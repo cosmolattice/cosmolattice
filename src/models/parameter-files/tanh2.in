@@ -1,0 +1,27 @@
+#Output
+outputfile = ./
+
+#Evolution
+expansion = true
+evolver = VV2
+
+#Lattice
+N = 64
+dt = 0.003
+kIR = 3
+
+#Times
+tOutputFreq = 0.1
+tOutputInfreq = 3
+tOutputRareFreq = 10
+tMax = 300
+
+#IC
+kCutOff = 18
+initial_amplitudes = 3.39928e18 0 # homogeneous amplitudes in GeV
+initial_momenta = -3.0714e31 0    # homogeneous amplitudes in GeV2
+
+#Model Parameters
+M = 2.435e19
+Lambda4 = 1.7966e65
+q = 4e4

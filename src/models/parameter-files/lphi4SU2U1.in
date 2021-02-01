@@ -1,0 +1,38 @@
+#Output
+outputfile = ./
+
+#Evolution
+expansion = true
+evolver = VV2
+
+#Lattice
+N = 128
+dt = 0.01
+kIR = 1.2
+
+#Times
+tOutputFreq = 0.1
+tOutputInfreq = 3
+tOutputRareFreq = 10
+tMax = 100
+
+#IC
+kCutOff = 6
+initial_amplitudes = 0
+initial_momenta = 0
+cmplx_field_initial_norm = 0 
+cmplx_momentum_initial_norm = 0
+SU2Doublet_initial_norm = 5.25151e18          # homogeneous amplitudes in GeV
+SU2Doublet_initial_momenta_norm = -4.45258e30 # homogeneous amplitudes in GeV2
+
+#Gauge couplings and effectiveCharges
+CSU1Charges = 1
+SU2DoubletU1Charges = 1
+SU2DoubletSU2Charges = 1
+gU1s = 1.11037e-05
+gSU2s = 2.22075e-05
+
+#Model Parameters
+qG = 50
+qH = 50
+lambda = 9e-14
