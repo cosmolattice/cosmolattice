@@ -39,7 +39,7 @@ namespace TempLat {
 #endif
         {
             if ( this->mVerbose) { }; /* just for the compiler warnings */
-           // int rank = 0;
+            int rank = 0;
 
 
 #ifndef NOMPI
