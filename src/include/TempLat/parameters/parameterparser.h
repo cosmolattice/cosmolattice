@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_PARAMETERS_PARAMETERS_H
 #define TEMPLAT_PARAMETERS_PARAMETERS_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
@@ -15,6 +15,10 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include <random>
 #include <iomanip>
+
+#ifndef NOMPI
+  #include <mpi.h> //This is to make getSeed MPI safe.
+#endif
 //#include "TempLat/parameters/mathparser/reducer.h"
 
 
@@ -119,7 +123,11 @@ namespace TempLat {
             std::string tmp = this->get<std::string>(name, "0")();
             if (tmp == "0") {
                 std::random_device r;
-                tmp = std::to_string(r());
+                unsigned int res = r();
+                #ifndef NOMPI
+                  MPI_Bcast(&res, 1, MPI_INT, 0,MPI_COMM_WORLD);
+                #endif
+                tmp = std::to_string(res);
             }
             params[name] = tmp;
             return tmp;

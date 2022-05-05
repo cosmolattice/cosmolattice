@@ -35,7 +35,7 @@ namespace TempLat {
                     - pow(model.aI, 3 + model.alpha) * Potential::derivS(model,n) );
         }
 
-
+		
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
 

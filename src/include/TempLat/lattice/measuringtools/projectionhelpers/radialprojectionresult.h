@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_RADIALPROJECTIONRESULT_H
 #define TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_RADIALPROJECTIONRESULT_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
@@ -44,29 +44,20 @@ namespace TempLat {
         typedef typename GetFloatType<T>::type floatType;
 
         /* Put public methods here. These should change very little over time. */
-        RadialProjectionResult(ptrdiff_t nBins) :
+        RadialProjectionResult(ptrdiff_t nBins, bool pUseBinCentralValues = false, bool pIsInFourier = false) :
         std::vector<RadialProjectionSingleBinAndValue<T>>(),
         finalizedOnce(false),
         mNBins(nBins),
         mValues(mNBins),
         mBinBounds(mNBins),
         mMultiplicities(mNBins, 0),
-        unset(false)
+        unset(false),
+        mUseBinCentralValues(pUseBinCentralValues),
+        mIsInFourier(pIsInFourier)
         {
 
         }
 
-        RadialProjectionResult(ptrdiff_t nBins, bool empty ) :
-                std::vector<RadialProjectionSingleBinAndValue<T>>(empty ? 0 : nBins),
-                finalizedOnce(false),
-                mNBins(nBins),
-                mValues(mNBins),
-                mBinBounds(mNBins),
-                mMultiplicities(mNBins, 0),
-                unset(true)
-        {
-
-        }
 
 
         /** \brief operator+= is a requirement for use as a workspace in FieldlessGetteration. */
@@ -85,11 +76,13 @@ namespace TempLat {
         }
 
         /** \brief Decrease the number of bins on demand. */
-        RadialProjectionResult& rebin(ptrdiff_t nBins) {
+        RadialProjectionResult& rebin(ptrdiff_t nBins, T customRange = -1) {
             std::vector<RadialProjectionSingleBinAndValue<T>>::operator=(
                                                                          RadialProjectionRebinner<T>::rebin(
                                                                                                             *this,
-                                                                                                            nBins
+                                                                                                            nBins,
+                                                                                                            centralBinBounds,
+                                                                                                            customRange
                                                                                                             )
             );
             return *this;
@@ -102,12 +95,35 @@ namespace TempLat {
          */
         template <typename LL>
         RadialProjectionResult& rescale(LL rescaler) {
-            for (auto&& it : *this) {
-                it.getValue() *= rescaler( it.getBin().average );
+            //for (auto&& it : *this) {
+            for (size_t i = 0; i< this->size(); ++i)
+            {
+                if(mUseBinCentralValues) (*this)[i].getValue() *= rescaler( this->centralBinBounds[i] );
+                else (*this)[i].getValue() *= rescaler( (*this)[i].getBin().average );
             }
             return *this;
         }
 
+        auto energy(int PSVersion) {
+            auto energy = 0.;
+            auto kIR = (*this).getCentralBinBounds()[0];
+            switch (PSVersion){
+                case 1:
+                    for (size_t i = 0; i < this->size(); ++i) {
+                        energy +=  (*this)[i].getValue().average / (i + 1) ;
+                    }
+                    break;
+                case 2:
+                case 3:
+                    for (auto&& it : *this) {
+                        energy +=  it.getValue().average * kIR / it.getBin().average ;
+                    }
+                    break;
+                default:
+                    energy = -1.;
+            }
+            return energy;
+        }
 
 
         /** \brief Rescale the bin positions with a normalization (for example dimensionful).
@@ -115,6 +131,26 @@ namespace TempLat {
         RadialProjectionResult& rescaleBins(T scale) {
             for (auto&& it : *this) {
                 it.getBin() *= scale;
+            }
+            for(T& b : centralBinBounds) {
+                 b *= scale;
+            }
+            return *this;
+        }
+
+        RadialProjectionResult& sumInsteadOfAverage() {
+          floatType intMultiplicity = 0;
+
+            /*for (auto&& it : *this) {
+              intMultiplicity = 2 * it.getBin().multiplicity; // *2 is to get the full number of modes, against original design
+              it.getValue() *= intMultiplicity;
+              //it.getValue().sumInsteadOfAverage();
+            }*/
+            for (size_t i = 0; i< this->size(); ++i)
+            {
+              intMultiplicity = (*this)[i].getBin().multiplicity * (mIsInFourier ? 2 : 1); // Multiply by 2 if in Fourier space (only half of the last coordinate is iterated over
+                                                                                          // in this case because of reflection symmetry for real data).
+              (*this)[i].getValue() *= intMultiplicity;
             }
             return *this;
         }
@@ -130,16 +166,26 @@ namespace TempLat {
             return sstream.str();
         }
 
+
+
         friend
         std::ostream& operator<< (std::ostream& ostream, const RadialProjectionResult& rpr) {
             ostream << rpr.toString() << "\n";
             return ostream;
         }
 
+        std::vector<T>& getCentralBinBounds()
+        {
+          return centralBinBounds;
+        }
+
         template <typename S>
         friend class RadialProjector;
-        template <typename S>
 
+        template <typename S>
+        friend class RadialProjectorGW;
+
+        template <typename S>
         friend RadialProjectionResult<S> operator+(const RadialProjectionResult<S>& a, const RadialProjectionResult<S>& b);
 
             private:
@@ -147,10 +193,13 @@ namespace TempLat {
         bool finalizedOnce;
         ptrdiff_t mNBins;
         RadialProjectionSingleQuantity<T> mValues, mBinBounds;
+        std::vector<T> centralBinBounds; // Naive central values of the bin. Does not need to be set.
 
         std::vector<floatType> mMultiplicities;
 
         bool unset;
+        bool mUseBinCentralValues;
+        bool mIsInFourier;
 
 
         void add(ptrdiff_t i, const T& value, const T& position, const T& weight = (T) 1) {
@@ -246,3 +295,4 @@ namespace TempLat {
 
 
 #endif
+

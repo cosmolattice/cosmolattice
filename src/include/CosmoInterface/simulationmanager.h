@@ -1,10 +1,10 @@
 #ifndef COSMOINTERFACE_SIMULATIONMANAGER_H
 #define COSMOINTERFACE_SIMULATIONMANAGER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include "CosmoInterface/definitions/averages.h"
@@ -21,7 +21,7 @@ namespace TempLat {
      *
      *
      **/
-     
+
 
     class SimulationManager {
     public:
@@ -57,10 +57,16 @@ namespace TempLat {
         {
             fIO.loader.open(restart);
 
-            ForLoop(i, 0,Model::Ns - 1,
+            ForLoop(i, 0, Model::Ns - 1,
                     fIO.load(model.fldS(i));
                             fIO.load(model.piS(i));
             );
+            
+            if (model.fldGWs != nullptr) {
+                ForLoop(i, 0, Model::NGWs - 1,
+                    fIO.load((*model.fldGWs)(i));
+                    fIO.load((*model.piGWs)(i));
+            ); }
 
             ForLoop(i, 0, Model::NCs -1,
                     fIO.load(model.fldCS(i));
@@ -105,6 +111,12 @@ namespace TempLat {
             fIO.save(model.fldS(i));
                 fIO.save(model.piS(i));
             );
+            
+            if (model.fldGWs != nullptr) {
+                ForLoop(i, 0, Model::NGWs - 1,
+            fIO.save( (*model.fldGWs)(i));
+                fIO.save( (*model.piGWs)(i));
+            );}
 
             ForLoop(i, 0, Model::NCs -1,
                             fIO.save(model.fldCS(i));
@@ -144,10 +156,10 @@ namespace TempLat {
 
         // Function which performs the automatic backup of the simulation.
         template<typename T, class Model>
-        void backup(ParameterParser& parser, Model& model, T time)
+        void backup(ParameterParser& parser, Model& model, T time, std::string folder)
         {
-            std::string oldStr(model.name + "_backup.h5");
-            std::string newStr(model.name + "_backup.h5~");
+            std::string oldStr(folder + model.name + "_backup.h5");
+            std::string newStr(folder + model.name + "_backup.h5~");
             rename(oldStr.c_str(), newStr.c_str()); //Keep the last backup in case something goes wrong after.
             saveSim(parser, model, time, oldStr);
         }

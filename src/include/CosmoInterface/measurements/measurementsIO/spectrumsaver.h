@@ -73,6 +73,12 @@ namespace TempLat {
             else saverStd->save(std::vector<std::shared_ptr<RadialProjectionResult<T>>> {std::make_shared<RadialProjectionResult<T>>(spectra)...}, t);
         }
 
+		/*template< template<typename> class... Spectra, class Model>
+        void saveEnergy(T& t, Spectra<T>... spectra, Model& model){
+            
+          saverStd->saveEnergy(std::vector<std::shared_ptr<RadialProjectionResult<T>>> {std::make_shared<RadialProjectionResult<T>>(spectra)...}, t, model);
+        }*/
+
 
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */

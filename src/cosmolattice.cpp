@@ -40,6 +40,7 @@ int main (int argc, char* argv[] ) {
     //If restart is set, the 'overridable' parameters are overridden here.
 
     RunParameters<double> runParams(parser);
+    runParams.setDoWeRestart(manager.doWeRestart());
     // The RunParameters class holds all relevant (model independent)
     // parameters for a run: Num. of points lattice/side (N),
     // the lattice length side (L) or alternatively the lattice IR cut-off (kIR),
@@ -48,6 +49,7 @@ int main (int argc, char* argv[] ) {
     // They are initialised from the parser.
 
     int nGhost = 1;
+    //bool changedt = true;
     // Number of lattice site layers for memory sharing among the neighbouring sub-lattices
     // split in a parallelised run. By default is set to nGhost = 1, as typically we need only
     // the closest neighbouring lattice sites to compute a gradient. Setting nGhost > 1
@@ -102,7 +104,7 @@ int main (int argc, char* argv[] ) {
 
     }
 
-    Evolver<double> evolver(model, runParams);
+    Evolver<ModelType> evolver(model, runParams);
     // Here an algorithm -- evolver -- to solve the field EoM is chosen. The type of evolver
     // is specified by the user in the input parameter file, and here is passed through
     // runParams. Model is passed as well to have access to normalisations.
@@ -120,9 +122,9 @@ int main (int argc, char* argv[] ) {
     //Creation of an info file, which lists all parameters and options chosen
 
 
-    /************************Time evolution*************************/
+   /************************Time evolution*************************/
 
-    for (int i = 0 ; t < runParams.tMax ; ++i, t += runParams.dt) {
+   for (int i = 0 ; i < static_cast<int>(runParams.tMax / model.dt); ++i) {
         //Loop for the time evolution. At each step we advance one time step dt
 
         if(measurer.areWeMeasuring(i))
@@ -132,16 +134,17 @@ int main (int argc, char* argv[] ) {
             //Some evolvers like staggered leapfrog have fields and momenta which
             //do not live at the same timesteps. Before measuring, we synchronize them.
             measurer.measure(i, t, model);
-            // Note that measurer.measure advances automatically conjugate momenta by half step in case 
-            // the evolver (e.g. leapfrog) required them to have been synchronised previously for 
+            // Note that measurer.measure advances automatically conjugate momenta by half step in case
+            // the evolver (e.g. leapfrog) required them to have been synchronised previously for
             // a measurement.
         }
 
         evolver.evolve(model, t - runParams.t0);
         // We evolve the EoM by one time step dt. It needs the time variable in case we want to simulate
         // a fixed background metric.
+        t += model.dt;
 
-        if(runParams.boolBackup && (i % runParams.tBackupFreqInt == 0)) manager.backup(parser, model, t);
+        if(runParams.boolBackup && (i % runParams.tBackupFreqInt == 0)) manager.backup(parser, model, t, runParams.backupPath);
         // If 'backing-up' is activated, here we create a back-up of the simulation
         // in case of a power shortage. Namely we back-up the simulation at the current time step
         // so that an appropriate file is generated, containing all the relevant information
@@ -149,6 +152,8 @@ int main (int argc, char* argv[] ) {
         // to re-start the simulation at the same moment, once we launch another job.
 
     } //End of time evolution.
+
+
 
     if(runParams.boolSaveEnd)
         // Here we check whether we want to save the simulation details at the end of evolution.

@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_HALKKBINS_H
 #define TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_HALKKBINS_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
@@ -36,14 +36,14 @@ namespace TempLat {
           if(!AlmostEqual(it.getBin().average,0)){
               ind=std::min(std::round((it.getBin().average))-1,ks.size()-1.0);
             //  say<<ind<<"\n";
-              vs[ind]+=it.getValue().average*it.getValue().multiplicity;
-              ms[ind]+=it.getValue().multiplicity;
+              vs[ind]+= it.getValue().average * it.getValue().multiplicity;
+              ms[ind]+= it.getValue().multiplicity;
             }
           }
           for(size_t i=0; i<ks.size();++i)
           {
-            ks[i]=i+1;
-            vs[i]/=ms[i];
+            ks[i] = i+1;
+            vs[i] /= ms[i];
           }
         }
 

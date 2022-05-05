@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_RANDOM_RANDOMGAUSSIANFIELD_H
 #define TEMPLAT_LATTICE_ALGEBRA_RANDOM_RANDOMGAUSSIANFIELD_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <complex>
@@ -151,7 +151,7 @@ namespace TempLat {
     using RandomGaussianField = RandomGaussianFieldHelper<T,false,false>;
 
     template<typename T>
-    using RandomRealGaussianField = RandomGaussianFieldHelper<T,true,false>;
+    using RandomRayleighField = RandomGaussianFieldHelper<T,true,false>;
 
     template<typename T>
     using RandomUniformUnitaryField = RandomGaussianFieldHelper<T,false,true>;

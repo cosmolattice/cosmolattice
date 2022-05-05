@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_COSMOINTERFACE_ABSTRACTMEASURER_H
 #define TEMPLAT_COSMOINTERFACE_ABSTRACTMEASURER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include <sstream>
@@ -12,6 +12,7 @@
 #include <iomanip>
 
 #include "CosmoInterface/measurements/scalarsingletmeasurer.h"
+#include "CosmoInterface/measurements/gwsmeasurer.h"
 #include "CosmoInterface/measurements/complexscalarmeasurer.h"
 #include "CosmoInterface/measurements/su2doubletmeasurer.h"
 #include "CosmoInterface/measurements/u1measurer.h"
@@ -46,6 +47,7 @@ namespace TempLat {
           expansion(par.expansion),    // Type of expansion (no expansion, fixed background, or self-consistent)
           eType(par.eType),   // Type of evolution algorithm (e.g. VV2, LF2...)
           scalarSingletMeasurer(model,filesManager, par, par.appendMode),   // Measurer for scalar fields
+          gwsMeasurer(model,filesManager, par, par.appendMode), 
           complexScalarMeasurer(model,filesManager, par, par.appendMode),   // Measurer for complex scalars
           su2DoubletMeasurer(model,filesManager, par, par.appendMode),   // Measurer for SU(2) doublets
           u1Measurer(model,filesManager, par, par.appendMode),   // Measurer for U(1) gauge fields
@@ -53,7 +55,9 @@ namespace TempLat {
           energiesMeasurer(model,filesManager, par, par.appendMode),   // Measurer of energies and scale factor
           scaleFactorMeasurer(model,filesManager, par, par.appendMode),   // Measurer of energies and scale factor
           energySnapshotsMeasurer(model, filesManager,  par.energySnapshotMeas),    // Measurer of energy and field snapshots
-          spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"}, filesManager.getUseHDF5())   // Output file that indicates at which times spectra are computed
+          spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"}, filesManager.getUseHDF5()),   // Output file that indicates at which times spectra are computed
+          PSMeasurer(par),
+          GWsPSMeasurer(par)
         {
         }
 
@@ -88,21 +92,22 @@ namespace TempLat {
               // Scale factor and derivatives
 
               filesManager.flush();
-
           }
 
           // Infrequent output (spectra):
           if(n% infreqOutputFreq == 0 ) {
 
-              scalarSingletMeasurer.measureSpectra(model,t);
+              scalarSingletMeasurer.measureSpectra(model,t, PSMeasurer);
               // Scalar singlet spectra
-              complexScalarMeasurer.measureSpectra(model,t);
+              gwsMeasurer.measureSpectra(model,t, GWsPSMeasurer);
+              // GWs spectra
+              complexScalarMeasurer.measureSpectra(model,t, PSMeasurer);
               // Complex scalar spectra
-              su2DoubletMeasurer.measureSpectra(model,t);
+              su2DoubletMeasurer.measureSpectra(model,t, PSMeasurer);
               // SU(2) doublet spectra
-              u1Measurer.measureSpectra(model,t);
+              u1Measurer.measureSpectra(model,t, PSMeasurer);
               // Electric and magnetic spectra, U(1) gauge sector
-              su2Measurer.measureSpectra(model,t);
+              su2Measurer.measureSpectra(model,t, PSMeasurer);
               // Electric and magnetic spectra, SU(2) gauge sector
 
               if(!filesManager.getUseHDF5()){
@@ -125,13 +130,15 @@ namespace TempLat {
             }else model.getToolBox()->unsetVerbose();
 
         }
+         
 
 
         bool areWeMeasuring(int n) const
         {
-            return (n % outputFreq == 0 || n% infreqOutputFreq == 0 || n % rareOutputFreq == 0);
+            return (n % outputFreq == 0 || n % infreqOutputFreq == 0 || n % rareOutputFreq == 0 );
         }
-
+		
+		
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
 
@@ -143,6 +150,7 @@ namespace TempLat {
         EvolverType eType;
 
         ScalarSingletMeasurer<T> scalarSingletMeasurer;
+        GWsMeasurer<T> gwsMeasurer; 
         ComplexScalarMeasurer<T> complexScalarMeasurer;
         SU2DoubletMeasurer<T> su2DoubletMeasurer;
         U1Measurer<T> u1Measurer;
@@ -152,6 +160,10 @@ namespace TempLat {
         EnergySnapshotsMeasurer energySnapshotsMeasurer;
 
         MeasurementsSaver<T> spectraTime;
+        PowerSpectrumMeasurer PSMeasurer;
+        GWsPowerSpectrumMeasurer GWsPSMeasurer;
+//         CheckTT CheckTransTrace;
+//         bool checkTTmodes;
 
 
     public:

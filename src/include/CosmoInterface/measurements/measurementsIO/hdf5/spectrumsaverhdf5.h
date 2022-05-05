@@ -1,10 +1,10 @@
 #ifndef COSMOINTERFACE_MEASUREMENTS_MEASUREMENTSIO_HDF5_SPECTRUMSAVERHDF5_H
 #define COSMOINTERFACE_MEASUREMENTS_MEASUREMENTSIO_HDF5_SPECTRUMSAVERHDF5_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 #ifdef HDF5
 #include "TempLat/util/prettytostring.h"
@@ -21,7 +21,7 @@ namespace TempLat {
 
     /** \brief A class which save the spectrum (or any RadialProjectionResults) in a hdf5 format.
      *
-     * 
+     *
      * Unit test: make test-spectrumsaverhdf5
      **/
 
@@ -68,13 +68,14 @@ namespace TempLat {
 
 
         void save(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)  {
-            if(nBins > -1)
-                for(size_t i = 0; i< arr.size(); ++i) {
-                    arr[i]->rebin(nBins);
-                    arr[i]->rescaleBins(kIR);
-                }
 
-            std::vector<T> binAv;
+          if(nBins > -1){
+              for(size_t i = 0; i < arr.size(); ++i) {
+                //  arr[i]->rebin(nBins , std::floor(pow(3, 0.5) / 2.0 * nGrid));  // The second argument is the total length of the grid in k . The bin size in computed as this divided by nBins. This choice corresponds to bin of size kIR for the default choice.
+                  arr[i]->rescaleBins(kIR);
+              }
+          }
+
             std::vector<T> valAv;
             std::vector<T> mult;
 
@@ -84,20 +85,36 @@ namespace TempLat {
             HDF5Group group = file.createOrOpenGroup(PrettyToString::get(t,10));
 
 
-            int count = 0;
             for(auto&& it :(*arr[0]))
             {
-                if(verbosity != 3) binAv.emplace_back(it.getBin().average);
-                else binAv.emplace_back((count + 1) * deltaKBin);
                 mult.emplace_back(it.getValue().multiplicity * 2); // *2 is to print an integer multiplicity, against original design
-                count++;
             }
-
-            HDF5Dataset binAvData = group.createDataset<T>("momBinAverage", std::vector<hsize_t>(1, binAv.size()));
-            binAvData.write(binAv);
-
             HDF5Dataset multData = group.createDataset<T>("momMultiplicity", std::vector<hsize_t>(1, mult.size()));
             multData.write(mult);
+            multData.close();
+
+
+
+            if(verbosity != 0){
+              std::vector<T> binAv;
+              for(auto&& it :(*arr[0]))
+              {
+                  binAv.emplace_back(it.getBin().average);
+              }
+              HDF5Dataset binAvData = group.createDataset<T>("momBinAverage", std::vector<hsize_t>(1, binAv.size()));
+              binAvData.write(binAv);
+              binAvData.close();
+            }
+
+
+            if(verbosity != 1){
+              HDF5Dataset binAvData = group.createDataset<T>("momBinCentralValues", std::vector<hsize_t>(1, arr[0]->getCentralBinBounds().size()));
+              binAvData.write(arr[0]->getCentralBinBounds());
+              binAvData.close();
+            }
+
+
+
 
 
             for(size_t i = 0; i< arr.size(); ++i)
@@ -115,7 +132,7 @@ namespace TempLat {
 
 
 
-            if(verbosity == 1)
+            if(verbosity == 2)
             {
                 std::vector<T> binMinVal;
                 std::vector<T> valMinVal;
@@ -154,9 +171,6 @@ namespace TempLat {
                 valSampleVarianceData.close();
 
             }
-
-            binAvData.close();
-            multData.close();
             group.close();
             file.close();
         }

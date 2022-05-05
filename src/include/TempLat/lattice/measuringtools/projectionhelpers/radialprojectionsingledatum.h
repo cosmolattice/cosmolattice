@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_RADIALPROJECTIONSINGLEDATUM_H
 #define TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_RADIALPROJECTIONSINGLEDATUM_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <sstream>
@@ -15,15 +15,15 @@
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 
 namespace TempLat {
-    
+
     /** \brief A class which holds a single bin which results from the radial
      *   projection of something. Used for describing both the bin position and values,
      *   namely combined in `RadialProjectionSingleBinAndValue`.
      *
      * Unit test: make test-radialprojectionsingledatum
      **/
-    
-    
+
+
     template <typename T>
     struct RadialProjectionSingleDatum {
 
@@ -72,16 +72,17 @@ namespace TempLat {
                     break;
                 }
             }
-            if ( withMultiplicity ) sstream << " " << 2 * multiplicity ; // *2 is to print an integer multiplicity, against original design
+            if ( withMultiplicity ) sstream << " " <<  multiplicity ; 
             return sstream.str();
         }
-        
+
         friend
         std::ostream& operator<< ( std::ostream& ostream, const RadialProjectionSingleDatum &dp) {
             ostream << dp.toString(true);
             return ostream;
         }
-        
+
+
         /** \brief For rescaling your results. */
         RadialProjectionSingleDatum<T>& operator*=(floatType value) {
             average *= value;
@@ -90,14 +91,21 @@ namespace TempLat {
             maxVal *= value;
             return *this;
         }
-        
+
+        /** \brief For  getting a sum instead of an average */
+        RadialProjectionSingleDatum<T>& sumInsteadOfAverage() {
+            floatType intMultiplicity = 2 *multiplicity; // *2 is to get the full number of modes, against original design
+            return (*this) *= intMultiplicity;
+        }
+
+
         /** \brief Summing two instances, lets you do a re-binning without having to think. Combines both values taking into account their original weights. */
         friend RadialProjectionSingleDatum<T> combine(const RadialProjectionSingleDatum<T>& a, const RadialProjectionSingleDatum<T>& b) {
             T a_sumOfSquares = (a.sampleVariance + a.average * a.average) * a.multiplicity;
             T b_sumOfSquares = (b.sampleVariance + b.average * b.average) * b.multiplicity;
             T a_sum = a.average * a.multiplicity;
             T b_sum = b.average * b.multiplicity;
-            
+
             return RadialProjectionSingleDatum<T>(
                 a_sum + b_sum,
                 a_sumOfSquares + b_sumOfSquares,
@@ -105,7 +113,7 @@ namespace TempLat {
                 std::max(a.maxVal, b.maxVal),
                 a.multiplicity + b.multiplicity
             );
-            
+
         }
 
 #ifdef TEMPLATTEST
