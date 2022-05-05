@@ -6,7 +6,7 @@ expansion = true
 evolver = VV2
 
 #Lattice
-N = 64
+N = 32
 dt = 0.01
 kIR = 1.8
 
@@ -14,7 +14,7 @@ kIR = 1.8
 tOutputFreq = 0.1
 tOutputInfreq = 3
 tOutputRareFreq = 10
-tMax = 200
+tMax = 50
 
 #IC
 kCutOff = 6

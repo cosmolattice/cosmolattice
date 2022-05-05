@@ -9,17 +9,24 @@ evolver = VV2
 N = 32
 dt = 0.01
 kIR = 0.75
-nBinsSpectra = 55
 
 #Times
 tOutputFreq = 0.1
 tOutputInfreq = 1
 tMax = 300
 
+#Spectra options
+PS_type = 1
+PS_version = 1
+
+#GWs
+GWprojectorType = 1
+withGWs=true
+
 #IC
-kCutOff = 1.75
-initial_amplitudes = 7.42675e18 0 # homogeneous amplitudes in GeV
-initial_momenta = -6.2969e30 0    # homogeneous amplitudes in GeV2
+kCutOff = 4
+initial_amplitudes = 5.6964e18 0  # homogeneous amplitudes in GeV
+initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
 
 #Model Parameters
 lambda = 9e-14

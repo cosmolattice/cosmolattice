@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_SQUAREROOT_H
 #define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_SQUAREROOT_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
@@ -32,6 +32,40 @@ namespace TempLat {
      *
      * Unit test: make test-multiply
      **/
+namespace Operators {
+     template<typename R>
+     struct SafeSqrt: public UnaryOperator<R> { //Check  if numerator if roughly zero, don't do the division Useful for spectrum fluctuation, when normalising wiht a cutoff
+     public:
+         using UnaryOperator<R>::mR;
+
+         SafeSqrt(const R& pR): UnaryOperator<R>(pR){}
+         auto get(ptrdiff_t i)
+         {
+             auto a = GetValue::get(mR,i);
+
+             decltype(a) zero(0);
+
+             return (a < zero) ? zero : sqrt(a);
+         }
+         virtual std::string operatorString() const {
+             return "safe_sqrt";
+         }
+         /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+         template <typename U>
+         void d(const U& other) = delete;
+
+     };
+   }
+
+
+     template<typename R>
+     typename ConditionalUnaryGetter<Operators::SafeSqrt, R>::type
+     safeSqrt(const R& r)
+     {
+         return Operators::SafeSqrt<R>(r);
+     }
+
+
     template <typename T>
     inline
     typename ConditionalBinaryGetter<Operators::Power, T, HalfType, ! std::is_arithmetic<T>::value>::type

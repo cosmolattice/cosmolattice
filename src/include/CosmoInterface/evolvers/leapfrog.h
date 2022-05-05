@@ -26,10 +26,13 @@ namespace TempLat {
         template<class Model>
         LeapFrog(Model& model, RunParameters<T>& rPar) :
                 expansion(rPar.expansion),
-                synced(false),
+                synced(!rPar.doWeRestart), //If this is the initial time, all fields are a t=0
                 fixedBackground(rPar.fixedBackground),  // A boolean. If true, expansion is fixed (and not self-consistent)
                 aBackground(model, rPar)   // Used for fixed background expansion
         {
+             if(synced)  model.aDotSI = model.aDotI - model.dt / 2.0 * ScaleFactorKernels::get(model);
+             // If this is time t=0 in a new simulation, we set aDotSI at t=-1/2, so we can
+             // evolve it by a full time step without changing the algorithm.
         }
 
         template<class Model>
@@ -47,12 +50,13 @@ namespace TempLat {
             // We start by computing the kicks:
 
             // First, we check whether our momenta are in a "normal state", namely living at
-            // -0.5 (not synced with the fields) or wheter they have been synced with the fields
+            // -0.5 (not synced with the fields) or whether they have been synced with the fields
             // for measurement purposes. In this case, they have already been evolved by half
             // a time step and we need to evolve them only by another half time step.
             T weight = synced ? 0.5 : 1.0;
 
             if (model.Ns > 0) kickScalar(model, weight);
+            if (model.fldGWs != nullptr) kickGWs(model, weight);
             if (model.NCs > 0) kickCS(model, weight);
             if (model.NSU2Doublet > 0) kickSU2Doublet(model, weight);
             if (model.NU1 > 0) kickU1Vector(model, weight);
@@ -66,10 +70,11 @@ namespace TempLat {
                 //  whether or not the field were synced or not.
 
             // Now we compute the drifts:
-                driftScaleFactor(model, tMinust0);
+                driftScaleFactor(model, tMinust0 + model.dt);
             }
 
             if (model.Ns > 0) driftScalar(model);
+            if (model.fldGWs != nullptr) driftGWs(model);
             if (model.NCs > 0) driftCS(model);
             if (model.NSU2Doublet > 0) driftSU2Doublet(model);
             if (model.NU1 > 0) driftU1Vector(model);
@@ -85,23 +90,25 @@ namespace TempLat {
         //  so everything can be measured at integer time.
         template<class Model>
         void sync(Model& model, T tMinust0) {
-            if (model.Ns > 0) kickScalar(model, 0.5);
-            if (model.NCs > 0) kickCS(model, 0.5);
-            if (model.NSU2Doublet > 0) kickSU2Doublet(model, 0.5);
-            if (model.NU1 > 0) kickU1Vector(model, 0.5);
-            if (model.NSU2 > 0) kickSU2Vector(model, 0.5);
+            if(! synced) {
+                if (model.Ns > 0) kickScalar(model, 0.5);
+                if (model.fldGWs != nullptr) kickGWs(model, 0.5);
+                if (model.NCs > 0) kickCS(model, 0.5);
+                if (model.NSU2Doublet > 0) kickSU2Doublet(model, 0.5);
+                if (model.NU1 > 0) kickU1Vector(model, 0.5);
+                if (model.NSU2 > 0) kickSU2Vector(model, 0.5);
 
-            if(expansion) {
-                if (Model::Ns > 0) model.pi2AvI = Averages::pi2S(model); // at t
-                if (Model::NCs > 0) model.CSpi2AvI = Averages::pi2CS(model); // at t
-                if (Model::NSU2Doublet > 0) model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model); // at t
-                if (Model::NU1 > 0) model.U1pi2AvI = Averages::pi2U1(model); // at t
-                if (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model); // at t
-                if(!fixedBackground) model.aDotI = model.aDotSI +  model.dt / 2.0 * ScaleFactorKernels::get(model);
-                else model.aDotI = aBackground.dot(tMinust0);
+                if (expansion) {
+                    if (Model::Ns > 0) model.pi2AvI = Averages::pi2S(model); // at t
+                    if (Model::NCs > 0) model.CSpi2AvI = Averages::pi2CS(model); // at t
+                    if (Model::NSU2Doublet > 0) model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model); // at t
+                    if (Model::NU1 > 0) model.U1pi2AvI = Averages::pi2U1(model); // at t
+                    if (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model); // at t
+                    if (!fixedBackground) model.aDotI = model.aDotSI + model.dt / 2.0 * ScaleFactorKernels::get(model);
+                    else model.aDotI = aBackground.dot(tMinust0);
+                }
+
             }
-
-
             synced = true;
         }
 
@@ -115,10 +122,19 @@ namespace TempLat {
             model.aDotSI +=  model.dt * ScaleFactorKernels::get(model);
             model.aDotI = (model.aDotSIM + model.aDotSI ) / 2.0;
         }
+        
+        
         template<class Model>
         void kickScalar(Model& model, T w) {
             ForLoop(n, 0, Model::Ns -1,
                     model.piS(n) += (w * model.dt) * ScalarSingletKernels::get(model,n);
+            );
+        }
+
+		template<class Model>
+        void kickGWs(Model& model, T w) {
+            ForLoop(n, 0, Model::NGWs - 1,
+                    (*model.piGWs)(n) += (w * model.dt) * GWsKernels::get(model,n);
             );
         }
 
@@ -181,6 +197,14 @@ namespace TempLat {
             // field).
 
         }
+        
+         template<class Model>
+        void driftGWs(Model& model) {
+            
+            (*model.fldGWs) +=  pow(model.aSI, model.alpha - 3) * (model.dt * (*model.piGWs) );
+
+        }
+
 
         template<class Model>
         void driftCS(Model& model)
@@ -226,6 +250,7 @@ namespace TempLat {
                 model.pi2AvSI = Averages::pi2S(model); // at t+dt/2
                 model.pi2AvI = 0.5 * (model.pi2AvSIM + model.pi2AvSI); // at t (average)
             }
+            
             if (Model::NCs > 0) {
                 model.CSpi2AvSIM = model.CSpi2AvSI;  // at t-dt/2
                 model.CSpi2AvSI = Averages::pi2CS(model); // at t+dt/2

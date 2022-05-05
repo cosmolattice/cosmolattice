@@ -85,6 +85,11 @@ namespace TempLat {
         }
 
 
+        void operator=(const FieldCollection<Arg,T,N,flatAssign,SHIFTIND>& other) { //overwrite the default = operator.
+            for(size_t i = 0; i<fs.size(); ++i) fs[i] = other.fs[i];
+        }
+
+
         using Getter = GetComponent;
         static constexpr size_t size = N;
 

@@ -48,7 +48,7 @@ namespace TempLat {
         {
             return Total(i,0,Model::NPotTerms-1,pM.potentialTerms(i));
         }
-
+        
 		// First derivative of the potential wrt scalar field n.
         template<class Model, int N>
         static inline auto derivS(Model& model, Tag<N> n)
@@ -63,7 +63,14 @@ namespace TempLat {
         {
             return IfElse((Model::Ns>0),MakeArray(i,0,Model::Ns-1, model.potDeriv(i)), ZeroType());
         }
-
+        
+		template<class Model>
+        static inline auto derivSSI(Model& model) 
+        {
+            return IfElse((Model::Ns>0),MakeArray(i,0,Model::Ns-1, derivSSI(i)), ZeroType());
+        }
+		
+		
 		// Second derivative of the potential wrt scalar field n. 
         template<class Model, int N>
         static inline auto deriv2S(Model& model, Tag<N> n) 

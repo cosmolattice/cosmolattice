@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_RADIALPROJECTIONSINGLEBINANDVALUE_H
 #define TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_RADIALPROJECTIONSINGLEBINANDVALUE_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <sstream>
@@ -16,8 +16,8 @@ namespace TempLat {
 
     /** \brief A class which combines a pair of RadialProjectionSingleDatums, one for
      *  the bin position, one for the function value for that bin.
-     * 
-     * 
+     *
+     *
      * Unit test: make test-radialprojectionsinglebinandvalue
      **/
     template <typename T>
@@ -25,7 +25,7 @@ namespace TempLat {
     public:
         /** \brief Default-construct binInformation and valueInformation: zeros (and equivalent), useful for summing up multiple entries. */
         RadialProjectionSingleBinAndValue() { }
-    
+
         RadialProjectionSingleBinAndValue(RadialProjectionSingleDatum<T> binInformation, RadialProjectionSingleDatum<T> valueInformation) :
         mBinInformation(binInformation),
         mValueInformation(valueInformation)
@@ -40,11 +40,24 @@ namespace TempLat {
             return sstream.str();
         }
 
+        std::string getBinString( int verbosity = 0) const {  // these booleans will allow to save multiple spectra in the same file.
+            std::stringstream sstream;
+            sstream << mBinInformation.toString(false, verbosity);
+            return sstream.str();
+        }
+
+        std::string getValueString( bool withMultiplicity = true, int verbosity = 0) const {  // these booleans will allow to save multiple spectra in the same file.
+            std::stringstream sstream;
+            sstream << mValueInformation.toString(withMultiplicity, verbosity);
+            return sstream.str();
+        }
+
+
         std::string getHeader(int verbosity = 0) const {
             return "# " + mBinInformation.getHeader(0, "bin", false, verbosity) + ", " + mValueInformation.getHeader(verbosity == 3 ? 4 : 1, "values", true, verbosity);
         }
-        std::string getHeaderBin(int verbosity = 0) const {
-            return "# " + mBinInformation.getHeader(0, "bin", false, verbosity);
+        std::string getHeaderBin(int verbosity = 0, int shift = 0) const {
+            return "# " + mBinInformation.getHeader(shift, "bin", false, verbosity);
         }
         std::string getHeaderValue(int verbosity = 0, int withMultiplicities = true, int shift = 0) const {
             return  mValueInformation.getHeader(shift, "values", withMultiplicities, verbosity);
@@ -55,7 +68,7 @@ namespace TempLat {
             ostream << dp.toString();
             return ostream;
         }
-        
+
         RadialProjectionSingleDatum<T>& getBin() { return mBinInformation; }
         RadialProjectionSingleDatum<T>& getValue() { return mValueInformation; }
         const RadialProjectionSingleDatum<T>& getBin() const { return mBinInformation; }
@@ -65,17 +78,17 @@ namespace TempLat {
         friend RadialProjectionSingleBinAndValue<T> combine(const RadialProjectionSingleBinAndValue<T>& a, const RadialProjectionSingleBinAndValue<T>& b) {
             return RadialProjectionSingleBinAndValue<T>( combine(a.mBinInformation, b.mBinInformation), combine(a.mValueInformation, b.mValueInformation));
         }
-        
+
         /** \brief Summing two instances, lets you do a re-binning without having to think. Combines both values taking into account their original weights. */
         RadialProjectionSingleBinAndValue<T>& combineTo(const RadialProjectionSingleBinAndValue<T>& other) {
             *this = combine(*this, other);
             return *this;
         }
-        
+
 
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
-        
+
         RadialProjectionSingleDatum<T> mBinInformation;
         RadialProjectionSingleDatum<T> mValueInformation;
 

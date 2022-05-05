@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_IO_HDF5_FILESAVERHDF5_H
 #define TEMPLAT_LATTICE_IO_HDF5_FILESAVERHDF5_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
 #ifdef HDF5
@@ -24,8 +24,8 @@ namespace TempLat {
 
 
     /** \brief A class which implements saving in pure HDF5.
-     * 
-     * 
+     *
+     *
      * Unit test: make test-filesaverhdf5
      **/
 
@@ -76,6 +76,7 @@ namespace TempLat {
         template<typename R>
         void save(R r){ //used to store an entity directly to a dataset, using it's own name.
             typedef typename GetGetReturnType<R>::type vType;
+            ConfirmSpace::apply(r,r.getToolBox()->mLayouts.getConfigSpaceLayout(), SpaceStateInterface::SpaceType::Configuration);
             GhostsHunter::apply(r);
             mDataset = mFile.createDataset<vType>(GetString::get(r), r.getToolBox()->mNGridPointsVec);
             saveDim(r,0,{});
@@ -85,6 +86,7 @@ namespace TempLat {
         template<typename R, typename T>
         void save(T t, R r, std::string name){ //used to store an entity in a time series. The name is the one of the group, data set labelled by t.
             typedef typename GetGetReturnType<R>::type vType;
+            ConfirmSpace::apply(r,r.getToolBox()->mLayouts.getConfigSpaceLayout(), SpaceStateInterface::SpaceType::Configuration);
             GhostsHunter::apply(r);
             mDataset = mFile.createOrOpenGroup(name).createDataset<vType>(PrettyToString::get(t,10), r.getToolBox()->mNGridPointsVec);
             saveDim(r,0,{});

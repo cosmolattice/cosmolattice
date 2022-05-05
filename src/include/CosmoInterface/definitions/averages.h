@@ -40,7 +40,8 @@ namespace TempLat {
         {
             return average(Total(i,0,Model::Ns - 1,FieldFunctionals::pi2S(model,i)));
         }
-
+		
+		
 		// --> Complex scalars:
 
         template <class Model>
@@ -110,6 +111,7 @@ namespace TempLat {
         template<typename Model>
         static inline void setAllAverages(Model& model) {
             model.potAvI = average(Potential::potential(model));
+            model.potAvSI = average(Potential::potential(model));
 
             if (model.Ns > 0) {
                 model.pi2AvI = Averages::pi2S(model);

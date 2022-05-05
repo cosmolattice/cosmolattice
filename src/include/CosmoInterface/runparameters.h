@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_COSMOINTERFACE_RUNPARAMETERS_H
 #define TEMPLAT_COSMOINTERFACE_RUNPARAMETERS_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include "TempLat/parameters/parameterparser.h"
@@ -29,11 +29,11 @@ namespace TempLat {
     class RunParameters  {
     public:
         /* Put public methods here. These should change very little over time. */
-        
+
         // List of run parameters and their default values:
         RunParameters(ParameterParser& par):
                 N(par.getOverride<ptrdiff_t>("N",Important)), // Number of lattice points per dimension
-                kIR(par.getOverride<T>("kIR",-1,Important)), // IR cutoff 
+                kIR(par.getOverride<T>("kIR",-1,Important)), // IR cutoff
                 lSide(par.getOverride<T>("lSide",-1,Important)), // Side length
                 dt(par.get<T>("dt",Important)),  // Time step
                 expansion(par.get<bool>("expansion",true,Important)), // If true: self-consistent expansion. If false: no expansion
@@ -46,12 +46,12 @@ namespace TempLat {
                 tOutVerb(par.get<T>("tOutputVerb",100 * dt)),  // Output verbosity
                 tBackupFreqFloat(par.get<T>("tBackupFreq",-1)),   // Frequency of backups
                 baseSeed(par.getSeed("baseSeed")), // Seed for random generator of initial fluctuations
-                outFn(par.get<std::string>("outputfile","cosmolattice_out")()),  // Folder where output is saved
+                outFn(par.get<std::string>("outputfile","./")()),  // Folder where output is saved
                 energySnapshotMeas(par.get<std::string,10>("energy_snapshot", std::vector<std::string>(10, Constants::defaultString))),  // Energy terms for which snapshots are printed
-				fixedBackground(expansion ? par.get<bool>("fixedBackground",false) : false), // If true, expansion is given by a fixed background
+                fixedBackground(expansion ? par.get<bool>("fixedBackground",false) : false), // If true, expansion is given by a fixed background
                 omegaEoS(fixedBackground ? par.get<T>("omegaEoS",1.0 / 3.0) : 0.0), // For fixed background expansion: equation of state
                 H0(fixedBackground ? par.get<T>("H0") : 0.0), // For fixed background expansion: initial Hubble parameter
-                spectraVerbosity(par.get<int>("spectraVerbosity",0)), // Verbosity of spectra files
+                spectraVerbosity(par.get<int>("spectraVerbosity",1)), // Verbosity of spectra files
                 deltaKBin(par.get<double>("deltaKBin",1)), // Bin width of the spectra
                 nBinsSpectra(floor(sqrt(3.0)/2.0 * N / deltaKBin)), // Number of bins in spectra
                 hdf5Spectra(par.get<bool>("hdf5Spectra",false)), // If true, spectra are printed in HDF5 format. If false, printed in txt format.
@@ -59,7 +59,13 @@ namespace TempLat {
                 appendMode(par.getOverride<bool>("appendToFiles", false)), // If true, output will be appended to pre-existing files. If false, files will be overwritten.
                 saveEndPath(par.get<std::string>("save_dir",Constants::defaultString)()), // Folder where simulation is saved at the end
                 backupPath(par.get<std::string>("backup_dir",Constants::defaultString)()), // Folder where simulation is saved during the simulation
-                printHeaders(par.get<bool>("print_headers", false)) // If true, headers are printed in all output files
+                printHeaders(par.get<bool>("print_headers", false)), // If true, headers are printed in all output files
+                doWeRestart(false), //Boolean which tells if we are runing in restart mode or not. Set in the main.
+                tolerance(par.get<T>("tolerance", -1)), //For adaptative solvers only
+                powerSpectrumType(par.get<int>("PS_type",1)),
+                powerSpectrumVersion(par.get<int>("PS_version",1)),
+                GWprojectorType(par.get<int>("GWprojectorType",2)), // Type of GWprojector (complex = 1, or real = 2)
+                withGWs(par.get<bool>("withGWs", false, Important))
         {
             if (AlmostEqual(lSide, -1)) {
                 if (AlmostEqual(kIR, -1))
@@ -100,6 +106,15 @@ namespace TempLat {
               backupPath = outFn;
               par.erase("backup_dir");
             }
+
+            if(powerSpectrumType < 1 or  powerSpectrumType > 2)  throw(RunParametersInconsistent("powerSpectrumType " + std::to_string(powerSpectrumType) + " is not a valid powerSpectrumType."));
+            if(powerSpectrumVersion < 1 or  powerSpectrumType > 3) throw(RunParametersInconsistent("powerSpectrumVersion " + std::to_string(powerSpectrumVersion) + " is not a valid powerSpectrumVersion."));
+            if(spectraVerbosity < 0 or  spectraVerbosity > 2) throw(RunParametersInconsistent("spectraVerbosity " + std::to_string(spectraVerbosity) + " is not a valid spectraVerbosity."));
+        }
+
+        void setDoWeRestart(bool pDoWeRestart)
+        {
+            doWeRestart = pDoWeRestart;
         }
 
 
@@ -109,8 +124,8 @@ namespace TempLat {
       T kIR;
       T lSide;
       T dx;
-      const T dt;
-
+      T dt;
+      
       const bool expansion;
 
       const T t0;
@@ -148,6 +163,17 @@ namespace TempLat {
       std::string backupPath;
 
       const bool printHeaders;
+
+      mutable bool doWeRestart;
+
+      T tolerance; //For adaptative solvers only.
+
+      const int powerSpectrumType;
+      const int powerSpectrumVersion;
+
+      const int GWprojectorType;
+      const bool withGWs;
+
 
 
 

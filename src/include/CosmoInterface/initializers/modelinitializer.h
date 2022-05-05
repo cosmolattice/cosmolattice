@@ -8,8 +8,9 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/initializers/fluctuationsgenerator.h"
-#include "CosmoInterface/initializers/scalarsingletinitializer.h"
 #include "CosmoInterface/initializers/scalefactorinitializer.h"
+#include "CosmoInterface/initializers/scalarsingletinitializer.h"
+#include "CosmoInterface/initializers/gwsinitializer.h"
 #include "CosmoInterface/initializers/u1initializer.h"
 #include "CosmoInterface/initializers/su2initializer.h"
 #include "CosmoInterface/definitions/averages.h"
@@ -38,6 +39,9 @@ namespace TempLat {
             
             // Initialize scalar singlets:
             if(Model::Ns > 0) ScalarSingletInitializer::initializeScalars(model, fg, rPar.kCutoff);
+            
+            // Initialize GWs:
+            if (model.fldGWs != nullptr) GWsInitializer::initializeGWs(model);
             
             // Initialize the SU2 gauge fields and SU2 doublets:
             //  --> Note: It is important to initialize SU2 first, as the doublet contributes to the U1 currents.

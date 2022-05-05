@@ -1,10 +1,10 @@
 #ifndef COSMOINTERFACE_MEASUREMENTS_SCALARMEASURER_H
 #define COSMOINTERFACE_MEASUREMENTS_SCALARMEASURER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/measurements/meansmeasurer.h"
@@ -25,7 +25,8 @@ namespace TempLat {
     public:
         /* Put public methods here. These should change very little over time. */
         template <typename Model>
-        ScalarSingletMeasurer(Model& model, FilesManager& filesManager, const RunParameters<T>& par, bool append)
+        ScalarSingletMeasurer(Model& model, FilesManager& filesManager, const RunParameters<T>& par, bool append):
+        PSType(par.powerSpectrumType)
         {
 
             bool amIRoot = model.getToolBox()->amIRoot();
@@ -61,11 +62,11 @@ namespace TempLat {
 
         // The following function measures the spectra of the norm and its time-derivative.
         template <typename Model>
-        void measureSpectra(Model& model, T t) {
+        void measureSpectra(Model& model, T t, PowerSpectrumMeasurer& PSMeasurer) {
             ForLoop(i, 0, Model::Ns - 1,
                     spectraOut(i).save(t,
-                            powerSpectrum(model.fldS(i)),
-                            pow(model.aI, 2 * model.alpha - 6) * powerSpectrum(model.piS(i)),
+                            PSMeasurer.powerSpectrum(model.fldS(i)),
+                            pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i)),
                             occupationNumber(model, i)
                             );
             );
@@ -76,6 +77,8 @@ namespace TempLat {
 
         TempLatVector<MeasurementsSaver<T>> standardOut;
         TempLatVector<SpectrumSaver<T>> spectraOut;
+
+        const int PSType;
     };
 
 

@@ -1,10 +1,10 @@
 #ifndef COSMOINTERFACE_EVOLVERS_VELOCITYVERLET_H
 #define COSMOINTERFACE_EVOLVERS_VELOCITYVERLET_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 
@@ -30,7 +30,7 @@ namespace TempLat {
 
     /** \brief A class which implements a velocity verlet algorithm that evolves scalar singlets, complex scalars, SU2 doublets, and U(1) and SU(2) gauge fields.
      *
-     * 
+     *
      **/
 
 
@@ -76,28 +76,33 @@ namespace TempLat {
                 if(expansion && !fixedBackground) kickScaleFactorHalf(model, w);   // only if self-consistent expansion
 
                 if(model.Ns > 0) kickScalar(model, w);
+                if (model.fldGWs != nullptr) kickGWs(model, w);
                 if(model.NCs > 0) kickCS(model, w);
                 if(model.NSU2Doublet > 0) kickSU2Doublet(model, w);
                 if(model.NU1 > 0) kickU1Vector(model, w);
                 if(model.NSU2 > 0) kickSU2Vector(model, w);
 
-                if (expansion){   
+                if (expansion){
                     if(!fixedBackground) storeMomentaAverages(model);
-                    
+
                     // Now we compute the drifts (phi_0 --> phi_1)
-                    driftScaleFactor(model, tMinust0, w);
+                    driftScaleFactor(model, tMinust0 + model.dt, w);
                 }
 
+
                 if(model.Ns > 0) driftScalar(model, w); 
+                if (model.fldGWs != nullptr) driftGWs(model, w);
                 if(model.NCs > 0) driftCS(model, w);
                 if(model.NSU2Doublet > 0) driftSU2Doublet(model, w);
                 if(model.NU1 > 0) driftU1Vector(model, w);
                 if(model.NSU2 > 0) driftSU2Vector(model, w);
 
                 if(expansion) storeFieldsAverages(model);
-                
+
                 // Now we compute the second kick (pi_1/2 --> pi_1)
+
                 if(model.Ns > 0) kickScalar(model, w); 
+                if (model.fldGWs != nullptr) kickGWs(model, w);
                 if(model.NCs > 0) kickCS(model, w);
                 if(model.NSU2Doublet > 0) kickSU2Doublet(model, w);
                 if(model.NU1 > 0) kickU1Vector(model, w);
@@ -118,20 +123,28 @@ namespace TempLat {
         void sync(Model& model, T tMinust0) {
             if(fixedBackground) model.aDotI = aBackground.dot(tMinust0);
         }
-        
+
     	/********
         * KICKS
-        *********/ 
-        
+        *********/
+
         // Evolves piS(i)
         template<class Model>
         void kickScalar(Model &model, T w) {
 
-           ForLoop(i, 0, Model::Ns - 1, 
+           ForLoop(i, 0, Model::Ns - 1,
            		model.piS(i) += (w * model.dt / 2) * ScalarSingletKernels::get(model, i) ;
            			);
         }
+		
+		template<class Model>
+        void kickGWs(Model &model, T w) {
 
+           ForLoop(i, 0, Model::NGWs - 1,
+           		(*model.piGWs)(i) += (w * model.dt / 2) * GWsKernels::get(model, i) ;
+           			);
+        }
+		
         // Evolves piCS(n)
         template<class Model>
         void kickCS(Model& model, T w) {
@@ -153,7 +166,7 @@ namespace TempLat {
 		// Evolves piU1(a)
         template<class Model>
         void kickU1Vector(Model& model, T w) {
-        
+
            ForLoop(a,0,Model::NU1 - 1,
                     model.piU1(a) +=  model.dt * w / 2 * U1Kernels::get(model,a)
                             );
@@ -167,28 +180,35 @@ namespace TempLat {
                     model.piSU2(n) +=  model.dt / 2  * w * SU2Kernels::get(model,n);
                     );
         }
-            
+
         // Evolves aDotSI
         template<class Model>
         void kickScaleFactorHalf(Model &model, T w) {
             model.aDotSI = model.aDotI + (model.dt / 2) * ScaleFactorKernels::get(model) * w;
         }
-        
+
         // Evolves aDotI
         template<class Model>
         void kickScaleFactorOne(Model &model, T w) {
             model.aDotI = model.aDotSI + (model.dt / 2) * ScaleFactorKernels::get(model) * w;
         }
-        
+
         /********
         * DRIFTS
-        *********/  
+        *********/
 
 		// Evolves fldS
         template<class Model>
-        void driftScalar(Model &model, T w) 
+        void driftScalar(Model &model, T w)
         {
             model.fldS +=  pow(model.aSI, model.alpha - 3) * (model.dt * w * model.piS );
+        }
+        
+        // Evolves fldGWs
+        template<class Model>
+        void driftGWs(Model &model, T w) 
+        {
+            (*model.fldGWs) +=  pow(model.aSI, model.alpha - 3) * (model.dt * w * (*model.piGWs) );
         }
 
 		// Evolves fldCS
@@ -197,7 +217,7 @@ namespace TempLat {
         {
             model.fldCS += pow(model.aSI, model.alpha - 3) * model.dt * w * model.piCS ;
         }
-        
+
         // Evolves fldSU2Doublet
         template<class Model>
         void driftSU2Doublet(Model& model, T w)
@@ -238,10 +258,10 @@ namespace TempLat {
                 model.aSI = (model.aIM + model.aI) / 2.0;
             }
         }
-        
+
     	/********
         * FUNCTIONS STORING VOLUME AVERAGES OF COMPOSITE FIELDS AND MOMENTA at different times
-        *********/ 
+        *********/
 
         template<class Model>
         void storeMomentaAverages(Model& model) {

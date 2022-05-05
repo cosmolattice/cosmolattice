@@ -31,8 +31,7 @@ namespace TempLat {
         	// Returns kernel for SU2 doublets (formed by covariant laplacian and potential derivative):
             return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianSU2Doublet(model,n) - pow(model.aI, 3 + model.alpha) / 2 * Potential::derivSU2Doublet(model,n);
         }
-
-
+		
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
 

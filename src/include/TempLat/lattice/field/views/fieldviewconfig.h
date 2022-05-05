@@ -50,21 +50,30 @@ namespace TempLat {
              //mManager->allocate();
          }
 
+
+         template<typename R>
+         void assign( R&& g)
+         {
+             int i=0;
+             auto& it=mToolBox->itX();
+             onBeforeAssignment(g);
+
+             for(it.begin();it.end();++(it))
+             {
+                 i=it();
+                 DoEval::eval(g,i);
+                 mManager->operator[](i) = GetEval::getEval(g,i);
+             }
+             mManager->setGhostsAreStale();
+         }
+
+
          template<typename R>
          void operator=( R&& g)
          {
-           int i=0;
-           auto& it=mToolBox->itX();
-           onBeforeAssignment(g);
-
-           for(it.begin();it.end();++(it))
-           {
-             i=it();
-             DoEval::eval(g,i);
-             mManager->operator[](i) = GetEval::getEval(g,i);
-           }
-           mManager->setGhostsAreStale();
+            this->assign(std::forward<R>(g));
          }
+
 
          template<typename R>
          void operator+=( R&& g)
@@ -74,7 +83,7 @@ namespace TempLat {
 
 
          void operator=(const ConfigView<T>& other) { //overwrite the default = operator.
-             operator=(1*other);
+             this->assign(other);
          }
 
          T get(ptrdiff_t i) const
