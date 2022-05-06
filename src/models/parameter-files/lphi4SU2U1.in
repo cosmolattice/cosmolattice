@@ -1,21 +1,20 @@
 #Output
-outputfile = ./
+#outputfile = ./
 
 #Evolution
 expansion = true
 evolver = VV2
 
 #Lattice
-N = 32
+N = 64
 dt = 0.01
-kIR = 1.2
+kIR = 2
 
 #Times
 tOutputFreq = 0.1
 tOutputInfreq = 3
 tOutputRareFreq = 10
-tMax = 50
-
+tMax = 100
 
 #IC
 kCutOff = 6
