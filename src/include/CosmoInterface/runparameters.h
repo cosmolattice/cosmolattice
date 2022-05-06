@@ -64,7 +64,7 @@ namespace TempLat {
                 tolerance(par.get<T>("tolerance", -1)), //For adaptative solvers only
                 powerSpectrumType(par.get<int>("PS_type",1)),
                 powerSpectrumVersion(par.get<int>("PS_version",1)),
-                GWprojectorType(par.get<int>("GWprojectorType",2)), // Type of GWprojector (complex = 1, or real = 2)
+                GWprojectorType(par.get<int>("GWprojectorType",2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
                 withGWs(par.get<bool>("withGWs", false, Important))
         {
             if (AlmostEqual(lSide, -1)) {

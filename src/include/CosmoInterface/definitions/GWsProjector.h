@@ -18,19 +18,10 @@
 
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexalgebra.h"
-#include "TempLat/lattice/algebra/su2algebra/su2algebra.h"
-#include "CosmoInterface/definitions/gaugederivatives.h"
-#include "TempLat/lattice/algebra/gaugealgebra/forwardcovariantderivative.h"
-#include "TempLat/lattice/algebra/su2algebra/su2multiply.h"
 #include "TempLat/lattice/algebra/gaugealgebra/fieldstrength.h"
-#include "TempLat/lattice/algebra/gaugealgebra/plaquette.h"
 #include "TempLat/lattice/algebra/operators/power.h"
-#include "TempLat/lattice/algebra/spatialderivatives/normgradientsquare.h"
-#include "TempLat/lattice/algebra/spatialderivatives/neutdiff.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 #include "TempLat/lattice/algebra/helpers/geteval.h"
-
-#include "TempLat/lattice/algebra/spatialderivatives/forwdij.h"
 
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/util/rangeiteration/sum_in_range.h"

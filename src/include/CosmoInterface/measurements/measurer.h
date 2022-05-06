@@ -57,6 +57,7 @@ namespace TempLat {
           energySnapshotsMeasurer(model, filesManager,  par.energySnapshotMeas),    // Measurer of energy and field snapshots
           spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"}, filesManager.getUseHDF5()),   // Output file that indicates at which times spectra are computed
           PSMeasurer(par),
+          // TestTransTrace(par),
           GWsPSMeasurer(par)
         {
         }
@@ -90,6 +91,8 @@ namespace TempLat {
               // Energy contributions and conservation check
               scaleFactorMeasurer.measure(model,t);
               // Scale factor and derivatives
+              // gwsMeasurer.measureStandard(model,t, TestTransTrace);
+              // Transversality and tracelessness test of GWs
 
               filesManager.flush();
           }
@@ -161,7 +164,9 @@ namespace TempLat {
 
         MeasurementsSaver<T> spectraTime;
         PowerSpectrumMeasurer PSMeasurer;
+        // CheckTT TestTransTrace;
         GWsPowerSpectrumMeasurer GWsPSMeasurer;
+
 
 
 

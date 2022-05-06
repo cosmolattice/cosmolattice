@@ -15,6 +15,7 @@
 #include "TempLat/util/templatvector.h"
 
 #include "CosmoInterface/definitions/GWsProjector.h"
+// #include "CosmoInterface/definitions/checkTT.h"
 
 #include "CosmoInterface/measurements/gwspowerspectrum.h"
 
@@ -45,8 +46,19 @@ namespace TempLat {
         	spectraOut.emplace_back(
                 			SpectrumGWSaver<T>(filesManager, "gws", amIRoot, append, par, !model.fldGWs)
                                     ); // File for spectra
+            // standardOut.emplace_back( MeasurementsSaver<T>(filesManager, "TT_Test", amIRoot, append, getTTHeaders(model)) ); // File for TT_check
 
         }
+
+        // template <typename Model, typename Check>
+        // void measureStandard(Model& model, T t, Check& TestTransTrace) {
+        //     standardOut(0).addAverage(t);
+        //     standardOut(0).addAverage(TestTransTrace.checkTrans(model, 1_c));
+        //     standardOut(0).addAverage(TestTransTrace.checkTrans(model, 2_c));
+        //     standardOut(0).addAverage(TestTransTrace.checkTrans(model, 3_c));
+        //     standardOut(0).addAverage(TestTransTrace.checkTrace(model));
+        //     standardOut(0).save();
+        // }
 
         template <typename Model>
         void measureSpectra(Model& model, T t, GWsPowerSpectrumMeasurer& GWsPSMeasurer) {
@@ -56,18 +68,18 @@ namespace TempLat {
         }
 
      	// Returns string with the header of the strin parameters file
-        template <typename Model>
-        std::vector<std::string> getTTHeaders(Model& model) const
-        {
-            std::vector<std::string> ret;
-            ret.emplace_back("t");
-            ret.emplace_back("lambda_1");
-            ret.emplace_back("lambda_2");
-            ret.emplace_back("lambda_3");
-            ret.emplace_back("delta");
+        // template <typename Model>
+        // std::vector<std::string> getTTHeaders(Model& model) const
+        // {
+        //    std::vector<std::string> ret;
+        //    ret.emplace_back("t");
+        //    ret.emplace_back("lambda_1");
+        //    ret.emplace_back("lambda_2");
+        //    ret.emplace_back("lambda_3");
+        //    ret.emplace_back("delta");
 
-            return ret;
-        }
+        //    return ret;
+        // }
 
 
 
@@ -76,6 +88,7 @@ namespace TempLat {
         /* Put all member variables and private methods here. These may change arbitrarily. */
 
         TempLatVector<SpectrumGWSaver<T>> spectraOut;
+        TempLatVector<MeasurementsSaver<T>> standardOut;
 
         const int PSType;
     };
