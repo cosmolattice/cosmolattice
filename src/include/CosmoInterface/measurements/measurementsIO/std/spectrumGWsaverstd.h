@@ -118,6 +118,7 @@ namespace TempLat {
             }
             (*outputSpectrum) << "\n";
 
+            (*outputEnergy) << std::setprecision(15);
             (*outputEnergy) << t << " " << (*arr[0]).energy(PSVersion) << " " <<  (*arr[0]).energy(PSVersion) *  Energies::rho(model)  << "\n";
 
             outputEnergy->flush();

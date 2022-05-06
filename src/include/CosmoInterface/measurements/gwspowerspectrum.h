@@ -13,7 +13,7 @@
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/algebra/algebra.h"
 
-#include "CosmoInterface/measurements/radialprojectorGW.h"
+#include "CosmoInterface/definitions/radialprojectorGW.h"
 #include "CosmoInterface/runparameters.h"
 
 

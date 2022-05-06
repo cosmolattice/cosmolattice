@@ -23,8 +23,6 @@ namespace TempLat
     struct ModelPars : public TempLat::DefaultModelPars {
     	static constexpr size_t NScalars = 1;
         // In our phi4 example, we only want 2 scalar fields.
-//         static constexpr size_t NGravWaves = 6;
-        // We always set 6 "Gravitational waves" fields
         static constexpr size_t NPotTerms = 1;
         // Our potential naturaly splits into two terms: the inflaton potential
         // and the interaction with the daughter field.

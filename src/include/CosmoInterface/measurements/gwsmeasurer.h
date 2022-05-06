@@ -42,25 +42,11 @@ namespace TempLat {
 
             bool amIRoot = model.getToolBox()->amIRoot();
             // We create a file containing the spectra
-//             standardOut.emplace_back(MeasurementsSaver<T>(filesManager, "GW_TransversalityTracelessness", amIRoot, append, getTTHeaders(model), !par.checkTT));
-
         	spectraOut.emplace_back(
                 			SpectrumGWSaver<T>(filesManager, "gws", amIRoot, append, par, !model.fldGWs)
                                     ); // File for spectra
 
         }
-
-//         template <typename Model>
-//         void measureStandard(Model& model, T t, CheckTT checkTransTrace) {
-//
-//             		standardOut(0).addAverage(t);
-//             		standardOut(0).addAverage(checkTransTrace.checkTrans(model, 1_c));
-//                     standardOut(0).addAverage(checkTransTrace.checkTrans(model, 2_c));
-//                     standardOut(0).addAverage(checkTransTrace.checkTrans(model, 3_c));
-//             		standardOut(0).addAverage(checkTransTrace.checkTrace(model));
-//                     standardOut(0).save();
-//
-//         }
 
         template <typename Model>
         void measureSpectra(Model& model, T t, GWsPowerSpectrumMeasurer& GWsPSMeasurer) {
@@ -89,7 +75,6 @@ namespace TempLat {
 
         /* Put all member variables and private methods here. These may change arbitrarily. */
 
-		TempLatVector<MeasurementsSaver<T>> standardOut;
         TempLatVector<SpectrumGWSaver<T>> spectraOut;
 
         const int PSType;

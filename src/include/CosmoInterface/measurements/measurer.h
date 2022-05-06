@@ -162,8 +162,7 @@ namespace TempLat {
         MeasurementsSaver<T> spectraTime;
         PowerSpectrumMeasurer PSMeasurer;
         GWsPowerSpectrumMeasurer GWsPSMeasurer;
-//         CheckTT CheckTransTrace;
-//         bool checkTTmodes;
+
 
 
     public:

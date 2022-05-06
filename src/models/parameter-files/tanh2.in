@@ -25,3 +25,7 @@ initial_momenta = -3.0714e31 0    # homogeneous amplitudes in GeV2
 M = 2.435e19
 Lambda4 = 1.7966e65
 q = 4e4
+
+#GWs
+GWprojectorType = 1
+withGWs=false
