@@ -11,11 +11,10 @@
 #include "TempLat/lattice/algebra/helpers/getngrid.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/field/field.h"
-#include "TempLat/lattice/measuringtools/radialprojectorGW.h"
 #include "TempLat/lattice/algebra/algebra.h"
-#include "CosmoInterface/runparameters.h"
 
-#include "CosmoInterface/definitions/GWsProjector.h"
+#include "CosmoInterface/measurements/radialprojectorGW.h"
+#include "CosmoInterface/runparameters.h"
 
 
 namespace TempLat {
@@ -26,7 +25,7 @@ namespace TempLat {
      *
      **/
 
-     //MakeException(WrongPSType);
+     MakeException(WrongPSTypeGW);
 
      class GWsPowerSpectrumMeasurer{
       public:
@@ -62,7 +61,7 @@ namespace TempLat {
                     return Function(ntilde, kIR * ntilde * dx  / pow<5>(N) / (8*(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(Constants::reducedMPlanck<T> / model.fStar)/Energies::rho(model)) * fk2;
                 }
                 else{
-                  throw(WrongPSType("You tried to call an undefined PSType " +std::to_string(PSType) + ", abort."));
+                  throw(WrongPSTypeGW("You tried to call an undefined PSType " +std::to_string(PSType) + ", abort."));
                   return fk2; //To remove moot warning.
                 }
             }

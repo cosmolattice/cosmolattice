@@ -36,17 +36,16 @@ namespace TempLat {
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
 
+    };
 
-
-    public:
-#ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
-#endif
+    struct GWsInitializerTester{
+      #ifdef TEMPLATTEST
+              static inline void Test(TDDAssertion& tdd);
+      #endif
     };
 
 
-
-} /* FCN */
+} /* TempLat */
 
 #ifdef TEMPLATTEST
 #include "CosmoInterface/initializers/gwsinitializer_test.h"

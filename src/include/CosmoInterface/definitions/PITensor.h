@@ -24,7 +24,7 @@ namespace TempLat {
 
     /** \brief A class which computes the componentes of the Anisotropic Tensor source of Gravitational Waves.
      *
-     * 
+     *
      * Unit test: make test-PITensor
      **/
 
@@ -32,51 +32,51 @@ namespace TempLat {
     public:
         /* Put public methods here. These should change very little over time. */
         PITensor() = delete;
-   
+
 
     public:
 
 		template<class Model>
         static inline auto totalTensor(Model& model, Tag<0>)
-        {		
+        {
             return scalarSinglet(model, 1_c, 1_c);
         }
         template<class Model>
         static inline auto totalTensor(Model& model, Tag<1>)
-        {		
+        {
             return scalarSinglet(model, 1_c, 2_c);
         }
         template<class Model>
         static inline auto totalTensor(Model& model, Tag<2>)
-        {	
+        {
             return scalarSinglet(model, 1_c, 3_c);
         }
        template<class Model>
         static inline auto totalTensor(Model& model, Tag<3>)
-        {	
+        {
             return scalarSinglet(model, 2_c, 2_c);
         }
         template<class Model>
         static inline auto totalTensor(Model& model, Tag<4>)
-        {	
+        {
             return scalarSinglet(model, 2_c, 3_c);
         }
         template<class Model>
         static inline auto totalTensor(Model& model, Tag<5>)
-        {	
+        {
             return scalarSinglet(model, 3_c, 3_c);
         }
-        
-        /* Complexa Scalars Tensor */
-        
 
-		
+        /* Complexa Scalars Tensor */
+
+
+
 //         template<class Model>
 //         static auto PITensorScalarsArray(Model& model)
 //         {
 //             return IfElse((Model::Ngws>0),MakeArray(i,0,Model::Ngws-1, PITensorScalars(model,i)), ZeroType());
 //         }
-        
+
     private:
         template<class Model, int I,int J>
         static inline auto scalarSinglet(Model& model, Tag<I> a, Tag<J> b)
@@ -84,13 +84,13 @@ namespace TempLat {
             return Total(i, 0, Model::Ns - 1, forwDiff(model.fldS(i),a) * forwDiff(model.fldS(i),b));
         }
 
-
-
-    public:
-#ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
-#endif
     };
+
+    struct  PITensorTest{
+    #ifdef TEMPLATTEST
+            static inline void Test(TDDAssertion& tdd);
+    #endif
+  };
 
 
 } /* FCN */

@@ -70,8 +70,8 @@ namespace TempLat {
           return mWorkspace2;
       }
 
-      template <typename T>
-      static void onBeforeAverageConfiguration(T&& pT) {
+      template <typename R>
+      static void onBeforeAverageConfiguration(R&& pT) {
           /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
           ConfirmSpace::apply(pT,pT.getToolBox()->mLayouts.getConfigSpaceLayout(), SpaceStateInterface::SpaceType::Configuration );
           GhostsHunter::apply(pT);
@@ -118,7 +118,7 @@ namespace TempLat {
 }
 
 #ifdef TEMPLATTEST
-#include "TempLat/lattice/measuringtools/averager_test.h"
+#include "TempLat/lattice/measuringtools/maximum_test.h"
 #endif
 
 

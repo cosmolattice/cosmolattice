@@ -39,7 +39,7 @@ namespace TempLat {
 
     /** \brief A class computes the projected product of h_ij h_ij^* in base of the u fields. See Technical Note II.
      *
-     * 
+     *
      * Unit test: make test-GWsProjector
      **/
 
@@ -50,14 +50,14 @@ namespace TempLat {
         mType(PRJType)
         {
         }
-   
+
 
     public:
 
-		/* Function that computes the Projector in base of the choice of lattice momenta given by the forward derivative of eqn 68 in the Art arXiv:2006.15122 */	
+		/* Function that computes the Projector in base of the choice of lattice momenta given by the forward derivative of eqn 68 in the Art arXiv:2006.15122 */
 		template<class Model, class Looper, int I, int J, typename T = double>
         inline auto Pr(Model& model, Looper& it, Tag<I> i, Tag<J> j) {
-         
+
             auto pVec = it.getVec();
 
             size_t N = GetNGrid::get(model.getOneField());
@@ -176,7 +176,7 @@ namespace TempLat {
             else return projectedGW_complex(model, it);
             return 0.;
         }
-        
+
     private:
         int mType;
 	};
@@ -193,7 +193,7 @@ namespace TempLat {
 } /* FCN */
 
 #ifdef TEMPLATTEST
-#include "CosmoInterface/helpers/GWsProjector_test.h"
+#include "CosmoInterface/definitions/GWsProjector_test.h"
 #endif
 
 

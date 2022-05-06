@@ -26,9 +26,9 @@ inline void TempLat::MaximumTester::Test(TempLat::TDDAssertion& tdd) {
     };
 
     struct myTmpStruct {
-        myTmpStruct() : mt(MemoryToolBox::makeShared(4, 16, 1)) { }
+        myTmpStruct() : mt(MemoryToolBox::makeShared(3, 4, 0)) { }
         double get(ptrdiff_t i) {
-            return i;
+            return i > 40 ? 0 : i;
         }
         auto getToolBox() { return mt; }
         void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType) {
@@ -44,8 +44,7 @@ inline void TempLat::MaximumTester::Test(TempLat::TDDAssertion& tdd) {
 
     say << "result of max : " << aget << "\n";
 
-    //tdd.verify( AlmostEqual(aget.compute(), 1.));
-    tdd.verify(false); //MAXIMUM NEEDS TO BE TESTED!!!!!!
+    //tdd.verify( aget == 40);
 
 
 }

@@ -15,7 +15,6 @@
 #include "TempLat/util/templatvector.h"
 
 #include "CosmoInterface/definitions/GWsProjector.h"
-// #include "CosmoInterface/definitions/checkTT.h"
 
 #include "CosmoInterface/measurements/gwspowerspectrum.h"
 
@@ -28,7 +27,7 @@ namespace TempLat {
 
     /** \brief A class which contains standard measurements for the GWs sector.
      *
-     * 
+     *
      * Unit test: make test-gwsmeasurer
      **/
 
@@ -39,18 +38,18 @@ namespace TempLat {
         template <typename Model>
         GWsMeasurer(Model& model, FilesManager& filesManager, const RunParameters<T>& par, bool append):
         PSType(par.powerSpectrumType)
- 		{   
+ 		{
 
             bool amIRoot = model.getToolBox()->amIRoot();
             // We create a file containing the spectra
 //             standardOut.emplace_back(MeasurementsSaver<T>(filesManager, "GW_TransversalityTracelessness", amIRoot, append, getTTHeaders(model), !par.checkTT));
-            
+
         	spectraOut.emplace_back(
                 			SpectrumGWSaver<T>(filesManager, "gws", amIRoot, append, par, !model.fldGWs)
                                     ); // File for spectra
-                    
+
         }
-        
+
 //         template <typename Model>
 //         void measureStandard(Model& model, T t, CheckTT checkTransTrace) {
 //
@@ -62,12 +61,12 @@ namespace TempLat {
 //                     standardOut(0).save();
 //
 //         }
-        
+
         template <typename Model>
         void measureSpectra(Model& model, T t, GWsPowerSpectrumMeasurer& GWsPSMeasurer) {
                    if (model.fldGWs != nullptr) spectraOut(0).save(t, model, GWsPSMeasurer.gwspowerSpectrum(model));
 
-            
+
         }
 
      	// Returns string with the header of the strin parameters file
@@ -87,7 +86,7 @@ namespace TempLat {
 
 
     private:
-    
+
         /* Put all member variables and private methods here. These may change arbitrarily. */
 
 		TempLatVector<MeasurementsSaver<T>> standardOut;

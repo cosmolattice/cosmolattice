@@ -15,8 +15,8 @@
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "TempLat/lattice/algebra/gaugealgebra/magneticfield.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
+#include "CosmoInterface/measurements/powerspectrum.h"
 #include "CosmoInterface/definitions/gausslaws.h"
-
 
 
 namespace TempLat {

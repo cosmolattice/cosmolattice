@@ -1,6 +1,6 @@
 #ifndef TEMPLAT_LATTICE_MEASUREMENTS_RADIALPROJECTORGW_TEST_H
 #define TEMPLAT_LATTICE_MEASUREMENTS_RADIALPROJECTORGW_TEST_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
@@ -10,7 +10,7 @@
 //#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 //#include "TempLat/lattice/field/field.h"
 
-inline void TempLat::RadialProjectorTester::Test(TempLat::TDDAssertion& tdd) {
+inline void TempLat::RadialProjectorGWTester::Test(TempLat::TDDAssertion& tdd) {
 
     tdd.verify( true );
 

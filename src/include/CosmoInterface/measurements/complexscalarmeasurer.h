@@ -11,6 +11,7 @@
 #include "CosmoInterface/measurements/measurementsIO/spectrumsaver.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/measurements/powerspectrum.h"
 #include "TempLat/util/templatvector.h"
 
 namespace TempLat {

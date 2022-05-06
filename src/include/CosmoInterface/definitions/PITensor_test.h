@@ -1,9 +1,13 @@
 #ifndef COSMOINTERFACE_HELPERS_PITENSOR_TEST_H
 #define COSMOINTERFACE_HELPERS_PITENSOR_TEST_H
-/* File created by Adrien Florio, 2020 */
-/* Released under the MIT license, see LICENSE.md. */
+/* This file is part of CosmoLattice, available at www.cosmolattice.net .
+   Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
+   Released under the MIT license, see LICENSE.md. */
 
-inline void FCN::PITensor::Test(FCN::TDDAssertion& tdd) {
+// File info: Main contributor(s): Jorge Baeza-Ballesteros, Adrien Florio, Nicolás Layza,  Year: 2022
+
+
+inline void TempLat::PITensorTest::Test(TempLat::TDDAssertion& tdd) {
 
     /* Default is to fail: to remind yourself to implement something here. */
     tdd.verify( true );

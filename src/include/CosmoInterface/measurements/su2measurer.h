@@ -14,10 +14,10 @@
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "CosmoInterface/definitions/gausslaws.h"
 #include "CosmoInterface/definitions/fieldfunctionals.h"
+#include "CosmoInterface/measurements/powerspectrum.h"
 #include "CosmoInterface/runparameters.h"
 
 namespace TempLat {
-
 
     /** \brief A class which contains standard measurements for the SU2 gauge fields.
      *

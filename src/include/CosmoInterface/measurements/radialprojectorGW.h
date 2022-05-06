@@ -25,6 +25,10 @@
 
 #include "CosmoInterface/definitions/GWsProjector.h"
 
+// This class is based on the TempLat/lattice/algebra/measuringtools/radialprojector.h class.
+// It is a reimplementation of the radial projection which allows to compute the projected
+// GW spectrum point by point, circumventing the exprission templates for efficiency.
+
 
 namespace TempLat {
 
@@ -147,7 +151,7 @@ namespace TempLat {
 }
 
 #ifdef TEMPLATTEST
-#include "TempLat/lattice/measuringtools/radialprojectorGW_test.h"
+#include "CosmoInterface/measurements/radialprojectorGW_test.h"
 #endif
 
 
