@@ -83,8 +83,8 @@ namespace TempLat {
 
                     auto BSU2 = safeSqrt(FieldFunctionals::B2SU2(model,k));
                     auto ESU2 =  pow(model.aI,  model.alpha - 1) * safeSqrt(FieldFunctionals::pi2SU2(model,k));
-                    auto magSpecSU2 = powerSpectrum(BSU2);
-                    auto elSpecSU2 = powerSpectrum(ESU2);
+                    auto magSpecSU2 = PSMeasurer.powerSpectrum(BSU2);
+                    auto elSpecSU2 = PSMeasurer.powerSpectrum(ESU2);
 
                     spectra(k).save(t, elSpecSU2, magSpecSU2);
             );
