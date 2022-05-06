@@ -56,15 +56,6 @@ namespace TempLat {
 
                 // Note: Initially, the gradients are 0, so the scale factors receives
                 //  only contributions from the kinetic energies and the potential.
-
-                // If leapfrog is used to solve the equations, a and aDot must be known
-                // at different times:
-                if (rPar.eType == LF) {
-                    model.aDotSI = model.fStar / Model::MPl * sqrt((kin + model.pot0SI) / 3.0);
-                    //SI starts at -1/2.
-
-                    model.aI += model.aDotSI * model.dt / 2;
-                }
             }
         }
 

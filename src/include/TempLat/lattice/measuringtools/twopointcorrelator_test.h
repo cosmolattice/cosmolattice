@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_MEASUREMENTS_TWOPOINTCORRELATOR_TEST_H
 #define TEMPLAT_LATTICE_MEASUREMENTS_TWOPOINTCORRELATOR_TEST_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
@@ -35,7 +35,7 @@ inline void TempLat::TwoPointCorrelatorTester::Test(TempLat::TDDAssertion& tdd) 
 
         ic.inFourierSpace() = base.inFourierSpace();
 
-        auto checkResult = projectRadially(ic, SpaceStateInterface::SpaceType::Configuration,toolBox).measure();
+        auto checkResult = projectRadially(ic, SpaceStateInterface::SpaceType::Configuration,toolBox, false, false).measure();
 
 //        base.iterate([&base](auto &piter) { say << piter.getCoordinates() << " " << base.get(piter) << "\n"; return true; });
 

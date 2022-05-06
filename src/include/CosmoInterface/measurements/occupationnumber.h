@@ -1,10 +1,10 @@
 #ifndef COSMOINTERFACE_MEASUREMENTS_OCCUPATIONNUMBER_H
 #define COSMOINTERFACE_MEASUREMENTS_OCCUPATIONNUMBER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "TempLat/util/function.h"
@@ -19,7 +19,7 @@ namespace TempLat {
 
     /** \brief A class which computes the occupation number.
      *
-     * 
+     *
      **/
 
 
@@ -36,7 +36,7 @@ namespace TempLat {
         tmp = (pow(model.aI, model.alpha - 3) * model.piS(i)) + model.aDotI / model.aI * model.fldS(i);
         auto part2 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure();
 
-        T normalisation = pow<2>(model.aI) * pow<3>(model.dx * N) / 2 * pow<2>(model.fStar / model.omegaStar);
+        T normalisation = pow<2>(model.aI) * pow<3>(model.dx) / pow<3>(N)  / 2 * pow<2>(model.fStar / model.omegaStar);
 
         T m2 = average(model.potDeriv2(i));
 

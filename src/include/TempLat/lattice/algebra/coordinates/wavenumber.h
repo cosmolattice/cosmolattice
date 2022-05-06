@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_COORDINATES_WAVENUMBER_H
 #define TEMPLAT_LATTICE_ALGEBRA_COORDINATES_WAVENUMBER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
@@ -68,6 +68,11 @@ namespace TempLat {
             return "k_" + std::to_string(j);
         }
 
+        std::string toString() const
+        {
+            return "k";
+        }
+
 
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -116,7 +121,10 @@ namespace TempLat {
         }
 
         std::string toString(int i) const{
-          return "k" + std::to_string(i);
+          return "k_" + std::to_string(i);
+        };
+        std::string toString() const{
+          return "k";
         };
 
         static constexpr size_t size = N;

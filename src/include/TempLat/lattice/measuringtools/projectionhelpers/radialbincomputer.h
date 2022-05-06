@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_RADIALBINCOMPUTER_H
 #define TEMPLAT_LATTICE_MEASUREMENTS_PROJECTIONHELPERS_RADIALBINCOMPUTER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <cmath>
@@ -30,11 +30,22 @@ namespace TempLat {
         {
             if ( mRange <= 0 ) mRange = 1;
         }
-        
+
         /** \brief Call this for your value, receive a bin index in return. */
         ptrdiff_t operator()(double value) const {
             ptrdiff_t bin = std::round( mNBins * (value - mMinVal) / mRange);
             return std::min(mHighestBin, std::max(ptrdiff_t(0), bin));
+        }
+
+        template<typename T>
+        void setCentralBinBounds(std::vector<T>& res)
+        {
+          res = std::vector<T>(mNBins);
+          T steps = mRange / mNBins;
+          for(ptrdiff_t i = 0; i < mNBins; ++i)
+          {
+            res[i] = mMinVal + i * steps;
+          }
         }
 
     private:

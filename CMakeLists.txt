@@ -23,9 +23,10 @@ set(CMAKE_CXX_STANDARD 14) #This is likely to evolve in future releases.
 
 #Most likely, if you use external library, they won't be in the default path. You need to help CMake where to find them.
 #The easiest way is to put below the absolute path to the folder where the library is.
-#You can also provide them when calling cmake or just directly add them to CMAKE_PREFIX_PATH.
+#You can also provide them when calling cmake or just dire
+#tly add them to CMAKE_PREFIX_PATH.
 
-#Cool note: if you installed these libraries with the automated scripts in thedependencies subfolder, you don't need to 
+#Cool note: if you installed these libraries with the automated scripts in thedependencies subfolder, you don't need to
 # do anything, the following line does it for you.
 include(src/cmake/auto_install_paths.cmake)
 
@@ -53,6 +54,7 @@ set(MYFFTW3_PATH "insert/here" CACHE STRING "FFTW3 guess path")
 #if you have an exotic HDF5, you can also help cmake by adding the path below.
 
 set(MYHDF5_PATH "insert/here" CACHE STRING "HDF5 guess path")
+
 
 #if for some reason you have other exotic installations the cmake can't find, just repeat the above procedure below.
 
@@ -137,7 +139,8 @@ endif()
 
 #you can target your computer architecture by changing the arch here.
 if(NOT ${G++OPT} STREQUAL "G")
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native ")
+    # example: set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native ")
+    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
 set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wshadow ")

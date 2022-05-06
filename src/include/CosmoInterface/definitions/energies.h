@@ -40,7 +40,7 @@ namespace TempLat {
         static inline auto gradientS(Model& model, T fldf) {  // scalar singlet: gradient energy
             return 0.5 * fldf * pow<-2>(model.aI);
         }
-
+		
         template<class Model, class T>  
         static inline auto kineticCS(Model& model, T fldf) {  // complex scalar: kinetic energy
             return  fldf * pow<-6>(model.aI);
@@ -50,7 +50,7 @@ namespace TempLat {
         static inline auto gradientCS(Model& model, T fldf) {   // complex scalar: gradient energy
             return  fldf * pow<-2>(model.aI);
         }
-
+		
         template<class Model, class T>
         static inline auto kineticSU2Doublet(Model& model, T fldf) {  // SU(2) doublet: kinetic energy
             return  fldf * pow<-6>(model.aI);
@@ -60,7 +60,7 @@ namespace TempLat {
         static inline auto gradientSU2Doublet(Model& model, T fldf) {   // SU(2) doublet: gradient energy
             return fldf * pow<-2>(model.aI);
         }
-
+		
         template<class Model, class T>    // U(1) gauge field: electric energy
         static inline auto electricU1(Model& model, T fldf) {  //This expects field already rescaled by the coupling constant. That ways, works like scalar, for different gauge fields.
             return 0.5 * pow<2>( model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf;
@@ -70,7 +70,7 @@ namespace TempLat {
         static inline auto magneticU1(Model& model, T fldf) {   // U(1) gauge field: magnetic energy
             return 0.5 * pow<2>( model.omegaStar / model.fStar)  * pow<-4>(model.aI) * fldf;
         }
-
+		
         template<class Model, class T>   // SU(2) gauge field: electric energy
         static inline auto electricSU2(Model& model, T fldf)
         {
@@ -93,7 +93,17 @@ namespace TempLat {
         static inline auto gradientS(Model& model) {
             return gradientS(model, model.grad2AvI);
         }
+        
+         template<class Model>
+        static inline auto kineticSSI(Model& model) {
+            return kineticS(model, model.pi2AvSI);
+        }
 
+        template<class Model>
+        static inline auto gradientSSI(Model& model) {
+            return gradientS(model, model.grad2AvSI);
+        }
+		
         template<class Model>
         static inline auto kineticCS(Model& model) {
             return kineticCS(model, model.CSpi2AvI);
@@ -103,7 +113,17 @@ namespace TempLat {
         static inline auto gradientCS(Model& model) {
             return gradientCS(model, model.CSgrad2AvI);
         }
+		
+		 template<class Model>
+        static inline auto kineticCSSI(Model& model) {
+            return kineticCS(model, model.CSpi2AvSI);
+        }
 
+        template<class Model>
+        static inline auto gradientCSSI(Model& model) {
+            return gradientCS(model, model.CSgrad2AvSI);
+        }
+		
         template<class Model>
         static inline auto kineticSU2Doublet(Model& model) {
             return kineticSU2Doublet(model, model.SU2DblPi2AvI);
@@ -113,7 +133,17 @@ namespace TempLat {
         static inline auto gradientSU2Doublet(Model& model) {
             return gradientSU2Doublet(model, model.SU2DblGrad2AvI);
         }
+		
+		template<class Model>
+        static inline auto kineticSU2DoubletSI(Model& model) {
+            return kineticSU2Doublet(model, model.SU2DblPi2AvSI);
+        }
 
+        template<class Model>
+        static inline auto gradientSU2DoubletSI(Model& model) {
+            return gradientSU2Doublet(model, model.SU2DblGrad2AvSI);
+        }
+		
         template<class Model>
         static inline auto electricU1(Model& model) {
             return electricU1(model, model.U1pi2AvI);
@@ -122,6 +152,16 @@ namespace TempLat {
         template<class Model>
         static inline auto magneticU1(Model& model) {
             return magneticU1(model, model.U1Mag2AvI);
+        }
+        
+        template<class Model>
+        static inline auto electricU1SI(Model& model) {
+            return electricU1(model, model.U1pi2AvSI);
+        }
+
+        template<class Model>
+        static inline auto magneticU1SI(Model& model) {
+            return magneticU1(model, model.U1Mag2AvSI);
         }
 
         template<class Model>
@@ -135,7 +175,19 @@ namespace TempLat {
         {
             return   magneticSU2(model, model.SU2Mag2AvI);
         }
+		
+		template<class Model>
+        static inline auto electricSU2SI(Model& model)
+        {
+            return electricSU2(model, model.SU2pi2AvSI);
+        }
 
+        template<class Model>
+        static inline auto magneticSU2SI(Model& model)
+        {
+            return   magneticSU2(model, model.SU2Mag2AvSI);
+        }
+		
         template <class Model>
         static inline auto rho(Model& model)  // Total energy density (sum of all contributions)
         {
@@ -157,6 +209,7 @@ namespace TempLat {
                     + EelSU2 + EmagSU2
                     + model.potAvI);   // we also include the potential energy to the sum
         }
+        
 
             private:
         /* Put all member variables and private methods here. These may change arbitrarily. */

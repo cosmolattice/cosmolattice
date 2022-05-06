@@ -1,10 +1,10 @@
 #ifndef COSMOINTERFACE_MEASUREMENTS_STD_SPECTRUMSAVERSTD_H
 #define COSMOINTERFACE_MEASUREMENTS_STD_SPECTRUMSAVERSTD_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "TempLat/util/tdd/tdd.h"
@@ -21,7 +21,7 @@ namespace TempLat {
 
     /** \brief A class which implements the std spectra output.
      *
-     * 
+     *
      * Unit test: make test-spectrumsaverstd
      **/
 
@@ -59,21 +59,25 @@ namespace TempLat {
             outputSpectrum = std::make_shared<OutputStream<T>>(name + ".txt", amIRoot, mMode);
         }
 
-
+		 
         void save(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
         {
+
             if(printHeader){
-                (*outputSpectrum) << (*arr[0])[0].getHeaderBin(verbosity) << " ";
-                for(size_t i = 0; i < arr.size() - 1; ++i) (*outputSpectrum) << (*arr[i])[0].getHeaderValue(verbosity, false, verbosity == 2 ? 4 * (i+1) : i+1)<< " ";
-                (*outputSpectrum) << (*(arr.back()))[0].getHeaderValue(verbosity, true, verbosity == 2 ? 4 * (arr.size()) : (arr.size())) << "\n";
+                if(verbosity != 1) (*outputSpectrum) << "1: binCentralValue" << " ";
+                if(verbosity != 0) (*outputSpectrum) << (*arr[0])[0].getHeaderBin(verbosity, verbosity == 1 ? 1 : 2) << " ";
+                for(size_t i = 0; i < arr.size() - 1; ++i) (*outputSpectrum) << (*arr[i])[0].getHeaderValue(verbosity, false, verbosity == 2 ? 4 * (i+1) + 2  : i+2)<< " ";
+                (*outputSpectrum) << (*(arr.back()))[0].getHeaderValue(verbosity, true, verbosity == 2 ? 4 * (arr.size()) + 2 : (arr.size() + 1)) << "\n";
+
                 printHeader = false;
             }
 
 
             auto mNBins = nBins;
+
             if(nBins > -1){
                 for(size_t i = 0; i < arr.size(); ++i) {
-                    arr[i]->rebin(nBins);
+                  //  arr[i]->rebin(nBins , std::floor(pow(3, 0.5) / 2.0 * nGrid));  // The second argument is the total length of the grid in k . The bin size in computed as this divided by nBins. This choice corresponds to bin of size kIR for the default choice.
                     arr[i]->rescaleBins(kIR);
                 }
             } else mNBins = arr[0]->size();
@@ -84,18 +88,38 @@ namespace TempLat {
             for(int i = 0; i< mNBins; ++i)
             {
                 sstream.str("");
-                if(verbosity != 2) sstream  << (*arr[0])[i].toString(true, arr.size() <= 1, verbosity); //true: bin information. arr.size() <= 1: multiplicity
-                else sstream << (i+1) * deltaKBin << " " << (*arr[0])[i].toString(false, arr.size() <= 1,  verbosity); //for verbosity 3, show multiple of deltaKbin for bin value, and only mean value for the spectrum.
+
+                if(verbosity == 0){
+                  sstream  <<  (*arr[0]).getCentralBinBounds()[i];
+                }
+                else if (verbosity == 1){
+                  sstream  <<  (*arr[0])[i].getBinString(verbosity);
+                }
+                else if (verbosity == 2){
+                  sstream  <<  (*arr[0]).getCentralBinBounds()[i] << " " <<  (*arr[0])[i].getBinString(verbosity);
+              }
+
+              sstream <<  " " << (*arr[0])[i].getValueString(arr.size() <= 1, verbosity);
+              for (size_t j = 1; j < arr.size() - 1; ++j) {
+                  sstream << " " << (*arr[j])[i].getValueString(false, verbosity);
+              }
+              if(arr.size() > 1) sstream << " " << (*arr.back())[i].getValueString(true, verbosity);
+              (*outputSpectrum) << sstream.str()  << "\n";
+
+
+                /*if(verbosity != 1) sstream  << (*arr[0])[i].toString(true, arr.size() <= 1, verbosity); //true: bin information. arr.size() <= 1: multiplicity
+                else sstream << (i+1) * deltaKBin *kIR << " " << (*arr[0])[i].toString(false, arr.size() <= 1,  verbosity); //for verbosity 1, show multiple of deltaKbin for bin value, and only mean value for the spectrum.
                 for (size_t j = 1; j < arr.size() - 1; ++j) {
                     sstream << " " << (*arr[j])[i].toString(false, false, verbosity);
                 }
                 if(arr.size() > 1) sstream << " " << (*arr.back())[i].toString(false, true,verbosity);
-                (*outputSpectrum) << sstream.str()  << "\n";
+                (*outputSpectrum) << sstream.str()  << "\n";*/
             }
-            (*outputSpectrum) << sstream.str()  << "\n\n";
+            (*outputSpectrum)  << "\n\n";
+
+
         }
-
-
+		
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
 

@@ -1,10 +1,10 @@
 #ifndef COSMOINTERFACE_MEASUREMENTS_SU2MEASURER_H
 #define COSMOINTERFACE_MEASUREMENTS_SU2MEASURER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/measurements/meansmeasurer.h"
@@ -14,10 +14,10 @@
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "CosmoInterface/definitions/gausslaws.h"
 #include "CosmoInterface/definitions/fieldfunctionals.h"
+#include "CosmoInterface/measurements/powerspectrum.h"
 #include "CosmoInterface/runparameters.h"
 
 namespace TempLat {
-
 
     /** \brief A class which contains standard measurements for the SU2 gauge fields.
      *
@@ -77,13 +77,15 @@ namespace TempLat {
 
         // This measures the electric and magnetic spectra and adds them to the files.
         template <typename Model>
-        void measureSpectra(Model& model, T t) {
+        void measureSpectra(Model& model, T t, PowerSpectrumMeasurer& PSMeasurer) {
 
             ForLoop(k,0,Model::NSU2-1,
-                    auto BSU2 = sqrt(FieldFunctionals::B2SU2(model,k));
-                    auto ESU2 =  pow(model.aI,  model.alpha - 1) * sqrt(FieldFunctionals::pi2SU2(model,k));
-                    auto magSpecSU2 = powerSpectrum(BSU2);
-                    auto elSpecSU2 = powerSpectrum(ESU2);
+
+                    auto BSU2 = safeSqrt(FieldFunctionals::B2SU2(model,k));
+                    auto ESU2 =  pow(model.aI,  model.alpha - 1) * safeSqrt(FieldFunctionals::pi2SU2(model,k));
+                    auto magSpecSU2 = PSMeasurer.powerSpectrum(BSU2);
+                    auto elSpecSU2 = PSMeasurer.powerSpectrum(ESU2);
+
                     spectra(k).save(t, elSpecSU2, magSpecSU2);
             );
         }

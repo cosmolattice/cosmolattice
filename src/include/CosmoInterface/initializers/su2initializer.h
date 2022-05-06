@@ -1,10 +1,10 @@
 #ifndef COSMOINTERFACE_INITIALIZERS_SU2INITIALIZER_H
 #define COSMOINTERFACE_INITIALIZERS_SU2INITIALIZER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "TempLat/util/constants.h"
@@ -131,7 +131,7 @@ namespace TempLat {
                 auto amplitudes = MakeArray(a,0,3,
                   fg.getFluctuationsNorm(model, model.fldSU2Doublet(i)(a),
                     model.masses2SU2Doublet(i)(a),kCutOff)*
-                    RandomRealGaussianField<T>(baseSeed + "norm" + model.fldSU2Doublet(i)(a).toString(),toolBox));
+                    RandomRayleighField<T>(baseSeed + "norm" + model.fldSU2Doublet(i)(a).toString(),toolBox));
 
                 // 2. Phases of the waves
                 // phases of left-moving waves (for each of the four components), set randomly:
@@ -163,7 +163,7 @@ namespace TempLat {
 
                 FourierSite<Model::NDim> ntilde(model.getToolBox());
                 auto k =   ntilde.norm() * model.kIR;
-                auto omega0 = fg.omega_k(k ,model.masses2SU2Doublet(i)(0_c));
+                auto omega0 = fg.omega_k(k ,model.masses2SU2Doublet(i)(0_c), model.fldSU2Doublet(i)(0_c).toString());
                 // effective frequency
 
                 ForLoop(a,0,3,

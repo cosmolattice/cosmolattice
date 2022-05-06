@@ -39,10 +39,11 @@ namespace TempLat {
 #endif
         {
             if ( this->mVerbose) { }; /* just for the compiler warnings */
-            int rank = 0;
+
 
 
 #ifndef NOMPI
+            int rank = 0;
 
             if (mVerbose ) sayShort << "Calling MPI_Init.\n";
             

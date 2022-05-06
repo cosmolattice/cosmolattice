@@ -21,7 +21,7 @@ namespace TempLat
     // number of fields of each species and the type of tinteractions.
 
     struct ModelPars : public TempLat::DefaultModelPars {
-        static constexpr size_t NScalars = 2;
+    	static constexpr size_t NScalars = 2;
         // In our phi4 example, we only want 2 scalar fields.
         static constexpr size_t NPotTerms = 2;
         // Our potential naturaly splits into two terms: the inflaton potential
@@ -49,7 +49,7 @@ namespace TempLat
  //...
 private:
 
-  double g,lambda,q;
+  double g,lambda, q;
 // Here are the declaration of the model specific parameters. They are 'private'
 // to force you using them only within your model and not outside.
 
@@ -80,6 +80,7 @@ private:
 
       q = parser.get<double>("q");
       // In the same way, we declare an input parameter 'q'.
+	 
 
       g = sqrt(q*lambda);
       //For convenience, we also define g as a function of lambda and q.
@@ -92,6 +93,7 @@ private:
 
         fldS0 = parser.get<double, 2>("initial_amplitudes");
         piS0 = parser.get<double, 2>("initial_momenta", {0, 0});
+        
         // Then, we need to specify the initial homogeneous
         // value of our fields. We read them again from the input file. The int '2' means
         // that we actually expect two values and that we will get an array of
@@ -155,8 +157,9 @@ private:
     {
         return 0.5 * q * pow<2>(fldS(0_c) * fldS(1_c));
     }
-
-
+	
+	
+	
     // Advanced note (ignore if you are satisfied with the above) :
     // - The 'auto' return type is important because the object returned is
     // not say an array containing  the value of the expression but the expression itself, which can and will be
@@ -178,14 +181,16 @@ private:
     // per scalar field (2 in this case).  The integer in Tag<0> tells you the field with
     // respect to which you are defining the derivative of the potential of.
     {
-      return   pow<3>(fldS(0_c)) + q  * fldS(0_c) * pow<2>(fldS(1_c));
+      return   pow<3>(fldS(0_c)) + q * fldS(0_c) * pow<2>(fldS(1_c)) ;
     }
 
     auto potDeriv(Tag<1>)  // Derivative with respect to the daughter field.
     {
       return  q * fldS(1_c) * pow<2>(fldS(0_c));
     }
-
+	
+	
+	
     /////////
    //  Second derivatives of the program potential with respect fields
    // (add one function for each field)
@@ -203,7 +208,8 @@ private:
     {
       return  q * pow<2>(fldS(0_c)) ;
     }
-
+		
+	
     };
 }
 

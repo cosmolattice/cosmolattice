@@ -43,7 +43,7 @@ namespace TempLat {
         template <typename S>
         void operator=(S&& vec)
         {
-            ForLoop(i, 0, N, mVec[i] = GetValue::get(vec.getComp(i),0));
+            ForLoop(i, 0, N-1, mVec[i] = GetValue::get(vec.getComp(i),0));
         }
 
         std::array<T,N>& asArr()

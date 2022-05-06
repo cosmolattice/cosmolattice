@@ -1,16 +1,17 @@
 #ifndef COSMOINTERFACE_MEASUREMENTS_COMPLEXSCALARMEASURER_H
 #define COSMOINTERFACE_MEASUREMENTS_COMPLEXSCALARMEASURER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/measurements/meansmeasurer.h"
 #include "CosmoInterface/measurements/measurementsIO/spectrumsaver.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/measurements/powerspectrum.h"
 #include "TempLat/util/templatvector.h"
 
 namespace TempLat {
@@ -18,7 +19,7 @@ namespace TempLat {
 
     /** \brief A class which contains standard measurements for the complex scalars.
      *
-     * 
+     *
      **/
 
     template <typename T>
@@ -29,13 +30,13 @@ namespace TempLat {
             ComplexScalarMeasurer(Model& model, FilesManager& filesManager, const RunParameters<T>& par, bool append)
             {
             	bool amIRoot = model.getToolBox()->amIRoot();
-            
+
             // We create THREE files for each complex scalar, containing the averages (mean, rms, etc) of the real and imaginary components and the norm
             // Files are created with the MeasurementsSaver function: the second parameter is added to the file name; the fifth one adds a header to the file
             	ForLoop(i, 0, Model::NCs - 1,
                     standardReOut.emplace_back(  // real part
                             MeasurementsSaver<T>(filesManager, model.fldCS(i)(0_c), amIRoot, append, MeansMeasurer::header())
-                    ); 
+                    );
                     standardImOut.emplace_back(  // imaginary part
                             MeasurementsSaver<T>(filesManager, model.fldCS(i)(1_c), amIRoot, append, MeansMeasurer::header())
                     );
@@ -52,7 +53,11 @@ namespace TempLat {
 
 		// The following function measures the corresponding averages with MeansMeasurer::measure, and adds them to the files.
 		// NOTE: For scalar fields, the momenta is defined as pi=a^(3-alpha)*f', with f' the time-derivative; see documentation.
-		//       The sqrt(2) is to retrive the field components.
+		//       The sqrt(2) is to retrive the field components, real and imaginary, in the
+		//following sense: varphi = (varphi_1+ivarphi_2)/sqrt{2}, so we plot the mean of
+		//varphi_1 and verphi_2 separately. However, when plotting the modulus we do it of the
+		// full field, so |varphi| = sqrt{Re{varphi}^2 + Im{varphi}^2} =
+		// = sqrt{varphi_1^2+varphi_2^2}/sqrt{2}.
         template <typename Model>
         void measureStandard(Model& model, T t) {
             ForLoop(i, 0, Model::NCs - 1,
@@ -60,19 +65,18 @@ namespace TempLat {
                           standardReOut(i).save();
                     MeansMeasurer::measure(standardImOut(i), sqrt(2) *model.fldCS(i)(1_c), sqrt(2) * model.piCS(i)(1_c) * pow(model.aI, model.alpha - 3), t);
                           standardImOut(i).save();
-                    MeansMeasurer::measure(standardNormOut(i), sqrt(2) * norm(model.fldCS(i)), sqrt(2) * norm(model.piCS(i) * pow(model.aI, model.alpha - 3)), t);
+                    MeansMeasurer::measure(standardNormOut(i),  norm(model.fldCS(i)),  norm(model.piCS(i) * pow(model.aI, model.alpha - 3)), t);
                           standardNormOut(i).save();
             );
         }
 
 		// The following function measures the power spectrum of the norm and its time-derivative as the sum of their components.
-		// The factor 2 is to recover the fields components
         template <typename Model>
-        void measureSpectra(Model& model, T t) {
+        void measureSpectra(Model& model, T t, PowerSpectrumMeasurer& PSMeasurer) {
             ForLoop(i, 0, Model::NCs - 1,
                     spectraNormOut(i).save(t,
-                    2.0 * (powerSpectrum(model.fldCS(i)(0_c)) + powerSpectrum(model.fldCS(i)(1_c))   ),
-                            2.0 * pow(model.aI, 2 * model.alpha - 6) * (powerSpectrum(model.piCS(i)(0_c) ) + powerSpectrum(model.piCS(i)(1_c)))
+                     (PSMeasurer.powerSpectrum(model.fldCS(i)(0_c)) + PSMeasurer.powerSpectrum(model.fldCS(i)(1_c))   ),
+                             pow(model.aI, 2 * model.alpha - 6) * (PSMeasurer.powerSpectrum(model.piCS(i)(0_c) ) + PSMeasurer.powerSpectrum(model.piCS(i)(1_c)))
                             );
                     );
         }
