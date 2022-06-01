@@ -26,6 +26,7 @@ namespace TempLat {
         /* Put public methods here. These should change very little over time. */
         template <typename Model>
         ScalarSingletMeasurer(Model& model, FilesManager& filesManager, const RunParameters<T>& par, bool append):
+        ONMeasurer(par),
         PSType(par.powerSpectrumType)
         {
 
@@ -67,7 +68,7 @@ namespace TempLat {
                     spectraOut(i).save(t,
                             PSMeasurer.powerSpectrum(model.fldS(i)),
                             pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i)),
-                            occupationNumber(model, i)
+                            ONMeasurer.occupationNumber(model, i)
                             );
             );
         }
@@ -77,6 +78,8 @@ namespace TempLat {
 
         TempLatVector<MeasurementsSaver<T>> standardOut;
         TempLatVector<SpectrumSaver<T>> spectraOut;
+
+        OccupationNumberMeasurer ONMeasurer;
 
         const int PSType;
     };
