@@ -51,7 +51,7 @@ namespace TempLat {
                 fixedBackground(expansion ? par.get<bool>("fixedBackground",false) : false), // If true, expansion is given by a fixed background
                 omegaEoS(fixedBackground ? par.get<T>("omegaEoS",1.0 / 3.0) : 0.0), // For fixed background expansion: equation of state
                 H0(fixedBackground ? par.get<T>("H0") : 0.0), // For fixed background expansion: initial Hubble parameter
-                spectraVerbosity(par.get<int>("spectraVerbosity",1)), // Verbosity of spectra files
+                spectraVerbosity(par.get<int>("spectraVerbosity",0)), // Verbosity of spectra files
                 deltaKBin(par.get<double>("deltaKBin",1)), // Bin width of the spectra
                 nBinsSpectra(floor(sqrt(3.0)/2.0 * N / deltaKBin)), // Number of bins in spectra
                 hdf5Spectra(par.get<bool>("hdf5Spectra",false)), // If true, spectra are printed in HDF5 format. If false, printed in txt format.

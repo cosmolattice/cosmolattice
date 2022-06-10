@@ -23,29 +23,45 @@ namespace TempLat {
      **/
 
 
-    template< class Model, int I>
-    auto occupationNumber(Model& model, Tag<I> i) {
-        using T = decltype(model.dx);
-        auto N = GetNGrid::get(model); //Isotropic lattices only.
 
-        Field<T> tmp("tmp", GetToolBox::get(model));
+ class OccupationNumberMeasurer{
+      public:
+        template<typename T>
+        OccupationNumberMeasurer(const RunParameters<T>& par) :
+        nbins(par.nBinsSpectra)
+        {}
 
-        tmp = model.fldS(i);
-        auto part1 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure();
+        template< class Model, int I>
+        auto occupationNumber(Model& model, Tag<I> i) {
+            using T = decltype(model.dx);
+            auto N = GetNGrid::get(model); //Isotropic lattices only.
+            T kMaxBins = std::floor(pow(3, 0.5) / 2.0 * N) + 1;
 
-        tmp = (pow(model.aI, model.alpha - 3) * model.piS(i)) + model.aDotI / model.aI * model.fldS(i);
-        auto part2 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure();
 
-        T normalisation = pow<2>(model.aI) * pow<3>(model.dx) / pow<3>(N)  / 2 * pow<2>(model.fStar / model.omegaStar);
+            Field<T> tmp("tmp", GetToolBox::get(model));
 
-        T m2 = average(model.potDeriv2(i));
+            tmp = model.fldS(i);
+            auto part1 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);
 
-        auto omegaK = Function(k, sqrt(pow<2>(model.aI) * m2 + pow<2>(k)));
+            tmp = (pow(model.aI, model.alpha - 3) * model.piS(i)) + model.aDotI / model.aI * model.fldS(i);
+            auto part2 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);
 
-        return (Function(k,normalisation * omegaK(k)) * part1)
-        +
-        (Function(k,normalisation * pow(model.aI, 2.0 * (1.0 - model.alpha)) / omegaK(k)) * part2);
-    }
+            T normalisation = pow<2>(model.aI) * pow<3>(model.dx) / pow<3>(N)  / 2 * pow<2>(model.fStar / model.omegaStar);
+
+            T m2 = average(model.potDeriv2(i));
+
+            auto omegaK = Function(k, sqrt(pow<2>(model.aI) * m2 + pow<2>(k)));
+
+            return (Function(k,normalisation * omegaK(k)) * part1)
+            +
+            (Function(k,normalisation * pow(model.aI, 2.0 * (1.0 - model.alpha)) / omegaK(k)) * part2);
+        }
+
+
+      private:
+        ptrdiff_t nbins;
+     };
+
 
 
     class OccupationNumberTester {
