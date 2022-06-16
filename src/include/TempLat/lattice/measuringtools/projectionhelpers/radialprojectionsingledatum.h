@@ -60,7 +60,7 @@ namespace TempLat {
             + (withMultiplicity ? (", " + std::to_string(start + 4) + ": multiplicity") : "") : (withMultiplicity ? (", " + std::to_string(start + 1) + ": multiplicity") : "") );
         }
 
-        std::string toString(bool withMultiplicity = false, int verbosity = 0) const {
+        std::string toString(bool withMultiplicity = false, int verbosity = 0, bool fourierMult = true) const {
             std::stringstream sstream;
             switch(verbosity){
                 case 0 : case 1: {
@@ -72,7 +72,7 @@ namespace TempLat {
                     break;
                 }
             }
-            if ( withMultiplicity ) sstream << " " <<  multiplicity ; 
+            if ( withMultiplicity ) sstream << " " <<  (fourierMult ? 2 * multiplicity : multiplicity); 
             return sstream.str();
         }
 
