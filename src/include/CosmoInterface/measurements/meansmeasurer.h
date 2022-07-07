@@ -1,21 +1,22 @@
 #ifndef COSMOINTERFACE_MEASUREMENTS_STANDARDMEASURER_H
 #define COSMOINTERFACE_MEASUREMENTS_STANDARDMEASURER_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/measurements/measurementsIO/measurementssaver.h"
 #include "TempLat/lattice/algebra/operators/power.h"
+#include "TempLat/lattice/algebra/operators/squareroot.h"
 
 namespace TempLat {
 
 
     /** \brief A class which implements common measurement to all fields, like mean and variance, in a standardized format.
      *
-     * 
+     *
      **/
 
     class MeansMeasurer {
@@ -41,13 +42,13 @@ namespace TempLat {
         }
 
 		// Header for average files of scalar fields (scalar singlets, complex scalars, and SU(2) doublets)
-        static std::vector<std::string> header() 
+        static std::vector<std::string> header()
         {
             return {"t","<phi>" ,"<pi>" ,"<phi^2>" ,"<pi^2>" ,"rms(phi)" ,"rms(pi)"};
         }
-        
+
          // Header for average files of gauge fields (U(1) and SU(2) sectors)
-        static std::vector<std::string> headerEB() 
+        static std::vector<std::string> headerEB()
         {
             return {"t","<|E|>" ,"<|B|>" ,"<|E|^2>" ,"<|B|^2>" ,"rms(|E|)" ,"rms(|B|)"};
         }
