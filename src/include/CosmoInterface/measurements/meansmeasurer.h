@@ -9,7 +9,6 @@
 
 #include "CosmoInterface/measurements/measurementsIO/measurementssaver.h"
 #include "TempLat/lattice/algebra/operators/power.h"
-#include "TempLat/lattice/algebra/operators/squareroot.h"
 
 namespace TempLat {
 
@@ -37,8 +36,14 @@ namespace TempLat {
             ms.addAverage(pi);
             ms.addAverage(phi2);
             ms.addAverage(pi2);
-            ms.addAverage(sqrt(phi2 - pow<2>(phi)));  // rms(phi)
-            ms.addAverage(sqrt(pi2 - pow<2>(pi)));  // rms(pi)
+
+            auto rmsPhi2 = phi2 - pow<2>(phi);
+            auto rmsPi2 = pi2 - pow<2>(pi);
+
+            // Sometimes, machine precision leads to imaginary rms.
+            // We check for this explicitly and set it to zero when it happens
+            ms.addAverage(rmsPhi2 > 0 ? sqrt(rmsPhi2) : 0);  // rms(phi)
+            ms.addAverage(rmsPi2 > 0 ? sqrt(rmsPi2) : 0);  // rms(pi)
         }
 
 		// Header for average files of scalar fields (scalar singlets, complex scalars, and SU(2) doublets)
