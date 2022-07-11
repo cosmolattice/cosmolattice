@@ -46,9 +46,9 @@ namespace TempLat {
             return sstream.str();
         }
 
-        std::string getValueString( bool withMultiplicity = true, int verbosity = 0) const {  // these booleans will allow to save multiple spectra in the same file.
+        std::string getValueString( bool withMultiplicity = true, int verbosity = 0, bool fourierMult = false) const {  // these booleans will allow to save multiple spectra in the same file.
             std::stringstream sstream;
-            sstream << mValueInformation.toString(withMultiplicity, verbosity);
+            sstream << mValueInformation.toString(withMultiplicity, verbosity, fourierMult);
             return sstream.str();
         }
 
