@@ -53,12 +53,13 @@ namespace TempLat {
 
             size_t N = GetNGrid::get(model.getOneField());
 
-            auto klattice = MakeVector(l, 1, Model::NDim,
+            // Note that we force the vector to have 3 components instead of Model::NDim so the code compiles for any NDim. The GW module only works for NDim=3. If NDim != 3, the code does not run and returns an error.
+            auto klattice = MakeVector(l, 1, 3,
                                        mType == 1 ? std::sin(2 * Constants::pi<T> * pVec[l-1] / N) :
                                        mType == 2 ? std::complex<T>(1) - std::complex<T>(std::cos(2.0 * Constants::pi<T> / N * pVec[l-1]),std::sin(2.0 * Constants::pi<T> / N * pVec[l-1])) :
                                        mType == 3 ? std::complex<T>(1) - std::complex<T>(std::cos(2.0 * Constants::pi<T> / N * pVec[l-1]),std::sin(-2.0 * Constants::pi<T> / N * pVec[l-1])) : std::complex<T>(1.));
 
-            T klatticeSquare = Total(k, 1, Model::NDim, abs((klattice(k))*conj(klattice(k))));
+            T klatticeSquare = Total(k, 1, 3, abs((klattice(k))*conj(klattice(k))));
 
             if(i == j) return (std::complex<T>)(1) - conj(klattice(i)) * (klattice(j)) / klatticeSquare;
             return - conj(klattice(i)) * (klattice(j)) / klatticeSquare;

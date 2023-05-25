@@ -32,7 +32,7 @@ namespace TempLat {
         	
             return (pow(model.aI, 1 + model.alpha) *
                     LatLapl<Model::NDim>( (*model.fldGWs)(n))
-                     + pow(model.aI, 1 + model.alpha) * 2 * pow<2>(model.fStar/Constants::MPl) * (PITensor::totalTensor(model,n)));
+                     + pow(model.aI, 1 + model.alpha) * 2. * (PITensor::totalTensor(model,n)));
         }
 		
 		

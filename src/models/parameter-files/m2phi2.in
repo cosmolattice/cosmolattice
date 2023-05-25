@@ -1,5 +1,5 @@
 #Output
-outputfile = ./test4/
+outputfile = ./test10/
 
 #Evolution
 expansion = true
@@ -8,7 +8,7 @@ evolver = LF
 #Lattice
 N = 32
 dt = 0.5
-kIR = 0.75
+kIR = 1
 
 #Times
 tOutputFreq = 1
@@ -26,9 +26,8 @@ withGWs=true
 
 #IC
 #kCutOff = 4
-initial_amplitudes = 5.6964e18 0  # homogeneous amplitudes in GeV
-initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
+initial_amplitudes = 1   # homogeneous amplitudes in GeV
+initial_momenta = 1    # homogeneous amplitudes in GeV2
 
 #Model Parameters
-lambda1 = 9e-14
-q = 100
+m = 1

@@ -72,7 +72,7 @@ private:
       // Independent parameters of the model (read from parameters file)
       /////////
 
-      lambda1 = parser.get<double>("m");
+      m = parser.get<double>("m");
       //  We start by initializing our model paramteters. We read them from the
       // input file/command line.  Effectively, by calling 'par.get<double>("lambda")'
       // we declare a new parameter which needs to be in the input data.  Its name is
@@ -88,7 +88,7 @@ private:
         /////////
 
         fldS0 = parser.get<double, 1>("initial_amplitudes");
-        piS0 = parser.get<double, 1>("initial_momenta", {0});
+        piS0 = parser.get<double, 1>("initial_momenta", 0);
         
         // Then, we need to specify the initial homogeneous
         // value of our fields. We read them again from the input file. The int '2' means
@@ -105,8 +105,8 @@ private:
         /////////
 
         alpha = 0;
-        fStar = fldS0[0];
-        omegaStar = m;
+        fStar = 1;
+        omegaStar = 1;
         // We now need to specify the rescaling from physical units to program units.
         // This consists of the  time rescaling exponent alpha, the field rescaling fStar
         // and the velocity rescaling omegaStar.

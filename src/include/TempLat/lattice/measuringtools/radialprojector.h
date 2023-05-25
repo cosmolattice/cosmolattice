@@ -137,6 +137,7 @@ namespace TempLat {
             {
               if((not excludeOrigin) or (not it.isAtOrigin())){
                   quality=layout.getHermitianPartners()->qualify(it.getVec());
+                 
                   if ( quality != HermitianRedundancy::negativePartner ) {
 
                       sType r = rFromCoords(it.getVec());

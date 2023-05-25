@@ -51,14 +51,14 @@ namespace TempLat {
 
             T kMaxBins = std::floor(pow(3, 0.5) / 2.0 * N) + 1;
 
-            if (PSVersion != 3){
+           if (PSVersion != 3){
                 auto fk2 = projectRadiallyGW(model, PSVersion == 1, PRJType, PSType, PSVersion).measure(model, nbins, kMaxBins);
                 if (PSType == 2){
-                    return Function(ntilde, pow<3>(kIR * ntilde * dx ) / N3 /(8*pow<2>(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(Constants::reducedMPlanck<T> / model.fStar)/Energies::rho(model)) * fk2;
+                    return Function(ntilde, pow<3>(kIR * ntilde * dx ) / N3 /(8*pow<2>(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(model.fStar / Constants::reducedMPlanck<T>)/Energies::rho(model)) * fk2;
                 }
                 else if (PSType == 1){
                     fk2.sumInsteadOfAverage();
-                    return Function(ntilde, kIR * ntilde * dx  / pow<5>(N) / (8*(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(Constants::reducedMPlanck<T> / model.fStar)/Energies::rho(model)) * fk2;
+                    return Function(ntilde, kIR * ntilde * dx  / pow<5>(N) / (8*(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(model.fStar/Constants::reducedMPlanck<T>)/Energies::rho(model)) * fk2;
                 }
                 else{
                   throw(WrongPSTypeGW("You tried to call an undefined PSType " +std::to_string(PSType) + ", abort."));
@@ -68,12 +68,12 @@ namespace TempLat {
             else{
                 if (PSType == 2){
                     auto fk2 = projectRadiallyGW(model, false, PRJType, PSType, PSVersion).measure(model,  nbins, kMaxBins);
-                    return  (pow<3>(kIR *  dx ) / N3 / (8*pow<2>(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(Constants::reducedMPlanck<T> / model.fStar)/Energies::rho(model)) * fk2;
+                    return  (pow<3>(kIR *  dx ) / N3 / (8*pow<2>(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(model.fStar / Constants::reducedMPlanck<T>)/Energies::rho(model)) * fk2;
                 }
                 else{
                     auto fk2 = projectRadiallyGW(model, false, PRJType, PSType, PSVersion).measure(model,  nbins, kMaxBins);
                     fk2.sumInsteadOfAverage();
-                    return (kIR  * dx  / pow<5>(N) / (8*(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(Constants::reducedMPlanck<T> / model.fStar)/Energies::rho(model)) * fk2;
+                    return (kIR  * dx  / pow<5>(N) / (8*(Constants::pi<T>)*pow(model.aI,2*model.alpha))*pow<2>(model.fStar / Constants::reducedMPlanck<T>)/Energies::rho(model)) * fk2;
                 }
             }
         }
