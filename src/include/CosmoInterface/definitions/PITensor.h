@@ -1,7 +1,11 @@
 #ifndef COSMOINTERFACE_HELPERS_PITENSOR_H
 #define COSMOINTERFACE_HELPERS_PITENSOR_H
-/* File created by Jorge Baeza, Adrien Florio and Nicolas Loayza 2021 */
-/* Released under the MIT license, see LICENSE.md. */
+
+/* This file is part of CosmoLattice, available at www.cosmolattice.net .
+   Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
+   Released under the MIT license, see LICENSE.md. */
+
+// File info: Main contributor(s): Jorge Baeza-Ballesteros, Adrien Florio, Nicolás Layza,  Year: 2022
 
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexalgebra.h"
@@ -20,7 +24,7 @@ namespace TempLat {
 
     /** \brief A class which computes the componentes of the Anisotropic Tensor source of Gravitational Waves.
      *
-     * 
+     *
      * Unit test: make test-PITensor
      **/
 
@@ -28,111 +32,118 @@ namespace TempLat {
     public:
         /* Put public methods here. These should change very little over time. */
         PITensor() = delete;
-   
+
 
     public:
-		
+
 		template<class Model>
         static inline auto totalTensor(Model& model, Tag<0>)
-        {		
-            return scalarSinglet(model, 1_c, 1_c) + complexscalarSinglet(model, 1_c, 1_c) - (pow<2>(model.omegaStar)/pow<2>(model.fStar)) * (pow(model.aI, -2.0 * model.alpha) * electricFieldU1(model, 1_c, 1_c) + pow(model.aI, -2.0) * magneticFieldU1(model, 0_c));
+        {
+            return totalTensor(model, 1_c, 1_c);
         }
         template<class Model>
         static inline auto totalTensor(Model& model, Tag<1>)
-        {		
-            return scalarSinglet(model, 1_c, 2_c) + complexscalarSinglet(model, 1_c, 2_c) - (pow<2>(model.omegaStar)/pow<2>(model.fStar)) * (pow(model.aI, -2.0 * model.alpha) * electricFieldU1(model, 1_c, 2_c) + pow(model.aI, -2.0) * magneticFieldU1(model, 1_c));
+        {
+            return totalTensor(model, 1_c, 2_c);
         }
         template<class Model>
         static inline auto totalTensor(Model& model, Tag<2>)
-        {	
-            return scalarSinglet(model, 1_c, 3_c) + complexscalarSinglet(model, 1_c, 3_c) - (pow<2>(model.omegaStar)/pow<2>(model.fStar)) * (pow(model.aI, -2.0 * model.alpha) * electricFieldU1(model, 1_c, 3_c) + pow(model.aI, -2.0) * magneticFieldU1(model, 2_c));
+        {
+            return totalTensor(model, 1_c, 3_c);
         }
        template<class Model>
         static inline auto totalTensor(Model& model, Tag<3>)
-        {	
-            return scalarSinglet(model, 2_c, 2_c) + complexscalarSinglet(model, 2_c, 2_c) - (pow<2>(model.omegaStar)/pow<2>(model.fStar)) * (pow(model.aI, -2.0 * model.alpha) * electricFieldU1(model, 2_c, 2_c) + pow(model.aI, -2.0) * magneticFieldU1(model, 3_c));
+        {
+            return totalTensor(model, 2_c, 2_c);
         }
         template<class Model>
         static inline auto totalTensor(Model& model, Tag<4>)
-        {	
-            return scalarSinglet(model, 2_c, 3_c) + complexscalarSinglet(model, 2_c, 3_c) - (pow<2>(model.omegaStar)/pow<2>(model.fStar)) * (pow(model.aI, -2.0 * model.alpha) * electricFieldU1(model, 2_c, 3_c) + pow(model.aI, -2.0) * magneticFieldU1(model, 4_c));
+        {
+            return totalTensor(model, 2_c, 3_c);
         }
         template<class Model>
         static inline auto totalTensor(Model& model, Tag<5>)
-        {	
-            return scalarSinglet(model, 3_c, 3_c) + complexscalarSinglet(model, 3_c, 3_c) - (pow<2>(model.omegaStar)/pow<2>(model.fStar)) * (pow(model.aI, -2.0 * model.alpha) * electricFieldU1(model, 3_c, 3_c) + pow(model.aI, -2.0) * magneticFieldU1(model, 5_c));
+        {
+            return totalTensor(model, 3_c, 3_c);
         }
-        
-        /* Complex Scalars Tensor */
-        
 
-		
-//         template<class Model>
-//         static auto PITensorScalarsArray(Model& model)
-//         {
-//             return IfElse((Model::Ngws>0),MakeArray(i,0,Model::Ngws-1, PITensorScalars(model,i)), ZeroType());
-//         }
-        
-    private:
+
+       template<class Model, int I, int J>
+       static inline auto totalTensor(Model& model, Tag<I> i, Tag<J> j)
+       {
+           return scalarSinglet(model, i, j) + complexScalar(model, i, j) + electricU1(model, i, j) + magneticU1(model, i, j);
+       }
+
+
+private:
         template<class Model, int I,int J>
         static inline auto scalarSinglet(Model& model, Tag<I> a, Tag<J> b)
         {
             return Total(i, 0, Model::Ns - 1, forwDiff(model.fldS(i),a) * forwDiff(model.fldS(i),b));
         }
-		
-		template<class Model, int I,int J>
-        static inline auto complexscalarSinglet(Model& model, Tag<I> a, Tag<J> b)
+
+        template<class Model, int I,int J>
+        static inline auto complexScalar(Model& model, Tag<I> a, Tag<J> b)
         {
-            return Total(i, 0, Model::NCs - 1, 2. * Real(conj(GaugeDerivatives::forwardCovGradientCS(model, i, a)) * GaugeDerivatives::forwardCovGradientCS(model, i, b)));
-        }
-		
-		template<class Model, int I,int J>
-        static inline auto electricFieldU1(Model& model, Tag<I> a, Tag<J> b)
-        {
-            return Total(i, 0, Model::NU1 - 1, pow(model.aI,2*(model.alpha - 1)) * model.piU1(i)(a) * model.piU1(i)(b) );
-        }
-        
-        template<class Model>
-        static inline auto magneticFieldU1(Model& model, Tag <0>)
-        {
-            return Total(i, 0, Model::NU1 - 1, pow<2>(fieldStrength(model.fldU1(i), 2_c , 3_c)));
+            return Total(i, 0, Model::NCs - 1, 2 * Real( GaugeDerivatives::forwardCovGradientCS(model, i,  a) * conj( GaugeDerivatives::forwardCovGradientCS(model, i,  b) )) );
         }
 
-		template<class Model>
-        static inline auto magneticFieldU1(Model& model, Tag <1>)
+//         template<class Model, int I,int J>
+//         static inline auto SU2doublet(Model& model, Tag<I> a, Tag<J> b)
+//         {
+//             return Total(i, 0, Model::NSU2Doublet - 1, 2 * Real(scalar_prod( GaugeDerivatives::forwardCovGradientSU2Doublet(model, i,  a), conj( GaugeDerivatives::forwardCovGradientSU2Doublet(model, i,  b) )) ));
+//         }
+
+        template<class Model, int I,int J>
+        static inline auto electricU1(const Model& model, Tag<I> i, Tag<J> j)
         {
-            return Total(i, 0, Model::NU1 - 1, fieldStrength(model.fldU1(i), 2_c , 3_c) * fieldStrength(model.fldU1(i), 3_c , 1_c));
+            return Total(a, 0, Model::NU1 - 1, - 1. / pow<2>(model.aI)  / pow<2>(model.fStar/model.omegaStar) * model.piU1(a)(i) * model.piU1(a)(j)  );
         }
-		
-		template<class Model>
-        static inline auto magneticFieldU1(Model& model, Tag <2>)
+
+        template<class Model, int I,int J>
+        static inline auto magneticU1(const Model& model, Tag<I> i, Tag<J> j)
         {
-            return Total(i, 0, Model::NU1 - 1, fieldStrength(model.fldU1(i), 2_c , 3_c) * fieldStrength(model.fldU1(i), 1_c , 2_c));
+            return Total(a, 0, Model::NU1 - 1,  - 1. / pow<2>(model.aI) / pow<2>(model.fStar/model.omegaStar) * magneticFieldU1(model.fldU1(a),i) * magneticFieldU1(model.fldU1(a),j)  ) ;
         }
-        
-        template<class Model>
-        static inline auto magneticFieldU1(Model& model, Tag <3>)
+
+        template<class Field>
+        static inline auto magneticFieldU1(const Field& f, Tag<1>)
         {
-            return Total(i, 0, Model::NU1 - 1, pow<2>(fieldStrength(model.fldU1(i), 3_c , 1_c)));
+            return fieldStrength(f, 2_c , 3_c);
         }
-        
-        template<class Model>
-        static inline auto magneticFieldU1(Model& model, Tag <4>)
+
+        template<class Field>
+        static inline auto magneticFieldU1(const Field& f, Tag<2>)
         {
-            return Total(i, 0, Model::NU1 - 1, fieldStrength(model.fldU1(i), 3_c , 1_c) * fieldStrength(model.fldU1(i), 1_c , 2_c));
+            return fieldStrength(f, 3_c , 1_c);
         }
-        
-        template<class Model>
-        static inline auto magneticFieldU1(Model& model, Tag <5>)
+
+        template<class Field>
+        static inline auto magneticFieldU1(const Field& f, Tag<3>)
         {
-            return Total(i, 0, Model::NU1 - 1,  pow<2>(fieldStrength(model.fldU1(i), 1_c , 2_c)));
+            return fieldStrength(f, 1_c , 2_c);
         }
-		
-    public:
-#ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
-#endif
+/*
+        template<class Model, int I,int J>
+        static inline auto electricSU2(Model& model, Tag<I> i, Tag<J> j)
+        {
+            return Total(a, 0, Model::NSU2 - 1,- 1. / pow<2>(model.aI) * pow<2>(model.fStar/model.omegaStar) * trace(model.piSU2(a)(i) * model.piSU2(a)(j))  )) );
+        }
+
+        template<class Model, int I,int J>
+        static inline auto magneticSU2(Model& model, Tag<I> i, Tag<J> j)
+        {
+            return Total(p, 0, Model::NU1 - 1, Total(k, 1, Model::NDim,  - 1. / pow<2>(model.aI) * pow<2>(model.fStar/model.omegaStar) * fieldStrength(model.fldU1(a),i,k) * fieldStrength(model.fldU1(a),j,k)  )) ));
+        }*/
+
+
     };
+
+    struct  PITensorTest{
+    #ifdef TEMPLATTEST
+            static inline void Test(TDDAssertion& tdd);
+    #endif
+  };
 
 
 } /* FCN */
