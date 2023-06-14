@@ -160,7 +160,13 @@ namespace TempLat {
      {
        return Operators::Power<R,T>(r,t);
      }
-
+	
+	  template <int N>
+      inline
+      ZeroType
+      pow(ZeroType) {
+          return ZeroType();
+      }
 
      template <typename T>
      inline
