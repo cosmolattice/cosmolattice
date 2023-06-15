@@ -146,7 +146,6 @@ namespace TempLat {
 
                       /* don't over-weight the real-valued entries: only one float value, only half the weight. */
                       floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
-                      //  say<<GetValue::get(mInstance,it());
                       baseWorkSpace.add(bin, GetValue::get(mInstance, it()), r, weight);
                   }
               }
