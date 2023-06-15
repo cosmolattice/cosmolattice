@@ -1,5 +1,5 @@
-#ifndef M2PHI2_H //Usual macro guard to prevent multiple inclusion
-#define M2PHI2_H
+#ifndef LPHI4_H //Usual macro guard to prevent multiple inclusion
+#define LPHI4_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -21,9 +21,9 @@ namespace TempLat
     // number of fields of each species and the type of tinteractions.
 
     struct ModelPars : public TempLat::DefaultModelPars {
-    	static constexpr size_t NScalars = 1;
+    	static constexpr size_t NScalars = 2;
         // In our phi4 example, we only want 2 scalar fields.
-        static constexpr size_t NPotTerms = 1;
+        static constexpr size_t NPotTerms = 2;
         // Our potential naturaly splits into two terms: the inflaton potential
         // and the interaction with the daughter field.
 
@@ -33,7 +33,7 @@ namespace TempLat
         // them on and specify interactions.
     };
 
-  #define MODELNAME m2phi2
+  #define MODELNAME lphi4
   // Here we define the name of the model. This should match the name of your file.
 
   template<class R>
@@ -49,7 +49,7 @@ namespace TempLat
  //...
 private:
 
-  double m;
+  double g,lambda, q;
 // Here are the declaration of the model specific parameters. They are 'private'
 // to force you using them only within your model and not outside.
 
@@ -72,13 +72,17 @@ private:
       // Independent parameters of the model (read from parameters file)
       /////////
 
-      lambda1 = parser.get<double>("m");
+      lambda = parser.get<double>("lambda");
       //  We start by initializing our model paramteters. We read them from the
       // input file/command line.  Effectively, by calling 'par.get<double>("lambda")'
       // we declare a new parameter which needs to be in the input data.  Its name is
       // "lambda" and we specify it is a 'double'.
-	  
 
+      q = parser.get<double>("q");
+      // In the same way, we declare an input parameter 'q'.
+	 
+
+      g = sqrt(q*lambda);
       //For convenience, we also define g as a function of lambda and q.
 
 
@@ -87,8 +91,8 @@ private:
         // (read from parameters file, or specified here if not)
         /////////
 
-        fldS0 = parser.get<double, 1>("initial_amplitudes");
-        piS0 = parser.get<double, 1>("initial_momenta", {0});
+        fldS0 = parser.get<double, 2>("initial_amplitudes");
+        piS0 = parser.get<double, 2>("initial_momenta", {0, 0});
         
         // Then, we need to specify the initial homogeneous
         // value of our fields. We read them again from the input file. The int '2' means
@@ -104,9 +108,9 @@ private:
         // Rescaling for program variables
         /////////
 
-        alpha = 0;
+        alpha = 1;
         fStar = fldS0[0];
-        omegaStar = m;
+        omegaStar = sqrt(lambda) * fStar;
         // We now need to specify the rescaling from physical units to program units.
         // This consists of the  time rescaling exponent alpha, the field rescaling fStar
         // and the velocity rescaling omegaStar.
@@ -138,7 +142,7 @@ private:
     // to define different function with the same name. The 'auto' keyword lets the compiler
     // figure out on itself what is the actual return type of the function.
     {
-        return 0.5 * pow<2>(fldS(0_c));
+        return 0.25 * pow<4>(fldS(0_c));
         // Some notations.  The scalar fields are stored in a collection called 'fldS'.
         // The scalar fields are labelled  from 0 to Ns-1. The field say number 1 is
         // accessed through the syntax 'fldS(0_c)'. The function 'pow<N>(x)'. Works with the
@@ -149,7 +153,10 @@ private:
         // can be applied to our fields,  see the manual for an exhaustive list
         // and what to do if you want to implement a new one.
     }
-   
+    auto potentialTerms(Tag<1>) // Interaction energy
+    {
+        return 0.5 * q * pow<2>(fldS(0_c) * fldS(1_c));
+    }
 	
 	
 	
@@ -174,10 +181,14 @@ private:
     // per scalar field (2 in this case).  The integer in Tag<0> tells you the field with
     // respect to which you are defining the derivative of the potential of.
     {
-      return   (fldS(0_c));
+      return   pow<3>(fldS(0_c)) + q * fldS(0_c) * pow<2>(fldS(1_c)) ;
     }
 
-   
+    auto potDeriv(Tag<1>)  // Derivative with respect to the daughter field.
+    {
+      return  q * fldS(1_c) * pow<2>(fldS(0_c));
+    }
+	
 	
 	
     /////////
@@ -190,10 +201,13 @@ private:
     // in the same fashion the second derivatives of the potential
     // (put 'return 0' if you are not using this feature).
     {
-      return  (fldS(0_c))/(fldS(0_c));
+      return  3 * pow<2>(fldS(0_c)) +  q * pow<2>(fldS(1_c)) ;
     }
 
-
+    auto potDeriv2(Tag<1>) // Second derivative with respect daughter field
+    {
+      return  q * pow<2>(fldS(0_c)) ;
+    }
 		
 	
     };

@@ -30,5 +30,5 @@ initial_amplitudes = 5.6964e18 0  # homogeneous amplitudes in GeV
 initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
 
 #Model Parameters
-lambda1 = 9e-14
+lambda = 9e-14
 q = 100
