@@ -68,6 +68,10 @@ namespace TempLat {
         }
 
 
+
+
+private:
+
        template<class Model, int I, int J>
        static inline auto totalTensor(Model& model, Tag<I> i, Tag<J> j)
        {
@@ -75,7 +79,6 @@ namespace TempLat {
        }
 
 
-private:
         template<class Model, int I,int J>
         static inline auto scalarSinglet(Model& model, Tag<I> a, Tag<J> b)
         {
@@ -88,11 +91,6 @@ private:
             return Total(i, 0, Model::NCs - 1, 2 * Real( GaugeDerivatives::forwardCovGradientCS(model, i,  a) * conj( GaugeDerivatives::forwardCovGradientCS(model, i,  b) )) );
         }
 
-//         template<class Model, int I,int J>
-//         static inline auto SU2doublet(Model& model, Tag<I> a, Tag<J> b)
-//         {
-//             return Total(i, 0, Model::NSU2Doublet - 1, 2 * Real(scalar_prod( GaugeDerivatives::forwardCovGradientSU2Doublet(model, i,  a), conj( GaugeDerivatives::forwardCovGradientSU2Doublet(model, i,  b) )) ));
-//         }
 
         template<class Model, int I,int J>
         static inline auto electricU1(const Model& model, Tag<I> i, Tag<J> j)
@@ -123,18 +121,7 @@ private:
         {
             return fieldStrength(f, 1_c , 2_c);
         }
-/*
-        template<class Model, int I,int J>
-        static inline auto electricSU2(Model& model, Tag<I> i, Tag<J> j)
-        {
-            return Total(a, 0, Model::NSU2 - 1,- 1. / pow<2>(model.aI) * pow<2>(model.fStar/model.omegaStar) * trace(model.piSU2(a)(i) * model.piSU2(a)(j))  )) );
-        }
 
-        template<class Model, int I,int J>
-        static inline auto magneticSU2(Model& model, Tag<I> i, Tag<J> j)
-        {
-            return Total(p, 0, Model::NU1 - 1, Total(k, 1, Model::NDim,  - 1. / pow<2>(model.aI) * pow<2>(model.fStar/model.omegaStar) * fieldStrength(model.fldU1(a),i,k) * fieldStrength(model.fldU1(a),j,k)  )) ));
-        }*/
 
 
     };
