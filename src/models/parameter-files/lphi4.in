@@ -3,17 +3,18 @@ outputfile = ./
 
 #Evolution
 expansion = true
-evolver = VV2
+evolver = LF
 
 #Lattice
 N = 32
-dt = 0.01
+dt = 0.5
 kIR = 0.75
 
 #Times
-tOutputFreq = 0.1
-tOutputInfreq = 1
-tMax = 300
+tOutputFreq = 1
+tOutputInfreq = 10
+tMax = 10
+
 
 #Spectra options
 PS_type = 1
@@ -21,10 +22,10 @@ PS_version = 1
 
 #GWs
 GWprojectorType = 1
-withGWs=false
+withGWs=true
 
 #IC
-kCutOff = 4
+#kCutOff = 4
 initial_amplitudes = 5.6964e18 0  # homogeneous amplitudes in GeV
 initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
 

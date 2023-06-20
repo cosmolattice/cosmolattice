@@ -210,9 +210,10 @@ namespace TempLat {
           dt(pDt),
           name(pName),
           fldGWs(parser.get<bool>("withGWs", false) ? std::make_unique<FieldCollection<Field, T, 6, true>>("fldGWs", toolBox, par) : nullptr),
-          piGWs(parser.get<bool>("withGWs", false) ? std::make_unique<FieldCollection<Field, T, 6, true>>("piGWs", toolBox, par) : nullptr)
+          piGWs( parser.get<bool>("withGWs", false) ? std::make_unique<FieldCollection<Field, T, 6, true>>("piGWs", toolBox, par) : nullptr)
           {
             // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this feature has yet not been tested)
+            if(NDim != 3 && fldGWs != nullptr) throw(RunParametersInconsistent("NDims must be equal to 3 to run GWs. If you want to run with NDim != 3, make sure withGWs = false."));
             if(NU1 > 1) throw(NotTested("The physics interface has not been fully tested with NU1 > 1. Abort. If you want to go on anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and please report any problems."));
             if(NSU2 > 1) throw(NotTested("The physics interface has not been fully tested with NSU2 > 1. Abort. If you want to go on anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and please report any problems."));
 
@@ -281,7 +282,7 @@ namespace TempLat {
         auto pi_GWtensor(Tag<2>, Tag<1>) {return (*piGWs)(1_c);}
         auto pi_GWtensor(Tag<2>, Tag<2>) {return (*piGWs)(3_c);}
         auto pi_GWtensor(Tag<2>, Tag<3>) {return (*piGWs)(4_c);}
-		    auto pi_GWtensor(Tag<3>, Tag<1>) {return (*piGWs)(2_c);}
+        auto pi_GWtensor(Tag<3>, Tag<1>) {return (*piGWs)(2_c);}
         auto pi_GWtensor(Tag<3>, Tag<2>) {return (*piGWs)(4_c);}
         auto pi_GWtensor(Tag<3>, Tag<3>) {return (*piGWs)(5_c);}
 
@@ -291,7 +292,7 @@ namespace TempLat {
         auto GWtensor(Tag<2>, Tag<1>) {return (*fldGWs)(1_c);}
         auto GWtensor(Tag<2>, Tag<2>) {return (*fldGWs)(3_c);}
         auto GWtensor(Tag<2>, Tag<3>) {return (*fldGWs)(4_c);}
-		    auto GWtensor(Tag<3>, Tag<1>) {return (*fldGWs)(2_c);}
+        auto GWtensor(Tag<3>, Tag<1>) {return (*fldGWs)(2_c);}
         auto GWtensor(Tag<3>, Tag<2>) {return (*fldGWs)(4_c);}
         auto GWtensor(Tag<3>, Tag<3>) {return (*fldGWs)(5_c);}
 

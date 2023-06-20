@@ -139,7 +139,7 @@ namespace TempLat {
 
 
 					// --> ... and then set the fluctuations of the derivatives.
-                    model.piCS(i)(0_c).inFourierSpace() = - Constants::I<T> * omega0 * a0 * (eitheta00 - eitheta01) / sqrt(2) / sqrt(2)- aDot * model.fldCS(i)(0_c).inFourierSpace(); // component 0
+                    model.piCS(i)(0_c).inFourierSpace() = - Constants::I<T> * omega0 * a0 * (eitheta00 - eitheta01) / sqrt(2) / sqrt(2) - aDot * model.fldCS(i)(0_c).inFourierSpace(); // component 0
                     model.piCS(i)(0_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
                     model.piCS(i)(1_c).inFourierSpace() = - Constants::I<T> * omega0 * a1 * (eitheta10 - eitheta11) / sqrt(2) / sqrt(2)  - aDot * model.fldCS(i)(1_c).inFourierSpace();  // component 1
                     model.piCS(i)(1_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0

@@ -3,25 +3,28 @@ outputfile = ./
 
 #Evolution
 expansion = true
-evolver = VV2
+evolver = LF
 
 #Lattice
 N = 32
 dt = 0.01
-kIR = 1.8
+kIR = .6
 
 #Times
-tOutputFreq = 0.1
-tOutputInfreq = 3
+tOutputFreq = 0.05
+tOutputInfreq = 5
 tOutputRareFreq = 10
-tMax = 50
+tMax = 100
+
+#GWs
+withGWs = true
 
 #IC
-kCutOff = 6
+kCutOff = 3
 initial_amplitudes = 0
 initial_momenta = 0
-cmplx_field_initial_norm = 5.25151e18     # homogeneous amplitudes in GeV
-cmplx_momentum_initial_norm = -4.45258e30 # homogeneous amplitudes in GeV2
+cmplx_field_initial_norm = 5.6964e18     # homogeneous amplitudes in GeV
+cmplx_momentum_initial_norm = -6.88343e30 # homogeneous amplitudes in GeV2
 
 #Gauge couplings and effectiveCharges
 CSU1Charges = 1

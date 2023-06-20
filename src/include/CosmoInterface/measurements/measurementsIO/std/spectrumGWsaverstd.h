@@ -107,11 +107,11 @@ namespace TempLat {
                   sstream  <<  (*arr[0]).getCentralBinBounds()[i] << " " <<  (*arr[0])[i].getBinString(verbosity);
               }
 
-              sstream <<  " " << (*arr[0])[i].getValueString(arr.size() <= 1, verbosity);
+              sstream <<  " " << (*arr[0])[i].getValueString(arr.size() <= 1, verbosity, true);
               for (size_t j = 1; j < arr.size() - 1; ++j) {
-                  sstream << " " << (*arr[j])[i].getValueString(false, verbosity);
+                  sstream << " " << (*arr[j])[i].getValueString(false, verbosity, true);
               }
-              if(arr.size() > 1) sstream << " " << (*arr.back())[i].getValueString(true, verbosity);
+              if(arr.size() > 1) sstream << " " << (*arr.back())[i].getValueString(true, verbosity, true);
               (*outputSpectrum) << sstream.str()  << "\n";
 
 
