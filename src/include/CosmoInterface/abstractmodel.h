@@ -97,7 +97,7 @@ namespace TempLat {
         //Kernels RK
 
 
-
+        bool isInitialized;
 
         // --> Scalar singlets
         FieldCollection<Field, T, Ns,true> fldS; //The last parameter is to "vectorise" the assignement. Can use it with scalar algebra (meaning scalar fields and U(1) non-compact gauge fields), but not with the rest.
@@ -194,6 +194,7 @@ namespace TempLat {
 
 
         AbstractModel(ParameterParser& parser, const LatticeParameters<T>& par, std::shared_ptr<MemoryToolBox> toolBox, T pDt, std::string pName="") :
+          isInitialized(toolBox->initializeFFT<T>()),
           fldS("scalar",toolBox,par),
           piS("pi_scalar",toolBox,par),
           fldCS("cmplx_scalar",toolBox,par),

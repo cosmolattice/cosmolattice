@@ -383,7 +383,13 @@ namespace TempLat {
         }
     }
 
-
+    template<typename T>
+    bool initializeFFT()
+    {
+        if (std::is_same<T, float>::value) mFFTLibrary.getPlans_float();
+        else if (std::is_same<T, double>::value) mFFTLibrary.getPlans_double();
+        return true;
+    }
 //    private:
     public:
     /* Put all member variables and private methods here. These may change arbitrarily. */

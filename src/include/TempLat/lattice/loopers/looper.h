@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_ITERATORS_ITERATOR_H
 #define TEMPLAT_LATTICE_ITERATORS_ITERATOR_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
@@ -34,7 +34,6 @@ namespace TempLat {
         Looper(std::shared_ptr<Coordinates> pCoord):
                Looper(pCoord, pCoord->getStart(), pCoord->getEnd())
         {
-
         }
 
         void operator++(){
@@ -96,28 +95,28 @@ namespace TempLat {
 
         ptrdiff_t operator()() const
         {
-          return mCoord->mOffsets[mICurrent];
-          //return (*mCoord)(mICurrent);
+//           return mCoord->mOffsets[mICurrent];
+          return (*mCoord)(mICurrent);
         }
         ptrdiff_t operator()(ptrdiff_t i) const
         {
-          return mCoord->mOffsets[mICurrent+i];
-          //return (*mCoord)(mICurrent);
+//           return mCoord->mOffsets[mICurrent+i];
+          return (*mCoord)(mICurrent);
         }
-        ptrdiff_t& operator()()
+        ptrdiff_t operator()()
         {
-          return mCoord->mOffsets[mICurrent];
-          //return (*mCoord)(mICurrent);
+//           return mCoord->mOffsets[mICurrent];
+          return (*mCoord)(mICurrent);
         }
-        std::vector<ptrdiff_t>& getVec() const
+        std::vector<ptrdiff_t> getVec() const
         {
-          return mCoord->mVectorCoords[mCoord->mOffsets[mICurrent]];
-          //return mCoord->getVec((*this)());
+//           return mCoord->mVectorCoords[mCoord->mOffsets[mICurrent]];
+          return mCoord->getVec(mICurrent);
         }
-        std::vector<ptrdiff_t>& getVec(const ptrdiff_t& i) const
+        std::vector<ptrdiff_t> getVec(const ptrdiff_t& i) const
         {
-          return mCoord->mVectorCoords[i];
-          //return mCoord->getVec(i);
+//           return mCoord->mVectorCoords[i];
+          return mCoord->getVec(i);
         }
 
         bool isAtOrigin()

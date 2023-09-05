@@ -132,6 +132,20 @@ namespace TempLat {
         }
 
 
+        void getPlans_float() {
+            if ( ! madePlansFloat ) {
+                if ( verbose ) sayMPI << "Going to prepare float FFT plans.\n";
+                madePlansFloat = true;
+                mPlansFloat = theLibrary->getPlans_float(mGroup, mLayout);
+            }
+        }
+        void getPlans_double() {
+            if ( ! madePlansDouble ) {
+                if ( verbose ) sayMPI << "Going to prepare double FFT plans.\n";
+                madePlansDouble = true;
+                mPlansDouble = theLibrary->getPlans_double(mGroup, mLayout);
+            }
+        }
 
     private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -148,20 +162,7 @@ namespace TempLat {
 
         bool verbose;
 
-        void getPlans_float() {
-            if ( ! madePlansFloat ) {
-                if ( verbose ) sayMPI << "Going to prepare float FFT plans.\n";
-                madePlansFloat = true;
-                mPlansFloat = theLibrary->getPlans_float(mGroup, mLayout);
-            }
-        }
-        void getPlans_double() {
-            if ( ! madePlansDouble ) {
-                if ( verbose ) sayMPI << "Going to prepare double FFT plans.\n";
-                madePlansDouble = true;
-                mPlansDouble = theLibrary->getPlans_double(mGroup, mLayout);
-            }
-        }
+
         
         /** \brief An inline function for storing a static global variable in a header. A lock that
             verifies that we do not accidentally call the FFT initi/fin-alizations twice. */
