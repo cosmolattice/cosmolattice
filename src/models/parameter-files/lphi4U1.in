@@ -17,7 +17,7 @@ tOutputRareFreq = 10
 tMax = 100
 
 #GWs
-withGWs = true
+withGWs = false
 
 #IC
 kCutOff = 3
