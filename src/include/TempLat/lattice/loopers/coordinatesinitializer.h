@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio,  Year: 2019. Jorge Baeza-Ballesteros, Year: 2023 (big changes to eliminate coordinates initialization)
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/jumpsholder.h"
@@ -111,12 +111,8 @@ namespace TempLat {
           } else {
               /* funny, get some speed increase by not checking for carry on here: effect -> finish entire rod before breaking the recursive loops. */
               for ( ptrdiff_t i = iStart; i < iEnd && carryOn; i += stride) {
-    //say << i << ", " << thisMemorySize << ", " << carryOn << "\n";
 
                   mOffsets[countNum] = offset + i * thisMemoryJump;
-
-//                  say << mOffsets[countNum];
-  //                say <<  mVectorCoords.size();
 
                   countNum++;
                   if ( ! carryOn ) allCarryOn = false;

@@ -384,7 +384,7 @@ namespace TempLat {
     }
 
     template<typename T>
-    bool initializeFFT()
+    bool initializeFFT() //(JBB, Sep 2023)
     {
         if (std::is_same<T, float>::value) mFFTLibrary.getPlans_float();
         else if (std::is_same<T, double>::value) mFFTLibrary.getPlans_double();

@@ -22,7 +22,7 @@ PS_version = 1
 
 #GWs
 GWprojectorType = 1
-withGWs=true
+withGWs=false
 
 #IC
 #kCutOff = 4

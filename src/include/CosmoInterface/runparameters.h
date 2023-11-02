@@ -65,7 +65,8 @@ namespace TempLat {
                 powerSpectrumType(par.get<int>("PS_type",1)),
                 powerSpectrumVersion(par.get<int>("PS_version",1)),
                 GWprojectorType(par.get<int>("GWprojectorType",2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
-                withGWs(par.get<bool>("withGWs", false, Important))
+                withGWs(par.get<bool>("withGWs", false, Important)),
+                flagON(par.get<bool>("flagON", false))
         {
             if (AlmostEqual(lSide, -1)) {
                 if (AlmostEqual(kIR, -1))
@@ -173,7 +174,7 @@ namespace TempLat {
 
       const int GWprojectorType;
       const bool withGWs;
-
+      const bool flagON;
 
 
 
