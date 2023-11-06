@@ -38,21 +38,21 @@ namespace TempLat {
             }
 
 
-            ptrdiff_t shiftCoordinates(Looper& it)
-            {
-              ptrdiff_t originalOffset = it();
-
-              it()=(originalOffset + mShifts.memoryJump());
-              //for ( ptrdiff_t i = 0, iEnd = mShifts.size(); i < iEnd; ++i) it().mCoordinates[i] += mShifts.shift(i);
-              return originalOffset;
-            }
-
-            void unShiftCoordinates(Looper& it, const ptrdiff_t& originalOffset)
-            {
-              it()=(originalOffset);
-
-              //for ( ptrdiff_t i = 0, iEnd = mShifts.size(); i < iEnd; ++i) it().mCoordinates[i] -= mShifts.shift(i);
-            }
+//             ptrdiff_t shiftCoordinates(Looper& it)
+//             {
+//               ptrdiff_t originalOffset = it();
+//
+//               it()=(originalOffset + mShifts.memoryJump());
+//               //for ( ptrdiff_t i = 0, iEnd = mShifts.size(); i < iEnd; ++i) it().mCoordinates[i] += mShifts.shift(i);
+//               return originalOffset;
+//             }
+//
+//             void unShiftCoordinates(Looper& it, const ptrdiff_t& originalOffset)
+//             {
+//               it()=(originalOffset);
+//
+//               //for ( ptrdiff_t i = 0, iEnd = mShifts.size(); i < iEnd; ++i) it().mCoordinates[i] -= mShifts.shift(i);
+//             }
 
 
 

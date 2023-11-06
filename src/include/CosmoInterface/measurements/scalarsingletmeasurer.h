@@ -27,6 +27,7 @@ namespace TempLat {
         template <typename Model>
         ScalarSingletMeasurer(Model& model, FilesManager& filesManager, const RunParameters<T>& par, bool append):
         ONMeasurer(par),
+        flagON(par.flagON),
         PSType(par.powerSpectrumType)
         {
 
@@ -62,14 +63,22 @@ namespace TempLat {
         }
 
         // The following function measures the spectra of the norm and its time-derivative.
-        template <typename Model>
+        template <typename Model> //The occupation number is only measured if the user indicates it. The current version requires one additional field to measure it (JBB, Nov 2023).
         void measureSpectra(Model& model, T t, PowerSpectrumMeasurer& PSMeasurer) {
             ForLoop(i, 0, Model::Ns - 1,
-                    spectraOut(i).save(t,
+                    if (flagON) {
+                        spectraOut(i).save(t,
                             PSMeasurer.powerSpectrum(model.fldS(i)),
                             pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i)),
                             ONMeasurer.occupationNumber(model, i)
                             );
+                    }
+                    else {
+                        spectraOut(i).save(t,
+                            PSMeasurer.powerSpectrum(model.fldS(i)),
+                            pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i))
+                            );
+                    }
             );
         }
 
@@ -80,6 +89,7 @@ namespace TempLat {
         TempLatVector<SpectrumSaver<T>> spectraOut;
 
         OccupationNumberMeasurer ONMeasurer;
+        bool flagON;
 
         const int PSType;
     };
