@@ -20,6 +20,7 @@
 
 namespace TempLat {
 
+    using std::cos;
 
     /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
     namespace Operators {

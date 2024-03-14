@@ -19,6 +19,8 @@
 
 namespace TempLat {
 
+    using std::sin;
+
 
     /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
     namespace Operators {

@@ -24,6 +24,8 @@ namespace TempLat {
      * 
      * Unit test: make test-sinh
      **/
+    using std::sinh;
+
 
     /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
     namespace Operators {

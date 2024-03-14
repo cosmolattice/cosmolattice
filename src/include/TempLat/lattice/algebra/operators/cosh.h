@@ -25,6 +25,7 @@ namespace TempLat {
      * 
      * Unit test: make test-cosh
      **/
+    using std::cosh;
 
     namespace Operators {
 
