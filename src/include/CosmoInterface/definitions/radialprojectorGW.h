@@ -162,7 +162,7 @@ namespace TempLat {
 }
 
 #ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/radialprojectorGW_test.h"
+#include "CosmoInterface/definitions/radialprojectorGW_test.h"
 #endif
 
 
