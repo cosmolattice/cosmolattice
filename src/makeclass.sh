@@ -11,8 +11,10 @@ if [[ ${#@} -lt 2 ]]; then
   exit 0;
 fi
 
-userName="File created by `git config user.name`, `date +%Y`"
-licenseText="Released under the MIT license, see LICENSE.md."
+userName="// File info: Main contributor(s):  `git config user.name`, Year: `date +%Y`"
+licenseText=" This file is part of CosmoLattice, available at www.cosmolattice.net .
+   Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
+   Released under the MIT license, see LICENSE.md."
 
 fullClassName=$1
 className=`echo $fullClassName | sed 's/.*::\([^:]*\)$/\1/g'`
@@ -65,8 +67,11 @@ mkdir -p "${dname}"
 
 (echo "#ifndef $FNAME"
 echo "#define $FNAME"
-echo "/* ${userName} */"
+echo ""
+#echo "/* ${userName} */"
 echo "/* ${licenseText} */"
+echo
+echo "${userName}"
 echo
 echo "#include \"TempLat/util/tdd/tdd.h\""
 echo
