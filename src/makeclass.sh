@@ -114,8 +114,11 @@ git add "include/${relPathToFile}"
 
 (echo "#ifndef $TESTNAME"
 echo "#define $TESTNAME"
-echo "/* ${userName} */"
+echo ""
+#echo "/* ${userName} */"
 echo "/* ${licenseText} */"
+echo
+echo "${userName}"
 echo
 echo "inline void TempLat::${namespaces}${className}::Test(TempLat::TDDAssertion& tdd) {"
 echo
@@ -136,8 +139,11 @@ if [[ -f "${ofname}" ]]; then
 fi
 
 (
-echo "/* ${userName} */"
+echo ""
+#echo "/* ${userName} */"
 echo "/* ${licenseText} */"
+echo
+echo "${userName}"
 echo "#include \"$relPathToFile\""
 echo ""
 echo "namespace {"
