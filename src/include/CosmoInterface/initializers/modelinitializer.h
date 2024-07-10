@@ -51,7 +51,7 @@ namespace TempLat {
             if(Model::NCs > 0 or (Model::NSU2Doublet > 0 && Model::NU1 > 0 ) ) U1Initializer::initializeU1(model, fg, rPar.kCutoff);
 
             Averages::setAllAverages(model);
-            if(rPar.expansion) {
+            if(rPar.expansion && !rPar.fixedBackground) {
                 // For consistency, correct the scale factor time-derivative with the fluctuations.
                 // Relevant only for higher order evolvers.
                 auto hubbleLaw =  HubbleConstraint::get(model);
