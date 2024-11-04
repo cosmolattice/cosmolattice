@@ -48,7 +48,7 @@ namespace TempLat {
           }
         std::vector<ptrdiff_t> getVec(ptrdiff_t i)//(JBB, Sep 2023)
         {
-            auto offset = mOffsets[i];
+            auto offset = mOffsets[i] - mJumps.toOrigin();;
             for(size_t j = 0; j < jumps.size(); j++) {
                 mLayouts.putSpatialLocationFromMemoryIndexInto(offset / jumps[j], j, vect);
                 offset = offset % jumps[j];

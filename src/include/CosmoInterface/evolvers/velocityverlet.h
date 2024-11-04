@@ -90,18 +90,18 @@ namespace TempLat {
                 }
 
 
-                if(model.Ns > 0) driftScalar(model, w); 
+                if(model.Ns > 0) driftScalar(model, w);
                 if (model.fldGWs != nullptr) driftGWs(model, w);
                 if(model.NCs > 0) driftCS(model, w);
                 if(model.NSU2Doublet > 0) driftSU2Doublet(model, w);
                 if(model.NU1 > 0) driftU1Vector(model, w);
                 if(model.NSU2 > 0) driftSU2Vector(model, w);
 
-                if(expansion) storeFieldsAverages(model);
+                if(expansion && !fixedBackground) storeFieldsAverages(model);
 
                 // Now we compute the second kick (pi_1/2 --> pi_1)
 
-                if(model.Ns > 0) kickScalar(model, w); 
+                if(model.Ns > 0) kickScalar(model, w);
                 if (model.fldGWs != nullptr) kickGWs(model, w);
                 if(model.NCs > 0) kickCS(model, w);
                 if(model.NSU2Doublet > 0) kickSU2Doublet(model, w);
@@ -136,7 +136,7 @@ namespace TempLat {
            		model.piS(i) += (w * model.dt / 2) * ScalarSingletKernels::get(model, i) ;
            			);
         }
-		
+
 		template<class Model>
         void kickGWs(Model &model, T w) {
 
@@ -144,7 +144,7 @@ namespace TempLat {
            		(*model.piGWs)(i) += (w * model.dt / 2) * GWsKernels::get(model, i) ;
            			);
         }
-		
+
         // Evolves piCS(n)
         template<class Model>
         void kickCS(Model& model, T w) {
@@ -203,10 +203,10 @@ namespace TempLat {
         {
             model.fldS +=  pow(model.aSI, model.alpha - 3) * (model.dt * w * model.piS );
         }
-        
+
         // Evolves fldGWs
         template<class Model>
-        void driftGWs(Model &model, T w) 
+        void driftGWs(Model &model, T w)
         {
             (*model.fldGWs) +=  pow(model.aSI, model.alpha - 3) * (model.dt * w * (*model.piGWs) );
         }
