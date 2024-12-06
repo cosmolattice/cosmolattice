@@ -48,7 +48,7 @@ namespace TempLat {
 
                 gauss.emplace_back(
                         MeasurementsSaver<T>(filesManager, "gauss_U1_" + std::to_string(i) , amIRoot, append,
-                                {"t", "var(LHS - RHS)_over_var(LHS + RHS)", "var(LHS)", "var(RHS)" })
+                                {"t", "var(LHS-RHS)_over_var(LHS+RHS)", "var(LHS)", "var(RHS)" })
                 ); // Checks the degree of conservation of the U(1) gauss law.
 
                 spectra.emplace_back(

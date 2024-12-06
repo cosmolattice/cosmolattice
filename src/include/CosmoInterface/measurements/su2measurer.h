@@ -43,7 +43,7 @@ namespace TempLat {
 
                     gauss.emplace_back(
                             MeasurementsSaver<T>(filesManager, "gauss_SU2_" + std::to_string(i), amIRoot, append,
-                                  {"t", "var(LHS - RHS)_over_var(LHS + RHS)", "var(LHS)", "var(RHS)" })
+                                  {"t", "var(LHS-RHS)_over_var(LHS+RHS)", "var(LHS)", "var(RHS)" })
                     ); // Checks the degree of conservation of the SU(2) gauss law.
 
                     spectra.emplace_back(
