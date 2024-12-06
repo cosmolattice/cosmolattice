@@ -10,8 +10,6 @@
 #include "CosmoInterface/definitions/fieldfunctionals.h"
 #include "CosmoInterface/definitions/energies.h"
 #include "CosmoInterface/definitions/potential.h"
-#include "CosmoInterface/definitions/hubbleconstraint.h"
-
 
 
 namespace TempLat {

@@ -63,8 +63,10 @@ namespace TempLat {
             if (model.NSU2 > 0) kickSU2Vector(model, weight);
 
             if (expansion) {
-                storeMomentaAverages(model);
-                if(!fixedBackground) kickScaleFactor(model);
+                if(!fixedBackground) {
+                    storeMomentaAverages(model);
+                    kickScaleFactor(model);
+                }
                 // We always evolve only the semi-integer scale factor time derivative
                 // from semi-sums of momenta at semi_integer time so we don't need to worry
                 //  whether or not the field were synced or not.
@@ -122,8 +124,8 @@ namespace TempLat {
             model.aDotSI +=  model.dt * ScaleFactorKernels::get(model);
             model.aDotI = (model.aDotSIM + model.aDotSI ) / 2.0;
         }
-        
-        
+
+
         template<class Model>
         void kickScalar(Model& model, T w) {
             ForLoop(n, 0, Model::Ns -1,
@@ -197,10 +199,10 @@ namespace TempLat {
             // field).
 
         }
-        
+
          template<class Model>
         void driftGWs(Model& model) {
-            
+
             (*model.fldGWs) +=  pow(model.aSI, model.alpha - 3) * (model.dt * (*model.piGWs) );
 
         }
@@ -250,7 +252,7 @@ namespace TempLat {
                 model.pi2AvSI = Averages::pi2S(model); // at t+dt/2
                 model.pi2AvI = 0.5 * (model.pi2AvSIM + model.pi2AvSI); // at t (average)
             }
-            
+
             if (Model::NCs > 0) {
                 model.CSpi2AvSIM = model.CSpi2AvSI;  // at t-dt/2
                 model.CSpi2AvSI = Averages::pi2CS(model); // at t+dt/2

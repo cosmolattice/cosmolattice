@@ -54,27 +54,21 @@ namespace TempLat {
           performIterationInit(mJumpsHolder.toOrigin(),  mOffsets, 0,  stride, allCarryOn);
 
       }
-      void initCoordinates(const std::array<ptrdiff_t, 2u>& workShare,std::vector<ptrdiff_t>& mOffsets, ptrdiff_t& mIStart, ptrdiff_t& mIEnd)
-    	{
-                ptrdiff_t thisMemorySize = 1;
-    	          for(const auto& tmp: mJumpsHolder.getSizesInMemory()) thisMemorySize*=tmp;
-                mIStart = (thisMemorySize * workShare[0]) / workShare[1];
-                mIEnd = (thisMemorySize * (workShare[0] + 1)) / workShare[1];
-                mOffsets.clear();
+    void initCoordinates(const std::array<ptrdiff_t, 2u>& workShare,std::vector<ptrdiff_t>& mOffsets, ptrdiff_t& mIStart, ptrdiff_t& mIEnd)
+    {
+            ptrdiff_t thisMemorySize = 1;
+            for(const auto& tmp: mJumpsHolder.getSizesInMemory()) thisMemorySize*=tmp;
+            mIStart = (thisMemorySize * workShare[0]) / workShare[1];
+            mIEnd = (thisMemorySize * (workShare[0] + 1)) / workShare[1];
+            mOffsets.clear();
 
-                auto jumps = mJumpsHolder.getJumpsInMemoryOrder();
-                auto sizes = mJumpsHolder.getSizesInMemory();
-                ptrdiff_t maxOffsets = mJumpsHolder.toOrigin();
-
-            for(size_t i = 0; i< sizes.size(); ++i){
-                    maxOffsets+=(sizes[i]-1) * jumps[i];
-                }
-
+            auto jumps = mJumpsHolder.getJumpsInMemoryOrder();
+            auto sizes = mJumpsHolder.getSizesInMemory();
 
             for ( ptrdiff_t i = mIStart; i < mIEnd; ++i) {
-    	              mOffsets.push_back(0);
-    	          }
-    	}
+                mOffsets.push_back(0);
+            }
+    }
       /** \brief Original recursive iteration, used to cache the coordinates to memory at initialisation
 
     */

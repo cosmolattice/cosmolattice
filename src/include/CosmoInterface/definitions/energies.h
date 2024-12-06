@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/evolvers/evolvertype.h"
+#include "CosmoInterface/definitions/averages.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 
 namespace TempLat {
@@ -191,6 +192,7 @@ namespace TempLat {
         template <class Model>
         static inline auto rho(Model& model)  // Total energy density (sum of all contributions)
         {
+            Averages::setAllAverages(model);
             auto Eks = (model.Ns > 0 ?  kineticS(model) : 0);
             auto Ekcs =  (model.NCs > 0 ? kineticCS(model) : 0);
             auto EkSU2Dbl =  (model.NSU2Doublet > 0 ? kineticSU2Doublet(model) : 0);
