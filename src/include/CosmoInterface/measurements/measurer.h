@@ -37,7 +37,7 @@ namespace TempLat {
         /* Put public methods here. These should change very little over time. */
         template<class Model>
         Measurer(Model& model, const RunParameters<T>& par) :
-          filesManager(par.outFn /*+ model.name*/, model.getToolBox(), false, par.hdf5Spectra, par.printHeaders), // File manager controlling output format and layout, see class.
+          filesManager(par.outFn + model.extraInfoFn(par.fnVerbosity) + par.extraInfoFn() /*+ model.name*/, model.getToolBox(), false, par.hdf5Spectra, par.printHeaders), // File manager controlling output format and layout, see class.
           outputFreq(par.tOutFreq / par.dt), // Number of steps between frequent output
           infreqOutputFreq(par.tOutInfreq / par.dt),  // Number of steps between infrequent output
           rareOutputFreq(par.tOutRareFreq / par.dt),  // Number of steps between rare output

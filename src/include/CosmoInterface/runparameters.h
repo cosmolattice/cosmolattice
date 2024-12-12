@@ -12,6 +12,7 @@
 #include "TempLat/lattice/latticeparameters.h"
 #include "CosmoInterface/evolvers/evolvertype.h"
 #include "TempLat/util/almostequal.h"
+#include "TempLat/util/floattostring.h"
 
 namespace TempLat {
 
@@ -60,6 +61,7 @@ namespace TempLat {
                 saveEndPath(par.get<std::string>("save_dir",Constants::defaultString)()), // Folder where simulation is saved at the end
                 backupPath(par.get<std::string>("backup_dir",Constants::defaultString)()), // Folder where simulation is saved during the simulation
                 printHeaders(par.get<bool>("print_headers", false)), // If true, headers are printed in all output files
+                fnVerbosity(par.get<int>("fn_verbosity", 0)), // Different verbosity in the output filename. By default, no info about model or params.
                 doWeRestart(false), //Boolean which tells if we are runing in restart mode or not. Set in the main.
                 tolerance(par.get<T>("tolerance", -1)), //For adaptative solvers only
                 powerSpectrumType(par.get<int>("PS_type",1)),
@@ -165,6 +167,8 @@ namespace TempLat {
 
       const bool printHeaders;
 
+      const int fnVerbosity;
+
       mutable bool doWeRestart;
 
       T tolerance; //For adaptative solvers only.
@@ -181,6 +185,18 @@ namespace TempLat {
       LatticeParameters<T> getLatParams()
       {
         return LatticeParameters<T>(dx, lSide, kIR);
+      }
+
+      std::string extraInfoFn() const 
+      {
+        std::string ret = "";
+        if(fnVerbosity == 0 or fnVerbosity == 1) return ret;
+        
+        if(fnVerbosity > 1) ret += "N_" + std::to_string(N) + "_kIR_"+ FloatToString::format(kIR) + "_";
+        
+        if(fnVerbosity > 2) ret += "dt_" + FloatToString::format(dt) + "_evolver_" + to_string(eType) + "_";
+
+        return ret;
       }
 
 

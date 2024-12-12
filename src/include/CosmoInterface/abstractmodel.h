@@ -369,6 +369,11 @@ namespace TempLat {
 
         }
 
+        std::string extraInfoFn(int verbosity)
+        {
+            return verbosity > 0 ? name + "_" : "";
+        }
+
     private:
 
 		// This sets the homogeneous components of the fields at a single point.

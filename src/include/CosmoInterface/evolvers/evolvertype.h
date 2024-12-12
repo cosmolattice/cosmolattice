@@ -42,6 +42,20 @@ namespace TempLat {
         return in;
     };
 
+    std::string to_string(EvolverType eType){
+        if(eType == LF) return "LF";
+        else if(eType == VV2) return "VV2";  
+        else if(eType == VV4) return "VV4";  
+        else if(eType == VV6) return "VV6";  
+        else if(eType == VV8) return "VV8";  
+        else if(eType == VV10) return "VV10";  
+        else if(eType == VV6_2) return "VV6_2";  
+        else if(eType == RK2) return "RK2";  
+        else if(eType == RK3_4) return "RK3_4";  
+        else if(eType == RK3_4_A) return "RK3_4_A";  
+        else return "";
+    }
+
     struct EvolverTypeTester{
 #ifdef TEMPLATTEST
         static inline void Test(TDDAssertion& tdd);
