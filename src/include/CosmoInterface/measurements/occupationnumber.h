@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getngrid.h"
 #include "TempLat/lattice/field/field.h"
+#include "TempLat/lattice/measuringtools/averager.h"
 
 
 namespace TempLat {

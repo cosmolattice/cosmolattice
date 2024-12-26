@@ -102,9 +102,15 @@ namespace TempLat {
   }*/
 
     template <typename T>
-    typename std::enable_if<!IsTempLatGettable<0,T>::value, typename GetGetReturnType<T>::type>::type
+    typename std::enable_if<!IsTempLatGettable<0,T>::value && !std::is_arithmetic<T>::value, typename GetGetReturnType<T>::type>::type
     average(T instance, SpaceStateInterface::SpaceType spaceType = GetGetReturnType<T>::isComplex ?  SpaceStateInterface::SpaceType::Fourier : SpaceStateInterface::SpaceType::Configuration) {
         return Averager<T>(instance, spaceType).compute();
+    }
+
+    template <typename T>
+    typename std::enable_if<std::is_arithmetic<T>::value,  T>::type
+    average(T a) {
+        return a;
     }
 
     auto average(ZeroType a)
