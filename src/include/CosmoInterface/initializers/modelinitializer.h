@@ -14,6 +14,7 @@
 #include "CosmoInterface/initializers/u1initializer.h"
 #include "CosmoInterface/initializers/su2initializer.h"
 #include "CosmoInterface/definitions/averages.h"
+#include "CosmoInterface/definitions/hubbleconstraint.h"
 
 namespace TempLat {
 

@@ -35,7 +35,7 @@ inline void TempLat::TwoPointCorrelatorTester::Test(TempLat::TDDAssertion& tdd) 
 
         ic.inFourierSpace() = base.inFourierSpace();
 
-        auto checkResult = projectRadially(ic, SpaceStateInterface::SpaceType::Configuration,toolBox, false, false).measure();
+        auto checkResult = projectRadially(ic, SpaceStateInterface::SpaceType::Configuration,toolBox, false).measure();
 
 //        base.iterate([&base](auto &piter) { say << piter.getCoordinates() << " " << base.get(piter) << "\n"; return true; });
 

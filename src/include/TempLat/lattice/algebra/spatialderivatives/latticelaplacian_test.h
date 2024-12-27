@@ -40,13 +40,13 @@ inline void TempLat::LatticeLaplacianTester::Test(TempLat::TDDAssertion& tdd) {
   for( it.begin(); it.end() ; ++it ){
     auto coord = toolBox->getCoordConfiguration(it());
     if( coord[0] != 16 && coord[0] != -15 ){           //coordinates range from -15 to 16.
-      OK *= fgSC.get(it()) == 0;   //0 except at the boundary, where it jumps
+      OK = OK && fgSC.get(it()) == 0;   //0 except at the boundary, where it jumps
     }
     else if( coord[0] == 16){
-      OK *= fgSC.get(it()) == -32; // Go accross the boundary need to get (-15-2* 16+15) == -32
+      OK = OK && fgSC.get(it()) == -32; // Go accross the boundary need to get (-15-2* 16+15) == -32
     }
     else if( coord[0] == -15)
-      OK *= fgSC.get(it()) == 32; // Go accross the boundary need to get (16+2*15-14) == 32
+      OK = OK && fgSC.get(it()) == 32; // Go accross the boundary need to get (16+2*15-14) == 32
   }
 
   tdd.verify( OK );
@@ -62,14 +62,14 @@ inline void TempLat::LatticeLaplacianTester::Test(TempLat::TDDAssertion& tdd) {
     for( it.begin(); it.end() ; ++it ){
       auto coord = toolBox->getCoordConfiguration(it());
       if( coord[0] != 16 && coord[0] != -15 ){           //coordinates range from -15 to 16.
-        OK *= fgSC2.get(it()) == 2;   //2 except at the boundary, where it jumps
+        OK = OK && fgSC2.get(it()) == 2;   //2 except at the boundary, where it jumps
       }
       else if( coord[0] == 16){
         //say <<
-        OK *= fgSC2.get(it()) == -62; // Go accross the boundary need to get ((-15)**2-2* (16)**2+(15)**2) == -62
+        OK = OK && fgSC2.get(it()) == -62; // Go accross the boundary need to get ((-15)**2-2* (16)**2+(15)**2) == -62
       }
       else if( coord[0] == -15)
-        OK *= fgSC2.get(it()) == 2; // Go accross the boundary need to get ((16)**2-2*(-15)**2-(14)**2) == 2
+        OK = OK && fgSC2.get(it()) == 2; // Go accross the boundary need to get ((16)**2-2*(-15)**2-(14)**2) == 2
     }
 //
 
@@ -83,7 +83,7 @@ inline void TempLat::LatticeLaplacianTester::Test(TempLat::TDDAssertion& tdd) {
   for( it.begin(); it.end() ; ++it ){
     auto coord = toolBox->getCoordConfiguration(it());
     if( coord[0] != 16 && coord[0] != -15 && coord[0] != 16 && coord[0] != -15 && coord[1] != 16 && coord[1] != -15 ){           //coordinates range from -15 to 16.
-      OK *= fgSC3.get(it()) == 0;   //2 except at the boundary, where it jumps
+      OK = OK && fgSC3.get(it()) == 0;   //2 except at the boundary, where it jumps
     }
 
     //Don't check the boundary case as it is becoming noying. But please feel free to if you have any doubts.
@@ -115,7 +115,7 @@ inline void TempLat::LatticeLaplacianTester::Test(TempLat::TDDAssertion& tdd) {
     for( it.begin(); it.end() ; ++it ){
       auto coord = toolBox->getCoordConfiguration(it());
       if( coord[0] != 16 && coord[0] != -15 && coord[0] != 16 && coord[0] != -15 && coord[1] != 16 && coord[1] != -15 ){           //coordinates range from -15 to 16.
-        OK *= fgSC5.get(it()) == 4;   //2 except at the boundary, where it jumps
+        OK = OK && fgSC5.get(it()) == 4;   //2 except at the boundary, where it jumps
       }
       //Don't check the boundary case as it is becoming noying. But please feel free to if you have any doubts.
     }

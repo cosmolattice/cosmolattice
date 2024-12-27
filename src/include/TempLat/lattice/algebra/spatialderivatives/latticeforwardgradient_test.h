@@ -55,9 +55,9 @@ inline void TempLat::LatticeForwardGradientTester::Test(TempLat::TDDAssertion& t
     for( it.begin(); it.end() ; ++it ){
       auto coord = toolBox->getCoordConfiguration(it());
       if( coord[0] != 16)           //coordinates range from -15 to 16.
-        OK *= fgSC.get(it()) == 1;
+        OK = OK && fgSC.get(it()) == 1;
       else
-        OK *= fgSC.get(it()) == 961; // Go accross the boundary need to get (-15-16)^2 == 961
+        OK = OK && fgSC.get(it()) == 961; // Go accross the boundary need to get (-15-16)^2 == 961
     }
 
 
@@ -73,9 +73,9 @@ inline void TempLat::LatticeForwardGradientTester::Test(TempLat::TDDAssertion& t
   for( it.begin(); it.end() ; ++it ){
     auto coord = toolBox->getCoordConfiguration(it());
     if( coord[0] != 16)           //coordinates range from -15 to 16.
-      OK *= fgSC2.get(it()) == 3 * 3;
+      OK = OK && fgSC2.get(it()) == 3 * 3;
     else
-      OK *= fgSC2.get(it()) == 961 *9; // Go accross the boundary need to get (-15-16)^2 == 961
+      OK = OK && fgSC2.get(it()) == 961 *9; // Go accross the boundary need to get (-15-16)^2 == 961
   }
 
 
@@ -89,9 +89,9 @@ inline void TempLat::LatticeForwardGradientTester::Test(TempLat::TDDAssertion& t
   for( it.begin(); it.end() ; ++it ){
     auto coord = toolBox->getCoordConfiguration(it());
     if( coord[0] != 16)           //coordinates range from -15 to 16.
-      OK *= fgSC3.get(it()) == 2 * 2;
+      OK = OK && fgSC3.get(it()) == 2 * 2;
     else
-      OK *= fgSC3.get(it()) == 961 *4; // Go accross the boundary need to get (-15-16)^2 == 961
+      OK = OK && fgSC3.get(it()) == 961 *4; // Go accross the boundary need to get (-15-16)^2 == 961
   }
   tdd.verify( OK );
 

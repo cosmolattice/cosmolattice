@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/algebra.h"
 
 #include "CosmoInterface/definitions/radialprojectorGW.h"
+#include "CosmoInterface/definitions/energies.h"
 #include "CosmoInterface/runparameters.h"
 
 

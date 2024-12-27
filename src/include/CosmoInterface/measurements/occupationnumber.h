@@ -14,6 +14,8 @@
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/measuringtools/averager.h"
 
+#include "CosmoInterface/runparameters.h"
+
 
 namespace TempLat {
 

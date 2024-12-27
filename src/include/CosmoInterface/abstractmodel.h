@@ -22,6 +22,7 @@
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 
 #include "TempLat/parameters/parameterparser.h"
+#include "CosmoInterface/runparameters.h"
 
 namespace TempLat {
 

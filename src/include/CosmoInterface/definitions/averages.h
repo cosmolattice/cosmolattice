@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/definitions/fieldfunctionals.h"
-#include "CosmoInterface/definitions/energies.h"
 #include "CosmoInterface/definitions/potential.h"
 
 
