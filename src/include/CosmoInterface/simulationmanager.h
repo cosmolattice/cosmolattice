@@ -173,9 +173,10 @@ namespace TempLat {
 
         // Create an info file, with all the simulation parameters as well as the parallelization grid the simulation
         // was run on.
-        void createInfoFile(ParameterParser& par, const std::string& modelName, const std::vector<int>& dec, bool amIRoot)
+        template<typename T, class Model>
+        void createInfoFile(ParameterParser& par, const RunParameters<T>& runPar, Model& model, const std::vector<int>& dec, bool amIRoot)
         {
-            info = std::make_unique<ConditionalFileStream>(modelName + ".infos",amIRoot);
+            info = std::make_unique<ConditionalFileStream>(base_filename(runPar, model, true) + ".infos",amIRoot);
             (*info) << "Parameters: \n" << par<< "\n";
             CStyleTime mt;
             mt.now();
@@ -202,6 +203,14 @@ namespace TempLat {
             snprintf(msBuf, 6, "%03lli", msDec );
             (*info) << "The timer indicates that it ran for " << ss << "." << msBuf << "s.\n";
             (*info) << "As it ran on " <<nprocesses <<" cores, this corresponds to " << ms / 1000.0 / 3600.0  * nprocesses << " core hours.\n";
+        }
+
+        template<typename T, class Model>
+        static std::string base_filename(const RunParameters<T>& par, Model& model, bool removeLastChar = false)
+        {
+            auto str = par.outFn +  model.extraInfoFn(par.fnVerbosity) + par.extraInfoFn();
+            if(removeLastChar) str.pop_back();
+            return str;
         }
 
 

@@ -118,7 +118,7 @@ int main (int argc, char* argv[] ) {
     // Printing in the console all the parameters chosen (both run parameter and specific
     // model parameters)
 
-    manager.createInfoFile(parser, runParams.outFn + model.name, toolBox->getDecomposition(), iAmRoot);
+    manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
     //Creation of an info file, which lists all parameters and options chosen
 
 
