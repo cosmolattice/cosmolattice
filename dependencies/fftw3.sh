@@ -5,9 +5,9 @@
 # it where you want it to be installed (first argument of this script).
 
 
-CURURL="http://fftw.org/fftw-3.3.9.tar.gz"
-CURNAME="fftw-3.3.9"
-CURFOLDER=fftw-3.3.9
+CURURL="http://fftw.org/fftw-3.3.10.tar.gz"
+CURNAME="fftw-3.3.10"
+CURFOLDER=fftw-3.3.10
 
 #Actual code
 
