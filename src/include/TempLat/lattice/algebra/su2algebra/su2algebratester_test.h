@@ -131,22 +131,53 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion& tdd) {
     say << (A2*A2*A2).SU2Get(0_c);
     say << (A3*A3).SU2Get(0_c);
     say << (A*A*A*A*A*A).SU2Get(0_c);
-    say << ((A*A)*(A*A)*(A*A)).SU2Get(0_c);
-
+    say << ((A*A)*(A*A)*(A*A)).SU2Get(0_c);*/
 
     auto B2 = A2*A2*A2;
     B2.eval(tmp);
-    say << (B2).SU2Get(2_c,tmp);
+    /*say << (B2).SU2Get(2_c,tmp);
     say << (A3*A3).SU2Get(2_c).get(tmp);
     say << (A*A*A*A*A*A).SU2Get(2_c).get(tmp);
-    say << ((A*A)*(A*A)*(A*A)).SU2Get(2_c).get(tmp);
+    say << ((A*A)*(A*A)*(A*A)).SU2Get(2_c).get(tmp);*/
+
+    tdd.verify( AlmostEqual((B2).SU2Get(2_c,tmp),(A3*A3).SU2Get(2_c).get(tmp)));
+    tdd.verify( AlmostEqual((B2).SU2Get(2_c,tmp),(A*A*A*A*A*A).SU2Get(2_c).get(tmp)));
+    tdd.verify( AlmostEqual((B2).SU2Get(2_c,tmp),((A*A)*(A*A)*(A*A)).SU2Get(2_c).get(tmp)));
+
+    
 
 
     //Funny stuff: uncomment to get a segfault! Morale: use too much memory on the stack and crashes
   //  say << (A*A*A*A*A*A*A*A).SU2Get(0_c);
   //  say << (A*A*A*A*A*A*A*A).SU2Get(0_c).get(tmp);
-    say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c);
+    /*say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c);
     say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c).get(tmp);*/
+
+
+    // commutator 
+    B = SU2Wrap(sqrt(1-pow<2>(0.56)-pow<2>(0.1)-pow<2>(0.01)),0.56,0.1,0.01);
+
+    auto comm = A * B - B * A;
+    comm.eval(tmp);
+
+    /*say << (comm).SU2Get(0_c,tmp);
+    say << (comm).SU2Get(1_c,tmp);
+    say << (comm).SU2Get(2_c,tmp);
+    say << (comm).SU2Get(3_c,tmp);*/
+
+    auto commutator2 = commutator(A,B);
+    commutator2.eval(tmp);
+    /*say << (commutator2).SU2Get(0_c,tmp);
+    say << (commutator2).SU2Get(1_c,tmp);
+    say << (commutator2).SU2Get(2_c,tmp);
+    say << (commutator2).SU2Get(3_c,tmp);*/
+
+    tdd.verify( AlmostEqual((comm).SU2Get(0_c,tmp),(commutator2).SU2Get(0_c,tmp)));
+    tdd.verify( AlmostEqual((comm).SU2Get(1_c,tmp),(commutator2).SU2Get(1_c,tmp)));
+    tdd.verify( AlmostEqual((comm).SU2Get(2_c,tmp),(commutator2).SU2Get(2_c,tmp)));
+    tdd.verify( AlmostEqual((comm).SU2Get(3_c,tmp),(commutator2).SU2Get(3_c,tmp)));
+
+
 
 }
 
