@@ -327,11 +327,11 @@ namespace TempLat {
 
       std::vector<ptrdiff_t> getCoordConfiguration(ptrdiff_t i)
       {
-        return mConfCoord->getVec(i);
+        return mConfCoord->getVecOffset(i);
       }
       std::vector<ptrdiff_t> getCoordFourier(ptrdiff_t i)
       {
-        return mFourierCoord->getVec(i);
+        return mFourierCoord->getVecOffset(i);
       }
 
       std::vector<size_t> getCoordConfiguration0N(ptrdiff_t i) //Brings back the coordinates between 0 and N-1. Useful for saving and loading for example
@@ -394,9 +394,9 @@ namespace TempLat {
     public:
     /* Put all member variables and private methods here. These may change arbitrarily. */
         MPICartesianGroup mGroup;
-        ptrdiff_t mNDimensions;
+        ptrdiff_t mNDimensions; //Dimensions of the problem
        // ptrdiff_t mNGridPoints;
-        std::vector<ptrdiff_t > mNGridPointsVec;
+        std::vector<ptrdiff_t > mNGridPointsVec; //Lattice size in each dimension
         ptrdiff_t mGhostDepth;
         FFTLibrarySelector mFFTLibrary;
         TripleStateLayouts mLayouts;

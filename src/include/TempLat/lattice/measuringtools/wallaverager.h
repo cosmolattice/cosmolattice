@@ -36,7 +36,7 @@ namespace TempLat {
                     mT(pT),
                     mSpaceType(spaceType)
             {
-                for(size_t i = 0; i < mT.getToolBox()->mNDimensions; ++i) {
+                for(ptrdiff_t i = 0; i < mT.getToolBox()->mNDimensions; ++i) {
                     mWorkspace.emplace_back(std::vector<vType>(mT.getToolBox()->mNGridPointsVec[i],0));
                 }
             }
@@ -53,20 +53,23 @@ namespace TempLat {
 
                 computeConfigurationSpace() ;
 
-                /*mT.getToolBox()->mGroup.getBaseComm().Allreduce(mWorkspace.data(), MPI_SUM); // Perform the reduction. All processes have a N*d array (in the isotropic case). it is allreduced here. 
+                //mT.getToolBox()->mGroup.getBaseComm().Allreduce(mWorkspace.data(), MPI_SUM); // Perform the reduction. All processes have a N*d array (in the isotropic case). it is allreduced here. 
+                for(ptrdiff_t i = 0; i < mT.getToolBox()->mNDimensions; ++i) {
+                    mT.getToolBox()->mGroup.getBaseComm().Allreduce(&mWorkspace[i], MPI_SUM); // Perform the reduction. All processes have a N*d array (in the isotropic case). it is allreduced here. 
+                }
 
-                std::vector<size_t> codim(mT.getToolBox()->mNDimensions, 1); // For each dimension, compute the size of the space that is average over (N^(d-1) for isotropic lattices)
-                for(size_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) {
-                    for(size_t j = 0; j < mT.getToolBox()->mNDimensions; ++j) {
+                std::vector<ptrdiff_t> codim(mT.getToolBox()->mNDimensions, 1); // For each dimension, compute the size of the space that is average over (N^(d-1) for isotropic lattices)
+                for(ptrdiff_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) {
+                    for(ptrdiff_t j = 0; j < mT.getToolBox()->mNDimensions; ++j) {
                         if(j!=t) codim[t] *= mT.getToolBox()->mNGridPointsVec[j];
                     }
                 }
 
-                for(size_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) { // Normalize the average
-                    for(size_t j = 0; j < mT.getToolBox()->mNGridPointsVec[t]; ++j) {
+                for(ptrdiff_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) { // Normalize the average
+                    for(ptrdiff_t j = 0; j < mT.getToolBox()->mNGridPointsVec[t]; ++j) {
                         mWorkspace[t][j] /= codim[t];
                     }
-                }*/
+                }
             }
 
             void computeConfigurationSpace() {
@@ -82,7 +85,6 @@ namespace TempLat {
                     i = it();
                     auto coord = mT.getToolBox()->getCoordConfiguration0N(i);
                     DoEval::eval(mT,i);
-                    say << coord;
 
                     for(ptrdiff_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) {
                         mWorkspace[t][coord[t]] += GetEval::getEval(mT,i);      //Average over the orthogonal directions.

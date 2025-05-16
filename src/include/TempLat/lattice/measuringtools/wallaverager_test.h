@@ -9,7 +9,7 @@
 
 inline void TempLat::WallAveragerTester::Test(TempLat::TDDAssertion& tdd) {
 
-   /* 
+    
     struct myTmpStruct {
         myTmpStruct() : mt(MemoryToolBox::makeShared(4, 16, 1)) { }
         double get(ptrdiff_t i) {
@@ -17,12 +17,15 @@ inline void TempLat::WallAveragerTester::Test(TempLat::TDDAssertion& tdd) {
             auto ii = mt->getCoordConfiguration0N(i);
 
             return ii[0] * pow(16,3) + ii[1]* pow(16,2) + ii[2] * 16 + ii[3];
-           //return 1;
         }
 
         double expectedAnswer(int l)
         {
             return (0.5 * (15) * 16 * ( pow(16,2) +  16 +  1))  + l; // sum_0^N-1 = (N-1)N/2
+        }
+
+        double dummy_coord(ptrdiff_t i, ptrdiff_t j, ptrdiff_t k, ptrdiff_t l) {
+            return i * pow(16,3) + j * pow(16,2) + k * 16 + l;
         }
 
         auto getToolBox() { return mt; }
@@ -32,29 +35,58 @@ inline void TempLat::WallAveragerTester::Test(TempLat::TDDAssertion& tdd) {
         std::string toString() const { return "myTmpStruct"; }
     };
 
-
     myTmpStruct myInstance;
+
+
+
+    std::array<double, 16> wallx;
+    std::array<double, 16> wally;
+    std::array<double, 16> wallz;
+    std::array<double, 16> wallt;
+
+    for (int i = 0; i < 16; ++i) {
+        wallx[i] = 0;
+        wally[i] = 0;
+        wallz[i] = 0;
+        wallt[i] = 0;
+    }   
+    
+    for (int i = 0; i < 16; ++i) {
+        for (int j = 0; j < 16; ++j) {
+            for (int k = 0; k < 16; ++k) {
+                for (int l = 0; l < 16; ++l) {
+                    wallx[i] += myInstance.dummy_coord(i,j,k,l);
+                    wally[j] += myInstance.dummy_coord(i,j,k,l);
+                    wallz[k] += myInstance.dummy_coord(i,j,k,l);
+                    wallt[l] += myInstance.dummy_coord(i,j,k,l);
+                }
+            }
+        }
+    }
+
+
 
     auto avs = wallAverager(myInstance);
     avs.compute();
-    auto wallt = avs.getWall(3);
+    auto nwallx = avs.getWall(0);
+    auto nwally = avs.getWall(1);
+    auto nwallz = avs.getWall(2);
+    auto nwallt = avs.getWall(3);
 
 
     for(int i = 0; i<15; ++i) {
-        say << wallt[i];
-    }*/
+        tdd.verify(AlmostEqual(nwallx[i],wallx[i]/pow(16,3)));
+        tdd.verify(AlmostEqual(nwally[i],wally[i]/pow(16,3)));
+        tdd.verify(AlmostEqual(nwallz[i],wallz[i]/pow(16,3)));
+        tdd.verify(AlmostEqual(nwallt[i],wallt[i]/pow(16,3)));
 
-    auto mt = MemoryToolBox::makeShared(3, 4, 1);
-
-    ptrdiff_t i = 0;
-    auto& it = mt->itX();
-
-    for(it.begin();it.end();++it)
-    {
-        i = it();
-        auto coord = mt->getCoordConfiguration(i);
-        say << coord;
+        say << i;
+        say << nwallt[i];
+        say << wallt[i]/pow(16,3);
     }
+    
+
+
 
 }
 

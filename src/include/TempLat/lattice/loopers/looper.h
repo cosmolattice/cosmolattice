@@ -29,7 +29,6 @@ namespace TempLat {
         mStart(pStart),
         mEnd(pEnd)
         {
-
         }
         Looper(std::shared_ptr<Coordinates> pCoord):
                Looper(pCoord, pCoord->getStart(), pCoord->getEnd())
