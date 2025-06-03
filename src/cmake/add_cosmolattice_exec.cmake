@@ -16,7 +16,7 @@ function(add_cosmolattice execName path ofile)
 		target_link_libraries(${execName} PUBLIC ${HDF5_LIBRARIES})
 	endif()
 
-
+	add_dependencies(${execName} kokkos_dep)
 endfunction()
 
 #Function to compile any main which use CosmoLattice.

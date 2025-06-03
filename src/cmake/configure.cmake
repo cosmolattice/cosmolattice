@@ -46,3 +46,7 @@ endif()
 
 #set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FFTW_INCLUDES}" )
 include_directories(${FFTW_INCLUDES})
+
+
+# Get Kokkos
+include(./src/cmake/get_kokkos.cmake)
