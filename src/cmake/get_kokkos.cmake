@@ -18,7 +18,7 @@ else ()
 endif ()
 
 check_language(OpenMP)
-find_package(OpenMP)
+find_package(OpenMP QUIET)
 if (OpenMP_CXX_FOUND)
     set(HAVE_OPENMP ON)
     set(HAVE_THREADS OFF)
@@ -26,25 +26,9 @@ else ()
     set(HAVE_OPENMP OFF)
     set(HAVE_THREADS ON)
 endif ()
-# if ENABLE_MPI is not set, set it to OFF
-if (NOT DEFINED ENABLE_MPI)
-    find_package(MPI)
-    if (MPI_FOUND)
-        set(ENABLE_MPI
-                ON
-                CACHE BOOL "Enable MPI support")
-    else ()
-        set(ENABLE_MPI
-                OFF
-                CACHE BOOL "Enable MPI support")
-    endif ()
-endif ()
 
-message(STATUS "MPI: ${ENABLE_MPI}")
-message(STATUS "OpenMP: ${HAVE_OPENMP}")
-message(STATUS "CUDA: ${HAVE_CUDA}")
-message(STATUS "HIP: ${HAVE_HIP}")
-message(STATUS "Threads: ${HAVE_THREADS}")
+message(STATUS "Kokkos configuration: \n    OpenMP: ${HAVE_OPENMP} \n    CUDA: ${HAVE_CUDA} \n    HIP: ${HAVE_HIP} \n    Threads: ${HAVE_THREADS}")
+
 
 # ##############################################################################
 # Get Kokkos
@@ -75,6 +59,11 @@ else ()
     # remove the last element
     string(SUBSTRING "${Kokkos_ARCH_LIST}" 0 -1 Kokkos_ARCH_LIST)
 endif ()
+
+# ##############################################################################
+# Build Kokkos!
+# This will happen very manually - this way we have the greatest control over what is happening.
+# ##############################################################################
 
 set(KOKKOS_VERSION 4.6.01)
 
@@ -114,6 +103,7 @@ execute_process(
         ../kokkos-repo 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
 )
+
 message(STATUS "Building Kokkos...")
 execute_process(
         COMMAND
@@ -121,6 +111,7 @@ execute_process(
         "make -j8 2<&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
 )
+
 message(STATUS "Installing Kokkos...")
 execute_process(
         COMMAND
@@ -129,4 +120,7 @@ execute_process(
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
 )
 
-find_package(Kokkos REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/Kokkos)
+# Kokkos by default does not support extensions, so we force them off
+set(CMAKE_CXX_EXTENSIONS OFF)
+# Make the package available
+find_package(Kokkos REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/Kokkos QUIET)
