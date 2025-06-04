@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.5)
+cmake_minimum_required(VERSION 3.5)
 include(src/cmake/title.cmake)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/src/cmake/)  #Tells CMake where the magic-find-my-path-functions are.
@@ -6,7 +6,7 @@ set(MODELS_PATH ./src/models/) #path to the cosmolattice models. If for some rea
 
 message(${CMAKE_MODULE_PATH})
 
-project (CosmoLattice CXX C)
+project(CosmoLattice CXX C)
 
 # These are the options which are available to the user.
 
@@ -43,7 +43,7 @@ include(src/cmake/auto_install_paths.cmake)
 # Example:  set(MYPPFT_PATH "/home/user/pfft/" CACHE STRING "PFFT guess path"), assuming that the library files are in
 #					 /home/user/pfft/bin/  and t he include file in /home/user/pfft/include/
 
- set(MYPFFT_PATH "insert/here" CACHE STRING "PFFT guess path")
+set(MYPFFT_PATH "insert/here" CACHE STRING "PFFT guess path")
 
 #########################################################################################################################
 
@@ -64,8 +64,7 @@ set(MYHDF5_PATH "insert/here" CACHE STRING "HDF5 guess path")
 #Now we add these indications to the relevant CMake variable. Btw, any path you add to CMAKE_PREFIX_PATH upon calling
 #cmake will be remembered, so don't hesitate to continue using it.
 
-set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYPFFT_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}" )
-
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYPFFT_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}")
 
 
 ###########The CMake shenanigans are hidden in this file. You can check it out if interested ############################
@@ -91,18 +90,17 @@ message("The model which is going to be compiled is: ${MODEL}.")
 set(MODEL_LABEL ${MODEL}) #Allows to customise the name below if wanted.
 
 
-
 #Next lines looks to see if a file name Model.cmake exists at the same place than the model. If so,
 #loads it, allows you to custom the cmake behaviour depending on the model
 
 find_file(MODELS_CMAKE ${MODEL}.cmake ${MODELS_PATH})
-if( NOT MODELS_CMAKE)
-  message("With no special options.")
-else()
+if (NOT MODELS_CMAKE)
+    message("With no special options.")
+else ()
     include(${MODELS_CMAKE})
-endif()
+endif ()
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DMODELTYPE=${MODEL} -DMODELINCLUDE=models/${MODEL}.h -DMODELLABEL=${MODEL_LABEL}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DMODELTYPE=${MODEL} -DMODELINCLUDE=models/${MODEL}.h -DMODELLABEL=${MODEL_LABEL}")
 
 ##########################################################################################################################
 
@@ -112,44 +110,46 @@ set(G++OPT Ofast CACHE STRING "Set optimisation level of g++. Can choose between
 set(G++SSE OFF CACHE BOOL "Set the sse instruction flags of g++. Default is OFF, but most likely you want to set is to ON.")
 set(G++AVX OFF CACHE STRING "Set the avx instruction flags during compilation. Can choose between OFF, mavx, mavx2, mavx512f (default = OFF). If you want something else, feel free to change the CMakeLists.")
 
-if(${G++OPT} STREQUAL "G")
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
-elseif(${G++OPT} STREQUAL "O1")
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 ")
-elseif(${G++OPT} STREQUAL "O2")
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 ")
-elseif(${G++OPT} STREQUAL "O3")
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 ")
-elseif(${G++OPT} STREQUAL "Ofast")
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast ")
-else()
+if (${G++OPT} STREQUAL "G")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
+elseif (${G++OPT} STREQUAL "O1")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 ")
+elseif (${G++OPT} STREQUAL "O2")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 ")
+elseif (${G++OPT} STREQUAL "O3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 ")
+elseif (${G++OPT} STREQUAL "Ofast")
+    if (KOKKOS)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 ")
+    else ()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast ")
+    endif ()
+else ()
     message(FATAL_ERROR "G++OPT=${G++OPT} is not a valid option.")
-endif()
-if(${G++SSE})
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3 -msse4")
-endif()
-if(${G++AVX} STREQUAL mavx)
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
-elseif(${G++AVX} STREQUAL mavx2)
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx2")
-elseif(${G++AVX} STREQUAL mavx512f)
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx2 -mavx512f")
-elseif(NOT ${G++AVX} STREQUAL OFF)
+endif ()
+if (${G++SSE})
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3 -msse4")
+endif ()
+if (${G++AVX} STREQUAL mavx)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
+elseif (${G++AVX} STREQUAL mavx2)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx2")
+elseif (${G++AVX} STREQUAL mavx512f)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx2 -mavx512f")
+elseif (NOT ${G++AVX} STREQUAL OFF)
     message(FATAL_ERROR "G++AVX=${G++AVX} is not a valid option.")
-endif()
+endif ()
 
 #you can target your computer architecture by changing the arch here.
-if(NOT ${G++OPT} STREQUAL "G")
+if (NOT ${G++OPT} STREQUAL "G")
     # example: set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native ")
-    set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-endif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif ()
 
-set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wshadow ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wshadow ")
 
 
 message("The compiler will be called with the following flags: ${CMAKE_CXX_FLAGS}")
-
-
 
 
 #########################################################################################################################
@@ -177,14 +177,14 @@ add_cosmolattice_executable(cosmolattice ./src/ ${MODEL_LABEL})
 
 add_custom_target(clean-cmake
         COMMAND ${CMAKE_COMMAND} -P ${CMAKE_SOURCE_DIR}/src/cmake/clean-all.cmake
-        )
+)
 
 #########################################################################################################################
 
 #Credits: ASCII art from http://patorjk.com/software/taag/
 # Font for comments: Big
 
-if(TESTING)
-enable_testing()
-add_subdirectory(src/tests/)
-endif()
+if (TESTING)
+    enable_testing()
+    add_subdirectory(src/tests/)
+endif ()

@@ -50,4 +50,5 @@ include_directories(${FFTW_INCLUDES})
 # Get Kokkos
 if (KOKKOS)
     include(./src/cmake/get_kokkos.cmake)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOKOKKOS")
 endif ()
