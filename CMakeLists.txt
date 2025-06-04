@@ -11,6 +11,7 @@ project (CosmoLattice CXX C)
 # These are the options which are available to the user.
 
 set(MPI OFF CACHE BOOL "Set to ON to build with MPI (default = OFF)")
+set(KOKKOS ON CACHE BOOL "Set to ON to build with Kokkos for shared memory and GPU parallelization (default = ON)")
 set(PFFT OFF CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
 set(HDF5 OFF CACHE BOOL "Set to ON to build with HDF5 support for saving fields (default = OFF)")
 set(TESTING OFF CACHE BOOL "Set to ON to be abble to build the tests (default = OFF)")

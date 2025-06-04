@@ -4,41 +4,41 @@
 include(CheckLanguage)
 
 check_language(CUDA)
-if(CMAKE_CUDA_COMPILER)
+if (CMAKE_CUDA_COMPILER)
     set(HAVE_CUDA ON)
     set(HAVE_HIP OFF)
-else()
+else ()
     set(HAVE_CUDA OFF)
     check_language(HIP)
-    if(CMAKE_HIP_COMPILER)
+    if (CMAKE_HIP_COMPILER)
         set(HAVE_HIP ON)
-    else()
+    else ()
         set(HAVE_HIP OFF)
-    endif()
-endif()
+    endif ()
+endif ()
 
 check_language(OpenMP)
 find_package(OpenMP)
-if(OpenMP_CXX_FOUND)
+if (OpenMP_CXX_FOUND)
     set(HAVE_OPENMP ON)
     set(HAVE_THREADS OFF)
-else()
+else ()
     set(HAVE_OPENMP OFF)
     set(HAVE_THREADS ON)
-endif()
+endif ()
 # if ENABLE_MPI is not set, set it to OFF
-if(NOT DEFINED ENABLE_MPI)
+if (NOT DEFINED ENABLE_MPI)
     find_package(MPI)
-    if(MPI_FOUND)
+    if (MPI_FOUND)
         set(ENABLE_MPI
                 ON
                 CACHE BOOL "Enable MPI support")
-    else()
+    else ()
         set(ENABLE_MPI
                 OFF
                 CACHE BOOL "Enable MPI support")
-    endif()
-endif()
+    endif ()
+endif ()
 
 message(STATUS "MPI: ${ENABLE_MPI}")
 message(STATUS "OpenMP: ${HAVE_OPENMP}")
@@ -62,7 +62,7 @@ endif ()
 
 if (NOT DEFINED Kokkos_ARCH_LIST)
     message(
-            WARNING
+            STATUS
             "Kokkos_ARCH_LIST not set. GPU architecture must be detectable when building Kokkos."
     )
     set(Kokkos_ARCH_LIST "")
@@ -76,25 +76,57 @@ else ()
     string(SUBSTRING "${Kokkos_ARCH_LIST}" 0 -1 Kokkos_ARCH_LIST)
 endif ()
 
-# add the Kokkos dependency to the build
-include(ExternalProject)
-ExternalProject_Add(
-        kokkos_dep
-        GIT_REPOSITORY https://github.com/kokkos/kokkos.git
-        GIT_TAG 4.6.01
-        PREFIX ${CMAKE_CURRENT_BINARY_DIR}/kokkos-build
-        INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/kokkos
-        CMAKE_ARGS -DCMAKE_CXX_FLAGS=-fPIC
-        CMAKE_CACHE_ARGS
-        -DCMAKE_BUILD_TYPE:STRING=Release
-        -DCMAKE_CXX_STANDARD:STRING=17
-        -DKokkos_ARCH_NATIVE:BOOL=${Kokkos_ARCH_NATIVE}
-        ${Kokkos_ARCH_LIST}
-        -DKokkos_ENABLE_CUDA:BOOL=${HAVE_CUDA}
-        -DKokkos_ENABLE_CUDA_CONSTEXPR:BOOL=${HAVE_CUDA}
-        -DKokkos_ENABLE_HIP:BOOL=${HAVE_HIP}
-        -DKokkos_ENABLE_OPENMP:BOOL=${HAVE_OPENMP}
-        -DKokkos_ENABLE_THREADS:BOOL=${HAVE_THREADS}
-        -DKokkos_ENABLE_SERIAL:BOOL=ON
-        -DKokkos_ENABLE_TESTS:BOOL=OFF
+set(KOKKOS_VERSION 4.6.01)
+
+message(STATUS "Downloading Kokkos ${KOKKOS_VERSION}")
+execute_process(
+        COMMAND
+        bash -c
+        "mkdir -p _dep && git clone https://github.com/kokkos/kokkos.git --depth 1 --branch ${KOKKOS_VERSION} _dep/kokkos-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        OUTPUT_QUIET)
+
+message(STATUS "Configure Kokkos...")
+execute_process(
+        COMMAND
+        bash -c
+        "mkdir -p _dep/kokkos-bin"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        OUTPUT_QUIET)
+execute_process(
+        COMMAND
+        bash -c
+        "cmake \
+        -DCMAKE_CXX_FLAGS=-fPIC \
+        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/Kokkos \
+        -DCMAKE_BUILD_TYPE:STRING=Release \
+        -DCMAKE_CXX_STANDARD:STRING=17 \
+        -DKokkos_ARCH_NATIVE:BOOL=${Kokkos_ARCH_NATIVE} \
+        ${Kokkos_ARCH_LIST} \
+        -DKokkos_ENABLE_CUDA:BOOL=${HAVE_CUDA} \
+        -DKokkos_ENABLE_CUDA_CONSTEXPR:BOOL=${HAVE_CUDA} \
+        -DKokkos_ENABLE_HIP:BOOL=${HAVE_HIP} \
+        -DKokkos_ENABLE_OPENMP:BOOL=${HAVE_OPENMP} \
+        -DKokkos_ENABLE_THREADS:BOOL=${HAVE_THREADS} \
+        -DKokkos_ENABLE_SERIAL:BOOL=ON \
+        -DKokkos_ENABLE_TESTS:BOOL=OFF \
+        ../kokkos-repo 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
 )
+message(STATUS "Building Kokkos...")
+execute_process(
+        COMMAND
+        bash -c
+        "make -j8 2<&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
+)
+message(STATUS "Installing Kokkos...")
+execute_process(
+        COMMAND
+        bash -c
+        "make install 2<&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
+)
+
+find_package(Kokkos REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/Kokkos)
