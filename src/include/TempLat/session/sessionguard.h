@@ -11,6 +11,7 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/parallel/mpi/session/mpiguard.h"
+#include "TempLat/parallel/kokkos/session/kokkosguard.h"
 
 namespace TempLat {
 
@@ -26,9 +27,10 @@ namespace TempLat {
     class SessionGuard {
     public:
     /* Put public methods here. These should change very little over time. */
-        SessionGuard(int argc, char* argv[], bool verbose = true) :
+        SessionGuard(int argc, char* argv[], bool verbose = false) :
         instanceProtectionKey(InstanceCounter(1)),
         mMPIGuard(argc, argv, verbose),
+        mKokkosGuard(argc, argv, verbose),
         mFFTSessionGuards(FFTLibrarySelector::getSessionGuards(verbose))
         {
         }
@@ -38,6 +40,7 @@ namespace TempLat {
     /* Put all member variables and private methods here. These may change arbitrarily. */
         int instanceProtectionKey;
         MPIGuard mMPIGuard;
+        KokkosGuard mKokkosGuard;
         std::vector<std::shared_ptr<FFTLibraryInterface::SessionGuard>> mFFTSessionGuards;
 
         static inline int InstanceCounter(int delta = 0) {
