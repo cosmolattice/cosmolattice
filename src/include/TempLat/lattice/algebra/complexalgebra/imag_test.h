@@ -10,20 +10,19 @@
 inline void TempLat::ImagTester::Test(TempLat::TDDAssertion& tdd) {
 
     struct MyStruct{
+        KOKKOS_FORCEINLINE_FUNCTION
         double ComplexFieldGet(Tag<0> t){
             return 87;
         };
+        KOKKOS_FORCEINLINE_FUNCTION
         int ComplexFieldGet(Tag<1> t){
             return 870;
         };
     };
 
-
     MyStruct ms;
     tdd.verify( Imag(ms) == 870 );
-    tdd.verify( Imag(std::complex<double>(1,870)) == 870 );
-
-
+    tdd.verify( Imag(complex<double>(1,870)) == 870 );
 }
 
 #endif

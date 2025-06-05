@@ -32,7 +32,7 @@ inline void TempLat::ComplexFieldMultiplyTester::Test(TempLat::TDDAssertion& tdd
     };
 
     auto test = MyStruct() * MyStruct2();
-    auto test2 = std::complex<double>(1,2) * MyStruct2();
+    auto test2 = complex<double>(1,2) * MyStruct2();
     
     /* Default is to fail: to remind yourself to implement something here. */
     tdd.verify( test.ComplexFieldGet(0_c) == -5 );

@@ -17,53 +17,42 @@
 #include "TempLat/lattice/algebra/operators/exponential.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 namespace TempLat {
-
-
     /** \brief A class which implements the Sinh.
      *
-     * 
      * Unit test: make test-sinh
      **/
     using std::sinh;
 
-
     /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
     namespace Operators {
-
         template <typename T>
         class Sinh : public UnaryOperator<T> {
         public:
-
-            /* Yes, need to do this 'using': parent class is template, stuff is not visible to the compiler yet. */
+            /* Put public methods here. These should change very little over time. */
             using UnaryOperator<T>::mR;
 
-            /* Put public methods here. These should change very little over time. */
-            Sinh(T a) : UnaryOperator<T>(a) {   }
+            KOKKOS_FUNCTION
+            Sinh(T a) : UnaryOperator<T>(a) {}
 
             /** \brief Getter for two instances. */
-            inline auto get(ptrdiff_t i)  {
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto get(ptrdiff_t i)  {
                 using namespace std; /* not std::exp, but this way, for potential future data types. */
                 return sinh(GetValue::get(mR, i));
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template <typename U>
-            inline auto d(const U& other)  {
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto d(const U& other)  {
                 return GetDeriv::get(mR, other) * (exp(*this) + exp(-(*this))) / 2.0;
             }
 
-            virtual std::string operatorString() const {
+            static std::string operatorString() {
                 return "sinh";
             }
-
-        private:
-            /* Put all member variables and private methods here. These may change arbitrarily. */
-
-
         };
-
     }
-
 
     /** \brief A mini struct for instiating the test case. */
     struct SinhTester {
@@ -72,28 +61,23 @@ namespace TempLat {
 #endif
     };
 
-
     /** \brief Exposing our newly define exp operation to the world. */
     template <typename T>
-    inline
+    KOKKOS_FORCEINLINE_FUNCTION
     typename ConditionalUnaryGetter<Operators::Sinh, T>::type
     sinh( T a) {
         return Operators::Sinh<T>(a);
     }
 
     /** \brief Specialize for possible zero input! */
-    inline
+    KOKKOS_FORCEINLINE_FUNCTION
     ZeroType sinh( ZeroType a) {
         return ZeroType();
     }
-
-
-
 } /* TempLat */
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/sinh_test.h"
 #endif
-
 
 #endif

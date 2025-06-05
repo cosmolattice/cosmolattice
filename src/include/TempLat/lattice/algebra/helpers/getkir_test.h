@@ -11,17 +11,20 @@ inline void TempLat::GetKIR::Test(TempLat::TDDAssertion& tdd) {
 
     /* Default is to fail: to remind yourself to implement something here. */
     struct myTest{
+      KOKKOS_FORCEINLINE_FUNCTION
       double getKIR()
       {
         return 0.42;
       }
     };
     struct myTest1{
+      KOKKOS_FORCEINLINE_FUNCTION
       double getKIR()
       {
         return 0.42;
       }
 
+      KOKKOS_FORCEINLINE_FUNCTION
       double get(ptrdiff_t i)
       {
         return 76;
@@ -29,11 +32,13 @@ inline void TempLat::GetKIR::Test(TempLat::TDDAssertion& tdd) {
     };
 
     struct myTest2{
+      KOKKOS_FORCEINLINE_FUNCTION
       double getIR()
       {
         return 0.42;
       }
 
+      KOKKOS_FORCEINLINE_FUNCTION
       double get(ptrdiff_t i)
       {
         return 76;
@@ -47,7 +52,6 @@ inline void TempLat::GetKIR::Test(TempLat::TDDAssertion& tdd) {
     //tdd.verify(GetKIR::getKIR(t1) == 0.42); //does not compile as we don't have get method and is needed for automatic type deducing.
     tdd.verify(GetKIR::getKIR(t1) == 0.42);
     tdd.verify(GetKIR::getKIR(t2) == 1);
-
 }
 
 #endif

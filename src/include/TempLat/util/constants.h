@@ -31,7 +31,7 @@ namespace TempLat {
         constexpr T reducedMPlanck = T(2.435e18); // Agreement between PDG and CODATA
 
         template<typename T=double>
-        constexpr std::complex<T> I = std::complex<T>(0,1);
+        constexpr complex<T> I = complex<T>(0,1);
 
         const std::string defaultString = "\u2716";
 

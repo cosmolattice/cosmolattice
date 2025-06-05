@@ -11,6 +11,7 @@ namespace TempLat {
     namespace TestScratch {
         template <int RETURNVALUE>
         struct DiracTesterTemplate {
+            KOKKOS_FORCEINLINE_FUNCTION
             double get(ptrdiff_t i) {
                 return RETURNVALUE * std::numeric_limits<double>::epsilon();
             }

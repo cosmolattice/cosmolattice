@@ -52,7 +52,7 @@ namespace TempLat {
            {
                 i=it();
                DoEval::eval(g,i);
-               mManager->complex(i)=GetEval::getEval(g,i);
+               mManager->as_complex(i)=GetEval::getEval(g,i);
            }
            //mManager->setGhostsAreStale();
             return *this;
@@ -68,24 +68,24 @@ namespace TempLat {
              GhostsHunter::apply(g);
 
          }
-         std::complex<T> get(ptrdiff_t i) const
+         complex<T> get(ptrdiff_t i) const
          {
-           return mManager->complex(i);
+           return mManager->as_complex(i);
          }
-         std::complex<T>& getSet(ptrdiff_t i)
+         complex<T>& getSet(ptrdiff_t i)
          {
-             return mManager->complex(i);
-         }
-
-
-         std::complex<T>&  get(const Looper& itK)
-         {
-           return   mManager->complex(itK());
+             return mManager->as_complex(i);
          }
 
-         const std::complex<T>&  get(const Looper& itK) const
+
+         complex<T>&  get(const Looper& itK)
          {
-           return   mManager->complex(itK());
+           return   mManager->as_complex(itK());
+         }
+
+         const complex<T>&  get(const Looper& itK) const
+         {
+           return   mManager->as_complex(itK());
          }
 
          virtual const JumpsHolder& getJumps() const
@@ -136,26 +136,26 @@ namespace TempLat {
           {
              ptrdiff_t offset = this->getOffsetFromCoords(test, position);
              /* our hack to give something that is not in the memory, without throwing an exception. */
-             static std::complex<T> dummy = 0;
-             dummy = std::complex<T>( std::numeric_limits<T>::infinity(), 0);
-             return offset > -1 ? mManager->complex(offset) : dummy;
+             static complex<T> dummy = 0;
+             dummy = complex<T>( std::numeric_limits<T>::infinity(), 0);
+             return offset > -1 ? mManager->as_complex(offset) : dummy;
          }
 
          //MPI aware setting of value. Use exceptionnaly (remove zero mode for example)
 
          template <typename... Args>
-         void setZeroMode(const std::complex<T>& toSet) { //This is dimension-aware.
+         void setZeroMode(const complex<T>& toSet) { //This is dimension-aware.
              std::vector<ptrdiff_t> asVec(mToolBox->mNDimensions,0);
              set(toSet, asVec);
          }
 
          template <typename... Args>
-         void set(const std::complex<T>& toSet, Args... args) {
+         void set(const complex<T>& toSet, Args... args) {
              std::vector<ptrdiff_t> asVec{{args...}};
              set(toSet, asVec);
          }
 
-         void set(const std::complex<T>& toSet, std::vector<ptrdiff_t> vec) {
+         void set(const complex<T>& toSet, std::vector<ptrdiff_t> vec) {
              bool tmp;
              auto& res = (*this)(tmp, vec);
              if(tmp) res = toSet;

@@ -9,6 +9,7 @@
 
 #include <complex>
 
+#include "TempLat/lattice/algebra/complex.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/memory/memoryblock.h"
@@ -43,6 +44,10 @@ namespace TempLat {
             return 1;
         }
 
+        bool toolboxDefined() {
+            return mToolBox == nullptr;
+        }
+
         // disabled these: only access through operator[], which optionally compiles with bounds checking.
 //        inline
 //        operator T*() { return mBlock; }
@@ -72,25 +77,25 @@ namespace TempLat {
 #ifdef CHECKBOUNDS
             checkRealBounds(i);
 #endif
-            return reinterpret_cast<std::complex<T>*>((T*) mBlock)[i];
+            return reinterpret_cast<complex<T>*>((T*) mBlock)[i];
         }
         */
 
         inline
-        std::complex<T>& complex(ptrdiff_t i) {
+        complex<T>& as_complex(ptrdiff_t i) {
 #ifdef CHECKBOUNDS
             checkComplexBounds(i);
 #endif
             /* https://stackoverflow.com/a/41654651/2295722 : cast double to complex is part of the standard since C++11. */
-            return reinterpret_cast<std::complex<T>*>((T*) mBlock)[i];
+            return reinterpret_cast<complex<T>*>((T*) mBlock)[i];
         }
 
         inline
-        const std::complex<T>& complex(ptrdiff_t i) const {
+        const complex<T>& as_complex(ptrdiff_t i) const {
 #ifdef CHECKBOUNDS
             checkComplexBounds(i);
 #endif
-            return reinterpret_cast<std::complex<T>*>((T*) mBlock)[i];;
+            return reinterpret_cast<complex<T>*>((T*) mBlock)[i];;
         }
 
         ptrdiff_t confirmConfigSpace() {
@@ -224,7 +229,7 @@ namespace TempLat {
         void checkComplexBounds(ptrdiff_t i) {
             if ( i < 0 || 2 * i >= (ptrdiff_t) mBlock.size() ) {throw MemoryManagerAccessOutOfBounds("Accessing memory out of bounds ", getName(), ", mBlock.size(): ", mBlock.size(), "index:", i);}
             /* also check that the casting works out correctly */
-            void *ptr1 = &(reinterpret_cast<std::complex<T>*>((T*) mBlock)[i]);
+            void *ptr1 = &(reinterpret_cast<complex<T>*>((T*) mBlock)[i]);
             void *ptr2 = &(mBlock[2 * i]);
             if ( ptr1 != ptr2 ) throw MemoryManagerAccessOutOfBounds("pointer casting from double to complex failed:", ptr1, "!=", ptr2);
         }

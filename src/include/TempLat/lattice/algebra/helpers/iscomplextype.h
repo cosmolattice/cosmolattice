@@ -13,7 +13,7 @@
 
 namespace TempLat {
 
-    /** \brief SFINAE detection of std::complex<whatever>
+    /** \brief SFINAE detection of complex<whatever>
      *
      * Unit test: make test-iscomplextype
      **/
@@ -22,19 +22,19 @@ namespace TempLat {
     };
 
     template <typename T>
-    struct IsComplexType<std::complex<T>> : public std::true_type {
+    struct IsComplexType<complex<T>> : public std::true_type {
     };
 
     template <typename T>
-    struct IsComplexType<const std::complex<T>> : public std::true_type {
+    struct IsComplexType<const complex<T>> : public std::true_type {
     };
 
     template <typename T>
-    struct IsComplexType<std::complex<T>&> : public std::true_type {
+    struct IsComplexType<complex<T>&> : public std::true_type {
     };
 
     template <typename T>
-    struct IsComplexType<const std::complex<T>&> : public std::true_type {
+    struct IsComplexType<const complex<T>&> : public std::true_type {
     };
 
     /** \brief a mini tester class... */

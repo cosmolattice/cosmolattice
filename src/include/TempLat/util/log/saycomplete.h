@@ -44,9 +44,9 @@ namespace TempLat {
         return result;
     }
     /** \brief A macro to put time and file info as prompt before the actual output. */
-#define say SayComplete(StripPathFromFileName(__FILE__), __LINE__)
-#define sayShort SayComplete(NULL, 0)
-#define sayMPI SayComplete((std::string("MPI Rank ") + std::to_string(TempLat::MPICommReference::worldRank()) + " - " + std::string(StripPathFromFileName(__FILE__))).c_str(), __LINE__)
+#define say TempLat::SayComplete(TempLat::StripPathFromFileName(__FILE__), __LINE__)
+#define sayShort TempLat::SayComplete(NULL, 0)
+#define sayMPI TempLat::SayComplete((std::string("MPI Rank ") + std::to_string(TempLat::MPICommReference::worldRank()) + " - " + std::string(StripPathFromFileName(__FILE__))).c_str(), __LINE__)
 
 
 

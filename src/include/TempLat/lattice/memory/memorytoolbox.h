@@ -30,7 +30,8 @@
 
 namespace TempLat {
 
-    /** \brief A class which collects all the tool classes which deal with memory(-state) manipulation. Make one toolbox using the makeShared method, and instantiate as many memory managers as you want, with identical layouts!
+    /** \brief A class which collects all the tool classes which deal with memory(-state) manipulation.
+     * Make one toolbox using the makeShared method, and instantiate as many memory managers as you want, with identical layouts!
      *
      * Unit test: make test-memorytoolbox
      **/

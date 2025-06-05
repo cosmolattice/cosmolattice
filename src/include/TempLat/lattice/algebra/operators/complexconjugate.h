@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_COMPLEXCONJUGATE_H
 #define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_COMPLEXCONJUGATE_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <complex>
@@ -15,44 +15,47 @@
 #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 
 namespace TempLat {
-
-    /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between them. */
+    /** \brief Enable use of this operator without prefixing std:: or TempLat::.
+     * The compiler can distinguish between them. */
+#ifndef NOKOKKOS
+    using Kokkos::conj;
+#else
     using std::conj;
+#endif
 
     namespace Operators {
-
-        /** \brief A class which applies a minus sign. Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
+        /** \brief A class which applies complex conjugation to a complex number.
+         * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
          *
          * Unit test: make test-multiply
          **/
-        template <typename R>
+        template<typename R>
         class ComplexConjugate : public UnaryOperator<R> {
         public:
-
-            /* Yes, need to do this 'using': parent class is template, stuff is not visible to the compiler yet. */
+            /* Put public methods here. These should change very little over time. */
             using UnaryOperator<R>::mR;
 
-            /* Put public methods here. These should change very little over time. */
-            ComplexConjugate(const R& a) : UnaryOperator<R>(a) {   }
+            KOKKOS_FUNCTION
+            ComplexConjugate(const R &a) : UnaryOperator<R>(a) {
+            }
 
             /** \brief Getter for two instances. */
-            inline auto get(ptrdiff_t i)  {
-                using namespace std;
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto get(ptrdiff_t i) {
+#ifndef NOKOKKOS
+                return Kokkos::conj(GetValue::get(mR, i));
+#else
                 return conj(GetValue::get(mR, i));
+#endif
             }
 
             /** \brief Complex conjugation and copmlex differentiation aren't friends. */
-            template <typename U>
-            inline auto d(const U& other) = delete;
-
-
-        private:
-            /* Put all member variables and private methods here. These may change arbitrarily. */
-
-
+            template<typename U>
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto d(const U &other) = delete;
         };
-
     }
+
     /** \brief A mini struct for instiating the test case. */
     struct ComplexConjugateTester {
 #ifdef TEMPLATTEST
@@ -60,20 +63,17 @@ namespace TempLat {
 #endif
     };
 
-
     /** \brief Exposing our newly define multiplication operation to the world. */
-    template <typename T>
-    typename ConditionalUnaryGetter<Operators::ComplexConjugate,T>::type
-    conj(const T& a) {
+    template<typename T>
+    KOKKOS_FORCEINLINE_FUNCTION
+    typename ConditionalUnaryGetter<Operators::ComplexConjugate, T>::type
+    conj(const T &a) {
         return Operators::ComplexConjugate<T>(a);
     }
-
-
 }
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/complexconjugate_test.h"
 #endif
-
 
 #endif

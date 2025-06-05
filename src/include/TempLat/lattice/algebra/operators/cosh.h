@@ -18,51 +18,41 @@
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 
 namespace TempLat {
-
-
-    /** \brief A class which implements the Cosh.
-     * 
-     * 
-     * Unit test: make test-cosh
-     **/
     using std::cosh;
 
     namespace Operators {
-
+        /** \brief A class which implements the Cosh.
+         *
+         * Unit test: make test-cosh
+         **/
         template <typename T>
         class Cosh : public UnaryOperator<T> {
         public:
-
-            /* Yes, need to do this 'using': parent class is template, stuff is not visible to the compiler yet. */
+            /* Put public methods here. These should change very little over time. */
             using UnaryOperator<T>::mR;
 
-            /* Put public methods here. These should change very little over time. */
+            KOKKOS_FUNCTION
             Cosh(T a) : UnaryOperator<T>(a) {   }
 
             /** \brief Getter for two instances. */
-            inline auto get(ptrdiff_t i)  {
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto get(ptrdiff_t i)  {
                 using namespace std; /* not std::exp, but this way, for potential future data types. */
                 return cosh(GetValue::get(mR, i));
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template <typename U>
-            inline auto d(const U& other)  {
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto d(const U& other)  {
                 return GetDeriv::get(mR, other) * sinh(*this);
             }
 
-            virtual std::string operatorString() const {
+            static std::string operatorString() {
                 return "cosh";
             }
-
-        private:
-            /* Put all member variables and private methods here. These may change arbitrarily. */
-
-
         };
-
     }
-
 
     /** \brief A mini struct for instiating the test case. */
     struct CoshTester {
@@ -71,26 +61,23 @@ namespace TempLat {
 #endif
     };
 
-
     /** \brief Exposing our newly define exp operation to the world. */
     template <typename T>
-    inline
+    KOKKOS_FORCEINLINE_FUNCTION
     typename ConditionalUnaryGetter<Operators::Cosh, T>::type
     cosh( T a) {
         return Operators::Cosh<T>(a);
     }
 
     /** \brief Specialize for possible zero input! */
-    inline
+    KOKKOS_FORCEINLINE_FUNCTION
     OneType cosh( ZeroType a) {
         return OneType();
     }
-
 } /* TempLat */
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/cosh_test.h"
 #endif
-
 
 #endif

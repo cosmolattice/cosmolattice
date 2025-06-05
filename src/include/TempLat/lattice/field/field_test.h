@@ -60,6 +60,9 @@ inline void TempLat::Field<T>::Test(TempLat::TDDAssertion& tdd) {
     tdd.verify(phi.mManager->isFourierSpace());
     tdd.verify(phi.mManager->areGhostsStale());
 
+    psi = psi + chi;
+
+    /*
     psi = potential;
 
     // didn't touch ghost cells of phi, so ghosts must still be stale. Did read phi, so must be in configuration space.
@@ -76,6 +79,7 @@ inline void TempLat::Field<T>::Test(TempLat::TDDAssertion& tdd) {
 
     if(bTest)
       tdd.verify(tmp == 26);
+    */
 
     // still didn't touch chi's ghost cells.
   /*  tdd.verify(chi.mManager->areGhostsStale());

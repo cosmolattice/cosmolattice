@@ -20,8 +20,10 @@ inline void TempLat::ConditionalBinaryGetterScalarVectorTester::Test(TempLat::TD
 
     class MyClass{
     public:
+      KOKKOS_FUNCTION
       MyClass(int b):a(b){}
 
+      KOKKOS_FORCEINLINE_FUNCTION
       auto vectorGet(ptrdiff_t i, ptrdiff_t j)
       {
         return a;

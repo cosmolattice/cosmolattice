@@ -13,28 +13,22 @@
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 
 namespace TempLat {
-
-
     namespace Operators {
-
-
-        /** \brief A class which takes the heaviside step function,
-         *  H(x) = 1 if x >= 0 else 0;
-         *  This is your tool of choice if you want to create if-statements inside equations.
+        /** \brief A class which implements the Dirac delta function.
          *
          * Unit test: make test-diracdeltafunction
          **/
         template <typename R>
         class DiracDeltaFunction : public UnaryOperator<R> {
         public:
-
-            /* Yes, need to do this 'using': parent class is template, stuff is not visible to the compiler yet. */
             using UnaryOperator<R>::mR;
 
+            KOKKOS_FUNCTION
             DiracDeltaFunction(const R& a) : UnaryOperator<R>(a) {   }
 
             /** \brief Getter for two instances. */
-            inline auto get(ptrdiff_t i)  {
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto get(ptrdiff_t i)  {
                 typedef typename GetGetReturnType<R>::type mType;
                 mType objValue = GetValue::get(mR, i);
                 bool isZero = objValue == mType(0);
@@ -48,17 +42,12 @@ namespace TempLat {
 //                return GetDeriv::get(mInstanceT, other) * DiracDelta(mInstanceT);
 //            }
 
-            virtual std::string operatorString() const {
+            static std::string operatorString() {
                 return "DiracDelta";
             }
-
-        private:
-            /* Put all member variables and private methods here. These may change arbitrarily. */
-
-
         };
-
     }
+
     /** \brief A mini struct for instiating the test case. */
     struct DiracDeltaFunctionTester {
 #ifdef TEMPLATTEST
@@ -66,21 +55,17 @@ namespace TempLat {
 #endif
     };
 
-
     /** \brief Exposing our newly define multiplication operation to the world. */
     template <typename T>
-    inline
+    KOKKOS_FORCEINLINE_FUNCTION
     Operators::DiracDeltaFunction<T>
     DiracDelta( const T& a) {
         return Operators::DiracDeltaFunction<T>(a);
     }
-
-
 }
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/diracdeltafunction_test.h"
 #endif
-
 
 #endif

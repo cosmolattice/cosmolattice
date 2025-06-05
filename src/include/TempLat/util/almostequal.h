@@ -13,6 +13,7 @@
 #include <complex>
 
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/lattice/algebra/complex.h"
 
 namespace TempLat {
     
@@ -28,7 +29,7 @@ namespace TempLat {
 
     /** \brief overload for complex values */
     template <typename T>
-    bool AlmostEqual (const std::complex<T>& a, const std::complex<T>& b, const T epsilon = std::sqrt(std::numeric_limits<T>::epsilon())) {
+    bool AlmostEqual (const complex<T>& a, const complex<T>& b, const T epsilon = std::sqrt(std::numeric_limits<T>::epsilon())) {
         return AlmostEqual(a.real(), b.real(), epsilon) && AlmostEqual(a.imag(), b.imag(), epsilon);
     };
 

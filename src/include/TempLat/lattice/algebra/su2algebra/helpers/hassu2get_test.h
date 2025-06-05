@@ -11,13 +11,14 @@ inline void TempLat::HasSU2GetTester::Test(TempLat::TDDAssertion& tdd) {
 
     /* Default is to fail: to remind yourself to implement something here. */
 
-
     struct MyStruct{
+        KOKKOS_FORCEINLINE_FUNCTION
         double SU2Get(Tag<0> t){
           return 87;
         };
     };
     struct MyStruct2{
+        KOKKOS_FORCEINLINE_FUNCTION
         double getComp(Tag<0> t){
             return 87;
         };

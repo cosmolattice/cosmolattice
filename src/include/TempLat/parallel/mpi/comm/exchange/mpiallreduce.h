@@ -96,10 +96,10 @@ namespace TempLat {
         /** \brief Treat complex values as array of size 2.
          */
         template <typename T>
-        std::complex<T> Allreduce(std::complex<T> value, MPI_Op operation, ptrdiff_t size = 2, int *error = NULL) {
+        complex<T> Allreduce(complex<T> value, MPI_Op operation, ptrdiff_t size = 2, int *error = NULL) {
             std::array<double, 2u> realView {{ value.real(), value.imag() }};
             Allreduce(&realView, operation);
-            return std::complex<T>(realView[0], realView[1]);
+            return complex<T>(realView[0], realView[1]);
         }
 
 #else

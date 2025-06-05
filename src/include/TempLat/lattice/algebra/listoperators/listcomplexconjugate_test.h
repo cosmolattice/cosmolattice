@@ -8,8 +8,7 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 inline void TempLat::ListComplexConjugateTester::Test(TempLat::TDDAssertion& tdd) {
-
-    std::complex<double> tmp(1,1);
+    complex<double> tmp(1,1);
     auto t1 = std::make_tuple(tmp,tmp,tmp,tmp);
 
     auto t3 = conj(t1);

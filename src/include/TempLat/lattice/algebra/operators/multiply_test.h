@@ -1,41 +1,42 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_MULTIPLY_TEST_H
 #define TEMPLAT_LATTICE_ALGEBRA_MULTIPLY_TEST_H
- 
+#include <Kokkos_Macros.hpp>
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+inline void TempLat::MultiplyTester::Test(TempLat::TDDAssertion &tdd) {
+  class myClass {
+  public:
+    KOKKOS_FUNCTION
+    myClass(int b): a(b) {
+    }
 
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto get(ptrdiff_t i) {
+      return a;
+    }
 
-inline void TempLat::MultiplyTester::Test(TempLat::TDDAssertion& tdd) {
+  private:
+    int a;
+  };
 
-    class myClass{
-    public:
-      myClass(int b):a(b){}
+  myClass c(3);
+  myClass b(2);
 
-      auto get(ptrdiff_t i)
-      {
-        return a;
-      }
+  //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
+  //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
+  tdd.verify(HasGetMethod<Operators::Multiplication<myClass, myClass> >::value == true);
+  tdd.verify((b * c).get(0) == 6);
 
-    private:
-      int a;
-    };
+  int e = 3, f = 4;
+  tdd.verify(HasGetMethod<decltype(e * f)>::value == false);
 
-    myClass c(3);
-    myClass b(2);
-
-    //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
-    //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
-    tdd.verify( HasGetMethod<Operators::Multiplication<myClass,myClass>>::value == true );
-    tdd.verify( (b*c).get(0) == 6 );
-    //
-    int e = 3, f = 4;
-    tdd.verify( HasGetMethod<decltype(e * f)>::value == false );
-
-
+  // pointless, but shuts up the compiler about unused variables:
+  e = e + f;
 }
 
 #endif

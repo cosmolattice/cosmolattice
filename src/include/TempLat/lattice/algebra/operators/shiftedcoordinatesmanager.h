@@ -10,21 +10,17 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/jumpsholder.h"
 
-
-
 namespace TempLat {
     MakeException(GetterShiftedGotWithoutSpaceConfirmationException);
 
-
     /** \brief A class which compute jumps for shifts.
-     *
      *
      * Unit test: make test-shiftedcoordinatesmanager
      **/
-
     class ShiftedCoordinatesManager {
     public:
         /* Put public methods here. These should change very little over time. */
+        KOKKOS_FUNCTION
       ShiftedCoordinatesManager(std::vector<ptrdiff_t> shifts = std::vector<ptrdiff_t>()):
         mShifts(shifts),
         mMemoryJump(0),

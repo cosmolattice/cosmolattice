@@ -10,16 +10,17 @@
 inline void TempLat::ScalarComplexFieldMultiplyTester::Test(TempLat::TDDAssertion& tdd) {
 
     struct MyStruct{
+        KOKKOS_FORCEINLINE_FUNCTION
         int  ComplexFieldGet(Tag<0> t)
         {
             return 1;
         }
+        KOKKOS_FORCEINLINE_FUNCTION
         int  ComplexFieldGet(Tag<1> t)
         {
             return 2;
         }
     };
-
 
  //   auto test = MyStruct() * 2;
     /* Default is to fail: to remind yourself to implement something here. */

@@ -1,10 +1,10 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_LOG_H
 #define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_LOG_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <cmath>
@@ -18,7 +18,6 @@
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 
 namespace TempLat {
-
     /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between them. */
     using std::log;
 
@@ -28,40 +27,37 @@ namespace TempLat {
          *
          * Unit test: make test-multiply
          **/
-        template <typename T>
+        template<typename T>
         class Log : public UnaryOperator<T> {
         public:
-
-            /* Yes, need to do this 'using': parent class is template, stuff is not visible to the compiler yet. */
+            /* Put public methods here. These should change very little over time. */
             using UnaryOperator<T>::mR;
 
-            /* Put public methods here. These should change very little over time. */
-            Log(T a) : UnaryOperator<T>(a) {   }
+            KOKKOS_FUNCTION
+            Log(T a) : UnaryOperator<T>(a) {
+            }
 
             /** \brief Getter for two instances. */
-            inline auto get(ptrdiff_t i)  {
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto get(ptrdiff_t i) {
                 using namespace std; /* not std::log, but this way, for potential future data types. */
                 return log(GetValue::get(mR, i));
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-            template <typename U>
-            inline auto d(const U& other)  {
+            template<typename U>
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto d(const U &other) {
                 /* not using pow for 1/mInstanceT because pow imports us, log.h */
                 return GetDeriv::get(mR, other) / mR;
             }
 
-            virtual std::string operatorString() const {
+            static std::string operatorString() {
                 return "log";
             }
-
-        private:
-            /* Put all member variables and private methods here. These may change arbitrarily. */
-
-
         };
-
     }
+
     /** \brief A mini struct for instiating the test case. */
     struct LogTester {
 #ifdef TEMPLATTEST
@@ -69,26 +65,23 @@ namespace TempLat {
 #endif
     };
 
-
     /** \brief Exposing our newly define log operation to the world. */
-    template <typename T>
-    inline
+    template<typename T>
+    KOKKOS_FORCEINLINE_FUNCTION
     typename ConditionalUnaryGetter<Operators::Log, T>::type
-    log( T a) {
+    log(T a) {
         return Operators::Log<T>(a);
     }
 
     /** \brief Specialize for possible zero output! */
-    inline
-    ZeroType log( OneType a) {
+    KOKKOS_FORCEINLINE_FUNCTION
+    ZeroType log(OneType a) {
         return ZeroType();
     }
-
 }
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/log_test.h"
 #endif
-
 
 #endif

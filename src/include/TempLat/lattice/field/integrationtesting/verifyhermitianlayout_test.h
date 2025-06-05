@@ -64,7 +64,7 @@ inline void TempLat::VerifyHermitianLayout::Test(TempLat::TDDAssertion& tdd) {
 
                 /* make sure we get a copy, not a reference, of the partner: */
                 bool dummy;
-                std::complex<double> partnerValue = phi_of_k(dummy,hermPartner);
+                complex<double> partnerValue = phi_of_k(dummy,hermPartner);
 
                 /* partner may not have been locally available: if so, skip. */
                 if ( dummy ) {
@@ -72,7 +72,7 @@ inline void TempLat::VerifyHermitianLayout::Test(TempLat::TDDAssertion& tdd) {
                     //                auto cpPartnerValue = partnerValue;
 
                     /* flip the sign of imaginary part for the equality comparison */
-                    if ( quality == HermitianRedundancy::negativePartner) partnerValue = std::complex<double>(partnerValue.real(), - partnerValue.imag());
+                    if ( quality == HermitianRedundancy::negativePartner) partnerValue = complex<double>(partnerValue.real(), - partnerValue.imag());
 
                     /* compare */
                     thisResult = AlmostEqual(thisValue, partnerValue );

@@ -52,12 +52,12 @@ namespace TempLat {
         }
 
 
-        std::complex<T> get(const int & i) {
+        complex<T> get(const int & i) {
             return get(mToolBox->getCoordFourier(i)); //Coded like that for testing purposes.
         }
 
 
-        std::complex<T> get(std::vector<ptrdiff_t> coord) {
+        complex<T> get(std::vector<ptrdiff_t> coord) {
 
             std::vector<ptrdiff_t> hermitianPartner;
 
@@ -72,7 +72,7 @@ namespace TempLat {
 
             auto pair = prng.getNextPair( Real, Unitary);
             /* ordered the if-statement by most-occurring case first. */
-            return std::complex<T> (pair[0],
+            return complex<T> (pair[0],
                                        hermitianType == HermitianRedundancy::none
                                     || hermitianType == HermitianRedundancy::positivePartner
                                     ?

@@ -64,7 +64,7 @@ namespace TempLat {
 
             auto it = mR.getToolBox()->itP();
 
-            std::array<std::complex<T>,size> tmpArr;
+            std::array<complex<T>,size> tmpArr;
             auto tmpR = r.ComplexFieldGet(0_c);
             auto tmpI = r.ComplexFieldGet(1_c);
 

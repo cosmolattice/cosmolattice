@@ -1,6 +1,7 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_HEAVISIDESTEPFUNCTION_TEST_H
 #define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_HEAVISIDESTEPFUNCTION_TEST_H
- 
+#include <Kokkos_Macros.hpp>
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */ 
@@ -11,6 +12,7 @@ namespace TempLat {
     namespace TestScratch {
         template <int RETURNVALUE>
         struct HeavisideTesterTemplate {
+            KOKKOS_FORCEINLINE_FUNCTION
             double get(ptrdiff_t i) {
                 return RETURNVALUE * std::numeric_limits<double>::epsilon();
             }

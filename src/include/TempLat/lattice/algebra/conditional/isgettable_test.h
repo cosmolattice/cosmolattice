@@ -13,8 +13,10 @@ inline void TempLat::IsGettableTester::Test(TempLat::TDDAssertion& tdd) {
 
   class MyClass{
   public:
+    KOKKOS_FUNCTION
     MyClass(int b):a(b){}
 
+    KOKKOS_FORCEINLINE_FUNCTION
     auto get(ptrdiff_t i)
     {
       return a;

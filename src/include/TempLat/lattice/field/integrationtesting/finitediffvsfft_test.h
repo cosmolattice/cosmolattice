@@ -32,8 +32,8 @@ void myLittleLambda(TempLat::TDDAssertion& tdd, ptrdiff_t nGrid, ptrdiff_t nGhos
         gradientFFT.emplace_back("fft_grad_" + std::to_string(i), toolBox);
         // You wish... FFT gradient is k phi_k, but that is not what we should compare to.
         // Finite difference in configuration space has FFT (1 - exp(i k)) phi)k.
-        //gradientFFT.back().inFourierSpace() = std::complex<double>(0, 1) * k[i]/nGrid * delta_x * gaussian.inFourierSpace();
-        gradientFFT.back().inFourierSpace() = (exp(std::complex<double>(0, 1) * k[i] * 2 * pi * dx) - 1.) / dx * gaussian.inFourierSpace();
+        //gradientFFT.back().inFourierSpace() = complex<double>(0, 1) * k[i]/nGrid * delta_x * gaussian.inFourierSpace();
+        gradientFFT.back().inFourierSpace() = (exp(complex<double>(0, 1) * k[i] * 2 * pi * dx) - 1.) / dx * gaussian.inFourierSpace();
         gradientFFT.back().getMemoryManager()->confirmConfigSpace();
     }
 

@@ -39,10 +39,10 @@ inline void TempLat::AveragerTester::Test(TempLat::TDDAssertion& tdd) {
 
     struct myTmpStructComplex {
         myTmpStructComplex(ptrdiff_t nd, ptrdiff_t ngr) : mt(MemoryToolBox::makeShared(nd, ngr, 1)) { }
-        std::complex<double> get(const ptrdiff_t& i) {
+        complex<double> get(const ptrdiff_t& i) {
             mt->itP()() = i;
             double imagPart = mt->mLayouts.getFourierSpaceLayout().getHermitianPartners()->qualify(mt->itP().getVec()) == HermitianRedundancy::realValued ? 0. : 1.;
-            return std::complex<double>(1., imagPart);
+            return complex<double>(1., imagPart);
         }
         auto getToolBox() { return mt; }
         void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType) {
@@ -65,9 +65,9 @@ inline void TempLat::AveragerTester::Test(TempLat::TDDAssertion& tdd) {
 
         auto result = agetCp.compute();
 
-        say << result << " vs hypothetical " << std::complex<double>(1., 1.) << "\n";
+        say << result << " vs hypothetical " << complex<double>(1., 1.) << "\n";
 
-        tdd.verify( AlmostEqual(result, std::complex<double>(1., 1.)) );
+        tdd.verify( AlmostEqual(result, complex<double>(1., 1.)) );
     };
 
     myLambda(4, 16);

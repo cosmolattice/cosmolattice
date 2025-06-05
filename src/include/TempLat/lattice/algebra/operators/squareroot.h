@@ -12,13 +12,9 @@
 
 #include "TempLat/lattice/algebra/constants/halftype.h"
 
-
 namespace TempLat {
-
     /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between them. */
     using std::sqrt;
-
-
 
     /** \brief A mini struct for instiating the test case. */
     struct SqrtTester {
@@ -27,69 +23,72 @@ namespace TempLat {
 #endif
     };
 
+    namespace Operators {
+        /** \brief A function which applies a square root, by forwarding to power(x, 0.5), with 0.5 templated explicitly.
+         * Holds the expression, only evaluates for a single element when you call SquareRoot::get(pIterCoords).
+         *
+         * Unit test: make test-multiply
+         **/
+        template<typename R>
+        struct SafeSqrt : public UnaryOperator<R> {
+        public:
+            using UnaryOperator<R>::mR;
 
-    /** \brief A function which applies a square root, by forwarding to power(x, 0.5), with 0.5 templated explicitly. Holds the expression, only evaluates for a single element when you call SquareRoot::get(pIterCoords).
-     *
-     * Unit test: make test-multiply
-     **/
-namespace Operators {
-     template<typename R>
-     struct SafeSqrt: public UnaryOperator<R> { //Check  if numerator if roughly zero, don't do the division Useful for spectrum fluctuation, when normalising wiht a cutoff
-     public:
-         using UnaryOperator<R>::mR;
+            KOKKOS_FUNCTION
+            SafeSqrt(const R &pR): UnaryOperator<R>(pR) {
+            }
 
-         SafeSqrt(const R& pR): UnaryOperator<R>(pR){}
-         auto get(ptrdiff_t i)
-         {
-             auto a = GetValue::get(mR,i);
+            /**
+             * \brief Check  if numerator if roughly zero, don't do the division.
+             *  Useful for spectrum fluctuation, when normalising with a cutoff
+             **/
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto get(ptrdiff_t i) {
+                auto a = GetValue::get(mR, i);
+                decltype(a) zero(0);
+                return (a < zero) ? zero : sqrt(a);
+            }
 
-             decltype(a) zero(0);
+            static std::string operatorString() {
+                return "safe_sqrt";
+            }
 
-             return (a < zero) ? zero : sqrt(a);
-         }
-         virtual std::string operatorString() const {
-             return "safe_sqrt";
-         }
-         /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-         template <typename U>
-         void d(const U& other) = delete;
+            /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+            template<typename U>
+            KOKKOS_FORCEINLINE_FUNCTION
+            void d(const U &other) = delete;
+        };
+    }
 
-     };
-   }
+    template<typename R>
+    KOKKOS_FORCEINLINE_FUNCTION
+    typename ConditionalUnaryGetter<Operators::SafeSqrt, R>::type
+    safeSqrt(const R &r) {
+        return Operators::SafeSqrt<R>(r);
+    }
 
-
-     template<typename R>
-     typename ConditionalUnaryGetter<Operators::SafeSqrt, R>::type
-     safeSqrt(const R& r)
-     {
-         return Operators::SafeSqrt<R>(r);
-     }
-
-
-    template <typename T>
-    inline
-    typename ConditionalBinaryGetter<Operators::Power, T, HalfType, ! std::is_arithmetic<T>::value>::type
-    sqrt( T a) {
+    template<typename T>
+    KOKKOS_FORCEINLINE_FUNCTION
+    typename ConditionalBinaryGetter<Operators::Power, T, HalfType, !std::is_arithmetic<T>::value>::type
+    sqrt(T a) {
         return Operators::Power<T, HalfType>(a, HalfType());
     }
 
     /** \brief Specialize for possible zero input! */
-    inline
-    ZeroType sqrt( ZeroType a) {
+    KOKKOS_FORCEINLINE_FUNCTION
+    ZeroType sqrt(ZeroType a) {
         return a;
     }
 
     /** \brief Specialize for possible unit input! */
-    inline
-    OneType sqrt( OneType a) {
+    KOKKOS_FORCEINLINE_FUNCTION
+    OneType sqrt(OneType a) {
         return a;
     }
-
 }
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/squareroot_test.h"
 #endif
-
 
 #endif

@@ -12,17 +12,20 @@ foreach (fn ${test_sources})
 
         #remove cpp and create a string appending test_ at the begining. Allows to create a rule test_filename
         string(REPLACE ".cpp" "" target_name "test-${f_name}")
+        string(REPLACE ".cpp" "-buildonly" build_name "test-${f_name}")
 
-        add_cosmolattice(${target_name} ${CMAKE_SOURCE_DIR}/src/tests/tddmain.cpp "")
-        target_sources(${target_name} PRIVATE ${fn})
+        add_cosmolattice(${build_name} ${CMAKE_SOURCE_DIR}/src/tests/tddmain.cpp "")
+        target_sources(${build_name} PRIVATE ${fn})
 
+        add_custom_target(${target_name})
+        add_dependencies(${target_name} ${build_name})
         if (NOT MPI)
             add_custom_command(TARGET ${target_name} POST_BUILD #to run directly the test after building
-                    COMMAND ./${target_name}
+                    COMMAND ./${build_name}
             )
         else ()
             add_custom_command(TARGET ${target_name} POST_BUILD #to run directly the test after building
-                    COMMAND mpirun -n ${NPROCESSES} ${target_name}
+                    COMMAND mpirun -n ${NPROCESSES} ${build_name}
             )
         endif ()
 

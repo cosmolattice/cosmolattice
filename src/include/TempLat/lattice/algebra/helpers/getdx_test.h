@@ -11,17 +11,20 @@ inline void TempLat::GetDx::Test(TempLat::TDDAssertion& tdd) {
 
     /* Default is to fail: to remind yourself to implement something here. */
     struct myTest{
+      KOKKOS_FORCEINLINE_FUNCTION
       double getDx()
       {
         return 0.42;
       }
     };
     struct myTest1{
+      KOKKOS_FORCEINLINE_FUNCTION
       double getDx()
       {
         return 0.42;
       }
 
+      KOKKOS_FORCEINLINE_FUNCTION
       double get(ptrdiff_t i)
       {
         return 76;
@@ -29,11 +32,13 @@ inline void TempLat::GetDx::Test(TempLat::TDDAssertion& tdd) {
     };
 
     struct myTest2{
+      KOKKOS_FORCEINLINE_FUNCTION
       double getI86R()
       {
         return 0.42;
       }
 
+      KOKKOS_FORCEINLINE_FUNCTION
       double get(ptrdiff_t i)
       {
         return 76;

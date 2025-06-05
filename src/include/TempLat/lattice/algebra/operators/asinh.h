@@ -16,50 +16,39 @@
 #include "TempLat/lattice/algebra/operators/exponential.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 namespace TempLat {
-
-
-    /** \brief A class which computes the asinh.
-     * 
-     * 
-     * Unit test: make test-asinh
-     **/
-
     namespace Operators {
-
+        /** \brief A class which computes the asinh.
+         *
+         * Unit test: make test-asinh
+         **/
         template <typename T>
         class ASinh : public UnaryOperator<T> {
         public:
-
-            /* Yes, need to do this 'using': parent class is template, stuff is not visible to the compiler yet. */
+            /* Put public methods here. These should change very little over time. */
             using UnaryOperator<T>::mR;
 
-            /* Put public methods here. These should change very little over time. */
-            ASinh(T a) : UnaryOperator<T>(a) {   }
+            KOKKOS_FUNCTION
+            ASinh(T a) : UnaryOperator<T>(a) {}
 
             /** \brief Getter for two instances. */
-            inline auto get(ptrdiff_t i)  {
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto get(ptrdiff_t i)  {
                 using namespace std; /* not std::exp, but this way, for potential future data types. */
                 return asinh(GetValue::get(mR, i));
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template <typename U>
-            inline auto d(const U& other)  {
+            KOKKOS_FORCEINLINE_FUNCTION
+            auto d(const U& other)  {
                 return 1 / sqrt(1  +  (*this) * (*this)) * GetDeriv::get(mR, other);
             }
 
-            virtual std::string operatorString() const {
+            static std::string operatorString() {
                 return "asinh";
             }
-
-        private:
-            /* Put all member variables and private methods here. These may change arbitrarily. */
-
-
         };
-
     }
-
 
     /** \brief A mini struct for instiating the test case. */
     struct ASinhTester {
@@ -70,20 +59,15 @@ namespace TempLat {
 
     /** \brief Exposing our newly define exp operation to the world. */
     template <typename T>
-    inline
+    KOKKOS_FORCEINLINE_FUNCTION
     typename ConditionalUnaryGetter<Operators::ASinh, T>::type
     asinh( T a) {
         return Operators::ASinh<T>(a);
     }
-
-
-
-
 } /* TempLat */
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/asinh_test.h"
 #endif
-
 
 #endif

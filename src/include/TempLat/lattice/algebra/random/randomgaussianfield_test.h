@@ -27,7 +27,7 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion& tdd)
 //
 //    say << myField.getNDimensions() << " dimensions detected.\n";
 //
-    std::array<std::complex<double>, 10> a, b;
+    std::array<complex<double>, 10> a, b;
 //
 //    auto pIterCoords = IterationCoordinates::createDummy(0, 0, 0, 0);
       std::vector<ptrdiff_t> coord({0,0,0});

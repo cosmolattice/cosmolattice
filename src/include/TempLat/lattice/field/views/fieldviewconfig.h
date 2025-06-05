@@ -15,6 +15,8 @@
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 
+#include "TempLat/parallel/kokkos/kokkos.h"
+
 namespace TempLat {
 
     MakeException(FieldViewConfigWrongSpaceConfirmation);
@@ -45,8 +47,10 @@ namespace TempLat {
          AbstractField<T>(name,toolBox,pLatPar),
          mDisableFFTBlocking(false)
          {
-             mManager->setGhostsAreStale();
-             mManager->confirmConfigSpace(); //allocation happens here
+             if (toolBox != nullptr) {
+                 mManager->setGhostsAreStale();
+                 mManager->confirmConfigSpace(); //allocation happens here
+             }
              //mManager->allocate();
          }
 
@@ -62,7 +66,7 @@ namespace TempLat {
              {
                  i=it();
                  DoEval::eval(g,i);
-                 mManager->operator[](i) = GetEval::getEval(g,i);
+                 mManager->operator[](idx) = GetEval::getEval(g, idx);
              }
              mManager->setGhostsAreStale();
          }

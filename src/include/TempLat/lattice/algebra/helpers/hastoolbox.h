@@ -18,13 +18,12 @@ namespace TempLat {
      * Unit test: make test-hastoolbox
      **/
 
-    // SFINAE test
-    // SFINAE test
-    // primary template handles types that have no nested ::type member:
+    // using SFINAE to determine if a class has a getToolBox method:
+    // primary template handles types that have no member called getToolBox:
     template< class, class = void_t<> >
     struct HasToolBox : std::false_type { };
-    
-    // specialization recognizes types that do have a nested ::type member:
+
+    // specialization if T has a member called getToolBox:
     template< class T >
     struct HasToolBox<T, void_t<decltype(std::declval<T>().getToolBox())>> : std::true_type { };
 

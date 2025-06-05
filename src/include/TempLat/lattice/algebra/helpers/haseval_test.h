@@ -10,12 +10,14 @@
 inline void TempLat::HasEvalTester::Test(TempLat::TDDAssertion& tdd) {
 
     struct myTest{
+        KOKKOS_FORCEINLINE_FUNCTION
         void eval(ptrdiff_t i){
             m = 76;
         }
         double m;
     };
     struct myTest2{
+        KOKKOS_FORCEINLINE_FUNCTION
         double eval(){
             return 777;
         }
@@ -24,7 +26,6 @@ inline void TempLat::HasEvalTester::Test(TempLat::TDDAssertion& tdd) {
     tdd.verify( HasEval<myTest>::value == true);
     tdd.verify( HasEval<myTest2>::value == false);
     tdd.verify( HasEval<double>::value == false);
-
 }
 
 #endif

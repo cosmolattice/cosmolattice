@@ -35,7 +35,6 @@ namespace TempLat {
                                                                    mVerbose(verbose) {
             if (this->mVerbose) {
             }; /* just for the compiler warnings */
-
 #ifndef NOKOKKOS
             Kokkos::initialize(argc, argv);
 #endif
@@ -58,9 +57,10 @@ namespace TempLat {
         static inline int InstanceCounter(int delta = 0) {
             static int counter = 0;
             counter += delta;
-            if (counter > 1) throw KokkosGuardInstantiationException(
-                "Per process, the KokkosGuard can be instantiated only once. This should be done in `int main()`. This is wrong. Instances:",
-                counter);
+            if (counter > 1)
+                throw KokkosGuardInstantiationException(
+                    "Per process, the KokkosGuard can be instantiated only once. This should be done in `int main()`. This is wrong. Instances:",
+                    counter);
             return counter;
         }
 

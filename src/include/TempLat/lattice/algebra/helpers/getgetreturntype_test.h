@@ -14,7 +14,7 @@ inline void TempLat::GetGetReturnTypeTester::Test(TempLat::TDDAssertion& tdd) {
     };
 
     struct tmp2 {
-        std::complex<double> get(const ptrdiff_t&) { return std::complex<double>(0., 0.); }
+        complex<double> get(const ptrdiff_t&) { return complex<double>(0., 0.); }
     };
 
   //  /* Default is to fail: to remind yourself to implement something here. */
@@ -22,7 +22,7 @@ inline void TempLat::GetGetReturnTypeTester::Test(TempLat::TDDAssertion& tdd) {
     tdd.verify( ! GetGetReturnType<tmp>::isComplex );
 
     tdd.verify( !std::is_same<GetGetReturnType<tmp2>::type, double>::value );
-    tdd.verify( std::is_same<GetGetReturnType<tmp2>::type, std::complex<double>>::value );
+    tdd.verify( std::is_same<GetGetReturnType<tmp2>::type, complex<double>>::value );
     tdd.verify( GetGetReturnType<tmp2>::isComplex );
 
 

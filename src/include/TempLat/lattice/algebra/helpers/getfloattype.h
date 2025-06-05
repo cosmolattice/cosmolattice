@@ -24,7 +24,7 @@ namespace TempLat {
     };
     
     template <typename S>
-    struct GetFloatType<std::complex<S>> {
+    struct GetFloatType<complex<S>> {
         typedef S type;
     };
     

@@ -9,11 +9,11 @@
 
 inline void TempLat::GetString::Test(TempLat::TDDAssertion& tdd) {
 
-    tdd.verify( std::is_same<std::string, decltype(GetString::get(std::complex<double>(1, 1)))>::value );
+    tdd.verify( std::is_same<std::string, decltype(GetString::get(complex<double>(1, 1)))>::value );
 
     tdd.verify( std::is_same<std::string, decltype(GetString::get((double)1))>::value );
 
-    //tdd.verify( std::is_same<std::string, decltype(GetString::get(std::complex<double>(1, 1),2))>::value );
+    //tdd.verify( std::is_same<std::string, decltype(GetString::get(complex<double>(1, 1),2))>::value );
 }
 
 #endif

@@ -1,6 +1,7 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_EXPONENTIAL_TEST_H
 #define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_EXPONENTIAL_TEST_H
- 
+#include <Kokkos_Macros.hpp>
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */ 
@@ -13,8 +14,10 @@ inline void TempLat::ExponentialTester::Test(TempLat::TDDAssertion& tdd) {
 
   class myClass{
   public:
+    KOKKOS_FUNCTION
     myClass(int b):a(b){}
 
+    KOKKOS_FORCEINLINE_FUNCTION
     auto get(const double& i)
     {
       return a;

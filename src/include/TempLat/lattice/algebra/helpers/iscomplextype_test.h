@@ -10,8 +10,8 @@
 inline void TempLat::IsComplexTypeTester::Test(TempLat::TDDAssertion& tdd) {
 
     /* Default is to fail: to remind yourself to implement something here. */
-    tdd.verify( IsComplexType<std::complex<float>>::value );
-    tdd.verify( IsComplexType<std::complex<double>>::value );
+    tdd.verify( IsComplexType<complex<float>>::value );
+    tdd.verify( IsComplexType<complex<double>>::value );
     tdd.verify( !IsComplexType<float>::value );
     tdd.verify( !IsComplexType<double>::value );
 

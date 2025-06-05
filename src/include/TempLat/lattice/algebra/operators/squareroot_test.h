@@ -11,8 +11,10 @@ inline void TempLat::SqrtTester::Test(TempLat::TDDAssertion& tdd) {
 
   class myClass{
   public:
+    KOKKOS_FUNCTION
     myClass(int b):a(b){}
 
+    KOKKOS_FORCEINLINE_FUNCTION
     auto get(const double& i)
     {
       return i;

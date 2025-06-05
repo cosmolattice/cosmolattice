@@ -18,8 +18,9 @@ namespace TempLat {
     //MakeException(FieldViewFourierWrongSpaceConfirmation);
     //MakeException(FieldViewConfigWrongSpaceConfirmation);
 
-    /** \brief A class which is a classical field on your n-dimensional equisized grid. You use it as a scalar field, a vector component, whatever. Template parameter is your type of floating point precision: float or double. Default: double.
-     *
+    /** \brief A class which is a classical field on your n-dimensional equisized grid.
+     * You use it as a scalar field, a vector component, whatever.
+     * Template parameter is your type of floating point precision: float or double. Default: double.
      *
      *  Implements a get method, and is hence suitable for all algebra.
      *
@@ -43,6 +44,10 @@ public:
     mFourierView(*this)
     {
     }
+
+    Field():
+    ConfigView<T>("",nullptr,LatticeParameters<T>()),
+    mFourierView(*this) {}
 
     virtual ~Field()
     {}
