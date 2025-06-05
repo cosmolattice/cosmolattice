@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <complex>
-
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -18,7 +16,7 @@ namespace TempLat {
     /** \brief Enable use of this operator without prefixing std:: or TempLat::.
      * The compiler can distinguish between them. */
 #ifndef NOKOKKOS
-    using Kokkos::conj;
+    using std::conj;
 #else
     using std::conj;
 #endif
@@ -45,7 +43,7 @@ namespace TempLat {
 #ifndef NOKOKKOS
                 return Kokkos::conj(GetValue::get(mR, i));
 #else
-                return conj(GetValue::get(mR, i));
+                return std::conj(GetValue::get(mR, i));
 #endif
             }
 

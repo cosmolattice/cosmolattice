@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <complex>
-
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/random/randomgaussian.h"
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"

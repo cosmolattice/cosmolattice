@@ -7,7 +7,6 @@
    
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/lattice/algebra/complex.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/memory/memoryblock.h"

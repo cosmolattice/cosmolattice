@@ -1,5 +1,3 @@
-#include "TempLat/parallel/kokkos/kokkos.h"
-
 #include "TempLat/lattice/algebra/operators/add.h"
 #include "TempLat/lattice/algebra/operators/arg.h"
 #include "TempLat/lattice/algebra/operators/subtract.h"
