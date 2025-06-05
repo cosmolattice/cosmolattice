@@ -16,6 +16,7 @@ inline void TempLat::GetToolBox::Test(TempLat::TDDAssertion& tdd) {
       MyTestOne() :
       mToolBox(MemoryToolBox::makeShared(3, 32, 1))
       {}
+        KOKKOS_FORCEINLINE_FUNCTION
         std::shared_ptr<MemoryToolBox> getToolBox() {
             return mToolBox;
         }

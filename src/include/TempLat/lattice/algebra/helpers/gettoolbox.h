@@ -11,39 +11,31 @@
 #include "TempLat/lattice/algebra/helpers/hastoolbox.h"
 
 namespace TempLat {
-
     /** \brief A class which gets jumps from all classes, also those that do not have jumps.
      *
      * Unit test: make test-getjumps
      **/
-
-
     class GetToolBox {
     public:
     /* Put public methods here. These should change very little over time. */
-
         template <typename U>
-        static inline
-        typename std::enable_if<HasToolBox<U>::value, std::shared_ptr<MemoryToolBox>>::type
+        KOKKOS_FORCEINLINE_FUNCTION
+        static typename std::enable_if<HasToolBox<U>::value, std::shared_ptr<MemoryToolBox>>::type
         get( U&& obj) {
             return obj.getToolBox();
         }
 
         template <typename U>
-        static inline
-        typename std::enable_if<!HasToolBox<U>::value, std::shared_ptr<MemoryToolBox>>::type
+        KOKKOS_FORCEINLINE_FUNCTION
+        static typename std::enable_if<!HasToolBox<U>::value, std::shared_ptr<MemoryToolBox>>::type
         get( U&& obj) {
             return std::shared_ptr<MemoryToolBox>();
         }
 
-
     private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
         GetToolBox() {
-
         }
-
-
 
     public:
 #ifdef TEMPLATTEST
@@ -55,6 +47,5 @@ namespace TempLat {
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/helpers/gettoolbox_test.h"
 #endif
-
 
 #endif

@@ -10,8 +10,6 @@
 #include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat {
-
-
   /** \brief A class which represents zero. Attempt to simplify derivative expressions.
    *
    * Unit test: make test-zerotype
@@ -29,10 +27,6 @@ namespace TempLat {
         ptrdiff_t get(ptrdiff_t i) { return 0; }
         static constexpr bool ISCONSTANT = true;
     };
-
-
-
 } /* TempLat */
-
 
 #endif

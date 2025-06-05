@@ -24,7 +24,7 @@ namespace TempLat {
         else return std::abs(a / b - 1) < epsilon;
     };
 
-    /** \brief overload for complex values */
+    /** \brief overload for complex values.  */
     template <typename T>
     bool AlmostEqual (const complex<T>& a, const complex<T>& b, const T epsilon = std::sqrt(std::numeric_limits<T>::epsilon())) {
         return AlmostEqual(a.real(), b.real(), epsilon) && AlmostEqual(a.imag(), b.imag(), epsilon);

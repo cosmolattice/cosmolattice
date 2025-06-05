@@ -21,13 +21,13 @@ namespace TempLat {
          * Unit test: make test-multiply
          **/
         template<typename R, typename T>
-        class Substraction : public BinaryOperator<R, T> {
+        class Subtraction : public BinaryOperator<R, T> {
         public:
             using BinaryOperator<R, T>::mR;
             using BinaryOperator<R, T>::mT;
 
             KOKKOS_FUNCTION
-            Substraction(const R &pR, const T &pT): BinaryOperator<R, T>(pR, pT) {
+            Subtraction(const R &pR, const T &pT): BinaryOperator<R, T>(pR, pT) {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
@@ -50,9 +50,9 @@ namespace TempLat {
 
     template<typename R, typename T>
     KOKKOS_FORCEINLINE_FUNCTION
-    typename ConditionalBinaryGetter<Operators::Substraction, R, T>::type
+    typename ConditionalBinaryGetter<Operators::Subtraction, R, T>::type
     operator-(const R &r, const T &t) {
-        return Operators::Substraction<R, T>(r, t);
+        return Operators::Subtraction<R, T>(r, t);
     }
 
 

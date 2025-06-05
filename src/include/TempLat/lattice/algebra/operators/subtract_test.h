@@ -28,7 +28,7 @@ inline void TempLat::SubtractTester::Test(TempLat::TDDAssertion &tdd) {
 
   //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
   //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
-  tdd.verify(HasGetMethod<Operators::Substraction<myClass, myClass> >::value == true);
+  tdd.verify(HasGetMethod<Operators::Subtraction<myClass, myClass> >::value == true);
   tdd.verify((a - b).get(0) == -1);
  int c = 3, d = 4;
   tdd.verify(HasGetMethod<decltype(c - d)>::value == false);
