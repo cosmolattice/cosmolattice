@@ -18,8 +18,6 @@ namespace TempLat {
 
     /** \brief A class which implements scalar multiplication over complex numbers.
      *
-     * 
-     * 
      * Unit test: make test-scalarcomplexfieldmultiply
      **/
 

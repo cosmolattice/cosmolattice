@@ -1,6 +1,5 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_SINE_TEST_H
 #define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_SINE_TEST_H
-#include <Kokkos_Macros.hpp>
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.

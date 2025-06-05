@@ -23,11 +23,11 @@
 #include "TempLat/lattice/algebra/constants/onetype.h"
 
 namespace TempLat {
+#ifdef NOKOKKOS
     /** \brief This one is not related to our algebra, but somehow not
      *  by default enabled in C++ standard library.
      */
     template<typename T, typename S>
-    KOKKOS_FORCEINLINE_FUNCTION
     typename std::enable_if<std::is_same<T, decltype((T) std::declval<S>())>::value && !HasGetMethod<S>::value,
         complex<T> >::type
     operator*(complex<T> a, S b) {
@@ -44,6 +44,7 @@ namespace TempLat {
     operator*(S b, complex<T> a) {
         return a * (T) b;
     }
+#endif
 
     /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
     namespace Operators {

@@ -7,8 +7,6 @@
    
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <complex>
-
 #include "TempLat/lattice/algebra/complex.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -17,7 +15,6 @@
 #include "TempLat/lattice/ghostcells/ghoststatekeeper.h"
 
 namespace TempLat {
-
     MakeException(MemoryManagerAccessOutOfBounds);
 
     /** \brief A class which holds a single lattice in memory, and tracks and moves between various ghost states. Templated for the memory type, typically float or double.

@@ -53,12 +53,14 @@ namespace TempLat {
             return "|Grad(" + GetString::get(mR)+")|^2";
         }
 
-        void doWeNeedGhosts() override
+        KOKKOS_FORCEINLINE_FUNCTION
+        void doWeNeedGhosts()
         {
             mR.confirmGhostsUpToDate();
         }
 
-        void eval(ptrdiff_t i) override
+        KOKKOS_FORCEINLINE_FUNCTION
+        void eval(ptrdiff_t i)
         {
             DoEval::eval(mR, i);
             for(size_t j=0; j<nDimensions;++j) DoEval::eval(mR, i + jumps[j]);
@@ -66,7 +68,7 @@ namespace TempLat {
 
 
         template <typename S>
-        inline
+        KOKKOS_FORCEINLINE_FUNCTION
         auto d(const S& other) {
             return 2 * LatForwardGrad(mR) * LatForwardGrad(mR.d(other));
         }

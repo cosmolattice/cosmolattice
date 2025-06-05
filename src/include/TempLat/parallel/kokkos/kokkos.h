@@ -2,11 +2,11 @@
 // Created by franz on 6/4/25.
 //
 
-#ifndef KOKKOS_H
-#define KOKKOS_H
+#ifndef TEMPLAT_PARALLEL_KOKKOS_KOKKOS_H
+#define TEMPLAT_PARALLEL_KOKKOS_KOKKOS_H
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/exception.h"
+#include "TempLat/util/tdd/tddassertion.h"
 
 #ifndef NOKOKKOS
 #include <Kokkos_Core.hpp>

@@ -7,9 +7,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Macros.hpp>
-
 #include "TempLat/util/getcpptypename.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 inline void TempLat::AddTester::Test(TempLat::TDDAssertion &tdd) {
   //    GetterGetOffset a, b;

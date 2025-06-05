@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include <complex>
+#include "TempLat/lattice/algebra/complex.h"
 
 namespace TempLat {
 

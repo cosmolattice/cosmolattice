@@ -7,10 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Macros.hpp>
-
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 namespace TempLat {
     /** \brief A template-programming class which helps to get the 'get'-value from any type,

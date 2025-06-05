@@ -7,9 +7,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Macros.hpp>
-
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 namespace TempLat {
     /** \brief A class which implement 1/2 as a type. Useful for squareroots.

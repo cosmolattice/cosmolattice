@@ -27,7 +27,6 @@ namespace TempLat {
         KOKKOS_FUNCTION
         ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) {
             shift = computeShifts({SHIFTS...});
-            shiftString = getString({SHIFTS...});
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
@@ -46,7 +45,7 @@ namespace TempLat {
         }
 
         static std::string operatorString() {
-            return shiftString;
+            return getString({SHIFTS...});
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
@@ -64,7 +63,7 @@ namespace TempLat {
             return mShifts.memoryJump();
         }
 
-        std::string getString(const std::vector<ptrdiff_t> &shifts) const {
+        static std::string getString(const std::vector<ptrdiff_t> &shifts) {
             std::string res = "_(";
             for (auto x: shifts) res += std::to_string(x) + ",";
             res.pop_back();
@@ -72,7 +71,6 @@ namespace TempLat {
         }
 
         ptrdiff_t shift;
-        std::string shiftString;
     };
 
     template<typename R, int N>

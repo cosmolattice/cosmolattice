@@ -12,6 +12,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/fftlayoutstruct.h"
 #include "TempLat/lattice/memory/memoryblock.h"
+
 namespace TempLat {
 
     /** \brief A class which applies the normalization to a block of memory after C2R and R2C fft's.

@@ -66,7 +66,7 @@ namespace TempLat {
              {
                  i=it();
                  DoEval::eval(g,i);
-                 mManager->operator[](idx) = GetEval::getEval(g, idx);
+                 mManager->operator[](i) = GetEval::getEval(g, i);
              }
              mManager->setGhostsAreStale();
          }
