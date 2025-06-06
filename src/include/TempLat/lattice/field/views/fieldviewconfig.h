@@ -47,10 +47,8 @@ namespace TempLat {
          AbstractField<T>(name,toolBox,pLatPar),
          mDisableFFTBlocking(false)
          {
-             if (toolBox != nullptr) {
-                 mManager->setGhostsAreStale();
-                 mManager->confirmConfigSpace(); //allocation happens here
-             }
+             mManager->setGhostsAreStale();
+             mManager->confirmConfigSpace(); //allocation happens here
              //mManager->allocate();
          }
 

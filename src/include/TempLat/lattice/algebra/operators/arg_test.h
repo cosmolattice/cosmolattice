@@ -11,7 +11,7 @@ inline void TempLat::ArgTester::Test(TempLat::TDDAssertion& tdd) {
 
     struct MyStructR{
         KOKKOS_FORCEINLINE_FUNCTION
-        double get(int i)
+        double get(int i) const
         {
             return (double)i / 4.0;
         }

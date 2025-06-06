@@ -1,6 +1,5 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_HELPERS_GETEVAL_TEST_H
 #define TEMPLAT_LATTICE_ALGEBRA_HELPERS_GETEVAL_TEST_H
-#include <Kokkos_Macros.hpp>
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -9,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 inline void TempLat::GetEval::Test(TempLat::TDDAssertion& tdd) {
-
     struct myTest{
         KOKKOS_FORCEINLINE_FUNCTION
         double getEval(ptrdiff_t i){

@@ -43,7 +43,7 @@ namespace TempLat {
              *  Useful for spectrum fluctuation, when normalising with a cutoff
              **/
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
                 auto a = GetValue::get(mR, i);
                 decltype(a) zero(0);
                 return (a < zero) ? zero : sqrt(a);

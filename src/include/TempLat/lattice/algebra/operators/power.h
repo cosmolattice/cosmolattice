@@ -22,7 +22,11 @@
 
 namespace TempLat {
     /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between them. */
+#ifndef NOKOKKOS
+    using Kokkos::pow;
+#else
     using std::pow;
+#endif
 
     /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
     namespace Operators {
@@ -31,7 +35,7 @@ namespace TempLat {
          * Unit test: make test-power
          **/
         template<typename R, typename T>
-        class Power : public BinaryOperator<R, T> {
+        class Power : public TempLat::BinaryOperator<R, T> {
         public:
             using BinaryOperator<R, T>::mR;
             using BinaryOperator<R, T>::mT;
@@ -41,9 +45,14 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
+#ifndef NOKOKKOS
+                using namespace Kokkos;
+                return pow(GetValue::get(mR, i), GetValue::get(mT, i));
+#else
                 using namespace std;
                 return pow(GetValue::get(mR, i), GetValue::get(mT, i));
+#endif
             }
 
             static std::string operatorString() {
@@ -53,7 +62,7 @@ namespace TempLat {
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 using namespace std;
                 /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
                 return GetDeriv::get(mR, other) * pow(mR, mT - OneType()) + GetDeriv::get(mT, other) * (*this) *
@@ -72,9 +81,13 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
+#ifndef NOKOKKOS
+                return Kokkos::pow(GetValue::get(mR, i), N);
+#else
                 using namespace std;
                 return pow(GetValue::get(mR, i), N);
+#endif
             }
 
             std::string toString() const {
@@ -84,7 +97,7 @@ namespace TempLat {
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 using namespace std;
                 /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
                 return Tag<N>() * PowerN<N - 1, R>(mR) * GetDeriv::get(mR, other);
@@ -101,7 +114,7 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
                 return GetValue::get(mR, i) * GetValue::get(mR, i);
             }
 
@@ -112,7 +125,7 @@ namespace TempLat {
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 using namespace std;
                 /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
                 return 2_c * mR * GetDeriv::get(mR, other);
@@ -129,7 +142,7 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
                 return GetValue::get(mR, i) * GetValue::get(mR, i) * GetValue::get(mR, i);
             }
 
@@ -140,7 +153,7 @@ namespace TempLat {
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 using namespace std;
                 /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
                 return 3_c * mR * mR * GetDeriv::get(mR, other);
@@ -157,7 +170,7 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
                 auto tmp = GetValue::get(mR, i);
                 tmp = tmp * tmp;
                 return tmp * tmp;
@@ -170,7 +183,7 @@ namespace TempLat {
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 using namespace std;
                 /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
                 return 4_c * mR * mR * mR * GetDeriv::get(mR, other);

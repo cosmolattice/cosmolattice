@@ -28,7 +28,7 @@ namespace TempLat {
 
             /** \brief Getter for two instances. */
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i)  {
+            auto get(ptrdiff_t i) const {
                 typedef typename GetGetReturnType<R>::type mType;
                 mType objValue = GetValue::get(mR, i);
                 bool isZero = objValue == mType(0);

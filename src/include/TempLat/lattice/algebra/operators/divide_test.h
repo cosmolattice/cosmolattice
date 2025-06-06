@@ -17,7 +17,7 @@ inline void TempLat::DivideTester::Test(TempLat::TDDAssertion &tdd) {
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(const double &i) {
+    auto get(const double &i) const {
       return a;
     }
 

@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/getcpptypename.h"
+#include "TempLat/lattice/algebra/operators/operators.h"
 
 inline void TempLat::AddTester::Test(TempLat::TDDAssertion &tdd) {
   //    GetterGetOffset a, b;
@@ -20,7 +21,7 @@ inline void TempLat::AddTester::Test(TempLat::TDDAssertion &tdd) {
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) {
+    auto get(ptrdiff_t i) const {
       return a;
     }
 
@@ -35,7 +36,7 @@ inline void TempLat::AddTester::Test(TempLat::TDDAssertion &tdd) {
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    double get(ptrdiff_t i) {
+    double get(ptrdiff_t i) const {
       return a;
     }
 

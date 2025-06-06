@@ -28,19 +28,25 @@ namespace TempLat {
             using UnaryOperator<T>::mR;
 
             KOKKOS_FUNCTION
-            ASinh(T a) : UnaryOperator<T>(a) {}
+            ASinh(const T& a) : UnaryOperator<T>(a) {}
 
             /** \brief Getter for two instances. */
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i)  {
+            auto get(ptrdiff_t i) const  {
                 using namespace std; /* not std::exp, but this way, for potential future data types. */
                 return asinh(GetValue::get(mR, i));
+#ifndef NOKOKKOS
+                return Kokkos::asinh(GetValue::get(mR, i));
+#else
+                using namespace std; /* not std::exp, but this way, for potential future data types. */
+                return asinh(GetValue::get(mR, i));
+#endif
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template <typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U& other)  {
+            auto d(const U& other) const  {
                 return 1 / sqrt(1  +  (*this) * (*this)) * GetDeriv::get(mR, other);
             }
 

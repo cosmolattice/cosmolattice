@@ -34,12 +34,12 @@ namespace TempLat {
         }
 
 
-        ptrdiff_t getVectorSize()
+        ptrdiff_t getVectorSize() const
         {
             return mToolBox->mNDimensions;
         }
 
-        auto vectorGet(ptrdiff_t i, ptrdiff_t j) //TODO: remove
+        auto vectorGet(ptrdiff_t i, ptrdiff_t j) const //TODO: remove
         {
             return mToolBox->getCoordFourier(i)[j];
         }

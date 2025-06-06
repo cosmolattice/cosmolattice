@@ -9,7 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/void_t.h"
-
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 namespace TempLat {
 

@@ -15,7 +15,7 @@ inline void TempLat::PowerTester::Test(TempLat::TDDAssertion& tdd) {
     myClass(int b):a(b){}
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i)
+    auto get(ptrdiff_t i) const
     {
       return a;
     }

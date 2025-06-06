@@ -22,7 +22,11 @@
 namespace TempLat {
     /** \brief Enable use of this operator without prefixing std:: or TempLat::.
      * The compiler can distinguish between them. */
+#ifndef NOKOKKOS
+    using Kokkos::abs;
+#else
     using std::abs;
+#endif
 
     namespace Operators {
         /** \brief A class which applies takes the absolute value.
@@ -43,9 +47,13 @@ namespace TempLat {
             /** \brief Getter for two instances. */
             KOKKOS_FORCEINLINE_FUNCTION
             typename GetFloatType<typename GetGetReturnType<R>::type>::type
-            get(ptrdiff_t i) {
+            get(ptrdiff_t i) const {
+#ifndef NOKOKKOS
+                return Kokkos::abs(GetValue::get(mR, i));
+#else
                 using namespace std;
                 return abs(GetValue::get(mR, i));
+#endif
             }
 
             static std::string operatorString() {

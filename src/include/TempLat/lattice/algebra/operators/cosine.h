@@ -34,20 +34,24 @@ namespace TempLat {
             using UnaryOperator<T>::mR;
 
             KOKKOS_FUNCTION
-            Cosine(T a) : UnaryOperator<T>(a) {
+            Cosine(const T& a) : UnaryOperator<T>(a) {
             }
 
             /** \brief Getter for two instances. */
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
+#ifndef NOKOKKOS
+                return Kokkos::cos(GetValue::get(mR, i));
+#else
                 using namespace std;
                 return cos(GetValue::get(mR, i));
+#endif
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 return -GetDeriv::get(mR, other) * sin(mR);
             }
 

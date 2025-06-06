@@ -44,10 +44,15 @@ namespace TempLat {
 
             /** \brief Getter for two instances. */
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
+#ifndef NOKOKKOS
+                auto res = Kokkos::atan2(GetValue::get(mR, i), GetValue::get(mR, i));
+                return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
+#else
                 using namespace std; /* this way, for potential future data types. */
                 auto res = atan2(GetValue::get(mR, i), GetValue::get(mR, i));
                 return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
+#endif
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */

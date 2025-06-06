@@ -20,8 +20,10 @@
 
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
+
 
 namespace TempLat {
     /** \brief A parent class which implements the common methods that all binary operators (*, +, -,... ) share.
@@ -34,42 +36,50 @@ namespace TempLat {
     class BinaryOperator {
     public:
         KOKKOS_FUNCTION
-        BinaryOperator(const R &pR, const T &pT): mR(pR),
-                                                  mT(pT) {
+        BinaryOperator(const R &pR, const T &pT)
+            : mR(pR), mT(pT) {
         }
 
-        virtual void doWeNeedGhosts() {
+        KOKKOS_FORCEINLINE_FUNCTION
+        void doWeNeedGhosts() {
             GhostsHunter::apply(mR);
             GhostsHunter::apply(mT);
         }
 
+        KOKKOS_FORCEINLINE_FUNCTION
         void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType) {
             ConfirmSpace::apply(mR, newLayout, spaceType);
             ConfirmSpace::apply(mT, newLayout, spaceType);
         }
 
+        KOKKOS_FORCEINLINE_FUNCTION
         ptrdiff_t confirmGhostsUpToDate() {
             return ConfirmGhosts::apply(mR) + ConfirmGhosts::apply(mT);
         }
 
-        inline JumpsHolder getJumps() {
+        KOKKOS_FORCEINLINE_FUNCTION
+        JumpsHolder getJumps() const {
             auto a = GetJumps::apply(mR);
             auto b = GetJumps::apply(mT);
-            if (a != b && !(a.isEmpty() || b.isEmpty())) throw DifferentJumpsHolderException(
-                "Two different memory layouts in binary operator"/*, toString()*/);
+            if (a != b && !(a.isEmpty() || b.isEmpty()))
+                throw DifferentJumpsHolderException(
+                    "Two different memory layouts in binary operator"/*, toString()*/);
             return a.isEmpty() ? b : a;
         }
 
-        KOKKOS_FORCEINLINE_FUNCTION void eval(ptrdiff_t i) {
+        KOKKOS_FORCEINLINE_FUNCTION
+        void eval(ptrdiff_t i) const {
             DoEval::eval(mR, i);
             DoEval::eval(mT, i);
         }
 
-        KOKKOS_FORCEINLINE_FUNCTION auto getDx() const {
+        KOKKOS_FORCEINLINE_FUNCTION
+        auto getDx() const {
             return HasDx<R>::value ? GetDx::getDx(mR) : (HasDx<T>::value ? GetDx::getDx(mT) : 1);
         }
 
-        KOKKOS_FORCEINLINE_FUNCTION auto getKIR() const {
+        KOKKOS_FORCEINLINE_FUNCTION
+        auto getKIR() const {
             return HasKIR<R>::value ? GetKIR::getKIR(mR) : (HasKIR<T>::value ? GetKIR::getKIR(mT) : 1);
         }
 
@@ -102,8 +112,8 @@ namespace TempLat {
         }
 
     protected:
-        R mR;
-        T mT;
+        const R& mR;
+        const T& mT;
 
     public:
 #ifdef TEMPLATTEST

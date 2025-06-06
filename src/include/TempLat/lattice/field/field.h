@@ -57,9 +57,11 @@ public:
     {
       ConfigView<T>::operator=(g);
     }
+
     void operator=(const Field<T>& other) { //overwrite the default = operator.
         operator=(1*other);
     }
+
     FourierView<T>& inFourierSpace()
     {
       mManager->confirmFourierSpace();

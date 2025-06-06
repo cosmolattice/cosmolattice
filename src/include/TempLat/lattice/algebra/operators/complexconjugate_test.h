@@ -11,7 +11,7 @@ inline void TempLat::ComplexConjugateTester::Test(TempLat::TDDAssertion& tdd) {
 
     struct myStruct {
         KOKKOS_FORCEINLINE_FUNCTION
-        complex<double> get(ptrdiff_t i) {
+        complex<double> get(ptrdiff_t i) const {
             return complex<double>(1, -1);
         }
     };

@@ -17,7 +17,7 @@ inline void TempLat::ExponentialTester::Test(TempLat::TDDAssertion& tdd) {
     myClass(int b):a(b){}
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(const double& i)
+    auto get(const double& i) const
     {
       return a;
     }

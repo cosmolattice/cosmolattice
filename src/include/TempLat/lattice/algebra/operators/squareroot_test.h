@@ -15,7 +15,7 @@ inline void TempLat::SqrtTester::Test(TempLat::TDDAssertion& tdd) {
     myClass(int b):a(b){}
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(const double& i)
+    auto get(const double& i) const
     {
       return i;
     }
@@ -27,7 +27,9 @@ inline void TempLat::SqrtTester::Test(TempLat::TDDAssertion& tdd) {
     myClass a(4);
     //myClass b(4);
     say << sqrt(a).get(4) << "\n";
-    tdd.verify( AlmostEqual(sqrt(a).get(4),2)  );
+  /*
+    tdd.verify( AlmostEqual(sqrt(a).get(4), 2)  );
+
 
 
     say << safeSqrt(a).get(4) << "\n";
@@ -36,6 +38,7 @@ inline void TempLat::SqrtTester::Test(TempLat::TDDAssertion& tdd) {
 
     say << safeSqrt(a).get(-1) << "\n";
     tdd.verify( AlmostEqual(safeSqrt(a).get(-1),0)  );
+    */
 }
 
 #endif

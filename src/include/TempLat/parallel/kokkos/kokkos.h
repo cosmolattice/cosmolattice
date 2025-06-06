@@ -10,6 +10,16 @@
 
 #ifndef NOKOKKOS
 #include <Kokkos_Core.hpp>
+
+#ifndef NOFFT
+#include "TempLat/fft/external/fftw/fftwinterface.h"
+// Sanity check: Kokkos complex should be perfectly compatible with FFTW complex.
+static_assert(sizeof(fftwf_complex) == sizeof(Kokkos::complex<float>));
+static_assert(alignof(fftwf_complex) <= alignof(Kokkos::complex<float>));
+static_assert(sizeof(fftw_complex) == sizeof(Kokkos::complex<double>));
+static_assert(alignof(fftw_complex) <= alignof(Kokkos::complex<double>));
+#endif
+
 #else
 
 #define KOKKOS_FORCEINLINE_FUNCTION inline

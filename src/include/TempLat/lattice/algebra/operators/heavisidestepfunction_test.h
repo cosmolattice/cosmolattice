@@ -12,7 +12,7 @@ namespace TempLat {
         template <int RETURNVALUE>
         struct HeavisideTesterTemplate {
             KOKKOS_FORCEINLINE_FUNCTION
-            double get(ptrdiff_t i) {
+            double get(ptrdiff_t i) const {
                 return RETURNVALUE * std::numeric_limits<double>::epsilon();
             }
         };

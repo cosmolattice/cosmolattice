@@ -10,13 +10,13 @@
 inline void TempLat::AbsoluteValueTester::Test(TempLat::TDDAssertion& tdd) {
     struct tmpStruct {
         KOKKOS_FORCEINLINE_FUNCTION
-        ptrdiff_t get(ptrdiff_t) {
+        ptrdiff_t get(ptrdiff_t) const {
             return -1;
         }
     };
     struct tmpStruct2 {
         KOKKOS_FORCEINLINE_FUNCTION
-        complex<double> get(ptrdiff_t) {
+        complex<double> get(ptrdiff_t) const {
             return complex<double>(1,1);
         }
     };

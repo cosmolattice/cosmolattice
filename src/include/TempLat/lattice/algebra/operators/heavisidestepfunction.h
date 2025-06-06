@@ -27,14 +27,14 @@ namespace TempLat {
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
-        auto get(ptrdiff_t i) {
+        auto get(ptrdiff_t i) const {
             return (GetValue::get(mR, i) >= 0 ? 1. : 0);
         }
 
         /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
         template<typename U>
         KOKKOS_FORCEINLINE_FUNCTION
-        auto d(const U &other) {
+        auto d(const U &other) const {
             return GetDeriv::get(mR, other) * DiracDelta(mR);
         }
 

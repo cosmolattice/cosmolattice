@@ -15,7 +15,7 @@ inline void TempLat::SubtractTester::Test(TempLat::TDDAssertion &tdd) {
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) {
+    auto get(ptrdiff_t i) const {
       return a;
     }
 

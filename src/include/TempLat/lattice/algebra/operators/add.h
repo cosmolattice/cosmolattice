@@ -11,6 +11,7 @@
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
+#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/halftype.h"
@@ -24,7 +25,7 @@ namespace TempLat {
          * Unit test: make test-multiply
          **/
         template<typename R, typename T>
-        class Addition : public BinaryOperator<R, T> {
+        class Addition : public TempLat::BinaryOperator<R, T> {
         public:
             using BinaryOperator<R, T>::mR;
             using BinaryOperator<R, T>::mT;
@@ -34,8 +35,8 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
-                return GetValue::get(mT, i) + GetValue::get(mR, i);
+            auto get(ptrdiff_t i) const {
+                return TempLat::GetValue::get(mT, i) + TempLat::GetValue::get(mR, i);
             }
 
             static std::string operatorString() {

@@ -30,17 +30,17 @@ namespace TempLat {
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
-        auto get(ptrdiff_t i) {
+        auto get(ptrdiff_t i) const {
             return GetValue::get(mR, i + shift);
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
-        void eval(ptrdiff_t i) {
+        void eval(ptrdiff_t i) const {
             DoEval::eval(mR, i + shift);
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
-        void doWeNeedGhosts() override {
+        void doWeNeedGhosts() {
             mR.confirmGhostsUpToDate();
         }
 
@@ -91,7 +91,7 @@ namespace TempLat {
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
-        void doWeNeedGhosts() {
+        void doWeNeedGhosts() const {
             mR.confirmGhostsUpToDate();
         }
 
@@ -100,7 +100,7 @@ namespace TempLat {
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
-        ptrdiff_t getShift() {
+        ptrdiff_t getShift() const {
             return shift;
         }
 

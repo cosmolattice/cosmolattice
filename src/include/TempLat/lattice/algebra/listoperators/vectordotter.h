@@ -30,7 +30,8 @@ namespace TempLat {
          }
 
          /** \brief Getter for two instances: return type automatically determined by the type which we get by multiplying one element of T with one element of S. */
-         inline auto get(ptrdiff_t i) {
+         KOKKOS_FORCEINLINE_FUNCTION
+         auto get(ptrdiff_t i) const {
              //say<<mVectorSize<<" "<<mR.getVectorSize();
              decltype(mR.vectorGet(i, 0) * mT.vectorGet(i, 0) ) result = 0;
              /* sorry, an if-statement inside a getter function: if T and S are the same thing, let's not call its getter twice (it might be an expensive algebraic operation. */
@@ -47,6 +48,7 @@ namespace TempLat {
              //say<<mVectorSize;
              return result;
          }
+
          void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType) {
              BinaryOperator<R,T>::confirmSpace(newLayout, spaceType);
              measureVectorSize();

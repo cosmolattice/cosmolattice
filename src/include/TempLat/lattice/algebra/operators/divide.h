@@ -30,11 +30,12 @@ namespace TempLat {
             using BinaryOperator<R, T>::mT;
 
             KOKKOS_FUNCTION
-            Division(const R &pR, const T &pT): BinaryOperator<R, T>(pR, pT) {
+            Division(const R &pR, const T &pT)
+                : BinaryOperator<R, T>(pR, pT) {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
                 return GetValue::get(mR, i) / GetValue::get(mT, i);
             }
 
@@ -45,7 +46,7 @@ namespace TempLat {
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 /* not using pow for mT * mT, because pow imports log which imports us, divide.h */
                 return GetDeriv::get(mR, other) / mT - GetDeriv::get(mT, other) * mR / (mT * mT);
             }
@@ -66,7 +67,7 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
                 auto a = GetValue::get(mR, i);
                 auto b = GetValue::get(mT, i);
 
@@ -75,14 +76,14 @@ namespace TempLat {
                 return AlmostEqual(a, zero) ? zero : a / b;
             }
 
-            std::string operatorString() const {
+            static std::string operatorString() {
                 return "/safe/";
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 /* not using pow for mT * mT, because pow imports log which imports us, divide.h */
                 return GetDeriv::get(mR, other) / mT - GetDeriv::get(mT, other) * mR / (mT * mT);
             }

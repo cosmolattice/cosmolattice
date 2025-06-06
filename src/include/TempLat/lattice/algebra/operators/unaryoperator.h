@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/containsspace.h"
@@ -57,7 +58,7 @@ namespace TempLat {
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
-        void eval(ptrdiff_t i) //virtual for shift operator for example
+        void eval(ptrdiff_t i) const
         {
             DoEval::eval(mR, i);
         }
@@ -97,7 +98,7 @@ namespace TempLat {
         }
 
     protected:
-        R mR;
+        const R &mR;
 
     public:
 #ifdef TEMPLATTEST

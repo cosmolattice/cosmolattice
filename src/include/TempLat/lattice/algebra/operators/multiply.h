@@ -66,7 +66,7 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
                 return GetValue::get(mT, i) * GetValue::get(mR, i);
             }
 
@@ -77,7 +77,7 @@ namespace TempLat {
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 return GetDeriv::get(mT, other) * mR + mT * GetDeriv::get(mR, other);
             }
         };
@@ -92,18 +92,18 @@ namespace TempLat {
             }
 
             KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) {
+            auto get(ptrdiff_t i) const {
                 return N * GetValue::get(mR, i);
             }
 
-            std::string operatorString() const {
+            static std::string operatorString() {
                 return std::to_string(N) + "*";
             }
 
             /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
             template<typename U>
             KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
+            auto d(const U &other) const {
                 return N * mR;
             }
         };
