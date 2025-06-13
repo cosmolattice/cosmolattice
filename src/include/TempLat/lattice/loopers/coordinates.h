@@ -7,98 +7,74 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019. Jorge Baeza-Ballesteros, Year: 2023
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/loopers/coordinatesinitializer.h"
+#include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-        /** \brief A class which
-         * holds offsets and vector coordinates. Used to cache the coordinate access and have loopers in arbitrary dimensions.
-         *
-         *
-         * Unit test: make test-coordinates
-         **/
-
-      class Coordinates {
-      public:
-          /* Put public methods here. These should change very little over time. */
-          Coordinates(const JumpsHolder& jumpsHolder, const LayoutStruct& layoutStruct):
-          mLayouts(layoutStruct),
-          mJumps(jumpsHolder),
-          mIStart(0),
-          jumps(mJumps.getJumpsInMemoryOrder()),
+  /** \brief A class which
+   * holds offsets and vector coordinates.
+   * Used to cache the coordinate access and have loopers in arbitrary dimensions.
+   *
+   * Unit test: make test-coordinates
+   **/
+  class Coordinates
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
+    Coordinates(const JumpsHolder &jumpsHolder, const LayoutStruct &layoutStruct)
+        : mLayouts(layoutStruct), mJumps(jumpsHolder), mIStart(0), jumps(mJumps.getJumpsInMemoryOrder()),
           vect(jumps.size())
-          {
-              CoordinatesInitializer mCI(jumpsHolder,layoutStruct);
-              mCI.initCoords(1,mOffsets,mIStart,mIEnd);
-              auto sizes = mJumps.getSizesInMemory();
-              mOffsets.shrink_to_fit();
+    {
+      CoordinatesInitializer mCI(jumpsHolder, layoutStruct);
+      mCI.initCoords(1, mOffsets, mIStart, mIEnd);
+      auto sizes = mJumps.getSizesInMemory();
+      mOffsets.shrink_to_fit();
+    }
 
-          }
+    ptrdiff_t operator()(ptrdiff_t i) const { return mOffsets[i]; }
 
+    ptrdiff_t &operator()(ptrdiff_t i) { return mOffsets[i]; }
 
-          ptrdiff_t operator()(ptrdiff_t i) const
-          {
-            return mOffsets[i];
-          }
+    std::vector<ptrdiff_t> getVec(ptrdiff_t i) { return getVecOffset(mOffsets[i]); }
 
-          ptrdiff_t& operator()(ptrdiff_t i)
-          {
-            return mOffsets[i];
-          }
+    std::vector<ptrdiff_t> getVecOffset(ptrdiff_t i) //(JBB 2023)
+    {
+      auto offset = i - mJumps.toOrigin();
+      for (size_t j = 0; j < jumps.size(); j++) {
+        mLayouts.putSpatialLocationFromMemoryIndexInto(offset / jumps[j], j, vect);
+        offset = offset % jumps[j];
+      }
+      return vect;
+    }
 
-          std::vector<ptrdiff_t> getVec(ptrdiff_t i)
-          {
-            return getVecOffset(mOffsets[i]);
-          }
+    ptrdiff_t getStart() const { return mIStart; }
+    ptrdiff_t getEnd() const { return mIEnd; }
 
-          std::vector<ptrdiff_t> getVecOffset(ptrdiff_t i) //(JBB 2023)
-          {
-            auto offset = i - mJumps.toOrigin();
-            for(size_t j = 0; j < jumps.size(); j++) {
-              mLayouts.putSpatialLocationFromMemoryIndexInto(offset / jumps[j], j, vect);
-              offset = offset % jumps[j];
-            }
-            return vect;
-          }
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
 
+    LayoutStruct mLayouts;
+    JumpsHolder mJumps;
 
-        ptrdiff_t getStart() const
-        {
-          return mIStart;
-        }
-        ptrdiff_t getEnd() const
-        {
-          return mIEnd;
-        }
-      private:
-          /* Put all member variables and private methods here. These may change arbitrarily. */
+    std::vector<ptrdiff_t> mOffsets;
+    ptrdiff_t mIStart;
+    ptrdiff_t mIEnd;
+    std::vector<ptrdiff_t> jumps, vect;
 
+    friend class Looper;
 
-          LayoutStruct mLayouts;
-          JumpsHolder mJumps;
-
-          std::vector<ptrdiff_t> mOffsets;
-          ptrdiff_t mIStart;
-          ptrdiff_t mIEnd;
-          std::vector<ptrdiff_t> jumps, vect;
-
-
-          friend class Looper;
-
-      public:
+  public:
 #ifdef TEMPLATTEST
-          static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-      };
+  };
 
-
-
-} /* TempLat */
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/loopers/coordinates_test.h"
 #endif
-
 
 #endif

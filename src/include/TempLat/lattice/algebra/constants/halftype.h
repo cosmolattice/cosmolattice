@@ -7,32 +7,34 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-    /** \brief A class which implement 1/2 as a type. Useful for squareroots.
-     *
-     * Unit test: make test-halftype
-     **/
-    struct HalfType {
-        std::string toString() const { return "(HalfType)1/2"; }
+namespace TempLat
+{
+  /** \brief A class which implement 1/2 as a type. Useful for squareroots.
+   *
+   * Unit test: make test-halftype
+   **/
+  struct HalfType {
+    static std::string toString() { return "(HalfType)1/2"; }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        double get(ptrdiff_t i) { return 0.5; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    static constexpr double get(ptrdiff_t i) { return 0.5; }
 
-        /** \brief Need a static instance of halftype, for constructing `Power(T& a, HalfType& ht);` */
-        static HalfType &getStatic() {
-            static HalfType ht;
-            return ht;
-        }
+    /** \brief Need a static instance of halftype, for constructing `Power(T& a, HalfType& ht);` */
+    static HalfType &getStatic()
+    {
+      static HalfType ht;
+      return ht;
+    }
 
-        static constexpr bool ISCONSTANT = true;
-    };
-} /* TempLat */
+    static constexpr bool ISCONSTANT = true;
+  };
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
-//#include "TempLat/lattice/algebra/constants/halftype_test.h"
+// #include "TempLat/lattice/algebra/constants/halftype_test.h"
 #endif
 
 #endif

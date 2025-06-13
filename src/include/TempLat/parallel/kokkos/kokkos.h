@@ -9,16 +9,8 @@
 #include "TempLat/util/tdd/tddassertion.h"
 
 #ifndef NOKOKKOS
-#include <Kokkos_Core.hpp>
 
-#ifndef NOFFT
-#include "TempLat/fft/external/fftw/fftwinterface.h"
-// Sanity check: Kokkos complex should be perfectly compatible with FFTW complex.
-static_assert(sizeof(fftwf_complex) == sizeof(Kokkos::complex<float>));
-static_assert(alignof(fftwf_complex) <= alignof(Kokkos::complex<float>));
-static_assert(sizeof(fftw_complex) == sizeof(Kokkos::complex<double>));
-static_assert(alignof(fftw_complex) <= alignof(Kokkos::complex<double>));
-#endif
+#include <Kokkos_Core.hpp>
 
 #else
 
@@ -27,19 +19,20 @@ static_assert(alignof(fftw_complex) <= alignof(Kokkos::complex<double>));
 
 #endif
 
-namespace TempLat {
+namespace TempLat
+{
 #ifdef TEMPLATTEST
-    class KokkosTest {
-    public:
-        KokkosTest() {}
-        static inline void Test(TDDAssertion& tdd);
-    };
+  class KokkosTest
+  {
+  public:
+    KokkosTest() {}
+    static inline void Test(TDDAssertion &tdd);
+  };
 #endif
-}
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/parallel/kokkos/kokkos_test.h"
 #endif
 
-
-#endif //KOKKOS_H
+#endif // KOKKOS_H

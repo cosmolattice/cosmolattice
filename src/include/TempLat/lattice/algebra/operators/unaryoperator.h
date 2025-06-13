@@ -7,105 +7,91 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
-//#include "TempLat/lattice/algebra/helpers/getderiv.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/util/containsspace.h"
+#include "TempLat/util/tdd/tdd.h"
+// #include "TempLat/lattice/algebra/helpers/getderiv.h"
+#include "TempLat/lattice/algebra/helpers/confirmghosts.h"
+#include "TempLat/lattice/algebra/helpers/confirmspace.h"
+#include "TempLat/lattice/algebra/helpers/getdx.h"
+#include "TempLat/lattice/algebra/helpers/getfloattype.h"
+#include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
+#include "TempLat/lattice/algebra/helpers/getjumps.h"
+#include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
-#include "TempLat/lattice/algebra/helpers/confirmghosts.h"
-#include "TempLat/lattice/algebra/helpers/confirmspace.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
-#include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/getfloattype.h"
-#include "TempLat/lattice/algebra/helpers/getkir.h"
-#include "TempLat/lattice/algebra/helpers/getdx.h"
 
+// #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 
-//#include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
+namespace TempLat
+{
+  /** \brief A parent class which implements the common methods that all unary operators (-, sqrt ) share.
+   *  Inherits from SpaceStateInterface in order to make the confirm(Config/Fourier)Space methods
+   *  accessible from any type of template instance.
+   *
+   * Unit test: make test-unaryoperator
+   **/
+  template <typename R> class UnaryOperator
+  {
+  public:
+    KOKKOS_FUNCTION
+    UnaryOperator(const R &pR) : mR(pR) {}
 
-namespace TempLat {
-    /** \brief A parent class which implements the common methods that all unary operators (-, sqrt ) share.
-     *  Inherits from SpaceStateInterface in order to make the confirm(Config/Fourier)Space methods
-     *  accessible from any type of template instance.
-     *
-     * Unit test: make test-unaryoperator
-     **/
-    template<typename R>
-    class UnaryOperator {
-    public:
-        KOKKOS_FUNCTION
-        UnaryOperator(const R &pR): mR(pR) {
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    void doWeNeedGhosts() { GhostsHunter::apply(mR); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        void doWeNeedGhosts() {
-            GhostsHunter::apply(mR);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        ptrdiff_t confirmGhostsUpToDate() {
-            return ConfirmGhosts::apply(mR);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType)
+    {
+      ConfirmSpace::apply(mR, newLayout, spaceType);
+    }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType) {
-            ConfirmSpace::apply(mR, newLayout, spaceType);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    void eval(ptrdiff_t i) { DoEval::eval(mR, i); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        void eval(ptrdiff_t i) const
-        {
-            DoEval::eval(mR, i);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    JumpsHolder getJumps() { return GetJumps::apply(mR); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        JumpsHolder getJumps() {
-            return GetJumps::apply(mR);
-        }
+    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
+    KOKKOS_FORCEINLINE_FUNCTION
+    std::shared_ptr<MemoryToolBox> getToolBox() { return GetToolBox::get(mR); }
 
-        /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-        KOKKOS_FORCEINLINE_FUNCTION
-        std::shared_ptr<MemoryToolBox> getToolBox() {
-            return GetToolBox::get(mR);
-        }
+    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    static std::string operatorString() { return " "; }
 
-        /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
-        static std::string operatorString() {
-            return " ";
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto getDx() const { return GetDx::getDx(mR); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        auto getDx() const {
-            return GetDx::getDx(mR);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto getKIR() const { return GetKIR::getKIR(mR); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        auto getKIR() const {
-            return GetKIR::getKIR(mR);
-        }
+    /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
+     * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
+     */
+    std::string toString() const
+    {
+      std::string result = GetString::get(mR);
+      if (ContainsSpace::test(result)) result = "(" + result + ")";
 
-        /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces. */
-        std::string toString() const {
-            std::string result = GetString::get(mR);
-            if (ContainsSpace::test(result)) result = "(" + result + ")";
+      return operatorString() + result;
+    }
 
-            return operatorString() + result;
-        }
+  protected:
+    R mR;
 
-    protected:
-        const R &mR;
-
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-}
+  };
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/unaryoperator_test.h"

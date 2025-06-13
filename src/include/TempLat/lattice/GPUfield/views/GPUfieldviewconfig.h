@@ -12,6 +12,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/lattice/GPUfield/views/abstractview.h"
+#include "TempLat/lattice/GPUmemory/GPUmemoryblock.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
@@ -32,12 +33,14 @@ namespace TempLat {
      * Field class
      *
      **/
-    template<typename T>
-    class GPUConfigView : public AbstractView<T> {
+    template<typename CRTP, typename T>
+    class GPUConfigView : public CRTP, public AbstractView<T> {
     public:
         /* Put public methods here. These should change very little over time. */
-        GPUConfigView(std::string name, const LatticeParameters<T> &pLatPar)
-            : AbstractView<T>(name, pLatPar), mDisableFFTBlocking(false) {
+        //using NumberType = typename CRTP::NumberType;
+
+        GPUConfigView(std::string name, const GPUMemoryBlock<T>& memory, const LatticeParameters<T> &pLatPar)
+            : AbstractView<T>(name, memory, pLatPar), mDisableFFTBlocking(false) {
         }
 
         template<typename R>
@@ -71,7 +74,7 @@ namespace TempLat {
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
-        void operator=(const GPUConfigView<T> &other) {
+        void operator=(const GPUConfigView<CRTP, T> &other) {
             this->assign(other);
         }
 

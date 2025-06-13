@@ -1,14 +1,14 @@
-#ifndef TEMPLAT_LATTICE_GPUFIELD_ABSTRACTVIEW_H
-#define TEMPLAT_LATTICE_GPUFIELD_ABSTRACTVIEW_H
+#ifndef TEMPLAT_LATTICE_GPUFIELD_ABSTRACTFIELD_H
+#define TEMPLAT_LATTICE_GPUFIELD_ABSTRACTFIELD_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
+// File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/GPUmemory/GPUmemoryblock.h"
+
 #include "TempLat/lattice/memory/jumpsholder.h"
 #include "TempLat/lattice/latticeparameters.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
@@ -16,19 +16,21 @@
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 
 namespace TempLat {
-    MakeException(GPUFieldValueGetterException);
+    MakeException(FieldValueGetterException);
 
-    /** \brief A simple class which provides a get method for basic types.
-     * Field class
-     *
-     **/
+    enum CANONICALTYPE { AMPLITUDE, MOMENTUM };
+
     template<typename T>
-    class AbstractView {
+    class GPUAbstractField {
+        /** \brief A simple class which provides a get method for basic types.
+         * Field class
+         *
+         **/
     public:
         /* Put public methods here. These should change very little over time. */
 
-        AbstractView(const std::string &name, const GPUMemoryBlock<T> &memory, const LatticeParameters<T> &pLatPar)
-            : memory(memory), latPar(pLatPar) {
+        GPUAbstractField(std::string name, LatticeParameters<T> pLatPar)
+            : latPar(pLatPar) {
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
@@ -69,6 +71,7 @@ namespace TempLat {
         void setGhostsAreStale() {
             // TODO
             //mManager.setGhostsAreStale();
+            return 0;
         }
 
         bool areGhostsStale() const {
@@ -92,27 +95,21 @@ namespace TempLat {
 
         LatticeParameters<T> latPar; // Information about the lattice (dx, kir...)
 
-        GPUMemoryBlock<T> memory;
-
         // Conceptually not amazing but really useful.
         ptrdiff_t getOffsetFromCoords(bool &test, std::vector<ptrdiff_t> position) {
-            return 0;
-            // TODO
-            /*
             auto mJumps = getJumps();
 
             if (mJumps.size() != position.size())
-                throw GPUFieldValueGetterException(
+                throw FieldValueGetterException(
                     "Wrong size / number of arguments to Field<T>::operator(). Dimensionality of field:", mJumps.size(),
                     ", dimensionality of your arguments:", position.size());
 
             ptrdiff_t offset = mJumps.getTotalOffsetFromSpatialCoordinates(position);
 
-            // our hack to give something that is not in the memory, without throwing an exception.
+            /* our hack to give something that is not in the memory, without throwing an exception. */
             if (offset > -1) test = true;
             else test = false;
             return offset;
-            */
         }
     };
 } /* TempLat */

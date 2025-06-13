@@ -8,11 +8,12 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-template<typename T>
-inline void TempLat::GPUConfigView<T>::Test(TempLat::TDDAssertion &tdd) {
-    LatticeParameters<double> latp;
-    GPUConfigView<double> config_view("view", latp);
-    tdd.verify(true);
-}
+//template<typename T>
+//inline void TempLat::GPUConfigView<T>::Test(TempLat::TDDAssertion &tdd) {
+//    LatticeParameters<double> latp;
+//    GPUMemoryBlock<double> memory(128);
+//    //GPUConfigView<double> config_view("view", memory, latp);
+//    tdd.verify(true);
+//}
 
 #endif

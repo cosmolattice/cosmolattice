@@ -38,7 +38,7 @@ set(TESTING
 # Not an option that was tested, so can't modify it easily
 set(FLOATFFT OFF)
 
-set(CMAKE_CXX_STANDARD 17) # This is likely to evolve in future releases.
+set(CMAKE_CXX_STANDARD 20) # This is likely to evolve in future releases.
 
 # Most likely, if you use external library, they won't be in the default path.
 # You need to help CMake where to find them. The easiest way is to put below the

@@ -7,86 +7,74 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
-#include "TempLat/lattice/algebra/operators/binaryoperator.h"
+#include "TempLat/lattice/algebra/constants/halftype.h"
+#include "TempLat/lattice/algebra/constants/onetype.h"
+#include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
-#include "TempLat/lattice/algebra/constants/zerotype.h"
-#include "TempLat/lattice/algebra/constants/onetype.h"
-#include "TempLat/lattice/algebra/constants/halftype.h"
+#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/lattice/algebra/operators/binaryoperator.h"
+#include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-    /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
-    namespace Operators {
-        /** \brief A class which adds two getters.
-         * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
-         *
-         * Unit test: make test-multiply
-         **/
-        template<typename R, typename T>
-        class Addition : public TempLat::BinaryOperator<R, T> {
-        public:
-            using BinaryOperator<R, T>::mR;
-            using BinaryOperator<R, T>::mT;
+namespace TempLat
+{
+  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  namespace Operators
+  {
+    /** \brief A class which adds two getters.
+     * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
+     *
+     * Unit test: make test-multiply
+     **/
+    template <typename R, typename T> class Addition : public TempLat::BinaryOperator<R, T>
+    {
+    public:
+      using BinaryOperator<R, T>::mR;
+      using BinaryOperator<R, T>::mT;
 
-            KOKKOS_FUNCTION
-            Addition(const R &pR, const T &pT): BinaryOperator<R, T>(pR, pT) {
-            }
+      KOKKOS_FUNCTION
+      Addition(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-            KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) const {
-                return TempLat::GetValue::get(mT, i) + TempLat::GetValue::get(mR, i);
-            }
+      KOKKOS_FORCEINLINE_FUNCTION
+      auto get(ptrdiff_t i) const { return TempLat::GetValue::get(mT, i) + TempLat::GetValue::get(mR, i); }
 
-            static std::string operatorString() {
-                return "+";
-            }
+      static std::string operatorString() { return "+"; }
 
-            /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-            template<typename U>
-            KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
-                return GetDeriv::get(mT, other) + GetDeriv::get(mR, other);
-            }
-        };
-    }
-
-    /** \brief A mini struct for instiating the test case. */
-    struct AddTester {
-#ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
-#endif
+      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      {
+        return GetDeriv::get(mT, other) + GetDeriv::get(mR, other);
+      }
     };
+  } // namespace Operators
 
-    template<typename R, typename T>
-    KOKKOS_FORCEINLINE_FUNCTION
-    typename ConditionalBinaryGetter<Operators::Addition, R, T>::type
-    operator+(const R &r, const T &t) {
-        return Operators::Addition<R, T>(r, t);
-    }
+  /** \brief A mini struct for instiating the test case. */
+  struct AddTester {
+#ifdef TEMPLATTEST
+    static inline void Test(TDDAssertion &tdd);
+#endif
+  };
 
-    /** \brief Specialize for possible zero input! */
-    template<typename T>
-    KOKKOS_FORCEINLINE_FUNCTION
-    T operator+(T a, const ZeroType b) {
-        return a;
-    }
+  template <typename R, typename T> KOKKOS_FORCEINLINE_FUNCTION auto operator+(const R &r, const T &t)
+  {
+    return Operators::Addition<R, T>(r, t);
+  }
 
-    /** \brief Specialize for possible half input! */
-    KOKKOS_FORCEINLINE_FUNCTION
-    OneType operator+(const HalfType a, const HalfType b) {
-        return OneType();
-    }
+  /** \brief Specialize for possible zero input! */
+  template <typename T> KOKKOS_FORCEINLINE_FUNCTION T operator+(T a, const ZeroType b) { return a; }
 
-    /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
-    template<typename T>
-    KOKKOS_FORCEINLINE_FUNCTION
-    typename std::enable_if<!std::is_same<T, ZeroType>::value, T>::type
-    operator+(const ZeroType a, T b) {
-        return b;
-    }
-}
+  /** \brief Specialize for possible half input! */
+  KOKKOS_FORCEINLINE_FUNCTION
+  OneType operator+(const HalfType a, const HalfType b) { return OneType(); }
+
+  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
+  template <typename T>
+  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<!std::is_same<T, ZeroType>::value, T>::type
+  operator+(const ZeroType a, T b)
+  {
+    return b;
+  }
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/add_test.h"

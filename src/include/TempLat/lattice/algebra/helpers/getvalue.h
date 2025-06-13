@@ -7,48 +7,61 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/util/tdd/tdd.h"
+#include <type_traits>
 
-namespace TempLat {
-    /** \brief A template-programming class which helps to get the 'get'-value from any type,
-     * whether it has the get-method or it is a scalar value.
-     * Now you can use an int as if it had a get method for example.
-     *
-     * Unit test: make test-getvalue
-     **/
-    class GetValue {
-    public:
-        /* Put public methods here. These should change very little over time. */
+namespace TempLat
+{
+  template <typename U>
+  concept TypeHasGetMethod = requires(U obj, ptrdiff_t i) { obj.get(i); };
 
-        template<typename U>
-        KOKKOS_FORCEINLINE_FUNCTION
-        static typename std::enable_if<HasGetMethod<U>::value, decltype(std::declval<U>().get(std::declval<ptrdiff_t>())
-        )>::type
-        get(U &&obj, ptrdiff_t i) {
-            return obj.get(i);
-        }
+  template <typename U>
+  concept TypeHasNoGetMethod = !TypeHasGetMethod<U>;
 
-        template<typename U>
-        KOKKOS_FORCEINLINE_FUNCTION
-        static typename std::enable_if<!HasGetMethod<U>::value, U>::type &
-        get(U &&obj, ptrdiff_t i) {
-            return obj;
-        }
+  template <typename U>
+  concept TypeGetsItself = (std::is_floating_point_v<std::decay_t<U>> || std::is_integral_v<std::decay_t<U>>);
 
-    private:
-        /* Put all member variables and private methods here. These may change arbitrarily. */
+  // template <typename T>
+  // concept TypeGetsItself<complex<T>> = std::is_floating_point<T>;
 
-        GetValue() {
-        }
+  /** \brief A template-programming class which helps to get the 'get'-value from any type,
+   * whether it has the get-method or it is a scalar value.
+   * Now you can use an int as if it had a get method for example.
+   *
+   * Unit test: make test-getvalue
+   **/
+  class GetValue
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
 
-    public:
+    template <typename U>
+      requires TypeHasGetMethod<U>
+    static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, ptrdiff_t i)
+    {
+      return obj.get(i);
+    }
+
+    template <typename U>
+      requires TypeGetsItself<U>
+    static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, ptrdiff_t i)
+    {
+      return obj;
+    }
+
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+
+    GetValue() = delete;
+
+  public:
 #ifdef TEMPLATTEST
-         static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-}
+  };
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/helpers/getvalue_test.h"

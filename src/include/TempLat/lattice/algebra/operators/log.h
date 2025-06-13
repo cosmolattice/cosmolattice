@@ -9,80 +9,77 @@
 
 #include <cmath>
 
-#include "TempLat/util/tdd/tdd.h"
+#include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
-#include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
-#include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/lattice/algebra/operators/divide.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
+#include "TempLat/lattice/algebra/operators/divide.h"
+#include "TempLat/lattice/algebra/operators/unaryoperator.h"
+#include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-    /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between them. */
-    using std::log;
+namespace TempLat
+{
+  /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
+   * them. */
+  using std::log;
 
-    /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
-    namespace Operators {
-        /** \brief A class which applies a minus sign. Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
-         *
-         * Unit test: make test-multiply
-         **/
-        template<typename T>
-        class Log : public UnaryOperator<T> {
-        public:
-            /* Put public methods here. These should change very little over time. */
-            using UnaryOperator<T>::mR;
+  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  namespace Operators
+  {
+    /** \brief A class which applies a minus sign. Holds the expression, only evaluates for a single element when you
+     *call Multiply::get(pIterCoords).
+     *
+     * Unit test: make test-multiply
+     **/
+    template <typename T> class Log : public UnaryOperator<T>
+    {
+    public:
+      /* Put public methods here. These should change very little over time. */
+      using UnaryOperator<T>::mR;
 
-            KOKKOS_FUNCTION
-            Log(const T& a) : UnaryOperator<T>(a) {
-            }
+      KOKKOS_FUNCTION
+      Log(const T &a) : UnaryOperator<T>(a) {}
 
-            /** \brief Getter for two instances. */
-            KOKKOS_FORCEINLINE_FUNCTION
-            auto get(ptrdiff_t i) const {
+      /** \brief Getter for two instances. */
+      KOKKOS_FORCEINLINE_FUNCTION
+      auto get(ptrdiff_t i) const
+      {
 #ifndef NOKOKKOS
-                return Kokkos::log(GetValue::get(mR, i));
+        return Kokkos::log(GetValue::get(mR, i));
 #else
-                using namespace std; /* not std::log, but this way, for potential future data types. */
-                return log(GetValue::get(mR, i));
+        using namespace std; /* not std::log, but this way, for potential future data types. */
+        return log(GetValue::get(mR, i));
 #endif
-            }
+      }
 
-            /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-            template<typename U>
-            KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) const {
-                /* not using pow for 1/mInstanceT because pow imports us, log.h */
-                return GetDeriv::get(mR, other) / mR;
-            }
+      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      {
+        /* not using pow for 1/mInstanceT because pow imports us, log.h */
+        return GetDeriv::get(mR, other) / mR;
+      }
 
-            static std::string operatorString() {
-                return "log";
-            }
-        };
-    }
-
-    /** \brief A mini struct for instiating the test case. */
-    struct LogTester {
-#ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
-#endif
+      static std::string operatorString() { return "log"; }
     };
+  } // namespace Operators
 
-    /** \brief Exposing our newly define log operation to the world. */
-    template<typename T>
-    KOKKOS_FORCEINLINE_FUNCTION
-    typename ConditionalUnaryGetter<Operators::Log, T>::type
-    log(T a) {
-        return Operators::Log<T>(a);
-    }
+  /** \brief A mini struct for instiating the test case. */
+  struct LogTester {
+#ifdef TEMPLATTEST
+    static inline void Test(TDDAssertion &tdd);
+#endif
+  };
 
-    /** \brief Specialize for possible zero output! */
-    KOKKOS_FORCEINLINE_FUNCTION
-    ZeroType log(OneType a) {
-        return ZeroType();
-    }
-}
+  /** \brief Exposing our newly define log operation to the world. */
+  template <typename T> KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::Log, T>::type log(T a)
+  {
+    return Operators::Log<T>(a);
+  }
+
+  /** \brief Specialize for possible zero output! */
+  KOKKOS_FORCEINLINE_FUNCTION
+  ZeroType log(OneType a) { return ZeroType(); }
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/log_test.h"

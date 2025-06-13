@@ -11,83 +11,79 @@
 // otherwise abs might be defined for integers only, with possibly desastrous consequences.
 #include <cmath>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
+#include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/operators/heavisidestepfunction.h"
 
-namespace TempLat {
-    /** \brief Enable use of this operator without prefixing std:: or TempLat::.
-     * The compiler can distinguish between them. */
+namespace TempLat
+{
+  /** \brief Enable use of this operator without prefixing std:: or TempLat::.
+   * The compiler can distinguish between them. */
 #ifndef NOKOKKOS
-    using Kokkos::abs;
+  using Kokkos::abs;
 #else
-    using std::abs;
+  using std::abs;
 #endif
 
-    namespace Operators {
-        /** \brief A class which applies takes the absolute value.
-         * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
-         *
-         * Unit test: make test-multiply
-         **/
-        template<typename R>
-        class AbsoluteValue : public UnaryOperator<R> {
-        public:
-            using UnaryOperator<R>::mR;
+  namespace Operators
+  {
+    /** \brief A class which applies takes the absolute value.
+     * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
+     *
+     * Unit test: make test-multiply
+     **/
+    template <typename R> class AbsoluteValue : public UnaryOperator<R>
+    {
+    public:
+      using UnaryOperator<R>::mR;
 
-            /* Put public methods here. These should change very little over time. */
-            KOKKOS_FUNCTION
-            AbsoluteValue(const R &a) : UnaryOperator<R>(a) {
-            }
+      /* Put public methods here. These should change very little over time. */
+      KOKKOS_FUNCTION
+      AbsoluteValue(const R &a) : UnaryOperator<R>(a) {}
 
-            /** \brief Getter for two instances. */
-            KOKKOS_FORCEINLINE_FUNCTION
-            typename GetFloatType<typename GetGetReturnType<R>::type>::type
-            get(ptrdiff_t i) const {
+      /** \brief Getter for two instances. */
+      KOKKOS_FORCEINLINE_FUNCTION
+      typename GetFloatType<typename GetGetReturnType<R>::type>::type get(ptrdiff_t i)
+      {
 #ifndef NOKOKKOS
-                return Kokkos::abs(GetValue::get(mR, i));
+        return Kokkos::abs(GetValue::get(mR, i));
 #else
-                using namespace std;
-                return abs(GetValue::get(mR, i));
+        using namespace std;
+        return abs(GetValue::get(mR, i));
 #endif
-            }
+      }
 
-            static std::string operatorString() {
-                return "abs";
-            }
+      static std::string operatorString() { return "abs"; }
 
-            /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-            template<typename U>
-            KOKKOS_FORCEINLINE_FUNCTION
-            auto d(const U &other) {
-                return GetDeriv::get(mR, other) * (-heaviside(-mR) + heaviside(mR));
-            }
-        };
-    }
-
-    /** \brief A mini struct for instiating the test case. */
-    struct AbsoluteValueTester {
-#ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
-#endif
+      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      {
+        return GetDeriv::get(mR, other) * (-heaviside(-mR) + heaviside(mR));
+      }
     };
+  } // namespace Operators
 
-    /** \brief Exposing our newly defined absolute value operation to the world. */
-    template<typename T>
-    KOKKOS_FORCEINLINE_FUNCTION
-    typename ConditionalUnaryGetter<Operators::AbsoluteValue, T>::type
-    abs(const T &a) {
-        return Operators::AbsoluteValue<T>(a);
-    }
-}
+  /** \brief A mini struct for instiating the test case. */
+  struct AbsoluteValueTester {
+#ifdef TEMPLATTEST
+    static inline void Test(TDDAssertion &tdd);
+#endif
+  };
+
+  /** \brief Exposing our newly defined absolute value operation to the world. */
+  template <typename T>
+  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::AbsoluteValue, T>::type abs(const T &a)
+  {
+    return Operators::AbsoluteValue<T>(a);
+  }
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/operators/absolutevalue_test.h"
 #endif
-
 
 #endif

@@ -18,18 +18,19 @@ namespace TempLat {
      * Unit test: make test-field
      **/
     template<typename T>
-    class GPUField : public GPUConfigView<T> {
+    class GPUField : public GPUConfigView<GPUField<T>, T> {
     public:
         /* Put public methods here. These should change very little over time. */
+        using NumberType = T;
 
         GPUField(std::string name, LatticeParameters<T> pLatPar = LatticeParameters<T>())
-            : GPUConfigView<T>(name, pLatPar) {
+            : GPUConfigView<GPUField<T>, T>(name, memory, pLatPar) {
         }
 
         template<typename R>
         KOKKOS_FORCEINLINE_FUNCTION
         void operator=(R &&g) {
-            GPUConfigView<T>::operator=(g);
+            GPUConfigView<GPUField<T>, T>::operator=(g);
         }
 
         KOKKOS_FORCEINLINE_FUNCTION
@@ -40,6 +41,8 @@ namespace TempLat {
 
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
+
+        GPUMemoryBlock<T> memory;
 
     public:
 #ifdef TEMPLATTEST
