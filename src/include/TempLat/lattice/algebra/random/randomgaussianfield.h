@@ -37,11 +37,12 @@ namespace TempLat
    *
    * Unit test: make test-randomgaussianfield
    **/
-  template <typename T, bool Real, bool Unitary> class RandomGaussianFieldHelper : public DimensionCountRecorder
+  template <size_t NDim, typename T, bool Real, bool Unitary>
+  class RandomGaussianFieldHelper : public DimensionCountRecorder
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    RandomGaussianFieldHelper(std::string baseSeed, std::shared_ptr<MemoryToolBox> pToolBox)
+    RandomGaussianFieldHelper(std::string baseSeed, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
         : DimensionCountRecorder(SpaceStateInterface::SpaceType::undefined), mBaseSeed(baseSeed), prng(baseSeed),
           mToolBox(pToolBox)
     {
@@ -80,7 +81,7 @@ namespace TempLat
     std::string mBaseSeed;
     std::vector<ptrdiff_t> rodPosition;
     Util::RandomGaussian prng;
-    std::shared_ptr<MemoryToolBox> mToolBox;
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
 
     /** \brief Verifies that the coordinates asked for are
      *  on the same rod that we are in, and that the last dimension
@@ -131,11 +132,11 @@ namespace TempLat
 #endif
   };
 
-  template <typename T> using RandomGaussianField = RandomGaussianFieldHelper<T, false, false>;
+  template <size_t NDim, typename T> using RandomGaussianField = RandomGaussianFieldHelper<NDim, T, false, false>;
 
-  template <typename T> using RandomRayleighField = RandomGaussianFieldHelper<T, true, false>;
+  template <size_t NDim, typename T> using RandomRayleighField = RandomGaussianFieldHelper<NDim, T, true, false>;
 
-  template <typename T> using RandomUniformUnitaryField = RandomGaussianFieldHelper<T, false, true>;
+  template <size_t NDim, typename T> using RandomUniformUnitaryField = RandomGaussianFieldHelper<NDim, T, false, true>;
 
 } // namespace TempLat
 

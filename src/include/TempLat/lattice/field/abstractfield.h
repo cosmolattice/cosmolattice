@@ -25,21 +25,18 @@ namespace TempLat
 
   enum CANONICALTYPE { AMPLITUDE, MOMENTUM };
 
-  template <typename T> // The three extra template parameters are just a conveninient way to create a different type
-                        // for every field.
-                        class AbstractField
+  /** \brief A simple class which provides a get method for basic types.
+   * Field class
+   *
+   *
+   **/
+  template <size_t NDim, typename T> class AbstractField
   {
-    /** \brief A simple class which provides a get method for basic types.
-     * Field class
-     *
-     *
-     *
-     **/
   public:
     /* Put public methods here. These should change very little over time. */
 
-    AbstractField(std::string name, std::shared_ptr<MemoryToolBox> toolBox, LatticeParameters<T> pLatPar)
-        : mToolBox(toolBox), mManager(std::make_shared<MemoryManager<T>>(mToolBox, name)), latPar(pLatPar)
+    AbstractField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
+        : mToolBox(toolBox), mManager(std::make_shared<MemoryManager<NDim, T>>(mToolBox, name)), latPar(pLatPar)
     {
       // mManager->confirmConfigSpace(); //allocation happens here
       // mManager->allocate();
@@ -68,7 +65,7 @@ namespace TempLat
       }
     }
 
-    std::shared_ptr<MemoryToolBox> getToolBox() { return mToolBox; }
+    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return mToolBox; }
 
     ptrdiff_t confirmGhostsUpToDate() { return this->mManager->confirmGhostsUpToDate(); }
 
@@ -84,7 +81,7 @@ namespace TempLat
     void setGhostsAreStale() { mManager->setGhostsAreStale(); }
     bool areGhostsStale() const { return mManager->areGhostsStale(); }
 
-    std::shared_ptr<MemoryManager<T>> getMemoryManager() { return mManager; }
+    std::shared_ptr<MemoryManager<NDim, T>> getMemoryManager() { return mManager; }
 
     inline auto getDx() const { return latPar.getDx(); }
 
@@ -92,8 +89,8 @@ namespace TempLat
 
   protected:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::shared_ptr<MemoryToolBox> mToolBox;
-    std::shared_ptr<MemoryManager<T>> mManager;
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    std::shared_ptr<MemoryManager<NDim, T>> mManager;
 
     LatticeParameters<T> latPar; // Information about the lattice (dx, kir...)
                                  // Conceptually not amazing but really useful.

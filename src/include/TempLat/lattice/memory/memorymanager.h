@@ -24,11 +24,11 @@ namespace TempLat
    *
    * Unit test: make test-memorymanager
    **/
-  template <typename T> class MemoryManager
+  template <size_t NDim, typename T> class MemoryManager
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    MemoryManager(std::shared_ptr<MemoryToolBox> toolBox, std::string name = "")
+    MemoryManager(std::shared_ptr<MemoryToolBox<NDim>> toolBox, std::string name = "")
         : mToolBox(toolBox), mName(name), mAllocated(false)
     {
     }
@@ -38,7 +38,7 @@ namespace TempLat
       if (mAllocated) return 0;
       if (mToolBox->verbosity.allocation) sayMPI << "Allocating memory.\n";
       mAllocated = true;
-      mBlock = MemoryBlock<T>(mToolBox->mLayouts.getNecessaryMemoryAllocation());
+      mBlock = MemoryBlock<NDim, T>(mToolBox->mLayouts.getNecessaryMemoryAllocation());
       return 1;
     }
 
@@ -240,10 +240,10 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::shared_ptr<MemoryToolBox> mToolBox;
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
     std::string mName;
     bool mAllocated;
-    MemoryBlock<T> mBlock;
+    MemoryBlock<NDim, T> mBlock;
 
     MemoryLayoutState mLayoutState;
     GhostStateKeeper mGhostStateKeeper;

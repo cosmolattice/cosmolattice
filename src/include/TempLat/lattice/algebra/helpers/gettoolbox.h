@@ -1,48 +1,59 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_HELPERS_GETTOOLBOX_H
 #define TEMPLAT_LATTICE_ALGEBRA_HELPERS_GETTOOLBOX_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hastoolbox.h"
+#include "TempLat/lattice/algebra/helpers/getstring.h"
 
-namespace TempLat {
-    /** \brief A class which gets jumps from all classes, also those that do not have jumps.
-     *
-     * Unit test: make test-getjumps
-     **/
-    class GetToolBox {
-    public:
+namespace TempLat
+{
+  template <typename U>
+  concept TypeHasToolBox = requires(U &&obj) { obj.getToolBox(); };
+
+  template <typename U>
+  concept TypeHasNoToolBox = !TypeHasToolBox<U>;
+
+  MakeException(GetToolBoxException);
+
+  /** \brief A class which gets jumps from all classes, also those that do not have jumps.
+   *
+   * Unit test: make test-getjumps
+   **/
+  class GetToolBox
+  {
+  public:
     /* Put public methods here. These should change very little over time. */
-        template <typename U>
-        KOKKOS_FORCEINLINE_FUNCTION
-        static typename std::enable_if<HasToolBox<U>::value, std::shared_ptr<MemoryToolBox>>::type
-        get( U&& obj) {
-            return obj.getToolBox();
-        }
+    template <typename U>
+      requires TypeHasToolBox<U>
+    static auto get(U &&obj)
+    {
+      return obj.getToolBox();
+    }
 
-        template <typename U>
-        KOKKOS_FORCEINLINE_FUNCTION
-        static typename std::enable_if<!HasToolBox<U>::value, std::shared_ptr<MemoryToolBox>>::type
-        get( U&& obj) {
-            return std::shared_ptr<MemoryToolBox>();
-        }
+    template <typename U>
+      requires TypeHasNoToolBox<U>
+    static auto get(U &&obj)
+    {
+      throw GetToolBoxException("Object does not have a toolbox: " + GetString::get(obj));
+      return std::shared_ptr<void>(nullptr);
+    }
 
-    private:
+  private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-        GetToolBox() {
-        }
+    GetToolBox() {}
 
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-}
+  };
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/helpers/gettoolbox_test.h"

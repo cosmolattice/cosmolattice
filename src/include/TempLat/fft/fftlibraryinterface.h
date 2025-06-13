@@ -14,14 +14,47 @@
 
 namespace TempLat
 {
+  /** \brief The result holder for getIntrinsicRescaleToGetUnnormalizedFFT:
+   *  two labeled double values.
+   */
+  struct IntrinsicScales {
+    IntrinsicScales() : c2r(1), r2c(1) {}
+    double c2r;
+    double r2c;
+    bool isDefault() { return c2r == 1 && r2c == 1; }
+  };
+
+  /** \brief Yes, another nested class interface: for the session guard. Your constructor should take care of
+   * your_library_init(), your destructor should take care of your_library_cleanup(). These are the session-wide
+   * initialization / finalization calls.
+   */
+  class FFTSessionGuard
+  {
+  public:
+    virtual ~FFTSessionGuard() {};
+  };
+
+  /** \brief Yes, for once a nested class. The interface for your to-be-implemented FFT plan, but forward and
+   * backward. Complex-to-real and real-to-complex.
+   *
+   *  Your implementation of FFTPlanInterface must take care of freeing the plan(s) upon destruction. So you should use
+   * shared_ptr's!
+   */
+  template <size_t NDim, typename T> class FFTPlanInterface
+  {
+  public:
+    /* virtual desctructor can not be abstract: https://stackoverflow.com/a/13444839/2295722 */
+    virtual ~FFTPlanInterface() {};
+    virtual void c2r(MemoryBlock<NDim, T> &mBlock) = 0;
+    virtual void r2c(MemoryBlock<NDim, T> &mBlock) = 0;
+  };
 
   /** \brief A pure abstract class (interface!) which defines the methods that you must implement for your new fft
    *library to play well with us.
    *
    * Unit test: make test-fftlibraryinterface
    **/
-
-  class FFTLibraryInterface
+  template <size_t NDim> class FFTLibraryInterface
   {
   public:
     /* Put public methods here. These should change very little over time. */
@@ -36,15 +69,6 @@ namespace TempLat
      */
     virtual ptrdiff_t getMaximumNumberOfDimensionsToDivide(ptrdiff_t nDimensions) = 0;
 
-    /** \brief The result holder for getIntrinsicRescaleToGetUnnormalizedFFT:
-     *  two labeled double values.
-     */
-    struct IntrinsicScales {
-      IntrinsicScales() : c2r(1), r2c(1) {}
-      double c2r;
-      double r2c;
-      bool isDefault() { return c2r == 1 && r2c == 1; }
-    };
     /** \brief The lattice objects expect an *unnormalized* FFT, such as FFTW and PFFT give:
      *  applying once forward and then backward, should return the input values multiplied by
      *  nGridPoints^nDimensions, i.e. the total number of values in the problem.
@@ -64,42 +88,17 @@ namespace TempLat
      */
     virtual void setPlannerPatience(int level) = 0;
 
-    /** \brief Yes, for once a nested class. The interface for your to-be-implemented FFT plan, but forward and
-     * backward. Complex-to-real and real-to-complex.
-     *
-     *  Your implementation of PlanInterface must take care of freeing the plan(s) upon destruction. So you should use
-     * shared_ptr's!
+    /** \brief Create fully working plans, which must self-destruct in the FFTPlanInterface's destructor. Use
+     * shared_ptr's. Since we use virtual methods here, we cannot use templates. Only one type of dynamic typing allowed
+     * by C++, either runtime (virtual) or compile time (template).
      */
-    template <typename T> class PlanInterface
-    {
-    public:
-      /* virtual desctructor can not be abstract: https://stackoverflow.com/a/13444839/2295722 */
-      virtual ~PlanInterface() {};
-      virtual void c2r(MemoryBlock<T> &mBlock) = 0;
-      virtual void r2c(MemoryBlock<T> &mBlock) = 0;
-    };
-
-    /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
-     *  Since we use virtual methods here, we cannot use templates. Only one type of dynamic typing allowed by C++,
-     * either runtime (virtual) or compile time (template).
+    virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
+                                                                          const FFTLayoutStruct &layout) = 0;
+    /** \brief Create fully working plans, which must self-destruct in the FFTPlanInterface's destructor. Use
+     * shared_ptr's.
      */
-    virtual std::shared_ptr<PlanInterface<float>> getPlans_float(const MPICartesianGroup &group,
-                                                                 const FFTLayoutStruct &layout) = 0;
-    /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
-     */
-    virtual std::shared_ptr<PlanInterface<double>> getPlans_double(const MPICartesianGroup &group,
-                                                                   const FFTLayoutStruct &layout) = 0;
-
-    /** \brief Yes, another nested class interface: for the session guard. Your constructor should take care of
-     * your_library_init(), your destructor should take care of your_library_cleanup(). These are the session-wide
-     * initialization / finalization calls.
-     */
-    class SessionGuard
-    {
-    public:
-      virtual ~SessionGuard() {};
-    };
-    virtual std::shared_ptr<SessionGuard> getSessionGuard(bool pVerbose) = 0;
+    virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
+                                                                            const FFTLayoutStruct &layout) = 0;
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

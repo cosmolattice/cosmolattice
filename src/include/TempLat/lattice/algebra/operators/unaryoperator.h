@@ -61,7 +61,7 @@ namespace TempLat
 
     /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
     KOKKOS_FORCEINLINE_FUNCTION
-    std::shared_ptr<MemoryToolBox> getToolBox() { return GetToolBox::get(mR); }
+    auto getToolBox() { return GetToolBox::get(mR); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
     static std::string operatorString() { return " "; }

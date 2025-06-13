@@ -9,10 +9,10 @@
 
 #include "TempLat/util/almostequal.h"
 
-template <typename T> inline void TempLat::MemoryBlock<T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
 #ifndef NOKOKKOS
-  MemoryBlock<T> test(128);
+  MemoryBlock<NDim, T> test(128);
 
   Kokkos::parallel_for(
       Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, test.size()),

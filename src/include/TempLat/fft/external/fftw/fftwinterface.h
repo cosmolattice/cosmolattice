@@ -14,14 +14,18 @@
 namespace TempLat
 {
 
+  inline std::shared_ptr<FFTSessionGuard> getFFTWSessionGuard(bool pVerbose = true)
+  {
+    return std::make_shared<FFTWGuard>(pVerbose);
+  }
+
   /** \brief A class which implements all of FFTLibraryInterface. The larger methods are implemented in classes from
    *which we inherit, in a linear chain: FFTWMemoryLayout and FFTWPlanner.
    *
    *
    * Unit test: make test-fftwinterface
    **/
-
-  class FFTWInterface : public FFTWMemoryLayout
+  template <size_t NDim> class FFTWInterface : public FFTWMemoryLayout<NDim>
   {
   public:
     /* Put public methods here. These should change very little over time. */
@@ -41,11 +45,6 @@ namespace TempLat
     virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nDimensions, ptrdiff_t nGridPoints)
     {
       return IntrinsicScales();
-    }
-
-    virtual std::shared_ptr<SessionGuard> getSessionGuard(bool pVerbose = true)
-    {
-      return std::make_shared<FFTWGuard>(pVerbose);
     }
 
   private:

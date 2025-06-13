@@ -13,139 +13,84 @@
 #include "TempLat/lattice/algebra/listoperators/vectordotter.h"
 #include "TempLat/lattice/algebra/helpers/getvectorcomponent.h"
 #include "TempLat/util/rangeiteration/tag.h"
-//#include "TempLat/lattice/algebra/vector.h"
+// #include "TempLat/lattice/algebra/vector.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-    /** \brief A class which allows for accessing (unscaled, dimensionless, index-valued) various
-     *  expressions involving the fourier coordinates.
-     *
-     *
-     * Unit test: make test-wavenumber
-     **/
+  /** \brief A class which allows for accessing (unscaled, dimensionless, index-valued) various
+   *  expressions involving the fourier coordinates.
+   *
+   *
+   * Unit test: make test-wavenumber
+   **/
 
+  template <size_t NDim> class WaveNumber /*: public Vector*/
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
+    WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox) {}
 
-    class WaveNumber /*: public Vector*/ {
-    public:
-        /* Put public methods here. These should change very little over time. */
-        WaveNumber( std::shared_ptr<MemoryToolBox> toolBox):
-                mToolBox(toolBox) {
+    ptrdiff_t getVectorSize() const { return mToolBox->mNDimensions; }
 
-        }
+    auto vectorGet(ptrdiff_t i, ptrdiff_t j) const // TODO: remove
+    {
+      return mToolBox->getCoordFourier(i)[j];
+    }
 
+    template <int N> auto operator()(Tag<N> t) { return getVectorComponent(*this, N - 1); }
 
-        ptrdiff_t getVectorSize() const
-        {
-            return mToolBox->mNDimensions;
-        }
+    auto operator[](const ptrdiff_t &i) { return getVectorComponent(*this, i); }
+    auto norm2() { return dot(*this, *this); }
+    auto norm() { return pow(this->norm2(), 0.5); }
 
-        auto vectorGet(ptrdiff_t i, ptrdiff_t j) const //TODO: remove
-        {
-            return mToolBox->getCoordFourier(i)[j];
-        }
+    std::string toString(ptrdiff_t j) const { return "k_" + std::to_string(j); }
 
-        template <int N>
-        auto operator()(Tag<N> t)
-        {
-            return getVectorComponent(*this, N-1);
-        }
+    std::string toString() const { return "k"; }
 
-        auto operator[](const ptrdiff_t& i)
-        {
-            return getVectorComponent(*this, i);
-        }
-        auto norm2()
-        {
-            return dot(*this,*this);
-        }
-        auto norm()
-        {
-            return pow(this->norm2(),0.5);
-        }
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+  };
 
-        std::string toString(ptrdiff_t j) const
-        {
-            return "k_" + std::to_string(j);
-        }
+  template <size_t NDim, size_t N> class FourierSite /*: public Vector*/
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
+    FourierSite(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox) {}
 
-        std::string toString() const
-        {
-            return "k";
-        }
+    ptrdiff_t getVectorSize() { return mToolBox->mNDimensions; }
 
+    auto vectorGet(ptrdiff_t i, ptrdiff_t j) // TODO: remove
+    {
+      return mToolBox->getCoordFourier(i)[j];
+    }
 
-    private:
-        /* Put all member variables and private methods here. These may change arbitrarily. */
-        std::shared_ptr<MemoryToolBox> mToolBox;
+    template <int J> auto operator()(Tag<J> t) { return getVectorComponent(*this, J - 1); }
 
-    };
+    auto operator[](const ptrdiff_t &i) { return getVectorComponent(*this, i); }
+    auto norm2() { return dot(*this, *this); }
+    auto norm() { return pow(this->norm2(), 0.5); }
 
+    std::string toString(int i) const { return "k_" + std::to_string(i); };
+    std::string toString() const { return "k"; };
 
-    template <size_t  N>
-    class FourierSite /*: public Vector*/ {
-    public:
-        /* Put public methods here. These should change very little over time. */
-        FourierSite( std::shared_ptr<MemoryToolBox> toolBox):
-        mToolBox(toolBox) {
+    static constexpr size_t size = N;
 
-        }
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+  };
 
-
-        ptrdiff_t getVectorSize()
-        {
-          return mToolBox->mNDimensions;
-        }
-
-        auto vectorGet(ptrdiff_t i, ptrdiff_t j) //TODO: remove
-        {
-          return mToolBox->getCoordFourier(i)[j];
-        }
-
-        template <int J>
-        auto operator()(Tag<J> t)
-        {
-            return getVectorComponent(*this, J-1);
-        }
-
-        auto operator[](const ptrdiff_t& i)
-        {
-          return getVectorComponent(*this, i);
-        }
-        auto norm2()
-        {
-          return dot(*this,*this);
-        }
-        auto norm()
-        {
-          return pow(this->norm2(),0.5);
-        }
-
-        std::string toString(int i) const{
-          return "k_" + std::to_string(i);
-        };
-        std::string toString() const{
-          return "k";
-        };
-
-        static constexpr size_t size = N;
-
-    private:
-        /* Put all member variables and private methods here. These may change arbitrarily. */
-        std::shared_ptr<MemoryToolBox> mToolBox;
-
-    };
-
-
-    struct WaveNumberTester{
+  struct WaveNumberTester {
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
+  };
 
-}
+} // namespace TempLat
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/coordinates/wavenumber_test.h"
 #endif
-
 
 #endif

@@ -11,18 +11,17 @@
 #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
 
-template <typename T> inline void TempLat::Field<T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-
   ptrdiff_t nGrid = 4, nGhost = 1;
 
-  auto toolBox = MemoryToolBox::makeShared(2, nGrid, nGhost);
+  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
   toolBox->setVerbose();
 
-  Field<T> phi("phi", toolBox);
-  Field<T> chi("chi", toolBox);
-  Field<T> psi("psi", toolBox);
+  Field<NDim, T> phi("phi", toolBox);
+  Field<NDim, T> chi("chi", toolBox);
+  Field<NDim, T> psi("psi", toolBox);
 
   WaveNumber k(toolBox);
   // phi.inFourierSpace() = k.norm2() * RandomGaussianField<T>("Hoi", toolBox);

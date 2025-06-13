@@ -31,7 +31,7 @@ namespace TempLat
    * Unit test: make test-fieldviewconfig
    **/
 
-  template <typename T> class ConfigView : public AbstractField<T>
+  template <size_t NDim, typename T> class ConfigView : public AbstractField<NDim, T>
   {
     /** \brief A simple class which provides a get method for basic types.
      * Field class
@@ -40,12 +40,12 @@ namespace TempLat
      *
      **/
   public:
-    using AbstractField<T>::mManager;
-    using AbstractField<T>::mToolBox;
+    using AbstractField<NDim, T>::mManager;
+    using AbstractField<NDim, T>::mToolBox;
 
     /* Put public methods here. These should change very little over time. */
-    ConfigView(std::string name, std::shared_ptr<MemoryToolBox> toolBox, LatticeParameters<T> pLatPar)
-        : AbstractField<T>(name, toolBox, pLatPar), mDisableFFTBlocking(false)
+    ConfigView(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
+        : AbstractField<NDim, T>(name, toolBox, pLatPar), mDisableFFTBlocking(false)
     {
       mManager->setGhostsAreStale();
       mManager->confirmConfigSpace(); // allocation happens here
@@ -114,7 +114,7 @@ namespace TempLat
 
     template <typename R> void operator+=(R &&g) { this->operator=(*this + g); }
 
-    void operator=(const ConfigView<T> &other)
+    void operator=(const ConfigView<NDim, T> &other)
     { // overwrite the default = operator.
       this->assign(other);
     }
@@ -146,7 +146,7 @@ namespace TempLat
         break;
       case SpaceStateInterface::SpaceType::Configuration:
       default:
-        AbstractField<T>::confirmSpace(newLayout, spaceType);
+        AbstractField<NDim, T>::confirmSpace(newLayout, spaceType);
         break;
       }
     }

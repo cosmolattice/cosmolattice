@@ -99,11 +99,16 @@ namespace TempLat
     }
 
     /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-    inline std::shared_ptr<MemoryToolBox> getToolBox()
+    inline auto getToolBox()
     {
-      auto a = GetToolBox::get(mR);
-      auto b = GetToolBox::get(mT);
-      return a.get() != NULL ? a : b;
+      using AT = decltype(GetToolBox::get(mR));
+      using BT = decltype(GetToolBox::get(mT));
+      if constexpr (!std::is_same_v<AT, std::nullptr_t>)
+        return GetToolBox::get(mR);
+      else if constexpr (!std::is_same_v<BT, std::nullptr_t>)
+        return GetToolBox::get(mT);
+      else
+        return nullptr;
     }
 
   protected:

@@ -16,5 +16,3 @@
 #include "TempLat/lattice/algebra/operators/asinh.h"
 #include "TempLat/lattice/algebra/operators/log.h"
 #include "TempLat/lattice/algebra/operators/exponential.h"
-
-

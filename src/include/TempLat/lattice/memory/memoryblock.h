@@ -23,7 +23,6 @@ namespace TempLat
   MakeException(MemoryBlockOutOfBoundsException);
 
 #ifndef NOKOKKOS
-
   /** \brief A class which holds a block of memory.
    * Feel free to pass it around and copy: the pointer
    * is itself kept inside a shared_ptr. Only when the
@@ -33,7 +32,7 @@ namespace TempLat
    *
    * Unit test: make test-memoryblock
    **/
-  template <typename T> class MemoryBlock
+  template <size_t NDim, typename T> class MemoryBlock
   {
   public:
     /* Put public methods here. These should change very little over time. */
@@ -122,7 +121,7 @@ namespace TempLat
 
 #else
 
-  template <typename T> class MemoryBlock
+  template <size_t NDim, typename T> class MemoryBlock
   {
   public:
     /* Put public methods here. These should change very little over time. */

@@ -7,10 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <typename T> inline void TempLat::MemoryManager<T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::MemoryManager<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-
-  auto toolBox = MemoryToolBox::makeShared(3, 192, 2);
+  auto toolBox = MemoryToolBox<NDim>::makeShared(192, 2);
 
   toolBox->mFFTLibrary.setVerbose();
 

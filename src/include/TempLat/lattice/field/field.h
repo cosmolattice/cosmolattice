@@ -27,30 +27,24 @@ namespace TempLat
    *
    * Unit test: make test-field
    **/
-
-  template <typename T> class Field : public ConfigView<T>
+  template <size_t NDim, typename T> class Field : public ConfigView<NDim, T>
   {
-    /** \brief A simple class which provides a get method for basic types.
-     * Field class
-     *
-     *
-     *
-     **/
   public:
-    using ConfigView<T>::mManager;
-
     /* Put public methods here. These should change very little over time. */
-    Field(std::string name, std::shared_ptr<MemoryToolBox> toolBox,
+
+    using ConfigView<NDim, T>::mManager;
+
+    Field(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
           LatticeParameters<T> pLatPar = LatticeParameters<T>())
-        : ConfigView<T>(name, toolBox, pLatPar), mFourierView(*this)
+        : ConfigView<NDim, T>(name, toolBox, pLatPar), mFourierView(*this)
     {
     }
 
-    Field() : ConfigView<T>("", nullptr, LatticeParameters<T>()), mFourierView(*this) {}
+    Field() : ConfigView<NDim, T>("", nullptr, LatticeParameters<T>()), mFourierView(*this) {}
 
-    template <typename R> void operator=(R &&g) { ConfigView<T>::operator=(g); }
+    template <typename R> void operator=(R &&g) { ConfigView<NDim, T>::operator=(g); }
 
-    void operator=(const Field<T> &other)
+    void operator=(const Field<NDim, T> &other)
     { // overwrite the default = operator.
       operator=(1 * other);
     }
@@ -61,33 +55,33 @@ namespace TempLat
       return mManager->getHostView();
     }
 
-    FourierView<T> &inFourierSpace()
+    FourierView<NDim, T> &inFourierSpace()
     {
       mManager->confirmFourierSpace();
       return mFourierView;
     }
 
     template <typename S>
-    inline typename std::enable_if<!std::is_same<Field<T>, S>::value, ZeroType>::type d(const S &other) const
+    inline typename std::enable_if<!std::is_same<Field<NDim, T>, S>::value, ZeroType>::type d(const S &other) const
     {
       return ZeroType();
     }
 
     /** \brief The real overload: is it a Field, then we must compare. */
-    inline ptrdiff_t d(const Field<T> &other) const { return *this == other ? 1 : 0; }
+    inline ptrdiff_t d(const Field<NDim, T> &other) const { return *this == other ? 1 : 0; }
 
-    friend bool operator==(const Field<T> &a, const Field<T> &b) { return a.mManager == b.mManager; }
+    friend bool operator==(const Field<NDim, T> &a, const Field<NDim, T> &b) { return a.mManager == b.mManager; }
 
     /* template <typename S>
      inline
-     typename std::enable_if<!std::is_same<Field<T>, S>::value, ZeroType>::type
+     typename std::enable_if<!std::is_same<Field<NDim, T>, S>::value, ZeroType>::type
      d(const S& other) const {
          return ZeroType();
      }
 
      template <typename S>
      inline
-     typename std::enable_if<std::is_same<Field<T>, S>::value, OneType>::type
+     typename std::enable_if<std::is_same<Field<NDim, T>, S>::value, OneType>::type
      d(const S& other) const {
          return OneType();
      }*/
@@ -96,7 +90,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    FourierView<T> mFourierView;
+    FourierView<NDim, T> mFourierView;
 
   public:
 #ifdef TEMPLATTEST

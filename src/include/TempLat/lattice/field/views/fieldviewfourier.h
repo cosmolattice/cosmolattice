@@ -31,11 +31,11 @@ namespace TempLat
    * Field class
    *
    **/
-  template <typename T> class FourierView : public AbstractField<T>
+  template <size_t NDim, typename T> class FourierView : public AbstractField<NDim, T>
   {
   public:
-    using AbstractField<T>::mManager;
-    using AbstractField<T>::mToolBox;
+    using AbstractField<NDim, T>::mManager;
+    using AbstractField<NDim, T>::mToolBox;
 
     template <typename R> FourierView &operator=(R &&g)
     {
@@ -81,7 +81,7 @@ namespace TempLat
         break;
       case SpaceStateInterface::SpaceType::Fourier:
       default:
-        AbstractField<T>::confirmSpace(newLayout, spaceType);
+        AbstractField<NDim, T>::confirmSpace(newLayout, spaceType);
         break;
       }
     }
@@ -136,10 +136,10 @@ namespace TempLat
       if (tmp) res = toSet;
     }
 
-    template <typename S> friend class Field;
+    template <size_t _NDim, typename S> friend class Field;
 
   private:
-    FourierView(const AbstractField<T> &f) : AbstractField<T>(f) {}
+    FourierView(const AbstractField<NDim, T> &f) : AbstractField<NDim, T>(f) {}
 
   public:
 #ifdef TEMPLATTEST
