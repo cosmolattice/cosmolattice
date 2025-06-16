@@ -42,31 +42,23 @@ namespace TempLat
     {
       mManager->setGhostsAreStale();
       mManager->confirmConfigSpace(); // allocation happens here
-      updateKokkosView();
     }
 
-    void updateKokkosView()
-    {
-#ifndef NOKOKKOS
-      mView = mManager->getView();
-#endif
-    }
-
-    template <typename G> class NDAssignment
-    {
-    public:
-      NDAssignment(Kokkos::View<T *, Kokkos::DefaultExecutionSpace> _mView, const G &_g) : mView(_mView), g(_g) {}
+    /**
+     * @brief This struct is just a helper to wrap a call operator with variadic parameters.
+     * We cannot do this directly in a lambda as variadic parameters do not play well with CUDA
+     *
+     * @tparam G The type of expression to evaluate.
+     */
+    template <typename G> struct NDAssignment {
+      NDAssignment(const KokkosNDView<NDim, T> &_mView, const G &_g) : mView(_mView), g(_g) {}
 
       template <typename... IDX> KOKKOS_FUNCTION void operator()(IDX... idx) const
       {
-        mView(idx...) = GetEval::getEval(g, idx...);
-        // This is a no-op, but it is needed to make sure that the lambda is
-        // instantiated correctly in the Kokkos parallel_for.
-        // The actual assignment happens in the assign() method.
+        // mView(idx...) = GetEval::getEval(g, idx...);
+        mView(idx...) = 1;
       }
-
-    private:
-      Kokkos::View<T *, Kokkos::DefaultExecutionSpace> mView;
+      KokkosNDView<NDim, T> mView;
       const G &g;
     };
 
@@ -94,7 +86,6 @@ namespace TempLat
       }
 
       onBeforeAssignment(g);
-      updateKokkosView();
 
 #ifndef NOKOKKOS
       Kokkos::Array<int64_t, NDim> start;
@@ -102,8 +93,21 @@ namespace TempLat
       for (size_t d = 0; d < NDim; ++d) {
         start[d] = padding[d][0] + localStarts[d];
         stop[d] = start[d] + localSizes[d];
+        std::cout << "start[" << d << "] = " << start[d] << ", stop[" << d << "] = " << stop[d] << std::endl;
       }
 
+      auto memorySizes = layout.getLocalSizes();
+      for (size_t d = 0; d < NDim; ++d) {
+        memorySizes[d] += padding[d][0] + padding[d][1]; // add padding to the local sizes
+      }
+
+      std::cout << "memory sizes: ";
+      for (const auto &size : memorySizes) {
+        std::cout << size << " ";
+      }
+      std::cout << std::endl;
+
+      auto mView = mManager->getNDView(memorySizes);
       Kokkos::parallel_for("ConfigViewAssign",                                     //
                            Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start, stop), //
                            NDAssignment<R>(mView, g)                               //
@@ -130,11 +134,12 @@ namespace TempLat
       this->assign(other);
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    T get(ptrdiff_t i) const
+    template <typename... IDX>
+      requires(NDim == sizeof...(IDX))
+    KOKKOS_FORCEINLINE_FUNCTION T get(IDX &&...idx) const
     {
 #ifndef NOKOKKOS
-      return mView(i);
+      return mView(idx...);
 #else
       return mManager->operator[](i);
 #endif
@@ -227,10 +232,6 @@ namespace TempLat
 
   private:
     bool mDisableFFTBlocking;
-
-#ifndef NOKOKKOS
-    Kokkos::View<T *, Kokkos::DefaultExecutionSpace> mView;
-#endif
 
   public:
 #ifdef TEMPLATTEST

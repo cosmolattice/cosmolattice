@@ -129,7 +129,7 @@ namespace TempLat
 #else
               globalSizes_INT.data(),
 #endif
-              (fftw_complex *)(double *)temp, (double *)temp,
+              (fftw_complex *)temp.data(), (double *)temp.data(),
 #ifndef NOMPI
               group.getBaseComm(),
 #endif

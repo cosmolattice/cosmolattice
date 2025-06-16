@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <Kokkos_Core_fwd.hpp>
 #include <cmath>
 #include <cstring>
 #include <vector>
@@ -49,9 +50,7 @@ namespace TempLat
     /** \brief state modify: zero out */
     void zero()
     {
-      std::cout << "zero=" << mSize << std::endl;
       if (size()) Kokkos::parallel_for(size(), KOKKOS_CLASS_LAMBDA(size_t i) { mData(i) = 0; });
-      std::cout << "zero=" << mSize << std::endl;
     }
 
     /** \brief access */
@@ -62,9 +61,54 @@ namespace TempLat
       return mData(i);
     }
 
-    auto getView() const { return mData; }
+    template <typename INT> auto getNDView(const std::array<INT, NDim> &localSizes) const
+    {
+#ifdef CHECKBOUNDS
+      size_t total_size = 1;
+      for (size_t i = 0; i < NDim; ++i)
+        total_size *= localSizes[i];
+      if (total_size > mSize)
+        throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds: total size ", total_size,
+                                              " is larger than allocated size ", mSize);
+#endif
+      return std::apply([&](auto &&...args) { return KokkosNDView<NDim, T>(mData.data(), args...); }, localSizes);
+    }
 
-    auto getHostView() const
+    template <typename INT> auto getNDHostView(const std::array<INT, NDim> &localSizes) const
+    {
+#ifdef CHECKBOUNDS
+      size_t total_size = 1;
+      for (size_t i = 0; i < NDim; ++i)
+        total_size *= localSizes[i];
+      if (total_size > mSize)
+        throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds: total size ", total_size,
+                                              " is larger than allocated size ", mSize);
+#endif
+      if (!mHostMirror.is_allocated()) mHostMirror = Kokkos::create_mirror_view(mData);
+      Kokkos::deep_copy(mHostMirror, mData);
+      return std::apply(
+          [&](auto &&...args) {
+            return KokkosNDView<NDim, T, Kokkos::DefaultHostExecutionSpace>(mHostMirror.data(), args...);
+          },
+          localSizes);
+    }
+
+    void pushHostView()
+    {
+      if (!mHostMirror.is_allocated())
+        throw MemoryBlockOutOfBoundsException(
+            "Cannot push host view: host mirror is not allocated. Call getRawHostView() or getNDHostView() first.");
+      Kokkos::deep_copy(mData, mHostMirror);
+    }
+
+    void deallocateHostView()
+    {
+      mHostMirror = typename Kokkos::View<T *, Kokkos::DefaultExecutionSpace>::host_mirror_type();
+    }
+
+    auto getRawView() const { return mData; }
+
+    auto getRawHostView() const
     {
       if (!mHostMirror.is_allocated()) mHostMirror = Kokkos::create_mirror_view(mData);
       Kokkos::deep_copy(mHostMirror, mData);

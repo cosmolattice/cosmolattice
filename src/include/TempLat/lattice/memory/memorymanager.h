@@ -42,21 +42,33 @@ namespace TempLat
       return 1;
     }
 
-    bool toolboxDefined() { return mToolBox == nullptr; }
+    template <typename INT> inline auto getNDView(const std::array<INT, NDim> &localSizes) const
+    {
+      return mBlock.getNDView(localSizes);
+    }
 
-    inline auto getView() const
+    template <typename INT> inline auto getNDHostView(const std::array<INT, NDim> &localSizes) const
+    {
+      return mBlock.getNDView(localSizes);
+    }
+
+    void pushHostView() { mBlock.pushHostView(); }
+
+    void deallocateHostView() { mBlock.deallocateHostView(); }
+
+    inline auto getRawView() const
     {
 #ifndef NOKOKKOS
-      return mBlock.getView();
+      return mBlock.getRawView();
 #else
       return [&](ptrdiff_t i) -> T & { return mBlock[i]; };
 #endif
     }
 
-    inline auto getHostView() const
+    inline auto getRawHostView() const
     {
 #ifndef NOKOKKOS
-      return mBlock.getHostView();
+      return mBlock.getRawHostView();
 #else
       return [&](ptrdiff_t i) -> T { return mBlock[i]; };
 #endif
