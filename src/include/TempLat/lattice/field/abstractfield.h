@@ -49,16 +49,17 @@ namespace TempLat
      * If same type, then return 1, otherwise return 0.
      */
 
-    virtual const JumpsHolder &getJumps() const = 0;
+    virtual const JumpsHolder<NDim> &getJumps() const = 0;
 
     // virtual void onBeforeAssignment() const = 0;
-    virtual inline void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType)
+    virtual inline void confirmSpace(const LayoutStruct<NDim> &newLayout,
+                                     const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       switch (spaceType) {
-      case SpaceStateInterface::SpaceType::Fourier:
+      case SpaceStateInterface<NDim>::SpaceType::Fourier:
         mManager->confirmFourierSpace();
         break;
-      case SpaceStateInterface::SpaceType::Configuration:
+      case SpaceStateInterface<NDim>::SpaceType::Configuration:
       default:
         mManager->confirmConfigSpace();
         break;
@@ -69,7 +70,7 @@ namespace TempLat
 
     ptrdiff_t confirmGhostsUpToDate() { return this->mManager->confirmGhostsUpToDate(); }
 
-    virtual Looper &getIt() = 0;
+    virtual Looper<NDim> &getIt() = 0;
 
     // Mostly for testing purpose
 

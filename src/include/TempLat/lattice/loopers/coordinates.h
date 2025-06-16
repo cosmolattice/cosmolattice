@@ -19,33 +19,90 @@ namespace TempLat
    *
    * Unit test: make test-coordinates
    **/
-  class Coordinates
+  template <size_t NDim> class Coordinates
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    Coordinates(const JumpsHolder &jumpsHolder, const LayoutStruct &layoutStruct)
-        : mLayouts(layoutStruct), mJumps(jumpsHolder), mIStart(0), jumps(mJumps.getJumpsInMemoryOrder()),
-          vect(jumps.size())
+    Coordinates(const JumpsHolder<NDim> &jumpsHolder, const LayoutStruct<NDim> &layoutStruct)
+        : mLayouts(layoutStruct), mJumps(jumpsHolder), mIStart(0), jumps(mJumps.getJumpsInMemoryOrder()), vect{}
     {
+      std::cout << mOffsets << std::endl;
       CoordinatesInitializer mCI(jumpsHolder, layoutStruct);
       mCI.initCoords(1, mOffsets, mIStart, mIEnd);
-      auto sizes = mJumps.getSizesInMemory();
+      // auto sizes = mJumps.getSizesInMemory();
       mOffsets.shrink_to_fit();
+      std::cout << mOffsets << std::endl;
     }
 
-    ptrdiff_t operator()(ptrdiff_t i) const { return mOffsets[i]; }
+    ptrdiff_t operator()(ptrdiff_t i) const
+    {
+      std::cout << mOffsets << std::endl;
+#ifdef CHECKBOUNDS
+      if (i < 0 || i >= (ptrdiff_t)mOffsets.size()) {
+        throw std::out_of_range("Coordinates::operator() out of bounds: " + std::to_string(i) + " not in [0, " +
+                                std::to_string(mOffsets.size()) + ")");
+      }
+#endif
+      std::cout << "Coordinates::operator() called with i = " << i << ", size is " << mOffsets.size() << std::endl;
+      return mOffsets[i];
+    }
 
-    ptrdiff_t &operator()(ptrdiff_t i) { return mOffsets[i]; }
+    ptrdiff_t &operator()(ptrdiff_t i)
+    {
+      std::cout << "mIStart: " << mIStart << ", mIEnd: " << mIEnd << std::endl;
+      std::cout << "jumps: ";
+      for (const auto &jump : jumps) {
+        std::cout << jump << " ";
+      }
+      std::cout << std::endl;
+      std::cout << "vect: ";
+      for (const auto &v : vect) {
+        std::cout << v << " ";
+      }
+      std::cout << std::endl;
+
+      std::cout << mOffsets << std::endl;
+#ifdef CHECKBOUNDS
+      if (i < 0 || i >= (ptrdiff_t)mOffsets.size()) {
+        throw std::out_of_range("Coordinates::operator() out of bounds: " + std::to_string(i) + " not in [0, " +
+                                std::to_string(mOffsets.size()) + ")");
+      }
+#endif
+      std::cout << "Coordinates::operator() called with i = " << i << ", size is " << mOffsets.size() << std::endl;
+      return mOffsets[i];
+    }
 
     std::vector<ptrdiff_t> getVec(ptrdiff_t i) { return getVecOffset(mOffsets[i]); }
 
-    std::vector<ptrdiff_t> getVecOffset(ptrdiff_t i) //(JBB 2023)
+    std::array<ptrdiff_t, NDim> getVecOffset(ptrdiff_t i) //(JBB 2023)
     {
+      std::cout << "mIStart: " << mIStart << ", mIEnd: " << mIEnd << std::endl;
+      std::cout << "jumps: ";
+      for (const auto &jump : jumps) {
+        std::cout << jump << " ";
+      }
+      std::cout << std::endl;
+      std::cout << "vect: ";
+      for (const auto &v : vect) {
+        std::cout << v << " ";
+      }
+      std::cout << std::endl;
+
       auto offset = i - mJumps.toOrigin();
-      for (size_t j = 0; j < jumps.size(); j++) {
+      for (size_t j = 0; j < NDim; j++) {
         mLayouts.putSpatialLocationFromMemoryIndexInto(offset / jumps[j], j, vect);
+        std::cout << "layout[" << j << "]: ";
+        for (size_t k = 0; k < NDim; k++) {
+          std::cout << vect[k] << " ";
+        }
+        std::cout << std::endl;
         offset = offset % jumps[j];
       }
+      std::cout << "getVecOffset: " << i << " -> ";
+      for (size_t j = 0; j < NDim; j++) {
+        std::cout << vect[j] << " ";
+      }
+      std::cout << std::endl;
       return vect;
     }
 
@@ -55,15 +112,15 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    LayoutStruct mLayouts;
-    JumpsHolder mJumps;
+    LayoutStruct<NDim> mLayouts;
+    JumpsHolder<NDim> mJumps;
 
     std::vector<ptrdiff_t> mOffsets;
     ptrdiff_t mIStart;
     ptrdiff_t mIEnd;
-    std::vector<ptrdiff_t> jumps, vect;
+    std::array<ptrdiff_t, NDim> jumps, vect;
 
-    friend class Looper;
+    template <size_t _NDim> friend class Looper;
 
   public:
 #ifdef TEMPLATTEST

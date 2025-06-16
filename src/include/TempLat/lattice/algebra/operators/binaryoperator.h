@@ -45,8 +45,9 @@ namespace TempLat
       GhostsHunter::apply(mT);
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType)
+    template <size_t NDim>
+    KOKKOS_FORCEINLINE_FUNCTION void confirmSpace(const LayoutStruct<NDim> &newLayout,
+                                                  const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
       ConfirmSpace::apply(mT, newLayout, spaceType);
@@ -55,11 +56,10 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR) + ConfirmGhosts::apply(mT); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    JumpsHolder getJumps() const
+    template <size_t NDim> KOKKOS_FORCEINLINE_FUNCTION JumpsHolder<NDim> getJumps() const
     {
-      auto a = GetJumps::apply(mR);
-      auto b = GetJumps::apply(mT);
+      auto a = GetJumps::apply<NDim>(mR);
+      auto b = GetJumps::apply<NDim>(mT);
       if (a != b && !(a.isEmpty() || b.isEmpty()))
         throw DifferentJumpsHolderException("Two different memory layouts in binary operator" /*, toString()*/);
       return a.isEmpty() ? b : a;

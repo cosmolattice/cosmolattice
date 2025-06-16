@@ -47,8 +47,9 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType)
+    template <size_t NDim>
+    KOKKOS_FORCEINLINE_FUNCTION void confirmSpace(const LayoutStruct<NDim> &newLayout,
+                                                  const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
     }
@@ -56,8 +57,10 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     void eval(ptrdiff_t i) { DoEval::eval(mR, i); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    JumpsHolder getJumps() { return GetJumps::apply(mR); }
+    template <size_t NDim> KOKKOS_FORCEINLINE_FUNCTION JumpsHolder<NDim> getJumps()
+    {
+      return GetJumps::apply<NDim>(mR);
+    }
 
     /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
     KOKKOS_FORCEINLINE_FUNCTION

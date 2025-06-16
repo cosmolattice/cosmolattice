@@ -81,8 +81,8 @@ namespace TempLat
 
     /** \brief given an actual setup, return the description of the subarray of the global problem that this process
      * holds. */
-    virtual FFTLayoutStruct computeLocalSizes(MPICartesianGroup group, std::vector<ptrdiff_t> nGridPoints,
-                                              bool forbidTransposition = false) = 0;
+    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGridPoints,
+                                                    bool forbidTransposition = false) = 0;
 
     /** \brief If your library has different levels of patience for the planning phase, set it here.
      */
@@ -93,12 +93,12 @@ namespace TempLat
      * by C++, either runtime (virtual) or compile time (template).
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
-                                                                          const FFTLayoutStruct &layout) = 0;
+                                                                          const FFTLayoutStruct<NDim> &layout) = 0;
     /** \brief Create fully working plans, which must self-destruct in the FFTPlanInterface's destructor. Use
      * shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
-                                                                            const FFTLayoutStruct &layout) = 0;
+                                                                            const FFTLayoutStruct<NDim> &layout) = 0;
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

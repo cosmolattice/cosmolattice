@@ -68,9 +68,10 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    FFTLibrarySelector(MPICartesianGroup group, std::vector<ptrdiff_t> nGridPoints, bool forbidTransposition = false)
-        : mGroup(group), mNDimensions(nGridPoints.size()), mNGridPoints(nGridPoints),
-          mLayout(mNGridPoints, true, false), madePlansFloat(false), madePlansDouble(false), verbose(false)
+    FFTLibrarySelector(MPICartesianGroup group, const std::array<ptrdiff_t, NDim> &nGridPoints,
+                       bool forbidTransposition = false)
+        : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints, true, false), madePlansFloat(false),
+          madePlansDouble(false), verbose(false)
     {
       /* here we take the decisions, although the decision to split the group has been made already. */
       ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
@@ -156,10 +157,9 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICartesianGroup mGroup;
-    ptrdiff_t mNDimensions;
-    std::vector<ptrdiff_t> mNGridPoints;
+    std::array<ptrdiff_t, NDim> mNGridPoints;
     std::shared_ptr<FFTLibraryInterface<NDim>> theLibrary;
-    FFTLayoutStruct mLayout;
+    FFTLayoutStruct<NDim> mLayout;
 
     bool madePlansFloat;
     bool madePlansDouble;

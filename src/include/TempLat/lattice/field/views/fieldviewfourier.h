@@ -57,7 +57,7 @@ namespace TempLat
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
       mManager->confirmFourierSpace();
 
-      ConfirmSpace::apply(g, mToolBox->mLayouts.getFourierSpaceLayout(), SpaceStateInterface::SpaceType::Fourier);
+      ConfirmSpace::apply(g, mToolBox->mLayouts.getFourierSpaceLayout(), SpaceStateInterface<NDim>::SpaceType::Fourier);
 
       GhostsHunter::apply(g);
     }
@@ -66,20 +66,20 @@ namespace TempLat
 
     complex<T> &getSet(ptrdiff_t i) { return mManager->as_complex(i); }
 
-    complex<T> &get(const Looper &itK) { return mManager->as_complex(itK()); }
+    complex<T> &get(const Looper<NDim> &itK) { return mManager->as_complex(itK()); }
 
-    const complex<T> &get(const Looper &itK) const { return mManager->as_complex(itK()); }
+    const complex<T> &get(const Looper<NDim> &itK) const { return mManager->as_complex(itK()); }
 
-    virtual const JumpsHolder &getJumps() const { return mToolBox->mLayouts.getFourierSpaceJumps(); }
+    virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getFourierSpaceJumps(); }
 
-    inline void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType)
+    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       switch (spaceType) {
-      case SpaceStateInterface::SpaceType::Configuration:
+      case SpaceStateInterface<NDim>::SpaceType::Configuration:
         throw FieldViewFourierWrongSpaceConfirmation("FieldViewFourier explicitly only can be used in Fourier space. "
                                                      "Do not transform to configuration space in place.");
         break;
-      case SpaceStateInterface::SpaceType::Fourier:
+      case SpaceStateInterface<NDim>::SpaceType::Fourier:
       default:
         AbstractField<NDim, T>::confirmSpace(newLayout, spaceType);
         break;
@@ -90,7 +90,7 @@ namespace TempLat
 
     const auto &getLayout() { return mToolBox->mLayouts.getFourierSpaceLayout(); }
 
-    virtual Looper &getIt() { return (Looper &)mToolBox->itP(); }
+    virtual Looper<NDim> &getIt() { return (Looper<NDim> &)mToolBox->itP(); }
 
     /** \brief Getting a single entry from an array. Variadic because the number of dimensions is variable.
      *  Use for tests only, never for actual integrations and iterations.

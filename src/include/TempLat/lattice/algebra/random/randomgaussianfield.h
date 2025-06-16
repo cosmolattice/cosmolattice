@@ -38,15 +38,16 @@ namespace TempLat
    * Unit test: make test-randomgaussianfield
    **/
   template <size_t NDim, typename T, bool Real, bool Unitary>
-  class RandomGaussianFieldHelper : public DimensionCountRecorder
+  class RandomGaussianFieldHelper : public DimensionCountRecorder<NDim>
   {
   public:
     /* Put public methods here. These should change very little over time. */
     RandomGaussianFieldHelper(std::string baseSeed, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
-        : DimensionCountRecorder(SpaceStateInterface::SpaceType::undefined), mBaseSeed(baseSeed), prng(baseSeed),
-          mToolBox(pToolBox)
+        : DimensionCountRecorder<NDim>(SpaceStateInterface<NDim>::SpaceType::undefined), mBaseSeed(baseSeed),
+          prng(baseSeed), mToolBox(pToolBox)
     {
-      confirmSpace(mToolBox->mLayouts.getFourierSpaceLayout(), SpaceStateInterface::SpaceType::Fourier);
+      DimensionCountRecorder<NDim>::confirmSpace(mToolBox->mLayouts.getFourierSpaceLayout(),
+                                                 SpaceStateInterface<NDim>::SpaceType::Fourier);
     }
 
     complex<T> get(const int &i)
@@ -59,7 +60,8 @@ namespace TempLat
 
       std::vector<ptrdiff_t> hermitianPartner;
 
-      auto hermitianType = getCurrentLayout().getHermitianPartners()->putHermitianPartner(coord, hermitianPartner);
+      auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners()->putHermitianPartner(
+          coord, hermitianPartner);
 
       updatePRNG(hermitianPartner);
 
@@ -90,27 +92,26 @@ namespace TempLat
      */
     void updatePRNG(const std::vector<ptrdiff_t> &coordinates)
     {
-      ptrdiff_t nd = getNDimensions();
-      bool needUpdate = (ptrdiff_t)rodPosition.size() < nd;
+      bool needUpdate = rodPosition.size() < NDim;
 
       /* can only monotonically grow. Are we going down? Restart from zero. */
-      needUpdate = needUpdate || rodPosition.back() > coordinates[nd - 1];
-      if (needUpdate) rodPosition.resize(nd);
-      for (ptrdiff_t i = 0; i < nd - 1; ++i) {
+      needUpdate = needUpdate || rodPosition.back() > coordinates[NDim - 1];
+      if (needUpdate) rodPosition.resize(NDim);
+      for (size_t i = 0; i < NDim - 1; ++i) {
         needUpdate = needUpdate || rodPosition[i] != coordinates[i];
         rodPosition[i] = coordinates[i];
       }
       if (needUpdate) {
         std::string rodPositionString = "";
-        for (ptrdiff_t i = 0; i < nd - 1; ++i) {
+        for (size_t i = 0; i < NDim - 1; ++i) {
           rodPositionString += std::to_string(rodPosition[i]) + ", ";
         }
         prng = Util::RandomGaussian(mBaseSeed + " " + rodPositionString);
         rodPosition.back() = 0;
       }
 
-      /* next, update the prng to be at one step before coordinates[nd - 1] */
-      ptrdiff_t goal = coordinates[nd - 1];
+      /* next, update the prng to be at one step before coordinates[NDim - 1] */
+      ptrdiff_t goal = coordinates[NDim - 1];
 
       if (goal < 0)
         throw RandomGaussianFieldNegativeFrequencyException(
@@ -120,7 +121,7 @@ namespace TempLat
       while (((ptrdiff_t)prng.getState() / 2) < goal)
         prng.getNextPair();
 
-      rodPosition.back() = coordinates[nd - 1];
+      rodPosition.back() = coordinates[NDim - 1];
     }
   };
 

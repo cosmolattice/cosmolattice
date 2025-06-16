@@ -25,6 +25,9 @@
 #include "TempLat/lattice/loopers/npartiteloopers/npartitecoordinates.h"
 #include "TempLat/lattice/loopers/npartiteloopers/npartitelooper.h"
 #include "TempLat/lattice/memory/verbositylevels.h"
+#include "TempLat/util/makeuniformarray.h"
+
+#include <cstddef>
 #include <sstream>
 #include <stdexcept>
 // #include "TempLat/lattice/algebra/shift.h"
@@ -60,13 +63,13 @@ namespace TempLat
     }
 
     /** \brief Constructor with default MPI layout and MPI_COMM_WORLD. */
-    MemoryToolBox(std::vector<ptrdiff_t> nGrid, ptrdiff_t ghostDepth, bool forbidTransposition = false)
+    MemoryToolBox(std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, bool forbidTransposition = false)
         : MemoryToolBox(FFTMPIDomainSplit<NDim>::makeMPIGroup(NDim), nGrid, ghostDepth, forbidTransposition)
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and MPI_COMM_WORLD. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(std::vector<ptrdiff_t> nGrid, ptrdiff_t ghostDepth,
-                                                                  bool forbidTransposition = false)
+    static inline std::shared_ptr<MemoryToolBox<NDim>>
+    makeShared(std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, bool forbidTransposition = false)
     {
       return std::make_shared<MemoryToolBox<NDim>>(nGrid, ghostDepth, forbidTransposition);
     }
@@ -85,13 +88,14 @@ namespace TempLat
     }
 
     /** \brief Constructor with default MPI layout and MPI_COMM_WORLD but custom number of threads. */
-    MemoryToolBox(std::vector<ptrdiff_t> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads, bool forbidTransposition)
+    MemoryToolBox(std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads, bool forbidTransposition)
         : MemoryToolBox(FFTMPIDomainSplit<NDim>::makeMPIGroup(NDim), nGrid, ghostDepth, nThreads, forbidTransposition)
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and MPI_COMM_WORLD. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(std::vector<ptrdiff_t> nGrid, ptrdiff_t ghostDepth,
-                                                                  ptrdiff_t nThreads, bool forbidTransposition = false)
+    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(std::array<ptrdiff_t, NDim> nGrid,
+                                                                  ptrdiff_t ghostDepth, ptrdiff_t nThreads,
+                                                                  bool forbidTransposition = false)
     {
       return std::make_shared<MemoryToolBox<NDim>>(nGrid, ghostDepth, nThreads, forbidTransposition);
     }
@@ -109,13 +113,14 @@ namespace TempLat
     }
 
     /** \brief Constructor with default MPI layout and but custom MPI_Comm. */
-    MemoryToolBox(MPICommReference comm, std::vector<ptrdiff_t> nGrid, ptrdiff_t ghostDepth,
+    MemoryToolBox(MPICommReference comm, std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth,
                   bool forbidTransposition = false)
         : MemoryToolBox(FFTMPIDomainSplit<NDim>::makeMPIGroup(comm, NDim), nGrid, ghostDepth, forbidTransposition)
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and but custom MPI_Comm. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(MPICommReference comm, std::vector<ptrdiff_t> nGrid,
+    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(MPICommReference comm,
+                                                                  std::array<ptrdiff_t, NDim> nGrid,
                                                                   ptrdiff_t ghostDepth,
                                                                   bool forbidTransposition = false)
     {
@@ -136,13 +141,14 @@ namespace TempLat
     }
 
     /** \brief Constructor with user chosen MPI layout. */
-    MemoryToolBox(MPICartesianGroup group, std::vector<ptrdiff_t> nGrid, ptrdiff_t ghostDepth,
+    MemoryToolBox(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth,
                   bool forbidTransposition = false)
         : MemoryToolBox(group, nGrid, ghostDepth, 1, forbidTransposition)
     {
     }
     /** \brief Shared-pointer constructor with user chosen MPI layout. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(MPICartesianGroup group, std::vector<ptrdiff_t> nGrid,
+    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(MPICartesianGroup group,
+                                                                  std::array<ptrdiff_t, NDim> nGrid,
                                                                   ptrdiff_t ghostDepth,
                                                                   bool forbidTransposition = false)
     {
@@ -152,11 +158,12 @@ namespace TempLat
     /** \brief Constructor with user chosen MPI layout and number of threads. */
     MemoryToolBox(MPICartesianGroup group, ptrdiff_t nGridPoints, ptrdiff_t ghostDepth, ptrdiff_t nThreads,
                   bool forbidTransposition = false)
-        : MemoryToolBox(group, std::vector<ptrdiff_t>(NDim, nGridPoints), ghostDepth, nThreads, forbidTransposition)
+        : MemoryToolBox(group, makeUniformArray<ptrdiff_t, NDim>(nGridPoints), ghostDepth, nThreads,
+                        forbidTransposition)
     {
     }
 
-    MemoryToolBox(MPICartesianGroup group, std::vector<ptrdiff_t> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads,
+    MemoryToolBox(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads,
                   bool forbidTransposition = false)
         : mGroup(group),
           // mNGridPoints(nGridPoints),
@@ -165,16 +172,18 @@ namespace TempLat
           mGhostBuster_toFFTConfig(mLayouts.getConfigSpaceJumps(), mLayouts.getFFTConfigSpaceJumps()),
           mGhostBuster_toConfig(mLayouts.getFFTConfigSpaceJumps(), mLayouts.getConfigSpaceJumps()),
           mGhostUpdater(group, mLayouts.getConfigSpaceJumps()),
-          mConfCoord(std::make_shared<Coordinates>(mLayouts.getConfigSpaceJumps(), mLayouts.getConfigSpaceLayout())),
+          mConfCoord(
+              std::make_shared<Coordinates<NDim>>(mLayouts.getConfigSpaceJumps(), mLayouts.getConfigSpaceLayout())),
           mFourierCoord(
-              std::make_shared<Coordinates>(mLayouts.getFourierSpaceJumps(), mLayouts.getFourierSpaceLayout())),
+              std::make_shared<Coordinates<NDim>>(mLayouts.getFourierSpaceJumps(), mLayouts.getFourierSpaceLayout())),
           mCSpaceIt(mConfCoord), mFSpaceIt(mFourierCoord) //,
     //   mCSpaceItThreaded(mConfCoord,nThreads)
     {
-      if (nGrid.size() != NDim)
-        throw(InconsistentDimensions("Abort: The number of dimensions in the lattice (" + std::to_string(nGrid.size()) +
-                                     ") does not match the number of dimensions in the toolbox (" +
-                                     std::to_string(NDim) + ")."));
+      // if (nGrid.size() != NDim)
+      //   throw(InconsistentDimensions("Abort: The number of dimensions in the lattice (" +
+      //   std::to_string(nGrid.size()) +
+      //                                ") does not match the number of dimensions in the toolbox (" +
+      //                                std::to_string(NDim) + ")."));
       checkParallelConsistency();
       initNNNeighbours();
 #ifndef TEMPLATTEST
@@ -233,16 +242,16 @@ namespace TempLat
 
     /* exceptionally, let everyone access private members of MemoryToolBox. */
 
-    Looper &itX() { return mCSpaceIt; }
+    Looper<NDim> &itX() { return mCSpaceIt; }
 
-    Looper &itP() { return mFSpaceIt; }
+    Looper<NDim> &itP() { return mFSpaceIt; }
 
-    NPartiteLooper &itXNPart() { return mCSpaceItNPartite; }
+    NPartiteLooper<NDim> &itXNPart() { return mCSpaceItNPartite; }
 
-    NPartiteLooper &itPNPart() { return mFSpaceItNPartite; }
+    NPartiteLooper<NDim> &itPNPart() { return mFSpaceItNPartite; }
 
-    std::vector<ptrdiff_t> getCoordConfiguration(ptrdiff_t i) { return mConfCoord->getVecOffset(i); }
-    std::vector<ptrdiff_t> getCoordFourier(ptrdiff_t i) { return mFourierCoord->getVecOffset(i); }
+    std::array<ptrdiff_t, NDim> getCoordConfiguration(ptrdiff_t i) { return mConfCoord->getVecOffset(i); }
+    std::array<ptrdiff_t, NDim> getCoordFourier(ptrdiff_t i) { return mFourierCoord->getVecOffset(i); }
 
     auto getCoord() { return mConfCoord; }
 
@@ -267,12 +276,12 @@ namespace TempLat
 
     ptrdiff_t getCoordinatesShiftByOne(ptrdiff_t i)
     {
-      return i > 0 ? (*mCoordinatesNNNeighbourShifts)[i - 1] : (*mCoordinatesNNNeighbourShifts)[-i - 1 + NDim];
+      return i > 0 ? (mCoordinatesNNNeighbourShifts)[i - 1] : (mCoordinatesNNNeighbourShifts)[-i - 1 + NDim];
     }
 
-    ptrdiff_t computeCoordinatesShifts(const std::vector<ptrdiff_t> &shifts)
+    ptrdiff_t computeCoordinatesShifts(const std::array<ptrdiff_t, NDim> &shifts)
     {
-      ShiftedCoordinatesManager mShifts(shifts);
+      ShiftedCoordinatesManager<NDim> mShifts(shifts);
 
       mShifts.setJumps(mLayouts.getConfigSpaceJumps());
       return mShifts.memoryJump();
@@ -306,28 +315,28 @@ namespace TempLat
     MPICartesianGroup mGroup;
     static constexpr ptrdiff_t mNDimensions = NDim; // Dimensions of the problem
     // ptrdiff_t mNGridPoints;
-    std::vector<ptrdiff_t> mNGridPointsVec; // Lattice size in each dimension
+    std::array<ptrdiff_t, NDim> mNGridPointsVec; // Lattice size in each dimension
     ptrdiff_t mGhostDepth;
     FFTLibrarySelector<NDim> mFFTLibrary;
-    TripleStateLayouts mLayouts;
+    TripleStateLayouts<NDim> mLayouts;
     FFTNormalization<NDim> mFFTNormalization;
-    GhostBuster mGhostBuster_toFFTConfig;
-    GhostBuster mGhostBuster_toConfig;
-    GhostUpdater mGhostUpdater;
+    GhostBuster<NDim> mGhostBuster_toFFTConfig;
+    GhostBuster<NDim> mGhostBuster_toConfig;
+    GhostUpdater<NDim> mGhostUpdater;
 
-    std::shared_ptr<Coordinates> mConfCoord;
-    std::shared_ptr<Coordinates> mFourierCoord;
+    std::shared_ptr<Coordinates<NDim>> mConfCoord;
+    std::shared_ptr<Coordinates<NDim>> mFourierCoord;
 
-    std::shared_ptr<NPartiteCoordinates> mConfCoordNPartite;
-    std::shared_ptr<NPartiteCoordinates> mFourierCoordNPartite;
+    std::shared_ptr<NPartiteCoordinates<NDim>> mConfCoordNPartite;
+    std::shared_ptr<NPartiteCoordinates<NDim>> mFourierCoordNPartite;
 
-    std::shared_ptr<std::vector<ptrdiff_t>> mCoordinatesNNNeighbourShifts;
+    std::array<ptrdiff_t, NDim> mCoordinatesNNNeighbourShifts;
 
-    Looper mCSpaceIt;
-    Looper mFSpaceIt;
+    Looper<NDim> mCSpaceIt;
+    Looper<NDim> mFSpaceIt;
 
-    NPartiteLooper mCSpaceItNPartite;
-    NPartiteLooper mFSpaceItNPartite;
+    NPartiteLooper<NDim> mCSpaceItNPartite;
+    NPartiteLooper<NDim> mFSpaceItNPartite;
     //  ThreadedLooper mCSpaceItThreaded;
 
     VerbosityLevels verbosity;
@@ -335,13 +344,12 @@ namespace TempLat
   private:
     void initNNNeighbours()
     {
-      mCoordinatesNNNeighbourShifts = std::make_shared<std::vector<ptrdiff_t>>(2 * NDim);
-      for (ptrdiff_t i = 0; i < NDim; ++i) {
-        std::vector<ptrdiff_t> shifts(NDim, (ptrdiff_t)0);
+      for (size_t i = 0; i < NDim; ++i) {
+        std::array<ptrdiff_t, NDim> shifts{};
         shifts[i] = 1;
-        (*mCoordinatesNNNeighbourShifts)[i] = computeCoordinatesShifts(shifts);
+        (mCoordinatesNNNeighbourShifts)[i] = computeCoordinatesShifts(shifts);
         shifts[i] = -1;
-        (*mCoordinatesNNNeighbourShifts)[i + NDim] = computeCoordinatesShifts(shifts);
+        (mCoordinatesNNNeighbourShifts)[i + NDim] = computeCoordinatesShifts(shifts);
       }
     }
 

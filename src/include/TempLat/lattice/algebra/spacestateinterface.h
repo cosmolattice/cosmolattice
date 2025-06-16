@@ -23,7 +23,7 @@ namespace TempLat
    *
    * Unit test: make test-spacestateinterface
    **/
-  class SpaceStateInterface
+  template <size_t NDim> class SpaceStateInterface
   {
   public:
     /* Put public methods here. These should change very little over time. */
@@ -33,7 +33,7 @@ namespace TempLat
 
     /** \brief A preparation function: pass this call to all the members in the tree / chain, make sure everyone is in
      * configuration or fourier space, and everyone has the actual same layout. */
-    virtual void confirmSpace(const LayoutStruct &newLayout, const SpaceType &spaceType) = 0;
+    virtual void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceType &spaceType) = 0;
 
     /** \brief A preparation function: pass this call to all the members in the tree / chain.
      *   We only want to update ghost cells on those fields where this expression tree actually uses
@@ -49,14 +49,14 @@ namespace TempLat
      *  Also, this is the perfect moment for verifying that all elements in
      *  the tree are of the same layout (or a constant).
      */
-    virtual inline JumpsHolder getConfigSpaceJumps() = 0;
+    virtual inline JumpsHolder<NDim> getConfigSpaceJumps() = 0;
 
     /** \brief In order to take spatial derivatives, the GetterShifted needs to know the jumps.
      *  This way the user has the most minimal need-to-know interface for spatial derivatives.
      *  Also, this is the perfect moment for verifying that all elements in
      *  the tree are of the same layout (or a constant).
      */
-    virtual inline JumpsHolder getFourierSpaceJumps() = 0;
+    virtual inline JumpsHolder<NDim> getFourierSpaceJumps() = 0;
 
     /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
     virtual inline std::shared_ptr<MemoryToolBox<3>> getToolBox() = 0;
@@ -101,9 +101,10 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-  inline std::ostream &operator<<(std::ostream &ostream, SpaceStateInterface::SpaceType st)
+  template <size_t NDim>
+  inline std::ostream &operator<<(std::ostream &ostream, typename SpaceStateInterface<NDim>::SpaceType st)
   {
-    ostream << "SpaceType::" + SpaceStateInterface::SpaceTypeString(st);
+    ostream << "SpaceType::" + SpaceStateInterface<NDim>::SpaceTypeString(st);
     return ostream;
   }
 

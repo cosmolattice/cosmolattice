@@ -17,11 +17,11 @@
 
 #include "TempLat/parallel/kokkos/kokkos.h"
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Macros.hpp>
 #include <sys/types.h>
 
 namespace TempLat
 {
-
   MakeException(FieldViewConfigWrongSpaceConfirmation);
 
   /** \brief A view on the field which, when interacted with, assures every time again that things are in
@@ -30,15 +30,8 @@ namespace TempLat
    *
    * Unit test: make test-fieldviewconfig
    **/
-
   template <size_t NDim, typename T> class ConfigView : public AbstractField<NDim, T>
   {
-    /** \brief A simple class which provides a get method for basic types.
-     * Field class
-     *
-     *
-     *
-     **/
   public:
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
@@ -58,6 +51,24 @@ namespace TempLat
       mView = mManager->getView();
 #endif
     }
+
+    template <typename G> class NDAssignment
+    {
+    public:
+      NDAssignment(Kokkos::View<T *, Kokkos::DefaultExecutionSpace> _mView, const G &_g) : mView(_mView), g(_g) {}
+
+      template <typename... IDX> KOKKOS_FUNCTION void operator()(IDX... idx) const
+      {
+        mView(idx...) = GetEval::getEval(g, idx...);
+        // This is a no-op, but it is needed to make sure that the lambda is
+        // instantiated correctly in the Kokkos parallel_for.
+        // The actual assignment happens in the assign() method.
+      }
+
+    private:
+      Kokkos::View<T *, Kokkos::DefaultExecutionSpace> mView;
+      const G &g;
+    };
 
     template <typename R> void assign(R &&g)
     {
@@ -82,23 +93,23 @@ namespace TempLat
         std::cout << std::endl;
       }
 
-      auto it = mToolBox->itX();
       onBeforeAssignment(g);
       updateKokkosView();
 
 #ifndef NOKOKKOS
-      int begin = -1;
-      int size = 0;
-      for (it.begin(); it.end(); ++(it)) {
-        if (begin < 0) begin = it();
-        size++;
+      Kokkos::Array<int64_t, NDim> start;
+      Kokkos::Array<int64_t, NDim> stop;
+      for (size_t d = 0; d < NDim; ++d) {
+        start[d] = padding[d][0] + localStarts[d];
+        stop[d] = start[d] + localSizes[d];
       }
-      Kokkos::parallel_for(
-          "ConfigViewAssign", Kokkos::RangePolicy<>(0, size), KOKKOS_CLASS_LAMBDA(const size_t &idx) {
-            DoEval::eval(g, idx);
-            mView(begin + idx) = GetEval::getEval(g, begin + idx);
-          });
+
+      Kokkos::parallel_for("ConfigViewAssign",                                     //
+                           Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start, stop), //
+                           NDAssignment<R>(mView, g)                               //
+      );
 #else
+      auto it = mToolBox->itX();
       int i = 0;
       for (it.begin(); it.end(); ++(it)) {
         i = it();
@@ -131,12 +142,12 @@ namespace TempLat
 
     T &getSet(ptrdiff_t i) { return mManager->operator[](i); }
 
-    virtual const JumpsHolder &getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
+    virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
 
-    inline void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType)
+    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       switch (spaceType) {
-      case SpaceStateInterface::SpaceType::Fourier:
+      case SpaceStateInterface<NDim>::SpaceType::Fourier:
         if (!mDisableFFTBlocking)
           throw FieldViewConfigWrongSpaceConfirmation(
               "FieldViewConfig explicitly only can be used in configuration space. Do not transform to Fourier space "
@@ -144,7 +155,7 @@ namespace TempLat
               "integration data, you can call Field<T>::setDisableFFTBlocking() to disable this block, and enable "
               "going from configuration to Fourier space.");
         break;
-      case SpaceStateInterface::SpaceType::Configuration:
+      case SpaceStateInterface<NDim>::SpaceType::Configuration:
       default:
         AbstractField<NDim, T>::confirmSpace(newLayout, spaceType);
         break;
@@ -153,13 +164,13 @@ namespace TempLat
 
     const auto &getLayout() { return mToolBox->mLayouts.getConfigSpaceLayout(); }
 
-    virtual Looper &getIt() { return (Looper &)mToolBox->itX(); }
+    virtual Looper<NDim> &getIt() { return (Looper<NDim> &)mToolBox->itX(); }
 
     void updateGhosts() { this->mManager->updateGhosts(); }
 
-    T &get(const Looper &itX) { return mManager->operator[](itX()); }
+    T &get(const Looper<NDim> &itX) { return mManager->operator[](itX()); }
 
-    T get(const Looper &itX) const { return mManager->operator[](itX()); }
+    T get(const Looper<NDim> &itX) const { return mManager->operator[](itX()); }
 
     std::string toString() const { return mManager->getName() + "(x)"; }
 
@@ -195,7 +206,8 @@ namespace TempLat
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
       mManager->confirmConfigSpace();
 
-      ConfirmSpace::apply(g, mToolBox->mLayouts.getConfigSpaceLayout(), SpaceStateInterface::SpaceType::Configuration);
+      ConfirmSpace::apply(g, mToolBox->mLayouts.getConfigSpaceLayout(),
+                          SpaceStateInterface<NDim>::SpaceType::Configuration);
 
       GhostsHunter::apply(g);
     }

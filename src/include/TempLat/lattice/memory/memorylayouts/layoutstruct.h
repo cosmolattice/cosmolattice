@@ -29,15 +29,15 @@ namespace TempLat
    * Unit test: make test-layoutstruct
    **/
 
-  /** \brief The result holder for computeLocalSizes. It is your responsability to set all values. */
-  struct LayoutStruct {
-    LayoutStruct(std::vector<ptrdiff_t> initNGrid)
-        : mTransposed(initNGrid), mHermitianPartners(std::make_shared<HermitianPartners>(initNGrid))
+  /** \brief The result holder for computeLocalSizes. It is your responsibility to set all values. */
+  template <size_t NDim> struct LayoutStruct {
+    LayoutStruct(std::array<ptrdiff_t, NDim> initNGrid)
+        : mTransposed(initNGrid), mHermitianPartners(std::make_shared<HermitianPartners<NDim>>(initNGrid))
     {
     }
 
     /** \brief An almost constructor: return a new instance which has a default global FFT layout */
-    static LayoutStruct createGlobalFFTLayout(std::vector<ptrdiff_t> initNGrid)
+    static LayoutStruct<NDim> createGlobalFFTLayout(std::array<ptrdiff_t, NDim> initNGrid)
     {
       LayoutStruct result(initNGrid);
       result.getGlobal().getGlobalSizes().back() = result.getGlobal().getGlobalSizes().back() / 2 + 1;
@@ -45,7 +45,7 @@ namespace TempLat
       return result;
     }
 
-    template <typename T = double> T getMaxRadius() const { return getGlobal().getMaxRadius<T>(); }
+    template <typename T = double> T getMaxRadius() const { return getGlobal().template getMaxRadius<T>(); }
 
     bool isTransposed() const { return getTransposed().isTransposed(); }
 
@@ -53,7 +53,7 @@ namespace TempLat
      *  in the target memory. No bounds checking!
      */
     void putSpatialLocationFromMemoryIndexInto(ptrdiff_t index, ptrdiff_t memoryDimension,
-                                               std::vector<ptrdiff_t> &target) const
+                                               std::array<ptrdiff_t, NDim> &target) const
     {
       auto map = getTransposed().getSpatialLocationFromMemoryIndex(index, memoryDimension);
       target[map.atIndex] = map.withValue;
@@ -64,32 +64,32 @@ namespace TempLat
      *  transposed, ready to be applied to `JumpsHolder::getJumpsInMemoryOrder()`.
      */
     void putMemoryIndexFromSpatialLocationInto(ptrdiff_t position, ptrdiff_t spatialDimension,
-                                               std::vector<ptrdiff_t> &target) const
+                                               std::array<ptrdiff_t, NDim> &target) const
     {
       auto map = getTransposed().getMemoryIndexFromSpatialLocation(position, spatialDimension);
       target[map.atIndex] = map.withValue;
     }
 
-    const std::vector<ptrdiff_t> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
+    const std::array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
 
-    template <typename T = ptrdiff_t> void setLocalSizes(const std::vector<T> &input)
+    template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input)
     {
       getTransposed().setLocalSizes(input);
     }
 
-    std::vector<ptrdiff_t> &getLocalSizes() { return getLocal().getLocalSizes(); }
-    const std::vector<ptrdiff_t> &getLocalSizes() const { return getLocal().getLocalSizes(); }
+    std::array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
+    const std::array<ptrdiff_t, NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
 
-    const std::vector<ptrdiff_t> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
+    const std::array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
 
-    template <typename T = ptrdiff_t> void setLocalStarts(const std::vector<T> &input)
+    template <typename T = ptrdiff_t> void setLocalStarts(const std::array<T, NDim> &input)
     {
       getLocal().setLocalStarts(input);
     }
-    std::vector<ptrdiff_t> &getLocalStarts() { return getLocal().getLocalStarts(); }
-    const std::vector<ptrdiff_t> &getLocalStarts() const { return getLocal().getLocalStarts(); }
+    std::array<ptrdiff_t, NDim> &getLocalStarts() { return getLocal().getLocalStarts(); }
+    const std::array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
 
-    template <typename T = ptrdiff_t> void setTranspositionMap_memoryToGlobalSpace(const std::vector<T> &input)
+    template <typename T = ptrdiff_t> void setTranspositionMap_memoryToGlobalSpace(const std::array<T, NDim> &input)
     {
       getTransposed().setTranspositionMap_memoryToGlobalSpace(input);
     }
@@ -98,7 +98,10 @@ namespace TempLat
       return getTransposed().getTranspositionMap_memoryToGlobalSpace();
     }
 
-    void setHermitianPartners(std::shared_ptr<HermitianPartners> newInstance) { mHermitianPartners = newInstance; }
+    void setHermitianPartners(std::shared_ptr<HermitianPartners<NDim>> newInstance)
+    {
+      mHermitianPartners = newInstance;
+    }
     const auto &getHermitianPartners() const { return mHermitianPartners; }
 
     friend bool operator==(const LayoutStruct &a, const LayoutStruct &b)
@@ -120,18 +123,18 @@ namespace TempLat
     //        friend class TripleStateLayouts;
 
   private:
-    LayoutStructLocalTransposed mTransposed;
+    LayoutStructLocalTransposed<NDim> mTransposed;
     /** \brief signed wavenumber and coordinate x = index > n/2 ? index - n : index. Need to provide this n/2 for each
      * dimensions. */
-    std::shared_ptr<HermitianPartners> mHermitianPartners;
+    std::shared_ptr<HermitianPartners<NDim>> mHermitianPartners;
 
-    inline LayoutStructLocalTransposed &getTransposed() { return mTransposed; }
-    inline LayoutStructLocal &getLocal() { return getTransposed().getLocal(); }
-    inline LayoutStructGlobal &getGlobal() { return getLocal().getGlobal(); }
+    inline LayoutStructLocalTransposed<NDim> &getTransposed() { return mTransposed; }
+    inline LayoutStructLocal<NDim> &getLocal() { return getTransposed().getLocal(); }
+    inline LayoutStructGlobal<NDim> &getGlobal() { return getLocal().getGlobal(); }
 
-    inline const LayoutStructLocalTransposed &getTransposed() const { return mTransposed; }
-    inline const LayoutStructLocal &getLocal() const { return getTransposed().getLocal(); }
-    inline const LayoutStructGlobal &getGlobal() const { return getLocal().getGlobal(); }
+    inline const LayoutStructLocalTransposed<NDim> &getTransposed() const { return mTransposed; }
+    inline const LayoutStructLocal<NDim> &getLocal() const { return getTransposed().getLocal(); }
+    inline const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
 
   public:
 #ifdef TEMPLATTEST

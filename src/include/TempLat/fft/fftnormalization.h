@@ -28,7 +28,7 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    FFTNormalization(FFTLayoutStruct layout)
+    FFTNormalization(FFTLayoutStruct<NDim> layout)
         : mLayout(layout), mN(1), mNumberOfDoublesToChange(2), mUnrollLevel(2), mNorm(1), mType(0)
     {
       for (auto &&it : mLayout.configurationSpace.getGlobalSizes())
@@ -94,7 +94,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    FFTLayoutStruct mLayout;
+    FFTLayoutStruct<NDim> mLayout;
     ptrdiff_t mN;
     ptrdiff_t mNumberOfDoublesToChange;
     ptrdiff_t mUnrollLevel;

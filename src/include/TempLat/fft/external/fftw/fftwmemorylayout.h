@@ -39,18 +39,17 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     FFTWMemoryLayout() {}
 
-    virtual FFTLayoutStruct computeLocalSizes(MPICartesianGroup group, std::vector<ptrdiff_t> nGridPoints,
-                                              bool forbidTransposition = false)
+    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGridPoints,
+                                                    bool forbidTransposition = false)
     {
-      FFTLayoutStruct result(nGridPoints, true, false);
+      FFTLayoutStruct<NDim> result(nGridPoints, true, false);
       /* default: everything is local. */
-      ptrdiff_t nDimensions = nGridPoints.size();
 
-      std::vector<ptrdiff_t> confLocalSizes(nGridPoints);
-      std::vector<ptrdiff_t> confLocalStarts(nDimensions, 0);
-      std::vector<ptrdiff_t> fourLocalSizes(nGridPoints);
-      std::vector<ptrdiff_t> fourLocalStarts(nDimensions, 0);
-      std::vector<ptrdiff_t> fourTransposition(nDimensions);
+      std::array<ptrdiff_t, NDim> confLocalSizes(nGridPoints);
+      std::array<ptrdiff_t, NDim> confLocalStarts{};
+      std::array<ptrdiff_t, NDim> fourLocalSizes(nGridPoints);
+      std::array<ptrdiff_t, NDim> fourLocalStarts{};
+      std::array<ptrdiff_t, NDim> fourTransposition{};
       std::iota(fourTransposition.begin(), fourTransposition.end(), 0);
 
       fourLocalSizes.back() = fourLocalSizes.back() / 2 + 1;
@@ -100,7 +99,7 @@ namespace TempLat
                                                               addExternalMemoryRequest expects units of real numbers. */
 
       result.fourierSpace.setHermitianPartners(
-          FFTWHermitianPartners::create(result.configurationSpace.getGlobalSizes()));
+          FFTWHermitianPartners<NDim>::create(result.configurationSpace.getGlobalSizes()));
 
       return result;
     };

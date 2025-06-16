@@ -7,17 +7,19 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::FFTWMemoryLayout<NDim>::Test(TempLat::TDDAssertion &tdd)
+#include <cstddef>
+template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(TempLat::TDDAssertion &tdd)
 {
 
   MPICommReference world;
 
   //    FFTWMemoryLayout mem; // cannot do this. Need the descending class for that.
-  FFTWInterface<NDim> mem;
 
-  auto &&computeExpectation = [&](const std::vector<ptrdiff_t> &nGrid) {
+  auto &&computeExpectation = [&](const auto &nGrid) {
+    constexpr size_t nDim = nGrid.size();
+    FFTWInterface<nDim> mem;
+
     FFTLayoutStruct expected(nGrid, true, false);
-    ptrdiff_t nDim = nGrid.size();
     std::vector<ptrdiff_t> confLocalSizes(nGrid);
     std::vector<ptrdiff_t> confLocalStarts(nDim, 0);
     std::vector<ptrdiff_t> fourLocalSizes(nGrid);
@@ -28,7 +30,7 @@ template <size_t NDim> inline void TempLat::FFTWMemoryLayout<NDim>::Test(TempLat
     fourLocalSizes.back() = fourLocalSizes.back() / 2 + 1;
     confLocalSizes.back() = 2 * fourLocalSizes.back();
 
-    expected.fourierSpace = LayoutStruct::createGlobalFFTLayout(nGrid);
+    expected.fourierSpace = LayoutStruct<nDim>::createGlobalFFTLayout(nGrid);
 
     confLocalSizes.back() = 2 * expected.fourierSpace.getLocalSizes().back();
 
@@ -62,12 +64,13 @@ template <size_t NDim> inline void TempLat::FFTWMemoryLayout<NDim>::Test(TempLat
     tdd.verify(test_Only_Works_For_World_Size_Which_Is_A_Factor_Of_128);
   } else {
 
-    auto &&doSingleTest = [&](std::vector<ptrdiff_t> ng) {
-      ptrdiff_t nd = ng.size();
-      std::vector<int> decompose(nd, 1);
+    auto &&doSingleTest = [&](const auto &nGrid) {
+      constexpr size_t nDim = nGrid.size();
+      std::vector<int> decompose(nDim, 1);
       decompose[0] = world.size();
-      auto fromLibrary = mem.computeLocalSizes(MPICartesianGroup(nd, decompose), ng);
-      auto expected = computeExpectation(ng);
+      FFTWInterface<nDim> mem;
+      auto fromLibrary = mem.computeLocalSizes(MPICartesianGroup(nDim, decompose), nGrid);
+      auto expected = computeExpectation(nGrid);
       bool result = fromLibrary == expected;
       tdd.verify(fromLibrary == expected);
       if (!result) {

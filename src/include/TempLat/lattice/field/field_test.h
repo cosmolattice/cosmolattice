@@ -35,8 +35,8 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   // auto r = x.getNorm();
 
   chi = 3; // pow(r, 3);
-  phi = 3;
-  psi = 3;
+  phi = 4;
+  psi = 5;
 
   {
     auto view = chi.directView();

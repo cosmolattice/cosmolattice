@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::TripleStateLayouts::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::TripleStateLayouts<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
 
   FFTLibrarySelector<4> theLibrary(MPICartesianGroup(4, {{MPICommReference().size(), 1, 1, 1}}), {256, 256, 256, 256});

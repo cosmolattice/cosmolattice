@@ -24,8 +24,7 @@ namespace TempLat
    *
    * Unit test: make test-jumpsholder
    **/
-
-  class JumpsHolder
+  template <size_t NDim> class JumpsHolder
   {
   public:
     /* Put public methods here. These should change very little over time. */
@@ -40,57 +39,49 @@ namespace TempLat
      *  \param atomSize The last dimension by default has size one (e.g. one double, one float). But you may set it to
      * for example 2, for complex pairs.
      */
-    JumpsHolder(LayoutStruct layout, std::vector<std::array<ptrdiff_t, 2u>> padding, ptrdiff_t atomSize = 1)
+    JumpsHolder(LayoutStruct<NDim> layout, std::array<std::array<ptrdiff_t, 2u>, NDim> padding, ptrdiff_t atomSize = 1)
         : mLayout(layout), mSizesInMemory(mLayout.getSizesInMemory()), mPadding(padding), mIsEmpty(false)
     {
-      if (mSizesInMemory.size() != padding.size())
-        throw JumpsHolderException("Different sizes for layout and padding:", mSizesInMemory.size(),
-                                   "!=", padding.size());
-
-      mJumps.resize(mSizesInMemory.size());
-
-      ptrdiff_t iStart = ((ptrdiff_t)mJumps.size()) - 1;
+      // if (mSizesInMemory.size() != padding.size())
+      //   throw JumpsHolderException("Different sizes for layout and padding:", mSizesInMemory.size(),
+      //                              "!=", padding.size());
 
       ptrdiff_t jumpAccumulator = 1;
 
-      for (ptrdiff_t i = iStart; i > -1; --i) {
-
+      for (ptrdiff_t i = NDim - 1; i > -1; --i) {
         ptrdiff_t nextDimSize = atomSize;
 
-        if (i < iStart) nextDimSize = mSizesInMemory[i + 1] + padding[i + 1][0] + padding[i + 1][1];
+        if (i < (ptrdiff_t)NDim - 1) nextDimSize = mSizesInMemory[i + 1] + padding[i + 1][0] + padding[i + 1][1];
 
         jumpAccumulator *= nextDimSize;
-
         mJumps[i] = jumpAccumulator;
       }
 
       mJumpToIteratableStart = 0;
-
-      for (ptrdiff_t i = 0, iEnd = mSizesInMemory.size(); i < iEnd; ++i) {
-
+      for (ptrdiff_t i = 0, iEnd = NDim; i < iEnd; ++i) {
         mJumpToIteratableStart += padding[i][0] * mJumps[i];
       }
     }
 
-    size_t size() const { return mJumps.size(); }
+    static constexpr size_t size() { return NDim; }
 
     const ptrdiff_t &toOrigin() const { return mJumpToIteratableStart; }
 
-    inline const std::vector<ptrdiff_t> &getSizesInMemory() const { return mSizesInMemory; }
+    inline const auto &getSizesInMemory() const { return mSizesInMemory; }
 
-    inline const std::vector<std::array<ptrdiff_t, 2u>> &getPadding() const { return mPadding; }
+    inline const auto &getPadding() const { return mPadding; }
 
-    inline const std::vector<ptrdiff_t> &getJumpsInMemoryOrder() const { return mJumps; }
+    inline const auto &getJumpsInMemoryOrder() const { return mJumps; }
 
     /** \brief Compute the total jump for a multidimensional offset/ shift vector: these take account for possible
      * transposition. Input is expected to be in the space of the logical problem, NOT necessarily the ordering of
      * memory. */
-    inline ptrdiff_t getJump(const std::vector<ptrdiff_t> &shifts) const
+    inline ptrdiff_t getJump(const std::array<ptrdiff_t, NDim> &shifts) const
     {
-      if (shifts.size() != mJumps.size())
-        throw JumpsHolderException("Called ptrdiff_t getJump(std::vector<ptrdiff_t> shifts) with shift of different "
-                                   "dimensionality than our jumps. Jumps size:",
-                                   mJumps.size(), ", your input shifts size:", shifts.size());
+      // if (shifts.size() != mJumps.size())
+      //   throw JumpsHolderException("Called ptrdiff_t getJump(std::vector<ptrdiff_t> shifts) with shift of different "
+      //                              "dimensionality than our jumps. Jumps size:",
+      //                              mJumps.size(), ", your input shifts size:", shifts.size());
       ptrdiff_t result = 0;
       for (ptrdiff_t i = 0, iEnd = mJumps.size(); i < iEnd; ++i) {
         result += mJumps[mLayout.getTranspositionMap_memoryToGlobalSpace().getInverse(i)] * shifts[i];
@@ -103,14 +94,14 @@ namespace TempLat
      *  offset if the requested coordinates are not in our space. No exception thrown.
      *  "position" is the global coordinate in the lattice, not the mpi-local one.
      */
-    inline ptrdiff_t getTotalOffsetFromSpatialCoordinates(const std::vector<ptrdiff_t> &position) const
+    inline ptrdiff_t getTotalOffsetFromSpatialCoordinates(const std::array<ptrdiff_t, NDim> &position) const
     {
-      if (position.size() != mJumps.size())
-        throw JumpsHolderException("Called ptrdiff_t getTotalOffsetFromSpatialCoordinates(std::vector<ptrdiff_t> "
-                                   "position) with position of different dimensionality than our jumps. Jumps size:",
-                                   mJumps.size(), ", your input position size:", position.size());
+      // if (position.size() != mJumps.size())
+      //   throw JumpsHolderException("Called ptrdiff_t getTotalOffsetFromSpatialCoordinates(std::vector<ptrdiff_t> "
+      //                              "position) with position of different dimensionality than our jumps. Jumps size:",
+      //                              mJumps.size(), ", your input position size:", position.size());
 
-      std::vector<ptrdiff_t> memoryIndices(position.size());
+      std::array<ptrdiff_t, NDim> memoryIndices{};
 
       for (ptrdiff_t i = 0, iEnd = position.size(); i < iEnd; ++i) {
         mLayout.putMemoryIndexFromSpatialLocationInto(position[i], i, memoryIndices);
@@ -144,9 +135,9 @@ namespace TempLat
       return ostream;
     }
 
-    inline bool operator!=(const JumpsHolder &b) { return !(*this == b); }
+    inline bool operator!=(const JumpsHolder &b) const { return !(*this == b); }
 
-    inline bool operator==(const JumpsHolder &b)
+    inline bool operator==(const JumpsHolder &b) const
     {
       bool result = isEmpty() == b.isEmpty();
       result = result && mSizesInMemory.size() == b.mSizesInMemory.size();
@@ -166,15 +157,15 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     /** \brief The layout that we are jumping on, for compact referencing... */
-    LayoutStruct mLayout;
-    std::vector<ptrdiff_t> mSizesInMemory;
-    std::vector<std::array<ptrdiff_t, 2u>> mPadding;
+    LayoutStruct<NDim> mLayout;
+    std::array<ptrdiff_t, NDim> mSizesInMemory;
+    std::array<std::array<ptrdiff_t, 2u>, NDim> mPadding;
     /** \brief If there is padding, the first owned iterable memory is at some distance from the start of the memory
      * block */
     ptrdiff_t mJumpToIteratableStart;
     /** \brief The final jumps in each direction. Add this to your (typed!) pointer, and you end up one step up or down
      * in that dimension. */
-    std::vector<ptrdiff_t> mJumps;
+    std::array<ptrdiff_t, NDim> mJumps;
 
     bool mIsEmpty;
 

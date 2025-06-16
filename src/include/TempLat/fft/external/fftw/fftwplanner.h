@@ -52,7 +52,7 @@ namespace TempLat
     /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
-                                                                          const FFTLayoutStruct &layout)
+                                                                          const FFTLayoutStruct<NDim> &layout)
     {
 #ifdef NOFFTFLOAT
       throw FFTWCompiledWithoutSinglePrecisionSupport();
@@ -107,7 +107,7 @@ namespace TempLat
     /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
-                                                                            const FFTLayoutStruct &layout)
+                                                                            const FFTLayoutStruct<NDim> &layout)
     {
 
       FFTWTranspositionFlags trFlags(layout);

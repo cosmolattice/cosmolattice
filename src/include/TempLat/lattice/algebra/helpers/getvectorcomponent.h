@@ -34,14 +34,15 @@ namespace TempLat
 
     void doWeNeedGhosts() { GhostsHunter::apply(mR, mJ); }
 
-    void confirmSpace(const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType)
+    template <size_t NDim>
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       ConfirmSpace::apply(mR, mJ, newLayout, spaceType);
     }
 
     ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR, mJ); }
 
-    inline JumpsHolder getJumps()
+    template <size_t NDim> inline JumpsHolder<NDim> getJumps()
     { // Just take jumps from the first component
       return GetJumps::apply(mR);
     }
