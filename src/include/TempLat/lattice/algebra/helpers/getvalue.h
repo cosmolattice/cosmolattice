@@ -8,20 +8,21 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/lattice/algebra/helpers/iscomplextype.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include <type_traits>
 
 namespace TempLat
 {
-  template <typename U>
-  concept TypeHasGetMethod = requires(U obj, ptrdiff_t i) { obj.get(i); };
+  template <typename U, typename... IDX>
+  concept TypeHasGet = requires(U obj, IDX... i) { obj.get(i...); };
 
-  template <typename U>
-  concept TypeHasNoGetMethod = !TypeHasGetMethod<U>;
+  template <typename U, typename... IDX>
+  concept TypeHasNoGet = !TypeHasGet<U, IDX...>;
 
-  template <typename U>
-  concept TypeGetsItself = (std::is_floating_point_v<std::decay_t<U>> || std::is_integral_v<std::decay_t<U>>);
+  template <typename U, typename... IDX>
+  concept TypeGetsItself = (std::is_arithmetic_v<std::decay_t<U>> || IsComplexType<std::decay_t<U>>::value);
 
   // template <typename T>
   // concept TypeGetsItself<complex<T>> = std::is_floating_point<T>;
@@ -37,16 +38,16 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
 
-    template <typename U>
-      requires TypeHasGetMethod<U>
-    static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, ptrdiff_t i)
+    template <typename U, typename... IDX>
+      requires TypeHasGet<U, IDX...>
+    static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
     {
-      return obj.get(i);
+      return obj.get(idx...);
     }
 
-    template <typename U>
-      requires TypeGetsItself<U>
-    static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, ptrdiff_t i)
+    template <typename U, typename... IDX>
+      requires TypeGetsItself<U, IDX...>
+    static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
     {
       return obj;
     }

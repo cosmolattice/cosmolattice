@@ -46,14 +46,15 @@ namespace TempLat
       AbsoluteValue(const R &a) : UnaryOperator<R>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      typename GetFloatType<typename GetGetReturnType<R>::type>::type get(ptrdiff_t i)
+      template <typename... IDX>
+      KOKKOS_FORCEINLINE_FUNCTION typename GetFloatType<typename GetGetReturnType<R>::type>::type
+      get(const IDX &...idx) const
       {
 #ifndef NOKOKKOS
-        return Kokkos::abs(GetValue::get(mR, i));
+        return Kokkos::abs(GetValue::get(mR, idx...));
 #else
         using namespace std;
-        return abs(GetValue::get(mR, i));
+        return abs(GetValue::get(mR, idx...));
 #endif
       }
 

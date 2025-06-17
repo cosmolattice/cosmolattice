@@ -42,28 +42,7 @@ namespace TempLat
     {
       mManager->setGhostsAreStale();
       mManager->confirmConfigSpace(); // allocation happens here
-    }
 
-    /**
-     * @brief This struct is just a helper to wrap a call operator with variadic parameters.
-     * We cannot do this directly in a lambda as variadic parameters do not play well with CUDA
-     *
-     * @tparam G The type of expression to evaluate.
-     */
-    template <typename G> struct NDAssignment {
-      NDAssignment(const KokkosNDView<NDim, T> &_mView, const G &_g) : mView(_mView), g(_g) {}
-
-      template <typename... IDX> KOKKOS_FUNCTION void operator()(IDX... idx) const
-      {
-        // mView(idx...) = GetEval::getEval(g, idx...);
-        mView(idx...) = 1;
-      }
-      KokkosNDView<NDim, T> mView;
-      const G &g;
-    };
-
-    template <typename R> void assign(R &&g)
-    {
       auto layout = mToolBox->mLayouts.getConfigSpaceLayout();
       auto localSizes = layout.getLocalSizes();
       auto globalSizes = layout.getGlobalSizes();
@@ -77,6 +56,9 @@ namespace TempLat
         std::cout << "Local start[" << i << "] = " << localStarts[i] << std::endl;
 
       auto configSpaceJumps = mToolBox->mLayouts.getConfigSpaceJumps();
+      for (uint i = 0; i < configSpaceJumps.getJumpsInMemoryOrder().size(); ++i) {
+        std::cout << "Jump[" << i << "] = " << configSpaceJumps.getJumpsInMemoryOrder()[i] << std::endl;
+      }
       auto padding = configSpaceJumps.getPadding();
       for (uint i = 0; i < padding.size(); ++i) {
         for (uint j = 0; j < padding[i].size(); ++j) {
@@ -85,11 +67,6 @@ namespace TempLat
         std::cout << std::endl;
       }
 
-      onBeforeAssignment(g);
-
-#ifndef NOKOKKOS
-      Kokkos::Array<int64_t, NDim> start;
-      Kokkos::Array<int64_t, NDim> stop;
       for (size_t d = 0; d < NDim; ++d) {
         start[d] = padding[d][0] + localStarts[d];
         stop[d] = start[d] + localSizes[d];
@@ -107,7 +84,36 @@ namespace TempLat
       }
       std::cout << std::endl;
 
-      auto mView = mManager->getNDView(memorySizes);
+      mView = mManager->getNDView(memorySizes);
+    }
+
+    Kokkos::Array<int64_t, NDim> start;
+    Kokkos::Array<int64_t, NDim> stop;
+
+    /**
+     * @brief This struct is just a helper to wrap a call operator with variadic parameters.
+     * We cannot do this directly in a lambda as variadic parameters do not play well with CUDA
+     *
+     * @tparam G The type of expression to evaluate.
+     */
+    template <typename G> struct NDAssignment {
+      NDAssignment(const KokkosNDView<NDim, T> &_mView, const G &_g) : mView(_mView), g(_g) {}
+
+      template <typename... IDX> KOKKOS_FUNCTION void operator()(IDX... idx) const
+      {
+        // mView(idx...) = GetEval::getEval(g, idx...);
+        auto test = GetEval::getEval(g, idx...);
+        mView(idx...) = GetEval::getEval(3, idx...) + test;
+      }
+      KokkosNDView<NDim, T> mView;
+      const G g;
+    };
+
+    template <typename R> void assign(R &&g)
+    {
+#ifndef NOKOKKOS
+
+      onBeforeAssignment(g);
       Kokkos::parallel_for("ConfigViewAssign",                                     //
                            Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start, stop), //
                            NDAssignment<R>(mView, g)                               //
@@ -124,6 +130,8 @@ namespace TempLat
 
       mManager->setGhostsAreStale();
     }
+
+    KokkosNDViewUnmanaged<NDim, T> mView;
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 

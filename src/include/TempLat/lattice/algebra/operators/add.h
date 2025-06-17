@@ -35,8 +35,10 @@ namespace TempLat
       KOKKOS_FUNCTION
       Addition(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return TempLat::GetValue::get(mT, i) + TempLat::GetValue::get(mR, i); }
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      {
+        return TempLat::GetValue::get(mT, idx...) + TempLat::GetValue::get(mR, idx...);
+      }
 
       static std::string operatorString() { return "+"; }
 

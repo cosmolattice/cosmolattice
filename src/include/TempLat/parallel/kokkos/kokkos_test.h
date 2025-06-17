@@ -1,9 +1,11 @@
-//
-// Created by franz on 6/4/25.
-//
-
 #ifndef KOKKOS_TEST_H
 #define KOKKOS_TEST_H
+
+/* This file is part of CosmoLattice, available at www.cosmolattice.net .
+   Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
+   Released under the MIT license, see LICENSE.md. */
+
+// File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
 #ifdef KOKKOS_SOURCE
 #include "TempLat/lattice/algebra/complexalgebra/scalarcomplexmultiply.h"

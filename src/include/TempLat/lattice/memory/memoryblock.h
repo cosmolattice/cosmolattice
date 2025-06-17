@@ -42,7 +42,12 @@ namespace TempLat
     MemoryBlock() : mSize(0u) {}
 
     /** \brief Constructor with a size to allocate. */
-    MemoryBlock(size_t size) : mSize(size), mData("FieldMemoryBlock", size) { zero(); }
+    MemoryBlock(size_t size) : mSize(size), mData("FieldMemoryBlock", size)
+    {
+      mHostMirror = Kokkos::create_mirror_view(mData);
+
+      zero();
+    }
 
     /** getter */
     size_t size() const { return mSize; }

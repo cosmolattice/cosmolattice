@@ -13,12 +13,6 @@
 
 namespace TempLat
 {
-  template <typename U>
-  concept TypeHasGetEvalMethod = requires(U obj, ptrdiff_t i) { obj.getEval(i); };
-
-  template <typename U>
-  concept TypeHasNoGetEvalMethod = !TypeHasGetEvalMethod<U>;
-
   /** \brief A class which chooses between get and getEval, to allow for some intermediate caching
    * (useful for operations that derive from matrix multiplication for example).
    *
@@ -30,13 +24,13 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
 
-    template <typename U>
-      requires TypeHasGetEvalMethod<U>
-    static KOKKOS_FORCEINLINE_FUNCTION auto getEval(U &&obj, ptrdiff_t i)
+    template <typename U, typename... IDX>
+      requires TypeHasGetEval<U, IDX...>
+    static KOKKOS_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
     {
       // static_assert(std::is_same_v<decltype(obj.getEval(i)), decltype(GetValue::get(obj, i))> && false,
       //               "The return type of getEval must be the same as the return type of get.");
-      return obj.getEval(i);
+      return obj.getEval(idx...);
     }
 
     template <typename T> auto extract()
@@ -45,12 +39,12 @@ namespace TempLat
                     "The return type of getEval must be the same as the return type of get.");
     }
 
-    template <typename U>
-      requires TypeHasNoGetEvalMethod<U>
-    static KOKKOS_FORCEINLINE_FUNCTION auto getEval(U &&obj, ptrdiff_t i)
+    template <typename U, typename... IDX>
+      requires TypeHasNoGetEval<U, IDX...>
+    static KOKKOS_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
     {
       // extract<decltype(GetValue::get(obj, i))>();
-      return GetValue::get(obj, i);
+      return GetValue::get(obj, idx...);
     }
 
   private:

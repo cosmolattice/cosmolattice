@@ -33,10 +33,16 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   // alternatively, put the result of getNorm in a variable.
   // SpatialCoordinate x;
   // auto r = x.getNorm();
+  {
+    auto view = chi.directView();
+    for (uint i = 0; i < view.size(); ++i) {
+      std::cout << "Chi[" << i << "]: " << view(i) << "\n";
+    }
+  }
 
   chi = 3; // pow(r, 3);
-  phi = 4;
-  psi = 5;
+  // phi = 4;
+  // psi = 5;
 
   {
     auto view = chi.directView();
