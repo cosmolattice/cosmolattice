@@ -11,38 +11,40 @@
 
 #include "TempLat/lattice/algebra/helpers/haskir.h"
 
-namespace TempLat {
-    /** \brief A getter for kIR.
-     *
-     * Careful, this method works only on types which also have a get method.
-     * Need this to deduce the return type.
-     *
-     * Unit test: make test-getkir
-     **/
-    class GetKIR {
-    public:
-        /* Put public methods here. These should change very little over time. */
+namespace TempLat
+{
+  /** \brief A getter for kIR.
+   *
+   * Careful, this method works only on types which also have a get method.
+   * Need this to deduce the return type.
+   *
+   * Unit test: make test-getkir
+   **/
+  class GetKIR
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
 
-        template<typename U>
-        KOKKOS_FORCEINLINE_FUNCTION
-        static typename std::enable_if<HasKIR<U>::value, decltype(std::declval<U>().getKIR())>::type
-        getKIR(U &obj) {
-            return obj.getKIR();
-        }
+    template <typename U>
+      requires HasKIR<U>
+    KOKKOS_FORCEINLINE_FUNCTION static auto getKIR(U &obj)
+    {
+      return obj.getKIR();
+    }
 
-        template<typename U>
-        KOKKOS_FORCEINLINE_FUNCTION
-        static typename std::enable_if<!HasKIR<U>::value, int>::type
-        getKIR(U &obj) {
-            return 1;
-        }
+    template <typename U>
+      requires(!HasKIR<U>)
+    KOKKOS_FORCEINLINE_FUNCTION static constexpr double getKIR(U &obj)
+    {
+      return 1;
+    }
 
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-} /* TempLat */
+  };
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/helpers/getkir_test.h"

@@ -13,10 +13,7 @@
 namespace TempLat
 {
   template <typename U, typename... IDX>
-  concept TypeHasGetEval = requires(U obj, IDX... idx) { obj.getEval(idx...); };
-
-  template <typename U, typename... IDX>
-  concept TypeHasNoGetEval = !TypeHasGetEval<U, IDX...>;
+  concept HasGetEval = requires(U obj, IDX... idx) { obj.getEval(idx...); };
 
   struct HasGetEvalTester {
 #ifdef TEMPLATTEST

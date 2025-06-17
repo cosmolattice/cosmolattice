@@ -25,7 +25,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
 
     template <typename U, typename... IDX>
-      requires TypeHasGetEval<U, IDX...>
+      requires HasGetEval<U, IDX...>
     static KOKKOS_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
     {
       // static_assert(std::is_same_v<decltype(obj.getEval(i)), decltype(GetValue::get(obj, i))> && false,
@@ -40,7 +40,7 @@ namespace TempLat
     }
 
     template <typename U, typename... IDX>
-      requires TypeHasNoGetEval<U, IDX...>
+      requires(!HasGetEval<U, IDX...>)
     static KOKKOS_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
     {
       // extract<decltype(GetValue::get(obj, i))>();

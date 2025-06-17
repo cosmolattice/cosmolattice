@@ -12,14 +12,16 @@
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 namespace TempLat
 {
-
   /** \brief A class which is part of the implementation of the list algebra.
    *
    * Unit test: make test-conditionallistunarygetter
    **/
-
   template <template <typename OPT> class OP, typename S>
-  concept ConditionalListUnaryGetter = IsSTDGettable<0, S>::value || IsTempLatGettable<0, S>::value;
+  concept ConditionalListUnaryGetter = IsSTDGettable<0, S> || IsTempLatGettable<0, S>;
+
+  struct ConditionalListUnaryGetterTester {
+    static void Test(TempLat::TDDAssertion &);
+  };
 
 } // namespace TempLat
 

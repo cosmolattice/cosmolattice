@@ -10,66 +10,66 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasdoweneedghosts.h"
 
-namespace TempLat {
+namespace TempLat
+{
   /** \brief A class which helps implementing the automatic management of updating the ghost cells.
    *
    * Unit test: make test-ghostshunter
    **/
-  class GhostsHunter {
+  class GhostsHunter
+  {
   public:
-    template<typename U>
-    KOKKOS_FORCEINLINE_FUNCTION
-    static typename std::enable_if<HasDoWeNeedGhostsMethod<U>::value, void>::type
-    apply(U &obj) {
+    template <typename U>
+      requires HasDoWeNeedGhostsMethod<U>
+    static void apply(U &obj)
+    {
       obj.doWeNeedGhosts();
     }
 
-    template<typename U>
-    KOKKOS_FORCEINLINE_FUNCTION
-    static typename std::enable_if<!HasDoWeNeedGhostsMethod<U>::value, void>::type
-    apply(U &obj) {
+    template <typename U>
+      requires(!HasDoWeNeedGhostsMethod<U>)
+    static void apply(U &obj)
+    {
     }
 
     /* Put public methods here. These should change very little over time. */
-    template<int N, typename U>
-    KOKKOS_FORCEINLINE_FUNCTION
-    static typename std::enable_if<HasDoWeNeedGhostsMethodIndexed<N, U>::value, void>::type
-    apply(U &obj, Tag<N> i) {
+    template <int N, typename U>
+      requires HasDoWeNeedGhostsMethodIndexed<N, U>
+    static void apply(U &obj, Tag<N> i)
+    {
       obj.doWeNeedGhosts(i);
     }
 
-    template<int N, typename U>
-    KOKKOS_FORCEINLINE_FUNCTION
-    static typename std::enable_if<!HasDoWeNeedGhostsMethodIndexed<N, U>::value, void>::type
-    apply(U &obj, Tag<N> i) {
+    template <int N, typename U>
+      requires(!HasDoWeNeedGhostsMethodIndexed<N, U>)
+    static void apply(U &obj, Tag<N> i)
+    {
     }
-
 
     /* Put public methods here. These should change very little over time. */
-    template<typename U>
-    KOKKOS_FORCEINLINE_FUNCTION
-    static typename std::enable_if<HasDoWeNeedGhostsMethodIndexedDyn<U>::value, void>::type
-    apply(U &obj, ptrdiff_t i) {
+    template <typename U>
+      requires HasDoWeNeedGhostsMethodIndexedDyn<U>
+    static void apply(U &obj, ptrdiff_t i)
+    {
       obj.doWeNeedGhosts(i);
     }
 
-    template<typename U>
-    KOKKOS_FORCEINLINE_FUNCTION
-    static typename std::enable_if<!HasDoWeNeedGhostsMethodIndexedDyn<U>::value, void>::type
-    apply(U &obj, ptrdiff_t i) {
+    template <typename U>
+      requires(!HasDoWeNeedGhostsMethodIndexedDyn<U>)
+    static void apply(U &obj, ptrdiff_t i)
+    {
     }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    GhostsHunter() {
-    }
+    GhostsHunter() {}
 
   public:
 #ifdef TEMPLATTEST
-            static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
   };
-} /* TempLat */
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/helpers/ghostshunter_test.h"

@@ -29,11 +29,11 @@ inline void TempLat::HasSpaceConfirmationMethodsTester::Test(TempLat::TDDAsserti
     }
   };
 
-  tdd.verify(TypeHasSpaceConfirmationMethods<MyTestOne, NDim> == true);
-  tdd.verify(TypeHasSpaceConfirmationMethods<MyTestTwo, NDim> == false);
-  tdd.verify(TypeHasSpaceConfirmationMethods<int, NDim> == false);
-  tdd.verify(TypeHasSpaceConfirmationMethodsIndexed<3, MyTestOne, NDim> == false);
-  tdd.verify(TypeHasSpaceConfirmationMethodsIndexed<3, MyTestThree, NDim> == true);
+  tdd.verify(HasSpaceConfirmationMethods<MyTestOne, NDim> == true);
+  tdd.verify(HasSpaceConfirmationMethods<MyTestTwo, NDim> == false);
+  tdd.verify(HasSpaceConfirmationMethods<int, NDim> == false);
+  tdd.verify(HasSpaceConfirmationMethodsIndexed<3, MyTestOne, NDim> == false);
+  tdd.verify(HasSpaceConfirmationMethodsIndexed<3, MyTestThree, NDim> == true);
 }
 
 #endif

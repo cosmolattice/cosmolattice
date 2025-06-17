@@ -9,37 +9,39 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasdx.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
-namespace TempLat {
-    /** \brief A getter for dx.
-     *
-     * Unit test: make test-getdx
-     **/
-    class GetDx {
-        //Careful, this method works only on types which alsohave a get method. Need this to deduce the return type.
-    public:
-        /* Put public methods here. These should change very little over time. */
+namespace TempLat
+{
+  /** \brief A getter for dx.
+   *
+   * Unit test: make test-getdx
+   **/
+  class GetDx
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
 
-        template<typename U>
-        KOKKOS_FORCEINLINE_FUNCTION
-        static typename std::enable_if<HasDx<U>::value, decltype(std::declval<U>().getDx())>::type
-        getDx(U &&obj) {
-            return obj.getDx();
-        }
+    template <typename U>
+      requires HasDx<U>
+    KOKKOS_FORCEINLINE_FUNCTION static auto getDx(U &&obj)
+    {
+      return obj.getDx();
+    }
 
-        template<typename U>
-        KOKKOS_FORCEINLINE_FUNCTION
-        static typename std::enable_if<!HasDx<U>::value, int>::type
-        getDx(U &obj) {
-            return 1;
-        }
+    template <typename U>
+      requires(!HasDx<U>)
+    KOKKOS_FORCEINLINE_FUNCTION static constexpr double getDx(U &obj)
+    {
+      return 1;
+    }
 
-    public:
+  public:
 #ifdef TEMPLATTEST
-         static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-} /* TempLat */
+  };
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/helpers/getdx_test.h"

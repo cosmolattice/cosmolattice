@@ -14,30 +14,12 @@
 
 namespace TempLat
 {
+  template <template <typename OPT, typename OPS> class OP, typename S, typename T>
+  concept ConditionalBinaryGetter = ((HasGetMethod<S> || HasGetMethod<T>) && !HasVectorGetMethod<S> &&
+                                     !HasVectorGetMethod<T> && !HasStaticGetter<S> && !HasStaticGetter<T>);
+
   struct ConditionalBinaryGetterTester {
     static void Test(TempLat::TDDAssertion &);
-  };
-
-  // Commodities for operators return types
-
-  /** \brief Default is ENABLE == false: no type def. */
-  template <template <typename OPT, typename OPS> class OP, typename S, typename T, bool ENABLE>
-  struct ConditionalBinaryGetterHelper {
-  };
-
-  /** \brief Default is ENABLE == true: typedef the desired operator. */
-  template <template <typename OPT, typename OPS> class OP, typename S, typename T>
-  struct ConditionalBinaryGetterHelper<OP, S, T, true> {
-    typedef OP<S, T> type;
-  };
-
-  template <template <typename OPT, typename OPS> class OP, typename S, typename T, bool OVERRIDE = true>
-  struct ConditionalBinaryGetter
-      : public ConditionalBinaryGetterHelper<OP, S, T,
-                                             ((HasGetMethod<S>::value || HasGetMethod<T>::value) &&
-                                              !HasVectorGetMethod<S>::value && !HasVectorGetMethod<T>::value &&
-                                              !HasStaticGetter<S>::value && !HasStaticGetter<T>::value) &&
-                                                 OVERRIDE> {
   };
 } // namespace TempLat
 

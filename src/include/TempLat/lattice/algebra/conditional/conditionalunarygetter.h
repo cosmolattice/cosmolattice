@@ -19,7 +19,7 @@ namespace TempLat
    * Unit test: make test-conditionalunarygetter
    **/
   template <template <typename OPT> class OP, typename T>
-  concept ConditionalUnaryGetter = TypeHasGetMethod<T>;
+  concept ConditionalUnaryGetter = HasGetMethod<T>;
 
   struct ConditionalUnaryGetterTester {
     static void Test(TempLat::TDDAssertion &);

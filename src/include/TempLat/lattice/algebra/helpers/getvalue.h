@@ -19,13 +19,7 @@ namespace TempLat
   concept TypeHasGet = requires(U obj, IDX... i) { obj.get(i...); };
 
   template <typename U, typename... IDX>
-  concept TypeHasNoGet = !TypeHasGet<U, IDX...>;
-
-  template <typename U, typename... IDX>
-  concept TypeGetsItself = (std::is_arithmetic_v<std::decay_t<U>> || IsComplexType<std::decay_t<U>>::value);
-
-  // template <typename T>
-  // concept TypeGetsItself<complex<T>> = std::is_floating_point<T>;
+  concept TypeGetsItself = (std::is_arithmetic_v<std::decay_t<U>> || IsComplexType<std::decay_t<U>>);
 
   /** \brief A template-programming class which helps to get the 'get'-value from any type,
    * whether it has the get-method or it is a scalar value.

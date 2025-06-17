@@ -25,9 +25,9 @@ inline void TempLat::HasGetMethodTester::Test(TempLat::TDDAssertion &tdd)
     void noGet() { std::cerr << "Hell no.\n"; }
   };
 
-  tdd.verify(TypeHasGetMethod<MyTestOne> == true);
-  tdd.verify(TypeHasGetMethod<MyTestTwo> == false);
-  tdd.verify(TypeHasGetMethod<int> == false);
+  tdd.verify(HasGetMethod<MyTestOne> == true);
+  tdd.verify(HasGetMethod<MyTestTwo> == false);
+  tdd.verify(HasGetMethod<int> == false);
 }
 
 #endif

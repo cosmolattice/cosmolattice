@@ -16,9 +16,9 @@ inline void TempLat::HasGetEvalTester::Test(TempLat::TDDAssertion &tdd)
     double getEval(ptrdiff_t i) { return 777; }
   };
   /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(TypeHasGetEval<myTest, ptrdiff_t> == false);
-  tdd.verify(TypeHasGetEval<myTest2, ptrdiff_t> == true);
-  tdd.verify(TypeHasGetEval<double, ptrdiff_t> == false);
+  tdd.verify(HasGetEval<myTest, ptrdiff_t> == false);
+  tdd.verify(HasGetEval<myTest2, ptrdiff_t> == true);
+  tdd.verify(HasGetEval<double, ptrdiff_t> == false);
 }
 
 #endif

@@ -14,12 +14,9 @@
 namespace TempLat
 {
   template <size_t NDim, class T>
-  concept TypeHasJumpMethods = requires(T t) {
+  concept HasJumpMethods = requires(T t) {
     { t.getJumps() } -> std::convertible_to<JumpsHolder<NDim>>;
   };
-
-  template <size_t NDim, class T>
-  concept TypeHasNoJumpMethods = !TypeHasJumpMethods<NDim, T>;
 
   /** \brief a mini tester class... */
   struct HasJumpMethodsTester {

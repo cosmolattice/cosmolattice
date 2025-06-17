@@ -10,39 +10,40 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/haseval.h"
 
-namespace TempLat {
-    /** \brief A class which helps implementing the intermediate evaluation mechanism,
-     * extremely useful for matrix algebra.
-     *
-     * Unit test: make test-doeval
-     **/
-    class DoEval {
-    public:
-        /* Put public methods here. These should change very little over time. */
-        template<typename U>
-        KOKKOS_FORCEINLINE_FUNCTION static
-        typename std::enable_if<HasEval<U>::value, void>::type
-        eval(U &&obj, ptrdiff_t i) {
-            obj.eval(i);
-        }
+namespace TempLat
+{
+  /** \brief A class which helps implementing the intermediate evaluation mechanism,
+   * extremely useful for matrix algebra.
+   *
+   * Unit test: make test-doeval
+   **/
+  class DoEval
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
+    template <typename U>
+      requires HasEval<U>
+    KOKKOS_FORCEINLINE_FUNCTION static void eval(U &&obj, ptrdiff_t i)
+    {
+      obj.eval(i);
+    }
 
-        template<typename U>
-        KOKKOS_FORCEINLINE_FUNCTION static
-        typename std::enable_if<!HasEval<U>::value, void>::type
-        eval(U &&obj, ptrdiff_t i) {
-        }
+    template <typename U>
+      requires(!HasEval<U>)
+    KOKKOS_FORCEINLINE_FUNCTION static constexpr void eval(U &&obj, ptrdiff_t i)
+    {
+    }
 
-    private:
-        /* Put all member variables and private methods here. These may change arbitrarily. */
-        DoEval() {
-        }
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+    DoEval() {}
 
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-} /* TempLat */
+  };
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/helpers/doeval_test.h"

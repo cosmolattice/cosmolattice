@@ -21,13 +21,10 @@
 namespace TempLat
 {
   template <typename U>
-  concept TypeCanBeConvertedToString = requires(U &&obj) { std::to_string(obj); };
+  concept CanBeConvertedToString = requires(U &&obj) { std::to_string(obj); };
 
   template <typename U>
-  concept TypeHasToString = requires(U &&obj) { obj.toString(); };
-
-  template <typename U>
-  concept TypeHasNoConverter = !TypeCanBeConvertedToString<U> && !TypeHasToString<U> && !IsComplexType<U>::value;
+  concept HasNoStringConverter = !CanBeConvertedToString<U> && !HasStringMethod<U> && !IsComplexType<U>;
 
   /** \brief A template-programming class which helps to get the 'toString'-value from any type, whether it has the
    *toString-method or it is a scalar value.
@@ -40,28 +37,28 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
 
     template <typename U>
-      requires TypeHasToString<U>
+      requires HasStringMethod<U>
     static inline std::string get(const U &obj)
     {
       return obj.toString();
     }
 
     template <typename U>
-      requires IsComplexType<U>::value
+      requires IsComplexType<U>
     static inline std::string get(const U &obj)
     {
       return "(" + GetString::get(obj.real()) + " + " + GetString::get(obj.imag()) + "i)";
     }
 
     template <typename U>
-      requires TypeCanBeConvertedToString<U>
+      requires(CanBeConvertedToString<U> && !std::is_floating_point_v<U>)
     static std::string get(const U &obj)
     {
       return std::to_string(obj);
     }
 
     template <typename U>
-      requires TypeHasNoConverter<U>
+      requires HasNoStringConverter<U>
     static inline std::string get(const U &obj)
     {
       // if everything fails, return the typeid
@@ -69,21 +66,22 @@ namespace TempLat
     }
 
     template <typename U>
-    static inline typename std::enable_if<std::is_floating_point<U>::value, std::string>::type get(const U &val)
+      requires std::is_floating_point_v<U>
+    static inline std::string get(const U &val)
     {
       return FloatToString::format(val);
     }
 
     template <int N, typename U>
-    static inline typename std::enable_if<HasStringMethodIndexed<N, U>::value, std::string>::type get(const U &obj,
-                                                                                                      Tag<N> i)
+      requires HasStringMethodIndexed<N, U>
+    static inline std::string get(const U &obj, Tag<N> i)
     {
       return obj.toString(i);
     }
 
     template <int N, typename U>
-    static inline typename std::enable_if<!HasStringMethodIndexed<N, U>::value, std::string>::type get(const U &obj,
-                                                                                                       Tag<N> i)
+      requires(!HasStringMethodIndexed<N, U>)
+    static inline std::string get(const U &obj, Tag<N> i)
     {
       return get(obj);
     }
@@ -101,13 +99,12 @@ namespace TempLat
   /** \brief Enable simple operator<< for all objects with a toString method.
    */
   template <typename T>
-  typename std::enable_if<HasStringMethod<T>::value, std::ostream>::type &operator<<(std::ostream &ostream,
-                                                                                     const T &obj)
+    requires HasStringMethod<T>
+  typename std::ostream &operator<<(std::ostream &ostream, const T &obj)
   {
     ostream << obj.toString();
     return ostream;
   }
-
 } // namespace TempLat
 
 #ifdef TEMPLATTEST

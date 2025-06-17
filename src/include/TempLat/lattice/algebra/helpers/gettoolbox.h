@@ -13,12 +13,6 @@
 
 namespace TempLat
 {
-  template <typename U>
-  concept TypeHasToolBox = requires(U &&obj) { obj.getToolBox(); };
-
-  template <typename U>
-  concept TypeHasNoToolBox = !TypeHasToolBox<U>;
-
   MakeException(GetToolBoxException);
 
   /** \brief A class which gets jumps from all classes, also those that do not have jumps.
@@ -30,14 +24,14 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     template <typename U>
-      requires TypeHasToolBox<U>
+      requires HasToolBox<U>
     static auto get(U &&obj)
     {
       return obj.getToolBox();
     }
 
     template <typename U>
-      requires TypeHasNoToolBox<U>
+      requires(!HasToolBox<U>)
     static auto get(U &&obj)
     {
       throw GetToolBoxException("Object does not have a toolbox: " + GetString::get(obj));

@@ -45,7 +45,7 @@ namespace TempLat
     }
 
     template <typename T>
-    typename std::enable_if<IsTempLatGettable<0, T>::value || IsSTDGettable<0, T>::value,
+    typename std::enable_if<IsTempLatGettable<0, T> || IsSTDGettable<0, T>,
                             bool>::type // This function allows to iterate over fieldcollection for example.
     iterate(T tup) const
     {

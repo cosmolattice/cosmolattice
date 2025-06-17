@@ -27,9 +27,9 @@ inline void TempLat::HasJumpMethodsTester::Test(TempLat::TDDAssertion &tdd)
     }
   };
 
-  tdd.verify(TypeHasJumpMethods<NDim, MyTestOne> == true);
-  tdd.verify(TypeHasJumpMethods<NDim, MyTestTwo> == false);
-  tdd.verify(TypeHasJumpMethods<NDim, int> == false);
+  tdd.verify(HasJumpMethods<NDim, MyTestOne> == true);
+  tdd.verify(HasJumpMethods<NDim, MyTestTwo> == false);
+  tdd.verify(HasJumpMethods<NDim, int> == false);
 }
 
 #endif

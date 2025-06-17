@@ -24,7 +24,7 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     template <typename U, size_t NDim>
-      requires TypeHasSpaceConfirmationMethods<U, NDim>
+      requires HasSpaceConfirmationMethods<U, NDim>
     static inline void apply(U &obj, const LayoutStruct<NDim> &newLayout,
                              const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
@@ -32,14 +32,14 @@ namespace TempLat
     }
 
     template <typename U, size_t NDim>
-      requires TypeHasNoSpaceConfirmationMethods<U, NDim>
+      requires(!HasSpaceConfirmationMethods<U, NDim>)
     static inline void apply(U &obj, const LayoutStruct<NDim> &newLayout,
                              const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
     }
 
     template <int N, typename U, size_t NDim>
-      requires TypeHasSpaceConfirmationMethodsIndexed<N, U, NDim>
+      requires HasSpaceConfirmationMethodsIndexed<N, U, NDim>
     static inline void apply(U &&obj, Tag<N> i, const LayoutStruct<NDim> &newLayout,
                              const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
@@ -47,14 +47,14 @@ namespace TempLat
     }
 
     template <int N, typename U, size_t NDim>
-      requires TypeHasNoSpaceConfirmationMethodsIndexed<N, U, NDim>
+      requires(!HasSpaceConfirmationMethodsIndexed<N, U, NDim>)
     static inline void apply(U &obj, ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
                              const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
     }
 
     template <typename U, size_t NDim>
-      requires TypeHasSpaceConfirmationMethodsIndexedDyn<U, NDim>
+      requires HasSpaceConfirmationMethodsIndexedDyn<U, NDim>
     static inline void apply(U &obj, ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
                              const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
@@ -62,7 +62,7 @@ namespace TempLat
     }
 
     template <typename U, size_t NDim>
-      requires TypeHasNoSpaceConfirmationMethodsIndexedDyn<U, NDim>
+      requires(!HasSpaceConfirmationMethodsIndexedDyn<U, NDim>)
     static inline void apply(U &obj, ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
                              const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {

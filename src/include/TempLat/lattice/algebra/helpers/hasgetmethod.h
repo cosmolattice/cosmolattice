@@ -14,13 +14,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A SFINAE-test class which determines at compile time whether an object has a method `get`.
+  /** \brief A concept which determines at compile time whether an object has a method `get`.
    *
    **/
-
   template <class T>
-  concept TypeHasGetMethod = requires(T t, ptrdiff_t idx) { t.get(idx); };
+  concept HasGetMethod = requires(T t, ptrdiff_t idx) { t.get(idx); };
 
   struct HasGetMethodTester {
   public:

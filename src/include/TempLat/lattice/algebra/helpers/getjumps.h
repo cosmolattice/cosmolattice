@@ -13,7 +13,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which gets jumps from all classes, also those that do not have jumps.
    *
    * Unit test: make test-getjumps
@@ -24,14 +23,14 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
 
     template <size_t NDim, typename U>
-      requires TypeHasJumpMethods<NDim, U>
+      requires HasJumpMethods<NDim, U>
     static inline auto apply(U &&obj)
     {
       return obj.getJumps();
     }
 
     template <size_t NDim, typename U>
-      requires TypeHasNoJumpMethods<NDim, U>
+      requires(!HasJumpMethods<NDim, U>)
     static inline auto apply(U &&obj)
     {
       return JumpsHolder<NDim>();

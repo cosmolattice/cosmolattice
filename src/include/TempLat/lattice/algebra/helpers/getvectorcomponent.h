@@ -24,7 +24,6 @@ namespace TempLat
    *
    * Unit test: make test-getvectorcomponent
    **/
-
   template <typename R> class GetVectorComponentHelper
   {
   public:
@@ -69,7 +68,6 @@ namespace TempLat
   {
     return GetVectorComponentHelper<R>(pR, i);
   }
-
 } // namespace TempLat
 
 #ifdef TEMPLATTEST
