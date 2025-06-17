@@ -43,10 +43,9 @@ namespace TempLat
        * \brief Check  if numerator if roughly zero, don't do the division.
        *  Useful for spectrum fluctuation, when normalising with a cutoff
        **/
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-        auto a = GetValue::get(mR, i);
+        auto a = GetValue::get(mR, idx...);
         decltype(a) zero(0);
         return (a < zero) ? zero : sqrt(a);
       }

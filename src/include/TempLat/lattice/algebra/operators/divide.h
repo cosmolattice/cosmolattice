@@ -34,8 +34,10 @@ namespace TempLat
       KOKKOS_FUNCTION
       Division(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return GetValue::get(mR, i) / GetValue::get(mT, i); }
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      {
+        return GetValue::get(mR, idx...) / GetValue::get(mT, idx...);
+      }
 
       static std::string operatorString() { return "/"; }
 

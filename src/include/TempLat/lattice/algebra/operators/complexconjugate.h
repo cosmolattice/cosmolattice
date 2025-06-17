@@ -39,13 +39,12 @@ namespace TempLat
       ComplexConjugate(const R &a) : UnaryOperator<R>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
 #ifndef NOKOKKOS
-        return Kokkos::conj(GetValue::get(mR, i));
+        return Kokkos::conj(GetValue::get(mR, idx...));
 #else
-        return std::conj(GetValue::get(mR, i));
+        return std::conj(GetValue::get(mR, idx...));
 #endif
       }
 

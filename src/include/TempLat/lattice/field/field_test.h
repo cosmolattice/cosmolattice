@@ -8,8 +8,9 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 // #include "TempLat/lattice/algebra/gettergetoffset.h"
-#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
-#include "TempLat/lattice/algebra/random/randomgaussianfield.h"
+// #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+// #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
+#include "TempLat/lattice/algebra/operators/operators.h"
 
 template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
@@ -23,8 +24,8 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   Field<NDim, T> chi("chi", toolBox);
   Field<NDim, T> psi("psi", toolBox);
 
-  WaveNumber k(toolBox);
-  // phi.inFourierSpace() = k.norm2() * RandomGaussianField<T>("Hoi", toolBox);
+  // WaveNumber k(toolBox);
+  //  phi.inFourierSpace() = k.norm2() * RandomGaussianField<T>("Hoi", toolBox);
 
   // just manipulated phi(k), so it must still be in Fourier space, and ghosts are stale.
   // tdd.verify(phi.mManager->isFourierSpace());
@@ -33,31 +34,63 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   // alternatively, put the result of getNorm in a variable.
   // SpatialCoordinate x;
   // auto r = x.getNorm();
-  {
-    auto view = chi.directView();
-    for (uint i = 0; i < view.size(); ++i) {
-      std::cout << "Chi[" << i << "]: " << view(i) << "\n";
-    }
-  }
 
-  chi = 3; // pow(r, 3);
+  chi = 1; // pow(r, 3);
   // phi = 4;
   // psi = 5;
-
-  {
-    auto view = chi.directView();
-    for (uint i = 0; i < view.size(); ++i) {
-      std::cout << "Chi[" << i << "]: " << view(i) << "\n";
-    }
+  std::array<size_t, NDim> localSizes;
+  std::array<std::pair<size_t, size_t>, NDim> slices;
+  for (size_t d = 0; d < NDim; ++d) {
+    localSizes[d] = nGrid + 2 * nGhost;
+    slices[d] = std::make_pair(nGhost, nGhost + nGrid);
   }
 
-  chi = chi + chi;
-  {
-    auto view = chi.directView();
-    for (uint i = 0; i < view.size(); ++i) {
-      std::cout << "Chi[" << i << "]: " << view(i) << "\n";
+  auto field_tester = [&](Field<NDim, T> &f, const auto &op, double expected) {
+    f = op;
+    auto view = f.getLocalView();
+
+    size_t total_size = 1;
+    std::array<size_t, NDim> extents;
+    for (uint i = 0; i < NDim; ++i) {
+      extents[i] = view.extent(i);
+      total_size *= extents[i];
     }
-  }
+
+    bool all_correct = true;
+    std::array<size_t, NDim> cIdx{};
+    for (size_t i = 0; i < total_size; ++i) {
+      // Linear index to cartesian index
+      size_t lsize = 1;
+      size_t remainder = i;
+      for (size_t j = 0; j < NDim; ++j) {
+        lsize *= extents[NDim - 1 - j];
+        cIdx[NDim - 1 - j] = remainder % lsize;
+        remainder = (remainder - cIdx[NDim - 1 - j]) / extents[NDim - 1 - j];
+      }
+      std::cout << "View(";
+      for (uint l = 0; l < NDim; ++l) {
+        std::cout << cIdx[l];
+        if (l != NDim - 1) std::cout << ", ";
+      }
+      std::apply(
+          [&](const auto &...args) {
+            std::cout << ") = " << view(args...) << std::endl;
+            all_correct = AlmostEqual(view(args...), expected);
+          },
+          cIdx);
+    }
+    tdd.verify(all_correct);
+  };
+
+  chi = 2;
+  field_tester(chi, chi, 2);
+
+  field_tester(phi, chi + chi, 4);
+  field_tester(phi, chi * chi, 4);
+  // field_tester(phi, chi - chi, 0);
+  // field_tester(phi, chi / chi, 1);
+
+  field_tester(phi, tanh(chi), tanh(2));
 
   return;
   /*
@@ -68,8 +101,8 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
 
     // neat consequence of the implementation: an expression actually evaluates to a specific type. Keeping that
     instance,
-    //     without passing it to an assignment operator, is simply the compiled expression. So we can do stuff with it.
-    auto potential = 0.5 * phi * phi + 42 * chi * chi * phi * phi - chi + (-chi);
+    //     without passing it to an assignment operator, is simply the compiled expression. So we can do stuff with
+    it. auto potential = 0.5 * phi * phi + 42 * chi * chi * phi * phi - chi + (-chi);
 
     // Stuff we can do:
     say << "Potential2: " << potential.toString() << "\n";

@@ -5,32 +5,15 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/complex.h"
 #include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
-
-  /** \brief SFINAE detection of complex<whatever>
-   *
-   * Unit test: make test-iscomplextype
-   **/
-  template <typename T> struct IsComplexType : public std::false_type {
-  };
-
-  template <typename T> struct IsComplexType<complex<T>> : public std::true_type {
-  };
-
-  template <typename T> struct IsComplexType<const complex<T>> : public std::true_type {
-  };
-
-  template <typename T> struct IsComplexType<complex<T> &> : public std::true_type {
-  };
-
-  template <typename T> struct IsComplexType<const complex<T> &> : public std::true_type {
-  };
+  template <typename T>
+  concept IsComplexType = std::is_same_v<std::decay_t<T>, complex<typename std::decay_t<T>::value_type>>;
 
   /** \brief a mini tester class... */
   struct IsComplexTypeTester {

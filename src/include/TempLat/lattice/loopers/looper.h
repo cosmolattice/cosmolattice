@@ -26,7 +26,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
 
     Looper(std::shared_ptr<Coordinates<NDim>> pCoord, ptrdiff_t pStart, ptrdiff_t pEnd)
-        : mCoord(pCoord), mStart(pStart), mEnd(pEnd)
+        : mCoord(*pCoord), mStart(pStart), mEnd(pEnd)
     {
     }
     Looper(std::shared_ptr<Coordinates<NDim>> pCoord) : Looper(pCoord, pCoord->getStart(), pCoord->getEnd()) {}
@@ -73,28 +73,28 @@ namespace TempLat
     ptrdiff_t operator()() const
     {
       //           return mCoord->mOffsets[mICurrent];
-      return (*mCoord)(mICurrent);
+      return (mCoord)(mICurrent);
     }
     ptrdiff_t operator()(ptrdiff_t i) const
     {
       //           return mCoord->mOffsets[mICurrent+i];
-      return (*mCoord)(mICurrent);
+      return (mCoord)(mICurrent);
     }
     ptrdiff_t operator()()
     {
       std::cout << "Looper::operator() called with i = " << mICurrent << std::endl;
       //           return mCoord->mOffsets[mICurrent];
-      return (*mCoord)(mICurrent);
+      return (mCoord)(mICurrent);
     }
     std::vector<ptrdiff_t> getVec() const
     {
       //           return mCoord->mVectorCoords[mCoord->mOffsets[mICurrent]];
-      return mCoord->getVec(mICurrent);
+      return mCoord.getVec(mICurrent);
     }
     std::vector<ptrdiff_t> getVec(const ptrdiff_t &i) const
     {
       //           return mCoord->mVectorCoords[i];
-      return mCoord->getVec(i);
+      return mCoord.getVec(i);
     }
 
     bool isAtOrigin()
@@ -107,7 +107,7 @@ namespace TempLat
     }
 
   private:
-    std::shared_ptr<Coordinates<NDim>> mCoord;
+    Coordinates<NDim> mCoord;
     mutable ptrdiff_t mICurrent;
     const ptrdiff_t mStart;
     const ptrdiff_t mEnd;

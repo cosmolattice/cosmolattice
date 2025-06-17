@@ -42,15 +42,15 @@ namespace TempLat
       Arg() : BinaryOperator<R, T>(R(), T()) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
 #ifndef NOKOKKOS
-        auto res = Kokkos::atan2(GetValue::get(mR, i), GetValue::get(mR, i));
+        using Kokkos::atan2;
+        auto res = atan2(GetValue::get(mR, idx...), GetValue::get(mR, idx...));
         return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
 #else
-        using namespace std; /* this way, for potential future data types. */
-        auto res = atan2(GetValue::get(mR, i), GetValue::get(mR, i));
+        using std::atan2; /* this way, for potential future data types. */
+        auto res = atan2(GetValue::get(mR, idx...), GetValue::get(mR, idx...));
         return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
 #endif
       }

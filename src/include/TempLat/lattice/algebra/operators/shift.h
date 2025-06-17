@@ -28,8 +28,11 @@ namespace TempLat
     KOKKOS_FUNCTION
     ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) { shift = computeShifts({SHIFTS...}); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) const { return GetValue::get(mR, i + shift); }
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    {
+      static_assert(sizeof...(IDX) == 1, "Shift must be deprecated...");
+      return GetValue::get(mR, (idx + shift)...);
+    }
 
     KOKKOS_FORCEINLINE_FUNCTION
     void eval(ptrdiff_t i) { DoEval::eval(mR, i + shift); }

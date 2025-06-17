@@ -26,8 +26,10 @@ namespace TempLat
     KOKKOS_FUNCTION
     HeavisideStepFunction(const R &pR) : UnaryOperator<R>(pR) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) const { return (GetValue::get(mR, i) >= 0 ? 1. : 0); }
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    {
+      return (GetValue::get(mR, idx...) >= 0 ? 1. : 0);
+    }
 
     /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
     template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)

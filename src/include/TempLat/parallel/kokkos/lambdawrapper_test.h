@@ -7,9 +7,6 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include <cstdint>
-#include <cuda.h>
-
 template <size_t NDim> void TempLat::KokkosNDLambdaWrapperTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   Kokkos::View<double *, Kokkos::DefaultExecutionSpace> a("a", size_t(pow(2, NDim)));

@@ -43,15 +43,9 @@ namespace TempLat
       Exponential(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        return Kokkos::exp(GetValue::get(mR, i));
-#else
-        using namespace std; /* not std::exp, but this way, for potential future data types. */
-        return exp(GetValue::get(mR, i));
-#endif
+        return exp(GetValue::get(mR, idx...));
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */

@@ -12,7 +12,7 @@
 namespace TempLat
 {
   template <size_t NDim, typename FUN> struct KokkosNDLambdaWrapper {
-    KokkosNDLambdaWrapper(const FUN &fun) : fun(fun) {};
+    KokkosNDLambdaWrapper(const FUN &_fun) : fun(_fun) {};
 
     template <typename... Args>
       requires(sizeof...(Args) == NDim)

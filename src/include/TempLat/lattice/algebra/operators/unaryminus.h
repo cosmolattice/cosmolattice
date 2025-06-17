@@ -34,8 +34,10 @@ namespace TempLat
       UnaryMinus(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return -GetValue::get(mR, i); }
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      {
+        return -GetValue::get(mR, idx...);
+      }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other) { return -GetDeriv::get(mR, other); }

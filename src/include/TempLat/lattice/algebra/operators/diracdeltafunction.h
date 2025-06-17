@@ -29,11 +29,10 @@ namespace TempLat
       DiracDeltaFunction(const R &a) : UnaryOperator<R>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         typedef typename GetGetReturnType<R>::type mType;
-        mType objValue = GetValue::get(mR, i);
+        mType objValue = GetValue::get(mR, idx...);
         bool isZero = objValue == mType(0);
         return isZero ? std::numeric_limits<mType>::infinity() : mType(0);
       }

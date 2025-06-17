@@ -42,11 +42,13 @@ namespace TempLat
     MemoryBlock() : mSize(0u) {}
 
     /** \brief Constructor with a size to allocate. */
-    MemoryBlock(size_t size) : mSize(size), mData("FieldMemoryBlock", size)
+    MemoryBlock(size_t size) : mSize(size)
     {
-      mHostMirror = Kokkos::create_mirror_view(mData);
+      mData = Kokkos::View<T *, Kokkos::DefaultExecutionSpace>("MemoryBlock", mSize);
 
       zero();
+
+      mHostMirror = Kokkos::create_mirror_view(mData);
     }
 
     /** getter */
@@ -78,7 +80,6 @@ namespace TempLat
 #endif
       return std::apply([&](auto &&...args) { return KokkosNDView<NDim, T>(mData.data(), args...); }, localSizes);
     }
-
     template <typename INT> auto getNDHostView(const std::array<INT, NDim> &localSizes) const
     {
 #ifdef CHECKBOUNDS

@@ -19,7 +19,11 @@
 
 namespace TempLat
 {
+#ifndef NOKOKKOS
+  using Kokkos::cosh;
+#else
   using std::cosh;
+#endif
 
   namespace Operators
   {
@@ -37,15 +41,9 @@ namespace TempLat
       Cosh(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        return Kokkos::cosh(GetValue::get(mR, i));
-#else
-        using namespace std; /* not std::exp, but this way, for potential future data types. */
-        return cosh(GetValue::get(mR, i));
-#endif
+        return cosh(GetValue::get(mR, idx...));
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */

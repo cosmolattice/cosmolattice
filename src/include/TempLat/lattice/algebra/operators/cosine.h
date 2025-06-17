@@ -20,7 +20,11 @@
 
 namespace TempLat
 {
+#ifndef NOKOKKOS
+  using Kokkos::cos;
+#else
   using std::cos;
+#endif
 
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
@@ -39,15 +43,9 @@ namespace TempLat
       Cosine(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        return Kokkos::cos(GetValue::get(mR, i));
-#else
-        using namespace std;
-        return cos(GetValue::get(mR, i));
-#endif
+        return cos(GetValue::get(mR, idx...));
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */

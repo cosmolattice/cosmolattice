@@ -18,15 +18,20 @@
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 namespace TempLat
 {
-  /** \brief A class which implements the Sinh.
-   *
-   * Unit test: make test-sinh
-   **/
+
+#ifndef NOKOKKOS
+  using Kokkos::sinh;
+#else
   using std::sinh;
+#endif
 
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
+    /** \brief A class which implements the Sinh.
+     *
+     * Unit test: make test-sinh
+     **/
     template <typename T> class Sinh : public UnaryOperator<T>
     {
     public:
@@ -37,15 +42,9 @@ namespace TempLat
       Sinh(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        return Kokkos::sinh(GetValue::get(mR, i));
-#else
-        using namespace std; /* not std::exp, but this way, for potential future data types. */
-        return sinh(GetValue::get(mR, i));
-#endif
+        return sinh(GetValue::get(mR, idx...));
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */

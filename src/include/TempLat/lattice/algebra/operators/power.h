@@ -46,16 +46,9 @@ namespace TempLat
       KOKKOS_FUNCTION
       Power(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        using namespace Kokkos;
-        return pow(GetValue::get(mR, i), GetValue::get(mT, i));
-#else
-        using namespace std;
-        return pow(GetValue::get(mR, i), GetValue::get(mT, i));
-#endif
+        return pow(GetValue::get(mR, idx...), GetValue::get(mT, idx...));
       }
 
       static std::string operatorString() { return "^"; }

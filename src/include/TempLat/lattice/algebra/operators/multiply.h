@@ -15,6 +15,7 @@
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
+#include "TempLat/lattice/algebra/conditional/isarithmetic.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/util/tdd/tdd.h"
 
@@ -68,8 +69,10 @@ namespace TempLat
       KOKKOS_FUNCTION
       Multiplication() : BinaryOperator<R, T>(R(), T()) {}
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return GetValue::get(mT, i) * GetValue::get(mR, i); }
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      {
+        return GetValue::get(mT, idx...) * GetValue::get(mR, idx...);
+      }
 
       static std::string operatorString() { return "*"; }
 
@@ -88,8 +91,10 @@ namespace TempLat
       KOKKOS_FUNCTION
       MultiplicationN(const R &pR) : UnaryOperator<R>(pR) {}
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return N * GetValue::get(mR, i); }
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      {
+        return N * GetValue::get(mR, idx...);
+      }
 
       static std::string operatorString() { return std::to_string(N) + "*"; }
 
@@ -107,8 +112,8 @@ namespace TempLat
 
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalBinaryGetter<Operators::Multiplication, R, T>::type
-  operator*(const R &r, const T &t)
+    requires(!IsArithmetic<R> || !IsArithmetic<T>)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return Operators::Multiplication<R, T>(r, t);
   }

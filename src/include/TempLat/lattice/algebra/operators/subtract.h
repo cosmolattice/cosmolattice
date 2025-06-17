@@ -11,6 +11,7 @@
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/unaryminus.h"
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/lattice/algebra/conditional/isarithmetic.h"
 
 namespace TempLat
 {
@@ -31,8 +32,10 @@ namespace TempLat
       KOKKOS_FUNCTION
       Subtraction(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return GetValue::get(mR, i) - GetValue::get(mT, i); }
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      {
+        return GetValue::get(mR, idx...) - GetValue::get(mT, idx...);
+      }
 
       static std::string operatorString() { return "-"; }
 
@@ -45,8 +48,8 @@ namespace TempLat
   } // namespace Operators
 
   template <typename R, typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalBinaryGetter<Operators::Subtraction, R, T>::type operator-(const R &r,
-                                                                                                             const T &t)
+    requires(!IsArithmetic<R> && !IsArithmetic<T>)
+  KOKKOS_FORCEINLINE_FUNCTION Operators::Subtraction<R, T> operator-(const R &r, const T &t)
   {
     return Operators::Subtraction<R, T>(r, t);
   }

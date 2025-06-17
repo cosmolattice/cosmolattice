@@ -16,9 +16,7 @@
 #include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/parallel/kokkos/kokkos.h"
-#include <Kokkos_Core.hpp>
-#include <Kokkos_Macros.hpp>
-#include <sys/types.h>
+#include "TempLat/parallel/kokkos/lambdawrapper.h"
 
 namespace TempLat
 {
@@ -68,14 +66,16 @@ namespace TempLat
       }
 
       for (size_t d = 0; d < NDim; ++d) {
-        start[d] = padding[d][0] + localStarts[d];
-        stop[d] = start[d] + localSizes[d];
-        std::cout << "start[" << d << "] = " << start[d] << ", stop[" << d << "] = " << stop[d] << std::endl;
+        start_iteration[d] = padding[d][0] + localStarts[d];
+        stop_iteration[d] = start_iteration[d] + localSizes[d];
+        std::cout << "start[" << d << "] = " << start_iteration[d] << ", stop[" << d << "] = " << stop_iteration[d]
+                  << std::endl;
       }
 
-      auto memorySizes = layout.getLocalSizes();
+      memorySizes = layout.getLocalSizes();
       for (size_t d = 0; d < NDim; ++d) {
         memorySizes[d] += padding[d][0] + padding[d][1]; // add padding to the local sizes
+        localSlicing[d] = std::make_pair(padding[d][0], padding[d][0] + localSizes[d]);
       }
 
       std::cout << "memory sizes: ";
@@ -83,41 +83,31 @@ namespace TempLat
         std::cout << size << " ";
       }
       std::cout << std::endl;
+      std::cout << "local slicing: [";
+      for (uint i = 0; i < localSlicing.size(); ++i) {
+        std::cout << localSlicing[i].first << ":" << localSlicing[i].second;
+        if (i != localSlicing.size() - 1) std::cout << ", ";
+      }
+      std::cout << std::endl;
 
       mView = mManager->getNDView(memorySizes);
+      mRawView = mManager->getRawView();
     }
-
-    Kokkos::Array<int64_t, NDim> start;
-    Kokkos::Array<int64_t, NDim> stop;
-
-    /**
-     * @brief This struct is just a helper to wrap a call operator with variadic parameters.
-     * We cannot do this directly in a lambda as variadic parameters do not play well with CUDA
-     *
-     * @tparam G The type of expression to evaluate.
-     */
-    template <typename G> struct NDAssignment {
-      NDAssignment(const KokkosNDView<NDim, T> &_mView, const G &_g) : mView(_mView), g(_g) {}
-
-      template <typename... IDX> KOKKOS_FUNCTION void operator()(IDX... idx) const
-      {
-        // mView(idx...) = GetEval::getEval(g, idx...);
-        auto test = GetEval::getEval(g, idx...);
-        mView(idx...) = GetEval::getEval(3, idx...) + test;
-      }
-      KokkosNDView<NDim, T> mView;
-      const G g;
-    };
 
     template <typename R> void assign(R &&g)
     {
 #ifndef NOKOKKOS
 
       onBeforeAssignment(g);
-      Kokkos::parallel_for("ConfigViewAssign",                                     //
-                           Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start, stop), //
-                           NDAssignment<R>(mView, g)                               //
-      );
+
+      auto functor = KOKKOS_CLASS_LAMBDA(const std::array<size_t, NDim> &idx)
+      {
+        std::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
+      };
+
+      Kokkos::parallel_for("ConfigViewAssign",                                                         //
+                           Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 #else
       auto it = mToolBox->itX();
       int i = 0;
@@ -131,7 +121,7 @@ namespace TempLat
       mManager->setGhostsAreStale();
     }
 
-    KokkosNDViewUnmanaged<NDim, T> mView;
+    auto getLocalView() { return mManager->getNDHostSubView(memorySizes, localSlicing); }
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
@@ -140,6 +130,14 @@ namespace TempLat
     void operator=(const ConfigView<NDim, T> &other)
     { // overwrite the default = operator.
       this->assign(other);
+    }
+
+    template <typename IDX>
+      requires(NDim != 1)
+    [[deprecated("This method should be solely used for checking purposes.")]]
+    KOKKOS_FORCEINLINE_FUNCTION T get(IDX idx) const
+    {
+      return mRawView(idx);
     }
 
     template <typename... IDX>
@@ -239,6 +237,16 @@ namespace TempLat
     }
 
   private:
+    Kokkos::Array<int64_t, NDim> start_iteration;
+    Kokkos::Array<int64_t, NDim> stop_iteration;
+
+    KokkosNDViewUnmanaged<NDim, T> mView;
+    KokkosNDViewUnmanaged<1, T> mRawView;
+    KokkosNDViewUnmanaged<NDim, T, Kokkos::DefaultHostExecutionSpace> mHostView;
+
+    std::array<ptrdiff_t, NDim> memorySizes;
+    std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
+
     bool mDisableFFTBlocking;
 
   public:

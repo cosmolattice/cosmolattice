@@ -16,9 +16,16 @@
 #include "TempLat/lattice/algebra/operators/multiply.h"
 #include "TempLat/lattice/algebra/operators/sinh.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
+#include <type_traits>
 
 namespace TempLat
 {
+#ifndef NOKOKKOS
+  using Kokkos::tanh;
+#else
+  using std::tanh;
+#endif
+
   namespace Operators
   {
     /** \brief A class which implements the Tanh.
@@ -35,15 +42,9 @@ namespace TempLat
       Tanh(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        return Kokkos::tanh(GetValue::get(mR, i));
-#else
-        using namespace std; /* not std::exp, but this way, for potential future data types. */
-        return tanh(GetValue::get(mR, i));
-#endif
+        return tanh(GetValue::get(mR, idx...));
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
@@ -64,7 +65,9 @@ namespace TempLat
   };
 
   /** \brief Exposing our newly define exp operation to the world. */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::Tanh, T>::type tanh(T a)
+  template <typename T>
+    requires(!std::is_arithmetic_v<T> && !IsComplexType<T>::value)
+  KOKKOS_FORCEINLINE_FUNCTION auto tanh(T a)
   {
     return Operators::Tanh<T>(a);
   }

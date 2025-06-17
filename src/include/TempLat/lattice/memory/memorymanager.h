@@ -46,10 +46,26 @@ namespace TempLat
     {
       return mBlock.getNDView(localSizes);
     }
-
     template <typename INT> inline auto getNDHostView(const std::array<INT, NDim> &localSizes) const
     {
-      return mBlock.getNDView(localSizes);
+      return mBlock.getNDHostView(localSizes);
+    }
+
+    template <typename INT>
+    auto getNDSubView(const std::array<INT, NDim> &localSizes,
+                      const std::array<std::pair<INT, INT>, NDim> &slices) const
+    {
+      auto view = mBlock.getNDView(localSizes);
+      auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
+      return subView;
+    }
+    template <typename INT>
+    auto getNDHostSubView(const std::array<INT, NDim> &localSizes,
+                          const std::array<std::pair<INT, INT>, NDim> &slices) const
+    {
+      auto view = mBlock.getNDHostView(localSizes);
+      auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
+      return subView;
     }
 
     void pushHostView() { mBlock.pushHostView(); }

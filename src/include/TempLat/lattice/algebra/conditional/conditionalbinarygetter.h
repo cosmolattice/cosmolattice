@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/lattice/algebra/conditional/isgettable.h"
+#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
 #include "TempLat/lattice/algebra/helpers/hasvectorgetmethod.h"
 #include "TempLat/util/tdd/tdd.h"

@@ -33,16 +33,14 @@ namespace TempLat
       ASinh(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
+      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-        using namespace std; /* not std::exp, but this way, for potential future data types. */
-        return asinh(GetValue::get(mR, i));
 #ifndef NOKOKKOS
-        return Kokkos::asinh(GetValue::get(mR, i));
+        using Kokkos::asinh; /* not std::exp, but this way, for potential future data types. */
+        return asinh(GetValue::get(mR, idx...));
 #else
-        using namespace std; /* not std::exp, but this way, for potential future data types. */
-        return asinh(GetValue::get(mR, i));
+        using std::asinh; /* not std::exp, but this way, for potential future data types. */
+        return asinh(GetValue::get(mR, idx...));
 #endif
       }
 
