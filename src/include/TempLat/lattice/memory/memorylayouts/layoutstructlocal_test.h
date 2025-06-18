@@ -9,11 +9,10 @@
 
 template <size_t NDim> inline void TempLat::LayoutStructLocal<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-
   /* test the operator== */
   LayoutStructLocal<3> a({0, 0, 0});
   LayoutStructLocal<3> b({0, 0, 0});
-  LayoutStructLocal<3> c({0, 0});
+  LayoutStructLocal<2> c({0, 0});
   LayoutStructLocal<3> d({0, 0, 0});
 
   d.getLocalSizes()[1] = 2;

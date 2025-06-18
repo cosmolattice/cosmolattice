@@ -65,7 +65,9 @@ namespace TempLat
   };
 
   /** \brief Exposing our newly define exp operation to the world. */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::Sine, T>::type sin(T a)
+  template <typename T>
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto sin(T a)
   {
     return Operators::Sine<T>(a);
   }

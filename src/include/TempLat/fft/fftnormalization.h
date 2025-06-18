@@ -104,47 +104,49 @@ namespace TempLat
 
     template <typename T> inline void apply(MemoryBlock<NDim, T> &mBlock, T norm)
     {
+      auto block_view = mBlock.getRawHostView();
+
       /* manually unrolled... */
 
       switch (mUnrollLevel) {
       case 32:
-        apply_unrolled<32>(mBlock, norm);
+        apply_unrolled<32>(block_view, norm);
         break;
       case 16:
-        apply_unrolled<16>(mBlock, norm);
+        apply_unrolled<16>(block_view, norm);
         break;
       case 8:
-        apply_unrolled<8>(mBlock, norm);
+        apply_unrolled<8>(block_view, norm);
         break;
       case 4:
-        apply_unrolled<4>(mBlock, norm);
+        apply_unrolled<4>(block_view, norm);
         break;
       case 2:
       default:
-        apply_unrolled<2>(mBlock, norm);
+        apply_unrolled<2>(block_view, norm);
         break;
       }
     }
 
-    template <ptrdiff_t BLOCKSIZE, typename T> inline void apply_unrolled(MemoryBlock<NDim, T> &mBlock, T norm)
+    template <ptrdiff_t BLOCKSIZE, typename T, typename View> inline void apply_unrolled(View &view, T norm)
     {
       for (ptrdiff_t i = 0, iEnd = mNumberOfDoublesToChange; i < iEnd; i += BLOCKSIZE) {
-        multiplyInPlace<BLOCKSIZE - 1, T>::apply(mBlock, i, norm);
+        multiplyInPlace<BLOCKSIZE - 1, T, View>::apply(view, i, norm);
       }
     }
 
     /** \brief is this a nested class? Yes, but well, it's really a wrapper around a function so that we can partially
      * specialize. */
-    template <ptrdiff_t OFFSET, typename T> struct multiplyInPlace {
-      static inline void apply(MemoryBlock<NDim, T> &mBlock, ptrdiff_t i, T norm)
+    template <ptrdiff_t OFFSET, typename T, typename View> struct multiplyInPlace {
+      static inline void apply(View &view, ptrdiff_t i, T norm)
       {
-        mBlock[i] *= norm;
-        multiplyInPlace<OFFSET - 1, T>::apply(mBlock, i + 1, norm);
+        view[i] *= norm;
+        multiplyInPlace<OFFSET - 1, T, View>::apply(view, i + 1, norm);
       }
     };
 
-    template <typename T> struct multiplyInPlace<(ptrdiff_t)-1, T> {
-      static inline void apply(MemoryBlock<NDim, T> &mBlock, ptrdiff_t i, T norm) { /* finished unrolling */ }
+    template <typename T, typename View> struct multiplyInPlace<(ptrdiff_t)-1, T, View> {
+      static inline void apply(View &view, ptrdiff_t i, T norm) { /* finished unrolling */ }
     };
 
   public:

@@ -11,7 +11,7 @@
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/unaryminus.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/conditional/isarithmetic.h"
+#include "TempLat/lattice/algebra/helpers/isarithmetic.h"
 
 namespace TempLat
 {

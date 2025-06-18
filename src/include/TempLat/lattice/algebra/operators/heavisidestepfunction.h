@@ -41,7 +41,8 @@ namespace TempLat
   };
 
   template <typename R>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<HeavisideStepFunction, R>::type heaviside(const R &r)
+    requires ConditionalUnaryGetter<R>
+  KOKKOS_FORCEINLINE_FUNCTION auto heaviside(const R &r)
   {
     return HeavisideStepFunction<R>(r);
   }

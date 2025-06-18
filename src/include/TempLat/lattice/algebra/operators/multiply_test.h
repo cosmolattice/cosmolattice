@@ -7,17 +7,16 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MultiplyTester::Test(TempLat::TDDAssertion &tdd) {
-  class myClass {
+inline void TempLat::MultiplyTester::Test(TempLat::TDDAssertion &tdd)
+{
+  class myClass
+  {
   public:
     KOKKOS_FUNCTION
-    myClass(int b): a(b) {
-    }
+    myClass(int b) : a(b) {}
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) const {
-      return a;
-    }
+    auto get(ptrdiff_t i) const { return a; }
 
   private:
     int a;
@@ -28,11 +27,11 @@ inline void TempLat::MultiplyTester::Test(TempLat::TDDAssertion &tdd) {
 
   //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
   //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
-  tdd.verify(HasGetMethod<Operators::Multiplication<myClass, myClass> >::value == true);
+  tdd.verify(HasGetMethod<Operators::Multiplication<myClass, myClass>> == true);
   tdd.verify((b * c).get(0) == 6);
 
   int e = 3, f = 4;
-  tdd.verify(HasGetMethod<decltype(e * f)>::value == false);
+  tdd.verify(HasGetMethod<decltype(e * f)> == false);
 
   // pointless, but shuts up the compiler about unused variables:
   e = e + f;

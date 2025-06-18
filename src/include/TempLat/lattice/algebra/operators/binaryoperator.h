@@ -38,7 +38,6 @@ namespace TempLat
     KOKKOS_FUNCTION
     BinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
     void doWeNeedGhosts()
     {
       GhostsHunter::apply(mR);
@@ -46,14 +45,12 @@ namespace TempLat
     }
 
     template <size_t NDim>
-    KOKKOS_FORCEINLINE_FUNCTION void confirmSpace(const LayoutStruct<NDim> &newLayout,
-                                                  const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
       ConfirmSpace::apply(mT, newLayout, spaceType);
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR) + ConfirmGhosts::apply(mT); }
 
     template <size_t NDim> KOKKOS_FORCEINLINE_FUNCTION JumpsHolder<NDim> getJumps() const
@@ -73,10 +70,10 @@ namespace TempLat
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto getDx() const { return HasDx<R>::value ? GetDx::getDx(mR) : (HasDx<T>::value ? GetDx::getDx(mT) : 1); }
+    auto getDx() const { return HasDx<R> ? GetDx::getDx(mR) : (HasDx<T> ? GetDx::getDx(mT) : 1.); }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto getKIR() const { return HasKIR<R>::value ? GetKIR::getKIR(mR) : (HasKIR<T>::value ? GetKIR::getKIR(mT) : 1); }
+    auto getKIR() const { return HasKIR<R> ? GetKIR::getKIR(mR) : (HasKIR<T> ? GetKIR::getKIR(mT) : 1.); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
     static std::string operatorString() { return " "; }

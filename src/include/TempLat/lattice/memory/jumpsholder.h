@@ -16,7 +16,6 @@
 
 namespace TempLat
 {
-
   MakeException(JumpsHolderException);
   MakeException(DifferentJumpsHolderException);
 

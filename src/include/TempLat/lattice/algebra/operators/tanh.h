@@ -66,7 +66,7 @@ namespace TempLat
 
   /** \brief Exposing our newly define exp operation to the world. */
   template <typename T>
-    requires(!std::is_arithmetic_v<T> && !IsComplexType<T>::value)
+    requires(!std::is_arithmetic_v<T> && !IsComplexType<T>)
   KOKKOS_FORCEINLINE_FUNCTION auto tanh(T a)
   {
     return Operators::Tanh<T>(a);

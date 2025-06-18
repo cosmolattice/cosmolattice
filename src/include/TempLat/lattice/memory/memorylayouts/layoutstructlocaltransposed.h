@@ -88,17 +88,21 @@ namespace TempLat
       return result;
     }
 
-    friend bool operator==(const LayoutStructLocalTransposed &a, const LayoutStructLocalTransposed &b)
+    template <size_t d2>
+    friend bool operator==(const LayoutStructLocalTransposed<NDim> &a, const LayoutStructLocalTransposed<d2> &b)
     {
+      if constexpr (NDim != d2)
+        return false;
+      else {
+        bool result = a.mLocal == b.mLocal &&
+                      a.mTranspositionMap_memoryToGlobalSpace == b.mTranspositionMap_memoryToGlobalSpace &&
+                      a.mSizesInMemory.size() == b.mSizesInMemory.size();
 
-      bool result = a.mLocal == b.mLocal &&
-                    a.mTranspositionMap_memoryToGlobalSpace == b.mTranspositionMap_memoryToGlobalSpace &&
-                    a.mSizesInMemory.size() == b.mSizesInMemory.size();
-
-      for (size_t i = 0; i < a.mSizesInMemory.size(); ++i) {
-        result = result && a.mSizesInMemory[i] == b.mSizesInMemory[i];
+        for (size_t i = 0; i < a.mSizesInMemory.size(); ++i) {
+          result = result && a.mSizesInMemory[i] == b.mSizesInMemory[i];
+        }
+        return result;
       }
-      return result;
     }
 
     friend std::ostream &operator<<(std::ostream &ostream, const LayoutStructLocalTransposed &ls)

@@ -64,7 +64,9 @@ namespace TempLat
   };
 
   /** \brief Exposing our newly define exp operation to the world. */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::Cosh, T>::type cosh(T a)
+  template <typename T>
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto cosh(T a)
   {
     return Operators::Cosh<T>(a);
   }

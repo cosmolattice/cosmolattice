@@ -18,7 +18,7 @@ namespace TempLat
    *
    * Unit test: make test-conditionalbinarygetterscalarvector
    **/
-  template <template <typename OPT, typename OPS> class OP, typename S, typename T>
+  template <typename S, typename T>
   concept ConditionalListBinaryGetter =
       (IsSTDGettable<0, S> || IsSTDGettable<0, T> || IsTempLatGettable<0, S> || IsTempLatGettable<0, T>);
 

@@ -8,13 +8,12 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/void_t.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
 {
   template <typename T>
-  concept TypeHasStaticGet = requires(T t, Tag<0> tag) { T::Getter::get(t, tag); };
+  concept HasStaticGet = requires(T t, Tag<0> tag) { T::Getter::get(t, tag); };
 
   struct HasStaticGetterDummy {
   public:

@@ -69,7 +69,9 @@ namespace TempLat
   };
 
   /** \brief Exposing our newly define log operation to the world. */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::Log, T>::type log(T a)
+  template <typename T>
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto log(T a)
   {
     return Operators::Log<T>(a);
   }

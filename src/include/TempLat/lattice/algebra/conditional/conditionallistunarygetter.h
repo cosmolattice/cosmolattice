@@ -16,7 +16,7 @@ namespace TempLat
    *
    * Unit test: make test-conditionallistunarygetter
    **/
-  template <template <typename OPT> class OP, typename S>
+  template <typename S>
   concept ConditionalListUnaryGetter = IsSTDGettable<0, S> || IsTempLatGettable<0, S>;
 
   struct ConditionalListUnaryGetterTester {

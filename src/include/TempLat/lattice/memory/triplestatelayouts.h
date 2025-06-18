@@ -64,6 +64,8 @@ namespace TempLat
       mJumps_configSpace = JumpsHolder<NDim>(mConfigSpaceWithGhosts_layout, tmpPadding);
 
       mNecessaryMemoryAllocation = computeMemSize();
+
+      std::cout << *this << std::endl;
     }
 
     friend std::ostream &operator<<(std::ostream &ostream, const TripleStateLayouts &tsl)

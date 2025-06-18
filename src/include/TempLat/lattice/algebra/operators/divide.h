@@ -92,15 +92,15 @@ namespace TempLat
 
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalBinaryGetter<Operators::Division, R, T>::type operator/(const R &r,
-                                                                                                          const T &t)
+    requires ConditionalBinaryGetter<R, T>
+  KOKKOS_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
   {
     return Operators::Division<R, T>(r, t);
   }
 
   template <typename R, typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalBinaryGetter<Operators::SafeDivision, R, T>::type
-  safeDivide(const R &r, const T &t)
+    requires ConditionalBinaryGetter<R, T>
+  KOKKOS_FORCEINLINE_FUNCTION auto safeDivide(const R &r, const T &t)
   {
     return Operators::SafeDivision<R, T>(r, t);
   }
@@ -110,8 +110,8 @@ namespace TempLat
 
   /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<!std::is_same<T, ZeroType>::value, ZeroType>::type
-  operator/(ZeroType a, const T &b)
+    requires std::is_same_v<T, ZeroType>
+  KOKKOS_FORCEINLINE_FUNCTION auto operator/(const ZeroType &a, const T &b)
   {
     return a;
   }

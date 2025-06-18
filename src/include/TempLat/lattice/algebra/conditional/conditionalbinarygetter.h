@@ -14,9 +14,9 @@
 
 namespace TempLat
 {
-  template <template <typename OPT, typename OPS> class OP, typename S, typename T>
+  template <typename S, typename T>
   concept ConditionalBinaryGetter = ((HasGetMethod<S> || HasGetMethod<T>) && !HasVectorGetMethod<S> &&
-                                     !HasVectorGetMethod<T> && !HasStaticGetter<S> && !HasStaticGetter<T>);
+                                     !HasVectorGetMethod<T> && !HasStaticGet<S> && !HasStaticGet<T>);
 
   struct ConditionalBinaryGetterTester {
     static void Test(TempLat::TDDAssertion &);

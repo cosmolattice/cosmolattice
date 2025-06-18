@@ -9,13 +9,14 @@
 
 #include <type_traits>
 
+#include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
+#include "TempLat/lattice/algebra/helpers/isarithmetic.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/lattice/algebra/conditional/isarithmetic.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/util/tdd/tdd.h"
 
@@ -112,26 +113,22 @@ namespace TempLat
 
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
-    requires(!IsArithmetic<R> || !IsArithmetic<T>)
+    requires ConditionalBinaryGetter<R, T>
   KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return Operators::Multiplication<R, T>(r, t);
   }
 
   template <typename R, int N>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename std::enable_if<HasGetMethod<R>::value && !(IsTempLatGettable<0, R>::value || IsSTDGettable<0, R>::value),
-                              Operators::MultiplicationN<R, N>>::type
-      operator*(const R &r, Tag<N> n)
+    requires(HasGetMethod<R> && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
+  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, Tag<N> n)
   {
     return Operators::MultiplicationN<R, N>(r);
   }
 
   template <typename R, int N>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename std::enable_if<HasGetMethod<R>::value && !(IsTempLatGettable<0, R>::value || IsSTDGettable<0, R>::value),
-                              Operators::MultiplicationN<R, N>>::type
-      operator*(Tag<N> n, const R &r)
+    requires(HasGetMethod<R> && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
+  KOKKOS_FORCEINLINE_FUNCTION auto operator*(Tag<N> n, const R &r)
   {
     return Operators::MultiplicationN<R, N>(r);
   }

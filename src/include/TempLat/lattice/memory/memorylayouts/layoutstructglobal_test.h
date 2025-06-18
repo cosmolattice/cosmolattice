@@ -12,7 +12,7 @@ template <size_t NDim> inline void TempLat::LayoutStructGlobal<NDim>::Test(TempL
   /* test the operator== */
   LayoutStructGlobal<3> a({0, 0, 0});
   LayoutStructGlobal<3> b({0, 0, 0});
-  LayoutStructGlobal<3> c({0, 0});
+  LayoutStructGlobal<2> c({0, 0});
   LayoutStructGlobal<3> d({0, 0, 0});
 
   d.getGlobalSizes()[1] = 2;
@@ -23,7 +23,7 @@ template <size_t NDim> inline void TempLat::LayoutStructGlobal<NDim>::Test(TempL
 
   a = LayoutStructGlobal({10, 10, 10});
 
-  std::array<ptrdiff_t, 3> memVec(3), posVec(3), memVec2(3);
+  std::array<ptrdiff_t, 3> memVec{}, posVec{}, memVec2{};
 
   memVec[0] = 1;
   memVec[1] = 2;

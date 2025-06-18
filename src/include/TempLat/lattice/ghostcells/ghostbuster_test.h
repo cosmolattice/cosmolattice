@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-
   /* Perhaps a bit elaborate, but it is as consistent as it gets.. */
 
   /* single datum on a grid: 24 bytes making up x, y, and z. */
@@ -19,7 +18,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
   /* arbitrary irregular sizing */
   std::array<ptrdiff_t, 3> nGrid{{62, 22, 24}};
 
-  std::vector<ptrdiff_t> transpositionMap{{0, 1, 2}};
+  std::array<ptrdiff_t, 3> transpositionMap{{0, 1, 2}};
 
   LayoutStruct<3> layout({62, 62, 62});
   layout.setLocalSizes(nGrid);
@@ -98,7 +97,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
   };
 
   /* arbitrary irregular ghosting A */
-  std::vector<std::array<ptrdiff_t, 2u>> nGhost1(3);
+  std::array<std::array<ptrdiff_t, 2u>, 3> nGhost1{};
 
   nGhost1[0][0] = 6;
   nGhost1[0][1] = 5;
@@ -108,7 +107,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
   nGhost1[2][1] = 1;
 
   /* arbitrary irregular ghosting B: by choice slightly smaller than A, to be safe. */
-  std::vector<std::array<ptrdiff_t, 2u>> nGhost2(3);
+  std::array<std::array<ptrdiff_t, 2u>, 3> nGhost2{};
   nGhost2[0][0] = 5;
   nGhost2[0][1] = 6;
   nGhost2[1][0] = 1;

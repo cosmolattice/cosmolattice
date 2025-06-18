@@ -65,7 +65,9 @@ namespace TempLat
   };
 
   /** \brief Exposing our newly define exp operation to the world. */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::Sinh, T>::type sinh(T a)
+  template <typename T>
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto sinh(T a)
   {
     return Operators::Sinh<T>(a);
   }

@@ -8,91 +8,79 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
+#include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 
-namespace TempLat {
-    /** \brief A class which implements scalar multiplication over complex numbers.
-     *
-     * Unit test: make test-scalarcomplexfieldmultiply
-     **/
+namespace TempLat
+{
+  /** \brief A class which implements scalar multiplication over complex numbers.
+   *
+   * Unit test: make test-scalarcomplexfieldmultiply
+   **/
 
-    template<typename R, typename T>
-    class ScalarComplexFieldMultiply : public ComplexFieldBinaryOperator<R, T> {
-    public:
-        /* Put public methods here. These should change very little over time. */
+  template <typename R, typename T> class ScalarComplexFieldMultiply : public ComplexFieldBinaryOperator<R, T>
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
 
-        using ComplexFieldBinaryOperator<R, T>::mR;
-        using ComplexFieldBinaryOperator<R, T>::mT;
+    using ComplexFieldBinaryOperator<R, T>::mR;
+    using ComplexFieldBinaryOperator<R, T>::mT;
 
-        KOKKOS_FUNCTION
-        ScalarComplexFieldMultiply(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {
-        }
+    KOKKOS_FUNCTION
+    ScalarComplexFieldMultiply(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        auto ComplexFieldGet(Tag<0> t) {
-            return mR * Real(mT);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<0> t) { return mR * Real(mT); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        auto ComplexFieldGet(Tag<1> t) {
-            return mR * Imag(mT);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<1> t) { return mR * Imag(mT); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) {
-            return GetEval::getEval(mR, i) * mT.ComplexFieldGet(0_c, i);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) { return GetEval::getEval(mR, i) * mT.ComplexFieldGet(0_c, i); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) {
-            return GetEval::getEval(mR, i) * mT.ComplexFieldGet(1_c, i);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) { return GetEval::getEval(mR, i) * mT.ComplexFieldGet(1_c, i); }
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        void eval(ptrdiff_t i) {
-            DoEval::eval(mR, i);
-            DoEval::eval(mT, i);
-        }
+    KOKKOS_FORCEINLINE_FUNCTION
+    void eval(ptrdiff_t i)
+    {
+      DoEval::eval(mR, i);
+      DoEval::eval(mT, i);
+    }
 
-        static std::string operatorString() {
-            return "*";
-        }
-    };
+    static std::string operatorString() { return "*"; }
+  };
 
-    struct ScalarComplexFieldMultiplyTester {
+  struct ScalarComplexFieldMultiplyTester {
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
+  };
 
-    template<typename R, typename T>
-    KOKKOS_FORCEINLINE_FUNCTION
-    typename std::enable_if<!HasStaticGetter<R>::value && !IsComplexType<R>::value && HasComplexFieldGet<T>::value,
-        ScalarComplexFieldMultiply<R, T> >::type
-    operator*(const R &r, const T &t) {
-        return {r, t};
-    }
+  template <typename R, typename T>
+    requires(!HasStaticGet<R> && !IsComplexType<R> && HasComplexFieldGet<T>)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
+  {
+    return ScalarComplexFieldMultiply<R, T>(r, t);
+  }
 
-    template<typename R, typename T>
-    KOKKOS_FORCEINLINE_FUNCTION
-    typename std::enable_if<!HasStaticGetter<T>::value && !IsComplexType<T>::value && HasComplexFieldGet<R>::value,
-        ScalarComplexFieldMultiply<T, R> >::type
-    operator*(const R &r, const T &t) {
-        return {t, r};
-    }
+  template <typename R, typename T>
+    requires(!HasStaticGet<T> && !IsComplexType<T> && HasComplexFieldGet<R>)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
+  {
+    return ScalarComplexFieldMultiply<T, R>{t, r};
+  }
 
-    template<typename R, typename T>
-    KOKKOS_FORCEINLINE_FUNCTION
-    typename std::enable_if<!HasStaticGetter<T>::value && !IsComplexType<T>::value && HasComplexFieldGet<R>::value,
-        ScalarComplexFieldMultiply<T, R> >::type
-    operator/(const R &r, const T &t) {
-        return {1_c / t, r};
-    }
-} /* TempLat */
+  template <typename R, typename T>
+    requires(!HasStaticGet<T> && !IsComplexType<T> && HasComplexFieldGet<R>)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
+  {
+    return ScalarComplexFieldMultiply<T, R>{1_c / t, r};
+  }
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/complexalgebra/scalarcomplexmultiply_test.h"

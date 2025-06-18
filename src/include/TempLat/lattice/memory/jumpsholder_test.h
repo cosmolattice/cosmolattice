@@ -9,7 +9,6 @@
 
 template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-
   /* Perhaps a bit elaborate, but it is as consistent as it gets.. */
   /* And in fact it helped getting out the errors. Yes. */
 
@@ -26,7 +25,7 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   layout.setLocalSizes(nGrid);
 
   /* arbitrary irregular ghosting */
-  std::vector<std::array<ptrdiff_t, 2u>> nGhost(3);
+  std::array<std::array<ptrdiff_t, 2u>, NDim> nGhost{};
   nGhost[0][0] = 6;
   nGhost[0][1] = 5;
   nGhost[1][0] = 4;
@@ -55,9 +54,9 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   }
 
   /* verify the setup, not controlled, but using the jumps which are under scrutiny */
-  JumpsHolder jumper(layout, nGhost);
+  JumpsHolder<3> jumper(layout, nGhost);
   bool allRight = true;
-  std::vector<ptrdiff_t> shifts(3);
+  std::array<ptrdiff_t, NDim> shifts{};
   for (ptrdiff_t i = 0; i < nGrid[0]; ++i) {
     shifts[0] = i;
     for (ptrdiff_t j = 0; j < nGrid[1]; ++j) {
@@ -85,6 +84,9 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   layout.setLocalSizes(nGrid);
 
   tdd.verify(jumper != JumpsHolder(layout2, nGhost));
+
+  std::cout << "information about jumps: ";
+  std::cout << jumper;
 }
 
 #endif

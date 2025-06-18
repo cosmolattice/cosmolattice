@@ -67,17 +67,20 @@ namespace TempLat
 
     friend struct LayoutStruct<NDim>;
 
-    friend bool operator==(const LayoutStructGlobal &a, const LayoutStructGlobal &b)
+    template <size_t d2> friend bool operator==(const LayoutStructGlobal<NDim> &a, const LayoutStructGlobal<d2> &b)
     {
+      if constexpr (NDim != d2)
+        return false;
+      else {
+        bool result = a.mGlobalSizes.size() == b.mGlobalSizes.size() &&
+                      a.mSignConversionMidpoint.size() == b.mSignConversionMidpoint.size();
 
-      bool result = a.mGlobalSizes.size() == b.mGlobalSizes.size() &&
-                    a.mSignConversionMidpoint.size() == b.mSignConversionMidpoint.size();
-
-      for (size_t i = 0; i < a.mGlobalSizes.size(); ++i) {
-        result = result && a.mGlobalSizes[i] == b.mGlobalSizes[i];
-        result = result && a.mSignConversionMidpoint[i] == b.mSignConversionMidpoint[i];
+        for (size_t i = 0; i < a.mGlobalSizes.size(); ++i) {
+          result = result && a.mGlobalSizes[i] == b.mGlobalSizes[i];
+          result = result && a.mSignConversionMidpoint[i] == b.mSignConversionMidpoint[i];
+        }
+        return result;
       }
-      return result;
     }
 
     friend std::ostream &operator<<(std::ostream &ostream, const LayoutStructGlobal &ls)

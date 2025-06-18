@@ -63,7 +63,8 @@ namespace TempLat
 
   /** \brief Exposing our newly define exp operation to the world. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::ASinh, T>::type asinh(T a)
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto asinh(T a)
   {
     return Operators::ASinh<T>(a);
   }

@@ -66,7 +66,9 @@ namespace TempLat
   };
 
   /** \brief Exposing our newly define exp operation to the world. */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::Cosine, T>::type cos(T a)
+  template <typename T>
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto cos(T a)
   {
     return Operators::Cosine<T>(a);
   }

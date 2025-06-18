@@ -10,6 +10,7 @@
 #include "TempLat/lattice/algebra/constants/halftype.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
+#include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
@@ -57,13 +58,15 @@ namespace TempLat
 #endif
   };
 
-  template <typename R, typename T> KOKKOS_FORCEINLINE_FUNCTION auto operator+(const R &r, const T &t)
+  template <typename R, typename T>
+    requires ConditionalBinaryGetter<R, T>
+  KOKKOS_FORCEINLINE_FUNCTION auto operator+(const R &r, const T &t)
   {
     return Operators::Addition<R, T>(r, t);
   }
 
   /** \brief Specialize for possible zero input! */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION T operator+(T a, const ZeroType b) { return a; }
+  template <typename T> KOKKOS_FORCEINLINE_FUNCTION T operator+(const ZeroType a, const ZeroType b) { return a; }
 
   /** \brief Specialize for possible half input! */
   KOKKOS_FORCEINLINE_FUNCTION
@@ -71,8 +74,16 @@ namespace TempLat
 
   /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<!std::is_same<T, ZeroType>::value, T>::type
-  operator+(const ZeroType a, T b)
+    requires(!std::is_same<T, ZeroType>::value)
+  KOKKOS_FORCEINLINE_FUNCTION T operator+(const ZeroType a, const T b)
+  {
+    return b;
+  }
+
+  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
+  template <typename T>
+    requires(!std::is_same<T, ZeroType>::value)
+  KOKKOS_FORCEINLINE_FUNCTION T operator+(const T b, const ZeroType a)
   {
     return b;
   }

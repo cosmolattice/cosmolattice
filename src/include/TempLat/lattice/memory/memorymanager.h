@@ -90,38 +90,6 @@ namespace TempLat
 #endif
     }
 
-    // disabled these: only access through operator[], which optionally compiles with bounds checking.
-    //        inline
-    //        operator T*() { return mBlock; }
-    //
-    //        inline
-    //        operator const T*() const { return mBlock; }
-
-    inline T &operator[](ptrdiff_t i)
-    {
-#ifdef CHECKBOUNDS
-      checkRealBounds(i);
-#endif
-      return mBlock[i];
-    }
-
-    inline T operator[](ptrdiff_t i) const
-    {
-#ifdef CHECKBOUNDS
-      checkRealBounds(i);
-#endif
-      return mBlock[i];
-    }
-
-    /*      inline
-          const T& operator [](ptrdiff_t i) const {
-  #ifdef CHECKBOUNDS
-              checkRealBounds(i);
-  #endif
-              return reinterpret_cast<complex<T>*>((T*) mBlock)[i];
-          }
-          */
-
     inline complex<T> &as_complex(ptrdiff_t i)
     {
 #ifdef CHECKBOUNDS
@@ -143,9 +111,6 @@ namespace TempLat
     {
       ptrdiff_t result = allocate();
 
-      // TODO
-
-      /*
       if (mToolBox->verbosity.spaceConfirmation)
         sayMPI << "Confirming that we are in configuration space. " << getName() << "\n";
       if (!mLayoutState.isConfigSpace()) {
@@ -172,10 +137,12 @@ namespace TempLat
         if (mToolBox->verbosity.spaceConfirmation)
           sayMPI << "Setting ghost state to stale, because of the FFT we performed. " << getName() << "\n";
         mGhostStateKeeper.setStale();
+
+        mBlock.pushHostView(); // make sure the data is pushed to the device
+        if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Pushed data to device.\n";
       }
       mLayoutState.setToConfigSpace();
       if (mToolBox->verbosity.spaceConfirmation) sayMPI << "We are in configuration space.\n";
-      */
       return result;
     }
 
@@ -183,31 +150,32 @@ namespace TempLat
     {
       ptrdiff_t result = allocate();
 
-      // TODO
-
-      /*
-      if ( mToolBox->verbosity.spaceConfirmation ) sayMPI << "Confirming that we are in Fourier space. " << getName() <<
-      "\n"; if ( ! mLayoutState.isFourierSpace() ) { if ( mLayoutState.isConfigSpace() ) { if (
-      mToolBox->verbosity.spaceConfirmation ) sayMPI << "Need ghost buster from plain config to fft config space.\n";
-              ++result;
-              mToolBox->mGhostBuster_toFFTConfig(mBlock);
-              mLayoutState.setToFFTConfigSpace();
-          }
-          if ( mLayoutState.isFFTConfigSpace() ) {
-              if ( mToolBox->verbosity.spaceConfirmation ) sayMPI << "Need FFT R2C.\n";
-              ++result;
-              if ( mToolBox->verbosity.fftPerformance ) say << "FFT: " <<  mName << "(x) -> " << mName << "(k)\n";
-              // do an fft
-              mToolBox->mFFTLibrary.r2c(mBlock);
-              // normalize after FFT
-              ++result;
-              mToolBox->mFFTNormalization.r2c(mBlock, (T) 1.);
-              if ( mToolBox->verbosity.spaceConfirmation ) sayMPI << "Performed FFT R2C.\n";
-          }
+      if (mToolBox->verbosity.spaceConfirmation)
+        sayMPI << "Confirming that we are in Fourier space. " << getName() << "\n";
+      if (!mLayoutState.isFourierSpace()) {
+        if (mLayoutState.isConfigSpace()) {
+          if (mToolBox->verbosity.spaceConfirmation)
+            sayMPI << "Need ghost buster from plain config to fft config space.\n";
+          ++result;
+          mToolBox->mGhostBuster_toFFTConfig(mBlock);
+          mLayoutState.setToFFTConfigSpace();
+        }
+        if (mLayoutState.isFFTConfigSpace()) {
+          if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Need FFT R2C.\n";
+          ++result;
+          if (mToolBox->verbosity.fftPerformance) say << "FFT: " << mName << "(x) -> " << mName << "(k)\n";
+          // do an fft
+          mToolBox->mFFTLibrary.r2c(mBlock);
+          // normalize after FFT
+          ++result;
+          mToolBox->mFFTNormalization.r2c(mBlock, (T)1.);
+          if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT R2C.\n";
+          mBlock.pushHostView(); // make sure the data is pushed to the device
+          if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Pushed data to device.\n";
+        }
       }
       mLayoutState.setToFourierSpace();
-      if ( mToolBox->verbosity.spaceConfirmation ) sayMPI << "We are in Fourier space.\n";
-      */
+      if (mToolBox->verbosity.spaceConfirmation) sayMPI << "We are in Fourier space.\n";
       return result;
     }
 

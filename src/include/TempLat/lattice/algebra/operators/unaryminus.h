@@ -55,7 +55,8 @@ namespace TempLat
 
   /** \brief Exposing our newly defined subtraction operation to the world. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::UnaryMinus, T>::type operator-(const T &a)
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto operator-(const T &a)
   {
     return Operators::UnaryMinus<T>(a);
   }

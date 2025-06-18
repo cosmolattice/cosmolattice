@@ -59,17 +59,20 @@ namespace TempLat
       return mGlobal.spatialCoordinateToMemoryIndex(position, dimension) - mLocalStarts[dimension];
     }
 
-    friend bool operator==(const LayoutStructLocal &a, const LayoutStructLocal &b)
+    template <size_t d2> friend bool operator==(const LayoutStructLocal<NDim> &a, const LayoutStructLocal<d2> &b)
     {
+      if constexpr (NDim != d2)
+        return false;
+      else {
+        bool result = a.mGlobal == b.mGlobal && a.mLocalSizes.size() == b.mLocalSizes.size() &&
+                      a.mLocalStarts.size() == b.mLocalStarts.size();
 
-      bool result = a.mGlobal == b.mGlobal && a.mLocalSizes.size() == b.mLocalSizes.size() &&
-                    a.mLocalStarts.size() == b.mLocalStarts.size();
-
-      for (size_t i = 0; i < a.mLocalSizes.size(); ++i) {
-        result = result && a.mLocalSizes[i] == b.mLocalSizes[i];
-        result = result && a.mLocalStarts[i] == b.mLocalStarts[i];
+        for (size_t i = 0; i < a.mLocalSizes.size(); ++i) {
+          result = result && a.mLocalSizes[i] == b.mLocalSizes[i];
+          result = result && a.mLocalStarts[i] == b.mLocalStarts[i];
+        }
+        return result;
       }
-      return result;
     }
 
     friend std::ostream &operator<<(std::ostream &ostream, const LayoutStructLocal &ls)

@@ -62,7 +62,8 @@ namespace TempLat
 
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::ComplexConjugate, T>::type conj(const T &a)
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto conj(const T &a)
   {
     return Operators::ComplexConjugate<T>(a);
   }

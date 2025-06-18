@@ -9,10 +9,10 @@
 template <size_t NDim> inline void TempLat::TranspositionMap<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
-  // tdd.verify(Throws<TranspositionMapOutOfBounds>([]() {
-  //   TranspositionMap<3> tmap();
-  //   tmap.setMap({{1, 2, 3, 5}});
-  // }));
+  tdd.verify(Throws<TranspositionMapOutOfBounds>([]() {
+    TranspositionMap<3> tmap;
+    tmap.setMap({{1, 2, 5}});
+  }));
 
   static constexpr ptrdiff_t nd = 5;
 

@@ -80,7 +80,8 @@ namespace TempLat
                                                                                     MemoryBlock<NDim, S> &mBlock)
     {
       // sayMPI << "FFTW double r2c starting. Plan: " << somePlan << "\n";
-      fftw_execute_dft_r2c(somePlan, mBlock.ptr(), (fftw_complex *)mBlock.ptr());
+      auto block_view = mBlock.getRawHostView();
+      fftw_execute_dft_r2c(somePlan, block_view.data(), (fftw_complex *)block_view.data());
       // sayMPI << "FFTW double r2c done.\n";
     }
 
@@ -89,28 +90,32 @@ namespace TempLat
     typename std::enable_if<std::is_same<S, float>::value, void>::type execute_r2c(plan somePlan,
                                                                                    MemoryBlock<NDim, S> &mBlock)
     {
-      fftwf_execute_dft_r2c(somePlan, mBlock.ptr(), (fftwf_complex *)mBlock.ptr());
+      auto block_view = mBlock.getRawHostView();
+      fftwf_execute_dft_r2c(somePlan, block_view.data(), (fftwf_complex *)block_view.data());
     }
 #endif
 
     template <typename S = T>
-    typename std::enable_if<std::is_same<S, double>::value, void>::type execute_c2r(plan somePlan,
-                                                                                    MemoryBlock<NDim, S> &mBlock)
+      requires std::is_same_v<S, double>
+    void execute_c2r(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
       // sayMPI << "FFTW double c2r starting. Plan: " << somePlan << "\n";
       // sayMPI << "with block size: " << mBlock.size() << "\n";
-      fftw_execute_dft_c2r(somePlan, (fftw_complex *)mBlock.ptr(), mBlock.ptr());
+      auto block_view = mBlock.getRawHostView();
+      fftw_execute_dft_c2r(somePlan, (fftw_complex *)block_view.data(), block_view.data());
       // sayMPI << "FFTW double c2r done.\n";
     }
 
 #ifndef NOFFTFLOAT
     template <typename S = T>
-    typename std::enable_if<std::is_same<S, float>::value, void>::type execute_c2r(plan somePlan,
-                                                                                   MemoryBlock<NDim, S> &mBlock)
+      requires std::is_same_v<S, float>
+    void execute_c2r(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
-      fftwf_execute_dft_c2r(somePlan, (fftwf_complex *)mBlock.ptr(), mBlock.ptr());
+      auto block_view = mBlock.getRawHostView();
+      fftwf_execute_dft_c2r(somePlan, (fftwf_complex *)block_view.data(), block_view.data());
     }
 #endif
+
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

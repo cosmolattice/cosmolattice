@@ -17,14 +17,11 @@
 
 namespace TempLat
 {
-
   /** \brief A class which allows for accessing (unscaled, dimensionless, index-valued) various
    *  expressions involving the fourier coordinates.
    *
-   *
    * Unit test: make test-wavenumber
    **/
-
   template <size_t NDim> class WaveNumber /*: public Vector*/
   {
   public:

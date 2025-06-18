@@ -104,12 +104,14 @@ namespace TempLat
     }
     const auto &getHermitianPartners() const { return mHermitianPartners; }
 
-    friend bool operator==(const LayoutStruct &a, const LayoutStruct &b)
+    template <size_t d2> friend bool operator==(const LayoutStruct<NDim> &a, const LayoutStruct<d2> &b)
     {
-
-      bool result = a.mTransposed == b.mTransposed && *(a.mHermitianPartners) == *(b.mHermitianPartners);
-
-      return result;
+      if constexpr (NDim != d2)
+        return false;
+      else {
+        bool result = a.mTransposed == b.mTransposed && *(a.mHermitianPartners) == *(b.mHermitianPartners);
+        return result;
+      }
     }
 
     friend std::ostream &operator<<(std::ostream &ostream, const LayoutStruct &ls)

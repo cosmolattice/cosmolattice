@@ -7,16 +7,17 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
-
 inline void TempLat::HasStaticGetterDummy::Test(TempLat::TDDAssertion &tdd)
 {
-  auto test = Complexify(1, 2);
+  class MyClass
+  {
+  public:
+    static auto get(ptrdiff_t i, Tag<0> tag) { return 1; }
+  };
 
   /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(TypeHasStaticGet<decltype(test)> == true);
-  tdd.verify(TypeHasStaticGet<double> == false);
-  tdd.verify(TypeHasStaticGet<Field<3, double>> == false);
+  tdd.verify(HasStaticGet<MyClass> == true);
+  tdd.verify(HasStaticGet<double> == false);
 }
 
 #endif

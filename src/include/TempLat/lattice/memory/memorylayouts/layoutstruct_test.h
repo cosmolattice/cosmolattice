@@ -9,11 +9,10 @@
 
 template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-
   /* test the operator== */
   LayoutStruct<3> a({0, 0, 0});
   LayoutStruct<3> b({0, 0, 0});
-  LayoutStruct<3> c({0, 0});
+  LayoutStruct<2> c({0, 0});
   LayoutStruct<3> d({0, 0, 0});
 
   d.getLocalSizes()[1] = 2;
@@ -32,12 +31,15 @@ template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TD
   tdd.verify(a.getLocalSizes()[1] == a.getSizesInMemory()[1]);
   tdd.verify(a.getLocalSizes()[2] == a.getSizesInMemory()[2]);
 
+  std::cout << "a.getLocalSizes() = " << a.getLocalSizes() << "   |   "
+            << "a.getSizesInMemory() = " << a.getSizesInMemory() << std::endl;
+
   std::array<ptrdiff_t, 3> newLocalStarts{{7, 8, 9}};
   a.setLocalStarts(newLocalStarts);
 
   a.setTranspositionMap_memoryToGlobalSpace({{2, 0, 1}});
 
-  std::array<ptrdiff_t, 3> memVec(3), posVec(3), memVec2(3);
+  std::array<ptrdiff_t, 3> memVec{}, posVec{}, memVec2{};
 
   memVec[0] = 1;
   memVec[1] = 2;

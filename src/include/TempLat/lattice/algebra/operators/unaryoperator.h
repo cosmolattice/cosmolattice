@@ -63,7 +63,6 @@ namespace TempLat
     }
 
     /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-    KOKKOS_FORCEINLINE_FUNCTION
     auto getToolBox() { return GetToolBox::get(mR); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */

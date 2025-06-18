@@ -15,7 +15,6 @@
 
 namespace TempLat
 {
-
   MakeException(TranspositionMapOutOfBounds);
 
   /** \brief A class which maps between two orderings.
@@ -26,7 +25,11 @@ namespace TempLat
   {
   public:
     /** \brief Default constructor: untransposed, both maps are a linear range. */
-    TranspositionMap() : mFromAtoB{}, mFromBtoA{} {}
+    TranspositionMap() : mFromAtoB{}, mFromBtoA{}
+    {
+      std::iota(mFromAtoB.begin(), mFromAtoB.end(), 0);
+      std::iota(mFromBtoA.begin(), mFromBtoA.end(), 0);
+    }
 
     static constexpr size_t size() { return NDim; }
 
@@ -38,7 +41,7 @@ namespace TempLat
     template <typename T = ptrdiff_t> void setMap(const std::array<T, NDim> &input)
     {
       mFromAtoB = input;
-      for (ptrdiff_t i = 0, iEnd = NDim; i < iEnd; ++i) {
+      for (ptrdiff_t i = 0, iEnd = mFromAtoB.size(); i < iEnd; ++i) {
         if (mFromAtoB[i] < 0 || mFromAtoB[i] > iEnd - 1)
           throw TranspositionMapOutOfBounds("Your map has entries that go beyond the size of the map:", input);
         mFromBtoA[mFromAtoB[i]] = i;
@@ -48,7 +51,7 @@ namespace TempLat
     bool isUntransposed() const
     {
       bool untransposed = true;
-      for (ptrdiff_t i = 0, iEnd = NDim; i < iEnd; ++i) {
+      for (ptrdiff_t i = 0, iEnd = mFromAtoB.size(); i < iEnd; ++i) {
         untransposed = untransposed && mFromAtoB[i] == i && mFromBtoA[i] == i;
       }
       return untransposed;
@@ -56,16 +59,16 @@ namespace TempLat
 
     bool isTransposed() const { return !isUntransposed(); }
 
-    template <size_t NDim2> friend bool operator==(const TranspositionMap<NDim> &a, const TranspositionMap<NDim2> &b)
+    friend bool operator==(const TranspositionMap &a, const TranspositionMap &b)
     {
-      bool equal = NDim == NDim2;
+      bool equal = a.size() == b.size();
       for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd && equal; ++i) {
         equal = equal && a.getForward(i) == b.getForward(i) && a.getInverse(i) == b.getInverse(i);
       }
       return equal;
     }
 
-    friend std::ostream &operator<<(std::ostream &ostream, const TranspositionMap<NDim> &a)
+    friend std::ostream &operator<<(std::ostream &ostream, const TranspositionMap &a)
     {
       ostream << " forward " << a.mFromAtoB << ", inverse " << a.mFromBtoA;
       return ostream;

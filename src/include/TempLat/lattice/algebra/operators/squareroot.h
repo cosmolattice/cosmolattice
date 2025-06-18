@@ -58,15 +58,15 @@ namespace TempLat
   } // namespace Operators
 
   template <typename R>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::SafeSqrt, R>::type safeSqrt(const R &r)
+    requires ConditionalUnaryGetter<R>
+  KOKKOS_FORCEINLINE_FUNCTION auto safeSqrt(const R &r)
   {
     return Operators::SafeSqrt<R>(r);
   }
 
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename ConditionalBinaryGetter<Operators::Power, T, HalfType, !std::is_arithmetic<T>::value>::type
-      sqrt(T a)
+    requires(ConditionalBinaryGetter<T, HalfType> && !std::is_arithmetic_v<T>)
+  KOKKOS_FORCEINLINE_FUNCTION auto sqrt(T a)
   {
     return Operators::Power<T, HalfType>(a, HalfType());
   }

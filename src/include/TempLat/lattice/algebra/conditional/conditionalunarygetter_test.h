@@ -7,18 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-// #include "TempLat/lattice/algebra/gettergetoffset.h"
-// #include "TempLat/lattice/algebra/getter.h"
-
-namespace TempLat
-{
-  namespace TestScratch
-  {
-    template <typename T> struct UnaryDummy {
-    };
-  } // namespace TestScratch
-} // namespace TempLat
-
 inline void TempLat::ConditionalUnaryGetterTester::Test(TempLat::TDDAssertion &tdd)
 {
   class MyClass
@@ -32,16 +20,8 @@ inline void TempLat::ConditionalUnaryGetterTester::Test(TempLat::TDDAssertion &t
     int a;
   };
 
-  /* .verify is actually a preprocessor function, to add a string version of the command to the output.
-    This doesn't play well with template instances, due to the comma's! */
-  tdd.verify(ConditionalUnaryGetter<TestScratch::UnaryDummy, MyClass> == true);
-
-  /* second test: this should not compile: */
-  //    ConditionalUnaryGetter<
-  //        TestScratch::UnaryDummy,
-  //        double
-  //    >::type (z(go));
-  // passed.
+  tdd.verify(ConditionalUnaryGetter<MyClass> == true);
+  tdd.verify(ConditionalUnaryGetter<double> == false);
 }
 
 #endif

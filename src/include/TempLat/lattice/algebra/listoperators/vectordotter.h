@@ -72,12 +72,14 @@ namespace TempLat
 
   template <typename R, typename T> VectorDotter<R, T> dot(R &r, T &t) { return VectorDotter<R, T>(r, t); }
 
-  template <typename R> typename std::enable_if<HasVectorGetMethod<R>::value, VectorDotter<R, R>>::type norm2(R r)
+  template <typename R>
+    requires HasVectorGetMethod<R>
+  auto norm2(R r)
   {
     return VectorDotter<R, R>(r, r);
   }
 
-  template <typename R> auto norm(R r) { return pow(norm2(r), 0.5); }
+  template <typename R> auto norm(R r) { return sqrt(norm2(r)); }
 
   class VectorDotterTester
   {

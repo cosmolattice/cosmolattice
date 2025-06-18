@@ -12,7 +12,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::T
   /* test the operator== */
   LayoutStructLocalTransposed<3> a({0, 0, 0});
   LayoutStructLocalTransposed<3> b({0, 0, 0});
-  LayoutStructLocalTransposed<3> c({0, 0});
+  LayoutStructLocalTransposed<2> c({0, 0});
   LayoutStructLocalTransposed<3> d({0, 0, 0});
 
   d.getLocal().getLocalSizes()[1] = 2;
@@ -38,7 +38,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::T
   tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[2]);
   tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[0]);
 
-  std::array<ptrdiff_t, 3> memVec(3), posVec(3), memVec2(3);
+  std::array<ptrdiff_t, 3> memVec{}, posVec{}, memVec2{};
 
   memVec[0] = 1;
   memVec[1] = 2;

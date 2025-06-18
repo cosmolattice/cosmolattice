@@ -29,6 +29,37 @@ namespace TempLat
   using std::pow;
 #endif
 
+  namespace internal
+  {
+    /**
+     * @brief A compile-time evaluatable power function for whole number exponents.
+     * This implementation generates some rather efficient instructions, see (https://godbolt.org/z/vT56bb1nx).
+     *
+     * @tparam n Exponent of type int
+     * @tparam RF Type of argument
+     * @param x Argument
+     * @return x^n
+     */
+    template <int n, typename NumberType>
+      requires requires(NumberType x) {
+        x * x;
+        static_cast<NumberType>(1) / x;
+      }
+    constexpr KOKKOS_INLINE_FUNCTION NumberType powr(const NumberType x)
+    {
+      if constexpr (n == 0)
+        return static_cast<NumberType>(1);
+      else if constexpr (n < 0)
+        return static_cast<NumberType>(1) / powr<-n, NumberType>(x);
+      else if constexpr (n == 1)
+        return x;
+      else if constexpr (n % 2 == 0)
+        return powr<n / 2>(x) * powr<n / 2>(x);
+      else
+        return powr<n / 2>(x) * powr<n / 2>(x) * x;
+    }
+  } // namespace internal
+
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
@@ -72,15 +103,7 @@ namespace TempLat
       PowerN(const R &pR) : UnaryOperator<R>(pR) {}
 
       KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const
-      {
-#ifndef NOKOKKOS
-        return Kokkos::pow(GetValue::get(mR, i), N);
-#else
-        using namespace std;
-        return pow(GetValue::get(mR, i), N);
-#endif
-      }
+      auto get(ptrdiff_t i) const { return internal::powr<N>(GetValue::get(mR, i)); }
 
       std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }
 
@@ -92,81 +115,11 @@ namespace TempLat
         return Tag<N>() * PowerN<N - 1, R>(mR) * GetDeriv::get(mR, other);
       }
     };
-
-    template <typename R> class PowerN<2, R> : public UnaryOperator<R>
-    {
-    public:
-      using UnaryOperator<R>::mR;
-
-      KOKKOS_FUNCTION
-      PowerN(const R &pR) : UnaryOperator<R>(pR) {}
-
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return GetValue::get(mR, i) * GetValue::get(mR, i); }
-
-      std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }
-
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
-      {
-        using namespace std;
-        /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
-        return 2_c * mR * GetDeriv::get(mR, other);
-      }
-    };
-
-    template <typename R> class PowerN<3, R> : public UnaryOperator<R>
-    {
-    public:
-      using UnaryOperator<R>::mR;
-
-      KOKKOS_FUNCTION
-      PowerN(const R &pR) : UnaryOperator<R>(pR) {}
-
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return GetValue::get(mR, i) * GetValue::get(mR, i) * GetValue::get(mR, i); }
-
-      std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }
-
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
-      {
-        using namespace std;
-        /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
-        return 3_c * mR * mR * GetDeriv::get(mR, other);
-      }
-    };
-
-    template <typename R> class PowerN<4, R> : public UnaryOperator<R>
-    {
-    public:
-      using UnaryOperator<R>::mR;
-
-      KOKKOS_FUNCTION
-      PowerN(const R &pR) : UnaryOperator<R>(pR) {}
-
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i)
-      {
-        auto tmp = GetValue::get(mR, i);
-        tmp = tmp * tmp;
-        return tmp * tmp;
-      }
-
-      std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }
-
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
-      {
-        using namespace std;
-        /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
-        return 4_c * mR * mR * mR * GetDeriv::get(mR, other);
-      }
-    };
   } // namespace Operators
 
   template <typename R, typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalBinaryGetter<Operators::Power, R, T>::type pow(const R &r, const T &t)
+    requires ConditionalBinaryGetter<R, T>
+  KOKKOS_FORCEINLINE_FUNCTION auto pow(const R &r, const T &t)
   {
     return Operators::Power<R, T>(r, t);
   }
@@ -185,33 +138,32 @@ namespace TempLat
 
   // enable if is just so that we can overload to consitently write pow<3>(4)  for std::pow(4,3);
   template <int N, typename R>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename std::enable_if<HasGetMethod<R>::value && N != 1 && N != 0, Operators::PowerN<N, R>>::type
-      pow(const R &r)
+    requires(HasGetMethod<R> && N != 1 && N != 0)
+  KOKKOS_FORCEINLINE_FUNCTION auto pow(const R &r)
   {
     return Operators::PowerN<N, R>(r);
   }
 
   // overload so that we can sonsitently write pow<3>(4)  for std::pow(4,3);
   template <int N, typename R>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename std::enable_if<!HasGetMethod<R>::value && N != 0 && N != 1 &&
-                                  !(IsTempLatGettable<0, R>::value || IsSTDGettable<0, R>::value),
-                              R>::type
-      pow(const R &r)
+    requires(!HasGetMethod<R> && N != 0 && N != 1 && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
+  KOKKOS_FORCEINLINE_FUNCTION auto pow(const R &r)
   {
-    return std::pow(r, N);
+    return internal::powr<N>(r);
   }
 
   /** \brief Specialize for possible zero input! */
   template <int N, typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<N == 0, OneType>::type pow(const T &a)
+    requires(N == 0)
+  constexpr KOKKOS_FORCEINLINE_FUNCTION auto pow(const T &a)
   {
     return OneType();
   }
 
   /** \brief Specialize for possible one input! */
-  template <int N, typename T> KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<N == 1, T>::type pow(const T &a)
+  template <int N, typename T>
+    requires(N == 1)
+  KOKKOS_FORCEINLINE_FUNCTION T pow(const T &a)
   {
     return a;
   }

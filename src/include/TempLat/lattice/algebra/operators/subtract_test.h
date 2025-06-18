@@ -7,17 +7,16 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::SubtractTester::Test(TempLat::TDDAssertion &tdd) {
-  class myClass {
+inline void TempLat::SubtractTester::Test(TempLat::TDDAssertion &tdd)
+{
+  class myClass
+  {
   public:
     KOKKOS_FUNCTION
-    myClass(int b): a(b) {
-    }
+    myClass(int b) : a(b) {}
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) const {
-      return a;
-    }
+    auto get(ptrdiff_t i) const { return a; }
 
   private:
     int a;
@@ -28,10 +27,10 @@ inline void TempLat::SubtractTester::Test(TempLat::TDDAssertion &tdd) {
 
   //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
   //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
-  tdd.verify(HasGetMethod<Operators::Subtraction<myClass, myClass> >::value == true);
+  tdd.verify(HasGetMethod<Operators::Subtraction<myClass, myClass>> == true);
   tdd.verify((a - b).get(0) == -1);
- int c = 3, d = 4;
-  tdd.verify(HasGetMethod<decltype(c - d)>::value == false);
+  int c = 3, d = 4;
+  tdd.verify(HasGetMethod<decltype(c - d)> == false);
 
   // pointless, but shuts up the compiler about unused variables:
   c = c + d;

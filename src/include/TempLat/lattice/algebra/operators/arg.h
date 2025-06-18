@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
+#include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
@@ -69,11 +69,10 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename std::enable_if<HasGetMethod<R>::value && HasGetMethod<T>::value, Operators::Arg<R, T>>::type
-      arg(R r, T t)
+    requires ConditionalBinaryGetter<R, T>
+  KOKKOS_FORCEINLINE_FUNCTION auto arg(R r, T t)
   {
-    return {r, t};
+    return Operators::Arg<R, T>{r, t};
   }
 } // namespace TempLat
 

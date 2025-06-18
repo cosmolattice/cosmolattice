@@ -67,7 +67,8 @@ namespace TempLat
 
   /** \brief Exposing our newly define exp operation to the world. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::Exponential, T>::type exp(T a)
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto exp(T a)
   {
     return Operators::Exponential<T>(a);
   }

@@ -9,17 +9,16 @@
 
 #include "TempLat/util/almostequal.h"
 
-inline void TempLat::DivideTester::Test(TempLat::TDDAssertion &tdd) {
-  class myClass {
+inline void TempLat::DivideTester::Test(TempLat::TDDAssertion &tdd)
+{
+  class myClass
+  {
   public:
     KOKKOS_FUNCTION
-    myClass(int b): a(b) {
-    }
+    myClass(int b) : a(b) {}
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto get(const double &i) const {
-      return a;
-    }
+    auto get(const double &i) const { return a; }
 
   private:
     double a;
@@ -29,13 +28,13 @@ inline void TempLat::DivideTester::Test(TempLat::TDDAssertion &tdd) {
   myClass b(4);
 
   //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
-  //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
-  tdd.verify(HasGetMethod<Operators::Division<myClass, myClass>>::value == true);
+  //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>> << "\n";
+  tdd.verify(HasGetMethod<Operators::Division<myClass, myClass>> == true);
 
-  tdd.verify(AlmostEqual((a/b).get(0) , 0.75 ));
+  tdd.verify(AlmostEqual((a / b).get(0), 0.75));
 
   int c = 3, d = 4;
-  tdd.verify(HasGetMethod<decltype(c / d)>::value == false);
+  tdd.verify(HasGetMethod<decltype(c / d)> == false);
 
   // pointless, but shuts up the compiler about unused variables:
   c = c + d;

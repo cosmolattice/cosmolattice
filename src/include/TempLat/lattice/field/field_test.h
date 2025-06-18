@@ -8,8 +8,9 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 // #include "TempLat/lattice/algebra/gettergetoffset.h"
-// #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 // #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
+#include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 
 template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(TempLat::TDDAssertion &tdd)
@@ -24,7 +25,15 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   Field<NDim, T> chi("chi", toolBox);
   Field<NDim, T> psi("psi", toolBox);
 
-  // WaveNumber k(toolBox);
+  WaveNumber k(toolBox);
+  phi.inFourierSpace();
+  tdd.verify(phi.mManager->isFourierSpace());
+
+  phi = 5;
+  tdd.verify(!phi.mManager->isFourierSpace());
+
+  return;
+
   //  phi.inFourierSpace() = k.norm2() * RandomGaussianField<T>("Hoi", toolBox);
 
   // just manipulated phi(k), so it must still be in Fourier space, and ghosts are stale.

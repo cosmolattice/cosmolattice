@@ -77,7 +77,8 @@ namespace TempLat
 
   /** \brief Exposing our newly defined absolute value operation to the world. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename ConditionalUnaryGetter<Operators::AbsoluteValue, T>::type abs(const T &a)
+    requires ConditionalUnaryGetter<T>
+  KOKKOS_FORCEINLINE_FUNCTION auto abs(const T &a)
   {
     return Operators::AbsoluteValue<T>(a);
   }
