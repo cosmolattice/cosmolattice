@@ -55,10 +55,7 @@ namespace TempLat
     size_t size() const { return mSize; }
 
     /** \brief state modify: zero out */
-    void zero()
-    {
-      if (size()) Kokkos::parallel_for(size(), KOKKOS_CLASS_LAMBDA(size_t i) { mData(i) = 0; });
-    }
+    void zero() { Kokkos::deep_copy(mData, T{}); }
 
     /** \brief access */
     KOKKOS_FORCEINLINE_FUNCTION
@@ -78,7 +75,8 @@ namespace TempLat
         throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds: total size ", total_size,
                                               " is larger than allocated size ", mSize);
 #endif
-      return std::apply([&](auto &&...args) { return KokkosNDView<NDim, T>(mData.data(), args...); }, localSizes);
+      return std::apply([&](auto &&...args) { return KokkosNDViewUnmanaged<NDim, T>(mData.data(), args...); },
+                        localSizes);
     }
     template <typename INT> auto getNDHostView(const std::array<INT, NDim> &localSizes) const
     {
@@ -94,7 +92,7 @@ namespace TempLat
       Kokkos::deep_copy(mHostMirror, mData);
       return std::apply(
           [&](auto &&...args) {
-            return KokkosNDView<NDim, T, Kokkos::DefaultHostExecutionSpace>(mHostMirror.data(), args...);
+            return KokkosNDViewUnmanaged<NDim, T, Kokkos::DefaultHostExecutionSpace>(mHostMirror.data(), args...);
           },
           localSizes);
     }

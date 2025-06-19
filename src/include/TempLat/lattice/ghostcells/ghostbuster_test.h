@@ -5,20 +5,24 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
+namespace TempLat
+{
+  namespace Testing
+  {
+    /* single datum on a grid: 24 bytes making up x, y, and z. */
+    struct datum {
+      ptrdiff_t x, y, z;
+    };
+  } // namespace Testing
+} // namespace TempLat
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* Perhaps a bit elaborate, but it is as consistent as it gets.. */
 
-  /* single datum on a grid: 24 bytes making up x, y, and z. */
-  struct datum {
-    ptrdiff_t x, y, z;
-  };
-
   /* arbitrary irregular sizing */
-  std::array<ptrdiff_t, 3> nGrid{{62, 22, 24}};
-
-  std::array<ptrdiff_t, 3> transpositionMap{{0, 1, 2}};
+  std::array<ptrdiff_t, 3> nGrid{{64, 48, 128}};
 
   LayoutStruct<3> layout({62, 62, 62});
   layout.setLocalSizes(nGrid);
@@ -33,7 +37,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
     JumpsHolder<3> jumperFrom(layout, nGhost);
     JumpsHolder<3> jumperTo(layout, nGhostB);
 
-    std::vector<datum> memory(std::max(memSize1, memSize2));
+    MemoryBlock<3, Testing::datum> memory(std::max(memSize1, memSize2));
 
 #ifdef CHECKBOUNDS
     /* where is the last non-ghost entry? */
@@ -43,26 +47,29 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
     ptrdiff_t last2 =
         jumperTo.toOrigin() + jumperTo.getJump(layout.getSizesInMemory()) +
         jumperTo.getJump({{-1, -1, -1}}); /* can use getJump because getSizesInMemory is not transposed. */
-    std::vector<datum> smallMemory(std::max(last1, last2));
+    std::vector<Testing::datum> smallMemory(std::max(last1, last2));
 
     tdd.verify(Throws<GhostBusterBoundsException>([&]() { GhostBuster(jumperTo, jumperFrom)(smallMemory); }));
 #endif
-
-    /* setup the controlled known memory; each entry equals its position */
-    for (ptrdiff_t i = -nGhost[0][0]; i < nGrid[0] + nGhost[0][1]; ++i) {
-      ptrdiff_t iPos =
-          (i + nGhost[0][0]) * (nGrid[1] + nGhost[1][0] + nGhost[1][1]) * (nGrid[2] + nGhost[2][0] + nGhost[2][1]);
-      for (ptrdiff_t j = -nGhost[1][0]; j < nGrid[1] + nGhost[1][1]; ++j) {
-        ptrdiff_t jPos = (j + nGhost[1][0]) * (nGrid[2] + nGhost[2][0] + nGhost[2][1]);
-        for (ptrdiff_t k = -nGhost[2][0]; k < nGrid[2] + nGhost[2][1]; ++k) {
-          ptrdiff_t kPos = k + nGhost[2][0];
-          ptrdiff_t pos = iPos + jPos + kPos;
-          // std::cerr << "Hoi " << pos << " " << i << " " << j << " " << k << "\n";
-          memory[pos].x = i;
-          memory[pos].y = j;
-          memory[pos].z = k;
+    {
+      auto memory_view = memory.getRawHostView();
+      /* setup the controlled known memory; each entry equals its position */
+      for (ptrdiff_t i = -nGhost[0][0]; i < nGrid[0] + nGhost[0][1]; ++i) {
+        ptrdiff_t iPos =
+            (i + nGhost[0][0]) * (nGrid[1] + nGhost[1][0] + nGhost[1][1]) * (nGrid[2] + nGhost[2][0] + nGhost[2][1]);
+        for (ptrdiff_t j = -nGhost[1][0]; j < nGrid[1] + nGhost[1][1]; ++j) {
+          ptrdiff_t jPos = (j + nGhost[1][0]) * (nGrid[2] + nGhost[2][0] + nGhost[2][1]);
+          for (ptrdiff_t k = -nGhost[2][0]; k < nGrid[2] + nGhost[2][1]; ++k) {
+            ptrdiff_t kPos = k + nGhost[2][0];
+            ptrdiff_t pos = iPos + jPos + kPos;
+            // std::cerr << "Hoi " << pos << " " << i << " " << j << " " << k << "\n";
+            memory_view[pos].x = i;
+            memory_view[pos].y = j;
+            memory_view[pos].z = k;
+          }
         }
       }
+      memory.pushHostView(); /* push the memory to the device. */
     }
 
     bool allRight = true;
@@ -71,9 +78,11 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
 
       GhostBuster<3> egon(x == 0 ? jumperFrom : jumperTo, x == 0 ? jumperTo : jumperFrom);
 
-      egon(memory.data(), memory.size());
+      egon(memory);
 
       JumpsHolder<3> jumper(x == 0 ? jumperTo : jumperFrom);
+
+      auto memory_view = memory.getRawHostView();
 
       /* verify the setup, not controlled,
        assuming jumps are correct (tested elsewhere),
@@ -84,10 +93,10 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
           for (ptrdiff_t k = 0; k < nGrid[2]; ++k) {
             ptrdiff_t pos = jumper.toOrigin() + jumper.getJumpsInMemoryOrder()[0] * i +
                             jumper.getJumpsInMemoryOrder()[1] * j + jumper.getJumpsInMemoryOrder()[2] * k;
-            const datum &dat = memory[pos];
+            const Testing::datum &dat = memory_view[pos];
             allRight = allRight && dat.x == i && dat.y == j && dat.z == k;
-            //                std::cerr << i << ", " << j << ", " << k << " => " << dat.x << ", " << dat.y << ", " <<
-            //                dat.z << "\n"; if ( ! allRight ) exit(0);
+            // std::cerr << i << ", " << j << ", " << k << " => " << dat.x << ", " << dat.y << ", " << dat.z << "\n";
+            // if (!allRight) exit(0);
           }
         }
       }
@@ -116,6 +125,17 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
   nGhost2[2][1] = 2;
 
   tdd.verify(Throws<GhostBusterOrderException>([&]() { myLittleLambda(nGhost1, nGhost2); }));
+
+  nGhost2[0][0] = 5;
+  nGhost2[0][1] = 4;
+  nGhost2[1][0] = 3;
+  nGhost2[1][1] = 2;
+  nGhost2[2][0] = 1;
+  nGhost2[2][1] = 0;
+
+  myLittleLambda(nGhost1, nGhost2);
+
+  myLittleLambda(nGhost2, nGhost1);
 
   /* Less obvious test: same origin, different layout. */
   nGhost1[0][0] = 0;

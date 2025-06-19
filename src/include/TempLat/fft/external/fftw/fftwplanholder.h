@@ -64,20 +64,24 @@ namespace TempLat
     MPICartesianGroup mGroup;
     std::shared_ptr<plan> mPlanR2C, mPlanC2R;
 
-    template <typename S = T> typename std::enable_if<std::is_same<S, double>::value, void>::type destroy(plan somePlan)
+    template <typename S = T>
+      requires std::is_same_v<S, double>
+    void destroy(plan somePlan)
     {
       fftw_destroy_plan(somePlan);
     }
 
 #ifndef NOFFTFLOAT
-    template <typename S = T> typename std::enable_if<std::is_same<S, float>::value, void>::type destroy(plan somePlan)
+    template <typename S = T>
+      requires std::is_same_v<S, float>
+    void destroy(plan somePlan)
     {
       fftwf_destroy_plan(somePlan);
     }
 #endif
     template <typename S = T>
-    typename std::enable_if<std::is_same<S, double>::value, void>::type execute_r2c(plan somePlan,
-                                                                                    MemoryBlock<NDim, S> &mBlock)
+      requires std::is_same_v<S, double>
+    void execute_r2c(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
       // sayMPI << "FFTW double r2c starting. Plan: " << somePlan << "\n";
       auto block_view = mBlock.getRawHostView();
@@ -87,8 +91,8 @@ namespace TempLat
 
 #ifndef NOFFTFLOAT
     template <typename S = T>
-    typename std::enable_if<std::is_same<S, float>::value, void>::type execute_r2c(plan somePlan,
-                                                                                   MemoryBlock<NDim, S> &mBlock)
+      requires std::is_same_v<S, float>
+    void execute_r2c(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
       auto block_view = mBlock.getRawHostView();
       fftwf_execute_dft_r2c(somePlan, block_view.data(), (fftwf_complex *)block_view.data());

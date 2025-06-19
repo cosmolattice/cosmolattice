@@ -7,13 +7,17 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <Kokkos_Core.hpp>
 #include <functional>
 #include <cstring>
 #include <stdexcept>
+#include <traits/Kokkos_IterationPatternTrait.hpp>
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
+#include "TempLat/util/timer.h"
 #include "TempLat/lattice/memory/jumpsholder.h"
+#include "TempLat/lattice/memory/memoryblock.h"
 
 namespace TempLat
 {
@@ -77,7 +81,9 @@ namespace TempLat
     template <template <size_t _NDim, typename S, typename... MArgs> class M, typename T, typename... Args>
     void operator()(M<NDim, T, Args...> &obj)
     {
+      // Timer timer;
       if constexpr (NDim > 1) bustTheGhostsWithViews(obj);
+      // std::cout << "GhostBuster took " << timer << std::endl;
     }
 
     /** \brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
@@ -97,7 +103,7 @@ namespace TempLat
     }
 #endif
 
-  private:
+  public:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     JumpsHolder<NDim> mFrom, mTo;
     ptrdiff_t mDirection;
@@ -112,34 +118,38 @@ namespace TempLat
       const auto from_sizes = mFrom.getSizesInMemory();
       const auto to_sizes = mTo.getSizesInMemory();
 
-      std::cout << "from_sizes: " << from_sizes << std::endl;
-      std::cout << "to_sizes: " << to_sizes << std::endl;
-
-      std::array<std::pair<size_t, size_t>, NDim> slicesFrom;
-      std::array<std::pair<size_t, size_t>, NDim> slicesTo;
-
-      std::array<size_t, NDim> from_full_sizes;
-      std::array<size_t, NDim> to_full_sizes;
-
+      // Get Views to the data
+      std::array<size_t, NDim> from_full_sizes{};
+      std::array<size_t, NDim> to_full_sizes{};
       for (size_t i = 0; i < NDim; ++i) {
-        slicesFrom[i] = std::make_pair(from_padding[i][0], from_padding[i][0] + from_sizes[i]);
-        slicesTo[i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
-
-        std::cout << "slicesFrom[" << i << "] = " << slicesFrom[i].first << ", " << slicesFrom[i].second << std::endl;
-        std::cout << "slicesTo[" << i << "] = " << slicesTo[i].first << ", " << slicesTo[i].second << std::endl;
-
         from_full_sizes[i] = from_padding[i][0] + from_sizes[i] + from_padding[i][1];
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
       }
-
       auto fromView = block.getNDView(from_full_sizes);
       auto toView = block.getNDView(to_full_sizes);
 
+      using LayoutType = typename decltype(fromView)::array_layout;
+
+      // Create subviews for the from and to views
+      // We need to create slices for each dimension, taking into account the padding
+      // and the layout of the views
+      std::array<std::pair<size_t, size_t>, NDim> slicesFrom{};
+      std::array<std::pair<size_t, size_t>, NDim> slicesTo{};
+      for (size_t i = 0; i < NDim; ++i) {
+        size_t to_i{};
+        if constexpr (std::is_same_v<LayoutType, Kokkos::LayoutRight>)
+          to_i = i;
+        else if constexpr (std::is_same_v<LayoutType, Kokkos::LayoutLeft>)
+          to_i = NDim - 1 - i;
+        slicesFrom[to_i] = std::make_pair(from_padding[i][0], from_padding[i][0] + from_sizes[i]);
+        slicesTo[to_i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
+      }
       auto fromSubView =
           std::apply([&](const auto &...args) { return Kokkos::subview(fromView, args...); }, slicesFrom);
       auto toSubView = std::apply([&](const auto &...args) { return Kokkos::subview(toView, args...); }, slicesTo);
 
-      // sanity check: the sizes of the subviews should match
+      // sanity check: the sizes of the subviews should match,
+      // except for the last dimension, which can be padded for the FFT
       for (size_t i = 0; i < NDim - 1; ++i) {
         if (fromSubView.extent(i) != toSubView.extent(i)) {
           throw GhostBusterBoundsException("GhostBuster: Subview sizes in dimension ", i,
@@ -147,9 +157,12 @@ namespace TempLat
                                            " != ", toSubView.extent(i));
         }
       }
-      // except for the last dimension, which can be padded for the FFT
 
-      std::array<ptrdiff_t, NDim - 1> largeIdx{};
+      std::array<ptrdiff_t, NDim> copy_sizes{};
+      for (size_t i = 0; i < NDim; ++i)
+        copy_sizes[i] = std::min(fromSubView.extent(i), toSubView.extent(i));
+
+      std::array<ptrdiff_t, NDim - 1> curIdx{};
       if (mDirection < 0) {
         // if we are moving in the negative direction, we
         // - have larger indices in the to view
@@ -157,47 +170,52 @@ namespace TempLat
         // - we can move blocks of the smallest dimension (i.e. last dimension) first, and then
         //   go to the larger dimensions.
         for (size_t i = 0; i < NDim - 1; ++i) {
-          largeIdx[i] = fromSubView.extent(i) - 1; // start from the last index in each dimension
+          curIdx[i] = fromSubView.extent(i) - 1; // start from the last index in each dimension
         }
+        // std::cout << "Starting from the end of the from view: " << curIdx << std::endl;
       } else {
         // if we are moving in the positive direction, we
         // - have smaller indices in the to view
         // - thus have to start moving from the start of from (we compress the memory)
         // - we move blocks of the smallest dimension (i.e. last dimension) first, and then
         //   go to the larger dimensions.
+        // std::cout << "Starting from the beginning of the from view: " << curIdx << std::endl;
       }
-      IterateRecurse(largeIdx, fromSubView, toSubView);
-    }
 
-  public:
-    template <typename FV, typename TV>
-    void IterateRecurse(std::array<ptrdiff_t, NDim - 1> curIdx, FV fromView, TV toView)
-    {
-      std::cout << "IterateRecurse: curIdx = " << curIdx << std::endl;
-      // First, perform the copy
-      size_t copy_size = std::min(toView.extent(NDim - 1), fromView.extent(NDim - 1));
-      Kokkos::parallel_for(
-          Kokkos::RangePolicy<typename decltype(fromView)::execution_space>(0, copy_size),
-          KOKKOS_LAMBDA(const size_t i) {
-            std::apply([&](const auto &...args) { toView(args..., i) = fromView(args..., i); }, curIdx);
-          });
+      if constexpr (std::is_same_v<LayoutType, Kokkos::LayoutRight>) {
+        // A temporary is necessary as the source and the destination may have overlap
+        Kokkos::View<T *, typename decltype(fromSubView)::execution_space> temp("temp_copy", copy_sizes[NDim - 1]);
 
-      // Then, figure out the next large index to copy
-      std::array<ptrdiff_t, NDim - 1> nextIdx = curIdx;
-
-      // Check if we have a next index to recurse down
-      bool hasNext = (mDirection < 0) ? lowerDimN(NDim - 2, nextIdx, fromView) : raiseDimN(0, nextIdx, fromView);
-      if (hasNext) {
-        // If we have a next index, recurse down
-        IterateRecurse(nextIdx, fromView, toView);
+        // iterate over all "large indices"
+        bool hasNext = true;
+        while (hasNext) {
+          // copy to the temporary
+          Kokkos::parallel_for(
+              Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
+              KOKKOS_LAMBDA(const size_t i) {
+                std::apply([&](const auto &...args) { temp(i) = fromSubView(args..., i); }, curIdx);
+              });
+          // copy from the temporary to the destination
+          Kokkos::parallel_for(
+              Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
+              KOKKOS_LAMBDA(const size_t i) {
+                std::apply([&](const auto &...args) { toSubView(args..., i) = temp(i); }, curIdx);
+              });
+          // Check if we have a next index to go to
+          hasNext =
+              (mDirection < 0) ? lowerDimN(NDim - 2, curIdx, copy_sizes) : raiseDimN(NDim - 2, curIdx, copy_sizes);
+        }
       } else {
-        // If we are done, we can return
-        return;
+        throw GhostBusterOrderException("GhostBuster only works for memory layouts with LayoutRight, not with this");
       }
+
+      // We need the fence only at the very end, as consecutive kernel launches happen in order.
+      Kokkos::fence();
     }
 
   private:
-    bool lowerDimN(ptrdiff_t DimN, auto &nextIdx, auto &fromView)
+    static inline bool lowerDimN(const ptrdiff_t DimN, std::array<ptrdiff_t, NDim - 1> &nextIdx,
+                                 const std::array<ptrdiff_t, NDim> &copy_sizes)
     {
       if (DimN < 0) {
         // We are done, we have iterated through all dimensions
@@ -207,23 +225,24 @@ namespace TempLat
         --nextIdx[DimN];
         return true;
       } else {
-        nextIdx[DimN] = (ptrdiff_t)fromView.extent(DimN) - 1; // reset to the last index
-        return lowerDimN(DimN - 1, nextIdx, fromView);        // carry to the next dimension
+        nextIdx[DimN] = copy_sizes[DimN] - 1;            // reset to the last index
+        return lowerDimN(DimN - 1, nextIdx, copy_sizes); // carry to the next dimension
       }
     };
 
-    bool raiseDimN(ptrdiff_t DimN, auto &nextIdx, auto &fromView)
+    static inline bool raiseDimN(const ptrdiff_t DimN, std::array<ptrdiff_t, NDim - 1> &nextIdx,
+                                 const std::array<ptrdiff_t, NDim> &copy_sizes)
     {
       if (DimN < 0) {
         // We are done, we have iterated through all dimensions
         return false;
       }
-      if (nextIdx[DimN] < (ptrdiff_t)fromView.extent(DimN) - 1) {
+      if (nextIdx[DimN] < copy_sizes[DimN] - 1) {
         ++nextIdx[DimN];
         return true;
       } else {
-        nextIdx[DimN] = 0;                             // reset to the first index
-        return raiseDimN(DimN - 1, nextIdx, fromView); // carry to the next dimension
+        nextIdx[DimN] = 0;                               // reset to the first index
+        return raiseDimN(DimN - 1, nextIdx, copy_sizes); // carry to the next dimension
       }
     };
 
@@ -237,7 +256,7 @@ namespace TempLat
     void recursor(const ptrdiff_t *layout, T *fromPtr, const ptrdiff_t *fromJumps, T *toPtr, const ptrdiff_t *toJumps,
                   ptrdiff_t thisDim, T *endPtr)
     {
-      if (thisDim < NDim - 1) {
+      if (thisDim < (ptrdiff_t)NDim - 1) {
         ptrdiff_t iStart = mDirection < 0 ? (*layout) - 1 : 0;
         ptrdiff_t iEnd = mDirection < 0 ? -1 : *layout;
         ptrdiff_t di = mDirection < 0 ? -1 : 1;

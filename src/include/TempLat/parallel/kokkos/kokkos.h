@@ -22,13 +22,22 @@ template <typename T> struct GetKokkosNDStarType<1, T> {
   using type = T *;
 };
 
-template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace>
-using KokkosNDView = Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, ExecutionSpace>;
-
-template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace>
+template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
+          typename Layout = Kokkos::LayoutRight>
+using KokkosNDView =
+    Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for dimensionality recursively with
+                 Layout,        // LayoutRight is most compatible for now, may change in future
+                 ExecutionSpace // Choice between GPU and CPU
+                 >;
+template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
+          typename Layout = Kokkos::LayoutRight>
 using KokkosNDViewUnmanaged =
-    Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, ExecutionSpace, Kokkos::MemoryTraits<Kokkos::Unmanaged>>;
-
+    Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for dimensionality recursively with
+                                                              // a helper
+                 Layout,                                 // LayoutRight is most compatible for now, may change in future
+                 ExecutionSpace,                         // Choice between GPU and CPU
+                 Kokkos::MemoryTraits<Kokkos::Unmanaged> // No allocation: Attach to existing memory
+                 >;
 #else
 
 #define KOKKOS_FORCEINLINE_FUNCTION inline
