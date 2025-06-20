@@ -12,6 +12,7 @@
 // #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
+#include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
 
 template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
@@ -32,9 +33,12 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   phi = 5;
   tdd.verify(!phi.mManager->isFourierSpace());
 
-  return;
+  chi = phi;
+  tdd.verify(!chi.mManager->isFourierSpace());
 
-  //  phi.inFourierSpace() = k.norm2() * RandomGaussianField<T>("Hoi", toolBox);
+  chi = LatticeLaplacian<NDim, decltype(phi)>(phi);
+
+  // phi.inFourierSpace() = k.norm2() * RandomGaussianField<T>("Hoi", toolBox);
 
   // just manipulated phi(k), so it must still be in Fourier space, and ghosts are stale.
   // tdd.verify(phi.mManager->isFourierSpace());

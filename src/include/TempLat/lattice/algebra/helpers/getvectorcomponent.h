@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/getvectorvalue.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -29,7 +30,11 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     GetVectorComponentHelper(const R &pR, ptrdiff_t pJ) : mR(pR), mJ(pJ) {}
-    auto get(ptrdiff_t i) { return GetVectorValue::vectorGet(mR, i, mJ); }
+
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX... idx) const
+    {
+      return GetValue::get(mR, mJ, idx...);
+    }
 
     void doWeNeedGhosts() { GhostsHunter::apply(mR, mJ); }
 

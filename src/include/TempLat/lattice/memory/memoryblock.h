@@ -39,16 +39,14 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
 
     /** \brief Default constructor: empty. */
-    MemoryBlock() : mSize(0u) {}
+    MemoryBlock() : mSize(0u), mHostMirrorOutdated(true) {}
 
     /** \brief Constructor with a size to allocate. */
-    MemoryBlock(size_t size) : mSize(size)
+    MemoryBlock(size_t size) : mSize(size), mHostMirrorOutdated(true)
     {
       mData = Kokkos::View<T *, Kokkos::DefaultExecutionSpace>("MemoryBlock", mSize);
 
       zero();
-
-      mHostMirror = Kokkos::create_mirror_view(mData);
     }
 
     /** getter */
@@ -88,13 +86,23 @@ namespace TempLat
         throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds: total size ", total_size,
                                               " is larger than allocated size ", mSize);
 #endif
-      if (!mHostMirror.is_allocated()) mHostMirror = Kokkos::create_mirror_view(mData);
-      Kokkos::deep_copy(mHostMirror, mData);
+      pullHostView(); // ensure host mirror is up to date
       return std::apply(
           [&](auto &&...args) {
             return KokkosNDViewUnmanaged<NDim, T, Kokkos::DefaultHostExecutionSpace>(mHostMirror.data(), args...);
           },
           localSizes);
+    }
+
+    void flagHostMirrorOutdated() const { mHostMirrorOutdated = true; }
+
+    void pullHostView() const
+    {
+      if (mHostMirrorOutdated) {
+        if (!mHostMirror.is_allocated()) mHostMirror = Kokkos::create_mirror_view(mData);
+        Kokkos::deep_copy(mHostMirror, mData);
+      }
+      mHostMirrorOutdated = false;
     }
 
     void pushHostView()
@@ -103,24 +111,22 @@ namespace TempLat
         throw MemoryBlockOutOfBoundsException(
             "Cannot push host view: host mirror is not allocated. Call getRawHostView() or getNDHostView() first.");
       Kokkos::deep_copy(mData, mHostMirror);
+      mHostMirrorOutdated = false;
     }
 
     void deallocateHostView()
     {
       mHostMirror = typename Kokkos::View<T *, Kokkos::DefaultExecutionSpace>::host_mirror_type();
+      mHostMirrorOutdated = true; // mark as outdated
     }
 
     auto getRawView() const { return mData; }
 
     auto getRawHostView() const
     {
-      if (!mHostMirror.is_allocated()) mHostMirror = Kokkos::create_mirror_view(mData);
-      Kokkos::deep_copy(mHostMirror, mData);
+      pullHostView(); // ensure host mirror is up to date
       return mHostMirror;
     }
-
-    KOKKOS_FORCEINLINE_FUNCTION
-    T *ptr() const { return mData.data(); }
 
     KOKKOS_FORCEINLINE_FUNCTION
     operator T *() const { return mData.data(); }
@@ -149,6 +155,7 @@ namespace TempLat
     Kokkos::View<T *, Kokkos::DefaultExecutionSpace> mData;
     mutable typename Kokkos::View<T *, Kokkos::DefaultExecutionSpace>::host_mirror_type mHostMirror;
     static constexpr size_t TSIZE = sizeof(T);
+    mutable bool mHostMirrorOutdated = true;
 
     KOKKOS_FORCEINLINE_FUNCTION
     void checkBounds(ptrdiff_t i) const

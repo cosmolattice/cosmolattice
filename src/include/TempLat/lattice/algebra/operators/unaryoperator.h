@@ -38,13 +38,10 @@ namespace TempLat
   template <typename R> class UnaryOperator
   {
   public:
-    KOKKOS_FUNCTION
     UnaryOperator(const R &pR) : mR(pR) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
     void doWeNeedGhosts() { GhostsHunter::apply(mR); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR); }
 
     template <size_t NDim>

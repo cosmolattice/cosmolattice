@@ -10,6 +10,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasvectorgetmethod.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -17,7 +18,6 @@ namespace TempLat
    *
    * Unit test: make test-getvectorvalue
    **/
-
   class GetVectorValue
   {
   public:
@@ -25,14 +25,14 @@ namespace TempLat
 
     template <typename U>
       requires HasVectorGetMethod<U>
-    static inline auto vectorGet(U &obj, ptrdiff_t i, ptrdiff_t j)
+    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &obj, ptrdiff_t i, ptrdiff_t j)
     {
       return obj.vectorGet(i, j);
     }
 
     template <typename U>
       requires(!HasVectorGetMethod<U>)
-    static inline auto vectorGet(U &&obj, ptrdiff_t i, ptrdiff_t j)
+    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &&obj, ptrdiff_t i, ptrdiff_t j)
     {
       return GetValue::get(obj, i);
     }

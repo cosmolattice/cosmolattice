@@ -34,10 +34,8 @@ namespace TempLat
       return GetValue::get(mR, (idx + shift)...);
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
     void eval(ptrdiff_t i) { DoEval::eval(mR, i + shift); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
     static std::string operatorString() { return getString({SHIFTS...}); }
@@ -81,8 +79,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto get(ptrdiff_t i) const { return mR.get(i + shift); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
+    void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
     std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }
 

@@ -100,11 +100,13 @@ inline void TempLat::KokkosTest::Test(TempLat::TDDAssertion &tdd)
   // We should fix them eventually.
 
   // ---- test double ----
+  // binary operators
   test_binary_operator<TempLat::Operators::Multiplication>(tdd);
   test_binary_operator<TempLat::Operators::Addition>(tdd);
   test_binary_operator<TempLat::Operators::Division>(tdd);
   test_binary_operator<TempLat::Operators::Power>(tdd);
   test_binary_operator<TempLat::Operators::Subtraction>(tdd);
+  // unary operators
   test_unary_operator<TempLat::Operators::AbsoluteValue>(tdd);
   test_unary_operator<TempLat::Operators::Cosh>(tdd);
   test_unary_operator<TempLat::Operators::ASinh>(tdd);

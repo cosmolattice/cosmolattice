@@ -87,6 +87,7 @@ namespace TempLat
       auto block_view = mBlock.getRawHostView();
       fftw_execute_dft_r2c(somePlan, block_view.data(), (fftw_complex *)block_view.data());
       // sayMPI << "FFTW double r2c done.\n";
+      mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 
 #ifndef NOFFTFLOAT
@@ -96,6 +97,7 @@ namespace TempLat
     {
       auto block_view = mBlock.getRawHostView();
       fftwf_execute_dft_r2c(somePlan, block_view.data(), (fftwf_complex *)block_view.data());
+      mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 #endif
 
@@ -108,6 +110,7 @@ namespace TempLat
       auto block_view = mBlock.getRawHostView();
       fftw_execute_dft_c2r(somePlan, (fftw_complex *)block_view.data(), block_view.data());
       // sayMPI << "FFTW double c2r done.\n";
+      mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 
 #ifndef NOFFTFLOAT
@@ -117,6 +120,7 @@ namespace TempLat
     {
       auto block_view = mBlock.getRawHostView();
       fftwf_execute_dft_c2r(somePlan, (fftwf_complex *)block_view.data(), block_view.data());
+      mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 #endif
 

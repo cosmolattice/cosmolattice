@@ -115,4 +115,3 @@ execute_process(
 # Kokkos by default does not support extensions, so we force them off
 set(CMAKE_CXX_EXTENSIONS OFF)
 # Make the package available
-find_package(Kokkos REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/Kokkos QUIET)

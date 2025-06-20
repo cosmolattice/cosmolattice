@@ -138,7 +138,6 @@ namespace TempLat
           sayMPI << "Setting ghost state to stale, because of the FFT we performed. " << getName() << "\n";
         mGhostStateKeeper.setStale();
 
-        mBlock.pushHostView(); // make sure the data is pushed to the device
         if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Pushed data to device.\n";
       }
       mLayoutState.setToConfigSpace();
@@ -173,6 +172,7 @@ namespace TempLat
           mBlock.pushHostView(); // make sure the data is pushed to the device
           if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Pushed data to device.\n";
         }
+        mBlock.flagHostMirrorOutdated();
       }
       mLayoutState.setToFourierSpace();
       if (mToolBox->verbosity.spaceConfirmation) sayMPI << "We are in Fourier space.\n";
@@ -183,24 +183,25 @@ namespace TempLat
     {
       ptrdiff_t result = confirmConfigSpace();
 
-      // TODO
-
-      /*
       if (mToolBox->verbosity.ghostConfirmationSteps)
         sayMPI << "Confirming that ghost cells are up to date. " << getName() << "\n" << mGhostStateKeeper << "\n";
       if (mGhostStateKeeper.isStale()) {
         if (mToolBox->verbosity.ghostConfirmationSteps) sayMPI << "Need to update ghost cells.\n";
         ++result;
-        mToolBox->mGhostUpdater.update(mBlock.ptr());
+        mToolBox->mGhostUpdater.update(mBlock);
         mGhostStateKeeper.setUpToDate();
       }
       if (mToolBox->verbosity.ghostConfirmationSteps)
         sayMPI << "Ghost cells are up to date.\n" << mGhostStateKeeper << "\n";
-       */
+      mBlock.flagHostMirrorOutdated();
       return result;
     }
 
-    void updateGhosts() { mToolBox->mGhostUpdater.update(mBlock.ptr()); }
+    void updateGhosts()
+    {
+      mToolBox->mGhostUpdater.update(mBlock);
+      mBlock.flagHostMirrorOutdated();
+    }
 
     /** \brief this is the only state the one may need to set from the outside: if a field is updated in the integrator.
      */

@@ -52,12 +52,12 @@ namespace TempLat
             "Can only work with identical padding at start and end of each dimension, not this.", allSame);
     }
 
-    template <typename T> void update(T *ptr)
+    template <typename T> void update(MemoryBlock<NDim, T> &block)
     {
 #ifndef NOMPI
-      pUpdate(ptr);
+      pUpdate(block.data());
 #else
-      pUpdate_NOMPI(ptr);
+      pUpdate_NOMPI(block.data());
 #endif
     }
 
@@ -81,7 +81,7 @@ namespace TempLat
       /* get neighbours */
 #ifndef NOMPI
 #ifndef IEXCH
-      mExchange.exchangeUp(mGhostSubarrayMap.getSubArray<T>(dimension), dimension,
+      mExchange.exchangeUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                            /* base ptr is lower corner of all memory, including ghosts. */
                            /* send:
                             Don't jump to origin, but jump along the edge of dimension
@@ -93,7 +93,7 @@ namespace TempLat
                            ptr);
 
       /* pointers: the same as above, but shifted by ghostDepth and ordering swapped. Yes. */
-      mExchange.exchangeDown(mGhostSubarrayMap.getSubArray<T>(dimension), dimension,
+      mExchange.exchangeDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                              ptr + mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension],
                              ptr + (mGhostDepth + mJumpsHolder.getSizesInMemory()[dimension]) *
                                        mJumpsHolder.getJumpsInMemoryOrder()[dimension]);
