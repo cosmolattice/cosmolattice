@@ -60,7 +60,8 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
 
   auto field_tester = [&](Field<NDim, T> &f, const auto &op, double expected) {
     f = op;
-    auto view = f.getLocalView();
+
+    auto view = f.getLocalNDHostView();
 
     size_t total_size = 1;
     std::array<size_t, NDim> extents;
@@ -89,6 +90,8 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
           [&](const auto &...args) {
             std::cout << ") = " << view(args...) << std::endl;
             all_correct = AlmostEqual(view(args...), expected);
+            if (!AlmostEqual(view(args...), expected))
+              sayMPI << "expected: " << expected << " got " << view(args...) << "\n";
           },
           cIdx);
     }
@@ -98,12 +101,13 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   chi = 2;
   field_tester(chi, chi, 2);
 
-  field_tester(phi, chi + chi, 4);
-  field_tester(phi, chi * chi, 4);
+  // field_tester(phi, chi + chi, 4);
+  field_tester(phi, chi * chi * chi, 2 * 2 * 2);
+  field_tester(phi, chi + chi * chi + chi * chi * chi, 2 + 2 * 2 + 2 * 2 * 2);
   // field_tester(phi, chi - chi, 0);
   // field_tester(phi, chi / chi, 1);
 
-  field_tester(phi, tanh(chi), tanh(2));
+  field_tester(phi, cos(chi), cos(2));
 
   return;
   /*

@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include <cstring>
 #include <stdexcept>
@@ -248,9 +248,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/ghostcells/ghostupdater_test.h"
-#endif
 
 #endif

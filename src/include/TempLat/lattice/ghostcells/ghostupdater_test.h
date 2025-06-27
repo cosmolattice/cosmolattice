@@ -5,15 +5,13 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/lattice/memory/triplestatelayouts.h"
-#include "TempLat/lattice/memory/memorytoolbox.h"
-#include "TempLat/lattice/field/field.h"
-#include "TempLat/util/tdd/tdd.h"
-#include <Kokkos_Macros.hpp>
+
 #include <iomanip>
 
 namespace TempLat

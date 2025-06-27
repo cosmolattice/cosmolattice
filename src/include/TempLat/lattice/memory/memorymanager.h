@@ -197,6 +197,8 @@ namespace TempLat
       return result;
     }
 
+    void flagHostMirrorOutdated() { mBlock.flagHostMirrorOutdated(); }
+
     void updateGhosts()
     {
       mToolBox->mGhostUpdater.update(mBlock);

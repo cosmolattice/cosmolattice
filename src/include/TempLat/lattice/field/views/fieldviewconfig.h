@@ -195,6 +195,7 @@ namespace TempLat
                           SpaceStateInterface<NDim>::SpaceType::Configuration);
 
       GhostsHunter::apply(g);
+      mManager->flagHostMirrorOutdated();
     }
     // MPI aware seetting of value. Use exceptionnaly (remove zero mode for example)
     template <typename... Args> void set(const T &toSet, Args... args)
