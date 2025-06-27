@@ -81,14 +81,14 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
         cIdx[NDim - 1 - j] = remainder % lsize;
         remainder = (remainder - cIdx[NDim - 1 - j]) / extents[NDim - 1 - j];
       }
-      std::cout << "View(";
-      for (uint l = 0; l < NDim; ++l) {
-        std::cout << cIdx[l];
-        if (l != NDim - 1) std::cout << ", ";
-      }
+      // std::cout << "View(";
+      // for (uint l = 0; l < NDim; ++l) {
+      //   std::cout << cIdx[l];
+      //   if (l != NDim - 1) std::cout << ", ";
+      // }
       std::apply(
           [&](const auto &...args) {
-            std::cout << ") = " << view(args...) << std::endl;
+            //      std::cout << ") = " << view(args...) << std::endl;
             all_correct = AlmostEqual(view(args...), expected);
             if (!AlmostEqual(view(args...), expected))
               sayMPI << "expected: " << expected << " got " << view(args...) << "\n";
@@ -101,11 +101,15 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   chi = 2;
   field_tester(chi, chi, 2);
 
-  // field_tester(phi, chi + chi, 4);
-  field_tester(phi, chi * chi * chi, 2 * 2 * 2);
-  field_tester(phi, chi + chi * chi + chi * chi * chi, 2 + 2 * 2 + 2 * 2 * 2);
-  // field_tester(phi, chi - chi, 0);
-  // field_tester(phi, chi / chi, 1);
+  chi + chi + chi;
+
+  field_tester(phi, chi + chi, 4);
+  field_tester(phi, chi * chi, 2 * 2);
+  // field_tester(^hi, chi * chi * chi, 2 * 2 * 2);
+  //   field_tester(phi, pow<4>(chi), 2 * 2 * 2 * 2);
+  //   field_tester(phi, chi + chi * chi + chi * chi * chi, 2 + 2 * 2 + 2 * 2 * 2);
+  //   field_tester(phi, chi - chi, 0);
+  //   field_tester(phi, chi / chi, 1);
 
   field_tester(phi, cos(chi), cos(2));
 

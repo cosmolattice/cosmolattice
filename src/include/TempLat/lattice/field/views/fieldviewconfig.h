@@ -80,13 +80,7 @@ namespace TempLat
                            Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
                            KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 #else
-      auto it = mToolBox->itX();
-      int i = 0;
-      for (it.begin(); it.end(); ++(it)) {
-        i = it();
-        DoEval::eval(g, i);
-        mManager->operator[](i) = GetEval::getEval(g, i);
-      }
+      throw Naaaaaa;
 #endif
 
       mManager->setGhostsAreStale();
@@ -102,14 +96,6 @@ namespace TempLat
     void operator=(const ConfigView<NDim, T> &other)
     { // overwrite the default = operator.
       this->assign(other);
-    }
-
-    template <typename IDX>
-      requires(NDim != 1)
-    [[deprecated("This method should be solely used for checking purposes.")]]
-    KOKKOS_FORCEINLINE_FUNCTION T get(IDX idx) const
-    {
-      return mRawView(idx);
     }
 
     template <typename... IDX>

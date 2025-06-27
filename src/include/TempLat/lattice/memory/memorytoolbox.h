@@ -330,7 +330,7 @@ namespace TempLat
     std::shared_ptr<NPartiteCoordinates<NDim>> mConfCoordNPartite;
     std::shared_ptr<NPartiteCoordinates<NDim>> mFourierCoordNPartite;
 
-    std::array<ptrdiff_t, NDim> mCoordinatesNNNeighbourShifts;
+    std::array<ptrdiff_t, 2 * NDim> mCoordinatesNNNeighbourShifts;
 
     Looper<NDim> mCSpaceIt;
     Looper<NDim> mFSpaceIt;

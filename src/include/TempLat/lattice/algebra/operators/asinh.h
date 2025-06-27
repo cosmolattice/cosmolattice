@@ -33,7 +33,9 @@ namespace TempLat
       ASinh(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
 #ifndef NOKOKKOS
         using Kokkos::asinh; /* not std::exp, but this way, for potential future data types. */
@@ -69,9 +71,5 @@ namespace TempLat
     return Operators::ASinh<T>(a);
   }
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/asinh_test.h"
-#endif
 
 #endif

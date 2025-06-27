@@ -32,7 +32,12 @@ namespace TempLat
       KOKKOS_FUNCTION
       Subtraction(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) {
+          GetValue::get(mR, idx...);
+          GetValue::get(mT, idx...);
+        }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return GetValue::get(mR, idx...) - GetValue::get(mT, idx...);
       }
@@ -94,9 +99,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/subtract_test.h"
-#endif
 
 #endif

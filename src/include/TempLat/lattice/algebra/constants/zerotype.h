@@ -25,7 +25,7 @@ namespace TempLat
   struct ZeroType {
     //        operator ptrdiff_t() const { return 0; }
     static std::string toString() { return "(ZeroType)0"; }
-    static constexpr ptrdiff_t get(ptrdiff_t i) { return 0; }
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...) { return 0; }
     static constexpr bool ISCONSTANT = true;
   };
 } // namespace TempLat

@@ -45,7 +45,9 @@ namespace TempLat
       Log(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return log(GetValue::get(mR, idx...));
       }
@@ -80,9 +82,5 @@ namespace TempLat
   KOKKOS_FORCEINLINE_FUNCTION
   ZeroType log(OneType a) { return ZeroType(); }
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/log_test.h"
-#endif
 
 #endif

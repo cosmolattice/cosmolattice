@@ -70,7 +70,12 @@ namespace TempLat
       KOKKOS_FUNCTION
       Multiplication() : BinaryOperator<R, T>(R(), T()) {}
 
-      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) {
+          GetValue::get(mT, idx...);
+          GetValue::get(mR, idx...);
+        }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return GetValue::get(mT, idx...) * GetValue::get(mR, idx...);
       }
@@ -92,7 +97,9 @@ namespace TempLat
       KOKKOS_FUNCTION
       MultiplicationN(const R &pR) : UnaryOperator<R>(pR) {}
 
-      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return N * GetValue::get(mR, idx...);
       }
@@ -176,9 +183,5 @@ namespace TempLat
   KOKKOS_FORCEINLINE_FUNCTION
   OneType operator*(OneType a, OneType b) { return a; }
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/multiply_test.h"
-#endif
 
 #endif

@@ -9,7 +9,6 @@
 
 inline void TempLat::GetGetReturnTypeTester::Test(TempLat::TDDAssertion &tdd)
 {
-
   struct tmp {
     KOKKOS_FORCEINLINE_FUNCTION
     double get(const ptrdiff_t &) const { return 0.; }

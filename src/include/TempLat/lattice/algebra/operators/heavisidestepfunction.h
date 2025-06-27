@@ -26,7 +26,9 @@ namespace TempLat
     KOKKOS_FUNCTION
     HeavisideStepFunction(const R &pR) : UnaryOperator<R>(pR) {}
 
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    template <typename... IDX>
+      requires requires(IDX... idx) { GetValue::get(mR, idx...); }
+    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return (GetValue::get(mR, idx...) >= 0 ? 1. : 0);
     }
@@ -61,9 +63,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/heavisidestepfunction_test.h"
-#endif
 
 #endif

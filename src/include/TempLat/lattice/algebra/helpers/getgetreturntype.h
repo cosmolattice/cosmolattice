@@ -21,8 +21,7 @@ namespace TempLat
    * Unit test: make test-getgetreturntype
    **/
   template <typename T> struct GetGetReturnType {
-    using type = std::decay_t<decltype(GetValue::get(std::declval<typename std::remove_reference<T>::type>(),
-                                                     std::declval<int>()))>;
+    using type = std::decay_t<decltype(GetValue::get_example(std::declval<std::decay_t<T>>()))>;
 
     static constexpr bool isComplex = IsComplexType<type>;
   };

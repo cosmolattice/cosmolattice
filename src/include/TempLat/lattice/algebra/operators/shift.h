@@ -45,8 +45,8 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    KOKKOS_FORCEINLINE_FUNCTION
-    ptrdiff_t computeShifts(const std::vector<ptrdiff_t> &shifts)
+    template <size_t NDim>
+    KOKKOS_FORCEINLINE_FUNCTION ptrdiff_t computeShifts(const std::array<ptrdiff_t, NDim> &shifts)
     {
       ShiftedCoordinatesManager mShifts(shifts);
 

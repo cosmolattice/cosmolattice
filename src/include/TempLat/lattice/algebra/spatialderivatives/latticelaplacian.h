@@ -188,7 +188,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t whatJump(ptrdiff_t dim, ptrdiff_t dSign, const JumpsHolder<3> &jump)
     {
-      std::vector<ptrdiff_t> shifts(3, (ptrdiff_t)0);
+      std::array<ptrdiff_t, 3> shifts{};
       shifts[dim] = dSign;
       ShiftedAccessor tmp(jump, shifts);
 

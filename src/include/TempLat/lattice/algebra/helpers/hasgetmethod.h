@@ -14,11 +14,20 @@
 
 namespace TempLat
 {
+  template <typename U, typename... IDX>
+  concept HasGetMethodHelper = requires(U u, IDX... idx) { u.get(idx...); };
+
   /** \brief A concept which determines at compile time whether an object has a method `get`.
    *
    **/
   template <class T>
-  concept HasGetMethod = requires(T t, ptrdiff_t idx) { t.get(idx); };
+  concept HasGetMethod = HasGetMethodHelper<T, size_t>                                            //
+                         || HasGetMethodHelper<T, size_t, size_t>                                 //
+                         || HasGetMethodHelper<T, size_t, size_t, size_t>                         //
+                         || HasGetMethodHelper<T, size_t, size_t, size_t, size_t>                 //
+                         || HasGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t>         //
+                         || HasGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t> //
+                         || HasGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t>;
 
   struct HasGetMethodTester {
   public:

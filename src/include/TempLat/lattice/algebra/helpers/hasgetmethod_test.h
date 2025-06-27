@@ -14,7 +14,7 @@ inline void TempLat::HasGetMethodTester::Test(TempLat::TDDAssertion &tdd)
   };
 
   struct MyTestOne {
-    dummy get(const ptrdiff_t &i)
+    dummy get(const ptrdiff_t &i) const
     {
       std::cerr << "Hell yeah.\n";
       return dummy();
@@ -25,9 +25,28 @@ inline void TempLat::HasGetMethodTester::Test(TempLat::TDDAssertion &tdd)
     void noGet() { std::cerr << "Hell no.\n"; }
   };
 
+  struct MyTestThree {
+    dummy get(const ptrdiff_t &, const ptrdiff_t &, const ptrdiff_t &)
+    {
+      std::cerr << "Hell yeah.\n";
+      return dummy();
+    }
+  };
+
+  struct MyTestFour {
+    dummy get(const ptrdiff_t &, const ptrdiff_t &, const ptrdiff_t &, const ptrdiff_t &)
+    {
+      std::cerr << "Hell yeah.\n";
+      return dummy();
+    }
+  };
+
   tdd.verify(HasGetMethod<MyTestOne> == true);
   tdd.verify(HasGetMethod<MyTestTwo> == false);
+  tdd.verify(HasGetMethod<MyTestThree> == true);
+  tdd.verify(HasGetMethod<MyTestFour> == true);
   tdd.verify(HasGetMethod<int> == false);
+  tdd.verify(HasGetMethod<bool> == false);
 }
 
 #endif

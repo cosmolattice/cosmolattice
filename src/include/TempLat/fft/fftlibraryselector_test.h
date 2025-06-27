@@ -17,7 +17,7 @@ inline void TempLat::FFTLibrarySelector<NDim>::TestBody(TempLat::TDDAssertion &t
 {
 
   /* int main already calls the mpi guard, which calls the FFT session guards. So this should be the second time. */
-  tdd.verify(Throws<FFTLibraryDoubleInitializationException>([]() { FFTLibrarySelector::getSessionGuards(); }));
+  tdd.verify(Throws<FFTLibraryDoubleInitializationException>([]() { getFFTSessionGuards(); }));
 
   /* let's create some memory, FFT forth and back, and check that the result is close enough to the input, module the
    * normalization.. */

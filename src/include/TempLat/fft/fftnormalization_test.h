@@ -18,7 +18,7 @@ template <size_t NDim> inline void TempLat::FFTNormalization<NDim>::Test(TempLat
   double baseNorm = std::pow(nGrid[0], NDim);
 
   auto split = FFTMPIDomainSplit<NDim>::makeDomainDecomposition(MPICommReference().size(), NDim);
-  FFTLibrarySelector ffter(MPICartesianGroup(NDim, split), nGrid);
+  FFTLibrarySelector<NDim> ffter(MPICartesianGroup(NDim, split), nGrid);
 
   FFTLayoutStruct layout = ffter.getLayout();
 

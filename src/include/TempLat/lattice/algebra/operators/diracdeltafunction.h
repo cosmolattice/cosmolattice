@@ -29,7 +29,9 @@ namespace TempLat
       DiracDeltaFunction(const R &a) : UnaryOperator<R>(a) {}
 
       /** \brief Getter for two instances. */
-      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         typedef typename GetGetReturnType<R>::type mType;
         mType objValue = GetValue::get(mR, idx...);
@@ -60,9 +62,4 @@ namespace TempLat
     return Operators::DiracDeltaFunction<T>(a);
   }
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/diracdeltafunction_test.h"
-#endif
-
 #endif

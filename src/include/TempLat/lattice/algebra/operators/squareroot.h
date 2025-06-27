@@ -43,7 +43,9 @@ namespace TempLat
        * \brief Check  if numerator if roughly zero, don't do the division.
        *  Useful for spectrum fluctuation, when normalising with a cutoff
        **/
-      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         auto a = GetValue::get(mR, idx...);
         decltype(a) zero(0);
@@ -79,9 +81,5 @@ namespace TempLat
   KOKKOS_FORCEINLINE_FUNCTION
   OneType sqrt(OneType a) { return a; }
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/squareroot_test.h"
-#endif
 
 #endif

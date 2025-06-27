@@ -137,7 +137,7 @@ namespace TempLat
     MemoryBlock duplicate()
     {
       MemoryBlock newblock(mSize);
-      Kokkos::deep_copy(newblock.getView(), mData);
+      Kokkos::deep_copy(newblock.getRawView(), mData);
       return newblock;
     }
 
@@ -147,7 +147,7 @@ namespace TempLat
       return ostream;
     }
 
-    friend bool operator==(const MemoryBlock &a, const MemoryBlock &b) { return a.getView() == b.getView(); }
+    friend bool operator==(const MemoryBlock &a, const MemoryBlock &b) { return a.getRawView() == b.getRawView(); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

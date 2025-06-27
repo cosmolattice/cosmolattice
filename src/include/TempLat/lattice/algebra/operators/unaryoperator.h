@@ -90,8 +90,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/unaryoperator_test.h"
-#endif
-
 #endif

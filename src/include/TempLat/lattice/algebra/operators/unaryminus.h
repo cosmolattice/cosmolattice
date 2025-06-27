@@ -34,7 +34,9 @@ namespace TempLat
       UnaryMinus(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return -GetValue::get(mR, idx...);
       }
@@ -55,7 +57,7 @@ namespace TempLat
 
   /** \brief Exposing our newly defined subtraction operation to the world. */
   template <typename T>
-    requires ConditionalUnaryGetter<T>
+    requires HasGetMethod<T>
   KOKKOS_FORCEINLINE_FUNCTION auto operator-(const T &a)
   {
     return Operators::UnaryMinus<T>(a);
@@ -71,9 +73,5 @@ namespace TempLat
     return a;
   }
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/operators/unaryminus_test.h"
-#endif
 
 #endif
