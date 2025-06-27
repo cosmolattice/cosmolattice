@@ -61,27 +61,34 @@ namespace TempLat
     template <size_t NDim>
     void datum_initialize(MemoryBlock<NDim, datum<NDim>> &block, const size_t nGrid, const size_t nGhost)
     {
-      std::array<size_t, NDim> localSizes;
-      for (size_t k = 0; k < NDim; ++k)
-        localSizes[k] = nGrid + 2 * nGhost;
-      auto view = block.getNDView(localSizes);
+      if constexpr (NDim == 1) {
+        auto view = block.getRawView();
+        Kokkos::parallel_for(
+            Kokkos::RangePolicy(0, nGrid),
+            KOKKOS_LAMBDA(const size_t i) { view(nGhost + i) = datum<NDim>{(ptrdiff_t)i + 1}; });
+      } else {
+        std::array<size_t, NDim> localSizes;
+        for (size_t k = 0; k < NDim; ++k)
+          localSizes[k] = nGrid + 2 * nGhost;
+        auto view = block.getNDView(localSizes);
 
-      std::array<std::pair<size_t, size_t>, NDim> slices{};
-      for (size_t k = 0; k < NDim; ++k)
-        slices[k] = std::make_pair(nGhost, nGhost + nGrid);
+        std::array<std::pair<size_t, size_t>, NDim> slices{};
+        for (size_t k = 0; k < NDim; ++k)
+          slices[k] = std::make_pair(nGhost, nGhost + nGrid);
 
-      auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
-      auto functor = KOKKOS_LAMBDA(const std::array<size_t, NDim> &idx)
-      {
-        std::apply([&](const auto &...args) { subView(args...) = datum<NDim>{((ptrdiff_t)args + 1)...}; }, idx);
-      };
+        auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
+        auto functor = KOKKOS_LAMBDA(const std::array<size_t, NDim> &idx)
+        {
+          std::apply([&](const auto &...args) { subView(args...) = datum<NDim>{((ptrdiff_t)args + 1)...}; }, idx);
+        };
 
-      Kokkos::Array<size_t, NDim> it_start{};
-      Kokkos::Array<size_t, NDim> it_stop{};
-      for (size_t k = 0; k < NDim; ++k)
-        it_stop[k] = nGrid;
-      Kokkos::parallel_for("GhostUpdater", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(it_start, it_stop),
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+        Kokkos::Array<size_t, NDim> it_start{};
+        Kokkos::Array<size_t, NDim> it_stop{};
+        for (size_t k = 0; k < NDim; ++k)
+          it_stop[k] = nGrid;
+        Kokkos::parallel_for("GhostUpdater", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(it_start, it_stop),
+                             KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      }
     }
 
     template <size_t nd> bool test_ghost_updater(const ptrdiff_t nGrid, const size_t nGhost)

@@ -8,6 +8,7 @@
 
 namespace
 {
+  TempLat::TDDContainer<TempLat::GhostUpdater<1>> test1;
   TempLat::TDDContainer<TempLat::GhostUpdater<2>> test2;
   TempLat::TDDContainer<TempLat::GhostUpdater<3>> test3;
   TempLat::TDDContainer<TempLat::GhostUpdater<4>> test4;
