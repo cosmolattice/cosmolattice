@@ -11,23 +11,52 @@
 
 template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
+  constexpr size_t nd = 3;
+  const ptrdiff_t nGrid = 2, nGhost = 1;
 
-  ptrdiff_t nGrid = 32, nGhost = 1;
+  auto show_field = [](const auto &field) {
+    auto view = field.getFullNDHostView();
 
-  auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
+    size_t total_size = 1;
+    std::array<size_t, nd> extents;
+    for (uint i = 0; i < nd; ++i) {
+      extents[i] = view.extent(i);
+      total_size *= extents[i];
+    }
+
+    std::array<size_t, nd> cIdx{};
+    for (size_t i = 0; i < total_size; ++i) {
+      // Linear index to cartesian index
+      size_t lsize = 1;
+      size_t remainder = i;
+      for (size_t j = 0; j < nd; ++j) {
+        lsize = extents[nd - 1 - j];
+        cIdx[nd - 1 - j] = remainder % lsize;
+        remainder = (remainder - cIdx[nd - 1 - j]) / extents[nd - 1 - j];
+      }
+      std::cout << "View(";
+      for (uint l = 0; l < nd; ++l) {
+        std::cout << cIdx[l];
+        if (l != nd - 1) std::cout << ", ";
+      }
+      std::apply([&](const auto &...args) { std::cout << ") = " << view(args...) << std::endl; }, cIdx);
+    }
+  };
+
+  auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
   SpatialCoordinate x(toolBox);
 
   toolBox->setVerbose();
 
-  Field<3, double> sc1("SC1", toolBox);
+  Field<nd, double> sc1("SC1", toolBox);
   sc1 = getVectorComponent(x, 0);
 
-  Field<3, double> sc2("SC2", toolBox);
+  Field<nd, double> sc2("SC2", toolBox);
   sc2 = getVectorComponent(x, 1);
 
-  std::cout << "sc1: " << std::endl;
-
+  show_field(sc1);
   sc1.updateGhosts();
+  show_field(sc1);
   sc2.updateGhosts();
 
   /*

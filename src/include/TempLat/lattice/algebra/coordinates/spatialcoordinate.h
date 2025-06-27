@@ -11,6 +11,7 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/coordinates/coordinatevector.h"
 #include "TempLat/lattice/algebra/helpers/getvectorcomponent.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -29,7 +30,8 @@ namespace TempLat
 
     ptrdiff_t getVectorSize() { return mToolBox->mNDimensions; }
 
-    template <typename IDX1, typename... IDX> auto get(const IDX1 component, const IDX &...idx) const
+    template <typename IDX1, typename... IDX>
+    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX1 component, const IDX &...idx) const
     {
       using type = decltype(component * (idx * ...));
       return (std::array<type, sizeof...(IDX)>{{idx...}}[component]);

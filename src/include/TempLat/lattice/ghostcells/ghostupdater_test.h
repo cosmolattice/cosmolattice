@@ -10,6 +10,11 @@
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/lattice/memory/triplestatelayouts.h"
+#include "TempLat/lattice/memory/memorytoolbox.h"
+#include "TempLat/lattice/field/field.h"
+#include "TempLat/util/tdd/tdd.h"
+#include <Kokkos_Macros.hpp>
+#include <iomanip>
 
 namespace TempLat
 {
@@ -37,12 +42,12 @@ namespace TempLat
       }
     };
 
-    struct datum {
-      ptrdiff_t x, y, z, rank;
+    template <size_t NDim> struct datum {
+      std::array<ptrdiff_t, NDim> data;
 
       friend std::ostream &operator<<(std::ostream &ostream, const datum &dat)
       {
-        ostream << "x: " << dat.x << ", y: " << dat.y << ", z: " << dat.z << ", rank: " << dat.rank;
+        ostream << dat.data;
         return ostream;
       }
 
@@ -52,113 +57,146 @@ namespace TempLat
         return holder.dType;
       }
     };
+
+    template <size_t NDim>
+    void datum_initialize(MemoryBlock<NDim, datum<NDim>> &block, const size_t nGrid, const size_t nGhost)
+    {
+      std::array<size_t, NDim> localSizes;
+      for (size_t k = 0; k < NDim; ++k)
+        localSizes[k] = nGrid + 2 * nGhost;
+      auto view = block.getNDView(localSizes);
+
+      std::array<std::pair<size_t, size_t>, NDim> slices{};
+      for (size_t k = 0; k < NDim; ++k)
+        slices[k] = std::make_pair(nGhost, nGhost + nGrid);
+
+      auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
+      auto functor = KOKKOS_LAMBDA(const std::array<size_t, NDim> &idx)
+      {
+        std::apply([&](const auto &...args) { subView(args...) = datum<NDim>{((ptrdiff_t)args + 1)...}; }, idx);
+      };
+
+      Kokkos::Array<size_t, NDim> it_start{};
+      Kokkos::Array<size_t, NDim> it_stop{};
+      for (size_t k = 0; k < NDim; ++k)
+        it_stop[k] = nGrid;
+      Kokkos::parallel_for("GhostUpdater", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(it_start, it_stop),
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+    }
+
+    template <size_t nd> bool test_ghost_updater(const ptrdiff_t nGrid, const size_t nGhost)
+    {
+      std::array<ptrdiff_t, nd> gridArray{};
+      std::array<ptrdiff_t, nd> gridArrayFull{};
+      for (uint i = 0; i < nd; ++i) {
+        gridArray[i] = nGrid;
+        gridArrayFull[i] = nGrid + 2 * nGhost;
+      }
+
+      constexpr bool verbose = false;
+
+      auto print_it = [&](auto view) {
+        if (!verbose) return;
+        const size_t total_size = pow<nd>(nGrid + 2 * nGhost);
+        std::array<size_t, nd> cIdx{};
+        for (size_t i = 0; i < total_size; ++i) {
+          // Linear index to cartesian index
+          size_t lsize = 1;
+          size_t remainder = i;
+          for (size_t j = 0; j < nd; ++j) {
+            lsize = gridArrayFull[nd - 1 - j];
+            cIdx[nd - 1 - j] = remainder % lsize;
+            remainder = (remainder - cIdx[nd - 1 - j]) / gridArrayFull[nd - 1 - j];
+          }
+          if (cIdx[nd - 1] == 0) sayMPI << "\n";
+          sayMPI << std::setw(4) << view(i).data[0];
+          if ((size_t)cIdx[nd - 1] != (size_t)nGrid - 1) sayMPI << " ";
+        }
+        sayMPI << "\n\n";
+      };
+
+      auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
+      toolBox->unsetVerbose();
+      MemoryBlock<nd, TestScratch::datum<nd>> block(pow<nd>(nGrid + 2 * nGhost));
+
+      MPICartesianGroup mGroup(FFTMPIDomainSplit<nd>::makeMPIGroup(nd));
+      FFTLibrarySelector<nd> fftlib(mGroup, gridArray);
+      TripleStateLayouts fullLayout(fftlib.getLayout(), nGhost);
+      GhostUpdater<nd> ghostUpdater(mGroup, fullLayout.getConfigSpaceJumps());
+
+      TestScratch::datum_initialize<nd>(block, nGrid, nGhost);
+
+      const size_t total_size = pow<nd>(nGrid + 2 * nGhost);
+      std::array<size_t, nd> cIdx{};
+
+      auto view = block.getRawHostView();
+      print_it(view);
+
+      ghostUpdater.update(block);
+
+      block.flagHostMirrorOutdated();
+      view = block.getRawHostView();
+      print_it(view);
+
+      bool all_correct = true;
+      uint ww = 0;
+      for (size_t i = 0; i < total_size; ++i) {
+        // Linear index to cartesian index
+        size_t lsize = 1;
+        size_t remainder = i;
+        for (size_t j = 0; j < nd; ++j) {
+          lsize = gridArrayFull[nd - 1 - j];
+          cIdx[nd - 1 - j] = remainder % lsize;
+          remainder = (remainder - cIdx[nd - 1 - j]) / gridArrayFull[nd - 1 - j];
+        }
+
+        auto should_value = cIdx;
+        for (size_t d = 0; d < nd; ++d) {
+          if (cIdx[d] < nGhost)
+            should_value[d] = nGrid - (nGhost - cIdx[d] - 1);
+          else if (cIdx[d] >= nGhost + nGrid)
+            should_value[d] = cIdx[d] - nGrid - (nGhost - 1);
+          else
+            should_value[d] -= nGhost - 1;
+        }
+
+        auto is_value = view(i).data;
+
+        for (size_t d = 0; d < nd; ++d) {
+          all_correct &= (size_t)is_value[d] == (size_t)should_value[d];
+          if ((size_t)is_value[d] != (size_t)should_value[d])
+            sayMPI << ++ww << " false " << is_value << " | vs | " << should_value << " AT POSITION " << cIdx << "\n";
+        }
+      }
+      return all_correct;
+    }
   } // namespace TestScratch
 } // namespace TempLat
 
 template <size_t NDim> inline void TempLat::GhostUpdater<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  /* Perhaps a bit elaborate, but it is as consistent as it gets.. */
-  /* And in fact it helped getting out the errors. Yes. */
+  // restrict the sizes, dimensionality can lead to some huge tests...
 
-  /* note to self: the debugging involved here was more about debugging the
-   test case, then about debugging the actual class being debugged.
-   Think of the golden refactoring rules to live by. Failed here. */
+  tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 1));
+  if constexpr (NDim < 6) tdd.verify(TestScratch::test_ghost_updater<NDim>(16, 1));
+  if constexpr (NDim < 4) {
+    tdd.verify(TestScratch::test_ghost_updater<NDim>(32, 1));
+    tdd.verify(TestScratch::test_ghost_updater<NDim>(128, 1));
+  }
 
-  // TODO: The test is broken with MPI. Not worrisome because the test itself is fine,
-  //  there is just a segfault t destruction time, related to how the test itself is contructed
-  //  Nice if someome were to fix that... . You can still using the test if you ignore
-  //  thesegfault, just uncomment here.
+  tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 2));
+  if constexpr (NDim < 6) tdd.verify(TestScratch::test_ghost_updater<NDim>(16, 2));
+  if constexpr (NDim < 4) {
+    tdd.verify(TestScratch::test_ghost_updater<NDim>(32, 2));
+    tdd.verify(TestScratch::test_ghost_updater<NDim>(128, 2));
+  }
 
-  say << "**************************\n WARNING: bug in this test, on destruction off the test data. The test itself "
-         "works, so if you want to see, come here and uncomment and ignore the segfault.\n**************************\n";
-
-  //    const ptrdiff_t nDimensions = 3;
-  //    const ptrdiff_t nGrid = 256;
-  //    const ptrdiff_t ghostDepth = 3;
-  //
-  //    MPICartesianGroup mGroup(FFTMPIDomainSplit::makeMPIGroup(nDimensions));
-  //
-  //    FFTLibrarySelector fftlib(mGroup, nDimensions, nGrid);
-  //
-  //    /* regular ghosting */
-  //    TripleStateLayouts fullLayout(fftlib.getLayout(), ghostDepth);
-  //
-  //
-  //
-  //    std::vector<TestScratch::datum> memory(
-  //                                                      std::pow(nGrid + 2 * ghostDepth, nDimensions)
-  //                                                      );
-  //
-  //    const auto& starts = fullLayout.getConfigSpaceStarts();
-  //    const auto& sizes = fullLayout.getConfigSpaceSizes();
-  //
-  //
-  //    auto&& makeCoord = [&nGrid](const auto& start, const auto& index) {
-  //        ptrdiff_t result = (start + index) % nGrid;
-  //        while ( result < 0 ) result += nGrid;
-  //        return result;
-  //    };
-  //
-  //    /* setup the controlled known memory; each entry equals its position */
-  //    for ( ptrdiff_t i = -ghostDepth; i < sizes[0] + ghostDepth; ++i ) {
-  //        ptrdiff_t iPos = (i + ghostDepth) * (sizes[1] + 2 * ghostDepth) * (sizes[2] + 2 * ghostDepth);
-  //        ptrdiff_t iCoord = makeCoord(starts[0], i);
-  //        bool iInGhostRegime = i < 0 || i >= sizes[0];
-  //        for ( ptrdiff_t j = -ghostDepth; j < sizes[1] + ghostDepth; ++j ) {
-  //            ptrdiff_t jPos = (j + ghostDepth) * (sizes[2] + 2 * ghostDepth);
-  //            ptrdiff_t jCoord = makeCoord(starts[1], j);
-  //            bool jInGhostRegime = j < 0 || j >= sizes[1];
-  //            for ( ptrdiff_t k = -ghostDepth; k < sizes[2] + ghostDepth; ++k ) {
-  //                ptrdiff_t kPos = k + ghostDepth;
-  //                ptrdiff_t kCoord = makeCoord(starts[2], k);
-  //                bool kInGhostRegime = k < 0 || k >= sizes[2];
-  //                bool inGhostRegime = iInGhostRegime || jInGhostRegime || kInGhostRegime;
-  //                ptrdiff_t pos = iPos + jPos + kPos;
-  //                if ( ! inGhostRegime) {
-  //                    /* zero out the ghost cells, so we are sure that the correct value later on truly comes from the
-  //                    owning process. */ memory[pos].x = iCoord; memory[pos].y = jCoord; memory[pos].z = kCoord;
-  //                }
-  //                memory[pos].rank = mGroup.getRank();
-  ////                                if (i < 0 && j < 0 && k < 0)
-  //                //                if ( iCoord == 253 && jCoord == 253 && kCoord == 253)
-  ////                                std::cerr << "Hoi " << "inGhostRegime: " << inGhostRegime << " " << pos << " " <<
-  /// i << " " << j << " " << k << " - coord: " << memory[pos] << "\n";
-  //            }
-  //        }
-  //    }
-  //
-  //    GhostUpdater ghostUpdater(mGroup, fullLayout.getConfigSpaceJumps());
-  //
-  //    ghostUpdater.update(memory.data());
-  //
-  //
-  //    bool allRight = true;
-  //    for ( ptrdiff_t i = -ghostDepth; i < sizes[0] + ghostDepth; ++i ) {
-  //        ptrdiff_t iPos = (i + ghostDepth) * (sizes[1] + 2 * ghostDepth) * (sizes[2] + 2 * ghostDepth);
-  //        ptrdiff_t iCoord = makeCoord(starts[0], i);
-  //        for ( ptrdiff_t j = -ghostDepth; j < sizes[1] + ghostDepth; ++j ) {
-  //            ptrdiff_t jPos = (j + ghostDepth) * (sizes[2] + 2 * ghostDepth);
-  //            ptrdiff_t jCoord = makeCoord(starts[1], j);
-  //            for ( ptrdiff_t k = -ghostDepth; k < sizes[2] + ghostDepth; ++k ) {
-  //                ptrdiff_t kPos = k + ghostDepth;
-  //                ptrdiff_t kCoord = makeCoord(starts[2], k);
-  //                ptrdiff_t pos = iPos + jPos + kPos;
-  //                bool thisRight = memory[pos].x == iCoord
-  //                && memory[pos].y == jCoord
-  //                && memory[pos].z == kCoord;
-  //                allRight = allRight && thisRight;
-  //
-  //                if (  !  thisRight ) std::cerr << "Ghost updating is broken " << pos << " | " << memory[pos] << ", "
-  //                    << memory[pos].x << " should be " << iCoord << " at " << i << ", "
-  //                    << memory[pos].y << " should be " << jCoord << " at " << j << ", "
-  //                    << memory[pos].z << " should be " << kCoord << " at " << k << "\n";
-  //
-  //            }
-  //        }
-  //    }
-  //
-  //
-  //    tdd.verify( allRight );
+  tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 3));
+  if constexpr (NDim < 6) tdd.verify(TestScratch::test_ghost_updater<NDim>(16, 3));
+  if constexpr (NDim < 4) {
+    tdd.verify(TestScratch::test_ghost_updater<NDim>(32, 3));
+    tdd.verify(TestScratch::test_ghost_updater<NDim>(128, 3));
+  }
 }
 
 #endif

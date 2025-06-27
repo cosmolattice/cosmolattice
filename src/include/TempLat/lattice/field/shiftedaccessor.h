@@ -24,7 +24,8 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    ShiftedAccessor(const JumpsHolder<NDim> &jump, std::vector<ptrdiff_t> shifts = std::vector<ptrdiff_t>())
+    ShiftedAccessor(const JumpsHolder<NDim> &jump,
+                    const std::array<ptrdiff_t, NDim> &shifts = std::array<ptrdiff_t, NDim>{})
         : mShifts(shifts)
     {
       this->updateJumps(jump);

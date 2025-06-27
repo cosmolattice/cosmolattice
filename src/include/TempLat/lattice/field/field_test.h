@@ -76,7 +76,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
       size_t lsize = 1;
       size_t remainder = i;
       for (size_t j = 0; j < NDim; ++j) {
-        lsize *= extents[NDim - 1 - j];
+        lsize = extents[NDim - 1 - j];
         cIdx[NDim - 1 - j] = remainder % lsize;
         remainder = (remainder - cIdx[NDim - 1 - j]) / extents[NDim - 1 - j];
       }

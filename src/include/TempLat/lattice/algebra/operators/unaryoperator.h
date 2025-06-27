@@ -38,6 +38,7 @@ namespace TempLat
   template <typename R> class UnaryOperator
   {
   public:
+    KOKKOS_FUNCTION
     UnaryOperator(const R &pR) : mR(pR) {}
 
     void doWeNeedGhosts() { GhostsHunter::apply(mR); }
@@ -54,10 +55,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     void eval(ptrdiff_t i) { DoEval::eval(mR, i); }
 
-    template <size_t NDim> KOKKOS_FORCEINLINE_FUNCTION JumpsHolder<NDim> getJumps()
-    {
-      return GetJumps::apply<NDim>(mR);
-    }
+    template <size_t NDim> JumpsHolder<NDim> getJumps() { return GetJumps::apply<NDim>(mR); }
 
     /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
     auto getToolBox() { return GetToolBox::get(mR); }

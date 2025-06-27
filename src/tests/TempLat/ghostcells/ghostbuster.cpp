@@ -3,7 +3,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 #include "TempLat/lattice/ghostcells/ghostbuster.h"
 
 namespace

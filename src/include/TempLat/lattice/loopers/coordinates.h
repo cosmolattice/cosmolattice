@@ -26,12 +26,10 @@ namespace TempLat
     Coordinates(const JumpsHolder<NDim> &jumpsHolder, const LayoutStruct<NDim> &layoutStruct)
         : mLayouts(layoutStruct), mJumps(jumpsHolder), mIStart(0), jumps(mJumps.getJumpsInMemoryOrder()), vect{}
     {
-      std::cout << mOffsets << std::endl;
       CoordinatesInitializer mCI(jumpsHolder, layoutStruct);
       mCI.initCoords(1, mOffsets, mIStart, mIEnd);
       // auto sizes = mJumps.getSizesInMemory();
       mOffsets.shrink_to_fit();
-      std::cout << mOffsets << std::endl;
     }
 
     ptrdiff_t operator()(ptrdiff_t i) const

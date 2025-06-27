@@ -35,18 +35,17 @@ namespace TempLat
     KOKKOS_FUNCTION
     LatticeLaplacian(R pR) : UnaryOperator<R>(pR), dx2(pow(GetDx::getDx(pR), 2))
     {
-      fixLaplacianMap(GetJumps::apply(mR));
+      // fixLaplacianMap(GetJumps::apply(mR));
     }
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i)
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      auto result = -2 * NDim * GetValue::get(mR, i);
-      for (size_t j(0); j < 2 * NDim; ++j)
-        result += GetValue::get(mR, i + mShiftAccessors[j]);
-      // for(size_t j(0);j<2*NDim;++j) result+=GetValue::get(mShiftAccessors[j],i);
+      auto result = -2 * NDim * GetValue::get(mR, idx...);
+      // for (size_t j(0); j < 2 * NDim; ++j^
+      //   result += GetValue::get(mR, i + mShiftAccessors[j]);
+      //  for(size_t j(0);j<2*NDim;++j) result+=GetValue::get(mShiftAccessors[j],i);
       return result / dx2;
     }
     /*
@@ -105,7 +104,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t whatJump(ptrdiff_t dim, ptrdiff_t dSign, const JumpsHolder<NDim> &jump)
     {
-      std::vector<ptrdiff_t> shifts(NDim, (ptrdiff_t)0);
+      std::array<ptrdiff_t, NDim> shifts{};
       shifts[dim] = dSign;
       ShiftedAccessor tmp(jump, shifts);
 

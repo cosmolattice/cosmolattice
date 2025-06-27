@@ -43,33 +43,16 @@ namespace TempLat
 
       auto layout = mToolBox->mLayouts.getConfigSpaceLayout();
       auto localSizes = layout.getLocalSizes();
-      auto globalSizes = layout.getGlobalSizes();
+      // auto globalSizes = layout.getGlobalSizes();
       auto localStarts = layout.getLocalStarts();
 
-      for (uint i = 0; i < localSizes.size(); ++i)
-        std::cout << "Local size[" << i << "] = " << localSizes[i] << std::endl;
-      for (uint i = 0; i < globalSizes.size(); ++i)
-        std::cout << "Global size[" << i << "] = " << globalSizes[i] << std::endl;
-      for (uint i = 0; i < localStarts.size(); ++i)
-        std::cout << "Local start[" << i << "] = " << localStarts[i] << std::endl;
-
       auto configSpaceJumps = mToolBox->mLayouts.getConfigSpaceJumps();
-      for (uint i = 0; i < configSpaceJumps.getJumpsInMemoryOrder().size(); ++i) {
-        std::cout << "Jump[" << i << "] = " << configSpaceJumps.getJumpsInMemoryOrder()[i] << std::endl;
-      }
+
       auto padding = configSpaceJumps.getPadding();
-      for (uint i = 0; i < padding.size(); ++i) {
-        for (uint j = 0; j < padding[i].size(); ++j) {
-          std::cout << "Padding[" << i << "][" << j << "] = " << padding[i][j] << " | ";
-        }
-        std::cout << std::endl;
-      }
 
       for (size_t d = 0; d < NDim; ++d) {
         start_iteration[d] = padding[d][0] + localStarts[d];
         stop_iteration[d] = start_iteration[d] + localSizes[d];
-        std::cout << "start[" << d << "] = " << start_iteration[d] << ", stop[" << d << "] = " << stop_iteration[d]
-                  << std::endl;
       }
 
       memorySizes = layout.getLocalSizes();
@@ -77,18 +60,6 @@ namespace TempLat
         memorySizes[d] += padding[d][0] + padding[d][1]; // add padding to the local sizes
         localSlicing[d] = std::make_pair(padding[d][0], padding[d][0] + localSizes[d]);
       }
-
-      std::cout << "memory sizes: ";
-      for (const auto &size : memorySizes) {
-        std::cout << size << " ";
-      }
-      std::cout << std::endl;
-      std::cout << "local slicing: [";
-      for (uint i = 0; i < localSlicing.size(); ++i) {
-        std::cout << localSlicing[i].first << ":" << localSlicing[i].second;
-        if (i != localSlicing.size() - 1) std::cout << ", ";
-      }
-      std::cout << std::endl;
 
       mView = mManager->getNDView(memorySizes);
       mRawView = mManager->getRawView();
@@ -121,7 +92,8 @@ namespace TempLat
       mManager->setGhostsAreStale();
     }
 
-    auto getLocalView() { return mManager->getNDHostSubView(memorySizes, localSlicing); }
+    auto getLocalNDHostView() const { return mManager->getNDHostSubView(memorySizes, localSlicing); }
+    auto getFullNDHostView() const { return mManager->getNDHostView(memorySizes); }
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
