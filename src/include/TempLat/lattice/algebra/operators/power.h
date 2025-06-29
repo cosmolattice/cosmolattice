@@ -40,7 +40,7 @@ namespace TempLat
      * @param x Argument
      * @return x^n
      */
-    template <int n, typename NumberType>
+    template <ptrdiff_t n, typename NumberType>
       requires requires(NumberType x) {
         x * x;
         static_cast<NumberType>(1) / x;
@@ -99,7 +99,7 @@ namespace TempLat
     };
 
     // This class is to make sure std::pow get a static integer. Might be a more elegant way to do it!
-    template <int N, typename R> class PowerN : public UnaryOperator<R>
+    template <ptrdiff_t N, typename R> class PowerN : public UnaryOperator<R>
     {
     public:
       using UnaryOperator<R>::mR;
@@ -107,8 +107,12 @@ namespace TempLat
       KOKKOS_FORCEINLINE_FUNCTION
       PowerN(const R &pR) : UnaryOperator<R>(pR) {}
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i) const { return internal::powr<N>(GetValue::get(mR, i)); }
+      template <typename... IDX>
+        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      {
+        return internal::powr<N>(GetValue::get(mR, idx...));
+      }
 
       std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }
 
@@ -129,20 +133,20 @@ namespace TempLat
     return Operators::Power<R, T>(r, t);
   }
 
-  template <int N> KOKKOS_FORCEINLINE_FUNCTION ZeroType pow(ZeroType) { return ZeroType(); }
+  template <ptrdiff_t N> KOKKOS_FORCEINLINE_FUNCTION ZeroType pow(ZeroType) { return ZeroType(); }
 
   template <typename T> KOKKOS_FORCEINLINE_FUNCTION OneType pow(const T &a, ZeroType b) { return OneType(); }
 
   /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<!std::is_same<T, ZeroType>::value, ZeroType>::type pow(ZeroType a,
-                                                                                                             const T &b)
+    requires std::is_same_v<T, ZeroType>
+  KOKKOS_FORCEINLINE_FUNCTION auto pow(ZeroType a, const T &b)
   {
     return ZeroType();
   }
 
   // enable if is just so that we can overload to consitently write pow<3>(4)  for std::pow(4,3);
-  template <int N, typename R>
+  template <ptrdiff_t N, typename R>
     requires(HasGetMethod<R> && N != 1 && N != 0)
   KOKKOS_FORCEINLINE_FUNCTION auto pow(const R &r)
   {
@@ -150,7 +154,7 @@ namespace TempLat
   }
 
   // overload so that we can sonsitently write pow<3>(4)  for std::pow(4,3);
-  template <int N, typename R>
+  template <ptrdiff_t N, typename R>
     requires(!HasGetMethod<R> && N != 0 && N != 1 && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
   KOKKOS_FORCEINLINE_FUNCTION auto pow(const R &r)
   {
@@ -158,7 +162,7 @@ namespace TempLat
   }
 
   /** \brief Specialize for possible zero input! */
-  template <int N, typename T>
+  template <ptrdiff_t N, typename T>
     requires(N == 0)
   constexpr KOKKOS_FORCEINLINE_FUNCTION auto pow(const T &a)
   {
@@ -166,7 +170,7 @@ namespace TempLat
   }
 
   /** \brief Specialize for possible one input! */
-  template <int N, typename T>
+  template <ptrdiff_t N, typename T>
     requires(N == 1)
   KOKKOS_FORCEINLINE_FUNCTION T pow(const T &a)
   {

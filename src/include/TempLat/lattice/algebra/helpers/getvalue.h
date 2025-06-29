@@ -52,17 +52,18 @@ namespace TempLat
         return get(obj, 0);
       } else if constexpr (TypeHasGet<U, int, int>) {
         return get(obj, 0, 0);
-      } else if constexpr (TypeHasGet<U, int, int>) {
-        return get(obj, 0, 0, 0);
       } else if constexpr (TypeHasGet<U, int, int, int>) {
-        return get(obj, 0, 0, 0, 0);
+        return get(obj, 0, 0, 0);
       } else if constexpr (TypeHasGet<U, int, int, int, int>) {
-        return get(obj, 0, 0, 0, 0, 0);
+        return get(obj, 0, 0, 0, 0);
       } else if constexpr (TypeHasGet<U, int, int, int, int, int>) {
-        return get(obj, 0, 0, 0, 0, 0, 0);
+        return get(obj, 0, 0, 0, 0, 0);
       } else if constexpr (TypeHasGet<U, int, int, int, int, int, int>) {
+        return get(obj, 0, 0, 0, 0, 0, 0);
+      } else if constexpr (TypeHasGet<U, int, int, int, int, int, int, int>) {
         return get(obj, 0, 0, 0, 0, 0, 0, 0);
-      }
+      } else
+        return obj;
     }
 
   private:

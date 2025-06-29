@@ -44,6 +44,7 @@ namespace TempLat
         mSignConversionMidpoint[i] = mGlobalSizes[i] / 2;
       }
     }
+    virtual ~FFTWHermitianPartners() {}
 
     /** \brief For testing purposes: track which entries in the layout carry redundant information, and if so, what
      * information.

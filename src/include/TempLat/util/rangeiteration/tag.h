@@ -24,7 +24,7 @@ namespace TempLat
     constexpr operator int() const { return N; }
     static constexpr int value = N;
 
-    std::string toString() const { return "Tag<" + std::to_string(N) + ">"; }
+    static std::string toString() { return "Tag<" + std::to_string(N) + ">"; }
   };
 
   template <int M, int N> Tag<M + N> operator+(Tag<M> t1, Tag<N> t2) { return Tag<M + N>(); }

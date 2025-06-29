@@ -25,7 +25,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which contains everything a model should have; models derive from here.
    *
    *

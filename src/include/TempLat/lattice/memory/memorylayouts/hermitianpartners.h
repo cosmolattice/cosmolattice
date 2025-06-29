@@ -27,6 +27,7 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     HermitianPartners(std::array<ptrdiff_t, NDim> initNGrid) : mNGrid(initNGrid) {}
+    virtual ~HermitianPartners() {}
 
     /** \brief For testing purposes: track which entries in the layout carry redundant information, and if so, what
      * information. The default implementation returns HermitianRedundancy::none, which you could (uselessly) use for

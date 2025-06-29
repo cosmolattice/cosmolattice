@@ -34,7 +34,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX1 component, const IDX &...idx) const
     {
       using type = decltype(component * (idx * ...));
-      return (std::array<type, sizeof...(IDX)>{{idx...}}[component]);
+      return (Kokkos::Array<type, sizeof...(IDX)>{{idx...}}[component]);
     }
 
     auto operator[](const ptrdiff_t &i) { return get(*this, i); }

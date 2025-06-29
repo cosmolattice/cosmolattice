@@ -11,6 +11,7 @@
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/lattice/memory/triplestatelayouts.h"
+#include "TempLat/lattice/algebra/operators/power.h"
 
 #include <iomanip>
 
