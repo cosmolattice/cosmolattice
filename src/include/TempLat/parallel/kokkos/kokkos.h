@@ -13,6 +13,7 @@
 #ifndef NOKOKKOS
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Random.hpp>
 
 // ------------------------------------------------
 // Getting the View types with stars

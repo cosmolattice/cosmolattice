@@ -26,7 +26,7 @@ template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Te
   }
   tdd.verify(all_true);
 #else
-  MemoryBlock<T> test(128);
+  MemoryBlock<NDim, T> test(128);
 
   // verified that we get segfault on i == test.size()
   for (ptrdiff_t i = 0, iEnd = test.size(); i < iEnd; ++i) {

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Core_fwd.hpp>
 #include <cmath>
 #include <cstring>
 #include <vector>

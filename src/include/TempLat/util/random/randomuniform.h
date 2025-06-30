@@ -7,10 +7,12 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <cstdint>
 #include <random>
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/hash/keccakhash.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 namespace TempLat
 {
@@ -20,6 +22,53 @@ namespace TempLat
    *
    * Unit test: make test-randomuniform
    **/
+#ifndef NOKOKKOS
+  template <typename RandomGenerator = std::mt19937_64> class RandomUniform
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
+    RandomUniform(std::string stringSeed)
+        : mStringSeed(stringSeed), mHashSeed(KeccakHash::compute(mStringSeed)), mSeed(mHashSeed), random_pool(mSeed)
+    {
+      rebase();
+    }
+
+    void rebase() { random_pool = Kokkos::Random_XorShift64_Pool<>(mSeed); }
+
+    const std::string &getSeedString() const { return mStringSeed; }
+
+    const typename RandomGenerator::result_type &getSeed() const { return mSeed; }
+
+    KOKKOS_FORCEINLINE_FUNCTION
+    double operator()() const
+    {
+      // obtain a generator from the pool
+      auto generator = random_pool.get_state();
+      // draw a number
+      const double x = generator.drand(0., 1.);
+      // do not forget to release the state of the engine
+      random_pool.free_state(generator);
+      return x;
+    }
+
+    /** \brief For testing purposes, we need to compare prng's, specifically their seeds. */
+    friend bool operator==(const RandomUniform &a, const RandomUniform &b) { return a.getSeed() == b.getSeed(); }
+
+    friend std::ostream &operator<<(std::ostream &ostream, const RandomUniform &pr)
+    {
+      ostream << "RandomUniform - seed string: \"" << pr.getSeedString() << "\" - seed value: " << pr.getSeed()
+              << " - number of values fetched: " << pr.getState();
+      return ostream;
+    }
+
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+    const std::string mStringSeed;
+    const KeccakHash::ResultType mHashSeed;
+    const uint64_t mSeed;
+    Kokkos::Random_XorShift64_Pool<> random_pool;
+  };
+#else
   template <typename RandomGenerator = std::mt19937_64> class RandomUniform
   {
   public:
@@ -78,6 +127,7 @@ namespace TempLat
 
     double scaleUIntToDouble(typename RandomGenerator::result_type value) { return (((double)value) - mMin) / mRange; }
   };
+#endif
 
   struct RandomUniformTester {
 #ifdef TEMPLATTEST

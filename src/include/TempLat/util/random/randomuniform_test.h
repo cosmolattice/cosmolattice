@@ -1,30 +1,31 @@
 #ifndef TEMPLAT_UTIL_RANDOM_RANDOMUNIFORM_TEST_H
 #define TEMPLAT_UTIL_RANDOM_RANDOMUNIFORM_TEST_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/almostequal.h"
 #include <iomanip> // setprecision
 
-inline void TempLat::RandomUniformTester::Test(TempLat::TDDAssertion& tdd) {
+inline void TempLat::RandomUniformTester::Test(TempLat::TDDAssertion &tdd)
+{
+  RandomUniform<> prng("Hello CosmoLattice world!");
 
-    RandomUniform<> prng("Hello CosmoLattice world!");
-    
-//    say << prng << "\n";
-    
-    double x = 0;
-    for ( int i = 0; i < 1000; ++i ) {
-        x += prng();
-    }
-//    std::cerr << std::fixed << std::setprecision(32) << "x: " << x << "\n";
-    
-    tdd.verify( prng.getState() == 1000u );
-    tdd.verify( AlmostEqual(x, 489.76572307423589336394798010587692) );
-
+  double x = 0;
+#ifdef NOKOKKOS
+  for (int i = 0; i < 1000000; ++i) {
+    x += prng();
+  }
+  tdd.verify(prng.getState() == 1000000);
+  tdd.verify(AlmostEqual(x, 499665.90377910772804170846939087));
+#else
+  Kokkos::parallel_reduce("RandomUniformTester", 100000, KOKKOS_LAMBDA(int, double &sum) { sum += prng(); }, x);
+  tdd.verify(AlmostEqual(x, 50104.227805841801455244421958923));
+#endif
+  std::cout << "Obtained " << std::setprecision(32) << x << std::endl;
 }
 
 #endif
