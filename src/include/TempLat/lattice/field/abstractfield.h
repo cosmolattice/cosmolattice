@@ -84,9 +84,11 @@ namespace TempLat
 
     std::shared_ptr<MemoryManager<NDim, T>> getMemoryManager() { return mManager; }
 
-    inline auto getDx() const { return latPar.getDx(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto getDx() const { return latPar.getDx(); }
 
-    inline auto getKIR() const { return latPar.getKIR(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto getKIR() const { return latPar.getKIR(); }
 
   protected:
     /* Put all member variables and private methods here. These may change arbitrarily. */

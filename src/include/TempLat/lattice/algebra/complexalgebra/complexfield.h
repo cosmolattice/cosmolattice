@@ -91,9 +91,11 @@ namespace TempLat
 
     std::string toString() const { return "(" + mR.toString() + ", " + mI.toString() + ")"; }
 
-    inline auto getDx() const { return mR.getDx(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto getDx() const { return mR.getDx(); }
 
-    inline auto getKIR() const { return mR.getKIR(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto getKIR() const { return mR.getKIR(); }
 
     void updateGhosts()
     {
