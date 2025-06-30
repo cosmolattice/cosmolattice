@@ -8,6 +8,8 @@
 
 namespace TempLat
 {
+  // If you wonder about how performant this is, take a look at https://godbolt.org/z/d33cMaEG1
+
   /**
    * @brief Returns the last i elements of the given tuple t
    *

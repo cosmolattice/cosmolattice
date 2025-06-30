@@ -11,6 +11,18 @@
 
 namespace TempLat
 {
+  /**
+   * @brief This is a functor which wraps a lambda.
+   * Basically, this is necessary when one wants to call a variadic lambda on an NVIDIA GPU.
+   * CUDA seems to be unable to expand the variadic arguments - in contrast, a direct approach does indeed work for
+   * openMP or serial compilation.
+   * To get around this limitation, the KokkosNDLambdaWrapper packs the indices into an array.
+   * If you wonder, whether there's a difference when using std::tie and tuples: https://godbolt.org/z/M3bG39rsM
+   * No. Therefore, we spare the ourselves the hassle and simply use std::array.
+   *
+   * @tparam NDim Number of arguments taken
+   * @tparam FUN The lambda to which we forward the indices
+   */
   template <size_t NDim, typename FUN> struct KokkosNDLambdaWrapper {
     KokkosNDLambdaWrapper(const FUN &_fun) : fun(_fun) {};
 

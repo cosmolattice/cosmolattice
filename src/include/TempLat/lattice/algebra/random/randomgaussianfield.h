@@ -10,6 +10,8 @@
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"
 #include "TempLat/util/random/randomgaussian.h"
 #include "TempLat/util/tdd/tdd.h"
+#include <Kokkos_Macros.hpp>
+#include <tuple>
 
 namespace TempLat
 {
@@ -17,7 +19,7 @@ namespace TempLat
   MakeException(RandomGaussianFieldNegativeFrequencyException);
 
   /** \brief A class which initializes your complex random gaussian field. ONLY WORKS FOR FFTW R2C complex layouts. It
-   *has a state, only call for monotonically increasing last dimension, and walk an entire rod in the last dimension
+   * has a state, only call for monotonically increasing last dimension, and walk an entire rod in the last dimension
    *  before moving sideways. Otherwise this will be freaking slow.
    *  This field is aware of wavenumbers: same layout is repeated
    *  for different resolutions. Increasing the resolution with the
@@ -55,9 +57,17 @@ namespace TempLat
       return get(mToolBox->getCoordFourier(i)); // Coded like that for testing purposes.
     }
 
-    complex<T> get(std::vector<ptrdiff_t> coord)
+    complex<T> get(const std::vector<ptrdiff_t> &coord)
     {
+      std::array<ptrdiff_t, NDim> pass{};
+      for (uint i = 0; i < NDim; ++i)
+        pass[i] = coord[i];
+      return std::apply([&](const auto &...args) { return get(args...); }, pass);
+    }
 
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
+    {
+      const std::vector<ptrdiff_t> coord{(static_cast<ptrdiff_t>(idx))...};
       std::vector<ptrdiff_t> hermitianPartner;
 
       auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners()->putHermitianPartner(
@@ -81,8 +91,8 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::string mBaseSeed;
-    std::vector<ptrdiff_t> rodPosition;
-    Util::RandomGaussian prng;
+    mutable std::vector<ptrdiff_t> rodPosition;
+    mutable Util::RandomGaussian prng;
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
 
     /** \brief Verifies that the coordinates asked for are
@@ -90,7 +100,7 @@ namespace TempLat
      *  is monotonically growing.
      *  If not, rebuild the prng.
      */
-    void updatePRNG(const std::vector<ptrdiff_t> &coordinates)
+    void updatePRNG(const std::vector<ptrdiff_t> &coordinates) const
     {
       bool needUpdate = rodPosition.size() < NDim;
 
