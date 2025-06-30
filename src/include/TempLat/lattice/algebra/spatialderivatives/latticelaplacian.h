@@ -5,8 +5,9 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
@@ -24,7 +25,6 @@ namespace TempLat
    *
    * Unit test: make test-laplacianlocal
    **/
-  //"Simple" version
   template <ptrdiff_t NDim, typename R> class LatticeLaplacian : public UnaryOperator<R>
   {
   public:
@@ -48,7 +48,7 @@ namespace TempLat
         std::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
                    tuple_add_to_nth<d>(std::tie(idx...), -1));
       });
-      return result; // / dx2;
+      return result / dx2;
     }
 
     static std::string operatorString() { return "Laplacian"; }
@@ -91,6 +91,13 @@ namespace TempLat
   KOKKOS_FORCEINLINE_FUNCTION auto LatLapl(R pR)
   {
     return LatticeLaplacian<NDim, R>(pR);
+  }
+
+  template <int NDim, typename R>
+    requires(!HasGetMethod<R>)
+  KOKKOS_FORCEINLINE_FUNCTION auto LatLapl(R pR)
+  {
+    return ZeroType();
   }
 } // namespace TempLat
 

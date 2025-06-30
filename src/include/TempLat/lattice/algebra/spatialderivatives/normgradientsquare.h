@@ -22,26 +22,31 @@ namespace TempLat
    *
    * Unit test: make test-normgradientsquare
    **/
-  template <int nDimensions, typename R> class NormGradientSquare : public UnaryOperator<R>
+  template <int NDim, typename R> class NormGradientSquare : public UnaryOperator<R>
   {
   public:
-    typedef typename GetGetReturnType<R>::type SV;
-    typedef typename GetFloatType<SV>::type S;
+    /* Put public methods here. These should change very little over time. */
+    using GetReturnType = typename GetGetReturnType<R>::type;
+    using FloatType = typename GetFloatType<GetReturnType>::type;
+
     using UnaryOperator<R>::mR;
 
-    /* Put public methods here. These should change very little over time. */
+    KOKKOS_FUNCTION
     NormGradientSquare(const R &pR) : UnaryOperator<R>(pR), dx2(pow<2>(GetDx::getDx(pR)))
     {
       fixGradientMap(GetJumps::apply(mR));
     }
 
-    auto get(ptrdiff_t i)
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      S res = 0;
-      for (size_t j = 0; j < nDimensions; ++j) {
-        res += pow<2>(mR.get(i + jumps[j]) - mR.get(i)) / dx2;
-      }
-      return res;
+      const auto midval = GetValue::get(mR, idx...);
+      FloatType result{};
+      constexpr_for<0, NDim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        std::apply([&](const auto &...shifted_idx) { result += pow<2>(GetValue::get(mR, shifted_idx...) - midval); },
+                   tuple_add_to_nth<d>(std::tie(idx...), 1));
+      });
+      return result / dx2;
     }
 
     std::string toString() const { return "|Grad(" + GetString::get(mR) + ")|^2"; }
@@ -51,9 +56,10 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     void eval(ptrdiff_t i)
     {
-      DoEval::eval(mR, i);
-      for (size_t j = 0; j < nDimensions; ++j)
-        DoEval::eval(mR, i + jumps[j]);
+      // TODO (Franz)
+      // DoEval::eval(mR, i);
+      // for (size_t j = 0; j < nDimensions; ++j)
+      //  DoEval::eval(mR, i + jumps[j]);
     }
 
     template <typename S> KOKKOS_FORCEINLINE_FUNCTION auto d(const S &other)
@@ -63,23 +69,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::array<ptrdiff_t, nDimensions> jumps;
-    S dx2;
-
-    void fixGradientMap(const JumpsHolder &jump)
-    {
-      for (ptrdiff_t dim = 0; dim < nDimensions; ++dim) {
-        jumps[dim] = pushBack(dim, 1, jump);
-      }
-    }
-
-    ptrdiff_t pushBack(ptrdiff_t dim, ptrdiff_t dSign, const JumpsHolder &jump)
-    {
-      std::vector<ptrdiff_t> shifts(nDimensions, (ptrdiff_t)0);
-      shifts[dim] = dSign;
-
-      return ShiftedAccessor(jump, shifts).getJump();
-    }
+    FloatType dx2;
   };
 
   class NormGradientSquareTester
@@ -91,11 +81,18 @@ namespace TempLat
   };
 
   template <int nDimensions = 3, typename R>
-  typename std::enable_if<HasGetMethod<R>::value, NormGradientSquare<nDimensions, R>>::type Grad2(R pR)
+    requires HasGetMethod<R>
+  auto Grad2(R pR)
   {
     return NormGradientSquare<nDimensions, R>(pR);
   }
 
+  template <int nDimensions = 3, typename R>
+    requires(!HasGetMethod<R>)
+  auto Grad2(R pR)
+  {
+    return ZeroType();
+  }
 } // namespace TempLat
 
 #ifdef TEMPLATTEST
