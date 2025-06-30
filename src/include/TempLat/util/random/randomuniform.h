@@ -63,9 +63,9 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    const std::string mStringSeed;
-    const KeccakHash::ResultType mHashSeed;
-    const uint64_t mSeed;
+    std::string mStringSeed;
+    KeccakHash::ResultType mHashSeed;
+    uint64_t mSeed;
     Kokkos::Random_XorShift64_Pool<> random_pool;
   };
 #else

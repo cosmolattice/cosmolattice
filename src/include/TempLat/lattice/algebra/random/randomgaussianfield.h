@@ -67,9 +67,13 @@ namespace TempLat
 
     template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
+      // TODO: this should be handled as fixed arrays.
       const std::vector<ptrdiff_t> coord{(static_cast<ptrdiff_t>(idx))...};
       std::vector<ptrdiff_t> hermitianPartner;
 
+      // TODO: Sadly, this implies a rebuild of how the HermitianPartners work.
+      // For this to be portable, we need to make this in some way static, so that it also works on GPU.
+      // Neither pointers (to host memory!) nor vtable lookups are a good idea on GPU.
       auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners()->putHermitianPartner(
           coord, hermitianPartner);
 
