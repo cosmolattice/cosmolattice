@@ -40,7 +40,7 @@ namespace TempLat
 
     template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      auto result = -2 * NDim * GetValue::get(mR, idx...);
+      auto result = (-2 * NDim * GetValue::get(mR, idx...));
       constexpr_for<0, NDim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         std::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
@@ -48,7 +48,7 @@ namespace TempLat
         std::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
                    tuple_add_to_nth<d>(std::tie(idx...), -1));
       });
-      return result / dx2;
+      return result; // / dx2;
     }
 
     static std::string operatorString() { return "Laplacian"; }

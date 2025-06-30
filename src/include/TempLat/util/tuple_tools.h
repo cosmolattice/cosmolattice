@@ -1,3 +1,6 @@
+#ifndef TEMPLAT_UTIL_TUPLETOOLS_H
+#define TEMPLAT_UTIL_TUPLETOOLS_H
+
 #include <tuple>
 #include <functional>
 
@@ -32,7 +35,7 @@ namespace TempLat
   template <size_t i, typename Head, typename... Tail>
   KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_first(const std::tuple<Head, Tail...> &t)
   {
-    static_assert(i <= 1 + sizeof...(Tail), "Cannot take a longer sequence than the tuple.");
+    static_assert(i <= sizeof...(Tail), "Cannot take a longer sequence than the tuple.");
     if constexpr (i == 0)
       return std::tuple();
     else if constexpr (i == 1)
@@ -56,14 +59,40 @@ namespace TempLat
    * @return auto the modified tuple
    */
   template <size_t n, typename I, typename... IDX>
-  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth(const std::tuple<IDX...> tt, const I &add)
+  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(std::tuple<IDX...> &&tt, const I &add)
+  {
+    static_assert(n < sizeof...(IDX));
+    std::get<n>(tt) += add;
+    return tt;
+  }
+
+  template <size_t n, typename I, typename... IDX>
+  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(std::tuple<IDX...> &tt, const I &add)
+  {
+    static_assert(n < sizeof...(IDX));
+    std::get<n>(tt) += add;
+    return tt;
+  }
+
+  template <size_t n, typename I, typename... IDX>
+  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth(const std::tuple<IDX...> &tt, const I &add)
   {
     constexpr size_t len = sizeof...(IDX);
     static_assert(n < len);
     if constexpr (n >= 1) {
-      return std::tuple_cat(tuple_first<n - 1>(tt), std::tuple(std::get<n>(tt) + add), tuple_last<len - n>(tt));
+      return std::tuple_cat(tuple_first<n>(tt), std::tuple(std::get<n>(tt) + add), tuple_last<len - n - 1>(tt));
     } else if constexpr (n == 0) {
       return std::tuple_cat(std::tuple(std::get<0>(tt) + add), tuple_last<len - 1>(tt));
     }
   }
+
+#ifdef TEMPLATTEST
+  class TupleToolsTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
+
+#endif

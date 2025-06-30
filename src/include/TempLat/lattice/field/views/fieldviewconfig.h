@@ -17,6 +17,8 @@
 
 #include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/parallel/kokkos/lambdawrapper.h"
+#include <Kokkos_Core.hpp>
+#include <impl/Kokkos_Profiling.hpp>
 
 namespace TempLat
 {
@@ -70,15 +72,22 @@ namespace TempLat
 #ifndef NOKOKKOS
 
       onBeforeAssignment(g);
-
-      auto functor = KOKKOS_CLASS_LAMBDA(const std::array<size_t, NDim> &idx)
-      {
-        std::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
-      };
-
-      Kokkos::parallel_for("ConfigViewAssign",                                                         //
-                           Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      if constexpr (NDim > 1) {
+        auto functor = KOKKOS_CLASS_LAMBDA(const std::array<size_t, NDim> &idx)
+        {
+          std::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
+        };
+        Kokkos::parallel_for("ConfigViewAssign",                                                         //
+                             Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
+                             KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      } else if constexpr (NDim == 1) {
+        Kokkos::parallel_for(
+            "ConfigViewAssign", //
+            Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]),
+            KOKKOS_CLASS_LAMBDA(const size_t idx) { mView(idx) = GetEval::getEval(g, idx); });
+      } else {
+        static_assert(NDim > 0);
+      }
 #else
       throw Naaaaaa;
 #endif

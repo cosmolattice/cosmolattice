@@ -12,8 +12,8 @@
 
 template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  constexpr size_t nd = 3;
-  const ptrdiff_t nGrid = 2, nGhost = 1;
+  constexpr size_t nd = 2;
+  const ptrdiff_t nGrid = 32, nGhost = 1;
 
   auto get_cIdx = [](const auto idx, const auto total_size, const auto extents) {
     std::array<size_t, nd> cIdx{};
@@ -51,113 +51,117 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
 
   auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
   SpatialCoordinate x(toolBox);
-
   toolBox->setVerbose();
 
   Field<nd, double> sc1("SC1", toolBox);
   sc1 = getVectorComponent(x, 0);
+  sc1.updateGhosts();
+  show_field(sc1);
 
   Field<nd, double> sc2("SC2", toolBox);
   sc2 = getVectorComponent(x, 1);
-
-  show_field(sc1);
-  sc1.updateGhosts();
-  show_field(sc1);
   sc2.updateGhosts();
 
-  auto fgSC = LatLapl<nd>(sc1);
-
-  bool OK = true;
-
-  // say <<  dum(16,-15,14) ;
-
-  auto sc1_view = sc1.getFullNDHostView();
+  Field<nd, double> result_field("SC2", toolBox);
+  auto result_view = result_field.getLocalNDHostView();
   size_t total_size = 1;
   std::array<size_t, nd> extents;
   for (uint i = 0; i < nd; ++i) {
-    extents[i] = sc1_view.extent(i);
+    extents[i] = result_view.extent(i);
     total_size *= extents[i];
   }
 
+  result_field = LatLapl<nd>(sc1);
+  result_view = result_field.getLocalNDHostView();
+  bool OK = true;
+  for (size_t i = 0; i < total_size; ++i) {
+    const auto coord = get_cIdx(i, total_size, extents);
+    // It's a linear function, except at the boundaries, where it jumps
+    std::apply(
+        [&](const auto... idx) {
+          if (coord[0] != 0 && coord[0] != nGrid - 1) {
+            // 0 except at the boundary, where it jumps
+            OK = OK && result_view(idx...) == 0;
+            if (!(result_view(idx...) == 0))
+              std::cout << "bulk fail: " << result_view(idx...) << ", expected: " << 0 << std::endl;
+          } else if (coord[0] == nGrid - 1) {
+            OK = OK && result_view(idx...) == -nGrid;
+            if (!(result_view(idx...) == -nGrid))
+              std::cout << "b1 fail: " << result_view(idx...) << ", expected: " << -nGrid << std::endl;
+          } else if (coord[0] == 0) {
+            OK = OK && result_view(idx...) == nGrid;
+            if (!(result_view(idx...) == nGrid))
+              std::cout << "b2 fail: " << result_view(idx...) << ", expected: " << nGrid << std::endl;
+          }
+        },
+        coord);
+  }
+  tdd.verify(OK);
+
+  result_field = LatLapl<nd>(sc1 * sc1);
+  result_view = result_field.getLocalNDHostView();
+  OK = true;
   for (size_t i = 0; i < total_size; ++i) {
     const auto coord = get_cIdx(i, total_size, extents);
     std::apply(
         [&](const auto... idx) {
-          if (coord[0] != 16 && coord[0] != -15) { // coordinates range from -15 to 16.
-            OK = OK && fgSC.get(idx...) == 0;      // 0 except at the boundary, where it jumps
-          } else if (coord[0] == 16) {
-            OK = OK && fgSC.get(idx...) == -32; // Go accross the boundary need to get (-15-2* 16+15) == -32
-          } else if (coord[0] == -15)
-            OK = OK && fgSC.get(idx...) == 32; // Go accross the boundary need to get (16+2*15-14) == 32
+          // It's a x^2, except at the boundaries, where it jumps
+          if (coord[0] != 0 && coord[0] != nGrid - 1) {
+            OK = OK && result_view(idx...) == 2;
+            if (!(result_view(idx...) == 2))
+              std::cout << "bulk fail: " << result_view(idx...) << ", expected: " << 2 << std::endl;
+          } else if (coord[0] == nGrid - 1) {
+            OK = OK && result_view(idx...) == (pow<2>(1) - 2 * pow<2>(nGrid) + pow<2>(nGrid - 1));
+            if (!(result_view(idx...) == (pow<2>(1) - 2 * pow<2>(nGrid) + pow<2>(nGrid - 1))))
+              std::cout << "b1 fail: " << result_view(idx...)
+                        << ", expected: " << (pow<2>(1) - 2 * pow<2>(nGrid) + pow<2>(nGrid - 1)) << std::endl;
+          } else if (coord[0] == 0) {
+            OK = OK && result_view(idx...) == (pow<2>(2) - 2 * pow<2>(1) + pow<2>(nGrid));
+            if (!(result_view(idx...) == (pow<2>(2) - 2 * pow<2>(1) + pow<2>(nGrid))))
+              std::cout << "b2 fail: " << result_view(idx...)
+                        << ", expected: " << (pow<2>(2) - 2 * pow<2>(1) + pow<2>(nGrid)) << std::endl;
+          }
         },
         coord);
   }
-
   tdd.verify(OK);
-  /*
-  auto fgSC2 = LatLapl<nd>(sc1 * sc1);
 
+  result_field = LatLapl<nd>(sc1 * sc2);
+  result_view = result_field.getLocalNDHostView();
   OK = true;
-
-  for (it.begin(); it.end(); ++it) {
-    auto coord = toolBox->getCoordConfiguration(it());
-    if (coord[0] != 16 && coord[0] != -15) { // coordinates range from -15 to 16.
-      OK = OK && fgSC2.get(it()) == 2;       // 2 except at the boundary, where it jumps
-    } else if (coord[0] == 16) {
-      // say <<
-      OK = OK && fgSC2.get(it()) == -62; // Go accross the boundary need to get ((-15)**2-2* (16)**2+(15)**2) == -62
-    } else if (coord[0] == -15)
-      OK = OK && fgSC2.get(it()) == 2; // Go accross the boundary need to get ((16)**2-2*(-15)**2-(14)**2) == 2
+  for (size_t i = 0; i < total_size; ++i) {
+    const auto coord = get_cIdx(i, total_size, extents);
+    std::apply(
+        [&](const auto... idx) {
+          if (coord[0] != 0 && coord[0] != nGrid - 1 && coord[1] != 0 && coord[1] != nGrid - 1) {
+            OK = OK && result_view(idx...) == 0;
+            if (!(result_view(idx...) == 0))
+              std::cout << "bulk fail: " << result_view(idx...) << ", expected: " << 2 << std::endl;
+          }
+          // Don't check the boundary case as it is becoming annoying. But please feel free to if you have any doubts.
+        },
+        coord);
   }
-  //
-
   tdd.verify(OK);
-
-  //
-  auto fgSC3 = LatLapl<nd>(sc1 * sc2);
-  //
-  OK = true;
-
-  for (it.begin(); it.end(); ++it) {
-    auto coord = toolBox->getCoordConfiguration(it());
-    if (coord[0] != 16 && coord[0] != -15 && coord[0] != 16 && coord[0] != -15 && coord[1] != 16 &&
-        coord[1] != -15) {             // coordinates range from -15 to 16.
-      OK = OK && fgSC3.get(it()) == 0; // 2 except at the boundary, where it jumps
-    }
-
-    // Don't check the boundary case as it is becoming noying. But please feel free to if you have any doubts.
-  }
-
-  tdd.verify(OK);
-
-  //
-  // laplacian of x^2 y^2: 2 * (y=2)^2 + (x=1)^1 * 2 = 10
-  auto fgSC4 = LatLapl<nd>(pow<2>(sc1 * sc2));
-
-  Field<3, double> dum("dummy", toolBox);
-
-  dum = fgSC4;
-  bool test;
-
-  // auto res = dum(test, 14, 12, 14); // test check to see if the coordinate is on this process or not.
-
-  // if (test) tdd.verify(res == 680);
 
   //   laplacian of x^2 + 2 x y + y^2 = 4
-  auto fgSC5 = LatLapl<nd>(pow<2>(sc1 + sc2));
-  //
+  result_field = LatLapl<nd>(pow<2>(sc1 + sc2));
+  result_view = result_field.getLocalNDHostView();
   OK = true;
-
-  for (it.begin(); it.end(); ++it) {
-    auto coord = toolBox->getCoordConfiguration(it());
-    if (coord[0] != 16 && coord[0] != -15 && coord[0] != 16 && coord[0] != -15 && coord[1] != 16 &&
-        coord[1] != -15) {             // coordinates range from -15 to 16.
-      OK = OK && fgSC5.get(it()) == 4; // 2 except at the boundary, where it jumps
-    }
-    // Don't check the boundary case as it is becoming noying. But please feel free to if you have any doubts.
+  for (size_t i = 0; i < total_size; ++i) {
+    const auto coord = get_cIdx(i, total_size, extents);
+    std::apply(
+        [&](const auto... idx) {
+          if (coord[0] != 0 && coord[0] != nGrid - 1 && coord[1] != 0 && coord[1] != nGrid - 1) {
+            OK = OK && result_view(idx...) == 4;
+            if (!(result_view(idx...) == 4))
+              std::cout << "bulk fail: " << result_view(idx...) << ", expected: " << 2 << std::endl;
+          }
+          // Don't check the boundary case as it is becoming annoying. But please feel free to if you have any doubts.
+        },
+        coord);
   }
   tdd.verify(OK);
-*/
 }
 
 #endif

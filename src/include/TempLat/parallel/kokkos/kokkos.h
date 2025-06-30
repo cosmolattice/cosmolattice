@@ -14,13 +14,20 @@
 
 #include <Kokkos_Core.hpp>
 
+// ------------------------------------------------
+// Getting the View types with stars
+// ------------------------------------------------
+
 template <size_t NDim, typename T> struct GetKokkosNDStarType {
   using type = typename GetKokkosNDStarType<NDim - 1, T>::type *;
 };
-
 template <typename T> struct GetKokkosNDStarType<1, T> {
   using type = T *;
 };
+
+// ------------------------------------------------
+// Getting View types
+// ------------------------------------------------
 
 template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
           typename Layout = Kokkos::LayoutRight>
@@ -38,6 +45,18 @@ using KokkosNDViewUnmanaged =
                  ExecutionSpace,                         // Choice between GPU and CPU
                  Kokkos::MemoryTraits<Kokkos::Unmanaged> // No allocation: Attach to existing memory
                  >;
+
+// ------------------------------------------------
+// Getting ranges to iterate over
+// ------------------------------------------------
+template <size_t NDim> struct KokkosNDRangeHelper {
+  using type = Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>;
+};
+template <> struct KokkosNDRangeHelper<1> {
+  using type = Kokkos::RangePolicy<>;
+};
+template <size_t NDim> using KokkosNDRange = KokkosNDRangeHelper<NDim>::type;
+
 #else
 
 #define KOKKOS_FORCEINLINE_FUNCTION inline
