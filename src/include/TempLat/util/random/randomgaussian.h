@@ -9,6 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/random/randomuniform.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -34,7 +35,8 @@ namespace TempLat
 
       const auto getSeed() const { return mRandomUniform.getSeed(); }
 
-      double operator()() { return getNextGaussian(); }
+      KOKKOS_FORCEINLINE_FUNCTION
+      double operator()() const { return getNextGaussian(); }
 
       std::array<double, 2> getNextPair(bool real = false, bool unitary = false)
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
@@ -60,8 +62,10 @@ namespace TempLat
       static constexpr double cTwoPi =
           6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359642961730265646132941876892;
 
-      double getNextGaussian()
+      KOKKOS_FORCEINLINE_FUNCTION
+      double getNextGaussian() const
       {
+#ifdef NOKOKKOS
         double result = 0.;
         if (mHaveCachedValue) {
           mHaveCachedValue = false;
@@ -80,17 +84,22 @@ namespace TempLat
         }
         ++mStateCounter;
         return result;
+#endif
+        return getNextGaussianPair(false, false, false)[0];
       }
 
+      KOKKOS_FORCEINLINE_FUNCTION
       std::array<double, 2u> getNextGaussianPair(bool updateStateCounter = true, bool real = false,
-                                                 bool unitary = false)
+                                                 bool unitary = false) const
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
-        // generate numbers with a real gaussian distribution or uniformly on the unit disk.
+// generate numbers with a real gaussian distribution or uniformly on the unit disk.
+#ifdef NOKOKKOS
         if (mStateCounter % 2)
           throw RandomGaussianWrongCallOrderException("Cannot call getNextGaussianPair after odd number of calls to "
                                                       "getNextGaussian(). This breaks reproducibility.");
 
         if (updateStateCounter) mStateCounter += 2;
+#endif
 
         double r0 = mRandomUniform();
         double r1 = mRandomUniform();
