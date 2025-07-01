@@ -36,10 +36,14 @@ namespace TempLat
     {
     }
 
-    inline LayoutStructLocal<NDim> &getLocal() { return mLocal; }
-    inline const LayoutStructLocal<NDim> &getLocal() const { return mLocal; }
-    inline LayoutStructGlobal<NDim> &getGlobal() { return getLocal().getGlobal(); }
-    inline const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    LayoutStructLocal<NDim> &getLocal() { return mLocal; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const LayoutStructLocal<NDim> &getLocal() const { return mLocal; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    LayoutStructGlobal<NDim> &getGlobal() { return getLocal().getGlobal(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
 
     bool isTransposed() const { return mTranspositionMap_memoryToGlobalSpace.isTransposed(); }
 
@@ -59,6 +63,7 @@ namespace TempLat
       return mTranspositionMap_memoryToGlobalSpace;
     }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     const std::array<ptrdiff_t, NDim> &getSizesInMemory() const { return mSizesInMemory; }
 
     /** \brief A dictionary for return values for memory to coordinate mapping. */

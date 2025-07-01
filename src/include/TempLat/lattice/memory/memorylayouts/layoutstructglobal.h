@@ -31,13 +31,15 @@ namespace TempLat
         mSignConversionMidpoint[i] = mGlobalSizes[i] / 2;
     }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     std::array<ptrdiff_t, NDim> &getGlobalSizes() { return mGlobalSizes; }
+    KOKKOS_FORCEINLINE_FUNCTION
     const std::array<ptrdiff_t, NDim> &getGlobalSizes() const { return mGlobalSizes; }
 
     /** returns the largest possible distance from the origin. mSignConversionMidpoint holds the
      *  maximum value of each dimension. Check that in localIndexToGlobalCoordinate.
      */
-    template <typename T = double> T getMaxRadius() const
+    template <typename T = double> KOKKOS_FORCEINLINE_FUNCTION T getMaxRadius() const
     {
       using namespace std;
       T r2 = 0;

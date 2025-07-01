@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <Kokkos_Core_fwd.hpp>
 #include <cstdint>
 #include <random>
 
@@ -23,31 +24,49 @@ namespace TempLat
    * Unit test: make test-randomuniform
    **/
 #ifndef NOKOKKOS
-  template <typename RandomGenerator = std::mt19937_64> class RandomUniform
+  template <typename dummy = void> class RandomUniform
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    RandomUniform(std::string stringSeed)
-        : mStringSeed(stringSeed), mHashSeed(KeccakHash::compute(mStringSeed)), mSeed(mHashSeed), random_pool(mSeed)
+    RandomUniform(std::string stringSeed) : RandomUniform(stringSeed, Kokkos::DefaultExecutionSpace().concurrency()) {}
+
+    RandomUniform(std::string stringSeed, size_t poolSize)
+        : mStringSeed(stringSeed), mHashSeed(KeccakHash::compute(mStringSeed)), mSeed(mHashSeed), mPoolSize(poolSize),
+          mRandomPool(mSeed)
     {
       rebase();
     }
 
-    void rebase() { random_pool = Kokkos::Random_XorShift64_Pool<>(mSeed); }
+    void rebase() { mRandomPool.init(mSeed, mPoolSize); }
+
+    KOKKOS_FORCEINLINE_FUNCTION
+    size_t getPoolSize() const { return mPoolSize; }
 
     const std::string &getSeedString() const { return mStringSeed; }
 
-    const typename RandomGenerator::result_type &getSeed() const { return mSeed; }
+    const auto getSeed() const { return mSeed; }
+
+    KOKKOS_FORCEINLINE_FUNCTION
+    double operator()(size_t state) const
+    {
+      // obtain a generator from the pool
+      auto generator = mRandomPool.get_state(state);
+      // draw a number
+      const double x = generator.drand(0., 1.);
+      // do not forget to release the state of the engine
+      mRandomPool.free_state(generator);
+      return x;
+    }
 
     KOKKOS_FORCEINLINE_FUNCTION
     double operator()() const
     {
       // obtain a generator from the pool
-      auto generator = random_pool.get_state();
+      auto generator = mRandomPool.get_state();
       // draw a number
       const double x = generator.drand(0., 1.);
       // do not forget to release the state of the engine
-      random_pool.free_state(generator);
+      mRandomPool.free_state(generator);
       return x;
     }
 
@@ -56,11 +75,7 @@ namespace TempLat
 
     friend std::ostream &operator<<(std::ostream &ostream, const RandomUniform &pr)
     {
-      ostream << "RandomUniform - seed string: \"" << pr.getSeedString() << "\" - seed value: " << pr.getSeed()
-#ifdef NOKOKKOS
-              << " - number of values fetched: " << pr.getState()
-#endif
-          ;
+      ostream << "RandomUniform - seed string: \"" << pr.getSeedString() << "\" - seed value: " << pr.getSeed() << "\n";
       return ostream;
     }
 
@@ -69,7 +84,8 @@ namespace TempLat
     std::string mStringSeed;
     KeccakHash::ResultType mHashSeed;
     uint64_t mSeed;
-    Kokkos::Random_XorShift64_Pool<> random_pool;
+    size_t mPoolSize;
+    Kokkos::Random_XorShift64_Pool<> mRandomPool;
   };
 #else
   template <typename RandomGenerator = std::mt19937_64> class RandomUniform

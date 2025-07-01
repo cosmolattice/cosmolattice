@@ -8,12 +8,26 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"
+#include "TempLat/util/constexpr_for.h"
 #include "TempLat/util/random/randomgaussian.h"
 #include "TempLat/util/tdd/tdd.h"
 #include <tuple>
 
 namespace TempLat
 {
+
+  template <size_t NDim, std::integral... IDX>
+  KOKKOS_FORCEINLINE_FUNCTION Kokkos::Array<ptrdiff_t, NDim> ndIdxToCoordinate(const LayoutStruct<NDim> &layout,
+                                                                               const IDX &...idx)
+  {
+    Kokkos::Array<ptrdiff_t, NDim> res{(ptrdiff_t)(idx)...};
+    for (uint i = 0; i < NDim; ++i) {
+      const ptrdiff_t &tSize = layout.getGlobalSizes()[i] / 2;
+      res[i] += layout.getLocalStarts()[i];
+      res[i] = res[i] > tSize ? res[i] - layout.getGlobalSizes()[i] : res[i];
+    }
+    return res;
+  }
 
   MakeException(RandomGaussianFieldNegativeFrequencyException);
 
@@ -45,28 +59,36 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     RandomGaussianFieldHelper(std::string baseSeed, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
         : DimensionCountRecorder<NDim>(SpaceStateInterface<NDim>::SpaceType::undefined), mBaseSeed(baseSeed),
-          prng(baseSeed), mToolBox(pToolBox)
+          prng(baseSeed), prng_hermitian(baseSeed), mToolBox(pToolBox),
+          mLayout(mToolBox->mLayouts.getFourierSpaceLayout())
     {
-      DimensionCountRecorder<NDim>::confirmSpace(mToolBox->mLayouts.getFourierSpaceLayout(),
-                                                 SpaceStateInterface<NDim>::SpaceType::Fourier);
+      DimensionCountRecorder<NDim>::confirmSpace(mLayout, SpaceStateInterface<NDim>::SpaceType::Fourier);
+      mRodSize = 1;
+
+      for (uint i = 0; i < NDim; ++i) {
+        mLocalStarts[i] = mLayout.getLocalStarts()[i];
+        mLocalSizes[i] = mLayout.getLocalSizes()[i];
+        mGlobalSizes[i] = mLayout.getGlobalSizes()[i];
+      }
+
+      size_t hermitian_size = 1;
+      for (uint i = 0; i < NDim - 1; ++i)
+        hermitian_size *= mLayout.getGlobalSizes()[i];
+      prng_hermitian = Util::RandomGaussian(baseSeed, hermitian_size);
     }
 
     template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
-      const Kokkos::Array<ptrdiff_t, NDim> coord{{(static_cast<ptrdiff_t>(idx))...}};
+      Kokkos::Array<ptrdiff_t, NDim> global_coord = ndIdxToCoordinate(mLayout, idx...);
+      return global_coord[NDim - 1];
       Kokkos::Array<ptrdiff_t, NDim> hermitianPartner;
 
-      // TODO: Sadly, this implies a rebuild of how the HermitianPartners work.
-      // For this to be portable, we need to make this in some way static, so that it also works on GPU.
-      // Neither pointers (to host memory!) nor vtable lookups are a good idea on GPU.
       auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners().putHermitianPartner(
-          coord, hermitianPartner);
+          global_coord, hermitianPartner);
 
 #ifdef NOKOKKOS
       // TODO implement this also for the kokkos version...
       updatePRNG(hermitianPartner);
-#endif
-
       auto pair = prng.getNextPair(Real, Unitary);
       /* ordered the if-statement by most-occurring case first. */
       return complex<T>(pair[0], hermitianType == HermitianRedundancy::none ||
@@ -74,6 +96,27 @@ namespace TempLat
                                      ? pair[1]
                                  : hermitianType == HermitianRedundancy::negativePartner ? -pair[1]
                                                                                          : T(0));
+#else
+      if (hermitianType == HermitianRedundancy::none) {
+        size_t local_idx = 1;
+        size_t dim_length = 1;
+        constexpr_for<0, NDim, 1>([&](const auto _i) {
+          constexpr size_t i = NDim - 1 - decltype(_i)::value;
+          local_idx += std::get<i>(std::tie(idx...)) * dim_length;
+          dim_length *= mLocalSizes[i];
+        });
+        return prng.getNextPair(local_idx % prng_hermitian.getPoolSize(), Real, Unitary)[0];
+      } else {
+        size_t hermitian_idx = 1;
+        size_t dim_length = 1;
+        constexpr_for<0, NDim - 1, 1>([&](const auto _i) {
+          constexpr size_t i = NDim - 2 - decltype(_i)::value;
+          hermitian_idx += std::get<i>(std::tie(idx...)) * dim_length;
+          dim_length *= mGlobalSizes[i];
+        });
+        return 1;
+      }
+#endif
     }
 
     std::string toString() const { return "Random gaussian field with seed: \"" + mBaseSeed + "\""; }
@@ -83,9 +126,17 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::string mBaseSeed;
+    size_t mRodSize;
     mutable std::vector<ptrdiff_t> rodPosition;
     mutable Util::RandomGaussian prng;
+    mutable Util::RandomGaussian prng_hermitian;
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+
+    LayoutStruct<NDim> mLayout;
+
+    Kokkos::Array<ptrdiff_t, NDim> mLocalStarts;
+    Kokkos::Array<ptrdiff_t, NDim> mLocalSizes;
+    Kokkos::Array<ptrdiff_t, NDim> mGlobalSizes;
 
     /** \brief Verifies that the coordinates asked for are
      *  on the same rod that we are in, and that the last dimension

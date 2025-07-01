@@ -33,15 +33,21 @@ namespace TempLat
     {
     }
 
-    inline LayoutStructGlobal<NDim> &getGlobal() { return mGlobal; }
-    inline const LayoutStructGlobal<NDim> &getGlobal() const { return mGlobal; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    LayoutStructGlobal<NDim> &getGlobal() { return mGlobal; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const LayoutStructGlobal<NDim> &getGlobal() const { return mGlobal; }
 
     template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input) { mLocalSizes = input; }
+    KOKKOS_FORCEINLINE_FUNCTION
     std::array<ptrdiff_t, NDim> &getLocalSizes() { return mLocalSizes; }
+    KOKKOS_FORCEINLINE_FUNCTION
     const std::array<ptrdiff_t, NDim> &getLocalSizes() const { return mLocalSizes; }
 
     template <typename T = ptrdiff_t> void setLocalStarts(const std::array<T, NDim> &input) { mLocalStarts = input; }
+    KOKKOS_FORCEINLINE_FUNCTION
     std::array<ptrdiff_t, NDim> &getLocalStarts() { return mLocalStarts; }
+    KOKKOS_FORCEINLINE_FUNCTION
     const std::array<ptrdiff_t, NDim> &getLocalStarts() const { return mLocalStarts; }
 
     /** \brief For both configuration and fourier space, the index values are not the same as coordinate

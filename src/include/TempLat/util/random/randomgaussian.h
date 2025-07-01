@@ -9,6 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/random/randomuniform.h"
+#include <Kokkos_Core_fwd.hpp>
 
 namespace TempLat
 {
@@ -26,11 +27,19 @@ namespace TempLat
     {
     public:
       /* Put public methods here. These should change very little over time. */
-      RandomGaussian(std::string seed) : mRandomUniform(seed), mStateCounter(0u), mHaveCachedValue(false) {}
+      RandomGaussian(std::string seed) : RandomGaussian(seed, Kokkos::DefaultExecutionSpace().concurrency()) {}
+
+      RandomGaussian(std::string seed, size_t poolSize)
+          : mRandomUniform(seed, poolSize), mStateCounter(0u), mHaveCachedValue(false)
+      {
+      }
+
+      KOKKOS_FORCEINLINE_FUNCTION
+      size_t getPoolSize() const { return mRandomUniform.getPoolSize(); }
 
       void rebase() { mRandomUniform.rebase(); }
 
-      const size_t &getState() const { return mStateCounter; }
+      size_t getState() const { return mStateCounter; }
 
       const auto getSeed() const { return mRandomUniform.getSeed(); }
 
@@ -38,13 +47,19 @@ namespace TempLat
       double operator()() const { return getNextGaussian(); }
 
       KOKKOS_FORCEINLINE_FUNCTION
-      auto getNextPair(bool real = false, bool unitary = false)
-#ifndef NOKOKKOS
-          const
-#endif
+      double operator()(size_t state_ctr) const { return getNextGaussian(state_ctr); }
+
+      auto getNextPair(bool real = false, bool unitary = false) const
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
         // generate numbers with a real gaussian distribution or uniformly on the unit disk.
         return getNextGaussianPair(true, real, unitary);
+      }
+
+      KOKKOS_FORCEINLINE_FUNCTION
+      auto getNextPair(size_t state_ctr, bool real = false, bool unitary = false) const
+      { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
+        // generate numbers with a real gaussian distribution or uniformly on the unit disk.
+        return getNextGaussianPair(state_ctr, real, unitary);
       }
 
       friend std::ostream &operator<<(std::ostream &ostream, const RandomGaussian &pr)
@@ -87,27 +102,58 @@ namespace TempLat
         }
         ++mStateCounter;
         return result;
+#else
+        return getNextGaussianPair((size_t)0, false, false)[0];
 #endif
-        return getNextGaussianPair(false, false, false)[0];
       }
 
       KOKKOS_FORCEINLINE_FUNCTION
-#ifndef NOKOKKOS
-      Kokkos::Array<double, 2u>
-#else
-      std::array<double, 2u>
-#endif
-      getNextGaussianPair(bool updateStateCounter = true, bool real = false, bool unitary = false) const
-      { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
-// generate numbers with a real gaussian distribution or uniformly on the unit disk.
+      double getNextGaussian(size_t state_ctr) const
+      {
 #ifdef NOKOKKOS
-        if (mStateCounter % 2)
-          throw RandomGaussianWrongCallOrderException("Cannot call getNextGaussianPair after odd number of calls to "
-                                                      "getNextGaussian(). This breaks reproducibility.");
+        double result = 0.;
+        if (mHaveCachedValue) {
+          mHaveCachedValue = false;
+          result = mCachedValue;
+        } else {
 
-        if (updateStateCounter) mStateCounter += 2;
+          /* We update the state counter by one, and update by one
+           again when the cached value is fetched. So the pair
+           computation method should not update the state counter. */
+          auto pair = getNextGaussianPair(false);
+
+          result = pair[0];
+          mCachedValue = pair[1];
+
+          mHaveCachedValue = true;
+        }
+        ++mStateCounter;
+        return result;
+#else
+        return getNextGaussianPair(state_ctr, false, false)[0];
 #endif
+      }
 
+      KOKKOS_FORCEINLINE_FUNCTION
+      Kokkos::Array<double, 2u> getNextGaussianPair(size_t state_ctr, bool real = false, bool unitary = false) const
+      { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
+        // generate numbers with a real gaussian distribution or uniformly on the unit disk.
+
+        double r0 = mRandomUniform(state_ctr);
+        double r1 = mRandomUniform(state_ctr);
+
+        double boxMullerR = r0 == 0 ? std::numeric_limits<double>::max() : std::sqrt(-2 * std::log(r0));
+        double boxMullerTheta = cTwoPi * r1;
+
+        if (real) boxMullerTheta = 0;
+        if (unitary) boxMullerR = 1;
+
+        return {{boxMullerR * Kokkos::cos(boxMullerTheta), boxMullerR * Kokkos::sin(boxMullerTheta)}};
+      }
+
+      std::array<double, 2u> getNextGaussianPair(bool updateStateCounter = true, bool real = false,
+                                                 bool unitary = false) const
+      {
         double r0 = mRandomUniform();
         double r1 = mRandomUniform();
 

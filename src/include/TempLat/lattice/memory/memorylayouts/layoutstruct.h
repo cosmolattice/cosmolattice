@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <Kokkos_Macros.hpp>
 #include <memory>
 #include <numeric>
 
@@ -67,6 +68,7 @@ namespace TempLat
       target[map.atIndex] = map.withValue;
     }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     const std::array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
 
     template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input)
@@ -74,16 +76,17 @@ namespace TempLat
       getTransposed().setLocalSizes(input);
     }
 
-    std::array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
+    KOKKOS_FORCEINLINE_FUNCTION
     const std::array<ptrdiff_t, NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     const std::array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
 
     template <typename T = ptrdiff_t> void setLocalStarts(const std::array<T, NDim> &input)
     {
       getLocal().setLocalStarts(input);
     }
-    std::array<ptrdiff_t, NDim> &getLocalStarts() { return getLocal().getLocalStarts(); }
+    KOKKOS_FORCEINLINE_FUNCTION
     const std::array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
 
     template <typename T = ptrdiff_t> void setTranspositionMap_memoryToGlobalSpace(const std::array<T, NDim> &input)
@@ -126,13 +129,19 @@ namespace TempLat
      * dimensions. */
     HermitianPartners<NDim> mHermitianPartners;
 
-    inline LayoutStructLocalTransposed<NDim> &getTransposed() { return mTransposed; }
-    inline LayoutStructLocal<NDim> &getLocal() { return getTransposed().getLocal(); }
-    inline LayoutStructGlobal<NDim> &getGlobal() { return getLocal().getGlobal(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    LayoutStructLocalTransposed<NDim> &getTransposed() { return mTransposed; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    LayoutStructLocal<NDim> &getLocal() { return getTransposed().getLocal(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    LayoutStructGlobal<NDim> &getGlobal() { return getLocal().getGlobal(); }
 
-    inline const LayoutStructLocalTransposed<NDim> &getTransposed() const { return mTransposed; }
-    inline const LayoutStructLocal<NDim> &getLocal() const { return getTransposed().getLocal(); }
-    inline const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const LayoutStructLocalTransposed<NDim> &getTransposed() const { return mTransposed; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const LayoutStructLocal<NDim> &getLocal() const { return getTransposed().getLocal(); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
 
   public:
 #ifdef TEMPLATTEST

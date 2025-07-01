@@ -11,7 +11,8 @@
 
 inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
 {
-  RandomGaussian prng("Hello CosmoLattice world!");
+  constexpr size_t N = 1e8;
+  RandomGaussian prng("Hello CosmoLattice world!", N);
   say << prng << "\n";
 
   static constexpr ptrdiff_t measure_center = 10;
@@ -21,7 +22,7 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
 #ifdef NOKOKKOS
   std::array<size_t, 2 * measure_center> measure;
   std::fill(measure.begin(), measure.end(), 0);
-  for (int i = 0; i < 1000000; ++i) {
+  for (int i = 0; i < N; ++i) {
     double next = prng();
     x += next;
     ptrdiff_t index = measure_center + std::round(next * measure_center / 3); /* 5 ? yes, 5 i_sigma happens. */
@@ -31,22 +32,22 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
   //    std::cerr << std::fixed << std::setprecision(32) << "x: " << x << "\n";
 
   tdd.verify(AlmostEqual(x, 210.2878193178173376054473919794));
-  tdd.verify(prng.getState() == 1000000u);
+  tdd.verify(prng.getState() == N);
 
   std::cout << "Obtained x = " << std::setprecision(32) << x << std::endl;
   //    say << prng << "\n";
 
   say << "Does this look gaussian enough?\n";
   for (auto &&it : measure) {
-    if (it > 0) std::cerr << std::string(it / 5000, '*') << "\n";
+    if (it > 0) std::cerr << std::string(it / (N / 200), '*') << "\n";
   }
 
 #else
   Kokkos::View<size_t[2 * measure_center]> measure("measure");
   Kokkos::parallel_reduce(
-      "RandomGaussian_test", 1000000,
-      KOKKOS_LAMBDA(int, double &sum) {
-        const double next = prng();
+      "RandomGaussian_test", N,
+      KOKKOS_LAMBDA(int i, double &sum) {
+        const double next = prng(i);
         sum += next;
         ptrdiff_t index = measure_center + std::round(next * measure_center / 3); /* 5 ? yes, 5 i_sigma happens. */
         index = std::max(ptrdiff_t(0), std::min(2 * measure_center - 1, index));
@@ -54,7 +55,7 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
       },
       x);
 
-  tdd.verify(AlmostEqual(x, 279.30794840767794084968045353889));
+  tdd.verify(AlmostEqual(x, 5906.2331311112102412153035402298));
 
   std::cout << "Obtained x = " << std::setprecision(32) << x << std::endl;
 
@@ -63,7 +64,7 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
   Kokkos::deep_copy(host_mirror, measure);
   for (uint i = 0; i < host_mirror.extent(0); ++i) {
     const auto it = host_mirror[i];
-    if (it > 0) std::cerr << std::string(it / 5000, '*') << "\n";
+    if (it > 0) std::cerr << std::string(it / (N / 200), '*') << "\n";
   }
 
 #endif
