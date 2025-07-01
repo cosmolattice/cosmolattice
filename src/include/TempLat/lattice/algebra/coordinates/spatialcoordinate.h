@@ -30,7 +30,7 @@ namespace TempLat
 
     ptrdiff_t getVectorSize() { return mToolBox->mNDimensions; }
 
-    template <typename IDX1, typename... IDX>
+    template <std::integral IDX1, std::integral... IDX>
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX1 component, const IDX &...idx) const
     {
       using type = decltype(component * (idx * ...));

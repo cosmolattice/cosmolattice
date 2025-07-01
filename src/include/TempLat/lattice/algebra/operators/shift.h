@@ -28,7 +28,7 @@ namespace TempLat
     KOKKOS_FUNCTION
     ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) { shift = computeShifts({SHIFTS...}); }
 
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       static_assert(sizeof...(IDX) == 1, "Shift must be deprecated...");
       return GetValue::get(mR, (idx + shift)...);

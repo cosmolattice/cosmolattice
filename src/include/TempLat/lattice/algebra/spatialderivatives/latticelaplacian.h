@@ -38,7 +38,7 @@ namespace TempLat
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       auto result = (-2 * NDim * GetValue::get(mR, idx...));
       constexpr_for<0, NDim, 1>([&](const auto _d) {

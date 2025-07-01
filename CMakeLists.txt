@@ -21,7 +21,7 @@ set(KOKKOS
     ON
     CACHE
       BOOL
-      "Set to ON to build with Kokkos for shared memory and GPU parallelization (default = ON)"
+      "Set to ON to build with Kokkos for shared memory and/or GPU parallelization (default = ON)"
 )
 set(PFFT
     OFF

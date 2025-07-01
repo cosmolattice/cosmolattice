@@ -7,11 +7,8 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#ifdef KOKKOS_SOURCE
 #include "TempLat/lattice/algebra/complexalgebra/scalarcomplexmultiply.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
-#include "TempLat/lattice/field/field.h"
-
 #include <cstdlib>
 
 #ifndef NOKOKKOS
@@ -266,5 +263,4 @@ didn't touch phi at all, so must be in fourier space.
 #endif
 }
 
-#endif
 #endif // KOKKOS_TEST_H

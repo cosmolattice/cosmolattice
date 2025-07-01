@@ -131,8 +131,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/fftw/fftwplanholder_test.h"
-#endif
-
 #endif

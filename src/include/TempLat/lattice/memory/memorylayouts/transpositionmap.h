@@ -27,8 +27,10 @@ namespace TempLat
     /** \brief Default constructor: untransposed, both maps are a linear range. */
     TranspositionMap() : mFromAtoB{}, mFromBtoA{}
     {
-      std::iota(mFromAtoB.begin(), mFromAtoB.end(), 0);
-      std::iota(mFromBtoA.begin(), mFromBtoA.end(), 0);
+      for (uint i = 0; i < NDim; ++i) {
+        mFromAtoB[i] = i;
+        mFromBtoA[i] = i;
+      }
     }
 
     static constexpr size_t size() { return NDim; }

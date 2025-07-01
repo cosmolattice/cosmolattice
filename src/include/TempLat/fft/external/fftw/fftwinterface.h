@@ -13,7 +13,6 @@
 
 namespace TempLat
 {
-
   inline std::shared_ptr<FFTSessionGuard> getFFTWSessionGuard(bool pVerbose = true)
   {
     return std::make_shared<FFTWGuard>(pVerbose);
@@ -56,13 +55,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/fftw/fftwmemorylayout_test.h"
-#endif
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/fftw/fftwinterface_test.h"
-#endif
 
 #endif

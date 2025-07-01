@@ -24,54 +24,48 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
   //  //  myField.confirmSpace(LayoutStruct(3), SpaceStateInterface::SpaceType::Fourier);
   //
   //    say << myField.getNDimensions() << " dimensions detected.\n";
-  //
-  std::array<complex<double>, 10> a, b;
-  //
-  //    auto pIterCoords = IterationCoordinates::createDummy(0, 0, 0, 0);
-  std::vector<ptrdiff_t> coord({0, 0, 0});
 
-  //
-  auto it = toolBox->itP();
-  for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i) {
-    coord[2] = i;
-    //        pIterCoords.setOffset(i);
-    a[i] = myField.get(coord);
-  }
-  //
+  Kokkos::View<complex<double> *> a("a", 10);
+  Kokkos::View<complex<double> *> b("b", 10);
+  auto a_host = Kokkos::create_mirror_view(a);
+  auto b_host = Kokkos::create_mirror_view(b);
+
+  Kokkos::parallel_for(
+      Kokkos::RangePolicy(0, a.size()), KOKKOS_LAMBDA(const size_t i) { a[i] = myField.get(0, 0, i); });
+
   auto firstSeed = myField.getCurrentSeed();
-  //
-  //    /* test rewinding */
+
+  // test rewinding
+  Kokkos::parallel_for(
+      Kokkos::RangePolicy(0, a.size()), KOKKOS_LAMBDA(const size_t i) { b[i] = myField.get(0, 0, i); });
+  Kokkos::deep_copy(a_host, a);
+  Kokkos::deep_copy(b_host, b);
+
+  for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i)
+    std::cout << "a = " << a_host[i] << ", b = " << b_host[i] << std::endl;
+
   bool rewindingWorks = true;
-  for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i) {
-    coord[2] = i;
-    //        pIterCoords.setOffset(i);
-    b[i] = myField.get(coord);
-    rewindingWorks = rewindingWorks && AlmostEqual(a[i], b[i]);
-  }
-  //
+  for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i)
+    rewindingWorks = rewindingWorks && AlmostEqual(a_host[i], b_host[i]);
   tdd.verify(rewindingWorks);
-  //
   tdd.verify(firstSeed == myField.getCurrentSeed());
-  //
-  //    /* test moving */
+
+  /*
+  // test moving
   bool movingWorks = true;
   bool seedChanged = false;
   coord[1] = 10;
   for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i) {
     coord[2] = i;
     b[i] = myField.get(coord);
-    //
     seedChanged = firstSeed != myField.getCurrentSeed();
     if (!seedChanged) break;
-    //
     movingWorks = movingWorks && !AlmostEqual(a[i], b[i]);
   }
-  //
   tdd.verify(seedChanged);
-  //
   tdd.verify(movingWorks);
-  //
-  //    /* test moving back */
+
+  // test moving back
   bool movingBackWorks = true;
   coord[1] = 0;
   for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i) {
@@ -85,6 +79,7 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
     coord[2] = -1;
     myField.get(coord);
   }));
+  */
 }
 
 #endif

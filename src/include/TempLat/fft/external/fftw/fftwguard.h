@@ -118,8 +118,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/fftw/fftwguard_test.h"
-#endif
-
 #endif

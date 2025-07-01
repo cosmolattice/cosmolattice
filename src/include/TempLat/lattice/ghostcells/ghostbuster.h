@@ -7,11 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Core.hpp>
 #include <functional>
 #include <cstring>
 #include <stdexcept>
-#include <traits/Kokkos_IterationPatternTrait.hpp>
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"

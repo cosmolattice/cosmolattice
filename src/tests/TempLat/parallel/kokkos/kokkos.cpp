@@ -12,8 +12,9 @@
 // Also the test code is by default mangled... this is a bit of a hack to get around that.
 #define KOKKOS_SOURCE
 #include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/kokkos/kokkos_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::KokkosTest> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::KokkosTest> test;
 }
-

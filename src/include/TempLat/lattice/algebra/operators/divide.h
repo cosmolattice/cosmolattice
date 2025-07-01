@@ -34,7 +34,7 @@ namespace TempLat
       KOKKOS_FUNCTION
       Division(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      template <typename... IDX>
+      template <std::integral... IDX>
         requires requires(IDX... idx) {
           GetValue::get(mR, idx...);
           GetValue::get(mT, idx...);

@@ -70,7 +70,7 @@ namespace TempLat
       KOKKOS_FUNCTION
       Multiplication() : BinaryOperator<R, T>(R(), T()) {}
 
-      template <typename... IDX>
+      template <std::integral... IDX>
         requires requires(IDX... idx) {
           GetValue::get(mT, idx...);
           GetValue::get(mR, idx...);
@@ -97,7 +97,7 @@ namespace TempLat
       KOKKOS_FUNCTION
       MultiplicationN(const R &pR) : UnaryOperator<R>(pR) {}
 
-      template <typename... IDX>
+      template <std::integral... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {

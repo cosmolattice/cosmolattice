@@ -31,17 +31,14 @@ namespace TempLat
 
   /** \brief The result holder for computeLocalSizes. It is your responsibility to set all values. */
   template <size_t NDim> struct LayoutStruct {
-    LayoutStruct(std::array<ptrdiff_t, NDim> initNGrid)
-        : mTransposed(initNGrid), mHermitianPartners(std::make_shared<HermitianPartners<NDim>>(initNGrid))
-    {
-    }
+    LayoutStruct(std::array<ptrdiff_t, NDim> initNGrid) : mTransposed(initNGrid), mHermitianPartners(initNGrid) {}
 
     /** \brief An almost constructor: return a new instance which has a default global FFT layout */
     static LayoutStruct<NDim> createGlobalFFTLayout(std::array<ptrdiff_t, NDim> initNGrid)
     {
       LayoutStruct result(initNGrid);
-      result.getGlobal().getGlobalSizes().back() = result.getGlobal().getGlobalSizes().back() / 2 + 1;
-      result.getLocal().getLocalSizes().back() = result.getGlobalSizes().back();
+      result.getGlobal().getGlobalSizes()[NDim - 1] = result.getGlobal().getGlobalSizes()[NDim - 1] / 2 + 1;
+      result.getLocal().getLocalSizes()[NDim - 1] = result.getGlobalSizes()[NDim - 1];
       return result;
     }
 
@@ -98,10 +95,9 @@ namespace TempLat
       return getTransposed().getTranspositionMap_memoryToGlobalSpace();
     }
 
-    void setHermitianPartners(std::shared_ptr<HermitianPartners<NDim>> newInstance)
-    {
-      mHermitianPartners = newInstance;
-    }
+    void setHermitianPartners(HermitianPartners<NDim> &&newInstance) { mHermitianPartners = std::move(newInstance); }
+
+    KOKKOS_FORCEINLINE_FUNCTION
     const auto &getHermitianPartners() const { return mHermitianPartners; }
 
     template <size_t d2> friend bool operator==(const LayoutStruct<NDim> &a, const LayoutStruct<d2> &b)
@@ -109,7 +105,7 @@ namespace TempLat
       if constexpr (NDim != d2)
         return false;
       else {
-        bool result = a.mTransposed == b.mTransposed && *(a.mHermitianPartners) == *(b.mHermitianPartners);
+        bool result = a.mTransposed == b.mTransposed && a.mHermitianPartners == b.mHermitianPartners;
         return result;
       }
     }
@@ -117,7 +113,7 @@ namespace TempLat
     friend std::ostream &operator<<(std::ostream &ostream, const LayoutStruct &ls)
     {
       ostream << ls.mTransposed << "\n"
-              << "  Hermitian layout: " << *(ls.mHermitianPartners) << "\n";
+              << "  Hermitian layout: " << ls.mHermitianPartners << "\n";
       return ostream;
     }
 
@@ -128,7 +124,7 @@ namespace TempLat
     LayoutStructLocalTransposed<NDim> mTransposed;
     /** \brief signed wavenumber and coordinate x = index > n/2 ? index - n : index. Need to provide this n/2 for each
      * dimensions. */
-    std::shared_ptr<HermitianPartners<NDim>> mHermitianPartners;
+    HermitianPartners<NDim> mHermitianPartners;
 
     inline LayoutStructLocalTransposed<NDim> &getTransposed() { return mTransposed; }
     inline LayoutStructLocal<NDim> &getLocal() { return getTransposed().getLocal(); }
@@ -145,9 +141,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorylayouts/layoutstruct_test.h"
-#endif
 
 #endif

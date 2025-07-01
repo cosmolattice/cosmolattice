@@ -23,7 +23,7 @@ template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TD
 
   /* test the transposition */
   a = LayoutStruct({16, 16, 16});
-  std::array<ptrdiff_t, 3> newLocalSizes{{4, 5, 6}};
+  Array<ptrdiff_t, 3> newLocalSizes{{4, 5, 6}};
   a.setLocalSizes(newLocalSizes);
 
   /* test that these propagate correctly */
@@ -34,12 +34,12 @@ template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TD
   std::cout << "a.getLocalSizes() = " << a.getLocalSizes() << "   |   "
             << "a.getSizesInMemory() = " << a.getSizesInMemory() << std::endl;
 
-  std::array<ptrdiff_t, 3> newLocalStarts{{7, 8, 9}};
+  Array<ptrdiff_t, 3> newLocalStarts{{7, 8, 9}};
   a.setLocalStarts(newLocalStarts);
 
   a.setTranspositionMap_memoryToGlobalSpace({{2, 0, 1}});
 
-  std::array<ptrdiff_t, 3> memVec{}, posVec{}, memVec2{};
+  Array<ptrdiff_t, 3> memVec{}, posVec{}, memVec2{};
 
   memVec[0] = 1;
   memVec[1] = 2;

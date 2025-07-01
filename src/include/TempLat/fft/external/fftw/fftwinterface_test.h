@@ -9,7 +9,6 @@
 
 template <size_t NDim> inline void TempLat::FFTWInterface<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-
   FFTWInterface someInterface;
   tdd.verify(true);
 }

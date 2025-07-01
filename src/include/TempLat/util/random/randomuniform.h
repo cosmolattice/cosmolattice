@@ -57,7 +57,10 @@ namespace TempLat
     friend std::ostream &operator<<(std::ostream &ostream, const RandomUniform &pr)
     {
       ostream << "RandomUniform - seed string: \"" << pr.getSeedString() << "\" - seed value: " << pr.getSeed()
-              << " - number of values fetched: " << pr.getState();
+#ifdef NOKOKKOS
+              << " - number of values fetched: " << pr.getState()
+#endif
+          ;
       return ostream;
     }
 

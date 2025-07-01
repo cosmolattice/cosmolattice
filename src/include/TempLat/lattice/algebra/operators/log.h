@@ -45,7 +45,7 @@ namespace TempLat
       Log(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
-      template <typename... IDX>
+      template <std::integral... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {

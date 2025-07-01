@@ -1,4 +1,5 @@
 build/
 build_clang/
+build_nokokkos/
 .cache/
 .idea/

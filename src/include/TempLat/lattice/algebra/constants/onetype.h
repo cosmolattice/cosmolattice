@@ -20,7 +20,10 @@ namespace TempLat
   struct OneType {
     //        operator ptrdiff_t() const { return 1; }
     static std::string toString() { return "(OneType)1"; }
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...) { return 1; }
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...)
+    {
+      return 1;
+    }
     static constexpr bool ISCONSTANT = true;
   };
 

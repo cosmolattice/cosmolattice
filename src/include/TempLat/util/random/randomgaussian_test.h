@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Core.hpp>
 #include <algorithm>
 
 inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
@@ -51,7 +50,7 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
         sum += next;
         ptrdiff_t index = measure_center + std::round(next * measure_center / 3); /* 5 ? yes, 5 i_sigma happens. */
         index = std::max(ptrdiff_t(0), std::min(2 * measure_center - 1, index));
-        Kokkos::atomic_increment(&measure[index]);
+        Kokkos::atomic_inc(&measure[index]);
       },
       x);
 

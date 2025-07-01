@@ -26,7 +26,7 @@ namespace TempLat
     KOKKOS_FUNCTION
     HeavisideStepFunction(const R &pR) : UnaryOperator<R>(pR) {}
 
-    template <typename... IDX>
+    template <std::integral... IDX>
       requires requires(IDX... idx) { GetValue::get(mR, idx...); }
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {

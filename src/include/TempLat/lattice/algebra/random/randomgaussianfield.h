@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"
 #include "TempLat/util/random/randomgaussian.h"
 #include "TempLat/util/tdd/tdd.h"
-#include <Kokkos_Macros.hpp>
 #include <tuple>
 
 namespace TempLat
@@ -52,32 +51,21 @@ namespace TempLat
                                                  SpaceStateInterface<NDim>::SpaceType::Fourier);
     }
 
-    complex<T> get(const int &i)
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
-      return get(mToolBox->getCoordFourier(i)); // Coded like that for testing purposes.
-    }
-
-    complex<T> get(const std::vector<ptrdiff_t> &coord)
-    {
-      std::array<ptrdiff_t, NDim> pass{};
-      for (uint i = 0; i < NDim; ++i)
-        pass[i] = coord[i];
-      return std::apply([&](const auto &...args) { return get(args...); }, pass);
-    }
-
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
-    {
-      // TODO: this should be handled as fixed arrays.
-      const std::vector<ptrdiff_t> coord{(static_cast<ptrdiff_t>(idx))...};
-      std::vector<ptrdiff_t> hermitianPartner;
+      const Kokkos::Array<ptrdiff_t, NDim> coord{{(static_cast<ptrdiff_t>(idx))...}};
+      Kokkos::Array<ptrdiff_t, NDim> hermitianPartner;
 
       // TODO: Sadly, this implies a rebuild of how the HermitianPartners work.
       // For this to be portable, we need to make this in some way static, so that it also works on GPU.
       // Neither pointers (to host memory!) nor vtable lookups are a good idea on GPU.
-      auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners()->putHermitianPartner(
+      auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners().putHermitianPartner(
           coord, hermitianPartner);
 
+#ifdef NOKOKKOS
+      // TODO implement this also for the kokkos version...
       updatePRNG(hermitianPartner);
+#endif
 
       auto pair = prng.getNextPair(Real, Unitary);
       /* ordered the if-statement by most-occurring case first. */
@@ -104,7 +92,7 @@ namespace TempLat
      *  is monotonically growing.
      *  If not, rebuild the prng.
      */
-    void updatePRNG(const std::vector<ptrdiff_t> &coordinates) const
+    void updatePRNG(const std::array<ptrdiff_t, NDim> &coordinates) const
     {
       bool needUpdate = rodPosition.size() < NDim;
 

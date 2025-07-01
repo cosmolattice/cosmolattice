@@ -38,7 +38,7 @@ namespace TempLat
     KOKKOS_FUNCTION
     LatticeForwardGradient(const R &pR) : mR(pR), dx(GetDx::getDx(mR)) { fixGradientMap(GetJumps::apply(mR)); }
 
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx)
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx)
     {
       auto other_point = std::array<ptrdiff_t, NDim>{{idx...}};
       other_point[i] += 1;

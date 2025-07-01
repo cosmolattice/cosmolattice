@@ -26,7 +26,7 @@ namespace TempLat
   template <size_t NDim, typename FUN> struct KokkosNDLambdaWrapper {
     KokkosNDLambdaWrapper(const FUN &_fun) : fun(_fun) {};
 
-    template <typename... Args>
+    template <std::integral... Args>
       requires(sizeof...(Args) == NDim)
     KOKKOS_FORCEINLINE_FUNCTION void operator()(Args... args) const
       requires(std::convertible_to<Args, std::common_type_t<Args...>> && ...)

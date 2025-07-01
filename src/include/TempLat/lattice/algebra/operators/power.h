@@ -77,7 +77,7 @@ namespace TempLat
       KOKKOS_FUNCTION
       Power(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      template <typename... IDX>
+      template <std::integral... IDX>
         requires requires(IDX... idx) {
           GetValue::get(mR, idx...);
           GetValue::get(mT, idx...);
@@ -107,7 +107,7 @@ namespace TempLat
       KOKKOS_FORCEINLINE_FUNCTION
       PowerN(const R &pR) : UnaryOperator<R>(pR) {}
 
-      template <typename... IDX>
+      template <std::integral... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {

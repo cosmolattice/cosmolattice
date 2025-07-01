@@ -5,6 +5,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
+#include "TempLat/lattice/memory/memorylayouts/layoutstruct_test.h"
 
 namespace
 {

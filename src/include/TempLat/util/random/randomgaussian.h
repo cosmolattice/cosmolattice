@@ -9,7 +9,6 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/random/randomuniform.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -38,7 +37,11 @@ namespace TempLat
       KOKKOS_FORCEINLINE_FUNCTION
       double operator()() const { return getNextGaussian(); }
 
-      std::array<double, 2> getNextPair(bool real = false, bool unitary = false)
+      KOKKOS_FORCEINLINE_FUNCTION
+      auto getNextPair(bool real = false, bool unitary = false)
+#ifndef NOKOKKOS
+          const
+#endif
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
         // generate numbers with a real gaussian distribution or uniformly on the unit disk.
         return getNextGaussianPair(true, real, unitary);
@@ -89,8 +92,12 @@ namespace TempLat
       }
 
       KOKKOS_FORCEINLINE_FUNCTION
-      std::array<double, 2u> getNextGaussianPair(bool updateStateCounter = true, bool real = false,
-                                                 bool unitary = false) const
+#ifndef NOKOKKOS
+      Kokkos::Array<double, 2u>
+#else
+      std::array<double, 2u>
+#endif
+      getNextGaussianPair(bool updateStateCounter = true, bool real = false, bool unitary = false) const
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
 // generate numbers with a real gaussian distribution or uniformly on the unit disk.
 #ifdef NOKOKKOS
@@ -110,7 +117,7 @@ namespace TempLat
         if (real) boxMullerTheta = 0;
         if (unitary) boxMullerR = 1;
 
-        return std::array<double, 2>{{boxMullerR * std::cos(boxMullerTheta), boxMullerR * std::sin(boxMullerTheta)}};
+        return {{boxMullerR * std::cos(boxMullerTheta), boxMullerR * std::sin(boxMullerTheta)}};
       }
 
     public:

@@ -35,26 +35,32 @@ namespace TempLat
 
     /** \brief When making sure everyone is in configuration or fourier space, steal the number of dimensions, which we
      * need in the coordinate manipulating objects.. */
-    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    KOKKOS_FUNCTION
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       if (mFixedSingleSpaceType != SpaceStateInterface<NDim>::SpaceType::undefined &&
           mFixedSingleSpaceType != spaceType) {
+#ifdef NOKOKKOS
         throw DimensionCountRecorder_CoordinateSpaceException(
             "You are using coordinates in one space for an expression in another space. This coordinate object insists "
             "on",
             SpaceStateInterface<NDim>::SpaceTypeString(mFixedSingleSpaceType), "while you now ask for",
             SpaceStateInterface<NDim>::SpaceTypeString(spaceType));
+#endif
       }
 
       mCurrentSpaceType = spaceType;
       mCurrentLayout = newLayout;
     }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     static constexpr ptrdiff_t getNDimensions() { return NDim; }
 
-    inline SpaceStateInterface<NDim>::SpaceType getCurrentSpaceType() const { return mCurrentSpaceType; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    SpaceStateInterface<NDim>::SpaceType getCurrentSpaceType() const { return mCurrentSpaceType; }
 
-    inline const LayoutStruct<NDim> &getCurrentLayout() const { return mCurrentLayout; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const LayoutStruct<NDim> &getCurrentLayout() const { return mCurrentLayout; }
 
     std::string toString() const
     {

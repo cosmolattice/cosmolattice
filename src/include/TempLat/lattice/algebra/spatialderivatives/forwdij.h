@@ -37,7 +37,7 @@ namespace TempLat
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       static_assert(dir > 0);
       constexpr size_t d = static_cast<size_t>(dir) - 1;

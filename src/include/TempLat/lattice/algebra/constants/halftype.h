@@ -19,7 +19,10 @@ namespace TempLat
   struct HalfType {
     static std::string toString() { return "(HalfType)1/2"; }
 
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...) { return 0.5; }
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...)
+    {
+      return 0.5;
+    }
 
     /** \brief Need a static instance of halftype, for constructing `Power(T& a, HalfType& ht);` */
     static HalfType &getStatic()

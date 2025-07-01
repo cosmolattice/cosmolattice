@@ -9,6 +9,8 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/tdd/tddassertion.h"
+#include <ostream>
+#include <array>
 
 #ifndef NOKOKKOS
 
@@ -19,44 +21,47 @@
 // Getting the View types with stars
 // ------------------------------------------------
 
-template <size_t NDim, typename T> struct GetKokkosNDStarType {
-  using type = typename GetKokkosNDStarType<NDim - 1, T>::type *;
-};
-template <typename T> struct GetKokkosNDStarType<1, T> {
-  using type = T *;
-};
+namespace TempLat
+{
 
-// ------------------------------------------------
-// Getting View types
-// ------------------------------------------------
+  template <size_t NDim, typename T> struct GetKokkosNDStarType {
+    using type = typename GetKokkosNDStarType<NDim - 1, T>::type *;
+  };
+  template <typename T> struct GetKokkosNDStarType<1, T> {
+    using type = T *;
+  };
 
-template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
-          typename Layout = Kokkos::LayoutRight>
-using KokkosNDView =
-    Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for dimensionality recursively with
-                 Layout,        // LayoutRight is most compatible for now, may change in future
-                 ExecutionSpace // Choice between GPU and CPU
-                 >;
-template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
-          typename Layout = Kokkos::LayoutRight>
-using KokkosNDViewUnmanaged =
-    Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for dimensionality recursively with
-                                                              // a helper
-                 Layout,                                 // LayoutRight is most compatible for now, may change in future
-                 ExecutionSpace,                         // Choice between GPU and CPU
-                 Kokkos::MemoryTraits<Kokkos::Unmanaged> // No allocation: Attach to existing memory
-                 >;
+  // ------------------------------------------------
+  // Getting View types
+  // ------------------------------------------------
 
-// ------------------------------------------------
-// Getting ranges to iterate over
-// ------------------------------------------------
-template <size_t NDim> struct KokkosNDRangeHelper {
-  using type = Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>;
-};
-template <> struct KokkosNDRangeHelper<1> {
-  using type = Kokkos::RangePolicy<>;
-};
-template <size_t NDim> using KokkosNDRange = KokkosNDRangeHelper<NDim>::type;
+  template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
+            typename Layout = Kokkos::LayoutRight>
+  using KokkosNDView = Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for
+                                                                                 // dimensionality recursively with
+                                    Layout,        // LayoutRight is most compatible for now, may change in future
+                                    ExecutionSpace // Choice between GPU and CPU
+                                    >;
+  template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
+            typename Layout = Kokkos::LayoutRight>
+  using KokkosNDViewUnmanaged =
+      Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for dimensionality recursively
+                                                                // with a helper
+                   Layout,         // LayoutRight is most compatible for now, may change in future
+                   ExecutionSpace, // Choice between GPU and CPU
+                   Kokkos::MemoryTraits<Kokkos::Unmanaged> // No allocation: Attach to existing memory
+                   >;
+
+  // ------------------------------------------------
+  // Getting ranges to iterate over
+  // ------------------------------------------------
+  template <size_t NDim> struct KokkosNDRangeHelper {
+    using type = Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>;
+  };
+  template <> struct KokkosNDRangeHelper<1> {
+    using type = Kokkos::RangePolicy<>;
+  };
+  template <size_t NDim> using KokkosNDRange = KokkosNDRangeHelper<NDim>::type;
 
 #else
 
@@ -65,8 +70,6 @@ template <size_t NDim> using KokkosNDRange = KokkosNDRangeHelper<NDim>::type;
 
 #endif
 
-namespace TempLat
-{
 #ifdef TEMPLATTEST
   class KokkosTest
   {
@@ -76,9 +79,5 @@ namespace TempLat
   };
 #endif
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/parallel/kokkos/kokkos_test.h"
-#endif
 
 #endif // KOKKOS_H
