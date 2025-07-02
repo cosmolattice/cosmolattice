@@ -119,7 +119,7 @@ namespace TempLat
       // Get Views to the data
       std::array<ptrdiff_t, NDim> from_full_sizes{};
       std::array<ptrdiff_t, NDim> to_full_sizes{};
-      for (ptrdiff_t i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i) {
         from_full_sizes[i] = from_padding[i][0] + from_sizes[i] + from_padding[i][1];
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
       }

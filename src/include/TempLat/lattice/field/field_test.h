@@ -38,7 +38,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
 
   chi = LatticeLaplacian<NDim, decltype(phi)>(phi);
 
-  phi.inFourierSpace() = k.norm2() * RandomGaussianField<NDim, T>("Hoi", toolBox);
+  // phi.inFourierSpace() = k.norm2() * RandomGaussianField<NDim, T>("Hoi", toolBox);
 
   // just manipulated phi(k), so it must still be in Fourier space, and ghosts are stale.
   // tdd.verify(phi.mManager->isFourierSpace());

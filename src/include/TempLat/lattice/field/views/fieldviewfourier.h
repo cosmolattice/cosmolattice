@@ -154,7 +154,6 @@ namespace TempLat
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
       auto localSizes = layout.getLocalSizes();
       // auto globalSizes = layout.getGlobalSizes();
-      auto localStarts = layout.getLocalStarts();
 
       for (size_t d = 0; d < NDim; ++d) {
         start_iteration[d] = 0;

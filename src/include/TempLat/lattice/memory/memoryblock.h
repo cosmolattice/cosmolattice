@@ -65,8 +65,8 @@ namespace TempLat
     template <typename R = T> auto getNDView(const std::array<ptrdiff_t, NDim> &localSizes) const
     {
 #ifdef CHECKBOUNDS
-      ptrdiff_t total_size = 1;
-      for (ptrdiff_t i = 0; i < NDim; ++i)
+      size_t total_size = 1;
+      for (size_t i = 0; i < NDim; ++i)
         total_size *= localSizes[i];
       if (total_size > mSize)
         throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds: total size ", total_size,
@@ -85,8 +85,8 @@ namespace TempLat
     template <typename R = T> auto getNDHostView(const std::array<ptrdiff_t, NDim> &localSizes) const
     {
 #ifdef CHECKBOUNDS
-      ptrdiff_t total_size = 1;
-      for (ptrdiff_t i = 0; i < NDim; ++i)
+      size_t total_size = 1;
+      for (size_t i = 0; i < NDim; ++i)
         total_size *= localSizes[i];
       if (total_size > mSize)
         throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds: total size ", total_size,
