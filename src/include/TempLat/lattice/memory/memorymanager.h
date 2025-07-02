@@ -42,28 +42,28 @@ namespace TempLat
       return 1;
     }
 
-    template <typename INT> inline auto getNDView(const std::array<INT, NDim> &localSizes) const
+    template <typename R = T> auto getNDView(const std::array<ptrdiff_t, NDim> &localSizes) const
     {
-      return mBlock.getNDView(localSizes);
+      return mBlock.template getNDView<R>(localSizes);
     }
-    template <typename INT> inline auto getNDHostView(const std::array<INT, NDim> &localSizes) const
+    template <typename R = T> auto getNDHostView(const std::array<ptrdiff_t, NDim> &localSizes) const
     {
-      return mBlock.getNDHostView(localSizes);
+      return mBlock.template getNDHostView<R>(localSizes);
     }
 
-    template <typename INT>
-    auto getNDSubView(const std::array<INT, NDim> &localSizes,
-                      const std::array<std::pair<INT, INT>, NDim> &slices) const
+    template <typename R = T>
+    auto getNDSubView(const std::array<ptrdiff_t, NDim> &localSizes,
+                      const std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> &slices) const
     {
-      auto view = mBlock.getNDView(localSizes);
+      auto view = mBlock.template getNDView<R>(localSizes);
       auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
       return subView;
     }
-    template <typename INT>
-    auto getNDHostSubView(const std::array<INT, NDim> &localSizes,
-                          const std::array<std::pair<INT, INT>, NDim> &slices) const
+    template <typename R = T>
+    auto getNDHostSubView(const std::array<ptrdiff_t, NDim> &localSizes,
+                          const std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> &slices) const
     {
-      auto view = mBlock.getNDHostView(localSizes);
+      auto view = mBlock.template getNDHostView<R>(localSizes);
       auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
       return subView;
     }
@@ -72,19 +72,19 @@ namespace TempLat
 
     void deallocateHostView() { mBlock.deallocateHostView(); }
 
-    inline auto getRawView() const
+    template <typename R = T> auto getRawView() const
     {
 #ifndef NOKOKKOS
-      return mBlock.getRawView();
+      return mBlock.template getRawView<R>();
 #else
       return [&](ptrdiff_t i) -> T & { return mBlock[i]; };
 #endif
     }
 
-    inline auto getRawHostView() const
+    template <typename R = T> auto getRawHostView() const
     {
 #ifndef NOKOKKOS
-      return mBlock.getRawHostView();
+      return mBlock.template getRawHostView<R>();
 #else
       return [&](ptrdiff_t i) -> T { return mBlock[i]; };
 #endif
@@ -137,8 +137,6 @@ namespace TempLat
         if (mToolBox->verbosity.spaceConfirmation)
           sayMPI << "Setting ghost state to stale, because of the FFT we performed. " << getName() << "\n";
         mGhostStateKeeper.setStale();
-
-        if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Pushed data to device.\n";
       }
       mLayoutState.setToConfigSpace();
       if (mToolBox->verbosity.spaceConfirmation) sayMPI << "We are in configuration space.\n";
@@ -169,8 +167,6 @@ namespace TempLat
           ++result;
           mToolBox->mFFTNormalization.r2c(mBlock, (T)1.);
           if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT R2C.\n";
-          mBlock.pushHostView(); // make sure the data is pushed to the device
-          if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Pushed data to device.\n";
         }
         mBlock.flagHostMirrorOutdated();
       }

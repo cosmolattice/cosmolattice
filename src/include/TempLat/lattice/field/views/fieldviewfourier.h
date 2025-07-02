@@ -37,19 +37,31 @@ namespace TempLat
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
 
-    template <typename R> FourierView &operator=(R &&g)
-    {
-      int i = 0;
-      auto &it = mToolBox->itP();
-      onBeforeAssignment(g);
+    template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
-      for (it.begin(); it.end(); ++(it)) {
-        i = it();
-        DoEval::eval(g, i);
-        mManager->as_complex(i) = GetEval::getEval(g, i);
+    template <typename R> void assign(R &&g)
+    {
+#ifndef NOKOKKOS
+      onBeforeAssignment(g);
+      if constexpr (NDim > 1) {
+        auto functor = KOKKOS_CLASS_LAMBDA(const std::array<size_t, NDim> &idx)
+        {
+          std::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
+        };
+        Kokkos::parallel_for("ConfigViewAssign",                                                         //
+                             Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
+                             KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      } else if constexpr (NDim == 1) {
+        Kokkos::parallel_for(
+            "ConfigViewAssign", //
+            Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]),
+            KOKKOS_CLASS_LAMBDA(const size_t idx) { mView(idx) = GetEval::getEval(g, idx); });
+      } else {
+        static_assert(NDim > 0);
       }
-      // mManager->setGhostsAreStale();
-      return *this;
+#else
+      throw Naaaaaa;
+#endif
     }
 
     template <typename R> void onBeforeAssignment(R &&g)
@@ -89,8 +101,6 @@ namespace TempLat
     std::string toString() const { return mManager->getName() + "(k)"; }
 
     const auto &getLayout() { return mToolBox->mLayouts.getFourierSpaceLayout(); }
-
-    virtual Looper<NDim> &getIt() { return (Looper<NDim> &)mToolBox->itP(); }
 
     /** \brief Getting a single entry from an array. Variadic because the number of dimensions is variable.
      *  Use for tests only, never for actual integrations and iterations.
@@ -139,7 +149,32 @@ namespace TempLat
     template <size_t _NDim, typename S> friend class Field;
 
   private:
-    FourierView(const AbstractField<NDim, T> &f) : AbstractField<NDim, T>(f) {}
+    FourierView(const AbstractField<NDim, T> &f) : AbstractField<NDim, T>(f)
+    {
+      auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
+      auto localSizes = layout.getLocalSizes();
+      // auto globalSizes = layout.getGlobalSizes();
+      auto localStarts = layout.getLocalStarts();
+
+      for (size_t d = 0; d < NDim; ++d) {
+        start_iteration[d] = 0;
+        stop_iteration[d] = start_iteration[d] + localSizes[d];
+      }
+
+      memorySizes = layout.getLocalSizes();
+      mView = mManager->template getNDView<complex<T>>(memorySizes);
+      mRawView = mManager->template getRawView<complex<T>>();
+    }
+
+    Kokkos::Array<int64_t, NDim> start_iteration;
+    Kokkos::Array<int64_t, NDim> stop_iteration;
+
+    KokkosNDViewUnmanaged<NDim, complex<T>> mView;
+    KokkosNDViewUnmanaged<1, complex<T>> mRawView;
+    KokkosNDViewUnmanaged<NDim, complex<T>, Kokkos::DefaultHostExecutionSpace> mHostView;
+
+    std::array<ptrdiff_t, NDim> memorySizes;
+    std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
 
   public:
 #ifdef TEMPLATTEST

@@ -136,7 +136,7 @@ namespace TempLat
       // Get View to the full data
       const auto padding = mJumpsHolder.getPadding();
       const auto sizes = mJumpsHolder.getSizesInMemory();
-      std::array<size_t, NDim> full_sizes{};
+      std::array<ptrdiff_t, NDim> full_sizes{};
       for (size_t i = 0; i < NDim; ++i)
         full_sizes[i] = padding[i][0] + sizes[i] + padding[i][1];
       auto View = block.getNDView(full_sizes);
@@ -144,10 +144,10 @@ namespace TempLat
       // Create subviews for the from and to views
       // We need to create slices for each dimension, taking into account the padding
       // and the layout of the views
-      std::array<std::pair<size_t, size_t>, NDim> btf_slicesFrom{};
-      std::array<std::pair<size_t, size_t>, NDim> btf_slicesTo{};
-      std::array<std::pair<size_t, size_t>, NDim> ftb_slicesFrom{};
-      std::array<std::pair<size_t, size_t>, NDim> ftb_slicesTo{};
+      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> btf_slicesFrom{};
+      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> btf_slicesTo{};
+      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> ftb_slicesFrom{};
+      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> ftb_slicesTo{};
 
       for (size_t dim = 0; dim < NDim; ++dim) {
         for (size_t depth = 1; depth <= (size_t)mGhostDepth; ++depth) {
@@ -163,21 +163,21 @@ namespace TempLat
 
             // so we copy a (NDim- 1)-dimensional slice. Include the padding, which leads to a copy of all corners, too!
             for (size_t i = 0; i < NDim; ++i) {
-              btf_slicesFrom[i] = (i == dim)
-                                      ? std::make_pair<size_t, size_t>(padding[i][0] + sizes[i] - depth,
-                                                                       padding[i][0] + sizes[i] - depth + 1)
-                                      : std::make_pair<size_t, size_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
-              btf_slicesTo[i] = (i == dim)
-                                    ? std::make_pair<size_t, size_t>(padding[i][0] - depth, padding[i][0] - depth + 1)
-                                    : std::make_pair<size_t, size_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
+              btf_slicesFrom[i] =
+                  (i == dim) ? std::make_pair<ptrdiff_t, ptrdiff_t>(padding[i][0] + sizes[i] - depth,
+                                                                    padding[i][0] + sizes[i] - depth + 1)
+                             : std::make_pair<ptrdiff_t, ptrdiff_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
+              btf_slicesTo[i] =
+                  (i == dim) ? std::make_pair<ptrdiff_t, ptrdiff_t>(padding[i][0] - depth, padding[i][0] - depth + 1)
+                             : std::make_pair<ptrdiff_t, ptrdiff_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
               ftb_slicesFrom[i] =
-                  (i == dim)
-                      ? std::make_pair<size_t, size_t>(padding[i][0] + (depth - 1), padding[i][0] + (depth - 1) + 1)
-                      : std::make_pair<size_t, size_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
+                  (i == dim) ? std::make_pair<ptrdiff_t, ptrdiff_t>(padding[i][0] + (depth - 1),
+                                                                    padding[i][0] + (depth - 1) + 1)
+                             : std::make_pair<ptrdiff_t, ptrdiff_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
               ftb_slicesTo[i] = (i == dim)
-                                    ? std::make_pair<size_t, size_t>(padding[i][0] + sizes[i] + (depth - 1),
-                                                                     padding[i][0] + sizes[i] + (depth - 1) + 1)
-                                    : std::make_pair<size_t, size_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
+                                    ? std::make_pair<ptrdiff_t, ptrdiff_t>(padding[i][0] + sizes[i] + (depth - 1),
+                                                                           padding[i][0] + sizes[i] + (depth - 1) + 1)
+                                    : std::make_pair<ptrdiff_t, ptrdiff_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
             }
             auto btf_fromSubView =
                 std::apply([&](const auto &...args) { return Kokkos::subview(View, args...); }, btf_slicesFrom);

@@ -77,7 +77,9 @@ namespace TempLat
       prng_hermitian = Util::RandomGaussian(baseSeed, hermitian_size);
     }
 
-    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
+    template <std::integral... IDX>
+      requires(sizeof...(IDX) == NDim)
+    KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> global_coord = ndIdxToCoordinate(mLayout, idx...);
       return global_coord[NDim - 1];

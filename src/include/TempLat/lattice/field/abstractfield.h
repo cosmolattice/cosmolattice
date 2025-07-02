@@ -70,8 +70,6 @@ namespace TempLat
 
     ptrdiff_t confirmGhostsUpToDate() { return this->mManager->confirmGhostsUpToDate(); }
 
-    virtual Looper<NDim> &getIt() = 0;
-
     // Mostly for testing purpose
 
     /** \brief Check the current state. */

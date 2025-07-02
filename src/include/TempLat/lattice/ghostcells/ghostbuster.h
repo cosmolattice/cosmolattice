@@ -117,9 +117,9 @@ namespace TempLat
       const auto to_sizes = mTo.getSizesInMemory();
 
       // Get Views to the data
-      std::array<size_t, NDim> from_full_sizes{};
-      std::array<size_t, NDim> to_full_sizes{};
-      for (size_t i = 0; i < NDim; ++i) {
+      std::array<ptrdiff_t, NDim> from_full_sizes{};
+      std::array<ptrdiff_t, NDim> to_full_sizes{};
+      for (ptrdiff_t i = 0; i < NDim; ++i) {
         from_full_sizes[i] = from_padding[i][0] + from_sizes[i] + from_padding[i][1];
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
       }
@@ -131,8 +131,8 @@ namespace TempLat
       // Create subviews for the from and to views
       // We need to create slices for each dimension, taking into account the padding
       // and the layout of the views
-      std::array<std::pair<size_t, size_t>, NDim> slicesFrom{};
-      std::array<std::pair<size_t, size_t>, NDim> slicesTo{};
+      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slicesFrom{};
+      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slicesTo{};
       for (size_t i = 0; i < NDim; ++i) {
         size_t to_i{};
         if constexpr (std::is_same_v<LayoutType, Kokkos::LayoutRight>)

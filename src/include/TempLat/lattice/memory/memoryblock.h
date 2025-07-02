@@ -62,35 +62,48 @@ namespace TempLat
       return mData(i);
     }
 
-    template <typename INT> auto getNDView(const std::array<INT, NDim> &localSizes) const
+    template <typename R = T> auto getNDView(const std::array<ptrdiff_t, NDim> &localSizes) const
     {
 #ifdef CHECKBOUNDS
-      size_t total_size = 1;
-      for (size_t i = 0; i < NDim; ++i)
+      ptrdiff_t total_size = 1;
+      for (ptrdiff_t i = 0; i < NDim; ++i)
         total_size *= localSizes[i];
       if (total_size > mSize)
         throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds: total size ", total_size,
                                               " is larger than allocated size ", mSize);
 #endif
-      return std::apply([&](auto &&...args) { return KokkosNDViewUnmanaged<NDim, T>(mData.data(), args...); },
-                        localSizes);
+
+      auto sizes = localSizes;
+      for (auto &&size : sizes) {
+        size *= sizeof(R) / sizeof(T); // adjust for type size
+      }
+
+      return std::apply(
+          [&](auto &&...args) { return KokkosNDViewUnmanaged<NDim, R>(reinterpret_cast<R *>(mData.data()), args...); },
+          sizes);
     }
-    template <typename INT> auto getNDHostView(const std::array<INT, NDim> &localSizes) const
+    template <typename R = T> auto getNDHostView(const std::array<ptrdiff_t, NDim> &localSizes) const
     {
 #ifdef CHECKBOUNDS
-      size_t total_size = 1;
-      for (size_t i = 0; i < NDim; ++i)
+      ptrdiff_t total_size = 1;
+      for (ptrdiff_t i = 0; i < NDim; ++i)
         total_size *= localSizes[i];
       if (total_size > mSize)
         throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds: total size ", total_size,
                                               " is larger than allocated size ", mSize);
 #endif
       pullHostView(); // ensure host mirror is up to date
+
+      auto sizes = localSizes;
+      for (auto &&size : sizes)
+        size *= sizeof(R) / sizeof(T); // adjust for type size
+
       return std::apply(
           [&](auto &&...args) {
-            return KokkosNDViewUnmanaged<NDim, T, Kokkos::DefaultHostExecutionSpace>(mHostMirror.data(), args...);
+            return KokkosNDViewUnmanaged<NDim, R, Kokkos::DefaultHostExecutionSpace>(
+                reinterpret_cast<R *>(mHostMirror.data()), args...);
           },
-          localSizes);
+          sizes);
     }
 
     void flagHostMirrorOutdated() const { mHostMirrorOutdated = true; }
@@ -119,12 +132,26 @@ namespace TempLat
       mHostMirrorOutdated = true; // mark as outdated
     }
 
-    auto getRawView() const { return mData; }
+    template <typename R = T> auto getRawView() const
+    {
+      if constexpr (std::is_same_v<R, T>)
+        return mData;
+      else {
+        const size_t size = mData.size() * sizeof(T) / sizeof(R);
+        return KokkosNDViewUnmanaged<1, R, Kokkos::DefaultExecutionSpace>(reinterpret_cast<R *>(mData.data()), size);
+      }
+    }
 
-    auto getRawHostView() const
+    template <typename R = T> auto getRawHostView() const
     {
       pullHostView(); // ensure host mirror is up to date
-      return mHostMirror;
+      if constexpr (std::is_same_v<R, T>)
+        return mHostMirror;
+      else {
+        const size_t size = mData.size() * sizeof(T) / sizeof(R);
+        return KokkosNDViewUnmanaged<1, R, Kokkos::DefaultHostExecutionSpace>(reinterpret_cast<R *>(mHostMirror.data()),
+                                                                              size);
+      }
     }
 
     KOKKOS_FORCEINLINE_FUNCTION

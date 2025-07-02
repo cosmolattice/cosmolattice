@@ -70,7 +70,6 @@ namespace TempLat
     template <typename R> void assign(R &&g)
     {
 #ifndef NOKOKKOS
-
       onBeforeAssignment(g);
       if constexpr (NDim > 1) {
         auto functor = KOKKOS_CLASS_LAMBDA(const std::array<size_t, NDim> &idx)
@@ -142,13 +141,7 @@ namespace TempLat
 
     const auto &getLayout() { return mToolBox->mLayouts.getConfigSpaceLayout(); }
 
-    virtual Looper<NDim> &getIt() { return (Looper<NDim> &)mToolBox->itX(); }
-
     void updateGhosts() { this->mManager->updateGhosts(); }
-
-    T &get(const Looper<NDim> &itX) { return mManager->operator[](itX()); }
-
-    T get(const Looper<NDim> &itX) const { return mManager->operator[](itX()); }
 
     std::string toString() const { return mManager->getName() + "(x)"; }
 
