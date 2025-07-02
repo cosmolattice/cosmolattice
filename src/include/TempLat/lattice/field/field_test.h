@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 // #include "TempLat/lattice/algebra/gettergetoffset.h"
-#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+// #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
@@ -26,7 +26,8 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   Field<NDim, T> chi("chi", toolBox);
   Field<NDim, T> psi("psi", toolBox);
 
-  WaveNumber k(toolBox);
+  std::cout << "Layout info: " << toolBox->mLayouts.getConfigSpaceLayout() << "\n";
+
   phi.inFourierSpace();
   tdd.verify(phi.mManager->isFourierSpace());
 
@@ -37,6 +38,10 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   tdd.verify(!chi.mManager->isFourierSpace());
 
   chi = LatticeLaplacian<NDim, decltype(phi)>(phi);
+  phi.inFourierSpace() = 2;
+  // WaveNumber k(toolBox);
+  //  phi.inFourierSpace() = k.norm2(); // * RandomGaussianField<NDim, T>("Hoi", toolBox);
+  tdd.verify(phi.mManager->isFourierSpace());
 
   // phi.inFourierSpace() = k.norm2() * RandomGaussianField<NDim, T>("Hoi", toolBox);
 
@@ -65,7 +70,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
 
     size_t total_size = 1;
     std::array<size_t, NDim> extents;
-    for (uint i = 0; i < NDim; ++i) {
+    for (size_t i = 0; i < NDim; ++i) {
       extents[i] = view.extent(i);
       total_size *= extents[i];
     }
@@ -82,7 +87,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
         remainder = (remainder - cIdx[NDim - 1 - j]) / extents[NDim - 1 - j];
       }
       // std::cout << "View(";
-      // for (uint l = 0; l < NDim; ++l) {
+      // for (size_t l = 0; l < NDim; ++l) {
       //   std::cout << cIdx[l];
       //   if (l != NDim - 1) std::cout << ", ";
       // }

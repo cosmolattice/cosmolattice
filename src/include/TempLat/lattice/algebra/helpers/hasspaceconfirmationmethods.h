@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/void_t.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/util/rangeiteration/tag.h"

@@ -7,9 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <vector>
-#include <numeric>
-
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 
@@ -35,14 +32,17 @@ namespace TempLat
 
     static constexpr size_t size() { return NDim; }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t getForward(ptrdiff_t index) const { return mFromAtoB[index]; }
-
+    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t getInverse(ptrdiff_t index) const { return mFromBtoA[index]; }
 
     /** \brief Provide your forward mapping, which will be the new output of getForward. */
     template <typename T = ptrdiff_t> void setMap(const std::array<T, NDim> &input)
     {
-      mFromAtoB = input;
+      for (size_t i = 0; i < NDim; ++i)
+        mFromAtoB[i] = input[i];
+
       for (ptrdiff_t i = 0, iEnd = mFromAtoB.size(); i < iEnd; ++i) {
         if (mFromAtoB[i] < 0 || mFromAtoB[i] > iEnd - 1)
           throw TranspositionMapOutOfBounds("Your map has entries that go beyond the size of the map:", input);
@@ -50,6 +50,7 @@ namespace TempLat
       }
     }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     bool isUntransposed() const
     {
       bool untransposed = true;
@@ -59,6 +60,7 @@ namespace TempLat
       return untransposed;
     }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     bool isTransposed() const { return !isUntransposed(); }
 
     friend bool operator==(const TranspositionMap &a, const TranspositionMap &b)
@@ -78,8 +80,8 @@ namespace TempLat
 
   private:
     /* From C to D means that entry at position 0 in C is at position mFromCtoD[0] in D. */
-    std::array<ptrdiff_t, NDim> mFromAtoB;
-    std::array<ptrdiff_t, NDim> mFromBtoA;
+    Kokkos::Array<ptrdiff_t, NDim> mFromAtoB;
+    Kokkos::Array<ptrdiff_t, NDim> mFromBtoA;
 
   public:
 #ifdef TEMPLATTEST
@@ -87,9 +89,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorylayouts/transpositionmap_test.h"
-#endif
 
 #endif

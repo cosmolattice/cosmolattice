@@ -20,11 +20,11 @@ namespace TempLat
    *
    * Unit test: make test-tuplemaker
    **/
-  template <typename R, class = void_t<>> struct number_to_skip_as_tuple {
+  template <typename R, class = std::void_t<>> struct number_to_skip_as_tuple {
     static const size_t value = 0;
   };
 
-  template <typename R> struct number_to_skip_as_tuple<R, void_t<decltype(R::numberToSkipAsTuple)>> {
+  template <typename R> struct number_to_skip_as_tuple<R, std::void_t<decltype(R::numberToSkipAsTuple)>> {
     static const size_t value = R::numberToSkipAsTuple;
   };
 

@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/util/isarray.h"
 
 namespace TempLat
 {
@@ -23,18 +24,23 @@ namespace TempLat
   template <size_t _NDim> class LayoutStructGlobal
   {
   public:
-    static constexpr size_t NDim = _NDim;
     /* Put public methods here. These should change very little over time. */
-    LayoutStructGlobal(std::array<ptrdiff_t, NDim> initNGrid) : mGlobalSizes(initNGrid)
+    static constexpr size_t NDim = _NDim;
+
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    LayoutStructGlobal(const C &initNGrid)
     {
-      for (size_t i = 0; i < NDim; ++i)
+      for (size_t i = 0; i < NDim; ++i) {
+        mGlobalSizes[i] = initNGrid[i];
         mSignConversionMidpoint[i] = mGlobalSizes[i] / 2;
+      }
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    std::array<ptrdiff_t, NDim> &getGlobalSizes() { return mGlobalSizes; }
+    Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() { return mGlobalSizes; }
     KOKKOS_FORCEINLINE_FUNCTION
-    const std::array<ptrdiff_t, NDim> &getGlobalSizes() const { return mGlobalSizes; }
+    const Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() const { return mGlobalSizes; }
 
     /** returns the largest possible distance from the origin. mSignConversionMidpoint holds the
      *  maximum value of each dimension. Check that in localIndexToGlobalCoordinate.
@@ -52,16 +58,15 @@ namespace TempLat
      *  values. Assuming periodic boundary conditions, we get that always c = i > half ? i - N : i;
      *  Don't mix up the arguments! Does not do transposition, so input pre-transposed dimension!
      */
+    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t memoryIndexToSpatialCoordinate(ptrdiff_t index, ptrdiff_t dimension) const
     {
       const ptrdiff_t &tSize = mSignConversionMidpoint[dimension];
-
-      //            say << "index " << index << " -> " << globalIndexPosition << " for start " <<
-      //            mLocalStarts[dimension] << "\n";
       return index > tSize ? index - mGlobalSizes[dimension] : index;
     }
 
     /** \brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
+    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
     {
       return (position >= 0 ? position : position + mGlobalSizes[dimension]);
@@ -94,8 +99,8 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::array<ptrdiff_t, NDim> mGlobalSizes;
-    std::array<ptrdiff_t, NDim> mSignConversionMidpoint;
+    Kokkos::Array<ptrdiff_t, NDim> mGlobalSizes;
+    Kokkos::Array<ptrdiff_t, NDim> mSignConversionMidpoint;
 
   public:
 #ifdef TEMPLATTEST
@@ -103,9 +108,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorylayouts/layoutstructglobal_test.h"
-#endif
 
 #endif

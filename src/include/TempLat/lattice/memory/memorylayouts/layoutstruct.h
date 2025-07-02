@@ -5,20 +5,16 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-
-#include <Kokkos_Macros.hpp>
-#include <memory>
-#include <numeric>
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/memory/memorylayouts/hermitianpartners.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocaltransposed.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/util/isarray.h"
 
 namespace TempLat
 {
-
   MakeException(LayoutStructWrongSizeException);
   MakeException(LayoutStructOutOfBoundsException);
 
@@ -29,13 +25,16 @@ namespace TempLat
    *
    * Unit test: make test-layoutstruct
    **/
-
-  /** \brief The result holder for computeLocalSizes. It is your responsibility to set all values. */
   template <size_t NDim> struct LayoutStruct {
-    LayoutStruct(std::array<ptrdiff_t, NDim> initNGrid) : mTransposed(initNGrid), mHermitianPartners(initNGrid) {}
+
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    LayoutStruct(const C &initNGrid) : mTransposed(initNGrid), mHermitianPartners(initNGrid)
+    {
+    }
 
     /** \brief An almost constructor: return a new instance which has a default global FFT layout */
-    static LayoutStruct<NDim> createGlobalFFTLayout(std::array<ptrdiff_t, NDim> initNGrid)
+    static LayoutStruct<NDim> createGlobalFFTLayout(Kokkos::Array<ptrdiff_t, NDim> initNGrid)
     {
       LayoutStruct result(initNGrid);
       result.getGlobal().getGlobalSizes()[NDim - 1] = result.getGlobal().getGlobalSizes()[NDim - 1] / 2 + 1;
@@ -43,15 +42,20 @@ namespace TempLat
       return result;
     }
 
-    template <typename T = double> T getMaxRadius() const { return getGlobal().template getMaxRadius<T>(); }
+    template <typename T = double> KOKKOS_FORCEINLINE_FUNCTION T getMaxRadius() const
+    {
+      return getGlobal().template getMaxRadius<T>();
+    }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     bool isTransposed() const { return getTransposed().isTransposed(); }
 
     /** \brief local index in some dimension of the memory layout, goes into its corresponding spatial dimension
      *  in the target memory. No bounds checking!
      */
+    KOKKOS_FORCEINLINE_FUNCTION
     void putSpatialLocationFromMemoryIndexInto(ptrdiff_t index, ptrdiff_t memoryDimension,
-                                               std::array<ptrdiff_t, NDim> &target) const
+                                               Kokkos::Array<ptrdiff_t, NDim> &target) const
     {
       auto map = getTransposed().getSpatialLocationFromMemoryIndex(index, memoryDimension);
       target[map.atIndex] = map.withValue;
@@ -61,38 +65,44 @@ namespace TempLat
      *  coordinate to memory indices, in memory-layout order (that is,
      *  transposed, ready to be applied to `JumpsHolder::getJumpsInMemoryOrder()`.
      */
+    KOKKOS_FORCEINLINE_FUNCTION
     void putMemoryIndexFromSpatialLocationInto(ptrdiff_t position, ptrdiff_t spatialDimension,
-                                               std::array<ptrdiff_t, NDim> &target) const
+                                               Kokkos::Array<ptrdiff_t, NDim> &target) const
     {
       auto map = getTransposed().getMemoryIndexFromSpatialLocation(position, spatialDimension);
       target[map.atIndex] = map.withValue;
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    const std::array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
+    const Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
 
-    template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input)
+    template <typename C>
+      requires IsArray<C, NDim>
+    void setLocalSizes(const C &input)
     {
-      getTransposed().setLocalSizes(input);
+      for (size_t i = 0; i < NDim; ++i)
+        getLocal().getLocalSizes()[i] = input[i];
     }
 
+    Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
     KOKKOS_FORCEINLINE_FUNCTION
-    const std::array<ptrdiff_t, NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
+    const Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    const std::array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
+    const Kokkos::Array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
 
-    template <typename T = ptrdiff_t> void setLocalStarts(const std::array<T, NDim> &input)
+    template <typename T = ptrdiff_t> void setLocalStarts(const Kokkos::Array<T, NDim> &input)
     {
       getLocal().setLocalStarts(input);
     }
     KOKKOS_FORCEINLINE_FUNCTION
-    const std::array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
+    const Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
 
-    template <typename T = ptrdiff_t> void setTranspositionMap_memoryToGlobalSpace(const std::array<T, NDim> &input)
+    template <typename T = ptrdiff_t> void setTranspositionMap_memoryToGlobalSpace(const Kokkos::Array<T, NDim> &input)
     {
       getTransposed().setTranspositionMap_memoryToGlobalSpace(input);
     }
+    KOKKOS_FORCEINLINE_FUNCTION
     const auto &getTranspositionMap_memoryToGlobalSpace() const
     {
       return getTransposed().getTranspositionMap_memoryToGlobalSpace();
@@ -120,9 +130,6 @@ namespace TempLat
       return ostream;
     }
 
-    //        friend class FFTLayoutStruct;
-    //        friend class TripleStateLayouts;
-
   private:
     LayoutStructLocalTransposed<NDim> mTransposed;
     /** \brief signed wavenumber and coordinate x = index > n/2 ? index - n : index. Need to provide this n/2 for each
@@ -148,7 +155,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
 
 #endif

@@ -10,7 +10,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructglobal.h"
-#include <cstddef>
+#include "TempLat/util/isarray.h"
 
 namespace TempLat
 {
@@ -28,9 +28,12 @@ namespace TempLat
   public:
     static constexpr size_t NDim = _NDim;
 
-    LayoutStructLocal(std::array<ptrdiff_t, NDim> initNGrid)
-        : mGlobal(initNGrid), mLocalSizes(initNGrid), mLocalStarts{}
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    LayoutStructLocal(const C &initNGrid) : mGlobal(initNGrid), mLocalStarts{}
     {
+      for (size_t i = 0; i < NDim; ++i)
+        mLocalSizes[i] = initNGrid[i];
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
@@ -38,28 +41,48 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return mGlobal; }
 
-    template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input) { mLocalSizes = input; }
+    template <typename T = ptrdiff_t> void setLocalSizes(const Kokkos::Array<T, NDim> &input)
+    {
+      for (size_t i = 0; i < NDim; ++i)
+        mLocalSizes[i] = input[i];
+    }
+    template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input)
+    {
+      for (size_t i = 0; i < NDim; ++i)
+        mLocalSizes[i] = input[i];
+    }
     KOKKOS_FORCEINLINE_FUNCTION
-    std::array<ptrdiff_t, NDim> &getLocalSizes() { return mLocalSizes; }
+    Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return mLocalSizes; }
     KOKKOS_FORCEINLINE_FUNCTION
-    const std::array<ptrdiff_t, NDim> &getLocalSizes() const { return mLocalSizes; }
+    const Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() const { return mLocalSizes; }
 
-    template <typename T = ptrdiff_t> void setLocalStarts(const std::array<T, NDim> &input) { mLocalStarts = input; }
+    template <typename T = ptrdiff_t> void setLocalStarts(const Kokkos::Array<T, NDim> &input)
+    {
+      for (size_t i = 0; i < NDim; ++i)
+        mLocalStarts[i] = input[i];
+    }
+    template <typename T = ptrdiff_t> void setLocalStarts(const std::array<T, NDim> &input)
+    {
+      for (size_t i = 0; i < NDim; ++i)
+        mLocalStarts[i] = input[i];
+    }
     KOKKOS_FORCEINLINE_FUNCTION
-    std::array<ptrdiff_t, NDim> &getLocalStarts() { return mLocalStarts; }
+    Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() { return mLocalStarts; }
     KOKKOS_FORCEINLINE_FUNCTION
-    const std::array<ptrdiff_t, NDim> &getLocalStarts() const { return mLocalStarts; }
+    const Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() const { return mLocalStarts; }
 
     /** \brief For both configuration and fourier space, the index values are not the same as coordinate
      *  values. Assuming periodic boundary conditions, we get that always c = i > half ? i - N : i;
      *  Don't mix up the arguments! Does not do transposition, so input pre-transposed dimension!
      */
+    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t memoryIndexToSpatialCoordinate(ptrdiff_t index, ptrdiff_t dimension) const
     {
       return mGlobal.memoryIndexToSpatialCoordinate(index + mLocalStarts[dimension], dimension);
     }
 
     /** \brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
+    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
     {
       return mGlobal.spatialCoordinateToMemoryIndex(position, dimension) - mLocalStarts[dimension];
@@ -91,8 +114,8 @@ namespace TempLat
 
   private:
     LayoutStructGlobal<NDim> mGlobal;
-    std::array<ptrdiff_t, NDim> mLocalSizes;
-    std::array<ptrdiff_t, NDim> mLocalStarts;
+    Kokkos::Array<ptrdiff_t, NDim> mLocalSizes;
+    Kokkos::Array<ptrdiff_t, NDim> mLocalStarts;
 
   public:
 #ifdef TEMPLATTEST
@@ -100,9 +123,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorylayouts/layoutstructlocal_test.h"
-#endif
 
 #endif

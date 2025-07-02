@@ -58,7 +58,7 @@ inline void TempLat::RandomUniformTester::Test(TempLat::TDDAssertion &tdd)
   Kokkos::parallel_for(Kokkos::RangePolicy(0, 10), KOKKOS_LAMBDA(const size_t i) { a(i) = prng(i); });
   auto a_host = Kokkos::create_mirror_view(a);
   Kokkos::deep_copy(a_host, a);
-  for (uint i = 0; i < 9; ++i)
+  for (size_t i = 0; i < 9; ++i)
     tdd.verify(!AlmostEqual(a_host(i), a_host(i + 1)));
 
   // If we use the same state, and the size of the parallel region is smaller than the concurrency, all values should be

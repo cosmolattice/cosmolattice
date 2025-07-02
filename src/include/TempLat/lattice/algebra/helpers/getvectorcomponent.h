@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
@@ -18,7 +18,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which returns one component of a vector as an object, keeping all fourier and co mechanics
    *consistent. Mostly useful for wave numbers.
    *
@@ -33,7 +32,7 @@ namespace TempLat
 
     template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX... idx) const
     {
-      return GetValue::get(mR, mJ, idx...);
+      return GetValue::get(mR, idx..., mJ);
     }
 
     void doWeNeedGhosts() { GhostsHunter::apply(mR, mJ); }
@@ -74,9 +73,5 @@ namespace TempLat
     return GetVectorComponentHelper<R>(pR, i);
   }
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/getvectorcomponent_test.h"
-#endif
 
 #endif

@@ -62,7 +62,7 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
   say << "Does this look gaussian enough?\n";
   auto host_mirror = Kokkos::create_mirror_view(measure);
   Kokkos::deep_copy(host_mirror, measure);
-  for (uint i = 0; i < host_mirror.extent(0); ++i) {
+  for (size_t i = 0; i < host_mirror.extent(0); ++i) {
     const auto it = host_mirror[i];
     if (it > 0) std::cerr << std::string(it / (N / 200), '*') << "\n";
   }

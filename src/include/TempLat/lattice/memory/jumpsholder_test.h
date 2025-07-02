@@ -18,7 +18,7 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   };
 
   /* arbitrary irregular sizing */
-  std::array<ptrdiff_t, 3> nGrid{{62, 22, 24}};
+  Kokkos::Array<ptrdiff_t, 3> nGrid{{62, 22, 24}};
 
   LayoutStruct<3> layout(nGrid);
 

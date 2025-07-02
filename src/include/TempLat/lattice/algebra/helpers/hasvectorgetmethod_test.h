@@ -25,8 +25,17 @@ inline void TempLat::HasVectorGetMethodTester::Test(TempLat::TDDAssertion &tdd)
     void noGet() { std::cerr << "Hell no.\n"; }
   };
 
+  struct MyTestThree {
+    dummy vectorGet(const ptrdiff_t &i, const ptrdiff_t &j, const ptrdiff_t &k)
+    {
+      std::cerr << "Hell yeah.\n";
+      return dummy();
+    }
+  };
+
   tdd.verify(HasVectorGetMethod<MyTestOne> == true);
   tdd.verify(HasVectorGetMethod<MyTestTwo> == false);
+  tdd.verify(HasVectorGetMethod<MyTestThree> == true);
   tdd.verify(HasVectorGetMethod<int> == false);
 }
 

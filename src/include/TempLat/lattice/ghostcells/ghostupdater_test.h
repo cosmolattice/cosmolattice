@@ -66,12 +66,12 @@ namespace TempLat
             Kokkos::RangePolicy(0, nGrid),
             KOKKOS_LAMBDA(const size_t i) { view(nGhost + i) = datum<NDim>{(ptrdiff_t)i + 1}; });
       } else {
-        std::array<size_t, NDim> localSizes;
+        std::array<ptrdiff_t, NDim> localSizes;
         for (size_t k = 0; k < NDim; ++k)
           localSizes[k] = nGrid + 2 * nGhost;
         auto view = block.getNDView(localSizes);
 
-        std::array<std::pair<size_t, size_t>, NDim> slices{};
+        std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slices{};
         for (size_t k = 0; k < NDim; ++k)
           slices[k] = std::make_pair(nGhost, nGhost + nGrid);
 
@@ -94,7 +94,7 @@ namespace TempLat
     {
       std::array<ptrdiff_t, nd> gridArray{};
       std::array<ptrdiff_t, nd> gridArrayFull{};
-      for (uint i = 0; i < nd; ++i) {
+      for (size_t i = 0; i < nd; ++i) {
         gridArray[i] = nGrid;
         gridArrayFull[i] = nGrid + 2 * nGhost;
       }
@@ -145,7 +145,7 @@ namespace TempLat
       print_it(view);
 
       bool all_correct = true;
-      uint ww = 0;
+      size_t ww = 0;
       for (size_t i = 0; i < total_size; ++i) {
         // Linear index to cartesian index
         size_t lsize = 1;

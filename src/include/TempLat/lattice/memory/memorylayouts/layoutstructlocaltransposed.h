@@ -11,6 +11,7 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocal.h"
 #include "TempLat/lattice/memory/memorylayouts/transpositionmap.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -28,12 +29,15 @@ namespace TempLat
   template <size_t _NDim> class LayoutStructLocalTransposed
   {
   public:
+    /* Put public methods here. These should change very little over time. */
     static constexpr size_t NDim = _NDim;
 
-    /* Put public methods here. These should change very little over time. */
-    LayoutStructLocalTransposed(std::array<ptrdiff_t, NDim> initNGrid)
-        : mLocal(initNGrid), mSizesInMemory(mLocal.getLocalSizes())
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    LayoutStructLocalTransposed(const C &initNGrid) : mLocal(initNGrid)
     {
+      for (size_t i = 0; i < NDim; ++i)
+        mSizesInMemory[i] = mLocal.getLocalSizes()[i];
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
@@ -47,6 +51,11 @@ namespace TempLat
 
     bool isTransposed() const { return mTranspositionMap_memoryToGlobalSpace.isTransposed(); }
 
+    template <typename T = ptrdiff_t> void setLocalSizes(const Kokkos::Array<T, NDim> &input)
+    {
+      getLocal().setLocalSizes(input);
+      adaptMemorySizesFromTranspositionMap();
+    }
     template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input)
     {
       getLocal().setLocalSizes(input);
@@ -58,13 +67,14 @@ namespace TempLat
       mTranspositionMap_memoryToGlobalSpace.setMap(input);
       adaptMemorySizesFromTranspositionMap();
     }
+    KOKKOS_FORCEINLINE_FUNCTION
     const TranspositionMap<NDim> &getTranspositionMap_memoryToGlobalSpace() const
     {
       return mTranspositionMap_memoryToGlobalSpace;
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    const std::array<ptrdiff_t, NDim> &getSizesInMemory() const { return mSizesInMemory; }
+    const Kokkos::Array<ptrdiff_t, NDim> &getSizesInMemory() const { return mSizesInMemory; }
 
     /** \brief A dictionary for return values for memory to coordinate mapping. */
     struct CoordinateMapping {
@@ -73,6 +83,7 @@ namespace TempLat
 
     /** \brief With transposition, go from actual memory index in memoryDimension to spatial coordinate value at spatial
      * dimension. */
+    KOKKOS_FORCEINLINE_FUNCTION
     CoordinateMapping getSpatialLocationFromMemoryIndex(ptrdiff_t index, ptrdiff_t memoryDimension) const
     {
       CoordinateMapping result;
@@ -84,6 +95,7 @@ namespace TempLat
 
     /** \brief With transposition, go from spatial coordinate value at spatial dimension to actual memory index in
      * memoryDimension. */
+    KOKKOS_FORCEINLINE_FUNCTION
     CoordinateMapping getMemoryIndexFromSpatialLocation(ptrdiff_t position, ptrdiff_t spatialDimension) const
     {
       CoordinateMapping result;
@@ -122,7 +134,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     LayoutStructLocal<NDim> mLocal;
     TranspositionMap<NDim> mTranspositionMap_memoryToGlobalSpace;
-    std::array<ptrdiff_t, NDim> mSizesInMemory;
+    Kokkos::Array<ptrdiff_t, NDim> mSizesInMemory;
 
     void adaptMemorySizesFromTranspositionMap()
     {
@@ -139,9 +151,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorylayouts/layoutstructlocaltransposed_test.h"
-#endif
 
 #endif

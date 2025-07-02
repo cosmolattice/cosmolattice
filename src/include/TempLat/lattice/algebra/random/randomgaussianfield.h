@@ -15,13 +15,12 @@
 
 namespace TempLat
 {
-
   template <size_t NDim, std::integral... IDX>
   KOKKOS_FORCEINLINE_FUNCTION Kokkos::Array<ptrdiff_t, NDim> ndIdxToCoordinate(const LayoutStruct<NDim> &layout,
                                                                                const IDX &...idx)
   {
     Kokkos::Array<ptrdiff_t, NDim> res{(ptrdiff_t)(idx)...};
-    for (uint i = 0; i < NDim; ++i) {
+    for (size_t i = 0; i < NDim; ++i) {
       const ptrdiff_t &tSize = layout.getGlobalSizes()[i] / 2;
       res[i] += layout.getLocalStarts()[i];
       res[i] = res[i] > tSize ? res[i] - layout.getGlobalSizes()[i] : res[i];
@@ -65,14 +64,14 @@ namespace TempLat
       DimensionCountRecorder<NDim>::confirmSpace(mLayout, SpaceStateInterface<NDim>::SpaceType::Fourier);
       mRodSize = 1;
 
-      for (uint i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i) {
         mLocalStarts[i] = mLayout.getLocalStarts()[i];
         mLocalSizes[i] = mLayout.getLocalSizes()[i];
         mGlobalSizes[i] = mLayout.getGlobalSizes()[i];
       }
 
       size_t hermitian_size = 1;
-      for (uint i = 0; i < NDim - 1; ++i)
+      for (size_t i = 0; i < NDim - 1; ++i)
         hermitian_size *= mLayout.getGlobalSizes()[i];
       prng_hermitian = Util::RandomGaussian(baseSeed, hermitian_size);
     }

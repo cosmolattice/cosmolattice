@@ -66,6 +66,8 @@ namespace TempLat
       mNecessaryMemoryAllocation = computeMemSize();
     }
 
+    ptrdiff_t getNGhostCells() const { return mNGhostCells; }
+
     friend std::ostream &operator<<(std::ostream &ostream, const TripleStateLayouts &tsl)
     {
       ostream << "TripleStateLayouts:\n  nDimensions: " << NDim << "\n  nGridPoints: " << tsl.mNGridPoints
@@ -116,7 +118,7 @@ namespace TempLat
     ptrdiff_t mNecessaryMemoryAllocation;
 
     /** \brief The padding needed in configuration space when being passed to perform an FFT to Fourier space. */
-    std::vector<ptrdiff_t> mFFTConfigSpacePadding;
+    std::array<ptrdiff_t, NDim> mFFTConfigSpacePadding;
 
     JumpsHolder<NDim> mJumps_fftConfigSpace;
     JumpsHolder<NDim> mJumps_fftFourierSpace;
@@ -124,7 +126,6 @@ namespace TempLat
 
     ptrdiff_t computeMemSize()
     {
-
       mMemUsedFFTBothSpaces = mFFTLayout.getMinimalMemorySize();
 
       mMemUsedConfigGhostSpace = 1;
@@ -136,11 +137,9 @@ namespace TempLat
 
     void measureFFTPadding()
     {
-      mFFTConfigSpacePadding.resize(NDim);
-      for (size_t i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i)
         mFFTConfigSpacePadding[i] =
             std::max((ptrdiff_t)0, mFFTLayout.configurationSpace.getLocalSizes()[i] - mNGridPoints[i]);
-      }
     }
 
   public:

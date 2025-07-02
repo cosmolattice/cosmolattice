@@ -8,15 +8,28 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/void_t.h"
 
 namespace TempLat
 {
   /** \brief A concept which determines at compile time whether an object has a method `get`.
    *
    */
+  template <typename U, typename... IDX>
+  concept HasVectorGetMethodHelper = requires(U u, IDX... idx) { u.vectorGet(idx...); };
+
+  /** \brief A concept which determines at compile time whether an object has a method `get`.
+   *
+   **/
   template <class T>
-  concept HasVectorGetMethod = requires(T t, ptrdiff_t i, ptrdiff_t j) { t.vectorGet(i, j); };
+  concept HasVectorGetMethod =
+      HasVectorGetMethodHelper<T, size_t>                                                    //
+      || HasVectorGetMethodHelper<T, size_t, size_t>                                         //
+      || HasVectorGetMethodHelper<T, size_t, size_t, size_t>                                 //
+      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t>                         //
+      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t>                 //
+      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t>         //
+      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t> //
+      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t, size_t>;
 
   struct HasVectorGetMethodTester {
   public:

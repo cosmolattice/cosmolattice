@@ -13,7 +13,6 @@
 
 namespace TempLat
 {
-
   MakeException(FFTLayoutStructException);
 
   /** \brief A struct which holds two memory layouts, which are unseparable:
@@ -105,9 +104,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorylayouts/fftlayoutstruct_test.h"
-#endif
 
 #endif

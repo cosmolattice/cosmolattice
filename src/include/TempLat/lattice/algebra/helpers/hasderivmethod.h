@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio, originally by  Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/void_t.h"
 
 namespace TempLat
 {

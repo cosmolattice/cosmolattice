@@ -30,24 +30,22 @@ namespace TempLat
 
     /** \brief Getter for two instances: return type automatically determined by the type which we get by multiplying
      * one element of T with one element of S. */
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) const
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      // say<<mVectorSize<<" "<<mR.getVectorSize();
-      decltype(mR.vectorGet(i, 0) * mT.vectorGet(i, 0)) result = 0;
+      decltype(mR.vectorGet(idx..., 0) * mT.vectorGet(idx..., 0)) result = 0;
+
       /* sorry, an if-statement inside a getter function: if T and S are the same thing, let's not call its getter twice
        * (it might be an expensive algebraic operation. */
       if ((void *)&mR == (void *)&mT) {
         for (ptrdiff_t j = 0, jEnd = mVectorSize; j < jEnd; ++j) {
-          auto a = mR.vectorGet(i, j);
+          const auto a = mR.vectorGet(idx..., j);
           result += a * a;
         }
       } else {
         for (ptrdiff_t j = 0, jEnd = mVectorSize; j < jEnd; ++j) {
-          result += mR.vectorGet(i, j) * mT.vectorGet(i, j);
+          result += mR.vectorGet(idx..., j) * mT.vectorGet(idx..., j);
         }
       }
-      // say<<mVectorSize;
       return result;
     }
 

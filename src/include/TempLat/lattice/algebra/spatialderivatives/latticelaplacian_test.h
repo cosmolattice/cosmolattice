@@ -33,7 +33,7 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
 
     size_t total_size = 1;
     std::array<size_t, nd> extents;
-    for (uint i = 0; i < nd; ++i) {
+    for (size_t i = 0; i < nd; ++i) {
       extents[i] = view.extent(i);
       total_size *= extents[i];
     }
@@ -41,7 +41,7 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
     for (size_t i = 0; i < total_size; ++i) {
       std::array<size_t, nd> cIdx = get_cIdx(i, total_size, extents);
       std::cout << "View(";
-      for (uint l = 0; l < nd; ++l) {
+      for (size_t l = 0; l < nd; ++l) {
         std::cout << cIdx[l];
         if (l != nd - 1) std::cout << ", ";
       }
@@ -66,7 +66,7 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
   auto result_view = result_field.getLocalNDHostView();
   size_t total_size = 1;
   std::array<size_t, nd> extents;
-  for (uint i = 0; i < nd; ++i) {
+  for (size_t i = 0; i < nd; ++i) {
     extents[i] = result_view.extent(i);
     total_size *= extents[i];
   }

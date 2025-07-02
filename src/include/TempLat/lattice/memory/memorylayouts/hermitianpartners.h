@@ -144,10 +144,11 @@ namespace TempLat
     std::string toString() const
     {
       if (mode == HermitianPartnersMode::none) {
-        return "Default HermitianRedundancy describer (configuration space -> no hermitian symmetry).";
+        // See below
       } else if (mode == HermitianPartnersMode::fftw) {
         return "FFTW HermitianRedundancy describer.";
       }
+      return "Default HermitianRedundancy describer (configuration space -> no hermitian symmetry).";
     }
 
     friend std::ostream &operator<<(std::ostream &ostream, const HermitianPartners &hp)

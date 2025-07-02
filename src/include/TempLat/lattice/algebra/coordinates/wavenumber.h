@@ -13,6 +13,7 @@
 #include "TempLat/lattice/algebra/listoperators/vectordotter.h"
 #include "TempLat/lattice/algebra/helpers/getvectorcomponent.h"
 #include "TempLat/util/rangeiteration/tag.h"
+#include <Kokkos_Macros.hpp>
 // #include "TempLat/lattice/algebra/vector.h"
 
 namespace TempLat
@@ -26,11 +27,16 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox) {}
+    WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox)
+    {
+      mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
+    }
 
-    ptrdiff_t getVectorSize() const { return mToolBox->mNDimensions; }
+    constexpr static size_t getVectorSize() { return NDim; }
 
-    auto vectorGet(ptrdiff_t i, ptrdiff_t j) const // TODO: remove
+    template <std::integral I, std::integral... JDX>
+      requires(sizeof...(JDX) == NDim)
+    KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(const I i, const JDX... j) const
     {
       return mToolBox->getCoordFourier(i)[j];
     }
@@ -48,36 +54,10 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    LayoutStruct<NDim> mLayout;
   };
 
-  template <size_t NDim, size_t N> class FourierSite /*: public Vector*/
-  {
-  public:
-    /* Put public methods here. These should change very little over time. */
-    FourierSite(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox) {}
-
-    ptrdiff_t getVectorSize() { return mToolBox->mNDimensions; }
-
-    auto vectorGet(ptrdiff_t i, ptrdiff_t j) // TODO: remove
-    {
-      return mToolBox->getCoordFourier(i)[j];
-    }
-
-    template <int J> auto operator()(Tag<J> t) { return getVectorComponent(*this, J - 1); }
-
-    auto operator[](const ptrdiff_t &i) { return getVectorComponent(*this, i); }
-    auto norm2() { return dot(*this, *this); }
-    auto norm() { return pow(this->norm2(), 0.5); }
-
-    std::string toString(int i) const { return "k_" + std::to_string(i); };
-    std::string toString() const { return "k"; };
-
-    static constexpr size_t size = N;
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
-  };
+  template <size_t NDim> using FourierSite = WaveNumber<NDim>;
 
   struct WaveNumberTester {
 #ifdef TEMPLATTEST

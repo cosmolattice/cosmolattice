@@ -30,7 +30,7 @@ inline void TempLat::WaveNumberTester::Test(TempLat::TDDAssertion &tdd)
 
   auto kn = k.norm2() * pow<2>(0.685);
   auto knkn = kn * kn;
-  // say<<knkn.get(45);
+  say << knkn.get(1, 2, 3);
   auto kn1 = k.norm() * pow<2>(0.685);
   // say<<knkn.get(45);
   auto kn1kn1 = kn1 * kn1;

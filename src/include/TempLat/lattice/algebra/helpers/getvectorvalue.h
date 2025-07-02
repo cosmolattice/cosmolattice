@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasvectorgetmethod.h"
@@ -23,16 +23,16 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
 
-    template <typename U>
-      requires HasVectorGetMethod<U>
-    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &obj, ptrdiff_t i, ptrdiff_t j)
+    template <typename U, std::integral I, std::integral... JDX>
+      requires(HasVectorGetMethod<U> && (sizeof...(JDX) >= 1))
+    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &obj, const I &i, const JDX &...jdx)
     {
-      return obj.vectorGet(i, j);
+      return obj.vectorGet(i, jdx...);
     }
 
-    template <typename U>
-      requires(!HasVectorGetMethod<U>)
-    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &&obj, ptrdiff_t i, ptrdiff_t j)
+    template <typename U, std::integral I, std::integral... JDX>
+      requires(!HasVectorGetMethod<U> && (sizeof...(JDX) >= 1))
+    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &&obj, const I &i, const JDX &...jdx)
     {
       return GetValue::get(obj, i);
     }
