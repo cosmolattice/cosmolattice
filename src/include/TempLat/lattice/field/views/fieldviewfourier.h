@@ -166,10 +166,8 @@ namespace TempLat
         stop_iteration[d] = start_iteration[d] + localSizes[d];
       }
 
-      for (size_t d = 0; d < NDim; ++d) {
+      for (size_t d = 0; d < NDim; ++d)
         memorySizes[d] = layout.getLocalSizes()[d];
-        std::cout << "Fourier memory size for dimension " << d << ": " << memorySizes[d] << std::endl;
-      }
       mView = mManager->template getNDView<complex<T>>(memorySizes);
       mRawView = mManager->template getRawView<complex<T>>();
     }

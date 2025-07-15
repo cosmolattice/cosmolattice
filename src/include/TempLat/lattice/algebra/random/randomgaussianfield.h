@@ -129,7 +129,6 @@ namespace TempLat
           local_idx += std::get<i>(std::tie(idx...)) * dim_length;
           dim_length *= mLocalSizes[i];
         });
-        return complex<T>(1., 0.);
         return prng.getNextPair(local_idx % prng_hermitian.getPoolSize(), Real, Unitary)[0];
       } else {
         size_t hermitian_idx = 1;
@@ -139,13 +138,12 @@ namespace TempLat
           hermitian_idx += std::get<i>(std::tie(idx...)) * dim_length;
           dim_length *= mGlobalSizes[i];
         });
-        return (hermitianType == HermitianRedundancy::positivePartner)
-                   ? complex<T>(-4.0, 0.0) // precomputed_hermitian(hermitian_idx)
+        return (hermitianType == HermitianRedundancy::positivePartner) ? precomputed_hermitian(hermitian_idx)
                : (hermitianType == HermitianRedundancy::negativePartner)
-                   ? complex<T>(-3.0, 0.0) // Kokkos::conj(precomputed_hermitian(hermitian_idx))
+                   ? Kokkos::conj(precomputed_hermitian(hermitian_idx))
                : (hermitianType == HermitianRedundancy::realValued)
-                   ? complex<T>(-2.0, 0.0) // complex<T>(Kokkos::real(precomputed_hermitian(hermitian_idx)))
-                   : complex<T>(-1.0, 0.0);
+                   ? complex<T>(Kokkos::real(precomputed_hermitian(hermitian_idx)))
+                   : complex<T>(0.0, 0.0);
       }
 #endif
     }

@@ -73,14 +73,9 @@ namespace TempLat
                                               " is larger than allocated size ", mSize);
 #endif
 
-      auto sizes = localSizes;
-      for (auto &&size : sizes) {
-        size *= sizeof(R) / sizeof(T); // adjust for type size
-      }
-
       return std::apply(
           [&](auto &&...args) { return KokkosNDViewUnmanaged<NDim, R>(reinterpret_cast<R *>(mData.data()), args...); },
-          sizes);
+          localSizes);
     }
     template <typename R = T> auto getNDHostView(const std::array<ptrdiff_t, NDim> &localSizes) const
     {
@@ -94,16 +89,12 @@ namespace TempLat
 #endif
       pullHostView(); // ensure host mirror is up to date
 
-      auto sizes = localSizes;
-      for (auto &&size : sizes)
-        size *= sizeof(R) / sizeof(T); // adjust for type size
-
       return std::apply(
           [&](auto &&...args) {
             return KokkosNDViewUnmanaged<NDim, R, Kokkos::DefaultHostExecutionSpace>(
                 reinterpret_cast<R *>(mHostMirror.data()), args...);
           },
-          sizes);
+          localSizes);
     }
 
     void flagHostMirrorOutdated() const { mHostMirrorOutdated = true; }

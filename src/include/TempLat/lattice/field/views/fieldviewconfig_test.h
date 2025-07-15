@@ -15,8 +15,8 @@ template <size_t NDim, typename T> inline void TempLat::ConfigView<NDim, T>::Tes
 
   auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
 
-  Field<3, double> a("a", toolBox);
-  Field<3, double> b("b", toolBox);
+  Field<NDim, double> a("a", toolBox);
+  Field<NDim, double> b("b", toolBox);
 
   a = 100;
   b = 100;

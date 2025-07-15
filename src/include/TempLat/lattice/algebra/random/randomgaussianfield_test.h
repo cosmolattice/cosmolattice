@@ -31,15 +31,13 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
   Field<3, double> b("b", toolBox);
 
   // Get random values
-  a.inFourierSpace() = 100;
-  // a.inFourierSpace() = myField;
+  a.inFourierSpace() = myField;
 
   // test rewinding
   auto firstSeed = myField.getCurrentSeed();
-  // myField.reset(); // reset the field to the initial seed
+  myField.reset(); // reset the field to the initial seed
   // myField = RandomGaussianField<3, double>("Hello world", toolBox);
-  b.inFourierSpace() = 10;
-  //  b.inFourierSpace() = myField;
+  b.inFourierSpace() = myField;
 
   // get host views
   auto a_host = a.inFourierSpace().directView();

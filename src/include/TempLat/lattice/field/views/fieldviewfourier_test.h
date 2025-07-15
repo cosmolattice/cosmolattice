@@ -14,12 +14,11 @@
 template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   const ptrdiff_t nGrid = 4, nGhost = 1;
-  constexpr size_t nd = 2;
 
   auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
 
-  Field<nd, double> a("a", toolBox);
-  Field<nd, double> x("x", toolBox);
+  Field<NDim, double> a("a", toolBox);
+  Field<NDim, double> x("x", toolBox);
 
   a.inFourierSpace() = 100;
   x.inFourierSpace() = 100;
