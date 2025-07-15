@@ -43,7 +43,7 @@ namespace TempLat
     /** \brief Constructor with a size to allocate. */
     MemoryBlock(size_t size) : mSize(size), mHostMirrorOutdated(true)
     {
-      mData = Kokkos::View<T *, Kokkos::DefaultExecutionSpace>("MemoryBlock", mSize);
+      mData = Kokkos::View<T *, Kokkos::DefaultExecutionSpace>("MemoryBlock", ((mSize + NDim * 256) / 128) * 128);
 
       zero();
     }

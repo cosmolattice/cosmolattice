@@ -8,30 +8,29 @@
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include <atomic>
+#include <cstddef>
 #include "TempLat/lattice/field/field.h"
 
 template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   const ptrdiff_t nGrid = 4, nGhost = 1;
+  constexpr size_t nd = 2;
 
-  auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
+  auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
 
-  Field<3, double> a("a", toolBox);
-  Field<3, double> b("b", toolBox);
+  Field<nd, double> a("a", toolBox);
+  Field<nd, double> x("x", toolBox);
 
   a.inFourierSpace() = 100;
-  b.inFourierSpace() = 100;
+  x.inFourierSpace() = 100;
 
   // get host views
   auto a_host = a.inFourierSpace().directView();
-  auto b_host = b.inFourierSpace().directView();
-
-  for (size_t i = 0; i < a_host.size(); ++i)
-    std::cout << "a = " << a_host[i] << ", b = " << b_host[i] << std::endl;
+  auto x_host = x.inFourierSpace().directView();
 
   bool same = true;
   for (size_t i = 0; i < a_host.size(); ++i)
-    same = same && AlmostEqual(a_host[i], b_host[i]);
+    same = same && AlmostEqual(a_host[i], x_host[i]);
   tdd.verify(same);
 
   /*ptrdiff_t nGrid = 256, nGhost = 2;

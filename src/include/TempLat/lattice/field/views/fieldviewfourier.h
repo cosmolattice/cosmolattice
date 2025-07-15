@@ -63,6 +63,7 @@ namespace TempLat
       throw Naaaaaa;
 #endif
     }
+
     inline auto getLocalNDHostView() const
     {
       return mManager->template getNDHostSubView<complex<T>>(memorySizes, localSlicing);
@@ -76,7 +77,6 @@ namespace TempLat
       mManager->confirmFourierSpace();
 
       ConfirmSpace::apply(g, mToolBox->mLayouts.getFourierSpaceLayout(), SpaceStateInterface<NDim>::SpaceType::Fourier);
-
       GhostsHunter::apply(g);
     }
 
@@ -168,6 +168,7 @@ namespace TempLat
 
       for (size_t d = 0; d < NDim; ++d) {
         memorySizes[d] = layout.getLocalSizes()[d];
+        std::cout << "Fourier memory size for dimension " << d << ": " << memorySizes[d] << std::endl;
       }
       mView = mManager->template getNDView<complex<T>>(memorySizes);
       mRawView = mManager->template getRawView<complex<T>>();
