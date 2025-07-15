@@ -9,6 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
+#include "TempLat/util/isarray.h"
 
 namespace TempLat
 {
@@ -38,7 +39,9 @@ namespace TempLat
     ptrdiff_t getInverse(ptrdiff_t index) const { return mFromBtoA[index]; }
 
     /** \brief Provide your forward mapping, which will be the new output of getForward. */
-    template <typename T = ptrdiff_t> void setMap(const std::array<T, NDim> &input)
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    void setMap(const C &input)
     {
       for (size_t i = 0; i < NDim; ++i)
         mFromAtoB[i] = input[i];

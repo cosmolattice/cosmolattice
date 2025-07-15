@@ -57,8 +57,8 @@ namespace TempLat
         stop_iteration[d] = start_iteration[d] + localSizes[d];
       }
 
-      memorySizes = layout.getLocalSizes();
       for (size_t d = 0; d < NDim; ++d) {
+        memorySizes[d] = layout.getLocalSizes()[d];
         memorySizes[d] += padding[d][0] + padding[d][1]; // add padding to the local sizes
         localSlicing[d] = std::make_pair(padding[d][0], padding[d][0] + localSizes[d]);
       }
@@ -94,8 +94,9 @@ namespace TempLat
       mManager->setGhostsAreStale();
     }
 
-    auto getLocalNDHostView() const { return mManager->getNDHostSubView(memorySizes, localSlicing); }
-    auto getFullNDHostView() const { return mManager->getNDHostView(memorySizes); }
+    inline auto getLocalNDHostView() const { return mManager->getNDHostSubView(memorySizes, localSlicing); }
+    inline auto getFullNDHostView() const { return mManager->getNDHostView(memorySizes); }
+    inline auto directView() const { return mManager->getRawHostView(); }
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 

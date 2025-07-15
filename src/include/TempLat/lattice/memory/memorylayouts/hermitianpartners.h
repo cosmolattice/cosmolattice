@@ -10,10 +10,12 @@
 #include <vector>
 #include <cmath>
 
+#include "TempLat/util/hash/keccakhashbareclass.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianredundancy.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianvalueaccounting.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/util/isarray.h"
 
 namespace TempLat
 {
@@ -28,11 +30,14 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    KOKKOS_FUNCTION
-    HermitianPartners(std::array<ptrdiff_t, NDim> initNGrid) : mNGrid(initNGrid), mode(HermitianPartnersMode::none)
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    KOKKOS_FUNCTION HermitianPartners(const C &initNGrid) : mode(HermitianPartnersMode::none)
     {
-      for (size_t i = 0; i < NDim; ++i)
+      for (size_t i = 0; i < NDim; ++i) {
+        mNGrid[i] = initNGrid[i];
         mSignConversionMidpoint[i] = mNGrid[i] / 2;
+      }
     }
 
     /** \brief For testing purposes: track which entries in the layout carry redundant information, and if so, what

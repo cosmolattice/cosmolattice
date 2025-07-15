@@ -52,7 +52,7 @@ namespace TempLat
     size_t size() const { return mSize; }
 
     /** \brief state modify: zero out */
-    void zero() { Kokkos::deep_copy(mData, T{}); }
+    void zero() { Kokkos::deep_copy(mData, T{0}); }
 
     /** \brief access */
     KOKKOS_FORCEINLINE_FUNCTION

@@ -34,7 +34,7 @@ namespace TempLat
 
       /* for FFTW, we manually need to set the size of the last dimension to the r2c setup: 2 * (N/2 + 1). */
       auto configLocalSizes = fourierSpace.getLocalSizes();
-      configLocalSizes.back() *= 2;
+      configLocalSizes[NDim - 1] *= 2;
       configurationSpace.setLocalSizes(configLocalSizes);
       /* but not for configurationSpace.globalSizes: keep the logical layout */
     }

@@ -63,6 +63,12 @@ namespace TempLat
       throw Naaaaaa;
 #endif
     }
+    inline auto getLocalNDHostView() const
+    {
+      return mManager->template getNDHostSubView<complex<T>>(memorySizes, localSlicing);
+    }
+    inline auto getFullNDHostView() const { return mManager->template getNDHostView<complex<T>>(memorySizes); }
+    inline auto directView() const { return mManager->template getRawHostView<complex<T>>(); }
 
     template <typename R> void onBeforeAssignment(R &&g)
     {
@@ -160,7 +166,9 @@ namespace TempLat
         stop_iteration[d] = start_iteration[d] + localSizes[d];
       }
 
-      memorySizes = layout.getLocalSizes();
+      for (size_t d = 0; d < NDim; ++d) {
+        memorySizes[d] = layout.getLocalSizes()[d];
+      }
       mView = mManager->template getNDView<complex<T>>(memorySizes);
       mRawView = mManager->template getRawView<complex<T>>();
     }

@@ -8,9 +8,11 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/util/random/randomgaussian.h"
 #include "TempLat/util/tdd/tdd.h"
+#include <Kokkos_Core_fwd.hpp>
 #include <tuple>
 
 namespace TempLat
@@ -69,19 +71,40 @@ namespace TempLat
         mLocalSizes[i] = mLayout.getLocalSizes()[i];
         mGlobalSizes[i] = mLayout.getGlobalSizes()[i];
       }
+      precomputeHermitian();
+    }
 
+    void reset()
+    {
+      Kokkos::fence();
+      prng = Util::RandomGaussian(mBaseSeed);
+    }
+
+    void precomputeHermitian()
+    {
       size_t hermitian_size = 1;
       for (size_t i = 0; i < NDim - 1; ++i)
         hermitian_size *= mLayout.getGlobalSizes()[i];
-      prng_hermitian = Util::RandomGaussian(baseSeed, hermitian_size);
+      prng_hermitian = Util::RandomGaussian(mBaseSeed + "_Hermitian", hermitian_size);
+      precomputed_hermitian = Kokkos::View<complex<double> *, Kokkos::DefaultExecutionSpace>(
+          "PrecomputedHermitianRandomValues", hermitian_size);
+
+      // Fill the precomputed hermitian values.
+      Kokkos::parallel_for(
+          Kokkos::RangePolicy(0, precomputed_hermitian.size()), KOKKOS_CLASS_LAMBDA(const size_t idx) {
+            const auto pair = prng_hermitian.getNextPair(idx, Real, Unitary);
+            precomputed_hermitian(idx).imag() = pair[0];
+            precomputed_hermitian(idx).real() = pair[1];
+          });
     }
+
+    Kokkos::View<complex<double> *, Kokkos::DefaultExecutionSpace> precomputed_hermitian;
 
     template <std::integral... IDX>
       requires(sizeof...(IDX) == NDim)
     KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> global_coord = ndIdxToCoordinate(mLayout, idx...);
-      return global_coord[NDim - 1];
       Kokkos::Array<ptrdiff_t, NDim> hermitianPartner;
 
       auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners().putHermitianPartner(
@@ -106,6 +129,7 @@ namespace TempLat
           local_idx += std::get<i>(std::tie(idx...)) * dim_length;
           dim_length *= mLocalSizes[i];
         });
+        return complex<T>(1., 0.);
         return prng.getNextPair(local_idx % prng_hermitian.getPoolSize(), Real, Unitary)[0];
       } else {
         size_t hermitian_idx = 1;
@@ -115,7 +139,13 @@ namespace TempLat
           hermitian_idx += std::get<i>(std::tie(idx...)) * dim_length;
           dim_length *= mGlobalSizes[i];
         });
-        return 1;
+        return (hermitianType == HermitianRedundancy::positivePartner)
+                   ? complex<T>(-4.0, 0.0) // precomputed_hermitian(hermitian_idx)
+               : (hermitianType == HermitianRedundancy::negativePartner)
+                   ? complex<T>(-3.0, 0.0) // Kokkos::conj(precomputed_hermitian(hermitian_idx))
+               : (hermitianType == HermitianRedundancy::realValued)
+                   ? complex<T>(-2.0, 0.0) // complex<T>(Kokkos::real(precomputed_hermitian(hermitian_idx)))
+                   : complex<T>(-1.0, 0.0);
       }
 #endif
     }

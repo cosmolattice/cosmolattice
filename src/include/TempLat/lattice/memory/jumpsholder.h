@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <cmath>
+#include <cstddef>
 
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/parallel/mpi/comm/mpicommreference.h"
@@ -39,8 +40,11 @@ namespace TempLat
      * for example 2, for complex pairs.
      */
     JumpsHolder(LayoutStruct<NDim> layout, std::array<std::array<ptrdiff_t, 2u>, NDim> padding, ptrdiff_t atomSize = 1)
-        : mLayout(layout), mSizesInMemory(mLayout.getSizesInMemory()), mPadding(padding), mIsEmpty(false)
+        : mLayout(layout), mPadding(padding), mIsEmpty(false)
     {
+      for (size_t i = 0; i < NDim; ++i) {
+        mSizesInMemory[i] = mLayout.getSizesInMemory()[i];
+      }
       // if (mSizesInMemory.size() != padding.size())
       //   throw JumpsHolderException("Different sizes for layout and padding:", mSizesInMemory.size(),
       //                              "!=", padding.size());

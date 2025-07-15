@@ -7,11 +7,13 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include "TempLat/lattice/field/field.h"
+
 inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* test the stability of the getter at various coordinates. */
 
-  ptrdiff_t nGrid = 32, nGhost = 1;
+  ptrdiff_t nGrid = 4, nGhost = 1;
 
   auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
   RandomGaussianField<3, double> myField("Hello world", toolBox);
@@ -25,27 +27,29 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
   //
   //    say << myField.getNDimensions() << " dimensions detected.\n";
 
-  Kokkos::View<complex<double> *> a("a", 10);
-  Kokkos::View<complex<double> *> b("b", 10);
-  auto a_host = Kokkos::create_mirror_view(a);
-  auto b_host = Kokkos::create_mirror_view(b);
+  Field<3, double> a("a", toolBox);
+  Field<3, double> b("b", toolBox);
 
-  Kokkos::parallel_for(
-      Kokkos::RangePolicy(0, a.size()), KOKKOS_LAMBDA(const size_t i) { a[i] = myField.get(0, 0, i); });
-
-  auto firstSeed = myField.getCurrentSeed();
+  // Get random values
+  a.inFourierSpace() = 100;
+  // a.inFourierSpace() = myField;
 
   // test rewinding
-  Kokkos::parallel_for(
-      Kokkos::RangePolicy(0, a.size()), KOKKOS_LAMBDA(const size_t i) { b[i] = myField.get(0, 0, i); });
-  Kokkos::deep_copy(a_host, a);
-  Kokkos::deep_copy(b_host, b);
+  auto firstSeed = myField.getCurrentSeed();
+  // myField.reset(); // reset the field to the initial seed
+  // myField = RandomGaussianField<3, double>("Hello world", toolBox);
+  b.inFourierSpace() = 10;
+  //  b.inFourierSpace() = myField;
 
-  for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i)
+  // get host views
+  auto a_host = a.inFourierSpace().directView();
+  auto b_host = b.inFourierSpace().directView();
+
+  for (size_t i = 0; i < a_host.size(); ++i)
     std::cout << "a = " << a_host[i] << ", b = " << b_host[i] << std::endl;
 
   bool rewindingWorks = true;
-  for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i)
+  for (size_t i = 0; i < a_host.size(); ++i)
     rewindingWorks = rewindingWorks && AlmostEqual(a_host[i], b_host[i]);
   tdd.verify(rewindingWorks);
   tdd.verify(firstSeed == myField.getCurrentSeed());

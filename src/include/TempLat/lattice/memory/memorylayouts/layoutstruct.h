@@ -34,7 +34,9 @@ namespace TempLat
     }
 
     /** \brief An almost constructor: return a new instance which has a default global FFT layout */
-    static LayoutStruct<NDim> createGlobalFFTLayout(Kokkos::Array<ptrdiff_t, NDim> initNGrid)
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    static LayoutStruct<NDim> createGlobalFFTLayout(const C &initNGrid)
     {
       LayoutStruct result(initNGrid);
       result.getGlobal().getGlobalSizes()[NDim - 1] = result.getGlobal().getGlobalSizes()[NDim - 1] / 2 + 1;
@@ -91,14 +93,18 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
 
-    template <typename T = ptrdiff_t> void setLocalStarts(const Kokkos::Array<T, NDim> &input)
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    void setLocalStarts(const C &input)
     {
       getLocal().setLocalStarts(input);
     }
     KOKKOS_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
 
-    template <typename T = ptrdiff_t> void setTranspositionMap_memoryToGlobalSpace(const Kokkos::Array<T, NDim> &input)
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    void setTranspositionMap_memoryToGlobalSpace(const C &input)
     {
       getTransposed().setTranspositionMap_memoryToGlobalSpace(input);
     }

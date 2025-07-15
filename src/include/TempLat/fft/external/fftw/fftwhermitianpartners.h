@@ -32,7 +32,9 @@ namespace TempLat
   {
   public:
     /** \brief Construct a std::shared_ptr to a new instance. */
-    static HermitianPartners<NDim> create(const std::array<ptrdiff_t, NDim> &globalSizes)
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    static HermitianPartners<NDim> create(const C &globalSizes)
     {
       auto instance = HermitianPartners<NDim>(globalSizes);
       instance.setMode(HermitianPartnersMode::fftw);

@@ -49,12 +49,6 @@ namespace TempLat
       operator=(1 * other);
     }
 
-    inline auto directView()
-    {
-      mManager->confirmConfigSpace();
-      return mManager->getRawHostView();
-    }
-
     FourierView<NDim, T> &inFourierSpace()
     {
       mManager->confirmFourierSpace();

@@ -49,6 +49,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     bool isTransposed() const { return mTranspositionMap_memoryToGlobalSpace.isTransposed(); }
 
     template <typename T = ptrdiff_t> void setLocalSizes(const Kokkos::Array<T, NDim> &input)
@@ -62,7 +63,9 @@ namespace TempLat
       adaptMemorySizesFromTranspositionMap();
     }
 
-    template <typename T = ptrdiff_t> void setTranspositionMap_memoryToGlobalSpace(const std::array<T, NDim> &input)
+    template <typename C = std::array<ptrdiff_t, NDim>>
+      requires IsArray<C, NDim>
+    void setTranspositionMap_memoryToGlobalSpace(const C &input)
     {
       mTranspositionMap_memoryToGlobalSpace.setMap(input);
       adaptMemorySizesFromTranspositionMap();

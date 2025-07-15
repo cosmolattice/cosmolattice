@@ -114,8 +114,9 @@ namespace TempLat
 
       MemoryBlock<NDim, double> temp(layout.getMinimalMemorySize());
 
-      std::vector<int> globalSizes_INT(layout.configurationSpace.getGlobalSizes().begin(),
-                                       layout.configurationSpace.getGlobalSizes().end());
+      std::vector<int> globalSizes_INT(layout.configurationSpace.getGlobalSizes().size());
+      for (size_t i = 0; i < layout.configurationSpace.getGlobalSizes().size(); ++i)
+        globalSizes_INT[i] = (int)layout.configurationSpace.getGlobalSizes()[i];
 
       auto c2r =
 #ifndef NOMPI
