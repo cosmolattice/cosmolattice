@@ -190,8 +190,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/field/views/fieldviewfourier_test.h"
-#endif
-
 #endif

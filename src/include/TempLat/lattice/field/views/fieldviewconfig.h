@@ -220,8 +220,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/field/views/fieldviewconfig_test.h"
-#endif
-
 #endif

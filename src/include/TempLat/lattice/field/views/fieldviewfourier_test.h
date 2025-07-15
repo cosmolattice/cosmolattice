@@ -5,12 +5,34 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include <atomic>
+#include "TempLat/lattice/field/field.h"
 
 template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
+  const ptrdiff_t nGrid = 4, nGhost = 1;
+
+  auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
+
+  Field<3, double> a("a", toolBox);
+  Field<3, double> b("b", toolBox);
+
+  a.inFourierSpace() = 100;
+  b.inFourierSpace() = 100;
+
+  // get host views
+  auto a_host = a.inFourierSpace().directView();
+  auto b_host = b.inFourierSpace().directView();
+
+  for (size_t i = 0; i < a_host.size(); ++i)
+    std::cout << "a = " << a_host[i] << ", b = " << b_host[i] << std::endl;
+
+  bool same = true;
+  for (size_t i = 0; i < a_host.size(); ++i)
+    same = same && AlmostEqual(a_host[i], b_host[i]);
+  tdd.verify(same);
 
   /*ptrdiff_t nGrid = 256, nGhost = 2;
 
@@ -33,11 +55,11 @@ template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Te
     that we don't overwrite another thread's failure. */
   /*bool expected = true;
   lastDimPositiveDefinite.compare_exchange_weak(expected, localSuccess);
-//        say << offset << " localSuccess: " << localSuccess << " pIterCoords[2]: " << pIterCoords[2] << "\n";
+  //        say << offset << " localSuccess: " << localSuccess << " pIterCoords[2]: " << pIterCoords[2] << "\n";
   return localSuccess;
-});
+  });
 
-tdd.verify(lastDimPositiveDefinite == true);*/
+  tdd.verify(lastDimPositiveDefinite == true);*/
 }
 
 #endif
