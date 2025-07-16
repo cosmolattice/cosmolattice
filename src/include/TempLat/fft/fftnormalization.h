@@ -126,6 +126,8 @@ namespace TempLat
         apply_unrolled<2>(block_view, norm);
         break;
       }
+
+      mBlock.pushHostView();
     }
 
     template <ptrdiff_t BLOCKSIZE, typename T, typename View> inline void apply_unrolled(View &view, T norm)

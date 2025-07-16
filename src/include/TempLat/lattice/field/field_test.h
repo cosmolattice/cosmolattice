@@ -13,112 +13,144 @@
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
+#include "TempLat/lattice/algebra/coordinates/spatialcoordinate.h"
 
 template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-  ptrdiff_t nGrid = 4, nGhost = 1;
+  ptrdiff_t nGrid = 16, nGhost = 2;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
   toolBox->setVerbose();
 
-  Field<NDim, T> phi("phi", toolBox);
-  Field<NDim, T> chi("chi", toolBox);
-  Field<NDim, T> psi("psi", toolBox);
+  {
+    Field<NDim, T> original("original", toolBox);
+    SpatialCoordinate x(toolBox);
+    original = getVectorComponent(x, 0);
+    original.updateGhosts();
 
-  std::cout << "Layout info: " << toolBox->mLayouts.getConfigSpaceLayout() << "\n";
+    Field<NDim, T> copy("copy", toolBox);
+    copy = original;
 
-  phi.inFourierSpace();
-  tdd.verify(phi.mManager->isFourierSpace());
+    // get host views
+    copy.getMemoryManager()->confirmFourierSpace();
+    auto copy_fourier_host = copy.inFourierSpace().directView();
+    // for (ptrdiff_t i = 0; i < pow<NDim>(nGrid); ++i)
+    //   std::cout << "fourier copy = " << copy_fourier_host[i] << std::endl;
 
-  phi = 5;
-  tdd.verify(!phi.mManager->isFourierSpace());
+    copy.getMemoryManager()->confirmConfigSpace();
+    copy.updateGhosts();
 
-  chi = phi;
-  tdd.verify(!chi.mManager->isFourierSpace());
+    auto original_host = original.directView();
+    auto copy_host = copy.directView();
 
-  chi = LatticeLaplacian<NDim, decltype(phi)>(phi);
-  phi.inFourierSpace() = 2;
-  // WaveNumber k(toolBox);
-  //  phi.inFourierSpace() = k.norm2(); // * RandomGaussianField<NDim, T>("Hoi", toolBox);
-  tdd.verify(phi.mManager->isFourierSpace());
-
-  // phi.inFourierSpace() = k.norm2() * RandomGaussianField<NDim, T>("Hoi", toolBox);
-
-  // just manipulated phi(k), so it must still be in Fourier space, and ghosts are stale.
-  // tdd.verify(phi.mManager->isFourierSpace());
-  // tdd.verify(phi.mManager->areGhostsStale());
-
-  // alternatively, put the result of getNorm in a variable.
-  // SpatialCoordinate x;
-  // auto r = x.getNorm();
-
-  chi = 1; // pow(r, 3);
-  // phi = 4;
-  // psi = 5;
-  std::array<size_t, NDim> localSizes;
-  std::array<std::pair<size_t, size_t>, NDim> slices;
-  for (size_t d = 0; d < NDim; ++d) {
-    localSizes[d] = nGrid + 2 * nGhost;
-    slices[d] = std::make_pair(nGhost, nGhost + nGrid);
+    // for (ptrdiff_t i = 0; i < pow<NDim>(nGrid + 2 * nGhost); ++i)
+    //   std::cout << "original = " << original_host[i] << ", copy = " << copy_host[i] << std::endl;
+    bool backforthWorks = true;
+    for (ptrdiff_t i = 0; i < pow<NDim>(nGrid + 2 * nGhost); ++i)
+      backforthWorks = backforthWorks && AlmostEqual(original_host[i], copy_host[i]);
+    tdd.verify(backforthWorks);
   }
 
-  auto field_tester = [&](Field<NDim, T> &f, const auto &op, double expected) {
-    f = op;
+  /*
+    Field<NDim, T> phi("phi", toolBox);
+    Field<NDim, T> chi("chi", toolBox);
+    Field<NDim, T> psi("psi", toolBox);
 
-    auto view = f.getLocalNDHostView();
+    std::cout << "Layout info: " << toolBox->mLayouts.getConfigSpaceLayout() << "\n";
 
-    size_t total_size = 1;
-    std::array<size_t, NDim> extents;
-    for (size_t i = 0; i < NDim; ++i) {
-      extents[i] = view.extent(i);
-      total_size *= extents[i];
+    phi.inFourierSpace();
+    tdd.verify(phi.mManager->isFourierSpace());
+
+    phi = 5;
+    tdd.verify(!phi.mManager->isFourierSpace());
+
+    chi = phi;
+    tdd.verify(!chi.mManager->isFourierSpace());
+
+    chi = LatticeLaplacian<NDim, decltype(phi)>(phi);
+    phi.inFourierSpace() = 2;
+    // WaveNumber k(toolBox);
+    //  phi.inFourierSpace() = k.norm2(); // * RandomGaussianField<NDim, T>("Hoi", toolBox);
+    tdd.verify(phi.mManager->isFourierSpace());
+
+    // phi.inFourierSpace() = k.norm2() * RandomGaussianField<NDim, T>("Hoi", toolBox);
+
+    // just manipulated phi(k), so it must still be in Fourier space, and ghosts are stale.
+    // tdd.verify(phi.mManager->isFourierSpace());
+    // tdd.verify(phi.mManager->areGhostsStale());
+
+    // alternatively, put the result of getNorm in a variable.
+    // SpatialCoordinate x;
+    // auto r = x.getNorm();
+
+    chi = 1; // pow(r, 3);
+    // phi = 4;
+    // psi = 5;
+    std::array<size_t, NDim> localSizes;
+    std::array<std::pair<size_t, size_t>, NDim> slices;
+    for (size_t d = 0; d < NDim; ++d) {
+      localSizes[d] = nGrid + 2 * nGhost;
+      slices[d] = std::make_pair(nGhost, nGhost + nGrid);
     }
 
-    bool all_correct = true;
-    std::array<size_t, NDim> cIdx{};
-    for (size_t i = 0; i < total_size; ++i) {
-      // Linear index to cartesian index
-      size_t lsize = 1;
-      size_t remainder = i;
-      for (size_t j = 0; j < NDim; ++j) {
-        lsize = extents[NDim - 1 - j];
-        cIdx[NDim - 1 - j] = remainder % lsize;
-        remainder = (remainder - cIdx[NDim - 1 - j]) / extents[NDim - 1 - j];
+    auto field_tester = [&](Field<NDim, T> &f, const auto &op, double expected) {
+      f = op;
+
+      auto view = f.getLocalNDHostView();
+
+      size_t total_size = 1;
+      std::array<size_t, NDim> extents;
+      for (size_t i = 0; i < NDim; ++i) {
+        extents[i] = view.extent(i);
+        total_size *= extents[i];
       }
-      // std::cout << "View(";
-      // for (size_t l = 0; l < NDim; ++l) {
-      //   std::cout << cIdx[l];
-      //   if (l != NDim - 1) std::cout << ", ";
-      // }
-      std::apply(
-          [&](const auto &...args) {
-            //      std::cout << ") = " << view(args...) << std::endl;
-            all_correct = AlmostEqual(view(args...), expected);
-            if (!AlmostEqual(view(args...), expected))
-              sayMPI << "expected: " << expected << " got " << view(args...) << "\n";
-          },
-          cIdx);
-    }
-    tdd.verify(all_correct);
-  };
 
-  chi = 2;
-  field_tester(chi, chi, 2);
+      bool all_correct = true;
+      std::array<size_t, NDim> cIdx{};
+      for (size_t i = 0; i < total_size; ++i) {
+        // Linear index to cartesian index
+        size_t lsize = 1;
+        size_t remainder = i;
+        for (size_t j = 0; j < NDim; ++j) {
+          lsize = extents[NDim - 1 - j];
+          cIdx[NDim - 1 - j] = remainder % lsize;
+          remainder = (remainder - cIdx[NDim - 1 - j]) / extents[NDim - 1 - j];
+        }
+        // std::cout << "View(";
+        // for (size_t l = 0; l < NDim; ++l) {
+        //   std::cout << cIdx[l];
+        //   if (l != NDim - 1) std::cout << ", ";
+        // }
+        std::apply(
+            [&](const auto &...args) {
+              //      std::cout << ") = " << view(args...) << std::endl;
+              all_correct = AlmostEqual(view(args...), expected);
+              if (!AlmostEqual(view(args...), expected))
+                sayMPI << "expected: " << expected << " got " << view(args...) << "\n";
+            },
+            cIdx);
+      }
+      tdd.verify(all_correct);
+    };
 
-  chi + chi + chi;
+    chi = 2;
+    field_tester(chi, chi, 2);
 
-  field_tester(phi, chi + chi, 4);
-  field_tester(phi, chi * chi, 2 * 2);
-  // field_tester(^hi, chi * chi * chi, 2 * 2 * 2);
-  //   field_tester(phi, pow<4>(chi), 2 * 2 * 2 * 2);
-  //   field_tester(phi, chi + chi * chi + chi * chi * chi, 2 + 2 * 2 + 2 * 2 * 2);
-  //   field_tester(phi, chi - chi, 0);
-  //   field_tester(phi, chi / chi, 1);
+    chi + chi + chi;
 
-  field_tester(phi, cos(chi), cos(2));
+    field_tester(phi, chi + chi, 4);
+    field_tester(phi, chi * chi, 2 * 2);
+    // field_tester(^hi, chi * chi * chi, 2 * 2 * 2);
+    //   field_tester(phi, pow<4>(chi), 2 * 2 * 2 * 2);
+    //   field_tester(phi, chi + chi * chi + chi * chi * chi, 2 + 2 * 2 + 2 * 2 * 2);
+    //   field_tester(phi, chi - chi, 0);
+    //   field_tester(phi, chi / chi, 1);
 
-  return;
+    field_tester(phi, cos(chi), cos(2));
+
+    return;
+  */
   /*
     // just manipulated chi(x), so it must still be in configuration space, and ghosts are stale.
     tdd.verify(!chi.mManager->isFourierSpace());

@@ -8,5 +8,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Field<2, double>> test;
+  TempLat::TDDContainer<TempLat::Field<3, double>> test;
 }

@@ -80,7 +80,7 @@ namespace TempLat
     void operator()(M<NDim, T, Args...> &obj)
     {
       // Timer timer;
-      if constexpr (NDim > 1) bustTheGhostsWithViews(obj);
+      bustTheGhostsWithViews(obj);
       // std::cout << "GhostBuster took " << timer << std::endl;
     }
 
@@ -108,9 +108,6 @@ namespace TempLat
 
     template <typename T> void bustTheGhostsWithViews(MemoryBlock<NDim, T> &block)
     {
-      // this method should be never instantiated for NDim == 1
-      static_assert(NDim > 1);
-
       const auto from_padding = mFrom.getPadding();
       const auto to_padding = mTo.getPadding();
       const auto from_sizes = mFrom.getSizesInMemory();
@@ -123,8 +120,9 @@ namespace TempLat
         from_full_sizes[i] = from_padding[i][0] + from_sizes[i] + from_padding[i][1];
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
       }
-      auto fromView = block.getNDView(from_full_sizes);
-      auto toView = block.getNDView(to_full_sizes);
+
+      auto fromView = block.template getNDView<T>(from_full_sizes);
+      auto toView = block.template getNDView<T>(to_full_sizes);
 
       using LayoutType = typename decltype(fromView)::array_layout;
 
@@ -142,19 +140,23 @@ namespace TempLat
         slicesFrom[to_i] = std::make_pair(from_padding[i][0], from_padding[i][0] + from_sizes[i]);
         slicesTo[to_i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
       }
+
+      // say << "GhostBuster: Padding is " << from_padding << " to " << to_padding << ", sizes are " << from_sizes
+      //           << " to " << to_sizes << std::endl;
       auto fromSubView =
           std::apply([&](const auto &...args) { return Kokkos::subview(fromView, args...); }, slicesFrom);
       auto toSubView = std::apply([&](const auto &...args) { return Kokkos::subview(toView, args...); }, slicesTo);
 
       // sanity check: the sizes of the subviews should match,
       // except for the last dimension, which can be padded for the FFT
-      for (size_t i = 0; i < NDim - 1; ++i) {
-        if (fromSubView.extent(i) != toSubView.extent(i)) {
-          throw GhostBusterBoundsException("GhostBuster: Subview sizes in dimension ", i,
-                                           " do not match after padding: ", fromSubView.extent(i),
-                                           " != ", toSubView.extent(i));
+      if constexpr (NDim > 1)
+        for (size_t i = 0; i < NDim - 1; ++i) {
+          if (fromSubView.extent(i) != toSubView.extent(i)) {
+            throw GhostBusterBoundsException("GhostBuster: Subview sizes in dimension ", i,
+                                             " do not match after padding: ", fromSubView.extent(i),
+                                             " != ", toSubView.extent(i));
+          }
         }
-      }
 
       std::array<ptrdiff_t, NDim> copy_sizes{};
       for (size_t i = 0; i < NDim; ++i)
@@ -167,9 +169,10 @@ namespace TempLat
         // - thus have to start moving from the end of from (we expand the memory)
         // - we can move blocks of the smallest dimension (i.e. last dimension) first, and then
         //   go to the larger dimensions.
-        for (size_t i = 0; i < NDim - 1; ++i) {
-          curIdx[i] = fromSubView.extent(i) - 1; // start from the last index in each dimension
-        }
+        if constexpr (NDim > 1)
+          for (size_t i = 0; i < NDim - 1; ++i) {
+            curIdx[i] = fromSubView.extent(i) - 1; // start from the last index in each dimension
+          }
         // std::cout << "Starting from the end of the from view: " << curIdx << std::endl;
       } else {
         // if we are moving in the positive direction, we
@@ -186,22 +189,31 @@ namespace TempLat
 
         // iterate over all "large indices"
         bool hasNext = true;
-        while (hasNext) {
-          // copy to the temporary
+        if constexpr (NDim > 1) {
+          while (hasNext) {
+            // copy to the temporary
+            Kokkos::parallel_for(
+                Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
+                KOKKOS_LAMBDA(const size_t i) {
+                  std::apply([&](const auto &...args) { temp(i) = fromSubView(args..., i); }, curIdx);
+                });
+            // copy from the temporary to the destination
+            Kokkos::parallel_for(
+                Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
+                KOKKOS_LAMBDA(const size_t i) {
+                  std::apply([&](const auto &...args) { toSubView(args..., i) = temp(i); }, curIdx);
+                });
+            // Check if we have a next index to go to
+            hasNext =
+                (mDirection < 0) ? lowerDimN(NDim - 2, curIdx, copy_sizes) : raiseDimN(NDim - 2, curIdx, copy_sizes);
+          }
+        } else if constexpr (NDim == 1) {
           Kokkos::parallel_for(
-              Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
-              KOKKOS_LAMBDA(const size_t i) {
-                std::apply([&](const auto &...args) { temp(i) = fromSubView(args..., i); }, curIdx);
-              });
-          // copy from the temporary to the destination
+              Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[0]),
+              KOKKOS_LAMBDA(const size_t i) { temp(i) = fromSubView(i); });
           Kokkos::parallel_for(
-              Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
-              KOKKOS_LAMBDA(const size_t i) {
-                std::apply([&](const auto &...args) { toSubView(args..., i) = temp(i); }, curIdx);
-              });
-          // Check if we have a next index to go to
-          hasNext =
-              (mDirection < 0) ? lowerDimN(NDim - 2, curIdx, copy_sizes) : raiseDimN(NDim - 2, curIdx, copy_sizes);
+              Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[0]),
+              KOKKOS_LAMBDA(const size_t i) { toSubView(i) = temp(i); });
         }
       } else {
         throw GhostBusterOrderException("GhostBuster only works for memory layouts with LayoutRight, not with this");
@@ -209,6 +221,7 @@ namespace TempLat
 
       // We need the fence only at the very end, as consecutive kernel launches happen in order.
       Kokkos::fence();
+      block.flagHostMirrorOutdated();
     }
 
   private:

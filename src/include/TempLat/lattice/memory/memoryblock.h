@@ -52,7 +52,13 @@ namespace TempLat
     size_t size() const { return mSize; }
 
     /** \brief state modify: zero out */
-    void zero() { Kokkos::deep_copy(mData, T{0}); }
+    void zero() { fill(T{0}); }
+
+    void fill(const T &value)
+    {
+      Kokkos::deep_copy(mData, value);
+      mHostMirrorOutdated = true; // mark host mirror as outdated
+    }
 
     /** \brief access */
     KOKKOS_FORCEINLINE_FUNCTION
@@ -128,7 +134,7 @@ namespace TempLat
       if constexpr (std::is_same_v<R, T>)
         return mData;
       else {
-        const size_t size = mData.size() * sizeof(T) / sizeof(R);
+        const size_t size = mSize * sizeof(T) / sizeof(R);
         return KokkosNDViewUnmanaged<1, R, Kokkos::DefaultExecutionSpace>(reinterpret_cast<R *>(mData.data()), size);
       }
     }
@@ -139,7 +145,7 @@ namespace TempLat
       if constexpr (std::is_same_v<R, T>)
         return mHostMirror;
       else {
-        const size_t size = mData.size() * sizeof(T) / sizeof(R);
+        const size_t size = mSize * sizeof(T) / sizeof(R);
         return KokkosNDViewUnmanaged<1, R, Kokkos::DefaultHostExecutionSpace>(reinterpret_cast<R *>(mHostMirror.data()),
                                                                               size);
       }
@@ -161,6 +167,17 @@ namespace TempLat
     friend std::ostream &operator<<(std::ostream &ostream, const MemoryBlock &mb)
     {
       ostream << "Memory Block. Size: " << mb.mSize << ", allocated: " << mb.mData.is_allocated() << "\n";
+      if (mb.mSize < 64)
+        ostream << "Data: \n";
+      else
+        ostream << "Data (first 64 elements): \n";
+      auto data = mb.getRawHostView();
+      mb.flagHostMirrorOutdated();
+      for (size_t i = 0; i < std::min(64, (int)mb.mSize); ++i) {
+        if (i > 0) ostream << ", ";
+        ostream << data(i);
+      }
+      ostream << "\n";
       return ostream;
     }
 

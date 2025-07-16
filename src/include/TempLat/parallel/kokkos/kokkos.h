@@ -75,7 +75,7 @@ namespace TempLat
   {
   public:
     KokkosTest() {}
-    static inline void Test(TDDAssertion &tdd);
+    template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
   };
 #endif
 } // namespace TempLat

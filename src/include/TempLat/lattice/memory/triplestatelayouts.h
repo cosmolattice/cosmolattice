@@ -37,14 +37,16 @@ namespace TempLat
     {
       measureFFTPadding();
 
-      std::array<std::array<ptrdiff_t, 2u>, NDim> tmpPadding{};
-
       /** FFT's memory layouts are given to us. Construct jumps without padding. */
       mJumps_fftFourierSpace =
-          JumpsHolder<NDim>(mFFTLayout.fourierSpace, tmpPadding, 1
+          JumpsHolder<NDim>(mFFTLayout.fourierSpace, {{}}, 1
                             /*2 atom size: complex! Ah, no, actually moved to pointers to std::complex, which is the
                                atom now. So back to atom size 1 std::complex, as opposed to 2 double/float. */
           );
+
+      std::array<std::array<ptrdiff_t, 2u>, NDim> tmpPadding{};
+      // FFT padding for in-place c2r r2c (see https://fftw.org/fftw3_doc/Multi_002dDimensional-DFTs-of-Real-Data.html)
+      tmpPadding[NDim - 1][1] = 2;
 
       /** FFT's memory layouts are given to us. Construct jumps without padding. */
       mJumps_fftConfigSpace = JumpsHolder<NDim>(mFFTLayout.configurationSpace, tmpPadding);

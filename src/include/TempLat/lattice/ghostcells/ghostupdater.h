@@ -160,7 +160,6 @@ namespace TempLat
                   View(padding[0][0] + sizes[0] + (depth - 1)) = View(padding[0][0] + (depth - 1));
                 });
           } else {
-
             // so we copy a (NDim- 1)-dimensional slice. Include the padding, which leads to a copy of all corners, too!
             for (size_t i = 0; i < NDim; ++i) {
               btf_slicesFrom[i] =

@@ -24,17 +24,39 @@ namespace TempLat
 
   template <size_t NDim> class SpatialCoordinate : public CoordinateVector<NDim>
   {
+    Kokkos::Array<ptrdiff_t, NDim> mPadding;
+
   public:
     /* Put public methods here. These should change very little over time. */
-    SpatialCoordinate(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox) {}
+    SpatialCoordinate(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox)
+    {
+      auto configSpaceJumps = mToolBox->mLayouts.getConfigSpaceJumps();
+      for (size_t d = 0; d < NDim; ++d)
+        mPadding[d] = configSpaceJumps.getPadding()[d][0];
+    }
 
     ptrdiff_t getVectorSize() { return mToolBox->mNDimensions; }
 
+    // usage: f(input1, input2, input3, output);
+
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    {
+      return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
+    }
+
+    template <std::integral... IDX, size_t... InputIndexes>
+    KOKKOS_FORCEINLINE_FUNCTION auto get_impl(std::tuple<const IDX &...> allIdx,
+                                              std::index_sequence<InputIndexes...>) const
+    {
+      auto constexpr lastIdx = sizeof...(IDX) - 1;
+      return get_impl(std::get<lastIdx>(allIdx), std::get<InputIndexes>(allIdx)...);
+    }
+
     template <std::integral IDX1, std::integral... IDX>
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX1 component, const IDX &...idx) const
+    KOKKOS_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
     {
       using type = decltype(component * (idx * ...));
-      return (Kokkos::Array<type, sizeof...(IDX)>{{idx...}}[component]);
+      return Kokkos::Array<type, sizeof...(IDX)>{{(static_cast<type>(idx))...}}[component] - mPadding[component] + 1;
     }
 
     auto operator[](const ptrdiff_t &i) { return get(*this, i); }

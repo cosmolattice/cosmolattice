@@ -39,18 +39,6 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
 
     MemoryBlock<3, Testing::datum> memory(std::max(memSize1, memSize2));
 
-#ifdef CHECKBOUNDS
-    /* where is the last non-ghost entry? */
-    //   ptrdiff_t last1 =
-    //       jumperFrom.toOrigin() + jumperFrom.getJump(layout.getSizesInMemory()) +
-    //       jumperFrom.getJump({{-1, -1, -1}}); /* can use getJump because getSizesInMemory is not transposed. */
-    //   ptrdiff_t last2 =
-    //       jumperTo.toOrigin() + jumperTo.getJump(layout.getSizesInMemory()) +
-    //       jumperTo.getJump({{-1, -1, -1}}); /* can use getJump because getSizesInMemory is not transposed. */
-    //   std::vector<Testing::datum> smallMemory(std::max(last1, last2));
-
-    //   tdd.verify(Throws<GhostBusterBoundsException>([&]() { GhostBuster(jumperTo, jumperFrom)(smallMemory); }));
-#endif
     {
       auto memory_view = memory.getRawHostView();
       /* setup the controlled known memory; each entry equals its position */
