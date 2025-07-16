@@ -70,6 +70,12 @@ namespace TempLat
         mLocalSizes[i] = mLayout.getLocalSizes()[i];
         mGlobalSizes[i] = mLayout.getGlobalSizes()[i];
       }
+
+      size_t hermitian_size = 1;
+      for (size_t i = 0; i < NDim - 1; ++i)
+        hermitian_size *= mLayout.getGlobalSizes()[i];
+      prng_hermitian = Util::RandomGaussian(mBaseSeed + "_Hermitian", hermitian_size);
+
       precomputeHermitian();
     }
 
@@ -81,10 +87,6 @@ namespace TempLat
 
     void precomputeHermitian()
     {
-      size_t hermitian_size = 1;
-      for (size_t i = 0; i < NDim - 1; ++i)
-        hermitian_size *= mLayout.getGlobalSizes()[i];
-      prng_hermitian = Util::RandomGaussian(mBaseSeed + "_Hermitian", hermitian_size);
       precomputed_hermitian = Kokkos::View<complex<double> *, Kokkos::DefaultExecutionSpace>(
           "PrecomputedHermitianRandomValues", hermitian_size);
 

@@ -229,4 +229,5 @@ add_custom_target(
 if(TESTING)
   enable_testing()
   add_subdirectory(src/tests/)
+  add_subdirectory(src/benchmarks/)
 endif()

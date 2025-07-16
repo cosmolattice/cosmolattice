@@ -1,5 +1,5 @@
-#ifndef TEMPLAT_UTIL_TempLatVECTOR_H
-#define TEMPLAT_UTIL_TempLatVECTOR_H
+#ifndef TEMPLAT_UTIL_TempLatTimer_H
+#define TEMPLAT_UTIL_TempLatTimer_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -38,6 +38,12 @@ namespace TempLat
       return std::chrono::duration_cast<std::chrono::microseconds>(end - mStart).count();
     }
 
+    size_t nanoseconds() const
+    {
+      auto end = std::chrono::high_resolution_clock::now();
+      return std::chrono::duration_cast<std::chrono::nanoseconds>(end - mStart).count();
+    }
+
     size_t minutes() const
     {
       auto end = std::chrono::high_resolution_clock::now();
@@ -46,7 +52,10 @@ namespace TempLat
 
     friend std::ostream &operator<<(std::ostream &os, const Timer &timer)
     {
-      size_t total = timer.microseconds();
+      size_t total = timer.nanoseconds();
+
+      const size_t nanoseconds = total % 1000;
+      total /= 1000;
 
       const size_t micro = total % 1000;
       total /= 1000;
@@ -62,7 +71,7 @@ namespace TempLat
 
       const size_t hours = total;
 
-      os << hours << "h " << min << "m " << sec << "s " << milli << "ms " << micro << "us";
+      os << hours << "h " << min << "m " << sec << "s " << milli << "ms " << micro << "us" << nanoseconds << "ns";
 
       return os;
     }
