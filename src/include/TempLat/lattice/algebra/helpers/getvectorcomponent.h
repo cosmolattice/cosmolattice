@@ -14,7 +14,6 @@
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/getvectorvalue.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {

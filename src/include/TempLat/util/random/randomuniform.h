@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Core_fwd.hpp>
 #include <cstdint>
 #include <random>
 
@@ -154,9 +153,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/util/random/randomuniform_test.h"
-#endif
 
 #endif

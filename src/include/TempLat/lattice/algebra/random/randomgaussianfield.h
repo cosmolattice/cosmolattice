@@ -12,7 +12,6 @@
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/util/random/randomgaussian.h"
 #include "TempLat/util/tdd/tdd.h"
-#include <Kokkos_Core_fwd.hpp>
 #include <tuple>
 
 namespace TempLat

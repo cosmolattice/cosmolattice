@@ -10,7 +10,6 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasvectorgetmethod.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {

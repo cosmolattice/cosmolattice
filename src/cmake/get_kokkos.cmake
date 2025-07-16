@@ -17,6 +17,13 @@ else()
   endif()
 endif()
 
+if(DEFINED NOGPU)
+  if(NOGPU)
+    set(HAVE_CUDA OFF)
+    set(HAVE_HIP OFF)
+  endif()
+endif()
+
 check_language(OpenMP)
 find_package(OpenMP QUIET)
 if(OpenMP_CXX_FOUND)

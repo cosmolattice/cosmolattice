@@ -11,7 +11,6 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocal.h"
 #include "TempLat/lattice/memory/memorylayouts/transpositionmap.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {

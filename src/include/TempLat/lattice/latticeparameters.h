@@ -11,7 +11,6 @@
 #include "TempLat/util/constants.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/almostequal.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {

@@ -90,7 +90,7 @@ namespace TempLat
 } // namespace TempLat
 #endif
 
-inline void TempLat::KokkosTest::Test(TempLat::TDDAssertion &tdd)
+template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
 {
 #ifndef NOKOKKOS
   // NOTE: Some tests are commented out because they have missing functionality.

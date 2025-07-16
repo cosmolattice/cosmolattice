@@ -22,7 +22,7 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
 #ifdef NOKOKKOS
   std::array<size_t, 2 * measure_center> measure;
   std::fill(measure.begin(), measure.end(), 0);
-  for (int i = 0; i < N; ++i) {
+  for (size_t i = 0; i < N; ++i) {
     double next = prng();
     x += next;
     ptrdiff_t index = measure_center + std::round(next * measure_center / 3); /* 5 ? yes, 5 i_sigma happens. */

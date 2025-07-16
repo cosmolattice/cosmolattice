@@ -11,7 +11,6 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/coordinates/coordinatevector.h"
 #include "TempLat/lattice/algebra/helpers/getvectorcomponent.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {

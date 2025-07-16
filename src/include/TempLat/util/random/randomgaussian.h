@@ -9,7 +9,6 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/random/randomuniform.h"
-#include <Kokkos_Core_fwd.hpp>
 
 namespace TempLat
 {
@@ -174,9 +173,5 @@ namespace TempLat
 
   } // namespace Util
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/util/random/randomgaussian_test.h"
-#endif
 
 #endif

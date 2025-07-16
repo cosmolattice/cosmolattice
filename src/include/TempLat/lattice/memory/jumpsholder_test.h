@@ -79,7 +79,7 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   tdd.verify(jumper == JumpsHolder(layout, nGhost));
 
   nGrid[0] *= 2;
-  LayoutStruct layout2(nGrid);
+  LayoutStruct<3> layout2(nGrid);
 
   layout.setLocalSizes(nGrid);
 

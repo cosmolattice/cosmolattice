@@ -8,10 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/almostequal.h"
-#include <KokkosCore_Config_SetupBackend.hpp>
-#include <Kokkos_Core.hpp>
-#include <Kokkos_Core_fwd.hpp>
-#include <impl/Kokkos_Profiling.hpp>
 #include <iomanip> // setprecision
 
 inline void TempLat::RandomUniformTester::Test(TempLat::TDDAssertion &tdd)
