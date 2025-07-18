@@ -12,14 +12,15 @@ int main(int argc, char **argv)
 
   SessionGuard guard(argc, argv, false);
 
-  constexpr size_t NDim = 2;
+  constexpr size_t NDim = 3;
   using T = double;
   constexpr size_t nGrid = 1024;
   constexpr size_t nGhost = 1;
-  constexpr size_t nSteps = 10000;
+  constexpr size_t nSteps = 256;
   constexpr T dt = 0.01;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost, false);
+
   toolBox->unsetVerbose();
 
   Field<NDim, T> phi("phi", toolBox);
@@ -41,13 +42,15 @@ int main(int argc, char **argv)
       pi.getMemoryManager()->confirmConfigSpace();
     });
 
-    measurer.measure("timestepping", [&]() {
-      for (size_t i = 0; i < nSteps; ++i) {
-        pi = LatticeLaplacian<NDim, decltype(phi)>(phi);
+    for (size_t i = 0; i < nSteps; ++i) {
+      measurer.measure("ghosts", [&]() { pi.updateGhosts(); });
+      measurer.measure("timestepping", [&]() {
+        pi = pi + LatticeLaplacian<NDim, decltype(phi)>(phi);
         phi = phi + dt * pi;
-      }
-    });
+        Kokkos::fence();
+      });
+    }
   });
-  bench.run(10);
+  bench.run(1);
   sayMPI << bench;
 }

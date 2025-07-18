@@ -75,6 +75,8 @@ namespace TempLat
       for (size_t i = 0; i < NDim - 1; ++i)
         hermitian_size *= mLayout.getGlobalSizes()[i];
       prng_hermitian = Util::RandomGaussian(mBaseSeed + "_Hermitian", hermitian_size);
+      precomputed_hermitian = Kokkos::View<complex<double> *, Kokkos::DefaultExecutionSpace>(
+          "PrecomputedHermitianRandomValues", hermitian_size);
 
       precomputeHermitian();
     }
@@ -87,9 +89,6 @@ namespace TempLat
 
     void precomputeHermitian()
     {
-      precomputed_hermitian = Kokkos::View<complex<double> *, Kokkos::DefaultExecutionSpace>(
-          "PrecomputedHermitianRandomValues", hermitian_size);
-
       // Fill the precomputed hermitian values.
       Kokkos::parallel_for(
           Kokkos::RangePolicy(0, precomputed_hermitian.size()), KOKKOS_CLASS_LAMBDA(const size_t idx) {

@@ -1,5 +1,6 @@
 build/
 build_clang/
 build_nokokkos/
+build_nogpu/
 .cache/
 .idea/

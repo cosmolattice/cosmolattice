@@ -84,10 +84,6 @@ namespace TempLat
 
     complex<T> &getSet(ptrdiff_t i) { return mManager->as_complex(i); }
 
-    complex<T> &get(const Looper<NDim> &itK) { return mManager->as_complex(itK()); }
-
-    const complex<T> &get(const Looper<NDim> &itK) const { return mManager->as_complex(itK()); }
-
     virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getFourierSpaceJumps(); }
 
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)

@@ -87,7 +87,7 @@ namespace TempLat
     {
       Measurer dead_measurer;
       if (n == 0) {
-        say << "Estimating number of iterations to run for the benchmark.\n";
+        sayMPI << "Estimating number of iterations to run for the benchmark.\n";
         // If n is 0, we run the function once and check how long it takes.
         Timer timer;
         mFunction(dead_measurer);
@@ -100,12 +100,12 @@ namespace TempLat
 
       // warmup
       if (n >= 10) {
-        say << "Running warmup for " << std::max((size_t)10, n / 2) << " iterations.\n";
+        sayMPI << "Running warmup for " << std::max((size_t)10, n / 2) << " iterations.\n";
         for (uint i = 0; i < std::max((size_t)10, n / 2); ++i)
           mFunction(dead_measurer);
       }
 
-      say << "Running benchmark for " << n << " iterations.\n";
+      sayMPI << "Running benchmark for " << n << " iterations.\n";
 
       Measurer measurer;
       for (size_t i = 0; i < n; ++i)

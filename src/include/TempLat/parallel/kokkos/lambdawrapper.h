@@ -28,7 +28,7 @@ namespace TempLat
 
     template <std::integral... Args>
       requires(sizeof...(Args) == NDim)
-    KOKKOS_FORCEINLINE_FUNCTION void operator()(Args... args) const
+    KOKKOS_FORCEINLINE_FUNCTION void operator()(const Args &...args) const
       requires(std::convertible_to<Args, std::common_type_t<Args...>> && ...)
     {
       fun({{args...}});

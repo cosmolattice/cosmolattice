@@ -23,6 +23,8 @@
 #include "TempLat/fft/external/fftw/fftwplanner.h"
 #include "TempLat/fft/external/fftw/fftwhermitianpartners.h"
 
+#include <numeric>
+
 namespace TempLat
 {
 

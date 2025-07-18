@@ -46,8 +46,7 @@ namespace TempLat
     ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR); }
 
     template <size_t NDim>
-    KOKKOS_FORCEINLINE_FUNCTION void confirmSpace(const LayoutStruct<NDim> &newLayout,
-                                                  const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
     }

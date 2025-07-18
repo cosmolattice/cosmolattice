@@ -14,16 +14,12 @@
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/fft/fftnormalization.h"
 
-#include "TempLat/lattice/loopers/coordinates.h"
-#include "TempLat/lattice/loopers/looper.h"
 #include "TempLat/lattice/memory/triplestatelayouts.h"
 
 #include "TempLat/lattice/ghostcells/ghostbuster.h"
 #include "TempLat/lattice/ghostcells/ghostupdater.h"
 
 #include "TempLat/lattice/algebra/operators/shiftedcoordinatesmanager.h"
-#include "TempLat/lattice/loopers/npartiteloopers/npartitecoordinates.h"
-#include "TempLat/lattice/loopers/npartiteloopers/npartitelooper.h"
 #include "TempLat/lattice/memory/verbositylevels.h"
 #include "TempLat/util/makeuniformarray.h"
 
@@ -171,21 +167,9 @@ namespace TempLat
           mLayouts(mFFTLibrary.getLayout(), mGhostDepth), mFFTNormalization(mLayouts),
           mGhostBuster_toFFTConfig(mLayouts.getConfigSpaceJumps(), mLayouts.getFFTConfigSpaceJumps()),
           mGhostBuster_toConfig(mLayouts.getFFTConfigSpaceJumps(), mLayouts.getConfigSpaceJumps()),
-          mGhostUpdater(group, mLayouts.getConfigSpaceJumps()),
-          mConfCoord(
-              std::make_shared<Coordinates<NDim>>(mLayouts.getConfigSpaceJumps(), mLayouts.getConfigSpaceLayout())),
-          mFourierCoord(
-              std::make_shared<Coordinates<NDim>>(mLayouts.getFourierSpaceJumps(), mLayouts.getFourierSpaceLayout())),
-          mCSpaceIt(mConfCoord), mFSpaceIt(mFourierCoord) //,
-    //   mCSpaceItThreaded(mConfCoord,nThreads)
+          mGhostUpdater(group, mLayouts.getConfigSpaceJumps())
     {
-      // if (nGrid.size() != NDim)
-      //   throw(InconsistentDimensions("Abort: The number of dimensions in the lattice (" +
-      //   std::to_string(nGrid.size()) +
-      //                                ") does not match the number of dimensions in the toolbox (" +
-      //                                std::to_string(NDim) + ")."));
       checkParallelConsistency();
-      initNNNeighbours();
 #ifndef TEMPLATTEST
       unsetVerbose();
 #endif
@@ -240,67 +224,6 @@ namespace TempLat
 
     bool amIRoot() { return mGroup.getBaseComm().rank() == 0; }
 
-    /* exceptionally, let everyone access private members of MemoryToolBox. */
-
-    Looper<NDim> &itX() { return mCSpaceIt; }
-
-    Looper<NDim> &itP() { return mFSpaceIt; }
-
-    NPartiteLooper<NDim> &itXNPart() { return mCSpaceItNPartite; }
-
-    NPartiteLooper<NDim> &itPNPart() { return mFSpaceItNPartite; }
-
-    std::array<ptrdiff_t, NDim> getCoordConfiguration(ptrdiff_t i) { return mConfCoord->getVecOffset(i); }
-    std::array<ptrdiff_t, NDim> getCoordFourier(ptrdiff_t i) { return mFourierCoord->getVecOffset(i); }
-
-    auto getCoord() { return mConfCoord; }
-
-    std::vector<size_t> getCoordConfiguration0N(
-        ptrdiff_t i) // Brings back the coordinates between 0 and N-1. Useful for saving and loading for example
-    {
-      auto tmp = getCoordConfiguration(i);
-      std::vector<size_t> res;
-
-      for (size_t j = 0; j < tmp.size(); ++j)
-        res.push_back(tmp[j] + mNGridPointsVec[j] / 2 - 1);
-      return res;
-    }
-    std::vector<size_t> getCoordFourier0N(ptrdiff_t i)
-    {
-      auto tmp = getCoordFourier(i);
-      std::vector<size_t> res;
-      for (size_t j = 0; j < tmp.size(); ++j)
-        res.push_back(tmp[j] + mNGridPointsVec[j] / 2 - 1);
-      return res;
-    }
-
-    ptrdiff_t getCoordinatesShiftByOne(ptrdiff_t i)
-    {
-      return i > 0 ? (mCoordinatesNNNeighbourShifts)[i - 1] : (mCoordinatesNNNeighbourShifts)[-i - 1 + NDim];
-    }
-
-    ptrdiff_t computeCoordinatesShifts(const std::array<ptrdiff_t, NDim> &shifts)
-    {
-      ShiftedCoordinatesManager<NDim> mShifts(shifts);
-
-      mShifts.setJumps(mLayouts.getConfigSpaceJumps());
-      return mShifts.memoryJump();
-    }
-
-    void addNPartiteIteration(int parity)
-    {
-      if (!mConfCoordNPartite) {
-        mConfCoordNPartite = std::make_shared<NPartiteCoordinates>(parity, mLayouts.getConfigSpaceJumps(),
-                                                                   mLayouts.getConfigSpaceLayout());
-        mCSpaceItNPartite.init(mConfCoordNPartite);
-      }
-      if (!mFourierCoordNPartite) {
-        mFourierCoordNPartite = std::make_shared<NPartiteCoordinates>(parity, mLayouts.getFourierSpaceJumps(),
-                                                                      mLayouts.getFourierSpaceLayout());
-        mFSpaceItNPartite.init(mConfCoordNPartite);
-      }
-    }
-
     template <typename T> bool initializeFFT() //(JBB, Sep 2023)
     {
       if (std::is_same<T, float>::value)
@@ -324,34 +247,7 @@ namespace TempLat
     GhostBuster<NDim> mGhostBuster_toConfig;
     GhostUpdater<NDim> mGhostUpdater;
 
-    std::shared_ptr<Coordinates<NDim>> mConfCoord;
-    std::shared_ptr<Coordinates<NDim>> mFourierCoord;
-
-    std::shared_ptr<NPartiteCoordinates<NDim>> mConfCoordNPartite;
-    std::shared_ptr<NPartiteCoordinates<NDim>> mFourierCoordNPartite;
-
-    std::array<ptrdiff_t, 2 * NDim> mCoordinatesNNNeighbourShifts;
-
-    Looper<NDim> mCSpaceIt;
-    Looper<NDim> mFSpaceIt;
-
-    NPartiteLooper<NDim> mCSpaceItNPartite;
-    NPartiteLooper<NDim> mFSpaceItNPartite;
-    //  ThreadedLooper mCSpaceItThreaded;
-
     VerbosityLevels verbosity;
-
-  private:
-    void initNNNeighbours()
-    {
-      for (size_t i = 0; i < NDim; ++i) {
-        std::array<ptrdiff_t, NDim> shifts{};
-        shifts[i] = 1;
-        (mCoordinatesNNNeighbourShifts)[i] = computeCoordinatesShifts(shifts);
-        shifts[i] = -1;
-        (mCoordinatesNNNeighbourShifts)[i + NDim] = computeCoordinatesShifts(shifts);
-      }
-    }
 
   public:
 #ifdef TEMPLATTEST
