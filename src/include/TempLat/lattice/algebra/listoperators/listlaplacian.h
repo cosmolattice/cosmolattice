@@ -48,19 +48,12 @@ namespace TempLat
   template <class T> using LapList3D = ListLaplacian<3, T>;
 
   template <int NDim, typename R>
-  typename // ConditionalListUnaryGetter<LapList3D , R>::type //Enough to check for a given dimension to see if
-           // compatible or not.
-      std::enable_if<IsSTDGettable<0, R>::value || IsTempLatGettable<0, R>::value, ListLaplacian<NDim, R>>::type
-      // ListLaplacian<R>
-      LatLapl(const R &r)
+    requires(IsSTDGettable<0, R> || IsTempLatGettable<0, R>)
+  auto LatLapl(const R &r)
   {
     return ListLaplacian<NDim, R>(r);
   }
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listlaplacian_test.h"
-#endif
 
 #endif

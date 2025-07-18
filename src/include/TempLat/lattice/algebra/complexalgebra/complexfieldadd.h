@@ -69,14 +69,14 @@ namespace TempLat
   }
 
   template <typename R, typename T>
-    requires(!HasStaticGet<R> && HasComplexFieldGet<T>)
+    requires(!HasStaticGetter<R> && HasComplexFieldGet<T>)
   auto operator+(const R &r, const T &t)
   {
     return ComplexFieldAddition<ComplexFieldWrapper<R, ZeroType>, T>{Complexify(r, ZeroType()), t};
   }
 
   template <typename R, typename T>
-    requires(!HasStaticGet<T> && HasComplexFieldGet<R>)
+    requires(!HasStaticGetter<T> && HasComplexFieldGet<R>)
   auto operator+(const R &r, const T &t)
   {
     return ComplexFieldAddition<R, ComplexFieldWrapper<T, ZeroType>>{r, Complexify(t, ZeroType())};

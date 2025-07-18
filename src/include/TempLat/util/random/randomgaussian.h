@@ -26,7 +26,7 @@ namespace TempLat
     {
     public:
       /* Put public methods here. These should change very little over time. */
-      RandomGaussian(std::string seed) : RandomGaussian(seed, 10 * Kokkos::DefaultExecutionSpace().concurrency()) {}
+      RandomGaussian(std::string seed) : RandomGaussian(seed, Kokkos::DefaultExecutionSpace().concurrency()) {}
 
       RandomGaussian(std::string seed, size_t poolSize)
           : mRandomUniform(seed, poolSize), mStateCounter(0u), mHaveCachedValue(false)

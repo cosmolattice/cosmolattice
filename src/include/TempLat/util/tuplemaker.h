@@ -52,19 +52,15 @@ namespace TempLat
   template <typename R> using TupleMaker = TupleMakerHelper<R, IsComposite<R>::value>;
 
   template <typename R>
-  typename std::enable_if<
-      HasStaticGetter<typename std::remove_cv<typename std::remove_reference<R>::type>::type>::value,
-      decltype(TupleMaker<R>()(std::forward<R>(std::declval<R>())))>::type
-  make_tuple_from(R &&r)
+    requires HasStaticGetter<std::decay_t<R>>
+  decltype(TupleMaker<R>()(std::forward<R>(std::declval<R>()))) make_tuple_from(R &&r)
   {
     return TupleMaker<R>()(std::forward<R>(r));
   }
 
   template <typename R>
-  typename std::enable_if<
-      !HasStaticGetter<typename std::remove_cv<typename std::remove_reference<R>::type>::type>::value,
-      decltype(std::make_tuple(std::forward<R>(std::declval<R>())))>::type
-  make_tuple_from(R &&r)
+    requires(!HasStaticGetter<std::decay_t<R>>)
+  decltype(std::make_tuple(std::forward<R>(std::declval<R>()))) make_tuple_from(R &&r)
   {
     return std::make_tuple(std::forward<R>(r));
   }

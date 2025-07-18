@@ -13,13 +13,11 @@
 
 namespace TempLat
 {
-
   /** \brief A class which
    *
    *
    * A tuple friendly for_each. From https://codereview.stackexchange.com/a/163802
    **/
-
   template <typename Tuple, typename F, std::size_t... Indices>
   constexpr void for_each_impl(Tuple &&tuple, F &&f, std::index_sequence<Indices...>)
   {
@@ -61,9 +59,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/util/foreach_test.h"
-#endif
 
 #endif

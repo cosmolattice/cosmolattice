@@ -1,4 +1,5 @@
 build/
+build_gpu/
 build_clang/
 build_nokokkos/
 build_nogpu/

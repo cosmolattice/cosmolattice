@@ -7,15 +7,15 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "templat/util/rangeiteration/tag.h"
-#include "templat/util/tdd/tdd.h"
-#include "templat/lattice/algebra/helpers/getdx.h"
-#include "templat/util/constexpr_for.h"
-#include "templat/lattice/algebra/operators/unaryoperator.h"
-#include "templat/lattice/algebra/helpers/getderiv.h"
-#include "templat/lattice/algebra/helpers/getgetreturntype.h"
-#include "templat/lattice/algebra/helpers/getfloattype.h"
-#include "templat/lattice/algebra/operators/operators.h"
+#include "TempLat/util/rangeiteration/tag.h"
+#include "TempLat/util/tdd/tdd.h"
+#include "TempLat/lattice/algebra/helpers/getdx.h"
+#include "TempLat/util/constexpr_for.h"
+#include "TempLat/lattice/algebra/operators/unaryoperator.h"
+#include "TempLat/lattice/algebra/helpers/getderiv.h"
+#include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
+#include "TempLat/lattice/algebra/helpers/getfloattype.h"
+#include "TempLat/lattice/algebra/operators/operators.h"
 
 namespace TempLat
 {

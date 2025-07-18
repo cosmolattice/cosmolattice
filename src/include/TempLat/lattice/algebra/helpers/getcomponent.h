@@ -31,7 +31,7 @@ namespace TempLat
 
     template <int N, typename U>
       requires(IsSTDGettable<N, U> && !IsTempLatGettable<N, U>)
-    static inline auto get(U &&obj, Tag<N> t)
+    static inline auto &get(U &&obj, Tag<N> t)
     {
       return std::get<N>(obj);
     }

@@ -19,7 +19,6 @@
 #include "TempLat/lattice/ghostcells/ghostbuster.h"
 #include "TempLat/lattice/ghostcells/ghostupdater.h"
 
-#include "TempLat/lattice/algebra/operators/shiftedcoordinatesmanager.h"
 #include "TempLat/lattice/memory/verbositylevels.h"
 #include "TempLat/util/makeuniformarray.h"
 

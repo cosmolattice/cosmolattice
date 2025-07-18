@@ -6,12 +6,11 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/tuple_size.h"
-#include "shiftedcoordinatesmanager.h"
 
 namespace TempLat
 {
@@ -25,35 +24,35 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     using UnaryOperator<R>::mR;
 
-    KOKKOS_FUNCTION
-    ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) { shift = computeShifts({SHIFTS...}); }
+    static constexpr size_t dim = sizeof...(SHIFTS);
+    static constexpr auto shifts = std::make_tuple(SHIFTS...);
 
-    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    KOKKOS_FUNCTION
+    ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) {}
+
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
     {
-      static_assert(sizeof...(IDX) == 1, "Shift must be deprecated...");
-      return GetValue::get(mR, (idx + shift)...);
+      constexpr_for<0, dim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        tuple_add_to_nth<d>(std::tie(idx...), std::get<d>(shifts));
+      });
+      return GetValue::get(mR, idx...);
     }
 
-    void eval(ptrdiff_t i) { DoEval::eval(mR, i + shift); }
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
+    {
+      constexpr_for<0, dim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        tuple_add_to_nth<d>(std::tie(idx...), std::get<d>(shifts));
+      });
+      return DoEval::eval(mR, idx...);
+    }
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
     static std::string operatorString() { return getString({SHIFTS...}); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    ptrdiff_t getShift() { return shift; }
-
   private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-    template <size_t NDim>
-    KOKKOS_FORCEINLINE_FUNCTION ptrdiff_t computeShifts(const std::array<ptrdiff_t, NDim> &shifts)
-    {
-      ShiftedCoordinatesManager mShifts(shifts);
-
-      mShifts.setJumps(GetJumps::apply(mR));
-      return mShifts.memoryJump();
-    }
-
     static std::string getString(const std::vector<ptrdiff_t> &shifts)
     {
       std::string res = "_(";
@@ -62,8 +61,6 @@ namespace TempLat
       res.pop_back();
       return res + ")";
     }
-
-    ptrdiff_t shift;
   };
 
   template <typename R, int N> class ExpressionShifterByOne : public UnaryOperator<R>
@@ -74,48 +71,47 @@ namespace TempLat
     using UnaryOperator<R>::mR;
 
     KOKKOS_FUNCTION
-    ExpressionShifterByOne(const R &pR) : UnaryOperator<R>(pR), shift(mR.getToolBox()->getCoordinatesShiftByOne(N)) {}
+    ExpressionShifterByOne(const R &pR) : UnaryOperator<R>(pR) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) const { return mR.get(i + shift); }
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
+    {
+      tuple_add_to_nth<N>(std::tie(idx...), 1);
+      return GetValue::get(mR, idx...);
+    }
+
+    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
+    {
+      tuple_add_to_nth<N>(std::tie(idx...), 1);
+      return DoEval::eval(mR, idx...);
+    }
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
     std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }
-
-    KOKKOS_FORCEINLINE_FUNCTION
-    ptrdiff_t getShift() const { return shift; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-    ptrdiff_t shift;
   };
 
   template <int... shifts, class R>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<(sizeof...(shifts) > 1) && tuple_size<R>::value == 1,
-                                                      ExpressionShifter<R, shifts...>>::type
-  shift(const R &pR)
+    requires((sizeof...(shifts) > 1) && tuple_size<R>::value == 1)
+  auto shift(const R &pR)
   {
     return ExpressionShifter<R, shifts...>(pR);
   }
 
   template <int N, class R>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<tuple_size<R>::value == 1, ExpressionShifterByOne<R, N>>::type
-  shift(const R &pR)
+    requires(tuple_size<R>::value == 1)
+  auto shift(const R &pR)
   {
     return ExpressionShifterByOne<R, N>(pR);
   }
 
   template <class R, int N>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<tuple_size<R>::value == 1, ExpressionShifterByOne<R, N>>::type
-  shift(const R &pR, Tag<N> t)
+    requires(tuple_size<R>::value == 1)
+  auto shift(const R &pR, Tag<N> t)
   {
     return ExpressionShifterByOne<R, N>(pR);
   }
 
   template <int N> KOKKOS_FORCEINLINE_FUNCTION OneType shift(OneType) { return OneType(); }
-
   template <int N> KOKKOS_FORCEINLINE_FUNCTION OneType shift(OneType, Tag<N>) { return OneType(); }
 
   struct ExpressionShifterTester {
@@ -125,48 +121,48 @@ namespace TempLat
   };
 
   //
-  //    template <typename R>
-  //    class ExpressionShifter<0,R> : public UnaryOperator<R> {
+  //    template <typename r>
+  //    class expressionshifter<0,r> : public unaryoperator<r> {
   //    public:
-  //        /* Put public methods here. These should change very little over time. */
-  //        using UnaryOperator<R>::mR;
+  //        /* put public methods here. these should change very little over time. */
+  //        using unaryoperator<r>::mr;
   //
-  //        ExpressionShifter(const R& pR, const std::vector<ptrdiff_t>& shifts) :
-  //        UnaryOperator<R>(pR)//,
-  //        //shift(computeShifts(shifts)),
-  //        //shiftString(getString(shifts))
+  //        expressionshifter(const r& pr, const std::vector<ptrdiff_t>& shifts) :
+  //        unaryoperator<r>(pr)//,
+  //        //shift(computeshifts(shifts)),
+  //        //shiftstring(getstring(shifts))
   //        {
   //
-  //            shift = computeShifts(shifts);
-  //            shiftString = getString(shifts) ;
+  //            shift = computeshifts(shifts);
+  //            shiftstring = getstring(shifts) ;
   //        }
   //
   //        inline
   //        auto get(ptrdiff_t i)
   //        {
-  //            return GetValue::get(mR,i + shift);
+  //            return getvalue::get(mr,i + shift);
   //        }
   //
-  //        void doWeNeedGhosts() override
+  //        void doweneedghosts() override
   //        {
-  //            mR.confirmGhostsUpToDate();
+  //            mr.confirmghostsuptodate();
   //        }
-  //        std::string operatorString() const override{
-  //            return shiftString;
+  //        std::string operatorstring() const override{
+  //            return shiftstring;
   //        }
   //
   //
   //    private:
-  //        /* Put all member variables and private methods here. These may change arbitrarily. */
-  //        ptrdiff_t computeShifts(const std::vector<ptrdiff_t>& shifts)
+  //        /* put all member variables and private methods here. these may change arbitrarily. */
+  //        ptrdiff_t computeshifts(const std::vector<ptrdiff_t>& shifts)
   //        {
-  //            ShiftedCoordinatesManager mShifts(shifts);
+  //            shiftedcoordinatesmanager mshifts(shifts);
   //
-  //            mShifts.setJumps(GetJumps::apply(mR));
-  //            return mShifts.memoryJump();
+  //            mshifts.setjumps(getjumps::apply(mr));
+  //            return mshifts.memoryjump();
   //
   //        }
-  //        std::string getString(const std::vector<ptrdiff_t>& shifts) const
+  //        std::string getstring(const std::vector<ptrdiff_t>& shifts) const
   //        {
   //            std::string res = "_(";
   //            for(auto x : shifts) res+=std::to_string(x)+",";
@@ -174,30 +170,30 @@ namespace TempLat
   //            return res+")";
   //        }
   //        ptrdiff_t shift;
-  //        std::string shiftString;
+  //        std::string shiftstring;
   //
   //
   //
   //    public:
-#ifdef TEMPLATTEST
-  //        static inline void Test(TDDAssertion& tdd);
+#ifdef templattest
+  //        static inline void test(tddassertion& tdd);
 #endif
   //    };
   //
-  //    template <typename R>
-  //    auto shift(const R& pR, const std::vector<ptrdiff_t>& shifts)
+  //    template <typename r>
+  //    auto shift(const r& pr, const std::vector<ptrdiff_t>& shifts)
   //    {
-  //        return ExpressionShifter<0,R>(pR,shifts);
+  //        return expressionshifter<0,r>(pr,shifts);
   //    }
   //
-  //    template <int N, class R>
-  //    auto shift(const R& pR)
+  //    template <int n, class r>
+  //    auto shift(const r& pr)
   //    {
-  //        return ExpressionShifter<N,R>(pR);
+  //        return expressionshifter<n,r>(pr);
   //    }
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
+#ifdef templattest
 #include "shift_test.h"
 #endif
 

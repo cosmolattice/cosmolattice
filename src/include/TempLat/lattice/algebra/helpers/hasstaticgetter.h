@@ -13,7 +13,7 @@
 namespace TempLat
 {
   template <typename T>
-  concept HasStaticGet = requires(T t, Tag<0> tag) { T::Getter::get(t, tag); };
+  concept HasStaticGetter = requires(int i, Tag<0> tag) { T::get(i, tag); };
 
   struct HasStaticGetterDummy {
   public:
@@ -23,9 +23,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/hasstaticgetter_test.h"
-#endif
 
 #endif

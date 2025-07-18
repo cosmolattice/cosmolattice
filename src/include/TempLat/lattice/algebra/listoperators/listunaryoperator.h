@@ -1,14 +1,13 @@
 #ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_LISTOPERATORS_LISTUNARYOPERATOR_H
 #define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_LISTOPERATORS_LISTUNARYOPERATOR_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/containsspace.h"
@@ -22,76 +21,66 @@
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
+  /** \brief A class which
+   *
+   *
+   * Unit test: make test-listunaryoperator
+   **/
+  template <typename R> class ListUnaryOperator
+  {
+  public:
+    ListUnaryOperator(const R &pR) : mR(pR) {}
 
-    /** \brief A class which
-     *
-     * 
-     * Unit test: make test-listunaryoperator
-     **/
+    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return ConfirmGhosts::apply(mR, i); }
 
-    template<typename R>
-    class
-    ListUnaryOperator{
-    public:
+    template <int N, size_t NDim>
+    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout,
+                      const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    {
+      ConfirmSpace::apply(mR, i, newLayout, spaceType);
+    }
 
-        ListUnaryOperator(const R& pR):
-        mR(pR)
-        {
-        }
+    inline auto getJumps()
+    { // Don't need indexing for get jumps.
+      return GetJumps::apply(mR);
+    }
 
-        template <int N>
-        ptrdiff_t confirmGhostsUpToDate(Tag<N> i)
-        {
-            return ConfirmGhosts::apply(mR,i);
-        }
+    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
+    inline auto getToolBox() { return GetToolBox::get(mR); }
 
-        template <int N>
-        void confirmSpace(Tag<N> i, const LayoutStruct &newLayout, const SpaceStateInterface::SpaceType &spaceType) {
-            ConfirmSpace::apply(mR, i, newLayout, spaceType);
-        }
+    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    static std::string operatorString() { return " "; }
 
-        inline JumpsHolder getJumps() { //Don't need indexing for get jumps.
-            return GetJumps::apply(mR);
-        }
-        /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-        virtual inline
-        std::shared_ptr<MemoryToolBox> getToolBox() {
-            return GetToolBox::get(mR);
-        }
+    /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
+     * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
+     */
+    template <int N> std::string toString(Tag<N> i) const
+    {
+      std::string result = GetString::get(mR, i);
 
-        /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
-        virtual std::string operatorString() const {
-            return " ";
-        }
+      if (ContainsSpace::test(result)) result = "(" + result + ")";
 
-        /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces. */
-        template<int N>
-        std::string toString(Tag<N> i) const {
+      return operatorString() + result;
+    }
 
-            std::string result = GetString::get(mR,i);
+    using Getter = GetComponent;
 
-            if ( ContainsSpace::test(result) ) result = "(" + result + ")";
+  protected:
+    R mR;
 
-            return operatorString() + result;
-        }
-
-        using Getter = GetComponent;
-    protected:
-        R mR;
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
+  };
 
-
-} /* TempLat */
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/listoperators/listunaryoperator_test.h"
 #endif
-
 
 #endif

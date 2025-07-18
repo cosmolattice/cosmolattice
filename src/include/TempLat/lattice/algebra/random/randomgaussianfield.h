@@ -129,7 +129,7 @@ namespace TempLat
           local_idx += std::get<i>(std::tie(idx...)) * dim_length;
           dim_length *= mLocalSizes[i];
         });
-        return prng.getNextPair(local_idx % prng_hermitian.getPoolSize(), Real, Unitary)[0];
+        return prng.getNextPair(local_idx % prng.getPoolSize(), Real, Unitary)[0];
       } else {
         size_t hermitian_idx = 1;
         size_t dim_length = 1;

@@ -11,6 +11,7 @@
 #include <sstream>
 #include <iomanip>
 #include <list>
+#include <fstream>
 
 #include "TempLat/util/log/saycomplete.h"
 #include "TempLat/util/timer.h"
@@ -113,6 +114,38 @@ namespace TempLat
 
       for (const auto &tag : measurer.getTags())
         mMeasurements[tag] = measurer.getMeasurement(tag);
+    }
+
+    /**
+     * @brief Creates a unique log file in the current directory with the benchmark results.
+     *
+     */
+    void log(std::string name) const
+    {
+      std::string formatted_time = std::to_string(std::time(nullptr));
+      std::string filename = name + "_bench_" + formatted_time + ".csv";
+
+      std::ofstream logFile(filename, std::ios::app);
+      if (logFile.is_open()) {
+        logFile << "Tag,Average[s],StdDev[s],Count\n";
+        for (const auto &el : mMeasurements) {
+          auto [measurementTag_, measurementData] = el;
+          std::string measurementTag = "\"" + measurementTag_ + "\"";
+          // replace whitespace in the tag with underscores
+          for (auto &c : measurementTag)
+            if (std::isspace(c)) c = '_';
+
+          const auto &[tag, average, stdDev, count] = measurementData;
+
+          const double averageInSeconds = average / 1e9;
+          const double stdDevInSeconds = stdDev / 1e9;
+
+          logFile << measurementTag << "," << averageInSeconds << "," << stdDevInSeconds << "," << count << "\n";
+        }
+        logFile.close();
+      } else {
+        sayMPI << "Could not open " << filename << " for writing.\n";
+      }
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Benchmark &bench)

@@ -37,7 +37,7 @@ namespace TempLat
 
     template <typename U>
       requires HasToolBox<U>
-    static inline std::vector<ptrdiff_t> getVec(U &obj)
+    static inline auto getVec(U &obj)
     {                                           // for isotropic lattices
       return obj.getToolBox()->mNGridPointsVec; // Isotropic lattices only.
     }
@@ -57,7 +57,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#include "TempLat/lattice/algebra/helpers/getngrid_test.h"
 
 #endif

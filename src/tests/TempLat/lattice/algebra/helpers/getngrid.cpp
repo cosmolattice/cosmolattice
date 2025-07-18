@@ -1,12 +1,13 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/algebra/helpers/getngrid.h"
+#include "TempLat/lattice/algebra/helpers/getngrid_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::GetNGrid> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::GetNGrid> test;
 }
-

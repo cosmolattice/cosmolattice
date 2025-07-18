@@ -274,8 +274,5 @@ namespace TempLat
 #ifdef TEMPLATTEST
 #include "TempLat/lattice/memory/memorymanager_test.h"
 #endif
-#ifdef TEMPLATTEST
-// #include "TempLat/lattice/loopers/genericlooper_test.h"
-#endif
 
 #endif

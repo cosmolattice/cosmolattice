@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/field/shiftedaccessor.h"
 
 #include "TempLat/lattice/algebra/spatialderivatives/latticeforwardgradient.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
@@ -16,7 +15,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which computes the gradient square norm.
    *
    *

@@ -33,7 +33,6 @@ else()
   set(HAVE_OPENMP OFF)
   set(HAVE_THREADS ON)
 endif()
-set(HAVE_OPENMP OFF)
 
 message(
   STATUS
@@ -127,38 +126,50 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # ##############################################################################
 # If profiling is requested, we add the kokkos-tools repository
 # ##############################################################################
+set(PROFILING
+    OFF
+    CACHE BOOL
+          "Set to ON to build with Kokkos tools for profiling (default = OFF)")
+if(DEFINED PROFILING)
+  if(NOT PROFILING)
+    message(STATUS "Profiling is disabled, not downloading Kokkos tools.")
+    return()
+  endif()
+else()
+  message(STATUS "Profiling is enabled, downloading Kokkos tools.")
 
-set(KOKKOS_TOOLS_VERSION develop)
+  set(KOKKOS_TOOLS_VERSION develop)
 
-message(STATUS "Downloading Kokkos tools ${KOKKOS_TOOLS_VERSION}")
-execute_process(
-  COMMAND
-    bash -c
-    "mkdir -p _dep && git clone https://github.com/kokkos/kokkos-tools.git --depth 1 --branch ${KOKKOS_TOOLS_VERSION} _dep/kokkos-tools-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  OUTPUT_QUIET)
+  message(STATUS "Downloading Kokkos tools ${KOKKOS_TOOLS_VERSION}")
+  execute_process(
+    COMMAND
+      bash -c
+      "mkdir -p _dep && git clone https://github.com/kokkos/kokkos-tools.git --depth 1 --branch ${KOKKOS_TOOLS_VERSION} _dep/kokkos-tools-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    OUTPUT_QUIET)
 
-message(STATUS "Configure Kokkos tools...")
-execute_process(
-  COMMAND bash -c "mkdir -p _dep/kokkos-tools-bin"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  OUTPUT_QUIET)
-execute_process(
-  COMMAND
-    bash -c "cmake -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
+  message(STATUS "Configure Kokkos tools...")
+  execute_process(
+    COMMAND bash -c "mkdir -p _dep/kokkos-tools-bin"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    OUTPUT_QUIET)
+  execute_process(
+    COMMAND
+      bash -c "cmake -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
            -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/Kokkos-Tools \
            ../kokkos-tools-repo \
            2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
 
-message(STATUS "Building Kokkos tools...")
-execute_process(
-  COMMAND bash -c
-          "make -j8 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
+  message(STATUS "Building Kokkos tools...")
+  execute_process(
+    COMMAND bash -c
+            "make -j8 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
 
-message(STATUS "Installing Kokkos tools...")
-execute_process(
-  COMMAND bash -c
-          "make install 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
+  message(STATUS "Installing Kokkos tools...")
+  execute_process(
+    COMMAND bash -c
+            "make install 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
+endif()

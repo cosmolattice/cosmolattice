@@ -15,9 +15,11 @@ inline void TempLat::HasStaticGetterDummy::Test(TempLat::TDDAssertion &tdd)
     static auto get(ptrdiff_t i, Tag<0> tag) { return 1; }
   };
 
+  static_assert(HasStaticGetter<MyClass> == true);
+
   /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(HasStaticGet<MyClass> == true);
-  tdd.verify(HasStaticGet<double> == false);
+  tdd.verify(HasStaticGetter<MyClass> == true);
+  tdd.verify(HasStaticGetter<double> == false);
 }
 
 #endif

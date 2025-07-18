@@ -61,21 +61,21 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-    requires(!HasStaticGet<R> && !IsComplexType<R> && HasComplexFieldGet<T>)
+    requires(!HasStaticGetter<R> && !IsComplexType<R> && HasComplexFieldGet<T>)
   KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<R, T>(r, t);
   }
 
   template <typename R, typename T>
-    requires(!HasStaticGet<T> && !IsComplexType<T> && HasComplexFieldGet<R>)
+    requires(!HasStaticGetter<T> && !IsComplexType<T> && HasComplexFieldGet<R>)
   KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<T, R>{t, r};
   }
 
   template <typename R, typename T>
-    requires(!HasStaticGet<T> && !IsComplexType<T> && HasComplexFieldGet<R>)
+    requires(!HasStaticGetter<T> && !IsComplexType<T> && HasComplexFieldGet<R>)
   KOKKOS_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<T, R>{1_c / t, r};
