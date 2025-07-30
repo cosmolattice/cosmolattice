@@ -110,8 +110,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/fft/fftlibraryinterface_test.h"
-#endif
-
 #endif

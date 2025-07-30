@@ -76,8 +76,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/parallel/kokkos/session/kokkosguard_test.h"
-#endif
-
 #endif

@@ -35,8 +35,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-// #include "TempLat/lattice/algebra/constants/halftype_test.h"
-#endif
-
 #endif

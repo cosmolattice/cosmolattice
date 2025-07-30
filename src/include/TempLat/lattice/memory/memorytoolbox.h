@@ -255,9 +255,6 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorytoolbox_test.h"
-#endif
 #include "TempLat/lattice/memory/memorymanager.h"
 
 #endif

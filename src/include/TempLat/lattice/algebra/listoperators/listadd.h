@@ -17,7 +17,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which adds two getters. Holds the expression, only evaluates for a single element when you call
    *Multiply::get(pIterCoords).
    *
@@ -55,10 +54,6 @@ namespace TempLat
   {
     return ListAddition<R, T>(r, t);
   } // namespace TempLat
-
 } // namespace TempLat
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listadd_test.h"
-#endif
 
 #endif

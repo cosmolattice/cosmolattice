@@ -82,8 +82,4 @@ namespace TempLat
   }
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/complexalgebra/scalarcomplexmultiply_test.h"
-#endif
-
 #endif

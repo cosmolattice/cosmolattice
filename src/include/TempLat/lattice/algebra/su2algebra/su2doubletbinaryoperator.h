@@ -71,11 +71,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator_test.h"
-#endif
 
 #endif

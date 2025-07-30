@@ -57,7 +57,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
 
 #endif

@@ -42,11 +42,6 @@ namespace TempLat
       return GetDeriv::get(expr, phi);
     });
   }
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/derivatives_test.h"
-#endif
 
 #endif

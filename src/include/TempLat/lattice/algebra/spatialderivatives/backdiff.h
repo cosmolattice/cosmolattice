@@ -91,8 +91,4 @@ namespace TempLat
   }
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/spatialderivatives/backdiff_test.h"
-#endif
-
 #endif

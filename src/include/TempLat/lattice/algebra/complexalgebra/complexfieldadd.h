@@ -84,8 +84,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/complexalgebra/complexfieldadd_test.h"
-#endif
-
 #endif

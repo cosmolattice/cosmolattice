@@ -5,6 +5,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/lattice/algebra/helpers/hasgetmethod_test.h"
 
 namespace
 {

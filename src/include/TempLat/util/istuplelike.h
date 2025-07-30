@@ -32,8 +32,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/util/istuplelike_test.h"
-#endif
-
 #endif

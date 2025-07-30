@@ -46,11 +46,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/util/tuple_size_test.h"
-#endif
 
 #endif

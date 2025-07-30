@@ -16,13 +16,11 @@
 
 namespace TempLat
 {
-
   /** \brief A class which groups common features to su2doublets unary operators.
    *
    *
    * Unit test: make test-su2doubletunaryoperator
    **/
-
   template <typename R> class SU2DoubletUnaryOperator
   {
   public:
@@ -63,11 +61,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/su2algebra/su2doubletunaryoperator_test.h"
-#endif
 
 #endif

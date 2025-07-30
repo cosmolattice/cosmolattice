@@ -5,8 +5,9 @@
 
 // File info: Main contributor(s):  Adrien Florio, Year: 2025
 #include "TempLat/lattice/algebra/su2algebra/su2commutator.h"
+#include "TempLat/lattice/algebra/su2algebra/su2commutator_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::SU2CommutatorTester> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::SU2CommutatorTester> test;
 }
-

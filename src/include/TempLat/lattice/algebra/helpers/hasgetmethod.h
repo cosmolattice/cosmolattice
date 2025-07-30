@@ -37,8 +37,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/hasgetmethod_test.h"
-#endif
-
 #endif

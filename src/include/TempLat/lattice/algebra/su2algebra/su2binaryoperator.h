@@ -19,7 +19,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements basic features of su2 binary operators.
    *
    *
@@ -75,11 +74,6 @@ namespace TempLat
     R mR;
     T mT;
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/su2algebra/su2binaryoperator_test.h"
-#endif
 
 #endif

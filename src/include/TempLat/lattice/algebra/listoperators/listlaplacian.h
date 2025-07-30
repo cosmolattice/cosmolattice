@@ -53,7 +53,6 @@ namespace TempLat
   {
     return ListLaplacian<NDim, R>(r);
   }
-
 } // namespace TempLat
 
 #endif

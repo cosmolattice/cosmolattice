@@ -12,16 +12,13 @@
 
 namespace TempLat
 {
-
   /** \brief A class which checks whether the object has a su2get method or not.
 
    *
    *
    * Unit test: make test-hassu2get
    **/
-
   struct HasSU2GetTester {
-
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
 #endif
@@ -36,9 +33,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "hassu2get_test.h"
-#endif
 
 #endif

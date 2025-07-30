@@ -158,8 +158,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/fft/fftnormalization_test.h"
-#endif
-
 #endif

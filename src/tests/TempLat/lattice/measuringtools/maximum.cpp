@@ -5,7 +5,9 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2021
 #include "TempLat/lattice/measuringtools/maximum.h"
+#include "TempLat/lattice/measuringtools/maximum_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::MaximumTester> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::MaximumTester> test;
 }

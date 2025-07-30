@@ -16,13 +16,11 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements a SU2 field (group).
    *
    *
    * Unit test: make test-su2field
    **/
-
   template <typename T> class SU2FieldBase
   {
   public:
@@ -122,11 +120,6 @@ namespace TempLat
   };
 
   template <typename T> using SU2Field = SU2FieldBase<T>;
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "su2field_test.h"
-#endif
 
 #endif

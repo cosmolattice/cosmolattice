@@ -80,8 +80,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/confirmspace_test.h"
-#endif
-
 #endif

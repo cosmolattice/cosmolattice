@@ -47,8 +47,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/getjumps_test.h"
-#endif
-
 #endif

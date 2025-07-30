@@ -92,8 +92,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/util/rangeiteration/tagliteral_test.h"
-#endif
-
 #endif

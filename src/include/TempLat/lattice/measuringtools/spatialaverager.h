@@ -105,8 +105,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/measuringtools/spatialaverager_test.h"
-#endif
-
 #endif

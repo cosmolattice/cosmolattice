@@ -22,8 +22,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/hasgeteval_test.h"
-#endif
-
 #endif

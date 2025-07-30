@@ -5,6 +5,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/listoperators/binaryfold.h"
+#include "TempLat/lattice/algebra/listoperators/binaryfold_test.h"
 
 namespace
 {

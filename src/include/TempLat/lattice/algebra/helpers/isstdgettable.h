@@ -25,11 +25,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/isstdgettable_test.h"
-#endif
 
 #endif

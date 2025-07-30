@@ -1,12 +1,13 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/almostequal.h"
+#include "TempLat/util/almostequal_test.h"
 
-namespace {
+namespace
+{
   TempLat::TDDContainer<TempLat::AlmostEqualTester> test;
 }
-

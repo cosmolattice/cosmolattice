@@ -61,11 +61,6 @@ namespace TempLat
   };
 
   template <typename R, typename T> ComplexFieldWrapper<R, T> Complexify(const R &r, const T &t) { return {r, t}; }
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/complexalgebra/complexwrapper_test.h"
-#endif
 
 #endif

@@ -19,13 +19,11 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements basic features of su2 unary operators.
    *
    *
    * Unit test: make test-su2unaryoperator
    **/
-
   template <typename R> class SU2UnaryOperator
   {
   public:
@@ -63,11 +61,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     R mR;
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/su2algebra/su2unaryoperator_test.h"
-#endif
 
 #endif

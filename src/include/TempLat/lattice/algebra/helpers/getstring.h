@@ -107,8 +107,4 @@ namespace TempLat
   }
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/getstring_test.h"
-#endif
-
 #endif

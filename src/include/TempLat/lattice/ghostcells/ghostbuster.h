@@ -141,8 +141,8 @@ namespace TempLat
         slicesTo[to_i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
       }
 
-      // say << "GhostBuster: Padding is " << from_padding << " to " << to_padding << ", sizes are " << from_sizes
-      //           << " to " << to_sizes << std::endl;
+      say << "GhostBuster: Padding is " << from_padding << " to " << to_padding << ", sizes are " << from_sizes
+          << " to " << to_sizes << "\n";
       auto fromSubView =
           std::apply([&](const auto &...args) { return Kokkos::subview(fromView, args...); }, slicesFrom);
       auto toSubView = std::apply([&](const auto &...args) { return Kokkos::subview(toView, args...); }, slicesTo);
@@ -302,9 +302,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/ghostcells/ghostbuster_test.h"
-#endif
 
 #endif

@@ -79,8 +79,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/util/log/puttostream_test.h"
-#endif
-
 #endif

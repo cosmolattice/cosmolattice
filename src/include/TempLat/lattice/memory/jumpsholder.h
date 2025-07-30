@@ -179,8 +179,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/jumpsholder_test.h"
-#endif
-
 #endif

@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements spatial coordinates.
    *
    * Unit test: make test-spatialcoordinate
@@ -86,9 +85,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/coordinates/spatialcoordinate_test.h"
-#endif
 
 #endif

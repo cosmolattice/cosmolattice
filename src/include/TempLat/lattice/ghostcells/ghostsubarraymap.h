@@ -12,7 +12,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which keeps track of all subarray types for a given
    *  layout, which in turn is described by the JumpsHolder. The map is
    *  for datatypes and dimensions. getSubArray<T>(dimension) is the
@@ -56,9 +55,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/ghostcells/ghostsubarraymap_test.h"
-#endif
 
 #endif

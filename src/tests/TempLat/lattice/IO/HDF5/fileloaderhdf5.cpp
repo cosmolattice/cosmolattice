@@ -1,16 +1,18 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
 #ifdef HDF5
 
 #include "TempLat/lattice/IO/HDF5/fileloaderhdf5.h"
+#include "TempLat/lattice/IO/HDF5/fileloaderhdf5_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::FileLoaderHDF5> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::FileLoaderHDF5> test;
 }
 
 #endif

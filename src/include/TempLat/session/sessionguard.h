@@ -15,7 +15,6 @@
 
 namespace TempLat
 {
-
   MakeException(SessionGuardInstantiationException);
 
   /** \brief A class which holds all the guards: fftw, pfft and mpi.
@@ -59,9 +58,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/session/sessionguard_test.h"
-#endif
 
 #endif

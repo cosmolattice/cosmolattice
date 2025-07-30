@@ -36,8 +36,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/hasdoweneedghosts_test.h"
-#endif
-
 #endif

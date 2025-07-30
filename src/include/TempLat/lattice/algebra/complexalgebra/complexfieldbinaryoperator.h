@@ -70,8 +70,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator_test.h"
-#endif
-
 #endif

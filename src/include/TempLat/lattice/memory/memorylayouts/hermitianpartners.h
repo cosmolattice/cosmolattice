@@ -186,8 +186,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorylayouts/hermitianpartners_test.h"
-#endif
-
 #endif

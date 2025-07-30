@@ -22,6 +22,7 @@ namespace TempLat
    *2, 3} is FFTW transposed. In other words, the entries in transitionMap are in line with the entries in
    *localStarts/-Sizes, and their value indicates the physical-space dimension of that entry.
    *
+   * Also, this class manages the sizes in memory!
    *
    * Unit test: make test-layoutstructlocaltransposed
    **/

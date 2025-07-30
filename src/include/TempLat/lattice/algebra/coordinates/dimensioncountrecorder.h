@@ -12,7 +12,6 @@
 
 namespace TempLat
 {
-
   MakeException(DimensionCountRecorderException);
   MakeException(DimensionCountRecorder_CoordinateSpaceException);
 
@@ -79,9 +78,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder_test.h"
-#endif
 
 #endif

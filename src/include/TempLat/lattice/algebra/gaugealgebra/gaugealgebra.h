@@ -7,7 +7,4 @@
 #include "TempLat/lattice/algebra/gaugealgebra/plaquette.h"
 #include "TempLat/lattice/algebra/gaugealgebra/plaquetteback.h"
 
-
-
-
 #endif // TempLat_LATTICE_GAUGEALGEBRA_GAUGEALGEBRA_H

@@ -13,7 +13,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which combines the MPIDomainSplit with the FFTLibrarySelector limits on domain splitting.
    *
    * Unit test: make test-fftmpidomainsplit
@@ -26,7 +25,8 @@ namespace TempLat
 
     static std::vector<int> makeDomainDecomposition(ptrdiff_t groupSize, ptrdiff_t nDimensions)
     {
-      ptrdiff_t nDimensionsToSplit = FFTLibrarySelector<NDim>::getMaximumNumberOfDimensionsToDivide(nDimensions);
+      ptrdiff_t nDimensionsToSplit =
+          TempLat::FFTLibrarySelector<NDim>::getMaximumNumberOfDimensionsToDivide(nDimensions);
 
       MPIDomainSplit theSplit(groupSize, nDimensions, nDimensionsToSplit);
 
@@ -53,12 +53,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/fftlibraryselector_test.h"
-#endif
-#ifdef TEMPLATTEST
-#include "TempLat/fft/fftmpidomainsplit_test.h"
-#endif
 
 #endif

@@ -26,8 +26,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/hasderivmethod_test.h"
-#endif
-
 #endif

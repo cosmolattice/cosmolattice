@@ -46,8 +46,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/parallel/kokkos/lambdawrapper_test.h"
-#endif
-
 #endif

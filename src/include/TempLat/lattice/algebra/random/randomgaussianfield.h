@@ -223,8 +223,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/random/randomgaussianfield_test.h"
-#endif
-
 #endif

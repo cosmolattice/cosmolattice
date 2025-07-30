@@ -48,8 +48,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/getvectorvalue_test.h"
-#endif
-
 #endif

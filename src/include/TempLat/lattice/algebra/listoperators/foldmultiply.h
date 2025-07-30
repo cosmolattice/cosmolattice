@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which
    *  reduces a list over multiplication. Specialisation of binary fold.
    *
@@ -50,9 +49,5 @@ namespace TempLat
   }
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/foldmultiply_test.h"
-#endif
 
 #endif

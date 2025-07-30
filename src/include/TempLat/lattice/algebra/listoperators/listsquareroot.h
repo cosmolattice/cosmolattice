@@ -29,16 +29,11 @@ namespace TempLat
   };
 
   template <typename R>
-    requires(IsSTDGettable<0, R>::value || IsTempLatGettable<0, R>::value)
+    requires(IsSTDGettable<0, R> || IsTempLatGettable<0, R>)
   ListPower<R, HalfType> sqrt(const R &r)
   {
     return ListPower<R, HalfType>(r, HalfType());
   }
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listsquareroot_test.h"
-#endif
 
 #endif

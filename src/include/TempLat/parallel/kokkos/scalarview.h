@@ -8,24 +8,23 @@
 #include "TempLat/parallel/kokkos/kokkos.h"
 #include <memory>
 
-template<typename T
+template <typename T
 #ifndef NOKOKKOS
-    , typename ExecutionSpace = Kokkos::DefaultExecutionSpace
+          ,
+          typename ExecutionSpace = Kokkos::DefaultExecutionSpace
 #endif
->
-class ScalarView {
+          >
+class ScalarView
+{
 public:
 private:
 #ifndef NOKOKKOS
-    Kokkos::View<T, ExecutionSpace> data;
+  Kokkos::View<T, ExecutionSpace> data;
 #else
-    std::shared_ptr<T> data;
+  std::shared_ptr<T> data;
 #endif
 };
 
-template<typename T, typename... Args>
-ScalarView<T> make_view(Args&&... args) {
+template <typename T, typename... Args> ScalarView<T> make_view(Args &&...args) {}
 
-}
-
-#endif //SCALARVIEW_H
+#endif // SCALARVIEW_H

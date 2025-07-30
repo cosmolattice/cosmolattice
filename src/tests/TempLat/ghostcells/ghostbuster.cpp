@@ -5,6 +5,7 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 #include "TempLat/lattice/ghostcells/ghostbuster.h"
+#include "TempLat/lattice/ghostcells/ghostbuster_test.h"
 
 namespace
 {

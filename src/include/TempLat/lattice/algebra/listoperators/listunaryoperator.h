@@ -76,11 +76,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listunaryoperator_test.h"
-#endif
 
 #endif

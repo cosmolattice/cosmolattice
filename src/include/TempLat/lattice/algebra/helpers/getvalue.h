@@ -78,8 +78,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/getvalue_test.h"
-#endif
-
 #endif

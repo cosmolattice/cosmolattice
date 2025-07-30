@@ -15,7 +15,6 @@ template <size_t NDim>
 template <typename T>
 inline void TempLat::FFTLibrarySelector<NDim>::TestBody(TempLat::TDDAssertion &tdd)
 {
-
   /* int main already calls the mpi guard, which calls the FFT session guards. So this should be the second time. */
   tdd.verify(Throws<FFTLibraryDoubleInitializationException>([]() { getFFTSessionGuards(); }));
 

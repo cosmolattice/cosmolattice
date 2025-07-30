@@ -23,8 +23,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/conditional/conditionalbinarygetter_test.h"
-#endif
-
 #endif

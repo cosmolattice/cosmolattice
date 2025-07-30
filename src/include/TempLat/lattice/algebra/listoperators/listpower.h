@@ -81,11 +81,6 @@ namespace TempLat
   {
     return ListPowerN<N, R>(r);
   }
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listpower_test.h"
-#endif
 
 #endif

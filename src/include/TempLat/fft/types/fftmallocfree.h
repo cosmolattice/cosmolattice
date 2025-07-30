@@ -67,8 +67,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/fft/types/fftmallocfree_test.h"
-#endif
-
 #endif

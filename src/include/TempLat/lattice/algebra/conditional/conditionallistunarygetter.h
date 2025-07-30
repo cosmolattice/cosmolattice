@@ -10,6 +10,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
+
 namespace TempLat
 {
   /** \brief A class which is part of the implementation of the list algebra.
@@ -22,11 +23,6 @@ namespace TempLat
   struct ConditionalListUnaryGetterTester {
     static void Test(TempLat::TDDAssertion &);
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/conditional/conditionallistunarygetter_test.h"
-#endif
 
 #endif

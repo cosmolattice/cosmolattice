@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which takes two VectorGetters, and implements a
    *  special get method which returns the dot-product / contraction of
    *  the two vectors.
@@ -86,11 +85,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/vectordotter_test.h"
-#endif
 
 #endif

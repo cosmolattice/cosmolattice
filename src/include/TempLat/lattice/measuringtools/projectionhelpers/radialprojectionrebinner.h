@@ -13,69 +13,51 @@
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialbincomputer.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglebinandvalue.h"
 
-namespace TempLat {
+namespace TempLat
+{
+  /** \brief A class which takes a std::vector<RadialProjectionSingleBinAndValue<T>> and rebins it into
+   *  a smaller number of bins.
+   *
+   * Unit test: make test-radialprojectionrebinner
+   **/
+  template <typename T> class RadialProjectionRebinner
+  {
+  public:
+    static std::vector<RadialProjectionSingleBinAndValue<T>>
+    rebin(const std::vector<RadialProjectionSingleBinAndValue<T>> &old, ptrdiff_t newNBins,
+          std::vector<T> &oldCentralValues, T customRange)
+    {
+      std::vector<RadialProjectionSingleBinAndValue<T>> result;
+      if (newNBins >= (ptrdiff_t)old.size()) {
+        result = old;
+      } else {
+        T minVal = old[0].getBin().minVal;
+        T maxVal = old.back().getBin().maxVal;
 
-    /** \brief A class which takes a std::vector<RadialProjectionSingleBinAndValue<T>> and rebins it into
-     *  a smaller number of bins.
-     *
-     * Unit test: make test-radialprojectionrebinner
-     **/
+        // say << maxVal;
+        // say << customRange;
 
-    template <typename T>
-    class RadialProjectionRebinner {
-    public:
-
-        static
-        std::vector<RadialProjectionSingleBinAndValue<T>>
-        rebin(
-              const std::vector<RadialProjectionSingleBinAndValue<T>>& old,
-              ptrdiff_t newNBins,
-              std::vector<T>& oldCentralValues,
-              T customRange
-              )
-        {
-            std::vector<RadialProjectionSingleBinAndValue<T>> result;
-            if ( newNBins >= (ptrdiff_t) old.size() ) {
-                result = old;
-            } else {
-                T minVal = old[0].getBin().minVal;
-                T maxVal = old.back().getBin().maxVal;
-
-                //say << maxVal;
-                //say << customRange;
-
-                RadialBinComputer pc(minVal, customRange < 0 ? maxVal : customRange, newNBins);
-                result.clear();
-                result.resize(newNBins);
-                for (auto&& it : old) {
-                    /* just take the central value for the bin indexing. */
-                    result[pc(it.getBin().average)].combineTo(it);
-                }
-                pc.setCentralBinBounds(oldCentralValues);
-            }
-            return result;
+        RadialBinComputer pc(minVal, customRange < 0 ? maxVal : customRange, newNBins);
+        result.clear();
+        result.resize(newNBins);
+        for (auto &&it : old) {
+          /* just take the central value for the bin indexing. */
+          result[pc(it.getBin().average)].combineTo(it);
         }
+        pc.setCentralBinBounds(oldCentralValues);
+      }
+      return result;
+    }
 
+  private:
+    /** \brief Only one static method. No instantiation. */
+    RadialProjectionRebinner() {}
 
-
-    private:
-        /** \brief Only one static method. No instantiation. */
-        RadialProjectionRebinner() {
-
-        }
-
-
-
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-}
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionrebinner_test.h"
-#endif
-
+  };
+} // namespace TempLat
 
 #endif

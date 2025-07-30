@@ -91,11 +91,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/complexalgebra/complexfieldfourierview_test.h"
-#endif
 
 #endif

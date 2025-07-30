@@ -46,8 +46,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/getderiv_test.h"
-#endif
-
 #endif

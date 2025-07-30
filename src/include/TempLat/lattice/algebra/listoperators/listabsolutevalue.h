@@ -49,11 +49,6 @@ namespace TempLat
   {
     return ListAbsoluteValue<R>(r);
   }
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listabsolutevalue_test.h"
-#endif
 
 #endif

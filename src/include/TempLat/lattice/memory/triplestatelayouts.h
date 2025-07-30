@@ -151,8 +151,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/triplestatelayouts_test.h"
-#endif
-
 #endif

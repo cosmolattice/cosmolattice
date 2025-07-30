@@ -271,8 +271,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memorymanager_test.h"
-#endif
-
 #endif

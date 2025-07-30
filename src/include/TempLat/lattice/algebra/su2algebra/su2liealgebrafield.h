@@ -11,7 +11,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements a SU2 field (algebra). Same than the group, except set 0 component to 0 and has a
    *function which returns its components wrt to sigma/2 instead of sigma, which is more conventional for the algebra
    *(but internally, also expanded as a function of sigma).
@@ -19,7 +18,6 @@ namespace TempLat
    *
    * Unit test: make test-su2liealgebrafield
    **/
-
   template <typename T> class SU2LieAlgebraField : public SU2FieldBase<T>
   {
   public:
@@ -62,7 +60,7 @@ namespace TempLat
   private:
     std::array<T, 4> SU2Get(ptrdiff_t i) // This function is private, as it is designed only for internal use and more
                                          // importantly, it does not return the correct 0th component,
-    { // for optmisation purposes.
+    {                                    // for optmisation purposes.
       return SU2FieldBase<T>::SU2Get(i);
     }
   };
@@ -72,11 +70,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/su2algebra/su2liealgebrafield_test.h"
-#endif
 
 #endif

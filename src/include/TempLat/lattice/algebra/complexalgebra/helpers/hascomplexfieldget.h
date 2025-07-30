@@ -27,8 +27,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget_test.h"
-#endif
-
 #endif

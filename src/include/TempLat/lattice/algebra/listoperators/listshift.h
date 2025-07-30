@@ -86,8 +86,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listshift_test.h"
-#endif
-
 #endif

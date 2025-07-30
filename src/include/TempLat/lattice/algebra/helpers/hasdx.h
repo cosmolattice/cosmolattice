@@ -31,8 +31,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/hasdx_test.h"
-#endif
-
 #endif

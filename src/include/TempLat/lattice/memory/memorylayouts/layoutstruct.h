@@ -16,7 +16,7 @@
 namespace TempLat
 {
   MakeException(LayoutStructWrongSizeException);
-  MakeException(LayoutStructOutOfBoundsException);
+  MakeException(LayoutStructOutOfBoundsExcetion);
 
   /** \brief Holds the result of FFTLibraryInterface::computeLocalSizes.
    *  In itself, has practically no logic, only forwards all the getters and setters to their respective owners.
@@ -82,8 +82,10 @@ namespace TempLat
       requires IsArray<C, NDim>
     void setLocalSizes(const C &input)
     {
+      Kokkos::Array<ptrdiff_t, NDim> localSizes;
       for (size_t i = 0; i < NDim; ++i)
-        getLocal().getLocalSizes()[i] = input[i];
+        localSizes[i] = input[i];
+      getTransposed().setLocalSizes(localSizes);
     }
 
     Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }

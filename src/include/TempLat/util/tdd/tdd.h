@@ -18,8 +18,4 @@
 
 #include "TempLat/util/almostequal.h"
 
-#ifdef TEMPLATTEST
-#include "TempLat/util/tdd/tdd_test.h"
-#endif
-
 #endif

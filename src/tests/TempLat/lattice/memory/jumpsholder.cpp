@@ -5,6 +5,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/memory/jumpsholder.h"
+#include "TempLat/lattice/memory/jumpsholder_test.h"
 
 namespace
 {

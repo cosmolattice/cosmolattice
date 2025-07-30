@@ -33,11 +33,6 @@ namespace TempLat
       T, std::void_t<decltype(std::declval<std::remove_cv_t<T>>().SU2DoubletGet(std::declval<Tag<0>>()))>>
       : std::true_type {
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "hassu2doubletget_test.h"
-#endif
 
 #endif

@@ -50,7 +50,6 @@ namespace TempLat
   {
     return ListDivision<R, T>(r, t);
   }
-
 } // namespace TempLat
 
 #endif

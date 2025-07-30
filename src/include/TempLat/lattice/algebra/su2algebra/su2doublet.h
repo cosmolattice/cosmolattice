@@ -15,7 +15,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements su2doublets.
    *
    *
@@ -118,11 +117,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "su2doublet_test.h"
-#endif
 
 #endif

@@ -45,8 +45,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/doeval_test.h"
-#endif
-
 #endif

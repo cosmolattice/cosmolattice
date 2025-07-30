@@ -122,11 +122,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/measuringtools/wallaverager_test.h"
-#endif
 
 #endif

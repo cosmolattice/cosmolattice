@@ -15,14 +15,12 @@
 
 namespace TempLat
 {
-
   /** \brief A class which
    * Field collections. Allows to have collection of composite vector fields as well.
    *
    *
    * Unit test: make test-fieldcollection
    **/
-
   template <template <class> class Arg, class T, int N, bool flatAssign = false, int SHIFTIND = 0> class FieldCollection
   {
   public:
@@ -82,11 +80,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/field/collections/fieldcollection_test.h"
-#endif
 
 #endif

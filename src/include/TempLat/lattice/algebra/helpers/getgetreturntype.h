@@ -33,8 +33,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/getgetreturntype_test.h"
-#endif
-
 #endif

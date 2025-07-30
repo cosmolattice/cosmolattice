@@ -10,7 +10,6 @@
 #include <functional>
 
 #include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/fft/external/fftw/fftwinterface.h"
 
 #ifndef NOFFT
@@ -176,11 +175,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#include "TempLat/fft/fftmpidomainsplit.h"
-// include this one after fftmpidomainsplit.h finishes, spaghetti includes...
-#ifdef TEMPLATTEST
-// #include "TempLat/fft/fftlibraryselector_test.h"
-#endif
 
 #endif

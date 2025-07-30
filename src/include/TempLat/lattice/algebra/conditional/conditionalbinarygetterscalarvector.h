@@ -12,7 +12,6 @@
 
 namespace TempLat
 {
-
   /** \brief A concept which is part of the implementation of the scalar multiplication for the vector algebra.
    *
    * Unit test: make test-conditionalbinarygetterscalarvector
@@ -24,11 +23,6 @@ namespace TempLat
   struct ConditionalBinaryGetterScalarVectorTester {
     static void Test(TempLat::TDDAssertion &);
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/conditional/conditionalbinarygetterscalarvector_test.h"
-#endif
 
 #endif

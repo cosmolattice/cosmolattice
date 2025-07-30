@@ -203,8 +203,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/measuringtools/radialprojector_test.h"
-#endif
-
 #endif

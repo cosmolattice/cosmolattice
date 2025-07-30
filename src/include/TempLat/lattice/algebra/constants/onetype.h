@@ -11,12 +11,10 @@
 
 namespace TempLat
 {
-
   /** \brief A class which represents one. Attempt to simplify derivative expressions.
    *
    * Unit test: make test-zerotype
    **/
-
   struct OneType {
     //        operator ptrdiff_t() const { return 1; }
     static std::string toString() { return "(OneType)1"; }
@@ -26,7 +24,6 @@ namespace TempLat
     }
     static constexpr bool ISCONSTANT = true;
   };
-
 } // namespace TempLat
 
 #endif

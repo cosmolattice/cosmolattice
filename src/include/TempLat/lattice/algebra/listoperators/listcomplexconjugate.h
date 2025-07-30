@@ -49,11 +49,7 @@ namespace TempLat
   auto conj(const R &r)
   {
     return ListComplexConjugate<R>(r);
-
-  } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listcomplexconjugate_test.h"
-#endif
+  }
+} // namespace TempLat
 
 #endif

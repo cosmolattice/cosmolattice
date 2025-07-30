@@ -40,8 +40,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/helpers/hasspaceconfirmationmethods_test.h"
-#endif
-
 #endif

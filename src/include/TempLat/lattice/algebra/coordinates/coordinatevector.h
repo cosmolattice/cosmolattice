@@ -10,9 +10,9 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayoutstate.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
+
 namespace TempLat
 {
-
   /** \brief A class which implements the concept of a coordinate.
    *
    *
@@ -40,9 +40,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/coordinates/coordinatevector_test.h"
-#endif
 
 #endif

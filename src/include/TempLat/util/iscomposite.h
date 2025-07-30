@@ -38,8 +38,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/util/iscomposite_test.h"
-#endif
-
 #endif

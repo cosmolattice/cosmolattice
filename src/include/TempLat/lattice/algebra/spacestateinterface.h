@@ -107,11 +107,6 @@ namespace TempLat
     ostream << "SpaceType::" + SpaceStateInterface<NDim>::SpaceTypeString(st);
     return ostream;
   }
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/spacestateinterface_test.h"
-#endif
 
 #endif

@@ -18,17 +18,10 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements the logarithm for the list algebra.
    *
    *
-   * Unit test: make test-listexponential
-   **/
-
-  /** \brief A class which adds two getters. Holds the expression, only evaluates for a single element when you call
-   *Multiply::get(pIterCoords).
-   *
-   * Unit test: make test-multiply
+   * Unit test: make test-listlog
    **/
   template <typename R> class ListLog : public ListUnaryOperator<R>
   {

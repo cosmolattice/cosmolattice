@@ -12,6 +12,7 @@
 // Also the test code is by default mangled... this is a bit of a hack to get around that.
 #define KOKKOS_SOURCE
 #include "TempLat/parallel/kokkos/lambdawrapper.h"
+#include "TempLat/parallel/kokkos/lambdawrapper_test.h"
 
 namespace
 {

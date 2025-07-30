@@ -115,7 +115,6 @@ namespace TempLat
       return offset;
     }
   };
-
 } // namespace TempLat
 
 #endif

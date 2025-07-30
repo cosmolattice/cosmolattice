@@ -47,9 +47,4 @@ namespace TempLat {
 
 } /* TempLat */
 
-#ifdef TEMPLATTEST
-#include "TempLat/util/isincontainer_test.h"
-#endif
-
-
 #endif

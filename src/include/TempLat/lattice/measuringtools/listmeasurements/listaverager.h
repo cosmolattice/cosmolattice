@@ -142,11 +142,6 @@ namespace TempLat
   {
     return make_list_from_array(ListAverager<T>(instance, spaceType).compute());
   }
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/measuringtools/listmeasurements/listaverager_test.h"
-#endif
 
 #endif

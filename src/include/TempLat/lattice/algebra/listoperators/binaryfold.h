@@ -54,8 +54,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/binaryfold_test.h"
-#endif
-
 #endif

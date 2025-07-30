@@ -52,8 +52,4 @@ namespace TempLat
   }
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/listoperators/listmultiply_test.h"
-#endif
-
 #endif

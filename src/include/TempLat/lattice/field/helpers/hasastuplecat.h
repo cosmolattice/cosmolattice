@@ -11,13 +11,11 @@
 
 namespace TempLat
 {
-
   /** \brief A class which detects whether or not an object has the hasTuplCat method.
    *
    *
    * Unit test: make test-hasastuplecat
    **/
-
   template <class, class = std::void_t<>> struct HasAsTupleCat : std::false_type {
   };
 
@@ -31,11 +29,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/field/helpers/hasastuplecat_test.h"
-#endif
 
 #endif

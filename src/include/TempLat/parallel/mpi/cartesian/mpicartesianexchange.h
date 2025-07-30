@@ -111,8 +111,4 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/parallel/mpi/cartesian/mpicartesianexchange_test.h"
-#endif
-
 #endif

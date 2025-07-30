@@ -91,8 +91,4 @@ namespace TempLat
   }
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/spatialderivatives/forwdiff_test.h"
-#endif
-
 #endif

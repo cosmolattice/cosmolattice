@@ -309,8 +309,4 @@ namespace TempLat
 #endif
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/memory/memoryblock_test.h"
-#endif
-
 #endif

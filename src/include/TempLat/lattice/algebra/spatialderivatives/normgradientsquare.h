@@ -93,8 +93,4 @@ namespace TempLat
   }
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/spatialderivatives/normgradientsquare_test.h"
-#endif
-
 #endif

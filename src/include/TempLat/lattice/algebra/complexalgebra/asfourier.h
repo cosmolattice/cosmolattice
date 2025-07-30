@@ -12,43 +12,37 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 
-namespace TempLat {
-    /** \brief A class which treats a complex field as an object in fourier space.
-     *
-     * Unit test: make test-asfourier
-     **/
-    template<typename R>
-    class ComplexFieldAsFourier {
-    public:
-        /* Put public methods here. These should change very little over time. */
-        using mRType = typename ComplexGetGetReturnType<R>::type;
+namespace TempLat
+{
+  /** \brief A class which treats a complex field as an object in fourier space.
+   *
+   * Unit test: make test-asfourier
+   **/
+  template <typename R> class ComplexFieldAsFourier
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
+    using mRType = typename ComplexGetGetReturnType<R>::type;
 
-        ComplexFieldAsFourier(const R &pR) : mR(pR) {
-        }
+    ComplexFieldAsFourier(const R &pR) : mR(pR) {}
 
-        auto get(ptrdiff_t i) {
-            return complex<mRType>(mR.ComplexFieldGet(0_c).get(i), mR.ComplexFieldGet(1_c).get(i));
-        }
+    auto get(ptrdiff_t i) { return complex<mRType>(mR.ComplexFieldGet(0_c).get(i), mR.ComplexFieldGet(1_c).get(i)); }
 
-    private:
-        /* Put all member variables and private methods here. These may change arbitrarily. */
-        R mR;
-    };
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+    R mR;
+  };
 
-    struct AsFourierTester {
+  struct AsFourierTester {
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
+  };
 
-    template<typename R>
-    ComplexFieldAsFourier<R> asFourier(R &&r) {
-        return ComplexFieldAsFourier<R>(std::forward<R>(r));
-    }
-} /* TempLat */
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/complexalgebra/asfourier_test.h"
-#endif
+  template <typename R> ComplexFieldAsFourier<R> asFourier(R &&r)
+  {
+    return ComplexFieldAsFourier<R>(std::forward<R>(r));
+  }
+} // namespace TempLat
 
 #endif

@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which holds an MPI_Datatype which is a subarray of
    * the lattice, created by MPI_Type_create_subarray. The subarray
    * is the ghost padding of the lattice, in one single dimension.
@@ -89,9 +88,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/ghostcells/ghostsubarray_test.h"
-#endif
 
 #endif

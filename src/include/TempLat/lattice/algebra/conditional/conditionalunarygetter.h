@@ -24,11 +24,6 @@ namespace TempLat
   struct ConditionalUnaryGetterTester {
     static void Test(TempLat::TDDAssertion &);
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/conditional/conditionalunarygetter_test.h"
-#endif
 
 #endif
