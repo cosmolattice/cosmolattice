@@ -46,7 +46,7 @@ namespace TempLat
 
       std::array<std::array<ptrdiff_t, 2u>, NDim> tmpPadding{};
       // FFT padding for in-place c2r r2c (see https://fftw.org/fftw3_doc/Multi_002dDimensional-DFTs-of-Real-Data.html)
-      tmpPadding[NDim - 1][1] = 2;
+      // The padding is already included in the memory size of the FFTConfigurationSpace layout.
 
       /** FFT's memory layouts are given to us. Construct jumps without padding. */
       mJumps_fftConfigSpace = JumpsHolder<NDim>(mFFTLayout.configurationSpace, tmpPadding);

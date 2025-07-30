@@ -15,7 +15,7 @@ template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Te
 {
   const ptrdiff_t nGrid = 4, nGhost = 1;
 
-  auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
+  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
   Field<NDim, double> a("a", toolBox);
   Field<NDim, double> x("x", toolBox);

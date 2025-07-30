@@ -121,6 +121,8 @@ namespace TempLat
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
       }
 
+      say << "GhostBuster: Padding is " << from_padding << " to " << to_padding << ", sizes are " << from_sizes
+          << " to " << to_sizes << "\n";
       auto fromView = block.template getNDView<T>(from_full_sizes);
       auto toView = block.template getNDView<T>(to_full_sizes);
 
@@ -141,8 +143,6 @@ namespace TempLat
         slicesTo[to_i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
       }
 
-      say << "GhostBuster: Padding is " << from_padding << " to " << to_padding << ", sizes are " << from_sizes
-          << " to " << to_sizes << "\n";
       auto fromSubView =
           std::apply([&](const auto &...args) { return Kokkos::subview(fromView, args...); }, slicesFrom);
       auto toSubView = std::apply([&](const auto &...args) { return Kokkos::subview(toView, args...); }, slicesTo);
