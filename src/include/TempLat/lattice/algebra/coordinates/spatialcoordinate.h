@@ -23,21 +23,25 @@ namespace TempLat
   template <size_t NDim> class SpatialCoordinate : public CoordinateVector<NDim>
   {
     Kokkos::Array<ptrdiff_t, NDim> mPadding;
+    LayoutStruct<NDim> mLayout;
 
   public:
     /* Put public methods here. These should change very little over time. */
-    SpatialCoordinate(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox)
+    SpatialCoordinate(std::shared_ptr<MemoryToolBox<NDim>> toolBox)
+        : mToolBox(toolBox), mLayout(toolBox->mLayouts.getConfigSpaceLayout())
     {
       auto configSpaceJumps = mToolBox->mLayouts.getConfigSpaceJumps();
       for (size_t d = 0; d < NDim; ++d)
         mPadding[d] = configSpaceJumps.getPadding()[d][0];
     }
 
-    ptrdiff_t getVectorSize() { return mToolBox->mNDimensions; }
+    static constexpr ptrdiff_t getVectorSize() { return NDim; }
 
     // usage: f(input1, input2, input3, output);
 
-    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    template <std::integral... IDX>
+      requires(sizeof...(IDX) == NDim + 1)
+    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
     }
@@ -54,12 +58,14 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
     {
       using type = decltype(component * (idx * ...));
-      return Kokkos::Array<type, sizeof...(IDX)>{{(static_cast<type>(idx))...}}[component] - mPadding[component] + 1;
+      static_assert(std::is_integral_v<type>, "SpatialCoordinate only supports integral types.");
+      Kokkos::Array<ptrdiff_t, NDim> result;
+      mLayout.putSpatialLocationFromMemoryIndexInto(result, idx...);
+      return result[component];
     }
 
-    auto operator[](const ptrdiff_t &i) { return get(*this, i); }
-
     JumpsHolder<NDim> getJumps() { return mToolBox->mLayouts.getConfigSpaceJumps(); }
+
     void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
                       const SpaceStateInterface<NDim>::SpaceType &spaceType)
     {

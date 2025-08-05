@@ -30,7 +30,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
 
     /** \brief Default constructor is only there to have it explicitly... */
-    JumpsHolder() : mLayout({1}), mIsEmpty(true) {}
+    JumpsHolder() : mLayout({1}, 0), mIsEmpty(true) {}
 
     /** \brief Constructor needs to know the following:
      *  \param mSizesInMemory The memory that should be iterated over.

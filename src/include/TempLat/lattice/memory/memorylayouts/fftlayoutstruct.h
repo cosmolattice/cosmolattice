@@ -26,7 +26,7 @@ namespace TempLat
   {
   public:
     FFTLayoutStruct(const std::array<ptrdiff_t, NDim> &nGridPoints, bool isFFTW_, bool isPFFT_)
-        : configurationSpace(nGridPoints), fourierSpace(LayoutStruct<NDim>::createGlobalFFTLayout(nGridPoints)),
+        : configurationSpace(nGridPoints, 0), fourierSpace(LayoutStruct<NDim>::createGlobalFFTLayout(nGridPoints)),
           mNGridPoints(nGridPoints), mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_)
     {
 

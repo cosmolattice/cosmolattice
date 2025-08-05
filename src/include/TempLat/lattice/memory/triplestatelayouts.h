@@ -32,7 +32,7 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     TripleStateLayouts(FFTLayoutStruct<NDim> fftLayout, ptrdiff_t nGhostCells)
-        : mFFTLayout(fftLayout), mConfigSpaceWithGhosts_layout(std::array<ptrdiff_t, NDim>{}),
+        : mFFTLayout(fftLayout), mConfigSpaceWithGhosts_layout(std::array<ptrdiff_t, NDim>{}, nGhostCells),
           mNGridPoints(fftLayout.getNGridPoints()), mNGhostCells(nGhostCells)
     {
       measureFFTPadding();
@@ -61,6 +61,7 @@ namespace TempLat
         localConfigSize[i] = mFFTLayout.configurationSpace.getLocalSizes()[i] - mFFTConfigSpacePadding[i];
       }
       mConfigSpaceWithGhosts_layout.setLocalSizes(localConfigSize);
+      mConfigSpaceWithGhosts_layout.setNGhosts(mNGhostCells);
 
       /* hard-coded exact hypercube: same size in all dimensions. */
       mJumps_configSpace = JumpsHolder<NDim>(mConfigSpaceWithGhosts_layout, tmpPadding);

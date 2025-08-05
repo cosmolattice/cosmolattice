@@ -34,7 +34,8 @@ namespace TempLat
 
     template <typename C = std::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>
-    LayoutStructLocalTransposed(const C &initNGrid) : mLocal(initNGrid)
+    LayoutStructLocalTransposed(const C &initNGrid, const ptrdiff_t nGhosts)
+        : mLocal(initNGrid, nGhosts), mNGhosts(nGhosts)
     {
       for (size_t i = 0; i < NDim; ++i)
         mSizesInMemory[i] = mLocal.getLocalSizes()[i];
@@ -61,6 +62,11 @@ namespace TempLat
     {
       getLocal().setLocalSizes(input);
       adaptMemorySizesFromTranspositionMap();
+    }
+    void setNGhosts(ptrdiff_t nGhosts)
+    {
+      mNGhosts = nGhosts;
+      getLocal().setNGhosts(nGhosts);
     }
 
     template <typename C = std::array<ptrdiff_t, NDim>>
@@ -138,6 +144,7 @@ namespace TempLat
     LayoutStructLocal<NDim> mLocal;
     TranspositionMap<NDim> mTranspositionMap_memoryToGlobalSpace;
     Kokkos::Array<ptrdiff_t, NDim> mSizesInMemory;
+    ptrdiff_t mNGhosts;
 
     void adaptMemorySizesFromTranspositionMap()
     {

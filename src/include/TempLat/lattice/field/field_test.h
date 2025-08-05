@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 // #include "TempLat/lattice/algebra/gettergetoffset.h"
-// #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
@@ -23,6 +23,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
 
   toolBox->setVerbose();
 
+  // Test whether a transformation of the field forward and backward works.
   {
     Field<NDim, T> original("original", toolBox);
     SpatialCoordinate x(toolBox);
@@ -35,8 +36,6 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
     // get host views
     copy.getMemoryManager()->confirmFourierSpace();
     auto copy_fourier_host = copy.inFourierSpace().directView();
-    // for (ptrdiff_t i = 0; i < pow<NDim>(nGrid); ++i)
-    //   std::cout << "fourier copy = " << copy_fourier_host[i] << std::endl;
 
     copy.getMemoryManager()->confirmConfigSpace();
     copy.updateGhosts();
@@ -44,36 +43,34 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
     auto original_host = original.directView();
     auto copy_host = copy.directView();
 
-    // for (ptrdiff_t i = 0; i < pow<NDim>(nGrid + 2 * nGhost); ++i)
-    //   std::cout << "original = " << original_host[i] << ", copy = " << copy_host[i] << std::endl;
     bool backforthWorks = true;
     for (ptrdiff_t i = 0; i < pow<NDim>(nGrid + 2 * nGhost); ++i)
       backforthWorks = backforthWorks && AlmostEqual(original_host[i], copy_host[i]);
     tdd.verify(backforthWorks);
   }
 
+  Field<NDim, T> phi("phi", toolBox);
+  Field<NDim, T> chi("chi", toolBox);
+  Field<NDim, T> psi("psi", toolBox);
+
+  std::cout << "Layout info: " << toolBox->mLayouts.getConfigSpaceLayout() << "\n";
+
+  phi.inFourierSpace();
+  tdd.verify(phi.mManager->isFourierSpace());
+
+  phi = 5;
+  tdd.verify(!phi.mManager->isFourierSpace());
+
+  chi = phi;
+  tdd.verify(!chi.mManager->isFourierSpace());
+
+  chi = LatticeLaplacian<NDim, decltype(phi)>(phi);
+  phi.inFourierSpace() = 2;
+  WaveNumber k(toolBox);
+  //  phi.inFourierSpace() = k.norm2(); // * RandomGaussianField<NDim, T>("Hoi", toolBox);
+  tdd.verify(phi.mManager->isFourierSpace());
+
   /*
-    Field<NDim, T> phi("phi", toolBox);
-    Field<NDim, T> chi("chi", toolBox);
-    Field<NDim, T> psi("psi", toolBox);
-
-    std::cout << "Layout info: " << toolBox->mLayouts.getConfigSpaceLayout() << "\n";
-
-    phi.inFourierSpace();
-    tdd.verify(phi.mManager->isFourierSpace());
-
-    phi = 5;
-    tdd.verify(!phi.mManager->isFourierSpace());
-
-    chi = phi;
-    tdd.verify(!chi.mManager->isFourierSpace());
-
-    chi = LatticeLaplacian<NDim, decltype(phi)>(phi);
-    phi.inFourierSpace() = 2;
-    // WaveNumber k(toolBox);
-    //  phi.inFourierSpace() = k.norm2(); // * RandomGaussianField<NDim, T>("Hoi", toolBox);
-    tdd.verify(phi.mManager->isFourierSpace());
-
     // phi.inFourierSpace() = k.norm2() * RandomGaussianField<NDim, T>("Hoi", toolBox);
 
     // just manipulated phi(k), so it must still be in Fourier space, and ghosts are stale.

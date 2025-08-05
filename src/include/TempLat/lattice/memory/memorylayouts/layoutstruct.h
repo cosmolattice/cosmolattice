@@ -12,6 +12,7 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/isarray.h"
+#include "TempLat/util/constexpr_for.h"
 
 namespace TempLat
 {
@@ -26,10 +27,18 @@ namespace TempLat
    * Unit test: make test-layoutstruct
    **/
   template <size_t NDim> struct LayoutStruct {
-
+    /**
+     * @brief Create a new LayoutStruct object.
+     *
+     * @tparam C A container with NDim elements
+     * @param initNGrid A container with NDim elements, each element is the size of the grid in that dimension.
+     * @param nGhosts The number of ghost cells in each dimension.
+     * @return requires
+     */
     template <typename C = std::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>
-    LayoutStruct(const C &initNGrid) : mTransposed(initNGrid), mHermitianPartners(initNGrid)
+    LayoutStruct(const C &initNGrid, const ptrdiff_t nGhosts)
+        : mTransposed(initNGrid, nGhosts), mHermitianPartners(initNGrid), mNGhosts(nGhosts)
     {
     }
 
@@ -38,7 +47,7 @@ namespace TempLat
       requires IsArray<C, NDim>
     static LayoutStruct<NDim> createGlobalFFTLayout(const C &initNGrid)
     {
-      LayoutStruct result(initNGrid);
+      LayoutStruct result(initNGrid, 0);
       result.getGlobal().getGlobalSizes()[NDim - 1] = result.getGlobal().getGlobalSizes()[NDim - 1] / 2 + 1;
       result.getLocal().getLocalSizes()[NDim - 1] = result.getGlobalSizes()[NDim - 1];
       return result;
@@ -55,24 +64,33 @@ namespace TempLat
     /** \brief local index in some dimension of the memory layout, goes into its corresponding spatial dimension
      *  in the target memory. No bounds checking!
      */
-    KOKKOS_FORCEINLINE_FUNCTION
-    void putSpatialLocationFromMemoryIndexInto(ptrdiff_t index, ptrdiff_t memoryDimension,
-                                               Kokkos::Array<ptrdiff_t, NDim> &target) const
+    template <typename Container, std::integral... IDX>
+      requires(sizeof...(IDX) == NDim)
+    KOKKOS_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto(Container &target, const IDX... idx) const
     {
-      auto map = getTransposed().getSpatialLocationFromMemoryIndex(index, memoryDimension);
-      target[map.atIndex] = map.withValue;
+      const auto indices = std::tie(idx...);
+      constexpr_for<0, NDim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        auto map = getTransposed().getSpatialLocationFromMemoryIndex(std::get<d>(indices), d);
+        target[map.atIndex] = map.withValue;
+      });
     }
 
     /** \brief Inverse of putSpatialLocationFromMemoryIndexInto: from spatial
      *  coordinate to memory indices, in memory-layout order (that is,
      *  transposed, ready to be applied to `JumpsHolder::getJumpsInMemoryOrder()`.
      */
-    KOKKOS_FORCEINLINE_FUNCTION
-    void putMemoryIndexFromSpatialLocationInto(ptrdiff_t position, ptrdiff_t spatialDimension,
-                                               Kokkos::Array<ptrdiff_t, NDim> &target) const
+    template <typename Container, std::integral... IDX>
+      requires(sizeof...(IDX) == NDim)
+    KOKKOS_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Kokkos::Array<ptrdiff_t, NDim> &target,
+                                                                           const IDX... pos) const
     {
-      auto map = getTransposed().getMemoryIndexFromSpatialLocation(position, spatialDimension);
-      target[map.atIndex] = map.withValue;
+      const auto positions = std::tie(pos...);
+      constexpr_for<0, NDim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        auto map = getTransposed().getMemoryIndexFromSpatialLocation(std::get<d>(positions), d);
+        target[map.atIndex] = map.withValue;
+      });
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
@@ -86,6 +104,12 @@ namespace TempLat
       for (size_t i = 0; i < NDim; ++i)
         localSizes[i] = input[i];
       getTransposed().setLocalSizes(localSizes);
+    }
+
+    void setNGhosts(ptrdiff_t nGhosts)
+    {
+      mNGhosts = nGhosts;
+      getTransposed().setNGhosts(nGhosts);
     }
 
     Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
@@ -143,6 +167,7 @@ namespace TempLat
     /** \brief signed wavenumber and coordinate x = index > n/2 ? index - n : index. Need to provide this n/2 for each
      * dimensions. */
     HermitianPartners<NDim> mHermitianPartners;
+    ptrdiff_t mNGhosts;
 
     KOKKOS_FORCEINLINE_FUNCTION
     LayoutStructLocalTransposed<NDim> &getTransposed() { return mTransposed; }

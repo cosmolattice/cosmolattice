@@ -25,20 +25,40 @@ namespace TempLat
    **/
   template <size_t NDim> class WaveNumber /*: public Vector*/
   {
+    Kokkos::Array<ptrdiff_t, NDim> mPadding;
+
   public:
     /* Put public methods here. These should change very little over time. */
-    WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mToolBox(toolBox)
+    WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox)
+        : mToolBox(toolBox), mLayout(toolBox->mLayouts.getFourierSpaceLayout())
     {
-      mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
+      auto fourierSpaceJumps = toolBox->mLayouts.getFourierSpaceJumps();
+      for (size_t d = 0; d < NDim; ++d)
+        mPadding[d] = fourierSpaceJumps.getPadding()[d][0];
     }
 
     constexpr static size_t getVectorSize() { return NDim; }
 
-    template <std::integral I, std::integral... JDX>
-      requires(sizeof...(JDX) == NDim)
-    KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(const I i, const JDX... j) const
+    template <std::integral... IDX>
+      requires(sizeof...(IDX) == NDim + 1)
+    KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(const IDX... idx) const
     {
-      return mToolBox->getCoordFourier(i)[j];
+      return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
+    }
+
+    template <std::integral... IDX, size_t... InputIndexes>
+    KOKKOS_FORCEINLINE_FUNCTION auto get_impl(std::tuple<const IDX &...> allIdx,
+                                              std::index_sequence<InputIndexes...>) const
+    {
+      auto constexpr lastIdx = sizeof...(IDX) - 1;
+      return get_impl(std::get<lastIdx>(allIdx), std::get<InputIndexes>(allIdx)...);
+    }
+
+    template <std::integral IDX1, std::integral... IDX>
+    KOKKOS_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
+    {
+      using type = decltype(component * (idx * ...));
+      return Kokkos::Array<type, sizeof...(IDX)>{{(static_cast<type>(idx))...}}[component] - mPadding[component] + 1;
     }
 
     template <int N> auto operator()(Tag<N> t) { return getVectorComponent(*this, N - 1); }

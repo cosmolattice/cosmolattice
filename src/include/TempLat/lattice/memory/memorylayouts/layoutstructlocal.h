@@ -30,7 +30,8 @@ namespace TempLat
 
     template <typename C = std::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>
-    LayoutStructLocal(const C &initNGrid) : mGlobal(initNGrid), mLocalStarts{}
+    LayoutStructLocal(const C &initNGrid, const ptrdiff_t nGhosts)
+        : mGlobal(initNGrid), mLocalStarts{}, mNGhosts(nGhosts)
     {
       for (size_t i = 0; i < NDim; ++i)
         mLocalSizes[i] = initNGrid[i];
@@ -51,6 +52,8 @@ namespace TempLat
       for (size_t i = 0; i < NDim; ++i)
         mLocalSizes[i] = input[i];
     }
+    void setNGhosts(ptrdiff_t nGhosts) { mNGhosts = nGhosts; }
+
     KOKKOS_FORCEINLINE_FUNCTION
     Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return mLocalSizes; }
     KOKKOS_FORCEINLINE_FUNCTION
@@ -78,7 +81,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t memoryIndexToSpatialCoordinate(ptrdiff_t index, ptrdiff_t dimension) const
     {
-      return mGlobal.memoryIndexToSpatialCoordinate(index + mLocalStarts[dimension], dimension);
+      return mGlobal.memoryIndexToSpatialCoordinate(index + mLocalStarts[dimension] - mNGhosts, dimension);
     }
 
     /** \brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
@@ -116,6 +119,8 @@ namespace TempLat
     LayoutStructGlobal<NDim> mGlobal;
     Kokkos::Array<ptrdiff_t, NDim> mLocalSizes;
     Kokkos::Array<ptrdiff_t, NDim> mLocalStarts;
+
+    ptrdiff_t mNGhosts;
 
   public:
 #ifdef TEMPLATTEST
