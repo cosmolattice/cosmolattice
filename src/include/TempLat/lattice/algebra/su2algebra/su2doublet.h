@@ -110,6 +110,14 @@ namespace TempLat {
             return GetToolBox::get(fs[0]);
         }
 
+        inline void updateGhosts() const
+        {
+            fs[0].updateGhosts();
+            fs[1].updateGhosts();
+            fs[2].updateGhosts();
+            fs[3].updateGhosts();
+
+        }
 
         inline auto getDx() const
         {

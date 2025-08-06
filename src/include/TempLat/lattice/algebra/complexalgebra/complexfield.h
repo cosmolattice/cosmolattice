@@ -127,6 +127,11 @@ namespace TempLat {
             return mR.getKIR();
         }
 
+        std::shared_ptr<MemoryToolBox> getToolBox()
+        {
+            return GetToolBox::get(mR);
+        }
+
         void updateGhosts()
         {
             mR.updateGhosts();

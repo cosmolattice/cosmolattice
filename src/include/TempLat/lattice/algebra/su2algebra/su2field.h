@@ -130,6 +130,18 @@ namespace TempLat {
             return GetKIR::getKIR(fs[0]);
         }
 
+        inline auto getToolBox() const
+        {
+            return GetToolBox::get(fs[0]);
+        }
+
+        inline void updateGhosts() const
+        {
+            fs[0].updateGhosts();
+            fs[1].updateGhosts();
+            fs[2].updateGhosts();
+        }
+
         using Getter = SU2Getter;
         static constexpr size_t SHIFTIND = 0;
         static constexpr size_t size = 4;
