@@ -130,7 +130,7 @@ namespace TempLat {
             return GetKIR::getKIR(fs[0]);
         }
 
-        inline auto getToolBox() const
+        inline auto getToolBox()
         {
             return GetToolBox::get(fs[0]);
         }
