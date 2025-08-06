@@ -13,6 +13,9 @@
 
 namespace TempLat
 {
+  template <typename U, typename... IDX>
+  concept TypeHasVectorGet = requires(U obj, IDX... i) { obj.vectorGet(i...); };
+
   /** \brief A getter for the vector-like algebra.
    *
    * Unit test: make test-getvectorvalue
@@ -22,18 +25,18 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
 
-    template <typename U, std::integral I, std::integral... JDX>
-      requires(HasVectorGetMethod<U> && (sizeof...(JDX) >= 1))
-    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &obj, const I &i, const JDX &...jdx)
+    template <typename U, std::integral... JDX>
+      requires(TypeHasVectorGet<U, JDX...> && (sizeof...(JDX) >= 1))
+    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &obj, const JDX &...jdx)
     {
-      return obj.vectorGet(i, jdx...);
+      return obj.vectorGet(jdx...);
     }
 
-    template <typename U, std::integral I, std::integral... JDX>
-      requires(!HasVectorGetMethod<U> && (sizeof...(JDX) >= 1))
-    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &&obj, const I &i, const JDX &...jdx)
+    template <typename U, std::integral... JDX>
+      requires(!TypeHasVectorGet<U, JDX...> && (sizeof...(JDX) >= 1))
+    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &&obj, const JDX &...jdx)
     {
-      return GetValue::get(obj, i);
+      return GetValue::get(obj, jdx...);
     }
 
   private:

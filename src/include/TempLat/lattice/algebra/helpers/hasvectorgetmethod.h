@@ -8,12 +8,15 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
+#include <type_traits>
 
 namespace TempLat
 {
   /** \brief A concept which determines at compile time whether an object has a method `get`.
    *
    */
+  // template <typename U, typename... IDX>
+  // concept HasVectorGetMethodHelper = requires(U u, IDX... idx) { u.vectorGet(idx...); };
   template <typename U, typename... IDX>
   concept HasVectorGetMethodHelper = requires(U u, IDX... idx) { u.vectorGet(idx...); };
 
@@ -22,14 +25,14 @@ namespace TempLat
    **/
   template <class T>
   concept HasVectorGetMethod =
-      HasVectorGetMethodHelper<T, size_t>                                                    //
-      || HasVectorGetMethodHelper<T, size_t, size_t>                                         //
-      || HasVectorGetMethodHelper<T, size_t, size_t, size_t>                                 //
-      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t>                         //
-      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t>                 //
-      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t>         //
-      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t> //
-      || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t, size_t>;
+      (HasVectorGetMethodHelper<T, size_t>                                                    //
+       || HasVectorGetMethodHelper<T, size_t, size_t>                                         //
+       || HasVectorGetMethodHelper<T, size_t, size_t, size_t>                                 //
+       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t>                         //
+       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t>                 //
+       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t>         //
+       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t> //
+       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t, size_t>);
 
   struct HasVectorGetMethodTester {
   public:

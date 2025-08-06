@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -14,34 +14,34 @@
 
 namespace TempLat
 {
+  MakeException(SpatialCoordinateConfigWrongSpaceConfirmation);
+
   /** \brief A class which implements spatial coordinates.
    *
    * Unit test: make test-spatialcoordinate
    **/
-  MakeException(SpatialCoordinateConfigWrongSpaceConfirmation);
-
   template <size_t NDim> class SpatialCoordinate : public CoordinateVector<NDim>
   {
-    Kokkos::Array<ptrdiff_t, NDim> mPadding;
-    LayoutStruct<NDim> mLayout;
-
   public:
     /* Put public methods here. These should change very little over time. */
+
     SpatialCoordinate(std::shared_ptr<MemoryToolBox<NDim>> toolBox)
         : mToolBox(toolBox), mLayout(toolBox->mLayouts.getConfigSpaceLayout())
     {
-      auto configSpaceJumps = mToolBox->mLayouts.getConfigSpaceJumps();
-      for (size_t d = 0; d < NDim; ++d)
-        mPadding[d] = configSpaceJumps.getPadding()[d][0];
     }
 
     static constexpr ptrdiff_t getVectorSize() { return NDim; }
 
-    // usage: f(input1, input2, input3, output);
-
     template <std::integral... IDX>
       requires(sizeof...(IDX) == NDim + 1)
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    {
+      return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
+    }
+
+    template <std::integral... IDX>
+      requires(sizeof...(IDX) == NDim + 1)
+    KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(const IDX... idx) const
     {
       return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
     }
@@ -57,8 +57,6 @@ namespace TempLat
     template <std::integral IDX1, std::integral... IDX>
     KOKKOS_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
     {
-      using type = decltype(component * (idx * ...));
-      static_assert(std::is_integral_v<type>, "SpatialCoordinate only supports integral types.");
       Kokkos::Array<ptrdiff_t, NDim> result;
       mLayout.putSpatialLocationFromMemoryIndexInto(result, idx...);
       return result[component];
@@ -83,6 +81,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    LayoutStruct<NDim> mLayout;
 
   public:
 #ifdef TEMPLATTEST

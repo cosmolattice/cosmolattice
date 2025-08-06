@@ -28,7 +28,7 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     DimensionCountRecorder(SpaceStateInterface<NDim>::SpaceType spaceType)
-        : mFixedSingleSpaceType(spaceType), mCurrentSpaceType(spaceType), mCurrentLayout({})
+        : mFixedSingleSpaceType(spaceType), mCurrentSpaceType(spaceType), mCurrentLayout({}, 0)
     {
     }
 
@@ -39,13 +39,11 @@ namespace TempLat
     {
       if (mFixedSingleSpaceType != SpaceStateInterface<NDim>::SpaceType::undefined &&
           mFixedSingleSpaceType != spaceType) {
-#ifdef NOKOKKOS
         throw DimensionCountRecorder_CoordinateSpaceException(
             "You are using coordinates in one space for an expression in another space. This coordinate object insists "
             "on",
             SpaceStateInterface<NDim>::SpaceTypeString(mFixedSingleSpaceType), "while you now ask for",
             SpaceStateInterface<NDim>::SpaceTypeString(spaceType));
-#endif
       }
 
       mCurrentSpaceType = spaceType;

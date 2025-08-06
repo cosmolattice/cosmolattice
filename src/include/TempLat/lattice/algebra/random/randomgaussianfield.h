@@ -12,6 +12,7 @@
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/util/random/randomgaussian.h"
 #include "TempLat/util/tdd/tdd.h"
+#include <Kokkos_Macros.hpp>
 #include <tuple>
 
 namespace TempLat
@@ -55,97 +56,83 @@ namespace TempLat
   template <size_t NDim, typename T, bool Real, bool Unitary>
   class RandomGaussianFieldHelper : public DimensionCountRecorder<NDim>
   {
+    using RNGInteger = typename Util::RandomGaussian::IntegerType;
+
   public:
     /* Put public methods here. These should change very little over time. */
     RandomGaussianFieldHelper(std::string baseSeed, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
         : DimensionCountRecorder<NDim>(SpaceStateInterface<NDim>::SpaceType::undefined), mBaseSeed(baseSeed),
-          prng(baseSeed), prng_hermitian(baseSeed), mToolBox(pToolBox),
-          mLayout(mToolBox->mLayouts.getFourierSpaceLayout())
+          prng(baseSeed), mToolBox(pToolBox), mLayout(mToolBox->mLayouts.getFourierSpaceLayout()), generation(0),
+          mGlobalSizes(mLayout.getGlobalSizes())
     {
       DimensionCountRecorder<NDim>::confirmSpace(mLayout, SpaceStateInterface<NDim>::SpaceType::Fourier);
-      mRodSize = 1;
-
-      for (size_t i = 0; i < NDim; ++i) {
-        mLocalStarts[i] = mLayout.getLocalStarts()[i];
-        mLocalSizes[i] = mLayout.getLocalSizes()[i];
-        mGlobalSizes[i] = mLayout.getGlobalSizes()[i];
-      }
-
-      size_t hermitian_size = 1;
-      for (size_t i = 0; i < NDim - 1; ++i)
-        hermitian_size *= mLayout.getGlobalSizes()[i];
-      prng_hermitian = Util::RandomGaussian(mBaseSeed + "_Hermitian", hermitian_size);
-      precomputed_hermitian = Kokkos::View<complex<double> *, Kokkos::DefaultExecutionSpace>(
-          "PrecomputedHermitianRandomValues", hermitian_size);
-
-      precomputeHermitian();
     }
 
-    void reset()
+    void reset() { generation = 0; }
+
+    void postGet()
     {
-      Kokkos::fence();
-      prng = Util::RandomGaussian(mBaseSeed);
+      // This is called after the get, so we can increase the generation.
+      generation++;
     }
 
-    void precomputeHermitian()
+    KOKKOS_FORCEINLINE_FUNCTION std::tuple<RNGInteger, RNGInteger>
+    gidx_to_idx2(const Kokkos::Array<ptrdiff_t, NDim> &gidx) const
     {
-      // Fill the precomputed hermitian values.
-      Kokkos::parallel_for(
-          Kokkos::RangePolicy(0, precomputed_hermitian.size()), KOKKOS_CLASS_LAMBDA(const size_t idx) {
-            const auto pair = prng_hermitian.getNextPair(idx, Real, Unitary);
-            precomputed_hermitian(idx).imag() = pair[0];
-            precomputed_hermitian(idx).real() = pair[1];
-          });
+      constexpr size_t nd1 = NDim / 2;
+
+      std::tuple<RNGInteger, RNGInteger> result;
+      auto &r = std::get<0>(result);
+      auto &c = std::get<1>(result);
+
+      RNGInteger dim_length = 1;
+      constexpr_for<0, NDim, 1>([&](const auto _i) {
+        // We go from the last dimension to the first, so we need to reverse the index.
+        constexpr size_t i = NDim - 1 - decltype(_i)::value;
+        // If we are in the second half of the dimensions, we sum the index to c
+        if constexpr (i > nd1) c += gidx[i] * dim_length;
+        // As soon, as we go into the first half, reset the dim_length to 1
+        if constexpr (i == nd1) dim_length = 1;
+        // If we are in the first half of the dimensions, we sum the index to r
+        if constexpr (i <= nd1) r += gidx[i] * dim_length;
+        dim_length *= mGlobalSizes[i];
+      });
+
+      return result;
     }
 
-    Kokkos::View<complex<double> *, Kokkos::DefaultExecutionSpace> precomputed_hermitian;
+    KOKKOS_FORCEINLINE_FUNCTION
+    complex<T> to_complex(const Kokkos::Array<double, 2> &pair) const { return complex<T>(pair[0], pair[1]); }
 
     template <std::integral... IDX>
       requires(sizeof...(IDX) == NDim)
     KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
-      Kokkos::Array<ptrdiff_t, NDim> global_coord = ndIdxToCoordinate(mLayout, idx...);
-      Kokkos::Array<ptrdiff_t, NDim> hermitianPartner;
+      Kokkos::Array<ptrdiff_t, NDim> global_coord;
+      mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, idx...);
 
+      Kokkos::Array<ptrdiff_t, NDim> hermitianPartner;
       auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners().putHermitianPartner(
           global_coord, hermitianPartner);
 
-#ifdef NOKOKKOS
-      // TODO implement this also for the kokkos version...
-      updatePRNG(hermitianPartner);
-      auto pair = prng.getNextPair(Real, Unitary);
-      /* ordered the if-statement by most-occurring case first. */
-      return complex<T>(pair[0], hermitianType == HermitianRedundancy::none ||
-                                         hermitianType == HermitianRedundancy::positivePartner
-                                     ? pair[1]
-                                 : hermitianType == HermitianRedundancy::negativePartner ? -pair[1]
-                                                                                         : T(0));
-#else
-      if (hermitianType == HermitianRedundancy::none) {
-        size_t local_idx = 1;
-        size_t dim_length = 1;
-        constexpr_for<0, NDim, 1>([&](const auto _i) {
-          constexpr size_t i = NDim - 1 - decltype(_i)::value;
-          local_idx += std::get<i>(std::tie(idx...)) * dim_length;
-          dim_length *= mLocalSizes[i];
-        });
-        return prng.getNextPair(local_idx % prng.getPoolSize(), Real, Unitary)[0];
-      } else {
-        size_t hermitian_idx = 1;
-        size_t dim_length = 1;
-        constexpr_for<0, NDim - 1, 1>([&](const auto _i) {
-          constexpr size_t i = NDim - 2 - decltype(_i)::value;
-          hermitian_idx += std::get<i>(std::tie(idx...)) * dim_length;
-          dim_length *= mGlobalSizes[i];
-        });
-        return (hermitianType == HermitianRedundancy::positivePartner) ? precomputed_hermitian(hermitian_idx)
-               : (hermitianType == HermitianRedundancy::negativePartner)
-                   ? Kokkos::conj(precomputed_hermitian(hermitian_idx))
-               : (hermitianType == HermitianRedundancy::realValued)
-                   ? complex<T>(Kokkos::real(precomputed_hermitian(hermitian_idx)))
-                   : complex<T>(0.0, 0.0);
+      // We do not need coordinates actually, but rather (positive!) global indices.
+      for (uint d = 0; d < NDim; ++d) {
+        if (global_coord[d] < 0) global_coord[d] += mGlobalSizes[d];
+        if (hermitianPartner[d] < 0) hermitianPartner[d] += mGlobalSizes[d];
       }
-#endif
+
+      if (hermitianType == HermitianRedundancy::none) {
+        const auto [r, c] = gidx_to_idx2(global_coord);
+        const auto val = to_complex(prng.getPair(r, c, generation, Real, Unitary));
+        return val;
+      } else {
+        const auto [r, c] = gidx_to_idx2(hermitianPartner);
+        const auto val = to_complex(prng.getPair(r, c, generation, Real, Unitary));
+        return (hermitianType == HermitianRedundancy::positivePartner)   ? val
+               : (hermitianType == HermitianRedundancy::negativePartner) ? Kokkos::conj(val)
+               : (hermitianType == HermitianRedundancy::realValued)      ? complex<T>(Kokkos::real(val))
+                                                                         : complex<T>(0.0, 0.0);
+      }
     }
 
     std::string toString() const { return "Random gaussian field with seed: \"" + mBaseSeed + "\""; }
@@ -155,56 +142,11 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::string mBaseSeed;
-    size_t mRodSize;
-    mutable std::vector<ptrdiff_t> rodPosition;
     mutable Util::RandomGaussian prng;
-    mutable Util::RandomGaussian prng_hermitian;
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
-
     LayoutStruct<NDim> mLayout;
-
-    Kokkos::Array<ptrdiff_t, NDim> mLocalStarts;
-    Kokkos::Array<ptrdiff_t, NDim> mLocalSizes;
+    RNGInteger generation;
     Kokkos::Array<ptrdiff_t, NDim> mGlobalSizes;
-
-    /** \brief Verifies that the coordinates asked for are
-     *  on the same rod that we are in, and that the last dimension
-     *  is monotonically growing.
-     *  If not, rebuild the prng.
-     */
-    void updatePRNG(const std::array<ptrdiff_t, NDim> &coordinates) const
-    {
-      bool needUpdate = rodPosition.size() < NDim;
-
-      /* can only monotonically grow. Are we going down? Restart from zero. */
-      needUpdate = needUpdate || rodPosition.back() > coordinates[NDim - 1];
-      if (needUpdate) rodPosition.resize(NDim);
-      for (size_t i = 0; i < NDim - 1; ++i) {
-        needUpdate = needUpdate || rodPosition[i] != coordinates[i];
-        rodPosition[i] = coordinates[i];
-      }
-      if (needUpdate) {
-        std::string rodPositionString = "";
-        for (size_t i = 0; i < NDim - 1; ++i) {
-          rodPositionString += std::to_string(rodPosition[i]) + ", ";
-        }
-        prng = Util::RandomGaussian(mBaseSeed + " " + rodPositionString);
-        rodPosition.back() = 0;
-      }
-
-      /* next, update the prng to be at one step before coordinates[NDim - 1] */
-      ptrdiff_t goal = coordinates[NDim - 1];
-
-      if (goal < 0)
-        throw RandomGaussianFieldNegativeFrequencyException(
-            "Random gaussian field assumes a positive wavenumber-only layout of the rods, exactly as in FFTW's R2C "
-            "transforms. Sorry, you asked for a negative frequency.");
-
-      while (((ptrdiff_t)prng.getState() / 2) < goal)
-        prng.getNextPair();
-
-      rodPosition.back() = coordinates[NDim - 1];
-    }
   };
 
   class RandomGaussianFieldTester

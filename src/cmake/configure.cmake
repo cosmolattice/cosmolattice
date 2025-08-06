@@ -1,6 +1,7 @@
 include(./src/cmake/add_cosmolattice_exec.cmake)
 
 include_directories(src/include)
+include_directories(SYSTEM src/include/random123/include/)
 
 # Get Kokkos
 if(KOKKOS)

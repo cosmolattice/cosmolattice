@@ -7,6 +7,10 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+struct Testy {
+  template <std::integral... IDX> double vectorGet(const IDX... idx) { return (idx + ...); }
+};
+
 inline void TempLat::GetVectorValue::Test(TempLat::TDDAssertion &tdd)
 {
   struct dummy {

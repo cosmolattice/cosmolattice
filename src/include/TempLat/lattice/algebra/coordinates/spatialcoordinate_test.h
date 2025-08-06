@@ -5,14 +5,17 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien,  Year: 2019
+// File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/field/field.h"
+#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+
+#include <iostream>
 
 template <size_t NDim_> inline void TempLat::SpatialCoordinate<NDim_>::Test(TempLat::TDDAssertion &tdd)
 {
   static constexpr size_t NDim = 2;
-  ptrdiff_t nGrid = 8, nGhost = 2;
+  ptrdiff_t nGrid = 8, nGhost = 0;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
@@ -34,6 +37,9 @@ template <size_t NDim_> inline void TempLat::SpatialCoordinate<NDim_>::Test(Temp
       correct &= phix_view(i, j) == x_val;
       const ptrdiff_t y_val = j > nGrid / 2 ? j - nGrid : j;
       correct &= phiy_view(i, j) == y_val;
+
+      std::cout << "phix.get(" << i << ", " << j << ") = " << phix_view(i, j) << ", expect " << x_val << "\n";
+      std::cout << "phiy.get(" << i << ", " << j << ") = " << phiy_view(i, j) << ", expect " << y_val << "\n";
     }
   }
   tdd.verify(correct);

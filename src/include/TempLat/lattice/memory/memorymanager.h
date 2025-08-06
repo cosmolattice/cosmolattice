@@ -72,23 +72,9 @@ namespace TempLat
 
     void deallocateHostView() { mBlock.deallocateHostView(); }
 
-    template <typename R = T> auto getRawView() const
-    {
-#ifndef NOKOKKOS
-      return mBlock.template getRawView<R>();
-#else
-      return [&](ptrdiff_t i) -> T & { return mBlock[i]; };
-#endif
-    }
+    template <typename R = T> auto getRawView() const { return mBlock.template getRawView<R>(); }
 
-    template <typename R = T> auto getRawHostView() const
-    {
-#ifndef NOKOKKOS
-      return mBlock.template getRawHostView<R>();
-#else
-      return [&](ptrdiff_t i) -> T { return mBlock[i]; };
-#endif
-    }
+    template <typename R = T> auto getRawHostView() const { return mBlock.template getRawHostView<R>(); }
 
     inline complex<T> &as_complex(ptrdiff_t i)
     {

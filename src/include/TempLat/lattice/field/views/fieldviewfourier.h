@@ -14,6 +14,8 @@
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
 
 namespace TempLat
 {
@@ -41,8 +43,9 @@ namespace TempLat
 
     template <typename R> void assign(R &&g)
     {
-#ifndef NOKOKKOS
       onBeforeAssignment(g);
+#ifndef NOKOKKOS
+      PreGet::apply(g);
       if constexpr (NDim > 1) {
         auto functor = KOKKOS_CLASS_LAMBDA(const std::array<size_t, NDim> &idx)
         {
@@ -59,6 +62,7 @@ namespace TempLat
       } else {
         static_assert(NDim > 0);
       }
+      PostGet::apply(g);
 #else
       throw Naaaaaa;
 #endif
@@ -66,7 +70,8 @@ namespace TempLat
 
     inline auto getLocalNDHostView() const
     {
-      return mManager->template getNDHostSubView<complex<T>>(memorySizes, localSlicing);
+      // As we have no ghosts in Fourier space, we can return the full view.
+      return mManager->template getNDHostView<complex<T>>(memorySizes);
     }
     inline auto getFullNDHostView() const { return mManager->template getNDHostView<complex<T>>(memorySizes); }
     inline auto directView() const { return mManager->template getRawHostView<complex<T>>(); }
@@ -78,6 +83,7 @@ namespace TempLat
 
       ConfirmSpace::apply(g, mToolBox->mLayouts.getFourierSpaceLayout(), SpaceStateInterface<NDim>::SpaceType::Fourier);
       GhostsHunter::apply(g);
+      mManager->flagHostMirrorOutdated();
     }
 
     complex<T> get(ptrdiff_t i) const { return mManager->as_complex(i); }

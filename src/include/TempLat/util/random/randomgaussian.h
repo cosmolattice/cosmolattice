@@ -24,145 +24,56 @@ namespace TempLat
      **/
     class RandomGaussian
     {
+      using INT2 = typename RandomUniform<>::IntegerType;
+
     public:
       /* Put public methods here. These should change very little over time. */
-      RandomGaussian(std::string seed) : RandomGaussian(seed, Kokkos::DefaultExecutionSpace().concurrency()) {}
 
-      RandomGaussian(std::string seed, size_t poolSize)
-          : mRandomUniform(seed, poolSize), mStateCounter(0u), mHaveCachedValue(false)
-      {
-      }
+      using IntegerType = INT2;
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      size_t getPoolSize() const { return mRandomUniform.getPoolSize(); }
-
-      void rebase() { mRandomUniform.rebase(); }
-
-      size_t getState() const { return mStateCounter; }
+      RandomGaussian(const std::string &seed) : mRandomUniform(seed) {}
 
       const auto getSeed() const { return mRandomUniform.getSeed(); }
 
       KOKKOS_FORCEINLINE_FUNCTION
-      double operator()() const { return getNextGaussian(); }
-
-      KOKKOS_FORCEINLINE_FUNCTION
-      double operator()(size_t state_ctr) const { return getNextGaussian(state_ctr); }
-
-      auto getNextPair(bool real = false, bool unitary = false) const
+      auto getPair(INT2 r, INT2 c, INT2 g, bool real = false, bool unitary = false) const
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
         // generate numbers with a real gaussian distribution or uniformly on the unit disk.
-        return getNextGaussianPair(true, real, unitary);
+        return getNextGaussianPair(r, c, g, real, unitary);
       }
 
       KOKKOS_FORCEINLINE_FUNCTION
-      auto getNextPair(size_t state_ctr, bool real = false, bool unitary = false) const
-      { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
-        // generate numbers with a real gaussian distribution or uniformly on the unit disk.
-        return getNextGaussianPair(state_ctr, real, unitary);
-      }
+      double get(INT2 r, INT2 c, INT2 g) const { return getPair(r, c, g, false, false)[0]; }
 
       friend std::ostream &operator<<(std::ostream &ostream, const RandomGaussian &pr)
       {
         ostream << "RandomGaussian - seed string: \"" << pr.mRandomUniform.getSeedString()
-                << "\" - seed value: " << pr.mRandomUniform.getSeed()
-                << " - number of values fetched: " << pr.getState();
+                << "\" - seed value: " << pr.mRandomUniform.getSeed();
         return ostream;
       }
 
     private:
       /* Put all member variables and private methods here. These may change arbitrarily. */
       RandomUniform<> mRandomUniform;
-      size_t mStateCounter;
-      bool mHaveCachedValue;
-      double mCachedValue;
 
       static constexpr double cTwoPi =
           6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359642961730265646132941876892;
 
       KOKKOS_FORCEINLINE_FUNCTION
-      double getNextGaussian() const
-      {
-#ifdef NOKOKKOS
-        double result = 0.;
-        if (mHaveCachedValue) {
-          mHaveCachedValue = false;
-          result = mCachedValue;
-        } else {
-
-          /* We update the state counter by one, and update by one
-           again when the cached value is fetched. So the pair
-           computation method should not update the state counter. */
-          auto pair = getNextGaussianPair(false);
-
-          result = pair[0];
-          mCachedValue = pair[1];
-
-          mHaveCachedValue = true;
-        }
-        ++mStateCounter;
-        return result;
-#else
-        return getNextGaussianPair((size_t)0, false, false)[0];
-#endif
-      }
-
-      KOKKOS_FORCEINLINE_FUNCTION
-      double getNextGaussian(size_t state_ctr) const
-      {
-#ifdef NOKOKKOS
-        double result = 0.;
-        if (mHaveCachedValue) {
-          mHaveCachedValue = false;
-          result = mCachedValue;
-        } else {
-
-          /* We update the state counter by one, and update by one
-           again when the cached value is fetched. So the pair
-           computation method should not update the state counter. */
-          auto pair = getNextGaussianPair(false);
-
-          result = pair[0];
-          mCachedValue = pair[1];
-
-          mHaveCachedValue = true;
-        }
-        ++mStateCounter;
-        return result;
-#else
-        return getNextGaussianPair(state_ctr, false, false)[0];
-#endif
-      }
-
-      KOKKOS_FORCEINLINE_FUNCTION
-      Kokkos::Array<double, 2u> getNextGaussianPair(size_t state_ctr, bool real = false, bool unitary = false) const
+      Kokkos::Array<double, 2u> getNextGaussianPair(INT2 r, INT2 c, INT2 g, bool real = false,
+                                                    bool unitary = false) const
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
         // generate numbers with a real gaussian distribution or uniformly on the unit disk.
 
-        double r0 = mRandomUniform(state_ctr);
-        double r1 = mRandomUniform(state_ctr);
+        const auto result = mRandomUniform.getPair(r, c, g);
 
-        double boxMullerR = r0 == 0 ? std::numeric_limits<double>::max() : std::sqrt(-2 * std::log(r0));
-        double boxMullerTheta = cTwoPi * r1;
+        const double &r0 = result[0];
+        const double &r1 = result[1];
 
-        if (real) boxMullerTheta = 0;
-        if (unitary) boxMullerR = 1;
+        double boxMullerR = unitary ? 1 : (r0 == 0 ? std::numeric_limits<double>::max() : std::sqrt(-2 * std::log(r0)));
+        double boxMullerTheta = real ? 0 : cTwoPi * r1;
 
         return {{boxMullerR * Kokkos::cos(boxMullerTheta), boxMullerR * Kokkos::sin(boxMullerTheta)}};
-      }
-
-      std::array<double, 2u> getNextGaussianPair(bool updateStateCounter = true, bool real = false,
-                                                 bool unitary = false) const
-      {
-        double r0 = mRandomUniform();
-        double r1 = mRandomUniform();
-
-        double boxMullerR = r0 == 0 ? std::numeric_limits<double>::max() : std::sqrt(-2 * std::log(r0));
-        double boxMullerTheta = cTwoPi * r1;
-
-        if (real) boxMullerTheta = 0;
-        if (unitary) boxMullerR = 1;
-
-        return {{boxMullerR * std::cos(boxMullerTheta), boxMullerR * std::sin(boxMullerTheta)}};
       }
 
     public:

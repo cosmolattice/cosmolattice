@@ -15,6 +15,9 @@
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/util/tdd/tdd.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 #include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/parallel/kokkos/lambdawrapper.h"
 
@@ -67,8 +70,10 @@ namespace TempLat
 
     template <typename R> void assign(R &&g)
     {
-#ifndef NOKOKKOS
       onBeforeAssignment(g);
+
+#ifndef NOKOKKOS
+      PreGet::apply(g);
       if constexpr (NDim > 1) {
         auto functor = KOKKOS_CLASS_LAMBDA(const std::array<size_t, NDim> &idx)
         {
@@ -89,6 +94,7 @@ namespace TempLat
       throw Naaaaaa;
 #endif
 
+      PostGet::apply(g);
       mManager->setGhostsAreStale();
     }
 
@@ -184,6 +190,7 @@ namespace TempLat
       GhostsHunter::apply(g);
       mManager->flagHostMirrorOutdated();
     }
+
     // MPI aware seetting of value. Use exceptionnaly (remove zero mode for example)
     template <typename... Args> void set(const T &toSet, Args... args)
     {

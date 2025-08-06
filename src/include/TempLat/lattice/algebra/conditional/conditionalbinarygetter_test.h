@@ -7,6 +7,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include "TempLat/lattice/algebra/operators/squareroot.h"
+
 namespace TempLat
 {
   namespace TestScratch
@@ -49,17 +51,18 @@ inline void TempLat::ConditionalBinaryGetterTester::Test(TempLat::TDDAssertion &
 
   //   third test: should not compile either
 
-  class MyVecClass
+  class MyClass2
   {
   public:
-    MyVecClass(int b) : a(b) {}
+    MyClass2(int b) : a(b) {}
 
-    auto get(ptrdiff_t i) { return a; }
-    auto vectorGet(ptrdiff_t i, ptrdiff_t j) { return a; }
+    auto get(ptrdiff_t i, ptrdiff_t j, ptrdiff_t k) const { return a; }
 
   private:
     int a;
   };
+
+  sqrt(MyClass2(1)).get(1, 2, 3); // should compile
 
   //        typedef typename ConditionalBinaryGetter<
   //            TestScratch::BinaryDummy,

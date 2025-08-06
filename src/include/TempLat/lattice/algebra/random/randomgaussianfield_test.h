@@ -13,19 +13,11 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* test the stability of the getter at various coordinates. */
 
-  ptrdiff_t nGrid = 4, nGhost = 1;
+  const ptrdiff_t nGrid = 4, nGhost = 1;
+  const ptrdiff_t fourierGridPoints = nGrid * nGrid * (nGrid / 2 + 1); // +1 for the zero frequency.
 
   auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
   RandomGaussianField<3, double> myField("Hello world", toolBox);
-  //
-  //  //  auto myFieldGetter = GetterWrap(myField);
-  //
-  //  //  auto test = myFieldGetter + myFieldGetter + myFieldGetter;
-  //
-  //  //  /* let it register the dimensionality */
-  //  //  myField.confirmSpace(LayoutStruct(3), SpaceStateInterface::SpaceType::Fourier);
-  //
-  //    say << myField.getNDimensions() << " dimensions detected.\n";
 
   Field<3, double> a("a", toolBox);
   Field<3, double> b("b", toolBox);
@@ -33,55 +25,36 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
   // Get random values
   a.inFourierSpace() = myField;
 
-  // test rewinding
-  auto firstSeed = myField.getCurrentSeed();
-  myField.reset(); // reset the field to the initial seed
-  // myField = RandomGaussianField<3, double>("Hello world", toolBox);
+  // Get more random values
   b.inFourierSpace() = myField;
 
-  // get host views
-  auto a_host = a.inFourierSpace().directView();
-  auto b_host = b.inFourierSpace().directView();
+  {
+    auto a_host = a.inFourierSpace().directView();
+    auto b_host = b.inFourierSpace().directView();
 
-  for (size_t i = 0; i < a_host.size(); ++i)
-    std::cout << "a = " << a_host[i] << ", b = " << b_host[i] << std::endl;
-
-  bool rewindingWorks = true;
-  for (size_t i = 0; i < a_host.size(); ++i)
-    rewindingWorks = rewindingWorks && AlmostEqual(a_host[i], b_host[i]);
-  tdd.verify(rewindingWorks);
-  tdd.verify(firstSeed == myField.getCurrentSeed());
-
-  /*
-  // test moving
-  bool movingWorks = true;
-  bool seedChanged = false;
-  coord[1] = 10;
-  for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i) {
-    coord[2] = i;
-    b[i] = myField.get(coord);
-    seedChanged = firstSeed != myField.getCurrentSeed();
-    if (!seedChanged) break;
-    movingWorks = movingWorks && !AlmostEqual(a[i], b[i]);
+    // Check that the values are different
+    bool different = true;
+    for (size_t i = 0; i < fourierGridPoints; ++i)
+      different &= !AlmostEqual(a_host(i), b_host(i));
+    tdd.verify(different);
   }
-  tdd.verify(seedChanged);
-  tdd.verify(movingWorks);
 
-  // test moving back
-  bool movingBackWorks = true;
-  coord[1] = 0;
-  for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd; ++i) {
-    coord[2] = i;
-    b[i] = myField.get(coord);
-    movingBackWorks = movingBackWorks && AlmostEqual(a[i], b[i]);
+  // test rewinding
+  myField.reset(); // reset the field to the initial generation.
+  b.inFourierSpace() = myField;
+
+  {
+    auto a_host = a.inFourierSpace().directView();
+    auto b_host = b.inFourierSpace().directView();
+
+    // Check that the values are identical
+    bool rewinding = true;
+    for (size_t i = 0; i < fourierGridPoints; ++i)
+      rewinding &= AlmostEqual(a_host(i), b_host(i));
+    for (size_t i = 0; i < fourierGridPoints; ++i)
+      std::cout << "a[" << i << "] = " << a_host(i) << ", b[" << i << "] = " << b_host(i) << "\n";
+    tdd.verify(rewinding);
   }
-  tdd.verify(movingBackWorks);
-
-  tdd.verify(Throws<RandomGaussianFieldNegativeFrequencyException>([&]() {
-    coord[2] = -1;
-    myField.get(coord);
-  }));
-  */
 }
 
 #endif

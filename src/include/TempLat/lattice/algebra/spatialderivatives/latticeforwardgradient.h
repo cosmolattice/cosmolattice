@@ -54,7 +54,8 @@ namespace TempLat
       //  DoEval::eval(mR, i + jumps[j]);
     }
 
-    ptrdiff_t getVectorSize() { return NDim; }
+    static constexpr size_t getVectorSize() { return NDim; }
+
     auto norm2() { return dot(*this, *this); }
     auto norm() { return pow(this->norm2(), 0.5); }
 

@@ -4,8 +4,8 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-#include "templat/util/random/randomuniform.h"
-#include "templat/util/random/randomuniform_test.h"
+#include "TempLat/util/random/randomuniform.h"
+#include "TempLat/util/random/randomuniform_test.h"
 
 namespace
 {

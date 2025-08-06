@@ -90,7 +90,7 @@ namespace TempLat
 
   /** \brief Specialize for possible half input! */
   KOKKOS_FORCEINLINE_FUNCTION
-  auto operator-(HalfType a, OneType b) { return -a; }
+  auto operator-(HalfType a, OneType b) { return Operators::UnaryMinus<HalfType>(a); }
 
   /** \brief A mini struct for instiating the test case. */
   struct SubtractTester {
