@@ -135,7 +135,7 @@ namespace TempLat {
             return GetToolBox::get(fs[0]);
         }
 
-        inline void updateGhosts() const
+        inline void updateGhosts()
         {
             fs[0].updateGhosts();
             fs[1].updateGhosts();
