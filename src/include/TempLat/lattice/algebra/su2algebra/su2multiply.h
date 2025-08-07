@@ -10,6 +10,7 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
+#include "TempLat/lattice/algebra/su2algebra/helpers/paulivectorsalgebra.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
@@ -72,12 +73,9 @@ namespace TempLat {
             DoEval::eval(mT, i);
             ForLoop(j,0,3,
                     cL[j] = this->mR.SU2Get(j,i);
-            cR[j] = this->mT.SU2Get(j,i);
+                    cR[j] = this->mT.SU2Get(j,i);
                     );
-            cache[0] = cL[0] * cR[0] - cL[1] *cR[1] - cL[2] *cR[2] - cL[3] *cR[3];
-            cache[1] = cL[0] * cR[1] + cL[1] *cR[0] + cL[3] *cR[2] - cL[2] *cR[3];
-            cache[2] = cL[0] * cR[2] + cL[2] *cR[0] + cL[1] *cR[3] - cL[3] *cR[1];
-            cache[3] = cL[0] * cR[3] + cL[3] *cR[0] + cL[2] *cR[1] - cL[1] *cR[2];
+            PauliVectorsAlgebra::multiply_inplace(cache, cL, cR);
         }
 
         virtual std::string operatorString() const {
