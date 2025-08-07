@@ -36,18 +36,17 @@ namespace TempLat
   {
   public:
     typedef typename SU2DoubletGetGetReturnType<T>::type vType;
-    static constexpr bool isComplexValued = IsComplexType<vType>::value;
+    static constexpr bool isComplexValued = IsComplexType<vType>;
     static constexpr size_t size = tuple_size<T>::value;
 
     typedef std::array<vType, size> arrVType;
 
     /* Put public methods here. These should change very little over time. */
-    SU2DoubletAverager(const T &pT, SpaceStateInterface::SpaceType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    SU2DoubletAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
 
     arrVType compute()
     {
-      arrVType selfResult =
-          mSpaceType == SpaceStateInterface::SpaceType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
+      arrVType selfResult = mSpaceType == SpaceStateType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
       auto toolBox = mT.SU2DoubletGet(0_c).getToolBox();
 
       arrVType reducedRes, ret; //= mT.getToolBox()->mGroup.getBaseComm().computeAllSum(selfResult);
@@ -105,22 +104,17 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    T mT;
-    SpaceStateInterface::SpaceType mSpaceType;
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
+    T mT;
+    SpaceStateType mSpaceType;
   };
 
   template <typename T>
-  typename std::enable_if<HasSU2DoubletGet<T>::value,
-                          decltype(make_list_from_array(
-                              std::declval<std::array<typename SU2DoubletGetGetReturnType<T>::type, T::size>>()))>::type
-  // auto
-  su2doubletaverage(T instance, SpaceStateInterface::SpaceType spaceType =
-                                    IsComplexType<typename SU2DoubletGetGetReturnType<T>::type>::value
-                                        ? SpaceStateInterface::SpaceType::Fourier
-                                        : SpaceStateInterface::SpaceType::Configuration)
+    requires HasSU2DoubletGet<T>
+  auto su2doubletaverage(T instance,
+                         SpaceStateType spaceType = IsComplexType<typename SU2DoubletGetGetReturnType<T>::type>
+                                                        ? SpaceStateType::Fourier
+                                                        : SpaceStateType::Configuration)
   {
     return make_list_from_array(SU2DoubletAverager<T>(instance, spaceType).compute());
   }

@@ -27,7 +27,7 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    DimensionCountRecorder(SpaceStateInterface<NDim>::SpaceType spaceType)
+    DimensionCountRecorder(SpaceStateType spaceType)
         : mFixedSingleSpaceType(spaceType), mCurrentSpaceType(spaceType), mCurrentLayout({}, 0)
     {
     }
@@ -35,10 +35,9 @@ namespace TempLat
     /** \brief When making sure everyone is in configuration or fourier space, steal the number of dimensions, which we
      * need in the coordinate manipulating objects.. */
     KOKKOS_FUNCTION
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
-      if (mFixedSingleSpaceType != SpaceStateInterface<NDim>::SpaceType::undefined &&
-          mFixedSingleSpaceType != spaceType) {
+      if (mFixedSingleSpaceType != SpaceStateType::undefined && mFixedSingleSpaceType != spaceType) {
         throw DimensionCountRecorder_CoordinateSpaceException(
             "You are using coordinates in one space for an expression in another space. This coordinate object insists "
             "on",
@@ -54,7 +53,7 @@ namespace TempLat
     static constexpr ptrdiff_t getNDimensions() { return NDim; }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    SpaceStateInterface<NDim>::SpaceType getCurrentSpaceType() const { return mCurrentSpaceType; }
+    SpaceStateType getCurrentSpaceType() const { return mCurrentSpaceType; }
 
     KOKKOS_FORCEINLINE_FUNCTION
     const LayoutStruct<NDim> &getCurrentLayout() const { return mCurrentLayout; }
@@ -66,8 +65,8 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    SpaceStateInterface<NDim>::SpaceType mFixedSingleSpaceType;
-    SpaceStateInterface<NDim>::SpaceType mCurrentSpaceType;
+    SpaceStateType mFixedSingleSpaceType;
+    SpaceStateType mCurrentSpaceType;
     LayoutStruct<NDim> mCurrentLayout;
 
   public:

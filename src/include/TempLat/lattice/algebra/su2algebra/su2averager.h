@@ -25,34 +25,24 @@
 
 namespace TempLat
 {
-
   /** \brief An averager for su2. Allows to take into account cached operations consistently.
-   *
    *
    * Unit test: make test-su2averager
    **/
-
   template <typename T> class SU2Averager
   {
   public:
-    typedef typename SU2GetGetReturnType<T>::type vType;
-    static constexpr bool isComplexValued = IsComplexType<vType>::value;
-    static constexpr size_t size = tuple_size<T>::value;
-
-    typedef std::array<vType, size> arrVType;
-
     /* Put public methods here. These should change very little over time. */
-    SU2Averager(const T &pT, SpaceStateInterface::SpaceType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    using vType = typename SU2GetGetReturnType<T>::type;
+    static constexpr bool isComplexValued = IsComplexType<vType>;
+    static constexpr size_t size = tuple_size<T>::value;
+    using arrVType = std::array<vType, size>;
 
-    /* operator vType()
-     {
-         return compute();
-     }*/
+    SU2Averager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
 
     arrVType compute()
     {
-      arrVType selfResult =
-          mSpaceType == SpaceStateInterface::SpaceType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
+      arrVType selfResult = mSpaceType == SpaceStateType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
       auto toolBox = mT.SU2Get(0_c).getToolBox();
 
       arrVType reducedRes, ret; //= mT.getToolBox()->mGroup.getBaseComm().computeAllSum(selfResult);
@@ -120,19 +110,10 @@ namespace TempLat
 
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
 
-    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-    /*    virtual inline
-        std::shared_ptr<MemoryToolBox> getToolBox() {
-            return GetToolBox::get(mT);
-        }*/
-
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
-    SpaceStateInterface::SpaceType mSpaceType;
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
+    SpaceStateType mSpaceType;
   };
 
   struct SU2AveragerTester {
@@ -142,14 +123,10 @@ namespace TempLat
   };
 
   template <typename T>
-  typename std::enable_if<
-      HasSU2Get<T>::value,
-      decltype(make_list_from_array(std::declval<std::array<typename SU2GetGetReturnType<T>::type, T::size>>()))>::type
-  // auto
-  su2average(T instance,
-             SpaceStateInterface::SpaceType spaceType = IsComplexType<typename SU2GetGetReturnType<T>::type>::value
-                                                            ? SpaceStateInterface::SpaceType::Fourier
-                                                            : SpaceStateInterface::SpaceType::Configuration)
+    requires HasSU2Get<T>
+  auto su2average(T instance, SpaceStateType spaceType = IsComplexType<typename SU2GetGetReturnType<T>::type>
+                                                             ? SpaceStateType::Fourier
+                                                             : SpaceStateType::Configuration)
   {
     return make_list_from_array(SU2Averager<T>(instance, spaceType).compute());
   }

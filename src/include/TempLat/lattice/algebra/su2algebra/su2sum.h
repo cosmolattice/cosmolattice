@@ -24,12 +24,13 @@ namespace TempLat
   template <typename R, typename T> class SU2Addition : public SU2BinaryOperator<R, T>
   {
   public:
-    typedef typename SU2GetGetReturnType<R>::type SV;
+    /* Put public methods here. These should change very little over time. */
 
     using SU2BinaryOperator<R, T>::mR;
     using SU2BinaryOperator<R, T>::mT;
 
-    /* Put public methods here. These should change very little over time. */
+    using SV = typename SU2GetGetReturnType<R>::type;
+
     SU2Addition(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
     template <int N> auto SU2Get(Tag<N> t) { return mT.SU2Get(t) + mR.SU2Get(t); }
@@ -44,12 +45,8 @@ namespace TempLat
       DoEval::eval(mR, i);
       DoEval::eval(mT, i);
     }
-    virtual std::string operatorString() const { return "+"; }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
+    static std::string operatorString() { return "+"; }
   };
 
   struct SU2SumTester {
@@ -59,10 +56,10 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasSU2Get<R>::value && HasSU2Get<T>::value, SU2Addition<R, T>>::type operator+(const R &r,
-                                                                                                         const T &t)
+    requires(HasSU2Get<R> && HasSU2Get<T>)
+  auto operator+(const R &r, const T &t)
   {
-    return {r, t};
+    return SU2Addition{r, t};
   }
 } // namespace TempLat
 

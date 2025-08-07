@@ -15,6 +15,7 @@
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 #include "TempLat/util/tuple_tools.h"
 
@@ -43,10 +44,10 @@ namespace TempLat
       auto result = (-2 * NDim * GetValue::get(mR, idx...));
       constexpr_for<0, NDim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        std::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                   tuple_add_to_nth<d>(std::tie(idx...), 1));
-        std::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                   tuple_add_to_nth<d>(std::tie(idx...), -1));
+        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
+                      tuple_add_to_nth<d>(device::tie(idx...), 1));
+        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
+                      tuple_add_to_nth<d>(device::tie(idx...), -1));
       });
       return result / dx2;
     }

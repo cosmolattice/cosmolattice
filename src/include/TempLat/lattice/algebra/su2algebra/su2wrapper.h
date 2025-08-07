@@ -24,7 +24,7 @@ namespace TempLat
   template <class A, class B, class C, class D> class SU2Wrapper : public SU2Operator
   {
   public:
-    typedef typename GetGetReturnType<A>::type SV;
+    using SV = typename GetGetReturnType<A>::type;
 
     /* Put public methods here. These should change very little over time. */
     SU2Wrapper() {}

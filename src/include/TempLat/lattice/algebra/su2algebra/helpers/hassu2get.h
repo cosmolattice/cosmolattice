@@ -5,33 +5,25 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
 {
-  /** \brief A class which checks whether the object has a su2get method or not.
-
-   *
+  /** \brief A concept which checks whether the object has a su2get method or not.
    *
    * Unit test: make test-hassu2get
    **/
+  template <typename T>
+  concept HasSU2Get = requires(T t, Tag<0> tag) { t.SU2Get(tag); };
+
   struct HasSU2GetTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
-  template <class, class = std::void_t<>> struct HasSU2Get : std::false_type {
-  };
-
-  template <class T>
-  struct HasSU2Get<T, std::void_t<decltype(std::declval<std::remove_cv_t<T>>().SU2Get(std::declval<Tag<0>>()))>>
-      : std::true_type {
-  };
-
 } // namespace TempLat
 
 #endif

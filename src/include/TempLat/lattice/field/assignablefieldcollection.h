@@ -15,7 +15,6 @@
 #include "TempLat/util/istuplelike.h"
 #include "TempLat/util/tuple_size.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
-#include "TempLat/lattice/field/assigners/assigner.h"
 #include "TempLat/util/tuplemaker.h"
 #include "TempLat/util/flattentuple.h"
 
@@ -48,17 +47,13 @@ namespace TempLat
       requires(!std::is_same_v<R, AssignableCollectionBase<Args...>>)
     void operator=(R &&r)
     {
-      // auto tup1 = flatten_tuple(make_tuple_from(static_cast<Q&>(*this)));
-      // auto tup2 = flatten_tuple(make_tuple_from(std::forward<R>(r)));
-      // Assigner::assign(tup1, tup2);
       using nakedR = typename std::remove_cv<typename std::remove_reference<R>::type>::type;
       for_in_range<0, size>([&](auto j) { std::get<j>(fs) = nakedR::Getter::get(r, j); });
     }
 
-    template <int M>
-    auto &operator()(
-        Tag<M> t) // Also work with operator [], but might be confusing that it is NOT an int (cant call f[1] -> f[1_c])
+    template <int M> auto &operator()(Tag<M> t)
     {
+      // Also work with operator [], but might be confusing that it is NOT an int (cant call f[1] -> f[1_c])
       return std::get<M - Q::SHIFTIND>(fs);
     }
 

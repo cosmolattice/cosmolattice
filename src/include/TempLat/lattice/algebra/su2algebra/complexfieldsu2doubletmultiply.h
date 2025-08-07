@@ -77,49 +77,43 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasComplexFieldGet<R>::value && HasSU2DoubletGet<T>::value,
-                          ComplexFieldSU2DoubletMultiplication<R, T>>::type
-  operator*(const R &r, const T &t)
+    requires(HasComplexFieldGet<R> && HasSU2DoubletGet<T>)
+  auto operator*(const R &r, const T &t)
   {
-    return {r, t};
+    return ComplexFieldSU2DoubletMultiplication<R, T>(r, t);
   }
 
   template <typename R, typename T>
-  typename std::enable_if<HasComplexFieldGet<T>::value && HasSU2DoubletGet<R>::value,
-                          ComplexFieldSU2DoubletMultiplication<T, R>>::type
-  operator*(const R &r, const T &t)
+    requires(HasComplexFieldGet<T> && HasSU2DoubletGet<R>)
+  auto operator*(const R &r, const T &t)
   {
-    return {t, r};
+    return ComplexFieldSU2DoubletMultiplication<R, T>(r, t);
   }
 
   template <typename T>
-  typename std::enable_if<HasSU2DoubletGet<T>::value,
-                          ComplexFieldSU2DoubletMultiplication<ComplexFieldWrapper<double, ZeroType>, T>>::type
-  operator*(double r, const T &t)
+    requires HasSU2DoubletGet<T>
+  auto operator*(double r, const T &t)
   {
     return Complexify(r, ZeroType()) * t;
   }
 
   template <typename T>
-  typename std::enable_if<HasSU2DoubletGet<T>::value,
-                          ComplexFieldSU2DoubletMultiplication<ComplexFieldWrapper<float, ZeroType>, T>>::type
-  operator*(float r, const T &t)
+    requires HasSU2DoubletGet<T>
+  auto operator*(float r, const T &t)
   {
     return Complexify(r, ZeroType()) * t;
   }
 
   template <typename T>
-  typename std::enable_if<HasSU2DoubletGet<T>::value,
-                          ComplexFieldSU2DoubletMultiplication<ComplexFieldWrapper<double, ZeroType>, T>>::type
-  operator/(const T &t, double r)
+    requires HasSU2DoubletGet<T>
+  auto operator/(const T &t, double r)
   {
     return Complexify(1_c / r, ZeroType()) * t;
   }
 
   template <typename T>
-  typename std::enable_if<HasSU2DoubletGet<T>::value,
-                          ComplexFieldSU2DoubletMultiplication<ComplexFieldWrapper<float, ZeroType>, T>>::type
-  operator/(const T &t, float r)
+    requires HasSU2DoubletGet<T>
+  auto operator/(const T &t, float r)
   {
     return Complexify(1_c / r, ZeroType()) * t;
   }

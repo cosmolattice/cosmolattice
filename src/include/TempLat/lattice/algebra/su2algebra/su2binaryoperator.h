@@ -58,7 +58,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
-    virtual inline std::shared_ptr<MemoryToolBox> getToolBox()
+    inline auto getToolBox()
     {
       auto a = GetToolBox::get(mR);
       auto b = GetToolBox::get(mT);

@@ -17,6 +17,8 @@
 
 namespace TempLat
 {
+  /** \brief An enum for passing the right space type, all while having the compiler type check it. */
+  enum class SpaceStateType { Configuration, Fourier, undefined };
 
   /** \brief An interface class which all getter-like objects inherit from, so we can access their
    *confirm(Config/Fourier)Space methods by their virtualness.
@@ -28,12 +30,9 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
 
-    /** \brief An enum for passing the right space type, all while having the compiler type check it. */
-    enum class SpaceType { Configuration, Fourier, undefined };
-
     /** \brief A preparation function: pass this call to all the members in the tree / chain, make sure everyone is in
      * configuration or fourier space, and everyone has the actual same layout. */
-    virtual void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceType &spaceType) = 0;
+    virtual void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) = 0;
 
     /** \brief A preparation function: pass this call to all the members in the tree / chain.
      *   We only want to update ghost cells on those fields where this expression tree actually uses
@@ -61,36 +60,36 @@ namespace TempLat
     /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
     virtual inline std::shared_ptr<MemoryToolBox<3>> getToolBox() = 0;
 
-    static inline std::string SpaceTypeString(SpaceType st)
+    static inline std::string SpaceTypeString(SpaceStateType st)
     {
       std::string result;
       switch (st) {
-      case SpaceType::Configuration:
+      case SpaceStateType::Configuration:
         result = "configuration space";
         break;
-      case SpaceType::Fourier:
+      case SpaceStateType::Fourier:
         result = "fourier space";
         break;
       default:
-      case SpaceType::undefined:
+      case SpaceStateType::undefined:
         result = "undefined space type";
         break;
       }
       return result;
     }
 
-    static inline std::string SpaceTypetoCanonicalCharacter(SpaceType st)
+    static inline std::string SpaceTypetoCanonicalCharacter(SpaceStateType st)
     {
       std::string result;
       switch (st) {
-      case SpaceType::Configuration:
+      case SpaceStateType::Configuration:
         result = "x";
         break;
-      case SpaceType::Fourier:
+      case SpaceStateType::Fourier:
         result = "k";
         break;
       default:
-      case SpaceType::undefined:
+      case SpaceStateType::undefined:
         result = "[x or k]";
         break;
       }
@@ -101,8 +100,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-  template <size_t NDim>
-  inline std::ostream &operator<<(std::ostream &ostream, typename SpaceStateInterface<NDim>::SpaceType st)
+  template <size_t NDim> inline std::ostream &operator<<(std::ostream &ostream, SpaceStateType st)
   {
     ostream << "SpaceType::" + SpaceStateInterface<NDim>::SpaceTypeString(st);
     return ostream;

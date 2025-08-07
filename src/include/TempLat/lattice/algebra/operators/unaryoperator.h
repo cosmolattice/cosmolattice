@@ -16,6 +16,10 @@
 // #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
+
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -43,10 +47,13 @@ namespace TempLat
 
     void doWeNeedGhosts() { GhostsHunter::apply(mR); }
 
+    void preGet() { PreGet::apply(mR); }
+
+    void postGet() { PostGet::apply(mR); }
+
     ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR); }
 
-    template <size_t NDim>
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
     }

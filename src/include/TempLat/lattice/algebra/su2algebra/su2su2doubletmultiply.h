@@ -21,18 +21,18 @@ namespace TempLat
 {
   /** \brief A class which implemetns SU2 SU2Doublet multiplication.
    *
-   *
    * Unit test: make test-su2su2doubletmultiply
    **/
   template <class R, class T> class SU2SU2DoubletMultiplication : public SU2DoubletBinaryOperator<R, T>
   {
   public:
+    /* Put public methods here. These should change very little over time. */
+
     using SU2DoubletBinaryOperator<R, T>::mR;
     using SU2DoubletBinaryOperator<R, T>::mT;
 
-    typedef typename SU2GetGetReturnType<R>::type SV;
+    using SV = typename SU2GetGetReturnType<R>::type;
 
-    /* Put public methods here. These should change very little over time. */
     SU2SU2DoubletMultiplication(const R &pR, const T &pT) : SU2DoubletBinaryOperator<R, T>(pR, pT) {}
 
     auto SU2DoubletGet(Tag<0> t)
@@ -71,7 +71,7 @@ namespace TempLat
       cache[3] = -cL[2] * cR[1] + cL[1] * cR[0] + cL[0] * cR[3] - cL[3] * cR[2];
     }
 
-    virtual std::string operatorString() const { return "*"; }
+    static std::string operatorString() { return "*"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -87,10 +87,10 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasSU2Get<R>::value && HasSU2DoubletGet<T>::value, SU2SU2DoubletMultiplication<R, T>>::type
-  operator*(const R &r, const T &t)
+    requires(HasSU2Get<R> && HasSU2DoubletGet<T>)
+  auto operator*(const R &r, const T &t)
   {
-    return {r, t};
+    return SU2SU2DoubletMultiplication<R, T>(r, t);
   }
 } // namespace TempLat
 

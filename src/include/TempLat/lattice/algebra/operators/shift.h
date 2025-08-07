@@ -50,13 +50,10 @@ namespace TempLat
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
-    static std::string operatorString() { return getString({SHIFTS...}); }
-
-  private:
-    static std::string getString(const std::vector<ptrdiff_t> &shifts)
+    static std::string operatorString()
     {
       std::string res = "_(";
-      for (auto x : shifts)
+      for (auto x : std::tie(SHIFTS...))
         res += std::to_string(x) + ",";
       res.pop_back();
       return res + ")";

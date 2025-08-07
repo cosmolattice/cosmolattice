@@ -14,17 +14,14 @@ namespace TempLat
 {
   /** \brief A class which computes the norm of a list.
    *
-   *
    * Unit test: make test-norm
    **/
   template <typename R>
-  typename std::enable_if<IsTempLatGettable<0, R>::value || IsSTDGettable<0, R>::value,
-                          decltype(total(pow<2>(std::declval<R>())))>::type
-  norm2(const R &r)
+    requires(IsTempLatGettable<0, R> || IsSTDGettable<0, R>)
+  auto norm2(const R &r)
   {
     return total(pow<2>(r));
   }
-
 } // namespace TempLat
 
 #endif

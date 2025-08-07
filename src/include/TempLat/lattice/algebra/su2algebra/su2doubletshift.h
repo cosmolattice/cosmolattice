@@ -69,19 +69,21 @@ namespace TempLat
   };
 
   template <int... shifts, class R>
-  typename std::enable_if<(sizeof...(shifts) > 1) && HasSU2DoubletGet<R>::value, SU2DoubletShifter<R, shifts...>>::type
-  shift(const R &pR)
+    requires((sizeof...(shifts) > 1) && HasSU2DoubletGet<R>)
+  auto shift(const R &pR)
   {
     return SU2DoubletShifter<R, shifts...>(pR);
   }
 
   template <int N, class R>
-  typename std::enable_if<HasSU2DoubletGet<R>::value, SU2DoubletShifterByOne<R, N>>::type shift(const R &pR)
+    requires HasSU2DoubletGet<R>
+  auto shift(const R &pR)
   {
     return SU2DoubletShifterByOne<R, N>(pR);
   }
   template <int N, class R>
-  typename std::enable_if<HasSU2DoubletGet<R>::value, SU2DoubletShifterByOne<R, N>>::type shift(const R &pR, Tag<N> t)
+    requires(HasSU2DoubletGet<R>)
+  auto shift(const R &pR, Tag<N> t)
   {
     return SU2DoubletShifterByOne<R, N>(pR);
   }

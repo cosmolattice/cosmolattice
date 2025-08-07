@@ -87,28 +87,29 @@ namespace TempLat
   };
 
   template <class R, class T>
-  typename std::enable_if<HasSU2DoubletGet<R>::value && HasSU2DoubletGet<T>::value, SU2DoubletDotter<R, T>>::type
-  scalar_prod(const R &r, const T &t)
+    requires(HasSU2DoubletGet<R> && HasSU2DoubletGet<T>)
+  auto scalar_prod(const R &r, const T &t)
   {
-    return {r, t};
+    return SU2DoubletDotter{r, t};
   }
 
   template <class R>
-  typename std::enable_if<HasSU2DoubletGet<R>::value, ZeroType>::type scalar_prod(const R &r, ZeroType t)
+    requires HasSU2DoubletGet<R>
+  auto scalar_prod(const R &r, ZeroType t)
   {
     return t;
   }
 
   template <class R>
-  typename std::enable_if<HasSU2DoubletGet<R>::value, ZeroType>::type scalar_prod(ZeroType t, const R &r)
+    requires HasSU2DoubletGet<R>
+  auto scalar_prod(ZeroType t, const R &r)
   {
     return t;
   }
 
   template <typename R>
-  typename std::enable_if<HasSU2DoubletGet<R>::value,
-                          decltype(Real(scalar_prod(std::declval<R>(), std::declval<R>())))>::type
-  norm2(const R &r)
+    requires HasSU2DoubletGet<R>
+  auto norm2(const R &r)
   {
     return Real(scalar_prod(r, r));
   }

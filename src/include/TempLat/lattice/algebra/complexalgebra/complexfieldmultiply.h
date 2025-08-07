@@ -60,62 +60,57 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasComplexFieldGet<R>::value && HasComplexFieldGet<T>::value,
-                          ComplexFieldMultiplication<R, T>>::type
-  operator*(const R &r, const T &t)
+    requires(HasComplexFieldGet<R> && HasComplexFieldGet<T>)
+  auto operator*(const R &r, const T &t)
   {
-    return {r, t};
+    return ComplexFieldMultiplication<R, T>(r, t);
   }
 
   template <typename R, typename T>
-  typename std::enable_if<IsComplexType<R>::value && HasComplexFieldGet<T>::value,
-                          ComplexFieldMultiplication<R, T>>::type
-  operator*(const R &r, const T &t)
+    requires(IsComplexType<R> && HasComplexFieldGet<T>)
+  auto operator*(const R &r, const T &t)
   {
-    return {r, t};
+    return ComplexFieldMultiplication<R, T>(r, t);
   }
 
   template <typename R, typename T>
-  typename std::enable_if<HasComplexFieldGet<R>::value && IsComplexType<T>::value,
-                          ComplexFieldMultiplication<R, T>>::type
-  operator*(const R &r, const T &t)
+    requires(HasComplexFieldGet<R> && IsComplexType<T>)
+  auto operator*(const R &r, const T &t)
   {
-    return {r, t};
+    return ComplexFieldMultiplication<R, T>(r, t);
   }
 
   template <typename R>
-  typename std::enable_if<HasComplexFieldGet<R>::value && !std::is_same<R, OneType>::value, R>::type
-  operator*(OneType, const R &r)
+    requires(HasComplexFieldGet<R> && !std::is_same_v<R, OneType>)
+  auto operator*(OneType, const R &r)
   {
     return r;
   }
 
   template <typename R>
-  typename std::enable_if<HasComplexFieldGet<R>::value && !std::is_same<R, OneType>::value, R>::type
-  operator*(const R &r, OneType)
+    requires(HasComplexFieldGet<R> && !std::is_same_v<R, OneType>)
+  auto operator*(const R &r, OneType)
   {
     return r;
   }
 
   template <typename R>
-  typename std::enable_if<HasComplexFieldGet<R>::value && !std::is_same<R, ZeroType>::value, ZeroType>::type
-  operator*(const R &r, ZeroType)
+    requires(HasComplexFieldGet<R> && !std::is_same_v<R, ZeroType>)
+  auto operator*(const R &r, ZeroType)
   {
     return ZeroType();
   }
 
   template <typename R>
-  typename std::enable_if<HasComplexFieldGet<R>::value && !std::is_same<R, ZeroType>::value, ZeroType>::type
-  operator*(ZeroType, const R &r)
+    requires(HasComplexFieldGet<R> && !std::is_same_v<R, ZeroType>)
+  auto operator*(ZeroType, const R &r)
   {
     return ZeroType();
   }
 
   template <typename R>
-  typename std::enable_if<HasComplexFieldGet<R>::value,
-                          decltype(pow<2>(std::declval<R>().ComplexFieldGet(std::declval<Tag<0>>())) +
-                                   pow<2>(std::declval<R>().ComplexFieldGet(std::declval<Tag<1>>())))>::type
-  norm2(R &&r)
+    requires HasComplexFieldGet<R>
+  auto norm2(R &&r)
   {
     return pow<2>(r.ComplexFieldGet(0_c)) + pow<2>(r.ComplexFieldGet(1_c));
   }

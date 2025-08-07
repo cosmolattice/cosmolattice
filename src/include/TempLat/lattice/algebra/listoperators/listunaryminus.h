@@ -45,9 +45,8 @@ namespace TempLat
   };
 
   template <typename R>
-  typename ConditionalListUnaryGetter<ListUnaryMinus, R>::type
-  // ListUnaryMinus<R>
-  operator-(const R &r)
+    requires ConditionalListUnaryGetter<R>
+  auto operator-(const R &r)
   {
     return ListUnaryMinus<R>(r);
   }

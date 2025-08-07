@@ -31,18 +31,15 @@ namespace TempLat
     SU2UnaryOperator(const R &pR) : mR(pR) {}
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
-    virtual std::string operatorString() const { return " "; }
+    static std::string operatorString() { return " "; }
 
     /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
      */
-    virtual std::string toString() const
+    std::string toString() const
     {
-
       std::string result = GetString::get(mR);
-
       if (ContainsSpace::test(result)) result = "(" + result + ")";
-
       return operatorString() + result;
     }
 
@@ -52,7 +49,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
-    virtual inline std::shared_ptr<MemoryToolBox> getToolBox() { return GetToolBox::get(mR); }
+    inline auto getToolBox() { return GetToolBox::get(mR); }
 
     static constexpr size_t size = 4;
     using Getter = SU2Getter;

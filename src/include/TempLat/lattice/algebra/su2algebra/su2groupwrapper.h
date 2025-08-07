@@ -21,14 +21,13 @@ namespace TempLat
   /** \brief A class which computes an element of the group SU(2).
    * By that, we mean that det=1 is imposed as a constrained on the 0th element, like in the SU2Fields.
    *
-   *
    * Unit test: make test-su2groupwrapper
    **/
   template <class A, class B, class C> class SU2GroupWrapper : public SU2Operator
   {
   public:
-    typedef typename GetGetReturnType<A>::type SV;
     /* Put public methods here. These should change very little over time. */
+    using SV = typename GetGetReturnType<A>::type;
 
     SU2GroupWrapper(const A &pA, const B &pB, const C &pC) : mA(pA), mB(pB), mC(pC) {}
 
@@ -37,11 +36,7 @@ namespace TempLat
     auto SU2Get(Tag<2> t) { return mB; }
     auto SU2Get(Tag<3> t) { return mC; }
 
-    auto SU2Get(Tag<0> t, ptrdiff_t i)
-    {
-      return cache[0];
-      // return sqrt(1.0-Total(i,1,3,pow<2>(SU2Get(i))GetValue::get()),i);
-    }
+    auto SU2Get(Tag<0> t, ptrdiff_t i) { return cache[0]; }
     auto SU2Get(Tag<1> t, ptrdiff_t i) { return cache[1]; }
     auto SU2Get(Tag<2> t, ptrdiff_t i) { return cache[2]; }
     auto SU2Get(Tag<3> t, ptrdiff_t i) { return cache[3]; }

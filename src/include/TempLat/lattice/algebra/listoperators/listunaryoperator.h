@@ -37,8 +37,7 @@ namespace TempLat
     template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return ConfirmGhosts::apply(mR, i); }
 
     template <int N, size_t NDim>
-    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout,
-                      const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
     }

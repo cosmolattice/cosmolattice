@@ -29,33 +29,32 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     AveragerHelper() {}
-    template <typename T> static void onBeforeAverageFourier(T &&pT, SpaceStateInterface::SpaceType pSpaceType)
+    template <typename T> static void onBeforeAverageFourier(T &&pT, SpaceStateType pSpaceType)
     {
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
-      if (pSpaceType != SpaceStateInterface::SpaceType::Fourier)
+      if (pSpaceType != SpaceStateType::Fourier)
         throw AveragerWrongSpace(" Called compute fourier space in averager specifying configuration layout. Abort.");
 
       ConfirmSpace::apply(pT, pT.getToolBox()->mLayouts.getFourierSpaceLayout(), pSpaceType);
       GhostsHunter::apply(pT);
     }
-    template <typename T> static void onBeforeAverageConfiguration(T &&pT, SpaceStateInterface::SpaceType pSpaceType)
+    template <typename T> static void onBeforeAverageConfiguration(T &&pT, SpaceStateType pSpaceType)
     {
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
-      if (pSpaceType != SpaceStateInterface::SpaceType::Configuration)
+      if (pSpaceType != SpaceStateType::Configuration)
         throw AveragerWrongSpace(" Called compute configuration space in averager specifying fourier layout. Abort.");
       ConfirmSpace::apply(pT, pT.getToolBox()->mLayouts.getConfigSpaceLayout(), pSpaceType);
       GhostsHunter::apply(pT);
     }
 
-    static vType normalize(std::shared_ptr<MemoryToolBox> toolBox, SpaceStateInterface::SpaceType pSpaceType,
-                           vType &value)
+    template <size_t NDim>
+    static vType normalize(std::shared_ptr<MemoryToolBox<NDim>> toolBox, SpaceStateType pSpaceType, vType &value)
     {
 
-      const LayoutStruct &layout = pSpaceType == SpaceStateInterface::SpaceType::Fourier
-                                       ? toolBox->mLayouts.getFourierSpaceLayout()
-                                       : toolBox->mLayouts.getConfigSpaceLayout();
+      const auto &layout = pSpaceType == SpaceStateType::Fourier ? toolBox->mLayouts.getFourierSpaceLayout()
+                                                                 : toolBox->mLayouts.getConfigSpaceLayout();
 
-      auto accounting = layout.getHermitianPartners()->getNumberOfIndependentValues();
+      const auto accounting = layout.getHermitianPartners()->getNumberOfIndependentValues();
 
       return normalizeTypeSpecific(value, accounting);
     }

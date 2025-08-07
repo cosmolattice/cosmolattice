@@ -18,18 +18,18 @@ namespace TempLat
 {
   /** \brief A class which implements the SU2 Subtraction.
    *
-   *
    * Unit test: make test-su2sum
    **/
   template <typename R, typename T> class SU2Subtraction : public SU2BinaryOperator<R, T>
   {
   public:
-    typedef typename SU2GetGetReturnType<R>::type SV;
+    /* Put public methods here. These should change very little over time. */
 
     using SU2BinaryOperator<R, T>::mR;
     using SU2BinaryOperator<R, T>::mT;
 
-    /* Put public methods here. These should change very little over time. */
+    using SV = typename SU2GetGetReturnType<R>::type;
+
     SU2Subtraction(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
     template <int N> auto SU2Get(Tag<N> t) { return mR.SU2Get(t) - mT.SU2Get(t); }
@@ -45,12 +45,10 @@ namespace TempLat
       DoEval::eval(mT, i);
     }
 
-    virtual std::string operatorString() const { return "-"; }
+    static std::string operatorString() { return "-"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
   };
 
   struct SU2SubtractTester {
@@ -60,10 +58,10 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasSU2Get<R>::value && HasSU2Get<T>::value, SU2Subtraction<R, T>>::type operator-(const R &r,
-                                                                                                            const T &t)
+    requires(HasSU2Get<R> && HasSU2Get<T>)
+  auto operator-(const R &r, const T &t)
   {
-    return {r, t};
+    return SU2Subtraction{r, t};
   }
 } // namespace TempLat
 

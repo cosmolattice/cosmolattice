@@ -12,10 +12,7 @@ inline void TempLat::HasSpaceConfirmationMethodsTester::Test(TempLat::TDDAsserti
   static constexpr size_t NDim = 3;
 
   struct MyTestOne {
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &sType)
-    {
-      std::cerr << "Hell yeah.\n";
-    }
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &sType) { std::cerr << "Hell yeah.\n"; }
   };
 
   struct MyTestTwo {
@@ -23,7 +20,7 @@ inline void TempLat::HasSpaceConfirmationMethodsTester::Test(TempLat::TDDAsserti
   };
 
   struct MyTestThree {
-    void confirmSpace(Tag<3> i, const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &sType)
+    void confirmSpace(Tag<3> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &sType)
     {
       std::cerr << "Hell yeah.\n";
     }

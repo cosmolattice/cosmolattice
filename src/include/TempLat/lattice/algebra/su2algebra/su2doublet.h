@@ -8,6 +8,8 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/helpers/getdx.h"
+#include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
@@ -20,21 +22,22 @@ namespace TempLat
    *
    * Unit test: make test-su2doublet
    **/
-  template <typename T> class SU2DoubletBase
+  template <size_t NDim, typename T> class SU2DoubletBase
   { //: public CollectionBase<SU2DoubletBase<T,ISMOMENTUM,I1,I2,I3,I4>,T, ISMOMENTUM, I1, I2, I3, I4> {
   public:
     /* Put public methods here. These should change very little over time. */
-    SU2DoubletBase(Field<T> f1, Field<T> f2, Field<T> f3, Field<T> f4) : fs{f1, f2, f3, f4}, mName("NoName")
+    SU2DoubletBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3, Field<NDim, T> f4)
+        : fs{f1, f2, f3, f4}, mName("NoName")
     // CollectionBase<SU2DoubletBase<T,ISMOMENTUM,I1,I2,I3,I4>,T, ISMOMENTUM, I1, I2, I3, I4>(f1, f2, f3, f4)
     {
     }
-    SU2DoubletBase(std::string name, std::shared_ptr<MemoryToolBox> toolBox, LatticeParameters<T> pLatPar)
+    SU2DoubletBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
         : mName(name) //:
                       // CollectionBase<SU2DoubletBase<T,ISMOMENTUM,I1,I2,I3,I4>,T,ISMOMENTUM,I1,I2,I3,I4>(name+"^",
                       // toolBox, pLatPar)
     {
       for (size_t i = 0; i < 4; ++i)
-        fs.emplace_back(Field<T>(name + "_" + std::to_string(i), toolBox, pLatPar));
+        fs.emplace_back(Field<NDim, T>(name + "_" + std::to_string(i), toolBox, pLatPar));
     }
 
     template <int N> auto SU2DoubletGet(Tag<N> t) { return (*this)(t); }
@@ -83,7 +86,7 @@ namespace TempLat
 
     std::string toString() const { return mName; }
 
-    std::shared_ptr<MemoryToolBox> getToolBox() { return GetToolBox::get(fs[0]); }
+    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return GetToolBox::get(fs[0]); }
 
     KOKKOS_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(fs[0]); }
@@ -98,19 +101,14 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    std::vector<Field<T>> fs;
+    std::vector<Field<NDim, T>> fs;
 
     const std::string mName;
 
   public:
   };
 
-  template <typename T> auto SU2Doubl(Field<T> f1, Field<T> f2, Field<T> f3, Field<T> f4)
-  {
-    return 0; // SU2DoubletBase<T>(f1, f2, f3, f4);
-  }
-
-  template <typename T> using SU2Doublet = SU2DoubletBase<T>;
+  template <size_t NDim, typename T> using SU2Doublet = SU2DoubletBase<NDim, T>;
 
   struct SU2DoubletTester {
 #ifdef TEMPLATTEST

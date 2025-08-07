@@ -15,19 +15,19 @@ namespace TempLat
    *function which returns its components wrt to sigma/2 instead of sigma, which is more conventional for the algebra
    *(but internally, also expanded as a function of sigma).
    *
-   *
    * Unit test: make test-su2liealgebrafield
    **/
-  template <typename T> class SU2LieAlgebraField : public SU2FieldBase<T>
+  template <size_t NDim, typename T> class SU2LieAlgebraField : public SU2FieldBase<NDim, T>
   {
   public:
-    using SU2FieldBase<T>::fs;
-
     /* Put public methods here. These should change very little over time. */
-    SU2LieAlgebraField(Field<T> f1, Field<T> f2, Field<T> f3) : SU2FieldBase<T>(f1, f2, f3) {}
 
-    SU2LieAlgebraField(std::string name, std::shared_ptr<MemoryToolBox> toolBox, LatticeParameters<T> pLatPar)
-        : SU2FieldBase<T>(name, toolBox, pLatPar)
+    using SU2FieldBase<NDim, T>::fs;
+
+    SU2LieAlgebraField(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3) : SU2FieldBase<NDim, T>(f1, f2, f3) {}
+
+    SU2LieAlgebraField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
+        : SU2FieldBase<NDim, T>(name, toolBox, pLatPar)
     {
     }
 
@@ -42,15 +42,15 @@ namespace TempLat
     auto SU2Get(Tag<0> t, ptrdiff_t i) { return 0.0; }
     template <int M> auto SU2Get(Tag<M> t, ptrdiff_t i) { return fs[M - 1].get(i); }
 
-    template <typename R> void operator=(R &&r) { SU2FieldBase<T>::operator=(r); }
+    template <typename R> void operator=(R &&r) { SU2FieldBase<NDim, T>::operator=(r); }
 
-    std::string toString() const { return SU2FieldBase<T>::toString(); }
-
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto getDx() const { return SU2FieldBase<T>::getDx(); }
+    std::string toString() const { return SU2FieldBase<NDim, T>::toString(); }
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto getKIR() const { return SU2FieldBase<T>::getKIR(); }
+    auto getDx() const { return SU2FieldBase<NDim, T>::getDx(); }
+
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto getKIR() const { return SU2FieldBase<NDim, T>::getKIR(); }
 
     using Getter = SU2Getter;
     static constexpr size_t SHIFTIND = 0;
@@ -61,7 +61,7 @@ namespace TempLat
     std::array<T, 4> SU2Get(ptrdiff_t i) // This function is private, as it is designed only for internal use and more
                                          // importantly, it does not return the correct 0th component,
     {                                    // for optmisation purposes.
-      return SU2FieldBase<T>::SU2Get(i);
+      return SU2FieldBase<NDim, T>::SU2Get(i);
     }
   };
 

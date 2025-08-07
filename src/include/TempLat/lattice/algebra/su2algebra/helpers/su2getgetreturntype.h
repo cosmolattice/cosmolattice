@@ -20,10 +20,11 @@ namespace TempLat
    * Unit test: make test-su2getgetreturntype
    **/
   template <typename T> struct SU2GetGetReturnType {
-    typedef typename GetGetReturnType<typename std::remove_const<typename std::remove_reference<decltype(SU2Getter::get(
-        std::declval<T>(), std::declval<Tag<1>>()))>::type>::type>::type
-        type; // Note: we check the type of the field 1 and not 0, as 1 is really an object.
-    static constexpr bool isComplex = IsComplexType<type>::value;
+    using type = typename GetGetReturnType<
+        std::decay_t<decltype(SU2Getter::get(std::declval<T>(), std::declval<Tag<1>>()))>>::type;
+    // Note: we check the type of the field 1 and not 0,
+    // as 1 is really an object.
+    static constexpr bool isComplex = IsComplexType<type>;
   };
 
   struct SU2GetGetReturnTypeTester {

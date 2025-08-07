@@ -13,7 +13,7 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* test the stability of the getter at various coordinates. */
 
-  const ptrdiff_t nGrid = 4, nGhost = 1;
+  const ptrdiff_t nGrid = 256, nGhost = 1;
   const ptrdiff_t fourierGridPoints = nGrid * nGrid * (nGrid / 2 + 1); // +1 for the zero frequency.
 
   auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
@@ -51,8 +51,6 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
     bool rewinding = true;
     for (size_t i = 0; i < fourierGridPoints; ++i)
       rewinding &= AlmostEqual(a_host(i), b_host(i));
-    for (size_t i = 0; i < fourierGridPoints; ++i)
-      std::cout << "a[" << i << "] = " << a_host(i) << ", b[" << i << "] = " << b_host(i) << "\n";
     tdd.verify(rewinding);
   }
 }

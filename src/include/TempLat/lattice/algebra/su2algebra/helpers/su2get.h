@@ -14,7 +14,6 @@ namespace TempLat
 {
   /** \brief A class which return the SU2Get method.
    *
-   *
    * Unit test: make test-su2get
    **/
   class SU2Getter

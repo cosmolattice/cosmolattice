@@ -32,14 +32,14 @@ namespace TempLat
     typedef typename GetGetReturnType<T>::type vType;
 
     /* Put public methods here. These should change very little over time. */
-    SpatialAverager(const T &pT, SpaceStateInterface::SpaceType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    SpatialAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
 
     operator vType() { return compute(); }
 
     std::vector<vType> compute() // We use the fat that the last dimension is never split in the parallelization
     {
 
-      if (mSpaceType == SpaceStateInterface::SpaceType::Fourier)
+      if (mSpaceType == SpaceStateType::Fourier)
         throw AveragerWrongSpace("Spatial averager works only in configuration space.");
 
       std::vector<vType> selfResult = computeConfigurationSpace();
@@ -84,12 +84,12 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
-    SpaceStateInterface::SpaceType mSpaceType;
+    SpaceStateType mSpaceType;
   };
 
   template <typename T>
   typename std::enable_if<!IsTempLatGettable<0, T>::value, std::vector<typename GetGetReturnType<T>::type>>::type
-  spatialAverage(T instance, SpaceStateInterface::SpaceType spaceType = SpaceStateInterface::SpaceType::Configuration)
+  spatialAverage(T instance, SpaceStateType spaceType = SpaceStateType::Configuration)
   {
     return SpatialAverager<T>(instance, spaceType).compute();
   }

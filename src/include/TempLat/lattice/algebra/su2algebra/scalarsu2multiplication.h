@@ -76,15 +76,17 @@ namespace TempLat
    }*/
 
   template <typename T>
-  typename std::enable_if<HasSU2Get<T>::value, ScalarSU2Multiplication<double, T>>::type operator*(double r, const T &t)
+    requires(HasSU2Get<T>)
+  auto operator*(double r, const T &t)
   {
-    return {r, t};
+    return ScalarSU2Multiplication{r, t};
   }
 
   template <typename T>
-  typename std::enable_if<HasSU2Get<T>::value, ScalarSU2Multiplication<float, T>>::type operator*(float r, const T &t)
+    requires HasSU2Get<T>
+  auto operator*(float r, const T &t)
   {
-    return {r, t};
+    return ScalarSU2Multiplication{r, t};
   }
 } // namespace TempLat
 

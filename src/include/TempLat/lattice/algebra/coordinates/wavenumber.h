@@ -77,14 +77,13 @@ namespace TempLat
 
     static std::string toString() { return "k"; }
 
-    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
-                      const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       switch (spaceType) {
-      case SpaceStateInterface<NDim>::SpaceType::Configuration:
+      case SpaceStateType::Configuration:
         throw WaveNumberWrongSpaceConfirmation("WaveNumber explicitly only can be used in fourier space. Abort.");
         break;
-      case SpaceStateInterface<NDim>::SpaceType::Fourier:
+      case SpaceStateType::Fourier:
       default:
         break;
       }

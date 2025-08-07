@@ -69,8 +69,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
-    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
-                      const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
     }

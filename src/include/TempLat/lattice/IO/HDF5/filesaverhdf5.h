@@ -73,8 +73,7 @@ namespace TempLat
     template <typename R> void save(R r)
     { // used to store an entity directly to a dataset, using it's own name.
       typedef typename GetGetReturnType<R>::type vType;
-      ConfirmSpace::apply(r, r.getToolBox()->mLayouts.getConfigSpaceLayout(),
-                          SpaceStateInterface::SpaceType::Configuration);
+      ConfirmSpace::apply(r, r.getToolBox()->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
       GhostsHunter::apply(r);
       mDataset = mFile.createDataset<vType>(GetString::get(r), r.getToolBox()->mNGridPointsVec);
       saveDim(r, 0, {});
@@ -84,8 +83,7 @@ namespace TempLat
     template <typename R, typename T> void save(T t, R r, std::string name)
     { // used to store an entity in a time series. The name is the one of the group, data set labelled by t.
       typedef typename GetGetReturnType<R>::type vType;
-      ConfirmSpace::apply(r, r.getToolBox()->mLayouts.getConfigSpaceLayout(),
-                          SpaceStateInterface::SpaceType::Configuration);
+      ConfirmSpace::apply(r, r.getToolBox()->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
       GhostsHunter::apply(r);
       mDataset = mFile.createOrOpenGroup(name).createDataset<vType>(PrettyToString::get(t, 10),
                                                                     r.getToolBox()->mNGridPointsVec);

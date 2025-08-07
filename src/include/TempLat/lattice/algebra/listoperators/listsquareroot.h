@@ -15,11 +15,8 @@ namespace TempLat
 
   /** \brief A class which implements the square root over lists.
    *
-   *
-   *
    * Unit test: make test-listsquareroot
    **/
-
   class ListSquareRootTester
   {
   public:

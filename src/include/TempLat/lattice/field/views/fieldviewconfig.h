@@ -75,9 +75,9 @@ namespace TempLat
 #ifndef NOKOKKOS
       PreGet::apply(g);
       if constexpr (NDim > 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const std::array<size_t, NDim> &idx)
+        auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
         {
-          std::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
+          device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
         };
         Kokkos::parallel_for("ConfigViewAssign",                                                         //
                              Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
@@ -111,25 +111,21 @@ namespace TempLat
       this->assign(other);
     }
 
-    template <typename... IDX>
+    template <std::integral... IDX>
       requires(NDim == sizeof...(IDX))
     KOKKOS_FORCEINLINE_FUNCTION T get(IDX &&...idx) const
     {
-#ifndef NOKOKKOS
       return mView(idx...);
-#else
-      return mManager->operator[](i);
-#endif
     }
 
     T &getSet(ptrdiff_t i) { return mManager->operator[](i); }
 
     virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
 
-    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       switch (spaceType) {
-      case SpaceStateInterface<NDim>::SpaceType::Fourier:
+      case SpaceStateType::Fourier:
         if (!mDisableFFTBlocking)
           throw FieldViewConfigWrongSpaceConfirmation(
               "FieldViewConfig explicitly only can be used in configuration space. Do not transform to Fourier space "
@@ -137,7 +133,7 @@ namespace TempLat
               "integration data, you can call Field<T>::setDisableFFTBlocking() to disable this block, and enable "
               "going from configuration to Fourier space.");
         break;
-      case SpaceStateInterface<NDim>::SpaceType::Configuration:
+      case SpaceStateType::Configuration:
       default:
         AbstractField<NDim, T>::confirmSpace(newLayout, spaceType);
         break;
@@ -184,8 +180,7 @@ namespace TempLat
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
       mManager->confirmConfigSpace();
 
-      ConfirmSpace::apply(g, mToolBox->mLayouts.getConfigSpaceLayout(),
-                          SpaceStateInterface<NDim>::SpaceType::Configuration);
+      ConfirmSpace::apply(g, mToolBox->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
 
       GhostsHunter::apply(g);
       mManager->flagHostMirrorOutdated();

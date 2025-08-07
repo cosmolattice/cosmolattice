@@ -30,10 +30,12 @@ namespace TempLat
    *
    *
    **/
-  template <size_t NDim, typename T> class AbstractField
+  template <size_t _NDim, typename T> class AbstractField
   {
   public:
     /* Put public methods here. These should change very little over time. */
+
+    static constexpr size_t NDim = _NDim;
 
     AbstractField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
         : mToolBox(toolBox), mManager(std::make_shared<MemoryManager<NDim, T>>(mToolBox, name)), latPar(pLatPar)
@@ -52,14 +54,13 @@ namespace TempLat
     virtual const JumpsHolder<NDim> &getJumps() const = 0;
 
     // virtual void onBeforeAssignment() const = 0;
-    virtual inline void confirmSpace(const LayoutStruct<NDim> &newLayout,
-                                     const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    virtual inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       switch (spaceType) {
-      case SpaceStateInterface<NDim>::SpaceType::Fourier:
+      case SpaceStateType::Fourier:
         mManager->confirmFourierSpace();
         break;
-      case SpaceStateInterface<NDim>::SpaceType::Configuration:
+      case SpaceStateType::Configuration:
       default:
         mManager->confirmConfigSpace();
         break;

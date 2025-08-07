@@ -11,12 +11,10 @@
 
 namespace TempLat
 {
-
   /** \brief A class which provides the interface for TDDContainers.
    *
    * Unit test: make test-tddcontainerbase
    */
-
   class TDDContainerBase
   {
   public:

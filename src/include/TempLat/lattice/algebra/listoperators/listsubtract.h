@@ -48,9 +48,8 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename ConditionalListBinaryGetter<ListSubtraction, R, T>::type
-  // ListSubtraction<R,T>
-  operator-(const R &r, const T &t)
+    requires ConditionalListBinaryGetter<R, T>
+  auto operator-(const R &r, const T &t)
   {
     return ListSubtraction<R, T>(r, t);
   }

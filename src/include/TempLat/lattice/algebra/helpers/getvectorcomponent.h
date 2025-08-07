@@ -36,8 +36,7 @@ namespace TempLat
 
     void doWeNeedGhosts() { GhostsHunter::apply(mR, mJ); }
 
-    template <size_t NDim>
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       ConfirmSpace::apply(mR, mJ, newLayout, spaceType);
     }

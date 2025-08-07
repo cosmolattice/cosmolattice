@@ -14,7 +14,6 @@ namespace TempLat
 {
   /** \brief A class which contains basic info about su2 algebra.
    *
-   *
    * Unit test: make test-su2operator
    **/
   class SU2Operator

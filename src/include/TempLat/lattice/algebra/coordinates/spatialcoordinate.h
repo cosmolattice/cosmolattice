@@ -64,15 +64,14 @@ namespace TempLat
 
     JumpsHolder<NDim> getJumps() { return mToolBox->mLayouts.getConfigSpaceJumps(); }
 
-    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
-                      const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       switch (spaceType) {
-      case SpaceStateInterface<NDim>::SpaceType::Fourier:
+      case SpaceStateType::Fourier:
         throw SpatialCoordinateConfigWrongSpaceConfirmation(
             "SpatialCoordinate explicitly only can be used in configuration space. Abort.");
         break;
-      case SpaceStateInterface<NDim>::SpaceType::Configuration:
+      case SpaceStateType::Configuration:
       default:
         break;
       }

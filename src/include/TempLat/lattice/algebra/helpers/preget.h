@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
 {
@@ -30,6 +31,20 @@ namespace TempLat
     template <typename U>
       requires(!requires(U obj) { obj.preGet(); })
     static inline void apply(U &)
+    {
+      // do nothing
+    }
+
+    template <typename U, int N>
+      requires requires(U obj, Tag<N> t) { obj.preGet(t); }
+    static inline void apply(U &obj, Tag<N> t)
+    {
+      obj.preGet(t);
+    }
+
+    template <typename U, int N>
+      requires(!requires(U obj, Tag<N> t) { obj.preGet(t); })
+    static inline void apply(U &, Tag<N>)
     {
       // do nothing
     }

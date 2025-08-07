@@ -18,13 +18,13 @@ namespace TempLat
    * @return auto a tied tuple of the last i elements
    */
   template <size_t i, typename Head, typename... Tail>
-  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_last(const std::tuple<Head, Tail...> &t)
+  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_last(const device::tuple<Head, Tail...> &t)
   {
     static_assert(i <= sizeof...(Tail), "Cannot take a longer tail than the tuple.");
     if constexpr (sizeof...(Tail) == i)
-      return std::apply([](auto & /*head*/, auto &...tail) { return std::tie(tail...); }, t);
+      return device::apply([](auto & /*head*/, auto &...tail) { return device::tie(tail...); }, t);
     else
-      return std::apply([](auto & /*head*/, auto &...tail) { return tuple_last<i>(std::tie(tail...)); }, t);
+      return device::apply([](auto & /*head*/, auto &...tail) { return tuple_last<i>(device::tie(tail...)); }, t);
   }
 
   /**
@@ -35,17 +35,17 @@ namespace TempLat
    * @return auto a tied tuple of the first i elements
    */
   template <size_t i, typename Head, typename... Tail>
-  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_first(const std::tuple<Head, Tail...> &t)
+  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_first(const device::tuple<Head, Tail...> &t)
   {
     static_assert(i <= sizeof...(Tail), "Cannot take a longer sequence than the tuple.");
     if constexpr (i == 0)
-      return std::tuple();
+      return device::tuple();
     else if constexpr (i == 1)
-      return std::apply([](auto &head, auto &.../*tail*/) { return std::tie(head); }, t);
+      return device::apply([](auto &head, auto &.../*tail*/) { return device::tie(head); }, t);
     else
-      return std::apply(
+      return device::apply(
           [](auto &head, auto &...tail) {
-            return std::tuple_cat(std::tie(head), tuple_first<i - 1>(std::tie(tail...)));
+            return device::tuple_cat(device::tie(head), tuple_first<i - 1>(device::tie(tail...)));
           },
           t);
   }
@@ -61,30 +61,31 @@ namespace TempLat
    * @return auto the modified tuple
    */
   template <size_t n, typename I, typename... IDX>
-  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(std::tuple<IDX...> &&tt, const I &add)
+  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(device::tuple<IDX...> &&tt, const I &add)
   {
     static_assert(n < sizeof...(IDX));
-    std::get<n>(tt) += add;
+    device::get<n>(tt) += add;
     return tt;
   }
 
   template <size_t n, typename I, typename... IDX>
-  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(std::tuple<IDX...> &tt, const I &add)
+  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(device::tuple<IDX...> &tt, const I &add)
   {
     static_assert(n < sizeof...(IDX));
-    std::get<n>(tt) += add;
+    device::get<n>(tt) += add;
     return tt;
   }
 
   template <size_t n, typename I, typename... IDX>
-  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth(const std::tuple<IDX...> &tt, const I &add)
+  KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth(const device::tuple<IDX...> &tt, const I &add)
   {
     constexpr size_t len = sizeof...(IDX);
     static_assert(n < len);
     if constexpr (n >= 1) {
-      return std::tuple_cat(tuple_first<n>(tt), std::tuple(std::get<n>(tt) + add), tuple_last<len - n - 1>(tt));
+      return device::tuple_cat(tuple_first<n>(tt), device::make_tuple(device::get<n>(tt) + add),
+                               tuple_last<len - n - 1>(tt));
     } else if constexpr (n == 0) {
-      return std::tuple_cat(std::tuple(std::get<0>(tt) + add), tuple_last<len - 1>(tt));
+      return device::tuple_cat(device::make_tuple(device::get<0>(tt) + add), tuple_last<len - 1>(tt));
     }
   }
 

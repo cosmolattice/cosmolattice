@@ -24,7 +24,9 @@ namespace TempLat
   template <template <class> class Arg, class T, int N, bool flatAssign = false, int SHIFTIND = 0> class FieldCollection
   {
   public:
-    FieldCollection(std::string name, std::shared_ptr<MemoryToolBox> toolBox,
+    static constexpr size_t NDim = Arg<T>::NDim;
+
+    FieldCollection(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
                     LatticeParameters<T> pLatPar = LatticeParameters<T>()) //:
     {
       for (size_t i = 0; i < N; ++i) {
@@ -37,25 +39,6 @@ namespace TempLat
 
     template <typename R> void operator=(R &&r)
     {
-      /*   auto body = static_if<flatAssign>(
-                  [&](){
-                      auto tup1 = flatten_tuple(make_tuple_from(*this));
-                      auto tup2 = flatten_tuple(make_tuple_from(std::forward<R>(r)));
-                      Assigner::assign(tup1, tup2);
-                      }
-                  ,[&]()
-                  {
-                      for_in_range<0,std::remove_reference<R>::type::size>(
-                   [&](auto i)
-                      {
-                         (*this).getComp(i) = std::remove_reference<R>::type::Getter::get(r,i);
-                      }
-                  );
-                  }
-          );
-
-         body();*/
-
       for_in_range<0, std::remove_reference<R>::type::size>(
           [&](auto i) { (*this).getComp(i) = std::remove_reference<R>::type::Getter::get(r, i); });
     }

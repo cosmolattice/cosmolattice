@@ -57,27 +57,24 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasComplexFieldGet<R>::value && HasComplexFieldGet<T>::value,
-                          ComplexFieldSubtraction<R, T>>::type
-  operator-(const R &r, const T &t)
+    requires(HasComplexFieldGet<R> && HasComplexFieldGet<T>)
+  auto operator-(const R &r, const T &t)
   {
-    return {r, t};
+    return ComplexFieldSubtraction<R, T>{r, t};
   }
 
   template <typename R, typename T>
-  typename std::enable_if<!HasStaticGetter<R>::value && HasComplexFieldGet<T>::value,
-                          ComplexFieldSubtraction<ComplexFieldWrapper<R, ZeroType>, T>>::type
-  operator-(const R &r, const T &t)
+    requires(!HasStaticGetter<R> && HasComplexFieldGet<T>)
+  auto operator-(const R &r, const T &t)
   {
-    return {Complexify(r, ZeroType()), t};
+    return ComplexFieldSubtraction{Complexify(r, ZeroType()), t};
   }
 
   template <typename R, typename T>
-  typename std::enable_if<HasComplexFieldGet<R>::value && !HasStaticGetter<T>::value,
-                          ComplexFieldSubtraction<R, ComplexFieldWrapper<T, ZeroType>>>::type
-  operator-(const R &r, const T &t)
+    requires(HasComplexFieldGet<R> && !HasStaticGetter<T>)
+  auto operator-(const R &r, const T &t)
   {
-    return {r, Complexify(t, ZeroType())};
+    return ComplexFieldSubtraction{r, Complexify(t, ZeroType())};
   }
 } // namespace TempLat
 

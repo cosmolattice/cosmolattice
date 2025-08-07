@@ -37,7 +37,7 @@ namespace TempLat
     typedef std::array<vType, size> arrVType;
 
     /* Put public methods here. These should change very little over time. */
-    ListAverager(const T &pT, SpaceStateInterface::SpaceType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    ListAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
 
     /* operator vType()
      {
@@ -46,8 +46,7 @@ namespace TempLat
 
     arrVType compute()
     {
-      arrVType selfResult =
-          mSpaceType == SpaceStateInterface::SpaceType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
+      arrVType selfResult = mSpaceType == SpaceStateType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
       auto toolBox = GetComponent::get(mT, Tag<0>()).getToolBox();
 
       arrVType reducedRes, ret; //= mT.getToolBox()->mGroup.getBaseComm().computeAllSum(selfResult);
@@ -106,7 +105,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
-    SpaceStateInterface::SpaceType mSpaceType;
+    SpaceStateType mSpaceType;
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -118,11 +117,11 @@ namespace TempLat
   };
 
   template <typename T>
-  auto listaverage(T instance,
-                   SpaceStateInterface::SpaceType spaceType =
-                       GetGetReturnType<decltype(GetComponent::get(std::declval<T &>(), Tag<0>()))>::isComplex
-                           ? SpaceStateInterface::SpaceType::Fourier
-                           : SpaceStateInterface::SpaceType::Configuration)
+  auto listaverage(
+      T instance,
+      SpaceStateType spaceType = GetGetReturnType<decltype(GetComponent::get(std::declval<T &>(), Tag<0>()))>::isComplex
+                                     ? SpaceStateType::Fourier
+                                     : SpaceStateType::Configuration)
   {
     return ListAverager<T>(instance, spaceType).compute();
   }
@@ -135,10 +134,10 @@ namespace TempLat
               std::array<typename GetGetReturnType<decltype(GetComponent::get(std::declval<T &>(), Tag<0>()))>::type,
                          T::size>>()))>::type
   // auto
-  average(T instance, SpaceStateInterface::SpaceType spaceType =
+  average(T instance, SpaceStateType spaceType =
                           GetGetReturnType<decltype(GetComponent::get(std::declval<T &>(), Tag<0>()))>::isComplex
-                              ? SpaceStateInterface::SpaceType::Fourier
-                              : SpaceStateInterface::SpaceType::Configuration)
+                              ? SpaceStateType::Fourier
+                              : SpaceStateType::Configuration)
   {
     return make_list_from_array(ListAverager<T>(instance, spaceType).compute());
   }

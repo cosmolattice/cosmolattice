@@ -26,6 +26,7 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
+
     ComplexField(Field<NDim, T> f1, Field<NDim, T> f2) : mR(f1), mI(f2), mName("NoName") {}
 
     ComplexField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
@@ -40,20 +41,26 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<1> t) { return mI; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) { return mR.get(i); }
+    template <std::integral... IDX>
+      requires(NDim == sizeof...(IDX))
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx)
+    {
+      return mR.get(idx...);
+    }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) { return mI.get(i); }
+    template <std::integral... IDX>
+      requires(NDim == sizeof...(IDX))
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx)
+    {
+      return mI.get(idx...);
+    }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto ComplexFieldGet(ptrdiff_t i) { return std::array<T, 2>{mR.get(i), mI.get(i)}; }
-
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto &ComplexFieldGetSet(Tag<0> t, ptrdiff_t i) { return mR.getSet(i); }
-
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto &ComplexFieldGetSet(Tag<1> t, ptrdiff_t i) { return mI.getSet(i); }
+    template <std::integral... IDX>
+      requires(NDim == sizeof...(IDX))
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(const IDX &...idx)
+    {
+      return Kokkos::Array<T, 2>{mR.get(idx...), mI.get(idx...)};
+    }
 
     template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) { return ComplexFieldGet(t); }
 

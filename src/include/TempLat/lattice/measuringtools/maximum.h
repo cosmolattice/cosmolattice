@@ -32,13 +32,13 @@ namespace TempLat
     typedef typename GetGetReturnType<T>::type vType;
 
     /* Put public methods here. These should change very little over time. */
-    Maximum(const T &pT, SpaceStateInterface::SpaceType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    Maximum(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
 
     operator vType() { return compute(); }
 
     vType compute()
     {
-      vType selfResult = mSpaceType == SpaceStateInterface::SpaceType::Fourier
+      vType selfResult = mSpaceType == SpaceStateType::Fourier
                              ? throw(MaximumWrongSpace("Maximum works only in real space."))
                              : computeConfigurationSpace();
 
@@ -66,8 +66,7 @@ namespace TempLat
     template <typename R> static void onBeforeAverageConfiguration(R &&pT)
     {
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
-      ConfirmSpace::apply(pT, pT.getToolBox()->mLayouts.getConfigSpaceLayout(),
-                          SpaceStateInterface::SpaceType::Configuration);
+      ConfirmSpace::apply(pT, pT.getToolBox()->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
       GhostsHunter::apply(pT);
     }
     std::string toString() const { return "max(" + GetString::get(mT) + ")"; }
@@ -78,14 +77,13 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
-    SpaceStateInterface::SpaceType mSpaceType;
+    SpaceStateType mSpaceType;
   };
 
   template <typename T>
   typename std::enable_if<!IsTempLatGettable<0, T>::value, typename GetGetReturnType<T>::type>::type
-  max(T instance, SpaceStateInterface::SpaceType spaceType = GetGetReturnType<T>::isComplex
-                                                                 ? SpaceStateInterface::SpaceType::Fourier
-                                                                 : SpaceStateInterface::SpaceType::Configuration)
+  max(T instance, SpaceStateType spaceType = GetGetReturnType<T>::isComplex ? SpaceStateType::Fourier
+                                                                            : SpaceStateType::Configuration)
   {
     return Maximum<T>(instance, spaceType).compute();
   }

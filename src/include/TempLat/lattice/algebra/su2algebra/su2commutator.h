@@ -19,18 +19,18 @@ namespace TempLat
 {
   /** \brief A class which computes the commutator of two SU(2) matrices.
    *
-   *
    * Unit test: make test-su2commutator
    **/
-
   template <typename R, typename T> class SU2Commutator : public SU2BinaryOperator<R, T>
   {
   public:
-    typedef typename SU2GetGetReturnType<R>::type SV;
+    /* Put public methods here. These should change very little over time. */
+
     using SU2BinaryOperator<R, T>::mR;
     using SU2BinaryOperator<R, T>::mT;
 
-    /* Put public methods here. These should change very little over time. */
+    using SV = typename SU2GetGetReturnType<R>::type;
+
     SU2Commutator(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
     auto SU2Get(Tag<0> t) { return ZeroType(); }
@@ -53,7 +53,7 @@ namespace TempLat
       cache[3] = 2 * (cL[2] * cR[1] - cL[1] * cR[2]);
     }
 
-    virtual std::string operatorString() const { return "commutator"; }
+    static std::string operatorString() { return "commutator"; }
 
   private:
     std::array<SV, 4> cL;
@@ -68,28 +68,36 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasSU2Get<R>::value && HasSU2Get<T>::value, SU2Commutator<R, T>>::type commutator(const R &r,
-                                                                                                            const T &t)
+    requires(HasSU2Get<R> && HasSU2Get<T>)
+  auto commutator(const R &r, const T &t)
   {
-    return {r, t};
+    return SU2Commutator{r, t};
   }
 
-  template <typename T> typename std::enable_if<HasSU2Get<T>::value, ZeroType>::type commutator(OneType r, const T &t)
-  {
-    return ZeroType();
-  }
-
-  template <typename R> typename std::enable_if<HasSU2Get<R>::value, ZeroType>::type commutator(const R &r, OneType t)
+  template <typename T>
+    requires HasSU2Get<T>
+  auto commutator(OneType r, const T &t)
   {
     return ZeroType();
   }
 
-  template <typename T> typename std::enable_if<HasSU2Get<T>::value, ZeroType>::type commutator(ZeroType r, const T &t)
+  template <typename R>
+    requires HasSU2Get<R>
+  auto commutator(const R &r, OneType t)
   {
     return ZeroType();
   }
 
-  template <typename R> typename std::enable_if<HasSU2Get<R>::value, ZeroType>::type commutator(const R &r, ZeroType t)
+  template <typename T>
+    requires HasSU2Get<T>
+  auto commutator(ZeroType r, const T &t)
+  {
+    return ZeroType();
+  }
+
+  template <typename R>
+    requires HasSU2Get<R>
+  auto commutator(const R &r, ZeroType t)
   {
     return ZeroType();
   }

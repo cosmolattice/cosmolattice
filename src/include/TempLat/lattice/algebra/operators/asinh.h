@@ -15,8 +15,14 @@
 #include "TempLat/lattice/algebra/operators/multiply.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/tdd/tdd.h"
+
 namespace TempLat
 {
+#ifndef NOKOKKOS
+  using Kokkos::asinh;
+#else
+  using std::asinh;
+#endif
   namespace Operators
   {
     /** \brief A class which computes the asinh.

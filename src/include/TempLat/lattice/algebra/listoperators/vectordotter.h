@@ -55,8 +55,7 @@ namespace TempLat
       return result;
     }
 
-    template <size_t NDim>
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       BinaryOperator<R, T>::confirmSpace(newLayout, spaceType);
     }

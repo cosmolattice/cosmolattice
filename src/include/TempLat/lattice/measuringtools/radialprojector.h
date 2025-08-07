@@ -48,8 +48,8 @@ namespace TempLat
     typedef typename RadialProjectionResult<sType>::floatType floatType;
     typedef RadialProjectionResult<sType> resultType;
 
-    RadialProjector(const T &instance, SpaceStateInterface::SpaceType spaceType,
-                    std::shared_ptr<MemoryToolBox> pToolBox, bool pUseCentralBinValues)
+    RadialProjector(const T &instance, SpaceStateType spaceType, std::shared_ptr<MemoryToolBox> pToolBox,
+                    bool pUseCentralBinValues)
         : mSpaceType(spaceType), mInstance(instance), mToolBox(pToolBox), mUseBinCentralValues(pUseCentralBinValues)
     {
     }
@@ -69,12 +69,12 @@ namespace TempLat
       }
 
       RadialProjectionResult<sType> baseWorkSpace(nLinearBins, mUseBinCentralValues,
-                                                  mSpaceType == SpaceStateInterface::SpaceType::Fourier);
+                                                  mSpaceType == SpaceStateType::Fourier);
 
       sType minValue = excludeOrigin ? 1.0 : 0.0;
 
       RadialProjectionResult<sType> myResult =
-          mSpaceType == SpaceStateInterface::SpaceType::Configuration
+          mSpaceType == SpaceStateType::Configuration
               ? computeConfigurationSpace(makeBinComputer(nLinearBins, minValue, customRange), baseWorkSpace,
                                           excludeOrigin)
               : computeFourierSpace(makeBinComputer(nLinearBins, minValue, customRange), baseWorkSpace, excludeOrigin);
@@ -85,15 +85,15 @@ namespace TempLat
     }
 
   private:
-    SpaceStateInterface::SpaceType mSpaceType;
+    SpaceStateType mSpaceType;
     T mInstance;
     std::shared_ptr<MemoryToolBox> mToolBox;
     bool mUseBinCentralValues;
 
     const auto &getLayout()
     {
-      return mSpaceType == SpaceStateInterface::SpaceType::Fourier ? mToolBox->mLayouts.getFourierSpaceLayout()
-                                                                   : mToolBox->mLayouts.getConfigSpaceLayout();
+      return mSpaceType == SpaceStateType::Fourier ? mToolBox->mLayouts.getFourierSpaceLayout()
+                                                   : mToolBox->mLayouts.getConfigSpaceLayout();
     }
 
     template <typename BINCOMPUTETYPE>
@@ -178,22 +178,20 @@ namespace TempLat
   };
 
   template <typename T>
-  RadialProjector<T> projectRadially(T instance, SpaceStateInterface::SpaceType spaceType,
-                                     std::shared_ptr<MemoryToolBox> pToolBox, bool useBinCentralValues)
+  RadialProjector<T> projectRadially(T instance, SpaceStateType spaceType, std::shared_ptr<MemoryToolBox> pToolBox,
+                                     bool useBinCentralValues)
   {
     return RadialProjector<T>(instance, spaceType, pToolBox, useBinCentralValues);
   }
 
   template <typename T> RadialProjector<T> projectRadially(T instance, bool useBinCentralValues = false)
   {
-    return projectRadially(instance, SpaceStateInterface::SpaceType::Configuration, GetToolBox::get(instance),
-                           useBinCentralValues);
+    return projectRadially(instance, SpaceStateType::Configuration, GetToolBox::get(instance), useBinCentralValues);
   }
 
   template <typename T> RadialProjector<T> projectRadiallyFourier(T instance, bool useBinCentralValues = false)
   {
-    return projectRadially(instance, SpaceStateInterface::SpaceType::Fourier, GetToolBox::get(instance),
-                           useBinCentralValues);
+    return projectRadially(instance, SpaceStateType::Fourier, GetToolBox::get(instance), useBinCentralValues);
   }
 
   struct RadialProjectorTester {

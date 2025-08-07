@@ -14,7 +14,6 @@ namespace TempLat
 {
   /** \brief A function which takes the trace of su2 matrices.
    *
-   *
    * Unit test: make test-su2trace
    **/
   template <typename R> auto trace(R &&r) { return 2 * r.SU2Get(0_c); }

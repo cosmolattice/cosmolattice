@@ -45,14 +45,14 @@ inline void TempLat::WaveNumberTester::Test(TempLat::TDDAssertion &tdd)
   ///* should not be happy with configuration space. */
   // tdd.verify( Throws<DimensionCountRecorder_CoordinateSpaceException>(
   //        [&]() {
-  //            cn.getNorm().confirmSpace(LayoutStruct(1), SpaceStateInterface::SpaceType::Configuration);
+  //            cn.getNorm().confirmSpace(LayoutStruct(1), SpaceStateType::Configuration);
   //        }
   //) );
 
   ///* should be happy with fourier space. */
   // tdd.verify( DoesNotThrow<DimensionCountRecorder_CoordinateSpaceException>(
   //        [&]() {
-  //            cn.getNorm().confirmSpace(LayoutStruct(1), SpaceStateInterface::SpaceType::Fourier);
+  //            cn.getNorm().confirmSpace(LayoutStruct(1), SpaceStateType::Fourier);
   //        }
   //) );
 

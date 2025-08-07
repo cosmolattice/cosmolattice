@@ -20,9 +20,9 @@ template <typename T> inline void TempLat::GetVectorComponentHelper<T>::Test(Tem
   auto test1 = GetVectorComponentHelper<FieldCollection<double>>(fc, 1);
   auto test2 = GetVectorComponentHelper<FieldCollection<double>>(fc, 2);
 
-  test1.confirmSpace(toolBox->mLayouts.getConfigSpaceLayout(), SpaceStateInterface::SpaceType::Configuration);
+  test1.confirmSpace(toolBox->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
   tdd.verify(fc[2].isFourierSpace() == true);
-  test2.confirmSpace(toolBox->mLayouts.getConfigSpaceLayout(), SpaceStateInterface::SpaceType::Configuration);
+  test2.confirmSpace(toolBox->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
   tdd.verify(fc[2].isFourierSpace() == false);
 
   fc[1].setGhostsAreStale();

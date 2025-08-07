@@ -17,18 +17,18 @@
 
 namespace TempLat
 {
-  /** \brief A class which aaplies the shift method to su2 objects.
-   *
+  /** \brief A class which applies the shift method to su2 objects.
    *
    * Unit test: make test-su2shift
    **/
   template <typename R, int... N> class SU2Shifter : public SU2UnaryOperator<R>
   {
   public:
-    typedef typename SU2GetGetReturnType<R>::type SV;
+    /* Put public methods here. These should change very little over time. */
+
+    using SV = typename SU2GetGetReturnType<R>::type;
     using SU2UnaryOperator<R>::mR;
 
-    /* Put public methods here. These should change very little over time. */
     SU2Shifter(const R &pR) : SU2UnaryOperator<R>(pR), shiftInd(shift<N...>(mR.SU2Get(0_c)).getShift())
     {
       shiftString = shift<N...>(mR.SU2Get(0_c)).getString({N...});
@@ -41,13 +41,14 @@ namespace TempLat
 
     void eval(ptrdiff_t i) { DoEval::eval(mR, i + shiftInd); }
 
-    std::string operatorString() const override { return shiftString; }
+    std::string operatorString() const { return shiftString; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     ptrdiff_t shiftInd;
     std::string shiftString;
   };
+
   template <typename R, int N> class SU2ShifterByOne : public SU2UnaryOperator<R>
   {
   public:
@@ -67,7 +68,7 @@ namespace TempLat
 
     void eval(ptrdiff_t i) { DoEval::eval(mR, i + shiftInd); }
 
-    std::string toString() const override { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }
+    std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -75,23 +76,26 @@ namespace TempLat
   };
 
   template <int... shifts, class R>
-  typename std::enable_if<(sizeof...(shifts) > 1) && HasSU2Get<R>::value, SU2Shifter<R, shifts...>>::type
-  shift(const R &pR)
+    requires((sizeof...(shifts) > 1) && HasSU2Get<R>)
+  auto shift(const R &pR)
   {
     return SU2Shifter<R, shifts...>(pR);
   }
 
-  template <int N, class R> typename std::enable_if<HasSU2Get<R>::value, SU2ShifterByOne<R, N>>::type shift(const R &pR)
+  template <int N, class R>
+    requires HasSU2Get<R>
+  auto shift(const R &pR)
   {
     return SU2ShifterByOne<R, N>(pR);
   }
 
   template <class R, int N>
-  typename std::enable_if<HasSU2Get<R>::value, SU2ShifterByOne<R, N>>::type shift(const R &pR, Tag<N> t)
+    requires(HasSU2Get<R>)
+  auto shift(const R &pR, Tag<N> t)
   {
     return SU2ShifterByOne<R, N>(pR);
   }
-  //
+
   struct SU2ShiftTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

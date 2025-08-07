@@ -47,7 +47,7 @@ namespace TempLat
 
       /* project radially in configuration space */
       /* this does FFT C2R */
-      auto projector = projectRadially(temporary, SpaceStateInterface::SpaceType::Configuration, mToolBox, false);
+      auto projector = projectRadially(temporary, SpaceStateType::Configuration, mToolBox, false);
 
       return projector.measure(nLinearBins);
     }

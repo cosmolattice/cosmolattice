@@ -36,8 +36,7 @@ namespace TempLat
     ListBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     template <int N, size_t NDim>
-    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout,
-                      const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
       ConfirmSpace::apply(mT, i, newLayout, spaceType);

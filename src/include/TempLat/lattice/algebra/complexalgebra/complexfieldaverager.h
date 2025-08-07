@@ -43,12 +43,11 @@ namespace TempLat
     typedef std::array<vType, size> arrVType;
 
     /* Put public methods here. These should change very little over time. */
-    ComplexFieldAverager(const T &pT, SpaceStateInterface::SpaceType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    ComplexFieldAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
 
     arrVType compute()
     {
-      arrVType selfResult =
-          mSpaceType == SpaceStateInterface::SpaceType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
+      arrVType selfResult = mSpaceType == SpaceStateType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
       auto toolBox = mT.ComplexFieldGet(0_c).getToolBox();
 
       arrVType reducedRes, ret; //= mT.getToolBox()->mGroup.getBaseComm().computeAllSum(selfResult);
@@ -108,7 +107,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
-    SpaceStateInterface::SpaceType mSpaceType;
+    SpaceStateType mSpaceType;
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -127,10 +126,10 @@ namespace TempLat
                           decltype(make_list_from_array(
                               std::declval<std::array<typename ComplexGetGetReturnType<T>::type, T::size>>()))>::type
   // auto
-  complexfieldaverage(T instance, SpaceStateInterface::SpaceType spaceType =
-                                      IsComplexType<typename ComplexGetGetReturnType<T>::type>::value
-                                          ? SpaceStateInterface::SpaceType::Fourier
-                                          : SpaceStateInterface::SpaceType::Configuration)
+  complexfieldaverage(T instance,
+                      SpaceStateType spaceType = IsComplexType<typename ComplexGetGetReturnType<T>::type>::value
+                                                     ? SpaceStateType::Fourier
+                                                     : SpaceStateType::Configuration)
   {
     return make_list_from_array(ComplexFieldAverager<T>(instance, spaceType).compute());
   }

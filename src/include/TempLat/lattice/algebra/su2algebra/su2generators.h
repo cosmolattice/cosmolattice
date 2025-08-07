@@ -16,19 +16,17 @@ namespace TempLat
 {
   /** \brief A class which implements the i*sigma matrices
    *
-   *
    * Unit test: make test-paulimatrices
    **/
   namespace Constants
   {
-
     struct Sigma0 {
       OneType SU2Get(Tag<0> t) { return OneType(); }
       ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
       ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
       ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
 
-      std::string toString() const { return "Id"; }
+      static std::string toString() { return "Id"; }
       static constexpr size_t size = 4;
     };
     constexpr Sigma0 sigma0;
@@ -40,7 +38,7 @@ namespace TempLat
       ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
       static constexpr size_t size = 4;
 
-      std::string toString() const { return "i\u03C3_1"; }
+      static std::string toString() { return "i\u03C3_1"; }
     };
     constexpr Sigma1 sigma1;
 
@@ -49,7 +47,7 @@ namespace TempLat
       ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
       OneType SU2Get(Tag<2> t) { return OneType(); }
       ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
-      std::string toString() const { return "i\u03C3_2"; }
+      static std::string toString() { return "i\u03C3_2"; }
       static constexpr size_t size = 4;
     };
     constexpr Sigma2 sigma2;
@@ -60,7 +58,7 @@ namespace TempLat
       ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
       OneType SU2Get(Tag<3> t) { return OneType(); }
 
-      std::string toString() const { return "i\u03C3_3"; }
+      static std::string toString() { return "i\u03C3_3"; }
       static constexpr size_t size = 4;
     };
     constexpr Sigma3 sigma3;
@@ -69,7 +67,6 @@ namespace TempLat
     inline Sigma1 i_sigma(Tag<1> t) { return sigma1; }
     inline Sigma2 i_sigma(Tag<2> t) { return sigma2; }
     inline Sigma3 i_sigma(Tag<3> t) { return sigma3; }
-
   }; // namespace Constants
 } // namespace TempLat
 

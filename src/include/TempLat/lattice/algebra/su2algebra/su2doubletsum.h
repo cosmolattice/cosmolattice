@@ -58,10 +58,10 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasSU2DoubletGet<R>::value && HasSU2DoubletGet<T>::value, SU2DoubletAddition<R, T>>::type
-  operator+(const R &r, const T &t)
+    requires(HasSU2DoubletGet<R> && HasSU2DoubletGet<T>)
+  auto operator+(const R &r, const T &t)
   {
-    return {r, t};
+    return SU2DoubletAddition<R, T>(r, t);
   }
 } // namespace TempLat
 

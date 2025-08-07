@@ -32,7 +32,7 @@ namespace TempLat
     typedef typename GetGetReturnType<T>::type vType;
 
     /* Put public methods here. These should change very little over time. */
-    WallAverager(const T &pT, SpaceStateInterface::SpaceType spaceType) : mT(pT), mSpaceType(spaceType)
+    WallAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
     {
       for (ptrdiff_t i = 0; i < mT.getToolBox()->mNDimensions; ++i) {
         mWorkspace.emplace_back(std::vector<vType>(mT.getToolBox()->mNGridPointsVec[i], 0));
@@ -44,7 +44,7 @@ namespace TempLat
     void compute()
     {
 
-      if (mSpaceType == SpaceStateInterface::SpaceType::Fourier)
+      if (mSpaceType == SpaceStateType::Fourier)
         throw AveragerWrongSpace("Wall averager works only in configuration space.");
 
       computeConfigurationSpace();
@@ -103,13 +103,13 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
-    SpaceStateInterface::SpaceType mSpaceType;
+    SpaceStateType mSpaceType;
     std::vector<std::vector<vType>> mWorkspace;
   };
 
   template <typename T>
   typename std::enable_if<!IsTempLatGettable<0, T>::value, WallAverager<T>>::type
-  wallAverager(T instance, SpaceStateInterface::SpaceType spaceType = SpaceStateInterface::SpaceType::Configuration)
+  wallAverager(T instance, SpaceStateType spaceType = SpaceStateType::Configuration)
   {
     return WallAverager<T>(instance, spaceType);
   }

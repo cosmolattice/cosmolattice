@@ -60,7 +60,9 @@ namespace TempLat
 #endif
   };
 
-  template <class R> typename std::enable_if<HasSU2Get<R>::value, SU2Dagger<R>>::type dagger(const R &r)
+  template <class R>
+    requires HasSU2Get<R>
+  auto dagger(const R &r)
   {
     return SU2Dagger<R>(r);
   };

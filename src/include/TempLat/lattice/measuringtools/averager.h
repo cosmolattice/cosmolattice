@@ -31,14 +31,13 @@ namespace TempLat
     static constexpr bool isComplexValued = GetGetReturnType<T>::isComplex;
 
     /* Put public methods here. These should change very little over time. */
-    Averager(const T &pT, SpaceStateInterface::SpaceType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    Averager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
 
     operator vType() { return compute(); }
 
     vType compute()
     {
-      vType selfResult =
-          mSpaceType == SpaceStateInterface::SpaceType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
+      vType selfResult = mSpaceType == SpaceStateType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
 
       vType reducedRes = mT.getToolBox()->mGroup.getBaseComm().computeAllSum(selfResult);
 
@@ -81,21 +80,20 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
-    SpaceStateInterface::SpaceType mSpaceType;
+    SpaceStateType mSpaceType;
   };
 
   /*template <typename T>
-  auto average(T instance, SpaceStateInterface::SpaceType spaceType = GetGetReturnType<T>::isComplex ?
-  SpaceStateInterface::SpaceType::Fourier : SpaceStateInterface::SpaceType::Configuration) { return
+  auto average(T instance, SpaceStateType spaceType = GetGetReturnType<T>::isComplex ?
+  SpaceStateType::Fourier : SpaceStateType::Configuration) { return
   Averager<T>(instance, spaceType).compute();
   }*/
 
   template <typename T>
   typename std::enable_if<!IsTempLatGettable<0, T>::value && !std::is_arithmetic<T>::value,
                           typename GetGetReturnType<T>::type>::type
-  average(T instance, SpaceStateInterface::SpaceType spaceType = GetGetReturnType<T>::isComplex
-                                                                     ? SpaceStateInterface::SpaceType::Fourier
-                                                                     : SpaceStateInterface::SpaceType::Configuration)
+  average(T instance, SpaceStateType spaceType = GetGetReturnType<T>::isComplex ? SpaceStateType::Fourier
+                                                                                : SpaceStateType::Configuration)
   {
     return Averager<T>(instance, spaceType).compute();
   }
@@ -105,10 +103,9 @@ namespace TempLat
   auto average(ZeroType a) { return 0; }
 
   template <typename T>
-  auto getAverager(T instance,
-                   SpaceStateInterface::SpaceType spaceType = GetGetReturnType<T>::isComplex
-                                                                  ? SpaceStateInterface::SpaceType::Fourier
-                                                                  : SpaceStateInterface::SpaceType::Configuration)
+  auto getAverager(T instance, SpaceStateType spaceType = GetGetReturnType<T>::isComplex
+                                                              ? SpaceStateType::Fourier
+                                                              : SpaceStateType::Configuration)
   {
     return Averager<T>(instance, spaceType);
   }

@@ -16,19 +16,15 @@ namespace TempLat
 {
   template <class T, size_t NDim>
   concept HasSpaceConfirmationMethods =
-      requires(T t, LayoutStruct<NDim> layout, SpaceStateInterface<NDim>::SpaceType spaceType) {
-        t.confirmSpace(layout, spaceType);
-      };
+      requires(T t, LayoutStruct<NDim> layout, SpaceStateType spaceType) { t.confirmSpace(layout, spaceType); };
 
   template <int N, class T, size_t NDim>
-  concept HasSpaceConfirmationMethodsIndexed =
-      requires(Tag<N> tag, T t, LayoutStruct<NDim> layout, SpaceStateInterface<NDim>::SpaceType spaceType) {
-        t.confirmSpace(tag, layout, spaceType);
-      };
+  concept HasSpaceConfirmationMethodsIndexed = requires(
+      Tag<N> tag, T t, LayoutStruct<NDim> layout, SpaceStateType spaceType) { t.confirmSpace(tag, layout, spaceType); };
 
   template <class T, size_t NDim>
   concept HasSpaceConfirmationMethodsIndexedDyn =
-      requires(ptrdiff_t idx, T t, LayoutStruct<NDim> layout, SpaceStateInterface<NDim>::SpaceType spaceType) {
+      requires(ptrdiff_t idx, T t, LayoutStruct<NDim> layout, SpaceStateType spaceType) {
         t.confirmSpace(idx, layout, spaceType);
       };
 

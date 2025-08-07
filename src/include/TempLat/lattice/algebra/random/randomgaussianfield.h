@@ -61,11 +61,11 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     RandomGaussianFieldHelper(std::string baseSeed, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
-        : DimensionCountRecorder<NDim>(SpaceStateInterface<NDim>::SpaceType::undefined), mBaseSeed(baseSeed),
-          prng(baseSeed), mToolBox(pToolBox), mLayout(mToolBox->mLayouts.getFourierSpaceLayout()), generation(0),
+        : DimensionCountRecorder<NDim>(SpaceStateType::undefined), mBaseSeed(baseSeed), prng(baseSeed),
+          mToolBox(pToolBox), mLayout(mToolBox->mLayouts.getFourierSpaceLayout()), generation(0),
           mGlobalSizes(mLayout.getGlobalSizes())
     {
-      DimensionCountRecorder<NDim>::confirmSpace(mLayout, SpaceStateInterface<NDim>::SpaceType::Fourier);
+      DimensionCountRecorder<NDim>::confirmSpace(mLayout, SpaceStateType::Fourier);
     }
 
     void reset() { generation = 0; }

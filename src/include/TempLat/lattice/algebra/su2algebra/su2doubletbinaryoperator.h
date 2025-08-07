@@ -18,13 +18,10 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements common features to SU2Doublet binary operators.
-   *
    *
    * Unit test: make test-su2doubletbinaryoperator
    **/
-
   template <typename R, typename T> class SU2DoubletBinaryOperator
   {
   public:
@@ -40,7 +37,6 @@ namespace TempLat
      * OP is * or whatever), this toString method does all the work for you. */
     std::string toString() const
     {
-
       std::string tt = GetString::get(mR);
 
       if (ContainsSpace::test(tt)) tt = "(" + tt + ")";

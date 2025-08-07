@@ -16,16 +16,12 @@ namespace TempLat
 {
   /** \brief A class which gives the return type of the get function of one of the doublet element.
    *
-   *
    * Unit test: make test-su2doubletgetgetreturntype
    **/
   template <typename T> struct SU2DoubletGetGetReturnType {
-    /* why not declval for the IterationCoordinates? Well, get takes a reference, which cannot be
-     * a temporary. So we dereference a NULL pointer, which is a value reference.
-     * Safe, because it is only at compile time. */
-    typedef typename GetGetReturnType<typename std::remove_const<typename std::remove_reference<
-        decltype(SU2DoubletGetter::get(std::declval<T>(), std::declval<Tag<0>>()))>::type>::type>::type type;
-    static constexpr bool isComplex = IsComplexType<type>::value;
+    using type = typename GetGetReturnType<
+        std::decay_t<decltype(SU2DoubletGetter::get(std::declval<T>(), std::declval<Tag<0>>()))>>::type;
+    static constexpr bool isComplex = IsComplexType<type>;
   };
 } // namespace TempLat
 

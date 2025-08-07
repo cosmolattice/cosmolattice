@@ -83,28 +83,36 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  typename std::enable_if<HasSU2Get<R>::value && HasSU2Get<T>::value, SU2Multiplication<R, T>>::type
-  operator*(const R &r, const T &t)
+    requires(HasSU2Get<R> && HasSU2Get<T>)
+  auto operator*(const R &r, const T &t)
   {
-    return {r, t};
+    return SU2Multiplication<R, T>(r, t);
   }
 
-  template <typename T> typename std::enable_if<HasSU2Get<T>::value, T>::type operator*(OneType r, const T &t)
+  template <typename T>
+    requires HasSU2Get<T>
+  auto operator*(OneType r, const T &t)
   {
     return t;
   }
 
-  template <typename R> typename std::enable_if<HasSU2Get<R>::value, R>::type operator*(const R &r, OneType t)
+  template <typename R>
+    requires HasSU2Get<R>
+  auto operator*(const R &r, OneType t)
   {
     return r;
   }
 
-  template <typename T> typename std::enable_if<HasSU2Get<T>::value, ZeroType>::type operator*(ZeroType r, const T &t)
+  template <typename T>
+    requires HasSU2Get<T>
+  auto operator*(ZeroType r, const T &t)
   {
     return r;
   }
 
-  template <typename R> typename std::enable_if<HasSU2Get<R>::value, ZeroType>::type operator*(const R &r, ZeroType t)
+  template <typename R>
+    requires(HasSU2Get<R>)
+  auto operator*(const R &r, ZeroType t)
   {
     return t;
   }

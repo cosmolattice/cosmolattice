@@ -18,6 +18,9 @@
 #include "TempLat/util/containsspace.h"
 #include "TempLat/util/tdd/tdd.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
@@ -44,8 +47,19 @@ namespace TempLat
       GhostsHunter::apply(mT);
     }
 
-    template <size_t NDim>
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateInterface<NDim>::SpaceType &spaceType)
+    void preGet()
+    {
+      PreGet::apply(mR);
+      PreGet::apply(mT);
+    }
+
+    void postGet()
+    {
+      PostGet::apply(mR);
+      PostGet::apply(mT);
+    }
+
+    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
       ConfirmSpace::apply(mT, newLayout, spaceType);

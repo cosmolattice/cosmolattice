@@ -18,7 +18,6 @@ namespace TempLat
 {
   /** \brief A class which groups common features to su2doublets unary operators.
    *
-   *
    * Unit test: make test-su2doubletunaryoperator
    **/
   template <typename R> class SU2DoubletUnaryOperator
@@ -28,14 +27,13 @@ namespace TempLat
     SU2DoubletUnaryOperator(const R &pR) : mR(pR) {}
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
-    virtual std::string operatorString() const { return " "; }
+    static std::string operatorString() { return " "; }
 
     /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
      */
-    virtual std::string toString() const
+    std::string toString() const
     {
-
       std::string result = GetString::get(mR);
 
       if (ContainsSpace::test(result)) result = "(" + result + ")";

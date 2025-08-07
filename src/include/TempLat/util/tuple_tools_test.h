@@ -11,41 +11,41 @@
 
 inline void TempLat::TupleToolsTester::Test(TempLat::TDDAssertion &tdd)
 {
-  const auto test_tup = std::tuple(1, 2, 3, 4, 5, 6, 5, 8, 9, 10);
+  const auto test_tup = device::tuple(1, 2, 3, 4, 5, 6, 5, 8, 9, 10);
 
   constexpr_for<0, 10, 1>([&](const auto _d) {
-    auto temp_res = std::tuple(1, 2, 3, 4, 5, 6, 5, 8, 9, 10);
+    auto temp_res = device::tuple(1, 2, 3, 4, 5, 6, 5, 8, 9, 10);
     constexpr auto idx = decltype(_d)::value;
-    std::cout << "idx = " << idx << std::endl;
+    // sayShort << "idx = " << idx << "\n";
     temp_res = TempLat::tuple_add_to_nth_mod<idx>(temp_res, 11);
     constexpr_for<0, 10, 1>([&](const auto _e) {
       constexpr auto jdx = decltype(_e)::value;
-      std::cout << "jdx = " << jdx << std::endl;
+      // sayShort << "jdx = " << jdx << "\n";
       if constexpr (jdx == idx) {
-        tdd.verify(std::get<jdx>(temp_res) == std::get<jdx>(test_tup) + 11);
-        if (!(std::get<jdx>(temp_res) == std::get<jdx>(test_tup) + 11))
-          say << "Value evaluated to " << std::get<jdx>(temp_res) << ", should be " << std::get<jdx>(test_tup) + 11
-              << "\n";
+        tdd.verify(device::get<jdx>(temp_res) == device::get<jdx>(test_tup) + 11);
+        if (!(device::get<jdx>(temp_res) == device::get<jdx>(test_tup) + 11))
+          say << "Value evaluated to " << device::get<jdx>(temp_res) << ", should be "
+              << device::get<jdx>(test_tup) + 11 << "\n";
       } else {
-        tdd.verify(std::get<jdx>(temp_res) == std::get<jdx>(test_tup));
+        tdd.verify(device::get<jdx>(temp_res) == device::get<jdx>(test_tup));
       }
     });
   });
 
   constexpr_for<0, 10, 1>([&](const auto _d) {
     constexpr auto idx = decltype(_d)::value;
-    std::cout << "idx = " << idx << std::endl;
+    // sayShort << "idx = " << idx << "\n";
     const auto temp_res = TempLat::tuple_add_to_nth<idx>(test_tup, 11);
     constexpr_for<0, 10, 1>([&](const auto _e) {
       constexpr auto jdx = decltype(_e)::value;
-      std::cout << "jdx = " << jdx << std::endl;
+      // sayShort << "jdx = " << jdx << "\n";
       if constexpr (jdx == idx) {
-        tdd.verify(std::get<jdx>(temp_res) == std::get<jdx>(test_tup) + 11);
-        if (!(std::get<jdx>(temp_res) == std::get<jdx>(test_tup) + 11))
-          say << "Value evaluated to " << std::get<jdx>(temp_res) << ", should be " << std::get<jdx>(test_tup) + 11
-              << "\n";
+        tdd.verify(device::get<jdx>(temp_res) == device::get<jdx>(test_tup) + 11);
+        if (!(device::get<jdx>(temp_res) == device::get<jdx>(test_tup) + 11))
+          say << "Value evaluated to " << device::get<jdx>(temp_res) << ", should be "
+              << device::get<jdx>(test_tup) + 11 << "\n";
       } else {
-        tdd.verify(std::get<jdx>(temp_res) == std::get<jdx>(test_tup));
+        tdd.verify(device::get<jdx>(temp_res) == device::get<jdx>(test_tup));
       }
     });
   });

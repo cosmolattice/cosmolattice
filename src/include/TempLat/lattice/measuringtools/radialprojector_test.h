@@ -1,16 +1,17 @@
 #ifndef TEMPLAT_LATTICE_MEASUREMENTS_RADIALPROJECTOR_TEST_H
 #define TEMPLAT_LATTICE_MEASUREMENTS_RADIALPROJECTOR_TEST_H
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-//#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
-//#include "TempLat/lattice/field/field.h"
+// #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+// #include "TempLat/lattice/field/field.h"
 
-inline void TempLat::RadialProjectorTester::Test(TempLat::TDDAssertion& tdd) {
+inline void TempLat::RadialProjectorTester::Test(TempLat::TDDAssertion &tdd)
+{
 
   /*  const ptrdiff_t nDim = 3;
     const ptrdiff_t nGrid = 16;
@@ -22,7 +23,7 @@ inline void TempLat::RadialProjectorTester::Test(TempLat::TDDAssertion& tdd) {
     auto phi_of_k = phi.inFourierSpace();
     phi_of_k = 1 * WaveNumber().getNorm();
 
-    auto rProj = projectRadially(3 * abs(phi_of_k), SpaceStateInterface::SpaceType::Fourier);
+    auto rProj = projectRadially(3 * abs(phi_of_k), SpaceStateType::Fourier);
 
     auto result = rProj.measure();
 
@@ -72,9 +73,10 @@ inline void TempLat::RadialProjectorTester::Test(TempLat::TDDAssertion& tdd) {
         // variance is close to zero, all numerical noise.
         // allRight = allRight && AlmostEqual(3 * it.getBin().sampleVariance, it.getValue().sampleVariance, 1.e-2);
         if ( it.getBin().average != 0 ) {
-            allRight = allRight && AlmostEqual(3 * it.getBin().average, it.getValue().average / it.getBin().average / it.getBin().average);
-            allRight = allRight && AlmostEqual(3 * it.getBin().minVal, it.getValue().minVal/ it.getBin().average / it.getBin().average);
-            allRight = allRight && AlmostEqual(3 * it.getBin().maxVal, it.getValue().maxVal/ it.getBin().average / it.getBin().average);
+            allRight = allRight && AlmostEqual(3 * it.getBin().average, it.getValue().average / it.getBin().average /
+it.getBin().average); allRight = allRight && AlmostEqual(3 * it.getBin().minVal, it.getValue().minVal/
+it.getBin().average / it.getBin().average); allRight = allRight && AlmostEqual(3 * it.getBin().maxVal,
+it.getValue().maxVal/ it.getBin().average / it.getBin().average);
         }
         if ( ! allRight ) {
             say << "Broken: " << it << "\n";

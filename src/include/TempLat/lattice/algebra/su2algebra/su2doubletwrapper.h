@@ -33,11 +33,7 @@ namespace TempLat
     auto SU2DoubletGet(Tag<2> t) { return mC; }
     auto SU2DoubletGet(Tag<3> t) { return mD; }
 
-    auto SU2DoubletGet(Tag<0> t, ptrdiff_t i)
-    {
-      return GetValue::get(mA, i);
-      // return sqrt(1.0-Total(i,1,3,pow<2>(SU2DoubletGet(i))GetValue::get()),i);
-    }
+    auto SU2DoubletGet(Tag<0> t, ptrdiff_t i) { return GetValue::get(mA, i); }
     auto SU2DoubletGet(Tag<1> t, ptrdiff_t i) { return GetValue::get(mB, i); }
     auto SU2DoubletGet(Tag<2> t, ptrdiff_t i) { return GetValue::get(mC, i); }
     auto SU2DoubletGet(Tag<3> t, ptrdiff_t i) { return GetValue::get(mD, i); }
