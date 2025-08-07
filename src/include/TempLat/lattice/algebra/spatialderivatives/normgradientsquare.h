@@ -35,7 +35,9 @@ namespace TempLat
       fixGradientMap(GetJumps::apply(mR));
     }
 
-    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       const auto midval = GetValue::get(mR, idx...);
       FloatType result{};

@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
@@ -45,28 +45,24 @@ namespace TempLat
       mManager->confirmConfigSpace(); // allocation happens here
 
       auto layout = mToolBox->mLayouts.getConfigSpaceLayout();
-      auto localSizes = layout.getLocalSizes();
-      // auto globalSizes = layout.getGlobalSizes();
-      auto localStarts = layout.getLocalStarts();
-
-      auto configSpaceJumps = mToolBox->mLayouts.getConfigSpaceJumps();
-
-      auto padding = configSpaceJumps.getPadding();
+      const auto localSizes = layout.getLocalSizes();
+      const size_t nGhosts = layout.getNGhosts();
 
       for (size_t d = 0; d < NDim; ++d) {
-        start_iteration[d] = padding[d][0] + localStarts[d];
+        start_iteration[d] = nGhosts;
         stop_iteration[d] = start_iteration[d] + localSizes[d];
-      }
 
-      for (size_t d = 0; d < NDim; ++d) {
         memorySizes[d] = layout.getLocalSizes()[d];
-        memorySizes[d] += padding[d][0] + padding[d][1]; // add padding to the local sizes
-        localSlicing[d] = std::make_pair(padding[d][0], padding[d][0] + localSizes[d]);
+        memorySizes[d] += nGhosts + nGhosts; // add padding to the local sizes
+        localSlicing[d] = std::make_pair(nGhosts, nGhosts + localSizes[d]);
       }
 
       mView = mManager->getNDView(memorySizes);
       mRawView = mManager->getRawView();
     }
+
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto getView() const { return mView; }
 
     template <typename R> void assign(R &&g)
     {
@@ -95,6 +91,7 @@ namespace TempLat
 #endif
 
       PostGet::apply(g);
+
       mManager->setGhostsAreStale();
     }
 
@@ -111,8 +108,11 @@ namespace TempLat
       this->assign(other);
     }
 
-    template <std::integral... IDX>
-      requires(NDim == sizeof...(IDX))
+    template <typename... IDX>
+      requires requires {
+        requires(NDim == sizeof...(IDX));
+        requires(std::is_integral_v<std::decay_t<IDX>> && ...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION T get(IDX &&...idx) const
     {
       return mView(idx...);

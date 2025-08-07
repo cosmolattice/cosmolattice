@@ -69,7 +69,7 @@ namespace TempLat
       mNecessaryMemoryAllocation = computeMemSize();
     }
 
-    ptrdiff_t getNGhostCells() const { return mNGhostCells; }
+    ptrdiff_t getNGhosts() const { return mNGhostCells; }
 
     friend std::ostream &operator<<(std::ostream &ostream, const TripleStateLayouts &tsl)
     {

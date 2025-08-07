@@ -26,7 +26,17 @@ namespace TempLat
 
     ComplexFieldAsFourier(const R &pR) : mR(pR) {}
 
-    auto get(ptrdiff_t i) { return complex<mRType>(mR.ComplexFieldGet(0_c).get(i), mR.ComplexFieldGet(1_c).get(i)); }
+    static constexpr size_t NDim = R::NDim;
+
+    template <typename... IDX>
+      requires requires {
+        requires(NDim == sizeof...(IDX));
+        requires(std::is_integral_v<std::decay_t<IDX>> && ...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx)
+    {
+      return complex<mRType>(mR.ComplexFieldGet(0_c, idx...), mR.ComplexFieldGet(1_c, idx...));
+    }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

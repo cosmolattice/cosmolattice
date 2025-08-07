@@ -36,7 +36,7 @@ namespace TempLat
       KOKKOS_FUNCTION
       Addition(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      template <std::integral... IDX>
+      template <typename... IDX>
         requires requires(IDX... idx) {
           GetValue::get(mT, idx...);
           GetValue::get(mR, idx...);

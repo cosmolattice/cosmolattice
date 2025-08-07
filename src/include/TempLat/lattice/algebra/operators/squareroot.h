@@ -43,7 +43,7 @@ namespace TempLat
        * \brief Check  if numerator if roughly zero, don't do the division.
        *  Useful for spectrum fluctuation, when normalising with a cutoff
        **/
-      template <std::integral... IDX>
+      template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {

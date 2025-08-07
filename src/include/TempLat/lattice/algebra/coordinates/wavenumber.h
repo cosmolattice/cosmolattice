@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -37,21 +38,21 @@ namespace TempLat
 
     constexpr static size_t getVectorSize() { return NDim; }
 
-    template <std::integral... IDX>
-      requires(sizeof...(IDX) == NDim + 1)
+    template <typename... IDX>
+      requires VariadicNDIndex<NDim + 1, IDX...>
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
     }
 
-    template <std::integral... IDX>
-      requires(sizeof...(IDX) == NDim + 1)
+    template <typename... IDX>
+      requires VariadicNDIndex<NDim + 1, IDX...>
     KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(const IDX &...idx) const
     {
       return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
     }
 
-    template <std::integral... IDX, size_t... InputIndexes>
+    template <typename... IDX, size_t... InputIndexes>
     KOKKOS_FORCEINLINE_FUNCTION auto get_impl(std::tuple<const IDX &...> allIdx,
                                               std::index_sequence<InputIndexes...>) const
     {
@@ -59,7 +60,7 @@ namespace TempLat
       return get_impl(std::get<lastIdx>(allIdx), std::get<InputIndexes>(allIdx)...);
     }
 
-    template <std::integral IDX1, std::integral... IDX>
+    template <typename IDX1, typename... IDX>
     KOKKOS_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> result;

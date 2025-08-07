@@ -4,10 +4,10 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/lattice/algebra/helpers/preget.h"
-#include "TempLat/lattice/algebra/helpers/preget_test.h"
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/variadicindex_test.h"
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::PreGet> test;
+  TempLat::TDDContainer<TempLat::VariadicIndexTester> test;
 }

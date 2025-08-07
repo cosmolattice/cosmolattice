@@ -32,14 +32,14 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
 
-    template <typename U, std::integral... IDX>
+    template <typename U, typename... IDX>
       requires TypeHasGet<U, IDX...>
     static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
     {
       return obj.get(idx...);
     }
 
-    template <typename U, std::integral... IDX>
+    template <typename U, typename... IDX>
       requires TypeGetsItself<U, IDX...>
     static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
     {

@@ -17,19 +17,6 @@
 
 namespace TempLat
 {
-  template <size_t NDim, std::integral... IDX>
-  KOKKOS_FORCEINLINE_FUNCTION Kokkos::Array<ptrdiff_t, NDim> ndIdxToCoordinate(const LayoutStruct<NDim> &layout,
-                                                                               const IDX &...idx)
-  {
-    Kokkos::Array<ptrdiff_t, NDim> res{(ptrdiff_t)(idx)...};
-    for (size_t i = 0; i < NDim; ++i) {
-      const ptrdiff_t &tSize = layout.getGlobalSizes()[i] / 2;
-      res[i] += layout.getLocalStarts()[i];
-      res[i] = res[i] > tSize ? res[i] - layout.getGlobalSizes()[i] : res[i];
-    }
-    return res;
-  }
-
   MakeException(RandomGaussianFieldNegativeFrequencyException);
 
   /** \brief A class which initializes your complex random gaussian field. ONLY WORKS FOR FFTW R2C complex layouts. It
@@ -104,8 +91,8 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     complex<T> to_complex(const Kokkos::Array<double, 2> &pair) const { return complex<T>(pair[0], pair[1]); }
 
-    template <std::integral... IDX>
-      requires(sizeof...(IDX) == NDim)
+    template <typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
     KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> global_coord;

@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
@@ -16,28 +16,41 @@
 
 namespace TempLat
 {
-
   /** \brief A class which computes the complex conjugate of a complex field.
-   *
    *
    * Unit test: make test-complexfieldconjugate
    **/
-
   template <typename R> class ComplexFieldConjugate : public ComplexFieldUnaryOperator<R>
   {
   public:
+    /* Put public methods here. These should change very little over time. */
+
     using ComplexFieldUnaryOperator<R>::mR;
 
-    /* Put public methods here. These should change very little over time. */
     ComplexFieldConjugate(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}
 
     auto ComplexFieldGet(Tag<0> t) { return Real(mR); }
     auto ComplexFieldGet(Tag<1> t) { return -Imag(mR); }
 
-    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) { return mR.ComplexFieldGet(0_c, i); }
-    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) { return -mR.ComplexFieldGet(1_c, i); }
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx)
+    {
+      return mR.ComplexFieldGet(0_c, idx...);
+    }
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx)
+    {
+      return -mR.ComplexFieldGet(1_c, idx...);
+    }
 
-    void eval(ptrdiff_t i) { DoEval::eval(mR, i); }
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    {
+      DoEval::eval(mR, idx...);
+    }
 
     std::string toString() const { return GetString::get(mR) + "^*"; }
 
@@ -52,13 +65,15 @@ namespace TempLat
   };
 
   template <typename R>
-  typename std::enable_if<HasComplexFieldGet<R>::value, ComplexFieldConjugate<R>>::type conj(const R &r)
+    requires HasComplexFieldGet<R>
+  auto conj(const R &r)
   {
     return ComplexFieldConjugate<R>(r);
   }
 
   template <typename R>
-  typename std::enable_if<HasComplexFieldGet<R>::value, ComplexFieldConjugate<R>>::type dagger(const R &r)
+    requires HasComplexFieldGet<R>
+  auto dagger(const R &r)
   {
     return ComplexFieldConjugate<R>(r);
   }

@@ -11,6 +11,9 @@
 #include "TempLat/util/tdd/tddassertion.h"
 #include <ostream>
 
+// Including this here, as we need that anywhere basically, where Kokkos is explicitly used.
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+
 #ifndef NOKOKKOS
 
 #include <Kokkos_Core.hpp>
@@ -30,7 +33,6 @@
 
 namespace TempLat
 {
-
   template <size_t NDim, typename T> struct GetKokkosNDStarType {
     using type = typename GetKokkosNDStarType<NDim - 1, T>::type *;
   };
@@ -89,6 +91,9 @@ namespace TempLat
     using cuda::std::make_tuple;
     using cuda::std::tie;
     using cuda::std::tuple_cat;
+
+    using Idx = uint32_t;
+    template <size_t NDim> using IdxArray = cuda::std::array<Idx, NDim>;
 #else
   template <typename... T> using tuple = std::tuple<T...>;
   template <typename T, std::size_t N> using array = std::array<T, N>;
@@ -99,6 +104,9 @@ namespace TempLat
   using std::make_tuple;
   using std::tie;
   using std::tuple_cat;
+
+  using Idx = uint32_t;
+  template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
 #endif
   } // namespace device
 

@@ -10,6 +10,8 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
+#include "TempLat/lattice/algebra/complexalgebra/real.h"
+#include "TempLat/lattice/algebra/complexalgebra/imag.h"
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
 
 namespace TempLat
@@ -26,42 +28,42 @@ namespace TempLat
   public:
     template <typename R>
       requires IsComplexType<R>
-    static inline decltype(real(std::declval<R>())) get(R &&r, Tag<0> t)
+    static auto get(R &&r, Tag<0> t)
     {
-      return real(r);
+      return Real(r);
     }
 
     template <typename R>
       requires IsComplexType<R>
-    static inline decltype(imag(std::declval<R>())) get(R &&r, Tag<1> t)
+    static auto get(R &&r, Tag<1> t)
     {
-      return imag(r);
+      return Imag(r);
     }
 
     template <typename R, int N>
       requires(!IsComplexType<R> && HasComplexFieldGet<R>)
-    static inline decltype(std::declval<R>().ComplexFieldGet(std::declval<Tag<N>>())) get(R &&r, Tag<N> t)
+    static auto get(R &&r, Tag<N> t)
     {
       return r.ComplexFieldGet(t);
     }
 
     template <typename R>
       requires IsComplexType<R>
-    static inline decltype(real(std::declval<R>())) get(R &&r, Tag<0> t, ptrdiff_t i)
+    static auto get(R &&r, Tag<0> t, ptrdiff_t i)
     {
-      return real(r);
+      return Real(r);
     }
 
     template <typename R>
       requires IsComplexType<R>
-    static inline decltype(imag(std::declval<R>())) get(R &&r, Tag<1> t, ptrdiff_t i)
+    static auto get(R &&r, Tag<1> t, ptrdiff_t i)
     {
-      return imag(r);
+      return Imag(r);
     }
 
     template <typename R, int N>
       requires(!IsComplexType<R> && HasComplexFieldGet<R>)
-    static inline decltype(std::declval<R>().ComplexFieldGet(std::declval<Tag<N>>())) get(R &&r, Tag<N> t, ptrdiff_t i)
+    static auto get(R &&r, Tag<N> t, ptrdiff_t i)
     {
       return r.ComplexFieldGet(t, i);
     }

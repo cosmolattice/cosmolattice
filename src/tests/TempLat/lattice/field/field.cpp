@@ -4,6 +4,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/field/field_test.h"
 

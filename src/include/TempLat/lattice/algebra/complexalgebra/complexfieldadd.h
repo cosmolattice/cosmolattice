@@ -12,6 +12,7 @@
 #include "imag.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
 
@@ -37,15 +38,25 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<1> t) { return Imag(mR) + Imag(mT); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) { return mR.ComplexFieldGet(0_c, i) + mT.ComplexFieldGet(0_c, i); }
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) { return mR.ComplexFieldGet(1_c, i) + mT.ComplexFieldGet(1_c, i); }
-
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx)
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return mR.ComplexFieldGet(0_c, idx...) + mT.ComplexFieldGet(0_c, idx...);
+    }
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx)
+    {
+      return mR.ComplexFieldGet(1_c, idx...) + mT.ComplexFieldGet(1_c, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(Tag<0> t, const IDX &...idx)
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
     }
 
     static std::string operatorString() { return "+"; }

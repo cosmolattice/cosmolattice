@@ -17,6 +17,7 @@
 #include "TempLat/lattice/algebra/operators/subtract.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
+#include "TempLat/util/powr.h"
 #include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
@@ -28,37 +29,6 @@ namespace TempLat
 #else
   using std::pow;
 #endif
-
-  namespace internal
-  {
-    /**
-     * @brief A compile-time evaluatable power function for whole number exponents.
-     * This implementation generates some rather efficient instructions, see (https://godbolt.org/z/vT56bb1nx).
-     *
-     * @tparam n Exponent of type int
-     * @tparam RF Type of argument
-     * @param x Argument
-     * @return x^n
-     */
-    template <ptrdiff_t n, typename NumberType>
-      requires requires(NumberType x) {
-        x * x;
-        static_cast<NumberType>(1) / x;
-      }
-    constexpr KOKKOS_INLINE_FUNCTION NumberType powr(const NumberType x)
-    {
-      if constexpr (n == 0)
-        return static_cast<NumberType>(1);
-      else if constexpr (n < 0)
-        return static_cast<NumberType>(1) / powr<-n, NumberType>(x);
-      else if constexpr (n == 1)
-        return x;
-      else if constexpr (n % 2 == 0)
-        return powr<n / 2>(x) * powr<n / 2>(x);
-      else
-        return powr<n / 2>(x) * powr<n / 2>(x) * x;
-    }
-  } // namespace internal
 
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
@@ -77,7 +47,12 @@ namespace TempLat
       KOKKOS_FUNCTION
       Power(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      template <typename... IDX>
+        requires requires(IDX... idx) {
+          GetValue::get(mR, idx...);
+          GetValue::get(mT, idx...);
+        }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return pow(GetValue::get(mR, idx...), GetValue::get(mT, idx...));
       }
@@ -102,11 +77,11 @@ namespace TempLat
       KOKKOS_FORCEINLINE_FUNCTION
       PowerN(const R &pR) : UnaryOperator<R>(pR) {}
 
-      template <std::integral... IDX>
+      template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-        return internal::powr<N>(GetValue::get(mR, idx...));
+        return powr<N>(GetValue::get(mR, idx...));
       }
 
       std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }
@@ -153,7 +128,7 @@ namespace TempLat
     requires(!HasGetMethod<R> && N != 0 && N != 1 && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
   KOKKOS_FORCEINLINE_FUNCTION auto pow(const R &r)
   {
-    return internal::powr<N>(r);
+    return powr<N>(r);
   }
 
   /** \brief Specialize for possible zero input! */

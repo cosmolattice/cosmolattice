@@ -64,8 +64,8 @@ namespace TempLat
     /** \brief local index in some dimension of the memory layout, goes into its corresponding spatial dimension
      *  in the target memory. No bounds checking!
      */
-    template <typename Container, std::integral... IDX>
-      requires(sizeof...(IDX) == NDim)
+    template <typename Container, typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
     KOKKOS_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto(Container &target, const IDX... idx) const
     {
       const auto indices = std::tie(idx...);
@@ -80,8 +80,8 @@ namespace TempLat
      *  coordinate to memory indices, in memory-layout order (that is,
      *  transposed, ready to be applied to `JumpsHolder::getJumpsInMemoryOrder()`.
      */
-    template <typename Container, std::integral... IDX>
-      requires(sizeof...(IDX) == NDim)
+    template <typename Container, typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
     KOKKOS_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Kokkos::Array<ptrdiff_t, NDim> &target,
                                                                            const IDX... pos) const
     {
@@ -111,6 +111,8 @@ namespace TempLat
       mNGhosts = nGhosts;
       getTransposed().setNGhosts(nGhosts);
     }
+
+    ptrdiff_t getNGhosts() const { return mNGhosts; }
 
     Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
     KOKKOS_FORCEINLINE_FUNCTION

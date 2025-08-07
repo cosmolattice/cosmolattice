@@ -33,7 +33,7 @@ namespace TempLat
 
     /** \brief Getter for two instances: return type automatically determined by the type which we get by multiplying
      * one element of T with one element of S. */
-    template <std::integral... IDX>
+    template <typename... IDX>
       requires requires(R mR, T mT, IDX... idx) { mR.vectorGet(idx..., 0) * mT.vectorGet(idx..., 0); }
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {

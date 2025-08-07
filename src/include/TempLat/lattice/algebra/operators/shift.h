@@ -8,6 +8,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/tuple_size.h"
@@ -30,7 +31,9 @@ namespace TempLat
     KOKKOS_FUNCTION
     ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) {}
 
-    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
@@ -39,7 +42,9 @@ namespace TempLat
       return GetValue::get(mR, idx...);
     }
 
-    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
@@ -70,13 +75,17 @@ namespace TempLat
     KOKKOS_FUNCTION
     ExpressionShifterByOne(const R &pR) : UnaryOperator<R>(pR) {}
 
-    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
     {
       tuple_add_to_nth<N>(std::tie(idx...), 1);
       return GetValue::get(mR, idx...);
     }
 
-    template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
       tuple_add_to_nth<N>(std::tie(idx...), 1);
       return DoEval::eval(mR, idx...);

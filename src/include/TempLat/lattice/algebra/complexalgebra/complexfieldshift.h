@@ -38,7 +38,7 @@ namespace TempLat
     template <int M> auto ComplexFieldGet(Tag<M> t, ptrdiff_t i) { return mR.ComplexFieldGet(t, i + shiftInd); }
     void eval(ptrdiff_t i) { DoEval::eval(mR, i + shiftInd); }
 
-    std::string operatorString() const override { return shiftString; }
+    std::string operatorString() const { return shiftString; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -71,22 +71,22 @@ namespace TempLat
   };
 
   template <int... shifts, class R>
-  typename std::enable_if<(sizeof...(shifts) > 1) && HasComplexFieldGet<R>::value,
-                          ComplexFieldShifter<R, shifts...>>::type
-  shift(const R &pR)
+    requires((sizeof...(shifts) > 1) && HasComplexFieldGet<R>)
+  auto shift(const R &pR)
   {
     return ComplexFieldShifter<R, shifts...>(pR);
   }
 
   template <int N, class R>
-  typename std::enable_if<HasComplexFieldGet<R>::value, ComplexFieldShifterByOne<R, N>>::type shift(const R &pR)
+    requires HasComplexFieldGet<R>
+  auto shift(const R &pR)
   {
     return ComplexFieldShifterByOne<R, N>(pR);
   }
 
   template <class R, int N>
-  typename std::enable_if<HasComplexFieldGet<R>::value, ComplexFieldShifterByOne<R, N>>::type shift(const R &pR,
-                                                                                                    Tag<N> t)
+    requires HasComplexFieldGet<R>
+  auto shift(const R &pR, Tag<N> t)
   {
     return ComplexFieldShifterByOne<R, N>(pR);
   }

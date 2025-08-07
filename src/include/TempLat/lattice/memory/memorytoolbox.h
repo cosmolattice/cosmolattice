@@ -174,8 +174,6 @@ namespace TempLat
 #endif
     }
 
-    ~MemoryToolBox() {}
-
     void checkParallelConsistency()
     {
       auto dec = mGroup.getDecomposition();
@@ -231,9 +229,10 @@ namespace TempLat
         mFFTLibrary.getPlans_double();
       return true;
     }
-    //    private:
+
+    ptrdiff_t getNGhosts() const { return mGhostDepth; }
+
   public:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICartesianGroup mGroup;
     static constexpr ptrdiff_t mNDimensions = NDim; // Dimensions of the problem
     // ptrdiff_t mNGridPoints;

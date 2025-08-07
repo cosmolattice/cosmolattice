@@ -44,7 +44,7 @@ namespace TempLat
     template <typename R> void assign(R &&g)
     {
       onBeforeAssignment(g);
-#ifndef NOKOKKOS
+
       PreGet::apply(g);
       if constexpr (NDim > 1) {
         auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
@@ -63,9 +63,6 @@ namespace TempLat
         static_assert(NDim > 0);
       }
       PostGet::apply(g);
-#else
-      throw Naaaaaa;
-#endif
     }
 
     inline auto getLocalNDHostView() const
@@ -161,15 +158,14 @@ namespace TempLat
     {
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
       auto localSizes = layout.getLocalSizes();
-      // auto globalSizes = layout.getGlobalSizes();
 
       for (size_t d = 0; d < NDim; ++d) {
         start_iteration[d] = 0;
         stop_iteration[d] = start_iteration[d] + localSizes[d];
+
+        memorySizes[d] = layout.getLocalSizes()[d];
       }
 
-      for (size_t d = 0; d < NDim; ++d)
-        memorySizes[d] = layout.getLocalSizes()[d];
       mView = mManager->template getNDView<complex<T>>(memorySizes);
       mRawView = mManager->template getRawView<complex<T>>();
     }

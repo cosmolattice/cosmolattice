@@ -25,14 +25,14 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
 
-    template <typename U, std::integral... JDX>
+    template <typename U, typename... JDX>
       requires(TypeHasVectorGet<U, JDX...> && (sizeof...(JDX) >= 1))
     KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &obj, const JDX &...jdx)
     {
       return obj.vectorGet(jdx...);
     }
 
-    template <typename U, std::integral... JDX>
+    template <typename U, typename... JDX>
       requires(!TypeHasVectorGet<U, JDX...> && (sizeof...(JDX) >= 1))
     KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &&obj, const JDX &...jdx)
     {
