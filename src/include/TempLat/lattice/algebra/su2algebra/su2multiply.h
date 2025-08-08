@@ -117,7 +117,8 @@ namespace TempLat {
         return r;
     }
 
-    template < typename T>
+    //This is redundant with the original simplification in the multiply ops.
+    /*template < typename T>
     typename std::enable_if< HasSU2Get<T>::value, ZeroType>::type
     operator*(ZeroType r, const T& t)
     {
@@ -129,7 +130,7 @@ namespace TempLat {
     operator*(const R& r, ZeroType t)
     {
         return t;
-    }
+    }*/
 
 
 } /* TempLat */

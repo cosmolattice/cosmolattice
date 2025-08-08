@@ -96,6 +96,12 @@ namespace TempLat {
             return -a;
         }
 
+        /** \brief Specialize for possible OneType OneType input */
+        inline
+        auto operator-( OneType a, OneType b) {
+            return ZeroType();
+        }
+
         /** \brief A mini struct for instiating the test case. */
         struct SubtractTester {
 #ifdef TEMPLATTEST
