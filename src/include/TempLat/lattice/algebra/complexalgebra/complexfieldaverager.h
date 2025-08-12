@@ -73,11 +73,11 @@ namespace TempLat
     arrVType compute()
     {
       if (mSpaceType == SpaceStateType::Fourier) {
-        AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.ComplexFieldGet(Tag<0>()), mSpaceType);
-        AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.ComplexFieldGet(Tag<1>()), mSpaceType);
-      } else if (mSpaceType == SpaceStateType::Configuration) {
         AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.ComplexFieldGet(Tag<0>()), mSpaceType);
         AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.ComplexFieldGet(Tag<1>()), mSpaceType);
+      } else if (mSpaceType == SpaceStateType::Configuration) {
+        AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.ComplexFieldGet(Tag<0>()), mSpaceType);
+        AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.ComplexFieldGet(Tag<1>()), mSpaceType);
       } else
         throw std::runtime_error("ComplexFieldAverager: Unknown space type.");
 
@@ -191,31 +191,11 @@ namespace TempLat
       a[1] = localResult.imag();
       return a;
     }
-    /*
-        arrVType computeFourierSpace()
-        {
-          auto toolBox = mT.ComplexFieldGet(0_c).getToolBox();
-          auto it = mT.ComplexFieldGet(0_c).getToolBox()->itP();
-          arrVType mWorkspace{};
-          ForLoop(i, 0, size - 1,
-                  (AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.ComplexFieldGet(i), mSpaceType)));
-
-          ptrdiff_t i = 0;
-
-          for (it.begin(); it.end(); ++it) {
-            if (toolBox->mLayouts.getFourierSpaceLayout().getHermitianPartners()->qualify(it.getVec()) !=
-                HermitianRedundancy::negativePartner) {
-              i = it();
-
-              DoEval::eval(mT, i);
-              ForLoop(j, 0, 1, mWorkspace[j] += mT.ComplexFieldGet(j, i));
-            }
-          }
-          return mWorkspace;
-        }
-    */
 
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
+
+    /** For measurement objects. */
+    auto getToolBox() { return GetToolBox::get(mT); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

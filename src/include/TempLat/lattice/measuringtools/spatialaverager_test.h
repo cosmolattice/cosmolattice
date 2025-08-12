@@ -7,19 +7,24 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-inline void TempLat::SpatialAveragerTester::Test(TempLat::TDDAssertion &tdd)
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include <Kokkos_Macros.hpp>
+
+namespace TempLat
 {
+  template <size_t _NDim> struct myTmpStruct {
+    static constexpr size_t NDim = _NDim;
 
-  /* Default is to fail: to remind yourself to implement something here. */
-  struct myTmpStruct {
-    myTmpStruct() : mt(MemoryToolBox::makeShared(4, 16, 1)) {}
-    double get(ptrdiff_t i)
+    myTmpStruct() : mt(MemoryToolBox<NDim>::makeShared(16, 1)), mLayout(mt->mLayouts.getConfigSpaceLayout()) {}
+
+    template <typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
     {
-
-      auto ii = mt->getCoordConfiguration0N(i);
+      Kokkos::Array<ptrdiff_t, NDim> ii;
+      mLayout.putSpatialLocationFromMemoryIndexInto0N(ii, idx...);
 
       return ii[0] * pow(16, 3) + ii[1] * pow(16, 2) + ii[2] * 16 + ii[3];
-      // return 1;
     }
 
     double expectedAnswer(int l)
@@ -28,17 +33,26 @@ inline void TempLat::SpatialAveragerTester::Test(TempLat::TDDAssertion &tdd)
     }
 
     auto getToolBox() { return mt; }
-    void confirmSpace(const LayoutStruct &newLayout, const SpaceStateType &spaceType) {}
-    std::shared_ptr<MemoryToolBox> mt;
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
+    std::shared_ptr<MemoryToolBox<NDim>> mt;
     std::string toString() const { return "myTmpStruct"; }
-  };
 
-  myTmpStruct myInstance;
+    LayoutStruct<NDim> mLayout;
+  };
+} // namespace TempLat
+
+inline void TempLat::SpatialAveragerTester::Test(TempLat::TDDAssertion &tdd)
+{
+  static constexpr size_t NDim = 4;
+  /* Default is to fail: to remind yourself to implement something here. */
+  myTmpStruct<NDim> myInstance;
 
   auto aget = spatialAverage(myInstance);
 
-  for (int i = 0; i < 15; ++i)
+  for (int i = 0; i < 15; ++i) {
     tdd.verify(AlmostEqual(aget[i], myInstance.expectedAnswer(i)));
+    sayShort << "i = " << i << ", aget[i] = " << aget[i] << ", expected = " << myInstance.expectedAnswer(i) << "\n";
+  }
 }
 
 #endif

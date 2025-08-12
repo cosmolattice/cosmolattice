@@ -9,41 +9,31 @@
 
 #include "TempLat/util/almostequal.h"
 
-inline void TempLat::MaximumTester::Test(TempLat::TDDAssertion &tdd)
+namespace TempLat
 {
-
-  struct myWorkspace {
-    myWorkspace() : value(0.) {}
-    myWorkspace &operator+=(const myWorkspace &other)
-    {
-      value += other.value;
-      return *this;
-    }
-    myWorkspace &operator+=(const double &other)
-    {
-      value += other;
-      return *this;
-    }
-    std::string toString() const { return "myWorkspace"; }
-    double value;
-  };
-
   struct myTmpStruct {
-    myTmpStruct() : mt(MemoryToolBox::makeShared(3, 4, 0)) {}
-    double get(ptrdiff_t i) { return i > 40 ? 0 : i; }
+    static constexpr size_t NDim = 3;
+    myTmpStruct() : mt(MemoryToolBox<3>::makeShared(64, 0)) {}
+    template <typename... IDX>
+      requires VariadicNDIndex<3, IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
+    {
+      return std::get<0>(std::tie(idx...)) > 40 ? 0 : std::get<0>(std::tie(idx...));
+    }
     auto getToolBox() { return mt; }
-    void confirmSpace(const LayoutStruct &newLayout, const SpaceStateType &spaceType) {}
-    std::shared_ptr<MemoryToolBox> mt;
+    void confirmSpace(const LayoutStruct<3> &newLayout, const SpaceStateType &spaceType) {}
+    std::shared_ptr<MemoryToolBox<3>> mt;
     std::string toString() const { return "myTmpStruct"; }
   };
+} // namespace TempLat
 
+inline void TempLat::MaximumTester::Test(TempLat::TDDAssertion &tdd)
+{
   myTmpStruct myInstance;
 
   auto aget = max(myInstance);
-
   say << "result of max : " << aget << "\n";
-
-  // tdd.verify( aget == 40);
+  tdd.verify(aget == 40);
 }
 
 #endif

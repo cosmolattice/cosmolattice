@@ -41,8 +41,6 @@ template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Te
   FieldChainFinal<T> phiBase("phi", toolBox);
   FieldViewFourier<T> phi(phiBase);*/
 
-  /* test that the looper is what we expected */
-
   /*std::atomic<bool> lastDimPositiveDefinite(true);
 
   WaveNumber k;

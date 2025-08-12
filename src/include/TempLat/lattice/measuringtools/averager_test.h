@@ -5,13 +5,13 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/util/almostequal.h"
 
-inline void TempLat::AveragerTester::Test(TempLat::TDDAssertion &tdd)
+namespace TempLat
 {
-
   struct myWorkspace {
     myWorkspace() : value(0.) {}
     myWorkspace &operator+=(const myWorkspace &other)
@@ -28,57 +28,78 @@ inline void TempLat::AveragerTester::Test(TempLat::TDDAssertion &tdd)
     double value;
   };
 
-  struct myTmpStruct {
-    myTmpStruct() : mt(MemoryToolBox::makeShared(4, 16, 1)) {}
-    double get(ptrdiff_t i) { return 1.; }
+  template <size_t _NDim> struct myTmpStruct {
+    static constexpr size_t NDim = _NDim;
+    myTmpStruct() : mt(MemoryToolBox<NDim>::makeShared(16, 1)) {}
+
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION double get(const IDX &...idx) const { return NDim; }
+
     auto getToolBox() { return mt; }
-    void confirmSpace(const LayoutStruct &newLayout, const SpaceStateType &spaceType) {}
-    std::shared_ptr<MemoryToolBox> mt;
+
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
+
+    std::shared_ptr<MemoryToolBox<NDim>> mt;
+
     std::string toString() const { return "myTmpStruct"; }
   };
 
-  struct myTmpStructComplex {
-    myTmpStructComplex(ptrdiff_t nd, ptrdiff_t ngr) : mt(MemoryToolBox::makeShared(nd, ngr, 1)) {}
-    complex<double> get(const ptrdiff_t &i)
+  template <size_t _NDim> struct myTmpStructComplex {
+    static constexpr size_t NDim = _NDim;
+    myTmpStructComplex(ptrdiff_t ngr)
+        : mt(MemoryToolBox<NDim>::makeShared(ngr, 1)), mLayout(mt->mLayouts.getFourierSpaceLayout())
     {
-      mt->itP()() = i;
-      double imagPart = mt->mLayouts.getFourierSpaceLayout().getHermitianPartners()->qualify(mt->itP().getVec()) ==
-                                HermitianRedundancy::realValued
-                            ? 0.
-                            : 1.;
+    }
+
+    template <typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION complex<double> get(const IDX &...idx) const
+    {
+      Kokkos::Array<ptrdiff_t, NDim> global_coord;
+      mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, idx...);
+      double imagPart =
+          mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::realValued ? 0. : NDim;
       return complex<double>(1., imagPart);
     }
-    auto getToolBox() { return mt; }
-    void confirmSpace(const LayoutStruct &newLayout, const SpaceStateType &spaceType) {}
-    std::shared_ptr<MemoryToolBox> mt;
-  };
 
-  myTmpStruct myInstance;
+    auto getToolBox() { return mt; }
+
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
+
+    std::shared_ptr<MemoryToolBox<NDim>> mt;
+
+    LayoutStruct<NDim> mLayout;
+  };
+} // namespace TempLat
+
+inline void TempLat::AveragerTester::Test(TempLat::TDDAssertion &tdd)
+{
+  myTmpStruct<3> myInstance;
 
   auto aget = getAverager(myInstance);
-
   say << "result of " << aget << ": " << aget.compute() << "\n";
 
-  tdd.verify(AlmostEqual(aget.compute(), 1.));
+  tdd.verify(AlmostEqual(aget.compute(), 3));
 
-  auto &&myLambda = [&tdd](ptrdiff_t nd_, ptrdiff_t ngr_) {
-    myTmpStructComplex myInstanceCp(nd_, ngr_);
+  auto myLambda = [&](auto dim, ptrdiff_t ngr_) {
+    constexpr size_t NDim = decltype(dim)::value;
+    myTmpStructComplex<NDim> myInstanceCp(ngr_);
 
     auto agetCp = getAverager(myInstanceCp);
 
     auto result = agetCp.compute();
 
-    say << result << " vs hypothetical " << complex<double>(1., 1.) << "\n";
+    say << result << " vs hypothetical " << complex<double>(1., NDim) << "\n";
 
-    tdd.verify(AlmostEqual(result, complex<double>(1., 1.)));
+    tdd.verify(AlmostEqual(result, complex<double>(1., NDim)));
   };
 
-  myLambda(4, 16);
-  myLambda(3, 32);
-  myLambda(2, 64);
+  myLambda(Tag<4>(), 16);
+  myLambda(Tag<3>(), 32);
+  myLambda(Tag<2>(), 64);
+
 #ifdef NOMPI
   /** this one fails correctly under MPI: each process would do the full 1d rod. */
-  myLambda(1, 12);
+  myLambda(Tag<1>(), 12);
 #endif
 }
 

@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/haseval.h"
@@ -21,22 +21,22 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    template <typename U>
+    template <typename U, typename... IDX>
       requires HasEval<U>
-    KOKKOS_FORCEINLINE_FUNCTION static void eval(U &&obj, ptrdiff_t i)
+    KOKKOS_FORCEINLINE_FUNCTION static void eval(U &&obj, const IDX &...idx)
     {
-      obj.eval(i);
+      obj.eval(idx...);
     }
 
-    template <typename U>
+    template <typename U, typename... IDX>
       requires(!HasEval<U>)
-    KOKKOS_FORCEINLINE_FUNCTION static constexpr void eval(U &&obj, ptrdiff_t i)
+    KOKKOS_FORCEINLINE_FUNCTION static constexpr void eval(U &&obj, const IDX &...i)
     {
     }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    DoEval() {}
+    DoEval() = delete;
 
   public:
 #ifdef TEMPLATTEST

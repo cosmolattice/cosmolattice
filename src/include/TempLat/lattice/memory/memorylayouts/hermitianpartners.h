@@ -7,11 +7,13 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <cuda.h>
 #include <vector>
 #include <cmath>
 
 #include "TempLat/util/hash/keccakhashbareclass.h"
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/util/powr.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianredundancy.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianvalueaccounting.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
@@ -110,12 +112,7 @@ namespace TempLat
     KOKKOS_FUNCTION
     HermitianValueAccounting getNumberOfIndependentValues() const
     {
-      if (mode == HermitianPartnersMode::none) {
-        ptrdiff_t vol = 1;
-        for (ptrdiff_t x : mNGrid)
-          vol *= x;
-        return HermitianValueAccounting(vol, 0);
-      } else if (mode == HermitianPartnersMode::fftw) {
+      if (mode == HermitianPartnersMode::fftw) {
         /* How do we get here? Well, hermitian redundant layout in FFTW is put in
          * N x N x ... x N/2+1 complex values -> naively 1 real and 1 imaginary for each.
          * Half of the entries in the last dim's [N/2] are redundant,
@@ -137,12 +134,18 @@ namespace TempLat
 
         ptrdiff_t hermitianSymmetricEntries = nGridVertices / mNGrid.back();
 
-        ptrdiff_t imaginary = nComplexVerticesAfterR2C - hermitianSymmetricEntries - pow<NDim - 1>(2);
+        ptrdiff_t imaginary = nComplexVerticesAfterR2C - hermitianSymmetricEntries - powr<NDim - 1>(2);
 
         /* 2^ND-1 is the number of real-valued entries, at {{ 0, 0, N/2, N/2, ...}}. */
-        ptrdiff_t real = imaginary + pow<NDim>(2);
+        ptrdiff_t real = imaginary + powr<NDim>(2);
 
         return HermitianValueAccounting(real, imaginary);
+      } else // if (mode == HermitianPartnersMode::none)
+      {
+        ptrdiff_t vol = 1;
+        for (ptrdiff_t x : mNGrid)
+          vol *= x;
+        return HermitianValueAccounting(vol, 0);
       }
     }
 

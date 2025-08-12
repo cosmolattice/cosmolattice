@@ -96,11 +96,8 @@ namespace TempLat
 
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
 
-    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-    /*    virtual inline
-        std::shared_ptr<MemoryToolBox> getToolBox() {
-            return GetToolBox::get(mT);
-        }*/
+    /** For measurement objects. */
+    inline std::shared_ptr<MemoryToolBox> getToolBox() { return GetToolBox::get(mT); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

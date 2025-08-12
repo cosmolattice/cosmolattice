@@ -48,13 +48,13 @@ namespace TempLat
     }
 
     template <size_t NDim>
-    static vType normalize(std::shared_ptr<MemoryToolBox<NDim>> toolBox, SpaceStateType pSpaceType, vType &value)
+    static vType normalize(std::shared_ptr<MemoryToolBox<NDim>> toolBox, SpaceStateType pSpaceType, const vType &value)
     {
 
       const auto &layout = pSpaceType == SpaceStateType::Fourier ? toolBox->mLayouts.getFourierSpaceLayout()
                                                                  : toolBox->mLayouts.getConfigSpaceLayout();
 
-      const auto accounting = layout.getHermitianPartners()->getNumberOfIndependentValues();
+      const auto accounting = layout.getHermitianPartners().getNumberOfIndependentValues();
 
       return normalizeTypeSpecific(value, accounting);
     }

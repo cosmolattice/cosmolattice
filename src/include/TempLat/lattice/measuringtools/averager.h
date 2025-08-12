@@ -5,15 +5,17 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
+#include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
+#include <memory>
 
 namespace TempLat
 {
@@ -23,82 +25,172 @@ namespace TempLat
    *
    * Unit test: make test-averager
    **/
-
   template <typename T> class Averager
   {
   public:
-    typedef typename GetGetReturnType<T>::type vType;
+    using vType = typename GetGetReturnType<T>::type;
     static constexpr bool isComplexValued = GetGetReturnType<T>::isComplex;
 
-    /* Put public methods here. These should change very little over time. */
-    Averager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    // TODO (Franz)
+    static constexpr size_t NDim = T::NDim;
 
-    operator vType() { return compute(); }
+    /* Put public methods here. These should change very little over time. */
+    Averager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
+    {
+      mToolBox = mT.getToolBox();
+      if (mToolBox == nullptr) throw std::runtime_error("Averager: ToolBox is null, cannot initialize.");
+
+      if (mSpaceType == SpaceStateType::Configuration) {
+        const auto layout = mToolBox->mLayouts.getConfigSpaceLayout();
+        const auto localSizes = layout.getLocalSizes();
+        const size_t nGhosts = layout.getNGhosts();
+
+        for (size_t d = 0; d < NDim; ++d) {
+          start_iteration[d] = nGhosts;
+          stop_iteration[d] = start_iteration[d] + localSizes[d];
+        }
+      } else if (mSpaceType == SpaceStateType::Fourier) {
+        const auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
+        const auto localSizes = layout.getLocalSizes();
+        for (size_t d = 0; d < NDim; ++d) {
+          start_iteration[d] = 0;
+          stop_iteration[d] = start_iteration[d] + localSizes[d];
+        }
+      } else {
+        throw std::runtime_error("Averager: Unknown space type.");
+      }
+    }
 
     vType compute()
     {
-      vType selfResult = mSpaceType == SpaceStateType::Fourier ? computeFourierSpace() : computeConfigurationSpace();
+      if (mSpaceType == SpaceStateType::Fourier) {
+        AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT, mSpaceType);
+      } else if (mSpaceType == SpaceStateType::Configuration) {
+        AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT, mSpaceType);
+      } else
+        throw std::runtime_error("Averager: Unknown space type.");
 
-      vType reducedRes = mT.getToolBox()->mGroup.getBaseComm().computeAllSum(selfResult);
+      // --------------------------------------------------------
+      // Reduce the result on the local lattice
+      // --------------------------------------------------------
 
+      vType localResult{};
+      if (mSpaceType == SpaceStateType::Configuration)
+        localResult = computeConfigurationSpace();
+      else if (mSpaceType == SpaceStateType::Fourier)
+        localResult = computeFourierSpace();
+      else
+        throw std::runtime_error("Averager: Unknown space type.");
+
+      // --------------------------------------------------------
+      // Reduce the result across all processes
+      // --------------------------------------------------------
+
+      const vType reducedRes = mT.getToolBox()->mGroup.getBaseComm().computeAllSum(localResult);
       return AveragerHelper<vType, isComplexValued>::normalize(mT.getToolBox(), mSpaceType, reducedRes);
     }
 
     vType computeConfigurationSpace()
     {
-      ptrdiff_t i = 0;
-      auto &it = mT.getToolBox()->itX();
-      vType mWorkspace = 0;
-      AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT, mSpaceType);
-      for (it.begin(); it.end(); ++it) {
-        i = it();
-        DoEval::eval(mT, i);
-        mWorkspace += GetEval::getEval(mT, i);
+      vType localResult{};
+
+      if constexpr (NDim > 1) {
+        auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
+        {
+          device::apply(
+              [&](auto &&...args) {
+                DoEval::eval(mT, args...);
+                update += mT.get(args...);
+              },
+              idx);
+        };
+        Kokkos::parallel_reduce("Averager",                                                                 //
+                                Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
+                                KokkosNDLambdaWrapperReduction<NDim, decltype(functor), vType>(functor), localResult);
+      } else if constexpr (NDim == 1) {
+        auto functor = KOKKOS_CLASS_LAMBDA(const device::Idx &idx, vType &update)
+        {
+          DoEval::eval(mT, idx);
+          update += mT.get(idx);
+        };
+        Kokkos::parallel_reduce("Averager", //
+                                Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]), functor, localResult);
+      } else {
+        static_assert(NDim > 0);
       }
-      return mWorkspace;
+
+      return localResult;
     }
 
     vType computeFourierSpace()
     {
-      auto &it = mT.getToolBox()->itP();
-      vType mWorkspace = 0;
-      AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT, mSpaceType);
-      for (it.begin(); it.end(); ++it) {
-        DoEval::eval(mT, it());
-        if (mT.getToolBox()->mLayouts.getFourierSpaceLayout().getHermitianPartners()->qualify(it.getVec()) !=
-            HermitianRedundancy::negativePartner)
-          mWorkspace += GetEval::getEval(mT, it());
+      vType localResult{};
+
+      const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
+
+      if constexpr (NDim > 1) {
+        auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
+        {
+          device::apply(
+              [&](auto &&...args) {
+                Kokkos::Array<ptrdiff_t, NDim> global_coord;
+                mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
+                if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
+                  return; // skip negative partners
+
+                DoEval::eval(mT, args...);
+                update += mT.get(args...);
+              },
+              idx);
+        };
+        Kokkos::parallel_reduce("Averager",                                                                 //
+                                Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
+                                KokkosNDLambdaWrapperReduction<NDim, decltype(functor), vType>(functor), localResult);
+      } else if constexpr (NDim == 1) {
+        auto functor = KOKKOS_CLASS_LAMBDA(const device::Idx &idx, vType &update)
+        {
+          DoEval::eval(mT, idx);
+          update += mT.get(idx);
+        };
+        Kokkos::parallel_reduce("Averager", //
+                                Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]), functor, localResult);
+      } else {
+        static_assert(NDim > 0);
       }
-      return mWorkspace;
+
+      return localResult;
     }
 
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
 
-    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-    virtual inline std::shared_ptr<MemoryToolBox> getToolBox() { return GetToolBox::get(mT); }
+    /** For measurement objects. */
+    auto getToolBox() { return GetToolBox::get(mT); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
     SpaceStateType mSpaceType;
+
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+
+    Kokkos::Array<device::Idx, NDim> start_iteration{};
+    Kokkos::Array<device::Idx, NDim> stop_iteration{};
   };
 
-  /*template <typename T>
-  auto average(T instance, SpaceStateType spaceType = GetGetReturnType<T>::isComplex ?
-  SpaceStateType::Fourier : SpaceStateType::Configuration) { return
-  Averager<T>(instance, spaceType).compute();
-  }*/
-
   template <typename T>
-  typename std::enable_if<!IsTempLatGettable<0, T>::value && !std::is_arithmetic<T>::value,
-                          typename GetGetReturnType<T>::type>::type
-  average(T instance, SpaceStateType spaceType = GetGetReturnType<T>::isComplex ? SpaceStateType::Fourier
-                                                                                : SpaceStateType::Configuration)
+    requires(!IsTempLatGettable<0, T> && !std::is_arithmetic_v<T>)
+  auto average(T instance, SpaceStateType spaceType = GetGetReturnType<T>::isComplex ? SpaceStateType::Fourier
+                                                                                     : SpaceStateType::Configuration)
   {
     return Averager<T>(instance, spaceType).compute();
   }
 
-  template <typename T> typename std::enable_if<std::is_arithmetic<T>::value, T>::type average(T a) { return a; }
+  template <typename T>
+    requires std::is_arithmetic_v<T>
+  auto average(T a)
+  {
+    return a;
+  }
 
   auto average(ZeroType a) { return 0; }
 

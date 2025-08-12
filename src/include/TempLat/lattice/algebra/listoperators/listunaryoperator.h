@@ -47,7 +47,7 @@ namespace TempLat
       return GetJumps::apply(mR);
     }
 
-    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
+    /** For measurement objects. */
     inline auto getToolBox() { return GetToolBox::get(mR); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */

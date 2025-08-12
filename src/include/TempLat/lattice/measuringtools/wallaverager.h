@@ -95,8 +95,8 @@ namespace TempLat
 
     std::string toString() const { return "<" + GetString::get(mT) + ">_walls"; }
 
-    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-    virtual inline std::shared_ptr<MemoryToolBox> getToolBox() { return GetToolBox::get(mT); }
+    /** For measurement objects. */
+    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return GetToolBox::get(mT); }
 
     auto getWall(size_t dim) const { return mWorkspace[dim]; }
 

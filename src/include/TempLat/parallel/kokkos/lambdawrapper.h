@@ -67,7 +67,6 @@ namespace TempLat
       requires(sizeof...(Args) == NDim)
     KOKKOS_FORCEINLINE_FUNCTION auto makeArray(device::tuple<Args...> &&tuple) const
     {
-      using type = std::common_type_t<Args...>;
       return device::apply([](auto &&...args) { return device::IdxArray<NDim>{{args...}}; }, tuple);
     }
   };

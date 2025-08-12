@@ -11,9 +11,7 @@
 
 namespace TempLat
 {
-
   /* we are going to abuse __LINE__ as an looper like value, simply so we get unique values for all tags. */
-
   namespace MPITags
   {
     static constexpr int waitInLine = __LINE__;
@@ -27,7 +25,6 @@ namespace TempLat
   /** \brief A class which just compiles.
    * Unit test: make test-mpitags
    **/
-
   class MPITagsJustCompile
   {
   public:

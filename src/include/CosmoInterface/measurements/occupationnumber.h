@@ -16,71 +16,61 @@
 
 #include "CosmoInterface/runparameters.h"
 
+namespace TempLat
+{
 
-namespace TempLat {
+  /** \brief A class which computes the occupation number.
+   *
+   *
+   **/
+  class OccupationNumberMeasurer
+  {
+  public:
+    template <typename T> OccupationNumberMeasurer(const RunParameters<T> &par) : nbins(par.nBinsSpectra) {}
 
+    template <class Model, int I> auto occupationNumber(Model &model, Tag<I> i)
+    {
+      constexpr size_t NDim = Model::NDim;
+      using T = decltype(model.dx);
 
-    /** \brief A class which computes the occupation number.
-     *
-     *
-     **/
+      const auto N = GetNGrid::get(model); // Isotropic lattices only.
+      const T kMaxBins = std::floor(pow(3, 0.5) / 2.0 * N) + 1;
 
+      Field<NDim, T> tmp("tmp", GetToolBox::get(model));
 
+      tmp = model.fldS(i);
+      const auto part1 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);
 
- class OccupationNumberMeasurer{
-      public:
-        template<typename T>
-        OccupationNumberMeasurer(const RunParameters<T>& par) :
-        nbins(par.nBinsSpectra)
-        {}
+      tmp = (pow(model.aI, model.alpha - 3) * model.piS(i)) + model.aDotI / model.aI * model.fldS(i);
+      const auto part2 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);
 
-        template< class Model, int I>
-        auto occupationNumber(Model& model, Tag<I> i) {
-            using T = decltype(model.dx);
-            auto N = GetNGrid::get(model); //Isotropic lattices only.
-            T kMaxBins = std::floor(pow(3, 0.5) / 2.0 * N) + 1;
+      const T normalisation =
+          pow<2>(model.aI) * pow<3>(model.dx) / pow<3>(N) / 2 * pow<2>(model.fStar / model.omegaStar);
 
+      const T m2 = average(model.potDeriv2(i));
 
-            Field<T> tmp("tmp", GetToolBox::get(model));
+      const auto omegaK = Function(k, sqrt(pow<2>(model.aI) * m2 + pow<2>(k)));
 
-            tmp = model.fldS(i);
-            auto part1 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);
+      return (Function(k, normalisation * omegaK(k)) * part1) +
+             (Function(k, normalisation * pow(model.aI, 2.0 * (1.0 - model.alpha)) / omegaK(k)) * part2);
+    }
 
-            tmp = (pow(model.aI, model.alpha - 3) * model.piS(i)) + model.aDotI / model.aI * model.fldS(i);
-            auto part2 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);
+  private:
+    ptrdiff_t nbins;
+  };
 
-            T normalisation = pow<2>(model.aI) * pow<3>(model.dx) / pow<3>(N)  / 2 * pow<2>(model.fStar / model.omegaStar);
+  class OccupationNumberTester
+  {
 
-            T m2 = average(model.potDeriv2(i));
-
-            auto omegaK = Function(k, sqrt(pow<2>(model.aI) * m2 + pow<2>(k)));
-
-            return (Function(k,normalisation * omegaK(k)) * part1)
-            +
-            (Function(k,normalisation * pow(model.aI, 2.0 * (1.0 - model.alpha)) / omegaK(k)) * part2);
-        }
-
-
-      private:
-        ptrdiff_t nbins;
-     };
-
-
-
-    class OccupationNumberTester {
-
-    public:
+  public:
 #ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
+  };
 
-
-
-} /* TempLat */
+} // namespace TempLat
 #ifdef TEMPLATTEST
 #include "CosmoInterface/measurements/occupationnumber_test.h"
 #endif
-
 
 #endif

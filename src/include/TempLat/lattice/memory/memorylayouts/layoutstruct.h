@@ -76,6 +76,16 @@ namespace TempLat
       });
     }
 
+    template <typename Container, typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto0N(Container &target, const IDX... idx)
+        const // Brings back the coordinates between 0 and N-1. Useful for saving and loading for example
+    {
+      putSpatialLocationFromMemoryIndexInto(target, idx...);
+      for (size_t j = 0; j < NDim; ++j)
+        if (target[j] < 0) target[j] = target[j] + getGlobal().getGlobalSizes()[j];
+    }
+
     /** \brief Inverse of putSpatialLocationFromMemoryIndexInto: from spatial
      *  coordinate to memory indices, in memory-layout order (that is,
      *  transposed, ready to be applied to `JumpsHolder::getJumpsInMemoryOrder()`.

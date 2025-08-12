@@ -109,7 +109,7 @@ namespace TempLat
       return result;
     }
 
-    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
+    /** For measurement objects. */
     inline auto getToolBox()
     {
       using AT = decltype(GetToolBox::get(mR));

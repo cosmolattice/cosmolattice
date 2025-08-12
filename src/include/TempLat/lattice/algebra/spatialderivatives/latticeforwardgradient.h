@@ -81,8 +81,8 @@ namespace TempLat
       return GetJumps::apply(mR);
     }
 
-    /** For measurement objects: need the toolbox for easiest access to loopers and whatever else. */
-    virtual inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return GetToolBox::get(mR); }
+    /** For measurement objects. */
+    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return GetToolBox::get(mR); }
 
     template <typename S> inline auto d(const S &other)
     {

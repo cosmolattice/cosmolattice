@@ -64,8 +64,6 @@ namespace TempLat
     ptrdiff_t mIEnd;
     std::vector<ptrdiff_t> jumps, vect;
 
-    friend class Looper;
-
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
