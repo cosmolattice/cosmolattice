@@ -111,8 +111,8 @@ namespace TempLat {
 
 
 } /* TempLat */
-
+#ifdef TEMPLATTEST
 #include "TempLat/lattice/algebra/su2algebra/su2doubletdagger_test.h"
-
+#endif
 
 #endif
