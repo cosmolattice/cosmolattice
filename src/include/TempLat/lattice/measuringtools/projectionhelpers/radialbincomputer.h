@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 namespace TempLat
 {
@@ -28,6 +29,7 @@ namespace TempLat
     }
 
     /** \brief Call this for your value, receive a bin index in return. */
+    KOKKOS_FUNCTION
     ptrdiff_t operator()(double value) const
     {
       ptrdiff_t bin = std::round(mNBins * (value - mMinVal) / mRange);

@@ -45,6 +45,8 @@ namespace TempLat
     KOKKOS_FUNCTION
     UnaryOperator(const R &pR) : mR(pR) {}
 
+    static consteval size_t getNDim() { return GetNDim::get<R>(); }
+
     void doWeNeedGhosts() { GhostsHunter::apply(mR); }
 
     void preGet() { PreGet::apply(mR); }

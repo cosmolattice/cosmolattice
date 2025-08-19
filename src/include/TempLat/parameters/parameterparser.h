@@ -237,10 +237,11 @@ namespace TempLat
             def.emplace_back(def[0]);
           }
         }
-        for (size_t i = ret.size(); i < (size_t)N; ++i) {
-          ret.push_back(ParameterGetter<S>(def[i], name));
-          oss << std::boolalpha << def[i] << " ";
-        }
+        if constexpr (N > 0)
+          for (size_t i = ret.size(); i < (size_t)N; ++i) {
+            ret.push_back(ParameterGetter<S>(def[i], name));
+            oss << std::boolalpha << def[i] << " ";
+          }
         // if(mVerbose) say << oss.str();
         if (toInsert)
           insert(oss.str()); // useful to insert the optionnal params so we can retrieve them later, for saving purposes

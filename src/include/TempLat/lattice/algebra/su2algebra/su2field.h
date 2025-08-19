@@ -21,10 +21,12 @@ namespace TempLat
    *
    * Unit test: make test-su2field
    **/
-  template <size_t NDim, typename T> class SU2FieldBase
+  template <size_t _NDim, typename T> class SU2FieldBase
   {
   public:
     /* Put public methods here. These should change very little over time. */
+    static constexpr size_t NDim = _NDim;
+
     SU2FieldBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3) : fs{f1, f2, f3}, cache(0), mName("NoName") {}
 
     SU2FieldBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)

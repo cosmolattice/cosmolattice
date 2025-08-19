@@ -27,7 +27,7 @@ namespace TempLat
 
   struct GetGetReturnTypeTester {
 #ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
+    template <typename T> static inline void Test(T &tdd);
 #endif
   };
 } // namespace TempLat

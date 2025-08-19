@@ -11,6 +11,7 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/parameters/parameterparser.h"
+#include <cstddef>
 
 namespace TempLat
 {
@@ -23,7 +24,7 @@ namespace TempLat
 
   MakeException(PureMPILoaderNotImplemented);
 
-  class FileLoaderPureMPI
+  template <size_t NDim> class FileLoaderPureMPI
   {
   public:
     /* Put public methods here. These should change very little over time. */
@@ -36,20 +37,20 @@ namespace TempLat
           "HighFive/HDF5 interface. If you don't, then just disable the options/functions which requires I/O");
     }
 
-    template <typename T> void loadReal(Field<T> &f)
+    template <typename T> void loadReal(Field<NDim, T> &f)
     {
       throw PureMPILoaderNotImplemented(
           "The pure MPI IO interface is yet to be implemented. If you require I/O for your lattice, please use the "
           "HighFive/HDF5 interface. If you don't, then just disable the options/functions which requires I/O");
     }
-    template <typename T> void loadComplex(FourierView<T> &f)
+    template <typename T> void loadComplex(FourierView<NDim, T> &f)
     {
       throw PureMPILoaderNotImplemented(
           "The pure MPI IO interface is yet to be implemented. If you require I/O for your lattice, please use the "
           "HighFive/HDF5 interface. If you don't, then just disable the options/functions which requires I/O");
     }
 
-    void open(std::string fn, std::shared_ptr<MemoryToolBox> toolBox)
+    void open(std::string fn, std::shared_ptr<MemoryToolBox<NDim>> toolBox)
     {
       throw PureMPILoaderNotImplemented(
           "The pure MPI IO interface is yet to be implemented. If you require I/O for your lattice, please use the "

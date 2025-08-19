@@ -9,6 +9,8 @@
 
 #include "TempLat/lattice/algebra/complexalgebra/scalarcomplexmultiply.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
+#include "TempLat/lattice/field/field.h"
+#include "TempLat/lattice/memory/memorytoolbox.h"
 #include <cstdlib>
 
 #ifndef NOKOKKOS
@@ -94,7 +96,37 @@ template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
 {
 #ifndef NOKOKKOS
   // NOTE: Some tests are commented out because they have missing functionality.
-  // We should fix them eventually.
+  // I should fix them eventually.
+
+  // ---- test singleset ----
+  {
+    auto toolBox = MemoryToolBox<2>::makeShared(8, 0);
+    Field<2, double> rField("rField", toolBox);
+    for (uint i = 0; i < 8; ++i) {
+      for (uint j = 0; j < 8; ++j) {
+        setAtOnePoint(rField, device::array<ptrdiff_t, 2>{i, j}, i + j);
+      }
+    }
+    {
+      auto host_view = rField.getLocalNDHostView();
+      bool all_correct = true;
+      for (uint i = 0; i < 8; ++i) {
+        for (uint j = 0; j < 8; ++j) {
+          all_correct &= host_view(i, j) == i + j;
+        }
+      }
+      tdd.verify(all_correct);
+    }
+    {
+      bool all_correct = true;
+      for (uint i = 0; i < 8; ++i) {
+        for (uint j = 0; j < 8; ++j) {
+          all_correct &= getAtOnePoint(rField, device::array<ptrdiff_t, 2>{i, j}) == i + j;
+        }
+      }
+      tdd.verify(all_correct);
+    }
+  }
 
   // ---- test double ----
   // binary operators

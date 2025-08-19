@@ -10,8 +10,6 @@
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
-#include "TempLat/util/tdd/tdd.h"
-#include <type_traits>
 
 namespace TempLat
 {
@@ -73,7 +71,7 @@ namespace TempLat
 
   public:
 #ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
+    template <typename T> static inline void Test(T &tdd);
 #endif
   };
 } // namespace TempLat

@@ -21,6 +21,7 @@
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
 
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
@@ -40,6 +41,17 @@ namespace TempLat
   public:
     KOKKOS_FUNCTION
     BinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
+
+    static consteval size_t getNDim()
+      requires HasNDim<R>
+    {
+      return GetNDim::get<R>();
+    }
+    static consteval size_t getNDim()
+      requires(!HasNDim<R> && HasNDim<T>)
+    {
+      return GetNDim::get<T>();
+    }
 
     void doWeNeedGhosts()
     {

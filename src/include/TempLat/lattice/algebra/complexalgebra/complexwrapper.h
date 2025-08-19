@@ -36,8 +36,8 @@ namespace TempLat
 
     template <int N> auto operator()(Tag<N> t) { return ComplexFieldGet(t); }
 
-    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) { return GetEval::getEval(mR, i); }
-    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) { return GetEval::getEval(mT, i); }
+    // auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) { return GetEval::getEval(mR, i); }
+    // auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) { return GetEval::getEval(mT, i); }
 
     void eval(ptrdiff_t i)
     {

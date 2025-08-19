@@ -31,9 +31,11 @@ namespace TempLat
    *
    * Unit test: make test-fieldviewconfig
    **/
-  template <size_t NDim, typename T> class ConfigView : public AbstractField<NDim, T>
+  template <size_t _NDim, typename T> class ConfigView : public AbstractField<_NDim, T>
   {
   public:
+    static constexpr size_t NDim = _NDim;
+
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
 
@@ -118,9 +120,17 @@ namespace TempLat
       return mView(idx...);
     }
 
-    T &getSet(ptrdiff_t i) { return mManager->operator[](i); }
+    template <typename... IDX>
+      requires requires {
+        requires(NDim == sizeof...(IDX));
+        requires(std::is_integral_v<std::decay_t<IDX>> && ...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION T &getSet(IDX &&...idx) const
+    {
+      return mView(idx...);
+    }
 
-    virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
+    const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
 
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {

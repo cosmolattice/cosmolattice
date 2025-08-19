@@ -7,6 +7,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Macros.hpp>
 #include <limits>
 #include <algorithm>
 
@@ -31,9 +33,20 @@ namespace TempLat
 
   public:
     RadialProjectionSingleQuantity(ptrdiff_t size)
-        : mAverages(size, 0), mVariances(size, 0), mMins(size, std::numeric_limits<T>::max()),
-          mMaxs(size, -std::numeric_limits<T>::max())
     {
+      mAverages = HostView("RadialProjectionSingleQuantity::mAverages", size, 0);
+      mVariances = HostView("RadialProjectionSingleQuantity::mVariances", size, 0);
+      mMins = HostView("RadialProjectionSingleQuantity::mMins", size);
+      Kokkos::deep_copy(mMins, std::numeric_limits<T>::max());
+      mMaxs = HostView("RadialProjectionSingleQuantity::mMaxs", size);
+      Kokkos::deep_copy(mMaxs, -std::numeric_limits<T>::max());
+
+      mAveragesDevice = DeviceView("RadialProjectionSingleQuantity::mAveragesDevice", size, 0);
+      mVariancesDevice = DeviceView("RadialProjectionSingleQuantity::mVariancesDevice", size, 0);
+      mMinsDevice = DeviceView("RadialProjectionSingleQuantity::mMinsDevice", size);
+      Kokkos::deep_copy(mMinsDevice, std::numeric_limits<T>::max());
+      mMaxsDevice = DeviceView("RadialProjectionSingleQuantity::mMaxsDevice", size);
+      Kokkos::deep_copy(mMaxsDevice, -std::numeric_limits<T>::max());
     }
 
     size_t size() const { return mAverages.size(); }
@@ -49,21 +62,39 @@ namespace TempLat
     }
 
     /** \brief Add one new weighted value to the collection of properties. */
-    void add(ptrdiff_t i, const T &value, const T &weight)
+    KOKKOS_FUNCTION
+    void add_device(ptrdiff_t i, const T &value, const T &weight) const
     {
       checkBounds(i);
-      mAverages[i] += weight * value;
-      mVariances[i] += weight * value * value;
-      mMins[i] = std::min(mMins[i], value);
-      mMaxs[i] = std::max(mMaxs[i], value);
+      mAveragesDevice[i] += weight * value;
+      mVariancesDevice[i] += weight * value * value;
+      mMinsDevice[i] = Kokkos::min(mMinsDevice[i], value);
+      mMaxsDevice[i] = Kokkos::max(mMaxsDevice[i], value);
     }
 
     void clear()
     {
-      mAverages.clear();
-      mVariances.clear();
-      mMins.clear();
-      mMaxs.clear();
+      Kokkos::deep_copy(mAverages, 0);
+      Kokkos::deep_copy(mVariances, 0);
+      Kokkos::deep_copy(mMins, std::numeric_limits<T>::max());
+      Kokkos::deep_copy(mMaxs, -std::numeric_limits<T>::max());
+      push();
+    }
+
+    void pull()
+    {
+      Kokkos::deep_copy(mAverages, mAveragesDevice);
+      Kokkos::deep_copy(mVariances, mVariancesDevice);
+      Kokkos::deep_copy(mMins, mMinsDevice);
+      Kokkos::deep_copy(mMaxs, mMaxsDevice);
+    }
+
+    void push()
+    {
+      Kokkos::deep_copy(mAveragesDevice, mAverages);
+      Kokkos::deep_copy(mVariancesDevice, mVariances);
+      Kokkos::deep_copy(mMinsDevice, mMins);
+      Kokkos::deep_copy(mMaxsDevice, mMaxs);
     }
 
     /** \brief This is why we keep stuff in vectors, sum up all the results from all processes in an easy way: vectors
@@ -88,17 +119,28 @@ namespace TempLat
     template <typename S> friend class RadialProjectionResult;
 
   private:
-    std::vector<T> mAverages;
-    std::vector<T> mVariances;
-    std::vector<T> mMins;
-    std::vector<T> mMaxs;
+    using HostView = Kokkos::View<T *, DefaultLayout, Kokkos::DefaultHostExecutionSpace>;
+    using DeviceView = Kokkos::View<T *, DefaultLayout, Kokkos::DefaultExecutionSpace>;
 
-    inline void checkBounds(ptrdiff_t i)
+    HostView mAverages;
+    HostView mVariances;
+    HostView mMins;
+    HostView mMaxs;
+
+    DeviceView mAveragesDevice;
+    DeviceView mVariancesDevice;
+    DeviceView mMinsDevice;
+    DeviceView mMaxsDevice;
+
+    KOKKOS_FORCEINLINE_FUNCTION
+    void checkBounds(ptrdiff_t i) const
     {
 #ifdef CHECKBOUNDS
+#ifdef NOKOKKOS
       if (i < 0 || i >= (ptrdiff_t)mAverages.size()) {
         throw RadialProjectionSingleQuantityException("Out of bounds: ", i, "not in", 0, " -- ", mAverages.size());
       }
+#endif
 #endif
     }
 

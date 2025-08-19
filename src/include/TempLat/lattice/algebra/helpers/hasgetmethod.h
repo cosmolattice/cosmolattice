@@ -31,7 +31,7 @@ namespace TempLat
   struct HasGetMethodTester {
   public:
 #ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
+    template <typename T> static inline void Test(T &tdd);
 #endif
   };
 

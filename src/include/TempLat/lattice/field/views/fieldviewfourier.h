@@ -13,9 +13,11 @@
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/field/abstractfield.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
+#include <Kokkos_Array.hpp>
 
 namespace TempLat
 {
@@ -33,9 +35,11 @@ namespace TempLat
    * Field class
    *
    **/
-  template <size_t NDim, typename T> class FourierView : public AbstractField<NDim, T>
+  template <size_t _NDim, typename T> class FourierView : public AbstractField<_NDim, T>
   {
   public:
+    static constexpr size_t NDim = _NDim;
+
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
 
@@ -83,9 +87,25 @@ namespace TempLat
       mManager->flagHostMirrorOutdated();
     }
 
-    complex<T> get(ptrdiff_t i) const { return mManager->as_complex(i); }
+    template <typename... IDX>
+      requires requires {
+        requires(NDim == sizeof...(IDX));
+        requires(std::is_integral_v<std::decay_t<IDX>> && ...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
+    {
+      return mView(idx...);
+    }
 
-    complex<T> &getSet(ptrdiff_t i) { return mManager->as_complex(i); }
+    template <typename... IDX>
+      requires requires {
+        requires(NDim == sizeof...(IDX));
+        requires(std::is_integral_v<std::decay_t<IDX>> && ...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION complex<T> &getSet(const IDX &...idx) const
+    {
+      return mView(idx...);
+    }
 
     virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getFourierSpaceJumps(); }
 
@@ -113,45 +133,40 @@ namespace TempLat
      *  At the same time, the arguments are in original dimension order, not transposed.
      *  Transposition will be applied internally where applicable.
      */
-    template <typename... Args> auto &operator()(bool &test, Args... args)
-    {
-      //            const ptrdiff_t sz = sizeof...(args);
-      std::vector<ptrdiff_t> asVec{{args...}};
-      return operator()(test, asVec);
-    }
+    /*
+   template <typename... Args> auto &operator()(bool &test, Args... args)
+   {
+     //            const ptrdiff_t sz = sizeof...(args);
+     std::vector<ptrdiff_t> asVec{{args...}};
+     return operator()(test, asVec);
+   }*/
 
+    /*
     auto &operator()(bool &test, std::vector<ptrdiff_t> position)
     {
       ptrdiff_t offset = this->getOffsetFromCoords(test, position);
-      /* our hack to give something that is not in the memory, without throwing an exception. */
-      static complex<T> dummy = 0;
-      dummy = complex<T>(std::numeric_limits<T>::infinity(), 0);
+      // our hack to give something that is not in the memory, without throwing an exception.
+      constexpr complex<T> dummy(std::numeric_limits<T>::infinity(), 0);
       return offset > -1 ? mManager->as_complex(offset) : dummy;
     }
+    */
 
     // MPI aware setting of value. Use exceptionnaly (remove zero mode for example)
 
     template <typename... Args> void setZeroMode(const complex<T> &toSet)
     {
       // This is dimension-aware.
-      std::vector<ptrdiff_t> asVec(mToolBox->mNDimensions, 0);
-      set(toSet, asVec);
+      device::array<ptrdiff_t, NDim> global_coord{{}};
+      device::array<ptrdiff_t, NDim> mem_pos{{}};
+
+      auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
+      device::apply([&](const auto &...idx) { layout.putMemoryIndexFromSpatialLocationInto(mem_pos, idx...); },
+                    global_coord);
+
+      setAtOnePoint(*this, mem_pos, toSet);
     }
 
-    template <typename... Args> void set(const complex<T> &toSet, Args... args)
-    {
-      std::vector<ptrdiff_t> asVec{{args...}};
-      set(toSet, asVec);
-    }
-
-    void set(const complex<T> &toSet, std::vector<ptrdiff_t> vec)
-    {
-      bool tmp;
-      auto &res = (*this)(tmp, vec);
-      if (tmp) res = toSet;
-    }
-
-    template <size_t _NDim, typename S> friend class Field;
+    template <size_t __NDim, typename S> friend class Field;
 
   private:
     FourierView(const AbstractField<NDim, T> &f) : AbstractField<NDim, T>(f)

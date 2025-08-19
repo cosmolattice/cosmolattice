@@ -17,16 +17,16 @@ namespace TempLat
    *
    * Unit test: make test-vectorfieldcollection
    **/
-  template <template <class> class Arg, class T, int NDim, int N, int SHIFTIND = 0, bool flatAssign = false>
-  class VectorFieldCollection
+  template <class Arg, class T, int NDim, int N, int SHIFTIND = 0, bool flatAssign = false> class VectorFieldCollection
   {
   public:
-    VectorFieldCollection(std::string name, std::shared_ptr<MemoryToolBox> toolBox,
+    VectorFieldCollection(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
                           LatticeParameters<T> pLatPar = LatticeParameters<T>()) //:
     {
-      for (size_t i = 0; i < N; ++i) {
-        fs.push_back(VectorField<Arg, T, NDim, flatAssign>(name + "_" + std::to_string(i), toolBox, pLatPar));
-      }
+      if constexpr (N > 0)
+        for (size_t i = 0; i < N; ++i) {
+          fs.push_back(VectorField<Arg, T, NDim, flatAssign>(name + "_" + std::to_string(i), toolBox, pLatPar));
+        }
     }
 
     template <int M> auto operator()(Tag<M> t) const { return fs[t - Tag<SHIFTIND>()]; }

@@ -17,105 +17,96 @@
 #include "CosmoInterface/measurements/powerspectrum.h"
 #include "CosmoInterface/runparameters.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-    /** \brief A class which contains standard measurements for the SU2 gauge fields.
-     *
-     **/
+  /** \brief A class which contains standard measurements for the SU2 gauge fields.
+   *
+   **/
 
-    template <typename T>
-    class SU2Measurer {
-    public:
-        /* Put public methods here. These should change very little over time. */
-        template <typename Model>
-        SU2Measurer(Model& model, FilesManager& filesManager, const RunParameters<T>& par, bool append)
-        {
-            bool amIRoot = model.getToolBox()->amIRoot();
+  template <typename T> class SU2Measurer
+  {
+  public:
+    /* Put public methods here. These should change very little over time. */
+    template <typename Model>
+    SU2Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
+    {
+      bool amIRoot = model.getToolBox()->amIRoot();
 
-            // We create three files for each SU(2) gauge field:
-            ForLoop(i, 0, Model::NSU2 - 1,
+      // We create three files for each SU(2) gauge field:
+      ForLoop(i, 0, Model::NSU2 - 1,
 
-                    standardNormOut.emplace_back(
-                            MeasurementsSaver<T>(filesManager, "norm_SU2_" + std::to_string(i) , amIRoot, append, MeansMeasurer::headerEB())
-                    );
-                    // Contains volume-averages of the electric and magnetic fields:
-                    // norm squared, norm to the fourth, and variances
+              standardNormOut.emplace_back(MeasurementsSaver<T>(filesManager, "norm_SU2_" + std::to_string(i), amIRoot,
+                                                                append, MeansMeasurer::headerEB()));
+              // Contains volume-averages of the electric and magnetic fields:
+              // norm squared, norm to the fourth, and variances
 
-                    gauss.emplace_back(
-                            MeasurementsSaver<T>(filesManager, "gauss_SU2_" + std::to_string(i), amIRoot, append,
-                                  {"t", "var(LHS-RHS)_over_var(LHS+RHS)", "var(LHS)", "var(RHS)" })
-                    ); // Checks the degree of conservation of the SU(2) gauss law.
+              gauss.emplace_back(
+                  MeasurementsSaver<T>(filesManager, "gauss_SU2_" + std::to_string(i), amIRoot, append,
+                                       {"t", "var(LHS-RHS)_over_var(LHS+RHS)", "var(LHS)",
+                                        "var(RHS)"})); // Checks the degree of conservation of the SU(2) gauss law.
 
-                    spectra.emplace_back(
-                            SpectrumSaver<T>(filesManager, "norm_SU2_" + std::to_string(i), amIRoot, append, par)
-                    ); // Contains the spectra of the electric and magnetic fields.
+              spectra.emplace_back(SpectrumSaver<T>(filesManager, "norm_SU2_" + std::to_string(i), amIRoot, append,
+                                                    par)); // Contains the spectra of the electric and magnetic fields.
 
-            );
-        }
+      );
+    }
 
-        // This measures the corresponding averages with MeansMeasurer::measure, and add them to the files.
-        // NOTE: For gauge fields, their momenta is defined as pi=a^(alpha-1)*B'_i, with A'_i the electric field.
+    // This measures the corresponding averages with MeansMeasurer::measure, and add them to the files.
+    // NOTE: For gauge fields, their momenta is defined as pi=a^(alpha-1)*B'_i, with A'_i the electric field.
 
-        template <typename Model>
-        void measureStandard(Model& model, T t) {
-            ForLoop(i, 0, Model::NSU2 - 1,
-    			auto B = sqrt(FieldFunctionals::B2SU2(model,i));
-              	auto E = pow(model.aI, 1 * model.alpha - 1) * sqrt(FieldFunctionals::pi2SU2(model,i));
-              	MeansMeasurer::measure(standardNormOut(i),  E, B, t);
-              	standardNormOut(i).save();
-                gauss(i).addAverage(t);// adds time to the Gauss law file
-                auto gaussArr = GaussLaws::checkSU2(model,i);
-                // the function returns a 3-component vector with information
-                // of the left and right hand sides of the Gauss law.
+    template <typename Model> void measureStandard(Model &model, T t)
+    {
+      ForLoop(i, 0, Model::NSU2 - 1, auto B = sqrt(FieldFunctionals::B2SU2(model, i));
+              auto E = pow(model.aI, 1 * model.alpha - 1) * sqrt(FieldFunctionals::pi2SU2(model, i));
+              MeansMeasurer::measure(standardNormOut(i), E, B, t); standardNormOut(i).save();
+              gauss(i).addAverage(t); // adds time to the Gauss law file
+              auto gaussArr = GaussLaws::checkSU2(model, i);
+              // the function returns a 3-component vector with information
+              // of the left and right hand sides of the Gauss law.
 
-                gauss(i).addAverage(gaussArr(0)); // var(LHS - RHS)_over_var(LHS + RHS),
-                gauss(i).addAverage(gaussArr(1)); // var(LHS)
-                gauss(i).addAverage(gaussArr(2)); // and var(RHS)
-                gauss(i).save();
-            );
-        }
+              gauss(i).addAverage(gaussArr(0)); // var(LHS - RHS)_over_var(LHS + RHS),
+              gauss(i).addAverage(gaussArr(1)); // var(LHS)
+              gauss(i).addAverage(gaussArr(2)); // and var(RHS)
+              gauss(i).save(););
+    }
 
-        // This measures the electric and magnetic spectra and adds them to the files.
-        template <typename Model>
-        void measureSpectra(Model& model, T t, PowerSpectrumMeasurer& PSMeasurer) {
+    // This measures the electric and magnetic spectra and adds them to the files.
+    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
+    {
 
-            ForLoop(k,0,Model::NSU2-1,
+      ForLoop(k, 0, Model::NSU2 - 1,
 
-                    auto BSU2 = safeSqrt(FieldFunctionals::B2SU2(model,k));
-                    auto ESU2 =  pow(model.aI,  model.alpha - 1) * safeSqrt(FieldFunctionals::pi2SU2(model,k));
-                    auto magSpecSU2 = PSMeasurer.powerSpectrum(BSU2);
-                    auto elSpecSU2 = PSMeasurer.powerSpectrum(ESU2);
+              auto BSU2 = safeSqrt(FieldFunctionals::B2SU2(model, k));
+              auto ESU2 = pow(model.aI, model.alpha - 1) * safeSqrt(FieldFunctionals::pi2SU2(model, k));
+              auto magSpecSU2 = PSMeasurer.powerSpectrum(BSU2); auto elSpecSU2 = PSMeasurer.powerSpectrum(ESU2);
 
-                    spectra(k).save(t, elSpecSU2, magSpecSU2);
-            );
-        }
+              spectra(k).save(t, elSpecSU2, magSpecSU2););
+    }
 
-    private:
-        /* Put all member variables and private methods here. These may change arbitrarily. */
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
 
-        TempLatVector<MeasurementsSaver<T>> standardNormOut;
-        TempLatVector<MeasurementsSaver<T>> gauss;
+    TempLatVector<MeasurementsSaver<T>> standardNormOut;
+    TempLatVector<MeasurementsSaver<T>> gauss;
 
-        TempLatVector<SpectrumSaver<T>> spectra;
+    TempLatVector<SpectrumSaver<T>> spectra;
 
-        EvolverType eType;
+    EvolverType eType;
+  };
 
-    };
-
-    class SU2MeasurerTester{
-    public:
+  class SU2MeasurerTester
+  {
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
+  };
 
-
-
-} /* TempLat */
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "CosmoInterface/measurements/su2measurer_test.h"
 #endif
-
 
 #endif

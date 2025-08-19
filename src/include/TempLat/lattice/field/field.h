@@ -24,10 +24,12 @@ namespace TempLat
    *
    * Unit test: make test-field
    **/
-  template <size_t NDim, typename T> class Field : public ConfigView<NDim, T>
+  template <size_t _NDim, typename T> class Field : public ConfigView<_NDim, T>
   {
   public:
     /* Put public methods here. These should change very little over time. */
+
+    static constexpr size_t NDim = _NDim;
 
     using ConfigView<NDim, T>::mManager;
 
@@ -56,7 +58,7 @@ namespace TempLat
       return ZeroType();
     }
     /** \brief The real overlord: is it a Field, then we must compare. */
-    ptrdiff_t d(const Field<NDim, T> &other) const { return *this == other ? OneType() : ZeroType(); }
+    ptrdiff_t d(const Field<NDim, T> &other) const { return *this == other ? 1 : 0; }
 
     friend bool operator==(const Field<NDim, T> &a, const Field<NDim, T> &b) { return a.mManager == b.mManager; }
 

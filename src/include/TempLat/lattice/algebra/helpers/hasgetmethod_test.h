@@ -45,7 +45,7 @@ struct MyTestFive {
 
 #include "TempLat/lattice/algebra/operators/operators.h"
 
-inline void TempLat::HasGetMethodTester::Test(TempLat::TDDAssertion &tdd)
+template <typename T> inline void TempLat::HasGetMethodTester::Test(T &tdd)
 {
   tdd.verify(HasGetMethod<MyTestOne> == true);
   tdd.verify(HasGetMethod<MyTestTwo> == false);

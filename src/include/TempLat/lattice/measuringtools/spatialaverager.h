@@ -105,8 +105,7 @@ namespace TempLat
         Kokkos::parallel_for(
             TeamPolicy(result.size(), Kokkos::AUTO()), KOKKOS_CLASS_LAMBDA(auto team) {
               const auto cur_lidx = nGhosts + team.league_rank();
-              auto functor = KOKKOS_CLASS_LAMBDA(const device::Idx &idx, vType &update)
-              {
+              auto functor = [&](const device::Idx &idx, vType &update) {
                 DoEval::eval(mT, idx, cur_lidx);
                 update += mT.get(idx, cur_lidx);
               };

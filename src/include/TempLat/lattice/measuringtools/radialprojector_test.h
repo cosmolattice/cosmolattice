@@ -7,84 +7,87 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-// #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
-// #include "TempLat/lattice/field/field.h"
+#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+#include "TempLat/lattice/field/field.h"
 
 inline void TempLat::RadialProjectorTester::Test(TempLat::TDDAssertion &tdd)
 {
+  static constexpr size_t NDim = 3;
+  const ptrdiff_t nGrid = 16;
+  const ptrdiff_t nGhost = 1;
 
-  /*  const ptrdiff_t nDim = 3;
-    const ptrdiff_t nGrid = 16;
-    const ptrdiff_t nGhost = 1;
+  auto mToolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
-    auto mToolBox = MemoryToolBox::makeShared(nDim, nGrid, nGhost );
+  Field<NDim, double> phi("phi", mToolBox);
+  auto phi_of_k = phi.inFourierSpace();
+  phi_of_k = 1 * WaveNumber<NDim>(mToolBox).norm();
 
-    Field<double> phi("phi", mToolBox);
-    auto phi_of_k = phi.inFourierSpace();
-    phi_of_k = 1 * WaveNumber().getNorm();
+  auto rProj = projectRadiallyFourier(abs(phi_of_k));
 
-    auto rProj = projectRadially(3 * abs(phi_of_k), SpaceStateType::Fourier);
+  auto result = rProj.measure();
 
-    auto result = rProj.measure();
+  //    say << "result: \n" << result << "\n";
 
-//    say << "result: \n" << result << "\n";
-
-    ///not sure this really tests the radial projection, but at least it tests MPI.
-    bool allRight = true;
-    for ( auto&& it : result) {
-        allRight = allRight && AlmostEqual(3 * it.getBin().average, it.getValue().average);
-        // variance is close to zero, all numerical noise.
-        // allRight = allRight && AlmostEqual(3 * it.getBin().sampleVariance, it.getValue().sampleVariance, 1.e-2);
-        allRight = allRight && AlmostEqual(3 * it.getBin().minVal, it.getValue().minVal);
-        allRight = allRight && AlmostEqual(3 * it.getBin().maxVal, it.getValue().maxVal);
-        if ( ! allRight ) {
-            say << "Broken: " << it << "\n";
-            break;
-        }
+  /// not sure this really tests the radial projection, but at least it tests MPI.
+  bool allRight = true;
+  for (auto &&it : result) {
+    allRight = allRight && AlmostEqual(3 * it.getBin().average, it.getValue().average);
+    // variance is close to zero, all numerical noise.
+    // allRight = allRight && AlmostEqual(3 * it.getBin().sampleVariance, it.getValue().sampleVariance, 1.e-2);
+    allRight = allRight && AlmostEqual(3 * it.getBin().minVal, it.getValue().minVal);
+    allRight = allRight && AlmostEqual(3 * it.getBin().maxVal, it.getValue().maxVal);
+    if (!allRight) {
+      say << "Broken: " << " Bin: " << it.getBin().average << ", "
+          << "Value: " << it.getValue().average << ", "
+          << "Min: " << it.getBin().minVal << ", "
+          << "Max: " << it.getBin().maxVal << "\n";
+      // break;
     }
+  }
 
-    tdd.verify( allRight );
+  tdd.verify(allRight);
 
-    // test the rebinning
-    result.rebin(10);
-    tdd.verify( result.size() == 10u );
+  // test the rebinning
+  result.rebin(10);
+  tdd.verify(result.size() == 10u);
 
-    allRight = true;
-    for ( auto&& it : result) {
-        allRight = allRight && AlmostEqual(3 * it.getBin().average, it.getValue().average);
-        // variance is close to zero, all numerical noise.
-        // allRight = allRight && AlmostEqual(3 * it.getBin().sampleVariance, it.getValue().sampleVariance, 1.e-2);
-        if ( it.getBin().average != 0 ) {
-            allRight = allRight && AlmostEqual(3 * it.getBin().minVal, it.getValue().minVal);
-            allRight = allRight && AlmostEqual(3 * it.getBin().maxVal, it.getValue().maxVal);
-        }
-        if ( ! allRight ) {
-            say << "Broken: " << it << "\n";
-            break;
-        }
+  allRight = true;
+  for (auto &&it : result) {
+    allRight = allRight && AlmostEqual(3 * it.getBin().average, it.getValue().average);
+    // variance is close to zero, all numerical noise.
+    // allRight = allRight && AlmostEqual(3 * it.getBin().sampleVariance, it.getValue().sampleVariance, 1.e-2);
+    if (it.getBin().average != 0) {
+      allRight = allRight && AlmostEqual(3 * it.getBin().minVal, it.getValue().minVal);
+      allRight = allRight && AlmostEqual(3 * it.getBin().maxVal, it.getValue().maxVal);
     }
-    tdd.verify( allRight );
-
-    // test the rescaling
-
-    result.rescale([](auto x) { return x * x; });
-    allRight = true;
-    for ( auto&& it : result) {
-        // variance is close to zero, all numerical noise.
-        // allRight = allRight && AlmostEqual(3 * it.getBin().sampleVariance, it.getValue().sampleVariance, 1.e-2);
-        if ( it.getBin().average != 0 ) {
-            allRight = allRight && AlmostEqual(3 * it.getBin().average, it.getValue().average / it.getBin().average /
-it.getBin().average); allRight = allRight && AlmostEqual(3 * it.getBin().minVal, it.getValue().minVal/
-it.getBin().average / it.getBin().average); allRight = allRight && AlmostEqual(3 * it.getBin().maxVal,
-it.getValue().maxVal/ it.getBin().average / it.getBin().average);
-        }
-        if ( ! allRight ) {
-            say << "Broken: " << it << "\n";
-            break;
-        }
+    if (!allRight) {
+      say << "Broken: " << it << "\n";
+      break;
     }
-    tdd.verify( allRight );
-*/
+  }
+  tdd.verify(allRight);
+
+  // test the rescaling
+
+  result.rescale([](auto x) { return x * x; });
+  allRight = true;
+  for (auto &&it : result) {
+    // variance is close to zero, all numerical noise.
+    // allRight = allRight && AlmostEqual(3 * it.getBin().sampleVariance, it.getValue().sampleVariance, 1.e-2);
+    if (it.getBin().average != 0) {
+      allRight = allRight && AlmostEqual(3 * it.getBin().average,
+                                         it.getValue().average / it.getBin().average / it.getBin().average);
+      allRight = allRight &&
+                 AlmostEqual(3 * it.getBin().minVal, it.getValue().minVal / it.getBin().average / it.getBin().average);
+      allRight = allRight &&
+                 AlmostEqual(3 * it.getBin().maxVal, it.getValue().maxVal / it.getBin().average / it.getBin().average);
+    }
+    if (!allRight) {
+      say << "Broken: " << it << "\n";
+      break;
+    }
+  }
+  tdd.verify(allRight);
 }
 
 #endif

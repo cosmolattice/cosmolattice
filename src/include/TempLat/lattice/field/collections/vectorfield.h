@@ -18,7 +18,7 @@ namespace TempLat
    *
    * Unit test: make test-vectorfield3d
    **/
-  template <template <class> class Arg, class T, int N, bool flatAssign = false>
+  template <class Arg, class T, int N, bool flatAssign = false>
   using VectorField = FieldCollection<Arg, T, N, flatAssign, 1>;
 } // namespace TempLat
 

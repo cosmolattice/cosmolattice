@@ -21,16 +21,16 @@ namespace TempLat
    *
    * Unit test: make test-fieldcollection
    **/
-  template <template <class> class Arg, class T, int N, bool flatAssign = false, int SHIFTIND = 0> class FieldCollection
+  template <class Arg, class T, int N, bool flatAssign = false, int SHIFTIND = 0> class FieldCollection
   {
   public:
-    static constexpr size_t NDim = Arg<T>::NDim;
+    static constexpr size_t NDim = Arg::NDim;
 
     FieldCollection(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
                     LatticeParameters<T> pLatPar = LatticeParameters<T>()) //:
     {
-      for (size_t i = 0; i < N; ++i) {
-        fs.push_back(Arg<T>(name + "_" + std::to_string(i + SHIFTIND), toolBox, pLatPar));
+      for (int i = 0; i < N; ++i) {
+        fs.push_back(Arg(name + "_" + std::to_string(i + SHIFTIND), toolBox, pLatPar));
       }
     }
 
@@ -55,7 +55,7 @@ namespace TempLat
     static constexpr size_t size = N;
 
   private:
-    std::vector<Arg<T>> fs;
+    std::vector<Arg> fs;
   };
 
   struct FieldCollectionTester {

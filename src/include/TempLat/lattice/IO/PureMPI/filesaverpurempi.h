@@ -22,13 +22,12 @@ namespace TempLat
    *
    * Unit test: make test-filesaverpurempi
    **/
-
-  class FileSaverPureMPI
+  template <size_t NDim> class FileSaverPureMPI
   {
   public:
     /* Put public methods here. These should change very little over time. */
     FileSaverPureMPI() {}
-    void open(std::string fn, std::shared_ptr<MemoryToolBox> toolBox)
+    void open(std::string fn, std::shared_ptr<MemoryToolBox<NDim>> toolBox)
     {
       throw PureMPISaverNotImplemented(
           "The pure MPI IO interface is yet to be implemented. If you require I/O for your lattice, please use the "

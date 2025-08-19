@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::GetGetReturnTypeTester::Test(TempLat::TDDAssertion &tdd)
+template <typename T> inline void TempLat::GetGetReturnTypeTester::Test(T &tdd)
 {
   struct tmp {
     KOKKOS_FORCEINLINE_FUNCTION

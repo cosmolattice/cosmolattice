@@ -30,7 +30,10 @@ namespace TempLat
     GetVectorComponentHelper(const R &pR, ptrdiff_t pJ) : mR(pR), mJ(pJ) {}
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R mR, ptrdiff_t mJ, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        GetValue::get(mR, idx..., mJ);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX... idx) const
     {
       return GetValue::get(mR, idx..., mJ);

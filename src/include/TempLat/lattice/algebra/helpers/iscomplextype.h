@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/complex.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -18,7 +17,7 @@ namespace TempLat
   /** \brief a mini tester class... */
   struct IsComplexTypeTester {
 #ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
+    template <typename T> static inline void Test(T &tdd);
 #endif
   };
 } // namespace TempLat

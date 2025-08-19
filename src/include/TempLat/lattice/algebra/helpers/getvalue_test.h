@@ -7,6 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::GetValue::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
+template <typename T> inline void TempLat::GetValue::Test(T &tdd) { tdd.verify(true); }
 
 #endif

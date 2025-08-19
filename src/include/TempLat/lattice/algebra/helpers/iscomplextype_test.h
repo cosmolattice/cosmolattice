@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::IsComplexTypeTester::Test(TempLat::TDDAssertion &tdd)
+template <typename T> inline void TempLat::IsComplexTypeTester::Test(T &tdd)
 {
   tdd.verify(IsComplexType<complex<float>>);
   tdd.verify(IsComplexType<complex<double>>);

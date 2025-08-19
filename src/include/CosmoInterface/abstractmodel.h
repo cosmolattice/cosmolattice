@@ -22,6 +22,7 @@
 
 #include "TempLat/parameters/parameterparser.h"
 #include "CosmoInterface/runparameters.h"
+#include <Kokkos_Core.hpp>
 
 namespace TempLat
 {
@@ -106,27 +107,27 @@ namespace TempLat
     bool isInitialized;
 
     // --> Scalar singlets
-    FieldCollection<Field, T, Ns, true>
+    FieldCollection<Field<NDim, T>, T, Ns, true>
         fldS; // The last parameter is to "vectorise" the assignement. Can use it with scalar algebra (meaning scalar
               // fields and U(1) non-compact gauge fields), but not with the rest.
-    FieldCollection<Field, T, Ns, true> piS;
+    FieldCollection<Field<NDim, T>, T, Ns, true> piS;
     // Does not make a huge difference anyhow, so in case of doubt put nothing or false (equivalent).
 
     // --> Complex scalars
-    FieldCollection<ComplexField, T, NCs> fldCS;
-    FieldCollection<ComplexField, T, NCs> piCS;
+    FieldCollection<ComplexField<NDim, T>, T, NCs> fldCS;
+    FieldCollection<ComplexField<NDim, T>, T, NCs> piCS;
 
     // --> SU2 doublets
-    FieldCollection<SU2Doublet, T, NSU2Doublet> fldSU2Doublet;
-    FieldCollection<SU2Doublet, T, NSU2Doublet> piSU2Doublet;
+    FieldCollection<SU2Doublet<NDim, T>, T, NSU2Doublet> fldSU2Doublet;
+    FieldCollection<SU2Doublet<NDim, T>, T, NSU2Doublet> piSU2Doublet;
 
     // --> U(1) gauge fields
-    VectorFieldCollection<Field, T, NDIM, NU1> fldU1;
-    VectorFieldCollection<Field, T, NDIM, NU1> piU1;
+    VectorFieldCollection<Field<NDim, T>, T, NDIM, NU1> fldU1;
+    VectorFieldCollection<Field<NDim, T>, T, NDIM, NU1> piU1;
 
     // --> SU(2) gauge fields
-    VectorFieldCollection<SU2Field, T, NDIM, NSU2> fldSU2;
-    VectorFieldCollection<SU2LieAlgebraField, T, NDim, NSU2> piSU2;
+    VectorFieldCollection<SU2Field<NDim, T>, T, NDIM, NSU2> fldSU2;
+    VectorFieldCollection<SU2LieAlgebraField<NDim, T>, T, NDim, NSU2> piSU2;
 
     // Variables that store the scale factor and energies during the evolution.
     // Suffixes indicate at which time they are evaluated:
@@ -193,21 +194,22 @@ namespace TempLat
     std::string name;
 
     // --> Graviational u fields
-    std::unique_ptr<FieldCollection<Field, T, 6, true>> fldGWs;
-    std::unique_ptr<FieldCollection<Field, T, 6, true>> piGWs;
+    std::unique_ptr<FieldCollection<Field<NDim, T>, T, 6, true>> fldGWs;
+    std::unique_ptr<FieldCollection<Field<NDim, T>, T, 6, true>> piGWs;
 
-    AbstractModel(ParameterParser &parser, const LatticeParameters<T> &par, std::shared_ptr<MemoryToolBox> toolBox,
-                  T pDt, std::string pName = "")
-        : isInitialized(toolBox->initializeFFT<T>()), fldS("scalar", toolBox, par), piS("pi_scalar", toolBox, par),
-          fldCS("cmplx_scalar", toolBox, par), piCS("pi_cmplx_scalar", toolBox, par),
+    AbstractModel(ParameterParser &parser, const LatticeParameters<T> &par,
+                  std::shared_ptr<MemoryToolBox<NDim>> toolBox, T pDt, std::string pName = "")
+        : isInitialized(toolBox->template initializeFFT<T>()), fldS("scalar", toolBox, par),
+          piS("pi_scalar", toolBox, par), fldCS("cmplx_scalar", toolBox, par), piCS("pi_cmplx_scalar", toolBox, par),
           fldSU2Doublet("SU2Doublet", toolBox, par), piSU2Doublet("pi_SU2Doublet", toolBox, par),
           fldU1("U1", toolBox, par), piU1("pi_U1", toolBox, par), fldSU2("SU2Fld", toolBox, par),
           piSU2("pi_SU2Fld", toolBox, par), aSI(1), aI(1), aIM(1), dx(par.getDx()), kIR(par.getKIR()), dt(pDt),
-          name(pName), fldGWs(parser.get<bool>("withGWs", false)
-                                  ? std::make_unique<FieldCollection<Field, T, 6, true>>("fldGWs", toolBox, par)
-                                  : nullptr),
+          name(pName),
+          fldGWs(parser.get<bool>("withGWs", false)
+                     ? std::make_unique<FieldCollection<Field<NDim, T>, T, 6, true>>("fldGWs", toolBox, par)
+                     : nullptr),
           piGWs(parser.get<bool>("withGWs", false)
-                    ? std::make_unique<FieldCollection<Field, T, 6, true>>("piGWs", toolBox, par)
+                    ? std::make_unique<FieldCollection<Field<NDim, T>, T, 6, true>>("piGWs", toolBox, par)
                     : nullptr)
     {
       // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this
@@ -306,7 +308,7 @@ namespace TempLat
     auto GWtensor(Tag<3>, Tag<3>) { return (*fldGWs)(5_c); }
 
     // Sometimes, it can be useful to get "any field" of the model. This function implements this in a generic way.
-    Field<T> getOneField()
+    Field<NDim, T> getOneField()
     {
       if (Ns > 0)
         return fldS(0_c);
@@ -339,17 +341,18 @@ namespace TempLat
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with
       // "removeInitValue()"
 
-      // Compute initial potential
-      pot0 = GetValue::get(Potential::potential(static_cast<R &>(*this)), 0);
+      device::array<ptrdiff_t, NDim> pos0{{}};
+
+      pot0 = getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
 
       // Compute second derivatives of the potential, giving the mass square.
-      ForLoop(j, 0, Ns - 1, masses2S(j) = GetValue::get(Potential::deriv2S(static_cast<R &>(*this), j), 0));
+      ForLoop(j, 0, Ns - 1, masses2S(j) = getAtOnePoint(Potential::deriv2S(static_cast<R &>(*this), j), pos0));
       ForLoop(j, 0, NCs - 1,
-              masses2CS(j) = Complexify(GetValue::get(Potential::deriv2CS(static_cast<R &>(*this), j)(0_c), 0),
-                                        GetValue::get(Potential::deriv2CS(static_cast<R &>(*this), j)(1_c), 0)););
+              masses2CS(j) = Complexify(getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(0_c), pos0),
+                                        getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(1_c), pos0)););
       ForLoop(j, 0, NSU2Doublet - 1,
               masses2SU2Doublet(j) =
-                  MakeSU2Doublet(a, GetValue::get(Potential::deriv2SU2Doublet(static_cast<R &>(*this), j)(a), 0)););
+                  MakeSU2Doublet(a, getAtOnePoint(Potential::deriv2SU2Doublet(static_cast<R &>(*this), j)(a), pos0)););
 
       // This removes the homogeneous component at one point added previously with "addInitValueOnePoint()"
       this->removeInitValue();
@@ -365,8 +368,10 @@ namespace TempLat
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with
       // "removeInitValue()"
 
+      device::array<ptrdiff_t, NDim> pos0{{}};
+      pot0 = getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
+
       // Compute initial potential at t=0
-      pot0 = GetValue::get(Potential::potential(static_cast<R &>(*this)), 0);
 
       // This removes the homogeneous component at one point added previously with "addInitValueOnePoint()"
       this->removeInitValue();
@@ -378,18 +383,20 @@ namespace TempLat
     // This sets the homogeneous components of the fields at a single point.
     void addInitValueOnePoint()
     {
-
-      ForLoop(j, 0, Ns - 1, fldS(j).getSet(0) = fldS0[j] / fStar);
-      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, fldCS(j)(i).getSet(0) = fldCS0(j)(i) / fStar;));
-      ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, fldSU2Doublet(j)(i).getSet(0) = fldSU2Doublet0(j)(i) / fStar;));
+      device::array<ptrdiff_t, NDim> pos0{{}};
+      ForLoop(j, 0, Ns - 1, setAtOnePoint(fldS(j), pos0, fldS0[j] / fStar););
+      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, setAtOnePoint(fldCS(j)(i), pos0, fldCS0(j)(i) / fStar);));
+      ForLoop(j, 0, NSU2Doublet - 1,
+              ForLoop(i, 0, 3, setAtOnePoint(fldSU2Doublet(j)(i), pos0, fldSU2Doublet0(j)(i) / fStar);));
     }
 
     // This removes the homogeneous components of the fields at a single point.
     void removeInitValue()
     {
-      ForLoop(j, 0, Ns - 1, fldS(j).getSet(0) = 0);
-      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, fldCS(j)(i).getSet(0) = 0;));
-      ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, fldSU2Doublet(j)(i).getSet(0) = 0;));
+      device::array<ptrdiff_t, NDim> pos0{{}};
+      ForLoop(j, 0, Ns - 1, setAtOnePoint(fldS(j), pos0, 0.););
+      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, setAtOnePoint(fldCS(j)(i), pos0, 0.);));
+      ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, setAtOnePoint(fldSU2Doublet(j)(i), pos0, 0.);));
     }
 
   public:

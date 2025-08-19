@@ -53,7 +53,7 @@ namespace TempLat
   } // namespace Operators
 
   template <typename R, typename T>
-    requires(!IsArithmetic<R> && !IsArithmetic<T>)
+    requires ConditionalBinaryGetter<R, T>
   KOKKOS_FORCEINLINE_FUNCTION Operators::Subtraction<R, T> operator-(const R &r, const T &t)
   {
     return Operators::Subtraction<R, T>(r, t);
@@ -72,10 +72,10 @@ namespace TempLat
 
   /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<!std::is_same<T, ZeroType>::value, Operators::UnaryMinus<T>>::type
-  operator-(ZeroType a, const T &b)
+    requires(!std::is_same_v<T, ZeroType>)
+  auto operator-(ZeroType a, const T &b)
   {
-    return -b;
+    return Operators::UnaryMinus<T>(b);
   }
 
   /** \brief Specialize for unary minus. */

@@ -51,10 +51,7 @@ namespace TempLat
      * If same type, then return 1, otherwise return 0.
      */
 
-    virtual const JumpsHolder<NDim> &getJumps() const = 0;
-
-    // virtual void onBeforeAssignment() const = 0;
-    virtual inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       switch (spaceType) {
       case SpaceStateType::Fourier:
@@ -97,24 +94,26 @@ namespace TempLat
     LatticeParameters<T> latPar; // Information about the lattice (dx, kir...)
                                  // Conceptually not amazing but really useful.
 
-    ptrdiff_t getOffsetFromCoords(bool &test, std::vector<ptrdiff_t> position)
-    {
-      auto mJumps = getJumps();
+    /*
+ptrdiff_t getOffsetFromCoords(bool &test, std::vector<ptrdiff_t> position)
+{
+auto mJumps = getJumps();
 
-      if (mJumps.size() != position.size())
-        throw FieldValueGetterException(
-            "Wrong size / number of arguments to Field<T>::operator(). Dimensionality of field:", mJumps.size(),
-            ", dimensionality of your arguments:", position.size());
+if (mJumps.size() != position.size())
+throw FieldValueGetterException(
+"Wrong size / number of arguments to Field<T>::operator(). Dimensionality of field:", mJumps.size(),
+", dimensionality of your arguments:", position.size());
 
-      ptrdiff_t offset = mJumps.getTotalOffsetFromSpatialCoordinates(position);
+ptrdiff_t offset = mJumps.getTotalOffsetFromSpatialCoordinates(position);
 
-      /* our hack to give something that is not in the memory, without throwing an exception. */
-      if (offset > -1)
-        test = true;
-      else
-        test = false;
-      return offset;
-    }
+// our hack to give something that is not in the memory, without throwing an exception.
+if (offset > -1)
+test = true;
+else
+test = false;
+return offset;
+}
+*/
   };
 } // namespace TempLat
 

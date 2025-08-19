@@ -92,8 +92,7 @@ namespace TempLat
      */
     template <typename Container, typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Kokkos::Array<ptrdiff_t, NDim> &target,
-                                                                           const IDX... pos) const
+    KOKKOS_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Container &target, const IDX... pos) const
     {
       const auto positions = std::tie(pos...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {

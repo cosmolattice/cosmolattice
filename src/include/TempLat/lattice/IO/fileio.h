@@ -30,15 +30,15 @@ namespace TempLat
    *
    * Unit test: make test-fileio
    **/
-
-  class FileIO
+  template <size_t NDim = 3> class FileIO
   {
   public:
     /* Put public methods here. These should change very little over time. */
     FileIO() {}
 
     template <class R>
-    typename std::enable_if<HasStaticGetter<typename NakedType<R>::type>::value, void>::type save(R &&r)
+      requires HasStaticGetter<typename NakedType<R>::type>
+    void save(R &&r)
     {
       using nakedR = typename NakedType<R>::type;
       for_in_range<number_to_skip_as_tuple<nakedR>::value, nakedR::size>(
@@ -46,13 +46,15 @@ namespace TempLat
     }
 
     template <class R>
-    typename std::enable_if<!HasStaticGetter<typename NakedType<R>::type>::value, void>::type save(R &&r)
+      requires(!HasStaticGetter<typename NakedType<R>::type>)
+    void save(R &&r)
     {
       saver.save(r);
     }
 
     template <class R>
-    typename std::enable_if<HasStaticGetter<typename NakedType<R>::type>::value, void>::type load(R &&r)
+      requires HasStaticGetter<typename NakedType<R>::type>
+    void load(R &&r)
     {
       using nakedR = typename NakedType<R>::type;
       for_in_range<number_to_skip_as_tuple<nakedR>::value, nakedR::size>(
@@ -60,7 +62,8 @@ namespace TempLat
     }
 
     template <class R>
-    typename std::enable_if<!HasStaticGetter<typename NakedType<R>::type>::value, void>::type load(R &&r)
+      requires(!HasStaticGetter<typename NakedType<R>::type>)
+    void load(R &&r)
     {
       loader.load(r);
     }
@@ -69,8 +72,8 @@ namespace TempLat
     FileSaverHDF5 saver;
     FileLoaderHDF5 loader;
 #else
-    FileLoaderPureMPI loader;
-    FileSaverPureMPI saver;
+    FileLoaderPureMPI<NDim> loader;
+    FileSaverPureMPI<NDim> saver;
 #endif
 
     /* Put all member variables and private methods here. These may change arbitrarily. */

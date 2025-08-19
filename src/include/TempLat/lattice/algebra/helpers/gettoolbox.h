@@ -32,10 +32,10 @@ namespace TempLat
 
     template <typename U>
       requires(!HasToolBox<U>)
-    static auto get(U &&obj)
+    static std::nullptr_t get(U &&obj)
     {
       throw GetToolBoxException("Object does not have a toolbox: " + GetString::get(obj));
-      return std::shared_ptr<void>(nullptr);
+      return std::nullptr_t();
     }
 
   private:

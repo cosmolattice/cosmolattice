@@ -22,16 +22,16 @@ namespace TempLat
    *
    * Unit test: make test-twopointcorrelator
    **/
-  template <typename T> class TwoPointCorrelatorBuilder : public ToolWithOwnMemory<T>
+  template <size_t NDim, typename T> class TwoPointCorrelatorBuilder : public ToolWithOwnMemory<NDim, T>
   {
-    using typename ToolWithOwnMemory<T>::fieldType;
-    using ToolWithOwnMemory<T>::getInstance;
-    using ToolWithOwnMemory<T>::getFieldForMeasurement;
+    using typename ToolWithOwnMemory<NDim, T>::fieldType;
+    using ToolWithOwnMemory<NDim, T>::getInstance;
+    using ToolWithOwnMemory<NDim, T>::getFieldForMeasurement;
 
   public:
     /* Put public methods here. These should change very little over time. */
-    TwoPointCorrelatorBuilder(T instance, std::shared_ptr<MemoryToolBox> pToolBox)
-        : ToolWithOwnMemory<T>(instance), mToolBox(pToolBox)
+    TwoPointCorrelatorBuilder(T instance, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
+        : ToolWithOwnMemory<NDim, T>(instance), mToolBox(pToolBox)
     {
     }
 
@@ -53,7 +53,7 @@ namespace TempLat
     }
 
   private:
-    std::shared_ptr<MemoryToolBox> mToolBox;
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
@@ -67,9 +67,9 @@ namespace TempLat
   /** \brief The object to call, PowerSpectrum(yourObject) returns a newly constructed PowerSpectrumBuilder<T>,
    *  on which you can call PowerSpectrumBuilder<T>#measure to get your power spectrum.
    */
-  template <typename T> auto TwoPointCorrelator(T instance)
+  template <size_t NDim, typename T> auto TwoPointCorrelator(T instance)
   {
-    return TwoPointCorrelatorBuilder<T>(instance, GetToolBox::get(instance));
+    return TwoPointCorrelatorBuilder<NDim, T>(instance, GetToolBox::get(instance));
   }
 } // namespace TempLat
 

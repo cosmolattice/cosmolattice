@@ -59,6 +59,9 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     const auto &ComplexFieldGet(Tag<1> t) const { return mI; }
 
+    template <int N> auto &operator()(Tag<N> t) { return ComplexFieldGet(t); }
+    template <int N> const auto &operator()(Tag<N> t) const { return ComplexFieldGet(t); }
+
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx)

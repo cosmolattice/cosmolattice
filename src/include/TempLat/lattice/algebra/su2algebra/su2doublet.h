@@ -22,10 +22,12 @@ namespace TempLat
    *
    * Unit test: make test-su2doublet
    **/
-  template <size_t NDim, typename T> class SU2DoubletBase
+  template <size_t _NDim, typename T> class SU2DoubletBase
   { //: public CollectionBase<SU2DoubletBase<T,ISMOMENTUM,I1,I2,I3,I4>,T, ISMOMENTUM, I1, I2, I3, I4> {
   public:
     /* Put public methods here. These should change very little over time. */
+    static constexpr size_t NDim = _NDim;
+
     SU2DoubletBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3, Field<NDim, T> f4)
         : fs{f1, f2, f3, f4}, mName("NoName")
     // CollectionBase<SU2DoubletBase<T,ISMOMENTUM,I1,I2,I3,I4>,T, ISMOMENTUM, I1, I2, I3, I4>(f1, f2, f3, f4)

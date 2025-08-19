@@ -7,7 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <Kokkos_Macros.hpp>
 #include <algorithm>
+#include <cstddef>
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
@@ -17,6 +19,7 @@
 
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
@@ -24,8 +27,6 @@
 
 namespace TempLat
 {
-  // Big TODO here!
-
   /** \brief A class which projects any N-D lattice on its positive-definite radial coordinate. In other
    *  words, integrating out all the angular dimensions.
    *  When in Fourier-space, this routine takes into account what the redundancies are.
@@ -41,16 +42,21 @@ namespace TempLat
   template <typename T> class RadialProjector
   {
   public:
-    typedef typename GetGetReturnType<T>::type vType;
-    typedef typename GetFloatType<vType>::type sType;
+    using vType = typename GetGetReturnType<T>::type;
+    using sType = typename GetFloatType<vType>::type;
 
     static constexpr bool isComplexValued = GetGetReturnType<T>::isComplex;
-    typedef typename RadialProjectionResult<sType>::floatType floatType;
-    typedef RadialProjectionResult<sType> resultType;
+    using floatType = typename RadialProjectionResult<sType>::floatType;
+    using resultType = RadialProjectionResult<sType>;
 
-    RadialProjector(const T &instance, SpaceStateType spaceType, std::shared_ptr<MemoryToolBox> pToolBox,
+    // TODO (Franz)
+    static constexpr size_t NDim = GetNDim::get<T>();
+
+    RadialProjector(const T &instance, SpaceStateType spaceType, std::shared_ptr<MemoryToolBox<NDim>> pToolBox,
                     bool pUseCentralBinValues)
-        : mSpaceType(spaceType), mInstance(instance), mToolBox(pToolBox), mUseBinCentralValues(pUseCentralBinValues)
+        : mSpaceType(spaceType), mInstance(instance), mToolBox(pToolBox), mUseBinCentralValues(pUseCentralBinValues),
+          mLayout((mSpaceType == SpaceStateType::Fourier) ? mToolBox->mLayouts.getFourierSpaceLayout()
+                                                          : mToolBox->mLayouts.getConfigSpaceLayout())
     {
     }
 
@@ -63,8 +69,8 @@ namespace TempLat
     RadialProjectionResult<sType> measure(ptrdiff_t nLinearBins = -1, sType customRange = -1, bool excludeOrigin = true)
     {
       if (nLinearBins < 0) {
-        ptrdiff_t nGrid = getLayout().getGlobalSizes()[0];
-        ptrdiff_t nDim = getLayout().getGlobalSizes().size();
+        ptrdiff_t nGrid = mLayout.getGlobalSizes()[0];
+        ptrdiff_t nDim = mLayout.getGlobalSizes().size();
         nLinearBins = std::pow(nGrid, std::max((ptrdiff_t)1, nDim - 1));
       }
 
@@ -87,22 +93,17 @@ namespace TempLat
   private:
     SpaceStateType mSpaceType;
     T mInstance;
-    std::shared_ptr<MemoryToolBox> mToolBox;
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
     bool mUseBinCentralValues;
-
-    const auto &getLayout()
-    {
-      return mSpaceType == SpaceStateType::Fourier ? mToolBox->mLayouts.getFourierSpaceLayout()
-                                                   : mToolBox->mLayouts.getConfigSpaceLayout();
-    }
+    LayoutStruct<NDim> mLayout;
 
     template <typename BINCOMPUTETYPE>
     auto computeConfigurationSpace(BINCOMPUTETYPE binComputer, RadialProjectionResult<sType> baseWorkSpace,
                                    bool excludeOrigin)
     {
-
-      auto it = mToolBox->itX();
       confirmGetterSpace();
+      /*
+      auto it = mToolBox->itX();
       for (it.begin(); it.end(); ++it) {
         if ((not excludeOrigin) or (not it.isAtOrigin())) {
 
@@ -113,73 +114,80 @@ namespace TempLat
           baseWorkSpace.add(bin, GetValue::get(mInstance, it()), r, 1);
         }
       }
+*/
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
-
       return baseWorkSpace;
     }
 
+  public:
     template <typename BINCOMPUTETYPE>
-    auto computeFourierSpace(BINCOMPUTETYPE binComputer, RadialProjectionResult<sType> baseWorkSpace,
-                             bool excludeOrigin)
+    RadialProjectionResult<sType> computeFourierSpace(BINCOMPUTETYPE binComputer,
+                                                      RadialProjectionResult<sType> baseWorkSpace, bool excludeOrigin)
     {
-
-      auto it = mToolBox->itP();
-      auto layout = getLayout();
-      HermitianRedundancy quality;
-
       confirmGetterSpace();
-      for (it.begin(); it.end(); ++it) {
-        if ((not excludeOrigin) or (not it.isAtOrigin())) {
-          quality = layout.getHermitianPartners()->qualify(it.getVec());
 
-          if (quality != HermitianRedundancy::negativePartner) {
-
-            sType r = rFromCoords(it.getVec());
-
-            ptrdiff_t bin = binComputer(r);
-
-            /* don't over-weight the real-valued entries: only one float value, only half the weight. */
-            floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
-            baseWorkSpace.add(bin, GetValue::get(mInstance, it()), r, weight);
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      {
+        Kokkos::Array<ptrdiff_t, NDim> global_coords;
+        device::apply([&](auto &&...args) { mLayout.putSpatialLocationFromMemoryIndexInto(global_coords, args...); },
+                      idx);
+        bool isAtOrigin = true;
+        for (auto &&it : global_coords) {
+          if (it != 0) {
+            isAtOrigin = false;
+            break;
           }
         }
-      }
+        if ((!excludeOrigin) || (!isAtOrigin)) {
+          HermitianRedundancy quality = mLayout.getHermitianPartners().qualify(global_coords);
+          if (quality != HermitianRedundancy::negativePartner) {
+            sType r = rFromCoords(global_coords);
+            ptrdiff_t bin = binComputer(r);
+            // don't over-weight the real-valued entries: only one float value, only half the weight.
+            floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
+            device::apply(
+                [&](auto &&...args) { baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, weight); },
+                idx);
+          }
+        }
+      };
+      Kokkos::parallel_for("RadialProjectorFourier",      //
+                           getLocalKokkosPolicy(mLayout), //
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      baseWorkSpace.pull();
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
 
       return baseWorkSpace;
     }
 
+    KOKKOS_FORCEINLINE_FUNCTION
+    static floatType rFromCoords(const Kokkos::Array<ptrdiff_t, NDim> &pCoord)
+    {
+      floatType r2 = 0;
+      for (auto &&it : pCoord)
+        r2 += it * it;
+      return Kokkos::sqrt(r2);
+    }
+
+  private:
     void confirmGetterSpace()
     {
-      ConfirmSpace::apply(mInstance, getLayout(), mSpaceType);
+      ConfirmSpace::apply(mInstance, mLayout, mSpaceType);
       GhostsHunter::apply(mInstance);
     }
 
     /** \brief Creates the lambda that maps the IterationCoordinates to a bin. */
     inline auto makeBinComputer(ptrdiff_t nLinearBins, sType minValue, sType customRange = -1)
     {
-      auto layout = getLayout();
-
-      auto rMax = customRange < 0 ? layout.getMaxRadius() : customRange;
+      auto rMax = customRange < 0 ? mLayout.getMaxRadius() : customRange;
 
       return RadialBinComputer(minValue, rMax, nLinearBins);
     }
-
-    floatType rFromCoords(const std::vector<ptrdiff_t> &pCoord)
-    {
-      using namespace std;
-      floatType r2 = 0;
-      for (auto &&it : pCoord) {
-        r2 += it * it;
-        //  say << it;
-      }
-      return sqrt(r2);
-    }
   };
 
-  template <typename T>
-  RadialProjector<T> projectRadially(T instance, SpaceStateType spaceType, std::shared_ptr<MemoryToolBox> pToolBox,
-                                     bool useBinCentralValues)
+  template <size_t NDim, typename T>
+  RadialProjector<T> projectRadially(T instance, SpaceStateType spaceType,
+                                     std::shared_ptr<MemoryToolBox<NDim>> pToolBox, bool useBinCentralValues)
   {
     return RadialProjector<T>(instance, spaceType, pToolBox, useBinCentralValues);
   }
@@ -191,6 +199,7 @@ namespace TempLat
 
   template <typename T> RadialProjector<T> projectRadiallyFourier(T instance, bool useBinCentralValues = false)
   {
+    std::shared_ptr<MemoryToolBox<GetNDim::get<T>()>> toolBox = GetToolBox::get(instance);
     return projectRadially(instance, SpaceStateType::Fourier, GetToolBox::get(instance), useBinCentralValues);
   }
 

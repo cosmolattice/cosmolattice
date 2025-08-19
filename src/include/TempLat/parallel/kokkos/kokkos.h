@@ -7,12 +7,17 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/tdd/tddassertion.h"
+
 #include <ostream>
+#include <sys/types.h>
 
 // Including this here, as we need that anywhere basically, where Kokkos is explicitly used.
 #include "TempLat/lattice/algebra/helpers/variadicindex.h"
+
+#include "TempLat/lattice/algebra/helpers/getvalue.h"
 
 #ifndef NOKOKKOS
 
@@ -44,15 +49,17 @@ namespace TempLat
   // Getting View types
   // ------------------------------------------------
 
+  using DefaultLayout = Kokkos::LayoutRight; // Default layout for Kokkos views, can be changed if needed.
+
   template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
-            typename Layout = Kokkos::LayoutRight>
+            typename Layout = DefaultLayout>
   using KokkosNDView = Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for
                                                                                  // dimensionality recursively with
                                     Layout,        // LayoutRight is most compatible for now, may change in future
                                     ExecutionSpace // Choice between GPU and CPU
                                     >;
   template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
-            typename Layout = Kokkos::LayoutRight>
+            typename Layout = DefaultLayout>
   using KokkosNDViewUnmanaged =
       Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for dimensionality recursively
                                                                 // with a helper
@@ -71,6 +78,23 @@ namespace TempLat
     using type = Kokkos::RangePolicy<>;
   };
   template <size_t NDim> using KokkosNDRange = KokkosNDRangeHelper<NDim>::type;
+
+  // Need to forward-declare this - we cannot include the layout header here, as it would create a circular dependency.
+  template <size_t NDim> struct LayoutStruct;
+
+  template <size_t NDim> auto getLocalKokkosPolicy(const LayoutStruct<NDim> &layout)
+  {
+    Kokkos::Array<uint64_t, NDim> start_iteration;
+    Kokkos::Array<uint64_t, NDim> stop_iteration;
+    const auto localSizes = layout.getLocalSizes();
+    const size_t nGhosts = layout.getNGhosts();
+
+    for (size_t d = 0; d < NDim; ++d) {
+      start_iteration[d] = nGhosts;
+      stop_iteration[d] = start_iteration[d] + localSizes[d];
+    }
+    return KokkosNDRange<NDim>(start_iteration, stop_iteration);
+  }
 
 #else
 
@@ -109,6 +133,29 @@ namespace TempLat
   template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
 #endif
   } // namespace device
+
+  template <typename OBJ, size_t NDim, typename T>
+  void setAtOnePoint(OBJ &&obj, device::array<ptrdiff_t, NDim> pos, T val)
+  {
+    Kokkos::parallel_for(
+        "Set a point", Kokkos::RangePolicy(0, 1),
+        KOKKOS_LAMBDA(const uint) { device::apply([&](const auto... idx) { obj.getSet(idx...) = val; }, pos); });
+  }
+
+  template <typename OBJ, size_t NDim>
+  GetGetReturnType<OBJ>::type getAtOnePoint(OBJ &&obj, const device::array<ptrdiff_t, NDim> &pos)
+  {
+    using T = GetGetReturnType<OBJ>::type;
+    T ret;
+
+    Kokkos::parallel_reduce(
+        "Get a point", Kokkos::RangePolicy(0, 1),
+        KOKKOS_LAMBDA(const uint, T &update) {
+          device::apply([&](const auto... idx) { update = GetValue::get(obj, idx...); }, pos);
+        },
+        ret);
+    return ret;
+  }
 
 #ifdef TEMPLATTEST
   class KokkosTest

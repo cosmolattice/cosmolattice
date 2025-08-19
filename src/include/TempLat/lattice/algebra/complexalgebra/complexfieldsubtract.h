@@ -15,6 +15,8 @@
 #include "imag.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
+#include "TempLat/lattice/algebra/complexalgebra/real.h"
+#include "TempLat/lattice/algebra/complexalgebra/imag.h"
 
 namespace TempLat
 {
@@ -46,7 +48,7 @@ namespace TempLat
       DoEval::eval(mT, i);
     }
 
-    std::string operatorString() const override { return "-"; }
+    static std::string operatorString() { return "-"; }
   };
 
   struct ComplexFieldSubtractTester {

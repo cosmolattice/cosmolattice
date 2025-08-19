@@ -9,6 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglebinandvalue.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
@@ -45,28 +46,30 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     RadialProjectionResult(ptrdiff_t nBins, bool pUseBinCentralValues = false, bool pIsInFourier = false)
         : std::vector<RadialProjectionSingleBinAndValue<T>>(), finalizedOnce(false), mNBins(nBins), mValues(mNBins),
-          mBinBounds(mNBins), mMultiplicities(mNBins, 0), unset(false), mUseBinCentralValues(pUseBinCentralValues),
-          mIsInFourier(pIsInFourier)
+          mBinBounds(mNBins), mUseBinCentralValues(pUseBinCentralValues), mIsInFourier(pIsInFourier)
     {
+      mMultiplicities = HostView("RadialProjectionResult::mMultiplicities", mNBins);
+      mMultiplicitiesDevice = DeviceView("RadialProjectionResult::mMultiplicitiesDevice", mNBins);
     }
 
     /** \brief operator+= is a requirement for use as a workspace in FieldlessGetteration. */
+    /*
+    Whatever the intention of this, it's an absolute disaster.
     RadialProjectionResult<T> operator+=(const RadialProjectionResult &other)
     {
       if (this->mNBins != other.mNBins)
         throw RadialProjectionResultSizeException(
             "RadialProjectionResults are of different size! Cannot add things of different size... Abort.");
-      if (unset) {
-        for (size_t i = 0; i < this->size(); ++i) {
-          (*this)[i] = RadialProjectionSingleBinAndValue<T>(other[i].getBin(), other[i].getValue());
-        }
-        unset = false;
-      }
+      if (!other.finalizedOnce)
+        throw RadialProjectionResultFinalizationException(
+            "Cannot add a RadialProjectionResult which has not been finalized yet! Abort.");
+      if (!finalizedOnce) finalizedOnce = other.finalizedOnce;
       for (size_t i = 0; i < this->size(); ++i) {
         (*this)[i].getValue().average += other[i].getValue().average;
       }
       return *this;
     }
+*/
 
     /** \brief Decrease the number of bins on demand. */
     RadialProjectionResult &rebin(ptrdiff_t nBins, T customRange = -1)
@@ -179,27 +182,45 @@ namespace TempLat
     RadialProjectionSingleQuantity<T> mValues, mBinBounds;
     std::vector<T> centralBinBounds; // Naive central values of the bin. Does not need to be set.
 
-    std::vector<floatType> mMultiplicities;
+    using HostView = Kokkos::View<floatType *, DefaultLayout, Kokkos::DefaultHostExecutionSpace>;
+    using DeviceView = Kokkos::View<floatType *, DefaultLayout, Kokkos::DefaultExecutionSpace>;
 
-    bool unset;
+    HostView mMultiplicities;
+    DeviceView mMultiplicitiesDevice;
+
     bool mUseBinCentralValues;
     bool mIsInFourier;
 
-    void add(ptrdiff_t i, const T &value, const T &position, const T &weight = (T)1)
+    KOKKOS_FORCEINLINE_FUNCTION
+    void add_device(ptrdiff_t i, const T &value, const T &position, const T &weight = (T)1) const
     {
-      mValues.add(i, value, weight);
-      mBinBounds.add(i, position, weight);
-      mMultiplicities[i] += weight;
+      mValues.add_device(i, value, weight);
+      mBinBounds.add_device(i, position, weight);
+      mMultiplicitiesDevice(i) += weight;
+    }
+
+    void pull()
+    {
+      mValues.pull();
+      mBinBounds.pull();
+      Kokkos::deep_copy(mMultiplicities, mMultiplicitiesDevice);
+    }
+
+    void push()
+    {
+      mValues.push();
+      mBinBounds.push();
+      Kokkos::deep_copy(mMultiplicitiesDevice, mMultiplicities);
     }
 
     /** \brief RadialProjector calls this as the last step, does the transposition of the result vecotrs into one vector
      * of RadialProjectionSingleBinAndValue<T>. */
     RadialProjectionResult &finalize(MPICommReference comm)
     {
-
       if (finalizedOnce) throw RadialProjectionResultFinalizationException("Can only finalize once per instance.");
 
       finalizedOnce = true;
+      pull();
 
       comm.Allreduce(&mMultiplicities, MPI_SUM);
 
@@ -210,6 +231,7 @@ namespace TempLat
 
       mFullResult.clear();
       for (ptrdiff_t i = 0; i < mNBins; ++i) {
+        sayShort << "Finalizing bin " << i << " with multiplicity " << mMultiplicities[i] << "\n";
         if (mMultiplicities[i] > 0) {
 
           RadialProjectionSingleBinAndValue<T> next(mBinBounds.getFinal(i, mMultiplicities[i]),
@@ -217,9 +239,9 @@ namespace TempLat
           this->push_back(next);
         }
       }
-      mMultiplicities.clear();
-      mValues.clear();
-      mBinBounds.clear();
+      // mMultiplicities.clear();
+      // mValues.clear();
+      // mBinBounds.clear();
       return *this;
     }
 
