@@ -17,7 +17,6 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
-#include <Kokkos_Array.hpp>
 
 namespace TempLat
 {
@@ -167,6 +166,8 @@ namespace TempLat
 
       setAtOnePoint(*this, mem_pos, toSet);
     }
+
+    std::string to_string() const { return mManager->getName() + "(k)"; }
 
     template <size_t __NDim, typename S> friend class Field;
 

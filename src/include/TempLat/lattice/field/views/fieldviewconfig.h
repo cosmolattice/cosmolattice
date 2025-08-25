@@ -210,6 +210,8 @@ namespace TempLat
       if (tmp) res = toSet;
     }
 
+    std::string to_string() const { return mManager->getName() + "(x)"; }
+
   private:
     Kokkos::Array<int64_t, NDim> start_iteration;
     Kokkos::Array<int64_t, NDim> stop_iteration;
