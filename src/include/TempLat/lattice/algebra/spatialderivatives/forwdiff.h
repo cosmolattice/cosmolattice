@@ -24,7 +24,7 @@ namespace TempLat
    *
    * Unit test: make test-forwdiff
    **/
-  template <int dir, typename R> class ForwDiff
+  template <int dir, typename R> class ForwDiff : public UnaryOperator<R>
   {
   public:
     using GetReturnType = typename GetGetReturnType<R>::type;
@@ -38,26 +38,37 @@ namespace TempLat
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        GetValue::get(mR, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      static_assert(dir > 0);
-      constexpr size_t d = static_cast<size_t>(dir) - 1;
-      auto result = -GetValue::get(mR, idx...);
-      std::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                 tuple_add_to_nth<d>(std::tie(idx...), 1));
-      return result / dx;
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        static_assert(dir > 0);
+        constexpr size_t d = static_cast<size_t>(dir) - 1;
+        auto result = -GetValue::get(mR, idx...);
+        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
+                      tuple_add_to_nth<d>(device::tie(idx...), 1));
+        return result / dx;
+      }
     }
 
     static std::string operatorString() { return "ForwDiff"; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      // TODO (Franz)
-      // DoEval::eval(mR, i);
-      // for (size_t j = 0; ^ < 2 * NDim; ++j)
-      //   DoEval::eval(mR, i + mShiftAccessors[j]);
+      constexpr size_t d = static_cast<size_t>(dir) - 1;
+      DoEval::eval(mR, idx...);
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
+                    tuple_add_to_nth<d>(device::tie(idx...), 1));
     }
 
   private:

@@ -5,11 +5,12 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
-#include "real.h"
-#include "imag.h"
+#include "TempLat/lattice/algebra/complexalgebra/real.h"
+#include "TempLat/lattice/algebra/complexalgebra/imag.h"
+#include "TempLat/lattice/algebra/operators/add.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/variadicindex.h"
@@ -34,19 +35,19 @@ namespace TempLat
     ComplexFieldAddition(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
     KOKKOS_FORCEINLINE_FUNCTION
-    auto ComplexFieldGet(Tag<0> t) { return Real(mR) + Real(mT); }
+    auto ComplexFieldGet(Tag<0> t) const { return Real(mR) + Real(mT); }
     KOKKOS_FORCEINLINE_FUNCTION
-    auto ComplexFieldGet(Tag<1> t) { return Imag(mR) + Imag(mT); }
+    auto ComplexFieldGet(Tag<1> t) const { return Imag(mR) + Imag(mT); }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) + mT.ComplexFieldGet(0_c, idx...);
     }
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(1_c, idx...) + mT.ComplexFieldGet(1_c, idx...);
     }
@@ -80,19 +81,18 @@ namespace TempLat
   }
 
   template <typename R, typename T>
-    requires(!HasStaticGetter<R> && HasComplexFieldGet<T>)
+    requires(!HasComplexFieldGet<R> && HasComplexFieldGet<T>)
   auto operator+(const R &r, const T &t)
   {
     return ComplexFieldAddition<ComplexFieldWrapper<R, ZeroType>, T>{Complexify(r, ZeroType()), t};
   }
 
   template <typename R, typename T>
-    requires(!HasStaticGetter<T> && HasComplexFieldGet<R>)
+    requires(!HasComplexFieldGet<T> && HasComplexFieldGet<R>)
   auto operator+(const R &r, const T &t)
   {
     return ComplexFieldAddition<R, ComplexFieldWrapper<T, ZeroType>>{r, Complexify(t, ZeroType())};
   }
-
 } // namespace TempLat
 
 #endif

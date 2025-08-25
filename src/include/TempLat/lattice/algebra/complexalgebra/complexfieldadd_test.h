@@ -7,7 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include <Kokkos_Macros.hpp>
+#include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
+
 inline void TempLat::ComplexFieldAddTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct MyStruct {
@@ -31,6 +32,19 @@ inline void TempLat::ComplexFieldAddTester::Test(TempLat::TDDAssertion &tdd)
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(test.ComplexFieldGet(0_c) == 4);
   tdd.verify(test.ComplexFieldGet(1_c) == 6);
+
+  // Test whether addition of two complex fields works.
+  constexpr size_t NDim = 2;
+  using T = double;
+  ptrdiff_t nGrid = 16, nGhost = 2;
+  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
+  toolBox->setVerbose();
+
+  ComplexField<NDim, T> fa("a", toolBox);
+  ComplexField<NDim, T> fb("b", toolBox);
+  ComplexField<NDim, T> fc("c", toolBox);
+
+  fc = fa + fb;
 }
 
 #endif

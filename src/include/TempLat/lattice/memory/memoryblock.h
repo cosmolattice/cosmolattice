@@ -45,8 +45,8 @@ namespace TempLat
     {
       mData = Kokkos::View<T *, Kokkos::DefaultExecutionSpace>("MemoryBlock", ((mSize + NDim * 256) / 128) * 128);
 
-      std::cout << "Allocated MemoryBlock of " << ((mSize + NDim * 256) / 128) * 128 * sizeof(T) / (1024 * 1024)
-                << "MB\n";
+      // std::cout << "Allocated MemoryBlock of " << ((mSize + NDim * 256) / 128) * 128 * sizeof(T) / (1024 * 1024)
+      //           << "MB\n";
 
       zero();
     }

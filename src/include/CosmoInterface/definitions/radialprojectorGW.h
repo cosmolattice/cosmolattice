@@ -82,44 +82,43 @@ namespace TempLat
     auto computeGWSpectrum(Model &model, BINCOMPUTETYPE binComputer, RadialProjectionResult<sType> baseWorkSpace,
                            bool excludeOrigin)
     {
+      // TODO (Franz)
+      /*
+            auto it = mToolBox->itP();
+            // Trying to fix multiplicity for GWs
+            auto layout = getLayout();
+            HermitianRedundancy quality;
 
-      auto it = mToolBox->itP();
-      // Trying to fix multiplicity for GWs
-      auto layout = getLayout();
-      HermitianRedundancy quality;
+            for (it.begin(); it.end(); ++it) {
+              // bool amIRoot = amIRoot(model.getToolBox());
 
-      for (it.begin(); it.end(); ++it) {
-        // bool amIRoot = amIRoot(model.getToolBox());
+              if ((not excludeOrigin) or (not it.isAtOrigin())) {
+                quality = layout.getHermitianPartners()->qualify(it.getVec());
 
-        if ((not excludeOrigin) or (not it.isAtOrigin())) {
-          quality = layout.getHermitianPartners()->qualify(it.getVec());
+                if (quality != HermitianRedundancy::negativePartner) {
 
-          if (quality != HermitianRedundancy::negativePartner) {
+                  sType r = rFromCoords(it.getVec());
 
-            sType r = rFromCoords(it.getVec());
+                  ptrdiff_t bin = binComputer(r);
 
-            ptrdiff_t bin = binComputer(r);
+                  // don't over-weight the real-valued entries: only one float value, only half the weight.
+                  floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
 
-            /* don't over-weight the real-valued entries: only one float value, only half the weight. */
-            floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
-
-            if (mPSVersion != 3)
-              baseWorkSpace.add(bin, gwsProjector.getProjectionatpoint(model, it), r, weight);
-            else {
-              WaveNumber ntilde(model.getOneField().getToolBox());
-              if (mPSType == 2)
-                baseWorkSpace.add(
-                    bin, gwsProjector.getProjectionatpoint(model, it) * GetValue::get(pow<3>(ntilde.norm()), it()), r,
-                    weight);
-              else
-                baseWorkSpace.add(
-                    bin, gwsProjector.getProjectionatpoint(model, it) * GetValue::get(ntilde.norm(), it()), r, weight);
+                  if (mPSVersion != 3)
+                    baseWorkSpace.add(bin, gwsProjector.getProjectionatpoint(model, it), r, weight);
+                  else {
+                    WaveNumber ntilde(model.getOneField().getToolBox());
+                    if (mPSType == 2)
+                      baseWorkSpace.add(
+                          bin, gwsProjector.getProjectionatpoint(model, it) * GetValue::get(pow<3>(ntilde.norm()),
+         it()), r, weight); else baseWorkSpace.add( bin, gwsProjector.getProjectionatpoint(model, it) *
+         GetValue::get(ntilde.norm(), it()), r, weight);
+                  }
+                }
+              }
             }
-          }
-        }
-      }
-      binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
-
+            binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
+      */
       return baseWorkSpace;
     }
 

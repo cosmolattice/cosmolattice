@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
 #include <type_traits>
+#include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
 {
@@ -17,7 +18,7 @@ namespace TempLat
   template <auto Start, auto End, auto Inc, class F> constexpr void constexpr_for(F &&f)
   {
     if constexpr (Start < End) {
-      f(std::integral_constant<decltype(Start), Start>{});
+      f(Tag<Start>{});
       constexpr_for<Start + Inc, End, Inc>(f);
     }
   }

@@ -42,16 +42,7 @@ namespace TempLat
     KOKKOS_FUNCTION
     BinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
-    static consteval size_t getNDim()
-      requires HasNDim<R>
-    {
-      return GetNDim::get<R>();
-    }
-    static consteval size_t getNDim()
-      requires(!HasNDim<R> && HasNDim<T>)
-    {
-      return GetNDim::get<T>();
-    }
+    static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
     void doWeNeedGhosts()
     {
@@ -88,11 +79,12 @@ namespace TempLat
       return a.isEmpty() ? b : a;
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
     }
 
     KOKKOS_FORCEINLINE_FUNCTION

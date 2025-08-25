@@ -123,6 +123,8 @@ namespace TempLat
       }
     }
 
+    auto getView() const { return mView; }
+
     std::string toString() const { return mManager->getName() + "(k)"; }
 
     const auto &getLayout() { return mToolBox->mLayouts.getFourierSpaceLayout(); }

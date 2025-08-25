@@ -12,6 +12,7 @@
 #include "imag.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/lattice/algebra/operators/power.h"
+#include "TempLat/lattice/algebra/operators/multiply.h"
 
 namespace TempLat
 {
@@ -29,27 +30,33 @@ namespace TempLat
 
     ComplexFieldMultiplication(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
-    auto ComplexFieldGet(Tag<0> t) { return Real(mR) * Real(mT) - Imag(mR) * Imag(mT); }
-    auto ComplexFieldGet(Tag<1> t) { return Real(mR) * Imag(mT) + Imag(mR) * Real(mT); }
+    auto ComplexFieldGet(Tag<0> t) const { return Real(mR) * Real(mT) - Imag(mR) * Imag(mT); }
+    auto ComplexFieldGet(Tag<1> t) const { return Real(mR) * Imag(mT) + Imag(mR) * Real(mT); }
 
-    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      return ComplexFieldGetter::get(mR, 0_c, i) * ComplexFieldGetter::get(mT, 0_c, i) -
-             ComplexFieldGetter::get(mR, 1_c, i) * ComplexFieldGetter::get(mT, 1_c, i);
+      return ComplexFieldGetter::get(mR, 0_c, idx...) * ComplexFieldGetter::get(mT, 0_c, idx...) -
+             ComplexFieldGetter::get(mR, 1_c, idx...) * ComplexFieldGetter::get(mT, 1_c, idx...);
     }
-    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
-      return ComplexFieldGetter::get(mR, 0_c, i) * ComplexFieldGetter::get(mT, 1_c, i) +
-             ComplexFieldGetter::get(mR, 1_c, i) * ComplexFieldGetter::get(mT, 0_c, i);
-    }
-
-    void eval(ptrdiff_t i)
-    {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return ComplexFieldGetter::get(mR, 0_c, idx...) * ComplexFieldGetter::get(mT, 1_c, idx...) +
+             ComplexFieldGetter::get(mR, 1_c, idx...) * ComplexFieldGetter::get(mT, 0_c, idx...);
     }
 
-    std::string operatorString() const override { return "*"; }
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
+    }
+
+    static std::string operatorString() { return "*"; }
   };
 
   struct ComplexFieldMultiplyTester {

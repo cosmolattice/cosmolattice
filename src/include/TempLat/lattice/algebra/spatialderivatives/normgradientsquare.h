@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/spatialderivatives/latticeforwardgradient.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 
 namespace TempLat
 {
@@ -30,36 +31,47 @@ namespace TempLat
     using UnaryOperator<R>::mR;
 
     KOKKOS_FUNCTION
-    NormGradientSquare(const R &pR) : UnaryOperator<R>(pR), dx2(pow<2>(GetDx::getDx(pR)))
-    {
-      fixGradientMap(GetJumps::apply(mR));
-    }
+    NormGradientSquare(const R &pR) : UnaryOperator<R>(pR), dx2(pow<2>(GetDx::getDx(pR))) {}
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R r, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        GetValue::get(r, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      const auto midval = GetValue::get(mR, idx...);
-      FloatType result{};
-      constexpr_for<0, NDim, 1>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        std::apply([&](const auto &...shifted_idx) { result += pow<2>(GetValue::get(mR, shifted_idx...) - midval); },
-                   tuple_add_to_nth<d>(std::tie(idx...), 1));
-      });
-      return result / dx2;
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        const auto midval = GetValue::get(mR, idx...);
+        FloatType result{};
+        constexpr_for<0, NDim, 1>([&](const auto _d) {
+          constexpr size_t d = decltype(_d)::value;
+          device::apply(
+              [&](const auto &...shifted_idx) { result += pow<2>(GetValue::get(mR, shifted_idx...) - midval); },
+              tuple_add_to_nth<d>(device::tie(idx...), 1));
+        });
+        return result / dx2;
+      }
     }
 
     std::string toString() const { return "|Grad(" + GetString::get(mR) + ")|^2"; }
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      // TODO (Franz)
-      // DoEval::eval(mR, i);
-      // for (size_t j = 0; j < nDimensions; ++j)
-      //  DoEval::eval(mR, i + jumps[j]);
+      DoEval::eval(mR, idx...);
+      constexpr_for<0, NDim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
+                      tuple_add_to_nth<d>(device::tie(idx...), 1));
+      });
     }
 
     template <typename S> KOKKOS_FORCEINLINE_FUNCTION auto d(const S &other)

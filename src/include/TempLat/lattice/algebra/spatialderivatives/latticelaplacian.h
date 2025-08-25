@@ -43,26 +43,36 @@ namespace TempLat
       requires VariadicNDIndex<NDim, IDX...>
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      auto result = (-2 * NDim * GetValue::get(mR, idx...));
-      constexpr_for<0, NDim, 1>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                      tuple_add_to_nth<d>(device::tie(idx...), 1));
-        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                      tuple_add_to_nth<d>(device::tie(idx...), -1));
-      });
-      return result / dx2;
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        auto result = (-2 * NDim * GetValue::get(mR, idx...));
+        constexpr_for<0, NDim, 1>([&](const auto _d) {
+          constexpr size_t d = decltype(_d)::value;
+          device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
+                        tuple_add_to_nth<d>(device::tie(idx...), 1));
+          device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
+                        tuple_add_to_nth<d>(device::tie(idx...), -1));
+        });
+        return result / dx2;
+      }
     }
 
     static std::string operatorString() { return "Laplacian"; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      // TODO (Franz)
-      // DoEval::eval(mR, i);
-      // for (size_t j = 0; ^ < 2 * NDim; ++j)
-      //   DoEval::eval(mR, i + mShiftAccessors[j]);
+      DoEval::eval(mR, idx...);
+      constexpr_for<0, NDim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
+                      tuple_add_to_nth<d>(device::tie(idx...), 1));
+      });
     }
 
     /** \brief Symbolic derivatives. */

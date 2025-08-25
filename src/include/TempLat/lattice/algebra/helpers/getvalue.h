@@ -7,9 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 
 namespace TempLat
 {
@@ -42,6 +40,17 @@ namespace TempLat
     static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
     {
       return obj;
+    }
+
+    template <typename U, typename... IDX>
+      requires requires {
+        requires !TypeHasGet<U, IDX...>;
+        requires !TypeGetsItself<U, IDX...>;
+        requires std::is_arithmetic_v<std::decay_t<decltype(U::value)>>;
+      }
+    static KOKKOS_FORCEINLINE_FUNCTION auto get(const U &obj, const IDX &...idx)
+    {
+      return std::decay_t<U>::value;
     }
 
     template <typename U> static auto get_example(U &&obj)

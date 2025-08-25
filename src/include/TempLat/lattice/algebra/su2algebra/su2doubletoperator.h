@@ -17,13 +17,15 @@ namespace TempLat
    *
    * Unit test: make test-su2doubletoperator
    **/
-  class SU2DoubletOperator
+  template <size_t NDim> class SU2DoubletOperator
   {
   public:
     /* Put public methods here. These should change very little over time. */
     SU2DoubletOperator() {}
     static constexpr size_t size = 4;
     using Getter = SU2DoubletGetter;
+
+    static consteval size_t getNDim() { return NDim; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

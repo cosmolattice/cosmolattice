@@ -9,12 +9,12 @@
 
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/views/fieldviewfourier.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/variadicindex.h"
-#include <memory>
 
 namespace TempLat
 {
@@ -28,17 +28,10 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    ComplexFieldFourierView(FourierView<NDim, T> r, FourierView<NDim, T> i) : mR(r), mI(i)
+    ComplexFieldFourierView(FourierView<NDim, T> r, FourierView<NDim, T> i)
+        : mR(r), mI(i), mToolBox(mR.getToolBox() == nullptr ? mI.getToolBox() : mR.getToolBox()),
+          mLayout(mToolBox->mLayouts.getFourierSpaceLayout())
     {
-      mToolBox = mR.getToolBox() == nullptr ? mI.getToolBox() : mR.getToolBox();
-
-      auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
-      auto localSizes = layout.getLocalSizes();
-
-      for (size_t d = 0; d < NDim; ++d) {
-        start_iteration[d] = 0;
-        stop_iteration[d] = start_iteration[d] + localSizes[d];
-      }
     }
 
     std::string toString() const { return "(" + mR.toString() + ", " + mI.toString() + ")"; }
@@ -47,22 +40,30 @@ namespace TempLat
     auto &ComplexFieldGet(Tag<0> t) { return mR; }
     KOKKOS_FORCEINLINE_FUNCTION
     const auto &ComplexFieldGet(Tag<0> t) const { return mR; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto &operator()(Tag<0> t) { return mR; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const auto &operator()(Tag<0> t) const { return mR; }
 
     KOKKOS_FORCEINLINE_FUNCTION
     auto &ComplexFieldGet(Tag<1> t) { return mI; }
     KOKKOS_FORCEINLINE_FUNCTION
     const auto &ComplexFieldGet(Tag<1> t) const { return mI; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto &operator()(Tag<1> t) { return mI; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const auto &operator()(Tag<1> t) const { return mI; }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.get(idx...);
     }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return mI.get(idx...);
     }
@@ -80,29 +81,17 @@ namespace TempLat
       const auto viewR = mR.getView();
       const auto viewI = mI.getView();
 
-      if constexpr (NDim > 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
-        {
-          device::apply(
-              [&](auto &&...args) {
-                viewR(args...) = GetEval::getEval(gR, args...);
-                viewI(args...) = GetEval::getEval(gI, args...);
-              },
-              idx);
-        };
-        Kokkos::parallel_for("ComplexFourierViewAssign",                                                 //
-                             Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
-                             KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
-      } else if constexpr (NDim == 1) {
-        Kokkos::parallel_for(
-            "ComplexFourierViewAssign", //
-            Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]), KOKKOS_CLASS_LAMBDA(const size_t idx) {
-              viewR(idx) = GetEval::getEval(gR, idx);
-              viewI(idx) = GetEval::getEval(gI, idx);
-            });
-      } else {
-        static_assert(NDim > 0);
-      }
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              viewR(args...) = GetEval::getEval(gR, args...);
+              viewI(args...) = GetEval::getEval(gI, args...);
+            },
+            idx);
+      };
+      Kokkos::parallel_for("ComplexFourierViewAssign", //
+                           getLocalKokkosPolicy(mLayout), KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
       PostGet::apply(g);
     }
@@ -127,6 +116,8 @@ namespace TempLat
 
     Kokkos::Array<int64_t, NDim> start_iteration;
     Kokkos::Array<int64_t, NDim> stop_iteration;
+
+    LayoutStruct<NDim> mLayout;
   };
 
   class ComplexFieldFourierViewTester

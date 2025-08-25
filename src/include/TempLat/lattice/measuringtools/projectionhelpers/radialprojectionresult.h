@@ -170,7 +170,7 @@ namespace TempLat
 
     template <typename S> friend class RadialProjector;
 
-    template <typename S> friend class RadialProjectorGW;
+    template <typename Model, typename S> friend class RadialProjectorGW;
 
     template <typename S>
     friend RadialProjectionResult<S> operator+(const RadialProjectionResult<S> &a, const RadialProjectionResult<S> &b);

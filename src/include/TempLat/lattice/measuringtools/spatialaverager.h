@@ -98,7 +98,7 @@ namespace TempLat
           };
           Kokkos::parallel_reduce("Averager",                                                                     //
                                   Kokkos::MDRangePolicy<Kokkos::Rank<NDim - 1>>(start_iteration, stop_iteration), //
-                                  KokkosNDLambdaWrapperReduction<NDim - 1, decltype(functor), vType>(functor),
+                                  KokkosNDLambdaWrapperReduction<NDim - 1, decltype(functor)>(functor),
                                   Kokkos::subview(localResult, cur_lidx - nGhosts));
         }
       } else if constexpr (NDim == 2) {

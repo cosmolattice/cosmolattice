@@ -93,7 +93,12 @@ namespace TempLat
       start_iteration[d] = nGhosts;
       stop_iteration[d] = start_iteration[d] + localSizes[d];
     }
-    return KokkosNDRange<NDim>(start_iteration, stop_iteration);
+
+    if constexpr (NDim == 1) {
+      return Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]);
+    } else {
+      return Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration);
+    }
   }
 
 #else

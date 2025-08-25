@@ -125,7 +125,13 @@ namespace TempLat
 
   // overload so that we can sonsitently write pow<3>(4)  for std::pow(4,3);
   template <ptrdiff_t N, typename R>
-    requires(!HasGetMethod<R> && N != 0 && N != 1 && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
+    requires requires(R r) {
+      requires !HasGetMethod<R>;
+      requires N != 0;
+      requires N != 1;
+      requires !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>);
+      powr<N>(r);
+    }
   KOKKOS_FORCEINLINE_FUNCTION auto pow(const R &r)
   {
     return powr<N>(r);

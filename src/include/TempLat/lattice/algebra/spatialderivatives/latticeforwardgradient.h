@@ -18,6 +18,7 @@
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/listoperators/vectordotter.h"
 
 namespace TempLat
 {
@@ -27,7 +28,7 @@ namespace TempLat
    *
    * Unit test: make test-forwardgradientlocal
    **/
-  template <int NDim, typename R> class LatticeForwardGradient
+  template <int NDim, typename R> class LatticeForwardGradient : public UnaryOperator<R>
   {
   public:
     /* Put public methods here. These should change very little over time. */
@@ -35,17 +36,37 @@ namespace TempLat
     using FloatType = typename GetFloatType<GetReturnType>::type;
 
     KOKKOS_FUNCTION
-    LatticeForwardGradient(const R &pR) : mR(pR), dx(GetDx::getDx(mR)) { fixGradientMap(GetJumps::apply(mR)); }
+    LatticeForwardGradient(const R &pR) : mR(pR), dx(GetDx::getDx(mR)) {}
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
     KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx)
     {
-      auto other_point = std::array<ptrdiff_t, NDim>{{idx...}};
-      other_point[i] += 1;
-      auto result = -GetValue::get(mR, idx...);
-      std::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); }, other_point);
-      return result / dx;
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        auto other_point = std::array<ptrdiff_t, NDim>{{idx...}};
+        other_point[i] += 1;
+        auto result = -GetValue::get(mR, idx...);
+        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); }, other_point);
+        return result / dx;
+      }
+    }
+
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      constexpr_for<0, NDim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        auto other_point = std::array<ptrdiff_t, NDim>{{idx...}};
+        other_point[d] += 1;
+        device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, other_point);
+      });
     }
 
     void eval(ptrdiff_t i)

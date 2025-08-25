@@ -13,6 +13,7 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 
@@ -30,8 +31,10 @@ namespace TempLat
     static constexpr size_t size = 4;
     using Getter = SU2DoubletGetter;
 
+    static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
+
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
-    virtual std::string operatorString() const { return " "; }
+    static std::string operatorString() { return " "; }
 
     /** \brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
      * OP is * or whatever), this toString method does all the work for you. */

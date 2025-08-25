@@ -9,19 +9,20 @@
 
 #include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexalgebra.h"
+#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 
 inline void TempLat::ComplexFieldTester::Test(TempLat::TDDAssertion &tdd)
 {
-  constexpr int nDim = 3;
+  constexpr size_t NDim = 3;
   constexpr int nGrid = 32;
   constexpr int nGhost = 0;
 
-  auto toolBox = MemoryToolBox<nDim>::makeShared(nGrid, nGhost);
+  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
   WaveNumber k(toolBox);
 
-  ComplexField<double> phi("phi", toolBox);
-  ComplexField<double> xi("xi", toolBox);
+  ComplexField<NDim, double> phi("phi", toolBox);
+  ComplexField<NDim, double> xi("xi", toolBox);
 
   tdd.verify(phi.inFourierSpace()(0_c).isFourierSpace());
   tdd.verify(phi.inFourierSpace()(1_c).isFourierSpace());

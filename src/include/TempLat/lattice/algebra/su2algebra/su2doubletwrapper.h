@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -20,38 +20,35 @@ namespace TempLat
    *
    * Unit test: make test-su2doubletwrapper
    **/
-  template <class A, class B, class C, class D> class SU2DoubletWrapper : public SU2DoubletOperator
+  template <class A, class B, class C, class D>
+  class SU2DoubletWrapper
+      : public SU2DoubletOperator<std::max(GetNDim::get<A>(),
+                                           std::max(GetNDim::get<B>(), std::max(GetNDim::get<C>(), GetNDim::get<D>())))>
   {
   public:
     /* Put public methods here. These should change very little over time. */
     SU2DoubletWrapper() {}
 
-    SU2DoubletWrapper(const A &pA, const B &pB, const C &pC, const D &pD) : mA(pA), mB(pB), mC(pC), mD(pD) {}
+    SU2DoubletWrapper(const A &pA, const B &pB, const C &pC, const D &pD) : mData(pA, pB, pC, pD) {}
 
-    auto SU2DoubletGet(Tag<0> t) { return mA; }
-    auto SU2DoubletGet(Tag<1> t) { return mB; }
-    auto SU2DoubletGet(Tag<2> t) { return mC; }
-    auto SU2DoubletGet(Tag<3> t) { return mD; }
+    template <int N> auto SU2DoubletGet(Tag<N> t) const { return device::get<N>(mData); }
 
-    auto SU2DoubletGet(Tag<0> t, ptrdiff_t i) { return GetValue::get(mA, i); }
-    auto SU2DoubletGet(Tag<1> t, ptrdiff_t i) { return GetValue::get(mB, i); }
-    auto SU2DoubletGet(Tag<2> t, ptrdiff_t i) { return GetValue::get(mC, i); }
-    auto SU2DoubletGet(Tag<3> t, ptrdiff_t i) { return GetValue::get(mD, i); }
+    template <int N, typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    {
+      return GetValue::get(SU2DoubletGet(t), idx...);
+    }
 
-    template <int N> auto operator()(Tag<N> t) { return SU2DoubletGet(t); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) { return SU2DoubletGet(t); }
 
     std::string toString() const
     {
-      return "SU2(" + GetString::get(mA) + "," + GetString::get(mB) + "," + GetString::get(mC) + "," +
-             GetString::get(mD) + ")";
+      return "SU2(" + GetString::get(device::get<0>(mData)) + "," + GetString::get(device::get<1>(mData)) + "," +
+             GetString::get(device::get<2>(mData)) + "," + GetString::get(device::get<3>(mData)) + ")";
     }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    A mA;
-    B mB;
-    C mC;
-    D mD;
+    device::tuple<A, B, C, D> mData; // to make sure the data is on the device if needed.
 
   public:
   };

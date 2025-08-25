@@ -48,9 +48,8 @@ namespace TempLat
    *
    * @tparam NDim Number of arguments taken
    * @tparam FUN The lambda to which we forward the indices
-   * @tparam RED The type of the reduction result
    */
-  template <size_t NDim, typename FUN, typename RED> struct KokkosNDLambdaWrapperReduction {
+  template <size_t NDim, typename FUN> struct KokkosNDLambdaWrapperReduction {
     KokkosNDLambdaWrapperReduction(const FUN &_fun) : fun(_fun) {};
 
     template <typename... Args>

@@ -32,6 +32,8 @@ inline void TempLat::SubtractTester::Test(TempLat::TDDAssertion &tdd)
   int c = 3, d = 4;
   tdd.verify(HasGetMethod<decltype(c - d)> == false);
 
+  tdd.verify((Tag<3>() - b).get(0) == -1);
+
   // pointless, but shuts up the compiler about unused variables:
   c = c + d;
 }

@@ -48,26 +48,6 @@ namespace TempLat
     {
       mToolBox = mT.ComplexFieldGet(Tag<0>()).getToolBox();
       if (mToolBox == nullptr) throw std::runtime_error("ComplexFieldAverager: ToolBox is null, cannot initialize.");
-
-      if (mSpaceType == SpaceStateType::Configuration) {
-        const auto layout = mToolBox->mLayouts.getConfigSpaceLayout();
-        const auto localSizes = layout.getLocalSizes();
-        const size_t nGhosts = layout.getNGhosts();
-
-        for (size_t d = 0; d < NDim; ++d) {
-          start_iteration[d] = nGhosts;
-          stop_iteration[d] = start_iteration[d] + localSizes[d];
-        }
-      } else if (mSpaceType == SpaceStateType::Fourier) {
-        const auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
-        const auto localSizes = layout.getLocalSizes();
-        for (size_t d = 0; d < NDim; ++d) {
-          start_iteration[d] = 0;
-          stop_iteration[d] = start_iteration[d] + localSizes[d];
-        }
-      } else {
-        throw std::runtime_error("ComplexFieldAverager: Unknown space type.");
-      }
     }
 
     arrVType compute()
@@ -113,33 +93,21 @@ namespace TempLat
     {
       complex<vType> localResult{};
 
-      if constexpr (NDim > 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, complex<vType> &update)
-        {
-          device::apply(
-              [&](auto &&...args) {
-                DoEval::eval(mT, args...);
-                update.real() += mT.ComplexFieldGet(Tag<0>(), args...);
-                update.imag() += mT.ComplexFieldGet(Tag<1>(), args...);
-              },
-              idx);
-        };
-        Kokkos::parallel_reduce("ComplexFieldAverager",                                                     //
-                                Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
-                                KokkosNDLambdaWrapperReduction<NDim, decltype(functor), complex<vType>>(functor),
-                                localResult);
-      } else if constexpr (NDim == 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const device::Idx &idx, complex<vType> &update)
-        {
-          DoEval::eval(mT, idx);
-          update.real() += mT.ComplexFieldGet(Tag<0>(), idx);
-          update.imag() += mT.ComplexFieldGet(Tag<1>(), idx);
-        };
-        Kokkos::parallel_reduce("ComplexFieldAverager", //
-                                Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]), functor, localResult);
-      } else {
-        static_assert(NDim > 0);
-      }
+      const auto mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
+
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, complex<vType> &update)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              DoEval::eval(mT, args...);
+              update.real() += mT.ComplexFieldGet(Tag<0>(), args...);
+              update.imag() += mT.ComplexFieldGet(Tag<1>(), args...);
+            },
+            idx);
+      };
+      Kokkos::parallel_reduce("ComplexFieldAverager",        //
+                              getLocalKokkosPolicy(mLayout), //
+                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       arrVType a{};
       a[0] = localResult.real();
@@ -153,38 +121,24 @@ namespace TempLat
 
       const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
 
-      if constexpr (NDim > 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, complex<vType> &update)
-        {
-          device::apply(
-              [&](auto &&...args) {
-                Kokkos::Array<ptrdiff_t, NDim> global_coord;
-                mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
-                if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
-                  return; // skip negative partners
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, complex<vType> &update)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              Kokkos::Array<ptrdiff_t, NDim> global_coord;
+              mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
+              if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
+                return; // skip negative partners
 
-                DoEval::eval(mT, args...);
-                update.real() += mT.ComplexFieldGet(Tag<0>(), args...);
-                update.imag() += mT.ComplexFieldGet(Tag<1>(), args...);
-              },
-              idx);
-        };
-        Kokkos::parallel_reduce("ComplexFieldAverager",                                                     //
-                                Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
-                                KokkosNDLambdaWrapperReduction<NDim, decltype(functor), complex<vType>>(functor),
-                                localResult);
-      } else if constexpr (NDim == 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const device::Idx &idx, complex<vType> &update)
-        {
-          DoEval::eval(mT, idx);
-          update.real() += mT.ComplexFieldGet(Tag<0>(), idx);
-          update.imag() += mT.ComplexFieldGet(Tag<1>(), idx);
-        };
-        Kokkos::parallel_reduce("ComplexFieldAverager", //
-                                Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]), functor, localResult);
-      } else {
-        static_assert(NDim > 0);
-      }
+              DoEval::eval(mT, args...);
+              update.real() += mT.ComplexFieldGet(Tag<0>(), args...);
+              update.imag() += mT.ComplexFieldGet(Tag<1>(), args...);
+            },
+            idx);
+      };
+      Kokkos::parallel_reduce("ComplexFieldAverager",        //
+                              getLocalKokkosPolicy(mLayout), //
+                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       arrVType a{};
       a[0] = localResult.real();

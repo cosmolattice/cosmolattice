@@ -19,6 +19,7 @@
 
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
@@ -60,8 +61,12 @@ namespace TempLat
       ConfirmSpace::apply(mR, newLayout, spaceType);
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void eval(ptrdiff_t i) { DoEval::eval(mR, i); }
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+    }
 
     template <size_t NDim> JumpsHolder<NDim> getJumps() { return GetJumps::apply<NDim>(mR); }
 

@@ -5,8 +5,16 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-template <typename T> inline void TempLat::GetValue::Test(T &tdd) { tdd.verify(true); }
+#include "TempLat/util/rangeiteration/tagliteral.h"
+
+template <typename T> inline void TempLat::GetValue::Test(T &tdd)
+{
+  tdd.verify(GetValue::get(Tag<1>(), 0, 1) == 1);
+  tdd.verify(GetValue::get(Tag<1>()) == 1);
+  tdd.verify(GetValue::get(Tag<7>(), 3, 4, 5) == 7);
+  tdd.verify(GetValue::get(Tag<7>()) == 7);
+}
 
 #endif

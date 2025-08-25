@@ -24,7 +24,7 @@ namespace TempLat
    *
    * Unit test: make test-neutdiff
    **/
-  template <int dir, typename R> class NeutDiff
+  template <int dir, typename R> class NeutDiff : public UnaryOperator<R>
   {
   public:
     using GetReturnType = typename GetGetReturnType<R>::type;
@@ -41,25 +41,34 @@ namespace TempLat
       requires VariadicIndex<IDX...>
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      static_assert(dir > 0);
-      constexpr size_t d = static_cast<size_t>(dir) - 1;
-      FloatType result{};
-      std::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                 tuple_add_to_nth<d>(std::tie(idx...), 1));
-      std::apply([&](const auto &...shifted_idx) { result -= GetValue::get(mR, shifted_idx...); },
-                 tuple_add_to_nth<d>(std::tie(idx...), -1));
-      return result / (2 * dx);
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        static_assert(dir > 0);
+        constexpr size_t d = static_cast<size_t>(dir) - 1;
+        FloatType result{};
+        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
+                      tuple_add_to_nth<d>(device::tie(idx...), 1));
+        device::apply([&](const auto &...shifted_idx) { result -= GetValue::get(mR, shifted_idx...); },
+                      tuple_add_to_nth<d>(device::tie(idx...), -1));
+        return result / (2 * dx);
+      }
     }
 
     static std::string operatorString() { return "NeutDiff"; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      // TODO (Franz)
-      // DoEval::eval(mR, i);
-      // for (size_t j = 0; ^ < 2 * NDim; ++j)
-      //   DoEval::eval(mR, i + mShiftAccessors[j]);
+      constexpr size_t d = static_cast<size_t>(dir) - 1;
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
+                    tuple_add_to_nth<d>(device::tie(idx...), 1));
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
+                    tuple_add_to_nth<d>(device::tie(idx...), -1));
     }
 
   private:

@@ -36,7 +36,7 @@ namespace TempLat
 
     template <typename U>
       requires(
-          requires { U::NDim; } &&
+          requires { typename U::NDim; } &&
           !requires {
             { U::getNDim() } -> std::convertible_to<size_t>;
           })
@@ -47,13 +47,13 @@ namespace TempLat
 
     template <typename U>
       requires(
-          !requires { U::NDim; } &&
+          !requires { typename U::NDim; } &&
           !requires {
             { U::getNDim() } -> std::convertible_to<size_t>;
           })
-    static consteval void get()
+    static consteval size_t get()
     {
-      throw std::runtime_error("GetNDim::get() called on a type that does not have a static NDim or getNDim() method.");
+      return 0;
     }
   };
 

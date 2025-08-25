@@ -20,6 +20,7 @@
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 
 namespace TempLat
 {
@@ -34,6 +35,8 @@ namespace TempLat
   {
   public:
     ListBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
+
+    static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
     template <int N, size_t NDim>
     void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)

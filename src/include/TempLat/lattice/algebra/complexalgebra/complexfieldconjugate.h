@@ -29,25 +29,25 @@ namespace TempLat
 
     ComplexFieldConjugate(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}
 
-    auto ComplexFieldGet(Tag<0> t) { return Real(mR); }
-    auto ComplexFieldGet(Tag<1> t) { return -Imag(mR); }
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t) const { return Real(mR); }
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t) const { return -Imag(mR); }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...);
     }
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return -mR.ComplexFieldGet(1_c, idx...);
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
     }

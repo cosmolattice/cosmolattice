@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -31,18 +32,33 @@ namespace TempLat
 
     ComplexFieldWrapper(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
-    auto ComplexFieldGet(Tag<0> t) { return mR; }
-    auto ComplexFieldGet(Tag<1> t) { return mT; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<0> t) const { return mR; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<1> t) const { return mT; }
 
-    template <int N> auto operator()(Tag<N> t) { return ComplexFieldGet(t); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return ComplexFieldGet(t); }
 
-    // auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) { return GetEval::getEval(mR, i); }
-    // auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) { return GetEval::getEval(mT, i); }
-
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return GetEval::getEval(mR, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
+    {
+      return GetEval::getEval(mT, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
     }
 
     std::string toString() const { return "Complex(" + GetString::get(mR) + "," + GetString::get(mT) + ")"; }

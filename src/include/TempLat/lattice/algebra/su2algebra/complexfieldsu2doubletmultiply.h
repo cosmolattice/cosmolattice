@@ -15,6 +15,8 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator.h"
+#include <Kokkos_Macros.hpp>
+#include <type_traits>
 
 namespace TempLat
 {
@@ -37,34 +39,47 @@ namespace TempLat
     auto SU2DoubletGet(Tag<2> t) { return Real(mR * Complexify(mT.SU2DoubletGet(2_c), mT.SU2DoubletGet(3_c))); }
     auto SU2DoubletGet(Tag<3> t) { return Imag(mR * Complexify(mT.SU2DoubletGet(2_c), mT.SU2DoubletGet(3_c))); }
 
-    auto SU2DoubletGet(Tag<0> t, ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<0> t, const IDX &...idx) const
     {
-      return mR.ComplexFieldGet(0_c, i) * mT.SU2DoubletGet(0_c, i) -
-             mR.ComplexFieldGet(1_c, i) * mT.SU2DoubletGet(1_c, i);
-    }
-    auto SU2DoubletGet(Tag<1> t, ptrdiff_t i)
-    {
-      return mR.ComplexFieldGet(0_c, i) * mT.SU2DoubletGet(1_c, i) +
-             mR.ComplexFieldGet(1_c, i) * mT.SU2DoubletGet(0_c, i);
-    }
-    auto SU2DoubletGet(Tag<2> t, ptrdiff_t i)
-    {
-      return mR.ComplexFieldGet(0_c, i) * mT.SU2DoubletGet(2_c, i) -
-             mR.ComplexFieldGet(1_c, i) * mT.SU2DoubletGet(3_c, i);
-    }
-    auto SU2DoubletGet(Tag<3> t, ptrdiff_t i)
-    {
-      return mR.ComplexFieldGet(0_c, i) * mT.SU2DoubletGet(3_c, i) +
-             mR.ComplexFieldGet(1_c, i) * mT.SU2DoubletGet(2_c, i);
+      return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(0_c, idx...) -
+             mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(1_c, idx...);
     }
 
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<1> t, const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(1_c, idx...) +
+             mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(0_c, idx...);
     }
 
-    std::string operatorString() const { return "*"; }
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<2> t, const IDX &...idx) const
+    {
+      return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(2_c, idx...) -
+             mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(3_c, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<3> t, const IDX &...idx) const
+    {
+      return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(3_c, idx...) +
+             mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(2_c, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
+    }
+
+    static std::string operatorString() { return "*"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -90,32 +105,18 @@ namespace TempLat
     return ComplexFieldSU2DoubletMultiplication<R, T>(r, t);
   }
 
-  template <typename T>
-    requires HasSU2DoubletGet<T>
-  auto operator*(double r, const T &t)
+  template <typename R, typename T>
+    requires(std::is_arithmetic_v<R> && HasSU2DoubletGet<T>)
+  auto operator*(R r, const T &t)
   {
     return Complexify(r, ZeroType()) * t;
   }
 
-  template <typename T>
-    requires HasSU2DoubletGet<T>
-  auto operator*(float r, const T &t)
+  template <typename R, typename T>
+    requires(std::is_arithmetic_v<R> && HasSU2DoubletGet<T>)
+  auto operator*(const T &t, R r)
   {
     return Complexify(r, ZeroType()) * t;
-  }
-
-  template <typename T>
-    requires HasSU2DoubletGet<T>
-  auto operator/(const T &t, double r)
-  {
-    return Complexify(1_c / r, ZeroType()) * t;
-  }
-
-  template <typename T>
-    requires HasSU2DoubletGet<T>
-  auto operator/(const T &t, float r)
-  {
-    return Complexify(1_c / r, ZeroType()) * t;
   }
 } // namespace TempLat
 

@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 
 namespace TempLat
@@ -25,6 +26,8 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     SU2DoubletUnaryOperator(const R &pR) : mR(pR) {}
+
+    static consteval size_t getNDim() { return GetNDim::get<R>(); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
     static std::string operatorString() { return " "; }

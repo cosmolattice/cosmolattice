@@ -24,7 +24,6 @@ namespace TempLat
    *
    * Unit test: make test-su2doubletdotter
    **/
-
   template <typename R, typename T> class SU2DoubletDotter : public ComplexFieldBinaryOperator<R, T>
   {
   public:
@@ -46,26 +45,36 @@ namespace TempLat
              mR.SU2DoubletGet(2_c) * mT.SU2DoubletGet(3_c) - mR.SU2DoubletGet(3_c) * mT.SU2DoubletGet(2_c);
     }
 
-    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      return mR.SU2DoubletGet(0_c, i) * mT.SU2DoubletGet(0_c, i) + mR.SU2DoubletGet(1_c, i) * mT.SU2DoubletGet(1_c, i) +
-             mR.SU2DoubletGet(2_c, i) * mT.SU2DoubletGet(2_c, i) + mR.SU2DoubletGet(3_c, i) * mT.SU2DoubletGet(3_c, i);
-    }
-    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i)
-    {
-      return mR.SU2DoubletGet(0_c, i) * mT.SU2DoubletGet(1_c, i) - mR.SU2DoubletGet(1_c, i) * mT.SU2DoubletGet(0_c, i) +
-             mR.SU2DoubletGet(2_c, i) * mT.SU2DoubletGet(3_c, i) - mR.SU2DoubletGet(3_c, i) * mT.SU2DoubletGet(2_c, i);
+      return mR.SU2DoubletGet(0_c, idx...) * mT.SU2DoubletGet(0_c, idx...) +
+             mR.SU2DoubletGet(1_c, idx...) * mT.SU2DoubletGet(1_c, idx...) +
+             mR.SU2DoubletGet(2_c, idx...) * mT.SU2DoubletGet(2_c, idx...) +
+             mR.SU2DoubletGet(3_c, idx...) * mT.SU2DoubletGet(3_c, idx...);
     }
 
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return mR.SU2DoubletGet(0_c, idx...) * mT.SU2DoubletGet(1_c, idx...) -
+             mR.SU2DoubletGet(1_c, idx...) * mT.SU2DoubletGet(0_c, idx...) +
+             mR.SU2DoubletGet(2_c, idx...) * mT.SU2DoubletGet(3_c, idx...) -
+             mR.SU2DoubletGet(3_c, idx...) * mT.SU2DoubletGet(2_c, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
     }
 
     std::string toString() const
     {
-
       std::string tt = GetString::get(mR);
 
       if (ContainsSpace::test(tt)) tt = "(" + tt + ")";

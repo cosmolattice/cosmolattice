@@ -11,6 +11,7 @@
 #include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include <Kokkos_Macros.hpp>
@@ -26,6 +27,8 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     ComplexFieldBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
+
+    static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
     static std::string operatorString() { return " "; }

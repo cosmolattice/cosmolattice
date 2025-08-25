@@ -7,6 +7,10 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/lattice/field/field.h"
+#include "TempLat/lattice/algebra/operators/operators.h"
+#include "TempLat/lattice/algebra/random/randomgaussianfield.h"
+
 inline void TempLat::NormGradientSquareTester::Test(TempLat::TDDAssertion &tdd)
 {
   constexpr size_t nd = 2;
@@ -16,11 +20,13 @@ inline void TempLat::NormGradientSquareTester::Test(TempLat::TDDAssertion &tdd)
 
   /* create the random field once, keep in memory. Trade off between RAM use and redundant computations. */
   Field<nd, double> gaussian("gaussian", toolBox);
-  gaussian.inFourierSpace() = 1 * RandomGaussianField<double>("hoi", toolBox);
+  gaussian.inFourierSpace() = 1 * RandomGaussianField<nd, double>("hoi", toolBox);
   gaussian += 0;
 
-  Field<nd, double> normGradSq = Grad2(gaussian);
-  Field<nd, double> LatForwardGradNorm2 = LatForwardGrad(gaussian).norm2();
+  Field<nd, double> normGradSq("normGradSq", toolBox);
+  normGradSq = Grad2(gaussian);
+  Field<nd, double> LatForwardGradNorm2("LatForwardGradNorm2", toolBox);
+  LatForwardGradNorm2 = LatForwardGrad(gaussian).norm2();
 
   bool allGood = true;
   // for (itX.begin(); itX.end(); ++itX) {

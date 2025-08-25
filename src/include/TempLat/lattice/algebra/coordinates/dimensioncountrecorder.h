@@ -38,11 +38,13 @@ namespace TempLat
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       if (mFixedSingleSpaceType != SpaceStateType::undefined && mFixedSingleSpaceType != spaceType) {
+#ifdef NOKOKKOS
         throw DimensionCountRecorder_CoordinateSpaceException(
             "You are using coordinates in one space for an expression in another space. This coordinate object insists "
             "on",
             SpaceStateInterface<NDim>::SpaceTypeString(mFixedSingleSpaceType), "while you now ask for",
             SpaceStateInterface<NDim>::SpaceTypeString(spaceType));
+#endif
       }
 
       mCurrentSpaceType = spaceType;

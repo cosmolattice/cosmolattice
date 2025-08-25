@@ -5,11 +5,12 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
@@ -23,65 +24,67 @@ namespace TempLat
    * Unit test: make test-su2doublet
    **/
   template <size_t _NDim, typename T> class SU2DoubletBase
-  { //: public CollectionBase<SU2DoubletBase<T,ISMOMENTUM,I1,I2,I3,I4>,T, ISMOMENTUM, I1, I2, I3, I4> {
+  {
   public:
     /* Put public methods here. These should change very little over time. */
     static constexpr size_t NDim = _NDim;
 
     SU2DoubletBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3, Field<NDim, T> f4)
-        : fs{f1, f2, f3, f4}, mName("NoName")
-    // CollectionBase<SU2DoubletBase<T,ISMOMENTUM,I1,I2,I3,I4>,T, ISMOMENTUM, I1, I2, I3, I4>(f1, f2, f3, f4)
+        : fs{{f1, f2, f3, f4}}, mName("NoName"), mLayout(f1.getToolBox()->mLayouts.getConfigSpaceLayout())
     {
     }
-    SU2DoubletBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
-        : mName(name) //:
-                      // CollectionBase<SU2DoubletBase<T,ISMOMENTUM,I1,I2,I3,I4>,T,ISMOMENTUM,I1,I2,I3,I4>(name+"^",
-                      // toolBox, pLatPar)
+    SU2DoubletBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+                   LatticeParameters<T> pLatPar = LatticeParameters<T>())
+        : mName(name), fs{{
+                           Field<NDim, T>(name + "_0", toolBox, pLatPar), //
+                           Field<NDim, T>(name + "_1", toolBox, pLatPar), //
+                           Field<NDim, T>(name + "_2", toolBox, pLatPar), //
+                           Field<NDim, T>(name + "_3", toolBox, pLatPar)  //
+                       }},
+          mLayout(toolBox->mLayouts.getConfigSpaceLayout())
     {
-      for (size_t i = 0; i < 4; ++i)
-        fs.emplace_back(Field<NDim, T>(name + "_" + std::to_string(i), toolBox, pLatPar));
     }
 
-    template <int N> auto SU2DoubletGet(Tag<N> t) { return (*this)(t); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) { return operator()(t); }
 
-    template <int N> auto SU2DoubletGet(Tag<N> t, ptrdiff_t i) { return fs[t].get(i); }
+    template <int N, typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    {
+      return fs[t].get(idx...);
+    }
 
-    template <int M> auto operator()(Tag<M> t) { return fs[t]; }
+    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<M> t) const { return fs[t]; }
 
     template <typename R> void operator=(R &&r)
     {
-      /*  for_in_range<0,std::remove_reference<R>::type::size>(
-                [&](auto i)
-                {
-                    (*this)(i) = std::remove_reference<R>::type::Getter::get(r,i);
-                }
-        );*/
+      constexpr_for<0, size, 1>([&](auto _i) {
+        constexpr size_t i = decltype(_i)::value;
+        fs[i].onBeforeAssignment(std::remove_reference<R>::type::Getter::get(r, _i));
+        PreGet::apply(fs[i]);
+      });
 
+      const auto views = device::make_tuple(fs[0].getView(), fs[1].getView(), fs[2].getView(), fs[3].getView());
+
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
-        ForLoop(i, 0, size - 1,
-                this->SU2DoubletGet(i).onBeforeAssignment(std::remove_reference<R>::type::Getter::get(r, i)););
+        device::apply(
+            [&](auto &&...args) {
+              constexpr_for<0, size, 1>([&](auto _i) {
+                constexpr size_t i = decltype(_i)::value;
+                device::get<i>(views)(args...) = r.SU2DoubletGet(_i, args...);
+              });
+            },
+            idx);
+      };
+      Kokkos::parallel_for("SU2DoubleConfigViewAssign", //
+                           getLocalKokkosPolicy(mLayout), KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
-        auto it = SU2DoubletGet(0_c).getToolBox()->itX();
-        std::array<T, size> tmpArr;
-
-        // auto getter = MakeArray(j,0,size-1,std::remove_reference<R>::type::Getter::get(r,j));
-        for (it.begin(); it.end(); ++it) {
-          auto i = it();
-          DoEval::eval(r, i);
-          // ForLoop(j,0, size-1,tmpArr[j] =  r.SU2DoubletGet(j,i));
-          // ForLoop(j,0, size-1,SU2DoubletGet(j).getSet(i) = tmpArr[j]);
-          tmpArr[0] = r.SU2DoubletGet(0_c, i);
-          tmpArr[1] = r.SU2DoubletGet(1_c, i);
-          tmpArr[2] = r.SU2DoubletGet(2_c, i);
-          tmpArr[3] = r.SU2DoubletGet(3_c, i);
-
-          fs[0].getSet(i) = tmpArr[0];
-          fs[1].getSet(i) = tmpArr[1];
-          fs[2].getSet(i) = tmpArr[2];
-          fs[3].getSet(i) = tmpArr[3];
-        }
-        ForLoop(j, 0, size - 1, this->SU2DoubletGet(j).setGhostsAreStale());
-      }
+      constexpr_for<0, size, 1>([&](auto _i) {
+        constexpr size_t i = decltype(_i)::value;
+        PreGet::apply(fs[i]);
+        fs[i].setGhostsAreStale();
+      });
     }
 
     template <typename R> void operator+=(R &&r) { (*this) = (*this) + r; }
@@ -103,11 +106,11 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    std::vector<Field<NDim, T>> fs;
-
     const std::string mName;
 
-  public:
+    device::array<Field<NDim, T>, 4> fs;
+
+    LayoutStruct<NDim> mLayout;
   };
 
   template <size_t NDim, typename T> using SU2Doublet = SU2DoubletBase<NDim, T>;

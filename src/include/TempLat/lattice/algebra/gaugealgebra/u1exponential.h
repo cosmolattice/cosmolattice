@@ -13,6 +13,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldunaryoperator.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -24,32 +25,44 @@ namespace TempLat
   template <typename R> class U1Exponential : public ComplexFieldUnaryOperator<R>
   {
   public:
-    typedef typename GetGetReturnType<R>::type SV;
+    using SV = typename GetGetReturnType<R>::type;
     /* Put public methods here. These should change very little over time. */
     using ComplexFieldUnaryOperator<R>::mR;
 
-    U1Exponential(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}
-
-    auto ComplexFieldGet(Tag<0> t) { return cos(mR); }
-    auto ComplexFieldGet(Tag<1> t) { return sin(mR); }
-
-    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i)
+    U1Exponential(const R &pR)
+        : ComplexFieldUnaryOperator<R>(pR), mCacheRe("U1Exponential::mCacheRe"), mCacheIm("U1Exponential::mCacheIm")
     {
-      return cacheRe;
+    }
+
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<0> t) const { return cos(mR); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<1> t) const { return sin(mR); }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    {
+      return mCacheRe();
       //   return std::cos(GetEval::getEval(mR,i));
     }
-    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i)
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
-      return cacheIm;
+      return mCacheIm();
       // return std::sin(GetEval::getEval(mR,i));
     }
 
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      SV tmp = GetEval::getEval(mR, i);
-      cacheRe = std::cos(tmp);
-      cacheIm = std::sin(tmp);
+      DoEval::eval(mR, idx...);
+      SV tmp = GetEval::getEval(mR, idx...);
+      mCacheRe() = std::cos(tmp);
+      mCacheIm() = std::sin(tmp);
     }
 
     std::string toString() const { return "U1(" + GetString::get(mR) + ")"; }
@@ -57,8 +70,8 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    SV cacheRe;
-    SV cacheIm;
+    Kokkos::View<SV> mCacheRe;
+    Kokkos::View<SV> mCacheIm;
   };
 
   struct U1ExponentialTester {

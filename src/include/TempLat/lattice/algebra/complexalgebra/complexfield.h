@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
@@ -31,54 +32,57 @@ namespace TempLat
     static constexpr size_t NDim = _NDim;
 
     ComplexField(Field<NDim, T> f1, Field<NDim, T> f2)
-        : mR(f1), mI(f2), mName("complex(" + f1.getName() + ", " + f2.getName() + ")")
+        : mR(f1), mI(f2), mName("complex(" + f1.getName() + ", " + f2.getName() + ")"),
+          mToolBox(mR.getToolBox() == nullptr ? mI.getToolBox() : mR.getToolBox()),
+          mLayout(mToolBox->mLayouts.getConfigSpaceLayout())
     {
-      mToolBox = mR.getToolBox() == nullptr ? mI.getToolBox() : mR.getToolBox();
-      if (mToolBox == nullptr) throw std::runtime_error("ComplexField: ToolBox is null, cannot initialize.");
-
-      init();
     }
 
     ComplexField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
                  LatticeParameters<T> pLatPar = LatticeParameters<T>())
-        : mR("Re_" + name, toolBox, pLatPar), mI("Im_" + name, toolBox, pLatPar), mName(name)
+        : mR("Re_" + name, toolBox, pLatPar), mI("Im_" + name, toolBox, pLatPar), mName(name), mToolBox(toolBox),
+          mLayout(mToolBox->mLayouts.getConfigSpaceLayout())
     {
-      mToolBox = toolBox;
-      if (mToolBox == nullptr) throw std::runtime_error("ComplexField: ToolBox is null, cannot initialize.");
-
-      init();
     }
 
     KOKKOS_FORCEINLINE_FUNCTION
     auto &ComplexFieldGet(Tag<0> t) { return mR; }
     KOKKOS_FORCEINLINE_FUNCTION
     const auto &ComplexFieldGet(Tag<0> t) const { return mR; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto &operator()(Tag<0> t) { return mR; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const auto &operator()(Tag<0> t) const { return mR; }
 
     KOKKOS_FORCEINLINE_FUNCTION
     auto &ComplexFieldGet(Tag<1> t) { return mI; }
     KOKKOS_FORCEINLINE_FUNCTION
     const auto &ComplexFieldGet(Tag<1> t) const { return mI; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto &operator()(Tag<1> t) { return mI; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    const auto &operator()(Tag<1> t) const { return mI; }
 
     template <int N> auto &operator()(Tag<N> t) { return ComplexFieldGet(t); }
     template <int N> const auto &operator()(Tag<N> t) const { return ComplexFieldGet(t); }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.get(idx...);
     }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return mI.get(idx...);
     }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(const IDX &...idx) const
     {
       return Kokkos::Array<T, 2>{mR.get(idx...), mI.get(idx...)};
     }
@@ -93,36 +97,26 @@ namespace TempLat
       mR.onBeforeAssignment(gR);
       mI.onBeforeAssignment(gI);
 
-      PreGet::apply(g);
+      PreGet::apply(gR);
+      PreGet::apply(gI);
 
       const auto viewR = mR.getView();
       const auto viewI = mI.getView();
 
-      if constexpr (NDim > 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
-        {
-          device::apply(
-              [&](auto &&...args) {
-                viewR(args...) = GetEval::getEval(gR, args...);
-                viewI(args...) = GetEval::getEval(gI, args...);
-              },
-              idx);
-        };
-        Kokkos::parallel_for("ComplexConfigViewAssign",                                                  //
-                             Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
-                             KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
-      } else if constexpr (NDim == 1) {
-        Kokkos::parallel_for(
-            "ComplexConfigViewAssign", //
-            Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]), KOKKOS_CLASS_LAMBDA(const size_t idx) {
-              viewR(idx) = GetEval::getEval(gR, idx);
-              viewI(idx) = GetEval::getEval(gI, idx);
-            });
-      } else {
-        static_assert(NDim > 0);
-      }
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              viewR(args...) = GetEval::getEval(gR, args...);
+              viewI(args...) = GetEval::getEval(gI, args...);
+            },
+            idx);
+      };
+      Kokkos::parallel_for("ComplexConfigViewAssign", //
+                           getLocalKokkosPolicy(mLayout), KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
-      PostGet::apply(g);
+      PostGet::apply(gR);
+      PostGet::apply(gI);
 
       mR.setGhostsAreStale();
       mI.setGhostsAreStale();
@@ -166,17 +160,7 @@ namespace TempLat
 
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
 
-    void init()
-    {
-      const auto layout = mToolBox->mLayouts.getConfigSpaceLayout();
-      const auto localSizes = layout.getLocalSizes();
-      const size_t nGhosts = layout.getNGhosts();
-
-      for (size_t d = 0; d < NDim; ++d) {
-        start_iteration[d] = nGhosts;
-        stop_iteration[d] = start_iteration[d] + localSizes[d];
-      }
-    }
+    LayoutStruct<NDim> mLayout;
 
   public:
 #ifdef TEMPLATTEST

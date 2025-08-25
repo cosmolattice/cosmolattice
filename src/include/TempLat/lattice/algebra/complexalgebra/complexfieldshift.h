@@ -19,30 +19,44 @@ namespace TempLat
   /** \brief A class which implements spatial shifts for complex algebra.
    *
    *
-   * Unit test: make test-su2shift
+   * Unit test: make test-complexfieldshift
    **/
   template <typename R, int... N> class ComplexFieldShifter : public ComplexFieldUnaryOperator<R>
   {
   public:
+    /* Put public methods here. These should change very little over time. */
+
     using ComplexFieldUnaryOperator<R>::mR;
 
-    /* Put public methods here. These should change very little over time. */
-    ComplexFieldShifter(const R &pR)
-        : ComplexFieldUnaryOperator<R>(pR), shiftInd(shift<N...>(mR.ComplexFieldGet(0_c)).getShift())
+    ComplexFieldShifter(const R &pR) : ComplexFieldUnaryOperator<R>(pR)
     {
       shiftString = shift<N...>(mR.ComplexFieldGet(0_c)).getString({N...});
     }
 
-    template <int M> auto ComplexFieldGet(Tag<M> t) { return shift<N...>(mR.ComplexFieldGet(t)); }
+    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t) const
+    {
+      return shift<N...>(mR.ComplexFieldGet(t));
+    }
 
-    template <int M> auto ComplexFieldGet(Tag<M> t, ptrdiff_t i) { return mR.ComplexFieldGet(t, i + shiftInd); }
-    void eval(ptrdiff_t i) { DoEval::eval(mR, i + shiftInd); }
+    template <int M, typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
+    {
+      return GetValue::get(ComplexFieldGet(t), idx...);
+    }
+
+    template <int M, typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(ComplexFieldGet(0_c), idx...);
+      DoEval::eval(ComplexFieldGet(1_c), idx...);
+    }
 
     std::string operatorString() const { return shiftString; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    ptrdiff_t shiftInd;
     std::string shiftString;
   };
   template <typename R, int N> class ComplexFieldShifterByOne : public ComplexFieldUnaryOperator<R>
@@ -52,22 +66,32 @@ namespace TempLat
 
     using ComplexFieldUnaryOperator<R>::mR;
 
-    ComplexFieldShifterByOne(const R &pR)
-        : ComplexFieldUnaryOperator<R>(pR), shiftInd(shift<N>(mR.ComplexFieldGet(0_c)).getShift())
+    ComplexFieldShifterByOne(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}
+
+    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t) const
     {
+      return shift<N>(mR.ComplexFieldGet(t));
     }
 
-    template <int M> auto ComplexFieldGet(Tag<M> t) { return shift<N>(mR.ComplexFieldGet(t)); }
+    template <int M, typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
+    {
+      return ComplexFieldGet(t).get(idx...);
+    }
 
-    template <int M> auto ComplexFieldGet(Tag<M> t, ptrdiff_t i) { return mR.ComplexFieldGet(t, i + shiftInd); }
-
-    void eval(ptrdiff_t i) { DoEval::eval(mR, i + shiftInd); }
+    template <int M, typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    {
+      DoEval::eval(ComplexFieldGet(0_c), idx...);
+      DoEval::eval(ComplexFieldGet(1_c), idx...);
+    }
 
     std::string toString() const { return GetString::get(mR) + "(->" + std::to_string(N) + ")"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    ptrdiff_t shiftInd;
   };
 
   template <int... shifts, class R>

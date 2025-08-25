@@ -17,6 +17,7 @@
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/complexalgebra/real.h"
 #include "TempLat/lattice/algebra/complexalgebra/imag.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -34,18 +35,32 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     ComplexFieldSubtraction(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
-    auto ComplexFieldGet(Tag<0> t) { return Real(mR) - Real(mT); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<0> t) const { return Real(mR) - Real(mT); }
 
-    auto ComplexFieldGet(Tag<1> t) { return Imag(mR) - Imag(mT); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<1> t) const { return Imag(mR) - Imag(mT); }
 
-    auto ComplexFieldGet(Tag<0> t, ptrdiff_t i) { return mR.ComplexFieldGet(0_c, i) - mT.ComplexFieldGet(0_c, i); }
-
-    auto ComplexFieldGet(Tag<1> t, ptrdiff_t i) { return mR.ComplexFieldGet(1_c, i) - mT.ComplexFieldGet(1_c, i); }
-
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return mR.ComplexFieldGet(0_c, idx...) - mT.ComplexFieldGet(0_c, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
+    {
+      return mR.ComplexFieldGet(1_c, idx...) - mT.ComplexFieldGet(1_c, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
     }
 
     static std::string operatorString() { return "-"; }
@@ -66,14 +81,14 @@ namespace TempLat
   }
 
   template <typename R, typename T>
-    requires(!HasStaticGetter<R> && HasComplexFieldGet<T>)
+    requires(!HasComplexFieldGet<R> && HasComplexFieldGet<T>)
   auto operator-(const R &r, const T &t)
   {
     return ComplexFieldSubtraction{Complexify(r, ZeroType()), t};
   }
 
   template <typename R, typename T>
-    requires(HasComplexFieldGet<R> && !HasStaticGetter<T>)
+    requires(HasComplexFieldGet<R> && !HasComplexFieldGet<T>)
   auto operator-(const R &r, const T &t)
   {
     return ComplexFieldSubtraction{r, Complexify(t, ZeroType())};
