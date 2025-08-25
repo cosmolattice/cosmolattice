@@ -31,7 +31,16 @@ namespace TempLat
       requires(sizeof...(Args) == NDim)
     KOKKOS_FORCEINLINE_FUNCTION void operator()(Args &&...args) const
     {
+      // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
+      // However, we do not want to impose this on the level of the memory layouts. In particular, this would
+      // require additional transpositions when going to Fourier space, which is not what we want. So we do the
+      // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
+      // on CPU, we do not reverse the access pattern.
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+      fun(reverse_array(device::IdxArray<NDim>{{std::forward<Args>(args)...}}));
+#else
       fun({{std::forward<Args>(args)...}});
+#endif
     }
 
     FUN fun;
@@ -56,7 +65,16 @@ namespace TempLat
       requires(sizeof...(Args) == NDim + 1)
     KOKKOS_FORCEINLINE_FUNCTION void operator()(Args &&...args) const
     {
+      // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
+      // However, we do not want to impose this on the level of the memory layouts. In particular, this would
+      // require additional transpositions when going to Fourier space, which is not what we want. So we do the
+      // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
+      // on CPU, we do not reverse the access pattern.
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+      auto tuple = reverse_tuple(device::tie(std::forward<Args>(args)...));
+#else
       auto tuple = device::tie(std::forward<Args>(args)...);
+#endif
       fun(makeArray(tuple_first<NDim>(tuple)), device::get<NDim>(tuple)); // the last argument is the reduction result
     }
 

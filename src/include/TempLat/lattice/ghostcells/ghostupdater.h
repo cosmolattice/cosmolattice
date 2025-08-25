@@ -187,23 +187,34 @@ namespace TempLat
             auto ftb_toSubView =
                 std::apply([&](const auto &...args) { return Kokkos::subview(View, args...); }, ftb_slicesTo);
 
-            auto btf_functor = KOKKOS_LAMBDA(const std::array<size_t, NDim> &idx)
+            auto btf_functor = KOKKOS_LAMBDA(const device::array<size_t, NDim> &idx)
             {
-              std::apply([&](auto &&...args) { btf_toSubView(args...) = btf_fromSubView(args...); }, idx);
+              device::apply([&](auto &&...args) { btf_toSubView(args...) = btf_fromSubView(args...); }, idx);
             };
-            auto ftb_functor = KOKKOS_LAMBDA(const std::array<size_t, NDim> &idx)
+            auto ftb_functor = KOKKOS_LAMBDA(const device::array<size_t, NDim> &idx)
             {
-              std::apply([&](auto &&...args) { ftb_toSubView(args...) = ftb_fromSubView(args...); }, idx);
+              device::apply([&](auto &&...args) { ftb_toSubView(args...) = ftb_fromSubView(args...); }, idx);
             };
+
+            // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced
+            // access. However, we do not want to impose this on the level of the memory layouts. In particular, this
+            // would require additional transpositions when going to Fourier space, which is not what we want. So we do
+            // the transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory
+            // access on CPU, we do not reverse the access pattern.
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+            constexpr bool reverse_acc = true;
+#else
+            constexpr bool reverse_acc = false;
+#endif
 
             const Kokkos::Array<size_t, NDim> it_start{};
             Kokkos::Array<size_t, NDim> it_stop{};
             for (size_t k = 0; k < NDim; ++k)
-              it_stop[k] = btf_fromSubView.extent(k);
+              it_stop[reverse_acc ? NDim - 1 - k : k] = btf_fromSubView.extent(k);
             Kokkos::parallel_for("GhostUpdater", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(it_start, it_stop),
                                  KokkosNDLambdaWrapper<NDim, decltype(btf_functor)>(btf_functor));
             for (size_t k = 0; k < NDim; ++k)
-              it_stop[k] = ftb_fromSubView.extent(k);
+              it_stop[reverse_acc ? NDim - 1 - k : k] = ftb_fromSubView.extent(k);
             Kokkos::parallel_for("GhostUpdater", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(it_start, it_stop),
                                  KokkosNDLambdaWrapper<NDim, decltype(ftb_functor)>(ftb_functor));
           }

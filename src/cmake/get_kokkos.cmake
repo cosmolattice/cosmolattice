@@ -3,24 +3,24 @@
 # ##############################################################################
 include(CheckLanguage)
 
-check_language(CUDA)
-if(CMAKE_CUDA_COMPILER)
-  set(HAVE_CUDA ON)
-  set(HAVE_HIP OFF)
-else()
-  set(HAVE_CUDA OFF)
-  check_language(HIP)
-  if(CMAKE_HIP_COMPILER)
-    set(HAVE_HIP ON)
-  else()
-    set(HAVE_HIP OFF)
-  endif()
-endif()
-
 if(DEFINED GPU)
   if(NOT GPU)
     set(HAVE_CUDA OFF)
     set(HAVE_HIP OFF)
+  else()
+    check_language(CUDA)
+    if(CMAKE_CUDA_COMPILER)
+      set(HAVE_CUDA ON)
+      set(HAVE_HIP OFF)
+    else()
+      set(HAVE_CUDA OFF)
+      check_language(HIP)
+      if(CMAKE_HIP_COMPILER)
+        set(HAVE_HIP ON)
+      else()
+        set(HAVE_HIP OFF)
+      endif()
+    endif()
   endif()
 endif()
 
@@ -43,30 +43,32 @@ message(
 # Get Kokkos
 # ##############################################################################
 
-if(NOT DEFINED Kokkos_ARCH)
-  set(Kokkos_ARCH_NATIVE
-      ON
-      CACHE BOOL "Enable Kokkos native architecture")
-else()
-  set(Kokkos_ARCH_NATIVE
-      OFF
-      CACHE BOOL "Enable Kokkos native architecture")
-endif()
+if(GPU)
+  if(NOT DEFINED Kokkos_ARCH)
+    set(Kokkos_ARCH_NATIVE
+        ON
+        CACHE BOOL "Enable Kokkos native architecture")
+  else()
+    set(Kokkos_ARCH_NATIVE
+        OFF
+        CACHE BOOL "Enable Kokkos native architecture")
+  endif()
 
-if(NOT DEFINED Kokkos_ARCH_LIST)
-  message(
-    STATUS
-      "Kokkos_ARCH_LIST not set. GPU architecture must be detectable when building Kokkos."
-  )
-  set(Kokkos_ARCH_LIST "")
-else()
-  # prepend every element with a -D and postpend with a :BOOL=ON
-  string(REPLACE ";" ";-D" Kokkos_ARCH_LIST ";${Kokkos_ARCH_LIST}")
-  # remove the first element
-  string(SUBSTRING "${Kokkos_ARCH_LIST}" 1 -1 Kokkos_ARCH_LIST)
-  string(REPLACE ";" ":BOOL=ON " Kokkos_ARCH_LIST "${Kokkos_ARCH_LIST};")
-  # remove the last element
-  string(SUBSTRING "${Kokkos_ARCH_LIST}" 0 -1 Kokkos_ARCH_LIST)
+  if(NOT DEFINED Kokkos_ARCH_LIST)
+    message(
+      STATUS
+        "Kokkos_ARCH_LIST not set. GPU architecture must be detectable when building Kokkos."
+    )
+    set(Kokkos_ARCH_LIST "")
+  else()
+    # prepend every element with a -D and postpend with a :BOOL=ON
+    string(REPLACE ";" ";-D" Kokkos_ARCH_LIST ";${Kokkos_ARCH_LIST}")
+    # remove the first element
+    string(SUBSTRING "${Kokkos_ARCH_LIST}" 1 -1 Kokkos_ARCH_LIST)
+    string(REPLACE ";" ":BOOL=ON " Kokkos_ARCH_LIST "${Kokkos_ARCH_LIST};")
+    # remove the last element
+    string(SUBSTRING "${Kokkos_ARCH_LIST}" 0 -1 Kokkos_ARCH_LIST)
+  endif()
 endif()
 
 # ##############################################################################

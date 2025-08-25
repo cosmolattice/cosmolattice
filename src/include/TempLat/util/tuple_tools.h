@@ -89,6 +89,28 @@ namespace TempLat
     }
   }
 
+  template <typename... Args, std::size_t... Is>
+  KOKKOS_FORCEINLINE_FUNCTION auto reverse_tuple(const device::tuple<Args...> &tuple, std::index_sequence<Is...>)
+  {
+    return std::tie(device::get<sizeof...(Args) - 1 - Is>(tuple)...);
+  }
+
+  template <typename... Args> KOKKOS_FORCEINLINE_FUNCTION auto reverse_tuple(const device::tuple<Args...> &tuple)
+  {
+    return reverse_tuple(tuple, std::make_index_sequence<sizeof...(Args)>());
+  }
+
+  template <typename Arg, size_t N, std::size_t... Is>
+  KOKKOS_FORCEINLINE_FUNCTION auto reverse_array(const device::array<Arg, N> &array, std::index_sequence<Is...>)
+  {
+    return device::array<Arg, N>{{device::get<N - 1 - Is>(array)...}};
+  }
+
+  template <typename Arg, size_t N> KOKKOS_FORCEINLINE_FUNCTION auto reverse_array(const device::array<Arg, N> &array)
+  {
+    return reverse_array(array, std::make_index_sequence<N>());
+  }
+
 #ifdef TEMPLATTEST
   class TupleToolsTester
   {

@@ -89,9 +89,21 @@ namespace TempLat
     const auto localSizes = layout.getLocalSizes();
     const size_t nGhosts = layout.getNGhosts();
 
-    for (size_t d = 0; d < NDim; ++d) {
-      start_iteration[d] = nGhosts;
-      stop_iteration[d] = start_iteration[d] + localSizes[d];
+    // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
+    // However, we do not want to impose this on the level of the memory layouts. In particular, this would
+    // require additional transpositions when going to Fourier space, which is not what we want. So we do the
+    // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
+    // on CPU, we do not reverse the access pattern.
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+    constexpr bool reverse = true;
+#else
+    constexpr bool reverse = false;
+#endif
+
+    for (int d = 0; d < (int)NDim; ++d) {
+      const int _d = reverse ? (int)NDim - 1 - d : d;
+      start_iteration[_d] = nGhosts;
+      stop_iteration[_d] = start_iteration[_d] + localSizes[d];
     }
 
     if constexpr (NDim == 1) {
@@ -121,7 +133,7 @@ namespace TempLat
     using cuda::std::tie;
     using cuda::std::tuple_cat;
 
-    using Idx = uint32_t;
+    using Idx = uint64_t;
     template <size_t NDim> using IdxArray = cuda::std::array<Idx, NDim>;
 #else
   template <typename... T> using tuple = std::tuple<T...>;
@@ -134,7 +146,7 @@ namespace TempLat
   using std::tie;
   using std::tuple_cat;
 
-  using Idx = uint32_t;
+  using Idx = uint64_t;
   template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
 #endif
   } // namespace device

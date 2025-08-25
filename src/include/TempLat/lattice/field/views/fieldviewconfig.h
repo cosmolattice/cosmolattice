@@ -13,6 +13,7 @@
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/field/abstractfield.h"
+#include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/helpers/preget.h"
@@ -41,20 +42,17 @@ namespace TempLat
 
     /* Put public methods here. These should change very little over time. */
     ConfigView(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
-        : AbstractField<NDim, T>(name, toolBox, pLatPar), mDisableFFTBlocking(false)
+        : AbstractField<NDim, T>(name, toolBox, pLatPar), mLayout(mToolBox->mLayouts.getConfigSpaceLayout()),
+          mDisableFFTBlocking(false)
     {
       mManager->setGhostsAreStale();
       mManager->confirmConfigSpace(); // allocation happens here
 
-      auto layout = mToolBox->mLayouts.getConfigSpaceLayout();
-      const auto localSizes = layout.getLocalSizes();
-      const size_t nGhosts = layout.getNGhosts();
+      const auto localSizes = mLayout.getLocalSizes();
+      const size_t nGhosts = mLayout.getNGhosts();
 
       for (size_t d = 0; d < NDim; ++d) {
-        start_iteration[d] = nGhosts;
-        stop_iteration[d] = start_iteration[d] + localSizes[d];
-
-        memorySizes[d] = layout.getLocalSizes()[d];
+        memorySizes[d] = mLayout.getLocalSizes()[d];
         memorySizes[d] += nGhosts + nGhosts; // add padding to the local sizes
         localSlicing[d] = std::make_pair(nGhosts, nGhosts + localSizes[d]);
       }
@@ -70,27 +68,15 @@ namespace TempLat
     {
       onBeforeAssignment(g);
 
-#ifndef NOKOKKOS
       PreGet::apply(g);
-      if constexpr (NDim > 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
-        {
-          device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
-        };
-        Kokkos::parallel_for("ConfigViewAssign",                                                         //
-                             Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
-                             KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
-      } else if constexpr (NDim == 1) {
-        Kokkos::parallel_for(
-            "ConfigViewAssign", //
-            Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]),
-            KOKKOS_CLASS_LAMBDA(const size_t idx) { mView(idx) = GetEval::getEval(g, idx); });
-      } else {
-        static_assert(NDim > 0);
-      }
-#else
-      throw Naaaaaa;
-#endif
+
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      {
+        device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
+      };
+      Kokkos::parallel_for("ConfigViewAssign",            //
+                           getLocalKokkosPolicy(mLayout), //
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
       PostGet::apply(g);
 
@@ -213,8 +199,7 @@ namespace TempLat
     std::string to_string() const { return mManager->getName() + "(x)"; }
 
   private:
-    Kokkos::Array<int64_t, NDim> start_iteration;
-    Kokkos::Array<int64_t, NDim> stop_iteration;
+    LayoutStruct<NDim> mLayout;
 
     KokkosNDViewUnmanaged<NDim, T> mView;
     KokkosNDViewUnmanaged<1, T> mRawView;

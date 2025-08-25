@@ -162,7 +162,7 @@ namespace TempLat
       for (size_t i = 0; i < NDim; ++i)
         copy_sizes[i] = std::min(fromSubView.extent(i), toSubView.extent(i));
 
-      std::array<ptrdiff_t, NDim - 1> curIdx{};
+      device::array<ptrdiff_t, NDim - 1> curIdx{};
       if (mDirection < 0) {
         // if we are moving in the negative direction, we
         // - have larger indices in the to view
@@ -195,13 +195,13 @@ namespace TempLat
             Kokkos::parallel_for(
                 Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
                 KOKKOS_LAMBDA(const size_t i) {
-                  std::apply([&](const auto &...args) { temp(i) = fromSubView(args..., i); }, curIdx);
+                  device::apply([&](const auto &...args) { temp(i) = fromSubView(args..., i); }, curIdx);
                 });
             // copy from the temporary to the destination
             Kokkos::parallel_for(
                 Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
                 KOKKOS_LAMBDA(const size_t i) {
-                  std::apply([&](const auto &...args) { toSubView(args..., i) = temp(i); }, curIdx);
+                  device::apply([&](const auto &...args) { toSubView(args..., i) = temp(i); }, curIdx);
                 });
             // Check if we have a next index to go to
             hasNext =
@@ -225,7 +225,7 @@ namespace TempLat
     }
 
   private:
-    static inline bool lowerDimN(const ptrdiff_t DimN, std::array<ptrdiff_t, NDim - 1> &nextIdx,
+    static inline bool lowerDimN(const ptrdiff_t DimN, device::array<ptrdiff_t, NDim - 1> &nextIdx,
                                  const std::array<ptrdiff_t, NDim> &copy_sizes)
     {
       if (DimN < 0) {
@@ -241,7 +241,7 @@ namespace TempLat
       }
     };
 
-    static inline bool raiseDimN(const ptrdiff_t DimN, std::array<ptrdiff_t, NDim - 1> &nextIdx,
+    static inline bool raiseDimN(const ptrdiff_t DimN, device::array<ptrdiff_t, NDim - 1> &nextIdx,
                                  const std::array<ptrdiff_t, NDim> &copy_sizes)
     {
       if (DimN < 0) {

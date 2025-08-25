@@ -46,25 +46,18 @@ namespace TempLat
 
     template <typename R> void assign(R &&g)
     {
+      auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
+
       onBeforeAssignment(g);
 
       PreGet::apply(g);
-      if constexpr (NDim > 1) {
-        auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
-        {
-          device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
-        };
-        Kokkos::parallel_for("ConfigViewAssign",                                                         //
-                             Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration), //
-                             KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
-      } else if constexpr (NDim == 1) {
-        Kokkos::parallel_for(
-            "ConfigViewAssign", //
-            Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]),
-            KOKKOS_CLASS_LAMBDA(const size_t idx) { mView(idx) = GetEval::getEval(g, idx); });
-      } else {
-        static_assert(NDim > 0);
-      }
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      {
+        device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
+      };
+      Kokkos::parallel_for("ConfigViewAssign",           //
+                           getLocalKokkosPolicy(layout), //
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
       PostGet::apply(g);
     }
 
