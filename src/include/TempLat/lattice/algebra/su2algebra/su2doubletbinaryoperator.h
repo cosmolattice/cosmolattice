@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
+#include "TempLat/lattice/algebra/helpers/gettoolbox.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 
@@ -58,6 +59,18 @@ namespace TempLat
 
     KOKKOS_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
+
+    inline auto getToolBox() const
+    {
+      using AT = decltype(GetToolBox::get(mR));
+      using BT = decltype(GetToolBox::get(mT));
+      if constexpr (!std::is_same_v<AT, std::nullptr_t>)
+        return GetToolBox::get(mR);
+      else if constexpr (!std::is_same_v<BT, std::nullptr_t>)
+        return GetToolBox::get(mT);
+      else
+        return nullptr;
+    }
 
   protected:
     /* Put all member variables and private methods here. These may change arbitrarily. */

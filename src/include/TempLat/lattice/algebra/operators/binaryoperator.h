@@ -114,7 +114,7 @@ namespace TempLat
     }
 
     /** For measurement objects. */
-    inline auto getToolBox()
+    inline auto getToolBox() const
     {
       using AT = decltype(GetToolBox::get(mR));
       using BT = decltype(GetToolBox::get(mT));

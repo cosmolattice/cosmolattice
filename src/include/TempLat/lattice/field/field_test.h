@@ -23,6 +23,11 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
 
   toolBox->setVerbose();
 
+  // make sure the GetNDim machinery works (sanity check, otherwise everything will just fail).
+  {
+    static_assert(GetNDim::get<Field<NDim, T>>() == NDim);
+  }
+
   // Test whether a transformation of the field forward and backward works.
   {
     Field<NDim, T> original("original", toolBox);

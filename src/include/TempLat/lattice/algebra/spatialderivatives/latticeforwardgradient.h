@@ -69,22 +69,13 @@ namespace TempLat
       });
     }
 
-    void eval(ptrdiff_t i)
-    {
-      // TODO (Franz)
-      // DoEval::eval(mR, i);
-      // for (size_t j = 0; j < nDimensions; ++j)
-      //  DoEval::eval(mR, i + jumps[j]);
-    }
-
     static constexpr size_t getVectorSize() { return NDim; }
 
-    auto norm2() { return dot(*this, *this); }
-    auto norm() { return pow(this->norm2(), 0.5); }
+    auto norm2() const { return dot(*this, *this); }
+    auto norm() const { return pow(this->norm2(), 0.5); }
 
     std::string toString() const { return "Grad(" + GetString::get(mR) + ")"; }
 
-    void doWeNeedGhosts(ptrdiff_t i) { mR.confirmGhostsUpToDate(); }
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
     KOKKOS_FORCEINLINE_FUNCTION
@@ -103,7 +94,7 @@ namespace TempLat
     }
 
     /** For measurement objects. */
-    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return GetToolBox::get(mR); }
+    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mR); }
 
     template <typename S> inline auto d(const S &other)
     {

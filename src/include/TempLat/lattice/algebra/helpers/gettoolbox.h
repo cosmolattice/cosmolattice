@@ -22,6 +22,8 @@ namespace TempLat
   class GetToolBox
   {
   public:
+    GetToolBox() = delete;
+
     /* Put public methods here. These should change very little over time. */
     template <typename U>
       requires HasToolBox<U>
@@ -38,11 +40,6 @@ namespace TempLat
       return std::nullptr_t();
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-    GetToolBox() {}
-
-  public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
 #endif

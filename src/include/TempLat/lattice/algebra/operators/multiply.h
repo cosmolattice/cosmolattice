@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <Kokkos_Macros.hpp>
 #include <type_traits>
 
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
@@ -69,6 +70,9 @@ namespace TempLat
 
       KOKKOS_FUNCTION
       Multiplication() : BinaryOperator<R, T>(R(), T()) {}
+
+      KOKKOS_FUNCTION
+      ~Multiplication() = default;
 
       template <typename... IDX>
         requires requires(IDX... idx) {

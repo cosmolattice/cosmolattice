@@ -32,7 +32,7 @@ namespace TempLat
       return (0.5 * (15) * 16 * (pow(16, 2) + 16 + 1)) + l; // sum_0^N-1 = (N-1)N/2
     }
 
-    auto getToolBox() { return mt; }
+    auto getToolBox() const { return mt; }
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
     std::shared_ptr<MemoryToolBox<NDim>> mt;
     std::string toString() const { return "myTmpStruct"; }

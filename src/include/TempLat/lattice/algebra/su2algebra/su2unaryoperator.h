@@ -49,7 +49,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
-    inline auto getToolBox() { return GetToolBox::get(mR); }
+    inline auto getToolBox() const { return GetToolBox::get(mR); }
 
     static constexpr size_t size = 4;
     using Getter = SU2Getter;

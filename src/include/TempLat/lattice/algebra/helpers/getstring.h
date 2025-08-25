@@ -51,7 +51,7 @@ namespace TempLat
     }
 
     template <typename U>
-      requires(CanBeConvertedToString<U> && !std::is_floating_point_v<U>)
+      requires(CanBeConvertedToString<U> && !std::is_floating_point_v<U> && !HasStringMethod<U>)
     static std::string get(const U &obj)
     {
       return std::to_string(obj);

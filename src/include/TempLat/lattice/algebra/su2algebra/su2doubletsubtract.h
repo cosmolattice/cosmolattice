@@ -34,9 +34,11 @@ namespace TempLat
     {
       return mR.SU2DoubletGet(t) - mT.SU2DoubletGet(t);
     }
-    template <int N, typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    template <int N, typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
-      return GetValue::get(SU2DoubletGet(t), idx...);
+      return mR.SU2DoubletGet(t, idx...) - mT.SU2DoubletGet(t, idx...);
     }
 
     template <typename... IDX>

@@ -74,7 +74,7 @@ endif()
 # control over what is happening.
 # ##############################################################################
 
-set(KOKKOS_VERSION 4.6.01)
+set(KOKKOS_VERSION 4.7.00)
 
 message(STATUS "Downloading Kokkos ${KOKKOS_VERSION}")
 execute_process(

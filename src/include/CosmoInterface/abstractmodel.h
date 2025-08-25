@@ -308,7 +308,7 @@ namespace TempLat
     auto GWtensor(Tag<3>, Tag<3>) { return (*fldGWs)(5_c); }
 
     // Sometimes, it can be useful to get "any field" of the model. This function implements this in a generic way.
-    Field<NDim, T> getOneField()
+    Field<NDim, T> getOneField() const
     {
       if (Ns > 0)
         return fldS(0_c);
@@ -330,7 +330,7 @@ namespace TempLat
     // informations about
     // the intrinsic parameter of the library. Sometimes, some of the classes need the MemoryToolBox to be created. This
     // function the user to quickly get it from the model.
-    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return getOneField().getToolBox(); }
+    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return getOneField().getToolBox(); }
 
     // set the initial value of the potential and the masses of the fields from the expression of the potential.
     void setInitialPotentialAndMassesFromPotential()

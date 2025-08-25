@@ -31,14 +31,16 @@ namespace TempLat
 
     SU2DoubletAddition(const R &pR, const T &pT) : SU2DoubletBinaryOperator<R, T>(pR, pT) {}
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t)
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const
     {
       return mT.SU2DoubletGet(t) + mR.SU2DoubletGet(t);
     }
 
-    template <int N, typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    template <int N, typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
-      return GetValue::get(SU2DoubletGet(t), idx...);
+      return mT.SU2DoubletGet(t, idx...) + mR.SU2DoubletGet(t, idx...);
     }
 
     template <typename... IDX>

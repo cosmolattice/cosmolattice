@@ -11,7 +11,7 @@ inline void TempLat::GetNGrid::Test(TempLat::TDDAssertion &tdd)
 {
   struct MyTestOne {
     MyTestOne() : mToolBox(MemoryToolBox<3>::makeShared(32, 1)) {}
-    std::shared_ptr<MemoryToolBox<3>> getToolBox() { return mToolBox; }
+    std::shared_ptr<MemoryToolBox<3>> getToolBox() const { return mToolBox; }
     std::shared_ptr<MemoryToolBox<3>> mToolBox;
   };
   MyTestOne one;

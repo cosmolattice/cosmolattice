@@ -71,7 +71,7 @@ namespace TempLat
     template <size_t NDim> JumpsHolder<NDim> getJumps() { return GetJumps::apply<NDim>(mR); }
 
     /** For measurement objects. */
-    auto getToolBox() { return GetToolBox::get(mR); }
+    auto getToolBox() const { return GetToolBox::get(mR); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
     static std::string operatorString() { return " "; }

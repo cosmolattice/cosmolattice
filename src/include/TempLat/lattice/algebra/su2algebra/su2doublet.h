@@ -45,7 +45,7 @@ namespace TempLat
     {
     }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) { return operator()(t); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const { return fs[t]; }
 
     template <int N, typename... IDX>
       requires VariadicIndex<IDX...>
@@ -91,7 +91,7 @@ namespace TempLat
 
     std::string toString() const { return mName; }
 
-    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return GetToolBox::get(fs[0]); }
+    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(fs[0]); }
 
     KOKKOS_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(fs[0]); }

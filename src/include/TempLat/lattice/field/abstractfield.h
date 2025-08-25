@@ -64,7 +64,7 @@ namespace TempLat
       }
     }
 
-    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return mToolBox; }
+    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return mToolBox; }
 
     ptrdiff_t confirmGhostsUpToDate() { return this->mManager->confirmGhostsUpToDate(); }
 

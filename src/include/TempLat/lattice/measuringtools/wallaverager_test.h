@@ -30,7 +30,7 @@ inline void TempLat::WallAveragerTester::Test(TempLat::TDDAssertion &tdd)
       return i * pow(16, 3) + j * pow(16, 2) + k * 16 + l;
     }
 
-    auto getToolBox() { return mt; }
+    auto getToolBox() const { return mt; }
     void confirmSpace(const LayoutStruct &newLayout, const SpaceStateType &spaceType) {}
     std::shared_ptr<MemoryToolBox> mt;
     std::string toString() const { return "myTmpStruct"; }

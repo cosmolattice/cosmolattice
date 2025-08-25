@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
+#include "TempLat/lattice/algebra/helpers/gettoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/getvectorsize.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
@@ -76,12 +77,16 @@ namespace TempLat
       return result;
     }
 
-    /** For measurement objects. */
-    inline auto getToolBox()
-    { // no need for indexing here either
-      auto a = GetToolBox::get(mR);
-      auto b = GetToolBox::get(mT);
-      return a.get() != nullptr ? a : b;
+    inline auto getToolBox() const
+    {
+      using AT = decltype(GetToolBox::get(mR));
+      using BT = decltype(GetToolBox::get(mT));
+      if constexpr (!std::is_same_v<AT, std::nullptr_t>)
+        return GetToolBox::get(mR);
+      else if constexpr (!std::is_same_v<BT, std::nullptr_t>)
+        return GetToolBox::get(mT);
+      else
+        return nullptr;
     }
 
     using Getter = GetComponent;

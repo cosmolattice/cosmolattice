@@ -37,7 +37,11 @@ namespace TempLat
     static constexpr size_t NDim = GetNDim::get<T>();
 
     /* Put public methods here. These should change very little over time. */
-    Averager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
+    Averager(const T &pT, SpaceStateType spaceType)
+      requires requires {
+        { pT.getToolBox() } -> std::same_as<std::shared_ptr<MemoryToolBox<NDim>>>;
+      }
+        : mT(pT), mSpaceType(spaceType)
     {
       mToolBox = mT.getToolBox();
       if (mToolBox == nullptr) throw std::runtime_error("Averager: ToolBox is null, cannot initialize.");
@@ -124,7 +128,7 @@ namespace TempLat
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
 
     /** For measurement objects. */
-    auto getToolBox() { return GetToolBox::get(mT); }
+    auto getToolBox() const { return GetToolBox::get(mT); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

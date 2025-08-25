@@ -34,7 +34,7 @@ namespace TempLat
 
     template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION double get(const IDX &...idx) const { return NDim; }
 
-    auto getToolBox() { return mt; }
+    auto getToolBox() const { return mt; }
 
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
 
@@ -61,7 +61,7 @@ namespace TempLat
       return complex<double>(1., imagPart);
     }
 
-    auto getToolBox() { return mt; }
+    auto getToolBox() const { return mt; }
 
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
 

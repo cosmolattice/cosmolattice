@@ -48,7 +48,7 @@ namespace TempLat
     }
 
     /** For measurement objects. */
-    inline auto getToolBox() { return GetToolBox::get(mR); }
+    inline auto getToolBox() const { return GetToolBox::get(mR); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
     static std::string operatorString() { return " "; }

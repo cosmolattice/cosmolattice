@@ -96,7 +96,7 @@ namespace TempLat
     std::string toString() const { return "<" + GetString::get(mT) + ">_walls"; }
 
     /** For measurement objects. */
-    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return GetToolBox::get(mT); }
+    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mT); }
 
     auto getWall(size_t dim) const { return mWorkspace[dim]; }
 

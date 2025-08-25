@@ -53,8 +53,8 @@ namespace TempLat
       return GetJumps::apply(mR);
     }
 
-    inline auto getToolBox()
-    { // just take toolboc from first component
+    inline auto getToolBox() const
+    { // just take toolbox from first component
       return GetToolBox::get(mR);
     }
 

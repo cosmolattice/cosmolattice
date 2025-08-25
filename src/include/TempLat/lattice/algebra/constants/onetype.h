@@ -25,6 +25,8 @@ namespace TempLat
       return 1;
     }
     static constexpr bool ISCONSTANT = true;
+
+    // operator double() const { return 1; }
   };
 } // namespace TempLat
 

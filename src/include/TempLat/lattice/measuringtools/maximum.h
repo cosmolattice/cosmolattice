@@ -113,7 +113,7 @@ namespace TempLat
     std::string toString() const { return "max(" + GetString::get(mT) + ")"; }
 
     /** For measurement objects. */
-    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() { return GetToolBox::get(mT); }
+    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mT); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

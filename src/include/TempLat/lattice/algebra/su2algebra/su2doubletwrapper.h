@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/su2algebra/su2doubletoperator.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 
 namespace TempLat
 {
@@ -31,14 +32,14 @@ namespace TempLat
 
     SU2DoubletWrapper(const A &pA, const B &pB, const C &pC, const D &pD) : mData(pA, pB, pC, pD) {}
 
-    template <int N> auto SU2DoubletGet(Tag<N> t) const { return device::get<N>(mData); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const { return device::get<N>(mData); }
 
     template <int N, typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
       return GetValue::get(SU2DoubletGet(t), idx...);
     }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) { return SU2DoubletGet(t); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2DoubletGet(t); }
 
     std::string toString() const
     {

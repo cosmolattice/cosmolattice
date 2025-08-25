@@ -149,7 +149,7 @@ namespace TempLat
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
 
     /** For measurement objects. */
-    auto getToolBox() { return GetToolBox::get(mT); }
+    auto getToolBox() const { return GetToolBox::get(mT); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

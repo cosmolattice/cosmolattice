@@ -36,7 +36,7 @@ namespace TempLat
 
     template <typename U>
       requires(
-          requires { typename U::NDim; } &&
+          requires { U::NDim; } &&
           !requires {
             { U::getNDim() } -> std::convertible_to<size_t>;
           })
@@ -47,7 +47,7 @@ namespace TempLat
 
     template <typename U>
       requires(
-          !requires { typename U::NDim; } &&
+          !requires { U::NDim; } &&
           !requires {
             { U::getNDim() } -> std::convertible_to<size_t>;
           })
@@ -55,17 +55,15 @@ namespace TempLat
     {
       return 0;
     }
+
+#ifdef TEMPLATTEST
+    static inline void Test(TDDAssertion &tdd);
+#endif
   };
 
   template <typename T>
   concept HasNDim = requires {
     { GetNDim::get<T>() } -> std::convertible_to<size_t>;
-  };
-
-  struct GetNDimTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

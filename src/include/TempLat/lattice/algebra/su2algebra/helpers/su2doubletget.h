@@ -9,6 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -19,7 +20,10 @@ namespace TempLat
   class SU2DoubletGetter
   {
   public:
-    template <typename R, int N> static inline auto get(R &&r, Tag<N> t) { return r.SU2DoubletGet(t); }
+    template <typename R, int N> static KOKKOS_FORCEINLINE_FUNCTION auto get(R &&r, Tag<N> t)
+    {
+      return r.SU2DoubletGet(t);
+    }
   };
 
 } // namespace TempLat
