@@ -7,6 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include "TempLat/util/log/saycomplete.h"
+#include "TempLat/util/powr.h"
+
 template <typename T> inline void TempLat::RadialProjectionResult<T>::Test(TempLat::TDDAssertion &tdd)
 {
 
@@ -21,15 +24,30 @@ template <typename T> inline void TempLat::RadialProjectionResult<T>::Test(TempL
 
   Kokkos::parallel_for(
       "RadialProjectionResultTest", Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, 10),
-      KOKKOS_LAMBDA(const ptrdiff_t i) { three.add_device(i, 2 * i, 2 * i); });
+      KOKKOS_LAMBDA(const ptrdiff_t i) {
+        three.add_device(i, 2 * i, 2 * i);
+        three.add_device(i, 2 * i + 0.5, 2 * i);
+        three.add_device(i, 2 * i - 0.5, 2 * i);
+      });
   three.finalize(MPICommReference());
   tdd.verify(three.size() == 10);
   {
     bool allRight = true;
     for (ptrdiff_t i = 0, iEnd = three.size(); i < iEnd; ++i) {
-      allRight = allRight && three[i].getValue().average == 2 * i;
-      allRight = allRight && three[i].getValue().sampleVariance == 0; // no variance in this case
-      allRight = allRight && three[i].getValue().multiplicity == 1;
+      const double expectedVariance =
+          abs(powr<2>(2. * i) * 2. / 3. - powr<2>(2 * i + 0.5) / 3. - powr<2>(2 * i - 0.5) / 3.);
+      allRight = allRight && AlmostEqual(three[i].getValue().average, 2 * i);
+      allRight = allRight && AlmostEqual(three[i].getValue().sampleVariance, expectedVariance);
+      allRight = allRight && three[i].getValue().multiplicity == 3;
+      if (!allRight) {
+        say << "Bin " << i << ": "
+            << "Average: " << three[i].getValue().average << ", Sample Variance: " << three[i].getValue().sampleVariance
+            << ", Multiplicity: " << three[i].getValue().multiplicity << "\n"
+            << "Expected: "
+            << "Average: " << 2 * i << ", Sample Variance: " << expectedVariance << ", Multiplicity: " << 3 << "\n";
+
+        break;
+      }
     }
     tdd.verify(allRight);
   }

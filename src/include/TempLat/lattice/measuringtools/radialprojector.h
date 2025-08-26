@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Macros.hpp>
 #include <algorithm>
 #include <cstddef>
 
@@ -91,7 +90,7 @@ namespace TempLat
     }
 
   private:
-    SpaceStateType mSpaceType;
+    const SpaceStateType mSpaceType;
     T mInstance;
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
     bool mUseBinCentralValues;
@@ -102,19 +101,43 @@ namespace TempLat
                                    bool excludeOrigin)
     {
       confirmGetterSpace();
-      /*
-      auto it = mToolBox->itX();
-      for (it.begin(); it.end(); ++it) {
-        if ((not excludeOrigin) or (not it.isAtOrigin())) {
 
-          sType r = rFromCoords(it.getVec());
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      {
+        // Get the global coordinates of this index.
+        Kokkos::Array<ptrdiff_t, NDim> global_coords;
+        device::apply([&](auto &&...args) { mLayout.putSpatialLocationFromMemoryIndexInto(global_coords, args...); },
+                      idx);
 
-          ptrdiff_t bin = binComputer(r);
+        // Check if we are at the origin.
+        bool isAtOrigin = true;
+        for (auto &&it : global_coords)
+          if (it != 0) {
+            isAtOrigin = false;
+            break;
+          }
+        if (excludeOrigin && isAtOrigin) [[unlikely]]
+          return;
 
-          baseWorkSpace.add(bin, GetValue::get(mInstance, it()), r, 1);
-        }
-      }
-*/
+        // get the radius
+        sType r{};
+        for (uint i = 0; i < NDim; ++i)
+          r += global_coords[i] * global_coords[i];
+        r = Kokkos::sqrt(r);
+
+        // Map the radius to a bin
+        const ptrdiff_t bin = binComputer(r);
+
+        // Add the bin contribution to the workspace.
+        device::apply([&](auto &&...args) { baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, 1.); },
+                      idx);
+      };
+
+      Kokkos::parallel_for("RadialProjectorConfiguration", //
+                           getLocalKokkosPolicy(mLayout),  //
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+
+      baseWorkSpace.pull();
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
       return baseWorkSpace;
     }
@@ -128,29 +151,42 @@ namespace TempLat
 
       auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
+        // Get the global coordinates of this index.
         Kokkos::Array<ptrdiff_t, NDim> global_coords;
         device::apply([&](auto &&...args) { mLayout.putSpatialLocationFromMemoryIndexInto(global_coords, args...); },
                       idx);
+
+        // Check if we are at the origin.
         bool isAtOrigin = true;
-        for (auto &&it : global_coords) {
+        for (auto &&it : global_coords)
           if (it != 0) {
             isAtOrigin = false;
             break;
           }
-        }
-        if ((!excludeOrigin) || (!isAtOrigin)) {
-          HermitianRedundancy quality = mLayout.getHermitianPartners().qualify(global_coords);
-          if (quality != HermitianRedundancy::negativePartner) {
-            sType r = rFromCoords(global_coords);
-            ptrdiff_t bin = binComputer(r);
-            // don't over-weight the real-valued entries: only one float value, only half the weight.
-            floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
-            device::apply(
-                [&](auto &&...args) { baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, weight); },
-                idx);
-          }
+        if (excludeOrigin && isAtOrigin) [[unlikely]]
+          return;
+
+        const HermitianRedundancy quality = mLayout.getHermitianPartners().qualify(global_coords);
+        if (quality != HermitianRedundancy::negativePartner) {
+          // get the radius
+          sType r{};
+          for (uint i = 0; i < NDim; ++i)
+            r += global_coords[i] * global_coords[i];
+          r = Kokkos::sqrt(r);
+
+          // Map the radius to a bin
+          const ptrdiff_t bin = binComputer(r);
+
+          // don't over-weight the real-valued entries: only one float value, only half the weight.
+          floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
+
+          // Add the bin contribution to the workspace.
+          device::apply(
+              [&](auto &&...args) { baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, weight); },
+              idx);
         }
       };
+
       Kokkos::parallel_for("RadialProjectorFourier",      //
                            getLocalKokkosPolicy(mLayout), //
                            KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
@@ -158,15 +194,6 @@ namespace TempLat
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
 
       return baseWorkSpace;
-    }
-
-    KOKKOS_FORCEINLINE_FUNCTION
-    static floatType rFromCoords(const Kokkos::Array<ptrdiff_t, NDim> &pCoord)
-    {
-      floatType r2 = 0;
-      for (auto &&it : pCoord)
-        r2 += it * it;
-      return Kokkos::sqrt(r2);
     }
 
   private:

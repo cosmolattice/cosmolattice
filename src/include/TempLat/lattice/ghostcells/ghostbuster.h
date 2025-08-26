@@ -121,8 +121,8 @@ namespace TempLat
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
       }
 
-      say << "GhostBuster: Padding is " << from_padding << " to " << to_padding << ", sizes are " << from_sizes
-          << " to " << to_sizes << "\n";
+      // say << "GhostBuster: Padding is " << from_padding << " to " << to_padding << ", sizes are " << from_sizes
+      //     << " to " << to_sizes << "\n";
       auto fromView = block.template getNDView<T>(from_full_sizes);
       auto toView = block.template getNDView<T>(to_full_sizes);
 

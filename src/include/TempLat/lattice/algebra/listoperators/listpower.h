@@ -21,7 +21,6 @@
 
 namespace TempLat
 {
-
   template <typename R, typename T> class ListPower : public ListBinaryOperator<R, T>
   {
   public:
@@ -30,11 +29,7 @@ namespace TempLat
 
     ListPower(const R &pR, const T &pT) : ListBinaryOperator<R, T>(pR, pT) {}
 
-    template <int N> auto getComp(Tag<N> t)
-    {
-      using namespace std;
-      return pow(GetComponent::get(mR, t), GetComponent::get(mT, t));
-    }
+    template <int N> auto getComp(Tag<N> t) { return pow(GetComponent::get(mR, t), GetComponent::get(mT, t)); }
 
     virtual std::string operatorString() const { return "^"; }
     template <int N> void doWeNeedGhosts(Tag<N> i)
@@ -42,7 +37,7 @@ namespace TempLat
       GhostsHunter::apply(mR, i);
       GhostsHunter::apply(mT, i);
     }
-    static const size_t size = static_max<tuple_size<R>::value, tuple_size<T>::value>::value;
+    static constexpr size_t size = std::max(tuple_size<R>::value, tuple_size<T>::value);
   };
 
   /** \brief A mini struct for instiating the test case. */
@@ -64,11 +59,7 @@ namespace TempLat
   public:
     using ListUnaryOperator<R>::mR;
     ListPowerN(const R &pR) : ListUnaryOperator<R>(pR) {}
-    template <int M> auto getComp(Tag<M> t)
-    {
-      using namespace std;
-      return pow<N>(GetComponent::get(mR, t));
-    }
+    template <int M> auto getComp(Tag<M> t) { return pow<N>(GetComponent::get(mR, t)); }
     template <int M> std::string toString(Tag<M> i) const { return GetString::get(mR, i) + "^" + std::to_string(N); }
 
     template <int M> void doWeNeedGhosts(Tag<M> i) { GhostsHunter::apply(mR, i); }

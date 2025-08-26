@@ -22,13 +22,11 @@ namespace TempLat
   constexpr void for_each_impl(Tuple &&tuple, F &&f, std::index_sequence<Indices...>)
   {
     using swallow = int[];
-    using namespace std;
     (void)swallow{1, (f(GetComponent::get(std::forward<Tuple>(tuple), Tag<Indices>())), void(), int{})...};
   }
 
   template <typename Tuple, typename F> constexpr void for_each(Tuple &&tuple, F &&f)
   {
-    using namespace std;
     constexpr std::size_t N = tuple_size<std::remove_reference_t<Tuple>>::value;
     for_each_impl(std::forward<Tuple>(tuple), std::forward<F>(f), std::make_index_sequence<N>{});
   }

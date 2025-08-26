@@ -20,22 +20,35 @@ inline void TempLat::WaveNumberTester::Test(TempLat::TDDAssertion &tdd)
 
   Field<NDim, double> phix("phix", toolBox);
   Field<NDim, double> phiy("phiy", toolBox);
+  Field<NDim, double> phinorm("phinorm", toolBox);
+  Field<NDim, double> phinorm2("phinorm2", toolBox);
 
   WaveNumber<NDim> x(toolBox);
   phix.inFourierSpace() = getVectorComponent(x, 0);
   phiy.inFourierSpace() = getVectorComponent(x, 1);
+  phinorm.inFourierSpace() = x.norm();
+  phinorm2.inFourierSpace() = x.norm2();
 
   auto phix_view = phix.inFourierSpace().getLocalNDHostView();
   auto phiy_view = phiy.inFourierSpace().getLocalNDHostView();
+  auto phinorm_view = phinorm.inFourierSpace().getLocalNDHostView();
+  auto phinorm2_view = phinorm2.inFourierSpace().getLocalNDHostView();
 
   // Check that the fourier coordinate is correct
   bool correct = true;
   for (ptrdiff_t i = 0; i < nGrid; ++i) {
     for (ptrdiff_t j = 0; j < nGrid / 2 + 1; ++j) {
-      const ptrdiff_t x_val = i > nGrid / 2 ? i - nGrid : i;
-      correct &= phix_view(i, j) == x_val;
-      const ptrdiff_t y_val = j > nGrid / 2 ? j - nGrid : j;
-      correct &= phiy_view(i, j) == y_val;
+      const double x_val = i > nGrid / 2 ? i - nGrid : i;
+      correct &= AlmostEqual(phix_view(i, j).real(), x_val);
+      correct &= AlmostEqual(phix_view(i, j).imag(), 0.);
+      const double y_val = j > nGrid / 2 ? j - nGrid : j;
+      correct &= AlmostEqual(phiy_view(i, j).real(), y_val);
+      correct &= AlmostEqual(phiy_view(i, j).imag(), 0.);
+      const double norm2 = (x_val * x_val + y_val * y_val);
+      correct &= AlmostEqual(phinorm2_view(i, j).real(), norm2);
+      correct &= AlmostEqual(phinorm2_view(i, j).imag(), 0.);
+      correct &= AlmostEqual(phinorm_view(i, j).real(), sqrt(norm2));
+      correct &= AlmostEqual(phinorm_view(i, j).imag(), 0.);
     }
   }
   tdd.verify(correct);

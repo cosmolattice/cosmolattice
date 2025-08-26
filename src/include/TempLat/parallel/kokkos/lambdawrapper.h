@@ -70,12 +70,13 @@ namespace TempLat
       // require additional transpositions when going to Fourier space, which is not what we want. So we do the
       // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
       // on CPU, we do not reverse the access pattern.
-#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
-      auto tuple = reverse_tuple(device::tie(std::forward<Args>(args)...));
-#else
       auto tuple = device::tie(std::forward<Args>(args)...);
-#endif
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+      fun(makeArray(reverse_tuple(tuple_first<NDim>(tuple))),
+          device::get<NDim>(tuple)); // the last argument is the reduction result
+#else
       fun(makeArray(tuple_first<NDim>(tuple)), device::get<NDim>(tuple)); // the last argument is the reduction result
+#endif
     }
 
     FUN fun;

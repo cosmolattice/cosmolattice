@@ -9,6 +9,7 @@
 
 #include "TempLat/lattice/memory/memorylayouts/hermitianpartners.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocaltransposed.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/isarray.h"

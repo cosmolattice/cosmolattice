@@ -9,11 +9,12 @@
 
 template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
+  const ptrdiff_t nGhost = 0;
   /* test the operator== */
-  LayoutStruct<3> a({0, 0, 0});
-  LayoutStruct<3> b({0, 0, 0});
-  LayoutStruct<2> c({0, 0});
-  LayoutStruct<3> d({0, 0, 0});
+  LayoutStruct<3> a({0, 0, 0}, nGhost);
+  LayoutStruct<3> b({0, 0, 0}, nGhost);
+  LayoutStruct<2> c({0, 0}, nGhost);
+  LayoutStruct<3> d({0, 0, 0}, nGhost);
 
   d.getLocalSizes()[1] = 2;
 
@@ -22,7 +23,7 @@ template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TD
   tdd.verify(!(a == d));
 
   /* test the transposition */
-  a = LayoutStruct({16, 16, 16});
+  a = LayoutStruct({16, 16, 16}, nGhost); // reset
   std::array<ptrdiff_t, 3> newLocalSizes{{4, 5, 6}};
   a.setLocalSizes(newLocalSizes);
 
@@ -45,9 +46,7 @@ template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TD
   memVec[1] = 2;
   memVec[2] = 3;
 
-  a.putSpatialLocationFromMemoryIndexInto(memVec[0], 0, posVec);
-  a.putSpatialLocationFromMemoryIndexInto(memVec[1], 1, posVec);
-  a.putSpatialLocationFromMemoryIndexInto(memVec[2], 2, posVec);
+  std::apply([&](const auto... idx) { a.putSpatialLocationFromMemoryIndexInto(posVec, idx...); }, memVec);
 
   say << "memVec " << memVec << " -> posVec " << posVec << "\n";
 
@@ -60,9 +59,7 @@ template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TD
   /* mem pos 1 at mem dim 0 -> global dim 2 -> global pos 1 + 9 = 10 -> 10 - 16 = -6 */
   tdd.verify(posVec[2] == -6);
 
-  a.putMemoryIndexFromSpatialLocationInto(posVec[0], 0, memVec2);
-  a.putMemoryIndexFromSpatialLocationInto(posVec[1], 1, memVec2);
-  a.putMemoryIndexFromSpatialLocationInto(posVec[2], 2, memVec2);
+  std::apply([&](const auto... idx) { a.putMemoryIndexFromSpatialLocationInto(memVec2, idx...); }, posVec);
 
   say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
   say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";

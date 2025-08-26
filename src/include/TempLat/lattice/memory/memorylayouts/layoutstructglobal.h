@@ -47,11 +47,10 @@ namespace TempLat
      */
     template <typename T = double> KOKKOS_FORCEINLINE_FUNCTION T getMaxRadius() const
     {
-      using namespace std;
       T r2 = 0;
       for (auto &&it : mSignConversionMidpoint)
         r2 += it * it;
-      return sqrt(r2);
+      return Kokkos::sqrt(r2);
     }
 
     /** \brief For both configuration and fourier space, the index values are not the same as coordinate

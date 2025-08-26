@@ -32,8 +32,8 @@ namespace TempLat
     KOKKOS_FUNCTION
     ptrdiff_t operator()(double value) const
     {
-      ptrdiff_t bin = std::round(mNBins * (value - mMinVal) / mRange);
-      return std::min(mHighestBin, std::max(ptrdiff_t(0), bin));
+      ptrdiff_t bin = Kokkos::round(mNBins * (value - mMinVal) / mRange);
+      return Kokkos::min(mHighestBin, Kokkos::max(ptrdiff_t(0), bin));
     }
 
     template <typename T> void setCentralBinBounds(std::vector<T> &res)

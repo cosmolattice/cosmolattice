@@ -50,12 +50,7 @@ namespace TempLat
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        return Kokkos::abs(GetValue::get(mR, idx...));
-#else
-        using namespace std;
         return abs(GetValue::get(mR, idx...));
-#endif
       }
 
       static std::string operatorString() { return "abs"; }

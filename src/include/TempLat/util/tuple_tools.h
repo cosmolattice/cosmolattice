@@ -92,7 +92,7 @@ namespace TempLat
   template <typename... Args, std::size_t... Is>
   KOKKOS_FORCEINLINE_FUNCTION auto reverse_tuple(const device::tuple<Args...> &tuple, std::index_sequence<Is...>)
   {
-    return std::tie(device::get<sizeof...(Args) - 1 - Is>(tuple)...);
+    return device::tie(device::get<sizeof...(Args) - 1 - Is>(tuple)...);
   }
 
   template <typename... Args> KOKKOS_FORCEINLINE_FUNCTION auto reverse_tuple(const device::tuple<Args...> &tuple)

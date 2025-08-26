@@ -34,42 +34,32 @@ namespace TempLat
   public:
     RadialProjectionSingleQuantity(ptrdiff_t size)
     {
-      mAverages = HostView("RadialProjectionSingleQuantity::mAverages", size, 0);
-      mVariances = HostView("RadialProjectionSingleQuantity::mVariances", size, 0);
-      mMins = HostView("RadialProjectionSingleQuantity::mMins", size);
-      Kokkos::deep_copy(mMins, std::numeric_limits<T>::max());
-      mMaxs = HostView("RadialProjectionSingleQuantity::mMaxs", size);
-      Kokkos::deep_copy(mMaxs, -std::numeric_limits<T>::max());
-
-      mAveragesDevice = DeviceView("RadialProjectionSingleQuantity::mAveragesDevice", size, 0);
-      mVariancesDevice = DeviceView("RadialProjectionSingleQuantity::mVariancesDevice", size, 0);
+      mAveragesDevice = DeviceView("RadialProjectionSingleQuantity::mAveragesDevice", size);
+      mVariancesDevice = DeviceView("RadialProjectionSingleQuantity::mVariancesDevice", size);
       mMinsDevice = DeviceView("RadialProjectionSingleQuantity::mMinsDevice", size);
       Kokkos::deep_copy(mMinsDevice, std::numeric_limits<T>::max());
       mMaxsDevice = DeviceView("RadialProjectionSingleQuantity::mMaxsDevice", size);
       Kokkos::deep_copy(mMaxsDevice, -std::numeric_limits<T>::max());
+
+      mAverages = Kokkos::create_mirror_view(mAveragesDevice);
+      mVariances = Kokkos::create_mirror_view(mVariancesDevice);
+      mMins = Kokkos::create_mirror_view(mMinsDevice);
+      Kokkos::deep_copy(mMins, std::numeric_limits<T>::max());
+      mMaxs = Kokkos::create_mirror_view(mMaxsDevice);
+      Kokkos::deep_copy(mMaxs, -std::numeric_limits<T>::max());
     }
 
     size_t size() const { return mAverages.size(); }
-
-    /** \brief Add two workspaces together, element by element */
-    void add(ptrdiff_t i, const RadialProjectionSingleQuantity &other)
-    {
-      checkBounds(i);
-      mAverages[i] += other.mAverages[i];
-      mVariances[i] += other.mVariances[i];
-      mMins[i] = std::min(mMins[i], other.mMins[i]);
-      mMaxs[i] = std::max(mMaxs[i], other.mMaxs[i]);
-    }
 
     /** \brief Add one new weighted value to the collection of properties. */
     KOKKOS_FUNCTION
     void add_device(ptrdiff_t i, const T &value, const T &weight) const
     {
       checkBounds(i);
-      mAveragesDevice[i] += weight * value;
-      mVariancesDevice[i] += weight * value * value;
-      mMinsDevice[i] = Kokkos::min(mMinsDevice[i], value);
-      mMaxsDevice[i] = Kokkos::max(mMaxsDevice[i], value);
+      Kokkos::atomic_add(&mAveragesDevice(i), weight * value);
+      Kokkos::atomic_add(&mVariancesDevice(i), weight * value * value);
+      Kokkos::atomic_min(&mMinsDevice(i), value);
+      Kokkos::atomic_max(&mMaxsDevice(i), value);
     }
 
     void clear()
@@ -101,6 +91,7 @@ namespace TempLat
      * of the same things and same size just add up. */
     void finalize(MPICommReference comm)
     {
+      pull();
       /* reduce! */
       comm.Allreduce(&mAverages, MPI_SUM);
       comm.Allreduce(&mVariances, MPI_SUM);
@@ -119,18 +110,18 @@ namespace TempLat
     template <typename S> friend class RadialProjectionResult;
 
   private:
-    using HostView = Kokkos::View<T *, DefaultLayout, Kokkos::DefaultHostExecutionSpace>;
     using DeviceView = Kokkos::View<T *, DefaultLayout, Kokkos::DefaultExecutionSpace>;
-
-    HostView mAverages;
-    HostView mVariances;
-    HostView mMins;
-    HostView mMaxs;
+    using HostMirror = typename DeviceView::HostMirror;
 
     DeviceView mAveragesDevice;
     DeviceView mVariancesDevice;
     DeviceView mMinsDevice;
     DeviceView mMaxsDevice;
+
+    HostMirror mAverages;
+    HostMirror mVariances;
+    HostMirror mMins;
+    HostMirror mMaxs;
 
     KOKKOS_FORCEINLINE_FUNCTION
     void checkBounds(ptrdiff_t i) const

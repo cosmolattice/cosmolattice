@@ -14,6 +14,7 @@
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglebinandvalue.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionrebinner.h"
+#include <emmintrin.h>
 
 namespace TempLat
 {
@@ -48,8 +49,8 @@ namespace TempLat
         : std::vector<RadialProjectionSingleBinAndValue<T>>(), finalizedOnce(false), mNBins(nBins), mValues(mNBins),
           mBinBounds(mNBins), mUseBinCentralValues(pUseBinCentralValues), mIsInFourier(pIsInFourier)
     {
-      mMultiplicities = HostView("RadialProjectionResult::mMultiplicities", mNBins);
       mMultiplicitiesDevice = DeviceView("RadialProjectionResult::mMultiplicitiesDevice", mNBins);
+      mMultiplicities = Kokkos::create_mirror_view(mMultiplicitiesDevice);
     }
 
     /** \brief operator+= is a requirement for use as a workspace in FieldlessGetteration. */
@@ -182,10 +183,10 @@ namespace TempLat
     RadialProjectionSingleQuantity<T> mValues, mBinBounds;
     std::vector<T> centralBinBounds; // Naive central values of the bin. Does not need to be set.
 
-    using HostView = Kokkos::View<floatType *, DefaultLayout, Kokkos::DefaultHostExecutionSpace>;
     using DeviceView = Kokkos::View<floatType *, DefaultLayout, Kokkos::DefaultExecutionSpace>;
+    using HostMirror = typename DeviceView::HostMirror;
 
-    HostView mMultiplicities;
+    HostMirror mMultiplicities;
     DeviceView mMultiplicitiesDevice;
 
     bool mUseBinCentralValues;
@@ -196,7 +197,7 @@ namespace TempLat
     {
       mValues.add_device(i, value, weight);
       mBinBounds.add_device(i, position, weight);
-      mMultiplicitiesDevice(i) += weight;
+      Kokkos::atomic_add(&mMultiplicitiesDevice(i), weight);
     }
 
     void pull()
@@ -231,9 +232,7 @@ namespace TempLat
 
       mFullResult.clear();
       for (ptrdiff_t i = 0; i < mNBins; ++i) {
-        sayShort << "Finalizing bin " << i << " with multiplicity " << mMultiplicities[i] << "\n";
         if (mMultiplicities[i] > 0) {
-
           RadialProjectionSingleBinAndValue<T> next(mBinBounds.getFinal(i, mMultiplicities[i]),
                                                     mValues.getFinal(i, mMultiplicities[i]));
           this->push_back(next);
