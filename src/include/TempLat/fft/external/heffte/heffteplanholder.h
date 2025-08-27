@@ -9,8 +9,13 @@
 
 #ifndef NOFFT
 #ifndef NOMPI
-#ifndef NOPPFT
+#ifndef NOHEFFTE
 #include <heffte.h>
+// Use the default_backend trait with the tag::gpu for the location
+namespace TempLat
+{
+  using heffte_backend_tag = heffte::backend::default_backend<heffte::tag::gpu>::type;
+}
 #endif
 #endif
 #endif
@@ -21,7 +26,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements part of FFTLibraryInterface::PlanInterface, holding the heffte plans in
    *shared_ptr's
    *- only freed when the last instance of this class is destructed.
@@ -33,44 +37,30 @@ namespace TempLat
   {
   public:
     // typedef heffte_plan plan;
+    using PlanType = heffte::fft3d_r2c<heffte_backend_tag, int>;
 
     /* Put public methods here. These should change very little over time. */
-    HEFFTEPlanHolder(MPICartesianGroup group) : mGroup(group) //,
-    /* need a reference to the group, to make sure the group is alive as long as the plans are alive. */
-    // mPlanR2C(std::make_shared<plan>(planR2C)), mPlanC2R(std::make_shared<plan>(planC2R))
-    {
-    }
+    HEFFTEPlanHolder(MPICartesianGroup group, std::shared_ptr<PlanType> plan) : mGroup(group), mPlan(plan) {}
 
     virtual ~HEFFTEPlanHolder() {}
 
-    virtual void c2r(MemoryBlock<NDim, T> &mBlock) {
-      // execute_c2r(*mPlanC2R, mBlock);
-    };
-    virtual void r2c(MemoryBlock<NDim, T> &mBlock) {
-      // execute_r2c(*mPlanR2C, mBlock);
-    };
+    virtual void c2r(MemoryBlock<NDim, T> &mBlock) { execute_c2r(mPlan, mBlock); };
+    virtual void r2c(MemoryBlock<NDim, T> &mBlock) { execute_r2c(mPlan, mBlock); };
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICartesianGroup mGroup;
-    // std::shared_ptr<plan> mPlanR2C, mPlanC2R;
-    /*
-        template <typename S = T>
-          requires std::is_same_v<S, double>
-        void execute_r2c(plan somePlan, MemoryBlock<S> &mBlock)
-        {
-          heffte_execute_dft_r2c(somePlan, mBlock.ptr(), (heffte_complex *)mBlock.ptr());
-        }
+    std::shared_ptr<PlanType> mPlan;
 
-        template <typename S = T>
-          requires std::is_same_v<S, double>
-        void execute_c2r(plan somePlan, MemoryBlock<S> &mBlock)
-        {
-          // sayMPI << "HEFFTE double c2r starting.\n";
-          heffte_execute_dft_c2r(somePlan, (heffte_complex *)mBlock.ptr(), mBlock.ptr());
-          // sayMPI << "HEFFTE double c2r done.\n";
-        }
-        */
+    void execute_r2c(std::shared_ptr<PlanType> fft, MemoryBlock<NDim, T> &mBlock)
+    {
+      fft->forward(mBlock.data(), (std::complex<T> *)mBlock.data(), heffte::scale::none);
+    }
+
+    void execute_c2r(std::shared_ptr<PlanType> fft, MemoryBlock<NDim, T> &mBlock)
+    {
+      fft->backward((std::complex<T> *)mBlock.data(), mBlock.data(), heffte::scale::full);
+    }
 
   public:
 #ifdef TEMPLATTEST

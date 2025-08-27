@@ -44,7 +44,7 @@ namespace TempLat
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGridPoints,
                                                     bool forbidTransposition = false)
     {
-      FFTLayoutStruct<NDim> result(nGridPoints, true, false);
+      FFTLayoutStruct<NDim> result(nGridPoints, true, false, false);
       /* default: everything is local. */
 
       std::array<ptrdiff_t, NDim> confLocalSizes(nGridPoints);

@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
@@ -14,6 +15,17 @@
 namespace TempLat
 {
   MakeException(FFTLayoutStructException);
+
+  /** \brief The result holder for getIntrinsicRescaleToGetUnnormalizedFFT:
+   *  two labeled double values.
+   */
+  struct IntrinsicScales {
+    IntrinsicScales() : c2r(1), r2c(1) {}
+    IntrinsicScales(double _c2r, double _r2c) : c2r(_c2r), r2c(_r2c) {}
+    double c2r;
+    double r2c;
+    bool isDefault() { return c2r == 1 && r2c == 1; }
+  };
 
   /** \brief A struct which holds two memory layouts, which are unseparable:
    * - the pre-FFT layout in configuration space, no padding or ghosting.
@@ -25,14 +37,16 @@ namespace TempLat
   template <size_t NDim> class FFTLayoutStruct
   {
   public:
-    FFTLayoutStruct(const std::array<ptrdiff_t, NDim> &nGridPoints, bool isFFTW_, bool isPFFT_)
+    FFTLayoutStruct(const std::array<ptrdiff_t, NDim> &nGridPoints, bool isFFTW_, bool isPFFT_, bool isHEFFTE_,
+                    IntrinsicScales scales = IntrinsicScales())
         : configurationSpace(nGridPoints, 0), fourierSpace(LayoutStruct<NDim>::createGlobalFFTLayout(nGridPoints)),
-          mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_)
+          mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_), mIsHEFFTE(isHEFFTE_), mScales(scales)
     {
       for (size_t i = 0; i < NDim; ++i)
         mNGridPoints[i] = nGridPoints[i];
 
-      if (mIsFFTW == mIsPFFT) throw FFTLayoutStructException("Must be either FFTW or PFFT, not both");
+      if ((int)mIsFFTW + (int)mIsPFFT + (int)mIsHEFFTE != 1)
+        throw FFTLayoutStructException("Must be either FFTW, PFFT or HEFFTE!");
 
       /* for FFTW, we manually need to set the size of the last dimension to the r2c setup: 2 * (N/2 + 1). */
       auto configLocalSizes = fourierSpace.getLocalSizes();
@@ -50,6 +64,7 @@ namespace TempLat
     const device::array<ptrdiff_t, NDim> &getNGridPoints() const { return mNGridPoints; }
     const bool &isFFTW() const { return mIsFFTW; }
     const bool &isPFFT() const { return mIsPFFT; }
+    const bool &isHEFFTE() const { return mIsHEFFTE; }
 
     /** \brief Compute on the fly, as our members may be modified by others. That's why OOP... */
     ptrdiff_t getMinimalMemorySize() const
@@ -92,12 +107,17 @@ namespace TempLat
       return ostream;
     }
 
+    IntrinsicScales getIntrinsicScales() const { return mScales; }
+
   private:
     device::array<ptrdiff_t, NDim> mNGridPoints;
     ptrdiff_t mExternalMemoryRequirement;
 
     bool mIsFFTW;
     bool mIsPFFT;
+    bool mIsHEFFTE;
+
+    IntrinsicScales mScales;
 
   public:
 #ifdef TEMPLATTEST

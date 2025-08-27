@@ -30,9 +30,9 @@ namespace TempLat
       return std::max((ptrdiff_t)1, nDimensions - 1);
     };
 
-    virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nDimensions, ptrdiff_t nGridPoints)
+    virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nGridPoints)
     {
-      return IntrinsicScales();
+      return IntrinsicScales{1., (double)powr<NDim>(nGridPoints)};
     }
 
     virtual std::shared_ptr<FFTSessionGuard> getSessionGuard(bool pVerbose = true)

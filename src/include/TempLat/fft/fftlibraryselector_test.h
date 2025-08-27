@@ -98,7 +98,7 @@ namespace TempLat
       nGridPoints[i] = nGrid[i];
     FFTLibrarySelector<NDim> ffter(mGroup_, nGridPoints);
     // ffter.setVerbose();
-    std::cout << "Using backend: " << ffter.getBackend() << " NDim = " << NDim << ", grid size = " << nGrid[0] << "\n";
+    sayMPI << "Using backend: " << ffter.getBackend() << " NDim = " << NDim << ", grid size = " << nGrid[0] << "\n";
 
     device::array<ptrdiff_t, NDim> nGridFourier = nGrid;
     nGridFourier[NDim - 1] = (nGridFourier[NDim - 1] / 2 + 1) * 2;
@@ -129,17 +129,18 @@ namespace TempLat
         std::cout << "mem[" << i << "] = " << result_view(i) << "\n";
     }*/
 
-    // sayMPI << "About to do FFT.\n";
+    sayMPI << "About to do FFT.\n";
     ffter.c2r(mem);
     ffter.r2c(mem);
-    // sayMPI << "Finished FFT.\n";
+    sayMPI << "Finished FFT.\n";
 
     if (ffter.getBackend() == "HEFFTE")
       tdd.verify(!mem.isHostViewAllocated());
     else
       tdd.verify(mem.isHostViewAllocated());
 
-    const T norm = 1. / std::pow(nGrid[0], NDim);
+    const T norm = 1. / std::pow(nGrid[0], NDim) * ffter.getLayout().getIntrinsicScales().r2c *
+                   ffter.getLayout().getIntrinsicScales().c2r;
     /*{
       const auto result_view = mem.getRawHostView();
       std::cout << "Memory contents AFTER c2r and r2c (normalized):\n";
@@ -192,17 +193,18 @@ namespace TempLat
                         pos);
         });
 
-    // sayMPI << "About to do FFT.\n";
+    sayMPI << "About to do FFT.\n";
     ffter.r2c(mem);
     ffter.c2r(mem);
-    // sayMPI << "Finished FFT.\n";
+    sayMPI << "Finished FFT.\n";
 
     if (ffter.getBackend() == "HEFFTE")
       tdd.verify(!mem.isHostViewAllocated());
     else
       tdd.verify(mem.isHostViewAllocated());
 
-    const T norm = 1. / std::pow(nGrid[0], NDim);
+    const T norm = 1. / std::pow(nGrid[0], NDim) * ffter.getLayout().getIntrinsicScales().r2c *
+                   ffter.getLayout().getIntrinsicScales().c2r;
 
     bool r2c_then_c2r = true;
     const auto result_view = mem.getRawHostView();
@@ -213,7 +215,6 @@ namespace TempLat
         vPos[NDim - 1 - j] = (i / acc) % memorySizes[NDim - 1 - j];
         acc *= memorySizes[NDim - 1 - j];
       }
-      std::cout << "r2c_then_c2r loop i=" << i << " of " << mem.size() << "\n";
       r2c_then_c2r = checkMem(norm, result_view(i), vPos, currentLayout, false) && r2c_then_c2r;
     }
     tdd.verify(r2c_then_c2r);

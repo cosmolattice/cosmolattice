@@ -88,25 +88,27 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     FFTLibrarySelector(MPICartesianGroup group, const std::array<ptrdiff_t, NDim> &nGridPoints,
                        bool forbidTransposition = false)
-        : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints, true, false), madePlansFloat(false),
+        : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints, true, false, false), madePlansFloat(false),
           madePlansDouble(false), verbose(false)
     {
       /* here we take the decisions, although the decision to split the group has been made already. */
-      [[maybe_unused]] ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
-      [[maybe_unused]] bool havePFFT = false;
-      [[maybe_unused]] bool haveHEFFTE = false;
+      [[maybe_unused]] const ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
 #ifndef NOMPI
 #ifndef NOPFFT
-      havePFFT = true;
+      [[maybe_unused]] constexpr bool havePFFT = true;
+#else
+      [[maybe_unused]] constexpr bool havePFFT = false;
 #endif
 
 #ifndef NOHEFFTE
-      haveHEFFTE = true;
+      [[maybe_unused]] constexpr bool haveHEFFTE = true;
+#else
+      [[maybe_unused]] constexpr bool haveHEFFTE = false;
 #endif
 #endif
 
 #ifndef NOMPI
-      if (haveHEFFTE) {
+      if constexpr (haveHEFFTE && (NDim <= 3)) {
 #ifndef NOHEFFTE
         theLibrary = std::make_shared<HEFFTEInterface<NDim>>();
         backend = "HEFFTE";

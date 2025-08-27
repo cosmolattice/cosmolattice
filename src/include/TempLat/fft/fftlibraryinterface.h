@@ -14,15 +14,6 @@
 
 namespace TempLat
 {
-  /** \brief The result holder for getIntrinsicRescaleToGetUnnormalizedFFT:
-   *  two labeled double values.
-   */
-  struct IntrinsicScales {
-    IntrinsicScales() : c2r(1), r2c(1) {}
-    double c2r;
-    double r2c;
-    bool isDefault() { return c2r == 1 && r2c == 1; }
-  };
 
   /** \brief Yes, another nested class interface: for the session guard. Your constructor should take care of
    * your_library_init(), your destructor should take care of your_library_cleanup(). These are the session-wide
@@ -77,7 +68,7 @@ namespace TempLat
      *  in order not to waste time,
      *  if your library does like FFTW and PFFT.
      */
-    virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nDimensions, ptrdiff_t nGridPoints) = 0;
+    virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nGridPoints) = 0;
 
     /** \brief given an actual setup, return the description of the subarray of the global problem that this process
      * holds. */
