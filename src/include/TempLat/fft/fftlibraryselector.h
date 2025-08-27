@@ -109,20 +109,25 @@ namespace TempLat
       if (haveHEFFTE) {
 #ifndef NOHEFFTE
         theLibrary = std::make_shared<HEFFTEInterface<NDim>>();
+        backend = "HEFFTE";
 #endif
       } else if (havePFFT && nDimSplit > 1) {
 #ifndef NOPFFT
         theLibrary = std::make_shared<PFFTInterface>();
+        backend = "PFFT";
 #endif
       } else
 #endif
       {
         theLibrary = std::make_shared<FFTWInterface<NDim>>();
+        backend = "FFTW";
       }
       mLayout = theLibrary->computeLocalSizes(mGroup, mNGridPoints, forbidTransposition);
     }
 
     const auto &getLayout() { return mLayout; }
+
+    const std::string &getBackend() const { return backend; }
 
     void setVerbose() { verbose = true; }
 
@@ -196,6 +201,8 @@ namespace TempLat
     std::shared_ptr<FFTPlanInterface<NDim, double>> mPlansDouble;
 
     bool verbose;
+
+    std::string backend;
 
   public:
     template <typename T> static inline void TestBody(TDDAssertion &tdd);

@@ -27,8 +27,10 @@ namespace TempLat
   public:
     FFTLayoutStruct(const std::array<ptrdiff_t, NDim> &nGridPoints, bool isFFTW_, bool isPFFT_)
         : configurationSpace(nGridPoints, 0), fourierSpace(LayoutStruct<NDim>::createGlobalFFTLayout(nGridPoints)),
-          mNGridPoints(nGridPoints), mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_)
+          mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_)
     {
+      for (size_t i = 0; i < NDim; ++i)
+        mNGridPoints[i] = nGridPoints[i];
 
       if (mIsFFTW == mIsPFFT) throw FFTLayoutStructException("Must be either FFTW or PFFT, not both");
 
@@ -45,7 +47,7 @@ namespace TempLat
 
     /* no, these aren't public members. Just getter methods. */
     constexpr ptrdiff_t getNDimensions() const { return NDim; }
-    const std::array<ptrdiff_t, NDim> &getNGridPoints() const { return mNGridPoints; }
+    const device::array<ptrdiff_t, NDim> &getNGridPoints() const { return mNGridPoints; }
     const bool &isFFTW() const { return mIsFFTW; }
     const bool &isPFFT() const { return mIsPFFT; }
 
@@ -91,7 +93,7 @@ namespace TempLat
     }
 
   private:
-    std::array<ptrdiff_t, NDim> mNGridPoints;
+    device::array<ptrdiff_t, NDim> mNGridPoints;
     ptrdiff_t mExternalMemoryRequirement;
 
     bool mIsFFTW;

@@ -37,6 +37,9 @@ namespace TempLat
     HEFFTEGuard([[maybe_unused]]
                 bool verbose = true)
     {
+      if (verbose) {
+        sayMPI << "HEFFTEGuard: HEFFTE does not require initialization or finalization. This guard does nothing.\n";
+      }
     }
 
     ~HEFFTEGuard() {}

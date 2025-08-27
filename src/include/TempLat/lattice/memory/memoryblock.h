@@ -45,9 +45,6 @@ namespace TempLat
     {
       mData = Kokkos::View<T *, Kokkos::DefaultExecutionSpace>("MemoryBlock", ((mSize + NDim * 256) / 128) * 128);
 
-      // std::cout << "Allocated MemoryBlock of " << ((mSize + NDim * 256) / 128) * 128 * sizeof(T) / (1024 * 1024)
-      //           << "MB\n";
-
       zero();
     }
 
@@ -131,6 +128,8 @@ namespace TempLat
       mHostMirror = typename Kokkos::View<T *, Kokkos::DefaultExecutionSpace>::host_mirror_type();
       mHostMirrorOutdated = true; // mark as outdated
     }
+
+    bool isHostViewAllocated() const { return mHostMirror.is_allocated(); }
 
     template <typename R = T> auto getRawView() const
     {

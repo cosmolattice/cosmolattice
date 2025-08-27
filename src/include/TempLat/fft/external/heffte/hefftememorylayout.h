@@ -57,32 +57,26 @@ namespace TempLat
 
 #ifndef NOMPI
       if (NDim > 1) {
-        std::vector<ptrdiff_t> globalLayout(result.fourierSpace.getLocalSizes().begin(),
-                                            result.fourierSpace.getLocalSizes().end());
+        std::vector<ptrdiff_t> globalLayout(NDim);
+        for (size_t i = 0; i < NDim; ++i)
+          globalLayout[i] = result.fourierSpace.getLocalSizes()[i];
 
         bool doTranspose = NDim > 2 && group.size() > 1;
 
         doTranspose = doTranspose && !forbidTransposition;
 
-        // say << "globalLayout: " << globalLayout << "\ninput: " << result << "\n";
         if (doTranspose) {
-
           fftwRequiredMemory = fftw_mpi_local_size_transposed((int)NDim, globalLayout.data(), group.getComm(),
                                                               confLocalSizes.data(), confLocalStarts.data(),
                                                               fourLocalSizes.data() + 1, fourLocalStarts.data() + 1);
-
           std::swap(fourTransposition[0], fourTransposition[1]);
-
         } else {
-
           fftwRequiredMemory = fftw_mpi_local_size((int)NDim, globalLayout.data(), group.getComm(),
                                                    fourLocalSizes.data(), fourLocalStarts.data());
           std::copy(fourLocalSizes.begin(), fourLocalSizes.end(), confLocalSizes.begin());
           std::copy(fourLocalStarts.begin(), fourLocalStarts.end(), confLocalStarts.begin());
           confLocalSizes.back() *= 2;
         }
-
-        // say << "output:\n" << result << "\n";
       }
 #endif
 

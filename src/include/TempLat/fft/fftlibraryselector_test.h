@@ -5,11 +5,230 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/almostequal.h"
 #include "TempLat/fft/fftmpidomainsplit.h"
-#include <functional>
+
+#include <iostream>
+
+namespace TempLat
+{
+  template <size_t NDim, typename T>
+  KOKKOS_FUNCTION T coordinateToValue(const device::array<ptrdiff_t, NDim> vPosctv,
+                                      const LayoutStruct<NDim> &currentLayout, bool fourierSpace)
+  {
+    device::array<ptrdiff_t, NDim> complexMemCoordinate{};
+    for (size_t i = 0; i < NDim; ++i)
+      complexMemCoordinate[i] = vPosctv[i];
+    device::array<ptrdiff_t, NDim> spaceCoordinate{};
+
+    const auto nGrid = currentLayout.getGlobalSizes();
+
+    // now, in this routine we walk the memory lineary, not caring about complex stuff. Hence vPosctv[2] /= 2;
+
+    bool isImaginaryPart = complexMemCoordinate[NDim - 1] % 2;
+
+    if (fourierSpace) complexMemCoordinate[NDim - 1] /= 2;
+
+    device::apply(
+        [&](const auto &...idx) { currentLayout.putSpatialLocationFromMemoryIndexInto(spaceCoordinate, idx...); },
+        complexMemCoordinate);
+
+    device::array<ptrdiff_t, NDim> hermitianPartnerCoordinate{};
+    for (size_t i = 0; i < NDim; ++i)
+      hermitianPartnerCoordinate[i] = spaceCoordinate[i];
+
+    ptrdiff_t imaginaryPartSign = 1;
+
+    auto hermQual = currentLayout.getHermitianPartners().qualify(spaceCoordinate);
+    currentLayout.getHermitianPartners().putHermitianPartner(spaceCoordinate, hermitianPartnerCoordinate);
+
+    if (fourierSpace)
+      if (isImaginaryPart) {
+        if (hermQual == HermitianRedundancy::realValued) {
+          imaginaryPartSign = 0;
+        } else if (hermQual == HermitianRedundancy::negativePartner) {
+          imaginaryPartSign = -1;
+        } else if (hermQual == HermitianRedundancy::positivePartner) {
+          imaginaryPartSign = 1;
+        }
+      }
+
+    T result = 0.;
+    for (const auto &it : hermitianPartnerCoordinate) { // WARNING: works only for isotropic grids
+      result = result * nGrid[0] + (it + nGrid[0] / 2);
+    }
+
+    return imaginaryPartSign * result;
+  };
+
+  template <size_t NDim, typename T>
+  bool checkMem(const T norm, const T val, const device::array<ptrdiff_t, NDim> vPos,
+                const LayoutStruct<NDim> &currentLayout, bool fourierSpace)
+  {
+    const auto &memorySizes = currentLayout.getSizesInMemory();
+
+    // sayMPI << "checkMem " << pos << "\n";
+    T valueShouldBe = coordinateToValue<NDim, T>(vPos, currentLayout, fourierSpace);
+    if (!fourierSpace)
+      if (vPos[NDim - 1] >= memorySizes[NDim - 1] - 2) return true;
+
+    bool thisCheck = AlmostEqual(valueShouldBe, norm * val, std::is_same<T, float>::value ? 0.1 : 1e-4);
+
+    if (!thisCheck) {
+      std::string vPosString = "{{ ";
+      for (const auto &it : vPos)
+        vPosString += std::to_string(it) + " ";
+      vPosString += "}}";
+      std::cout << "Not equal: " << vPosString << " -> " << valueShouldBe << " != " << norm * val << " = " << norm
+                << " * " << val << "\n";
+    }
+    return thisCheck;
+  };
+
+  template <size_t NDim, typename T>
+  void test_r2c_c2r(TempLat::TDDAssertion &tdd, const TempLat::device::array<ptrdiff_t, NDim> nGrid)
+  {
+    using namespace TempLat;
+
+    /* let's create some memory, FFT forth and back, and check that the result is close enough to the input, module the
+     * normalization.. */
+
+    auto split = FFTMPIDomainSplit<NDim>::makeDomainDecomposition(MPICommReference().size(), NDim);
+    auto mGroup_ = MPICartesianGroup(NDim, split);
+    std::array<ptrdiff_t, NDim> nGridPoints;
+    for (size_t i = 0; i < NDim; ++i)
+      nGridPoints[i] = nGrid[i];
+    FFTLibrarySelector<NDim> ffter(mGroup_, nGridPoints);
+    // ffter.setVerbose();
+    std::cout << "Using backend: " << ffter.getBackend() << " NDim = " << NDim << ", grid size = " << nGrid[0] << "\n";
+
+    auto layout = ffter.getLayout();
+    MemoryBlock<NDim, T> mem(layout.getMinimalMemorySize());
+
+    const auto currentLayout = layout.configurationSpace;
+    const auto memorySizes = currentLayout.getSizesInMemory();
+
+    // Fill the memory with known values.
+    Kokkos::parallel_for(
+        "Set a point", Kokkos::RangePolicy(0, mem.size()), KOKKOS_LAMBDA(const size_t i) {
+          device::array<ptrdiff_t, NDim> pos{};
+          size_t acc = 1;
+          for (size_t j = 0; j < NDim; ++j) {
+            pos[NDim - 1 - j] = (i / acc) % memorySizes[NDim - 1 - j];
+            acc *= memorySizes[NDim - 1 - j];
+          }
+          device::apply([&](const auto... idx) { mem[i] = coordinateToValue<NDim, T>(pos, currentLayout, false); },
+                        pos);
+        });
+
+    // sayMPI << "About to do FFT.\n";
+    ffter.r2c(mem);
+    ffter.c2r(mem);
+    // sayMPI << "Finished FFT.\n";
+
+    if (ffter.getBackend() == "HEFFTE")
+      tdd.verify(!mem.isHostViewAllocated());
+    else
+      tdd.verify(mem.isHostViewAllocated());
+
+    const T norm = 1. / std::pow(nGrid[0], NDim);
+
+    bool r2c_then_c2r = true;
+    const auto result_view = mem.getRawHostView();
+    for (size_t i = 0; i < mem.size(); ++i) {
+      device::array<ptrdiff_t, NDim> vPos{};
+      size_t acc = 1;
+      for (size_t j = 0; j < NDim; ++j) {
+        vPos[NDim - 1 - j] = (i / acc) % memorySizes[NDim - 1 - j];
+        acc *= memorySizes[NDim - 1 - j];
+      }
+      r2c_then_c2r = r2c_then_c2r && checkMem(norm, result_view(i), vPos, currentLayout, false);
+    }
+    tdd.verify(r2c_then_c2r);
+    if (!r2c_then_c2r) sayMPI << "Failed for NDim: " << NDim << ", nGrid[0]: " << nGrid[0] << "\n";
+  };
+
+  template <size_t NDim, typename T>
+  void test_c2r_r2c(TempLat::TDDAssertion &tdd, const TempLat::device::array<ptrdiff_t, NDim> nGrid)
+  {
+    using namespace TempLat;
+
+    /* let's create some memory, FFT forth and back, and check that the result is close enough to the input, module the
+     * normalization.. */
+
+    auto split = FFTMPIDomainSplit<NDim>::makeDomainDecomposition(MPICommReference().size(), NDim);
+    auto mGroup_ = MPICartesianGroup(NDim, split);
+    std::array<ptrdiff_t, NDim> nGridPoints;
+    for (size_t i = 0; i < NDim; ++i)
+      nGridPoints[i] = nGrid[i];
+    FFTLibrarySelector<NDim> ffter(mGroup_, nGridPoints);
+    // ffter.setVerbose();
+    std::cout << "Using backend: " << ffter.getBackend() << " NDim = " << NDim << ", grid size = " << nGrid[0] << "\n";
+
+    device::array<ptrdiff_t, NDim> nGridFourier = nGrid;
+    nGridFourier[NDim - 1] = (nGridFourier[NDim - 1] / 2 + 1) * 2;
+
+    auto layout = ffter.getLayout();
+    // say << layout << "\n";
+    MemoryBlock<NDim, T> mem(layout.getMinimalMemorySize());
+
+    const auto currentLayout = layout.fourierSpace;
+
+    // manually implement 3d:
+    // Fill the memory with known values.
+    Kokkos::parallel_for(
+        "Set a point", Kokkos::RangePolicy(0, mem.size()), KOKKOS_LAMBDA(const size_t i) {
+          device::array<ptrdiff_t, NDim> pos{};
+          size_t acc = 1;
+          for (size_t j = 0; j < NDim; ++j) {
+            pos[NDim - 1 - j] = (i / acc) % nGridFourier[NDim - 1 - j];
+            acc *= nGridFourier[NDim - 1 - j];
+          }
+          mem[i] = coordinateToValue<NDim, T>(pos, currentLayout, true);
+        });
+
+    /*{
+      const auto result_view = mem.getRawHostView();
+      std::cout << "Memory contents BEFORE c2r and r2c:\n";
+      for (size_t i = 0; i < mem.size(); ++i)
+        std::cout << "mem[" << i << "] = " << result_view(i) << "\n";
+    }*/
+
+    // sayMPI << "About to do FFT.\n";
+    ffter.c2r(mem);
+    ffter.r2c(mem);
+    // sayMPI << "Finished FFT.\n";
+
+    if (ffter.getBackend() == "HEFFTE")
+      tdd.verify(!mem.isHostViewAllocated());
+    else
+      tdd.verify(mem.isHostViewAllocated());
+
+    const T norm = 1. / std::pow(nGrid[0], NDim);
+    /*{
+      const auto result_view = mem.getRawHostView();
+      std::cout << "Memory contents AFTER c2r and r2c (normalized):\n";
+      for (size_t i = 0; i < mem.size(); ++i)
+        std::cout << "mem[" << i << "] = " << result_view(i) * norm << "\n";
+    }*/
+    bool c2r_then_r2c = true;
+    const auto result_view = mem.getRawHostView();
+    for (size_t i = 0; i < mem.size(); ++i) {
+      device::array<ptrdiff_t, NDim> vPos{};
+      size_t acc = 1;
+      for (size_t j = 0; j < NDim; ++j) {
+        vPos[NDim - 1 - j] = (i / acc) % nGridFourier[NDim - 1 - j];
+        acc *= nGridFourier[NDim - 1 - j];
+      }
+      c2r_then_r2c = c2r_then_r2c && checkMem(norm, result_view(i), vPos, currentLayout, true);
+    }
+    tdd.verify(c2r_then_r2c);
+    if (!c2r_then_r2c) sayMPI << "Failed for NDim: " << NDim << ", nGrid[0]: " << nGrid[0] << "\n";
+  };
+} // namespace TempLat
 
 template <size_t _NDim>
 template <typename T>
@@ -18,170 +237,17 @@ inline void TempLat::FFTLibrarySelector<_NDim>::TestBody(TempLat::TDDAssertion &
   /* int main already calls the mpi guard, which calls the FFT session guards. So this should be the second time. */
   tdd.verify(Throws<FFTLibraryDoubleInitializationException>([]() { getFFTSessionGuards(); }));
 
-  /* let's create some memory, FFT forth and back, and check that the result is close enough to the input, module the
-   * normalization.. */
-
-  auto &&myLittleLambda = [&tdd](const auto nGrid) {
-    constexpr size_t NDim = nGrid.size();
-    auto split = FFTMPIDomainSplit<NDim>::makeDomainDecomposition(MPICommReference().size(), NDim);
-    auto mGroup_ = MPICartesianGroup(NDim, split);
-    std::array<ptrdiff_t, NDim> nGridPoints;
-    for (size_t i = 0; i < NDim; ++i)
-      nGridPoints[i] = nGrid[i];
-    FFTLibrarySelector<NDim> ffter(mGroup_, nGridPoints);
-    ffter.setVerbose();
-
-    auto layout = ffter.getLayout();
-    // say << layout << "\n";
-    MemoryBlock<NDim, T> mem(layout.getMinimalMemorySize());
-
-    // We check once r2c ( i.e. start with configuration space, order == 0 ) and once c2r ( i.e. start with fourier
-    // space, order == 1 ).
-    for (int order = 0; order < 2; ++order) {
-      auto &currentLayout = order ? layout.fourierSpace : layout.configurationSpace;
-      auto memorySizes = currentLayout.getSizesInMemory();
-
-      // manually implement 3d:
-      auto coordinateToValue = KOKKOS_LAMBDA(const device::array<ptrdiff_t, NDim> &vPosctv)
-      {
-        device::array<ptrdiff_t, NDim> complexMemCoordinate{};
-        for (size_t i = 0; i < NDim; ++i)
-          complexMemCoordinate[i] = vPosctv[i];
-        device::array<ptrdiff_t, NDim> spaceCoordinate{};
-
-        // now, in this routine we walk the memory lineary, not caring about complex stuff. Hence vPosctv[2] /= 2;
-
-        bool isImaginaryPart = complexMemCoordinate[NDim - 1] % 2;
-
-        complexMemCoordinate[NDim - 1] /= 2;
-        device::apply(
-            [&](const auto &...idx) { currentLayout.putSpatialLocationFromMemoryIndexInto(spaceCoordinate, idx...); },
-            complexMemCoordinate);
-
-        device::array<ptrdiff_t, NDim> hermitianPartnerCoordinate{};
-        for (size_t i = 0; i < NDim; ++i)
-          hermitianPartnerCoordinate[i] = spaceCoordinate[i];
-
-        ptrdiff_t imaginaryPartSign = 1;
-        if (order) {
-          auto hermQual = currentLayout.getHermitianPartners().qualify(spaceCoordinate);
-          currentLayout.getHermitianPartners().putHermitianPartner(spaceCoordinate, hermitianPartnerCoordinate);
-
-          if (isImaginaryPart) {
-            if (hermQual == HermitianRedundancy::realValued) {
-              imaginaryPartSign = 0;
-            } else if (hermQual == HermitianRedundancy::negativePartner) {
-              imaginaryPartSign = -1;
-            } else if (hermQual == HermitianRedundancy::positivePartner) {
-              imaginaryPartSign = 1;
-            }
-          }
-        }
-
-        T result = 0.;
-        for (const auto &it : hermitianPartnerCoordinate) { // WARNING: works only for isotropic grids
-          result = result * nGrid[0] + (it + nGrid[0] / 2);
-        }
-
-        return imaginaryPartSign * result;
-      };
-
-      // Fill the memory with known values.
-      Kokkos::parallel_for(
-          "Set a point", Kokkos::RangePolicy(0, mem.size()), KOKKOS_LAMBDA(const size_t i) {
-            device::array<ptrdiff_t, NDim> pos{};
-            size_t acc = 1;
-            for (size_t j = 0; j < NDim; ++j) {
-              pos[NDim - 1 - j] = (i / acc) % memorySizes[NDim - 1 - j];
-              acc *= memorySizes[NDim - 1 - j];
-            }
-            device::apply([&](const auto... idx) { mem[i] = coordinateToValue(pos); }, pos);
-          });
-
-      // order == 0: r2c then c2r. Order == 1: c2r then r2c.
-      sayMPI << "About to do FFT.\n";
-      if (!order) ffter.r2c(mem);
-      ffter.c2r(mem);
-      if (order) ffter.r2c(mem);
-      sayMPI << "Finished FFT.\n";
-
-      // auto emptyPadding = [&](auto pos, auto vPos) {
-      //     if ( vPos.back() >= memorySizes.back() - 2) {
-      // std::cerr << "Padding " << vPos << " " << mem[pos] << "\n";
-      //         mem[pos] = 100000 ;
-      //     }
-      //     return true;
-      // };
-      //  verified: no effect on c2r - r2c result;
-      // if ( ! order ) iterate(emptyPadding, 0, 0, actualVPos);
-
-      const T norm = 1. / std::pow(nGrid[0], NDim);
-
-      bool allRight = true;
-      auto checkMem = [&](const auto val, const auto vPos) {
-        // sayMPI << "checkMem " << pos << "\n";
-        T valueShouldBe = coordinateToValue(vPos);
-
-        if ((!order) && vPos[NDim - 1] >= memorySizes[NDim - 1] - 2) return true;
-
-        bool thisCheck = AlmostEqual(valueShouldBe, norm * val, std::is_same<T, float>::value ? 0.1 : 1e-4);
-
-        allRight = allRight && thisCheck;
-        //            if ( order && allRight ) say << "Equal: " << vPos << " -> " << valueShouldBe << " == " << norm *
-        //            mem[pos] << "\n";
-        if (!thisCheck) {
-          say << "Not equal: " << vPos << " -> " << valueShouldBe << " != " << norm * val << " = " << norm << " * "
-              << val << "\n";
-          //                for ( int ii = 1; ii < 20; ++ii)
-          //                    std::cerr << "pos + " << ii << " = " << (pos + ii) << ": " << norm * mem[pos + ii] << "
-          //                    = " << norm << " * " << mem[pos + ii] << "\n";
-          //                std::cerr << "\n\n";
-        }
-        return allRight;
-      };
-
-      auto result_view = mem.getRawHostView();
-      for (size_t i = 0; i < mem.size(); ++i) {
-        device::array<ptrdiff_t, NDim> pos{};
-        size_t acc = 1;
-        for (size_t j = 0; j < NDim; ++j) {
-          pos[NDim - 1 - j] = (i / acc) % memorySizes[NDim - 1 - j];
-          acc *= memorySizes[NDim - 1 - j];
-        }
-        checkMem(result_view(i), pos);
-      }
-
-      bool r2c_then_c2r = allRight;
-      bool c2r_then_r2c = allRight;
-      if (order)
-        tdd.verify(c2r_then_r2c);
-      else
-        tdd.verify(r2c_then_c2r);
-      if (!allRight)
-        sayMPI << "Failed for NDim: " << NDim << ", nGrid: " << nGrid << "\n";
-      else
-        sayMPI << "Success for NDim: " << NDim << ", nGrid: " << nGrid << "\n";
+  // We test in 2,3,4 dimensions, and for grids 2^4, ..., 2^5.
+  constexpr_for<2, 5, 1>([&](auto i) {
+    constexpr size_t NDim = decltype(i)::value;
+    for (ptrdiff_t inGrid = 4; inGrid < 6; ++inGrid) {
+      device::array<ptrdiff_t, NDim> nGrid;
+      for (auto &it : nGrid)
+        it = std::pow(2, inGrid);
+      test_r2c_c2r<NDim, T>(tdd, nGrid);
+      test_c2r_r2c<NDim, T>(tdd, nGrid);
     }
-  };
-
-  for (ptrdiff_t inGrid = 1; inGrid < 6; ++inGrid) {
-    device::array<ptrdiff_t, 2> nGrid;
-    for (auto &it : nGrid)
-      it = std::pow(2, inGrid);
-    myLittleLambda(nGrid);
-  }
-  for (ptrdiff_t inGrid = 1; inGrid < 5; ++inGrid) {
-    device::array<ptrdiff_t, 3> nGrid;
-    for (auto &it : nGrid)
-      it = std::pow(2, inGrid);
-    myLittleLambda(nGrid);
-  }
-  for (ptrdiff_t inGrid = 1; inGrid < 4; ++inGrid) {
-    device::array<ptrdiff_t, 4> nGrid;
-    for (auto &it : nGrid)
-      it = std::pow(2, inGrid);
-    myLittleLambda(nGrid);
-  }
+  });
 }
 
 template <size_t NDim> inline void TempLat::FFTLibrarySelector<NDim>::Test(TempLat::TDDAssertion &tdd)
