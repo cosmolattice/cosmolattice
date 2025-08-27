@@ -116,6 +116,11 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
+
+  inline std::shared_ptr<FFTSessionGuard> getFFTWSessionGuard(bool pVerbose = true)
+  {
+    return std::make_shared<FFTWGuard>(pVerbose);
+  }
 } // namespace TempLat
 
 #endif

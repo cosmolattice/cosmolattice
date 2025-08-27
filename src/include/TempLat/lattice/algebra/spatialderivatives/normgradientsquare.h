@@ -94,14 +94,14 @@ namespace TempLat
 
   template <int nDimensions = 3, typename R>
     requires HasGetMethod<R>
-  auto Grad2(R pR)
+  KOKKOS_FORCEINLINE_FUNCTION auto Grad2(R pR)
   {
     return NormGradientSquare<nDimensions, R>(pR);
   }
 
   template <int nDimensions = 3, typename R>
     requires(!HasGetMethod<R>)
-  auto Grad2(R pR)
+  KOKKOS_FORCEINLINE_FUNCTION auto Grad2(R pR)
   {
     return ZeroType();
   }

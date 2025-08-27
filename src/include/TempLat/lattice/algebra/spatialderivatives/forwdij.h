@@ -88,7 +88,7 @@ namespace TempLat
 
   template <class R, int N>
     requires HasGetMethod<R>
-  auto forwDij(R pR, Tag<N> t)
+  KOKKOS_FORCEINLINE_FUNCTION auto forwDij(R pR, Tag<N> t)
   {
     return ForwDij<N, R>(pR);
   }

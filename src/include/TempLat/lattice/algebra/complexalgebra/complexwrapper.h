@@ -28,8 +28,11 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
+
+    KOKKOS_FUNCTION
     ComplexFieldWrapper() {}
 
+    KOKKOS_FUNCTION
     ComplexFieldWrapper(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     KOKKOS_FORCEINLINE_FUNCTION
@@ -76,7 +79,11 @@ namespace TempLat
 #endif
   };
 
-  template <typename R, typename T> ComplexFieldWrapper<R, T> Complexify(const R &r, const T &t) { return {r, t}; }
+  template <typename R, typename T>
+  KOKKOS_FORCEINLINE_FUNCTION ComplexFieldWrapper<R, T> Complexify(const R &r, const T &t)
+  {
+    return {r, t};
+  }
 } // namespace TempLat
 
 #endif

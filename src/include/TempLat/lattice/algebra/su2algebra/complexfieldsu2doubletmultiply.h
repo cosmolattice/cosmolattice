@@ -110,17 +110,24 @@ namespace TempLat
   }
 
   template <typename R, typename T>
-    requires(std::is_arithmetic_v<R> && HasSU2DoubletGet<T>)
+    requires(std::is_arithmetic_v<std::decay_t<R>> && HasSU2DoubletGet<T>)
   auto operator*(R r, const T &t)
   {
-    return Complexify(r, ZeroType()) * t;
+    return ComplexFieldSU2DoubletMultiplication(Complexify(r, ZeroType()), t);
   }
 
   template <typename R, typename T>
-    requires(std::is_arithmetic_v<R> && HasSU2DoubletGet<T>)
+    requires(std::is_arithmetic_v<std::decay_t<R>> && HasSU2DoubletGet<T>)
   auto operator*(const T &t, R r)
   {
-    return Complexify(r, ZeroType()) * t;
+    return ComplexFieldSU2DoubletMultiplication(Complexify(r, ZeroType()), t);
+  }
+
+  template <typename R, typename T>
+    requires(std::is_arithmetic_v<std::decay_t<R>> && HasSU2DoubletGet<T>)
+  auto operator/(const T &t, R r)
+  {
+    return ComplexFieldSU2DoubletMultiplication(Complexify(1_c / r, ZeroType()), t);
   }
 } // namespace TempLat
 

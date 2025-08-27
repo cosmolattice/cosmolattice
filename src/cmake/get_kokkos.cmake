@@ -3,23 +3,22 @@
 # ##############################################################################
 include(CheckLanguage)
 
-if(DEFINED GPU)
-  if(NOT GPU)
-    set(HAVE_CUDA OFF)
-    set(HAVE_HIP OFF)
+option(GPU "Set to ON to build with GPU support (default = OFF)" OFF)
+if(NOT GPU)
+  set(CUDA OFF)
+  set(HIP OFF)
+else()
+  check_language(CUDA)
+  if(CMAKE_CUDA_COMPILER)
+    set(CUDA ON)
+    set(HIP OFF)
   else()
-    check_language(CUDA)
-    if(CMAKE_CUDA_COMPILER)
-      set(HAVE_CUDA ON)
-      set(HAVE_HIP OFF)
+    set(CUDA OFF)
+    check_language(HIP)
+    if(CMAKE_HIP_COMPILER)
+      set(HIP ON)
     else()
-      set(HAVE_CUDA OFF)
-      check_language(HIP)
-      if(CMAKE_HIP_COMPILER)
-        set(HAVE_HIP ON)
-      else()
-        set(HAVE_HIP OFF)
-      endif()
+      set(HIP OFF)
     endif()
   endif()
 endif()
@@ -27,16 +26,16 @@ endif()
 check_language(OpenMP)
 find_package(OpenMP QUIET)
 if(OpenMP_CXX_FOUND)
-  set(HAVE_OPENMP ON)
-  set(HAVE_THREADS OFF)
+  set(OPENMP ON)
+  set(THREADS OFF)
 else()
-  set(HAVE_OPENMP OFF)
-  set(HAVE_THREADS ON)
+  set(OPENMP OFF)
+  set(THREADS ON)
 endif()
 
 message(
   STATUS
-    "Kokkos configuration: \n    OpenMP: ${HAVE_OPENMP} \n    CUDA: ${HAVE_CUDA} \n    HIP: ${HAVE_HIP} \n    Threads: ${HAVE_THREADS}"
+    "Kokkos configuration: \n    OpenMP: ${OPENMP} \n    CUDA: ${CUDA} \n    HIP: ${HIP} \n    Threads: ${THREADS}"
 )
 
 # ##############################################################################
@@ -97,28 +96,28 @@ execute_process(
         -DCMAKE_CXX_FLAGS=-fPIC \
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
         -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/Kokkos \
-        -DCMAKE_BUILD_TYPE:STRING=Release \
-        -DCMAKE_CXX_STANDARD:STRING=${CMAKE_CXX_STANDARD} \
-        -DKokkos_ARCH_NATIVE:BOOL=${Kokkos_ARCH_NATIVE} \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD} \
+        -DKokkos_ARCH_NATIVE=${Kokkos_ARCH_NATIVE} \
         ${Kokkos_ARCH_LIST} \
-        -DKokkos_ENABLE_CUDA:BOOL=${HAVE_CUDA} \
-        -DKokkos_ENABLE_CUDA_CONSTEXPR:BOOL=${HAVE_CUDA} \
-        -DKokkos_ENABLE_HIP:BOOL=${HAVE_HIP} \
-        -DKokkos_ENABLE_OPENMP:BOOL=${HAVE_OPENMP} \
-        -DKokkos_ENABLE_THREADS:BOOL=${HAVE_THREADS} \
-        -DKokkos_ENABLE_SERIAL:BOOL=ON \
-        -DKokkos_ENABLE_TESTS:BOOL=OFF \
-        ../kokkos-repo 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+        -DKokkos_ENABLE_CUDA=${CUDA} \
+        -DKokkos_ENABLE_CUDA_CONSTEXPR=${CUDA} \
+        -DKokkos_ENABLE_HIP=${HIP} \
+        -DKokkos_ENABLE_OPENMP=${OPENMP} \
+        -DKokkos_ENABLE_THREADS=${THREADS} \
+        -DKokkos_ENABLE_SERIAL=ON \
+        -DKokkos_ENABLE_TESTS=OFF \
+        ../kokkos-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
 
 message(STATUS "Building Kokkos...")
 execute_process(
-  COMMAND bash -c "make -j8 2<&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+  COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
 
 message(STATUS "Installing Kokkos...")
 execute_process(
-  COMMAND bash -c "make install 2<&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+  COMMAND bash -c "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
 
 # Kokkos by default does not support extensions, so we force them off

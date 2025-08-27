@@ -26,6 +26,7 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
+    KOKKOS_FUNCTION
     ComplexFieldUnaryOperator(const R &pR) : mR(pR) {}
 
     static consteval size_t getNDim() { return GetNDim::get<R>(); }

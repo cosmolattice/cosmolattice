@@ -96,9 +96,11 @@ namespace TempLat
     bool mUseBinCentralValues;
     LayoutStruct<NDim> mLayout;
 
+  public:
     template <typename BINCOMPUTETYPE>
-    auto computeConfigurationSpace(BINCOMPUTETYPE binComputer, RadialProjectionResult<sType> baseWorkSpace,
-                                   bool excludeOrigin)
+    RadialProjectionResult<sType> computeConfigurationSpace(BINCOMPUTETYPE binComputer,
+                                                            RadialProjectionResult<sType> baseWorkSpace,
+                                                            bool excludeOrigin)
     {
       confirmGetterSpace();
 

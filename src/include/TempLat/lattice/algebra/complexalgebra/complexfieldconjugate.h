@@ -27,6 +27,7 @@ namespace TempLat
 
     using ComplexFieldUnaryOperator<R>::mR;
 
+    KOKKOS_FUNCTION
     ComplexFieldConjugate(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}
 
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t) const { return Real(mR); }
@@ -66,23 +67,26 @@ namespace TempLat
 
   template <typename R>
     requires HasComplexFieldGet<R>
-  auto conj(const R &r)
+  KOKKOS_FORCEINLINE_FUNCTION auto conj(const R &r)
   {
     return ComplexFieldConjugate<R>(r);
   }
 
   template <typename R>
     requires HasComplexFieldGet<R>
-  auto dagger(const R &r)
+  KOKKOS_FORCEINLINE_FUNCTION auto dagger(const R &r)
   {
     return ComplexFieldConjugate<R>(r);
   }
 
+  KOKKOS_FORCEINLINE_FUNCTION
   OneType dagger(OneType) { return OneType(); }
+  KOKKOS_FORCEINLINE_FUNCTION
   OneType conj(OneType) { return OneType(); }
 
+  KOKKOS_FORCEINLINE_FUNCTION
   ZeroType conj(ZeroType t) { return t; };
-
+  KOKKOS_FORCEINLINE_FUNCTION
   ZeroType dagger(ZeroType t) { return t; };
 
 } // namespace TempLat

@@ -27,6 +27,7 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
+    KOKKOS_FUNCTION
     ComplexFieldBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }

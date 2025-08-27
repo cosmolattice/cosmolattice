@@ -44,7 +44,6 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mCacheRe();
-      //   return std::cos(GetEval::getEval(mR,i));
     }
 
     template <typename... IDX>

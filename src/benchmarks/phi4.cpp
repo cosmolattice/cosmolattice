@@ -14,9 +14,9 @@ int main(int argc, char **argv)
 
   constexpr size_t NDim = 3;
   using T = double;
-  constexpr size_t nGrid = 128;
+  constexpr size_t nGrid = 512;
   constexpr size_t nGhost = 1;
-  constexpr size_t nSteps = 1024 * 16;
+  constexpr size_t nSteps = 64;
   constexpr T dt = 0.01;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost, false);

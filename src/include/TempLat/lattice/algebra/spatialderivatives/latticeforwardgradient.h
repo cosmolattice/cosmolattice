@@ -115,7 +115,8 @@ namespace TempLat
 #endif
   };
 
-  template <int nDimensions = 3, typename R> LatticeForwardGradient<nDimensions, R> LatForwardGrad(R pR)
+  template <int nDimensions = 3, typename R>
+  KOKKOS_FORCEINLINE_FUNCTION LatticeForwardGradient<nDimensions, R> LatForwardGrad(R pR)
   {
     return LatticeForwardGradient<nDimensions, R>(pR);
   }

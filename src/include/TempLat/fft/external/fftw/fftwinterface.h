@@ -13,11 +13,6 @@
 
 namespace TempLat
 {
-  inline std::shared_ptr<FFTSessionGuard> getFFTWSessionGuard(bool pVerbose = true)
-  {
-    return std::make_shared<FFTWGuard>(pVerbose);
-  }
-
   /** \brief A class which implements all of FFTLibraryInterface. The larger methods are implemented in classes from
    *which we inherit, in a linear chain: FFTWMemoryLayout and FFTWPlanner.
    *

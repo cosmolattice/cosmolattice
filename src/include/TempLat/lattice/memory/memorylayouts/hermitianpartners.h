@@ -129,9 +129,9 @@ namespace TempLat
         for (const auto &it : mNGrid)
           nGridVertices *= it;
 
-        ptrdiff_t nComplexVerticesAfterR2C = nGridVertices / mNGrid.back() * (mNGrid.back() / 2 + 1);
+        ptrdiff_t nComplexVerticesAfterR2C = nGridVertices / mNGrid[NDim - 1] * (mNGrid[NDim - 1] / 2 + 1);
 
-        ptrdiff_t hermitianSymmetricEntries = nGridVertices / mNGrid.back();
+        ptrdiff_t hermitianSymmetricEntries = nGridVertices / mNGrid[NDim - 1];
 
         ptrdiff_t imaginary = nComplexVerticesAfterR2C - hermitianSymmetricEntries - powr<NDim - 1>(2);
 
@@ -177,7 +177,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::array<ptrdiff_t, NDim> mNGrid;
+    device::array<ptrdiff_t, NDim> mNGrid;
     HermitianPartnersMode mode;
     Kokkos::Array<ptrdiff_t, NDim> mSignConversionMidpoint;
 

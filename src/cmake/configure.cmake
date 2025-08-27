@@ -10,6 +10,13 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOKOKKOS")
 endif()
 
+# Get Heffte
+if(HEFFTE)
+  include(./src/cmake/get_heffte.cmake)
+else()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOHEFFTE")
+endif()
+
 find_package(FFTW)
 
 # Need pthread to compile the non-mpi version
@@ -57,6 +64,10 @@ include_directories(${FFTW_INCLUDES})
 
 if(KOKKOS)
   find_package(Kokkos REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/Kokkos QUIET)
+endif()
+
+if(HEFFTE)
+  find_package(Heffte REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/heffte QUIET)
 endif()
 
 message(STATUS "MPI CXX compiler: ${MPI_CXX_COMPILER}")

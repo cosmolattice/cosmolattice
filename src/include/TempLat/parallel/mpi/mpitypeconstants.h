@@ -12,7 +12,6 @@
 #ifndef NOMPI
 #include <mpi.h>
 #else
-
 typedef int MPI_Comm;
 #ifndef MPI_COMM_WORLD
 #define MPI_COMM_WORLD 1

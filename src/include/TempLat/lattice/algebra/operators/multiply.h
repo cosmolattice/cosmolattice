@@ -68,12 +68,6 @@ namespace TempLat
       KOKKOS_FUNCTION
       Multiplication(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      KOKKOS_FUNCTION
-      Multiplication() : BinaryOperator<R, T>(R(), T()) {}
-
-      KOKKOS_FUNCTION
-      ~Multiplication() = default;
-
       template <typename... IDX>
         requires requires(IDX... idx) {
           GetValue::get(mT, idx...);
@@ -98,7 +92,6 @@ namespace TempLat
     public:
       using UnaryOperator<R>::mR;
 
-      KOKKOS_FUNCTION
       MultiplicationN(const R &pR) : UnaryOperator<R>(pR) {}
 
       template <typename... IDX>
@@ -147,38 +140,19 @@ namespace TempLat
   /** \brief Specialize for possible zero input! */
   template <typename T> KOKKOS_FORCEINLINE_FUNCTION ZeroType operator*(const T &a, ZeroType b) { return b; }
 
-  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
-  template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION typename std::enable_if<!std::is_same<T, ZeroType>::value, ZeroType>::type
-  operator*(ZeroType a, const T &b)
-  {
-    return a;
-  }
-
   /** \brief Specialize for possible zero input! Need to disable one of these for two OneTypes as input. */
   /** \brief Specialize for possible unit input! */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename std::enable_if<!std::is_same<T, OneType>::value && !std::is_same<T, ZeroType>::value, T>::type &
-      operator*(T &&a, const OneType b)
+    requires(!std::is_same_v<T, OneType> && !std::is_same_v<T, ZeroType>)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const T &a, const OneType b)
   {
     return a;
   }
 
   /** \brief Specialize for possible unit input! */
   template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename std::enable_if<!std::is_same<T, OneType>::value && !std::is_same<T, ZeroType>::value, T>::type &
-      operator*(const OneType a, T &&b)
-  {
-    return b;
-  }
-
-  /** \brief Specialize for possible unit input! */
-  template <typename T>
-  KOKKOS_FORCEINLINE_FUNCTION
-      typename std::enable_if<!std::is_same<T, OneType>::value && !std::is_same<T, ZeroType>::value, T>::type
-      operator*(const OneType &a, const T &b)
+    requires(!std::is_same_v<T, OneType> && !std::is_same_v<T, ZeroType>)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const OneType &a, const T &b)
   {
     return b;
   }

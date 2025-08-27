@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 include(src/cmake/title.cmake)
 
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/src/cmake/
@@ -26,6 +26,9 @@ set(KOKKOS
 set(PFFT
     OFF
     CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
+set(HEFFTE
+    ON
+    CACHE BOOL "Set to ON to build with Heffte (default = ON)")
 set(HDF5
     OFF
     CACHE

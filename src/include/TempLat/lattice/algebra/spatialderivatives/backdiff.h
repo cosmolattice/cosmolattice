@@ -16,6 +16,7 @@
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
+#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -88,7 +89,7 @@ namespace TempLat
 
   template <class R, int N>
     requires HasGetMethod<R>
-  auto backDiff(R pR, Tag<N> t)
+  KOKKOS_FORCEINLINE_FUNCTION auto backDiff(R pR, Tag<N> t)
   {
     return BackDiff<N, R>(pR);
   }

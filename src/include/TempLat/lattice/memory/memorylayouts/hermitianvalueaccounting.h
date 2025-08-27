@@ -20,13 +20,16 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
+    KOKKOS_FUNCTION
     HermitianValueAccounting(ptrdiff_t realCount, ptrdiff_t imaginaryCount)
         : mRealCount(realCount), mImaginaryCount(imaginaryCount)
     {
     }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t getRealValueCount() { return mRealCount; }
 
+    KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t getImaginaryValueCount() { return mImaginaryCount; }
 
     friend std::ostream &operator<<(std::ostream &ostream, const HermitianValueAccounting &hva)

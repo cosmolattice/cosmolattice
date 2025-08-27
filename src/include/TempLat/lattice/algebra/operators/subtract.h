@@ -73,7 +73,7 @@ namespace TempLat
   /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires(!std::is_same_v<T, ZeroType>)
-  auto operator-(ZeroType a, const T &b)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator-(ZeroType a, const T &b)
   {
     return Operators::UnaryMinus<T>(b);
   }

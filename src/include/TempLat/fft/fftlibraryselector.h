@@ -13,11 +13,17 @@
 #include "TempLat/fft/external/fftw/fftwinterface.h"
 
 #ifndef NOFFT
+
 #ifndef NOMPI
 #ifndef NOPFFT
 #include "TempLat/fft/external/pfft/pfftinterface.h"
 #endif
+
+#ifndef NOHEFFTE
+#include "TempLat/fft/external/heffte/heffteinterface.h"
 #endif
+#endif
+
 #endif
 
 namespace TempLat
@@ -49,9 +55,15 @@ namespace TempLat
 #ifndef NOFFT
     result.push_back(getFFTWSessionGuard(pVerbose));
 #ifndef NOMPI
+
 #ifndef NOPFFT
-    result.push_back(PFFTInterface().getSessionGuard(pVerbose));
+    result.push_back(getPFFTSessionGuard(pVerbose));
 #endif
+
+#ifndef NOHEFFTE
+    result.push_back(getHEFFTESessionGuard(pVerbose));
+#endif
+
 #endif
 #endif
 
@@ -79,14 +91,24 @@ namespace TempLat
 #ifndef NOPFFT
       havePFFT = true;
 #endif
+
+#ifndef NOHEFFTE
+      bool haveHEFFTE = true;
 #endif
-      if (havePFFT && nDimSplit > 1) {
+#endif
+
 #ifndef NOMPI
+      if (haveHEFFTE) {
+#ifndef NOHEFFTE
+        theLibrary = std::make_shared<HEFFTEInterface<NDim>>();
+#endif
+      } else if (havePFFT && nDimSplit > 1) {
 #ifndef NOPFFT
         theLibrary = std::make_shared<PFFTInterface>();
 #endif
+      } else
 #endif
-      } else {
+      {
         theLibrary = std::make_shared<FFTWInterface<NDim>>();
       }
       mLayout = theLibrary->computeLocalSizes(mGroup, mNGridPoints, forbidTransposition);

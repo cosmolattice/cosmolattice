@@ -91,7 +91,7 @@ namespace TempLat
 
   template <class R, int N>
     requires HasGetMethod<R>
-  auto neutDiff(R pR, Tag<N> t)
+  KOKKOS_FORCEINLINE_FUNCTION auto neutDiff(R pR, Tag<N> t)
   {
     return NeutDiff<N, R>(pR);
   }

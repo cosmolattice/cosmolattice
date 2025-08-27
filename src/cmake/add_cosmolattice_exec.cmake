@@ -17,8 +17,10 @@ function(add_cosmolattice execName path ofile)
 
   if(KOKKOS)
     target_link_libraries(${execName} PUBLIC Kokkos::kokkos)
-    target_compile_options(${execName} PUBLIC $<$<COMPILE_LANGUAGE:CUDA>:
-                                              --use_fast_math>)
+  endif()
+
+  if(HEFFTE)
+    target_link_libraries(${execName} PUBLIC Heffte::Heffte)
   endif()
 endfunction()
 

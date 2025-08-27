@@ -32,6 +32,7 @@ namespace TempLat
     using ComplexFieldBinaryOperator<R, T>::mR;
     using ComplexFieldBinaryOperator<R, T>::mT;
 
+    KOKKOS_FUNCTION
     ComplexFieldAddition(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
     KOKKOS_FORCEINLINE_FUNCTION
@@ -75,21 +76,21 @@ namespace TempLat
 
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && HasComplexFieldGet<T>)
-  auto operator+(const R &r, const T &t)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator+(const R &r, const T &t)
   {
     return ComplexFieldAddition<R, T>{r, t};
   }
 
   template <typename R, typename T>
     requires(!HasComplexFieldGet<R> && HasComplexFieldGet<T>)
-  auto operator+(const R &r, const T &t)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator+(const R &r, const T &t)
   {
     return ComplexFieldAddition<ComplexFieldWrapper<R, ZeroType>, T>{Complexify(r, ZeroType()), t};
   }
 
   template <typename R, typename T>
     requires(!HasComplexFieldGet<T> && HasComplexFieldGet<R>)
-  auto operator+(const R &r, const T &t)
+  KOKKOS_FORCEINLINE_FUNCTION auto operator+(const R &r, const T &t)
   {
     return ComplexFieldAddition<R, ComplexFieldWrapper<T, ZeroType>>{r, Complexify(t, ZeroType())};
   }
