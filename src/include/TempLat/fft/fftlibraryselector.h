@@ -5,9 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-
-#include <functional>
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/external/fftw/fftwinterface.h"
@@ -30,19 +28,28 @@ namespace TempLat
 {
   MakeException(FFTLibraryDoubleInitializationException);
 
-  /** \brief An inline function for storing a static global variable in a header. A lock that
-      verifies that we do not accidentally call the FFT initi/fin-alizations twice. */
-  static inline bool getSessionGuardsWasCalledOnce()
-  {
-    static bool wasOnce = false;
-    bool result = wasOnce;
-    wasOnce = true;
-    return result;
-  }
+  /**
+   * @brief I wrapped this in a struct for a very specific case: If we have multiple translation units (cpp files)
+   * which include this header, and each calls getFFTSessionGuards, then we will have multiple static variables, one per
+   * translation unit, and the guards will not work as intended. By wrapping it in a struct, we ensure that there is
+   * only one instance of the static variable, no matter how many translation units include this header.
+   *
+   */
+  struct holdStaticGuard {
+    /** \brief An inline function for storing a static global variable in a header. A lock that
+        verifies that we do not accidentally call the FFT initi/fin-alizations twice. */
+    static bool getSessionGuardsWasCalledOnce()
+    {
+      static bool wasOnce = false;
+      bool result = wasOnce;
+      wasOnce = true;
+      return result;
+    }
+  };
 
   static inline std::vector<std::shared_ptr<FFTSessionGuard>> getFFTSessionGuards(bool pVerbose = true)
   {
-    if (getSessionGuardsWasCalledOnce())
+    if (holdStaticGuard::getSessionGuardsWasCalledOnce())
       throw FFTLibraryDoubleInitializationException("You can only call getSessionGuards once.");
 
     std::vector<std::shared_ptr<FFTSessionGuard>> result;
@@ -85,15 +92,16 @@ namespace TempLat
           madePlansDouble(false), verbose(false)
     {
       /* here we take the decisions, although the decision to split the group has been made already. */
-      ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
-      bool havePFFT = false;
+      [[maybe_unused]] ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
+      [[maybe_unused]] bool havePFFT = false;
+      [[maybe_unused]] bool haveHEFFTE = false;
 #ifndef NOMPI
 #ifndef NOPFFT
       havePFFT = true;
 #endif
 
 #ifndef NOHEFFTE
-      bool haveHEFFTE = true;
+      haveHEFFTE = true;
 #endif
 #endif
 

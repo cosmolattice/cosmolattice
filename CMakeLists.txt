@@ -167,10 +167,13 @@ elseif(${G++OPT} STREQUAL "O2")
 elseif(${G++OPT} STREQUAL "O3")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 ")
 elseif(${G++OPT} STREQUAL "Ofast")
+  # We disable the warnings about NaN checking in Ofast, if you use fast-math,
+  # you should be aware of what you do.
   if(KOKKOS)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -ffast-math")
+    set(CMAKE_CXX_FLAGS
+        "${CMAKE_CXX_FLAGS} -O3 -ffast-math -Wno-nan-infinity-disabled")
   else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast ")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -Wno-nan-infinity-disabled")
   endif()
 else()
   message(FATAL_ERROR "G++OPT=${G++OPT} is not a valid option.")

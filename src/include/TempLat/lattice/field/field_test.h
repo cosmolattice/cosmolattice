@@ -40,8 +40,6 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
 
     // get host views
     copy.getMemoryManager()->confirmFourierSpace();
-    auto copy_fourier_host = copy.inFourierSpace().directView();
-
     copy.getMemoryManager()->confirmConfigSpace();
     copy.updateGhosts();
 
@@ -58,9 +56,13 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   // Miscellaneous tests
   // ------------------------------------------------------------------------------------------
 
-  WaveNumber<NDim> k(toolBox);
-  auto op = pow<2>(Tag<1>() - k.norm2());
+  {
+    WaveNumber<NDim> k(toolBox);
+    auto op = pow<2>(Tag<1>() - k.norm2());
+  }
 
+  // ------------------------------------------------------------------------------------------
+  // Test operations
   // ------------------------------------------------------------------------------------------
 
   {

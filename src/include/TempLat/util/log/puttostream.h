@@ -11,20 +11,12 @@
 #include <vector>
 #include <iostream>
 #include "TempLat/util/tdd/tddmacros.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
-
-#ifndef NOKOKKOS
-#include <Kokkos_Core.hpp>
-#endif
 
 namespace TempLat
 {
   /* expose these to for vectors of arrays of vectors... */
   template <typename T> std::ostream &operator<<(std::ostream &stream, const std::vector<T> &vec);
   template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const std::array<T, N> &vec);
-#ifndef NOKOKKOS
-  template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const Kokkos::Array<T, N> &vec);
-#endif
 
   /** \brief Simple outputing of arrays and vectors: not exposing as operator<<, because below we want to limit it to
    * vectors and arrays, without needing to know the exact number of template parameters for this systems implementation
@@ -59,13 +51,6 @@ namespace TempLat
   {
     return PutToStream(stream, vec);
   };
-
-#ifndef NOKOKKOS
-  template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const Kokkos::Array<T, N> &vec)
-  {
-    return PutToStream(stream, vec);
-  };
-#endif
 
   /** \brief A class which tests PutToStream.
    *

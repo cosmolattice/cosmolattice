@@ -10,6 +10,7 @@
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/tdd/tddassertion.h"
+#include "TempLat/util/log/puttostream.h"
 
 #include <ostream>
 #include <sys/types.h>
@@ -173,6 +174,16 @@ namespace TempLat
         ret);
     return ret;
   }
+
+  template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const device::array<T, N> &vec)
+  {
+    return PutToStream(stream, vec);
+  };
+
+  template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const Kokkos::Array<T, N> &vec)
+  {
+    return PutToStream(stream, vec);
+  };
 
 #ifdef TEMPLATTEST
   class KokkosTest

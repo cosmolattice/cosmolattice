@@ -45,13 +45,14 @@ namespace TempLat
      * information. The default implementation returns HermitianRedundancy::none, which you could (uselessly) use for
      * configuration-space layouts.
      */
-    KOKKOS_FUNCTION
-    HermitianRedundancy qualify(const Kokkos::Array<ptrdiff_t, NDim> &globalCoordinate) const
+    template <typename Container>
+      requires requires(Container c) { c[NDim - 1]; }
+    KOKKOS_FUNCTION HermitianRedundancy qualify(const Container &globalCoordinate) const
     {
       if (mode == HermitianPartnersMode::none) {
         // see below
       } else if (mode == HermitianPartnersMode::fftw) {
-        size_t lastDim = NDim - 1;
+        constexpr size_t lastDim = NDim - 1;
 
         HermitianRedundancy result = HermitianRedundancy::none;
         if ((globalCoordinate[lastDim] == 0) || globalCoordinate[lastDim] == mSignConversionMidpoint[lastDim]) {
@@ -79,9 +80,13 @@ namespace TempLat
     /** \brief If the entry at your input globalCoordinate has a partner which is its hermitian conjugate,
      *  then return the coordinates to that partner. Otherwise return the input. No bounds checking!
      */
-    KOKKOS_FUNCTION
-    HermitianRedundancy putHermitianPartner(const Kokkos::Array<ptrdiff_t, NDim> &globalCoordinate,
-                                            Kokkos::Array<ptrdiff_t, NDim> &target) const
+    template <typename Container1, typename Container2>
+      requires requires(Container1 c, Container2 d) {
+        c[NDim - 1];
+        d[NDim - 1];
+      }
+    KOKKOS_FUNCTION HermitianRedundancy putHermitianPartner(const Container1 &globalCoordinate,
+                                                            Container2 &target) const
     {
       if (mode == HermitianPartnersMode::none) {
         // see below
