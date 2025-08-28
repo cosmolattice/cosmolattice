@@ -3,7 +3,7 @@
 # control over what is happening.
 # ##############################################################################
 
-if(CUDA OR HIP)
+if((CUDA OR HIP) AND (MPI))
   set(HEFFTE_VERSION v2.4.1)
 
   message(STATUS "Downloading HEFFTE ${HEFFTE_VERSION}")

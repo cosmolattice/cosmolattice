@@ -27,7 +27,7 @@ namespace TempLat
    **/
   template <size_t NDim> class HEFFTEPlanner : public FFTLibraryInterface<NDim>
   {
-    static_assert(NDim <= 3, "HEFFTE only works in 1, 2 or 3 dimensions.");
+    static_assert(NDim == 2 || NDim == 3, "HEFFTE only works in 2 or 3 dimensions.");
 
   public:
     /* Put public methods here. These should change very little over time. */

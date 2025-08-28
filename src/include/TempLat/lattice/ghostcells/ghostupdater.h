@@ -12,6 +12,7 @@
 #include <utility>
 #include <ranges>
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/parallel/kokkos/lambdawrapper.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
@@ -46,6 +47,13 @@ namespace TempLat
         : mExchange(exchange), mJumpsHolder(jumpsHolder), mGhostDepth(mJumpsHolder.getPadding()[0][0]),
           mGhostSubarrayMap(mJumpsHolder, mGhostDepth)
     {
+      auto full_sizes = mJumpsHolder.getSizesInMemory();
+      for (uint i = 0; i < NDim; ++i) {
+        if (mGhostDepth > full_sizes[i]) {
+          throw GhostUpdaterException("Ghost depth is larger than local size in dimension " + std::to_string(i) + ":",
+                                      mGhostDepth, " > ", full_sizes[i]);
+        }
+      }
       /* verify that */
       bool allSame = true;
       for (auto &&it : mJumpsHolder.getPadding()) {
@@ -59,10 +67,15 @@ namespace TempLat
     template <typename T> void update(MemoryBlock<NDim, T> &block)
     {
 #ifndef NOMPI
-      pUpdate(block.data());
-#else
-      pUpdate_NOMPI(block);
+      // There is no MPI splitting in one dimension. Also, when we have only a single node, there is no need to do MPI
+      // communication.
+      if (mExchange.getMPICartesianGroup().size() > 1 && NDim > 1) {
+        pUpdate(block);
+      } else
 #endif
+      {
+        pUpdate_NOMPI(block);
+      }
     }
 
   private:
@@ -72,17 +85,128 @@ namespace TempLat
     ptrdiff_t mGhostDepth;
     GhostSubarrayMap<NDim> mGhostSubarrayMap;
 
-    template <typename T> void pUpdate(T *ptr)
+    template <typename T> void pUpdate(MemoryBlock<NDim, T> &block)
     {
       /* iterate dimensions */
       for (ptrdiff_t d = 0; d < NDim; ++d) {
-        update_forDimension(ptr, d);
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+        update_forDimension_device(block, d);
+#else
+        update_forDimension(block, d);
+#endif
       }
     }
 
-    template <typename T> void update_forDimension(T *ptr, ptrdiff_t dimension)
+    template <typename T> void update_forDimension_device(MemoryBlock<NDim, T> &block, ptrdiff_t dimension)
     {
-      /* get neighbours */
+      // We will copy slabs of thickness ghostDepth in the dimension 'dimension'.
+      auto full_sizes = mJumpsHolder.getSizesInMemory();
+      for (size_t i = 0; i < NDim; ++i)
+        full_sizes[i] += 2 * mGhostDepth;
+      auto slab_sizes = mJumpsHolder.getSizesInMemory();
+      for (size_t i = 0; i < NDim; ++i)
+        slab_sizes[i] += 2 * mGhostDepth;
+      slab_sizes[dimension] = mGhostDepth;
+      size_t total_size = 1;
+      for (size_t i = 0; i < NDim; ++i)
+        total_size *= slab_sizes[i];
+
+      // We need two slabs of thickness ghostDepth
+      auto sendSlab =
+          std::apply([&](const auto &...args) { return KokkosNDView<NDim, T>("sendSlab", args...); }, slab_sizes);
+      auto receiveSlab =
+          std::apply([&](const auto &...args) { return KokkosNDView<NDim, T>("receiveSlab", args...); }, slab_sizes);
+
+      // To get the right subviews of the full data, we need to create slices for each dimension
+      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> send_slices{};
+      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> receive_slices{};
+
+      // UP
+      {
+        for (size_t i = 0; i < NDim; ++i) {
+          // we send the end of the dimension
+          send_slices[i] = (i == dimension) ? std::pair<ptrdiff_t, ptrdiff_t>(full_sizes[i] - 2 * mGhostDepth,
+                                                                              full_sizes[i] - mGhostDepth)
+                                            : std::pair<ptrdiff_t, ptrdiff_t>(0, slab_sizes[i]);
+          // we receive at the origin of the dimension
+          receive_slices[i] = (i == dimension) ? std::pair<ptrdiff_t, ptrdiff_t>(0, mGhostDepth)
+                                               : std::pair<ptrdiff_t, ptrdiff_t>(0, slab_sizes[i]);
+        }
+
+        // Get Subviews to the full data
+        auto sendSubView = std::apply(
+            [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, send_slices);
+        auto receiveSubView = std::apply(
+            [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, receive_slices);
+
+        // Copy the data to the send slab
+        auto copy_to_slab_functor = KOKKOS_LAMBDA(const device::IdxArray<NDim> &idx)
+        {
+          device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
+        };
+        Kokkos::parallel_for("copy_to_slab", getLocalKokkosPolicy(slab_sizes),
+                             KokkosNDLambdaWrapper<NDim, decltype(copy_to_slab_functor)>(copy_to_slab_functor));
+        Kokkos::fence();
+
+        // Exchange the slabs
+        MPI_Datatype dataType = MPITypeSelect<T>();
+
+        mExchange.exchangeUp(dataType, dimension, sendSlab.data(), receiveSlab.data(), total_size);
+
+        // Copy the data from the receive slab
+        auto copy_from_slab_functor = KOKKOS_LAMBDA(const device::IdxArray<NDim> &idx)
+        {
+          device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
+        };
+        Kokkos::parallel_for("copy_from_slab", getLocalKokkosPolicy(slab_sizes),
+                             KokkosNDLambdaWrapper<NDim, decltype(copy_from_slab_functor)>(copy_from_slab_functor));
+        Kokkos::fence();
+      }
+
+      // DOWN
+      {
+        for (size_t i = 0; i < NDim; ++i) {
+          // we send the origin of the dimension
+          send_slices[i] = (i == dimension) ? std::pair<ptrdiff_t, ptrdiff_t>(mGhostDepth, 2 * mGhostDepth)
+                                            : std::pair<ptrdiff_t, ptrdiff_t>(0, slab_sizes[i]);
+          // we receive at the end of the dimension
+          receive_slices[i] = (i == dimension)
+                                  ? std::pair<ptrdiff_t, ptrdiff_t>(full_sizes[i] - mGhostDepth, full_sizes[i])
+                                  : std::pair<ptrdiff_t, ptrdiff_t>(0, slab_sizes[i]);
+        }
+
+        // Get Subviews to the full data
+        auto sendSubView = std::apply(
+            [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, send_slices);
+        auto receiveSubView = std::apply(
+            [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, receive_slices);
+
+        // Copy the data to the send slab
+        auto copy_to_slab_functor = KOKKOS_LAMBDA(const device::array<size_t, NDim> &idx)
+        {
+          device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
+        };
+        Kokkos::parallel_for("copy_to_slab", getLocalKokkosPolicy(slab_sizes),
+                             KokkosNDLambdaWrapper<NDim, decltype(copy_to_slab_functor)>(copy_to_slab_functor));
+        Kokkos::fence();
+
+        // Exchange the slabs
+        mExchange.exchangeDown(MPITypeSelect<T>(), dimension, sendSlab.data(), receiveSlab.data(), total_size);
+
+        // Copy the data from the receive slab
+        auto copy_from_slab_functor = KOKKOS_LAMBDA(const device::array<size_t, NDim> &idx)
+        {
+          device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
+        };
+        Kokkos::parallel_for("copy_from_slab", getLocalKokkosPolicy(slab_sizes),
+                             KokkosNDLambdaWrapper<NDim, decltype(copy_from_slab_functor)>(copy_from_slab_functor));
+        Kokkos::fence();
+      }
+    }
+
+    template <typename T> void update_forDimension(MemoryBlock<NDim, T> &block, ptrdiff_t dimension)
+    {
+      auto *ptr = block.data();
 #ifndef NOMPI
 #ifndef IEXCH
       mExchange.exchangeUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
@@ -95,14 +219,13 @@ namespace TempLat
                                      mJumpsHolder.getJumpsInMemoryOrder()[dimension],
                            /* receive: in origin, including ghosts. */
                            ptr);
-
       /* pointers: the same as above, but shifted by ghostDepth and ordering swapped. Yes. */
       mExchange.exchangeDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                              ptr + mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension],
                              ptr + (mGhostDepth + mJumpsHolder.getSizesInMemory()[dimension]) *
                                        mJumpsHolder.getJumpsInMemoryOrder()[dimension]);
 #else
-      mExchange.IrecvUp(mGhostSubarrayMap.getSubArray<T>(dimension), dimension,
+      mExchange.IrecvUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                         /* base ptr is lower corner of all memory, including ghosts. */
                         /* send:
                          Don't jump to origin, but jump along the edge of dimension
@@ -113,15 +236,15 @@ namespace TempLat
                         /* receive: in origin, including ghosts. */
                         ptr);
       /* pointers: the same as above, but shifted by ghostDepth and ordering swapped. Yes. */
-      mExchange.IrecvDown(mGhostSubarrayMap.getSubArray<T>(dimension), dimension,
+      mExchange.IrecvDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                           ptr + mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension],
                           ptr + (mGhostDepth + mJumpsHolder.getSizesInMemory()[dimension]) *
                                     mJumpsHolder.getJumpsInMemoryOrder()[dimension]);
       /*Same as above*/
       mExchange.IsendUp(
-          mGhostSubarrayMap.getSubArray<T>(dimension), dimension,
+          mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
           ptr + (mJumpsHolder.getSizesInMemory()[dimension]) * mJumpsHolder.getJumpsInMemoryOrder()[dimension], ptr);
-      mExchange.IsendDown(mGhostSubarrayMap.getSubArray<T>(dimension), dimension,
+      mExchange.IsendDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                           ptr + mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension],
                           ptr + (mGhostDepth + mJumpsHolder.getSizesInMemory()[dimension]) *
                                     mJumpsHolder.getJumpsInMemoryOrder()[dimension]);
@@ -134,11 +257,18 @@ namespace TempLat
     template <typename T> void pUpdate_NOMPI(MemoryBlock<NDim, T> &block, ptrdiff_t dimension = 0)
     {
       // Get View to the full data
-      const auto padding = mJumpsHolder.getPadding();
-      const auto sizes = mJumpsHolder.getSizesInMemory();
+      const auto ghostDepth = mJumpsHolder.getPadding()[0][0];
+      for (size_t i = 0; i < NDim; ++i)
+        if (ghostDepth != mJumpsHolder.getPadding()[i][0] || ghostDepth != mJumpsHolder.getPadding()[i][1]) {
+          throw GhostUpdaterException(
+              "Can only work with identical padding at start and end of each dimension, not this.");
+        }
+      device::array<ptrdiff_t, NDim> sizes;
+      for (size_t i = 0; i < NDim; ++i)
+        sizes[i] = mJumpsHolder.getSizesInMemory()[i];
       std::array<ptrdiff_t, NDim> full_sizes{};
       for (size_t i = 0; i < NDim; ++i)
-        full_sizes[i] = padding[i][0] + sizes[i] + padding[i][1];
+        full_sizes[i] = ghostDepth + sizes[i] + ghostDepth;
       auto View = block.getNDView(full_sizes);
 
       // Create subviews for the from and to views
@@ -156,27 +286,27 @@ namespace TempLat
             // For NDim == 1, we just need to copy the corners.
             Kokkos::parallel_for(
                 "GhostUpdater", Kokkos::RangePolicy(0, 1), KOKKOS_LAMBDA(const size_t) {
-                  View(padding[0][0] - depth) = View(padding[0][0] + sizes[0] - depth);
-                  View(padding[0][0] + sizes[0] + (depth - 1)) = View(padding[0][0] + (depth - 1));
+                  View(ghostDepth - depth) = View(ghostDepth + sizes[0] - depth);
+                  View(ghostDepth + sizes[0] + (depth - 1)) = View(ghostDepth + (depth - 1));
                 });
           } else {
             // so we copy a (NDim- 1)-dimensional slice. Include the padding, which leads to a copy of all corners, too!
             for (size_t i = 0; i < NDim; ++i) {
-              btf_slicesFrom[i] =
-                  (i == dim) ? std::make_pair<ptrdiff_t, ptrdiff_t>(padding[i][0] + sizes[i] - depth,
-                                                                    padding[i][0] + sizes[i] - depth + 1)
-                             : std::make_pair<ptrdiff_t, ptrdiff_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
-              btf_slicesTo[i] =
-                  (i == dim) ? std::make_pair<ptrdiff_t, ptrdiff_t>(padding[i][0] - depth, padding[i][0] - depth + 1)
-                             : std::make_pair<ptrdiff_t, ptrdiff_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
+              btf_slicesFrom[i] = (i == dim)
+                                      ? std::make_pair<ptrdiff_t, ptrdiff_t>(ghostDepth + sizes[i] - depth,
+                                                                             ghostDepth + sizes[i] - depth + 1)
+                                      : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
+              btf_slicesTo[i] = (i == dim)
+                                    ? std::make_pair<ptrdiff_t, ptrdiff_t>(ghostDepth - depth, ghostDepth - depth + 1)
+                                    : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
               ftb_slicesFrom[i] =
-                  (i == dim) ? std::make_pair<ptrdiff_t, ptrdiff_t>(padding[i][0] + (depth - 1),
-                                                                    padding[i][0] + (depth - 1) + 1)
-                             : std::make_pair<ptrdiff_t, ptrdiff_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
+                  (i == dim)
+                      ? std::make_pair<ptrdiff_t, ptrdiff_t>(ghostDepth + (depth - 1), ghostDepth + (depth - 1) + 1)
+                      : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
               ftb_slicesTo[i] = (i == dim)
-                                    ? std::make_pair<ptrdiff_t, ptrdiff_t>(padding[i][0] + sizes[i] + (depth - 1),
-                                                                           padding[i][0] + sizes[i] + (depth - 1) + 1)
-                                    : std::make_pair<ptrdiff_t, ptrdiff_t>(0, padding[i][0] + sizes[i] + padding[i][1]);
+                                    ? std::make_pair<ptrdiff_t, ptrdiff_t>(ghostDepth + sizes[i] + (depth - 1),
+                                                                           ghostDepth + sizes[i] + (depth - 1) + 1)
+                                    : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
             }
             auto btf_fromSubView =
                 std::apply([&](const auto &...args) { return Kokkos::subview(View, args...); }, btf_slicesFrom);
@@ -220,36 +350,6 @@ namespace TempLat
           }
         }
       }
-      return;
-      /* for each dimension, walk all steps.
-       When at the start of a ghost block in that dimension, copy that whole block,
-       and jump past it.
-       When in the 'owned memory' range of that dimension, recurse into deeper dimensions.
-       */
-      // ptrdiff_t blockSize = mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension];
-
-      /* front to back */
-      // std::memmove(ptr + (mGhostDepth + mJumpsHolder.getSizesInMemory()[dimension]) *
-      //                        mJumpsHolder.getJumpsInMemoryOrder()[dimension],
-      //              ptr + mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension], blockSize * sizeof(T));
-
-      /* back to front */
-      // std::memmove(ptr,
-      //              ptr + mJumpsHolder.getSizesInMemory()[dimension] *
-      //              mJumpsHolder.getJumpsInMemoryOrder()[dimension], blockSize * sizeof(T));
-
-      // if (dimension < NDim - 1) {
-      /* already copied blocks which end up in this dimension's ghosting, but do not skip that:
-       * Just as in the MPI case, we need to copy all blocks including the ghosting,
-       * such that after a full cycle, also the corner blocks are properly copies into place.
-       */
-      //  for (ptrdiff_t i = -mGhostDepth; i < mJumpsHolder.getSizesInMemory()[dimension] + mGhostDepth; ++i) {
-      /* so yes, i starts at mGhostDepth, *and* we add another mGhostDepth here:
-       we iterate our owned memory, which starts at ptr + mGhostDepth, and then
-       we skip mGhostDepth slices, because we already copied those entirely. */
-      //    pUpdate_NOMPI(ptr + (mGhostDepth + i) * mJumpsHolder.getJumpsInMemoryOrder()[dimension], dimension + 1);
-      //  }
-      //}
     }
 
   public:

@@ -114,14 +114,14 @@ namespace TempLat
     FFTLayoutStruct<NDim> mFFTLayout;
     LayoutStruct<NDim> mConfigSpaceWithGhosts_layout;
     /** \brief Using ptrdiff_t's even though these numbers are positive definite. We want to be safe in subtractions. */
-    std::array<ptrdiff_t, NDim> mNGridPoints;
+    device::array<ptrdiff_t, NDim> mNGridPoints;
     ptrdiff_t mNGhostCells;
     ptrdiff_t mMemUsedFFTBothSpaces;
     ptrdiff_t mMemUsedConfigGhostSpace;
     ptrdiff_t mNecessaryMemoryAllocation;
 
     /** \brief The padding needed in configuration space when being passed to perform an FFT to Fourier space. */
-    std::array<ptrdiff_t, NDim> mFFTConfigSpacePadding;
+    device::array<ptrdiff_t, NDim> mFFTConfigSpacePadding;
 
     JumpsHolder<NDim> mJumps_fftConfigSpace;
     JumpsHolder<NDim> mJumps_fftFourierSpace;

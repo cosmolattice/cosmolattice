@@ -3,39 +3,57 @@
 # ##############################################################################
 include(CheckLanguage)
 
-option(GPU "Set to ON to build with GPU support (default = OFF)" OFF)
-if(NOT GPU)
-  set(CUDA OFF)
-  set(HIP OFF)
-else()
+option(CUDA "Enable CUDA support" ON)
+option(HIP "Enable HIP support" ON)
+option(OpenMP "Enable OpenMP support" ON)
+
+if(CUDA)
+  # Let's see if we have a CUDA compiler
   check_language(CUDA)
   if(CMAKE_CUDA_COMPILER)
     set(CUDA ON)
     set(HIP OFF)
   else()
     set(CUDA OFF)
-    check_language(HIP)
-    if(CMAKE_HIP_COMPILER)
-      set(HIP ON)
-    else()
-      set(HIP OFF)
-    endif()
   endif()
 endif()
 
-check_language(OpenMP)
-find_package(OpenMP QUIET)
-if(OpenMP_CXX_FOUND)
-  set(OPENMP ON)
-  set(THREADS OFF)
+if(HIP AND NOT CUDA)
+  # Let's see if we have a HIP compiler
+  check_language(HIP)
+  if(CMAKE_HIP_COMPILER)
+    set(HIP ON)
+  else()
+    set(HIP OFF)
+  endif()
+endif()
+
+if(OpenMP
+   AND NOT CUDA
+   AND NOT HIP)
+  check_language(OpenMP)
+  find_package(OpenMP QUIET)
+  if(OpenMP_CXX_FOUND)
+    set(OPENMP ON)
+    set(THREADS OFF)
+  else()
+    set(OPENMP OFF)
+  endif()
 else()
   set(OPENMP OFF)
+endif()
+
+if(NOT CUDA
+   AND NOT HIP
+   AND NOT OPENMP)
   set(THREADS ON)
+else()
+  set(THREADS OFF)
 endif()
 
 message(
   STATUS
-    "Kokkos configuration: \n    OpenMP: ${OPENMP} \n    CUDA: ${CUDA} \n    HIP: ${HIP} \n    Threads: ${THREADS}"
+    "Kokkos configuration: \n    CUDA: ${CUDA} \n    HIP: ${HIP} \n    OpenMP: ${OPENMP} \n    Threads: ${THREADS}"
 )
 
 # ##############################################################################

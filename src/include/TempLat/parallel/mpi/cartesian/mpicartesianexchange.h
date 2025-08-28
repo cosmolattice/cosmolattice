@@ -30,22 +30,20 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     MPICartesianExchange(MPICartesianGroup group) : mGroup(group), mNeighbours(mGroup) {}
 
-    void exchangeUp(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive)
+    void exchangeUp(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive, int sendCount = 1)
     {
 #ifndef NOMPI
       MPI_Status stat;
-      static constexpr int sendCount = 1;
       MPI_Sendrecv(ptrSend, sendCount, dataType, mNeighbours.getUpperNeighbour(dimension), MPITags::dataShiftGhostCells,
                    ptrReceive, sendCount, dataType, mNeighbours.getLowerNeighbour(dimension),
                    MPITags::dataShiftGhostCells, mGroup.getComm(), &stat);
 #endif
     }
 
-    void exchangeDown(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive)
+    void exchangeDown(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive, int sendCount = 1)
     {
 #ifndef NOMPI
       MPI_Status stat;
-      static constexpr int sendCount = 1;
       MPI_Sendrecv(ptrSend, sendCount, dataType, mNeighbours.getLowerNeighbour(dimension), MPITags::dataShiftGhostCells,
                    ptrReceive, sendCount, dataType, mNeighbours.getUpperNeighbour(dimension),
                    MPITags::dataShiftGhostCells, mGroup.getComm(), &stat);
@@ -95,6 +93,8 @@ namespace TempLat
       MPI_Waitall(4, mRequests.data(), &stat);
 #endif
     }
+
+    const MPICartesianGroup &getMPICartesianGroup() const { return mGroup; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

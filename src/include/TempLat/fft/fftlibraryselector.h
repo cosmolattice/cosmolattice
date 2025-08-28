@@ -108,7 +108,7 @@ namespace TempLat
 #endif
 
 #ifndef NOMPI
-      if constexpr (haveHEFFTE && (NDim <= 3)) {
+      if constexpr (haveHEFFTE && (NDim == 3 || NDim == 2)) {
 #ifndef NOHEFFTE
         theLibrary = std::make_shared<HEFFTEInterface<NDim>>();
         backend = "HEFFTE";

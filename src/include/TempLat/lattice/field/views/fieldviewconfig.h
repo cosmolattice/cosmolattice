@@ -21,6 +21,7 @@
 
 #include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/parallel/kokkos/lambdawrapper.h"
+#include <Kokkos_Core_fwd.hpp>
 
 namespace TempLat
 {

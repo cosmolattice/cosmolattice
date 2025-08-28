@@ -16,12 +16,13 @@ int main(int argc, char **argv)
   using T = double;
   constexpr size_t nGrid = 512;
   constexpr size_t nGhost = 1;
-  constexpr size_t nSteps = 64;
+  constexpr size_t nSteps = 1;
   constexpr T dt = 0.01;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost, false);
 
-  toolBox->unsetVerbose();
+  // toolBox->unsetVerbose();
+  toolBox->setVerbose();
 
   Field<NDim, T> phi("phi", toolBox);
   Field<NDim, T> pi("pi", toolBox);
@@ -43,7 +44,10 @@ int main(int argc, char **argv)
     });
 
     for (size_t i = 0; i < nSteps; ++i) {
-      measurer.measure("ghosts", [&]() { pi.updateGhosts(); });
+      measurer.measure("ghosts", [&]() {
+        pi.updateGhosts();
+        Kokkos::fence();
+      });
       measurer.measure("timestepping", [&]() {
         pi = pi + LatticeLaplacian<NDim, decltype(phi)>(phi);
         phi = phi + dt * pi;

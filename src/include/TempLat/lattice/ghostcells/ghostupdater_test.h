@@ -12,8 +12,10 @@
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/lattice/memory/triplestatelayouts.h"
 #include "TempLat/lattice/algebra/operators/power.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 #include <iomanip>
+#include <sstream>
 
 namespace TempLat
 {
@@ -22,12 +24,12 @@ namespace TempLat
   namespace TestScratch
   {
     /* quick and ugly helper struct */
-    struct datumMPITypeHolder {
+    template <size_t NDim> struct datumMPITypeHolder {
       MPI_Datatype dType;
       datumMPITypeHolder()
       {
 #ifndef NOMPI
-        MPI_Type_contiguous(4, TempLat::MPITypeSelect<ptrdiff_t>(), &dType);
+        MPI_Type_contiguous(NDim, TempLat::MPITypeSelect<ptrdiff_t>(), &dType);
         MPI_Type_commit(&dType);
 #endif
       }
@@ -42,7 +44,7 @@ namespace TempLat
     };
 
     template <size_t NDim> struct datum {
-      std::array<ptrdiff_t, NDim> data;
+      device::array<ptrdiff_t, NDim> data;
 
       friend std::ostream &operator<<(std::ostream &ostream, const datum &dat)
       {
@@ -52,88 +54,110 @@ namespace TempLat
 
       static MPI_Datatype getMPIType()
       {
-        static datumMPITypeHolder holder;
+        static datumMPITypeHolder<NDim> holder;
         return holder.dType;
       }
     };
 
-    template <size_t NDim>
-    void datum_initialize(MemoryBlock<NDim, datum<NDim>> &block, const size_t nGrid, const size_t nGhost)
+    template <size_t NDim> void datum_initialize(MemoryBlock<NDim, datum<NDim>> &block, const LayoutStruct<NDim> layout)
     {
+      const auto localSizes = layout.getLocalSizes();
+      const ptrdiff_t nGhost = layout.getNGhosts();
+
+      std::string localSizesStr = "{";
+      for (size_t i = 0; i < NDim; ++i) {
+        localSizesStr += std::to_string(localSizes[i]);
+        if (i != NDim - 1) localSizesStr += ", ";
+      }
+      localSizesStr += "}";
+
       if constexpr (NDim == 1) {
         auto view = block.getRawView();
         Kokkos::parallel_for(
-            Kokkos::RangePolicy(0, nGrid),
-            KOKKOS_LAMBDA(const size_t i) { view(nGhost + i) = datum<NDim>{(ptrdiff_t)i + 1}; });
+            Kokkos::RangePolicy(0, localSizes[0]), KOKKOS_LAMBDA(const size_t i) {
+              view(nGhost + i) = datum<NDim>{layout.getLocalStarts()[0] + (ptrdiff_t)i + 1};
+            });
       } else {
-        std::array<ptrdiff_t, NDim> localSizes;
+        std::array<ptrdiff_t, NDim> viewSizes;
         for (size_t k = 0; k < NDim; ++k)
-          localSizes[k] = nGrid + 2 * nGhost;
-        auto view = block.getNDView(localSizes);
+          viewSizes[k] = localSizes[k] + 2 * nGhost;
+        auto view = block.getNDView(viewSizes);
 
         std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slices{};
         for (size_t k = 0; k < NDim; ++k)
-          slices[k] = std::make_pair(nGhost, nGhost + nGrid);
+          slices[k] = std::make_pair(nGhost, nGhost + localSizes[k]);
 
         auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
-        auto functor = KOKKOS_LAMBDA(const std::array<size_t, NDim> &idx)
+        auto functor = KOKKOS_LAMBDA(const device::IdxArray<NDim> &idx)
         {
-          std::apply([&](const auto &...args) { subView(args...) = datum<NDim>{((ptrdiff_t)args + 1)...}; }, idx);
+          device::array<ptrdiff_t, NDim> val;
+          for (size_t k = 0; k < NDim; ++k)
+            val[k] = idx[k] + layout.getLocalStarts()[k] + 1;
+          device::IdxArray<NDim> inc;
+          for (size_t k = 0; k < NDim; ++k)
+            inc[k] = k;
+          device::apply([&](const auto &...args) { subView(idx[args]...) = datum<NDim>{val[args]...}; }, inc);
         };
 
-        Kokkos::Array<size_t, NDim> it_start{};
-        Kokkos::Array<size_t, NDim> it_stop{};
+        std::array<ptrdiff_t, NDim> it_stop{};
         for (size_t k = 0; k < NDim; ++k)
-          it_stop[k] = nGrid;
-        Kokkos::parallel_for("GhostUpdater", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(it_start, it_stop),
+          it_stop[k] = localSizes[k];
+
+        Kokkos::parallel_for("GhostUpdater", getLocalKokkosPolicy(it_stop),
                              KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
       }
     }
 
     template <size_t nd> bool test_ghost_updater(const ptrdiff_t nGrid, const size_t nGhost)
     {
-      std::array<ptrdiff_t, nd> gridArray{};
-      std::array<ptrdiff_t, nd> gridArrayFull{};
-      for (size_t i = 0; i < nd; ++i) {
-        gridArray[i] = nGrid;
-        gridArrayFull[i] = nGrid + 2 * nGhost;
-      }
+      auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
+      toolBox->unsetVerbose();
+
+      MPICartesianGroup mGroup(FFTMPIDomainSplit<nd>::makeMPIGroup(nd));
+      FFTLibrarySelector<nd> fftlib(mGroup, toolBox->mNGridPointsVec);
+      TripleStateLayouts fullLayout(fftlib.getLayout(), nGhost);
+      GhostUpdater<nd> ghostUpdater(mGroup, fullLayout.getConfigSpaceJumps());
+
+      const auto localSizes = fullLayout.getConfigSpaceLayout().getLocalSizes();
+      std::array<ptrdiff_t, nd> fullLocalSizes{};
+      for (size_t i = 0; i < nd; ++i)
+        fullLocalSizes[i] = localSizes[i] + 2 * nGhost;
 
       constexpr bool verbose = false;
 
       auto print_it = [&](auto view) {
         if (!verbose) return;
-        const size_t total_size = pow<nd>(nGrid + 2 * nGhost);
+        size_t total_size = 1;
+        for (size_t i = 0; i < nd; ++i)
+          total_size *= fullLocalSizes[i];
         std::array<size_t, nd> cIdx{};
+        std::stringstream gridArrayStr;
         for (size_t i = 0; i < total_size; ++i) {
           // Linear index to cartesian index
           size_t lsize = 1;
           size_t remainder = i;
           for (size_t j = 0; j < nd; ++j) {
-            lsize = gridArrayFull[nd - 1 - j];
+            lsize = fullLocalSizes[nd - 1 - j];
             cIdx[nd - 1 - j] = remainder % lsize;
-            remainder = (remainder - cIdx[nd - 1 - j]) / gridArrayFull[nd - 1 - j];
+            remainder = (remainder - cIdx[nd - 1 - j]) / fullLocalSizes[nd - 1 - j];
           }
-          if (cIdx[nd - 1] == 0) sayMPI << "\n";
-          sayMPI << std::setw(4) << view(i).data[0];
-          if ((size_t)cIdx[nd - 1] != (size_t)nGrid - 1) sayMPI << " ";
+          if (cIdx[nd - 1] == 0) gridArrayStr << "\n";
+          gridArrayStr << std::setw(4) << view(i).data[0];
+          if ((size_t)cIdx[nd - 1] != (size_t)nGrid - 1) gridArrayStr << " ";
         }
-        sayMPI << "\n\n";
+        gridArrayStr << "\n\n";
+
+        sayMPI << "Current view:" << gridArrayStr.str();
       };
 
-      auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
-      toolBox->unsetVerbose();
       MemoryBlock<nd, TestScratch::datum<nd>> block(pow<nd>(nGrid + 2 * nGhost));
+      const auto config_layout = fullLayout.getConfigSpaceLayout();
+      TestScratch::datum_initialize<nd>(block, config_layout);
 
-      MPICartesianGroup mGroup(FFTMPIDomainSplit<nd>::makeMPIGroup(nd));
-      FFTLibrarySelector<nd> fftlib(mGroup, gridArray);
-      TripleStateLayouts fullLayout(fftlib.getLayout(), nGhost);
-      GhostUpdater<nd> ghostUpdater(mGroup, fullLayout.getConfigSpaceJumps());
-
-      TestScratch::datum_initialize<nd>(block, nGrid, nGhost);
-
-      const size_t total_size = pow<nd>(nGrid + 2 * nGhost);
-      std::array<size_t, nd> cIdx{};
+      size_t total_size = 1;
+      for (size_t i = 0; i < nd; ++i)
+        total_size *= fullLocalSizes[i];
+      std::array<ptrdiff_t, nd> cIdx{};
 
       auto view = block.getRawHostView();
       print_it(view);
@@ -151,27 +175,30 @@ namespace TempLat
         size_t lsize = 1;
         size_t remainder = i;
         for (size_t j = 0; j < nd; ++j) {
-          lsize = gridArrayFull[nd - 1 - j];
+          lsize = fullLocalSizes[nd - 1 - j];
           cIdx[nd - 1 - j] = remainder % lsize;
-          remainder = (remainder - cIdx[nd - 1 - j]) / gridArrayFull[nd - 1 - j];
+          remainder = (remainder - cIdx[nd - 1 - j]) / fullLocalSizes[nd - 1 - j];
+          cIdx[nd - 1 - j] += config_layout.getLocalStarts()[nd - 1 - j] + 1 - nGhost;
         }
 
         auto should_value = cIdx;
         for (size_t d = 0; d < nd; ++d) {
-          if (cIdx[d] < nGhost)
-            should_value[d] = nGrid - (nGhost - cIdx[d] - 1);
-          else if (cIdx[d] >= nGhost + nGrid)
-            should_value[d] = cIdx[d] - nGrid - (nGhost - 1);
-          else
-            should_value[d] -= nGhost - 1;
+          if (cIdx[d] < 1) should_value[d] += nGrid;
+          if (cIdx[d] > nGrid) should_value[d] -= nGrid;
         }
 
-        auto is_value = view(i).data;
+        std::array<ptrdiff_t, nd> is_value;
+        for (size_t d = 0; d < nd; ++d)
+          is_value[d] = view(i).data[d];
 
         for (size_t d = 0; d < nd; ++d) {
           all_correct &= (size_t)is_value[d] == (size_t)should_value[d];
           if ((size_t)is_value[d] != (size_t)should_value[d])
-            sayMPI << ++ww << " false " << is_value << " | vs | " << should_value << " AT POSITION " << cIdx << "\n";
+            sayMPI << ++ww << " false " << is_value << " (is) | vs | " << should_value << " (should) AT POSITION "
+                   << cIdx << "\n";
+          // else
+          //   sayMPI << ++ww << " true " << is_value << " (is) | vs | " << should_value << " (should) AT POSITION "
+          //          << cIdx << "\n";
         }
       }
       return all_correct;
@@ -181,6 +208,9 @@ namespace TempLat
 
 template <size_t NDim> inline void TempLat::GhostUpdater<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
+  static_assert(NDim > 1, "GhostUpdater test only makes sense in 2 or more dimensions.");
+  // I just don't have the patience to do the 1D case, since it involves no MPI communication.
+
   // restrict the sizes, dimensionality can lead to some huge tests...
 
   tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 1));
@@ -197,7 +227,7 @@ template <size_t NDim> inline void TempLat::GhostUpdater<NDim>::Test(TempLat::TD
     tdd.verify(TestScratch::test_ghost_updater<NDim>(128, 2));
   }
 
-  tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 3));
+  tdd.verify(Throws<GhostUpdaterException>([&]() { TestScratch::test_ghost_updater<NDim>(4, 3); }));
   if constexpr (NDim < 6) tdd.verify(TestScratch::test_ghost_updater<NDim>(16, 3));
   if constexpr (NDim < 4) {
     tdd.verify(TestScratch::test_ghost_updater<NDim>(32, 3));

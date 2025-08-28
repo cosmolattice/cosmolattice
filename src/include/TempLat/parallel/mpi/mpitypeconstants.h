@@ -40,55 +40,64 @@ namespace TempLat
   /** \brief or without having to define a dummy variable to pass on, how about some templates: */
 #ifndef NOMPI
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<char, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<char, T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_CHAR;
   }
 
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<bool, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<bool, T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_CXX_BOOL;
   }
 
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<float, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<float, T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_FLOAT;
   }
 
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<double, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<T, double>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_DOUBLE;
   }
 
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<int, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<int, T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_INT;
   }
 
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<long int, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<long int, T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_LONG;
   }
 
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<long long int, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<long long int, T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_LONG_LONG_INT;
   }
 
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<unsigned long int, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<unsigned long int, T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_UNSIGNED_LONG;
   }
 
   template <typename T>
-  constexpr typename std::enable_if<std::is_same<unsigned long long int, T>::value, MPI_Datatype>::type MPITypeSelect()
+    requires std::is_same_v<unsigned long long int, T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return MPI_UNSIGNED_LONG_LONG;
   }
@@ -96,23 +105,16 @@ namespace TempLat
   /** \brief If you call any method that relies on MPITypeSelect, but you want to pass
    * a custom class with a custom type, your class can implement the method
    * `static MPI_Datatype getMPIType();` (see ghostupdater_test.h of an example!)
-   * which is then detected by the following SFINAE template:
+   * which is then detected by the following concept:
    */
-  // SFINAE test
-  template <typename T> class HasToMPIDataType
-  {
-  private:
-    typedef char YesType[1];
-    typedef char NoType[2];
-
-    template <typename C> static YesType &test(decltype(&C::getMPIType));
-    template <typename C> static NoType &test(...);
-
-  public:
-    enum { value = sizeof(test<T>(0)) == sizeof(YesType) };
-  };
   template <typename T>
-  constexpr typename std::enable_if<HasToMPIDataType<T>::value, MPI_Datatype>::type MPITypeSelect()
+  concept HasToMPIDataType = requires {
+    { T::getMPIType() } -> std::same_as<MPI_Datatype>;
+  };
+
+  template <typename T>
+    requires HasToMPIDataType<T>
+  constexpr MPI_Datatype MPITypeSelect()
   {
     return T::getMPIType();
   }
