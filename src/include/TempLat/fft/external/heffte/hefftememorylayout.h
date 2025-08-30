@@ -38,8 +38,10 @@ namespace TempLat
     HEFFTEMemoryLayout() {}
 
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid,
-                                                    bool forbidTransposition = HEFFTEWITHTRANSPOSITION())
+                                                    bool forbidTransposition = !HEFFTEWITHTRANSPOSITION())
     {
+      forbidTransposition = true;
+
       double scale_factor = 1.0;
       for (size_t i = 0; i < NDim; ++i)
         scale_factor *= nGrid[i];

@@ -150,6 +150,7 @@ namespace TempLat
       getPlans_double();
       if (verbose) sayMPI << "Going to perform double r2c.\n";
       mPlansDouble->r2c(mBlock);
+      mBlock.flagHostMirrorOutdated();
     }
 
     void r2c(MemoryBlock<NDim, float> &mBlock)
@@ -157,6 +158,7 @@ namespace TempLat
       getPlans_float();
       if (verbose) sayMPI << "Going to perform float r2c.\n";
       mPlansFloat->r2c(mBlock);
+      mBlock.flagHostMirrorOutdated();
     }
 
     void c2r(MemoryBlock<NDim, double> &mBlock)
@@ -164,6 +166,7 @@ namespace TempLat
       getPlans_double();
       if (verbose) sayMPI << "Going to perform double c2r.\n";
       mPlansDouble->c2r(mBlock);
+      mBlock.flagHostMirrorOutdated();
     }
 
     void c2r(MemoryBlock<NDim, float> &mBlock)
@@ -171,6 +174,7 @@ namespace TempLat
       getPlans_float();
       if (verbose) sayMPI << "Going to perform float c2r.\n";
       mPlansFloat->c2r(mBlock);
+      mBlock.flagHostMirrorOutdated();
     }
 
     void getPlans_float()

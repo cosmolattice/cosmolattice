@@ -72,6 +72,24 @@ namespace TempLat
         configSizes[i] = layout.configurationSpace.getLocalSizes()[i];
         fourierSizes[i] = layout.fourierSpace.getLocalSizes()[i];
       }
+      configSizes[NDim - 1] -= 2;
+
+      std::cout << "HEFFTE plan: configStarts = ";
+      for (auto &&it : configStarts)
+        std::cout << it << " ";
+      std::cout << "\n";
+      std::cout << "HEFFTE plan: configSizes = ";
+      for (auto &&it : configSizes)
+        std::cout << it << " ";
+      std::cout << "\n";
+      std::cout << "HEFFTE plan: fourierStarts = ";
+      for (auto &&it : fourierStarts)
+        std::cout << it << " ";
+      std::cout << "\n";
+      std::cout << "HEFFTE plan: fourierSizes = ";
+      for (auto &&it : fourierSizes)
+        std::cout << it << " ";
+      std::cout << std::endl;
 
       // local box and outbox, i.e. shapes of the local data in memory
       heffte::box3d<int> inbox(configStarts, configSizes);
@@ -85,6 +103,9 @@ namespace TempLat
 
       // plan options
       heffte::plan_options options = heffte::default_options<heffte_backend_tag>();
+      options.algorithm = heffte::reshape_algorithm::p2p;
+      options.use_pencils = false;
+      options.use_gpu_aware = true;
 
       return std::make_shared<PlanType>(inbox, outbox, r2c_direction, comm, options);
     }

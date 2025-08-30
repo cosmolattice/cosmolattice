@@ -236,7 +236,9 @@ namespace TempLat
     return ret;
   }
 
-  template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const device::array<T, N> &vec)
+  template <typename T, size_t N>
+    requires(!std::is_same_v<std::array<T, N>, device::array<T, N>>)
+  std::ostream &operator<<(std::ostream &stream, const device::array<T, N> &vec)
   {
     return PutToStream(stream, vec);
   };

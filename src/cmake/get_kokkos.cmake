@@ -125,17 +125,18 @@ execute_process(
         -DKokkos_ENABLE_THREADS=${THREADS} \
         -DKokkos_ENABLE_SERIAL=ON \
         -DKokkos_ENABLE_TESTS=OFF \
-        ../kokkos-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+        ../kokkos-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_config.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
 
 message(STATUS "Building Kokkos...")
 execute_process(
-  COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+  COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_build.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
 
 message(STATUS "Installing Kokkos...")
 execute_process(
-  COMMAND bash -c "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
+  COMMAND bash -c
+          "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_install.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
 
 # Kokkos by default does not support extensions, so we force them off

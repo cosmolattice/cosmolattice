@@ -223,7 +223,7 @@ namespace TempLat
       finalizedOnce = true;
       pull();
 
-      comm.Allreduce(&mMultiplicities, MPI_SUM);
+      comm.Allreduce(mMultiplicities, MPI_SUM);
 
       mValues.finalize(comm);
       mBinBounds.finalize(comm);

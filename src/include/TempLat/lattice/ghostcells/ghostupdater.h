@@ -97,6 +97,7 @@ namespace TempLat
       }
     }
 
+  public:
     template <typename T> void update_forDimension_device(MemoryBlock<NDim, T> &block, ptrdiff_t dimension)
     {
       // We will copy slabs of thickness ghostDepth in the dimension 'dimension'.
@@ -204,6 +205,7 @@ namespace TempLat
       }
     }
 
+  private:
     template <typename T> void update_forDimension(MemoryBlock<NDim, T> &block, ptrdiff_t dimension)
     {
       auto *ptr = block.data();

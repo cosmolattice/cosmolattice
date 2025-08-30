@@ -29,7 +29,7 @@ namespace TempLat
 
     template <typename... Args>
       requires(sizeof...(Args) == NDim)
-    KOKKOS_FORCEINLINE_FUNCTION void operator()(Args &&...args) const
+    KOKKOS_FORCEINLINE_FUNCTION void operator()(const Args &...args) const
     {
       // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
       // However, we do not want to impose this on the level of the memory layouts. In particular, this would
@@ -37,7 +37,7 @@ namespace TempLat
       // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
       // on CPU, we do not reverse the access pattern.
 #if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
-      fun(reverse_array(device::IdxArray<NDim>{{std::forward<Args>(args)...}}));
+      fun(reverse_array(device::IdxArray<NDim>{{args...}}));
 #else
       fun({{std::forward<Args>(args)...}});
 #endif
@@ -70,7 +70,7 @@ namespace TempLat
       // require additional transpositions when going to Fourier space, which is not what we want. So we do the
       // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
       // on CPU, we do not reverse the access pattern.
-      auto tuple = device::tie(std::forward<Args>(args)...);
+      auto tuple = device::tie(args...);
 #if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
       fun(makeArray(reverse_tuple(tuple_first<NDim>(tuple))),
           device::get<NDim>(tuple)); // the last argument is the reduction result
@@ -85,7 +85,7 @@ namespace TempLat
       requires(sizeof...(Args) == NDim)
     KOKKOS_FORCEINLINE_FUNCTION auto makeArray(device::tuple<Args...> &&tuple) const
     {
-      return device::apply([](auto &&...args) { return device::IdxArray<NDim>{{args...}}; }, tuple);
+      return device::apply([](const auto &...args) { return device::IdxArray<NDim>{{args...}}; }, tuple);
     }
   };
 

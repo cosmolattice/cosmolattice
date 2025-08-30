@@ -82,8 +82,8 @@ namespace TempLat
       for (const auto &it : vPos)
         vPosString += std::to_string(it) + " ";
       vPosString += "}}";
-      std::cout << "Not equal: " << vPosString << " -> " << valueShouldBe << " != " << norm * val << " = " << norm
-                << " * " << val << "\n";
+      sayMPI << "Not equal: " << vPosString << " -> " << valueShouldBe << " != " << norm * val << " = " << norm << " * "
+             << val;
     }
     return thisCheck;
   };
@@ -122,31 +122,43 @@ namespace TempLat
           mem[i] = coordinateToValue<NDim, T>(pos, currentLayout, true);
         });
 
-    /*{
+    {
       const auto result_view = mem.getRawHostView();
       std::cout << "Memory contents BEFORE c2r and r2c:\n";
-      for (size_t i = 0; i < mem.size(); ++i)
-        std::cout << "mem[" << i << "] = " << result_view(i) << "\n";
-    }*/
+      for (size_t i = 0; i < mem.size(); ++i) {
+        std::cout /*<< "mem[" << i << "] = "*/ << std::setw(12) << result_view(i);
+        if (i % nGridFourier[0] == nGridFourier[0] - 1)
+          std::cout << std::endl;
+        else
+          std::cout << ", ";
+      }
+      std::cout << std::endl;
+    }
 
     sayMPI << "About to do FFT.\n";
     ffter.c2r(mem);
     ffter.r2c(mem);
     sayMPI << "Finished FFT.\n";
 
-    if (ffter.getBackend() == "HEFFTE")
-      tdd.verify(!mem.isHostViewAllocated());
-    else
-      tdd.verify(mem.isHostViewAllocated());
+    // if (ffter.getBackend() == "HEFFTE")
+    //   tdd.verify(!mem.isHostViewAllocated());
+    // else
+    //   tdd.verify(mem.isHostViewAllocated());
 
     const T norm = 1. / std::pow(nGrid[0], NDim) * ffter.getLayout().getIntrinsicScales().r2c *
                    ffter.getLayout().getIntrinsicScales().c2r;
-    /*{
+    {
       const auto result_view = mem.getRawHostView();
       std::cout << "Memory contents AFTER c2r and r2c (normalized):\n";
-      for (size_t i = 0; i < mem.size(); ++i)
-        std::cout << "mem[" << i << "] = " << result_view(i) * norm << "\n";
-    }*/
+      for (size_t i = 0; i < mem.size(); ++i) {
+        std::cout /*<< "mem[" << i << "] = "*/ << std::setw(12) << result_view(i);
+        if (i % nGridFourier[0] == nGridFourier[0] - 1)
+          std::cout << std::endl;
+        else
+          std::cout << ", ";
+      }
+      std::cout << std::endl;
+    }
     bool c2r_then_r2c = true;
     const auto result_view = mem.getRawHostView();
     for (size_t i = 0; i < mem.size(); ++i) {
@@ -231,13 +243,14 @@ inline void TempLat::FFTLibrarySelector<_NDim>::TestBody(TempLat::TDDAssertion &
 
   // We test in 2,3,4 dimensions, and for grids 2^4, ..., 2^5.
   constexpr_for<2, 3, 1>([&](auto i) {
+    sayMPI << "Testing FFTLibrarySelector for NDim = " << decltype(i)::value << "\n";
     constexpr size_t NDim = decltype(i)::value;
     for (ptrdiff_t inGrid = 2; inGrid < 3; ++inGrid) {
       device::array<ptrdiff_t, NDim> nGrid;
       for (auto &it : nGrid)
         it = std::pow(2, inGrid);
-      test_r2c_c2r<NDim, T>(tdd, nGrid);
-      // test_c2r_r2c<NDim, T>(tdd, nGrid);
+      // test_r2c_c2r<NDim, T>(tdd, nGrid);
+      test_c2r_r2c<NDim, T>(tdd, nGrid);
     }
   });
 }

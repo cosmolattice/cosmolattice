@@ -93,10 +93,10 @@ namespace TempLat
     {
       pull();
       /* reduce! */
-      comm.Allreduce(&mAverages, MPI_SUM);
-      comm.Allreduce(&mVariances, MPI_SUM);
-      comm.Allreduce(&mMins, MPI_MIN);
-      comm.Allreduce(&mMaxs, MPI_MAX);
+      comm.Allreduce(mAverages, MPI_SUM);
+      comm.Allreduce(mVariances, MPI_SUM);
+      comm.Allreduce(mMins, MPI_MIN);
+      comm.Allreduce(mMaxs, MPI_MAX);
     }
 
     /** \brief to be called only after finalize, returning the normalized result, this time transposed: all info per

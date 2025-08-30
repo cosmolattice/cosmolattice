@@ -21,8 +21,7 @@ int main(int argc, char **argv)
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost, false);
 
-  // toolBox->unsetVerbose();
-  toolBox->setVerbose();
+  toolBox->unsetVerbose();
 
   Field<NDim, T> phi("phi", toolBox);
   Field<NDim, T> pi("pi", toolBox);

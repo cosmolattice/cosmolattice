@@ -37,7 +37,9 @@ namespace TempLat
     /** \brief Makes a copy of your value, applies the reduction
      *  in-place on the copied value, returns the resulting value.
      */
-    template <typename T> T Allreduce(const T &value, MPI_Op operation, ptrdiff_t size = 1, int *error = NULL)
+    template <typename T>
+      requires requires { MPITypeSelect<T>(); }
+    T Allreduce(const T &value, MPI_Op operation, ptrdiff_t size = 1, int *error = NULL)
     {
       T copyValue = value;
       int myerror = MPI_SUCCESS != MPI_Allreduce(MPI_IN_PLACE, &copyValue, size, MPITypeSelect<T>(), operation, mComm);
@@ -63,6 +65,29 @@ namespace TempLat
         combineAllError(myerror);
       }
       return *value;
+    }
+
+    /** \brief The vector / array versions perform the reduction in-
+     *  place, you loose your original array.
+     */
+    template <typename View>
+      requires requires(View view) {
+        typename View::value_type;
+        typename View::size_type;
+        view.data();
+        MPITypeSelect<typename View::value_type>();
+      }
+    View Allreduce(View value, MPI_Op operation, ptrdiff_t size = 0, int *error = NULL)
+    {
+      using T = typename View::value_type;
+      int myerror =
+          MPI_SUCCESS != MPI_Allreduce(MPI_IN_PLACE, value.data(), value.size(), MPITypeSelect<T>(), operation, mComm);
+      if (error) {
+        *error = myerror;
+      } else {
+        combineAllError(myerror);
+      }
+      return value;
     }
 
     /** \brief The vector / array versions perform the reduction in-
