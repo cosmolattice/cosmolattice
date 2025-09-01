@@ -55,14 +55,20 @@ namespace TempLat
     const auto &operator()(Tag<1> t) const { return mI; }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires requires(FourierView<NDim, T> mR, IDX... idx) {
+        requires VariadicNDIndex<NDim, IDX...>;
+        mR.get(idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.get(idx...);
     }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires requires(FourierView<NDim, T> mI, IDX... idx) {
+        requires VariadicNDIndex<NDim, IDX...>;
+        mI.get(idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return mI.get(idx...);

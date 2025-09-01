@@ -7,10 +7,87 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/lattice/algebra/algebra.h"
+#include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
+
 inline void TempLat::ComplexFieldShiftTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(true);
+
+  /*  using T = TempLat::ComplexFieldAsFourier<TempLat::ScalarComplexFieldMultiply<
+        TempLat::Operators::Division<
+            int,
+            TempLat::Operators::Addition<
+                TempLat::Operators::Addition<
+                    TempLat::Operators::PowerN<
+                        2, TempLat::Operators::Subtraction<
+                               TempLat::Tag<1>, TempLat::Operators::Cosine<TempLat::Operators::Multiplication<
+                                                    double,
+     TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>, TempLat::Operators::PowerN< 2,
+     TempLat::Operators::UnaryMinus<TempLat::Operators::Sine<TempLat::Operators::Multiplication< double,
+     TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>>, TempLat::Operators::Addition<
+                    TempLat::Operators::Addition<
+                        TempLat::Operators::PowerN<
+                            2, TempLat::Operators::Subtraction<
+                                   TempLat::Tag<1>,
+                                   TempLat::Operators::Cosine<TempLat::Operators::Multiplication<
+                                       double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>,
+                        TempLat::Operators::PowerN<
+                            2,
+     TempLat::Operators::UnaryMinus<TempLat::Operators::Sine<TempLat::Operators::Multiplication< double,
+     TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>>, TempLat::Operators::Addition<
+                        TempLat::Operators::PowerN<
+                            2, TempLat::Operators::Subtraction<
+                                   TempLat::Tag<1>,
+                                   TempLat::Operators::Cosine<TempLat::Operators::Multiplication<
+                                       double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>,
+                        TempLat::Operators::PowerN<
+                            2,
+     TempLat::Operators::UnaryMinus<TempLat::Operators::Sine<TempLat::Operators::Multiplication< double,
+     TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>>>>>, TempLat::ComplexFieldConjugate<
+            TempLat::ComplexFieldSubtraction<TempLat::ComplexFieldWrapper<TempLat::Tag<1>, TempLat::ZeroType>,
+                                             TempLat::U1Exponential<TempLat::Operators::Multiplication<
+                                                 double,
+     TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>>>;*/
+
+  using T = TempLat::Operators::Division<
+      int,
+      TempLat::Operators::Addition<
+          TempLat::Operators::Addition<
+              TempLat::Operators::PowerN<
+                  2, TempLat::Operators::Subtraction<
+                         TempLat::Tag<1>, TempLat::Operators::Cosine<TempLat::Operators::Multiplication<
+                                              double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>,
+              TempLat::Operators::PowerN<
+                  2, TempLat::Operators::UnaryMinus<TempLat::Operators::Sine<TempLat::Operators::Multiplication<
+                         double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>>,
+          TempLat::Operators::Addition<
+              TempLat::Operators::Addition<
+                  TempLat::Operators::PowerN<
+                      2, TempLat::Operators::Subtraction<
+                             TempLat::Tag<1>, TempLat::Operators::Cosine<TempLat::Operators::Multiplication<
+                                                  double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>,
+                  TempLat::Operators::PowerN<
+                      2, TempLat::Operators::UnaryMinus<TempLat::Operators::Sine<TempLat::Operators::Multiplication<
+                             double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>>,
+              TempLat::Operators::Addition<
+                  TempLat::Operators::PowerN<
+                      2, TempLat::Operators::Subtraction<
+                             TempLat::Tag<1>, TempLat::Operators::Cosine<TempLat::Operators::Multiplication<
+                                                  double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>,
+                  TempLat::Operators::PowerN<
+                      2, TempLat::Operators::UnaryMinus<TempLat::Operators::Sine<TempLat::Operators::Multiplication<
+                             double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>>>>>;
+
+  using T2 = TempLat::ComplexFieldConjugate<
+      TempLat::ComplexFieldSubtraction<TempLat::ComplexFieldWrapper<TempLat::Tag<1>, TempLat::ZeroType>,
+                                       TempLat::U1Exponential<TempLat::Operators::Multiplication<
+                                           double, TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>>>>>;
+  using T1 = TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>;
+  using RES1 = TempLat::ComplexFieldAsFourier<TempLat::ScalarComplexFieldMultiply<T1, T2>>;
+
+  tdd.verify(HasGetMethod<RES1>);
 }
 
 #endif

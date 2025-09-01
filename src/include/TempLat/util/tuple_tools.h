@@ -18,10 +18,13 @@ namespace TempLat
    * @return auto a tied tuple of the last i elements
    */
   template <size_t i, typename Head, typename... Tail>
+    requires(i <= sizeof...(Tail))
   KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_last(const device::tuple<Head, Tail...> &t)
   {
     static_assert(i <= sizeof...(Tail), "Cannot take a longer tail than the tuple.");
-    if constexpr (sizeof...(Tail) == i)
+    if constexpr (sizeof...(Tail) + 1 == i)
+      return device::apply([](auto &head, auto &...tail) { return device::tie(head, tail...); }, t);
+    else if constexpr (sizeof...(Tail) == i)
       return device::apply([](auto & /*head*/, auto &...tail) { return device::tie(tail...); }, t);
     else
       return device::apply([](auto & /*head*/, auto &...tail) { return tuple_last<i>(device::tie(tail...)); }, t);
@@ -34,10 +37,11 @@ namespace TempLat
    * @param t tuple to be split
    * @return auto a tied tuple of the first i elements
    */
-  template <size_t i, typename Head, typename... Tail>
+  template <int i, typename Head, typename... Tail>
   KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_first(const device::tuple<Head, Tail...> &t)
   {
     static_assert(i <= sizeof...(Tail), "Cannot take a longer sequence than the tuple.");
+    static_assert(i >= 0, "Cannot take a longer sequence than the tuple.");
     if constexpr (i == 0)
       return device::tuple();
     else if constexpr (i == 1)
@@ -80,7 +84,6 @@ namespace TempLat
   KOKKOS_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth(const device::tuple<IDX...> &tt, const I &add)
   {
     constexpr size_t len = sizeof...(IDX);
-    static_assert(n < len);
     if constexpr (n >= 1) {
       return device::tuple_cat(tuple_first<n>(tt), device::make_tuple(device::get<n>(tt) + add),
                                tuple_last<len - n - 1>(tt));

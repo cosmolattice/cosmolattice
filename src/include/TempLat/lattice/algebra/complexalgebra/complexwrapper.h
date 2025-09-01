@@ -43,14 +43,20 @@ namespace TempLat
     template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return ComplexFieldGet(t); }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R mR, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        GetValue::get(mR, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return GetEval::getEval(mR, idx...);
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(T mT, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        GetValue::get(mT, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return GetEval::getEval(mT, idx...);

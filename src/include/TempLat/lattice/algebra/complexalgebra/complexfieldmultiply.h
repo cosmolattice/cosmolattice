@@ -38,14 +38,26 @@ namespace TempLat
     auto ComplexFieldGet(Tag<1> t) const { return Real(mR) * Imag(mT) + Imag(mR) * Real(mT); }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R mR, T mT, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        ComplexFieldGetter::get(mR, 0_c, idx...);
+        ComplexFieldGetter::get(mT, 0_c, idx...);
+        ComplexFieldGetter::get(mR, 1_c, idx...);
+        ComplexFieldGetter::get(mT, 1_c, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return ComplexFieldGetter::get(mR, 0_c, idx...) * ComplexFieldGetter::get(mT, 0_c, idx...) -
              ComplexFieldGetter::get(mR, 1_c, idx...) * ComplexFieldGetter::get(mT, 1_c, idx...);
     }
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R mR, T mT, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        ComplexFieldGetter::get(mR, 0_c, idx...);
+        ComplexFieldGetter::get(mT, 0_c, idx...);
+        ComplexFieldGetter::get(mR, 1_c, idx...);
+        ComplexFieldGetter::get(mT, 1_c, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return ComplexFieldGetter::get(mR, 0_c, idx...) * ComplexFieldGetter::get(mT, 1_c, idx...) +
@@ -94,13 +106,6 @@ namespace TempLat
   template <typename R>
     requires(HasComplexFieldGet<R> && !std::is_same_v<R, OneType>)
   KOKKOS_FORCEINLINE_FUNCTION auto operator*(OneType, const R &r)
-  {
-    return r;
-  }
-
-  template <typename R>
-    requires(HasComplexFieldGet<R> && !std::is_same_v<R, OneType>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, OneType)
   {
     return r;
   }

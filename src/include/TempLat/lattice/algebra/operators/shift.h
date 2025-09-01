@@ -26,7 +26,7 @@ namespace TempLat
     using UnaryOperator<R>::mR;
 
     static constexpr size_t dim = sizeof...(SHIFTS);
-    static constexpr auto shifts = std::make_tuple(SHIFTS...);
+    static constexpr auto shifts = device::make_tuple(SHIFTS...);
 
     KOKKOS_FUNCTION
     ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) {}
@@ -37,7 +37,7 @@ namespace TempLat
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        tuple_add_to_nth<d>(std::tie(idx...), std::get<d>(shifts));
+        tuple_add_to_nth<d>(device::tie(idx...), device::get<d>(shifts));
       });
       return GetValue::get(mR, idx...);
     }
@@ -48,7 +48,7 @@ namespace TempLat
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        tuple_add_to_nth<d>(std::tie(idx...), std::get<d>(shifts));
+        tuple_add_to_nth<d>(device::tie(idx...), device::get<d>(shifts));
       });
       return DoEval::eval(mR, idx...);
     }
@@ -58,17 +58,22 @@ namespace TempLat
     static std::string operatorString()
     {
       std::string res = "_(";
-      for (auto x : std::tie(SHIFTS...))
+      for (auto x : device::tie(SHIFTS...))
         res += std::to_string(x) + ",";
       res.pop_back();
       return res + ")";
     }
   };
 
-  template <typename R, int N> class ExpressionShifterByOne : public UnaryOperator<R>
+  template <typename R, int _N> class ExpressionShifterByOne : public UnaryOperator<R>
   {
     // TODO: override confirmspace to force configuration space.
   public:
+    static_assert(_N != 0, "_N cannot be 0.");
+
+    static constexpr int N = _N > 0 ? _N : -_N;
+    static constexpr int dir = _N > 0 ? 1 : -1;
+
     /* Put public methods here. These should change very little over time. */
     using UnaryOperator<R>::mR;
 
@@ -76,10 +81,14 @@ namespace TempLat
     ExpressionShifterByOne(const R &pR) : UnaryOperator<R>(pR) {}
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R r, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        GetValue::get(r, idx...);
+        tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
     {
-      tuple_add_to_nth<N>(std::tie(idx...), 1);
+      tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
       return GetValue::get(mR, idx...);
     }
 
@@ -87,7 +96,7 @@ namespace TempLat
       requires VariadicIndex<IDX...>
     KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
-      tuple_add_to_nth<N>(std::tie(idx...), 1);
+      tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
       return DoEval::eval(mR, idx...);
     }
 

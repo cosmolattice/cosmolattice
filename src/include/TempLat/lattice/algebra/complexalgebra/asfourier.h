@@ -8,6 +8,8 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -26,14 +28,15 @@ namespace TempLat
 
     ComplexFieldAsFourier(const R &pR) : mR(pR) {}
 
-    static constexpr size_t NDim = R::NDim;
+    static constexpr size_t NDim = GetNDim::get<R>();
 
     template <typename... IDX>
-      requires requires {
-        requires(NDim == sizeof...(IDX));
-        requires(std::is_integral_v<std::decay_t<IDX>> && ...);
+      requires requires(R mR, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        mR.ComplexFieldGet(0_c, idx...);
+        mR.ComplexFieldGet(1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx)
+    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return complex<mRType>(mR.ComplexFieldGet(0_c, idx...), mR.ComplexFieldGet(1_c, idx...));
     }

@@ -33,7 +33,7 @@ namespace TempLat
       requires(!HasDx<U>)
     KOKKOS_FORCEINLINE_FUNCTION static constexpr double getDx(U &obj)
     {
-      return 1;
+      return 1.f;
     }
 
   public:

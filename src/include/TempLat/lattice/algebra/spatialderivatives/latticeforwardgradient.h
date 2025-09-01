@@ -28,18 +28,23 @@ namespace TempLat
    *
    * Unit test: make test-forwardgradientlocal
    **/
-  template <int NDim, typename R> class LatticeForwardGradient : public UnaryOperator<R>
+  template <size_t _NDim, typename R> class LatticeForwardGradient : public UnaryOperator<R>
   {
   public:
     /* Put public methods here. These should change very little over time. */
     using GetReturnType = typename GetGetReturnType<R>::type;
     using FloatType = typename GetFloatType<GetReturnType>::type;
 
+    static constexpr size_t NDim = _NDim;
+
     KOKKOS_FUNCTION
     LatticeForwardGradient(const R &pR) : mR(pR), dx(GetDx::getDx(mR)) {}
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires requires(R r, IDX... idx) {
+        requires VariadicNDIndex<NDim, IDX...>;
+        GetValue::get(r, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx)
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)

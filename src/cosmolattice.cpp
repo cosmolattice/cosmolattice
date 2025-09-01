@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
   // You can check in this way, in the console output,
   // that you are running indeed the model you intended.
 
-  double t = 0;
+  typename ModelType::FloatType t = 0;
   // Our time variable. Initialized below.
 
   if (not manager.doWeRestart()) // If this is a new simulation:

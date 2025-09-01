@@ -38,7 +38,10 @@ namespace TempLat
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        GetValue::get(mR, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)

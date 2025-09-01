@@ -86,7 +86,7 @@ namespace TempLat
       std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other) const
       {
         /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
         return Tag<N>() * PowerN<N - 1, R>(mR) * GetDeriv::get(mR, other);

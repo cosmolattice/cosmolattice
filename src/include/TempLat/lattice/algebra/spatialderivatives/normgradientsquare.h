@@ -21,12 +21,14 @@ namespace TempLat
    *
    * Unit test: make test-normgradientsquare
    **/
-  template <int NDim, typename R> class NormGradientSquare : public UnaryOperator<R>
+  template <size_t _NDim, typename R> class NormGradientSquare : public UnaryOperator<R>
   {
   public:
     /* Put public methods here. These should change very little over time. */
     using GetReturnType = typename GetGetReturnType<R>::type;
     using FloatType = typename GetFloatType<GetReturnType>::type;
+
+    static constexpr size_t NDim = _NDim;
 
     using UnaryOperator<R>::mR;
 
@@ -34,9 +36,9 @@ namespace TempLat
     NormGradientSquare(const R &pR) : UnaryOperator<R>(pR), dx2(pow<2>(GetDx::getDx(pR))) {}
 
     template <typename... IDX>
-      requires requires(R r, IDX... idx) {
+      requires requires(IDX... idx) {
         requires VariadicIndex<IDX...>;
-        GetValue::get(r, idx...);
+        GetValue::get(mR, idx...);
       }
     KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {

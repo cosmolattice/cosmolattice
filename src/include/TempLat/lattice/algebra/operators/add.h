@@ -70,7 +70,7 @@ namespace TempLat
   }
 
   /** \brief Specialize for possible zero input! */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION T operator+(const ZeroType a, const ZeroType b) { return a; }
+  KOKKOS_FORCEINLINE_FUNCTION auto operator+(const ZeroType a, const ZeroType b) { return ZeroType(); }
 
   /** \brief Specialize for possible half input! */
   KOKKOS_FORCEINLINE_FUNCTION

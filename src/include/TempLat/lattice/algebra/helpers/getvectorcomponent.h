@@ -34,7 +34,7 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         GetValue::get(mR, idx..., mJ);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX... idx) const
+    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return GetValue::get(mR, idx..., mJ);
     }
@@ -71,7 +71,7 @@ namespace TempLat
 #endif
   };
 
-  template <typename R> GetVectorComponentHelper<R> getVectorComponent(const R &pR, ptrdiff_t i)
+  template <typename R> GetVectorComponentHelper<R> getVectorComponent(const R &pR, const ptrdiff_t i)
   {
     return GetVectorComponentHelper<R>(pR, i);
   }

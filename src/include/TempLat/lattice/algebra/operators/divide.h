@@ -26,7 +26,8 @@ namespace TempLat
      *
      * Unit test: make test-divide
      **/
-    template <typename R, typename T> struct Division : public BinaryOperator<R, T> {
+    template <typename R, typename T> class Division : public BinaryOperator<R, T>
+    {
     public:
       using BinaryOperator<R, T>::mR;
       using BinaryOperator<R, T>::mT;
@@ -66,13 +67,17 @@ namespace TempLat
       KOKKOS_FUNCTION
       SafeDivision(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
-      KOKKOS_FORCEINLINE_FUNCTION
-      auto get(ptrdiff_t i)
+      template <typename... IDX>
+        requires requires(IDX... idx) {
+          GetValue::get(mR, idx...);
+          GetValue::get(mT, idx...);
+        }
+      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-        auto a = GetValue::get(mR, i);
-        auto b = GetValue::get(mT, i);
+        const auto a = GetValue::get(mR, idx...);
+        const auto b = GetValue::get(mT, idx...);
 
-        decltype(a) zero(0);
+        decltype(a / b) zero(0);
 
         return AlmostEqual(a, zero) ? zero : a / b;
       }
