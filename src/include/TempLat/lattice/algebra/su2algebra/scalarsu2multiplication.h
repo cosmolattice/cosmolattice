@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
@@ -31,28 +31,70 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     ScalarSU2Multiplication(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
-    typedef typename SU2GetGetReturnType<T>::type SV;
+    using SV = typename SU2GetGetReturnType<T>::type;
 
-    auto SU2Get(Tag<0> t) { return mR * mT.SU2Get(0_c); }
-    auto SU2Get(Tag<1> t) { return mR * mT.SU2Get(1_c); }
-    auto SU2Get(Tag<2> t) { return mR * mT.SU2Get(2_c); }
-    auto SU2Get(Tag<3> t) { return mR * mT.SU2Get(3_c); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<0> t) const { return mR * mT.SU2Get(0_c); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<1> t) const { return mR * mT.SU2Get(1_c); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<2> t) const { return mR * mT.SU2Get(2_c); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<3> t) const { return mR * mT.SU2Get(3_c); }
 
-    auto SU2Get(Tag<0> t, ptrdiff_t i) { return GetValue::get(mR, i) * mT.SU2Get(0_c, i); }
-    auto SU2Get(Tag<1> t, ptrdiff_t i) { return GetValue::get(mR, i) * mT.SU2Get(1_c, i); }
-    auto SU2Get(Tag<2> t, ptrdiff_t i) { return GetValue::get(mR, i) * mT.SU2Get(2_c, i); }
-    auto SU2Get(Tag<3> t, ptrdiff_t i) { return GetValue::get(mR, i) * mT.SU2Get(3_c, i); }
-
-    std::array<SV, 4> SU2Get(ptrdiff_t i) { return {SU2Get(0_c, i), SU2Get(1_c, i), SU2Get(2_c, i), SU2Get(3_c, i)}; }
-
-    template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
-
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires requires(R mR, T mT, IDX... idx) {
+        GetValue::get(mR, idx...);
+        mT.SU2Get(0_c, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return GetValue::get(mR, idx...) * mT.SU2Get(0_c, idx...);
     }
-    virtual std::string operatorString() const { return "*"; }
+    template <typename... IDX>
+      requires requires(R mR, T mT, IDX... idx) {
+        GetValue::get(mR, idx...);
+        mT.SU2Get(1_c, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
+    {
+      return GetValue::get(mR, idx...) * mT.SU2Get(1_c, idx...);
+    }
+    template <typename... IDX>
+      requires requires(R mR, T mT, IDX... idx) {
+        GetValue::get(mR, idx...);
+        mT.SU2Get(2_c, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
+    {
+      return GetValue::get(mR, idx...) * mT.SU2Get(2_c, idx...);
+    }
+    template <typename... IDX>
+      requires requires(R mR, T mT, IDX... idx) {
+        GetValue::get(mR, idx...);
+        mT.SU2Get(3_c, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
+    {
+      return GetValue::get(mR, idx...) * mT.SU2Get(3_c, idx...);
+    }
+
+    template <typename... IDX>
+      requires requires(IDX... idx) {
+        GetValue::get(mR, idx...);
+        mT.SU2Get(0_c, idx...);
+        mT.SU2Get(1_c, idx...);
+        mT.SU2Get(2_c, idx...);
+        mT.SU2Get(3_c, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
+    {
+      return {{SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)}};
+    }
+
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
+
+    static std::string operatorString() { return "*"; }
   };
 
   struct ComplexFieldSU2MultiplyTester {
@@ -74,9 +116,15 @@ namespace TempLat
    {
        return {t,r};
    }*/
+  template <typename R, typename T>
+    requires(HasGetMethod<R> && HasSU2Get<T>)
+  auto operator*(const R &r, const T &t)
+  {
+    return ScalarSU2Multiplication{r, t};
+  }
 
   template <typename T>
-    requires(HasSU2Get<T>)
+    requires HasSU2Get<T>
   auto operator*(double r, const T &t)
   {
     return ScalarSU2Multiplication{r, t};

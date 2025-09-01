@@ -39,7 +39,7 @@ namespace TempLat
     {
     }
 
-    Field() : ConfigView<NDim, T>("", nullptr, LatticeParameters<T>()), mFourierView(*this) {}
+    Field() : ConfigView<NDim, T>("do not use", nullptr, LatticeParameters<T>()), mFourierView(*this) {}
 
     template <typename R> void operator=(R &&g) { ConfigView<NDim, T>::operator=(g); }
 

@@ -17,7 +17,8 @@ namespace TempLat
    * Unit test: make test-hassu2get
    **/
   template <typename T>
-  concept HasSU2Get = requires(T t, Tag<0> tag) { t.SU2Get(tag); };
+  concept HasSU2Get = requires(T t) { t.SU2Get(0_c); } || requires(T t) { t.SU2Get(1_c); } ||
+                      requires(T t) { t.SU2Get(2_c); } || requires(T t) { t.SU2Get(3_c); };
 
   struct HasSU2GetTester {
 #ifdef TEMPLATTEST

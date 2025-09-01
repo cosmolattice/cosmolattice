@@ -43,9 +43,13 @@ namespace TempLat
 
     /* Put public methods here. These should change very little over time. */
     ConfigView(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
-        : AbstractField<NDim, T>(name, toolBox, pLatPar), mLayout(mToolBox->mLayouts.getConfigSpaceLayout()),
-          mDisableFFTBlocking(false)
+        : AbstractField<NDim, T>(name, toolBox, pLatPar), mDisableFFTBlocking(false)
     {
+      if (toolBox != nullptr)
+        mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
+      else
+        return;
+
       mManager->setGhostsAreStale();
       mManager->confirmConfigSpace(); // allocation happens here
 
@@ -137,7 +141,7 @@ namespace TempLat
       }
     }
 
-    const auto &getLayout() { return mToolBox->mLayouts.getConfigSpaceLayout(); }
+    const auto &getLayout() { return mLayout; }
 
     void updateGhosts() { this->mManager->updateGhosts(); }
 
@@ -177,7 +181,7 @@ namespace TempLat
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
       mManager->confirmConfigSpace();
 
-      ConfirmSpace::apply(g, mToolBox->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
+      ConfirmSpace::apply(g, mLayout, SpaceStateType::Configuration);
 
       GhostsHunter::apply(g);
       mManager->flagHostMirrorOutdated();

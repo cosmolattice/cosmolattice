@@ -5,12 +5,14 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2020
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2get.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -31,24 +33,22 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     SU2BinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
+    static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
+
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
-    virtual std::string operatorString() const { return " "; }
+    static std::string operatorString() { return " "; }
 
     /** \brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
      * OP is * or whatever), this toString method does all the work for you. */
     std::string toString() const
     {
-
       std::string tt = GetString::get(mR);
-
       if (ContainsSpace::test(tt)) tt = "(" + tt + ")";
 
       std::string ss = GetString::get(mT);
-
       if (ContainsSpace::test(ss)) ss = "(" + ss + ")";
 
       std::string result = tt + " " + operatorString() + " " + ss;
-
       return result;
     }
 
@@ -70,11 +70,18 @@ namespace TempLat
         return nullptr;
     }
 
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
+    }
+
     static constexpr size_t size = 4;
     using Getter = SU2Getter;
 
   protected:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
     /* Put all member variables and private methods here. These may change arbitrarily. */
     R mR;
     T mT;

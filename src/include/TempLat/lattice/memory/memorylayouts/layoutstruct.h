@@ -43,6 +43,12 @@ namespace TempLat
     {
     }
 
+    LayoutStruct()
+        : mTransposed(device::array<ptrdiff_t, NDim>{{1}}, 0), mHermitianPartners(device::array<ptrdiff_t, NDim>{{1}}),
+          mNGhosts(0)
+    {
+    }
+
     /** \brief An almost constructor: return a new instance which has a default global FFT layout */
     template <typename C = std::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>

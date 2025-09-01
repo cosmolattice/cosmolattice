@@ -167,6 +167,7 @@ namespace TempLat
   private:
     FourierView(const AbstractField<NDim, T> &f) : AbstractField<NDim, T>(f)
     {
+      if (mToolBox == nullptr) return;
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
       auto localSizes = layout.getLocalSizes();
 

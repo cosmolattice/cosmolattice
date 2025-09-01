@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
@@ -44,7 +44,13 @@ namespace TempLat
     auto SU2DoubletGet(Tag<3> t) const { return Imag(mR * Complexify(mT.SU2DoubletGet(2_c), mT.SU2DoubletGet(3_c))); }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R mR, T mT, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        mR.ComplexFieldGet(0_c, idx...);
+        mT.SU2DoubletGet(0_c, idx...);
+        mR.ComplexFieldGet(1_c, idx...);
+        mT.SU2DoubletGet(1_c, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(0_c, idx...) -
@@ -52,7 +58,13 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R mR, T mT, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        mR.ComplexFieldGet(0_c, idx...);
+        mT.SU2DoubletGet(0_c, idx...);
+        mR.ComplexFieldGet(1_c, idx...);
+        mT.SU2DoubletGet(1_c, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<1> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(1_c, idx...) +
@@ -60,7 +72,13 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R mR, T mT, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        mR.ComplexFieldGet(0_c, idx...);
+        mT.SU2DoubletGet(2_c, idx...);
+        mR.ComplexFieldGet(1_c, idx...);
+        mT.SU2DoubletGet(3_c, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<2> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(2_c, idx...) -
@@ -68,7 +86,13 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(R mR, T mT, IDX... idx) {
+        requires VariadicIndex<IDX...>;
+        mR.ComplexFieldGet(0_c, idx...);
+        mT.SU2DoubletGet(2_c, idx...);
+        mR.ComplexFieldGet(1_c, idx...);
+        mT.SU2DoubletGet(3_c, idx...);
+      }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<3> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(3_c, idx...) +

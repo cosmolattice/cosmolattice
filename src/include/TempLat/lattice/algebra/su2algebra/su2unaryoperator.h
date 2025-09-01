@@ -9,10 +9,12 @@
 
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2get.h"
@@ -28,6 +30,9 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
+
+    static consteval size_t getNDim() { return GetNDim::get<R>(); }
+
     SU2UnaryOperator(const R &pR) : mR(pR) {}
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
@@ -50,6 +55,13 @@ namespace TempLat
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
     inline auto getToolBox() const { return GetToolBox::get(mR); }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+    }
 
     static constexpr size_t size = 4;
     using Getter = SU2Getter;

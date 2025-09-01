@@ -13,6 +13,7 @@
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/operators/squareroot.h"
 
 namespace TempLat
 {
@@ -27,63 +28,78 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     static constexpr size_t NDim = _NDim;
 
-    SU2FieldBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3) : fs{f1, f2, f3}, cache(0), mName("NoName") {}
+    SU2FieldBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3)
+        : fs{{f1, f2, f3}}, mName("NoName"), mLayout(fs[0].getToolbox()->mLayouts.getConfigSpaceLayout())
+    {
+    }
 
-    SU2FieldBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
-        : cache(0), mName(name)
+    SU2FieldBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+                 LatticeParameters<T> pLatPar = LatticeParameters<T>())
+        : mName(name), mLayout(toolBox->mLayouts.getConfigSpaceLayout())
     {
       for (size_t i = 0; i < 3; ++i) {
-        fs.push_back(Field<NDim, T>(name + "_" + std::to_string(i + 1), toolBox, pLatPar));
+        std::destroy_at(&fs[i]);
+        std::construct_at(&fs[i], name + "_" + std::to_string(i + 1), toolBox, pLatPar);
       }
     }
 
-    template <int N> auto SU2Get(Tag<N> t) { return (*this)(t); }
+    template <int N> auto SU2Get(Tag<N> t) const { return this->operator()(t); }
 
-    auto operator()(Tag<0> t) { return sqrt(1.0 - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2])); }
+    auto operator()(Tag<0> t) const { return sqrt(1.0 - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2])); }
 
-    template <int M> auto &operator()(Tag<M> t) { return fs[M - 1]; }
+    template <int M>
+      requires(M > 0)
+    auto &operator()(Tag<M> t)
+    {
+      return fs[M - 1];
+    }
+    template <int M>
+      requires(M > 0)
+    const auto &operator()(Tag<M> t) const
+    {
+      return fs[M - 1];
+    }
 
-    auto SU2Get(Tag<0> t, ptrdiff_t i)
+    template <typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
       return sqrt(
-          1.0 - pow<2>(fs[0].get(i)) - pow<2>(fs[1].get(i)) -
+          1.0 - pow<2>(fs[0].get(idx...)) - pow<2>(fs[1].get(idx...)) -
           pow<2>(fs[2].get(
-              i))); // Apriori not optimal, as we compute several time c0, but does not seem to make a difference.
+              idx...))); // Apriori not optimal, as we compute several time c0, but does not seem to make a difference.
     }
-    template <int M> auto SU2Get(Tag<M> t, ptrdiff_t i) { return fs[M - 1].get(i); }
-
-    /* auto SU2Get(Tag<0> t, ptrdiff_t i)
-     {
-         return cache;
-     }
-
-     void eval(ptrdiff_t i)
-     {
-         cache = sqrt(1.0 - pow<2>(fs[0].get(i)) - pow<2>(fs[1].get(i)) - pow<2>(fs[2].get(i)));
-     }*/
+    template <int M, typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
+    {
+      return fs[M - 1].get(idx...);
+    }
 
     template <typename R> void operator=(R &&r)
     {
       ForLoop(i, 1, size - 1, fs[i - 1].onBeforeAssignment(std::remove_reference<R>::type::Getter::get(r, i)););
+      ForLoop(j, 0, 2, PreGet::apply(fs[j]));
 
-      auto it = fs[0].getToolBox()->itX();
-      std::array<T, size> tmpArr;
+      const auto view1 = fs[0].getView();
+      const auto view2 = fs[1].getView();
+      const auto view3 = fs[2].getView();
 
-      // T det = 0;
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              DoEval::eval(r, args...);
+              view1(args...) = r.SU2Get(1_c, args...);
+              view2(args...) = r.SU2Get(2_c, args...);
+              view3(args...) = r.SU2Get(3_c, args...);
+            },
+            idx);
+      };
+      Kokkos::parallel_for("SU2ConfigViewAssign", //
+                           getLocalKokkosPolicy(mLayout), KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
-      for (it.begin(); it.end(); ++it) {
-        auto i = it();
-
-        DoEval::eval(r, i);
-        tmpArr = r.SU2Get(i);
-
-        // fs[0].getSet(i) = sqrt(1.0 - pow<2>(tmpArr[1]) - pow<2>(tmpArr[2]) - pow<2>(tmpArr[3]));
-        // fs[0].getSet(i) = tmpArr[0];
-
-        fs[0].getSet(i) = tmpArr[1];
-        fs[1].getSet(i) = tmpArr[2];
-        fs[2].getSet(i) = tmpArr[3];
-      }
+      ForLoop(j, 0, 2, PostGet::apply(fs[j]));
       ForLoop(j, 0, 2, fs[j].setGhostsAreStale());
     }
 
@@ -96,21 +112,15 @@ namespace TempLat
     auto getKIR() const { return GetKIR::getKIR(fs[0]); }
 
     using Getter = SU2Getter;
+
     static constexpr size_t SHIFTIND = 0;
     static constexpr size_t size = 4;
     static constexpr size_t numberToSkipAsTuple = 1;
 
   protected:
-    std::array<T, 4> SU2Get(ptrdiff_t i) // This function is private, as it is designed only for internal use and more
-                                         // importantly, it does not return the correct 0th component,
-    {                                    // for optmisation purposes.
-      return {/*sqrt(1.0 - pow<2>(fs[1].get(i)) - pow<2>(fs[2].get(i)) - pow<2>(fs[3].get(i)))*/ 0, fs[0].get(i),
-              fs[1].get(i), fs[2].get(i)};
-    }
-
-    std::vector<Field<NDim, T>> fs;
-    T cache;
+    device::array<Field<NDim, T>, 3> fs;
     const std::string mName;
+    LayoutStruct<NDim> mLayout;
   };
 
   struct SU2FieldTester {

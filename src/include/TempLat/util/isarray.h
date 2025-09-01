@@ -18,7 +18,8 @@ namespace TempLat
    *
    **/
   template <typename T, size_t NDim>
-  concept IsArray = std::is_same_v<std::array<typename T::value_type, NDim>, T> ||
+  concept IsArray = std::is_same_v<device::array<typename T::value_type, NDim>, T> ||
+                    std::is_same_v<std::array<typename T::value_type, NDim>, T> ||
                     std::is_same_v<Kokkos::Array<typename T::value_type, NDim>, T>;
 
   struct IsArrayTester {

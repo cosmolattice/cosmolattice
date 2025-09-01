@@ -40,16 +40,7 @@ namespace TempLat
     AbstractField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
         : mToolBox(toolBox), mManager(std::make_shared<MemoryManager<NDim, T>>(mToolBox, name)), latPar(pLatPar)
     {
-      // mManager->confirmConfigSpace(); //allocation happens here
-      // mManager->allocate();
     }
-
-    /** \brief Symbolic derivative: check this out.
-     *  Assumes that different field are properly labelled,
-     *  User responsible for that. Done automatically when one uses
-     * fieldcollection.
-     * If same type, then return 1, otherwise return 0.
-     */
 
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
@@ -72,6 +63,7 @@ namespace TempLat
 
     /** \brief Check the current state. */
     bool isConfigSpace() const { return mManager->isConfigSpace(); }
+
     /** \brief Check the current state. */
     bool isFourierSpace() const { return mManager->isFourierSpace(); }
 

@@ -9,13 +9,14 @@
 
 #include <type_traits>
 #include "TempLat/util/rangeiteration/tag.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 namespace TempLat
 {
   /**
    * @brief A compile-time for loop, which calls the lambda f of signature void(integer) for each index.
    */
-  template <auto Start, auto End, auto Inc, class F> constexpr void constexpr_for(F &&f)
+  template <auto Start, auto End, auto Inc, class F> KOKKOS_FORCEINLINE_FUNCTION constexpr void constexpr_for(F &&f)
   {
     if constexpr (Start < End) {
       f(Tag<Start>{});

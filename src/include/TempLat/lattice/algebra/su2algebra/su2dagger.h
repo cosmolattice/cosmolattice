@@ -12,7 +12,6 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2unaryoperator.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/doeval.h"
 
 namespace TempLat
 {
@@ -22,33 +21,50 @@ namespace TempLat
    *
    * Unit test: make test-su2dagger
    **/
-
   template <typename R> class SU2Dagger : public SU2UnaryOperator<R>
   {
   public:
-    typedef typename SU2GetGetReturnType<R>::type SV;
+    using SV = typename SU2GetGetReturnType<R>::type;
     using SU2UnaryOperator<R>::mR;
 
     /* Put public methods here. These should change very little over time. */
     SU2Dagger(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
-    auto SU2Get(Tag<0> t) { return mR.SU2Get(0_c); }
-    auto SU2Get(Tag<1> t) { return -mR.SU2Get(1_c); }
-    auto SU2Get(Tag<2> t) { return -mR.SU2Get(2_c); }
-    auto SU2Get(Tag<3> t) { return -mR.SU2Get(3_c); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<0> t) const { return mR.SU2Get(0_c); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<1> t) const { return -mR.SU2Get(1_c); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<2> t) const { return -mR.SU2Get(2_c); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<3> t) const { return -mR.SU2Get(3_c); }
 
-    template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
+    template <> auto SU2Get() const { return std::move(cache); }
 
-    auto SU2Get(Tag<0> t, ptrdiff_t i) { return mR.SU2Get(0_c, i); }
-    auto SU2Get(Tag<1> t, ptrdiff_t i) { return -mR.SU2Get(1_c, i); }
-    auto SU2Get(Tag<2> t, ptrdiff_t i) { return -mR.SU2Get(2_c, i); }
-    auto SU2Get(Tag<3> t, ptrdiff_t i) { return -mR.SU2Get(3_c, i); }
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
+    {
+      return mR.SU2Get(0_c, idx...);
+    }
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
+    {
+      return -mR.SU2Get(1_c, idx...);
+    }
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
+    {
+      return -mR.SU2Get(2_c, idx...);
+    }
+    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
+    {
+      return -mR.SU2Get(3_c, idx...);
+    }
 
-    std::array<SV, 4> SU2Get(ptrdiff_t i) { return {SU2Get(0_c, i), SU2Get(1_c, i), SU2Get(2_c, i), SU2Get(3_c, i)}; }
+    template <typename... IDX> device::array<SV, 4> SU2Get(const IDX &...idx)
+    {
+      return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
+    }
 
-    void eval(ptrdiff_t i) { DoEval::eval(mR, i); }
-
-    std::string toString() const override { return GetString::get(mR) + "^\u2020"; }
+    std::string toString() const { return GetString::get(mR) + "^\u2020"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
