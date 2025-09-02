@@ -29,23 +29,47 @@ namespace TempLat
     using SV = typename SU2GetGetReturnType<R>::type;
     using SU2UnaryOperator<R>::mR;
 
-    SU2Shifter(const R &pR) : SU2UnaryOperator<R>(pR), shiftInd(shift<N...>(mR.SU2Get(0_c)).getShift())
+    SU2Shifter(const R &pR) : SU2UnaryOperator<R>(pR) { shiftString = shift<N...>(mR.SU2Get(0_c)).getString({N...}); }
+
+    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N...>(mR.SU2Get(t)); }
+
+    template <int M, typename... IDX> struct RightIndices {
+      static constexpr bool value = requires(R r, IDX... idx) {
+        GetValue::get(r.SU2Get(0_c), idx...);
+        GetValue::get(r.SU2Get(1_c), idx...);
+        GetValue::get(r.SU2Get(2_c), idx...);
+        GetValue::get(r.SU2Get(3_c), idx...);
+      };
+    };
+
+    template <int M, typename... IDX>
+      requires RightIndices<M, IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
-      shiftString = shift<N...>(mR.SU2Get(0_c)).getString({N...});
+      return GetValue::get(shift<N...>(mR.SU2Get(t)), idx...);
     }
 
-    template <int M> auto SU2Get(Tag<M> t) { return shift<N...>(mR.SU2Get(t)); }
-    template <int M> auto SU2Get(Tag<M> t, ptrdiff_t i) { return mR.SU2Get(t, i + shiftInd); }
+    template <typename... IDX>
+      requires(RightIndices<0, IDX...>::value && RightIndices<1, IDX...>::value && RightIndices<2, IDX...>::value &&
+               RightIndices<3, IDX...>::value)
+    KOKKOS_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
+    {
+      return {{SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)}};
+    }
 
-    std::array<SV, 4> SU2Get(ptrdiff_t i) { return {SU2Get(0_c, i), SU2Get(1_c, i), SU2Get(2_c, i), SU2Get(3_c, i)}; }
-
-    void eval(ptrdiff_t i) { DoEval::eval(mR, i + shiftInd); }
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(shift<N...>(mR.SU2Get(1_c)), idx...);
+      DoEval::eval(shift<N...>(mR.SU2Get(2_c)), idx...);
+      DoEval::eval(shift<N...>(mR.SU2Get(3_c)), idx...);
+    }
 
     std::string operatorString() const { return shiftString; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    ptrdiff_t shiftInd;
     std::string shiftString;
   };
 
@@ -56,23 +80,44 @@ namespace TempLat
     using SU2UnaryOperator<R>::mR;
 
     /* Put public methods here. These should change very little over time. */
-    SU2ShifterByOne(const R &pR) : SU2UnaryOperator<R>(pR), shiftInd(shift<N>(mR.SU2Get(1_c)).getShift()) {}
+    SU2ShifterByOne(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
-    template <int M> auto SU2Get(Tag<M> t) { return shift<N>(mR.SU2Get(t)); }
+    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N>(mR.SU2Get(t)); }
 
-    template <int M> auto SU2Get(Tag<M> t, ptrdiff_t i) { return mR.SU2Get(t, i + shiftInd); }
+    template <int M, typename... IDX> struct RightIndices {
+      static constexpr bool value = requires(R r, IDX... idx) { GetValue::get(r.SU2Get(Tag<M>()), idx...); };
+    };
 
-    template <int Q> auto operator()(Tag<Q> t) { return SU2Get(t); }
+    template <int M, typename... IDX>
+      requires RightIndices<M, IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
+    {
+      return GetValue::get(mR.SU2Get(shift<N>(t)), idx...);
+    }
 
-    std::array<SV, 4> SU2Get(ptrdiff_t i) { return {SU2Get(0_c, i), SU2Get(1_c, i), SU2Get(2_c, i), SU2Get(3_c, i)}; }
+    template <int Q> auto operator()(Tag<Q> t) const { return SU2Get(t); }
 
-    void eval(ptrdiff_t i) { DoEval::eval(mR, i + shiftInd); }
+    template <typename... IDX>
+      requires(RightIndices<0, IDX...>::value && RightIndices<1, IDX...>::value && RightIndices<2, IDX...>::value &&
+               RightIndices<3, IDX...>::value)
+    device::array<SV, 4> SU2Get(const IDX &...idx) const
+    {
+      return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    void eval(const IDX &...idx) const
+    {
+      DoEval::eval(shift<N>(mR.SU2Get(1_c)), idx...);
+      DoEval::eval(shift<N>(mR.SU2Get(2_c)), idx...);
+      DoEval::eval(shift<N>(mR.SU2Get(3_c)), idx...);
+    }
 
     std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    ptrdiff_t shiftInd;
   };
 
   template <int... shifts, class R>

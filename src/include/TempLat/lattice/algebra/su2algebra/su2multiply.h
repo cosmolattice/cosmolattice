@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/tdd/tdd.h"
@@ -13,7 +13,9 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/operators/multiply.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
+#include "TempLat/util/constexpr_for.h"
 
 namespace TempLat
 {
@@ -26,54 +28,91 @@ namespace TempLat
   template <typename R, typename T> class SU2Multiplication : public SU2BinaryOperator<R, T>
   {
   public:
-    typedef typename SU2GetGetReturnType<R>::type SV;
+    using SV = typename SU2GetGetReturnType<R>::type;
+
     using SU2BinaryOperator<R, T>::mR;
     using SU2BinaryOperator<R, T>::mT;
 
     /* Put public methods here. These should change very little over time. */
     SU2Multiplication(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
-    auto SU2Get(Tag<0> t)
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<0> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2Get(0_c) - mR.SU2Get(1_c) * mT.SU2Get(1_c) - mR.SU2Get(2_c) * mT.SU2Get(2_c) -
              mR.SU2Get(3_c) * mT.SU2Get(3_c);
     }
-    auto SU2Get(Tag<1> t)
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<1> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2Get(1_c) + mR.SU2Get(3_c) * mT.SU2Get(2_c) + mR.SU2Get(1_c) * mT.SU2Get(0_c) -
              mR.SU2Get(2_c) * mT.SU2Get(3_c);
     }
-    auto SU2Get(Tag<2> t)
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<2> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2Get(2_c) + mR.SU2Get(2_c) * mT.SU2Get(0_c) + mR.SU2Get(1_c) * mT.SU2Get(3_c) -
              mR.SU2Get(3_c) * mT.SU2Get(1_c);
     }
-    auto SU2Get(Tag<3> t)
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<3> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2Get(3_c) + mR.SU2Get(3_c) * mT.SU2Get(0_c) + mR.SU2Get(2_c) * mT.SU2Get(1_c) -
              mR.SU2Get(1_c) * mT.SU2Get(2_c);
     }
 
-    auto SU2Get(ptrdiff_t i) { return std::move(cache); }
-    template <int N> auto SU2Get(Tag<N> t, ptrdiff_t i) { return cache[N]; }
+    template <typename... IDX> struct RequiredIndices {
+      static constexpr bool value = requires(R r, T t, IDX... idx) {
+        r.SU2Get(0_c, idx...);
+        r.SU2Get(1_c, idx...);
+        r.SU2Get(2_c, idx...);
+        r.SU2Get(3_c, idx...);
+        t.SU2Get(0_c, idx...);
+        t.SU2Get(1_c, idx...);
+        t.SU2Get(2_c, idx...);
+        t.SU2Get(3_c, idx...);
+      };
+    };
 
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires RequiredIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
-      ForLoop(j, 0, 3, cL[j] = this->mR.SU2Get(j, i); cR[j] = this->mT.SU2Get(j, i););
+      return std::move(cache);
+    }
+
+    template <int N, typename... IDX>
+      requires RequiredIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    {
+      return cache[N];
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
+
+      device::array<SV, 4> cL;
+      device::array<SV, 4> cR;
+
+      constexpr_for<0, 4, 1>([&](auto j) {
+        cL[j] = mR.SU2Get(j, idx...);
+        cR[j] = mT.SU2Get(j, idx...);
+      });
+
       cache[0] = cL[0] * cR[0] - cL[1] * cR[1] - cL[2] * cR[2] - cL[3] * cR[3];
       cache[1] = cL[0] * cR[1] + cL[1] * cR[0] + cL[3] * cR[2] - cL[2] * cR[3];
       cache[2] = cL[0] * cR[2] + cL[2] * cR[0] + cL[1] * cR[3] - cL[3] * cR[1];
       cache[3] = cL[0] * cR[3] + cL[3] * cR[0] + cL[2] * cR[1] - cL[1] * cR[2];
     }
 
-    virtual std::string operatorString() const { return "."; }
+    static std::string operatorString() { return "."; }
 
   private:
-    std::array<SV, 4> cL;
-    std::array<SV, 4> cR;
-    std::array<SV, 4> cache;
+    mutable device::array<SV, 4> cache;
   };
 
   struct SU2MultiplyTester {

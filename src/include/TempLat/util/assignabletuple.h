@@ -17,13 +17,11 @@
 
 namespace TempLat
 {
-
   /** \brief A class which makes tuple out of things that have an operator equal. Dispatch the equal.
    *
    *
    * Unit test: make test-assignabletuple
    **/
-
   template <int Shift, class... Args>
   class AssignableTuple : public AssignableCollectionBase<AssignableTuple<Shift, Args...>, Args...>
   {

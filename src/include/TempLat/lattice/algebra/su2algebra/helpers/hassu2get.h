@@ -9,6 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
+#include "TempLat/util/rangeiteration/tagliteral.h"
 
 namespace TempLat
 {

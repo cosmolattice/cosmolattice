@@ -48,13 +48,13 @@ namespace TempLat
     template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const { return fs[t]; }
 
     template <int N, typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires requires(Field<NDim, T> f, IDX... idx) { f.get(idx...); }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
       return fs[t].get(idx...);
     }
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<M> t) const { return fs[t]; }
+    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto &operator()(Tag<M> t) { return fs[t]; }
 
     template <typename R> void operator=(R &&r)
     {
@@ -100,7 +100,6 @@ namespace TempLat
     auto getKIR() const { return GetKIR::getKIR(fs[0]); }
 
     using Getter = SU2DoubletGetter;
-    static constexpr size_t SHIFTIND = 0;
     static constexpr size_t size = 4;
 
   private:

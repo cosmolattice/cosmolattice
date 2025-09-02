@@ -43,50 +43,32 @@ namespace TempLat
     auto SU2Get(Tag<3> t) const { return mR * mT.SU2Get(3_c); }
 
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        GetValue::get(mR, idx...);
-        mT.SU2Get(0_c, idx...);
-      }
+      requires requires(R mR, T mT, IDX... idx) { GetValue::get(mR, idx...); }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
       return GetValue::get(mR, idx...) * mT.SU2Get(0_c, idx...);
     }
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        GetValue::get(mR, idx...);
-        mT.SU2Get(1_c, idx...);
-      }
+      requires requires(R mR, T mT, IDX... idx) { GetValue::get(mR, idx...); }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
     {
       return GetValue::get(mR, idx...) * mT.SU2Get(1_c, idx...);
     }
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        GetValue::get(mR, idx...);
-        mT.SU2Get(2_c, idx...);
-      }
+      requires requires(R mR, T mT, IDX... idx) { GetValue::get(mR, idx...); }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
     {
       return GetValue::get(mR, idx...) * mT.SU2Get(2_c, idx...);
     }
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        GetValue::get(mR, idx...);
-        mT.SU2Get(3_c, idx...);
-      }
+      requires requires(R mR, T mT, IDX... idx) { GetValue::get(mR, idx...); }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
     {
       return GetValue::get(mR, idx...) * mT.SU2Get(3_c, idx...);
     }
 
     template <typename... IDX>
-      requires requires(IDX... idx) {
-        GetValue::get(mR, idx...);
-        mT.SU2Get(0_c, idx...);
-        mT.SU2Get(1_c, idx...);
-        mT.SU2Get(2_c, idx...);
-        mT.SU2Get(3_c, idx...);
-      }
+      requires requires(IDX... idx) { GetValue::get(mR, idx...); }
     KOKKOS_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
     {
       return {{SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)}};

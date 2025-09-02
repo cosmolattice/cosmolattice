@@ -13,6 +13,7 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 namespace TempLat
 {
@@ -29,44 +30,41 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     SU2Wrapper() {}
 
-    SU2Wrapper(const A &pA, const B &pB, const C &pC, const D &pD) : mA(pA), mB(pB), mC(pC), mD(pD) {}
+    SU2Wrapper(const A &pA, const B &pB, const C &pC, const D &pD) : data(pA, pB, pC, pD) {}
 
-    auto SU2Get(Tag<0> t)
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return device::get<N>(data); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
+
+    template <int N, typename... IDX> struct RightIndices {
+      static constexpr bool value =
+          requires(device::tuple<A, B, C, D> t, IDX... idx) { GetValue::get(device::get<N>(t), idx...); };
+    };
+
+    template <int N, typename... IDX>
+      requires RightIndices<N, IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
-      return mA;
-      // return sqrt(1.0-Total(i,1,3,pow<2>(SU2Get(i))));
+      return GetValue::get(device::get<N>(data), idx...);
     }
-    auto SU2Get(Tag<1> t) { return mB; }
-    auto SU2Get(Tag<2> t) { return mC; }
-    auto SU2Get(Tag<3> t) { return mD; }
 
-    auto SU2Get(Tag<0> t, ptrdiff_t i)
+    template <typename... IDX>
+      requires(RightIndices<0, IDX...>::value && RightIndices<1, IDX...>::value && RightIndices<2, IDX...>::value &&
+               RightIndices<3, IDX...>::value)
+    KOKKOS_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
     {
-      return GetValue::get(mA, i);
-      // return sqrt(1.0-Total(i,1,3,pow<2>(SU2Get(i))GetValue::get()),i);
+      return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
     }
-    auto SU2Get(Tag<1> t, ptrdiff_t i) { return GetValue::get(mB, i); }
-    auto SU2Get(Tag<2> t, ptrdiff_t i) { return GetValue::get(mC, i); }
-    auto SU2Get(Tag<3> t, ptrdiff_t i) { return GetValue::get(mD, i); }
-
-    template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
-
-    std::array<SV, 4> SU2Get(ptrdiff_t i) { return {SU2Get(0_c, i), SU2Get(1_c, i), SU2Get(2_c, i), SU2Get(3_c, i)}; }
 
     std::string toString() const
     {
-      return "SU2(" + GetString::get(mA) + "," + GetString::get(mB) + "," + GetString::get(mC) + "," +
-             GetString::get(mD) + ")";
+      return "SU2(" + GetString::get(device::get<0>(data)) + "," + GetString::get(device::get<1>(data)) + "," +
+             GetString::get(device::get<2>(data)) + "," + GetString::get(device::get<3>(data)) + ")";
     }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    A mA;
-    B mB;
-    C mC;
-    D mD;
 
-  public:
+    device::tuple<A, B, C, D> data;
   };
 
   struct SU2WrapperTester {

@@ -19,6 +19,7 @@
 #include "TempLat/lattice/algebra/helpers/variadicindex.h"
 
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
+#include "TempLat/lattice/algebra/helpers/geteval.h"
 
 #ifndef NOKOKKOS
 
@@ -221,16 +222,15 @@ namespace TempLat
         KOKKOS_LAMBDA(const uint) { device::apply([&](const auto... idx) { obj.getSet(idx...) = val; }, pos); });
   }
 
-  template <typename OBJ, size_t NDim>
-  GetGetReturnType<OBJ>::type getAtOnePoint(OBJ &&obj, const device::array<ptrdiff_t, NDim> &pos)
+  template <typename OBJ, size_t NDim, typename I = ptrdiff_t>
+  GetGetReturnType<OBJ>::type getAtOnePoint(OBJ &&obj, const device::array<I, NDim> &pos)
   {
     using T = GetGetReturnType<OBJ>::type;
     T ret;
-
     Kokkos::parallel_reduce(
         "Get a point", Kokkos::RangePolicy(0, 1),
         KOKKOS_LAMBDA(const uint, T &update) {
-          device::apply([&](const auto... idx) { update = GetValue::get(obj, idx...); }, pos);
+          device::apply([&](const auto... idx) { update = GetEval::getEval(obj, idx...); }, pos);
         },
         ret);
     return ret;

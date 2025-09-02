@@ -21,10 +21,10 @@ namespace TempLat
   namespace Constants
   {
     struct Sigma0 {
-      OneType SU2Get(Tag<0> t) { return OneType(); }
-      ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
-      ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
-      ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
+      static OneType SU2Get(Tag<0> t) { return OneType(); }
+      static ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
+      static ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
+      static ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
 
       static std::string toString() { return "Id"; }
       static constexpr size_t size = 4;
@@ -32,10 +32,10 @@ namespace TempLat
     constexpr Sigma0 sigma0;
 
     struct Sigma1 {
-      ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
-      OneType SU2Get(Tag<1> t) { return OneType(); }
-      ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
-      ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
+      static ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
+      static OneType SU2Get(Tag<1> t) { return OneType(); }
+      static ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
+      static ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
       static constexpr size_t size = 4;
 
       static std::string toString() { return "i\u03C3_1"; }
@@ -43,20 +43,20 @@ namespace TempLat
     constexpr Sigma1 sigma1;
 
     struct Sigma2 {
-      ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
-      ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
-      OneType SU2Get(Tag<2> t) { return OneType(); }
-      ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
+      static ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
+      static ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
+      static OneType SU2Get(Tag<2> t) { return OneType(); }
+      static ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
       static std::string toString() { return "i\u03C3_2"; }
       static constexpr size_t size = 4;
     };
     constexpr Sigma2 sigma2;
 
     struct Sigma3 {
-      ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
-      ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
-      ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
-      OneType SU2Get(Tag<3> t) { return OneType(); }
+      static ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
+      static ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
+      static ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
+      static OneType SU2Get(Tag<3> t) { return OneType(); }
 
       static std::string toString() { return "i\u03C3_3"; }
       static constexpr size_t size = 4;

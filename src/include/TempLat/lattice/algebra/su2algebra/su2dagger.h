@@ -40,26 +40,40 @@ namespace TempLat
     auto SU2Get(Tag<3> t) const { return -mR.SU2Get(3_c); }
 
     template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
-    template <> auto SU2Get() const { return std::move(cache); }
 
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) { r.SU2Get(0_c, idx...); }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
       return mR.SU2Get(0_c, idx...);
     }
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) { r.SU2Get(1_c, idx...); }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
     {
       return -mR.SU2Get(1_c, idx...);
     }
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) { r.SU2Get(2_c, idx...); }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
     {
       return -mR.SU2Get(2_c, idx...);
     }
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) { r.SU2Get(3_c, idx...); }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
     {
       return -mR.SU2Get(3_c, idx...);
     }
 
-    template <typename... IDX> device::array<SV, 4> SU2Get(const IDX &...idx)
+    template <typename... IDX>
+      requires requires(R r, IDX... idx) {
+        r.SU2Get(0_c, idx...);
+        r.SU2Get(1_c, idx...);
+        r.SU2Get(2_c, idx...);
+        r.SU2Get(3_c, idx...);
+      }
+    device::array<SV, 4> SU2Get(const IDX &...idx)
     {
       return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
     }

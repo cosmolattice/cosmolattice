@@ -8,11 +8,13 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/make_tuple_tag.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
+#include "TempLat/util/assignabletuple.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -25,24 +27,28 @@
 
 namespace TempLat
 {
-
   /** \brief An averager specialised for SU2Doublet. Allows to take into account cached operations consistently.
    *
    *
    * Unit test: make test-su2doubletaverager
    **/
-
   template <typename T> class SU2DoubletAverager
   {
   public:
-    typedef typename SU2DoubletGetGetReturnType<T>::type vType;
+    using vType = typename SU2DoubletGetGetReturnType<T>::type;
     static constexpr bool isComplexValued = IsComplexType<vType>;
     static constexpr size_t size = tuple_size<T>::value;
 
-    typedef std::array<vType, size> arrVType;
+    static constexpr size_t NDim = TempLat::GetNDim::get<T>();
+
+    using arrVType = std::array<vType, size>;
 
     /* Put public methods here. These should change very little over time. */
-    SU2DoubletAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    SU2DoubletAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
+    {
+      mToolBox = mT.SU2DoubletGet(0_c).getToolBox();
+      if (mToolBox == nullptr) throw std::runtime_error("SU2Averager: ToolBox is null, cannot initialize.");
+    }
 
     arrVType compute()
     {
@@ -59,54 +65,87 @@ namespace TempLat
       return ret;
     }
 
+    class su2doubletresult : public device::array<vType, size>
+    {
+    public:
+      KOKKOS_FUNCTION
+      auto &operator+=(const su2doubletresult &other)
+      {
+        for (size_t i = 0; i < size; ++i) {
+          (*this)[i] += other[i];
+        }
+        return *this;
+      }
+    };
+
     arrVType computeConfigurationSpace()
     {
-      auto it = mT.SU2DoubletGet(0_c).getToolBox()->itX();
-      arrVType mWorkspace{};
-      // for_each(mT,[&](auto x){AveragerHelper<vType ,isComplexValued>::onBeforeAverageConfiguration(x,mSpaceType);});
+      su2doubletresult localResult{};
+
       ForLoop(i, 0, size - 1,
               (AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.SU2DoubletGet(i), mSpaceType)));
-      ptrdiff_t i = 0;
 
-      for (it.begin(); it.end(); ++it) {
-        i = it();
+      const auto mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
 
-        DoEval::eval(mT, i);
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2doubletresult &update)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              DoEval::eval(mT, args...);
+              constexpr_for<0, size, 1>([&](auto j) { update[j] += mT.SU2DoubletGet(j, args...); });
+            },
+            idx);
+      };
+      Kokkos::parallel_reduce("SU2DoubletAverager",          //
+                              getLocalKokkosPolicy(mLayout), //
+                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
-        ForLoop(j, 0, 3, mWorkspace[j] += mT.SU2DoubletGet(j, i));
-      }
-      return mWorkspace;
+      arrVType _localResult;
+      for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });
+      return _localResult;
     }
 
     arrVType computeFourierSpace()
     {
-      auto toolBox = mT.SU2DoubletGet(0_c).getToolBox();
-      auto it = mT.SU2DoubletGet(0_c).getToolBox()->itP();
-      arrVType mWorkspace{};
+      su2doubletresult localResult{};
+
       ForLoop(i, 0, size - 1,
               (AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.SU2DoubletGet(i), mSpaceType)));
 
-      ptrdiff_t i = 0;
+      const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
 
-      for (it.begin(); it.end(); ++it) {
-        if (toolBox->mLayouts.getFourierSpaceLayout().getHermitianPartners()->qualify(it.getVec()) !=
-            HermitianRedundancy::negativePartner) {
-          i = it();
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2doubletresult &update)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              Kokkos::Array<ptrdiff_t, NDim> global_coord;
+              mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
+              if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
+                return; // skip negative partners
 
-          DoEval::eval(mT, i);
-          ForLoop(j, 0, 3, mWorkspace[j] += mT.SU2DoubletGet(j, i));
-        }
-      }
-      return mWorkspace;
+              DoEval::eval(mT, args...);
+              constexpr_for<0, size, 1>([&](auto j) { update[j] += mT.SU2DoubletGet(j, args...); });
+            },
+            idx);
+      };
+
+      Kokkos::parallel_reduce("SU2DoubletAverager",          //
+                              getLocalKokkosPolicy(mLayout), //
+                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+
+      arrVType _localResult;
+      for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });
+      return _localResult;
     }
 
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-
     T mT;
     SpaceStateType mSpaceType;
+
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
   };
 
   template <typename T>

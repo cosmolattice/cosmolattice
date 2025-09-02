@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2020
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
@@ -29,6 +29,7 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     SU2DoubletBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
+
     static constexpr size_t size = 4;
     using Getter = SU2DoubletGetter;
 
@@ -42,15 +43,12 @@ namespace TempLat
     std::string toString() const
     {
       std::string tt = GetString::get(mR);
-
       if (ContainsSpace::test(tt)) tt = "(" + tt + ")";
 
       std::string ss = GetString::get(mT);
-
       if (ContainsSpace::test(ss)) ss = "(" + ss + ")";
 
       std::string result = tt + " " + operatorString() + " " + ss;
-
       return result;
     }
 

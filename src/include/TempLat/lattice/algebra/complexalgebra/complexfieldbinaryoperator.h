@@ -58,6 +58,14 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
+    }
+
     inline auto getToolBox() const
     {
       using AT = decltype(GetToolBox::get(mR));

@@ -35,14 +35,36 @@ namespace TempLat
     template <int N> auto SU2Get(Tag<N> t) { return mR.SU2Get(t) - mT.SU2Get(t); }
 
     template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
-    std::array<SV, 4> SU2Get(ptrdiff_t i) { return {SU2Get(0_c, i), SU2Get(1_c, i), SU2Get(2_c, i), SU2Get(3_c, i)}; }
 
-    template <int M> auto SU2Get(Tag<M> t, ptrdiff_t i) { return mR.SU2Get(t, i) - mT.SU2Get(t, i); }
+    template <typename... IDX> struct RightIndices {
+      static constexpr bool value = requires(R r, T t, IDX... idx) {
+        r.SU2Get(0_c, idx...);
+        r.SU2Get(1_c, idx...);
+        r.SU2Get(2_c, idx...);
+        r.SU2Get(3_c, idx...);
+      };
+    };
 
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires RightIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
+    }
+
+    template <int M, typename... IDX>
+      requires RightIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
+    {
+      return mR.SU2Get(t, idx...) - mT.SU2Get(t, idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+      DoEval::eval(mT, idx...);
     }
 
     static std::string operatorString() { return "-"; }

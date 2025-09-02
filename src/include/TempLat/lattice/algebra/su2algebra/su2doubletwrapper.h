@@ -34,9 +34,16 @@ namespace TempLat
 
     template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const { return device::get<N>(mData); }
 
-    template <int N, typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    template <int N, typename... IDX>
+      requires requires(A a, B b, C c, D d, IDX... idx) {
+        GetValue::get(a, idx...);
+        GetValue::get(b, idx...);
+        GetValue::get(c, idx...);
+        GetValue::get(d, idx...);
+      }
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
-      return GetValue::get(SU2DoubletGet(t), idx...);
+      return GetValue::get(device::get<N>(mData), idx...);
     }
 
     template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2DoubletGet(t); }

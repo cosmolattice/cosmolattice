@@ -18,7 +18,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which computes the scalar product of two doublets.
    *
    *
@@ -34,12 +33,14 @@ namespace TempLat
 
     SU2DoubletDotter(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
-    auto ComplexFieldGet(Tag<0> t)
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<0> t) const
     {
       return mR.SU2DoubletGet(0_c) * mT.SU2DoubletGet(0_c) + mR.SU2DoubletGet(1_c) * mT.SU2DoubletGet(1_c) +
              mR.SU2DoubletGet(2_c) * mT.SU2DoubletGet(2_c) + mR.SU2DoubletGet(3_c) * mT.SU2DoubletGet(3_c);
     }
-    auto ComplexFieldGet(Tag<1> t)
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto ComplexFieldGet(Tag<1> t) const
     {
       return mR.SU2DoubletGet(0_c) * mT.SU2DoubletGet(1_c) - mR.SU2DoubletGet(1_c) * mT.SU2DoubletGet(0_c) +
              mR.SU2DoubletGet(2_c) * mT.SU2DoubletGet(3_c) - mR.SU2DoubletGet(3_c) * mT.SU2DoubletGet(2_c);
@@ -76,15 +77,12 @@ namespace TempLat
     std::string toString() const
     {
       std::string tt = GetString::get(mR);
-
       if (ContainsSpace::test(tt)) tt = "(" + tt + ")";
 
       std::string ss = GetString::get(mT);
-
       if (ContainsSpace::test(ss)) ss = "(" + ss + ")";
 
       std::string result = "(" + tt + "," + ss + ")";
-
       return result;
     }
   };

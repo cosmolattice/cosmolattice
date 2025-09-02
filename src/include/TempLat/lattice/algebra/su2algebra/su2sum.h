@@ -33,17 +33,33 @@ namespace TempLat
 
     SU2Addition(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
-    template <int N> auto SU2Get(Tag<N> t) { return mT.SU2Get(t) + mR.SU2Get(t); }
+    template <int N> auto SU2Get(Tag<N> t) const { return mT.SU2Get(t) + mR.SU2Get(t); }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
-    template <int N> auto SU2Get(Tag<N> t, ptrdiff_t i) { return mT.SU2Get(t, i) + mR.SU2Get(t, i); }
+    template <typename... IDX> struct RightIndices {
+      static constexpr bool value = requires(R r, T t, IDX... idx) {
+        r.SU2Get(0_c, idx...);
+        r.SU2Get(1_c, idx...);
+        r.SU2Get(2_c, idx...);
+        r.SU2Get(3_c, idx...);
+        t.SU2Get(0_c, idx...);
+        t.SU2Get(1_c, idx...);
+        t.SU2Get(2_c, idx...);
+        t.SU2Get(3_c, idx...);
+      };
+    };
 
-    template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
-    std::array<SV, 4> SU2Get(ptrdiff_t i) { return {SU2Get(0_c, i), SU2Get(1_c, i), SU2Get(2_c, i), SU2Get(3_c, i)}; }
-
-    void eval(ptrdiff_t i)
+    template <int N, typename... IDX>
+      requires RightIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
-      DoEval::eval(mR, i);
-      DoEval::eval(mT, i);
+      return mT.SU2Get(t, idx...) + mR.SU2Get(t, idx...);
+    }
+    template <int N, typename... IDX>
+      requires RightIndices<IDX...>::value
+    device::array<SV, 4> SU2Get(const IDX &...i) const
+    {
+      return {SU2Get(0_c, i...), SU2Get(1_c, i...), SU2Get(2_c, i...), SU2Get(3_c, i...)};
     }
 
     static std::string operatorString() { return "+"; }

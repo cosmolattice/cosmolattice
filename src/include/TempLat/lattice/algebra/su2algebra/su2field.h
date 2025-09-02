@@ -29,18 +29,19 @@ namespace TempLat
     static constexpr size_t NDim = _NDim;
 
     SU2FieldBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3)
-        : fs{{f1, f2, f3}}, mName("NoName"), mLayout(fs[0].getToolbox()->mLayouts.getConfigSpaceLayout())
+        : fs{{f1, f2, f3}}, mName("NoName"), mLayout(fs[0].getToolBox()->mLayouts.getConfigSpaceLayout())
     {
     }
 
     SU2FieldBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
                  LatticeParameters<T> pLatPar = LatticeParameters<T>())
-        : mName(name), mLayout(toolBox->mLayouts.getConfigSpaceLayout())
+        : fs{{
+              Field<NDim, T>(name + "_1", toolBox, pLatPar), //
+              Field<NDim, T>(name + "_2", toolBox, pLatPar), //
+              Field<NDim, T>(name + "_3", toolBox, pLatPar)  //
+          }},
+          mName(name), mLayout(toolBox->mLayouts.getConfigSpaceLayout())
     {
-      for (size_t i = 0; i < 3; ++i) {
-        std::destroy_at(&fs[i]);
-        std::construct_at(&fs[i], name + "_" + std::to_string(i + 1), toolBox, pLatPar);
-      }
     }
 
     template <int N> auto SU2Get(Tag<N> t) const { return this->operator()(t); }
@@ -74,6 +75,13 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
       return fs[M - 1].get(idx...);
+    }
+
+    template <typename... IDX>
+      requires VariadicNDIndex<NDim, IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION device::array<T, 4> SU2Get(const IDX &...idx) const
+    {
+      return {{SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)}};
     }
 
     template <typename R> void operator=(R &&r)

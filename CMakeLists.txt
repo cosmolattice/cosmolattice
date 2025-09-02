@@ -10,9 +10,9 @@ message(${CMAKE_MODULE_PATH})
 
 project(CosmoLattice CXX C)
 
-# These are the options which are available to the user.
-
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# These are the options which are available to the user.
 
 set(MPI
     OFF

@@ -31,31 +31,70 @@ namespace TempLat
 
     SU2GroupWrapper(const A &pA, const B &pB, const C &pC) : mA(pA), mB(pB), mC(pC) {}
 
-    auto SU2Get(Tag<0> t) { return sqrt(1.0 - Total(i, 1, 3, pow<2>(SU2Get(i)))); }
-    auto SU2Get(Tag<1> t) { return mA; }
-    auto SU2Get(Tag<2> t) { return mB; }
-    auto SU2Get(Tag<3> t) { return mC; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<0> t) const { return sqrt(1.0 - Total(i, 1, 3, pow<2>(SU2Get(i)))); }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<1> t) const { return mA; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<2> t) const { return mB; }
+    KOKKOS_FORCEINLINE_FUNCTION
+    auto SU2Get(Tag<3> t) const { return mC; }
 
-    auto SU2Get(Tag<0> t, ptrdiff_t i) { return cache[0]; }
-    auto SU2Get(Tag<1> t, ptrdiff_t i) { return cache[1]; }
-    auto SU2Get(Tag<2> t, ptrdiff_t i) { return cache[2]; }
-    auto SU2Get(Tag<3> t, ptrdiff_t i) { return cache[3]; }
+    template <typename... IDX> struct RightIndices {
+      static constexpr bool value = requires(A a, B b, C c, IDX... idx) {
+        GetValue::get(a, idx...);
+        GetValue::get(b, idx...);
+        GetValue::get(c, idx...);
+      };
+    };
 
-    void eval(ptrdiff_t i)
+    template <typename... IDX>
+      requires RightIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
-      DoEval::eval(mA, i);
-      DoEval::eval(mB, i);
-      DoEval::eval(mC, i);
+      return cache[0];
+    }
+    template <typename... IDX>
+      requires RightIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
+    {
+      return cache[1];
+    }
+    template <typename... IDX>
+      requires RightIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
+    {
+      return cache[2];
+    }
+    template <typename... IDX>
+      requires RightIndices<IDX...>::value
+    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
+    {
+      return cache[3];
+    }
 
-      cache[1] = GetValue::get(mA, i);
-      cache[2] = GetValue::get(mB, i);
-      cache[3] = GetValue::get(mC, i);
+    template <typename... IDX>
+      requires RightIndices<IDX...>::value
+    void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mA, idx...);
+      DoEval::eval(mB, idx...);
+      DoEval::eval(mC, idx...);
+
+      cache[1] = GetValue::get(mA, idx...);
+      cache[2] = GetValue::get(mB, idx...);
+      cache[3] = GetValue::get(mC, idx...);
       cache[0] = sqrt(1.0 - pow<2>(cache[1]) - pow<2>(cache[2]) - pow<2>(cache[3]));
     }
 
     template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
 
-    std::array<SV, 4> SU2Get(ptrdiff_t i) { return std::move(cache); }
+    template <typename... IDX>
+      requires RightIndices<IDX...>::value
+    device::array<SV, 4> SU2Get(const IDX &...idx) const
+    {
+      return std::move(cache);
+    }
 
     std::string toString() const
     {
@@ -68,7 +107,7 @@ namespace TempLat
     B mB;
     C mC;
 
-    std::array<SV, 4> cache;
+    mutable device::array<SV, 4> cache;
   };
 
   struct SU2GroupWrapperTester {

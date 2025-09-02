@@ -12,11 +12,10 @@
 
 inline void TempLat::ComplexFieldSU2MultiplyTester::Test(TempLat::TDDAssertion &tdd)
 {
-  // Test the SU2Doublet class
   auto toolBox = std::make_shared<MemoryToolBox<3>>(16, 1);
   Field<3, float> field("testField", toolBox);
   SU2Field<3, float> su2("testSU2", toolBox);
-  SU2Field<3, float> result("testDoublet2", toolBox);
+  SU2Field<3, float> result("testResultSU2", toolBox);
 
   field = -3.0f;
 

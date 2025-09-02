@@ -17,6 +17,7 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
@@ -39,7 +40,7 @@ namespace TempLat
     static constexpr bool isComplexValued = IsComplexType<vType>;
     static constexpr size_t size = tuple_size<T>::value;
 
-    static constexpr size_t NDim = T::NDim;
+    static constexpr size_t NDim = GetNDim::get<T>();
 
     using arrVType = std::array<vType, size>;
 
@@ -52,15 +53,6 @@ namespace TempLat
 
     arrVType compute()
     {
-      if (mSpaceType == SpaceStateType::Fourier) {
-        AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.ComplexFieldGet(Tag<0>()), mSpaceType);
-        AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.ComplexFieldGet(Tag<1>()), mSpaceType);
-      } else if (mSpaceType == SpaceStateType::Configuration) {
-        AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.ComplexFieldGet(Tag<0>()), mSpaceType);
-        AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.ComplexFieldGet(Tag<1>()), mSpaceType);
-      } else
-        throw std::runtime_error("ComplexFieldAverager: Unknown space type.");
-
       // --------------------------------------------------------
       // Reduce the result on the local lattice
       // --------------------------------------------------------
@@ -91,6 +83,9 @@ namespace TempLat
 
     arrVType computeConfigurationSpace()
     {
+      AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.ComplexFieldGet(Tag<0>()), mSpaceType);
+      AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.ComplexFieldGet(Tag<1>()), mSpaceType);
+
       complex<vType> localResult{};
 
       const auto mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
@@ -117,6 +112,9 @@ namespace TempLat
 
     arrVType computeFourierSpace()
     {
+      AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.ComplexFieldGet(Tag<0>()), mSpaceType);
+      AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.ComplexFieldGet(Tag<1>()), mSpaceType);
+
       complex<vType> localResult{};
 
       const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
@@ -157,9 +155,6 @@ namespace TempLat
     SpaceStateType mSpaceType;
 
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
-
-    device::IdxArray<NDim> start_iteration{};
-    device::IdxArray<NDim> stop_iteration{};
   };
 
   class ComplexFieldAveragerTester

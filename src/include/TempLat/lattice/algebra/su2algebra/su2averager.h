@@ -7,11 +7,13 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/make_tuple_tag.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
+#include "TempLat/util/assignabletuple.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -36,9 +38,16 @@ namespace TempLat
     using vType = typename SU2GetGetReturnType<T>::type;
     static constexpr bool isComplexValued = IsComplexType<vType>;
     static constexpr size_t size = tuple_size<T>::value;
+
+    static constexpr size_t NDim = TempLat::GetNDim::get<T>();
+
     using arrVType = std::array<vType, size>;
 
-    SU2Averager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
+    SU2Averager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
+    {
+      mToolBox = mT.SU2Get(0_c).getToolBox();
+      if (mToolBox == nullptr) throw std::runtime_error("SU2Averager: ToolBox is null, cannot initialize.");
+    }
 
     arrVType compute()
     {
@@ -55,57 +64,76 @@ namespace TempLat
       return ret;
     }
 
+    class su2result : public device::array<vType, size>
+    {
+    public:
+      KOKKOS_FUNCTION
+      auto &operator+=(const su2result &other)
+      {
+        for (size_t i = 0; i < size; ++i) {
+          (*this)[i] += other[i];
+        }
+        return *this;
+      }
+    };
+
     arrVType computeConfigurationSpace()
     {
-      auto it = mT.SU2Get(0_c).getToolBox()->itX();
-      arrVType mWorkspace{};
-      // for_each(mT,[&](auto x){AveragerHelper<vType ,isComplexValued>::onBeforeAverageConfiguration(x,mSpaceType);});
+      su2result localResult{};
+
       ForLoop(i, 0, size - 1,
               (AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.SU2Get(i), mSpaceType)));
-      ptrdiff_t i = 0;
 
-      arrVType tmpArr;
+      const auto mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
 
-      for (it.begin(); it.end(); ++it) {
-        i = it();
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2result &update)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              DoEval::eval(mT, args...);
+              constexpr_for<0, size, 1>([&](auto j) { update[j] += mT.SU2Get(j, args...); });
+            },
+            idx);
+      };
+      Kokkos::parallel_reduce("SU2Averager",                 //
+                              getLocalKokkosPolicy(mLayout), //
+                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
-        DoEval::eval(mT, i);
-        tmpArr = mT.SU2Get(i);
-
-        mWorkspace[0] += sqrt(1.0 - pow<2>(tmpArr[1]) - pow<2>(tmpArr[2]) - pow<2>(tmpArr[3]));
-        mWorkspace[1] += tmpArr[1];
-        mWorkspace[2] += tmpArr[2];
-        mWorkspace[3] += tmpArr[3];
-      }
-      return mWorkspace;
+      arrVType _localResult;
+      for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });
+      return _localResult;
     }
 
     arrVType computeFourierSpace()
     {
-      auto toolBox = mT.SU2Get(0_c).getToolBox();
-      auto it = mT.SU2Get(0_c).getToolBox()->itP();
-      arrVType mWorkspace{};
-      ForLoop(i, 0, size - 1,
-              (AveragerHelper<vType, isComplexValued>::onBeforeAverageFourier(mT.SU2Get(i), mSpaceType)));
+      AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.SU2Get(0_c), mSpaceType);
+      AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT.SU2Get(1_c), mSpaceType);
 
-      arrVType tmpArr;
+      su2result localResult{};
 
-      ptrdiff_t i = 0;
+      const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
 
-      for (it.begin(); it.end(); ++it) {
-        if (toolBox->mLayouts.getFourierSpaceLayout().getHermitianPartners()->qualify(it.getVec()) !=
-            HermitianRedundancy::negativePartner) {
-          i = it();
+      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2result &update)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              Kokkos::Array<ptrdiff_t, NDim> global_coord;
+              mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
+              if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
+                return; // skip negative partners
 
-          DoEval::eval(mT, i);
-          tmpArr = mT.SU2Get(i);
-          mWorkspace[0] += tmpArr[0];
-          mWorkspace[1] += tmpArr[1];
-          mWorkspace[2] += tmpArr[2];
-          mWorkspace[3] += tmpArr[3];
-        }
-      }
-      return mWorkspace;
+              DoEval::eval(mT, args...);
+              constexpr_for<0, size, 1>([&](auto j) { update[j] += mT.SU2Get(j, args...); });
+            },
+            idx);
+      };
+      Kokkos::parallel_reduce("ComplexFieldAverager",        //
+                              getLocalKokkosPolicy(mLayout), //
+                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+
+      arrVType _localResult;
+      for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });
+      return _localResult;
     }
 
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
@@ -114,6 +142,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
     SpaceStateType mSpaceType;
+
+    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
   };
 
   struct SU2AveragerTester {

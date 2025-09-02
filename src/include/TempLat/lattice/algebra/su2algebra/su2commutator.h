@@ -63,6 +63,9 @@ namespace TempLat
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
 
+      device::array<SV, 4> cL;
+      device::array<SV, 4> cR;
+
       constexpr_for<0, 4, 1>([&](auto j) {
         cL[j] = mR.SU2Get(j, idx...);
         cR[j] = mT.SU2Get(j, idx...);
@@ -77,8 +80,6 @@ namespace TempLat
     static std::string operatorString() { return "commutator"; }
 
   private:
-    mutable device::array<SV, 4> cL;
-    mutable device::array<SV, 4> cR;
     mutable device::array<SV, 4> cache;
   };
 

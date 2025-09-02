@@ -21,7 +21,7 @@ namespace TempLat
    * Unit test: make test-real
    **/
   template <class T>
-    requires HasComplexFieldGet<T>
+    requires requires(T t) { t.ComplexFieldGet(0_c); }
   static KOKKOS_FORCEINLINE_FUNCTION auto Real(T &&t)
   {
     return t.ComplexFieldGet(0_c);

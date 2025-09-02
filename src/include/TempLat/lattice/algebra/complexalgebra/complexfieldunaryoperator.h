@@ -52,6 +52,13 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
+    template <typename... IDX>
+      requires VariadicIndex<IDX...>
+    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(mR, idx...);
+    }
+
     static constexpr size_t size = 2;
     using Getter = ComplexFieldGetter;
 
