@@ -61,7 +61,7 @@ namespace TempLat
       }
     }
 
-    static std::string operatorString() { return "Laplacian"; }
+    virtual std::string operatorString() const override { return "Laplacian"; }
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {

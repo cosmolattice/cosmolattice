@@ -58,7 +58,7 @@ namespace TempLat
       }
     }
 
-    static std::string operatorString() { return "NeutDij"; }
+    virtual std::string operatorString() const override { return "NeutDij"; }
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {

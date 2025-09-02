@@ -75,7 +75,7 @@ namespace TempLat
         return GetValue::get(mT, idx...) * GetValue::get(mR, idx...);
       }
 
-      static std::string operatorString() { return "*"; }
+      virtual std::string operatorString() const override { return "*"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
@@ -98,7 +98,7 @@ namespace TempLat
         return N * GetValue::get(mR, idx...);
       }
 
-      static std::string operatorString() { return std::to_string(N) + "*"; }
+      virtual std::string operatorString() const override { return std::to_string(N) + "*"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other) { return N * mR; }
@@ -136,8 +136,9 @@ namespace TempLat
 
   /** \brief Specialize for possible zero input! */
   template <typename T> KOKKOS_FORCEINLINE_FUNCTION ZeroType operator*(const T &a, ZeroType b) { return b; }
+  /** \brief Specialize for possible zero input! */
+  template <typename T> KOKKOS_FORCEINLINE_FUNCTION ZeroType operator*(ZeroType a, const T &b) { return a; }
 
-  /** \brief Specialize for possible zero input! Need to disable one of these for two OneTypes as input. */
   /** \brief Specialize for possible unit input! */
   template <typename T>
     requires(!std::is_same_v<T, OneType> && !std::is_same_v<T, ZeroType>)
@@ -145,7 +146,6 @@ namespace TempLat
   {
     return a;
   }
-
   /** \brief Specialize for possible unit input! */
   template <typename T>
     requires(!std::is_same_v<T, OneType> && !std::is_same_v<T, ZeroType>)

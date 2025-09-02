@@ -76,7 +76,7 @@ namespace TempLat
 
     template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
-    static std::string operatorString() { return "*"; }
+    virtual std::string operatorString() const override { return "*"; }
   };
 
   struct ComplexFieldSU2MultiplyTester {

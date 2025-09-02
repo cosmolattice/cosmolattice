@@ -54,7 +54,7 @@ namespace TempLat
       DoEval::eval(SU2DoubletGet(3_c), idx...);
     }
 
-    std::string operatorString() const { return shiftString; }
+    virtual std::string operatorString() const override { return shiftString; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

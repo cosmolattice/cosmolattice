@@ -60,7 +60,7 @@ namespace TempLat
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> void d(const U &other) = delete;
 
-      static std::string operatorString() { return "arg"; }
+      virtual std::string operatorString() const override { return "arg"; }
     };
   } // namespace Operators
 

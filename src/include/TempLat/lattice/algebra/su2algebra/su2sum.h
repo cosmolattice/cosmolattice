@@ -62,7 +62,7 @@ namespace TempLat
       return {SU2Get(0_c, i...), SU2Get(1_c, i...), SU2Get(2_c, i...), SU2Get(3_c, i...)};
     }
 
-    static std::string operatorString() { return "+"; }
+    virtual std::string operatorString() const override { return "+"; }
   };
 
   struct SU2SumTester {

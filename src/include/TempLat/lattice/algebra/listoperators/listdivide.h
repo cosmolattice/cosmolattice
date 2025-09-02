@@ -27,7 +27,7 @@ namespace TempLat
 
     template <int N> auto getComp(Tag<N> t) { return GetComponent::get(mR, t) / GetComponent::get(mT, t); }
 
-    static std::string operatorString() { return "/"; }
+    virtual std::string operatorString() const override { return "/"; }
 
     template <int N> void doWeNeedGhosts(Tag<N> i)
     {

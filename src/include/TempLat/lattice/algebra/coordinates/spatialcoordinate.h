@@ -77,6 +77,9 @@ namespace TempLat
       }
     }
 
+    static std::string toString(ptrdiff_t j) { return "x_" + std::to_string(j); }
+    static std::string toString() { return "x"; }
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;

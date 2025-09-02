@@ -53,7 +53,7 @@ namespace TempLat
         return abs(GetValue::get(mR, idx...));
       }
 
-      static std::string operatorString() { return "abs"; }
+      virtual std::string operatorString() const override { return "abs"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)

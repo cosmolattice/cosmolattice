@@ -61,7 +61,7 @@ namespace TempLat
     }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
-    static std::string operatorString() { return " "; }
+    virtual std::string operatorString() const = 0;
 
     /** \brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
      * OP is * or whatever), this toString method does all the work for you. */

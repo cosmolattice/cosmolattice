@@ -55,7 +55,7 @@ namespace TempLat
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
-    static std::string operatorString()
+    virtual std::string operatorString() const override
     {
       std::string res = "_(";
       for (auto x : device::tie(SHIFTS...))

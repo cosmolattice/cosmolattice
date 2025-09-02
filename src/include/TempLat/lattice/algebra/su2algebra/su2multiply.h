@@ -109,7 +109,7 @@ namespace TempLat
       cache[3] = cL[0] * cR[3] + cL[3] * cR[0] + cL[2] * cR[1] - cL[1] * cR[2];
     }
 
-    static std::string operatorString() { return "."; }
+    virtual std::string operatorString() const override { return "."; }
 
   private:
     mutable device::array<SV, 4> cache;

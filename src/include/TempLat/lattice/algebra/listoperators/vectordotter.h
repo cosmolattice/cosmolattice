@@ -60,7 +60,19 @@ namespace TempLat
       BinaryOperator<R, T>::confirmSpace(newLayout, spaceType);
     }
 
-    static std::string operatorString() { return "."; }
+    virtual std::string operatorString() const override { return "."; }
+
+    std::string toString() const
+    {
+      std::string tt = GetString::get(mR);
+      if (ContainsSpace::test(tt)) tt = "(" + tt + ")";
+
+      std::string ss = GetString::get(mT);
+      if (ContainsSpace::test(ss)) ss = "(" + ss + ")";
+
+      std::string result = "<" + tt + "," + ss + ">";
+      return result;
+    }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

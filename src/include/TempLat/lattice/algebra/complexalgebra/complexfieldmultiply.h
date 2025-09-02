@@ -72,7 +72,7 @@ namespace TempLat
       DoEval::eval(mT, idx...);
     }
 
-    static std::string operatorString() { return "*"; }
+    virtual std::string operatorString() const override { return "*"; }
   };
 
   struct ComplexFieldMultiplyTester {

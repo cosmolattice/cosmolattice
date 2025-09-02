@@ -39,7 +39,7 @@ namespace TempLat
       return GetDeriv::get(mR, other) * DiracDelta(mR);
     }
 
-    static std::string operatorString() { return "Heaviside"; }
+    virtual std::string operatorString() const override { return "Heaviside"; }
   };
 
   template <typename R>

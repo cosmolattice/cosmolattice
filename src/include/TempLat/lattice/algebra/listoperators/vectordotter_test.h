@@ -26,6 +26,8 @@ inline void TempLat::VectorDotterTester::Test(TempLat::TDDAssertion &tdd)
 
     fieldX = dot(x, x);
 
+    std::cout << "dot operation: " << dot(x, x).toString() << std::endl;
+
     const auto fieldX_view = fieldX.getLocalNDHostView();
 
     bool correct = true;

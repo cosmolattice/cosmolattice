@@ -57,7 +57,7 @@ namespace TempLat
       }
     }
 
-    static std::string operatorString() { return "BackDiff"; }
+    virtual std::string operatorString() const override { return "BackDiff"; }
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {

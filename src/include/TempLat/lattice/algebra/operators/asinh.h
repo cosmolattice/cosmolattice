@@ -58,7 +58,7 @@ namespace TempLat
         return 1 / sqrt(1 + (*this) * (*this)) * GetDeriv::get(mR, other);
       }
 
-      static std::string operatorString() { return "asinh"; }
+      virtual std::string operatorString() const override { return "asinh"; }
     };
   } // namespace Operators
 

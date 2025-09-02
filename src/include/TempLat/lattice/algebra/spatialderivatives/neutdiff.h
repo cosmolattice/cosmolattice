@@ -58,7 +58,7 @@ namespace TempLat
       }
     }
 
-    static std::string operatorString() { return "NeutDiff"; }
+    virtual std::string operatorString() const override { return "NeutDiff"; }
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {

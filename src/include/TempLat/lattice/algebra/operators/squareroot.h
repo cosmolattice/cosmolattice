@@ -52,7 +52,7 @@ namespace TempLat
         return (a < zero) ? zero : sqrt(a);
       }
 
-      static std::string operatorString() { return "safe_sqrt"; }
+      virtual std::string operatorString() const override { return "safe_sqrt"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION void d(const U &other) = delete;

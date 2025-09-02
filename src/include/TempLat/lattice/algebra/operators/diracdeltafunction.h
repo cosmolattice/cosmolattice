@@ -45,7 +45,7 @@ namespace TempLat
       //                return GetDeriv::get(mInstanceT, other) * DiracDelta(mInstanceT);
       //            }
 
-      static std::string operatorString() { return "DiracDelta"; }
+      virtual std::string operatorString() const override { return "DiracDelta"; }
     };
   } // namespace Operators
 

@@ -74,7 +74,7 @@ namespace TempLat
     auto getToolBox() const { return GetToolBox::get(mR); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
-    static std::string operatorString() { return " "; }
+    virtual std::string operatorString() const { return " "; }
 
     KOKKOS_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(mR); }

@@ -107,7 +107,7 @@ namespace TempLat
       DoEval::eval(mT, idx...);
     }
 
-    static std::string operatorString() { return "*"; }
+    virtual std::string operatorString() const override { return "*"; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

@@ -74,6 +74,8 @@ namespace TempLat
       DoEval::eval(mT, idx...);
     }
 
+    virtual std::string operatorString() const override { return "·"; }
+
     std::string toString() const
     {
       std::string tt = GetString::get(mR);
@@ -82,7 +84,7 @@ namespace TempLat
       std::string ss = GetString::get(mT);
       if (ContainsSpace::test(ss)) ss = "(" + ss + ")";
 
-      std::string result = "(" + tt + "," + ss + ")";
+      std::string result = "<" + tt + "," + ss + ">";
       return result;
     }
   };

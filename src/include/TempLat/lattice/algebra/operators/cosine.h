@@ -56,7 +56,7 @@ namespace TempLat
         return -GetDeriv::get(mR, other) * sin(mR);
       }
 
-      static std::string operatorString() { return "cos"; }
+      virtual std::string operatorString() const override { return "cos"; }
     };
   } // namespace Operators
 

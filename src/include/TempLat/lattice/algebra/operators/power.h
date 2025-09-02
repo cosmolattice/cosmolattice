@@ -57,7 +57,7 @@ namespace TempLat
         return pow(GetValue::get(mR, idx...), GetValue::get(mT, idx...));
       }
 
-      static std::string operatorString() { return "^"; }
+      virtual std::string operatorString() const override { return "^"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)

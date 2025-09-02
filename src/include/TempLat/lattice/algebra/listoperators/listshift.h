@@ -39,7 +39,7 @@ namespace TempLat
       return shift<N...>(GetComponent::get(mR, t));
     }
 
-    static std::string operatorString() { return ""; }
+    virtual std::string operatorString() const override { return ""; }
     template <int M> void doWeNeedGhosts(Tag<M> i) { GetComponent::get(mR, i).confirmGhostsUpToDate(); }
 
     static const size_t size = tuple_size<R>::value;

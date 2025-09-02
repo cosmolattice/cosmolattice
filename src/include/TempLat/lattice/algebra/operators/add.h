@@ -45,7 +45,7 @@ namespace TempLat
         return TempLat::GetValue::get(mT, idx...) + TempLat::GetValue::get(mR, idx...);
       }
 
-      static std::string operatorString() { return "+"; }
+      virtual std::string operatorString() const override { return "+"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
@@ -83,7 +83,6 @@ namespace TempLat
   {
     return b;
   }
-
   /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires(!std::is_same<T, ZeroType>::value)

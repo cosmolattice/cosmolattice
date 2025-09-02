@@ -44,7 +44,7 @@ namespace TempLat
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other) { return -GetDeriv::get(mR, other); }
 
-      static std::string operatorString() { return "-"; }
+      virtual std::string operatorString() const override { return "-"; }
     };
   } // namespace Operators
 

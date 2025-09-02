@@ -45,7 +45,7 @@ namespace TempLat
         return GetValue::get(mR, idx...) / GetValue::get(mT, idx...);
       }
 
-      static std::string operatorString() { return "/"; }
+      virtual std::string operatorString() const override { return "/"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
@@ -82,7 +82,7 @@ namespace TempLat
         return AlmostEqual(a, zero) ? zero : a / b;
       }
 
-      static std::string operatorString() { return "/safe/"; }
+      virtual std::string operatorString() const override { return "/safe/"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)

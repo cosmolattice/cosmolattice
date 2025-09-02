@@ -59,7 +59,7 @@ namespace TempLat
         return GetDeriv::get(mR, other) / mR;
       }
 
-      static std::string operatorString() { return "log"; }
+      virtual std::string operatorString() const override { return "log"; }
     };
   } // namespace Operators
 
