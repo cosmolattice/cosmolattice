@@ -92,7 +92,7 @@ namespace TempLat
       requires RightIndices<M, IDX...>::value
     KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
-      return GetValue::get(mR.SU2Get(shift<N>(t)), idx...);
+      return GetValue::get(shift<N>(mR.SU2Get(t)), idx...);
     }
 
     template <int Q> auto operator()(Tag<Q> t) const { return SU2Get(t); }
