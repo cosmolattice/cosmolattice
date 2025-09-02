@@ -9,10 +9,12 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
+#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+#include <type_traits>
 
 namespace TempLat
 {
@@ -77,22 +79,25 @@ namespace TempLat
 #endif
   };
 
+  template <typename T>
+  concept IsScalarType = (std::is_arithmetic_v<T> || HasGetMethod<T>) && !HasComplexFieldGet<T>;
+
   template <typename R, typename T>
-    requires(!HasComplexFieldGet<R> && !IsComplexType<R> && HasComplexFieldGet<T>)
+    requires(IsScalarType<R> && HasComplexFieldGet<T>)
   KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<R, T>(r, t);
   }
 
   template <typename R, typename T>
-    requires(!HasComplexFieldGet<T> && !IsComplexType<T> && HasComplexFieldGet<R>)
+    requires(HasComplexFieldGet<R> && IsScalarType<T>)
   KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<T, R>{t, r};
   }
 
   template <typename R, typename T>
-    requires(!HasComplexFieldGet<T> && !IsComplexType<T> && HasComplexFieldGet<R>)
+    requires(HasComplexFieldGet<R> && IsScalarType<T>)
   KOKKOS_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<T, R>{1_c / t, r};
