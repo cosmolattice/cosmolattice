@@ -10,6 +10,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator.h"
+#include "TempLat/lattice/algebra/su2algebra/su2subtract.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include <Kokkos_Macros.hpp>

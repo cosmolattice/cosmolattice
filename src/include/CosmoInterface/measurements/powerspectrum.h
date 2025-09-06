@@ -82,9 +82,10 @@ namespace TempLat
       }
     }
 
-    template <size_t NDim, typename R, typename T> auto powerSpectrum(R f, ptrdiff_t N, T kIR)
+    template <typename R, typename T> auto powerSpectrum(R f, ptrdiff_t N, T kIR)
     { // This function is for expression/composite operator, which need their own memory to perform the fourier
       // transform.
+      static constexpr size_t NDim = GetNDim::get<R>();
       Field<NDim, T> tmp("tmp", GetToolBox::get(f));
       tmp = f;
 

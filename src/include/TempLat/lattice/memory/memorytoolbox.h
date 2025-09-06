@@ -40,10 +40,12 @@ namespace TempLat
   MakeException(InconsistentDomainSplitting);
   MakeException(InconsistentDimensions);
 
-  template <size_t NDim> class MemoryToolBox
+  template <size_t _NDim> class MemoryToolBox
   {
   public:
     /* Put public methods here. These should change very little over time. */
+
+    static constexpr size_t NDim = _NDim;
 
     /** \brief Constructor with default MPI layout and MPI_COMM_WORLD. */
     MemoryToolBox(ptrdiff_t nGridPoints, ptrdiff_t ghostDepth, bool forbidTransposition = false)

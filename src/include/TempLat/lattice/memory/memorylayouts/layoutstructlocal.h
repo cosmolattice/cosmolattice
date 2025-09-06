@@ -88,7 +88,7 @@ namespace TempLat
     KOKKOS_FORCEINLINE_FUNCTION
     ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
     {
-      return mGlobal.spatialCoordinateToMemoryIndex(position, dimension) - mLocalStarts[dimension];
+      return mGlobal.spatialCoordinateToMemoryIndex(position, dimension) - mLocalStarts[dimension] + mNGhosts;
     }
 
     template <size_t d2> friend bool operator==(const LayoutStructLocal<NDim> &a, const LayoutStructLocal<d2> &b)

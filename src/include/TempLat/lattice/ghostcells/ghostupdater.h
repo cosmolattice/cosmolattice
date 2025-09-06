@@ -13,7 +13,7 @@
 #include <ranges>
 
 #include "TempLat/parallel/kokkos/kokkos.h"
-#include "TempLat/parallel/kokkos/lambdawrapper.h"
+#include "TempLat/parallel/kokkos/kokkoslambdawrapper.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 #include "TempLat/parallel/mpi/mpitags.h"

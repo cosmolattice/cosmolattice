@@ -31,8 +31,8 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     HEFFTETranspositionFlags(const FFTLayoutStruct<NDim> &layout)
     {
-      bool transposedC = layout.fourierSpace.isTransposed();
-      bool transposedR = layout.configurationSpace.isTransposed();
+      // bool transposedC = layout.fourierSpace.isTransposed();
+      // bool transposedR = layout.configurationSpace.isTransposed();
 
       // mFlagC2R = (transposedC ? HEFFTE_TRANSPOSED_IN : 0) | (transposedR ? HEFFTE_TRANSPOSED_OUT : 0);
 

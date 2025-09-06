@@ -15,8 +15,11 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
+#include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/parameters/parameterparser.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/kokkos/kokkosoperations.h"
 
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5file.h"
 
@@ -106,36 +109,58 @@ namespace TempLat
     {
       auto toolBox = r.getToolBox();
 
-      auto itX = toolBox->itX();
+      constexpr size_t NDim = std::decay_t<decltype(*toolBox)>::NDim;
 
       auto starts = toolBox->mLayouts.getConfigSpaceStarts(); // Local mpi offset.
       auto sizes = toolBox->mLayouts.getConfigSpaceSizes();   // Local mpi sizes.
 
+      const auto mLayout = toolBox->mLayouts.getConfigSpaceLayout();
+
       if (dim == toolBox->mNDimensions - 1) // Last dimension, saved as a full rod.
       {
-        coords.emplace_back(
-            0); // look at index 0 in the last dimension. The next nGrid[last dimension] points are stored continuously.
-        ptrdiff_t offset = r.getJumps().getTotalOffsetFromSpatialCoordinates(coords);
+        // look at index 0 in the last dimension. The next nGrid[last dimension] points are stored continuously.
+        coords.emplace_back(0);
 
-        std::vector<hsize_t> subdims(
-            toolBox->mNDimensions,
-            1); // for hdf5, tell it we want to store a sub array of size (1,1,1...,nGrid[last dimension]).
+        // for hdf5, tell it we want to store a sub array of size (1,1,1...,nGrid[last dimension]).
+        std::vector<hsize_t> subdims(toolBox->mNDimensions, 1);
         subdims.back() = toolBox->mNGridPointsVec[dim];
-        std::vector<hsize_t> offsets; // at position (i,j,k,...,0) in the global lattice file.
+
+        // at position (i,j,k,...,0) in the global lattice file.
+        std::vector<hsize_t> offsets;
         for (size_t i = 0; i < coords.size(); ++i)
           offsets.emplace_back(coords[i]);
         offsets.back() = 0;
 
-        typedef typename GetGetReturnType<R>::type vType;
+        using vType = typename GetGetReturnType<R>::type;
 
+        // We have the coordinate, now we need to convert this to an index in local memory. Let's buffer the coords in a
+        // device array to use with putMemoryIndexFromSpatialLocationInto.
+        device::array<ptrdiff_t, NDim> memoryPos;
+        for (size_t i = 0; i < coords.size(); ++i)
+          memoryPos[i] = coords[i];
+        // Then, overwrite memoryPos with the actual memory indices.
+        device::apply([&](auto... idx) { mLayout.putMemoryIndexFromSpatialLocationInto(memoryPos, idx...); },
+                      memoryPos);
+        // To get the subview, we make another copy with one dimension less.
+        device::array<ptrdiff_t, NDim - 1> subMemoryPos;
+        for (size_t i = 0; i < NDim - 1; ++i)
+          subMemoryPos[i] = memoryPos[i];
+        // And apply this to get the subview, with the last dimension as a range starting from memoryPos[dim] (which is
+        // nGhosts) to memoryPos[dim]+nGrid[dim].
+        auto subview = device::apply(
+            [&](const auto &...args) {
+              return Kokkos::subview(r.getView(), args...,
+                                     std::pair<ptrdiff_t, ptrdiff_t>(memoryPos[dim], memoryPos[dim] + subdims[dim]));
+            },
+            subMemoryPos);
+
+        // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
         std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
-        for (size_t i = 0; i < sdata.size(); ++i) {
-          sdata[i] = r.get(offset + i);
-        }
-
+        device::copyDeviceToHost(subview, sdata.data());
         mDataset.writeSlices(sdata, subdims, offsets);
       } else {
-        for (int i = 0; i < sizes[dim]; ++i) { // Recursive call to loop over an arbitrary number of dimensions.
+        // Recursive call to loop over an arbitrary number of dimensions.
+        for (int i = 0; i < sizes[dim]; ++i) {
           std::vector<ptrdiff_t> newCoords(coords);
           newCoords.emplace_back(starts[dim] + i);
           saveDim(r, dim + 1, newCoords);

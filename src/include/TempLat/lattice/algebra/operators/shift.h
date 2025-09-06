@@ -107,21 +107,21 @@ namespace TempLat
 
   template <int... shifts, class R>
     requires((sizeof...(shifts) > 1) && tuple_size<R>::value == 1)
-  auto shift(const R &pR)
+  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &pR)
   {
     return ExpressionShifter<R, shifts...>(pR);
   }
 
   template <int N, class R>
     requires(tuple_size<R>::value == 1)
-  auto shift(const R &pR)
+  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &pR)
   {
     return ExpressionShifterByOne<R, N>(pR);
   }
 
   template <class R, int N>
     requires(tuple_size<R>::value == 1)
-  auto shift(const R &pR, Tag<N> t)
+  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &pR, Tag<N> t)
   {
     return ExpressionShifterByOne<R, N>(pR);
   }

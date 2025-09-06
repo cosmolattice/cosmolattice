@@ -61,9 +61,23 @@ namespace TempLat
       type.close();
     }
 
-    template <typename T>
-    void writeSlices(std::vector<T> data, const std::vector<hsize_t> &subdims, const std::vector<hsize_t> &offsets)
+    template <typename T, typename C>
+      requires requires(C c) {
+        c.size();
+        c[0];
+      }
+    void writeSlices(std::vector<T> data, const C &_subdims, const C &_offsets)
     {
+      if (_subdims.size() != _offsets.size())
+        throw std::runtime_error("In HDF5Dataset::writeSlices, subdims and offsets must have the same size");
+
+      std::vector<hsize_t> subdims(_subdims.size());
+      std::vector<hsize_t> offsets(_offsets.size());
+
+      for (size_t i = 0; i < _subdims.size(); ++i) {
+        subdims[i] = static_cast<hsize_t>(_subdims[i]);
+        offsets[i] = static_cast<hsize_t>(_offsets[i]);
+      }
 
       auto mNDimensions = subdims.size();
       std::vector<hsize_t> strides(mNDimensions, 1);
@@ -89,30 +103,16 @@ namespace TempLat
       type.close();
     }
 
-    template <typename T>
-    void writeSlices(std::vector<T> data, const std::vector<ptrdiff_t> &subdims, const std::vector<ptrdiff_t> &offsets)
-    {
-      std::vector<hsize_t> tmp1, tmp2;
-      for (size_t i = 0; i < subdims.size(); ++i) {
-        tmp1.emplace_back(subdims[i]);
-        tmp2.emplace_back(offsets[i]);
+    template <typename T, typename C>
+      requires requires(C c) {
+        c.size();
+        c[0];
       }
-      writeSlices(data, tmp1, tmp2);
-    }
-
-    template <typename T>
-    void writeSlices(std::vector<T> data, const std::vector<size_t> &subdims, const std::vector<size_t> &offsets)
+    void writeElement(T data, const C &_offsets)
     {
-      std::vector<hsize_t> tmp1, tmp2;
-      for (size_t i = 0; i < subdims.size(); ++i) {
-        tmp1.emplace_back(subdims[i]);
-        tmp2.emplace_back(offsets[i]);
-      }
-      writeSlices(data, tmp1, tmp2);
-    }
-
-    template <typename T> void writeElement(T data, const std::vector<hsize_t> &offsets)
-    {
+      std::vector<hsize_t> offsets(_offsets.size());
+      for (size_t i = 0; i < _offsets.size(); ++i)
+        offsets[i] = static_cast<hsize_t>(_offsets[i]);
 
       auto mNDimensions = offsets.size();
       std::vector<hsize_t> strides(mNDimensions, 1);
@@ -145,9 +145,23 @@ namespace TempLat
       type.close();
     }
 
-    template <typename T>
-    void readSlices(std::vector<T> &data, const std::vector<hsize_t> &subdims, const std::vector<hsize_t> &offsets)
+    template <typename T, typename C>
+      requires requires(C c) {
+        c.size();
+        c[0];
+      }
+    void readSlices(std::vector<T> &data, const C &_subdims, const C &_offsets)
     {
+      if (_subdims.size() != _offsets.size())
+        throw std::runtime_error("In HDF5Dataset::readSlices, subdims and offsets must have the same size");
+
+      std::vector<hsize_t> subdims(_subdims.size());
+      std::vector<hsize_t> offsets(_offsets.size());
+
+      for (size_t i = 0; i < _subdims.size(); ++i) {
+        subdims[i] = static_cast<hsize_t>(_subdims[i]);
+        offsets[i] = static_cast<hsize_t>(_offsets[i]);
+      }
 
       auto mNDimensions = subdims.size();
       std::vector<hsize_t> strides(mNDimensions, 1);
@@ -173,8 +187,16 @@ namespace TempLat
       type.close();
     }
 
-    template <typename T> void readElement(T data, const std::vector<hsize_t> &offsets)
+    template <typename T, typename C>
+      requires requires(C c) {
+        c.size();
+        c[0];
+      }
+    void readElement(T data, const C &_offsets)
     {
+      std::vector<hsize_t> offsets(_offsets.size());
+      for (size_t i = 0; i < _offsets.size(); ++i)
+        offsets[i] = static_cast<hsize_t>(_offsets[i]);
 
       auto mNDimensions = offsets.size();
       std::vector<hsize_t> strides(mNDimensions, 1);

@@ -63,21 +63,27 @@ namespace TempLat
 
   template <typename R, int N> class SU2DoubletShifterByOne : public SU2DoubletUnaryOperator<R>
   {
+    decltype(SU2DoubletWrap(
+        shift<N>(std::declval<R>().SU2DoubletGet(0_c)), shift<N>(std::declval<R>().SU2DoubletGet(1_c)),
+        shift<N>(std::declval<R>().SU2DoubletGet(2_c)), shift<N>(std::declval<R>().SU2DoubletGet(3_c)))) expr;
+
   public:
     using SU2DoubletUnaryOperator<R>::mR;
     /* Put public methods here. These should change very little over time. */
-    SU2DoubletShifterByOne(const R &pR) : SU2DoubletUnaryOperator<R>(pR) {}
-
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const
+    SU2DoubletShifterByOne(const R &pR)
+        : SU2DoubletUnaryOperator<R>(mR),
+          expr(SU2DoubletWrap(shift<N>(mR.SU2DoubletGet(0_c)), shift<N>(mR.SU2DoubletGet(1_c)),
+                              shift<N>(mR.SU2DoubletGet(2_c)), shift<N>(mR.SU2DoubletGet(3_c))))
     {
-      return shift<N>(mR.SU2DoubletGet(t));
     }
+
+    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const { return expr; }
 
     template <int M, typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }
     KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
     {
-      return GetValue::get(shift<N>(mR.SU2DoubletGet(t)), idx...);
+      return GetValue::get(expr.SU2DoubletGet(t), idx...);
     }
 
     template <typename... IDX>

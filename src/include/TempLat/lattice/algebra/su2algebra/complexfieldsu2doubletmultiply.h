@@ -120,7 +120,7 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-    requires(HasComplexFieldGet<R> && HasSU2DoubletGet<T>)
+    requires((HasComplexFieldGet<R> || IsComplexType<R>) && HasSU2DoubletGet<T>)
   auto operator*(const R &r, const T &t)
   {
     return ComplexFieldSU2DoubletMultiplication<R, T>(r, t);
@@ -134,22 +134,22 @@ namespace TempLat
   }
 
   template <typename R, typename T>
-    requires(std::is_arithmetic_v<std::decay_t<R>> && HasSU2DoubletGet<T>)
-  auto operator*(R r, const T &t)
+    requires((std::is_arithmetic_v<std::decay_t<R>> || HasGetMethod<R>) && HasSU2DoubletGet<T>)
+  auto operator*(const R &r, const T &t)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(r, ZeroType()), t);
   }
 
   template <typename R, typename T>
-    requires(std::is_arithmetic_v<std::decay_t<R>> && HasSU2DoubletGet<T>)
-  auto operator*(const T &t, R r)
+    requires((std::is_arithmetic_v<std::decay_t<R>> || HasGetMethod<R>) && HasSU2DoubletGet<T>)
+  auto operator*(const T &t, const R &r)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(r, ZeroType()), t);
   }
 
   template <typename R, typename T>
-    requires(std::is_arithmetic_v<std::decay_t<R>> && HasSU2DoubletGet<T>)
-  auto operator/(const T &t, R r)
+    requires((std::is_arithmetic_v<std::decay_t<R>> || HasGetMethod<R>) && HasSU2DoubletGet<T>)
+  auto operator/(const T &t, const R &r)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(1_c / r, ZeroType()), t);
   }

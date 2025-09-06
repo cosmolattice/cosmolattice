@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/tdd/tddassertion.h"
 #include "TempLat/util/log/puttostream.h"
@@ -17,9 +16,6 @@
 
 // Including this here, as we need that anywhere basically, where Kokkos is explicitly used.
 #include "TempLat/lattice/algebra/helpers/variadicindex.h"
-
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
 
 #ifndef NOKOKKOS
 
@@ -213,28 +209,6 @@ namespace TempLat
   template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
 #endif
   } // namespace device
-
-  template <typename OBJ, size_t NDim, typename T>
-  void setAtOnePoint(OBJ &&obj, device::array<ptrdiff_t, NDim> pos, T val)
-  {
-    Kokkos::parallel_for(
-        "Set a point", Kokkos::RangePolicy(0, 1),
-        KOKKOS_LAMBDA(const uint) { device::apply([&](const auto... idx) { obj.getSet(idx...) = val; }, pos); });
-  }
-
-  template <typename OBJ, size_t NDim, typename I = ptrdiff_t>
-  GetGetReturnType<OBJ>::type getAtOnePoint(OBJ &&obj, const device::array<I, NDim> &pos)
-  {
-    using T = GetGetReturnType<OBJ>::type;
-    T ret;
-    Kokkos::parallel_reduce(
-        "Get a point", Kokkos::RangePolicy(0, 1),
-        KOKKOS_LAMBDA(const uint, T &update) {
-          device::apply([&](const auto... idx) { update = GetEval::getEval(obj, idx...); }, pos);
-        },
-        ret);
-    return ret;
-  }
 
   template <typename T, size_t N>
     requires(!std::is_same_v<std::array<T, N>, device::array<T, N>>)

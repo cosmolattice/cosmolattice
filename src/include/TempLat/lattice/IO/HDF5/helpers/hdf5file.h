@@ -79,7 +79,12 @@ namespace TempLat
         return createGroup(gn);
     }
 
-    template <typename T, typename inttype> HDF5Dataset createDataset(std::string name, std::vector<inttype> dims)
+    template <typename T, typename C>
+      requires requires(C c) {
+        c.size();
+        c[0];
+      }
+    HDF5Dataset createDataset(const std::string name, const C &dims)
     {
       return getGroup().createDataset<T>(name, dims);
     }

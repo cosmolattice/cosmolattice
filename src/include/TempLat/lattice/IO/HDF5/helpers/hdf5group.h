@@ -42,8 +42,17 @@ namespace TempLat
       }
     }
 
-    template <typename T> HDF5Dataset createDataset(std::string name, std::vector<hsize_t> dims)
+    template <typename T, typename C>
+      requires requires(C c) {
+        c.size();
+        c[0];
+      }
+    HDF5Dataset createDataset(std::string name, const C &_dims)
     {
+      std::vector<hsize_t> dims(_dims.size());
+      for (size_t i = 0; i < _dims.size(); ++i)
+        dims[i] = static_cast<hsize_t>(_dims[i]);
+
       auto dataspace_id = H5Screate_simple(dims.size(), dims.data(), NULL);
 
       HDF5Dataset ret(
@@ -52,21 +61,6 @@ namespace TempLat
       H5Sclose(dataspace_id);
 
       return ret;
-    }
-
-    template <typename T> HDF5Dataset createDataset(std::string name, std::vector<size_t> dims)
-    {
-      std::vector<hsize_t> tmp;
-      for (hsize_t x : dims)
-        tmp.emplace_back(x);
-      return createDataset<T>(name, tmp);
-    }
-    template <typename T> HDF5Dataset createDataset(std::string name, std::vector<ptrdiff_t> dims)
-    {
-      std::vector<hsize_t> tmp;
-      for (hsize_t x : dims)
-        tmp.emplace_back(x);
-      return createDataset<T>(name, tmp);
     }
 
     HDF5Group getGroup(std::string gn = "/") { return {H5Gopen(mId, gn.c_str(), H5P_DEFAULT)}; }

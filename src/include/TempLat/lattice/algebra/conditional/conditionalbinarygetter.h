@@ -9,6 +9,7 @@
 
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
+#include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
 #include "TempLat/lattice/algebra/helpers/hasvectorgetmethod.h"
@@ -21,6 +22,7 @@ namespace TempLat
     requires HasGetMethod<S> || HasGetMethod<T>;
     requires !HasComplexFieldGet<S> && !HasComplexFieldGet<T>;
     requires !HasSU2Get<S> && !HasSU2Get<T>;
+    requires !HasSU2DoubletGet<S> && !HasSU2DoubletGet<T>;
     requires !HasVectorGetMethod<S>;
     requires !HasVectorGetMethod<T> && !HasStaticGetter<S> && !HasStaticGetter<T>;
   };

@@ -13,6 +13,7 @@
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/lattice/algebra/operators/multiply.h"
+#include "TempLat/lattice/algebra/operators/subtract.h"
 #include <Kokkos_Macros.hpp>
 
 namespace TempLat
@@ -32,9 +33,7 @@ namespace TempLat
     KOKKOS_FUNCTION
     ComplexFieldMultiplication(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<0> t) const { return Real(mR) * Real(mT) - Imag(mR) * Imag(mT); }
-    KOKKOS_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<1> t) const { return Real(mR) * Imag(mT) + Imag(mR) * Real(mT); }
 
     template <typename... IDX>

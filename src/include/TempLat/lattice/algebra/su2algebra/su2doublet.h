@@ -45,7 +45,7 @@ namespace TempLat
     {
     }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const { return fs[t]; }
+    template <int N> KOKKOS_FORCEINLINE_FUNCTION const Field<NDim, T> &SU2DoubletGet(Tag<N> t) const { return fs[t]; }
 
     template <int N, typename... IDX>
       requires requires(Field<NDim, T> f, IDX... idx) { f.get(idx...); }
