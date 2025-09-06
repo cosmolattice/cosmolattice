@@ -9,8 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasdx.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
-
+#include "TempLat/parallel/device.h"
 namespace TempLat
 {
   /** \brief A getter for dx.
@@ -24,14 +23,14 @@ namespace TempLat
 
     template <typename U>
       requires HasDx<U>
-    KOKKOS_FORCEINLINE_FUNCTION static auto getDx(U &&obj)
+    DEVICE_FORCEINLINE_FUNCTION static auto getDx(U &&obj)
     {
       return obj.getDx();
     }
 
     template <typename U>
       requires(!HasDx<U>)
-    KOKKOS_FORCEINLINE_FUNCTION static constexpr double getDx(U &obj)
+    DEVICE_FORCEINLINE_FUNCTION static constexpr double getDx(U &obj)
     {
       return 1.f;
     }

@@ -19,7 +19,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> ii;
       mLayout.putSpatialLocationFromMemoryIndexInto0N(ii, idx...);
@@ -43,7 +43,7 @@ namespace TempLat
 
 inline void TempLat::SpatialAveragerTester::Test(TempLat::TDDAssertion &tdd)
 {
-  static constexpr size_t NDim = 4;
+  static constexpr size_t NDim = 2;
   /* Default is to fail: to remind yourself to implement something here. */
   myTmpStruct<NDim> myInstance;
 

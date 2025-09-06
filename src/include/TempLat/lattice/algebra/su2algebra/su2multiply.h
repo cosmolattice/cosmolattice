@@ -36,25 +36,25 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     SU2Multiplication(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2Get(0_c) - mR.SU2Get(1_c) * mT.SU2Get(1_c) - mR.SU2Get(2_c) * mT.SU2Get(2_c) -
              mR.SU2Get(3_c) * mT.SU2Get(3_c);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<1> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2Get(1_c) + mR.SU2Get(3_c) * mT.SU2Get(2_c) + mR.SU2Get(1_c) * mT.SU2Get(0_c) -
              mR.SU2Get(2_c) * mT.SU2Get(3_c);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<2> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2Get(2_c) + mR.SU2Get(2_c) * mT.SU2Get(0_c) + mR.SU2Get(1_c) * mT.SU2Get(3_c) -
              mR.SU2Get(3_c) * mT.SU2Get(1_c);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<3> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2Get(3_c) + mR.SU2Get(3_c) * mT.SU2Get(0_c) + mR.SU2Get(2_c) * mT.SU2Get(1_c) -
@@ -76,21 +76,21 @@ namespace TempLat
 
     template <typename... IDX>
       requires RequiredIndices<IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(const IDX &...idx) const
     {
       return std::move(cache);
     }
 
     template <int N, typename... IDX>
       requires RequiredIndices<IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       return cache[N];
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);

@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/util/tdd/tdd.h"
 // #include "TempLat/lattice/algebra/helpers/getderiv.h"
@@ -30,6 +29,8 @@
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 
+#include "TempLat/parallel/device.h"
+
 // #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 
 namespace TempLat
@@ -43,7 +44,7 @@ namespace TempLat
   template <typename R> class UnaryOperator
   {
   public:
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     UnaryOperator(const R &pR) : mR(pR) {}
 
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
@@ -63,7 +64,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
     }
@@ -76,10 +77,10 @@ namespace TempLat
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return " "; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(mR); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
     /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP

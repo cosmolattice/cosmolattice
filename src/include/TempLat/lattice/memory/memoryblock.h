@@ -11,12 +11,13 @@
 #include <cstring>
 #include <vector>
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/log/log.h"
 
 #include "TempLat/fft/types/fftmallocfree.h"
 #include "TempLat/util/tdd/tdd.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -61,7 +62,7 @@ namespace TempLat
     }
 
     /** \brief access */
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     T &operator[](ptrdiff_t i) const
     {
       checkBounds(i);
@@ -153,10 +154,10 @@ namespace TempLat
       }
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     operator T *() const { return mData.data(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     T *data() const { return mData.data(); }
 
     MemoryBlock duplicate()
@@ -193,7 +194,7 @@ namespace TempLat
     static constexpr size_t TSIZE = sizeof(T);
     mutable bool mHostMirrorOutdated = true;
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     void checkBounds(ptrdiff_t i) const
     {
 #ifdef CHECKBOUNDS

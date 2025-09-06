@@ -32,7 +32,7 @@ namespace TempLat
 
     using UnaryOperator<R>::mR;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     NormGradientSquare(const R &pR) : UnaryOperator<R>(pR), dx2(pow<2>(GetDx::getDx(pR))) {}
 
     template <typename... IDX>
@@ -40,7 +40,7 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         GetValue::get(mR, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)
         return ZeroType();
@@ -66,7 +66,7 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         DoEval::eval(r, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {
@@ -76,7 +76,7 @@ namespace TempLat
       });
     }
 
-    template <typename S> KOKKOS_FORCEINLINE_FUNCTION auto d(const S &other)
+    template <typename S> DEVICE_FORCEINLINE_FUNCTION auto d(const S &other)
     {
       return 2 * LatForwardGrad(mR) * LatForwardGrad(mR.d(other));
     }
@@ -96,14 +96,14 @@ namespace TempLat
 
   template <int nDimensions = 3, typename R>
     requires HasGetMethod<R>
-  KOKKOS_FORCEINLINE_FUNCTION auto Grad2(R pR)
+  DEVICE_FORCEINLINE_FUNCTION auto Grad2(R pR)
   {
     return NormGradientSquare<nDimensions, R>(pR);
   }
 
   template <int nDimensions = 3, typename R>
     requires(!HasGetMethod<R>)
-  KOKKOS_FORCEINLINE_FUNCTION auto Grad2(R pR)
+  DEVICE_FORCEINLINE_FUNCTION auto Grad2(R pR)
   {
     return ZeroType();
   }

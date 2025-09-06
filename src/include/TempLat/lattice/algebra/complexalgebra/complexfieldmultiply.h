@@ -30,7 +30,7 @@ namespace TempLat
     using ComplexFieldBinaryOperator<R, T>::mR;
     using ComplexFieldBinaryOperator<R, T>::mT;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ComplexFieldMultiplication(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
     auto ComplexFieldGet(Tag<0> t) const { return Real(mR) * Real(mT) - Imag(mR) * Imag(mT); }
@@ -44,7 +44,7 @@ namespace TempLat
         ComplexFieldGetter::get(mR, 1_c, idx...);
         ComplexFieldGetter::get(mT, 1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return ComplexFieldGetter::get(mR, 0_c, idx...) * ComplexFieldGetter::get(mT, 0_c, idx...) -
              ComplexFieldGetter::get(mR, 1_c, idx...) * ComplexFieldGetter::get(mT, 1_c, idx...);
@@ -57,7 +57,7 @@ namespace TempLat
         ComplexFieldGetter::get(mR, 1_c, idx...);
         ComplexFieldGetter::get(mT, 1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return ComplexFieldGetter::get(mR, 0_c, idx...) * ComplexFieldGetter::get(mT, 1_c, idx...) +
              ComplexFieldGetter::get(mR, 1_c, idx...) * ComplexFieldGetter::get(mT, 0_c, idx...);
@@ -65,7 +65,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
@@ -83,28 +83,28 @@ namespace TempLat
 
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && HasComplexFieldGet<T>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ComplexFieldMultiplication<R, T>(r, t);
   }
 
   template <typename R, typename T>
     requires(IsComplexType<R> && HasComplexFieldGet<T>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ComplexFieldMultiplication<R, T>(r, t);
   }
 
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && IsComplexType<T>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ComplexFieldMultiplication<R, T>(r, t);
   }
 
   template <typename R>
     requires(HasComplexFieldGet<R> && !std::is_same_v<R, OneType>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(OneType, const R &r)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(OneType, const R &r)
   {
     return r;
   }
@@ -118,14 +118,14 @@ namespace TempLat
 
   template <typename R>
     requires(HasComplexFieldGet<R> && !std::is_same_v<R, ZeroType>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(ZeroType, const R &r)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(ZeroType, const R &r)
   {
     return ZeroType();
   }
 
   template <typename R>
     requires HasComplexFieldGet<R>
-  KOKKOS_FORCEINLINE_FUNCTION auto norm2(R &&r)
+  DEVICE_FORCEINLINE_FUNCTION auto norm2(R &&r)
   {
     return pow<2>(r.ComplexFieldGet(0_c)) + pow<2>(r.ComplexFieldGet(1_c));
   }

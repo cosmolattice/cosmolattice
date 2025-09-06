@@ -25,13 +25,13 @@ namespace TempLat
     public:
       using UnaryOperator<R>::mR;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       DiracDeltaFunction(const R &a) : UnaryOperator<R>(a) {}
 
       /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         typedef typename GetGetReturnType<R>::type mType;
         mType objValue = GetValue::get(mR, idx...);
@@ -57,7 +57,7 @@ namespace TempLat
   };
 
   /** \brief Exposing our newly define multiplication operation to the world. */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION Operators::DiracDeltaFunction<T> DiracDelta(const T &a)
+  template <typename T> DEVICE_FORCEINLINE_FUNCTION Operators::DiracDeltaFunction<T> DiracDelta(const T &a)
   {
     return Operators::DiracDeltaFunction<T>(a);
   }

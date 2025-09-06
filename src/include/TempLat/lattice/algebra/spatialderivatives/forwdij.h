@@ -32,7 +32,7 @@ namespace TempLat
 
     using UnaryOperator<R>::mR;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ForwDij(R pR) : UnaryOperator<R>(pR), dx(GetDx::getDx(pR)) {}
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
@@ -42,7 +42,7 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         GetValue::get(mR, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)
         return ZeroType();
@@ -63,7 +63,7 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         DoEval::eval(r, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       constexpr size_t d = static_cast<size_t>(dir) - 1;
       DoEval::eval(mR, idx...);
@@ -91,14 +91,14 @@ namespace TempLat
 
   template <class R, int N>
     requires HasGetMethod<R>
-  KOKKOS_FORCEINLINE_FUNCTION auto forwDij(R pR, Tag<N> t)
+  DEVICE_FORCEINLINE_FUNCTION auto forwDij(R pR, Tag<N> t)
   {
     return ForwDij<N, R>(pR);
   }
 
   template <int NDim, typename R>
     requires(!HasGetMethod<R>)
-  KOKKOS_FORCEINLINE_FUNCTION auto forwDij(R pR)
+  DEVICE_FORCEINLINE_FUNCTION auto forwDij(R pR)
   {
     return ZeroType();
   }

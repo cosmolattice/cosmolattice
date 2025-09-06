@@ -35,13 +35,13 @@ namespace TempLat
       /* Put public methods here. These should change very little over time. */
       using UnaryOperator<T>::mR;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       ASinh(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
 #ifndef NOKOKKOS
         using Kokkos::asinh; /* not std::exp, but this way, for potential future data types. */
@@ -53,7 +53,7 @@ namespace TempLat
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return 1 / sqrt(1 + (*this) * (*this)) * GetDeriv::get(mR, other);
       }
@@ -72,7 +72,7 @@ namespace TempLat
   /** \brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
-  KOKKOS_FORCEINLINE_FUNCTION auto asinh(T a)
+  DEVICE_FORCEINLINE_FUNCTION auto asinh(T a)
   {
     return Operators::ASinh<T>(a);
   }

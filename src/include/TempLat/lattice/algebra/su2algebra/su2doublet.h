@@ -10,11 +10,12 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -45,16 +46,16 @@ namespace TempLat
     {
     }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION const Field<NDim, T> &SU2DoubletGet(Tag<N> t) const { return fs[t]; }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION const Field<NDim, T> &SU2DoubletGet(Tag<N> t) const { return fs[t]; }
 
     template <int N, typename... IDX>
       requires requires(Field<NDim, T> f, IDX... idx) { f.get(idx...); }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
       return fs[t].get(idx...);
     }
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto &operator()(Tag<M> t) { return fs[t]; }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto &operator()(Tag<M> t) { return fs[t]; }
 
     template <typename R> void operator=(R &&r)
     {
@@ -66,7 +67,7 @@ namespace TempLat
 
       const auto views = device::make_tuple(fs[0].getView(), fs[1].getView(), fs[2].getView(), fs[3].getView());
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
         device::apply(
             [&](auto &&...args) {
@@ -78,7 +79,8 @@ namespace TempLat
             idx);
       };
       Kokkos::parallel_for("SU2DoubleConfigViewAssign", //
-                           getLocalKokkosPolicy(mLayout), KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+                           device::getLocalKokkosPolicy(mLayout),
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
       constexpr_for<0, size, 1>([&](auto _i) {
         constexpr size_t i = decltype(_i)::value;
@@ -93,10 +95,10 @@ namespace TempLat
 
     std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(fs[0]); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(fs[0]); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(fs[0]); }
 
     using Getter = SU2DoubletGetter;

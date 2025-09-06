@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include <Kokkos_Core_fwd.hpp>
 #ifdef HDF5
 
 #include "TempLat/util/prettytostring.h"
@@ -19,8 +18,8 @@
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/parameters/parameterparser.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
-#include "TempLat/parallel/kokkos/kokkosoperations.h"
+
+#include "TempLat/parallel/device.h"
 
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5file.h"
 
@@ -160,12 +159,12 @@ namespace TempLat
 
           // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
           std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
-          device::copyDeviceToHost(subview, sdata.data());
+          device::memory::copyDeviceToHost(subview, sdata.data());
           mDataset.writeSlices(sdata, subdims, offsets);
         } else {
           // Otherwise, we use GetEval to get the data point by point.
           Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
-          auto functor = KOKKOS_CLASS_LAMBDA(size_t i)
+          auto functor = DEVICE_CLASS_LAMBDA(size_t i)
           {
             device::apply([&](const auto &...idx) { device_buf(i - memoryPos[dim]) = GetEval::getEval(r, idx..., i); },
                           subMemoryPos);
@@ -175,7 +174,7 @@ namespace TempLat
 
           // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
           std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
-          device::copyDeviceToHost(device_buf, sdata.data());
+          device::memory::copyDeviceToHost(device_buf, sdata.data());
           mDataset.writeSlices(sdata, subdims, offsets);
         }
       } else {

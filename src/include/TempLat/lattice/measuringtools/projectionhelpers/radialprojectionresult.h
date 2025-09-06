@@ -9,12 +9,13 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglebinandvalue.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionrebinner.h"
 #include <emmintrin.h>
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -192,7 +193,7 @@ namespace TempLat
     bool mUseBinCentralValues;
     bool mIsInFourier;
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     void add_device(ptrdiff_t i, const T &value, const T &position, const T &weight = (T)1) const
     {
       mValues.add_device(i, value, weight);

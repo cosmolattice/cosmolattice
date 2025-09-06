@@ -17,7 +17,7 @@ namespace TempLat
   /** \brief Enable use of this operator without prefixing std:: or TempLat::.
    * The compiler can distinguish between them. */
 #ifndef NOKOKKOS
-  using std::conj;
+  using Kokkos::conj;
 #else
   using std::conj;
 #endif
@@ -35,23 +35,19 @@ namespace TempLat
       /* Put public methods here. These should change very little over time. */
       using UnaryOperator<R>::mR;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       ComplexConjugate(const R &a) : UnaryOperator<R>(a) {}
 
       /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        return Kokkos::conj(GetValue::get(mR, idx...));
-#else
-        return std::conj(GetValue::get(mR, idx...));
-#endif
+        return conj(GetValue::get(mR, idx...));
       }
 
       /** \brief Complex conjugation and copmlex differentiation aren't friends. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other) = delete;
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other) = delete;
     };
   } // namespace Operators
 
@@ -65,7 +61,7 @@ namespace TempLat
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
-  KOKKOS_FORCEINLINE_FUNCTION auto conj(const T &a)
+  DEVICE_FORCEINLINE_FUNCTION auto conj(const T &a)
   {
     return Operators::ComplexConjugate<T>(a);
   }

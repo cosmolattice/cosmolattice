@@ -68,7 +68,7 @@ namespace TempLat
     class su2doubletresult : public device::array<vType, size>
     {
     public:
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       auto &operator+=(const su2doubletresult &other)
       {
         for (size_t i = 0; i < size; ++i) {
@@ -87,7 +87,7 @@ namespace TempLat
 
       const auto mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2doubletresult &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2doubletresult &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -96,8 +96,8 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("SU2DoubletAverager",          //
-                              getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_reduce("SU2DoubletAverager",                  //
+                              device::getLocalKokkosPolicy(mLayout), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       arrVType _localResult;
@@ -114,7 +114,7 @@ namespace TempLat
 
       const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2doubletresult &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2doubletresult &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -129,8 +129,8 @@ namespace TempLat
             idx);
       };
 
-      Kokkos::parallel_reduce("SU2DoubletAverager",          //
-                              getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_reduce("SU2DoubletAverager",                  //
+                              device::getLocalKokkosPolicy(mLayout), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       arrVType _localResult;

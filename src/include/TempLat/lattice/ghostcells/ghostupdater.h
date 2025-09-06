@@ -12,8 +12,6 @@
 #include <utility>
 #include <ranges>
 
-#include "TempLat/parallel/kokkos/kokkos.h"
-#include "TempLat/parallel/kokkos/kokkoslambdawrapper.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 #include "TempLat/parallel/mpi/mpitags.h"
@@ -21,6 +19,8 @@
 #include "TempLat/lattice/memory/jumpsholder.h"
 #include "TempLat/lattice/memory/memoryblock.h"
 #include "TempLat/lattice/ghostcells/ghostsubarraymap.h"
+
+#include "TempLat/parallel/device.h"
 
 // #define IEXCH
 
@@ -141,11 +141,11 @@ namespace TempLat
             [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, receive_slices);
 
         // Copy the data to the send slab
-        auto copy_to_slab_functor = KOKKOS_LAMBDA(const device::IdxArray<NDim> &idx)
+        auto copy_to_slab_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
         {
           device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
         };
-        Kokkos::parallel_for("copy_to_slab", getLocalKokkosPolicy(slab_sizes),
+        Kokkos::parallel_for("copy_to_slab", device::getLocalKokkosPolicy(slab_sizes),
                              KokkosNDLambdaWrapper<NDim, decltype(copy_to_slab_functor)>(copy_to_slab_functor));
         Kokkos::fence();
 
@@ -155,11 +155,11 @@ namespace TempLat
         mExchange.exchangeUp(dataType, dimension, sendSlab.data(), receiveSlab.data(), total_size);
 
         // Copy the data from the receive slab
-        auto copy_from_slab_functor = KOKKOS_LAMBDA(const device::IdxArray<NDim> &idx)
+        auto copy_from_slab_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
         {
           device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
         };
-        Kokkos::parallel_for("copy_from_slab", getLocalKokkosPolicy(slab_sizes),
+        Kokkos::parallel_for("copy_from_slab", device::getLocalKokkosPolicy(slab_sizes),
                              KokkosNDLambdaWrapper<NDim, decltype(copy_from_slab_functor)>(copy_from_slab_functor));
         Kokkos::fence();
       }
@@ -183,11 +183,11 @@ namespace TempLat
             [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, receive_slices);
 
         // Copy the data to the send slab
-        auto copy_to_slab_functor = KOKKOS_LAMBDA(const device::array<size_t, NDim> &idx)
+        auto copy_to_slab_functor = DEVICE_LAMBDA(const device::array<size_t, NDim> &idx)
         {
           device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
         };
-        Kokkos::parallel_for("copy_to_slab", getLocalKokkosPolicy(slab_sizes),
+        Kokkos::parallel_for("copy_to_slab", device::getLocalKokkosPolicy(slab_sizes),
                              KokkosNDLambdaWrapper<NDim, decltype(copy_to_slab_functor)>(copy_to_slab_functor));
         Kokkos::fence();
 
@@ -195,11 +195,11 @@ namespace TempLat
         mExchange.exchangeDown(MPITypeSelect<T>(), dimension, sendSlab.data(), receiveSlab.data(), total_size);
 
         // Copy the data from the receive slab
-        auto copy_from_slab_functor = KOKKOS_LAMBDA(const device::array<size_t, NDim> &idx)
+        auto copy_from_slab_functor = DEVICE_LAMBDA(const device::array<size_t, NDim> &idx)
         {
           device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
         };
-        Kokkos::parallel_for("copy_from_slab", getLocalKokkosPolicy(slab_sizes),
+        Kokkos::parallel_for("copy_from_slab", device::getLocalKokkosPolicy(slab_sizes),
                              KokkosNDLambdaWrapper<NDim, decltype(copy_from_slab_functor)>(copy_from_slab_functor));
         Kokkos::fence();
       }
@@ -287,7 +287,7 @@ namespace TempLat
           if constexpr (NDim == 1) {
             // For NDim == 1, we just need to copy the corners.
             Kokkos::parallel_for(
-                "GhostUpdater", Kokkos::RangePolicy(0, 1), KOKKOS_LAMBDA(const size_t) {
+                "GhostUpdater", Kokkos::RangePolicy(0, 1), DEVICE_LAMBDA(const size_t) {
                   View(ghostDepth - depth) = View(ghostDepth + sizes[0] - depth);
                   View(ghostDepth + sizes[0] + (depth - 1)) = View(ghostDepth + (depth - 1));
                 });
@@ -319,11 +319,11 @@ namespace TempLat
             auto ftb_toSubView =
                 std::apply([&](const auto &...args) { return Kokkos::subview(View, args...); }, ftb_slicesTo);
 
-            auto btf_functor = KOKKOS_LAMBDA(const device::array<size_t, NDim> &idx)
+            auto btf_functor = DEVICE_LAMBDA(const device::array<size_t, NDim> &idx)
             {
               device::apply([&](auto &&...args) { btf_toSubView(args...) = btf_fromSubView(args...); }, idx);
             };
-            auto ftb_functor = KOKKOS_LAMBDA(const device::array<size_t, NDim> &idx)
+            auto ftb_functor = DEVICE_LAMBDA(const device::array<size_t, NDim> &idx)
             {
               device::apply([&](auto &&...args) { ftb_toSubView(args...) = ftb_fromSubView(args...); }, idx);
             };

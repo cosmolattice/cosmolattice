@@ -15,8 +15,9 @@
 #include "TempLat/util/powr.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianredundancy.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianvalueaccounting.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/isarray.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -33,7 +34,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     template <typename C = std::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>
-    KOKKOS_FUNCTION HermitianPartners(const C &initNGrid) : mode(HermitianPartnersMode::none)
+    DEVICE_FUNCTION HermitianPartners(const C &initNGrid) : mode(HermitianPartnersMode::none)
     {
       for (size_t i = 0; i < NDim; ++i) {
         mNGrid[i] = initNGrid[i];
@@ -47,7 +48,7 @@ namespace TempLat
      */
     template <typename Container>
       requires requires(Container c) { c[NDim - 1]; }
-    KOKKOS_FUNCTION HermitianRedundancy qualify(const Container &globalCoordinate) const
+    DEVICE_FUNCTION HermitianRedundancy qualify(const Container &globalCoordinate) const
     {
       if (mode == HermitianPartnersMode::none) {
         // see below
@@ -85,7 +86,7 @@ namespace TempLat
         c[NDim - 1];
         d[NDim - 1];
       }
-    KOKKOS_FUNCTION HermitianRedundancy putHermitianPartner(const Container1 &globalCoordinate,
+    DEVICE_FUNCTION HermitianRedundancy putHermitianPartner(const Container1 &globalCoordinate,
                                                             Container2 &target) const
     {
       if (mode == HermitianPartnersMode::none) {
@@ -113,7 +114,7 @@ namespace TempLat
 
     /** \brief Compute the number of unique / independent real and imaginary floating point values in a memory layout.
      */
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     HermitianValueAccounting getNumberOfIndependentValues() const
     {
       if (mode == HermitianPartnersMode::fftw) {

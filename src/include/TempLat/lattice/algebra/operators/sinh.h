@@ -38,19 +38,19 @@ namespace TempLat
       /* Put public methods here. These should change very little over time. */
       using UnaryOperator<T>::mR;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       Sinh(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return sinh(GetValue::get(mR, idx...));
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mR, other) * (exp(*this) + exp(-(*this))) / 2.0;
       }
@@ -69,13 +69,13 @@ namespace TempLat
   /** \brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
-  KOKKOS_FORCEINLINE_FUNCTION auto sinh(T a)
+  DEVICE_FORCEINLINE_FUNCTION auto sinh(T a)
   {
     return Operators::Sinh<T>(a);
   }
 
   /** \brief Specialize for possible zero input! */
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   ZeroType sinh(ZeroType a) { return ZeroType(); }
 } // namespace TempLat
 

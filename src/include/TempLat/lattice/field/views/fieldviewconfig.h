@@ -19,8 +19,7 @@
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
 
-#include "TempLat/parallel/kokkos/kokkos.h"
-#include "TempLat/parallel/kokkos/kokkoslambdawrapper.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -65,7 +64,7 @@ namespace TempLat
       mRawView = mManager->getRawView();
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getView() const { return mView; }
 
     template <typename R> void assign(R &&g)
@@ -74,12 +73,12 @@ namespace TempLat
 
       PreGet::apply(g);
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
       };
-      Kokkos::parallel_for("ConfigViewAssign",            //
-                           getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_for("ConfigViewAssign",                    //
+                           device::getLocalKokkosPolicy(mLayout), //
                            KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
       PostGet::apply(g);
@@ -105,7 +104,7 @@ namespace TempLat
         requires(NDim == sizeof...(IDX));
         requires(std::is_integral_v<std::decay_t<IDX>> && ...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION T get(IDX &&...idx) const
+    DEVICE_FORCEINLINE_FUNCTION T get(IDX &&...idx) const
     {
       return mView(idx...);
     }
@@ -115,7 +114,7 @@ namespace TempLat
         requires(NDim == sizeof...(IDX));
         requires(std::is_integral_v<std::decay_t<IDX>> && ...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION T &getSet(IDX &&...idx) const
+    DEVICE_FORCEINLINE_FUNCTION T &getSet(IDX &&...idx) const
     {
       return mView(idx...);
     }

@@ -37,7 +37,7 @@ namespace TempLat
 
     static constexpr size_t NDim = _NDim;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     LatticeForwardGradient(const R &pR) : mR(pR), dx(GetDx::getDx(mR)) {}
 
     template <typename... IDX>
@@ -45,7 +45,7 @@ namespace TempLat
         requires VariadicNDIndex<NDim, IDX...>;
         GetValue::get(r, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx)
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)
         return ZeroType();
@@ -63,7 +63,7 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         DoEval::eval(r, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {
@@ -83,9 +83,9 @@ namespace TempLat
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return dx; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
     void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
@@ -121,7 +121,7 @@ namespace TempLat
   };
 
   template <int nDimensions = 3, typename R>
-  KOKKOS_FORCEINLINE_FUNCTION LatticeForwardGradient<nDimensions, R> LatForwardGrad(R pR)
+  DEVICE_FORCEINLINE_FUNCTION LatticeForwardGradient<nDimensions, R> LatForwardGrad(R pR)
   {
     return LatticeForwardGradient<nDimensions, R>(pR);
   }

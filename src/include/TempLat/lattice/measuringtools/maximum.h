@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -17,6 +16,8 @@
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -51,7 +52,7 @@ namespace TempLat
       // --------------------------------------------------------
 
       vType localResult{};
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -60,8 +61,8 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("Averager",                                                      //
-                              getLocalKokkosPolicy(mToolBox->mLayouts.getConfigSpaceLayout()), //
+      Kokkos::parallel_reduce("Averager",                                                              //
+                              device::getLocalKokkosPolicy(mToolBox->mLayouts.getConfigSpaceLayout()), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor), vType>(functor),
                               Kokkos::Max<vType>(localResult));
 

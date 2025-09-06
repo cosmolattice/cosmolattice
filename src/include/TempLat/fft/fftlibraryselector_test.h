@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/device.h"
 #include "TempLat/util/almostequal.h"
 #include "TempLat/fft/fftmpidomainsplit.h"
 
@@ -16,7 +16,7 @@
 namespace TempLat
 {
   template <size_t NDim, typename T>
-  KOKKOS_FUNCTION T coordinateToValue(const device::array<ptrdiff_t, NDim> vPosctv,
+  DEVICE_FUNCTION T coordinateToValue(const device::array<ptrdiff_t, NDim> vPosctv,
                                       const LayoutStruct<NDim> &currentLayout, bool fourierSpace)
   {
     device::array<ptrdiff_t, NDim> complexMemCoordinate{};
@@ -112,7 +112,7 @@ namespace TempLat
     // manually implement 3d:
     // Fill the memory with known values.
     Kokkos::parallel_for(
-        "Set a point", Kokkos::RangePolicy(0, mem.size()), KOKKOS_LAMBDA(const size_t i) {
+        "Set a point", Kokkos::RangePolicy(0, mem.size()), DEVICE_LAMBDA(const size_t i) {
           device::array<ptrdiff_t, NDim> pos{};
           size_t acc = 1;
           for (size_t j = 0; j < NDim; ++j) {
@@ -194,7 +194,7 @@ namespace TempLat
 
     // Fill the memory with known values.
     Kokkos::parallel_for(
-        "Set a point", Kokkos::RangePolicy(0, mem.size()), KOKKOS_LAMBDA(const size_t i) {
+        "Set a point", Kokkos::RangePolicy(0, mem.size()), DEVICE_LAMBDA(const size_t i) {
           device::array<ptrdiff_t, NDim> pos{};
           size_t acc = 1;
           for (size_t j = 0; j < NDim; ++j) {

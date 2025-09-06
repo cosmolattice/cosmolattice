@@ -29,25 +29,25 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ComplexFieldWrapper() {}
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ComplexFieldWrapper(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<0> t) const { return mR; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<1> t) const { return mT; }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return ComplexFieldGet(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return ComplexFieldGet(t); }
 
     template <typename... IDX>
       requires requires(R mR, IDX... idx) {
         requires VariadicIndex<IDX...>;
         GetValue::get(mR, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return GetEval::getEval(mR, idx...);
     }
@@ -57,14 +57,14 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         GetValue::get(mT, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return GetEval::getEval(mT, idx...);
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
@@ -86,7 +86,7 @@ namespace TempLat
   };
 
   template <typename R, typename T>
-  KOKKOS_FORCEINLINE_FUNCTION ComplexFieldWrapper<R, T> Complexify(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION ComplexFieldWrapper<R, T> Complexify(const R &r, const T &t)
   {
     return {r, t};
   }

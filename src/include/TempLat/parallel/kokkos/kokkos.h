@@ -17,8 +17,6 @@
 // Including this here, as we need that anywhere basically, where Kokkos is explicitly used.
 #include "TempLat/lattice/algebra/helpers/variadicindex.h"
 
-#ifndef NOKOKKOS
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 
@@ -30,12 +28,53 @@
 #include <tuple>
 #endif
 
-// ------------------------------------------------
-// Getting the View types with stars
-// ------------------------------------------------
+#define DEVICE_FUNCTION KOKKOS_FUNCTION
+#define DEVICE_FORCEINLINE_FUNCTION KOKKOS_FORCEINLINE_FUNCTION
+#define DEVICE_INLINE_FUNCTION KOKKOS_INLINE_FUNCTION
+#define DEVICE_LAMBDA KOKKOS_LAMBDA
+#define DEVICE_CLASS_LAMBDA KOKKOS_CLASS_LAMBDA
 
 namespace TempLat
 {
+  // ------------------------------------------------
+  // Standard library replacements in device namespace
+  // ------------------------------------------------
+
+  namespace device
+  {
+#ifdef KOKKOS_ENABLE_CUDA
+    template <typename... T> using tuple = cuda::std::tuple<T...>;
+    template <typename T, std::size_t N> using array = cuda::std::array<T, N>;
+    using cuda::std::apply;
+    using cuda::std::forward_as_tuple;
+    using cuda::std::get;
+    using cuda::std::index_sequence;
+    using cuda::std::make_tuple;
+    using cuda::std::tie;
+    using cuda::std::tuple_cat;
+
+    using Idx = uint64_t;
+    template <size_t NDim> using IdxArray = cuda::std::array<Idx, NDim>;
+#else
+    template <typename... T> using tuple = std::tuple<T...>;
+    template <typename T, std::size_t N> using array = std::array<T, N>;
+    using std::apply;
+    using std::forward_as_tuple;
+    using std::get;
+    using std::index_sequence;
+    using std::make_tuple;
+    using std::tie;
+    using std::tuple_cat;
+
+    using Idx = uint64_t;
+    template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
+#endif
+  } // namespace device
+
+  // ------------------------------------------------
+  // Getting View types with stars
+  // ------------------------------------------------
+
   template <size_t NDim, typename T> struct GetKokkosNDStarType {
     using type = typename GetKokkosNDStarType<NDim - 1, T>::type *;
   };
@@ -77,137 +116,78 @@ namespace TempLat
   };
   template <size_t NDim> using KokkosNDRange = KokkosNDRangeHelper<NDim>::type;
 
-  // Need to forward-declare this - we cannot include the layout header here, as it would create a circular dependency.
+  // Need to forward-declare this - we cannot include the layout header here, as it would create a circular
+  // dependency.
   template <size_t NDim> struct LayoutStruct;
-
-  template <size_t NDim> auto getLocalKokkosPolicy(const LayoutStruct<NDim> &layout)
-  {
-    Kokkos::Array<uint64_t, NDim> start_iteration;
-    Kokkos::Array<uint64_t, NDim> stop_iteration;
-    const auto localSizes = layout.getLocalSizes();
-    const size_t nGhosts = layout.getNGhosts();
-
-    // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
-    // However, we do not want to impose this on the level of the memory layouts. In particular, this would
-    // require additional transpositions when going to Fourier space, which is not what we want. So we do the
-    // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
-    // on CPU, we do not reverse the access pattern.
-#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
-    constexpr bool reverse = true;
-#else
-    constexpr bool reverse = false;
-#endif
-
-    for (int d = 0; d < (int)NDim; ++d) {
-      const int _d = reverse ? (int)NDim - 1 - d : d;
-      start_iteration[_d] = nGhosts;
-      stop_iteration[_d] = start_iteration[_d] + localSizes[d];
-    }
-
-    if constexpr (NDim == 1) {
-      return Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]);
-    } else {
-      return Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration);
-    }
-  }
-
-  template <size_t NDim> auto getLocalKokkosPolicy(const std::array<ptrdiff_t, NDim> &localSizes)
-  {
-    Kokkos::Array<uint64_t, NDim> start_iteration;
-    Kokkos::Array<uint64_t, NDim> stop_iteration;
-
-    // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
-    // However, we do not want to impose this on the level of the memory layouts. In particular, this would
-    // require additional transpositions when going to Fourier space, which is not what we want. So we do the
-    // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
-    // on CPU, we do not reverse the access pattern.
-#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
-    constexpr bool reverse = true;
-#else
-    constexpr bool reverse = false;
-#endif
-
-    for (int d = 0; d < (int)NDim; ++d) {
-      const int _d = reverse ? (int)NDim - 1 - d : d;
-      start_iteration[_d] = 0;
-      stop_iteration[_d] = start_iteration[_d] + localSizes[d];
-    }
-
-    if constexpr (NDim == 1) {
-      return Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]);
-    } else {
-      return Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration);
-    }
-  }
-
-  template <size_t NDim>
-  auto getLocalKokkosPolicy(const LayoutStruct<NDim> &layout, Kokkos::DefaultExecutionSpace &exec)
-  {
-    Kokkos::Array<uint64_t, NDim> start_iteration;
-    Kokkos::Array<uint64_t, NDim> stop_iteration;
-    const auto localSizes = layout.getLocalSizes();
-    const size_t nGhosts = layout.getNGhosts();
-
-    // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
-    // However, we do not want to impose this on the level of the memory layouts. In particular, this would
-    // require additional transpositions when going to Fourier space, which is not what we want. So we do the
-    // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
-    // on CPU, we do not reverse the access pattern.
-#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
-    constexpr bool reverse = true;
-#else
-    constexpr bool reverse = false;
-#endif
-
-    for (int d = 0; d < (int)NDim; ++d) {
-      const int _d = reverse ? (int)NDim - 1 - d : d;
-      start_iteration[_d] = nGhosts;
-      stop_iteration[_d] = start_iteration[_d] + localSizes[d];
-    }
-
-    if constexpr (NDim == 1) {
-      return Kokkos::RangePolicy(exec, start_iteration[0], stop_iteration[0]);
-    } else {
-      return Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(exec, start_iteration, stop_iteration);
-    }
-  }
-
-#else
-
-#define KOKKOS_FORCEINLINE_FUNCTION inline
-#define KOKKOS_FUNCTION
-
-#endif
 
   namespace device
   {
-#ifdef KOKKOS_ENABLE_CUDA
-    template <typename... T> using tuple = cuda::std::tuple<T...>;
-    template <typename T, std::size_t N> using array = cuda::std::array<T, N>;
-    using cuda::std::apply;
-    using cuda::std::forward_as_tuple;
-    using cuda::std::get;
-    using cuda::std::index_sequence;
-    using cuda::std::make_tuple;
-    using cuda::std::tie;
-    using cuda::std::tuple_cat;
 
-    using Idx = uint64_t;
-    template <size_t NDim> using IdxArray = cuda::std::array<Idx, NDim>;
+    template <size_t NDim> auto getLocalKokkosPolicy(const LayoutStruct<NDim> &layout)
+    {
+      Kokkos::Array<uint64_t, NDim> start_iteration;
+      Kokkos::Array<uint64_t, NDim> stop_iteration;
+      const auto localSizes = layout.getLocalSizes();
+      const size_t nGhosts = layout.getNGhosts();
+
+      // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
+      // However, we do not want to impose this on the level of the memory layouts. In particular, this would
+      // require additional transpositions when going to Fourier space, which is not what we want. So we do the
+      // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
+      // on CPU, we do not reverse the access pattern.
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+      constexpr bool reverse = true;
 #else
-  template <typename... T> using tuple = std::tuple<T...>;
-  template <typename T, std::size_t N> using array = std::array<T, N>;
-  using std::apply;
-  using std::forward_as_tuple;
-  using std::get;
-  using std::index_sequence;
-  using std::make_tuple;
-  using std::tie;
-  using std::tuple_cat;
-
-  using Idx = uint64_t;
-  template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
+      constexpr bool reverse = false;
 #endif
+
+      for (int d = 0; d < (int)NDim; ++d) {
+        const int _d = reverse ? (int)NDim - 1 - d : d;
+        start_iteration[_d] = nGhosts;
+        stop_iteration[_d] = start_iteration[_d] + localSizes[d];
+      }
+
+      if constexpr (NDim == 1) {
+        return Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]);
+      } else {
+        return Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration);
+      }
+    }
+
+    template <size_t NDim>
+    auto getLocalKokkosPolicy(const std::array<ptrdiff_t, NDim> &starts, const std::array<ptrdiff_t, NDim> &stops)
+    {
+      Kokkos::Array<uint64_t, NDim> start_iteration;
+      Kokkos::Array<uint64_t, NDim> stop_iteration;
+
+      // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
+      // However, we do not want to impose this on the level of the memory layouts. In particular, this would
+      // require additional transpositions when going to Fourier space, which is not what we want. So we do the
+      // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
+      // on CPU, we do not reverse the access pattern.
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+      constexpr bool reverse = true;
+#else
+      constexpr bool reverse = false;
+#endif
+
+      for (int d = 0; d < (int)NDim; ++d) {
+        const int _d = reverse ? (int)NDim - 1 - d : d;
+        start_iteration[_d] = starts[d];
+        stop_iteration[_d] = start_iteration[_d] + stops[d];
+      }
+
+      if constexpr (NDim == 1) {
+        return Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]);
+      } else {
+        return Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration);
+      }
+    }
+
+    template <size_t NDim> auto getLocalKokkosPolicy(const std::array<ptrdiff_t, NDim> &stops)
+    {
+      return getLocalKokkosPolicy(std::array<ptrdiff_t, NDim>{}, stops);
+    }
   } // namespace device
 
   template <typename T, size_t N>

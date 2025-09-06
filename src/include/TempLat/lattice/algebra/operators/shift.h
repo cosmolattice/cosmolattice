@@ -28,12 +28,12 @@ namespace TempLat
     static constexpr size_t dim = sizeof...(SHIFTS);
     static constexpr auto shifts = device::make_tuple(SHIFTS...);
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) {}
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(IDX... idx) const
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
@@ -44,7 +44,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
@@ -77,7 +77,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     using UnaryOperator<R>::mR;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ExpressionShifterByOne(const R &pR) : UnaryOperator<R>(pR) {}
 
     template <typename... IDX>
@@ -86,7 +86,7 @@ namespace TempLat
         GetValue::get(r, idx...);
         tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(IDX... idx) const
     {
       tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
       return GetValue::get(mR, idx...);
@@ -94,7 +94,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
       tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
       return DoEval::eval(mR, idx...);
@@ -107,27 +107,27 @@ namespace TempLat
 
   template <int... shifts, class R>
     requires((sizeof...(shifts) > 1) && tuple_size<R>::value == 1)
-  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &pR)
+  DEVICE_FORCEINLINE_FUNCTION auto shift(const R &pR)
   {
     return ExpressionShifter<R, shifts...>(pR);
   }
 
   template <int N, class R>
     requires(tuple_size<R>::value == 1)
-  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &pR)
+  DEVICE_FORCEINLINE_FUNCTION auto shift(const R &pR)
   {
     return ExpressionShifterByOne<R, N>(pR);
   }
 
   template <class R, int N>
     requires(tuple_size<R>::value == 1)
-  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &pR, Tag<N> t)
+  DEVICE_FORCEINLINE_FUNCTION auto shift(const R &pR, Tag<N> t)
   {
     return ExpressionShifterByOne<R, N>(pR);
   }
 
-  template <int N> KOKKOS_FORCEINLINE_FUNCTION OneType shift(OneType) { return OneType(); }
-  template <int N> KOKKOS_FORCEINLINE_FUNCTION OneType shift(OneType, Tag<N>) { return OneType(); }
+  template <int N> DEVICE_FORCEINLINE_FUNCTION OneType shift(OneType) { return OneType(); }
+  template <int N> DEVICE_FORCEINLINE_FUNCTION OneType shift(OneType, Tag<N>) { return OneType(); }
 
   struct ExpressionShifterTester {
 #ifdef TEMPLATTEST

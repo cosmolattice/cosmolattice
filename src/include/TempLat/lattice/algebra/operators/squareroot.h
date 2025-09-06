@@ -36,7 +36,7 @@ namespace TempLat
     public:
       using UnaryOperator<R>::mR;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       SafeSqrt(const R &pR) : UnaryOperator<R>(pR) {}
 
       /**
@@ -45,7 +45,7 @@ namespace TempLat
        **/
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         auto a = GetValue::get(mR, idx...);
         decltype(a) zero(0);
@@ -55,30 +55,30 @@ namespace TempLat
       virtual std::string operatorString() const override { return "safe_sqrt"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION void d(const U &other) = delete;
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION void d(const U &other) = delete;
     };
   } // namespace Operators
 
   template <typename R>
     requires ConditionalUnaryGetter<R>
-  KOKKOS_FORCEINLINE_FUNCTION auto safeSqrt(const R &r)
+  DEVICE_FORCEINLINE_FUNCTION auto safeSqrt(const R &r)
   {
     return Operators::SafeSqrt<R>(r);
   }
 
   template <typename T>
     requires(ConditionalBinaryGetter<T, HalfType> && !std::is_arithmetic_v<T>)
-  KOKKOS_FORCEINLINE_FUNCTION auto sqrt(T a)
+  DEVICE_FORCEINLINE_FUNCTION auto sqrt(T a)
   {
     return Operators::Power<T, HalfType>(a, HalfType());
   }
 
   /** \brief Specialize for possible zero input! */
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   ZeroType sqrt(ZeroType a) { return a; }
 
   /** \brief Specialize for possible unit input! */
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   OneType sqrt(OneType a) { return a; }
 } // namespace TempLat
 

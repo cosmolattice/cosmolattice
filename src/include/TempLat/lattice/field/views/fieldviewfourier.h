@@ -13,11 +13,11 @@
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/field/abstractfield.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
-#include "TempLat/parallel/kokkos/kokkosoperations.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -52,12 +52,12 @@ namespace TempLat
       onBeforeAssignment(g);
 
       PreGet::apply(g);
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
       };
-      Kokkos::parallel_for("ConfigViewAssign",           //
-                           getLocalKokkosPolicy(layout), //
+      Kokkos::parallel_for("ConfigViewAssign",                   //
+                           device::getLocalKokkosPolicy(layout), //
                            KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
       PostGet::apply(g);
     }
@@ -85,7 +85,7 @@ namespace TempLat
         requires(NDim == sizeof...(IDX));
         requires(std::is_integral_v<std::decay_t<IDX>> && ...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
       return mView(idx...);
     }
@@ -95,7 +95,7 @@ namespace TempLat
         requires(NDim == sizeof...(IDX));
         requires(std::is_integral_v<std::decay_t<IDX>> && ...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION complex<T> &getSet(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION complex<T> &getSet(const IDX &...idx) const
     {
       return mView(idx...);
     }
@@ -158,7 +158,7 @@ namespace TempLat
       device::apply([&](const auto &...idx) { layout.putMemoryIndexFromSpatialLocationInto(mem_pos, idx...); },
                     global_coord);
 
-      device::setAtOnePoint(*this, mem_pos, toSet);
+      device::memory::setAtOnePoint(*this, mem_pos, toSet);
     }
 
     std::string to_string() const { return mManager->getName() + "(k)"; }

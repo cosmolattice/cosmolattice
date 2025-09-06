@@ -343,17 +343,18 @@ namespace TempLat
 
       device::array<ptrdiff_t, NDim> pos0{{}};
 
-      pot0 = device::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
+      pot0 = device::memory::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
 
       // Compute second derivatives of the potential, giving the mass square.
-      ForLoop(j, 0, Ns - 1, masses2S(j) = device::getAtOnePoint(Potential::deriv2S(static_cast<R &>(*this), j), pos0));
+      ForLoop(j, 0, Ns - 1,
+              masses2S(j) = device::memory::getAtOnePoint(Potential::deriv2S(static_cast<R &>(*this), j), pos0));
       ForLoop(j, 0, NCs - 1,
-              masses2CS(j) =
-                  Complexify(device::getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(0_c), pos0),
-                             device::getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(1_c), pos0)););
+              masses2CS(j) = Complexify(
+                  device::memory::getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(0_c), pos0),
+                  device::memory::getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(1_c), pos0)););
       ForLoop(j, 0, NSU2Doublet - 1,
               masses2SU2Doublet(j) = MakeSU2Doublet(
-                  a, device::getAtOnePoint(Potential::deriv2SU2Doublet(static_cast<R &>(*this), j)(a), pos0)););
+                  a, device::memory::getAtOnePoint(Potential::deriv2SU2Doublet(static_cast<R &>(*this), j)(a), pos0)););
 
       // This removes the homogeneous component at one point added previously with "addInitValueOnePoint()"
       this->removeInitValue();
@@ -370,7 +371,7 @@ namespace TempLat
       // "removeInitValue()"
 
       device::array<ptrdiff_t, NDim> pos0{{}};
-      pot0 = device::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
+      pot0 = device::memory::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
 
       // Compute initial potential at t=0
 
@@ -385,19 +386,20 @@ namespace TempLat
     void addInitValueOnePoint()
     {
       device::array<ptrdiff_t, NDim> pos0{{}};
-      ForLoop(j, 0, Ns - 1, device::setAtOnePoint(fldS(j), pos0, fldS0[j] / fStar););
-      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, device::setAtOnePoint(fldCS(j)(i), pos0, fldCS0(j)(i) / fStar);));
-      ForLoop(j, 0, NSU2Doublet - 1,
-              ForLoop(i, 0, 3, device::setAtOnePoint(fldSU2Doublet(j)(i), pos0, fldSU2Doublet0(j)(i) / fStar);));
+      ForLoop(j, 0, Ns - 1, device::memory::setAtOnePoint(fldS(j), pos0, fldS0[j] / fStar););
+      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(fldCS(j)(i), pos0, fldCS0(j)(i) / fStar);));
+      ForLoop(
+          j, 0, NSU2Doublet - 1,
+          ForLoop(i, 0, 3, device::memory::setAtOnePoint(fldSU2Doublet(j)(i), pos0, fldSU2Doublet0(j)(i) / fStar);));
     }
 
     // This removes the homogeneous components of the fields at a single point.
     void removeInitValue()
     {
       device::array<ptrdiff_t, NDim> pos0{{}};
-      ForLoop(j, 0, Ns - 1, device::setAtOnePoint(fldS(j), pos0, 0.););
-      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, device::setAtOnePoint(fldCS(j)(i), pos0, 0.);));
-      ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, device::setAtOnePoint(fldSU2Doublet(j)(i), pos0, 0.);));
+      ForLoop(j, 0, Ns - 1, device::memory::setAtOnePoint(fldS(j), pos0, 0.););
+      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(fldCS(j)(i), pos0, 0.);));
+      ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, device::memory::setAtOnePoint(fldSU2Doublet(j)(i), pos0, 0.);));
     }
 
   public:

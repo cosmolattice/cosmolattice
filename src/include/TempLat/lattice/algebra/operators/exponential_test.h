@@ -3,38 +3,36 @@
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-//#include "TempLat/lattice/algebra/operators/divide.h"
+// #include "TempLat/lattice/algebra/operators/divide.h"
 
-inline void TempLat::ExponentialTester::Test(TempLat::TDDAssertion& tdd) {
+inline void TempLat::ExponentialTester::Test(TempLat::TDDAssertion &tdd)
+{
 
-  class myClass{
+  class myClass
+  {
   public:
-    KOKKOS_FUNCTION
-    myClass(int b):a(b){}
+    DEVICE_FUNCTION
+    myClass(int b) : a(b) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto get(const double& i) const
-    {
-      return a;
-    }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto get(const double &i) const { return a; }
 
   private:
     double a;
   };
 
-    myClass a(3);
-    //myClass b(4);
-    say << exp(a).get(0) << "\n";
-    tdd.verify( AlmostEqual(exp(a).get(0),std::exp(3))  );
-//    say << exp(a / b).d(a) << "\n";
-//    say << exp(a / b).d(b) << "\n";
-//
-//    /* Default is to fail: to remind yourself to implement something here. */
-
+  myClass a(3);
+  // myClass b(4);
+  say << exp(a).get(0) << "\n";
+  tdd.verify(AlmostEqual(exp(a).get(0), std::exp(3)));
+  //    say << exp(a / b).d(a) << "\n";
+  //    say << exp(a / b).d(b) << "\n";
+  //
+  //    /* Default is to fail: to remind yourself to implement something here. */
 }
 
 #endif

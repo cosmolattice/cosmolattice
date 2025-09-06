@@ -67,7 +67,7 @@ namespace TempLat
     class su2result : public device::array<vType, size>
     {
     public:
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       auto &operator+=(const su2result &other)
       {
         for (size_t i = 0; i < size; ++i) {
@@ -86,7 +86,7 @@ namespace TempLat
 
       const auto mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2result &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2result &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -95,8 +95,8 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("SU2Averager",                 //
-                              getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_reduce("SU2Averager",                         //
+                              device::getLocalKokkosPolicy(mLayout), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       arrVType _localResult;
@@ -113,7 +113,7 @@ namespace TempLat
 
       const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2result &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2result &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -127,8 +127,8 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("ComplexFieldAverager",        //
-                              getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_reduce("ComplexFieldAverager",                //
+                              device::getLocalKokkosPolicy(mLayout), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       arrVType _localResult;

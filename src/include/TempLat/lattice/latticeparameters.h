@@ -49,13 +49,13 @@ namespace TempLat
         kIR = lat.kIR;
       }*/
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     T getDx() const { return dx; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     T getKIR() const { return kIR; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     T getLSide() const { return lSide; }
 
   private:

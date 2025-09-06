@@ -12,10 +12,8 @@
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/lattice/memory/triplestatelayouts.h"
 #include "TempLat/lattice/algebra/operators/power.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 
-#include <iomanip>
-#include <sstream>
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -74,7 +72,7 @@ namespace TempLat
       if constexpr (NDim == 1) {
         auto view = block.getRawView();
         Kokkos::parallel_for(
-            Kokkos::RangePolicy(0, localSizes[0]), KOKKOS_LAMBDA(const size_t i) {
+            Kokkos::RangePolicy(0, localSizes[0]), DEVICE_LAMBDA(const size_t i) {
               view(nGhost + i) = datum<NDim>{layout.getLocalStarts()[0] + (ptrdiff_t)i + 1};
             });
       } else {
@@ -88,7 +86,7 @@ namespace TempLat
           slices[k] = std::make_pair(nGhost, nGhost + localSizes[k]);
 
         auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
-        auto functor = KOKKOS_LAMBDA(const device::IdxArray<NDim> &idx)
+        auto functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
         {
           device::array<ptrdiff_t, NDim> val;
           for (size_t k = 0; k < NDim; ++k)

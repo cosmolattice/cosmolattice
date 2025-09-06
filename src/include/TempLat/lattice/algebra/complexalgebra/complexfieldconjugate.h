@@ -27,18 +27,18 @@ namespace TempLat
 
     using ComplexFieldUnaryOperator<R>::mR;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ComplexFieldConjugate(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t) const { return Real(mR); }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t) const { return -Imag(mR); }
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t) const { return Real(mR); }
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t) const { return -Imag(mR); }
 
     template <typename... IDX>
       requires requires(R mR, IDX... idx) {
         requires VariadicIndex<IDX...>;
         mR.ComplexFieldGet(0_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...);
     }
@@ -47,14 +47,14 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         mR.ComplexFieldGet(1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return -mR.ComplexFieldGet(1_c, idx...);
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
     }
@@ -73,26 +73,26 @@ namespace TempLat
 
   template <typename R>
     requires HasComplexFieldGet<R>
-  KOKKOS_FORCEINLINE_FUNCTION auto conj(const R &r)
+  DEVICE_FORCEINLINE_FUNCTION auto conj(const R &r)
   {
     return ComplexFieldConjugate<R>(r);
   }
 
   template <typename R>
     requires HasComplexFieldGet<R>
-  KOKKOS_FORCEINLINE_FUNCTION auto dagger(const R &r)
+  DEVICE_FORCEINLINE_FUNCTION auto dagger(const R &r)
   {
     return ComplexFieldConjugate<R>(r);
   }
 
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   OneType dagger(OneType) { return OneType(); }
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   OneType conj(OneType) { return OneType(); }
 
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   ZeroType conj(ZeroType t) { return t; };
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   ZeroType dagger(ZeroType t) { return t; };
 
 } // namespace TempLat

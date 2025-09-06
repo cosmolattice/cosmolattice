@@ -18,10 +18,10 @@ inline void TempLat::AddTester::Test(TempLat::TDDAssertion &tdd)
   class myClass
   {
   public:
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     myClass(int b) : a(b) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto get(ptrdiff_t i) const { return a; }
 
   private:
@@ -31,16 +31,16 @@ inline void TempLat::AddTester::Test(TempLat::TDDAssertion &tdd)
   class myClass2
   {
   public:
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     myClass2(int b) : a(b) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     double get(ptrdiff_t i) const { return a; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return 2.89; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return 9.89; }
 
   private:

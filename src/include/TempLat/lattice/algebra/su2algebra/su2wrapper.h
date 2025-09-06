@@ -13,7 +13,8 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -32,8 +33,8 @@ namespace TempLat
 
     SU2Wrapper(const A &pA, const B &pB, const C &pC, const D &pD) : data(pA, pB, pC, pD) {}
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return device::get<N>(data); }
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return device::get<N>(data); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
     template <int N, typename... IDX> struct RightIndices {
       static constexpr bool value =
@@ -42,7 +43,7 @@ namespace TempLat
 
     template <int N, typename... IDX>
       requires RightIndices<N, IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       return GetValue::get(device::get<N>(data), idx...);
     }
@@ -50,7 +51,7 @@ namespace TempLat
     template <typename... IDX>
       requires(RightIndices<0, IDX...>::value && RightIndices<1, IDX...>::value && RightIndices<2, IDX...>::value &&
                RightIndices<3, IDX...>::value)
-    KOKKOS_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
     {
       return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
     }

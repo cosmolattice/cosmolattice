@@ -7,26 +7,25 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::SqrtTester::Test(TempLat::TDDAssertion& tdd) {
+inline void TempLat::SqrtTester::Test(TempLat::TDDAssertion &tdd)
+{
 
-  class myClass{
+  class myClass
+  {
   public:
-    KOKKOS_FUNCTION
-    myClass(int b):a(b){}
+    DEVICE_FUNCTION
+    myClass(int b) : a(b) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto get(const double& i) const
-    {
-      return i;
-    }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto get(const double &i) const { return i; }
 
   private:
     double a;
   };
 
-    myClass a(4);
-    //myClass b(4);
-    say << sqrt(a).get(4) << "\n";
+  myClass a(4);
+  // myClass b(4);
+  say << sqrt(a).get(4) << "\n";
   /*
     tdd.verify( AlmostEqual(sqrt(a).get(4), 2)  );
 

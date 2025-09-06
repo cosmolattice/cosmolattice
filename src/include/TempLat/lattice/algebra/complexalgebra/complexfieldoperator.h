@@ -21,7 +21,7 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ComplexFieldOperator() {}
 
     static constexpr size_t size = 2;

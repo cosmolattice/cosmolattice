@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/device.h"
 #include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
@@ -21,13 +21,13 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...)
+    DEVICE_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...)
     {
       return 0.5;
     }
 
     /** \brief Need a static instance of halftype, for constructing `Power(T& a, HalfType& ht);` */
-    static KOKKOS_FORCEINLINE_FUNCTION HalfType &getStatic()
+    static DEVICE_FORCEINLINE_FUNCTION HalfType &getStatic()
     {
       static HalfType ht;
       return ht;

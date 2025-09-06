@@ -35,16 +35,16 @@ namespace TempLat
       using BinaryOperator<R, T>::mR;
       using BinaryOperator<R, T>::mT;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       Arg(R r, T t) : BinaryOperator<R, T>(r, t) {}
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       Arg() : BinaryOperator<R, T>(R(), T()) {}
 
       /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
 #ifndef NOKOKKOS
         using Kokkos::atan2;
@@ -72,7 +72,7 @@ namespace TempLat
 
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
-  KOKKOS_FORCEINLINE_FUNCTION auto arg(R r, T t)
+  DEVICE_FORCEINLINE_FUNCTION auto arg(R r, T t)
   {
     return Operators::Arg<R, T>{r, t};
   }

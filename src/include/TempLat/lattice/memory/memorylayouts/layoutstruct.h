@@ -9,11 +9,12 @@
 
 #include "TempLat/lattice/memory/memorylayouts/hermitianpartners.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocaltransposed.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/isarray.h"
 #include "TempLat/util/constexpr_for.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -60,12 +61,12 @@ namespace TempLat
       return result;
     }
 
-    template <typename T = double> KOKKOS_FORCEINLINE_FUNCTION T getMaxRadius() const
+    template <typename T = double> DEVICE_FORCEINLINE_FUNCTION T getMaxRadius() const
     {
       return getGlobal().template getMaxRadius<T>();
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     bool isTransposed() const { return getTransposed().isTransposed(); }
 
     /** \brief local index in some dimension of the memory layout, goes into its corresponding spatial dimension
@@ -73,7 +74,7 @@ namespace TempLat
      */
     template <typename Container, typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto(Container &target, const IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto(Container &target, const IDX... idx) const
     {
       const auto indices = std::tie(idx...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {
@@ -85,7 +86,7 @@ namespace TempLat
 
     template <typename Container, typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto0N(Container &target, const IDX... idx)
+    DEVICE_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto0N(Container &target, const IDX... idx)
         const // Brings back the coordinates between 0 and N-1. Useful for saving and loading for example
     {
       putSpatialLocationFromMemoryIndexInto(target, idx...);
@@ -99,7 +100,7 @@ namespace TempLat
      */
     template <typename Container, typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Container &target, const IDX... pos) const
+    DEVICE_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Container &target, const IDX... pos) const
     {
       const auto positions = std::tie(pos...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {
@@ -109,7 +110,7 @@ namespace TempLat
       });
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
 
     template <typename C>
@@ -131,10 +132,10 @@ namespace TempLat
     ptrdiff_t getNGhosts() const { return mNGhosts; }
 
     Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
 
     template <typename C = std::array<ptrdiff_t, NDim>>
@@ -143,7 +144,7 @@ namespace TempLat
     {
       getLocal().setLocalStarts(input);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
 
     template <typename C = std::array<ptrdiff_t, NDim>>
@@ -152,7 +153,7 @@ namespace TempLat
     {
       getTransposed().setTranspositionMap_memoryToGlobalSpace(input);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const auto &getTranspositionMap_memoryToGlobalSpace() const
     {
       return getTransposed().getTranspositionMap_memoryToGlobalSpace();
@@ -160,7 +161,7 @@ namespace TempLat
 
     void setHermitianPartners(HermitianPartners<NDim> &&newInstance) { mHermitianPartners = std::move(newInstance); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const auto &getHermitianPartners() const { return mHermitianPartners; }
 
     template <size_t d2> friend bool operator==(const LayoutStruct<NDim> &a, const LayoutStruct<d2> &b)
@@ -187,18 +188,18 @@ namespace TempLat
     HermitianPartners<NDim> mHermitianPartners;
     ptrdiff_t mNGhosts;
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     LayoutStructLocalTransposed<NDim> &getTransposed() { return mTransposed; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     LayoutStructLocal<NDim> &getLocal() { return getTransposed().getLocal(); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     LayoutStructGlobal<NDim> &getGlobal() { return getLocal().getGlobal(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructLocalTransposed<NDim> &getTransposed() const { return mTransposed; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructLocal<NDim> &getLocal() const { return getTransposed().getLocal(); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
 
   public:

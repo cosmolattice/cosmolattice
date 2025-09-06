@@ -24,7 +24,8 @@
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
+
+#include "TempLat/parallel/device.h"
 
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 
@@ -39,7 +40,7 @@ namespace TempLat
   template <typename R, typename T> class BinaryOperator
   {
   public:
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     BinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
@@ -70,7 +71,7 @@ namespace TempLat
 
     ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR) + ConfirmGhosts::apply(mT); }
 
-    template <size_t NDim> KOKKOS_FORCEINLINE_FUNCTION JumpsHolder<NDim> getJumps() const
+    template <size_t NDim> DEVICE_FORCEINLINE_FUNCTION JumpsHolder<NDim> getJumps() const
     {
       auto a = GetJumps::apply<NDim>(mR);
       auto b = GetJumps::apply<NDim>(mT);
@@ -81,16 +82,16 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return HasDx<R> ? GetDx::getDx(mR) : (HasDx<T> ? GetDx::getDx(mT) : 1.); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return HasKIR<R> ? GetKIR::getKIR(mR) : (HasKIR<T> ? GetKIR::getKIR(mT) : 1.); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */

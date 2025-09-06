@@ -3,30 +3,29 @@
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-inline void TempLat::SineTester::Test(TempLat::TDDAssertion& tdd) {
+inline void TempLat::SineTester::Test(TempLat::TDDAssertion &tdd)
+{
 
-    class myClass{
-    public:
-        KOKKOS_FUNCTION
-        myClass(int b):a(b){}
+  class myClass
+  {
+  public:
+    DEVICE_FUNCTION
+    myClass(int b) : a(b) {}
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        auto get(const double& i) const
-        {
-            return a;
-        }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto get(const double &i) const { return a; }
 
-    private:
-        double a;
-    };
+  private:
+    double a;
+  };
 
-    myClass a(3);
-    //myClass b(4);
-    tdd.verify( AlmostEqual(sin(a).get(0),std::sin(3.))  );
+  myClass a(3);
+  // myClass b(4);
+  tdd.verify(AlmostEqual(sin(a).get(0), std::sin(3.)));
 }
 
 #endif

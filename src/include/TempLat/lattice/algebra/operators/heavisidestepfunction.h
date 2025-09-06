@@ -23,18 +23,18 @@ namespace TempLat
   public:
     using UnaryOperator<R>::mR;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     HeavisideStepFunction(const R &pR) : UnaryOperator<R>(pR) {}
 
     template <typename... IDX>
       requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return (GetValue::get(mR, idx...) >= 0 ? 1. : 0);
     }
 
     /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-    template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+    template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
     {
       return GetDeriv::get(mR, other) * DiracDelta(mR);
     }
@@ -44,17 +44,17 @@ namespace TempLat
 
   template <typename R>
     requires ConditionalUnaryGetter<R>
-  KOKKOS_FORCEINLINE_FUNCTION auto heaviside(const R &r)
+  DEVICE_FORCEINLINE_FUNCTION auto heaviside(const R &r)
   {
     return HeavisideStepFunction<R>(r);
   }
 
   /** \brief Specialize for possible zero input! */
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   OneType heaviside(ZeroType a) { return OneType(); }
 
   /** \brief Specialize for possible unit input! */
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   OneType heaviside(OneType a) { return OneType(); }
 
   struct HeavisideStepFunctionTester {

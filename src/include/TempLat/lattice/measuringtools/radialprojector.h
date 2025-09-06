@@ -104,7 +104,7 @@ namespace TempLat
     {
       confirmGetterSpace();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
         // Get the global coordinates of this index.
         Kokkos::Array<ptrdiff_t, NDim> global_coords;
@@ -135,8 +135,8 @@ namespace TempLat
                       idx);
       };
 
-      Kokkos::parallel_for("RadialProjectorConfiguration", //
-                           getLocalKokkosPolicy(mLayout),  //
+      Kokkos::parallel_for("RadialProjectorConfiguration",        //
+                           device::getLocalKokkosPolicy(mLayout), //
                            KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
       baseWorkSpace.pull();
@@ -151,7 +151,7 @@ namespace TempLat
     {
       confirmGetterSpace();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
         // Get the global coordinates of this index.
         Kokkos::Array<ptrdiff_t, NDim> global_coords;
@@ -189,8 +189,8 @@ namespace TempLat
         }
       };
 
-      Kokkos::parallel_for("RadialProjectorFourier",      //
-                           getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_for("RadialProjectorFourier",              //
+                           device::getLocalKokkosPolicy(mLayout), //
                            KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
       baseWorkSpace.pull();
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());

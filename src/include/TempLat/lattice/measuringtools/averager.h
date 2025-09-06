@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -17,6 +16,9 @@
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
+
+#include "TempLat/parallel/device.h"
+
 #include <memory>
 
 namespace TempLat
@@ -82,7 +84,7 @@ namespace TempLat
 
       const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -91,8 +93,8 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("Averager",                    //
-                              getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_reduce("Averager",                            //
+                              device::getLocalKokkosPolicy(mLayout), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       return localResult;
@@ -104,7 +106,7 @@ namespace TempLat
 
       const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -118,8 +120,8 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("Averager",                    //
-                              getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_reduce("Averager",                            //
+                              device::getLocalKokkosPolicy(mLayout), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       return localResult;

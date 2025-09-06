@@ -14,10 +14,10 @@ inline void TempLat::DivideTester::Test(TempLat::TDDAssertion &tdd)
   class myClass
   {
   public:
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     myClass(int b) : a(b) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto get(const double &i) const { return a; }
 
   private:

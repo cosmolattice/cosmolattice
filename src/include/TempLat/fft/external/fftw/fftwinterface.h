@@ -25,13 +25,11 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     FFTWInterface()
     {
-#ifndef NOKOKKOS
-      // Sanity check: Kokkos complex should be perfectly compatible with FFTW complex.
-      static_assert(sizeof(fftwf_complex) == sizeof(Kokkos::complex<float>));
-      static_assert(alignof(fftwf_complex) <= alignof(Kokkos::complex<float>));
-      static_assert(sizeof(fftw_complex) == sizeof(Kokkos::complex<double>));
-      static_assert(alignof(fftw_complex) <= alignof(Kokkos::complex<double>));
-#endif
+      // Sanity check: our complex type should be perfectly compatible with FFTW complex.
+      static_assert(sizeof(fftwf_complex) == sizeof(complex<float>));
+      static_assert(alignof(fftwf_complex) <= alignof(complex<float>));
+      static_assert(sizeof(fftw_complex) == sizeof(complex<double>));
+      static_assert(alignof(fftw_complex) <= alignof(complex<double>));
     }
 
     virtual ptrdiff_t getMaximumNumberOfDimensionsToDivide(ptrdiff_t nDimensions) { return 1; };

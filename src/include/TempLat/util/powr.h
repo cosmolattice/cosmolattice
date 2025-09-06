@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -25,7 +25,7 @@ namespace TempLat
       x * x;
       static_cast<NumberType>(1) / x;
     }
-  constexpr KOKKOS_INLINE_FUNCTION NumberType powr(const NumberType x)
+  constexpr DEVICE_INLINE_FUNCTION NumberType powr(const NumberType x)
   {
     if constexpr (n == 0)
       return static_cast<NumberType>(1);

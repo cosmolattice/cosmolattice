@@ -32,7 +32,7 @@ namespace TempLat
     static constexpr size_t NDim = _NDim;
     myTmpStruct() : mt(MemoryToolBox<NDim>::makeShared(16, 1)) {}
 
-    template <typename... IDX> KOKKOS_FORCEINLINE_FUNCTION double get(const IDX &...idx) const { return NDim; }
+    template <typename... IDX> DEVICE_FORCEINLINE_FUNCTION double get(const IDX &...idx) const { return NDim; }
 
     auto getToolBox() const { return mt; }
 
@@ -52,7 +52,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION complex<double> get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION complex<double> get(const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> global_coord;
       mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, idx...);
@@ -91,6 +91,9 @@ inline void TempLat::AveragerTester::Test(TempLat::TDDAssertion &tdd)
     say << result << " vs hypothetical " << complex<double>(1., NDim) << "\n";
 
     tdd.verify(AlmostEqual(result, complex<double>(1., NDim)));
+    if (!AlmostEqual(result, complex<double>(1., NDim))) {
+      std::cout << " got " << result << ", expected " << complex<double>(1., NDim) << std::endl;
+    }
   };
 
   myLambda(Tag<4>(), 16);

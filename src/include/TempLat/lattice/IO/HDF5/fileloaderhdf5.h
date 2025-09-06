@@ -14,8 +14,8 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/parameters/parameterparser.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
-#include "TempLat/parallel/kokkos/kokkosoperations.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -126,7 +126,7 @@ namespace TempLat
         mDataset.readSlices(rdata, subdims, offsets);
 
         // And copy to device.
-        device::copyHostToDevice(rdata.data(), subview);
+        device::memory::copyHostToDevice(rdata.data(), subview);
       } else {
         // Recursive call to loop over an arbitrary number of dimensions.
         for (int i = 0; i < sizes[dim]; ++i) {

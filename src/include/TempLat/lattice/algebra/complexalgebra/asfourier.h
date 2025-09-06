@@ -36,7 +36,7 @@ namespace TempLat
         mR.ComplexFieldGet(0_c, idx...);
         mR.ComplexFieldGet(1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return complex<mRType>(mR.ComplexFieldGet(0_c, idx...), mR.ComplexFieldGet(1_c, idx...));
     }

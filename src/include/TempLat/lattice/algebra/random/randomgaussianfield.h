@@ -8,11 +8,12 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/util/random/randomgaussian.h"
 #include "TempLat/util/tdd/tdd.h"
-#include <Kokkos_Macros.hpp>
+
+#include "TempLat/parallel/device.h"
+
 #include <tuple>
 
 namespace TempLat
@@ -63,7 +64,7 @@ namespace TempLat
       generation++;
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION std::tuple<RNGInteger, RNGInteger>
+    DEVICE_FORCEINLINE_FUNCTION std::tuple<RNGInteger, RNGInteger>
     gidx_to_idx2(const Kokkos::Array<ptrdiff_t, NDim> &gidx) const
     {
       constexpr size_t nd1 = NDim / 2;
@@ -88,12 +89,12 @@ namespace TempLat
       return result;
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     complex<T> to_complex(const Kokkos::Array<double, 2> &pair) const { return complex<T>(pair[0], pair[1]); }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> global_coord;
       mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, idx...);

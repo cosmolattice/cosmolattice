@@ -32,7 +32,7 @@ namespace TempLat
       using BinaryOperator<R, T>::mR;
       using BinaryOperator<R, T>::mT;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       Division(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
       template <typename... IDX>
@@ -40,7 +40,7 @@ namespace TempLat
           GetValue::get(mR, idx...);
           GetValue::get(mT, idx...);
         }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return GetValue::get(mR, idx...) / GetValue::get(mT, idx...);
       }
@@ -48,7 +48,7 @@ namespace TempLat
       virtual std::string operatorString() const override { return "/"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         /* not using pow for mT * mT, because pow imports log which imports us, divide.h */
         return GetDeriv::get(mR, other) / mT - GetDeriv::get(mT, other) * mR / (mT * mT);
@@ -64,7 +64,7 @@ namespace TempLat
       using BinaryOperator<R, T>::mR;
       using BinaryOperator<R, T>::mT;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       SafeDivision(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
       template <typename... IDX>
@@ -72,7 +72,7 @@ namespace TempLat
           GetValue::get(mR, idx...);
           GetValue::get(mT, idx...);
         }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         const auto a = GetValue::get(mR, idx...);
         const auto b = GetValue::get(mT, idx...);
@@ -85,7 +85,7 @@ namespace TempLat
       virtual std::string operatorString() const override { return "/safe/"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         /* not using pow for mT * mT, because pow imports log which imports us, divide.h */
         return GetDeriv::get(mR, other) / mT - GetDeriv::get(mT, other) * mR / (mT * mT);
@@ -103,25 +103,25 @@ namespace TempLat
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
-  KOKKOS_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
   {
     return Operators::Division<R, T>(r, t);
   }
 
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
-  KOKKOS_FORCEINLINE_FUNCTION auto safeDivide(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto safeDivide(const R &r, const T &t)
   {
     return Operators::SafeDivision<R, T>(r, t);
   }
 
   /** \brief Specialize for possible unit input! Simplify derivatives for example. */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION T operator/(const T &a, OneType b) { return a; }
+  template <typename T> DEVICE_FORCEINLINE_FUNCTION T operator/(const T &a, OneType b) { return a; }
 
   /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires std::is_same_v<T, ZeroType>
-  KOKKOS_FORCEINLINE_FUNCTION auto operator/(const ZeroType &a, const T &b)
+  DEVICE_FORCEINLINE_FUNCTION auto operator/(const ZeroType &a, const T &b)
   {
     return a;
   }

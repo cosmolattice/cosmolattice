@@ -14,7 +14,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/hash/keccakhash.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/device.h"
 
 #include <Random123/philox.h>
 
@@ -46,10 +46,10 @@ namespace TempLat
 
     const auto getSeed() const { return mSeed; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     double get(INT2 r, INT2 c, INT2 gen) const { return getPair(r, c, gen)[0]; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     Kokkos::Array<double, 2> getPair(INT2 r, INT2 c, INT2 gen) const
     {
       RNG2 rng;
@@ -63,7 +63,7 @@ namespace TempLat
       return {{integer_to_double(result[0]), integer_to_double(result[1])}};
     }
 
-    template <typename T> KOKKOS_FORCEINLINE_FUNCTION double integer_to_double(T value) const
+    template <typename T> DEVICE_FORCEINLINE_FUNCTION double integer_to_double(T value) const
     {
       return (static_cast<double>(value) - static_cast<double>(std::numeric_limits<T>::min())) /
              static_cast<double>(std::numeric_limits<T>::max());

@@ -15,7 +15,8 @@
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
+
+#include "TempLat/parallel/device.h"
 
 #include "TempLat/util/tuple_tools.h"
 
@@ -34,7 +35,7 @@ namespace TempLat
 
     using UnaryOperator<R>::mR;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     LatticeLaplacian(R pR) : UnaryOperator<R>(pR), dx2(pow(GetDx::getDx(pR), 2)) {}
 
     void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
@@ -44,7 +45,7 @@ namespace TempLat
         requires VariadicNDIndex<NDim, IDX...>;
         GetValue::get(mR, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)
         return ZeroType();
@@ -68,7 +69,7 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         DoEval::eval(r, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {
@@ -79,7 +80,7 @@ namespace TempLat
     }
 
     /** \brief Symbolic derivatives. */
-    template <typename S> KOKKOS_FORCEINLINE_FUNCTION auto d(const S &other)
+    template <typename S> DEVICE_FORCEINLINE_FUNCTION auto d(const S &other)
     {
       return LatticeLaplacian<NDim, R>(GetDeriv::get(mR, other));
     }
@@ -104,14 +105,14 @@ namespace TempLat
 
   template <int NDim, typename R>
     requires HasGetMethod<R>
-  KOKKOS_FORCEINLINE_FUNCTION auto LatLapl(R pR)
+  DEVICE_FORCEINLINE_FUNCTION auto LatLapl(R pR)
   {
     return LatticeLaplacian<NDim, R>(pR);
   }
 
   template <int NDim, typename R>
     requires(!HasGetMethod<R>)
-  KOKKOS_FORCEINLINE_FUNCTION auto LatLapl(R pR)
+  DEVICE_FORCEINLINE_FUNCTION auto LatLapl(R pR)
   {
     return ZeroType();
   }

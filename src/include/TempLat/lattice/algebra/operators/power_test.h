@@ -3,27 +3,23 @@
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::PowerTester::Test(TempLat::TDDAssertion& tdd) {
+inline void TempLat::PowerTester::Test(TempLat::TDDAssertion &tdd)
+{
 
-  class myClass{
+  class myClass
+  {
   public:
-    KOKKOS_FUNCTION
-    myClass(int b):a(b){}
+    DEVICE_FUNCTION
+    myClass(int b) : a(b) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
-    auto get(ptrdiff_t i) const
-    {
-      return a;
-    }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto get(ptrdiff_t i) const { return a; }
 
-    std::string toString() const
-    {
-      return "aaaaaa";
-    }
+    std::string toString() const { return "aaaaaa"; }
 
   private:
     int a;
@@ -32,13 +28,11 @@ inline void TempLat::PowerTester::Test(TempLat::TDDAssertion& tdd) {
   myClass a(3);
   myClass b(4);
 
+  tdd.verify(pow(a, b).get(0) == 81);
+  tdd.verify(pow<3>(a).get(0) == 27);
 
-  tdd.verify( pow(a , b).get(0) == 81 );
-  tdd.verify( pow<3>(a ).get(0) == 27 );
-
-    /* Default is to fail: to remind yourself to implement something here. */
-//    tdd.verify( false );
-
+  /* Default is to fail: to remind yourself to implement something here. */
+  //    tdd.verify( false );
 }
 
 #endif

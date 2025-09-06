@@ -39,19 +39,19 @@ namespace TempLat
       /* Put public methods here. These should change very little over time. */
       using UnaryOperator<T>::mR;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       Exponential(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return exp(GetValue::get(mR, idx...));
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mR, other) * *this;
       }
@@ -70,13 +70,13 @@ namespace TempLat
   /** \brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
-  KOKKOS_FORCEINLINE_FUNCTION auto exp(T a)
+  DEVICE_FORCEINLINE_FUNCTION auto exp(T a)
   {
     return Operators::Exponential<T>(a);
   }
 
   /** \brief Specialize for possible zero input! */
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   OneType exp(ZeroType a) { return OneType(); }
 } // namespace TempLat
 

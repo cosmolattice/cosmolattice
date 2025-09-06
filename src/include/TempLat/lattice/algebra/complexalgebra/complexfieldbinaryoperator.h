@@ -27,7 +27,7 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ComplexFieldBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
@@ -52,15 +52,15 @@ namespace TempLat
       return result;
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(mR); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);

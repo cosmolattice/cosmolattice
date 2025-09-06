@@ -31,13 +31,13 @@ namespace TempLat
     using ComplexFieldBinaryOperator<R, T>::mR;
     using ComplexFieldBinaryOperator<R, T>::mT;
 
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     ScalarComplexFieldMultiply(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<0> t) const { return mR * Real(mT); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<1> t) const { return mR * Imag(mT); }
 
     template <typename... IDX>
@@ -46,7 +46,7 @@ namespace TempLat
         GetValue::get(mR, idx...);
         mT.ComplexFieldGet(0_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return GetEval::getEval(mR, idx...) * mT.ComplexFieldGet(0_c, idx...);
     }
@@ -57,14 +57,14 @@ namespace TempLat
         GetValue::get(mR, idx...);
         mT.ComplexFieldGet(1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return GetEval::getEval(mR, idx...) * mT.ComplexFieldGet(1_c, idx...);
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
@@ -84,21 +84,21 @@ namespace TempLat
 
   template <typename R, typename T>
     requires(IsScalarType<R> && HasComplexFieldGet<T>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<R, T>(r, t);
   }
 
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && IsScalarType<T>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<T, R>{t, r};
   }
 
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && IsScalarType<T>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<T, R>{1_c / t, r};
   }

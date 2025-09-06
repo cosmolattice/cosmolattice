@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/device.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
@@ -45,22 +45,22 @@ namespace TempLat
     {
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto &ComplexFieldGet(Tag<0> t) { return mR; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const auto &ComplexFieldGet(Tag<0> t) const { return mR; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto &operator()(Tag<0> t) { return mR; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const auto &operator()(Tag<0> t) const { return mR; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto &ComplexFieldGet(Tag<1> t) { return mI; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const auto &ComplexFieldGet(Tag<1> t) const { return mI; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto &operator()(Tag<1> t) { return mI; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const auto &operator()(Tag<1> t) const { return mI; }
 
     template <int N> auto &operator()(Tag<N> t) { return ComplexFieldGet(t); }
@@ -68,21 +68,21 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.get(idx...);
     }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return mI.get(idx...);
     }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(const IDX &...idx) const
     {
       return Kokkos::Array<T, 2>{mR.get(idx...), mI.get(idx...)};
     }
@@ -103,7 +103,7 @@ namespace TempLat
       const auto viewR = mR.getView();
       const auto viewI = mI.getView();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
         device::apply(
             [&](auto &&...args) {
@@ -113,7 +113,8 @@ namespace TempLat
             idx);
       };
       Kokkos::parallel_for("ComplexConfigViewAssign", //
-                           getLocalKokkosPolicy(mLayout), KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+                           device::getLocalKokkosPolicy(mLayout),
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
       PostGet::apply(gR);
       PostGet::apply(gI);
@@ -126,10 +127,10 @@ namespace TempLat
 
     std::string toString() const { return "(" + mR.toString() + ", " + mI.toString() + ")"; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return mR.getDx(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return mR.getKIR(); }
 
     void updateGhosts()

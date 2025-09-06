@@ -12,10 +12,10 @@ inline void TempLat::MultiplyTester::Test(TempLat::TDDAssertion &tdd)
   class myClass
   {
   public:
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     myClass(int b) : a(b) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto get(ptrdiff_t i) const { return a; }
 
   private:

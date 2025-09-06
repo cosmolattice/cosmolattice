@@ -41,19 +41,19 @@ namespace TempLat
       /* Put public methods here. These should change very little over time. */
       using UnaryOperator<T>::mR;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       Log(const T &a) : UnaryOperator<T>(a) {}
 
       /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return log(GetValue::get(mR, idx...));
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         /* not using pow for 1/mInstanceT because pow imports us, log.h */
         return GetDeriv::get(mR, other) / mR;
@@ -73,13 +73,13 @@ namespace TempLat
   /** \brief Exposing our newly define log operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
-  KOKKOS_FORCEINLINE_FUNCTION auto log(T a)
+  DEVICE_FORCEINLINE_FUNCTION auto log(T a)
   {
     return Operators::Log<T>(a);
   }
 
   /** \brief Specialize for possible zero output! */
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   ZeroType log(OneType a) { return ZeroType(); }
 } // namespace TempLat
 

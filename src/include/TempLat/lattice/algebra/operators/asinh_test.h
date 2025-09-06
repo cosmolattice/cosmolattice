@@ -7,26 +7,25 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-inline void TempLat::ASinhTester::Test(TempLat::TDDAssertion &tdd) {
-    class myClass {
-    public:
-        KOKKOS_FUNCTION
-        myClass(int b): a(b) {
-        }
+inline void TempLat::ASinhTester::Test(TempLat::TDDAssertion &tdd)
+{
+  class myClass
+  {
+  public:
+    DEVICE_FUNCTION
+    myClass(int b) : a(b) {}
 
-        KOKKOS_FORCEINLINE_FUNCTION
-        auto get(const double &i) const {
-            return a;
-        }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto get(const double &i) const { return a; }
 
-    private:
-        double a;
-    };
+  private:
+    double a;
+  };
 
-    myClass a(3);
-    //myClass b(4);
-    say << asinh(a).get(0) << "\n";
-    tdd.verify(AlmostEqual(asinh(a).get(0), std::asinh(3.)));
+  myClass a(3);
+  // myClass b(4);
+  say << asinh(a).get(0) << "\n";
+  tdd.verify(AlmostEqual(asinh(a).get(0), std::asinh(3.)));
 }
 
 #endif

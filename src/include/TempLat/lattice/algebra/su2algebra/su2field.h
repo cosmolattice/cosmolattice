@@ -63,7 +63,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
       return sqrt(
           1.0 - pow<2>(fs[0].get(idx...)) - pow<2>(fs[1].get(idx...)) -
@@ -72,14 +72,14 @@ namespace TempLat
     }
     template <int M, typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
       return fs[M - 1].get(idx...);
     }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION device::array<T, 4> SU2Get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION device::array<T, 4> SU2Get(const IDX &...idx) const
     {
       return {{SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)}};
     }
@@ -93,7 +93,7 @@ namespace TempLat
       const auto view2 = fs[1].getView();
       const auto view3 = fs[2].getView();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
         device::apply(
             [&](auto &&...args) {
@@ -105,7 +105,8 @@ namespace TempLat
             idx);
       };
       Kokkos::parallel_for("SU2ConfigViewAssign", //
-                           getLocalKokkosPolicy(mLayout), KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+                           device::getLocalKokkosPolicy(mLayout),
+                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
 
       ForLoop(j, 0, 2, PostGet::apply(fs[j]));
       ForLoop(j, 0, 2, fs[j].setGhostsAreStale());
@@ -113,10 +114,10 @@ namespace TempLat
 
     std::string toString() const { return mName; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(fs[0]); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(fs[0]); }
 
     using Getter = SU2Getter;

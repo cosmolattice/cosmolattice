@@ -52,7 +52,7 @@ namespace TempLat
     size_t size() const { return mAverages.size(); }
 
     /** \brief Add one new weighted value to the collection of properties. */
-    KOKKOS_FUNCTION
+    DEVICE_FUNCTION
     void add_device(ptrdiff_t i, const T &value, const T &weight) const
     {
       checkBounds(i);
@@ -123,7 +123,7 @@ namespace TempLat
     HostMirror mMins;
     HostMirror mMaxs;
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     void checkBounds(ptrdiff_t i) const
     {
 #ifdef CHECKBOUNDS

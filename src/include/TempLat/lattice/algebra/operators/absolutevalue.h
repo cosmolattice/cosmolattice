@@ -42,13 +42,13 @@ namespace TempLat
       using UnaryOperator<R>::mR;
 
       /* Put public methods here. These should change very little over time. */
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       AbsoluteValue(const R &a) : UnaryOperator<R>(a) {}
 
       /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return abs(GetValue::get(mR, idx...));
       }
@@ -56,7 +56,7 @@ namespace TempLat
       virtual std::string operatorString() const override { return "abs"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mR, other) * (-heaviside(-mR) + heaviside(mR));
       }
@@ -73,7 +73,7 @@ namespace TempLat
   /** \brief Exposing our newly defined absolute value operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
-  KOKKOS_FORCEINLINE_FUNCTION auto abs(const T &a)
+  DEVICE_FORCEINLINE_FUNCTION auto abs(const T &a)
   {
     return Operators::AbsoluteValue<T>(a);
   }

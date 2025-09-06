@@ -39,7 +39,7 @@ namespace TempLat
    *  by default enabled in C++ standard library.
    */
   template <typename T, typename S>
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
       typename std::enable_if<std::is_same<T, decltype((T)std::declval<S>())>::value && !HasGetMethod<S>::value,
                               complex<T>>::type
       operator*(S b, complex<T> a)
@@ -62,7 +62,7 @@ namespace TempLat
       using BinaryOperator<R, T>::mR;
       using BinaryOperator<R, T>::mT;
 
-      KOKKOS_FUNCTION
+      DEVICE_FUNCTION
       Multiplication(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
       template <typename... IDX>
@@ -70,7 +70,7 @@ namespace TempLat
           GetValue::get(mT, idx...);
           GetValue::get(mR, idx...);
         }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return GetValue::get(mT, idx...) * GetValue::get(mR, idx...);
       }
@@ -78,7 +78,7 @@ namespace TempLat
       virtual std::string operatorString() const override { return "*"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other)
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mT, other) * mR + mT * GetDeriv::get(mR, other);
       }
@@ -93,7 +93,7 @@ namespace TempLat
 
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return N * GetValue::get(mR, idx...);
       }
@@ -101,7 +101,7 @@ namespace TempLat
       virtual std::string operatorString() const override { return std::to_string(N) + "*"; }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
-      template <typename U> KOKKOS_FORCEINLINE_FUNCTION auto d(const U &other) { return N * mR; }
+      template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other) { return N * mR; }
     };
   } // namespace Operators
 
@@ -115,47 +115,47 @@ namespace TempLat
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return Operators::Multiplication<R, T>(r, t);
   }
 
   template <typename R, int N>
     requires(HasGetMethod<R> && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const R &r, Tag<N> n)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, Tag<N> n)
   {
     return Operators::MultiplicationN<R, N>(r);
   }
 
   template <typename R, int N>
     requires(HasGetMethod<R> && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(Tag<N> n, const R &r)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(Tag<N> n, const R &r)
   {
     return Operators::MultiplicationN<R, N>(r);
   }
 
   /** \brief Specialize for possible zero input! */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION ZeroType operator*(const T &a, ZeroType b) { return b; }
+  template <typename T> DEVICE_FORCEINLINE_FUNCTION ZeroType operator*(const T &a, ZeroType b) { return b; }
   /** \brief Specialize for possible zero input! */
-  template <typename T> KOKKOS_FORCEINLINE_FUNCTION ZeroType operator*(ZeroType a, const T &b) { return a; }
+  template <typename T> DEVICE_FORCEINLINE_FUNCTION ZeroType operator*(ZeroType a, const T &b) { return a; }
 
   /** \brief Specialize for possible unit input! */
   template <typename T>
     requires(!std::is_same_v<T, OneType> && !std::is_same_v<T, ZeroType>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const T &a, const OneType b)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const T &a, const OneType b)
   {
     return a;
   }
   /** \brief Specialize for possible unit input! */
   template <typename T>
     requires(!std::is_same_v<T, OneType> && !std::is_same_v<T, ZeroType>)
-  KOKKOS_FORCEINLINE_FUNCTION auto operator*(const OneType &a, const T &b)
+  DEVICE_FORCEINLINE_FUNCTION auto operator*(const OneType &a, const T &b)
   {
     return b;
   }
 
   /** \brief Specialize for possible unit input! */
-  KOKKOS_FORCEINLINE_FUNCTION
+  DEVICE_FORCEINLINE_FUNCTION
   OneType operator*(OneType a, OneType b) { return a; }
 } // namespace TempLat
 

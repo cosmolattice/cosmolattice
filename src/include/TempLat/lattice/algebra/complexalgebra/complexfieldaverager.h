@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/device.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/util/tdd/tdd.h"
@@ -90,7 +90,7 @@ namespace TempLat
 
       const auto mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, complex<vType> &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, complex<vType> &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -100,8 +100,8 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("ComplexFieldAverager",        //
-                              getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_reduce("ComplexFieldAverager",                //
+                              device::getLocalKokkosPolicy(mLayout), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       arrVType a{};
@@ -119,7 +119,7 @@ namespace TempLat
 
       const LayoutStruct<NDim> mLayout = mToolBox->mLayouts.getFourierSpaceLayout();
 
-      auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, complex<vType> &update)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, complex<vType> &update)
       {
         device::apply(
             [&](auto &&...args) {
@@ -134,8 +134,8 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("ComplexFieldAverager",        //
-                              getLocalKokkosPolicy(mLayout), //
+      Kokkos::parallel_reduce("ComplexFieldAverager",                //
+                              device::getLocalKokkosPolicy(mLayout), //
                               KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
 
       arrVType a{};

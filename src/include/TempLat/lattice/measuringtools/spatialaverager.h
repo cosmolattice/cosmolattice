@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/kokkos/kokkosoperations.h"
 #include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/util/tdd/tdd.h"
@@ -17,7 +17,10 @@
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
+#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -87,7 +90,7 @@ namespace TempLat
 
       if constexpr (NDim > 2) {
         for (uint cur_lidx = nGhosts; cur_lidx < result.size() + nGhosts; ++cur_lidx) {
-          auto functor = KOKKOS_CLASS_LAMBDA(const device::IdxArray<NDim - 1> &idx, vType &update)
+          auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim - 1> &idx, vType &update)
           {
             device::apply(
                 [&](auto &&...args) {
@@ -103,7 +106,7 @@ namespace TempLat
         }
       } else if constexpr (NDim == 2) {
         Kokkos::parallel_for(
-            TeamPolicy(result.size(), Kokkos::AUTO()), KOKKOS_CLASS_LAMBDA(auto team) {
+            TeamPolicy(result.size(), Kokkos::AUTO()), DEVICE_CLASS_LAMBDA(auto team) {
               const auto cur_lidx = nGhosts + team.league_rank();
               auto functor = [&](const device::Idx &idx, vType &update) {
                 DoEval::eval(mT, idx, cur_lidx);
@@ -118,9 +121,9 @@ namespace TempLat
         Kokkos::parallel_for(
             "SpatialAverager",
             Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(start_iteration[0], stop_iteration[0]),
-            KOKKOS_CLASS_LAMBDA(const device::Idx &idx) { localResult(idx - start_iteration[0]) = mT.get(idx); });
+            DEVICE_CLASS_LAMBDA(const device::Idx &idx) { localResult(idx - start_iteration[0]) = mT.get(idx); });
       }
-      Kokkos::deep_copy(localResultHostView, localResult);
+      device::memory::copyDeviceToHost(localResult, result.data());
 
       return result;
     }
