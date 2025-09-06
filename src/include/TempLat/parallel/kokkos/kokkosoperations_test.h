@@ -14,7 +14,7 @@ void TempLat::KokkosOperationsTester::Test(TempLat::TDDAssertion &tdd)
     say << "Testing 1D copy device to host";
     Kokkos::View<double *, Kokkos::DefaultExecutionSpace> a("a", 10);
     Kokkos::parallel_for(
-        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)0, 10), KOKKOS_LAMBDA(size_t i) { a(i) = i; });
+        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)0, 10), DEVICE_LAMBDA(size_t i) { a(i) = i; });
 
     std::vector<double> host_a(10);
 
@@ -33,7 +33,7 @@ void TempLat::KokkosOperationsTester::Test(TempLat::TDDAssertion &tdd)
     auto a = Kokkos::subview(_a, std::make_pair((size_t)2, (size_t)8));
 
     Kokkos::parallel_for(
-        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)0, 10), KOKKOS_LAMBDA(size_t i) { a(i) = i; });
+        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)0, 10), DEVICE_LAMBDA(size_t i) { a(i) = i; });
 
     std::vector<double> host_a(10);
 
@@ -46,7 +46,7 @@ void TempLat::KokkosOperationsTester::Test(TempLat::TDDAssertion &tdd)
     Kokkos::View<double **, Kokkos::DefaultExecutionSpace> a("a", 10, 10);
     Kokkos::parallel_for(
         Kokkos::MDRangePolicy<Kokkos::DefaultExecutionSpace, Kokkos::Rank<2>>({0, 0}, {10, 10}),
-        KOKKOS_LAMBDA(size_t i, size_t j) { a(i, j) = j * 10 + i; });
+        DEVICE_LAMBDA(size_t i, size_t j) { a(i, j) = j * 10 + i; });
 
     std::vector<double> host_a(100);
 
@@ -70,7 +70,7 @@ void TempLat::KokkosOperationsTester::Test(TempLat::TDDAssertion &tdd)
     Kokkos::View<double **, Kokkos::DefaultExecutionSpace> _a("a", 10, 10);
     Kokkos::parallel_for(
         Kokkos::MDRangePolicy<Kokkos::DefaultExecutionSpace, Kokkos::Rank<2>>({0, 0}, {10, 10}),
-        KOKKOS_LAMBDA(size_t i, size_t j) { _a(i, j) = j * 10 + i; });
+        DEVICE_LAMBDA(size_t i, size_t j) { _a(i, j) = j * 10 + i; });
 
     auto a = Kokkos::subview(_a, std::make_pair((size_t)2, (size_t)8), std::make_pair((size_t)1, (size_t)9));
 

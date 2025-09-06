@@ -41,16 +41,16 @@ namespace TempLat
         mSizesInMemory[i] = mLocal.getLocalSizes()[i];
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     LayoutStructLocal<NDim> &getLocal() { return mLocal; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructLocal<NDim> &getLocal() const { return mLocal; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     LayoutStructGlobal<NDim> &getGlobal() { return getLocal().getGlobal(); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     bool isTransposed() const { return mTranspositionMap_memoryToGlobalSpace.isTransposed(); }
 
     template <typename T = ptrdiff_t> void setLocalSizes(const Kokkos::Array<T, NDim> &input)
@@ -76,13 +76,13 @@ namespace TempLat
       mTranspositionMap_memoryToGlobalSpace.setMap(input);
       adaptMemorySizesFromTranspositionMap();
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const TranspositionMap<NDim> &getTranspositionMap_memoryToGlobalSpace() const
     {
       return mTranspositionMap_memoryToGlobalSpace;
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getSizesInMemory() const { return mSizesInMemory; }
 
     /** \brief A dictionary for return values for memory to coordinate mapping. */
@@ -92,7 +92,7 @@ namespace TempLat
 
     /** \brief With transposition, go from actual memory index in memoryDimension to spatial coordinate value at spatial
      * dimension. */
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     CoordinateMapping getSpatialLocationFromMemoryIndex(ptrdiff_t index, ptrdiff_t memoryDimension) const
     {
       CoordinateMapping result;
@@ -104,7 +104,7 @@ namespace TempLat
 
     /** \brief With transposition, go from spatial coordinate value at spatial dimension to actual memory index in
      * memoryDimension. */
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     CoordinateMapping getMemoryIndexFromSpatialLocation(ptrdiff_t position, ptrdiff_t spatialDimension) const
     {
       CoordinateMapping result;

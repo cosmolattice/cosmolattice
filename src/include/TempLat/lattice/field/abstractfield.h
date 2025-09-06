@@ -72,10 +72,10 @@ namespace TempLat
 
     std::shared_ptr<MemoryManager<NDim, T>> getMemoryManager() { return mManager; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return latPar.getDx(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return latPar.getKIR(); }
 
   protected:

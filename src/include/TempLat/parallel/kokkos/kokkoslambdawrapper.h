@@ -1,5 +1,5 @@
-#ifndef TEMPLAT_PARALLEL_KOKKOS_LAMBDAWRAPPER_H
-#define TEMPLAT_PARALLEL_KOKKOS_LAMBDAWRAPPER_H
+#ifndef TEMPLAT_PARALLEL_DEVICE_LAMBDAWRAPPER_H
+#define TEMPLAT_PARALLEL_DEVICE_LAMBDAWRAPPER_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -29,7 +29,7 @@ namespace TempLat
 
     template <typename... Args>
       requires(sizeof...(Args) == NDim)
-    KOKKOS_FORCEINLINE_FUNCTION void operator()(const Args &...args) const
+    DEVICE_FORCEINLINE_FUNCTION void operator()(const Args &...args) const
     {
       // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
       // However, we do not want to impose this on the level of the memory layouts. In particular, this would
@@ -63,7 +63,7 @@ namespace TempLat
 
     template <typename... Args>
       requires(sizeof...(Args) == NDim + 1)
-    KOKKOS_FORCEINLINE_FUNCTION void operator()(Args &&...args) const
+    DEVICE_FORCEINLINE_FUNCTION void operator()(Args &&...args) const
     {
       // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
       // However, we do not want to impose this on the level of the memory layouts. In particular, this would
@@ -83,7 +83,7 @@ namespace TempLat
 
     template <typename... Args>
       requires(sizeof...(Args) == NDim)
-    KOKKOS_FORCEINLINE_FUNCTION auto makeArray(device::tuple<Args...> &&tuple) const
+    DEVICE_FORCEINLINE_FUNCTION auto makeArray(device::tuple<Args...> &&tuple) const
     {
       return device::apply([](const auto &...args) { return device::IdxArray<NDim>{{args...}}; }, tuple);
     }

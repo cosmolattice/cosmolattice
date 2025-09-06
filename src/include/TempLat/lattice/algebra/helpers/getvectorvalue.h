@@ -27,14 +27,14 @@ namespace TempLat
 
     template <typename U, typename... JDX>
       requires(TypeHasVectorGet<U, JDX...> && (sizeof...(JDX) >= 1))
-    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &obj, const JDX &...jdx)
+    DEVICE_FORCEINLINE_FUNCTION static auto vectorGet(U &obj, const JDX &...jdx)
     {
       return obj.vectorGet(jdx...);
     }
 
     template <typename U, typename... JDX>
       requires(!TypeHasVectorGet<U, JDX...> && (sizeof...(JDX) >= 1))
-    KOKKOS_FORCEINLINE_FUNCTION static auto vectorGet(U &&obj, const JDX &...jdx)
+    DEVICE_FORCEINLINE_FUNCTION static auto vectorGet(U &&obj, const JDX &...jdx)
     {
       return GetValue::get(obj, jdx...);
     }

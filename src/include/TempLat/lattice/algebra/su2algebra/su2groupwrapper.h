@@ -31,13 +31,13 @@ namespace TempLat
 
     SU2GroupWrapper(const A &pA, const B &pB, const C &pC) : mA(pA), mB(pB), mC(pC) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const { return sqrt(1.0 - Total(i, 1, 3, pow<2>(SU2Get(i)))); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<1> t) const { return mA; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<2> t) const { return mB; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<3> t) const { return mC; }
 
     template <typename... IDX> struct RightIndices {
@@ -50,25 +50,25 @@ namespace TempLat
 
     template <typename... IDX>
       requires RightIndices<IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
       return cache[0];
     }
     template <typename... IDX>
       requires RightIndices<IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
     {
       return cache[1];
     }
     template <typename... IDX>
       requires RightIndices<IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
     {
       return cache[2];
     }
     template <typename... IDX>
       requires RightIndices<IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
     {
       return cache[3];
     }

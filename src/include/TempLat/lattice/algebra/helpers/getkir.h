@@ -27,14 +27,14 @@ namespace TempLat
 
     template <typename U>
       requires HasKIR<U>
-    KOKKOS_FORCEINLINE_FUNCTION static auto getKIR(U &obj)
+    DEVICE_FORCEINLINE_FUNCTION static auto getKIR(U &obj)
     {
       return obj.getKIR();
     }
 
     template <typename U>
       requires(!HasKIR<U>)
-    KOKKOS_FORCEINLINE_FUNCTION static constexpr double getKIR(U &obj)
+    DEVICE_FORCEINLINE_FUNCTION static constexpr double getKIR(U &obj)
     {
       return 1;
     }

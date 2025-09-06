@@ -34,7 +34,7 @@ namespace TempLat
     using ListUnaryOperator<R>::mR;
     ListShifter(const R &pR) : ListUnaryOperator<R>(pR) {}
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto getComp(Tag<M> t) const
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto getComp(Tag<M> t) const
     {
       return shift<N...>(GetComponent::get(mR, t));
     }
@@ -51,7 +51,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     ListShifterByOne(const R &pR) : ListUnaryOperator<R>(pR), mR(pR) {}
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto getComp(Tag<M> t) const
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto getComp(Tag<M> t) const
     {
       return shift<N>(GetComponent::get(mR, t));
     }
@@ -70,21 +70,21 @@ namespace TempLat
 
   template <typename R, int... N>
     requires(IsSTDGettable<0, R> || IsTempLatGettable<0, R>)
-  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &r)
+  DEVICE_FORCEINLINE_FUNCTION auto shift(const R &r)
   {
     return ListShifter<R, N...>(r);
   }
 
   template <int N, class R>
     requires(IsSTDGettable<0, R> || IsTempLatGettable<0, R>)
-  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &pR)
+  DEVICE_FORCEINLINE_FUNCTION auto shift(const R &pR)
   {
     return ListShifterByOne<R, N>(pR);
   }
 
   template <class R, int N>
     requires(IsSTDGettable<0, R> || IsTempLatGettable<0, R>)
-  KOKKOS_FORCEINLINE_FUNCTION auto shift(const R &pR, const Tag<N> &t)
+  DEVICE_FORCEINLINE_FUNCTION auto shift(const R &pR, const Tag<N> &t)
   {
     return ListShifterByOne<R, N>(pR);
   }

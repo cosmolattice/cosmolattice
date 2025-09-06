@@ -32,7 +32,7 @@ namespace TempLat
 
     SU2DoubletWrapper(const A &pA, const B &pB, const C &pC, const D &pD) : mData(pA, pB, pC, pD) {}
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const { return device::get<N>(mData); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const { return device::get<N>(mData); }
 
     template <int N, typename... IDX>
       requires requires(A a, B b, C c, D d, IDX... idx) {
@@ -41,12 +41,12 @@ namespace TempLat
         GetValue::get(c, idx...);
         GetValue::get(d, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
       return GetValue::get(device::get<N>(mData), idx...);
     }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2DoubletGet(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2DoubletGet(t); }
 
     std::string toString() const
     {

@@ -35,7 +35,7 @@ namespace TempLat
      * one element of T with one element of S. */
     template <typename... IDX>
       requires requires(R mR, T mT, IDX... idx) { mR.vectorGet(idx..., 0) * mT.vectorGet(idx..., 0); }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       decltype(GetVectorValue::vectorGet(mR, idx..., 0) * GetVectorValue::vectorGet(mT, idx..., 0)) result = 0;
 

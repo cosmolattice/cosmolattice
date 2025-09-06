@@ -32,21 +32,21 @@ namespace TempLat
       shiftString = shift<N...>(mR.SU2DoubletGet(0_c)).getString({N...});
     }
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const
     {
       return shift<N...>(mR.SU2DoubletGet(t));
     }
 
     template <int M, typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2DoubletGet(1_c, idx...); }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
     {
       return GetValue::get(shift<N...>(mR.SU2DoubletGet(t)), idx...);
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(SU2DoubletGet(0_c), idx...);
       DoEval::eval(SU2DoubletGet(1_c), idx...);
@@ -77,18 +77,18 @@ namespace TempLat
     {
     }
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const { return expr; }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const { return expr; }
 
     template <int M, typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
     {
       return GetValue::get(expr.SU2DoubletGet(t), idx...);
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(SU2DoubletGet(0_c), idx...);
       DoEval::eval(SU2DoubletGet(1_c), idx...);

@@ -35,14 +35,14 @@ namespace TempLat
 
       const auto getSeed() const { return mRandomUniform.getSeed(); }
 
-      KOKKOS_FORCEINLINE_FUNCTION
+      DEVICE_FORCEINLINE_FUNCTION
       auto getPair(INT2 r, INT2 c, INT2 g, bool real = false, bool unitary = false) const
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
         // generate numbers with a real gaussian distribution or uniformly on the unit disk.
         return getNextGaussianPair(r, c, g, real, unitary);
       }
 
-      KOKKOS_FORCEINLINE_FUNCTION
+      DEVICE_FORCEINLINE_FUNCTION
       double get(INT2 r, INT2 c, INT2 g) const { return getPair(r, c, g, false, false)[0]; }
 
       friend std::ostream &operator<<(std::ostream &ostream, const RandomGaussian &pr)
@@ -59,7 +59,7 @@ namespace TempLat
       static constexpr double cTwoPi =
           6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359642961730265646132941876892;
 
-      KOKKOS_FORCEINLINE_FUNCTION
+      DEVICE_FORCEINLINE_FUNCTION
       Kokkos::Array<double, 2u> getNextGaussianPair(INT2 r, INT2 c, INT2 g, bool real = false,
                                                     bool unitary = false) const
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to

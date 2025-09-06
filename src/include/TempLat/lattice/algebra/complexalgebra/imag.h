@@ -19,14 +19,14 @@ namespace TempLat
    **/
   template <class T>
     requires HasComplexFieldGet<T>
-  static KOKKOS_FORCEINLINE_FUNCTION auto Imag(T &&t)
+  static DEVICE_FORCEINLINE_FUNCTION auto Imag(T &&t)
   {
     return t.ComplexFieldGet(Tag<1>());
   }
 
   template <class T>
     requires IsComplexType<T>
-  static KOKKOS_FORCEINLINE_FUNCTION auto Imag(T &&t)
+  static DEVICE_FORCEINLINE_FUNCTION auto Imag(T &&t)
   {
     return t.imag();
   }

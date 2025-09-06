@@ -28,7 +28,7 @@ namespace TempLat
     static std::string toString() { return "(ZeroType)0"; }
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION static constexpr ptrdiff_t get(const IDX &...)
+    DEVICE_FORCEINLINE_FUNCTION static constexpr ptrdiff_t get(const IDX &...)
     {
       return 0;
     }

@@ -34,7 +34,7 @@ namespace TempLat
     SU2Addition(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
     template <int N> auto SU2Get(Tag<N> t) const { return mT.SU2Get(t) + mR.SU2Get(t); }
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
     template <typename... IDX> struct RightIndices {
       static constexpr bool value = requires(R r, T t, IDX... idx) {
@@ -51,7 +51,7 @@ namespace TempLat
 
     template <int N, typename... IDX>
       requires RightIndices<IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       return mT.SU2Get(t, idx...) + mR.SU2Get(t, idx...);
     }

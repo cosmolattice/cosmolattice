@@ -26,7 +26,7 @@ namespace TempLat
 
     template <typename U, typename... IDX>
       requires HasGetEval<U, IDX...>
-    static KOKKOS_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
+    static DEVICE_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
     {
       // static_assert(std::is_same_v<decltype(obj.getEval(i)), decltype(GetValue::get(obj, i))> && false,
       //               "The return type of getEval must be the same as the return type of get.");
@@ -41,7 +41,7 @@ namespace TempLat
 
     template <typename U, typename... IDX>
       requires(!HasGetEval<U, IDX...>)
-    static KOKKOS_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
+    static DEVICE_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
     {
       return GetValue::get(obj, idx...);
     }

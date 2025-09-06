@@ -37,15 +37,15 @@ namespace TempLat
       }
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() { return mGlobalSizes; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() const { return mGlobalSizes; }
 
     /** returns the largest possible distance from the origin. mSignConversionMidpoint holds the
      *  maximum value of each dimension. Check that in localIndexToGlobalCoordinate.
      */
-    template <typename T = double> KOKKOS_FORCEINLINE_FUNCTION T getMaxRadius() const
+    template <typename T = double> DEVICE_FORCEINLINE_FUNCTION T getMaxRadius() const
     {
       T r2 = 0;
       for (auto &&it : mSignConversionMidpoint)
@@ -57,7 +57,7 @@ namespace TempLat
      *  values. Assuming periodic boundary conditions, we get that always c = i > half ? i - N : i;
      *  Don't mix up the arguments! Does not do transposition, so input pre-transposed dimension!
      */
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t memoryIndexToSpatialCoordinate(ptrdiff_t index, ptrdiff_t dimension) const
     {
       const ptrdiff_t &tSize = mSignConversionMidpoint[dimension];
@@ -65,7 +65,7 @@ namespace TempLat
     }
 
     /** \brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
     {
       return (position >= 0 ? position : position + mGlobalSizes[dimension]);

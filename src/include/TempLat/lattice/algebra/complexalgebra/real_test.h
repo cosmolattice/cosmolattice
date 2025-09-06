@@ -13,9 +13,9 @@
 inline void TempLat::RealTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct MyStruct {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<0> t) { return 87; };
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     double ComplexFieldGet(Tag<1> t) { return 870; };
   };
 

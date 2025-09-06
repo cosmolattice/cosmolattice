@@ -34,7 +34,7 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         GetValue::get(mR, idx..., mJ);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return GetValue::get(mR, idx..., mJ);
     }

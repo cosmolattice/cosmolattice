@@ -16,7 +16,7 @@ namespace TempLat
     myTmpStruct() : mt(MemoryToolBox<3>::makeShared(64, 0)) {}
     template <typename... IDX>
       requires VariadicNDIndex<3, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
     {
       return std::get<0>(std::tie(idx...)) > 40 ? 0 : std::get<0>(std::tie(idx...));
     }

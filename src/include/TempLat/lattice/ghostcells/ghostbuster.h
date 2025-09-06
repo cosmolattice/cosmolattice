@@ -194,13 +194,13 @@ namespace TempLat
             // copy to the temporary
             Kokkos::parallel_for(
                 Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
-                KOKKOS_LAMBDA(const size_t i) {
+                DEVICE_LAMBDA(const size_t i) {
                   device::apply([&](const auto &...args) { temp(i) = fromSubView(args..., i); }, curIdx);
                 });
             // copy from the temporary to the destination
             Kokkos::parallel_for(
                 Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
-                KOKKOS_LAMBDA(const size_t i) {
+                DEVICE_LAMBDA(const size_t i) {
                   device::apply([&](const auto &...args) { toSubView(args..., i) = temp(i); }, curIdx);
                 });
             // Check if we have a next index to go to
@@ -210,10 +210,10 @@ namespace TempLat
         } else if constexpr (NDim == 1) {
           Kokkos::parallel_for(
               Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[0]),
-              KOKKOS_LAMBDA(const size_t i) { temp(i) = fromSubView(i); });
+              DEVICE_LAMBDA(const size_t i) { temp(i) = fromSubView(i); });
           Kokkos::parallel_for(
               Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[0]),
-              KOKKOS_LAMBDA(const size_t i) { toSubView(i) = temp(i); });
+              DEVICE_LAMBDA(const size_t i) { toSubView(i) = temp(i); });
         }
       } else {
         throw GhostBusterOrderException("GhostBuster only works for memory layouts with LayoutRight, not with this");

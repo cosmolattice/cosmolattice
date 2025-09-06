@@ -1,5 +1,5 @@
-#ifndef TEMPLAT_PARALLEL_KOKKOS_LAMBDAWRAPPER_TEST_H
-#define TEMPLAT_PARALLEL_KOKKOS_LAMBDAWRAPPER_TEST_H
+#ifndef TEMPLAT_PARALLEL_DEVICE_LAMBDAWRAPPER_TEST_H
+#define TEMPLAT_PARALLEL_DEVICE_LAMBDAWRAPPER_TEST_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -16,7 +16,7 @@ template <size_t NDim> void TempLat::KokkosNDLambdaWrapperTester<NDim>::Test(Tem
   // ------------------------------------------------------------------------------------
   {
     Kokkos::View<double *, Kokkos::DefaultExecutionSpace> a("a", size_t(powr<NDim>(2)));
-    auto functor = KOKKOS_LAMBDA(const device::IdxArray<NDim> &idx)
+    auto functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
     {
       // change from "base 2" to base 10
       size_t base10_idx = 0;
@@ -50,7 +50,7 @@ template <size_t NDim> void TempLat::KokkosNDLambdaWrapperTester<NDim>::Test(Tem
   // Testing the KokkosNDLambdaWrapperReduction
   // ------------------------------------------------------------------------------------
   {
-    auto functor = KOKKOS_LAMBDA(const device::IdxArray<NDim> &idx, complex<double> &update)
+    auto functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx, complex<double> &update)
     {
       update += complex<double>((double)NDim, -(double)NDim); // just to test that the lambda works
     };
@@ -69,7 +69,7 @@ template <size_t NDim> void TempLat::KokkosNDLambdaWrapperTester<NDim>::Test(Tem
     } else {
       Kokkos::parallel_reduce(
           "init", Kokkos::RangePolicy(0, 2),
-          KOKKOS_LAMBDA(const size_t idx, complex<double> &update) {
+          DEVICE_LAMBDA(const size_t idx, complex<double> &update) {
             update += complex<double>((double)NDim, -(double)NDim); // just to test that the lambda works
           },
           result);

@@ -31,17 +31,17 @@ namespace TempLat
     {
     }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return operator()(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return operator()(t); }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2LieAlgebraGet(Tag<N> t) const { return 2 * SU2Get(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2LieAlgebraGet(Tag<N> t) const { return 2 * SU2Get(t); }
 
     template <int M> auto &operator()(Tag<M> t) { return fs[M - 1]; }
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION const auto &operator()(Tag<M> t) const { return fs[M - 1]; }
-    KOKKOS_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return ZeroType(); }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<M> t) const { return fs[M - 1]; }
+    DEVICE_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return ZeroType(); }
 
     template <int N, typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       if constexpr (N > 0)
         return fs[N - 1].get(idx...);
@@ -53,10 +53,10 @@ namespace TempLat
 
     std::string toString() const { return SU2FieldBase<NDim, T>::toString(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return SU2FieldBase<NDim, T>::getDx(); }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return SU2FieldBase<NDim, T>::getKIR(); }
 
     using Getter = SU2Getter;

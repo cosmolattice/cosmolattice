@@ -31,7 +31,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     SU2DoubletSubtract(const R &pR, const T &pT) : SU2DoubletBinaryOperator<R, T>(pR, pT) {}
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const
     {
       return mR.SU2DoubletGet(t) - mT.SU2DoubletGet(t);
     }
@@ -40,14 +40,14 @@ namespace TempLat
         r.SU2DoubletGet(1_c, idx...);
         t.SU2DoubletGet(1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
       return mR.SU2DoubletGet(t, idx...) - mT.SU2DoubletGet(t, idx...);
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);

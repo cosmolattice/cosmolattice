@@ -22,14 +22,14 @@ namespace TempLat
    **/
   template <class T>
     requires requires(T t) { t.ComplexFieldGet(0_c); }
-  static KOKKOS_FORCEINLINE_FUNCTION auto Real(T &&t)
+  static DEVICE_FORCEINLINE_FUNCTION auto Real(T &&t)
   {
     return t.ComplexFieldGet(0_c);
   }
 
   template <class T>
     requires IsComplexType<T>
-  static KOKKOS_FORCEINLINE_FUNCTION auto Real(T &&t)
+  static DEVICE_FORCEINLINE_FUNCTION auto Real(T &&t)
   {
     return t.real();
   }

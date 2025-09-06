@@ -10,12 +10,12 @@
 template <typename T> inline void TempLat::GetGetReturnTypeTester::Test(T &tdd)
 {
   struct tmp {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     double get(const ptrdiff_t &) const { return 0.; }
   };
 
   struct tmp2 {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     complex<double> get(const ptrdiff_t &) const { return complex<double>(0., 0.); }
   };
 

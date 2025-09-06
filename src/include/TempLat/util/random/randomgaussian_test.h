@@ -22,7 +22,7 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
   Kokkos::View<size_t[2 * measure_center]> measure("measure");
   Kokkos::parallel_reduce(
       "RandomGaussian_test", N,
-      KOKKOS_LAMBDA(int i, double &sum) {
+      DEVICE_LAMBDA(int i, double &sum) {
         const double next = prng.get(i, i, 0);
         sum += next;
         ptrdiff_t index = measure_center + std::round(next * measure_center / 3); /* 5 ? yes, 5 i_sigma happens. */

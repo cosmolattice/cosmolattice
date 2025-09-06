@@ -35,25 +35,25 @@ namespace TempLat
 
     SU2SU2DoubletMultiplication(const R &pR, const T &pT) : SU2DoubletBinaryOperator<R, T>(pR, pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2DoubletGet(Tag<0> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2DoubletGet(0_c) + mR.SU2Get(2_c) * mT.SU2DoubletGet(2_c) -
              mR.SU2Get(3_c) * mT.SU2DoubletGet(1_c) - mR.SU2Get(1_c) * mT.SU2DoubletGet(3_c);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2DoubletGet(Tag<1> t) const
     {
       return mR.SU2Get(0_c) * mT.SU2DoubletGet(1_c) + mR.SU2Get(3_c) * mT.SU2DoubletGet(0_c) +
              mR.SU2Get(2_c) * mT.SU2DoubletGet(3_c) + mR.SU2Get(1_c) * mT.SU2DoubletGet(2_c);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2DoubletGet(Tag<2> t) const
     {
       return -mR.SU2Get(1_c) * mT.SU2DoubletGet(1_c) + mR.SU2Get(3_c) * mT.SU2DoubletGet(3_c) -
              mR.SU2Get(2_c) * mT.SU2DoubletGet(0_c) + mR.SU2Get(0_c) * mT.SU2DoubletGet(2_c);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2DoubletGet(Tag<3> t) const
     {
       return -mR.SU2Get(2_c) * mT.SU2DoubletGet(1_c) + mR.SU2Get(1_c) * mT.SU2DoubletGet(0_c) +
@@ -76,14 +76,14 @@ namespace TempLat
 
     template <int N, typename... IDX>
       requires RightIndices<IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
       return cache[N];
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);

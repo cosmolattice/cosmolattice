@@ -23,14 +23,14 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     template <typename U, typename... IDX>
       requires HasEval<U>
-    KOKKOS_FORCEINLINE_FUNCTION static void eval(U &&obj, const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION static void eval(U &&obj, const IDX &...idx)
     {
       obj.eval(idx...);
     }
 
     template <typename U, typename... IDX>
       requires(!HasEval<U>)
-    KOKKOS_FORCEINLINE_FUNCTION static constexpr void eval(U &&obj, const IDX &...i)
+    DEVICE_FORCEINLINE_FUNCTION static constexpr void eval(U &&obj, const IDX &...i)
     {
     }
 

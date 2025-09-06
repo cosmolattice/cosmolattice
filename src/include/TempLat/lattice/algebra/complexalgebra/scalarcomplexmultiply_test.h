@@ -11,9 +11,9 @@ inline void TempLat::ScalarComplexFieldMultiplyTester::Test(TempLat::TDDAssertio
 {
 
   struct MyStruct {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<0> t) const { return 1; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<1> t) const { return 2; }
   };
 

@@ -36,13 +36,13 @@ namespace TempLat
 
     SU2Commutator(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const { return ZeroType(); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<1> t) const { return 2 * (mR.SU2Get(3_c) * mT.SU2Get(2_c) - mR.SU2Get(2_c) * mT.SU2Get(3_c)); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<2> t) const { return 2 * (mR.SU2Get(1_c) * mT.SU2Get(3_c) - mR.SU2Get(3_c) * mT.SU2Get(1_c)); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<3> t) const { return 2 * (mR.SU2Get(2_c) * mT.SU2Get(1_c) - mR.SU2Get(1_c) * mT.SU2Get(2_c)); }
 
     template <typename... IDX>
@@ -51,14 +51,14 @@ namespace TempLat
     {
       return std::move(cache);
     }
-    template <int N, typename... IDX> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    template <int N, typename... IDX> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       return cache[N];
     }
 
     template <typename... IDX>
       requires requires(R mR, T mT, IDX... idx) { VariadicIndex<IDX...>; }
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);

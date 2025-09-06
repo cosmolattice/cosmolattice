@@ -10,14 +10,14 @@
 inline void TempLat::GetEval::Test(TempLat::TDDAssertion &tdd)
 {
   struct myTest {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     double getEval(ptrdiff_t i) { return 76; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     double get(ptrdiff_t i) { return 63; }
   };
   struct myTest2 {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     double get(ptrdiff_t i) { return 777; }
   };
 

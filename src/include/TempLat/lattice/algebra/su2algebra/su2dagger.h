@@ -30,38 +30,38 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     SU2Dagger(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const { return mR.SU2Get(0_c); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<1> t) const { return -mR.SU2Get(1_c); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<2> t) const { return -mR.SU2Get(2_c); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<3> t) const { return -mR.SU2Get(3_c); }
 
-    template <int N> KOKKOS_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2Get(0_c, idx...); }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
       return mR.SU2Get(0_c, idx...);
     }
     template <typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2Get(1_c, idx...); }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
     {
       return -mR.SU2Get(1_c, idx...);
     }
     template <typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2Get(2_c, idx...); }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
     {
       return -mR.SU2Get(2_c, idx...);
     }
     template <typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2Get(3_c, idx...); }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
     {
       return -mR.SU2Get(3_c, idx...);
     }

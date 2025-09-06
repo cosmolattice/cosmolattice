@@ -37,9 +37,9 @@ namespace TempLat
         mLocalSizes[i] = initNGrid[i];
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     LayoutStructGlobal<NDim> &getGlobal() { return mGlobal; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return mGlobal; }
 
     template <typename T = ptrdiff_t> void setLocalSizes(const Kokkos::Array<T, NDim> &input)
@@ -54,9 +54,9 @@ namespace TempLat
     }
     void setNGhosts(ptrdiff_t nGhosts) { mNGhosts = nGhosts; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return mLocalSizes; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() const { return mLocalSizes; }
 
     template <typename T = ptrdiff_t> void setLocalStarts(const Kokkos::Array<T, NDim> &input)
@@ -69,23 +69,23 @@ namespace TempLat
       for (size_t i = 0; i < NDim; ++i)
         mLocalStarts[i] = input[i];
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() { return mLocalStarts; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     const Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() const { return mLocalStarts; }
 
     /** \brief For both configuration and fourier space, the index values are not the same as coordinate
      *  values. Assuming periodic boundary conditions, we get that always c = i > half ? i - N : i;
      *  Don't mix up the arguments! Does not do transposition, so input pre-transposed dimension!
      */
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t memoryIndexToSpatialCoordinate(ptrdiff_t index, ptrdiff_t dimension) const
     {
       return mGlobal.memoryIndexToSpatialCoordinate(index + mLocalStarts[dimension] - mNGhosts, dimension);
     }
 
     /** \brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
     {
       return mGlobal.spatialCoordinateToMemoryIndex(position, dimension) - mLocalStarts[dimension] + mNGhosts;

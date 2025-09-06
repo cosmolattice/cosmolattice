@@ -10,12 +10,12 @@
 inline void TempLat::HasEvalTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct myTest {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     void eval(ptrdiff_t i) { m = 76; }
     double m;
   };
   struct myTest2 {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     double eval() { return 777; }
   };
 

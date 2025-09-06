@@ -34,13 +34,13 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     ComplexFieldSU2DoubletMultiplication(const R &pR, const T &pT) : SU2DoubletBinaryOperator<R, T>(pR, pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2DoubletGet(Tag<0> t) const { return Real(mR * Complexify(mT.SU2DoubletGet(0_c), mT.SU2DoubletGet(1_c))); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2DoubletGet(Tag<1> t) const { return Imag(mR * Complexify(mT.SU2DoubletGet(0_c), mT.SU2DoubletGet(1_c))); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2DoubletGet(Tag<2> t) const { return Real(mR * Complexify(mT.SU2DoubletGet(2_c), mT.SU2DoubletGet(3_c))); }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto SU2DoubletGet(Tag<3> t) const { return Imag(mR * Complexify(mT.SU2DoubletGet(2_c), mT.SU2DoubletGet(3_c))); }
 
     template <typename... IDX>
@@ -51,7 +51,7 @@ namespace TempLat
         mR.ComplexFieldGet(1_c, idx...);
         mT.SU2DoubletGet(1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(0_c, idx...) -
              mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(1_c, idx...);
@@ -65,7 +65,7 @@ namespace TempLat
         mR.ComplexFieldGet(1_c, idx...);
         mT.SU2DoubletGet(1_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<1> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(1_c, idx...) +
              mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(0_c, idx...);
@@ -79,7 +79,7 @@ namespace TempLat
         mR.ComplexFieldGet(1_c, idx...);
         mT.SU2DoubletGet(3_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<2> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<2> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(2_c, idx...) -
              mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(3_c, idx...);
@@ -93,7 +93,7 @@ namespace TempLat
         mR.ComplexFieldGet(1_c, idx...);
         mT.SU2DoubletGet(3_c, idx...);
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<3> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<3> t, const IDX &...idx) const
     {
       return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(3_c, idx...) +
              mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(2_c, idx...);
@@ -101,7 +101,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);

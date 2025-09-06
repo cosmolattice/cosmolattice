@@ -12,17 +12,17 @@
 inline void TempLat::ComplexFieldAddTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct MyStruct {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<0> t) const { return 1; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<1> t) const { return 2; }
 
     using Getter = ComplexFieldGetter;
   };
   struct MyStruct2 {
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<0> t) const { return 3; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<1> t) const { return 4; }
 
     using Getter = ComplexFieldGetter;

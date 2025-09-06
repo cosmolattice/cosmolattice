@@ -24,7 +24,7 @@ template <typename T> inline void TempLat::RadialProjectionResult<T>::Test(TempL
 
   Kokkos::parallel_for(
       "RadialProjectionResultTest", Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, 10),
-      KOKKOS_LAMBDA(const ptrdiff_t i) {
+      DEVICE_LAMBDA(const ptrdiff_t i) {
         three.add_device(i, 2 * i, 2 * i);
         three.add_device(i, 2 * i + 0.5, 2 * i);
         three.add_device(i, 2 * i - 0.5, 2 * i);

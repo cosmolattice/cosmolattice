@@ -30,14 +30,14 @@ namespace TempLat
 
     template <typename U, typename... IDX>
       requires TypeHasGet<U, IDX...>
-    static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
+    static DEVICE_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
     {
       return obj.get(idx...);
     }
 
     template <typename U, typename... IDX>
       requires TypeGetsItself<U, IDX...>
-    static KOKKOS_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
+    static DEVICE_FORCEINLINE_FUNCTION auto get(U &&obj, const IDX &...idx)
     {
       return obj;
     }
@@ -48,7 +48,7 @@ namespace TempLat
         requires !TypeGetsItself<U, IDX...>;
         requires std::is_arithmetic_v<std::decay_t<decltype(U::value)>>;
       }
-    static KOKKOS_FORCEINLINE_FUNCTION auto get(const U &obj, const IDX &...idx)
+    static DEVICE_FORCEINLINE_FUNCTION auto get(const U &obj, const IDX &...idx)
     {
       return std::decay_t<U>::value;
     }

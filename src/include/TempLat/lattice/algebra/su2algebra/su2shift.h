@@ -31,7 +31,7 @@ namespace TempLat
 
     SU2Shifter(const R &pR) : SU2UnaryOperator<R>(pR) { shiftString = shift<N...>(mR.SU2Get(0_c)).getString({N...}); }
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N...>(mR.SU2Get(t)); }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N...>(mR.SU2Get(t)); }
 
     template <int M, typename... IDX> struct RightIndices {
       static constexpr bool value = requires(R r, IDX... idx) {
@@ -44,7 +44,7 @@ namespace TempLat
 
     template <int M, typename... IDX>
       requires RightIndices<M, IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
       return GetValue::get(shift<N...>(mR.SU2Get(t)), idx...);
     }
@@ -52,14 +52,14 @@ namespace TempLat
     template <typename... IDX>
       requires(RightIndices<0, IDX...>::value && RightIndices<1, IDX...>::value && RightIndices<2, IDX...>::value &&
                RightIndices<3, IDX...>::value)
-    KOKKOS_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
     {
       return {{SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)}};
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(shift<N...>(mR.SU2Get(1_c)), idx...);
       DoEval::eval(shift<N...>(mR.SU2Get(2_c)), idx...);
@@ -82,7 +82,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     SU2ShifterByOne(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N>(mR.SU2Get(t)); }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N>(mR.SU2Get(t)); }
 
     template <int M, typename... IDX> struct RightIndices {
       static constexpr bool value = requires(R r, IDX... idx) { GetValue::get(r.SU2Get(Tag<M>()), idx...); };
@@ -90,7 +90,7 @@ namespace TempLat
 
     template <int M, typename... IDX>
       requires RightIndices<M, IDX...>::value
-    KOKKOS_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
       return GetValue::get(shift<N>(mR.SU2Get(t)), idx...);
     }

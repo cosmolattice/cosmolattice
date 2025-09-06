@@ -30,7 +30,7 @@ namespace TempLat
     using CT = typename ctype<NT>::value;
     const size_t big_number = 1000 * 1000;
     constexpr CT max_val = 5;
-    auto transf = KOKKOS_LAMBDA(int i) { return 1 + i / (CT)big_number * max_val; };
+    auto transf = DEVICE_LAMBDA(int i) { return 1 + i / (CT)big_number * max_val; };
 
     Kokkos::View<NT *, Kokkos::DefaultExecutionSpace> a("a", big_number);
 
@@ -38,7 +38,7 @@ namespace TempLat
     if constexpr (std::is_same_v<NT, complex<CT>>) magic_number = complex<CT>(1. + (rand() % 5), 1. + (rand() % 5));
 
     Kokkos::parallel_for(
-        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)0, big_number), KOKKOS_LAMBDA(size_t i) {
+        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)0, big_number), DEVICE_LAMBDA(size_t i) {
           auto op = OP(transf(i), magic_number);
           a(i) = op.get(0);
         });
@@ -62,7 +62,7 @@ namespace TempLat
     using CT = typename ctype<NT>::value;
     constexpr size_t big_number = 1000 * 1000;
     constexpr CT max_val = 2;
-    auto transf = KOKKOS_LAMBDA(int i)->CT { return 1 + i / (CT)big_number * max_val; };
+    auto transf = DEVICE_LAMBDA(int i)->CT { return 1 + i / (CT)big_number * max_val; };
 
     Kokkos::View<NT *, Kokkos::DefaultExecutionSpace> a("a", big_number);
 
@@ -70,7 +70,7 @@ namespace TempLat
     if constexpr (std::is_same_v<NT, complex<CT>>) magic_number = complex<CT>(1. + (rand() % 5), 1. + (rand() % 5));
 
     Kokkos::parallel_for(
-        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, big_number), KOKKOS_LAMBDA(int i) {
+        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, big_number), DEVICE_LAMBDA(int i) {
           auto op = Operators::Addition(OP(transf(i)), magic_number);
           a(i) = op.get(0);
         });
@@ -240,7 +240,7 @@ template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
   Kokkos::View<double *, Kokkos::DefaultExecutionSpace> a("a", 10);
 
   Kokkos::parallel_for(Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)
-  0, 10), KOKKOS_LAMBDA(size_t i) { Kokkos::printf("hello world from thread
+  0, 10), DEVICE_LAMBDA(size_t i) { Kokkos::printf("hello world from thread
   %d\n", i); Kokkos::printf("hello world from thread %f\n", psi.get(2));
                        });
 

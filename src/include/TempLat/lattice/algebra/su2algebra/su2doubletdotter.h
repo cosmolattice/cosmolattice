@@ -33,13 +33,13 @@ namespace TempLat
 
     SU2DoubletDotter(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<0> t) const
     {
       return mR.SU2DoubletGet(0_c) * mT.SU2DoubletGet(0_c) + mR.SU2DoubletGet(1_c) * mT.SU2DoubletGet(1_c) +
              mR.SU2DoubletGet(2_c) * mT.SU2DoubletGet(2_c) + mR.SU2DoubletGet(3_c) * mT.SU2DoubletGet(3_c);
     }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<1> t) const
     {
       return mR.SU2DoubletGet(0_c) * mT.SU2DoubletGet(1_c) - mR.SU2DoubletGet(1_c) * mT.SU2DoubletGet(0_c) +
@@ -48,7 +48,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.SU2DoubletGet(0_c, idx...) * mT.SU2DoubletGet(0_c, idx...) +
              mR.SU2DoubletGet(1_c, idx...) * mT.SU2DoubletGet(1_c, idx...) +
@@ -58,7 +58,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return mR.SU2DoubletGet(0_c, idx...) * mT.SU2DoubletGet(1_c, idx...) -
              mR.SU2DoubletGet(1_c, idx...) * mT.SU2DoubletGet(0_c, idx...) +
@@ -68,7 +68,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);

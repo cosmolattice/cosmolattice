@@ -16,7 +16,7 @@ template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Te
 
   Kokkos::parallel_for(
       Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, test.size()),
-      KOKKOS_LAMBDA(const size_t i) { test[i] = i; });
+      DEVICE_LAMBDA(const size_t i) { test[i] = i; });
 
   const auto view = test.getRawHostView();
 

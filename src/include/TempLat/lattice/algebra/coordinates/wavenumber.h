@@ -40,20 +40,20 @@ namespace TempLat
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim + 1, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
     }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim + 1, IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto vectorGet(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX &...idx) const
     {
       return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
     }
 
     template <typename... IDX, size_t... InputIndexes>
-    KOKKOS_FORCEINLINE_FUNCTION auto get_impl(std::tuple<const IDX &...> allIdx,
+    DEVICE_FORCEINLINE_FUNCTION auto get_impl(std::tuple<const IDX &...> allIdx,
                                               std::index_sequence<InputIndexes...>) const
     {
       auto constexpr lastIdx = sizeof...(IDX) - 1;
@@ -61,7 +61,7 @@ namespace TempLat
     }
 
     template <typename IDX1, typename... IDX>
-    KOKKOS_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> result;
       mLayout.putSpatialLocationFromMemoryIndexInto(result, idx...);

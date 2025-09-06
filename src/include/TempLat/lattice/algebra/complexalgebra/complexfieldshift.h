@@ -33,7 +33,7 @@ namespace TempLat
       shiftString = shift<N...>(mR.ComplexFieldGet(0_c)).getString({N...});
     }
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t) const
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t) const
     {
       return shift<N...>(mR.ComplexFieldGet(t));
     }
@@ -43,14 +43,14 @@ namespace TempLat
         requires VariadicIndex<IDX...>;
         mR.ComplexFieldGet(Tag<M>());
       }
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
     {
       return GetValue::get(shift<N...>(mR.ComplexFieldGet(t)), idx...);
     }
 
     template <int M, typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(ComplexFieldGet(0_c), idx...);
       DoEval::eval(ComplexFieldGet(1_c), idx...);
@@ -71,21 +71,21 @@ namespace TempLat
 
     ComplexFieldShifterByOne(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}
 
-    template <int M> KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t) const
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t) const
     {
       return shift<N>(mR.ComplexFieldGet(t));
     }
 
     template <int M, typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
     {
       return shift<N>(mR.ComplexFieldGet(t)).get(idx...);
     }
 
     template <int M, typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(ComplexFieldGet(0_c), idx...);
       DoEval::eval(ComplexFieldGet(1_c), idx...);

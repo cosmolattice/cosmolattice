@@ -20,7 +20,7 @@ namespace TempLat
   class SU2DoubletGetter
   {
   public:
-    template <typename R, int N> static KOKKOS_FORCEINLINE_FUNCTION auto get(R &&r, Tag<N> t)
+    template <typename R, int N> static DEVICE_FORCEINLINE_FUNCTION auto get(R &&r, Tag<N> t)
     {
       return r.SU2DoubletGet(t);
     }

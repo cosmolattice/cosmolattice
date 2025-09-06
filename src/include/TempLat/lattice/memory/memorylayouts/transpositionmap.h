@@ -33,9 +33,9 @@ namespace TempLat
 
     static constexpr size_t size() { return NDim; }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t getForward(ptrdiff_t index) const { return mFromAtoB[index]; }
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t getInverse(ptrdiff_t index) const { return mFromBtoA[index]; }
 
     /** \brief Provide your forward mapping, which will be the new output of getForward. */
@@ -53,7 +53,7 @@ namespace TempLat
       }
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     bool isUntransposed() const
     {
       bool untransposed = true;
@@ -63,7 +63,7 @@ namespace TempLat
       return untransposed;
     }
 
-    KOKKOS_FORCEINLINE_FUNCTION
+    DEVICE_FORCEINLINE_FUNCTION
     bool isTransposed() const { return !isUntransposed(); }
 
     friend bool operator==(const TranspositionMap &a, const TranspositionMap &b)

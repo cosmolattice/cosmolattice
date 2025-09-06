@@ -20,7 +20,7 @@ namespace TempLat
     static std::string toString() { return "(OneType)1"; }
     template <typename... IDX>
       requires VariadicIndex<IDX...>
-    KOKKOS_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...)
+    DEVICE_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...)
     {
       return 1;
     }

@@ -14,7 +14,7 @@ class myClass
 public:
   myClass(int b) : a(b) {}
 
-  template <std::integral... IDX> KOKKOS_FORCEINLINE_FUNCTION auto get(const IDX &...i) const { return a; }
+  template <std::integral... IDX> DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...i) const { return a; }
 
 private:
   double a;
