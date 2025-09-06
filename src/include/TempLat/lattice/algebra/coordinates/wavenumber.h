@@ -89,6 +89,11 @@ namespace TempLat
       }
     }
 
+    inline auto getToolBox() const
+    { // just take toolbox from first component
+      return mToolBox;
+    }
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;

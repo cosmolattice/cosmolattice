@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
+#include <Kokkos_Core_fwd.hpp>
 #ifdef HDF5
 
 #include "TempLat/util/prettytostring.h"
@@ -145,19 +146,38 @@ namespace TempLat
         device::array<ptrdiff_t, NDim - 1> subMemoryPos;
         for (size_t i = 0; i < NDim - 1; ++i)
           subMemoryPos[i] = memoryPos[i];
-        // And apply this to get the subview, with the last dimension as a range starting from memoryPos[dim] (which is
-        // nGhosts) to memoryPos[dim]+nGrid[dim].
-        auto subview = device::apply(
-            [&](const auto &...args) {
-              return Kokkos::subview(r.getView(), args...,
-                                     std::pair<ptrdiff_t, ptrdiff_t>(memoryPos[dim], memoryPos[dim] + subdims[dim]));
-            },
-            subMemoryPos);
 
-        // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
-        std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
-        device::copyDeviceToHost(subview, sdata.data());
-        mDataset.writeSlices(sdata, subdims, offsets);
+        // If the input is a field, we can copy directly from memory
+        if constexpr (requires(R _r) { _r.getView(); }) {
+          // And apply this to get the subview, with the last dimension as a range starting from memoryPos[dim] (which
+          // is nGhosts) to memoryPos[dim]+nGrid[dim].
+          auto subview = device::apply(
+              [&](const auto &...args) {
+                return Kokkos::subview(r.getView(), args...,
+                                       std::pair<ptrdiff_t, ptrdiff_t>(memoryPos[dim], memoryPos[dim] + subdims[dim]));
+              },
+              subMemoryPos);
+
+          // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
+          std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
+          device::copyDeviceToHost(subview, sdata.data());
+          mDataset.writeSlices(sdata, subdims, offsets);
+        } else {
+          // Otherwise, we use GetEval to get the data point by point.
+          Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
+          auto functor = KOKKOS_CLASS_LAMBDA(size_t i)
+          {
+            device::apply([&](const auto &...idx) { device_buf(i - memoryPos[dim]) = GetEval::getEval(r, idx..., i); },
+                          subMemoryPos);
+          };
+          Kokkos::parallel_for("SaveDimBufferFilling",
+                               Kokkos::RangePolicy(memoryPos[dim], memoryPos[dim] + subdims[dim]), functor);
+
+          // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
+          std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
+          device::copyDeviceToHost(device_buf, sdata.data());
+          mDataset.writeSlices(sdata, subdims, offsets);
+        }
       } else {
         // Recursive call to loop over an arbitrary number of dimensions.
         for (int i = 0; i < sizes[dim]; ++i) {

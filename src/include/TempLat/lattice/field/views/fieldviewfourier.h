@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/kokkos/kokkosoperations.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
@@ -157,7 +158,7 @@ namespace TempLat
       device::apply([&](const auto &...idx) { layout.putMemoryIndexFromSpatialLocationInto(mem_pos, idx...); },
                     global_coord);
 
-      setAtOnePoint(*this, mem_pos, toSet);
+      device::setAtOnePoint(*this, mem_pos, toSet);
     }
 
     std::string to_string() const { return mManager->getName() + "(k)"; }

@@ -33,6 +33,7 @@ inline void TempLat::HDF5Tester::Test(TempLat::TDDAssertion &tdd)
 
   fs.create("./FILE.h5");
   fs.save(phi);
+  fs.save(x * 1.);
   fs.save(0.45, "aDot");
   fs.close();
 

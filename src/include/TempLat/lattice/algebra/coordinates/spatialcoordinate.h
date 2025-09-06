@@ -77,6 +77,11 @@ namespace TempLat
       }
     }
 
+    inline auto getToolBox() const
+    { // just take toolbox from first component
+      return mToolBox;
+    }
+
     static std::string toString(ptrdiff_t j) { return "x_" + std::to_string(j); }
     static std::string toString() { return "x"; }
 
