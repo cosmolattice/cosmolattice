@@ -24,7 +24,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
   /* arbitrary irregular sizing */
   std::array<ptrdiff_t, 3> nGrid{{64, 48, 128}};
 
-  LayoutStruct<3> layout({62, 62, 62});
+  LayoutStruct<3> layout({62, 62, 62}, 1);
   layout.setLocalSizes(nGrid);
 
   auto &&myLittleLambda = [&](auto nGhost, auto nGhostB) {

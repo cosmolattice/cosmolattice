@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"

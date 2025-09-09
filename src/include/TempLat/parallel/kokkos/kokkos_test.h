@@ -11,6 +11,7 @@
 #include "TempLat/lattice/algebra/operators/operators.h"
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
+#include "TempLat/util/almostequal.h"
 #include <cstdlib>
 
 #ifndef NOKOKKOS
@@ -47,12 +48,20 @@ namespace TempLat
     Kokkos::deep_copy(host_view, a);
 
     bool all_correct = true;
-    for (size_t i = 0; i < big_number; ++i)
-      all_correct &= TempLat::AlmostEqual(host_view[i], OP(transf(i), magic_number).get(0));
+    for (size_t i = 0; i < big_number; ++i) {
+      all_correct &= TempLat::AlmostEqual(host_view[i], OP(transf(i), magic_number).get(0), 1e-14);
+      if (!TempLat::AlmostEqual(host_view[i], OP(transf(i), magic_number).get(0))) {
+        say << "Failed at index " << i << " with operation " << OP(transf(i), magic_number).operatorString()
+            << " and data type " << typeid(NT).name() << "\n"
+            << "Relative error: " << ((host_view[i]) / OP(transf(i), magic_number).get(0) - 1) << "\n"
+            << "Values: " << host_view[i] << " (GPU),  " << OP(transf(i), magic_number).get(0) << " (CPU) \n";
+      }
+    }
     tdd.verify(all_correct);
     if (!all_correct) {
       const auto nres = OP(transf(0), magic_number).get(0);
-      say << "Failed with operation " << OP<NT, NT>::operatorString() << " and data type " << typeid(NT).name() << "\n"
+      say << "Failed with operation " << OP(transf(0), magic_number).operatorString() << " and data type "
+          << typeid(NT).name() << "\n"
           << "Relative error: " << ((host_view[0]) / nres - 1) << "\n";
     }
   }
@@ -84,7 +93,8 @@ namespace TempLat
     tdd.verify(all_correct);
     if (!all_correct) {
       const auto nres = Operators::Addition(OP(transf(0.)), magic_number).get(0);
-      say << "Failed with operation " << OP<NT>::operatorString() << " and data type " << typeid(NT).name() << "\n"
+      say << "Failed with operation " << Operators::Addition(OP(transf(0.)), magic_number).operatorString()
+          << " and data type " << typeid(NT).name() << "\n"
           << "Relative error: " << ((host_view[0]) / nres - 1) << "\n"
           << "Values: " << host_view[0] << " (GPU),  " << nres << " (CPU) \n";
     }
@@ -104,7 +114,7 @@ template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
     Field<2, double> rField("rField", toolBox);
     for (uint i = 0; i < 8; ++i) {
       for (uint j = 0; j < 8; ++j) {
-        setAtOnePoint(rField, device::array<ptrdiff_t, 2>{i, j}, i + j);
+        device::memory::setAtOnePoint(rField, device::array<ptrdiff_t, 2>{i, j}, i + j);
       }
     }
     {
@@ -121,7 +131,7 @@ template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
       bool all_correct = true;
       for (uint i = 0; i < 8; ++i) {
         for (uint j = 0; j < 8; ++j) {
-          all_correct &= getAtOnePoint(rField, device::array<ptrdiff_t, 2>{i, j}) == i + j;
+          all_correct &= device::memory::getAtOnePoint(rField, device::array<ptrdiff_t, 2>{i, j}) == i + j;
         }
       }
       tdd.verify(all_correct);

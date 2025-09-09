@@ -101,7 +101,7 @@ namespace TempLat
         for (size_t k = 0; k < NDim; ++k)
           it_stop[k] = localSizes[k];
 
-        Kokkos::parallel_for("GhostUpdater", getLocalKokkosPolicy(it_stop),
+        Kokkos::parallel_for("GhostUpdater", device::getLocalKokkosPolicy(it_stop),
                              KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
       }
     }
@@ -209,6 +209,11 @@ template <size_t NDim> inline void TempLat::GhostUpdater<NDim>::Test(TempLat::TD
   static_assert(NDim > 1, "GhostUpdater test only makes sense in 2 or more dimensions.");
   // I just don't have the patience to do the 1D case, since it involves no MPI communication.
 
+  int size = 1;
+#ifndef NOMPI
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+#endif
+
   // restrict the sizes, dimensionality can lead to some huge tests...
 
   tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 1));
@@ -218,14 +223,20 @@ template <size_t NDim> inline void TempLat::GhostUpdater<NDim>::Test(TempLat::TD
     tdd.verify(TestScratch::test_ghost_updater<NDim>(128, 1));
   }
 
-  tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 2));
+  if (size > 2)
+    tdd.verify(Throws<GhostUpdaterException>([&]() { TestScratch::test_ghost_updater<NDim>(4, 2); }));
+  else
+    tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 2));
   if constexpr (NDim < 6) tdd.verify(TestScratch::test_ghost_updater<NDim>(16, 2));
   if constexpr (NDim < 4) {
     tdd.verify(TestScratch::test_ghost_updater<NDim>(32, 2));
     tdd.verify(TestScratch::test_ghost_updater<NDim>(128, 2));
   }
 
-  tdd.verify(Throws<GhostUpdaterException>([&]() { TestScratch::test_ghost_updater<NDim>(4, 3); }));
+  if (size > 1)
+    tdd.verify(Throws<GhostUpdaterException>([&]() { TestScratch::test_ghost_updater<NDim>(4, 3); }));
+  else
+    tdd.verify(TestScratch::test_ghost_updater<NDim>(4, 3));
   if constexpr (NDim < 6) tdd.verify(TestScratch::test_ghost_updater<NDim>(16, 3));
   if constexpr (NDim < 4) {
     tdd.verify(TestScratch::test_ghost_updater<NDim>(32, 3));

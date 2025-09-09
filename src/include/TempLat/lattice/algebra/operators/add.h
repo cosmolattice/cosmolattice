@@ -33,6 +33,7 @@ namespace TempLat
       using BinaryOperator<R, T>::mR;
       using BinaryOperator<R, T>::mT;
 
+      DEVICE_FUNCTION
       Addition(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
       template <typename... IDX>
