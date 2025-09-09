@@ -5,9 +5,11 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/field/field.h"
+
+#include <cmath>
 
 inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
 {
@@ -35,7 +37,7 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
     // Check that the values are different
     bool different = true;
     for (size_t i = 0; i < fourierGridPoints; ++i)
-      different &= !AlmostEqual(a_host(i), b_host(i));
+      different &= !AlmostEqual(a_host(i), b_host(i)) &&  std::isfinite(abs(a_host(i))) && std::isfinite(abs(b_host(i)));
     tdd.verify(different);
   }
 
@@ -50,7 +52,7 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
     // Check that the values are identical
     bool rewinding = true;
     for (size_t i = 0; i < fourierGridPoints; ++i)
-      rewinding &= AlmostEqual(a_host(i), b_host(i));
+      rewinding &= AlmostEqual(a_host(i), b_host(i)) &&  std::isfinite(abs(a_host(i))) && std::isfinite(abs(b_host(i)));
     tdd.verify(rewinding);
   }
 }

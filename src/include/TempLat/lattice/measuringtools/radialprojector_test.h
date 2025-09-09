@@ -13,7 +13,7 @@
 inline void TempLat::RadialProjectorTester::Test(TempLat::TDDAssertion &tdd)
 {
   static constexpr size_t NDim = 3;
-  const ptrdiff_t nGrid = 4;
+  const ptrdiff_t nGrid = 32;
   const ptrdiff_t nGhost = 1;
 
   auto mToolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);

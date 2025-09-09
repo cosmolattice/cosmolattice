@@ -28,7 +28,7 @@ namespace TempLat
       }
 
       template <typename OBJ, size_t NDim, typename I = ptrdiff_t>
-      GetGetReturnType<OBJ>::type getAtOnePoint(OBJ &&obj, const device::array<I, NDim> &pos)
+      auto getAtOnePoint(OBJ &&obj, const device::array<I, NDim> &pos)
       {
         using T = GetGetReturnType<OBJ>::type;
         T ret;

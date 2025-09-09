@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Core.hpp>
-#include <Kokkos_Macros.hpp>
 #include <limits>
 #include <algorithm>
 
@@ -16,6 +14,7 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsingledatum.h"
 #include "TempLat/parallel/mpi/comm/mpicommreference.h"
+#include "TempLat/parallel/device_def.h"
 
 namespace TempLat
 {
@@ -110,7 +109,7 @@ namespace TempLat
     template <typename S> friend class RadialProjectionResult;
 
   private:
-    using DeviceView = Kokkos::View<T *, DefaultLayout, Kokkos::DefaultExecutionSpace>;
+    using DeviceView = KokkosNDView<1, T>;
     using HostMirror = typename DeviceView::HostMirror;
 
     DeviceView mAveragesDevice;
