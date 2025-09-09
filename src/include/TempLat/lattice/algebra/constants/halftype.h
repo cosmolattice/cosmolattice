@@ -7,8 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/parallel/device.h"
 #include "TempLat/util/tdd/tdd.h"
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {

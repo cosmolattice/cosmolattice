@@ -9,6 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
