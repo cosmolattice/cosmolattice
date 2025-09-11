@@ -54,13 +54,13 @@ namespace TempLat
 
     void execute_r2c(std::shared_ptr<PlanType> fft, MemoryBlock<NDim, T> &mBlock)
     {
-      Kokkos::fence();
+      device::iteration::fence();
       fft->forward((T *)mBlock.data(), (std::complex<T> *)mBlock.data(), heffte::scale::none);
     }
 
     void execute_c2r(std::shared_ptr<PlanType> fft, MemoryBlock<NDim, T> &mBlock)
     {
-      Kokkos::fence();
+      device::iteration::fence();
       fft->backward((std::complex<T> *)mBlock.data(), (T *)mBlock.data(), heffte::scale::full);
     }
 

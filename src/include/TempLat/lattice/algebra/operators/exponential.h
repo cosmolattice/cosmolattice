@@ -20,11 +20,7 @@ namespace TempLat
 {
   /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
    * them. */
-#ifndef NOKOKKOS
-  using Kokkos::exp;
-#else
-  using std::exp;
-#endif
+  using device::exp;
 
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators

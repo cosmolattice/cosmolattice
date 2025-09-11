@@ -184,7 +184,7 @@ namespace TempLat
     RadialProjectionSingleQuantity<T> mValues, mBinBounds;
     std::vector<T> centralBinBounds; // Naive central values of the bin. Does not need to be set.
 
-    using DeviceView = Kokkos::View<floatType *, DefaultLayout, Kokkos::DefaultExecutionSpace>;
+    using DeviceView = device::memory::NDView<1, floatType>;
     using HostMirror = typename DeviceView::HostMirror;
 
     HostMirror mMultiplicities;

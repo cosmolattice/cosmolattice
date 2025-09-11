@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
-#include "TempLat/parallel/device.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/util/tdd/tdd.h"
@@ -25,6 +24,8 @@
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+
+#include "TempLat/parallel/device_iteration.h"
 
 namespace TempLat
 {
@@ -100,9 +101,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("ComplexFieldAverager",                //
-                              device::getLocalKokkosPolicy(mLayout), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+      device::iteration::parallel_reduce("ComplexFieldAverager", mLayout, functor, localResult);
 
       arrVType a{};
       a[0] = localResult.real();
@@ -123,7 +122,7 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              Kokkos::Array<ptrdiff_t, NDim> global_coord;
+              device::array<ptrdiff_t, NDim> global_coord;
               mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners
@@ -134,9 +133,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("ComplexFieldAverager",                //
-                              device::getLocalKokkosPolicy(mLayout), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+      device::iteration::parallel_reduce("ComplexFieldAverager", mLayout, functor, localResult);
 
       arrVType a{};
       a[0] = localResult.real();

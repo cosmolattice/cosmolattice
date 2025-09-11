@@ -18,12 +18,7 @@
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 namespace TempLat
 {
-
-#ifndef NOKOKKOS
-  using Kokkos::sinh;
-#else
-  using std::sinh;
-#endif
+  using device::sinh;
 
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators

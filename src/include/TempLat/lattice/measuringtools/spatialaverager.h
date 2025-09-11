@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/parallel/kokkos/kokkosoperations.h"
 #include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/util/tdd/tdd.h"
@@ -20,7 +19,8 @@
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
 
-#include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_memory.h"
+#include "TempLat/parallel/device_iteration.h"
 
 namespace TempLat
 {
@@ -86,42 +86,21 @@ namespace TempLat
     {
       std::vector<vType> result(mT.getToolBox()->mNGridPointsVec.back(), 0);
       // unmanaged view of the local result
-      KokkosNDViewUnmanaged<1, vType> localResultHostView(result.data(), stop_iteration[0] - start_iteration[0]);
+      device::memory::NDViewUnmanaged<1, vType> localResultHostView(result.data(),
+                                                                    stop_iteration[0] - start_iteration[0]);
 
-      if constexpr (NDim > 2) {
-        for (uint cur_lidx = nGhosts; cur_lidx < result.size() + nGhosts; ++cur_lidx) {
-          auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim - 1> &idx, vType &update)
-          {
-            device::apply(
-                [&](auto &&...args) {
-                  DoEval::eval(mT, args..., cur_lidx);
-                  update += mT.get(args..., cur_lidx);
-                },
-                idx);
-          };
-          Kokkos::parallel_reduce("Averager",                                                                     //
-                                  Kokkos::MDRangePolicy<Kokkos::Rank<NDim - 1>>(start_iteration, stop_iteration), //
-                                  KokkosNDLambdaWrapperReduction<NDim - 1, decltype(functor)>(functor),
-                                  Kokkos::subview(localResult, cur_lidx - nGhosts));
-        }
-      } else if constexpr (NDim == 2) {
-        Kokkos::parallel_for(
-            TeamPolicy(result.size(), Kokkos::AUTO()), DEVICE_CLASS_LAMBDA(auto team) {
-              const auto cur_lidx = nGhosts + team.league_rank();
-              auto functor = [&](const device::Idx &idx, vType &update) {
-                DoEval::eval(mT, idx, cur_lidx);
-                update += mT.get(idx, cur_lidx);
-              };
-              Kokkos::parallel_reduce("Averager", //
-                                      Kokkos::TeamThreadRange(team, start_iteration[0], stop_iteration[0]), functor,
-                                      Kokkos::subview(localResult, cur_lidx - nGhosts));
-            });
-      } else if constexpr (NDim == 1) {
-        // just copy the values.
-        Kokkos::parallel_for(
-            "SpatialAverager",
-            Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(start_iteration[0], stop_iteration[0]),
-            DEVICE_CLASS_LAMBDA(const device::Idx &idx) { localResult(idx - start_iteration[0]) = mT.get(idx); });
+      for (uint cur_lidx = nGhosts; cur_lidx < result.size() + nGhosts; ++cur_lidx) {
+        auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim - 1> &idx, vType &update)
+        {
+          device::apply(
+              [&](auto &&...args) {
+                DoEval::eval(mT, args..., cur_lidx);
+                update += mT.get(args..., cur_lidx);
+              },
+              idx);
+        };
+        device::iteration::parallel_reduce("Averager", start_iteration, stop_iteration, functor,
+                                           Kokkos::subview(localResult, cur_lidx - nGhosts));
       }
       device::memory::copyDeviceToHost(localResult, result.data());
 

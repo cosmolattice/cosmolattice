@@ -125,7 +125,7 @@ namespace TempLat
         sType r{};
         for (uint i = 0; i < NDim; ++i)
           r += global_coords[i] * global_coords[i];
-        r = Kokkos::sqrt(r);
+        r = device::sqrt(r);
 
         // Map the radius to a bin
         const ptrdiff_t bin = binComputer(r);
@@ -135,9 +135,7 @@ namespace TempLat
                       idx);
       };
 
-      Kokkos::parallel_for("RadialProjectorConfiguration",        //
-                           device::getLocalKokkosPolicy(mLayout), //
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      device::iteration::parallel_for("RadialProjectorConfiguration", mLayout, functor);
 
       baseWorkSpace.pull();
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
@@ -174,7 +172,7 @@ namespace TempLat
           sType r{};
           for (uint i = 0; i < NDim; ++i)
             r += global_coords[i] * global_coords[i];
-          r = Kokkos::sqrt(r);
+          r = device::sqrt(r);
 
           // Map the radius to a bin
           const ptrdiff_t bin = binComputer(r);
@@ -188,10 +186,7 @@ namespace TempLat
               idx);
         }
       };
-
-      Kokkos::parallel_for("RadialProjectorFourier",              //
-                           device::getLocalKokkosPolicy(mLayout), //
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      device::iteration::parallel_for("RadialProjectorFourier", mLayout, functor);
       baseWorkSpace.pull();
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
 

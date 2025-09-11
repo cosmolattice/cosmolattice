@@ -17,7 +17,8 @@
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
 
-#include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_memory.h"
+#include "TempLat/parallel/device_iteration.h"
 
 namespace TempLat
 {
@@ -56,9 +57,7 @@ namespace TempLat
       {
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
       };
-      Kokkos::parallel_for("ConfigViewAssign",                   //
-                           device::getLocalKokkosPolicy(layout), //
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      device::iteration::parallel_for("FourierViewAssign", layout, functor);
       PostGet::apply(g);
     }
 
@@ -170,25 +169,17 @@ namespace TempLat
     {
       if (mToolBox == nullptr) return;
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
-      auto localSizes = layout.getLocalSizes();
 
-      for (size_t d = 0; d < NDim; ++d) {
-        start_iteration[d] = 0;
-        stop_iteration[d] = start_iteration[d] + localSizes[d];
-
+      for (size_t d = 0; d < NDim; ++d)
         memorySizes[d] = layout.getLocalSizes()[d];
-      }
 
       mView = mManager->template getNDView<complex<T>>(memorySizes);
       mRawView = mManager->template getRawView<complex<T>>();
     }
 
-    Kokkos::Array<int64_t, NDim> start_iteration;
-    Kokkos::Array<int64_t, NDim> stop_iteration;
-
-    KokkosNDViewUnmanaged<NDim, complex<T>> mView;
-    KokkosNDViewUnmanaged<1, complex<T>> mRawView;
-    KokkosNDViewUnmanaged<NDim, complex<T>, Kokkos::DefaultHostExecutionSpace> mHostView;
+    device::memory::NDViewUnmanaged<NDim, complex<T>> mView;
+    device::memory::NDViewUnmanaged<1, complex<T>> mRawView;
+    device::memory::NDViewUnmanagedHost<NDim, complex<T>> mHostView;
 
     std::array<ptrdiff_t, NDim> memorySizes;
     std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;

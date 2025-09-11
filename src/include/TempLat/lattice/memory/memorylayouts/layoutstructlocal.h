@@ -42,12 +42,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return mGlobal; }
 
-    template <typename T = ptrdiff_t> void setLocalSizes(const Kokkos::Array<T, NDim> &input)
-    {
-      for (size_t i = 0; i < NDim; ++i)
-        mLocalSizes[i] = input[i];
-    }
-    template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input)
+    template <typename C = device::array<ptrdiff_t, NDim>> void setLocalSizes(const C &input)
     {
       for (size_t i = 0; i < NDim; ++i)
         mLocalSizes[i] = input[i];
@@ -55,24 +50,19 @@ namespace TempLat
     void setNGhosts(ptrdiff_t nGhosts) { mNGhosts = nGhosts; }
 
     DEVICE_FORCEINLINE_FUNCTION
-    Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return mLocalSizes; }
+    device::array<ptrdiff_t, NDim> &getLocalSizes() { return mLocalSizes; }
     DEVICE_FORCEINLINE_FUNCTION
-    const Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() const { return mLocalSizes; }
+    const device::array<ptrdiff_t, NDim> &getLocalSizes() const { return mLocalSizes; }
 
-    template <typename T = ptrdiff_t> void setLocalStarts(const Kokkos::Array<T, NDim> &input)
-    {
-      for (size_t i = 0; i < NDim; ++i)
-        mLocalStarts[i] = input[i];
-    }
-    template <typename T = ptrdiff_t> void setLocalStarts(const std::array<T, NDim> &input)
+    template <typename C = device::array<ptrdiff_t, NDim>> void setLocalStarts(const C &input)
     {
       for (size_t i = 0; i < NDim; ++i)
         mLocalStarts[i] = input[i];
     }
     DEVICE_FORCEINLINE_FUNCTION
-    Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() { return mLocalStarts; }
+    device::array<ptrdiff_t, NDim> &getLocalStarts() { return mLocalStarts; }
     DEVICE_FORCEINLINE_FUNCTION
-    const Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() const { return mLocalStarts; }
+    const device::array<ptrdiff_t, NDim> &getLocalStarts() const { return mLocalStarts; }
 
     /** \brief For both configuration and fourier space, the index values are not the same as coordinate
      *  values. Assuming periodic boundary conditions, we get that always c = i > half ? i - N : i;
@@ -117,8 +107,8 @@ namespace TempLat
 
   private:
     LayoutStructGlobal<NDim> mGlobal;
-    Kokkos::Array<ptrdiff_t, NDim> mLocalSizes;
-    Kokkos::Array<ptrdiff_t, NDim> mLocalStarts;
+    device::array<ptrdiff_t, NDim> mLocalSizes;
+    device::array<ptrdiff_t, NDim> mLocalStarts;
 
     ptrdiff_t mNGhosts;
 

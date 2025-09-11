@@ -17,13 +17,12 @@
 #include "TempLat/fft/types/fftmallocfree.h"
 #include "TempLat/util/tdd/tdd.h"
 
-#include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_memory.h"
 
 namespace TempLat
 {
   MakeException(MemoryBlockOutOfBoundsException);
 
-#ifndef NOKOKKOS
   /** \brief A class which holds a block of memory.
    * Feel free to pass it around and copy: the pointer
    * is itself kept inside a shared_ptr. Only when the
@@ -81,7 +80,9 @@ namespace TempLat
 #endif
 
       return std::apply(
-          [&](auto &&...args) { return KokkosNDViewUnmanaged<NDim, R>(reinterpret_cast<R *>(mData.data()), args...); },
+          [&](auto &&...args) {
+            return device::memory::NDViewUnmanaged<NDim, R>(reinterpret_cast<R *>(mData.data()), args...);
+          },
           localSizes);
     }
     template <typename R = T> auto getNDHostView(const std::array<ptrdiff_t, NDim> &localSizes) const
@@ -98,8 +99,7 @@ namespace TempLat
 
       return std::apply(
           [&](auto &&...args) {
-            return KokkosNDViewUnmanaged<NDim, R, Kokkos::DefaultHostExecutionSpace>(
-                reinterpret_cast<R *>(mHostMirror.data()), args...);
+            return device::memory::NDViewUnmanagedHost<NDim, R>(reinterpret_cast<R *>(mHostMirror.data()), args...);
           },
           localSizes);
     }
@@ -138,7 +138,7 @@ namespace TempLat
         return mData;
       else {
         const size_t size = mSize * sizeof(T) / sizeof(R);
-        return KokkosNDViewUnmanaged<1, R, Kokkos::DefaultExecutionSpace>(reinterpret_cast<R *>(mData.data()), size);
+        return device::memory::NDViewUnmanaged<1, R>(reinterpret_cast<R *>(mData.data()), size);
       }
     }
 
@@ -149,8 +149,7 @@ namespace TempLat
         return mHostMirror;
       else {
         const size_t size = mSize * sizeof(T) / sizeof(R);
-        return KokkosNDViewUnmanaged<1, R, Kokkos::DefaultHostExecutionSpace>(reinterpret_cast<R *>(mHostMirror.data()),
-                                                                              size);
+        return device::memory::NDViewUnmanagedHost<1, R>(reinterpret_cast<R *>(mHostMirror.data()), size);
       }
     }
 
@@ -198,7 +197,7 @@ namespace TempLat
     void checkBounds(ptrdiff_t i) const
     {
 #ifdef CHECKBOUNDS
-#ifdef NOKOKKOS
+#ifdef DEVICE_HAS_EXCEPTIONS
       if (i < 0 || i >= (ptrdiff_t)mSize)
         throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds:", i, "not in 0 -- ", mSize);
 #endif
@@ -210,103 +209,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
-#else
-
-  template <size_t NDim, typename T> class MemoryBlock
-  {
-  public:
-    /* Put public methods here. These should change very little over time. */
-    /** \brief Default constructor: empty. */
-    MemoryBlock() : mSize(0u), thePointer() /* defaults to thePointer.get() == NULL */ {}
-
-    /** \brief Constructor with a size to allocate. */
-    MemoryBlock(size_t size)
-        : mSize(size), thePointer(std::make_shared<T *>((T *)FFTMallocFree<T>::malloc(size * TSIZE)))
-    {
-      zero();
-    }
-
-    /** destructor */
-    ~MemoryBlock()
-    {
-      if (thePointer.use_count() < 2 && thePointer.get() != NULL) {
-        FFTMallocFree<T>::free(*thePointer);
-      }
-    }
-
-    /** getter */
-    size_t size() const { return mSize; }
-
-    /** \brief state modify: zero out */
-    void zero()
-    {
-      if (size()) std::memset(*thePointer, 0, size() * TSIZE);
-    }
-
-    /** \brief access: avoid using these for manual iteration */
-    inline operator T *() { return *thePointer; }
-
-    /** \brief access: avoid using these for manual iteration */
-    inline operator const T *() const { return *thePointer; }
-
-    /** \brief access: avoid using these for iteration */
-    inline T *ptr() { return *thePointer; }
-
-    /** \brief access: avoid using these for iteration */
-    inline T *data() { return *thePointer; }
-
-    /** \brief access: avoid using these for iteration */
-    inline const T *data() const { return *thePointer; }
-
-    /** \brief access */
-    inline const T &operator[](ptrdiff_t i) const
-    {
-      checkBounds(i);
-      return (*thePointer)[i];
-    }
-
-    /** \brief access */
-    inline T &operator[](ptrdiff_t i)
-    {
-      checkBounds(i);
-      return (*thePointer)[i];
-    }
-
-    inline MemoryBlock duplicate()
-    {
-      MemoryBlock newblock(mSize);
-      std::memmove(newblock.ptr(), ptr(), mSize * TSIZE);
-    }
-
-    friend std::ostream &operator<<(std::ostream &ostream, const MemoryBlock &mb)
-    {
-      ostream << "Memory Block. Size: " << mb.mSize << ", allocated: " << *(mb.thePointer) << "\n";
-      return ostream;
-    }
-
-    friend bool operator==(const MemoryBlock &a, const MemoryBlock &b) { return a.ptr() == b.ptr(); }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-    size_t mSize;
-    std::shared_ptr<T *> thePointer;
-    static constexpr size_t TSIZE = sizeof(T);
-
-    inline void checkBounds(ptrdiff_t i) const
-    {
-#ifdef CHECKBOUNDS
-      if (i < 0 || i >= (ptrdiff_t)mSize)
-        throw MemoryBlockOutOfBoundsException("Accessing memory block out of bounds:", i, "not in 0 -- ", mSize);
-#endif
-    }
-
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-#endif
 } // namespace TempLat
 
 #endif

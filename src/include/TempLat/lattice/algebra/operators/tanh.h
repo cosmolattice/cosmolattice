@@ -20,11 +20,7 @@
 
 namespace TempLat
 {
-#ifndef NOKOKKOS
-  using Kokkos::tanh;
-#else
-  using std::tanh;
-#endif
+  using device::tanh;
 
   namespace Operators
   {

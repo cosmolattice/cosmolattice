@@ -65,7 +65,7 @@ namespace TempLat
     }
 
     DEVICE_FORCEINLINE_FUNCTION std::tuple<RNGInteger, RNGInteger>
-    gidx_to_idx2(const Kokkos::Array<ptrdiff_t, NDim> &gidx) const
+    gidx_to_idx2(const device::array<ptrdiff_t, NDim> &gidx) const
     {
       constexpr size_t nd1 = NDim / 2;
 
@@ -90,16 +90,16 @@ namespace TempLat
     }
 
     DEVICE_FORCEINLINE_FUNCTION
-    complex<T> to_complex(const Kokkos::Array<double, 2> &pair) const { return complex<T>(pair[0], pair[1]); }
+    complex<T> to_complex(const device::array<double, 2> &pair) const { return complex<T>(pair[0], pair[1]); }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
-      Kokkos::Array<ptrdiff_t, NDim> global_coord;
+      device::array<ptrdiff_t, NDim> global_coord;
       mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, idx...);
 
-      Kokkos::Array<ptrdiff_t, NDim> hermitianPartner;
+      device::array<ptrdiff_t, NDim> hermitianPartner;
       auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners().putHermitianPartner(
           global_coord, hermitianPartner);
 
@@ -117,8 +117,8 @@ namespace TempLat
         const auto [r, c] = gidx_to_idx2(hermitianPartner);
         const auto val = to_complex(prng.getPair(r, c, generation, Real, Unitary));
         return (hermitianType == HermitianRedundancy::positivePartner)   ? val
-               : (hermitianType == HermitianRedundancy::negativePartner) ? Kokkos::conj(val)
-               : (hermitianType == HermitianRedundancy::realValued)      ? complex<T>(Kokkos::real(val))
+               : (hermitianType == HermitianRedundancy::negativePartner) ? device::conj(val)
+               : (hermitianType == HermitianRedundancy::realValued)      ? complex<T>(device::real(val))
                                                                          : complex<T>(0.0, 0.0);
       }
     }
@@ -134,7 +134,7 @@ namespace TempLat
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
     RNGInteger generation;
-    Kokkos::Array<ptrdiff_t, NDim> mGlobalSizes;
+    device::array<ptrdiff_t, NDim> mGlobalSizes;
   };
 
   class RandomGaussianFieldTester

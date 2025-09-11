@@ -45,12 +45,12 @@ int main(int argc, char **argv)
     for (size_t i = 0; i < nSteps; ++i) {
       measurer.measure("ghosts", [&]() {
         pi.updateGhosts();
-        Kokkos::fence();
+        device::iteration::fence();
       });
       measurer.measure("timestepping", [&]() {
         pi = pi + LatticeLaplacian<NDim, decltype(phi)>(phi);
         phi = phi + dt * pi;
-        Kokkos::fence();
+        device::iteration::fence();
       });
     }
   });

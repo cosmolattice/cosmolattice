@@ -7,7 +7,9 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
+#include <cstddef>
 #include <functional>
+#include <limits>
 #include <sstream>
 #include <iomanip>
 #include <list>
@@ -36,9 +38,9 @@ namespace TempLat
         measurements.emplace_back(tag, elapsed);
       }
 
-      size_t getAverage(const std::string &tag) const
+      double getAverage(const std::string &tag) const
       {
-        size_t total = 0;
+        double total = 0;
         size_t count = 0;
         for (const auto &[measurementTag, elapsed] : measurements) {
           if (measurementTag == tag) {
@@ -51,19 +53,24 @@ namespace TempLat
 
       auto getMeasurement(const std::string tag) const
       {
-        size_t average = getAverage(tag);
-        size_t totalSquaredDiff = 0;
-        size_t count = 0;
+        double average = getAverage(tag);
+        double totalSquaredDiff = 0;
+        double count = 0;
+        double min = std::numeric_limits<double>::max();
+        double max = 0;
         for (const auto &[measurementTag, elapsed] : measurements) {
           if (measurementTag == tag) {
-            size_t diff = elapsed > average ? elapsed - average : average - elapsed;
+            double diff = elapsed > average ? elapsed - average : average - elapsed;
             totalSquaredDiff += diff * diff;
             ++count;
+            min = std::min(min, elapsed);
+            max = std::max(max, elapsed);
           }
         }
-        size_t stdD = count > 0 ? std::sqrt(totalSquaredDiff / count) : 0;
+        std::cout << "average: " << average << " count: " << count << " totalSquaredDiff: " << totalSquaredDiff << "\n";
+        double stdD = count > 0 ? std::sqrt(totalSquaredDiff) / count : 0;
 
-        return std::make_tuple(tag, average, stdD, count);
+        return std::make_tuple(tag, average, stdD, min, max, count);
       }
 
       std::vector<std::string> getTags() const
@@ -78,7 +85,7 @@ namespace TempLat
       }
 
     private:
-      std::vector<std::pair<std::string, size_t>> measurements; // tag, elapsed time in nanoseconds
+      std::vector<std::pair<std::string, double>> measurements; // tag, elapsed time in nanoseconds
       friend class Benchmark;
     };
 
@@ -135,7 +142,7 @@ namespace TempLat
           for (auto &c : measurementTag)
             if (std::isspace(c)) c = '_';
 
-          const auto &[tag, average, stdDev, count] = measurementData;
+          const auto &[tag, average, stdDev, minT, maxT, count] = measurementData;
 
           const double averageInSeconds = average / 1e9;
           const double stdDevInSeconds = stdDev / 1e9;
@@ -154,10 +161,12 @@ namespace TempLat
       std::list<std::string> outputs;
       for (const auto &el : bench.mMeasurements) {
         const auto &[measurementTag, measurementData] = el;
-        const auto &[tag, average, stdDev, count] = measurementData;
+        const auto &[tag, average, stdDev, minT, maxT, count] = measurementData;
 
         const auto [averageStr, averageLevel] = formatTime(average, 0);
         const auto [stdDevStr, stdDevLevel] = formatTime(stdDev, averageLevel);
+        const auto [minStr, minLevel] = formatTime(minT, averageLevel);
+        const auto [maxStr, maxLevel] = formatTime(maxT, averageLevel);
         const std::string countStr = std::to_string(count);
 
         std::stringstream ss;
@@ -165,7 +174,9 @@ namespace TempLat
            << "\n    \033[1;34m|\033[0m Average : " << std::setw(tagWidth - 16 - averageStr.size()) << ""
            << averageStr // average
            << "\n    \033[1;34m|\033[0m Std Dev : " << std::setw(tagWidth - 16 - stdDevStr.size()) << ""
-           << stdDevStr // std
+           << stdDevStr                                                                                         // std
+           << "\n    \033[1;34m|\033[0m     Min : " << std::setw(tagWidth - 16 - minStr.size()) << "" << minStr // std
+           << "\n    \033[1;34m|\033[0m     Max : " << std::setw(tagWidth - 16 - maxStr.size()) << "" << maxStr // std
            << "\n    \033[1;34m|\033[0m Count :   " << std::setw(tagWidth - 16 - countStr.size()) << ""
            << countStr; // count
         outputs.push_back(ss.str());
@@ -211,7 +222,8 @@ namespace TempLat
   private:
     std::function<void(Measurer &)> mFunction;
 
-    using Measurement = std::tuple<std::string, size_t, size_t, size_t>; // tag, average, std, count
+    using Measurement =
+        std::tuple<std::string, double, double, double, double, size_t>; // tag, average, std, min, max, count
     std::map<std::string, Measurement> mMeasurements;
 
     static std::pair<std::string, int> formatTime(size_t time_ns, int lv = 0)

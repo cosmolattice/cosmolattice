@@ -1,14 +1,87 @@
 #ifndef TEMPLAT_PARALLEL_DEVICE_H
 #define TEMPLAT_PARALLEL_DEVICE_H
 
-#include "TempLat/parallel/device_def.h"
+#ifdef DEVICE_KOKKOS
 
-#ifndef NOKOKKOS
+#include "TempLat/parallel/kokkos/kokkos.h"
 
-#include "TempLat/parallel/kokkos/kokkosoperations.h"
-#include "TempLat/parallel/kokkos/kokkoslambdawrapper.h"
-#include "TempLat/parallel/kokkos/session/kokkosguard.h"
+namespace TempLat
+{
+  namespace export_device_namespace = device_kokkos;
+} // namespace TempLat
+
+#else
+
+#include "TempLat/parallel/std/std.h"
+namespace TempLat
+{
+  namespace export_device_namespace = std_device;
+} // namespace TempLat
 
 #endif
+
+namespace TempLat
+{
+  namespace device
+  {
+    using export_device_namespace::reverse_access_pattern;
+
+    // ------------------------------------------------
+    // Tuple and logic defaults
+    // ------------------------------------------------
+
+    using export_device_namespace::apply;
+    using export_device_namespace::array;
+    using export_device_namespace::forward_as_tuple;
+    using export_device_namespace::get;
+    using export_device_namespace::index_sequence;
+    using export_device_namespace::make_tuple;
+    using export_device_namespace::tie;
+    using export_device_namespace::tuple;
+    using export_device_namespace::tuple_cat;
+
+    using export_device_namespace::Idx;
+    using export_device_namespace::IdxArray;
+
+    // ------------------------------------------------
+    // Arithmetic defaults
+    // ------------------------------------------------
+
+    using export_device_namespace::abs;
+    using export_device_namespace::acos;
+    using export_device_namespace::acosh;
+    using export_device_namespace::asin;
+    using export_device_namespace::asinh;
+    using export_device_namespace::atan;
+    using export_device_namespace::atan2;
+    using export_device_namespace::atanh;
+    using export_device_namespace::ceil;
+    using export_device_namespace::conj;
+    using export_device_namespace::cos;
+    using export_device_namespace::cosh;
+    using export_device_namespace::exp;
+    using export_device_namespace::floor;
+    using export_device_namespace::fmod;
+    using export_device_namespace::imag;
+    using export_device_namespace::log;
+    using export_device_namespace::max;
+    using export_device_namespace::min;
+    using export_device_namespace::pow;
+    using export_device_namespace::real;
+    using export_device_namespace::sin;
+    using export_device_namespace::sinh;
+    using export_device_namespace::sqrt;
+    using export_device_namespace::tan;
+    using export_device_namespace::tanh;
+
+    using export_device_namespace::complex;
+  } // namespace device
+
+  // The complex type is used in many places, so we re-export it at the top level.
+  using device::complex;
+} // namespace TempLat
+
+// Including this here, as we need that anywhere basically, where Kokkos is explicitly used.
+#include "TempLat/lattice/algebra/helpers/variadicindex.h"
 
 #endif

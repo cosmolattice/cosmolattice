@@ -38,7 +38,7 @@ namespace TempLat
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       if (mFixedSingleSpaceType != SpaceStateType::undefined && mFixedSingleSpaceType != spaceType) {
-#ifdef NOKOKKOS
+#ifndef DEVICE_KOKKOS
         throw DimensionCountRecorder_CoordinateSpaceException(
             "You are using coordinates in one space for an expression in another space. This coordinate object insists "
             "on",

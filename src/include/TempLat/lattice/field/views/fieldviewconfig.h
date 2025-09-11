@@ -19,7 +19,8 @@
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
 
-#include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_memory.h"
+#include "TempLat/parallel/device_iteration.h"
 
 namespace TempLat
 {
@@ -77,9 +78,7 @@ namespace TempLat
       {
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
       };
-      Kokkos::parallel_for("ConfigViewAssign",                    //
-                           device::getLocalKokkosPolicy(mLayout), //
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      device::iteration::parallel_for("ConfigViewAssign", mLayout, functor);
 
       PostGet::apply(g);
 
@@ -204,9 +203,9 @@ namespace TempLat
   private:
     LayoutStruct<NDim> mLayout;
 
-    KokkosNDViewUnmanaged<NDim, T> mView;
-    KokkosNDViewUnmanaged<1, T> mRawView;
-    KokkosNDViewUnmanaged<NDim, T, Kokkos::DefaultHostExecutionSpace> mHostView;
+    device::memory::NDViewUnmanaged<NDim, T> mView;
+    device::memory::NDViewUnmanaged<1, T> mRawView;
+    device::memory::NDViewUnmanagedHost<NDim, T> mHostView;
 
     std::array<ptrdiff_t, NDim> memorySizes;
     std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;

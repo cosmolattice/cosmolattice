@@ -25,6 +25,8 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 
+#include "TempLat/parallel/device_iteration.h"
+
 namespace TempLat
 {
   /** \brief An averager for su2. Allows to take into account cached operations consistently.
@@ -95,9 +97,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("SU2Averager",                         //
-                              device::getLocalKokkosPolicy(mLayout), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+      device::iteration::parallel_reduce("SU2Averager", mLayout, functor, localResult);
 
       arrVType _localResult;
       for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });
@@ -117,7 +117,7 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              Kokkos::Array<ptrdiff_t, NDim> global_coord;
+              device::array<ptrdiff_t, NDim> global_coord;
               mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners
@@ -127,9 +127,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("ComplexFieldAverager",                //
-                              device::getLocalKokkosPolicy(mLayout), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+      device::iteration::parallel_reduce("ComplexFieldAverager", mLayout, functor, localResult);
 
       arrVType _localResult;
       for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });

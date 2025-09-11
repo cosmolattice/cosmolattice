@@ -54,7 +54,7 @@ namespace TempLat
       requires VariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION complex<double> get(const IDX &...idx) const
     {
-      Kokkos::Array<ptrdiff_t, NDim> global_coord;
+      device::array<ptrdiff_t, NDim> global_coord;
       mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, idx...);
       double imagPart =
           mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::realValued ? 0. : NDim;

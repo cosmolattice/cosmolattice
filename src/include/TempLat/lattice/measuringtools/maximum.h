@@ -57,14 +57,11 @@ namespace TempLat
         device::apply(
             [&](auto &&...args) {
               DoEval::eval(mT, args...);
-              update = Kokkos::max(mT.get(args...), update);
+              update = max(mT.get(args...), update);
             },
             idx);
       };
-      Kokkos::parallel_reduce("Averager",                                                              //
-                              device::getLocalKokkosPolicy(mToolBox->mLayouts.getConfigSpaceLayout()), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor), vType>(functor),
-                              Kokkos::Max<vType>(localResult));
+      device::iteration::parallel_reduce("Averager", mToolBox->mLayouts.getConfigSpaceLayout(), functor, device::Max<vType>(localResult));
 
       // --------------------------------------------------------
       // Reduce the result across all processes

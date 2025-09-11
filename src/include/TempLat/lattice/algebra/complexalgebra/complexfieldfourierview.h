@@ -96,9 +96,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_for("ComplexFourierViewAssign", //
-                           device::getLocalKokkosPolicy(mLayout),
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      device::iteration::parallel_for("ComplexFourierViewAssign", mLayout, functor);
 
       PostGet::apply(g);
     }
@@ -120,9 +118,6 @@ namespace TempLat
     FourierView<NDim, T> mI;
 
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
-
-    Kokkos::Array<int64_t, NDim> start_iteration;
-    Kokkos::Array<int64_t, NDim> stop_iteration;
 
     LayoutStruct<NDim> mLayout;
   };

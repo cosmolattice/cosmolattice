@@ -38,9 +38,9 @@ namespace TempLat
     }
 
     DEVICE_FORCEINLINE_FUNCTION
-    Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() { return mGlobalSizes; }
+    device::array<ptrdiff_t, NDim> &getGlobalSizes() { return mGlobalSizes; }
     DEVICE_FORCEINLINE_FUNCTION
-    const Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() const { return mGlobalSizes; }
+    const device::array<ptrdiff_t, NDim> &getGlobalSizes() const { return mGlobalSizes; }
 
     /** returns the largest possible distance from the origin. mSignConversionMidpoint holds the
      *  maximum value of each dimension. Check that in localIndexToGlobalCoordinate.
@@ -50,7 +50,7 @@ namespace TempLat
       T r2 = 0;
       for (auto &&it : mSignConversionMidpoint)
         r2 += it * it;
-      return Kokkos::sqrt(r2);
+      return device::sqrt(r2);
     }
 
     /** \brief For both configuration and fourier space, the index values are not the same as coordinate
@@ -98,8 +98,8 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    Kokkos::Array<ptrdiff_t, NDim> mGlobalSizes;
-    Kokkos::Array<ptrdiff_t, NDim> mSignConversionMidpoint;
+    device::array<ptrdiff_t, NDim> mGlobalSizes;
+    device::array<ptrdiff_t, NDim> mSignConversionMidpoint;
 
   public:
 #ifdef TEMPLATTEST

@@ -23,11 +23,7 @@ namespace TempLat
 {
   /** \brief Enable use of this operator without prefixing std:: or TempLat::.
    * The compiler can distinguish between them. */
-#ifndef NOKOKKOS
-  using Kokkos::abs;
-#else
-  using std::abs;
-#endif
+  using device::abs;
 
   namespace Operators
   {

@@ -25,6 +25,8 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletgetgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 
+#include "TempLat/parallel/device_iteration.h"
+
 namespace TempLat
 {
   /** \brief An averager specialised for SU2Doublet. Allows to take into account cached operations consistently.
@@ -96,9 +98,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("SU2DoubletAverager",                  //
-                              device::getLocalKokkosPolicy(mLayout), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+      device::iteration::parallel_reduce("SU2DoubletAverager", mLayout, functor, localResult);
 
       arrVType _localResult;
       for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });
@@ -118,7 +118,7 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              Kokkos::Array<ptrdiff_t, NDim> global_coord;
+              device::array<ptrdiff_t, NDim> global_coord;
               mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners
@@ -129,9 +129,7 @@ namespace TempLat
             idx);
       };
 
-      Kokkos::parallel_reduce("SU2DoubletAverager",                  //
-                              device::getLocalKokkosPolicy(mLayout), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+      device::iteration::parallel_reduce("SU2DoubletAverager", mLayout, functor, localResult);
 
       arrVType _localResult;
       for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });

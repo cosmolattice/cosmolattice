@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
-#include "TempLat/parallel/device_def.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {

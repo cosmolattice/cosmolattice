@@ -11,12 +11,11 @@ function(add_cosmolattice execName path ofile)
   target_link_libraries(${execName} PUBLIC Threads::Threads)
   target_link_libraries(${execName} PUBLIC ${FFTW_LIBRARIES})
 
+  # Custom function to link to the chosen device backend
+  target_link_device(${execName})
+
   if(HDF5)
     target_link_libraries(${execName} PUBLIC ${HDF5_LIBRARIES})
-  endif()
-
-  if(KOKKOS)
-    target_link_libraries(${execName} PUBLIC Kokkos::kokkos)
   endif()
 
   if(HEFFTE)

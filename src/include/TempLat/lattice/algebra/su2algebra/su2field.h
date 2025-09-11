@@ -104,9 +104,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_for("SU2ConfigViewAssign", //
-                           device::getLocalKokkosPolicy(mLayout),
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      device::iteration::parallel_for("SU2ConfigViewAssign", mLayout, functor);
 
       ForLoop(j, 0, 2, PostGet::apply(fs[j]));
       ForLoop(j, 0, 2, fs[j].setGhostsAreStale());

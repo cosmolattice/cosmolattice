@@ -72,11 +72,9 @@ namespace TempLat
     FileSaverHDF5 saver;
     FileLoaderHDF5 loader;
 #else
-    FileLoaderPureMPI<NDim> loader;
     FileSaverPureMPI<NDim> saver;
+    FileLoaderPureMPI<NDim> loader;
 #endif
-
-    /* Put all member variables and private methods here. These may change arbitrarily. */
 
   public:
 #ifdef TEMPLATTEST

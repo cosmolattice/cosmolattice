@@ -19,11 +19,7 @@
 
 namespace TempLat
 {
-#ifndef NOKOKKOS
-  using Kokkos::cosh;
-#else
-  using std::cosh;
-#endif
+  using device::cosh;
 
   namespace Operators
   {

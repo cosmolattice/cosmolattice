@@ -84,7 +84,7 @@ namespace TempLat
       requires VariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(const IDX &...idx) const
     {
-      return Kokkos::Array<T, 2>{mR.get(idx...), mI.get(idx...)};
+      return device::array<T, 2>{mR.get(idx...), mI.get(idx...)};
     }
 
     ComplexFieldFourierView<NDim, T> inFourierSpace() { return {mR.inFourierSpace(), mI.inFourierSpace()}; }
@@ -112,9 +112,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_for("ComplexConfigViewAssign", //
-                           device::getLocalKokkosPolicy(mLayout),
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      device::iteration::parallel_for("ComplexConfigViewAssign", mLayout, functor);
 
       PostGet::apply(gR);
       PostGet::apply(gI);
@@ -155,9 +153,6 @@ namespace TempLat
     Field<NDim, T> mI;
 
     const std::string mName;
-
-    Kokkos::Array<int64_t, NDim> start_iteration;
-    Kokkos::Array<int64_t, NDim> stop_iteration;
 
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
 

@@ -17,9 +17,7 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
 
-#include "TempLat/parallel/device.h"
-
-#include <memory>
+#include "TempLat/parallel/device_iteration.h"
 
 namespace TempLat
 {
@@ -93,9 +91,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("Averager",                            //
-                              device::getLocalKokkosPolicy(mLayout), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+      device::iteration::parallel_reduce("Averager", mLayout, functor, localResult);
 
       return localResult;
     }
@@ -110,7 +106,7 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              Kokkos::Array<ptrdiff_t, NDim> global_coord;
+              device::array<ptrdiff_t, NDim> global_coord;
               mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners
@@ -120,9 +116,7 @@ namespace TempLat
             },
             idx);
       };
-      Kokkos::parallel_reduce("Averager",                            //
-                              device::getLocalKokkosPolicy(mLayout), //
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), localResult);
+      device::iteration::parallel_reduce("Averager", mLayout, functor, localResult);
 
       return localResult;
     }

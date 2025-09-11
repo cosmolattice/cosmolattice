@@ -34,10 +34,6 @@ namespace TempLat
     HDF5Dataset(const hid_t &id) : HDF5Object(id), alreadyClosed(false) {}
 
     HDF5Dataset(hid_t &&id) : HDF5Object(id), alreadyClosed(false) {}
-    ~HDF5Dataset()
-    {
-      //  this->close();
-    }
 
     void close()
     {
@@ -46,6 +42,7 @@ namespace TempLat
         alreadyClosed = true;
       }
     }
+
     template <typename T> void write(std::vector<T> data)
     {
       HDF5Type<T> type;

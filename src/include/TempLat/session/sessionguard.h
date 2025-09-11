@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/fft/fftlibraryselector.h"
-#include "TempLat/parallel/kokkos/session/kokkosguard.h"
+#include "TempLat/parallel/device_guard.h"
 #include "TempLat/parallel/mpi/session/mpiguard.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/tdd/tdd.h"
@@ -29,7 +29,7 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     SessionGuard(int argc, char *argv[], bool verbose = false)
-        : instanceProtectionKey(InstanceCounter(1)), mMPIGuard(argc, argv, verbose), mKokkosGuard(argc, argv, verbose),
+        : instanceProtectionKey(InstanceCounter(1)), mMPIGuard(argc, argv, verbose), mDeviceGuard(argc, argv, verbose),
           mFFTSessionGuards(getFFTSessionGuards(verbose))
     {
     }
@@ -38,7 +38,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     int instanceProtectionKey;
     MPIGuard mMPIGuard;
-    KokkosGuard mKokkosGuard;
+    DeviceGuard mDeviceGuard;
     std::vector<std::shared_ptr<FFTSessionGuard>> mFFTSessionGuards;
 
     static inline int InstanceCounter(int delta = 0)

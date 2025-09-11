@@ -11,12 +11,13 @@
 #include <cmath>
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/complex.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
   /** \brief we are comparing computed floats, so allow for some epsilon */
   template <typename T1, typename T2, typename T3 = T1>
+    requires(std::is_arithmetic_v<T1> && std::is_arithmetic_v<T2> && std::is_arithmetic_v<T3>)
   bool AlmostEqual(const T1 &a, const T2 &b, const T3 &epsilon = std::sqrt(std::numeric_limits<T3>::epsilon()))
   {
     if (std::isnan(a) || std::isnan(b)) return false;

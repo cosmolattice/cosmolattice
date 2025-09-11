@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/lattice/algebra/complex.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {

@@ -14,7 +14,8 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsingledatum.h"
 #include "TempLat/parallel/mpi/comm/mpicommreference.h"
-#include "TempLat/parallel/device_def.h"
+
+#include "TempLat/parallel/device_memory.h"
 
 namespace TempLat
 {
@@ -109,7 +110,7 @@ namespace TempLat
     template <typename S> friend class RadialProjectionResult;
 
   private:
-    using DeviceView = KokkosNDView<1, T>;
+    using DeviceView = device::memory::NDView<1, T>;
     using HostMirror = typename DeviceView::HostMirror;
 
     DeviceView mAveragesDevice;
@@ -126,7 +127,7 @@ namespace TempLat
     void checkBounds(ptrdiff_t i) const
     {
 #ifdef CHECKBOUNDS
-#ifdef NOKOKKOS
+#ifdef DEVICE_HAS_EXCEPTIONS
       if (i < 0 || i >= (ptrdiff_t)mAverages.size()) {
         throw RadialProjectionSingleQuantityException("Out of bounds: ", i, "not in", 0, " -- ", mAverages.size());
       }

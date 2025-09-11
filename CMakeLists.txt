@@ -17,11 +17,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(MPI
     OFF
     CACHE BOOL "Set to ON to build with MPI (default = OFF)")
-set(KOKKOS
-    ON
+set(DEVICE
+    KOKKOS
     CACHE
       BOOL
-      "Set to ON to build with Kokkos for shared memory and/or GPU parallelization (default = ON)"
+      "Set to the device to use for shared memory and/or GPU parallelization (default = KOKKOS)"
 )
 set(PFFT
     OFF
@@ -37,6 +37,9 @@ set(HDF5
 set(TESTING
     OFF
     CACHE BOOL "Set to ON to be abble to build the tests (default = OFF)")
+set(PROFILING
+    OFF
+    CACHE BOOL "Set to ON to build with tools for profiling (default = OFF)")
 
 # Not an option that was tested, so can't modify it easily
 set(FLOATFFT OFF)
@@ -169,12 +172,8 @@ elseif(${G++OPT} STREQUAL "O3")
 elseif(${G++OPT} STREQUAL "Ofast")
   # We disable the warnings about NaN checking in Ofast, if you use fast-math,
   # you should be aware of what you do.
-  if(KOKKOS)
-    set(CMAKE_CXX_FLAGS
-        "${CMAKE_CXX_FLAGS} -O3 -ffast-math -Wno-nan-infinity-disabled")
-  else()
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -Wno-nan-infinity-disabled")
-  endif()
+  set(CMAKE_CXX_FLAGS
+      "${CMAKE_CXX_FLAGS} -O3 -ffast-math -Wno-nan-infinity-disabled")
 else()
   message(FATAL_ERROR "G++OPT=${G++OPT} is not a valid option.")
 endif()

@@ -3,12 +3,8 @@ include(./src/cmake/add_cosmolattice_exec.cmake)
 include_directories(src/include)
 include_directories(SYSTEM src/include/random123/include/)
 
-# Get Kokkos
-if(KOKKOS)
-  include(./src/cmake/get_kokkos.cmake)
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOKOKKOS")
-endif()
+# Set up the device
+include(./src/cmake/device/device.cmake)
 
 # Get Heffte
 if(HEFFTE)
@@ -61,10 +57,6 @@ endif()
 
 # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FFTW_INCLUDES}" )
 include_directories(${FFTW_INCLUDES})
-
-if(KOKKOS)
-  find_package(Kokkos REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/Kokkos QUIET)
-endif()
 
 if(HEFFTE)
   find_package(Heffte REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/heffte QUIET)

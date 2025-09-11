@@ -19,11 +19,7 @@
 
 namespace TempLat
 {
-#ifndef NOKOKKOS
-  using Kokkos::sin;
-#else
-  using std::sin;
-#endif
+  using device::sin;
 
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators

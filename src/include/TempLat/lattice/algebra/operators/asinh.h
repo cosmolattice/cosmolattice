@@ -18,11 +18,7 @@
 
 namespace TempLat
 {
-#ifndef NOKOKKOS
-  using Kokkos::asinh;
-#else
-  using std::asinh;
-#endif
+  using device::asinh;
   namespace Operators
   {
     /** \brief A class which computes the asinh.
@@ -43,13 +39,7 @@ namespace TempLat
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        using Kokkos::asinh; /* not std::exp, but this way, for potential future data types. */
         return asinh(GetValue::get(mR, idx...));
-#else
-        using std::asinh; /* not std::exp, but this way, for potential future data types. */
-        return asinh(GetValue::get(mR, idx...));
-#endif
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */

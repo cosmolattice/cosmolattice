@@ -20,11 +20,7 @@
 
 namespace TempLat
 {
-#ifndef NOKOKKOS
-  using Kokkos::cos;
-#else
-  using std::cos;
-#endif
+  using device::cos;
 
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators

@@ -38,18 +38,35 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    FileSaverHDF5() {}
+    FileSaverHDF5() { std::cout << "FileSaverHDF5: Called constructor."; }
 
-    void open(std::string fn) { mFile.open(fn); }
+    void open(std::string fn)
+    {
+      std::cout << "FileSaverHDF5: Opened file " << fn << std::endl;
+      // mFile.open(fn);
+    }
 
-    void create(std::string fn) { mFile.create(fn); }
+    void create(std::string fn)
+    {
+      std::cout << "FileSaverHDF5: Created file " << fn << std::endl;
+      // mFile.create(fn);
+    }
 
-    void close() { mFile.close(); }
-    void reset() { this->close(); }
+    void close()
+    {
+      std::cout << "FileSaverHDF5: Closed file." << std::endl;
+      // mFile.close();
+    }
+    void reset()
+    {
+      std::cout << "FileSaverHDF5: Resetting file." << std::endl;
+      this->close();
+    }
 
     void save(ParameterParser &r)
     { // Conceptually, may be better as attributes? But nightmare to save vector of strings, did nt manage to do it in a
       // finite amount of time.
+      /*
       std::ostringstream oss;
 
       std::vector<std::string> parStr;
@@ -71,20 +88,24 @@ namespace TempLat
         mDataset.writeElement(parStr[i].c_str(), std::vector<hsize_t>(1, i));
       }
       mDataset.close();
+*/
     }
 
     template <typename R> void save(R r)
     { // used to store an entity directly to a dataset, using it's own name.
+      /*
       typedef typename GetGetReturnType<R>::type vType;
       ConfirmSpace::apply(r, r.getToolBox()->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
       GhostsHunter::apply(r);
       mDataset = mFile.createDataset<vType>(GetString::get(r), r.getToolBox()->mNGridPointsVec);
       saveDim(r, 0, {});
       mDataset.close();
+*/
     }
 
     template <typename R, typename T> void save(T t, R r, std::string name)
     { // used to store an entity in a time series. The name is the one of the group, data set labelled by t.
+      /*
       typedef typename GetGetReturnType<R>::type vType;
       ConfirmSpace::apply(r, r.getToolBox()->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
       GhostsHunter::apply(r);
@@ -92,14 +113,17 @@ namespace TempLat
                                                                     r.getToolBox()->mNGridPointsVec);
       saveDim(r, 0, {});
       mDataset.close();
+      */
     }
 
     template <typename R> void save(R t, std::string name)
     { // used to store a number. The name is the one of the dataset which contains this number.
+      /*
       typedef typename GetGetReturnType<R>::type vType;
       mDataset = mFile.createDataset<vType>(name, std::vector<hsize_t>(1, 1));
       mDataset.writeElement(&t, std::vector<hsize_t>(1, 0));
       mDataset.close();
+*/
     }
 
     // To save our fields, we use the fact that the last dimension is not parallelised.
@@ -107,6 +131,7 @@ namespace TempLat
     // last dimension to file.
     template <typename R> void saveDim(R r, int dim, std::vector<ptrdiff_t> coords)
     {
+      /*
       auto toolBox = r.getToolBox();
 
       constexpr size_t NDim = std::decay_t<decltype(*toolBox)>::NDim;
@@ -185,13 +210,17 @@ namespace TempLat
           saveDim(r, dim + 1, newCoords);
         }
       }
+*/
     }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
     HDF5File mFile;
-    HDF5Dataset mDataset;
+    // TODO: This is totally insane, but if this is uncommented, the data becomes just a set of nans.
+    // No need to call anything, it's just straight nans. I have no clue why or how.
+    // Problem for future me.
+    // HDF5Dataset mDataset;
 
   public:
 #ifdef TEMPLATTEST

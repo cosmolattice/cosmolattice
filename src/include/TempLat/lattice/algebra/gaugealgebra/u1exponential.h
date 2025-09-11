@@ -30,7 +30,7 @@ namespace TempLat
     using ComplexFieldUnaryOperator<R>::mR;
 
     U1Exponential(const R &pR)
-        : ComplexFieldUnaryOperator<R>(pR), mCacheRe("U1Exponential::mCacheRe"), mCacheIm("U1Exponential::mCacheIm")
+        : ComplexFieldUnaryOperator<R>(pR)
     {
     }
 
@@ -43,15 +43,15 @@ namespace TempLat
       requires VariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      return mCacheRe();
+      return mCacheRe;
     }
 
     template <typename... IDX>
       requires VariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
-      return mCacheIm();
-      // return std::sin(GetEval::getEval(mR,i));
+      return mCacheIm;
+      // return sin(GetEval::getEval(mR, idx...));
     }
 
     template <typename... IDX>
@@ -60,8 +60,8 @@ namespace TempLat
     {
       DoEval::eval(mR, idx...);
       SV tmp = GetEval::getEval(mR, idx...);
-      mCacheRe() = std::cos(tmp);
-      mCacheIm() = std::sin(tmp);
+      mCacheRe = cos(tmp);
+      mCacheIm = sin(tmp);
     }
 
     std::string toString() const { return "U1(" + GetString::get(mR) + ")"; }
@@ -69,8 +69,8 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    Kokkos::View<SV> mCacheRe;
-    Kokkos::View<SV> mCacheIm;
+    SV mCacheRe;
+    SV mCacheIm;
   };
 
   struct U1ExponentialTester {

@@ -37,7 +37,7 @@ namespace TempLat
      * @param nGhosts The number of ghost cells in each dimension.
      * @return requires
      */
-    template <typename C = std::array<ptrdiff_t, NDim>>
+    template <typename C = device::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>
     LayoutStruct(const C &initNGrid, const ptrdiff_t nGhosts)
         : mTransposed(initNGrid, nGhosts), mHermitianPartners(initNGrid), mNGhosts(nGhosts)
@@ -51,7 +51,7 @@ namespace TempLat
     }
 
     /** \brief An almost constructor: return a new instance which has a default global FFT layout */
-    template <typename C = std::array<ptrdiff_t, NDim>>
+    template <typename C = device::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>
     static LayoutStruct<NDim> createGlobalFFTLayout(const C &initNGrid)
     {
@@ -76,10 +76,10 @@ namespace TempLat
       requires VariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto(Container &target, const IDX... idx) const
     {
-      const auto indices = std::tie(idx...);
+      const auto indices = device::tie(idx...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        auto map = getTransposed().getSpatialLocationFromMemoryIndex(std::get<d>(indices), d);
+        auto map = getTransposed().getSpatialLocationFromMemoryIndex(device::get<d>(indices), d);
         target[map.atIndex] = map.withValue;
       });
     }
@@ -102,25 +102,22 @@ namespace TempLat
       requires VariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Container &target, const IDX... pos) const
     {
-      const auto positions = std::tie(pos...);
+      const auto positions = device::tie(pos...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        auto map = getTransposed().getMemoryIndexFromSpatialLocation(std::get<d>(positions), d);
+        auto map = getTransposed().getMemoryIndexFromSpatialLocation(device::get<d>(positions), d);
         target[map.atIndex] = map.withValue;
       });
     }
 
     DEVICE_FORCEINLINE_FUNCTION
-    const Kokkos::Array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
+    const device::array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
 
     template <typename C>
       requires IsArray<C, NDim>
     void setLocalSizes(const C &input)
     {
-      Kokkos::Array<ptrdiff_t, NDim> localSizes;
-      for (size_t i = 0; i < NDim; ++i)
-        localSizes[i] = input[i];
-      getTransposed().setLocalSizes(localSizes);
+      getTransposed().setLocalSizes(input);
     }
 
     void setNGhosts(ptrdiff_t nGhosts)
@@ -131,23 +128,23 @@ namespace TempLat
 
     ptrdiff_t getNGhosts() const { return mNGhosts; }
 
-    Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
+    device::array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
     DEVICE_FORCEINLINE_FUNCTION
-    const Kokkos::Array<ptrdiff_t, NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
+    const device::array<ptrdiff_t, NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
 
     DEVICE_FORCEINLINE_FUNCTION
-    const Kokkos::Array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
+    const device::array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
 
-    template <typename C = std::array<ptrdiff_t, NDim>>
+    template <typename C = device::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>
     void setLocalStarts(const C &input)
     {
       getLocal().setLocalStarts(input);
     }
     DEVICE_FORCEINLINE_FUNCTION
-    const Kokkos::Array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
+    const device::array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
 
-    template <typename C = std::array<ptrdiff_t, NDim>>
+    template <typename C = device::array<ptrdiff_t, NDim>>
       requires IsArray<C, NDim>
     void setTranspositionMap_memoryToGlobalSpace(const C &input)
     {

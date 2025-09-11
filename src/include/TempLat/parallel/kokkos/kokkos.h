@@ -7,18 +7,10 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/tdd/tddassertion.h"
 #include "TempLat/util/log/puttostream.h"
 
-#include <ostream>
-#include <sys/types.h>
-
-// Including this here, as we need that anywhere basically, where Kokkos is explicitly used.
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
-
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Random.hpp>
+#include <Kokkos_Complex.hpp>
 
 #ifdef KOKKOS_ENABLE_CUDA
 #include <cuda/std/array>
@@ -36,12 +28,35 @@
 
 namespace TempLat
 {
-  // ------------------------------------------------
-  // Standard library replacements in device namespace
-  // ------------------------------------------------
-
-  namespace device
+  namespace device_kokkos
   {
+    // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
+    // However, we do not want to impose this on the level of the memory layouts. In particular, this would
+    // require additional transpositions when going to Fourier space, which is not what we want. So we do the
+    // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
+    // on CPU, we do not reverse the access pattern.
+#ifdef FORCE_ACCESS_PATTERN
+
+#if FORCE_ACCESS_PATTERN == 0
+    constexpr bool reverse_access_pattern = false;
+#elif FORCE_ACCESS_PATTERN == 1
+    constexpr bool reverse_access_pattern = true;
+#endif
+
+#else
+
+#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
+    constexpr bool reverse_access_pattern = true;
+#else
+    constexpr bool reverse_access_pattern = false;
+#endif
+
+#endif
+
+    // ------------------------------------------------
+    // Standard library replacements in device_kokkos namespace
+    // ------------------------------------------------
+
 #ifdef KOKKOS_ENABLE_CUDA
     template <typename... T> using tuple = cuda::std::tuple<T...>;
     template <typename T, std::size_t N> using array = cuda::std::array<T, N>;
@@ -69,135 +84,44 @@ namespace TempLat
     using Idx = uint64_t;
     template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
 #endif
-  } // namespace device
 
-  // ------------------------------------------------
-  // Getting View types with stars
-  // ------------------------------------------------
+    // ------------------------------------------------
+    // Arithmetic defaults in device_kokkos namespace
+    // ------------------------------------------------
 
-  template <size_t NDim, typename T> struct GetKokkosNDStarType {
-    using type = typename GetKokkosNDStarType<NDim - 1, T>::type *;
-  };
-  template <typename T> struct GetKokkosNDStarType<1, T> {
-    using type = T *;
-  };
+    using Kokkos::abs;
+    using Kokkos::acos;
+    using Kokkos::acosh;
+    using Kokkos::asin;
+    using Kokkos::asinh;
+    using Kokkos::atan;
+    using Kokkos::atan2;
+    using Kokkos::atanh;
+    using Kokkos::ceil;
+    using Kokkos::conj;
+    using Kokkos::cos;
+    using Kokkos::cosh;
+    using Kokkos::exp;
+    using Kokkos::floor;
+    using Kokkos::fmod;
+    using Kokkos::imag;
+    using Kokkos::log;
+    using Kokkos::max;
+    using Kokkos::min;
+    using Kokkos::pow;
+    using Kokkos::real;
+    using Kokkos::sin;
+    using Kokkos::sinh;
+    using Kokkos::sqrt;
+    using Kokkos::tan;
+    using Kokkos::tanh;
 
-  // ------------------------------------------------
-  // Getting View types
-  // ------------------------------------------------
-
-  using DefaultLayout = Kokkos::LayoutRight; // Default layout for Kokkos views, can be changed if needed.
-
-  template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
-            typename Layout = DefaultLayout>
-  using KokkosNDView = Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for
-                                                                                 // dimensionality recursively with
-                                    Layout,        // LayoutRight is most compatible for now, may change in future
-                                    ExecutionSpace // Choice between GPU and CPU
-                                    >;
-  template <size_t NDim, typename T, typename ExecutionSpace = Kokkos::DefaultExecutionSpace,
-            typename Layout = DefaultLayout>
-  using KokkosNDViewUnmanaged =
-      Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for dimensionality recursively
-                                                                // with a helper
-                   Layout,         // LayoutRight is most compatible for now, may change in future
-                   ExecutionSpace, // Choice between GPU and CPU
-                   Kokkos::MemoryTraits<Kokkos::Unmanaged> // No allocation: Attach to existing memory
-                   >;
-
-  // ------------------------------------------------
-  // Getting ranges to iterate over
-  // ------------------------------------------------
-  template <size_t NDim> struct KokkosNDRangeHelper {
-    using type = Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>;
-  };
-  template <> struct KokkosNDRangeHelper<1> {
-    using type = Kokkos::RangePolicy<>;
-  };
-  template <size_t NDim> using KokkosNDRange = KokkosNDRangeHelper<NDim>::type;
-
-  // Need to forward-declare this - we cannot include the layout header here, as it would create a circular
-  // dependency.
-  template <size_t NDim> struct LayoutStruct;
-
-  namespace device
-  {
-
-    template <size_t NDim> auto getLocalKokkosPolicy(const LayoutStruct<NDim> &layout)
-    {
-      Kokkos::Array<uint64_t, NDim> start_iteration;
-      Kokkos::Array<uint64_t, NDim> stop_iteration;
-      const auto localSizes = layout.getLocalSizes();
-      const size_t nGhosts = layout.getNGhosts();
-
-      // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
-      // However, we do not want to impose this on the level of the memory layouts. In particular, this would
-      // require additional transpositions when going to Fourier space, which is not what we want. So we do the
-      // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
-      // on CPU, we do not reverse the access pattern.
-#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
-      constexpr bool reverse = true;
-#else
-      constexpr bool reverse = false;
-#endif
-
-      for (int d = 0; d < (int)NDim; ++d) {
-        const int _d = reverse ? (int)NDim - 1 - d : d;
-        start_iteration[_d] = nGhosts;
-        stop_iteration[_d] = start_iteration[_d] + localSizes[d];
-      }
-
-      if constexpr (NDim == 1) {
-        return Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]);
-      } else {
-        return Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration);
-      }
-    }
-
-    template <size_t NDim>
-    auto getLocalKokkosPolicy(const std::array<ptrdiff_t, NDim> &starts, const std::array<ptrdiff_t, NDim> &stops)
-    {
-      Kokkos::Array<uint64_t, NDim> start_iteration;
-      Kokkos::Array<uint64_t, NDim> stop_iteration;
-
-      // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
-      // However, we do not want to impose this on the level of the memory layouts. In particular, this would
-      // require additional transpositions when going to Fourier space, which is not what we want. So we do the
-      // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
-      // on CPU, we do not reverse the access pattern.
-#if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
-      constexpr bool reverse = true;
-#else
-      constexpr bool reverse = false;
-#endif
-
-      for (int d = 0; d < (int)NDim; ++d) {
-        const int _d = reverse ? (int)NDim - 1 - d : d;
-        start_iteration[_d] = starts[d];
-        stop_iteration[_d] = start_iteration[_d] + stops[d];
-      }
-
-      if constexpr (NDim == 1) {
-        return Kokkos::RangePolicy(start_iteration[0], stop_iteration[0]);
-      } else {
-        return Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start_iteration, stop_iteration);
-      }
-    }
-
-    template <size_t NDim> auto getLocalKokkosPolicy(const std::array<ptrdiff_t, NDim> &stops)
-    {
-      return getLocalKokkosPolicy(std::array<ptrdiff_t, NDim>{}, stops);
-    }
-  } // namespace device
+    template <typename T> using complex = Kokkos::complex<T>;
+  } // namespace device_kokkos
 
   template <typename T, size_t N>
-    requires(!std::is_same_v<std::array<T, N>, device::array<T, N>>)
-  std::ostream &operator<<(std::ostream &stream, const device::array<T, N> &vec)
-  {
-    return PutToStream(stream, vec);
-  };
-
-  template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const Kokkos::Array<T, N> &vec)
+    requires(!std::is_same_v<std::array<T, N>, device_kokkos::array<T, N>>)
+  std::ostream &operator<<(std::ostream &stream, const device_kokkos::array<T, N> &vec)
   {
     return PutToStream(stream, vec);
   };
@@ -211,5 +135,7 @@ namespace TempLat
   };
 #endif
 } // namespace TempLat
+
+#include "TempLat/parallel/kokkos/kokkos_internal.h"
 
 #endif // KOKKOS_H

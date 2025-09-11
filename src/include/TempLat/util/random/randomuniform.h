@@ -52,11 +52,11 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     Kokkos::Array<double, 2> getPair(INT2 r, INT2 c, INT2 gen) const
     {
-      RNG2 rng;
+      const RNG2 rng;
 
       // create a counter and key for the generator
-      RNG2::ctr_type counter = {{r, c}};
-      RNG2::key_type key = {{mSeed + gen}};
+      const RNG2::ctr_type counter = {{r, c}};
+      const RNG2::key_type key = {{mSeed + gen}};
       // draw a pair of numbers
       const RNG2::ctr_type result = rng(counter, key);
 

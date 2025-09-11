@@ -146,10 +146,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # ##############################################################################
 # If profiling is requested, we add the kokkos-tools repository
 # ##############################################################################
-set(PROFILING
-    OFF
-    CACHE BOOL
-          "Set to ON to build with Kokkos tools for profiling (default = OFF)")
+
 if(DEFINED PROFILING)
   if(NOT PROFILING)
     message(STATUS "Profiling is disabled, not downloading Kokkos tools.")

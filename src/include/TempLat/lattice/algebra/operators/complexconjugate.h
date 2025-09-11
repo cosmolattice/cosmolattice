@@ -16,11 +16,7 @@ namespace TempLat
 {
   /** \brief Enable use of this operator without prefixing std:: or TempLat::.
    * The compiler can distinguish between them. */
-#ifndef NOKOKKOS
-  using Kokkos::conj;
-#else
-  using std::conj;
-#endif
+  using device::conj;
 
   namespace Operators
   {

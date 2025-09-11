@@ -60,7 +60,7 @@ namespace TempLat
           6.2831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359642961730265646132941876892;
 
       DEVICE_FORCEINLINE_FUNCTION
-      Kokkos::Array<double, 2u> getNextGaussianPair(INT2 r, INT2 c, INT2 g, bool real = false,
+      device::array<double, 2u> getNextGaussianPair(INT2 r, INT2 c, INT2 g, bool real = false,
                                                     bool unitary = false) const
       { // Even if this is not completely consistent with the name, it is convenient to be able to use this class to
         // generate numbers with a real gaussian distribution or uniformly on the unit disk.
@@ -70,10 +70,11 @@ namespace TempLat
         const double &r0 = result[0];
         const double &r1 = result[1];
 
-        double boxMullerR = unitary ? 1 : (r0 == 0 ? std::numeric_limits<double>::max() : std::sqrt(-2 * std::log(r0)));
-        double boxMullerTheta = real ? 0 : cTwoPi * r1;
+        const double boxMullerR =
+            unitary ? 1 : (r0 == 0 ? std::numeric_limits<double>::max() : device::sqrt(-2 * device::log(r0)));
+        const double boxMullerTheta = real ? 0 : cTwoPi * r1;
 
-        return {{boxMullerR * Kokkos::cos(boxMullerTheta), boxMullerR * Kokkos::sin(boxMullerTheta)}};
+        return {{boxMullerR * device::cos(boxMullerTheta), boxMullerR * device::sin(boxMullerTheta)}};
       }
 
     public:
@@ -81,7 +82,6 @@ namespace TempLat
       static inline void Test(TDDAssertion &tdd);
 #endif
     };
-
   } // namespace Util
 } // namespace TempLat
 

@@ -11,7 +11,6 @@
 
 template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-#ifndef NOKOKKOS
   MemoryBlock<NDim, T> test(128);
 
   Kokkos::parallel_for(
@@ -25,16 +24,6 @@ template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Te
     all_true &= (AlmostEqual(view[i], (T)i));
   }
   tdd.verify(all_true);
-#else
-  MemoryBlock<NDim, T> test(128);
-
-  // verified that we get segfault on i == test.size()
-  for (ptrdiff_t i = 0, iEnd = test.size(); i < iEnd; ++i) {
-    test[i] = i;
-  }
-  tdd.verify(true);
-
-#endif
 }
 
 #endif

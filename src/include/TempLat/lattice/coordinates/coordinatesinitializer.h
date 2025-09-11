@@ -30,7 +30,7 @@ namespace TempLat
         : mJumpsHolder(jumpsHolder), mLayoutStruct(layoutStruct), mNDimensions(mJumpsHolder.getSizesInMemory().size())
     {
     }
-    void initCoords(const ptrdiff_t &stride, Kokkos::Array<ptrdiff_t, NDim> &mOffsets, ptrdiff_t &mIStart,
+    void initCoords(const ptrdiff_t &stride, device::array<ptrdiff_t, NDim> &mOffsets, ptrdiff_t &mIStart,
                     ptrdiff_t &mIEnd)
     {
       bool allCarryOn = true;

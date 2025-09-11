@@ -22,6 +22,7 @@
 
 namespace TempLat
 {
+  using device::atan2;
   namespace Operators
   {
     /** \brief A class to compute the argument of a complex field.
@@ -46,15 +47,8 @@ namespace TempLat
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-#ifndef NOKOKKOS
-        using Kokkos::atan2;
         auto res = atan2(GetValue::get(mR, idx...), GetValue::get(mT, idx...));
         return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
-#else
-        using std::atan2; /* this way, for potential future data types. */
-        auto res = atan2(GetValue::get(mR, idx...), GetValue::get(mT, idx...));
-        return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
-#endif
       }
 
       /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */

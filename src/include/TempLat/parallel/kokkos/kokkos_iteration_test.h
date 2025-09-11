@@ -1,5 +1,5 @@
-#ifndef TEMPLAT_PARALLEL_DEVICE_LAMBDAWRAPPER_TEST_H
-#define TEMPLAT_PARALLEL_DEVICE_LAMBDAWRAPPER_TEST_H
+#ifndef TEMPLAT_PARALLEL_KOKKOS_ITERATION_TEST_H
+#define TEMPLAT_PARALLEL_KOKKOS_ITERATION_TEST_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -9,14 +9,14 @@
 
 #include "TempLat/util/powr.h"
 
-template <size_t NDim> void TempLat::KokkosNDLambdaWrapperTester<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> void TempLat::KokkosIterationTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   // ------------------------------------------------------------------------------------
   // Testing the KokkosNDLambdaWrapper
   // ------------------------------------------------------------------------------------
   {
     Kokkos::View<double *, Kokkos::DefaultExecutionSpace> a("a", size_t(powr<NDim>(2)));
-    auto functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
+    auto functor = DEVICE_LAMBDA(const device_kokkos::IdxArray<NDim> &idx)
     {
       // change from "base 2" to base 10
       size_t base10_idx = 0;
@@ -26,16 +26,16 @@ template <size_t NDim> void TempLat::KokkosNDLambdaWrapperTester<NDim>::Test(Tem
       a(base10_idx) = NDim; // just to test that the lambda works
     };
 
-    device::IdxArray<NDim> start{};
-    device::IdxArray<NDim> stop{};
+    Kokkos::Array<size_t, NDim> start{};
+    Kokkos::Array<size_t, NDim> stop{};
     for (size_t i = 0; i < NDim; ++i)
       stop[i] = 2;
 
     if constexpr (NDim > 1)
       Kokkos::parallel_for("init", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start, stop),
-                           KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+                           device_kokkos::KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
     else
-      Kokkos::parallel_for("init", Kokkos::RangePolicy(0, 2), KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      Kokkos::parallel_for("init", Kokkos::RangePolicy(0, 2), device_kokkos::KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
     Kokkos::fence();
 
     auto host_view = Kokkos::create_mirror_view(a);
@@ -50,13 +50,13 @@ template <size_t NDim> void TempLat::KokkosNDLambdaWrapperTester<NDim>::Test(Tem
   // Testing the KokkosNDLambdaWrapperReduction
   // ------------------------------------------------------------------------------------
   {
-    auto functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx, complex<double> &update)
+    auto functor = DEVICE_LAMBDA(const device_kokkos::IdxArray<NDim> &idx, complex<double> &update)
     {
       update += complex<double>((double)NDim, -(double)NDim); // just to test that the lambda works
     };
 
-    device::IdxArray<NDim> start{};
-    device::IdxArray<NDim> stop{};
+    Kokkos::Array<size_t, NDim> start{};
+    Kokkos::Array<size_t, NDim> stop{};
     for (size_t i = 0; i < NDim; ++i)
       stop[i] = 2;
 
@@ -64,7 +64,7 @@ template <size_t NDim> void TempLat::KokkosNDLambdaWrapperTester<NDim>::Test(Tem
 
     if constexpr (NDim > 1) {
       Kokkos::parallel_reduce("init", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start, stop),
-                              KokkosNDLambdaWrapperReduction<NDim, decltype(functor), complex<double>>(functor),
+                              device_kokkos::KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor),
                               result);
     } else {
       Kokkos::parallel_reduce(

@@ -63,7 +63,7 @@ namespace TempLat
     template <typename IDX1, typename... IDX>
     DEVICE_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
     {
-      Kokkos::Array<ptrdiff_t, NDim> result;
+      device::array<ptrdiff_t, NDim> result;
       mLayout.putSpatialLocationFromMemoryIndexInto(result, idx...);
       return result[component];
     }

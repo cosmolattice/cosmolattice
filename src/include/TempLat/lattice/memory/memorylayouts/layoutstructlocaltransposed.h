@@ -53,12 +53,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     bool isTransposed() const { return mTranspositionMap_memoryToGlobalSpace.isTransposed(); }
 
-    template <typename T = ptrdiff_t> void setLocalSizes(const Kokkos::Array<T, NDim> &input)
-    {
-      getLocal().setLocalSizes(input);
-      adaptMemorySizesFromTranspositionMap();
-    }
-    template <typename T = ptrdiff_t> void setLocalSizes(const std::array<T, NDim> &input)
+    template <typename C = device::array<ptrdiff_t, NDim>> void setLocalSizes(const C &input)
     {
       getLocal().setLocalSizes(input);
       adaptMemorySizesFromTranspositionMap();
@@ -83,7 +78,7 @@ namespace TempLat
     }
 
     DEVICE_FORCEINLINE_FUNCTION
-    const Kokkos::Array<ptrdiff_t, NDim> &getSizesInMemory() const { return mSizesInMemory; }
+    const device::array<ptrdiff_t, NDim> &getSizesInMemory() const { return mSizesInMemory; }
 
     /** \brief A dictionary for return values for memory to coordinate mapping. */
     struct CoordinateMapping {
@@ -143,7 +138,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     LayoutStructLocal<NDim> mLocal;
     TranspositionMap<NDim> mTranspositionMap_memoryToGlobalSpace;
-    Kokkos::Array<ptrdiff_t, NDim> mSizesInMemory;
+    device::array<ptrdiff_t, NDim> mSizesInMemory;
     ptrdiff_t mNGhosts;
 
     void adaptMemorySizesFromTranspositionMap()

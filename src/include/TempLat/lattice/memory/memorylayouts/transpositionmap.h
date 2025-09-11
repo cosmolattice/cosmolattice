@@ -83,8 +83,8 @@ namespace TempLat
 
   private:
     /* From C to D means that entry at position 0 in C is at position mFromCtoD[0] in D. */
-    Kokkos::Array<ptrdiff_t, NDim> mFromAtoB;
-    Kokkos::Array<ptrdiff_t, NDim> mFromBtoA;
+    device::array<ptrdiff_t, NDim> mFromAtoB;
+    device::array<ptrdiff_t, NDim> mFromBtoA;
 
   public:
 #ifdef TEMPLATTEST
