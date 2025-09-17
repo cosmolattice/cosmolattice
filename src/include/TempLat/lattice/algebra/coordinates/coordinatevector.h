@@ -26,7 +26,7 @@ namespace TempLat
     void doWeNeedGhosts(ptrdiff_t i) {}
 
     virtual void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) = 0;
-    ptrdiff_t confirmGhostsUpToDate(ptrdiff_t i) { return 1; }
+    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return 1; }
     inline virtual JumpsHolder<NDim> getJumps() = 0;
 
   private:

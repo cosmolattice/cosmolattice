@@ -129,6 +129,39 @@ namespace TempLat
       return result;
     }
 
+    ptrdiff_t confirmFFTConfigSpace()
+    {
+      ptrdiff_t result = allocate();
+
+      if (mToolBox->verbosity.spaceConfirmation)
+        sayMPI << "Confirming that we are in FFT configuration space. " << getName() << "\n";
+      if (!mLayoutState.isFFTConfigSpace()) {
+        if (mLayoutState.isFourierSpace()) {
+          if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Need FFT C2R.\n";
+          // say << "Setting fft library verbose.\n";
+          // mToolBox->mFFTLibrary.setVerbose();
+          // do an fft
+          ++result;
+          if (mToolBox->verbosity.fftPerformance) say << "FFT: " << mName << "(k) -> " << mName << "(x)\n";
+          mToolBox->mFFTLibrary.c2r(mBlock);
+          // normalize after FFT
+          ++result;
+          mToolBox->mFFTNormalization.c2r(mBlock, (T)1.);
+          mLayoutState.setToFFTConfigSpace();
+          if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT C2R.\n";
+        } else if (mLayoutState.isConfigSpace()) {
+          if (mToolBox->verbosity.spaceConfirmation)
+            sayMPI << "Need ghost buster from plain config to fft config space.\n";
+          ++result;
+          mToolBox->mGhostBuster_toFFTConfig(mBlock);
+          mLayoutState.setToFFTConfigSpace();
+        }
+      }
+      mLayoutState.setToFFTConfigSpace();
+      if (mToolBox->verbosity.spaceConfirmation) sayMPI << "We are in FFT configuration space.\n";
+      return result;
+    }
+
     ptrdiff_t confirmFourierSpace()
     {
       ptrdiff_t result = allocate();

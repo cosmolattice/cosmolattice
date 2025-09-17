@@ -92,7 +92,8 @@ namespace TempLat
     {
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
     }
-    ptrdiff_t confirmGhostsUpToDate(ptrdiff_t i) { return ConfirmGhosts::apply(mR, i); }
+
+    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return ConfirmGhosts::apply(mR, i); }
     inline JumpsHolder<NDim> getJumps()
     { // Don't need indexing for get jumps.
       return GetJumps::apply(mR);

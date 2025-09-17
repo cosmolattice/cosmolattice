@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 // #include "TempLat/lattice/algebra/gettergetoffset.h"
 #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
@@ -17,10 +17,9 @@
 
 template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-  ptrdiff_t nGrid = 16, nGhost = 2;
+  const ptrdiff_t nGrid = 32, nGhost = 2;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
-
   toolBox->setVerbose();
 
   // make sure the GetNDim machinery works (sanity check, otherwise everything will just fail).
@@ -47,8 +46,12 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
     auto copy_host = copy.directView();
 
     bool backforthWorks = true;
-    for (ptrdiff_t i = 0; i < pow<NDim>(nGrid + 2 * nGhost); ++i)
+    for (ptrdiff_t i = 0; i < original_host.size(); ++i) {
       backforthWorks = backforthWorks && AlmostEqual(original_host[i], copy_host[i]);
+      if (!AlmostEqual(original_host[i], copy_host[i])) {
+        sayMPI << "original[" << i << "] = " << original_host[i] << ", copy[" << i << "] = " << copy_host[i] << "\n";
+      }
+    }
     tdd.verify(backforthWorks);
   }
 
@@ -166,9 +169,9 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
     say << "Potential2: " << potential.toString() << "\n";
 
     // and awesomer:
-    // auto dVdPhi = potential.d(phi);
+    auto dVdPhi = potential.d(phi);
 
-    // say << "dPotential/dphi: " << dVdPhi.toString() << "\n";
+    say << "dPotential/dphi: " << dVdPhi.toString() << "\n";
   }
 }
 

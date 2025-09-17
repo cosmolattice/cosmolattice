@@ -36,22 +36,22 @@ namespace TempLat
       requires VariadicNDIndex<NDim + 1, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
+      return get_impl(device::tie(idx...), device::make_index_sequence<sizeof...(IDX) - 1>{});
     }
 
     template <typename... IDX>
       requires VariadicNDIndex<NDim + 1, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX... idx) const
     {
-      return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
+      return get_impl(device::tie(idx...), device::make_index_sequence<sizeof...(IDX) - 1>{});
     }
 
     template <typename... IDX, size_t... InputIndexes>
-    DEVICE_FORCEINLINE_FUNCTION auto get_impl(std::tuple<const IDX &...> allIdx,
-                                              std::index_sequence<InputIndexes...>) const
+    DEVICE_FORCEINLINE_FUNCTION auto get_impl(device::tuple<const IDX &...> allIdx,
+                                              device::index_sequence<InputIndexes...>) const
     {
       auto constexpr lastIdx = sizeof...(IDX) - 1;
-      return get_impl(std::get<lastIdx>(allIdx), std::get<InputIndexes>(allIdx)...);
+      return get_impl(device::get<lastIdx>(allIdx), device::get<InputIndexes>(allIdx)...);
     }
 
     template <typename IDX1, typename... IDX>

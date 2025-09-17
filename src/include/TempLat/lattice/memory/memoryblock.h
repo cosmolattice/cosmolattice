@@ -43,8 +43,7 @@ namespace TempLat
     /** \brief Constructor with a size to allocate. */
     MemoryBlock(size_t size) : mSize(size), mHostMirrorOutdated(true)
     {
-      mData = Kokkos::View<T *, Kokkos::DefaultExecutionSpace>("MemoryBlock", ((mSize + NDim * 256) / 128) * 128);
-
+      mData = device::memory::NDView<1, T>("MemoryBlock", ceil((mSize + NDim * 256.) / 128.) * 128.);
       zero();
     }
 
@@ -188,8 +187,8 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     size_t mSize;
-    Kokkos::View<T *, Kokkos::DefaultExecutionSpace> mData;
-    mutable typename Kokkos::View<T *, Kokkos::DefaultExecutionSpace>::host_mirror_type mHostMirror;
+    device::memory::NDView<1, T> mData;
+    mutable typename device::memory::NDView<1, T>::host_mirror_type mHostMirror;
     static constexpr size_t TSIZE = sizeof(T);
     mutable bool mHostMirrorOutdated = true;
 

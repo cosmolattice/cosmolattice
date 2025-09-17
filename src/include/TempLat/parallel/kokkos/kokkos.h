@@ -58,27 +58,29 @@ namespace TempLat
     // ------------------------------------------------
 
 #ifdef KOKKOS_ENABLE_CUDA
-    template <typename... T> using tuple = cuda::std::tuple<T...>;
     template <typename T, std::size_t N> using array = cuda::std::array<T, N>;
     using cuda::std::apply;
     using cuda::std::forward_as_tuple;
     using cuda::std::get;
     using cuda::std::index_sequence;
+    using cuda::std::make_index_sequence;
     using cuda::std::make_tuple;
     using cuda::std::tie;
+    using cuda::std::tuple;
     using cuda::std::tuple_cat;
 
     using Idx = uint64_t;
     template <size_t NDim> using IdxArray = cuda::std::array<Idx, NDim>;
 #else
-    template <typename... T> using tuple = std::tuple<T...>;
     template <typename T, std::size_t N> using array = std::array<T, N>;
     using std::apply;
     using std::forward_as_tuple;
     using std::get;
     using std::index_sequence;
+    using std::make_index_sequence;
     using std::make_tuple;
     using std::tie;
+    using std::tuple;
     using std::tuple_cat;
 
     using Idx = uint64_t;

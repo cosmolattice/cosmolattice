@@ -147,6 +147,7 @@ namespace TempLat
           device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
         };
         device::iteration::parallel_for("copy_to_slab", {}, slab_sizes, copy_to_slab_functor);
+        // We must fence the operation, as we need the data to be in the slab before we call MPI.
         device::iteration::fence();
 
         // Exchange the slabs
@@ -160,6 +161,7 @@ namespace TempLat
           device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
         };
         device::iteration::parallel_for("copy_from_slab", {}, slab_sizes, copy_from_slab_functor);
+        // We must fence the operation, as we need the data to be in the slab before we call MPI.
         device::iteration::fence();
       }
 
@@ -187,6 +189,7 @@ namespace TempLat
           device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
         };
         device::iteration::parallel_for("copy_to_slab", {}, slab_sizes, copy_to_slab_functor);
+        // We must fence the operation, as we need the data to be in the slab before we call MPI.
         device::iteration::fence();
 
         // Exchange the slabs
@@ -198,6 +201,7 @@ namespace TempLat
           device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
         };
         device::iteration::parallel_for("copy_from_slab", {}, slab_sizes, copy_from_slab_functor);
+        // We must fence the operation, as we need the data to be in the slab before we call MPI.
         device::iteration::fence();
       }
     }
@@ -328,10 +332,10 @@ namespace TempLat
             const device::IdxArray<NDim> it_start{};
             device::IdxArray<NDim> it_stop{};
             for (size_t k = 0; k < NDim; ++k)
-              it_stop[device::reverse_access_pattern ? NDim - 1 - k : k] = btf_fromSubView.extent(k);
+              it_stop[k] = btf_fromSubView.extent(k);
             device::iteration::parallel_for("GhostUpdater", it_start, it_stop, btf_functor);
             for (size_t k = 0; k < NDim; ++k)
-              it_stop[device::reverse_access_pattern ? NDim - 1 - k : k] = ftb_fromSubView.extent(k);
+              it_stop[k] = ftb_fromSubView.extent(k);
             device::iteration::parallel_for("GhostUpdater", it_start, it_stop, ftb_functor);
           }
         }

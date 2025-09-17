@@ -20,7 +20,7 @@ foreach(fn ${test_sources})
 
     add_cosmolattice(${build_name} ${CMAKE_SOURCE_DIR}/src/tests/tddmain.cpp "")
     target_sources(${build_name} PRIVATE ${fn})
-    target_compile_definitions(${build_name} PRIVATE CHECKBOUNDS)
+    target_compile_definitions(${build_name} PUBLIC CHECKBOUNDS)
 
     add_custom_target(${target_name})
     add_dependencies(${target_name} ${build_name})

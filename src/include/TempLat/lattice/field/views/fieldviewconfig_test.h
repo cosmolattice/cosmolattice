@@ -11,7 +11,7 @@
 
 template <size_t NDim, typename T> inline void TempLat::ConfigView<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-  const ptrdiff_t nGrid = 4, nGhost = 1;
+  const ptrdiff_t nGrid = 16, nGhost = 2;
 
   auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
 
@@ -30,7 +30,7 @@ template <size_t NDim, typename T> inline void TempLat::ConfigView<NDim, T>::Tes
 
   bool same = true;
   for (size_t i = 0; i < a_host.size(); ++i)
-    same = same && AlmostEqual(a_host[i], b_host[i]);
+    same = same && AlmostEqual(a_host[i], b_host[i]) && AlmostEqual(a_host[i], 100.0);
   tdd.verify(same);
 
   /*ptrdiff_t nGrid = 256, nGhost = 2;

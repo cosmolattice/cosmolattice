@@ -15,7 +15,7 @@
 template <size_t NDim_> inline void TempLat::SpatialCoordinate<NDim_>::Test(TempLat::TDDAssertion &tdd)
 {
   static constexpr size_t NDim = 2;
-  ptrdiff_t nGrid = 8, nGhost = 0;
+  ptrdiff_t nGrid = 16, nGhost = 2;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
@@ -29,17 +29,25 @@ template <size_t NDim_> inline void TempLat::SpatialCoordinate<NDim_>::Test(Temp
   auto phix_view = phix.getLocalNDHostView();
   auto phiy_view = phiy.getLocalNDHostView();
 
+  auto layout = toolBox->mLayouts.getConfigSpaceLayout();
+
   // Check that the spatial coordinate is correct
   bool correct = true;
-  for (ptrdiff_t i = 0; i < nGrid; ++i) {
-    for (ptrdiff_t j = 0; j < nGrid; ++j) {
-      const ptrdiff_t x_val = i > nGrid / 2 ? i - nGrid : i;
-      correct &= phix_view(i, j) == x_val;
-      const ptrdiff_t y_val = j > nGrid / 2 ? j - nGrid : j;
-      correct &= phiy_view(i, j) == y_val;
+  for (ptrdiff_t i = 0; i < phix_view.extent(0); ++i) {
+    for (ptrdiff_t j = 0; j < phix_view.extent(1); ++j) {
+      const ptrdiff_t global_x = layout.getLocalStarts()[0] + i;
+      const ptrdiff_t global_y = layout.getLocalStarts()[1] + j;
 
-      std::cout << "phix.get(" << i << ", " << j << ") = " << phix_view(i, j) << ", expect " << x_val << "\n";
-      std::cout << "phiy.get(" << i << ", " << j << ") = " << phiy_view(i, j) << ", expect " << y_val << "\n";
+      const ptrdiff_t x_val = global_x > nGrid / 2 ? global_x - nGrid : global_x;
+      const ptrdiff_t y_val = global_y > nGrid / 2 ? global_y - nGrid : global_y;
+
+      correct &= (phix_view(i, j) == x_val) && (x.get(nGhost + i, nGhost + j, 0) == x_val);
+      correct &= (phiy_view(i, j) == y_val) && (x.get(nGhost + i, nGhost + j, 1) == y_val);
+
+      if (!(phix_view(i, j) == x_val))
+        sayMPI << "Failed: phix.get(" << i << ", " << j << ") = " << phix_view(i, j) << ", expect " << x_val << "\n";
+      if (!(phiy_view(i, j) == y_val))
+        sayMPI << "Failed: phiy.get(" << i << ", " << j << ") = " << phiy_view(i, j) << ", expect " << y_val << "\n";
     }
   }
   tdd.verify(correct);

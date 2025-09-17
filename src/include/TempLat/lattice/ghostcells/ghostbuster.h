@@ -17,6 +17,9 @@
 #include "TempLat/lattice/memory/jumpsholder.h"
 #include "TempLat/lattice/memory/memoryblock.h"
 
+#include "TempLat/parallel/device_iteration.h"
+#include "TempLat/parallel/device_memory.h"
+
 namespace TempLat
 {
   MakeException(GhostBusterOrderException);
@@ -108,6 +111,8 @@ namespace TempLat
 
     template <typename T> void bustTheGhostsWithViews(MemoryBlock<NDim, T> &block)
     {
+      device::iteration::fence();
+
       const auto from_padding = mFrom.getPadding();
       const auto to_padding = mTo.getPadding();
       const auto from_sizes = mFrom.getSizesInMemory();
@@ -185,7 +190,7 @@ namespace TempLat
 
       if constexpr (std::is_same_v<LayoutType, Kokkos::LayoutRight>) {
         // A temporary is necessary as the source and the destination may have overlap
-        Kokkos::View<T *, typename decltype(fromSubView)::execution_space> temp("temp_copy", copy_sizes[NDim - 1]);
+        device::memory::NDView<1, T> temp("temp_copy", copy_sizes[NDim - 1]);
 
         // iterate over all "large indices"
         bool hasNext = true;

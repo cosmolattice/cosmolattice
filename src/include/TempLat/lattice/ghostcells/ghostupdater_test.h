@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/operators/power.h"
 
 #include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_iteration.h"
 
 namespace TempLat
 {
@@ -101,8 +102,7 @@ namespace TempLat
         for (size_t k = 0; k < NDim; ++k)
           it_stop[k] = localSizes[k];
 
-        Kokkos::parallel_for("GhostUpdater", device::getLocalKokkosPolicy(it_stop),
-                             KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+        device::iteration::parallel_for("GhostUpdater", {}, it_stop, functor);
       }
     }
 
@@ -121,7 +121,7 @@ namespace TempLat
       for (size_t i = 0; i < nd; ++i)
         fullLocalSizes[i] = localSizes[i] + 2 * nGhost;
 
-      constexpr bool verbose = false;
+      constexpr bool verbose = nd == 2;
 
       auto print_it = [&](auto view) {
         if (!verbose) return;
