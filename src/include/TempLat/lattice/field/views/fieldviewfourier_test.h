@@ -24,8 +24,8 @@ template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Te
   x.inFourierSpace() = 100;
 
   // get host views
-  auto a_host = a.inFourierSpace().directView();
-  auto x_host = x.inFourierSpace().directView();
+  auto a_host = a.inFourierSpace().getRawHostView();
+  auto x_host = x.inFourierSpace().getRawHostView();
 
   bool same = true;
   for (size_t i = 0; i < a_host.size(); ++i)

@@ -42,8 +42,8 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
     copy.getMemoryManager()->confirmConfigSpace();
     copy.updateGhosts();
 
-    auto original_host = original.directView();
-    auto copy_host = copy.directView();
+    auto original_host = original.getRawHostView();
+    auto copy_host = copy.getRawHostView();
 
     bool backforthWorks = true;
     for (ptrdiff_t i = 0; i < original_host.size(); ++i) {

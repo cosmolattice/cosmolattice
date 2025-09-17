@@ -67,7 +67,7 @@ namespace TempLat
       return mManager->template getNDHostView<complex<T>>(memorySizes);
     }
     inline auto getFullNDHostView() const { return mManager->template getNDHostView<complex<T>>(memorySizes); }
-    inline auto directView() const { return mManager->template getRawHostView<complex<T>>(); }
+    inline auto getRawHostView() const { return mManager->template getRawHostView<complex<T>>(); }
 
     template <typename R> void onBeforeAssignment(R &&g)
     {

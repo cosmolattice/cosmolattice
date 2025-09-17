@@ -22,8 +22,8 @@ template <size_t NDim, typename T> inline void TempLat::ConfigView<NDim, T>::Tes
   b = 100;
 
   // get host views
-  auto a_host = a.directView();
-  auto b_host = b.directView();
+  auto a_host = a.getRawHostView();
+  auto b_host = b.getRawHostView();
 
   for (size_t i = 0; i < a_host.size(); ++i)
     std::cout << "a = " << a_host[i] << ", b = " << b_host[i] << std::endl;

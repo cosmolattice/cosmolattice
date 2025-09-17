@@ -87,7 +87,7 @@ namespace TempLat
 
     inline auto getLocalNDHostView() const { return mManager->getNDHostSubView(memorySizes, localSlicing); }
     inline auto getFullNDHostView() const { return mManager->getNDHostView(memorySizes); }
-    inline auto directView() const { return mManager->getRawHostView(); }
+    inline auto getRawHostView() const { return mManager->getRawHostView(); }
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 

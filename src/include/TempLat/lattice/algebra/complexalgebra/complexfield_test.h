@@ -40,10 +40,10 @@ template <size_t NDim, typename T> inline void TempLat::ComplexField<NDim, T>::T
     // update ghosts on copy
     copy.updateGhosts();
 
-    auto original_host_r = original.ComplexFieldGet(Tag<0>()).directView();
-    auto original_host_i = original.ComplexFieldGet(Tag<1>()).directView();
-    auto copy_host_r = copy.ComplexFieldGet(Tag<0>()).directView();
-    auto copy_host_i = copy.ComplexFieldGet(Tag<1>()).directView();
+    auto original_host_r = original.ComplexFieldGet(Tag<0>()).getRawHostView();
+    auto original_host_i = original.ComplexFieldGet(Tag<1>()).getRawHostView();
+    auto copy_host_r = copy.ComplexFieldGet(Tag<0>()).getRawHostView();
+    auto copy_host_i = copy.ComplexFieldGet(Tag<1>()).getRawHostView();
 
     bool backforthWorks = true;
     for (ptrdiff_t i = 0; i < pow<NDim>(nGrid + 2 * nGhost); ++i) {

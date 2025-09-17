@@ -43,7 +43,7 @@ namespace TempLat
     /** \brief Constructor with a size to allocate. */
     MemoryBlock(size_t size) : mSize(size), mHostMirrorOutdated(true)
     {
-      mData = device::memory::NDView<1, T>("MemoryBlock", ceil((mSize + NDim * 256.) / 128.) * 128.);
+      mData = device::memory::NDView<1, T>("MemoryBlock", mSize);
       zero();
     }
 
