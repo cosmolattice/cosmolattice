@@ -20,6 +20,11 @@
 #ifndef NOHEFFTE
 #include "TempLat/fft/external/heffte/heffteinterface.h"
 #endif
+
+#ifdef KOKKOS_FFT
+#include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
+#endif
+
 #endif
 
 #endif
@@ -71,6 +76,10 @@ namespace TempLat
     result.push_back(getHEFFTESessionGuard(pVerbose));
 #endif
 
+#ifdef KOKKOS_FFT
+    result.push_back(getKokkosFFTSessionGuard(pVerbose));
+#endif
+
 #endif
 #endif
 
@@ -105,24 +114,43 @@ namespace TempLat
 #else
       [[maybe_unused]] constexpr bool haveHEFFTE = false;
 #endif
+
+#ifdef KOKKOS_FFT
+      [[maybe_unused]] constexpr bool haveKOKKOSFFT = true;
+#else
+      [[maybe_unused]] constexpr bool haveKOKKOSFFT = false;
+#endif
+
 #endif
 
 #ifndef NOMPI
-      if constexpr (haveHEFFTE && (NDim == 3 || NDim == 2)) {
+      if constexpr (haveKOKKOSFFT) {
+#ifdef KOKKOS_FFT
+        theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
+        backend = "KOKKOS_FFT";
+#endif // KOKKOS_FFT
+      } else if constexpr (haveHEFFTE && (NDim == 3 || NDim == 2)) {
 #ifndef NOHEFFTE
         theLibrary = std::make_shared<HEFFTEInterface<NDim>>();
         backend = "HEFFTE";
-#endif
+#endif // NOHEFFTE
       } else if (havePFFT && nDimSplit > 1) {
 #ifndef NOPFFT
         theLibrary = std::make_shared<PFFTInterface>();
         backend = "PFFT";
-#endif
+#endif // NOPFFT
       } else
-#endif
+#endif // NOMPI
       {
-        theLibrary = std::make_shared<FFTWInterface<NDim>>();
-        backend = "FFTW";
+        if constexpr (haveKOKKOSFFT) {
+#ifdef KOKKOS_FFT
+          theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
+          backend = "KOKKOS_FFT";
+#endif // KOKKOS_FFT
+        } else {
+          theLibrary = std::make_shared<FFTWInterface<NDim>>();
+          backend = "FFTW";
+        }
       }
       mLayout = theLibrary->computeLocalSizes(mGroup, mNGridPoints, forbidTransposition);
     }

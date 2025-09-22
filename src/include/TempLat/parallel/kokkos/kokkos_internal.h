@@ -67,6 +67,7 @@ namespace TempLat
     }
 
     template <size_t NDim, typename I>
+      requires(!std::is_same_v<std::array<I, NDim>, device_kokkos::array<I, NDim>>)
     auto getLocalKokkosPolicy(const std::array<I, NDim> &starts, const std::array<I, NDim> &stops)
     {
       Kokkos::Array<uint64_t, NDim> start_iteration;
