@@ -7,8 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/lattice/memory/memoryblock.h"
 #include "TempLat/lattice/memory/memorylayouts/fftlayoutstruct.h"
+
+#include "TempLat/lattice/memory/memoryblock.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
 #include "TempLat/util/tdd/tdd.h"
 

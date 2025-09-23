@@ -84,6 +84,16 @@ namespace TempLat
           },
           localSizes);
     }
+    template <typename R = T>
+      requires(!std::is_same_v<std::array<ptrdiff_t, NDim>, device::array<ptrdiff_t, NDim>>)
+    auto getNDView(const device::array<ptrdiff_t, NDim> &localSizes) const
+    {
+      std::array<ptrdiff_t, NDim> ls;
+      for (size_t i = 0; i < NDim; ++i)
+        ls[i] = localSizes[i];
+      return getNDView<R>(ls);
+    }
+
     template <typename R = T> auto getNDHostView(const std::array<ptrdiff_t, NDim> &localSizes) const
     {
 #ifdef CHECKBOUNDS
@@ -101,6 +111,15 @@ namespace TempLat
             return device::memory::NDViewUnmanagedHost<NDim, R>(reinterpret_cast<R *>(mHostMirror.data()), args...);
           },
           localSizes);
+    }
+    template <typename R = T>
+      requires(!std::is_same_v<std::array<ptrdiff_t, NDim>, device::array<ptrdiff_t, NDim>>)
+    auto getNDHostView(const device::array<ptrdiff_t, NDim> &localSizes) const
+    {
+      std::array<ptrdiff_t, NDim> ls;
+      for (size_t i = 0; i < NDim; ++i)
+        ls[i] = localSizes[i];
+      return getNDHostView<R>(ls);
     }
 
     void flagHostMirrorOutdated() const { mHostMirrorOutdated = true; }

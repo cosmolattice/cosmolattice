@@ -9,7 +9,6 @@
 
 inline void TempLat::ScalarComplexFieldMultiplyTester::Test(TempLat::TDDAssertion &tdd)
 {
-
   struct MyStruct {
     DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<0> t) const { return 1; }

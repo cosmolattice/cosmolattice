@@ -181,6 +181,10 @@ namespace TempLat
     const T norm = 1. / std::pow(nGrid[0], NDim) * ffter.getLayout().getIntrinsicScales().r2c *
                    ffter.getLayout().getIntrinsicScales().c2r;
 
+    std::cout << "Normalization factor: " << norm << "\n";
+    std::cout << "Intrinsic scales: r2c = " << ffter.getLayout().getIntrinsicScales().r2c
+              << ", c2r = " << ffter.getLayout().getIntrinsicScales().c2r << std::endl;
+
     // Print the field content for debugging
     if constexpr (NDim == 2) {
       if (nGrid[0] <= 8) {
@@ -280,11 +284,11 @@ inline void TempLat::FFTLibrarySelector<_NDim>::TestBody(TempLat::TDDAssertion &
   /* int main already calls the mpi guard, which calls the FFT session guards. So this should be the second time. */
   tdd.verify(Throws<FFTLibraryDoubleInitializationException>([]() { getFFTSessionGuards(); }));
 
-  // We test in 2,3,4 dimensions, and for grids 2^4, ..., 2^5.
+  // We test in 2,3,4 dimensions, and for grids 2^2, ..., 2^5.
   constexpr_for<2, 5, 1>([&](auto i) {
     sayMPI << "Testing FFTLibrarySelector for NDim = " << decltype(i)::value << "\n";
     constexpr size_t NDim = decltype(i)::value;
-    for (ptrdiff_t inGrid = 2; inGrid < 5; ++inGrid) {
+    for (ptrdiff_t inGrid : std::array<ptrdiff_t, 4>{2, 3, 6, 7}) {
       device::array<ptrdiff_t, NDim> nGrid;
       for (auto &it : nGrid)
         it = std::pow(2, inGrid);

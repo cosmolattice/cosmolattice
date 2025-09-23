@@ -16,15 +16,10 @@
 #ifndef NOPFFT
 #include "TempLat/fft/external/pfft/pfftinterface.h"
 #endif
-
-#ifndef NOHEFFTE
-#include "TempLat/fft/external/heffte/heffteinterface.h"
 #endif
 
 #ifdef KOKKOS_FFT
 #include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
-#endif
-
 #endif
 
 #endif
@@ -72,10 +67,6 @@ namespace TempLat
     result.push_back(getPFFTSessionGuard(pVerbose));
 #endif
 
-#ifndef NOHEFFTE
-    result.push_back(getHEFFTESessionGuard(pVerbose));
-#endif
-
 #ifdef KOKKOS_FFT
     result.push_back(getKokkosFFTSessionGuard(pVerbose));
 #endif
@@ -102,17 +93,11 @@ namespace TempLat
     {
       /* here we take the decisions, although the decision to split the group has been made already. */
       [[maybe_unused]] const ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
-#ifndef NOMPI
+
 #ifndef NOPFFT
       [[maybe_unused]] constexpr bool havePFFT = true;
 #else
       [[maybe_unused]] constexpr bool havePFFT = false;
-#endif
-
-#ifndef NOHEFFTE
-      [[maybe_unused]] constexpr bool haveHEFFTE = true;
-#else
-      [[maybe_unused]] constexpr bool haveHEFFTE = false;
 #endif
 
 #ifdef KOKKOS_FFT
@@ -121,19 +106,12 @@ namespace TempLat
       [[maybe_unused]] constexpr bool haveKOKKOSFFT = false;
 #endif
 
-#endif
-
 #ifndef NOMPI
       if constexpr (haveKOKKOSFFT && (NDim <= 3)) {
 #ifdef KOKKOS_FFT
         theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
         backend = "KOKKOS_FFT";
 #endif // KOKKOS_FFT
-      } else if constexpr (haveHEFFTE && (NDim == 3 || NDim == 2)) {
-#ifndef NOHEFFTE
-        theLibrary = std::make_shared<HEFFTEInterface<NDim>>();
-        backend = "HEFFTE";
-#endif // NOHEFFTE
       } else if constexpr (havePFFT && nDimSplit > 1) {
 #ifndef NOPFFT
         theLibrary = std::make_shared<PFFTInterface>();

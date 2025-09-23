@@ -96,8 +96,6 @@ namespace TempLat
           for (size_t i = 0; i < 3; ++i)
             axes[2 - i] = -j * 3 - i - 1;
 
-          std::cout << "Chain3D " << j << " axes: " << axes[0] << ", " << axes[1] << ", " << axes[2] << "\n";
-
           auto plan_c2r = std::shared_ptr<c2rType>(new c2rType(Kokkos::DefaultExecutionSpace(), fourier_view,
                                                                config_view, KokkosFFT::Direction::backward, axes));
           auto plan_r2c = std::shared_ptr<r2cType>(new r2cType(Kokkos::DefaultExecutionSpace(), config_view,
@@ -116,8 +114,6 @@ namespace TempLat
           axes[1] = 1;
           axes[0] = 0;
 
-          std::cout << "Chain2D axes: " << axes[0] << ", " << axes[1] << "\n";
-
           auto plan_c2r = std::shared_ptr<c2rType>(new c2rType(Kokkos::DefaultExecutionSpace(), fourier_view,
                                                                config_view, KokkosFFT::Direction::backward, axes));
           auto plan_r2c = std::shared_ptr<r2cType>(new r2cType(Kokkos::DefaultExecutionSpace(), config_view,
@@ -132,8 +128,6 @@ namespace TempLat
 
         auto axes = KokkosFFT::axis_type<1>{};
         axes[0] = 0;
-
-        std::cout << "Chain1D axes: " << axes[0] << "\n";
 
         auto plan_c2r = std::shared_ptr<c2rType>(new c2rType(Kokkos::DefaultExecutionSpace(), fourier_view, config_view,
                                                              KokkosFFT::Direction::backward, axes));

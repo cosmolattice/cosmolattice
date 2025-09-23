@@ -6,13 +6,6 @@ include_directories(SYSTEM src/include/random123/include/)
 # Set up the device
 include(./src/cmake/device/device.cmake)
 
-# Get Heffte
-if(HEFFTE)
-  include(./src/cmake/get_heffte.cmake)
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOHEFFTE")
-endif()
-
 find_package(FFTW)
 
 # Need pthread to compile the non-mpi version
@@ -57,10 +50,6 @@ endif()
 
 # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FFTW_INCLUDES}" )
 include_directories(${FFTW_INCLUDES})
-
-if(HEFFTE)
-  find_package(Heffte REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/heffte QUIET)
-endif()
 
 message(STATUS "MPI CXX compiler: ${MPI_CXX_COMPILER}")
 message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")

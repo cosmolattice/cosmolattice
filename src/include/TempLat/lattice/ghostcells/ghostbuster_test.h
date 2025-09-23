@@ -90,8 +90,8 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
                               jumper.getJumpsInMemoryOrder()[1] * j + jumper.getJumpsInMemoryOrder()[2] * k;
               const Testing::datum &dat = memory_view[pos];
               SingleDeviceAllRight = SingleDeviceAllRight && dat.x == i && dat.y == j && dat.z == k;
-              // std::cerr << i << ", " << j << ", " << k << " => " << dat.x << ", " << dat.y << ", " << dat.z << "\n";
-              // if (!SingleDeviceAllRight) exit(0);
+              if (!SingleDeviceAllRight)
+                std::cerr << i << ", " << j << ", " << k << " => " << dat.x << ", " << dat.y << ", " << dat.z << "\n";
             }
           }
         }
@@ -161,6 +161,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
     mField = getVectorComponent(x, dir);
     mOriginal = mField; // copy the original.
 
+    // verify the setup, before ghostbusting, no MPI communication yet.
     {
       auto mView = mField.getLocalNDHostView();
       auto oView = mOriginal.getLocalNDHostView();

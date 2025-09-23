@@ -13,6 +13,8 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/util/tdd/tdd.h"
 
+#include "TempLat/util/timer.h"
+
 namespace TempLat
 {
   MakeException(MemoryManagerAccessOutOfBounds);
@@ -95,7 +97,11 @@ namespace TempLat
 
     ptrdiff_t confirmConfigSpace()
     {
+      Timer timer;
       ptrdiff_t result = allocate();
+
+      auto t1 = timer.milliseconds();
+      std::cout << "t1 = " << t1 << std::endl;
 
       if (mToolBox->verbosity.spaceConfirmation)
         sayMPI << "Confirming that we are in configuration space. " << getName() << "\n";
@@ -110,16 +116,22 @@ namespace TempLat
           mToolBox->mFFTLibrary.c2r(mBlock);
           // normalize after FFT
           ++result;
-          mToolBox->mFFTNormalization.c2r(mBlock, (T)1.);
+          mToolBox->mFFTNormalization.c2r(mBlock, 1.);
           mLayoutState.setToFFTConfigSpace();
           if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT C2R.\n";
+          std::cout << "Performed FFT C2R.\n";
         }
+        auto t2 = timer.milliseconds() - t1;
+        std::cout << "t2 = " << t2 << std::endl;
         if (mLayoutState.isFFTConfigSpace()) {
           if (mToolBox->verbosity.spaceConfirmation)
             sayMPI << "Need ghost buster from fft config to plain config space.\n";
           ++result;
           mToolBox->mGhostBuster_toConfig(mBlock);
+          std::cout << "Need ghost buster from fft config to plain config space.\n";
         }
+        auto t3 = timer.milliseconds() - t2 - t1;
+        std::cout << "t3 = " << t3 << std::endl;
         if (mToolBox->verbosity.spaceConfirmation)
           sayMPI << "Setting ghost state to stale, because of the FFT we performed. " << getName() << "\n";
         mGhostStateKeeper.setStale();
@@ -146,7 +158,7 @@ namespace TempLat
           mToolBox->mFFTLibrary.c2r(mBlock);
           // normalize after FFT
           ++result;
-          mToolBox->mFFTNormalization.c2r(mBlock, (T)1.);
+          mToolBox->mFFTNormalization.c2r(mBlock, 1.);
           mLayoutState.setToFFTConfigSpace();
           if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT C2R.\n";
         } else if (mLayoutState.isConfigSpace()) {
@@ -184,7 +196,7 @@ namespace TempLat
           mToolBox->mFFTLibrary.r2c(mBlock);
           // normalize after FFT
           ++result;
-          mToolBox->mFFTNormalization.r2c(mBlock, (T)1.);
+          mToolBox->mFFTNormalization.r2c(mBlock, 1.);
           if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT R2C.\n";
         }
         mBlock.flagHostMirrorOutdated();

@@ -1,6 +1,12 @@
 #ifndef TEMPLAT_PARALLEL_DEVICE_ITERATION_H
 #define TEMPLAT_PARALLEL_DEVICE_ITERATION_H
 
+/* This file is part of CosmoLattice, available at www.cosmolattice.net .
+   Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
+   Released under the MIT license, see LICENSE.md. */
+
+// File info: Main contributor(s): Franz R. Sattler, Year: 2025
+
 #include "TempLat/parallel/device.h"
 
 #ifdef DEVICE_KOKKOS

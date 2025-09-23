@@ -26,9 +26,6 @@ set(DEVICE
 set(PFFT
     OFF
     CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
-set(HEFFTE
-    ON
-    CACHE BOOL "Set to ON to build with Heffte (default = ON)")
 set(HDF5
     OFF
     CACHE
@@ -45,6 +42,7 @@ set(PROFILING
 set(FLOATFFT OFF)
 
 set(CMAKE_CXX_STANDARD 20) # This is likely to evolve in future releases.
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Most likely, if you use external library, they won't be in the default path.
 # You need to help CMake where to find them. The easiest way is to put below the

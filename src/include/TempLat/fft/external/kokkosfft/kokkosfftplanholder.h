@@ -64,26 +64,26 @@ namespace TempLat
       void execute_c2r(const auto &src, const auto &dest)
       {
         for (const auto &plan : c2rPlans_3D) {
-          KokkosFFT::execute(*plan, src, dest);
+          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
         }
         for (const auto &plan : c2rPlans_2D) {
-          KokkosFFT::execute(*plan, src, dest);
+          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
         }
         for (const auto &plan : c2rPlans_1D) {
-          KokkosFFT::execute(*plan, src, dest);
+          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
         }
       }
 
       void execute_r2c(const auto &src, const auto &dest)
       {
         for (const auto &plan : r2cPlans_3D) {
-          KokkosFFT::execute(*plan, src, dest);
+          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
         }
         for (const auto &plan : r2cPlans_2D) {
-          KokkosFFT::execute(*plan, src, dest);
+          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
         }
         for (const auto &plan : r2cPlans_1D) {
-          KokkosFFT::execute(*plan, src, dest);
+          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
         }
       }
 
@@ -106,7 +106,6 @@ namespace TempLat
     void execute_r2c(MemoryBlock<NDim, T> &mBlock)
     {
       device::iteration::fence();
-
       auto fourier_view = std::apply(
           [&](auto &&...args) {
             return device::memory::NDViewUnmanaged<NDim, complex<T>>(reinterpret_cast<complex<T> *>(mBlock.data()),
@@ -118,14 +117,12 @@ namespace TempLat
                      mPlanChain.configSizes);
 
       mPlanChain.execute_r2c(config_view, fourier_view);
-
       device::iteration::fence();
     }
 
     void execute_c2r(MemoryBlock<NDim, T> &mBlock)
     {
       device::iteration::fence();
-
       auto fourier_view = std::apply(
           [&](auto &&...args) {
             return device::memory::NDViewUnmanaged<NDim, complex<T>>(reinterpret_cast<complex<T> *>(mBlock.data()),
@@ -137,7 +134,6 @@ namespace TempLat
                      mPlanChain.configSizes);
 
       mPlanChain.execute_c2r(fourier_view, config_view);
-
       device::iteration::fence();
     }
 

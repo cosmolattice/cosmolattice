@@ -40,10 +40,7 @@ namespace TempLat
     {
       forbidTransposition = true;
 
-      double scale_factor = 1.0;
-      for (size_t i = 0; i < NDim; ++i)
-        scale_factor *= nGrid[i];
-      FFTLayoutStruct<NDim> result(nGrid, false, false, true, IntrinsicScales{1., scale_factor});
+      FFTLayoutStruct<NDim> result(nGrid, false, false, true, IntrinsicScales{1., 1.});
       /* default: everything is local. */
 
       std::array<ptrdiff_t, NDim> confLocalSizes(nGrid);

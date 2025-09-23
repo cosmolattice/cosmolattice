@@ -50,6 +50,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
       backforthWorks = backforthWorks && AlmostEqual(original_host[i], copy_host[i]);
       if (!AlmostEqual(original_host[i], copy_host[i])) {
         sayMPI << "original[" << i << "] = " << original_host[i] << ", copy[" << i << "] = " << copy_host[i] << "\n";
+        exit(-10);
       }
     }
     tdd.verify(backforthWorks);

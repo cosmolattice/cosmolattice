@@ -11,6 +11,7 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/timer.h"
@@ -82,9 +83,10 @@ namespace TempLat
     template <template <size_t _NDim, typename S, typename... MArgs> class M, typename T, typename... Args>
     void operator()(M<NDim, T, Args...> &obj)
     {
-      // Timer timer;
+      device::iteration::fence();
+      Timer timer;
       bustTheGhostsWithViews(obj);
-      // std::cout << "GhostBuster took " << timer << std::endl;
+      std::cout << "GhostBuster took " << timer << std::endl;
     }
 
     /** \brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
@@ -119,8 +121,8 @@ namespace TempLat
       const auto to_sizes = mTo.getSizesInMemory();
 
       // Get Views to the data
-      std::array<ptrdiff_t, NDim> from_full_sizes{};
-      std::array<ptrdiff_t, NDim> to_full_sizes{};
+      device::array<ptrdiff_t, NDim> from_full_sizes{};
+      device::array<ptrdiff_t, NDim> to_full_sizes{};
       for (size_t i = 0; i < NDim; ++i) {
         from_full_sizes[i] = from_padding[i][0] + from_sizes[i] + from_padding[i][1];
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
@@ -163,7 +165,7 @@ namespace TempLat
           }
         }
 
-      std::array<ptrdiff_t, NDim> copy_sizes{};
+      device::array<ptrdiff_t, NDim> copy_sizes{};
       for (size_t i = 0; i < NDim; ++i)
         copy_sizes[i] = std::min(fromSubView.extent(i), toSubView.extent(i));
 
@@ -225,13 +227,12 @@ namespace TempLat
       }
 
       // We need the fence only at the very end, as consecutive kernel launches happen in order.
-      Kokkos::fence();
+      device::iteration::fence();
       block.flagHostMirrorOutdated();
     }
 
-  private:
     static inline bool lowerDimN(const ptrdiff_t DimN, device::array<ptrdiff_t, NDim - 1> &nextIdx,
-                                 const std::array<ptrdiff_t, NDim> &copy_sizes)
+                                 const device::array<ptrdiff_t, NDim> &copy_sizes)
     {
       if (DimN < 0) {
         // We are done, we have iterated through all dimensions
@@ -247,7 +248,7 @@ namespace TempLat
     };
 
     static inline bool raiseDimN(const ptrdiff_t DimN, device::array<ptrdiff_t, NDim - 1> &nextIdx,
-                                 const std::array<ptrdiff_t, NDim> &copy_sizes)
+                                 const device::array<ptrdiff_t, NDim> &copy_sizes)
     {
       if (DimN < 0) {
         // We are done, we have iterated through all dimensions
@@ -262,6 +263,7 @@ namespace TempLat
       }
     };
 
+  private:
     template <typename T> void bustTheGhosts(T *ptr, ptrdiff_t memSize)
     {
       recursor<T>(mFrom.getSizesInMemory().data(), ptr + mFrom.toOrigin(), mFrom.getJumpsInMemoryOrder().data(),

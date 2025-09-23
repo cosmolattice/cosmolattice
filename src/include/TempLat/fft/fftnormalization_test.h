@@ -7,49 +7,62 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include "TempLat/fft/fftlibraryselector.h"
+#include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/util/almostequal.h"
 #include "TempLat/lattice/memory/memoryblock.h"
-#include "TempLat/fft/fftlibraryselector.h"
 
 template <size_t NDim> inline void TempLat::FFTNormalization<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  std::vector<ptrdiff_t> nGrid(NDim, 256);
+  std::array<ptrdiff_t, NDim> nGrid;
+  for (size_t i = 0; i < NDim; ++i)
+    nGrid[i] = 256;
 
-  double baseNorm = std::pow(nGrid[0], NDim);
+  const double baseNorm = std::pow(nGrid[0], NDim);
 
   auto split = FFTMPIDomainSplit<NDim>::makeDomainDecomposition(MPICommReference().size(), NDim);
   FFTLibrarySelector<NDim> ffter(MPICartesianGroup(NDim, split), nGrid);
 
   FFTLayoutStruct layout = ffter.getLayout();
+  auto iScales = layout.getIntrinsicScales();
 
   FFTNormalization<NDim> normalizer(layout);
 
-  ptrdiff_t iEnd = layout.getMinimalMemorySize();
+  const ptrdiff_t iEnd = layout.getMinimalMemorySize();
 
   MemoryBlock<NDim, double> mem(iEnd);
+  auto host_mem_view = mem.getRawHostView();
+  auto mem_view = mem.getRawView();
 
   auto &&doTest = [&](auto expectedNormC2R, auto expectedNormR2C) {
-    for (ptrdiff_t i = 0; i < iEnd; ++i) {
-      mem[i] = 1;
-    }
-    normalizer.c2r(mem, 1.);
+    device::iteration::foreach (
+        "InitMem", device::IdxArray<1>{0}, device::IdxArray<1>{(device::Idx)iEnd},
+        DEVICE_LAMBDA(const device::IdxArray<1> &i) { mem_view[i[0]] = i[0]; });
+    device::iteration::fence();
+
+    normalizer.c2r(mem, 1. / iScales.c2r);
+    mem.flagHostMirrorOutdated();
+
     bool c2rAllgood = true;
+    mem.pullHostView();
     for (ptrdiff_t i = 0; i < iEnd; ++i) {
-      c2rAllgood = c2rAllgood && AlmostEqual(mem[i], expectedNormC2R);
+      c2rAllgood = c2rAllgood && AlmostEqual(host_mem_view[i], expectedNormC2R * i / iScales.c2r);
       if (!c2rAllgood) {
-        sayShort << "at " << i << ": " << mem[i] << " != " << expectedNormC2R << "\n";
+        sayShort << "at " << i << ": " << host_mem_view[i] << " != " << expectedNormC2R * i / iScales.c2r << "\n";
         break;
       }
     }
-
     tdd.verify(c2rAllgood);
 
-    normalizer.r2c(mem, 1.);
+    normalizer.r2c(mem, 1 / iScales.r2c);
+    mem.flagHostMirrorOutdated();
+
     bool r2cAllgood = true;
+    mem.pullHostView();
     for (ptrdiff_t i = 0; i < iEnd; ++i) {
-      r2cAllgood = r2cAllgood && AlmostEqual(mem[i], expectedNormR2C);
+      r2cAllgood = r2cAllgood && AlmostEqual(host_mem_view[i], expectedNormR2C * i / iScales.r2c);
       if (!r2cAllgood) {
-        sayShort << "at " << i << ": " << mem[i] << " != " << expectedNormR2C << "\n";
+        sayShort << "at " << i << ": " << host_mem_view[i] << " != " << expectedNormR2C * i / iScales.r2c << "\n";
         break;
       }
     }
@@ -57,12 +70,15 @@ template <size_t NDim> inline void TempLat::FFTNormalization<NDim>::Test(TempLat
     tdd.verify(r2cAllgood);
   };
 
+  sayShort << "Testing Config normalization...\n";
   normalizer.setToConfigType();
   doTest(1. / baseNorm, 1. / baseNorm);
 
+  sayShort << "Testing Fourier normalization...\n";
   normalizer.setToFourierType();
   doTest(1., 1. / baseNorm);
 
+  sayShort << "Testing Mixed normalization...\n";
   normalizer.setToMixedType();
   doTest(1. / std::sqrt(baseNorm), 1. / baseNorm);
 }

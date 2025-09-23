@@ -17,7 +17,7 @@ namespace TempLat
    *which we inherit, in a linear chain: KokkosFFTMemoryLayout and KokkosFFTPlanner.
    *
    *
-   * Unit test: make test-heffteinterface
+   * Unit test: make test-kokkosinterface
    **/
   template <size_t NDim> class KokkosFFTInterface : public KokkosFFTMemoryLayout<NDim>
   {
@@ -32,7 +32,7 @@ namespace TempLat
 
     virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nGridPoints)
     {
-      return IntrinsicScales{1, 1};
+      return IntrinsicScales{1., 1};
     }
 
     virtual std::shared_ptr<FFTSessionGuard> getSessionGuard(bool pVerbose = true)

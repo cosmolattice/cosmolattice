@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
@@ -37,16 +36,16 @@ namespace TempLat
   template <size_t NDim> class FFTLayoutStruct
   {
   public:
-    FFTLayoutStruct(const std::array<ptrdiff_t, NDim> &nGridPoints, bool isFFTW_, bool isPFFT_, bool isHEFFTE_,
+    FFTLayoutStruct(const std::array<ptrdiff_t, NDim> &nGridPoints, bool isFFTW_, bool isPFFT_, bool isKOKKOSFFT_,
                     IntrinsicScales scales = IntrinsicScales())
         : configurationSpace(nGridPoints, 0), fourierSpace(LayoutStruct<NDim>::createGlobalFFTLayout(nGridPoints)),
-          mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_), mIsHEFFTE(isHEFFTE_), mScales(scales)
+          mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_), mIsKOKKOSFFT(isKOKKOSFFT_), mScales(scales)
     {
       for (size_t i = 0; i < NDim; ++i)
         mNGridPoints[i] = nGridPoints[i];
 
-      if ((int)mIsFFTW + (int)mIsPFFT + (int)mIsHEFFTE != 1)
-        throw FFTLayoutStructException("Must be either FFTW, PFFT or HEFFTE!");
+      if ((int)mIsFFTW + (int)mIsPFFT + (int)mIsKOKKOSFFT != 1)
+        throw FFTLayoutStructException("Must be either FFTW, PFFT or KOKKOSFFT!");
 
       /* for FFTW, we manually need to set the size of the last dimension to the r2c setup: 2 * (N/2 + 1). */
       auto configLocalSizes = fourierSpace.getLocalSizes();
@@ -64,7 +63,7 @@ namespace TempLat
     const device::array<ptrdiff_t, NDim> &getNGridPoints() const { return mNGridPoints; }
     const bool &isFFTW() const { return mIsFFTW; }
     const bool &isPFFT() const { return mIsPFFT; }
-    const bool &isHEFFTE() const { return mIsHEFFTE; }
+    const bool &isKOKKOSFFT() const { return mIsKOKKOSFFT; }
 
     /** \brief Compute on the fly, as our members may be modified by others. That's why OOP... */
     ptrdiff_t getMinimalMemorySize() const
@@ -115,7 +114,7 @@ namespace TempLat
 
     bool mIsFFTW;
     bool mIsPFFT;
-    bool mIsHEFFTE;
+    bool mIsKOKKOSFFT;
 
     IntrinsicScales mScales;
 

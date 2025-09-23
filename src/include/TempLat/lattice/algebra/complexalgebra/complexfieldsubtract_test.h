@@ -9,7 +9,6 @@
 
 inline void TempLat::ComplexFieldSubtractTester::Test(TempLat::TDDAssertion &tdd)
 {
-
   struct MyStruct {
     int ComplexFieldGet(Tag<0> t) const { return 1; }
     int ComplexFieldGet(Tag<1> t) const { return 2; }

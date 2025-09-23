@@ -17,10 +17,6 @@ function(add_cosmolattice execName path ofile)
   if(HDF5)
     target_link_libraries(${execName} PUBLIC ${HDF5_LIBRARIES})
   endif()
-
-  if(HEFFTE)
-    target_link_libraries(${execName} PUBLIC Heffte::Heffte)
-  endif()
 endfunction()
 
 # Function to compile any main which use CosmoLattice.

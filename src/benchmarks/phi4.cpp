@@ -26,6 +26,15 @@ int main(int argc, char **argv)
   Field<NDim, T> phi("phi", toolBox);
   Field<NDim, T> pi("pi", toolBox);
 
+  phi.getMemoryManager()->confirmFourierSpace();
+  pi.getMemoryManager()->confirmFourierSpace();
+  phi.getMemoryManager()->confirmConfigSpace();
+  pi.getMemoryManager()->confirmConfigSpace();
+  phi.getMemoryManager()->confirmFourierSpace();
+  pi.getMemoryManager()->confirmFourierSpace();
+  phi.getMemoryManager()->confirmConfigSpace();
+  pi.getMemoryManager()->confirmConfigSpace();
+
   Benchmark bench([&](Benchmark::Measurer &measurer) {
     measurer.measure("x->k fourier", [&]() {
       phi.getMemoryManager()->confirmFourierSpace();

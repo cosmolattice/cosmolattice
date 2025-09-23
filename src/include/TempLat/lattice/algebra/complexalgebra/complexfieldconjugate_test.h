@@ -9,7 +9,6 @@
 
 inline void TempLat::ComplexFieldConjugateTester::Test(TempLat::TDDAssertion &tdd)
 {
-
   /* Default is to fail: to remind yourself to implement something here. */
   struct MyStruct {
     int ComplexFieldGet(Tag<0> t) const { return 1; }
