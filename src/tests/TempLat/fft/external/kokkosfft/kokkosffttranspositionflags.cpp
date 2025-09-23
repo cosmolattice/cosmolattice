@@ -1,17 +1,18 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-#ifndef NOMPI
-#ifndef NOPFFT
+   Released under the MIT license, see LICENSE.md. */
 
-#include "TempLat/fft/external/pfft/pffttranspositionflags.h"
+// File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
-namespace {
-    TempLat::TDDContainer<TempLat::PFFTTranspositionFlags> test;
+#ifdef KOKKOS_FFT
+
+#include "TempLat/fft/external/kokkosfft/kokkosffttranspositionflags.h"
+#include "TempLat/fft/external/kokkosfft/kokkosffttranspositionflags_test.h"
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::KokkosFFTTranspositionFlags> test;
 }
 
-#endif
 #endif

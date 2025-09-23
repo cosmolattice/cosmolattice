@@ -104,12 +104,10 @@ namespace TempLat
     nGridFourier[NDim - 1] = (nGridFourier[NDim - 1] / 2 + 1) * 2;
 
     auto layout = ffter.getLayout();
-    // say << layout << "\n";
     MemoryBlock<NDim, T> mem(layout.getMinimalMemorySize());
 
     const auto currentLayout = layout.fourierSpace;
 
-    // manually implement 3d:
     // Fill the memory with known values.
     Kokkos::parallel_for(
         "Set a point", Kokkos::RangePolicy(0, mem.size()), DEVICE_LAMBDA(const size_t i) {
@@ -122,56 +120,99 @@ namespace TempLat
           mem[i] = coordinateToValue<NDim, T>(pos, currentLayout, true);
         });
 
-    {
-      const auto result_view = mem.getRawHostView();
-      std::cout << "Memory contents BEFORE c2r and r2c:\n";
-      for (size_t i = 0; i < mem.size(); ++i) {
-        std::cout /*<< "mem[" << i << "] = "*/ << std::setw(12) << result_view(i);
-        if (i % nGridFourier[0] == nGridFourier[0] - 1)
-          std::cout << std::endl;
-        else
-          std::cout << ", ";
+    // Print the field content for debugging
+    if constexpr (NDim == 2) {
+      if (nGrid[0] <= 8) {
+        const auto result_view = mem.getRawHostView();
+        std::cout << "Memory contents BEFORE c2r and r2c:\n";
+        for (size_t i = 0; i < mem.size(); ++i) {
+          std::cout /*<< "mem[" << i << "] = "*/ << std::setw(12) << result_view(i);
+          if (i % nGridFourier[0] == nGridFourier[0] - 1)
+            std::cout << std::endl;
+          else
+            std::cout << ", ";
+        }
+        std::cout << std::endl;
       }
-      std::cout << std::endl;
     }
 
-    sayMPI << "About to do FFT.\n";
+    sayMPI << "About to do c2r FFT.\n";
     ffter.c2r(mem);
-    ffter.r2c(mem);
-    sayMPI << "Finished FFT.\n";
+    sayMPI << "Finished c2r.\n";
 
-    // if (ffter.getBackend() == "HEFFTE")
-    //   tdd.verify(!mem.isHostViewAllocated());
-    // else
-    //   tdd.verify(mem.isHostViewAllocated());
+    // Print the field content for debugging
+    if constexpr (NDim == 2) {
+      if (nGrid[0] <= 8) {
+        const auto result_view = mem.getRawHostView();
+        std::cout << "Memory contents INTERMEDIATE c2r:\n";
+        for (size_t i = 0; i < mem.size(); ++i) {
+          std::cout /*<< "mem[" << i << "] = "*/ << std::setw(12) << result_view(i);
+          if (i % nGridFourier[0] == nGridFourier[0] - 1)
+            std::cout << std::endl;
+          else
+            std::cout << ", ";
+        }
+        std::cout << std::endl;
+      }
+    }
+
+    // Just check that it's different
+    {
+      bool after_first = false;
+      const auto result_view = mem.getRawHostView();
+      for (size_t i = 0; i < mem.size(); ++i) {
+        device::array<ptrdiff_t, NDim> vPos{};
+        size_t acc = 1;
+        for (size_t j = 0; j < NDim; ++j) {
+          vPos[NDim - 1 - j] = (i / acc) % nGridFourier[NDim - 1 - j];
+          acc *= nGridFourier[NDim - 1 - j];
+        }
+        auto old = coordinateToValue<NDim, T>(vPos, currentLayout, true);
+        after_first = (abs(result_view(i) - old) > 0.1) || after_first;
+      }
+      tdd.verify(after_first);
+      if (!after_first) sayMPI << "Failed for NDim: " << NDim << ", nGrid[0]: " << nGrid[0] << "\n";
+    }
+
+    sayMPI << "About to do r2c FFT.\n";
+    ffter.r2c(mem);
+    sayMPI << "Finished r2c FFT.\n";
 
     const T norm = 1. / std::pow(nGrid[0], NDim) * ffter.getLayout().getIntrinsicScales().r2c *
                    ffter.getLayout().getIntrinsicScales().c2r;
+
+    // Print the field content for debugging
+    if constexpr (NDim == 2) {
+      if (nGrid[0] <= 8) {
+        const auto result_view = mem.getRawHostView();
+        std::cout << "Memory contents AFTER c2r and r2c (normalized):\n";
+        for (size_t i = 0; i < mem.size(); ++i) {
+          std::cout /*<< "mem[" << i << "] = "*/ << std::setw(12) << result_view(i);
+          if (i % nGridFourier[0] == nGridFourier[0] - 1)
+            std::cout << std::endl;
+          else
+            std::cout << ", ";
+        }
+        std::cout << std::endl;
+      }
+    }
+
+    // Check that we recover the original data
     {
+      bool c2r_then_r2c = true;
       const auto result_view = mem.getRawHostView();
-      std::cout << "Memory contents AFTER c2r and r2c (normalized):\n";
       for (size_t i = 0; i < mem.size(); ++i) {
-        std::cout /*<< "mem[" << i << "] = "*/ << std::setw(12) << result_view(i);
-        if (i % nGridFourier[0] == nGridFourier[0] - 1)
-          std::cout << std::endl;
-        else
-          std::cout << ", ";
+        device::array<ptrdiff_t, NDim> vPos{};
+        size_t acc = 1;
+        for (size_t j = 0; j < NDim; ++j) {
+          vPos[NDim - 1 - j] = (i / acc) % nGridFourier[NDim - 1 - j];
+          acc *= nGridFourier[NDim - 1 - j];
+        }
+        c2r_then_r2c = checkMem(norm, result_view(i), vPos, currentLayout, true) && c2r_then_r2c;
       }
-      std::cout << std::endl;
+      tdd.verify(c2r_then_r2c);
+      if (!c2r_then_r2c) sayMPI << "Failed for NDim: " << NDim << ", nGrid[0]: " << nGrid[0] << "\n";
     }
-    bool c2r_then_r2c = true;
-    const auto result_view = mem.getRawHostView();
-    for (size_t i = 0; i < mem.size(); ++i) {
-      device::array<ptrdiff_t, NDim> vPos{};
-      size_t acc = 1;
-      for (size_t j = 0; j < NDim; ++j) {
-        vPos[NDim - 1 - j] = (i / acc) % nGridFourier[NDim - 1 - j];
-        acc *= nGridFourier[NDim - 1 - j];
-      }
-      c2r_then_r2c = checkMem(norm, result_view(i), vPos, currentLayout, true) && c2r_then_r2c;
-    }
-    tdd.verify(c2r_then_r2c);
-    if (!c2r_then_r2c) sayMPI << "Failed for NDim: " << NDim << ", nGrid[0]: " << nGrid[0] << "\n";
   };
 
   template <size_t NDim, typename T>
@@ -210,27 +251,25 @@ namespace TempLat
     ffter.c2r(mem);
     sayMPI << "Finished FFT.\n";
 
-    if (ffter.getBackend() == "HEFFTE")
-      tdd.verify(!mem.isHostViewAllocated());
-    else
-      tdd.verify(mem.isHostViewAllocated());
-
     const T norm = 1. / std::pow(nGrid[0], NDim) * ffter.getLayout().getIntrinsicScales().r2c *
                    ffter.getLayout().getIntrinsicScales().c2r;
 
-    bool r2c_then_c2r = true;
-    const auto result_view = mem.getRawHostView();
-    for (size_t i = 0; i < mem.size(); ++i) {
-      device::array<ptrdiff_t, NDim> vPos{};
-      size_t acc = 1;
-      for (size_t j = 0; j < NDim; ++j) {
-        vPos[NDim - 1 - j] = (i / acc) % memorySizes[NDim - 1 - j];
-        acc *= memorySizes[NDim - 1 - j];
+    // Verify that we recover the original data
+    {
+      bool r2c_then_c2r = true;
+      const auto result_view = mem.getRawHostView();
+      for (size_t i = 0; i < mem.size(); ++i) {
+        device::array<ptrdiff_t, NDim> vPos{};
+        size_t acc = 1;
+        for (size_t j = 0; j < NDim; ++j) {
+          vPos[NDim - 1 - j] = (i / acc) % memorySizes[NDim - 1 - j];
+          acc *= memorySizes[NDim - 1 - j];
+        }
+        r2c_then_c2r = checkMem(norm, result_view(i), vPos, currentLayout, false) && r2c_then_c2r;
       }
-      r2c_then_c2r = checkMem(norm, result_view(i), vPos, currentLayout, false) && r2c_then_c2r;
+      tdd.verify(r2c_then_c2r);
+      if (!r2c_then_c2r) sayMPI << "Failed for NDim: " << NDim << ", nGrid[0]: " << nGrid[0] << "\n";
     }
-    tdd.verify(r2c_then_c2r);
-    if (!r2c_then_c2r) sayMPI << "Failed for NDim: " << NDim << ", nGrid[0]: " << nGrid[0] << "\n";
   };
 } // namespace TempLat
 
@@ -242,14 +281,14 @@ inline void TempLat::FFTLibrarySelector<_NDim>::TestBody(TempLat::TDDAssertion &
   tdd.verify(Throws<FFTLibraryDoubleInitializationException>([]() { getFFTSessionGuards(); }));
 
   // We test in 2,3,4 dimensions, and for grids 2^4, ..., 2^5.
-  constexpr_for<2, 3, 1>([&](auto i) {
+  constexpr_for<2, 5, 1>([&](auto i) {
     sayMPI << "Testing FFTLibrarySelector for NDim = " << decltype(i)::value << "\n";
     constexpr size_t NDim = decltype(i)::value;
-    for (ptrdiff_t inGrid = 2; inGrid < 3; ++inGrid) {
+    for (ptrdiff_t inGrid = 2; inGrid < 5; ++inGrid) {
       device::array<ptrdiff_t, NDim> nGrid;
       for (auto &it : nGrid)
         it = std::pow(2, inGrid);
-      // test_r2c_c2r<NDim, T>(tdd, nGrid);
+      test_r2c_c2r<NDim, T>(tdd, nGrid);
       test_c2r_r2c<NDim, T>(tdd, nGrid);
     }
   });

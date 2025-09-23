@@ -124,7 +124,7 @@ namespace TempLat
 #endif
 
 #ifndef NOMPI
-      if constexpr (haveKOKKOSFFT) {
+      if constexpr (haveKOKKOSFFT && (NDim <= 3)) {
 #ifdef KOKKOS_FFT
         theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
         backend = "KOKKOS_FFT";
@@ -134,7 +134,7 @@ namespace TempLat
         theLibrary = std::make_shared<HEFFTEInterface<NDim>>();
         backend = "HEFFTE";
 #endif // NOHEFFTE
-      } else if (havePFFT && nDimSplit > 1) {
+      } else if constexpr (havePFFT && nDimSplit > 1) {
 #ifndef NOPFFT
         theLibrary = std::make_shared<PFFTInterface>();
         backend = "PFFT";
@@ -142,7 +142,7 @@ namespace TempLat
       } else
 #endif // NOMPI
       {
-        if constexpr (haveKOKKOSFFT) {
+        if constexpr (haveKOKKOSFFT && (NDim <= 3)) {
 #ifdef KOKKOS_FFT
           theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
           backend = "KOKKOS_FFT";

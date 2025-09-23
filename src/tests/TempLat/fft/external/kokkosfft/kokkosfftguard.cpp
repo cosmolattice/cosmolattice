@@ -3,7 +3,8 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Franz R. Sattler, Year: 2025
+
 #include "TempLat/fft/external/kokkosfft/kokkosfftguard.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftguard_test.h"
 

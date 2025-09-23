@@ -6,3 +6,10 @@ build_nokokkos/
 build_nogpu/
 .cache/
 .idea/
+
+dependencies/*/
+
+.DS_Store
+*.DS_Store
+*/.DS_Store
+*/*/.DS_Store

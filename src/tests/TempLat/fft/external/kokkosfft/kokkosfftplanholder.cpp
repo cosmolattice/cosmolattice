@@ -1,15 +1,16 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+   Released under the MIT license, see LICENSE.md. */
 
-#ifndef NOPFFT
-#include "TempLat/fft/external/pfft/pfftplanholder.h"
-namespace {
-    TempLat::TDDContainer<TempLat::PFFTPlanHolder<float>> test;
-    TempLat::TDDContainer<TempLat::PFFTPlanHolder<double>> test2;
-}
+// File info: Main contributor(s): Franz R. Sattler, Year: 2025
+
+#ifdef KOKKOS_FFT
+#include "TempLat/fft/external/kokkosfft/kokkosfftplanholder.h"
+#include "TempLat/fft/external/kokkosfft/kokkosfftplanholder_test.h"
+namespace
+{
+  TempLat::TDDContainer<TempLat::KokkosFFTPlanHolder<float>> test;
+  TempLat::TDDContainer<TempLat::KokkosFFTPlanHolder<double>> test2;
+} // namespace
 #endif
-

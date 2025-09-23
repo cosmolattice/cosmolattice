@@ -1,14 +1,15 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+   Released under the MIT license, see LICENSE.md. */
 
-#ifndef NOPFFT
-#include "TempLat/fft/external/pfft/pfftmemorylayout.h"
-#include "TempLat/fft/external/pfft/pfftinterface.h"
-namespace {
-    TempLat::TDDContainer<TempLat::PFFTMemoryLayout> test;
+// File info: Main contributor(s): Franz R. Sattler, Year: 2025
+
+#ifdef KOKKOS_FFT
+#include "TempLat/fft/external/kokkosfft/kokkosfftmemorylayout.h"
+#include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
+namespace
+{
+  TempLat::TDDContainer<TempLat::KokkosFFTMemoryLayout> test;
 }
 #endif
