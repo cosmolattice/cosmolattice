@@ -91,7 +91,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_reduce("Averager", mLayout, functor, localResult);
+      device::iteration::reduce("Averager", mLayout, functor, localResult);
 
       return localResult;
     }
@@ -116,7 +116,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_reduce("Averager", mLayout, functor, localResult);
+      device::iteration::reduce("Averager", mLayout, functor, localResult);
 
       return localResult;
     }

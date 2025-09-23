@@ -61,7 +61,8 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_reduce("Averager", mToolBox->mLayouts.getConfigSpaceLayout(), functor, device::Max<vType>(localResult));
+      device::iteration::reduce("Averager", mToolBox->mLayouts.getConfigSpaceLayout(), functor,
+                                device::Max<vType>(localResult));
 
       // --------------------------------------------------------
       // Reduce the result across all processes

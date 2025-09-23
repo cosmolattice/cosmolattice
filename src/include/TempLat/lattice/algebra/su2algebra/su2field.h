@@ -104,7 +104,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_for("SU2ConfigViewAssign", mLayout, functor);
+      device::iteration::foreach ("SU2ConfigViewAssign", mLayout, functor);
 
       ForLoop(j, 0, 2, PostGet::apply(fs[j]));
       ForLoop(j, 0, 2, fs[j].setGhostsAreStale());

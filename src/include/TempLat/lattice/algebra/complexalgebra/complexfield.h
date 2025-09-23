@@ -112,7 +112,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_for("ComplexConfigViewAssign", mLayout, functor);
+      device::iteration::foreach ("ComplexConfigViewAssign", mLayout, functor);
 
       PostGet::apply(gR);
       PostGet::apply(gI);

@@ -57,7 +57,7 @@ namespace TempLat
       {
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
       };
-      device::iteration::parallel_for("FourierViewAssign", layout, functor);
+      device::iteration::foreach ("FourierViewAssign", layout, functor);
       PostGet::apply(g);
     }
 

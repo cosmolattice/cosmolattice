@@ -18,8 +18,8 @@ namespace TempLat
     namespace iteration
     {
       using export_device_namespace::iteration::fence;
-      using export_device_namespace::iteration::parallel_for;
-      using export_device_namespace::iteration::parallel_reduce;
+      using export_device_namespace::iteration::foreach;
+      using export_device_namespace::iteration::reduce;
     } // namespace iteration
   } // namespace device
 } // namespace TempLat

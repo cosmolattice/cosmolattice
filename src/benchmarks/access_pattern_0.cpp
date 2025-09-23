@@ -35,7 +35,7 @@ int main(int argc, char **argv)
       pi.updateGhosts();
       device::fence();
       measurer.measure("timestepping", [&]() {
-        pi = pi + LatticeLaplacian<NDim, decltype(phi)>(phi);
+        pi = pi + dt * LatticeLaplacian<NDim, decltype(phi)>(phi);
         phi = phi + dt * pi;
         device::fence();
       });

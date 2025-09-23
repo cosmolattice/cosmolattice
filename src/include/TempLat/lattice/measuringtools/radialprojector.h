@@ -135,7 +135,7 @@ namespace TempLat
                       idx);
       };
 
-      device::iteration::parallel_for("RadialProjectorConfiguration", mLayout, functor);
+      device::iteration::foreach ("RadialProjectorConfiguration", mLayout, functor);
 
       baseWorkSpace.pull();
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
@@ -186,7 +186,7 @@ namespace TempLat
               idx);
         }
       };
-      device::iteration::parallel_for("RadialProjectorFourier", mLayout, functor);
+      device::iteration::foreach ("RadialProjectorFourier", mLayout, functor);
       baseWorkSpace.pull();
       binComputer.setCentralBinBounds(baseWorkSpace.getCentralBinBounds());
 

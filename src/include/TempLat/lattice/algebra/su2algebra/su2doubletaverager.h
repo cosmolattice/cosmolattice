@@ -98,7 +98,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_reduce("SU2DoubletAverager", mLayout, functor, localResult);
+      device::iteration::reduce("SU2DoubletAverager", mLayout, functor, localResult);
 
       arrVType _localResult;
       for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });
@@ -129,7 +129,7 @@ namespace TempLat
             idx);
       };
 
-      device::iteration::parallel_reduce("SU2DoubletAverager", mLayout, functor, localResult);
+      device::iteration::reduce("SU2DoubletAverager", mLayout, functor, localResult);
 
       arrVType _localResult;
       for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });

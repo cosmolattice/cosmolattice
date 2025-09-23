@@ -78,7 +78,7 @@ namespace TempLat
       {
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
       };
-      device::iteration::parallel_for("ConfigViewAssign", mLayout, functor);
+      device::iteration::foreach ("ConfigViewAssign", mLayout, functor);
 
       PostGet::apply(g);
 

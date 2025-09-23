@@ -67,8 +67,9 @@ namespace TempLat
             max = std::max(max, elapsed);
           }
         }
-        std::cout << "average: " << average << " count: " << count << " totalSquaredDiff: " << totalSquaredDiff << "\n";
         double stdD = count > 0 ? std::sqrt(totalSquaredDiff) / count : 0;
+        std::cout << "average: " << average << " count: " << count << " totalSquaredDiff: " << totalSquaredDiff
+                  << " std: " << stdD << "\n";
 
         return std::make_tuple(tag, average, stdD, min, max, count);
       }

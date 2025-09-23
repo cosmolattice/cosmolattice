@@ -16,7 +16,7 @@ int main(int argc, char **argv)
   using T = double;
   constexpr size_t nGrid = 512;
   constexpr size_t nGhost = 1;
-  constexpr size_t nSteps = 1;
+  constexpr size_t nSteps = 10;
   constexpr T dt = 0.01;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost, false);
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
         device::iteration::fence();
       });
       measurer.measure("timestepping", [&]() {
-        pi = pi + LatticeLaplacian<NDim, decltype(phi)>(phi);
+        pi = pi + dt * LatticeLaplacian<NDim, decltype(phi)>(phi) * dt;
         phi = phi + dt * pi;
         device::iteration::fence();
       });

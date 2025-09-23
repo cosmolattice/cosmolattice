@@ -146,7 +146,7 @@ namespace TempLat
         {
           device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
         };
-        device::iteration::parallel_for("copy_to_slab", {}, slab_sizes, copy_to_slab_functor);
+        device::iteration::foreach ("copy_to_slab", {}, slab_sizes, copy_to_slab_functor);
         // We must fence the operation, as we need the data to be in the slab before we call MPI.
         device::iteration::fence();
 
@@ -160,7 +160,7 @@ namespace TempLat
         {
           device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
         };
-        device::iteration::parallel_for("copy_from_slab", {}, slab_sizes, copy_from_slab_functor);
+        device::iteration::foreach ("copy_from_slab", {}, slab_sizes, copy_from_slab_functor);
         // We must fence the operation, as we need the data to be in the slab before we call MPI.
         device::iteration::fence();
       }
@@ -188,7 +188,7 @@ namespace TempLat
         {
           device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
         };
-        device::iteration::parallel_for("copy_to_slab", {}, slab_sizes, copy_to_slab_functor);
+        device::iteration::foreach ("copy_to_slab", {}, slab_sizes, copy_to_slab_functor);
         // We must fence the operation, as we need the data to be in the slab before we call MPI.
         device::iteration::fence();
 
@@ -200,7 +200,7 @@ namespace TempLat
         {
           device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
         };
-        device::iteration::parallel_for("copy_from_slab", {}, slab_sizes, copy_from_slab_functor);
+        device::iteration::foreach ("copy_from_slab", {}, slab_sizes, copy_from_slab_functor);
         // We must fence the operation, as we need the data to be in the slab before we call MPI.
         device::iteration::fence();
       }
@@ -287,7 +287,7 @@ namespace TempLat
 
           if constexpr (NDim == 1) {
             // For NDim == 1, we just need to copy the corners.
-            device::iteration::parallel_for(
+            device::iteration::foreach (
                 "GhostUpdater", device::IdxArray<1>{0}, device::IdxArray<1>{1}, DEVICE_LAMBDA(const size_t) {
                   View(ghostDepth - depth) = View(ghostDepth + sizes[0] - depth);
                   View(ghostDepth + sizes[0] + (depth - 1)) = View(ghostDepth + (depth - 1));
@@ -333,10 +333,10 @@ namespace TempLat
             device::IdxArray<NDim> it_stop{};
             for (size_t k = 0; k < NDim; ++k)
               it_stop[k] = btf_fromSubView.extent(k);
-            device::iteration::parallel_for("GhostUpdater", it_start, it_stop, btf_functor);
+            device::iteration::foreach ("GhostUpdater", it_start, it_stop, btf_functor);
             for (size_t k = 0; k < NDim; ++k)
               it_stop[k] = ftb_fromSubView.extent(k);
-            device::iteration::parallel_for("GhostUpdater", it_start, it_stop, ftb_functor);
+            device::iteration::foreach ("GhostUpdater", it_start, it_stop, ftb_functor);
           }
         }
       }

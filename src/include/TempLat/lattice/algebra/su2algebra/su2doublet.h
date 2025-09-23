@@ -78,7 +78,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_for("SU2DoubleConfigViewAssign", mLayout, functor);
+      device::iteration::foreach ("SU2DoubleConfigViewAssign", mLayout, functor);
 
       constexpr_for<0, size, 1>([&](auto _i) {
         constexpr size_t i = decltype(_i)::value;

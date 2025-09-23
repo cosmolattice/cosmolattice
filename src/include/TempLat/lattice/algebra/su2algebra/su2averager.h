@@ -97,7 +97,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_reduce("SU2Averager", mLayout, functor, localResult);
+      device::iteration::reduce("SU2Averager", mLayout, functor, localResult);
 
       arrVType _localResult;
       for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });
@@ -127,7 +127,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_reduce("ComplexFieldAverager", mLayout, functor, localResult);
+      device::iteration::reduce("ComplexFieldAverager", mLayout, functor, localResult);
 
       arrVType _localResult;
       for_in_range<0, size>([&](auto i) { _localResult[i] = localResult[i]; });

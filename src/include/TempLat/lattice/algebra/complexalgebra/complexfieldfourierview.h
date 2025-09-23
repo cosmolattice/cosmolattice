@@ -96,7 +96,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_for("ComplexFourierViewAssign", mLayout, functor);
+      device::iteration::foreach ("ComplexFourierViewAssign", mLayout, functor);
 
       PostGet::apply(g);
     }

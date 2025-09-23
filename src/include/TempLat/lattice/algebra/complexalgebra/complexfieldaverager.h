@@ -101,7 +101,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_reduce("ComplexFieldAverager", mLayout, functor, localResult);
+      device::iteration::reduce("ComplexFieldAverager", mLayout, functor, localResult);
 
       arrVType a{};
       a[0] = localResult.real();
@@ -133,7 +133,7 @@ namespace TempLat
             },
             idx);
       };
-      device::iteration::parallel_reduce("ComplexFieldAverager", mLayout, functor, localResult);
+      device::iteration::reduce("ComplexFieldAverager", mLayout, functor, localResult);
 
       arrVType a{};
       a[0] = localResult.real();

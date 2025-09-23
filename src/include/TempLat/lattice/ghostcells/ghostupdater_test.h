@@ -102,7 +102,7 @@ namespace TempLat
         for (size_t k = 0; k < NDim; ++k)
           it_stop[k] = localSizes[k];
 
-        device::iteration::parallel_for("GhostUpdater", {}, it_stop, functor);
+        device::iteration::foreach ("GhostUpdater", {}, it_stop, functor);
       }
     }
 
