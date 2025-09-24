@@ -943,7 +943,10 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  =    @CMAKE_CURRENT_SOURCE_DIR@/src/include \
+INPUT                  =    @CMAKE_CURRENT_SOURCE_DIR@/src/include/TempLat \
+                            @CMAKE_CURRENT_SOURCE_DIR@/src/include/CosmoLattice \
+                            @CMAKE_CURRENT_SOURCE_DIR@/src/models \
+                            @CMAKE_CURRENT_SOURCE_DIR@/src/cosmolattice.cpp \
                             @CMAKE_CURRENT_SOURCE_DIR@/documentation/md
 
 # This tag can be used to specify the character encoding of the source files
