@@ -33,14 +33,14 @@ namespace TempLat
     static constexpr ptrdiff_t getVectorSize() { return NDim; }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim + 1, IDX...>
+      requires IsVariadicNDIndex<NDim + 1, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return get_impl(device::tie(idx...), device::make_index_sequence<sizeof...(IDX) - 1>{});
     }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim + 1, IDX...>
+      requires IsVariadicNDIndex<NDim + 1, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX... idx) const
     {
       return get_impl(device::tie(idx...), device::make_index_sequence<sizeof...(IDX) - 1>{});

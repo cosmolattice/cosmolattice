@@ -33,7 +33,7 @@ namespace TempLat
   public:
     /** \brief Construct a std::shared_ptr to a new instance. */
     template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     static HermitianPartners<NDim> create(const C &globalSizes)
     {
       auto instance = HermitianPartners<NDim>(globalSizes);

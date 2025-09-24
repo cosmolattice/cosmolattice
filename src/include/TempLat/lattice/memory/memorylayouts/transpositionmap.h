@@ -40,7 +40,7 @@ namespace TempLat
 
     /** \brief Provide your forward mapping, which will be the new output of getForward. */
     template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     void setMap(const C &input)
     {
       for (size_t i = 0; i < NDim; ++i)

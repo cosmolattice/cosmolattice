@@ -33,7 +33,7 @@ namespace TempLat
     static constexpr size_t NDim = _NDim;
 
     template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     LayoutStructLocalTransposed(const C &initNGrid, const ptrdiff_t nGhosts)
         : mLocal(initNGrid, nGhosts), mNGhosts(nGhosts)
     {
@@ -65,7 +65,7 @@ namespace TempLat
     }
 
     template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     void setTranspositionMap_memoryToGlobalSpace(const C &input)
     {
       mTranspositionMap_memoryToGlobalSpace.setMap(input);

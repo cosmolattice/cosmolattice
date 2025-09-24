@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::IsArrayTester> test;
+  TempLat::TDDContainer<TempLat::IsNDArrayTester> test;
 }

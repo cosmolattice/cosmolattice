@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/parallel/device.h"
 
 namespace TempLat
@@ -28,7 +28,7 @@ namespace TempLat
     //        operator ptrdiff_t() const { return 0; }
     static std::string toString() { return "(ZeroType)0"; }
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION static constexpr ptrdiff_t get(const IDX &...)
     {
       return 0;

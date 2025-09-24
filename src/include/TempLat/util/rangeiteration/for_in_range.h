@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which implements a static for loop.
    *
    *

@@ -15,7 +15,7 @@
 #include <sys/types.h>
 
 // Including this here, as we need that anywhere basically.
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 
 #include <array>
 #include <tuple>

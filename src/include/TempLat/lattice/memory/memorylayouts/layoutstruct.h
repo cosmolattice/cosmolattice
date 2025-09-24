@@ -38,7 +38,7 @@ namespace TempLat
      * @return requires
      */
     template <typename C = device::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     LayoutStruct(const C &initNGrid, const ptrdiff_t nGhosts)
         : mTransposed(initNGrid, nGhosts), mHermitianPartners(initNGrid), mNGhosts(nGhosts)
     {
@@ -52,7 +52,7 @@ namespace TempLat
 
     /** \brief An almost constructor: return a new instance which has a default global FFT layout */
     template <typename C = device::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     static LayoutStruct<NDim> createGlobalFFTLayout(const C &initNGrid)
     {
       LayoutStruct result(initNGrid, 0);
@@ -73,7 +73,7 @@ namespace TempLat
      *  in the target memory. No bounds checking!
      */
     template <typename Container, typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto(Container &target, const IDX... idx) const
     {
       const auto indices = device::tie(idx...);
@@ -85,7 +85,7 @@ namespace TempLat
     }
 
     template <typename Container, typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto0N(Container &target, const IDX... idx)
         const // Brings back the coordinates between 0 and N-1. Useful for saving and loading for example
     {
@@ -99,7 +99,7 @@ namespace TempLat
      *  transposed, ready to be applied to `JumpsHolder::getJumpsInMemoryOrder()`.
      */
     template <typename Container, typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Container &target, const IDX... pos) const
     {
       const auto positions = device::tie(pos...);
@@ -114,7 +114,7 @@ namespace TempLat
     const device::array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
 
     template <typename C>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     void setLocalSizes(const C &input)
     {
       getTransposed().setLocalSizes(input);
@@ -136,7 +136,7 @@ namespace TempLat
     const device::array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
 
     template <typename C = device::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     void setLocalStarts(const C &input)
     {
       getLocal().setLocalStarts(input);
@@ -145,7 +145,7 @@ namespace TempLat
     const device::array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
 
     template <typename C = device::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     void setTranspositionMap_memoryToGlobalSpace(const C &input)
     {
       getTransposed().setTranspositionMap_memoryToGlobalSpace(input);

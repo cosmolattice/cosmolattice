@@ -14,6 +14,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # These are the options which are available to the user.
 
+set(DOCUMENTATION
+    OFF "Build documentation"
+    CACHE BOOL "Build documentation with Doxygen (default = OFF)")
 set(MPI
     OFF
     CACHE BOOL "Set to ON to build with MPI (default = OFF)")

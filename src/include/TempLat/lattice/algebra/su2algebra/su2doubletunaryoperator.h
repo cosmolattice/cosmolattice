@@ -51,7 +51,7 @@ namespace TempLat
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);

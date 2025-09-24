@@ -44,7 +44,7 @@ namespace TempLat
   template <size_t NDim, typename T, bool Real, bool Unitary>
   class RandomGaussianFieldHelper : public DimensionCountRecorder<NDim>
   {
-    using RNGInteger = typename Util::RandomGaussian::IntegerType;
+    using RNGInteger = typename RandomGaussian::IntegerType;
 
   public:
     /* Put public methods here. These should change very little over time. */
@@ -93,7 +93,7 @@ namespace TempLat
     complex<T> to_complex(const device::array<double, 2> &pair) const { return complex<T>(pair[0], pair[1]); }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
       device::array<ptrdiff_t, NDim> global_coord;
@@ -130,7 +130,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::string mBaseSeed;
-    mutable Util::RandomGaussian prng;
+    mutable RandomGaussian prng;
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
     RNGInteger generation;

@@ -1,5 +1,5 @@
-#ifndef TEMPLAT_UTIL_ISARRAY_H
-#define TEMPLAT_UTIL_ISARRAY_H
+#ifndef TEMPLAT_UTIL_IsNDArray_H
+#define TEMPLAT_UTIL_IsNDArray_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -18,11 +18,11 @@ namespace TempLat
    *
    **/
   template <typename T, size_t NDim>
-  concept IsArray = std::is_same_v<device::array<typename T::value_type, NDim>, T> ||
-                    std::is_same_v<std::array<typename T::value_type, NDim>, T> ||
-                    std::is_same_v<Kokkos::Array<typename T::value_type, NDim>, T>;
+  concept IsNDArray = std::is_same_v<device::array<typename T::value_type, NDim>, T> ||
+                      std::is_same_v<std::array<typename T::value_type, NDim>, T> ||
+                      std::is_same_v<Kokkos::Array<typename T::value_type, NDim>, T>;
 
-  struct IsArrayTester {
+  struct IsNDArrayTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
 #endif

@@ -8,7 +8,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/tuple_size.h"
@@ -32,7 +32,7 @@ namespace TempLat
     ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) {}
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto get(IDX... idx) const
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
@@ -43,7 +43,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
@@ -82,7 +82,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         GetValue::get(r, idx...);
         tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
       }
@@ -93,7 +93,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
       tuple_add_to_nth<N - 1>(device::tie(idx...), dir);

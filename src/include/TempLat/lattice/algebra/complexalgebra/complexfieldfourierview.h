@@ -14,7 +14,7 @@
 #include "TempLat/lattice/field/views/fieldviewfourier.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 
 namespace TempLat
 {
@@ -56,7 +56,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(FourierView<NDim, T> mR, IDX... idx) {
-        requires VariadicNDIndex<NDim, IDX...>;
+        requires IsVariadicNDIndex<NDim, IDX...>;
         mR.get(idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
@@ -66,7 +66,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(FourierView<NDim, T> mI, IDX... idx) {
-        requires VariadicNDIndex<NDim, IDX...>;
+        requires IsVariadicNDIndex<NDim, IDX...>;
         mI.get(idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const

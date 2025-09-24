@@ -51,7 +51,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION complex<double> get(const IDX &...idx) const
     {
       device::array<ptrdiff_t, NDim> global_coord;

@@ -38,7 +38,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R mR, T mT, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         ComplexFieldGetter::get(mR, 0_c, idx...);
         ComplexFieldGetter::get(mT, 0_c, idx...);
         ComplexFieldGetter::get(mR, 1_c, idx...);
@@ -51,7 +51,7 @@ namespace TempLat
     }
     template <typename... IDX>
       requires requires(R mR, T mT, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         ComplexFieldGetter::get(mR, 0_c, idx...);
         ComplexFieldGetter::get(mT, 0_c, idx...);
         ComplexFieldGetter::get(mR, 1_c, idx...);
@@ -64,7 +64,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);

@@ -31,7 +31,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R mR, ptrdiff_t mJ, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         GetValue::get(mR, idx..., mJ);
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const

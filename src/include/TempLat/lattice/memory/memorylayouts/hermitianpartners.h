@@ -33,7 +33,7 @@ namespace TempLat
   public:
     /* Put public methods here. These should change very little over time. */
     template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     DEVICE_FUNCTION HermitianPartners(const C &initNGrid) : mode(HermitianPartnersMode::none)
     {
       for (size_t i = 0; i < NDim; ++i) {

@@ -29,10 +29,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     using ComplexFieldUnaryOperator<R>::mR;
 
-    U1Exponential(const R &pR)
-        : ComplexFieldUnaryOperator<R>(pR)
-    {
-    }
+    U1Exponential(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}
 
     DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<0> t) const { return cos(mR); }
@@ -40,14 +37,14 @@ namespace TempLat
     auto ComplexFieldGet(Tag<1> t) const { return sin(mR); }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mCacheRe;
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return mCacheIm;
@@ -55,7 +52,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);

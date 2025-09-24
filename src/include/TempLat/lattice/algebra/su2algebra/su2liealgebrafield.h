@@ -40,7 +40,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return ZeroType(); }
 
     template <int N, typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       if constexpr (N > 0)

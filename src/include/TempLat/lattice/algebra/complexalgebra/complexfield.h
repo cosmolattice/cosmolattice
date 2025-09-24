@@ -15,7 +15,7 @@
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldfourierview.h"
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include <memory>
 
 namespace TempLat
@@ -67,21 +67,21 @@ namespace TempLat
     template <int N> const auto &operator()(Tag<N> t) const { return ComplexFieldGet(t); }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
       return mR.get(idx...);
     }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
       return mI.get(idx...);
     }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(const IDX &...idx) const
     {
       return device::array<T, 2>{mR.get(idx...), mI.get(idx...)};

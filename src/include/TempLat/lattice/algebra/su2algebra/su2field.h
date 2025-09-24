@@ -62,7 +62,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
       return sqrt(
@@ -71,14 +71,14 @@ namespace TempLat
               idx...))); // Apriori not optimal, as we compute several time c0, but does not seem to make a difference.
     }
     template <int M, typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
       return fs[M - 1].get(idx...);
     }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION device::array<T, 4> SU2Get(const IDX &...idx) const
     {
       return {{SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)}};

@@ -15,7 +15,7 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 
 namespace TempLat
@@ -46,7 +46,7 @@ namespace TempLat
     auto SU2Get(Tag<3> t) const { return 2 * (mR.SU2Get(2_c) * mT.SU2Get(1_c) - mR.SU2Get(1_c) * mT.SU2Get(2_c)); }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     auto SU2Get(const IDX &...idx) const
     {
       return std::move(cache);
@@ -57,7 +57,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) { VariadicIndex<IDX...>; }
+      requires requires(R mR, T mT, IDX... idx) { IsVariadicIndex<IDX...>; }
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);

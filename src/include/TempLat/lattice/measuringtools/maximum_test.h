@@ -15,7 +15,7 @@ namespace TempLat
     static constexpr size_t NDim = 3;
     myTmpStruct() : mt(MemoryToolBox<3>::makeShared(64, 0)) {}
     template <typename... IDX>
-      requires VariadicNDIndex<3, IDX...>
+      requires IsVariadicNDIndex<3, IDX...>
     DEVICE_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
     {
       return std::get<0>(std::tie(idx...)) > 40 ? 0 : std::get<0>(std::tie(idx...));

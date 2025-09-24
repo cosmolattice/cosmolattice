@@ -39,7 +39,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         GetValue::get(mR, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -60,7 +60,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         DoEval::eval(r, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const

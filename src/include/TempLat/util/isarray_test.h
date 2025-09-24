@@ -7,18 +7,18 @@
 
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
-inline void TempLat::IsArrayTester::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::IsNDArrayTester::Test(TempLat::TDDAssertion &tdd)
 {
-  tdd.verify(IsArray<std::array<int, 3>, 3> == true);
-  tdd.verify(IsArray<Kokkos::Array<int, 3>, 3> == true);
+  tdd.verify(IsNDArray<std::array<int, 3>, 3> == true);
+  tdd.verify(IsNDArray<Kokkos::Array<int, 3>, 3> == true);
 
-  tdd.verify(IsArray<std::array<int, 3>, 2> == false);
-  tdd.verify(IsArray<std::array<int, 3>, 4> == false);
-  tdd.verify(IsArray<Kokkos::Array<int, 3>, 2> == false);
-  tdd.verify(IsArray<Kokkos::Array<int, 3>, 4> == false);
+  tdd.verify(IsNDArray<std::array<int, 3>, 2> == false);
+  tdd.verify(IsNDArray<std::array<int, 3>, 4> == false);
+  tdd.verify(IsNDArray<Kokkos::Array<int, 3>, 2> == false);
+  tdd.verify(IsNDArray<Kokkos::Array<int, 3>, 4> == false);
 
-  tdd.verify(IsArray<int, 3> == false);
-  tdd.verify(IsArray<double, 5> == false);
+  tdd.verify(IsNDArray<int, 3> == false);
+  tdd.verify(IsNDArray<double, 5> == false);
 }
 
 #endif

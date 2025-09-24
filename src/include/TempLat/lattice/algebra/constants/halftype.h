@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/parallel/device.h"
 
 namespace TempLat
@@ -21,7 +21,7 @@ namespace TempLat
     static std::string toString() { return "(HalfType)1/2"; }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...)
     {
       return 0.5;

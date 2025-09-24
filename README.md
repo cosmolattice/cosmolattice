@@ -1,3 +1,4 @@
+
 # CosmoLattice
 
 ## *A modern code for lattice simulations of scalar and gauge field dynamics in an expanding universe*
@@ -11,9 +12,12 @@
 
 ### Basic installation
 
-*Minimal requirements:* `CMake` version 3 or above, `g++` version 5 or above, `fftw3`.
+*Minimal requirements:* 
+- `CMake` version 3.10 or above
+- `g++` version 8 or above
+- `fftw3`
 
-```
+```bash
 git clone https://github.com/cosmolattice/cosmolattice.git
 cd cosmolattice   
 mkdir build                     
@@ -24,9 +28,9 @@ make cosmolattice
 
 This will compile the ``lphi4`` model. To run it with the default input file, you can do
 
-``
+```bash
 ./lphi4 input=../src/models/parameter-files/lphi4.in
-``
+```
 
 The above commands just represent a very brief guide for the installation and execution of CosmoLattice. 
 For further information, see  Appendix A of the <a href=https://arxiv.org/pdf/2102.01031.pdf target="_blank" rel="noopener noreferrer" >user-manual</a>.

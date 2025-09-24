@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -39,14 +39,14 @@ namespace TempLat
     constexpr static size_t getVectorSize() { return NDim; }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim + 1, IDX...>
+      requires IsVariadicNDIndex<NDim + 1, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
     }
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim + 1, IDX...>
+      requires IsVariadicNDIndex<NDim + 1, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX &...idx) const
     {
       return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});

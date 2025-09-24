@@ -29,7 +29,7 @@ namespace TempLat
     static constexpr size_t NDim = _NDim;
 
     template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsArray<C, NDim>
+      requires IsNDArray<C, NDim>
     LayoutStructLocal(const C &initNGrid, const ptrdiff_t nGhosts)
         : mGlobal(initNGrid), mLocalStarts{}, mNGhosts(nGhosts)
     {

@@ -6,6 +6,9 @@ include_directories(SYSTEM src/include/random123/include/)
 # Set up the device
 include(./src/cmake/device/device.cmake)
 
+# Set up documentation
+include(./src/cmake/doxygen.cmake)
+
 find_package(FFTW)
 
 # Need pthread to compile the non-mpi version

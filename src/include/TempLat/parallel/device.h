@@ -89,6 +89,6 @@ namespace TempLat
 } // namespace TempLat
 
 // Including this here, as we need that anywhere basically, where Kokkos is explicitly used.
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 
 #endif

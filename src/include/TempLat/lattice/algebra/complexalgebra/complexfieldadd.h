@@ -13,7 +13,7 @@
 #include "TempLat/lattice/algebra/operators/add.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
 
@@ -42,7 +42,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R mR, T mT, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         mR.ComplexFieldGet(0_c, idx...);
         mT.ComplexFieldGet(0_c, idx...);
       }
@@ -52,7 +52,7 @@ namespace TempLat
     }
     template <typename... IDX>
       requires requires(R mR, T mT, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         mR.ComplexFieldGet(1_c, idx...);
         mT.ComplexFieldGet(1_c, idx...);
       }
@@ -62,7 +62,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires VariadicIndex<IDX...>
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(Tag<0> t, const IDX &...idx)
     {
       DoEval::eval(mR, idx...);

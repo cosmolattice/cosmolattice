@@ -4,10 +4,10 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
-#include "TempLat/lattice/algebra/helpers/variadicindex_test.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
+#include "TempLat/lattice/algebra/helpers/IsVariadicIndex_test.h"
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::VariadicIndexTester> test;
+  TempLat::TDDContainer<TempLat::IsVariadicIndexTester> test;
 }

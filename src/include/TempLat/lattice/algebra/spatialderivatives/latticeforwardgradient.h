@@ -42,7 +42,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {
-        requires VariadicNDIndex<NDim, IDX...>;
+        requires IsVariadicNDIndex<NDim, IDX...>;
         GetValue::get(r, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx)
@@ -60,7 +60,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         DoEval::eval(r, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const

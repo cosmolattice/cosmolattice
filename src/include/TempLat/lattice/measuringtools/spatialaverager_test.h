@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include <Kokkos_Macros.hpp>
 
 namespace TempLat
@@ -18,7 +18,7 @@ namespace TempLat
     myTmpStruct() : mt(MemoryToolBox<NDim>::makeShared(16, 1)), mLayout(mt->mLayouts.getConfigSpaceLayout()) {}
 
     template <typename... IDX>
-      requires VariadicNDIndex<NDim, IDX...>
+      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
     {
       Kokkos::Array<ptrdiff_t, NDim> ii;

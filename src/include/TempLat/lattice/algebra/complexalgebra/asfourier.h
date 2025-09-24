@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/variadicindex.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
 #include "TempLat/util/tdd/tdd.h"
@@ -32,7 +32,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R mR, IDX... idx) {
-        requires VariadicIndex<IDX...>;
+        requires IsVariadicIndex<IDX...>;
         mR.ComplexFieldGet(0_c, idx...);
         mR.ComplexFieldGet(1_c, idx...);
       }
