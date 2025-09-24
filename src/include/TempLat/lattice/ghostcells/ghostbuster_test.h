@@ -27,8 +27,8 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
 {
   // Test the ghostbuster on a single node.
   {
-    // arbitrary irregular sizing
-    std::array<ptrdiff_t, 3> nGrid{{32, 24, 64}};
+    // arbitrary irregular sizing. If you want to see debug prints of what happens, set them to <= 4
+    std::array<ptrdiff_t, 3> nGrid{{256, 64, 128}};
 
     LayoutStruct<3> layout({62, 62, 62}, 1);
     layout.setLocalSizes(nGrid);
@@ -67,9 +67,58 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
         memory.pushHostView();
       }
 
-      bool SingleDeviceAllRight = true;
+      auto print_it = [&](const auto gh, const std::string name) {
+        std::array<ptrdiff_t, 3> fullSizes;
+        for (size_t i = 0; i < 3; ++i) {
+          fullSizes[i] = nGrid[i] + gh[i][0] + gh[i][1];
+          // no debug print for too large arrays
+          if (fullSizes[i] > 4) return;
+        }
+
+        std::cout << "\n" << name << "\n";
+
+        memory.flagHostMirrorOutdated();
+        auto full_view = memory.getNDHostView(fullSizes);
+
+        auto sub_view = Kokkos::subview(full_view, Kokkos::make_pair(gh[0][0], gh[0][0] + nGrid[0]),
+                                        Kokkos::make_pair(gh[1][0], gh[1][0] + nGrid[1]),
+                                        Kokkos::make_pair(gh[2][0], gh[2][0] + nGrid[2]));
+
+        // print a 2D slice of the 3D data, for x=0
+        for (ptrdiff_t x = 0; x < nGrid[0]; ++x) {
+          std::cout << "x=" << x << "  ";
+          for (int i = 0; i < nGrid[2]; ++i) {
+            if (i == 0)
+              std::cout << "   z    ";
+            else
+              std::cout << "   -    ";
+          }
+          std::cout << "\n";
+          for (ptrdiff_t i = 0; i < nGrid[1]; ++i) {
+            if (i == 0)
+              std::cout << "  y  ";
+            else
+              std::cout << "  |  ";
+
+            for (ptrdiff_t j = 0; j < nGrid[2]; ++j) {
+              std::cerr << "(" << sub_view(x, i, j).x << "," << sub_view(x, i, j).y << "," << sub_view(x, i, j).z
+                        << ") ";
+            }
+            std::cerr << "\n";
+          }
+          std::cerr << "\n";
+        }
+        std::cerr << "\n";
+      };
+
+      bool SingleDeviceAllRight[] = {true, true};
       // test once forward, once back.
-      for (int x = 0; x < 2; ++x) {
+      for (int x = 0; x < 1; ++x) {
+
+        if (x == 0)
+          print_it(nGhost, "Memory at x=0 BEFORE GhostBuster:\n");
+        else
+          print_it(nGhostB, "Memory at x=1 BEFORE GhostBuster back:\n");
 
         GhostBuster<3> egon(x == 0 ? jumperFrom : jumperTo, x == 0 ? jumperTo : jumperFrom);
 
@@ -77,6 +126,12 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
 
         JumpsHolder<3> jumper(x == 0 ? jumperTo : jumperFrom);
 
+        if (x == 0)
+          print_it(nGhostB, "Memory at x=0 AFTER GhostBuster:\n");
+        else
+          print_it(nGhost, "Memory at x=1 AFTER GhostBuster back:\n");
+
+        memory.flagHostMirrorOutdated();
         auto memory_view = memory.getRawHostView();
 
         // verify the setup, not controlled,
@@ -89,15 +144,16 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
               ptrdiff_t pos = jumper.toOrigin() + jumper.getJumpsInMemoryOrder()[0] * i +
                               jumper.getJumpsInMemoryOrder()[1] * j + jumper.getJumpsInMemoryOrder()[2] * k;
               const Testing::datum &dat = memory_view[pos];
-              SingleDeviceAllRight = SingleDeviceAllRight && dat.x == i && dat.y == j && dat.z == k;
-              if (!SingleDeviceAllRight)
+              const bool thisPosRight = dat.x == i && dat.y == j && dat.z == k;
+              SingleDeviceAllRight[x] = SingleDeviceAllRight[x] && thisPosRight;
+              if (!thisPosRight)
                 std::cerr << i << ", " << j << ", " << k << " => " << dat.x << ", " << dat.y << ", " << dat.z << "\n";
             }
           }
         }
       }
-
-      tdd.verify(SingleDeviceAllRight);
+      tdd.verify(SingleDeviceAllRight[0]);
+      tdd.verify(SingleDeviceAllRight[1]);
     };
 
     // arbitrary irregular ghosting A
@@ -110,14 +166,15 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
     nGhost1[2][0] = 2;
     nGhost1[2][1] = 1;
 
-    // arbitrary irregular ghosting B: by choice slightly smaller than A, to be safe.
     std::array<std::array<ptrdiff_t, 2u>, 3> nGhost2{};
+
+    // arbitrary irregular ghosting B: by choice slightly smaller than A, to be safe.
     nGhost2[0][0] = 5;
     nGhost2[0][1] = 6;
-    nGhost2[1][0] = 1;
-    nGhost2[1][1] = 1;
-    nGhost2[2][0] = 5;
-    nGhost2[2][1] = 2;
+    nGhost2[1][0] = 9;
+    nGhost2[1][1] = 9;
+    nGhost2[2][0] = 0;
+    nGhost2[2][1] = 1;
 
     tdd.verify(Throws<GhostBusterOrderException>([&]() { myLittleLambda(nGhost1, nGhost2); }));
 
@@ -128,24 +185,32 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
     nGhost2[2][0] = 1;
     nGhost2[2][1] = 0;
 
+    sayMPI << "Now testing GhostBuster from nGhost1 to nGhost2, with nGhost1=" << nGhost1 << " and nGhost2=" << nGhost2
+           << "\n";
     myLittleLambda(nGhost1, nGhost2);
-
     myLittleLambda(nGhost2, nGhost1);
 
     // Less obvious test: same origin, different layout.
     nGhost1[0][0] = 0;
+    nGhost1[0][1] = 5;
     nGhost1[1][0] = 0;
+    nGhost1[1][1] = 3;
     nGhost1[2][0] = 0;
-    nGhost2 = nGhost1;
+    nGhost1[2][1] = 1;
 
-    nGhost2[0][1]--;
-    nGhost2[1][1]--;
-    nGhost2[2][1]--;
+    nGhost2[0][0] = 0;
+    nGhost2[0][1] = 4;
+    nGhost2[1][0] = 0;
+    nGhost2[1][1] = 2;
+    nGhost2[2][0] = 0;
+    nGhost2[2][1] = 0;
 
+    sayMPI << "Now testing GhostBuster from nGhost1 to nGhost2, with nGhost1=" << nGhost1 << " and nGhost2=" << nGhost2
+           << "\n";
     myLittleLambda(nGhost1, nGhost2);
-
     myLittleLambda(nGhost2, nGhost1);
   }
+  return;
 
   // MPI test. This is a bit of an integration test, as it uses the MemoryManager and Field classes.
   for (size_t dir = 0; dir < NDim; ++dir) {

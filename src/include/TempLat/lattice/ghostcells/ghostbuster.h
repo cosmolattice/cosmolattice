@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <cstddef>
 #include <functional>
 #include <cstring>
 #include <stdexcept>
@@ -63,30 +64,53 @@ namespace TempLat
             "GhostBuster only works for memory layouts with jumps of 1 in the last dimension, not with this:",
             mFrom.getJumpsInMemoryOrder(), " to ", mTo.getJumpsInMemoryOrder());
 
-      bool consistent = true;
-      for (ptrdiff_t i = 0, iEnd = mFrom.getJumpsInMemoryOrder().size(); i < iEnd; ++i) {
-        ptrdiff_t thisSign = mFrom.getJumpsInMemoryOrder()[i] - mTo.getJumpsInMemoryOrder()[i];
-        if (mDirection == 0) mDirection = thisSign;
-        consistent = consistent && (thisSign * mDirection >= 0);
-      }
-      if (verbose) say << "from " << from << " to " << to << "\n";
-      if (!consistent)
-        throw GhostBusterOrderException(
-            "Can only work with jumps that change in the same direction for all dimensions, not with this:",
-            mFrom.getJumpsInMemoryOrder(), " to ", mTo.getJumpsInMemoryOrder());
-    }
+      auto from_padding = mFrom.getPadding();
+      auto to_padding = mTo.getPadding();
 
-    /** \brief Do the transformation. Size is passed on, only used when compiled CHECKBOUNDS defined. */
-    template <typename T> void operator()(T *ptr, ptrdiff_t memSize) { bustTheGhosts(ptr, memSize); }
+      size_t originTo = mTo.toOrigin();
+      size_t originFrom = mFrom.toOrigin();
+
+      size_t slab0SizeTo = 1;
+      size_t slab0SizeFrom = 1;
+      for (size_t i = 1; i < NDim; ++i) {
+        slab0SizeTo *= mTo.getSizesInMemory()[i] + to_padding[i][0] + to_padding[i][1];
+        slab0SizeFrom *= mFrom.getSizesInMemory()[i] + from_padding[i][0] + from_padding[i][1];
+      }
+      // We are SHRINKING memory
+      if (slab0SizeTo < slab0SizeFrom && originTo <= originFrom) mDirection = 1;
+      // We are EXPANDING memory
+      else if (slab0SizeTo > slab0SizeFrom && originTo >= originFrom)
+        mDirection = -1;
+      // We are RESHUFFLING memory
+      else if (slab0SizeTo == slab0SizeFrom) {
+        // We are reshuffling memory, but in which direction?
+        if (originTo <= originFrom)
+          mDirection = 1;
+        else
+          mDirection = -1;
+      } else {
+        std::stringstream ss;
+        ss << "GhostBuster only works for in-place reshuffling of memory, or "
+           << "expanding/contracting in the same direction. "
+           << "This is not the case for these layouts: "
+           << "\norigins  from: " << mFrom.toOrigin()         //
+           << "\n           to: " << mTo.toOrigin()           //
+           << "\nSlabSize from: " << slab0SizeFrom            //
+           << "\n           to: " << slab0SizeTo              //
+           << "\npadding  from: " << mFrom.getPadding()       //
+           << "\n           to: " << mTo.getPadding()         //
+           << "\nsizes    from: " << mFrom.getSizesInMemory() //
+           << "\n           to: " << mTo.getSizesInMemory();
+        throw GhostBusterOrderException(ss.str());
+      }
+    }
 
     /** \brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
     template <template <size_t _NDim, typename S, typename... MArgs> class M, typename T, typename... Args>
     void operator()(M<NDim, T, Args...> &obj)
     {
-      device::iteration::fence();
       Timer timer;
-      bustTheGhostsWithViews(obj);
-      std::cout << "GhostBuster took " << timer << std::endl;
+      bustTheGhosts(obj);
     }
 
     /** \brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
@@ -111,160 +135,76 @@ namespace TempLat
     JumpsHolder<NDim> mFrom, mTo;
     ptrdiff_t mDirection;
 
-    template <typename T> void bustTheGhostsWithViews(MemoryBlock<NDim, T> &block)
+    template <typename T> void bustTheGhosts(MemoryBlock<NDim, T> &block)
     {
-      device::iteration::fence();
-
       const auto from_padding = mFrom.getPadding();
       const auto to_padding = mTo.getPadding();
       const auto from_sizes = mFrom.getSizesInMemory();
       const auto to_sizes = mTo.getSizesInMemory();
 
-      // Get Views to the data
       device::array<ptrdiff_t, NDim> from_full_sizes{};
       device::array<ptrdiff_t, NDim> to_full_sizes{};
       for (size_t i = 0; i < NDim; ++i) {
         from_full_sizes[i] = from_padding[i][0] + from_sizes[i] + from_padding[i][1];
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
       }
-
-      // say << "GhostBuster: Padding is " << from_padding << " to " << to_padding << ", sizes are " << from_sizes
-      //     << " to " << to_sizes << "\n";
       auto fromView = block.template getNDView<T>(from_full_sizes);
       auto toView = block.template getNDView<T>(to_full_sizes);
 
-      using LayoutType = typename decltype(fromView)::array_layout;
-
-      // Create subviews for the from and to views
-      // We need to create slices for each dimension, taking into account the padding
-      // and the layout of the views
       std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slicesFrom{};
       std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slicesTo{};
       for (size_t i = 0; i < NDim; ++i) {
-        size_t to_i{};
-        if constexpr (std::is_same_v<LayoutType, Kokkos::LayoutRight>)
-          to_i = i;
-        else if constexpr (std::is_same_v<LayoutType, Kokkos::LayoutLeft>)
-          to_i = NDim - 1 - i;
-        slicesFrom[to_i] = std::make_pair(from_padding[i][0], from_padding[i][0] + from_sizes[i]);
-        slicesTo[to_i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
+        slicesFrom[i] = std::make_pair(from_padding[i][0], from_padding[i][0] + from_sizes[i]);
+        slicesTo[i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
       }
 
-      auto fromSubView =
-          std::apply([&](const auto &...args) { return Kokkos::subview(fromView, args...); }, slicesFrom);
-      auto toSubView = std::apply([&](const auto &...args) { return Kokkos::subview(toView, args...); }, slicesTo);
+      // We always do slabs in the first (most striding) dimension.
+      const int dim = 0;
 
-      // sanity check: the sizes of the subviews should match,
-      // except for the last dimension, which can be padded for the FFT
-      if constexpr (NDim > 1)
-        for (size_t i = 0; i < NDim - 1; ++i) {
-          if (fromSubView.extent(i) != toSubView.extent(i)) {
-            throw GhostBusterBoundsException("GhostBuster: Subview sizes in dimension ", i,
-                                             " do not match after padding: ", fromSubView.extent(i),
-                                             " != ", toSubView.extent(i));
+      std::array<ptrdiff_t, NDim> tslab_sizes{};
+      for (size_t i = 0; i < NDim; ++i) {
+        if (i == dim)
+          tslab_sizes[i] = 1;
+        else
+          tslab_sizes[i] = to_sizes[i];
+      }
+      auto tslab =
+          std::apply([&](const auto &...args) { return device::memory::NDView<NDim, T>("GhostBusterTSlab", args...); },
+                     tslab_sizes);
+
+      for (int _j = 0; _j < to_sizes[dim]; ++_j) {
+        // If we shrink (mDirection==1), we go from 0 to max. (slabs are dropping to "lower" memory)
+        // If we expand (mDirection==-1), we go from max to 0. (slabs are rising to "higher" memory)
+        const int j = mDirection > 0 ? _j : to_sizes[dim] - 1 - _j;
+
+        std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slabSliceFrom{};
+        std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slabSliceTo{};
+        for (size_t i = 0; i < NDim; ++i) {
+          if (i == dim) {
+            slabSliceFrom[i] = std::make_pair(from_padding[i][0] + j, from_padding[i][0] + j + 1);
+            slabSliceTo[i] = std::make_pair(to_padding[i][0] + j, to_padding[i][0] + j + 1);
+          } else {
+            slabSliceFrom[i] = std::make_pair(from_padding[i][0], from_padding[i][0] + to_sizes[i]);
+            slabSliceTo[i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
           }
         }
 
-      device::array<ptrdiff_t, NDim> copy_sizes{};
-      for (size_t i = 0; i < NDim; ++i)
-        copy_sizes[i] = std::min(fromSubView.extent(i), toSubView.extent(i));
+        auto fromSubView =
+            std::apply([&](const auto &...args) { return Kokkos::subview(fromView, args...); }, slabSliceFrom);
+        auto toSubView = std::apply([&](const auto &...args) { return Kokkos::subview(toView, args...); }, slabSliceTo);
 
-      device::array<ptrdiff_t, NDim - 1> curIdx{};
-      if (mDirection < 0) {
-        // if we are moving in the negative direction, we
-        // - have larger indices in the to view
-        // - thus have to start moving from the end of from (we expand the memory)
-        // - we can move blocks of the smallest dimension (i.e. last dimension) first, and then
-        //   go to the larger dimensions.
-        if constexpr (NDim > 1)
-          for (size_t i = 0; i < NDim - 1; ++i) {
-            curIdx[i] = fromSubView.extent(i) - 1; // start from the last index in each dimension
-          }
-        // std::cout << "Starting from the end of the from view: " << curIdx << std::endl;
-      } else {
-        // if we are moving in the positive direction, we
-        // - have smaller indices in the to view
-        // - thus have to start moving from the start of from (we compress the memory)
-        // - we move blocks of the smallest dimension (i.e. last dimension) first, and then
-        //   go to the larger dimensions.
-        // std::cout << "Starting from the beginning of the from view: " << curIdx << std::endl;
-      }
-
-      if constexpr (std::is_same_v<LayoutType, Kokkos::LayoutRight>) {
-        // A temporary is necessary as the source and the destination may have overlap
-        device::memory::NDView<1, T> temp("temp_copy", copy_sizes[NDim - 1]);
-
-        // iterate over all "large indices"
-        bool hasNext = true;
-        if constexpr (NDim > 1) {
-          while (hasNext) {
-            // copy to the temporary
-            Kokkos::parallel_for(
-                Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
-                DEVICE_LAMBDA(const size_t i) {
-                  device::apply([&](const auto &...args) { temp(i) = fromSubView(args..., i); }, curIdx);
-                });
-            // copy from the temporary to the destination
-            Kokkos::parallel_for(
-                Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[NDim - 1]),
-                DEVICE_LAMBDA(const size_t i) {
-                  device::apply([&](const auto &...args) { toSubView(args..., i) = temp(i); }, curIdx);
-                });
-            // Check if we have a next index to go to
-            hasNext =
-                (mDirection < 0) ? lowerDimN(NDim - 2, curIdx, copy_sizes) : raiseDimN(NDim - 2, curIdx, copy_sizes);
-          }
-        } else if constexpr (NDim == 1) {
-          Kokkos::parallel_for(
-              Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[0]),
-              DEVICE_LAMBDA(const size_t i) { temp(i) = fromSubView(i); });
-          Kokkos::parallel_for(
-              Kokkos::RangePolicy<typename decltype(fromSubView)::execution_space>(0, copy_sizes[0]),
-              DEVICE_LAMBDA(const size_t i) { toSubView(i) = temp(i); });
-        }
-      } else {
-        throw GhostBusterOrderException("GhostBuster only works for memory layouts with LayoutRight, not with this");
+        // Copy to the temporary
+        device::memory::copyDeviceToDevice(fromSubView, tslab);
+        // Copy to the destination
+        device::memory::copyDeviceToDevice(tslab, toSubView);
       }
 
       // We need the fence only at the very end, as consecutive kernel launches happen in order.
-      device::iteration::fence();
       block.flagHostMirrorOutdated();
     }
 
-    static inline bool lowerDimN(const ptrdiff_t DimN, device::array<ptrdiff_t, NDim - 1> &nextIdx,
-                                 const device::array<ptrdiff_t, NDim> &copy_sizes)
-    {
-      if (DimN < 0) {
-        // We are done, we have iterated through all dimensions
-        return false;
-      }
-      if (nextIdx[DimN] > 0) {
-        --nextIdx[DimN];
-        return true;
-      } else {
-        nextIdx[DimN] = copy_sizes[DimN] - 1;            // reset to the last index
-        return lowerDimN(DimN - 1, nextIdx, copy_sizes); // carry to the next dimension
-      }
-    };
-
-    static inline bool raiseDimN(const ptrdiff_t DimN, device::array<ptrdiff_t, NDim - 1> &nextIdx,
-                                 const device::array<ptrdiff_t, NDim> &copy_sizes)
-    {
-      if (DimN < 0) {
-        // We are done, we have iterated through all dimensions
-        return false;
-      }
-      if (nextIdx[DimN] < copy_sizes[DimN] - 1) {
-        ++nextIdx[DimN];
-        return true;
-      } else {
-        nextIdx[DimN] = 0;                               // reset to the first index
-        return raiseDimN(DimN - 1, nextIdx, copy_sizes); // carry to the next dimension
-      }
-    };
-
   private:
-    template <typename T> void bustTheGhosts(T *ptr, ptrdiff_t memSize)
+    template <typename T> void bustTheGhosts_CPU(T *ptr, ptrdiff_t memSize)
     {
       recursor<T>(mFrom.getSizesInMemory().data(), ptr + mFrom.toOrigin(), mFrom.getJumpsInMemoryOrder().data(),
                   ptr + mTo.toOrigin(), mTo.getJumpsInMemoryOrder().data(), 0, ptr + memSize);

@@ -33,11 +33,12 @@ int main(int argc, char **argv)
 
     for (size_t i = 0; i < nSteps; ++i) {
       pi.updateGhosts();
-      device::fence();
+      device::iteration::fence();
+
       measurer.measure("timestepping", [&]() {
         pi = pi + dt * LatticeLaplacian<NDim, decltype(phi)>(phi);
         phi = phi + dt * pi;
-        device::fence();
+        device::iteration::fence();
       });
     }
   });

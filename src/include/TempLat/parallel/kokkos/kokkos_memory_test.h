@@ -102,6 +102,32 @@ void TempLat::KokkosMemoryTester::Test(TempLat::TDDAssertion &tdd)
       }
     tdd.verify(all_correct);
   }
+  // Test large 2D with subview
+  {
+    say << "Testing 2D copy device to host with subviews (large arrays)";
+
+    Kokkos::View<double **, Kokkos::DefaultExecutionSpace> _a("a", 128, 128);
+    Kokkos::parallel_for(
+        Kokkos::MDRangePolicy<Kokkos::DefaultExecutionSpace, Kokkos::Rank<2>>({0, 0}, {128, 128}),
+        DEVICE_LAMBDA(size_t i, size_t j) { _a(i, j) = j * 10 + i; });
+
+    auto a = Kokkos::subview(_a, std::make_pair((size_t)2, (size_t)120), std::make_pair((size_t)4, (size_t)110));
+
+    std::vector<double> host_a(118 * 106);
+
+    device_kokkos::memory::copyDeviceToHost(a, host_a.data());
+
+    bool all_correct = true;
+    for (size_t i = 4; i < 110; ++i)
+      for (size_t j = 2; j < 120; ++j) {
+        all_correct &= (host_a[(i - 4) * 118 + (j - 2)] == i * 10 + j);
+        if (host_a[(i - 4) * 118 + (j - 2)] != i * 10 + j) {
+          std::cout << "Error at " << i << " " << j << " got " << host_a[(i - 4) * 118 + (j - 2)] << " expected "
+                    << i * 10 + j << std::endl;
+        }
+      }
+    tdd.verify(all_correct);
+  }
 }
 
 #endif

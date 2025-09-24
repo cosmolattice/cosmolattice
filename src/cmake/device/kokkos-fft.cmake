@@ -5,7 +5,7 @@
 
 set(KOKKOS_FFT_VERSION v0.4.0)
 
-message(STATUS "Downloading Kokkos-FFT ${KOKKOS_FFT_VERSION}")
+message(STATUS "Fetching Kokkos-FFT ${KOKKOS_FFT_VERSION}")
 execute_process(
   COMMAND
     bash -c
@@ -13,7 +13,7 @@ execute_process(
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   OUTPUT_QUIET)
 
-message(STATUS "Configure Kokkos-FFT...")
+message(DEBUG "Configure Kokkos-FFT...")
 execute_process(
   COMMAND bash -c "mkdir -p _dep/kokkos-fft-bin"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -31,12 +31,12 @@ execute_process(
         ../kokkos-fft-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_config.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin)
 
-message(STATUS "Building Kokkos-FFT...")
+message(DEBUG "Building Kokkos-FFT...")
 execute_process(
   COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_build.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin)
 
-message(STATUS "Installing Kokkos-FFT...")
+message(DEBUG "Installing Kokkos-FFT...")
 execute_process(
   COMMAND bash -c
           "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_install.log"

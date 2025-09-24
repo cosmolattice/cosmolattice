@@ -13,6 +13,7 @@
 
 #include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/parallel/kokkos/kokkos_internal.h"
+#include <sstream>
 
 namespace TempLat
 {
@@ -72,17 +73,21 @@ namespace TempLat
       void copyDeviceToDevice(const View1 &src, View2 &dest)
       {
         static_assert(View1::rank == View2::rank, "Source and destination views must have the same rank.");
-        static_assert(std::is_same<typename View1::value_type, typename View2::value_type>::value,
+        static_assert(std::is_same_v<typename View1::value_type, typename View2::value_type>,
                       "Source and destination views must have the same value type.");
-        static_assert(std::is_same<typename View1::execution_space, typename View2::execution_space>::value,
+        static_assert(std::is_same_v<typename View1::execution_space, typename View2::execution_space>,
                       "Source and destination views must have the same execution space.");
-        static_assert(std::is_same<typename View1::array_layout, typename View2::array_layout>::value,
-                      "Source and destination views must have the same layout.");
+        // static_assert(std::is_same_v<typename View1::array_layout, typename View2::array_layout>,
+        //               "Source and destination views must have the same layout.");
 
         constexpr size_t dim = View1::rank;
         for (size_t i = 0; i < dim; ++i)
-          if (src.extent(i) != dest.extent(i))
-            throw std::runtime_error("Source and destination views must have the same extents.");
+          if (src.extent(i) != dest.extent(i)) {
+            std::stringstream ss;
+            ss << "Source and destination views must have the same extents. Mismatch at dimension " << i << ": "
+               << "src extent = " << src.extent(i) << ", dest extent = " << dest.extent(i);
+            throw std::runtime_error(ss.str());
+          }
 
         bool contiguous = src.span_is_contiguous() && dest.span_is_contiguous();
         if (contiguous) {

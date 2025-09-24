@@ -1,62 +1,4 @@
 # ##############################################################################
-# Find out which backends are available
-# ##############################################################################
-include(CheckLanguage)
-
-option(CUDA "Enable CUDA support" ON)
-option(HIP "Enable HIP support" ON)
-option(OpenMP "Enable OpenMP support" ON)
-
-if(CUDA)
-  # Let's see if we have a CUDA compiler
-  check_language(CUDA)
-  if(CMAKE_CUDA_COMPILER)
-    set(CUDA ON)
-    set(HIP OFF)
-  else()
-    set(CUDA OFF)
-  endif()
-endif()
-
-if(HIP AND NOT CUDA)
-  # Let's see if we have a HIP compiler
-  check_language(HIP)
-  if(CMAKE_HIP_COMPILER)
-    set(HIP ON)
-  else()
-    set(HIP OFF)
-  endif()
-endif()
-
-if(OpenMP
-   AND NOT CUDA
-   AND NOT HIP)
-  check_language(OpenMP)
-  find_package(OpenMP QUIET)
-  if(OpenMP_CXX_FOUND)
-    set(OPENMP ON)
-    set(THREADS OFF)
-  else()
-    set(OPENMP OFF)
-  endif()
-else()
-  set(OPENMP OFF)
-endif()
-
-if(NOT CUDA
-   AND NOT HIP
-   AND NOT OPENMP)
-  set(THREADS ON)
-else()
-  set(THREADS OFF)
-endif()
-
-message(
-  STATUS
-    "Kokkos configuration: \n    CUDA: ${CUDA} \n    HIP: ${HIP} \n    OpenMP: ${OPENMP} \n    Threads: ${THREADS}"
-)
-
-# ##############################################################################
 # Get Kokkos
 # ##############################################################################
 
@@ -95,7 +37,7 @@ endif()
 
 set(KOKKOS_VERSION 4.7.00)
 
-message(STATUS "Downloading Kokkos ${KOKKOS_VERSION}")
+message(STATUS "Fetching Kokkos ${KOKKOS_VERSION}")
 execute_process(
   COMMAND
     bash -c
@@ -103,7 +45,7 @@ execute_process(
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   OUTPUT_QUIET)
 
-message(STATUS "Configure Kokkos...")
+message(DEBUG "Configure Kokkos...")
 execute_process(
   COMMAND bash -c "mkdir -p _dep/kokkos-bin"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -128,12 +70,12 @@ execute_process(
         ../kokkos-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_config.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
 
-message(STATUS "Building Kokkos...")
+message(DEBUG "Building Kokkos...")
 execute_process(
   COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_build.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
 
-message(STATUS "Installing Kokkos...")
+message(DEBUG "Installing Kokkos...")
 execute_process(
   COMMAND bash -c
           "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_install.log"
@@ -149,7 +91,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 if(DEFINED PROFILING)
   if(NOT PROFILING)
-    message(STATUS "Profiling is disabled, not downloading Kokkos tools.")
     return()
   endif()
 else()
@@ -165,7 +106,7 @@ else()
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     OUTPUT_QUIET)
 
-  message(STATUS "Configure Kokkos tools...")
+  message(DEBUG "Configure Kokkos tools...")
   execute_process(
     COMMAND bash -c "mkdir -p _dep/kokkos-tools-bin"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
@@ -178,13 +119,13 @@ else()
            2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
 
-  message(STATUS "Building Kokkos tools...")
+  message(DEBUG "Building Kokkos tools...")
   execute_process(
     COMMAND bash -c
             "make -j8 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
 
-  message(STATUS "Installing Kokkos tools...")
+  message(DEBUG "Installing Kokkos tools...")
   execute_process(
     COMMAND bash -c
             "make install 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"

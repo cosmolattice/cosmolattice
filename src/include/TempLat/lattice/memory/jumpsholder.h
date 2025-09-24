@@ -42,12 +42,8 @@ namespace TempLat
     JumpsHolder(LayoutStruct<NDim> layout, std::array<std::array<ptrdiff_t, 2u>, NDim> padding, ptrdiff_t atomSize = 1)
         : mLayout(layout), mPadding(padding), mIsEmpty(false)
     {
-      for (size_t i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i)
         mSizesInMemory[i] = mLayout.getSizesInMemory()[i];
-      }
-      // if (mSizesInMemory.size() != padding.size())
-      //   throw JumpsHolderException("Different sizes for layout and padding:", mSizesInMemory.size(),
-      //                              "!=", padding.size());
 
       ptrdiff_t jumpAccumulator = 1;
 
@@ -156,6 +152,8 @@ namespace TempLat
 
       return result;
     }
+
+    const auto &getLayout() const { return mLayout; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

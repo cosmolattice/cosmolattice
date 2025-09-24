@@ -10,6 +10,7 @@
 #include <array>
 #include <vector>
 #include <iostream>
+#include <tuple>
 #include "TempLat/util/tdd/tddmacros.h"
 
 namespace TempLat
@@ -17,6 +18,7 @@ namespace TempLat
   /* expose these to for vectors of arrays of vectors... */
   template <typename T> std::ostream &operator<<(std::ostream &stream, const std::vector<T> &vec);
   template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const std::array<T, N> &vec);
+  template <typename T, typename K> std::ostream &operator<<(std::ostream &stream, const std::pair<T, K> &p);
 
   /** \brief Simple outputing of arrays and vectors: not exposing as operator<<, because below we want to limit it to
    * vectors and arrays, without needing to know the exact number of template parameters for this systems implementation
@@ -45,6 +47,12 @@ namespace TempLat
   template <typename T> std::ostream &operator<<(std::ostream &stream, const std::vector<T> &vec)
   {
     return PutToStream(stream, vec);
+  };
+
+  template <typename T, typename K> std::ostream &operator<<(std::ostream &stream, const std::pair<T, K> &p)
+  {
+    stream << "( " << p.first << ", " << p.second << " )";
+    return stream;
   };
 
   template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const std::array<T, N> &vec)
