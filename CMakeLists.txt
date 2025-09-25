@@ -8,8 +8,10 @@ set(MODELS_PATH ./src/models/) # path to the cosmolattice models. If for some
 
 message(${CMAKE_MODULE_PATH})
 
-project(CosmoLattice CXX C)
+project(CosmoLattice CXX)
 
+set(CMAKE_CXX_STANDARD 20) # This is likely to evolve in future releases.
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # These are the options which are available to the user.
@@ -43,9 +45,6 @@ set(PROFILING
 
 # Not an option that was tested, so can't modify it easily
 set(FLOATFFT OFF)
-
-set(CMAKE_CXX_STANDARD 20) # This is likely to evolve in future releases.
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Most likely, if you use external library, they won't be in the default path.
 # You need to help CMake where to find them. The easiest way is to put below the

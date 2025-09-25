@@ -1,9 +1,4 @@
-build/
-build_gpu/
-build_*/
-build_clang/
-build_nokokkos/
-build_nogpu/
+build*/
 .cache/
 .idea/
 

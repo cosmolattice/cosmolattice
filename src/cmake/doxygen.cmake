@@ -3,7 +3,7 @@
 # ##############################################################################
 
 # check if Doxygen is installed
-if(DOCUMENTATION)
+if(DOCUMENTATION STREQUAL "ON")
   find_package(Doxygen QUIET)
   if(DOXYGEN_FOUND)
     # set input and output files

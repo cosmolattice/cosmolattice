@@ -57,7 +57,7 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) { IsVariadicIndex<IDX...>; }
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);

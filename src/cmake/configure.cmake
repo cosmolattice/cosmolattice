@@ -1,7 +1,7 @@
 include(./src/cmake/add_cosmolattice_exec.cmake)
 
-include_directories(src/include)
-include_directories(SYSTEM src/include/random123/include/)
+include_directories(src/include/)
+include_directories(SYSTEM external/include/)
 
 # Set up the device
 include(./src/cmake/device/device.cmake)
