@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <cmath>
-
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"

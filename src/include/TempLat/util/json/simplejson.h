@@ -12,7 +12,6 @@
 #pragma once
 
 #include <cstdint>
-#include <cmath>
 #include <cctype>
 #include <string>
 #include <deque>

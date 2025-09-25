@@ -33,7 +33,9 @@ namespace TempLat
     DEVICE_FUNCTION
     ComplexFieldMultiplication(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
+    DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<0> t) const { return Real(mR) * Real(mT) - Imag(mR) * Imag(mT); }
+    DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<1> t) const { return Real(mR) * Imag(mT) + Imag(mR) * Real(mT); }
 
     template <typename... IDX>

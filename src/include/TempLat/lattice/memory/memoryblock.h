@@ -7,10 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <cmath>
-#include <cstring>
-#include <vector>
-
 #include "TempLat/util/exception.h"
 #include "TempLat/util/log/log.h"
 

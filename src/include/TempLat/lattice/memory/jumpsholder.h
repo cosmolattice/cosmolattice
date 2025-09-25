@@ -7,9 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <cmath>
-#include <cstddef>
-
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/parallel/mpi/comm/mpicommreference.h"
 #include "TempLat/util/exception.h"

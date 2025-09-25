@@ -55,7 +55,7 @@ namespace TempLat
       }
 
       template <typename OBJ, size_t NDim, typename I = ptrdiff_t>
-      auto getAtOnePoint(OBJ &&obj, const device_kokkos::array<I, NDim> &pos)
+      GetGetReturnType<OBJ>::type getAtOnePoint(OBJ &&obj, const device_kokkos::array<I, NDim> &pos)
       {
         using T = GetGetReturnType<OBJ>::type;
         T ret;
@@ -98,7 +98,8 @@ namespace TempLat
           for (size_t i = 0; i < dim; ++i)
             localSizes[i] = src.extent(i);
 
-          auto functor = [=](const device_kokkos::IdxArray<dim> &idx) {
+          auto functor = DEVICE_LAMBDA(const device_kokkos::IdxArray<dim> &idx)
+          {
             device_kokkos::apply([&](const auto... i) { dest(i...) = src(i...); }, idx);
           };
 

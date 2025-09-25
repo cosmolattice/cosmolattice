@@ -88,7 +88,7 @@ namespace TempLat
       planChain.fourierSizes = fourierSizes;
 
       if constexpr (NDim >= 3) {
-        for (int j = 0; j < NDim / 3; ++j) {
+        for (size_t j = 0; j < NDim / 3; ++j) {
           using c2rType = typename KokkosFFTPlanHolder<NDim, T>::template PlanType_c2r<3>;
           using r2cType = typename KokkosFFTPlanHolder<NDim, T>::template PlanType_r2c<3>;
 

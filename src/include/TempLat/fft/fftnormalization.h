@@ -86,13 +86,6 @@ namespace TempLat
       }
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-    FFTLayoutStruct<NDim> mLayout;
-    ptrdiff_t mN;
-    double mNorm;
-    int mType;
-
     template <typename T> inline void apply(MemoryBlock<NDim, T> &mBlock, T norm)
     {
       auto block_view = mBlock.getRawView();
@@ -100,6 +93,13 @@ namespace TempLat
       device::iteration::foreach ("FFTNormalization", device::IdxArray<1>{0}, device::IdxArray<1>{mBlock.size()},
                                   functor);
     }
+
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+    FFTLayoutStruct<NDim> mLayout;
+    ptrdiff_t mN;
+    double mNorm;
+    int mType;
 
   public:
 #ifdef TEMPLATTEST

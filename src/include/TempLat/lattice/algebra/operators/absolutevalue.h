@@ -9,7 +9,6 @@
 
 // imperative to include this:
 // otherwise abs might be defined for integers only, with possibly desastrous consequences.
-#include <cmath>
 
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <cmath>
 #include <algorithm>
 
 #include "TempLat/util/tdd/tdd.h"

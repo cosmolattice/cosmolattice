@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which make a tuple from a composite object.
    *
    *
@@ -31,14 +30,14 @@ namespace TempLat
   template <typename R, bool> struct TupleMakerHelper {
     auto operator()(R &&r)
     {
-      using nakedR = typename std::remove_cv<typename std::remove_reference<R>::type>::type;
+      using nakedR = typename std::decay_t<R>;
       return make_tuple_tag<number_to_skip_as_tuple<nakedR>::value, tuple_size<nakedR>::value>(
           [&](auto i) { return nakedR::Getter::get(r, i); });
     }
   };
 
   template <typename R> struct TupleMakerHelper<R, true> {
-    using nakedR = typename std::remove_cv<typename std::remove_reference<R>::type>::type;
+    using nakedR = typename std::decay_t<R>;
     auto operator()(R &&r)
     {
       return make_tuple_tag<number_to_skip_as_tuple<nakedR>::value, tuple_size<nakedR>::value>([&](auto i) {

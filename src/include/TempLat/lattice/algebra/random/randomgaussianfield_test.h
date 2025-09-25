@@ -9,8 +9,6 @@
 
 #include "TempLat/lattice/field/field.h"
 
-#include <cmath>
-
 inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* test the stability of the getter at various coordinates. */

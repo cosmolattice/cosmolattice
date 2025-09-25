@@ -134,7 +134,6 @@ namespace TempLat
 
     floatType rFromCoords(const std::vector<ptrdiff_t> &pCoord)
     {
-      using namespace std;
       floatType r2 = 0;
       for (auto &&it : pCoord) {
         r2 += it * it;

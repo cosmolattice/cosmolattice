@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <limits> /** to get epsilons for various types */
-#include <cmath>
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/device.h"

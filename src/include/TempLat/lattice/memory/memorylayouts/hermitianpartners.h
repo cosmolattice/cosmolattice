@@ -7,9 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <vector>
-#include <cmath>
-
 #include "TempLat/util/hash/keccakhashbareclass.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/powr.h"

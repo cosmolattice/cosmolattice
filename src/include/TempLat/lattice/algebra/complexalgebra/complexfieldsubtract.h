@@ -83,21 +83,21 @@ namespace TempLat
 
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && HasComplexFieldGet<T>)
-  DEVICE_FORCEINLINE_FUNCTION auto operator-(const R &r, const T &t)
+  auto operator-(const R &r, const T &t)
   {
     return ComplexFieldSubtraction<R, T>{r, t};
   }
 
   template <typename R, typename T>
     requires(!HasComplexFieldGet<R> && HasComplexFieldGet<T>)
-  DEVICE_FORCEINLINE_FUNCTION auto operator-(const R &r, const T &t)
+  auto operator-(const R &r, const T &t)
   {
     return ComplexFieldSubtraction{Complexify(r, ZeroType()), t};
   }
 
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && !HasComplexFieldGet<T>)
-  DEVICE_FORCEINLINE_FUNCTION auto operator-(const R &r, const T &t)
+  auto operator-(const R &r, const T &t)
   {
     return ComplexFieldSubtraction{r, Complexify(t, ZeroType())};
   }

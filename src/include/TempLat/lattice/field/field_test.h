@@ -46,7 +46,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
     auto copy_host = copy.getRawHostView();
 
     bool backforthWorks = true;
-    for (ptrdiff_t i = 0; i < original_host.size(); ++i) {
+    for (size_t i = 0; i < original_host.size(); ++i) {
       backforthWorks = backforthWorks && AlmostEqual(original_host[i], copy_host[i]);
       if (!AlmostEqual(original_host[i], copy_host[i])) {
         sayMPI << "original[" << i << "] = " << original_host[i] << ", copy[" << i << "] = " << copy_host[i] << "\n";

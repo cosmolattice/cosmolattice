@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <cmath>
-
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/lattice/memory/jumpsholder.h"

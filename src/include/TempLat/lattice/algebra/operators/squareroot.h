@@ -16,7 +16,7 @@ namespace TempLat
 {
   /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
    * them. */
-  using std::sqrt;
+  using device::sqrt;
 
   /** \brief A mini struct for instiating the test case. */
   struct SqrtTester {

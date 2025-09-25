@@ -15,7 +15,6 @@ void TempLat::KokkosMemoryTester::Test(TempLat::TDDAssertion &tdd)
     Kokkos::View<double *, Kokkos::DefaultExecutionSpace> a("a", 10);
     Kokkos::parallel_for(
         Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)0, 10), DEVICE_LAMBDA(size_t i) { a(i) = i; });
-
     std::vector<double> host_a(10);
     device_kokkos::memory::copyDeviceToHost(a, host_a.data());
 

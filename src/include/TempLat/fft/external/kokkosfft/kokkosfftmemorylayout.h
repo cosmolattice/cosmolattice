@@ -38,7 +38,7 @@ namespace TempLat
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid,
                                                     bool forbidTransposition = !KOKKOSFFTWITHTRANSPOSITION())
     {
-      forbidTransposition = true;
+      forbidTransposition = true || forbidTransposition;
 
       FFTLayoutStruct<NDim> result(nGrid, false, false, true, IntrinsicScales{1., 1.});
       /* default: everything is local. */

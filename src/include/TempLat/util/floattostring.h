@@ -7,9 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <cmath>
-#include <cstring>
-
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/stringtrimmer.h"
 

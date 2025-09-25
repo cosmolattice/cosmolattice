@@ -34,7 +34,6 @@ namespace TempLat
 
     template <typename R> void operator=(R &&r)
     {
-
       for_in_range<0, std::remove_reference<R>::type::size>(
           [&](auto i) { (*this).getComp(i) = std::remove_reference<R>::type::Getter::get(r, i); });
     }

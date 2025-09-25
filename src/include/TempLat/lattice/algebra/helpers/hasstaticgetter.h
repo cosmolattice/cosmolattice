@@ -13,7 +13,7 @@
 namespace TempLat
 {
   template <typename T>
-  concept HasStaticGetter = requires(int i, Tag<0> tag) { T::get(i, tag); };
+  concept HasStaticGetter = requires(int i, Tag<0> tag) { T::Getter::get(i, tag); };
 
   struct HasStaticGetterDummy {
   public:
