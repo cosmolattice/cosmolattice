@@ -109,13 +109,13 @@ namespace TempLat {
     };
 
     template <class A, class B, class C, class D>
-    auto SU2Wrap(A&& pA, B&& pB, C&& pC, D&& pD)
+    auto SU2Wrap(A pA, B pB, C pC, D pD)
     {
         return SU2Wrapper<A,B,C,D>(pA,pB,pC,pD);
     }
 
     template <typename F>
-    auto SU2Wrap(F&& f)
+    auto SU2Wrap(F f)
     {
         return SU2Wrap(f(0_c), f(1_c), f(2_c), f(3_c));
     }
