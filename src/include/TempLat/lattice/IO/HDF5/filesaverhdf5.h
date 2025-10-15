@@ -9,8 +9,11 @@
 
 #ifdef HDF5
 
+#include <cstring>
 #include "TempLat/util/prettytostring.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
+#include "TempLat/lattice/algebra/helpers/confirmspace.h"
+#include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -42,8 +45,8 @@ namespace TempLat {
             mFile.open(fn);
         }
 
-        void create(std::string fn) {
-            mFile.create(fn);
+        void create(std::string fn, FileMode flag = Overwrite) {
+            mFile.create(fn, flag);
         }
 
         void close()
@@ -65,13 +68,41 @@ namespace TempLat {
                     parStr.emplace_back(x.first + "=" + x.second);
                 }
             }
-            mDataset = mFile.createDataset<const char*>("Parameters", std::vector<hsize_t>(1,parStr.size()));
+
+            // Create a flat buffer of fixed-size strings
+            std::vector<char> stringData(parStr.size() * HDF5TypeConstant::FixedSizeStringLength, 0);
             for(size_t i = 0; i < parStr.size(); ++i){
                 if(parStr[i].size() > HDF5TypeConstant::FixedSizeStringLength) throw StringIsTooLong("Well, that's a bit embarassing. One of your parameters contains too many characters (the total string should be smaller than "+std::to_string(HDF5TypeConstant::FixedSizeStringLength)+" char by default, for our hdf5). If you managed to make HDF5 with variable string length, please let us know! If you just want to change the hardcoded number, look in the file TempLat/lattice/IO/HDF5/helpers/hdf5type.h .");
-                mDataset.writeElement(parStr[i].c_str(),std::vector<hsize_t>(1,i));
+                std::strncpy(&stringData[i * HDF5TypeConstant::FixedSizeStringLength], parStr[i].c_str(), HDF5TypeConstant::FixedSizeStringLength - 1);
             }
+
+            // Create dataset and write directly with H5Dwrite using proper string type
+            mDataset = mFile.createDataset<const char*>("Parameters", std::vector<hsize_t>(1,parStr.size()));
+            HDF5Type<const char*> strtype;
+            H5Dwrite(mDataset, strtype.type, H5S_ALL, H5S_ALL, H5P_DEFAULT, stringData.data());
+            strtype.close();
             mDataset.close();
         }
+
+        void save_attr(ParameterParser& r){ //Conceptually, may be better as attributes? But nightmare to save vector of strings, did nt manage to do it in a finite amount of time.
+            std::ostringstream oss;
+
+            std::vector<std::string> parStr;
+            std::string tmp;
+            mDataset = mFile.createDataset<const char*>("Parameters", std::vector<hsize_t>(1,parStr.size()));
+            for(auto x : r.getParams() ){
+                if(x.second != "inf") {
+                    //parStr.emplace_back(x.first + "=" + x.second);
+                    mDataset.addAtribute(x.first, x.second);
+                }
+            }
+           /* for(size_t i = 0; i < parStr.size(); ++i){
+                if(parStr[i].size() > HDF5TypeConstant::FixedSizeStringLength) throw StringIsTooLong("Well, that's a bit embarassing. One of your parameters contains too many characters (the total string should be smaller than "+std::to_string(HDF5TypeConstant::FixedSizeStringLength)+" char by default, for our hdf5). If you managed to make HDF5 with variable string length, please let us know! If you just want to change the hardcoded number, look in the file TempLat/lattice/IO/HDF5/helpers/hdf5type.h .");
+                mDataset.writeElement(parStr[i].c_str(),std::vector<hsize_t>(1,i));
+            }*/
+            mDataset.close();
+        }
+
 
         template<typename R>
         void save(R r){ //used to store an entity directly to a dataset, using it's own name.
