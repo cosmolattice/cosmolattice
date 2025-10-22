@@ -27,7 +27,7 @@ namespace TempLat
     using SV = typename SU2GetGetReturnType<R>::type;
     using SU2UnaryOperator<R>::mR;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2Dagger(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
     DEVICE_FORCEINLINE_FUNCTION

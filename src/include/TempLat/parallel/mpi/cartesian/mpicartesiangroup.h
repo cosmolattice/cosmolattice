@@ -27,7 +27,7 @@ namespace TempLat
   class MPICartesianGroup
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     /** \brief Constructor: templated for the optional proposed decomposition, if you are unhappy
      *        with the built-in decomposition.
      *

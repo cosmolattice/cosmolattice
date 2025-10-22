@@ -24,7 +24,7 @@ namespace TempLat
   class ScaleFactorInitializer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ScaleFactorInitializer() = delete;
 
     template <class Model, typename T> static void initializeScaleFactor(Model &model, RunParameters<T> &rPar)

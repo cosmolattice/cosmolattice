@@ -30,7 +30,7 @@ namespace TempLat
   template <typename R, typename T> class SU2BinaryOperator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2BinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }

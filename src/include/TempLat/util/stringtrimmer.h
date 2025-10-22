@@ -30,7 +30,7 @@ namespace TempLat
   class StringTrimmer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     static inline void ltrim(std::string &s)
     {
       s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int c) { return !std::isspace(c); }));

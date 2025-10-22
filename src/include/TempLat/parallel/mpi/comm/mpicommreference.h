@@ -30,7 +30,7 @@ namespace TempLat
   class MPICommReference : public MPIAllReduce
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MPICommReference(MPI_Comm comm = MPI_COMM_WORLD)
         : MPIAllReduce(comm), mComm(comm), mSize(getSizeForComm(comm)), mRank(getRankInComm(comm))
     {

@@ -32,7 +32,7 @@ namespace TempLat
     template <typename T> class Log : public UnaryOperator<T>
     {
     public:
-      /* Put public methods here. These should change very little over time. */
+      // Put public methods here. These should change very little over time.
       using UnaryOperator<T>::mR;
 
       DEVICE_FUNCTION

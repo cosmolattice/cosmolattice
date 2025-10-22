@@ -34,10 +34,10 @@ template <size_t NDim> inline void TempLat::FFTNormalization<NDim>::Test(TempLat
   auto host_mem_view = mem.getRawHostView();
   auto mem_view = mem.getRawView();
 
+  auto zeroMemory = DEVICE_LAMBDA(const device::IdxArray<1> &i) { mem_view[i[0]] = i[0]; };
+
   auto &&doTest = [&](auto expectedNormC2R, auto expectedNormR2C) {
-    device::iteration::foreach (
-        "InitMem", device::IdxArray<1>{0}, device::IdxArray<1>{(device::Idx)iEnd},
-        DEVICE_LAMBDA(const device::IdxArray<1> &i) { mem_view[i[0]] = i[0]; });
+    device::iteration::foreach ("InitMem", device::IdxArray<1>{0}, device::IdxArray<1>{(device::Idx)iEnd}, zeroMemory);
     device::iteration::fence();
 
     normalizer.c2r(mem, 1. / iScales.c2r);

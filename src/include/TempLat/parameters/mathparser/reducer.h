@@ -27,7 +27,7 @@ namespace TempLat
   class Reducer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Reducer() = delete;
 
     static double reduce(std::string str, ParameterParser &parser)

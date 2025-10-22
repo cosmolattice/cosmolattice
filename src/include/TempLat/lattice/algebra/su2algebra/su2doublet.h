@@ -27,7 +27,7 @@ namespace TempLat
   template <size_t _NDim, typename T> class SU2DoubletBase
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     static constexpr size_t NDim = _NDim;
 
     SU2DoubletBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3, Field<NDim, T> f4)

@@ -29,7 +29,7 @@ namespace TempLat
   template <typename R> class SU2UnaryOperator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
 

@@ -20,7 +20,7 @@ namespace TempLat
   class PreGet
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename U>
       requires requires(U obj) { obj.preGet(); }
     static inline void apply(U &obj)

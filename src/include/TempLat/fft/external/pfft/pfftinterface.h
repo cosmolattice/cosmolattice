@@ -24,7 +24,7 @@ namespace TempLat
   class PFFTInterface : public PFFTMemoryLayout
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     PFFTInterface() {}
 
     virtual ptrdiff_t getMaximumNumberOfDimensionsToDivide(ptrdiff_t nDimensions)

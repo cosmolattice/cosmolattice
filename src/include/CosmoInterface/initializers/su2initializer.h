@@ -28,7 +28,7 @@ namespace TempLat
   class SU2Initializer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2Initializer() = delete;
 
     // INITIALIZATION: SU(2) GAUGE FIELDS

@@ -28,7 +28,7 @@ namespace TempLat
   template <size_t NDim> class TripleStateLayouts
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TripleStateLayouts(FFTLayoutStruct<NDim> fftLayout, ptrdiff_t nGhostCells)
         : mFFTLayout(fftLayout), mConfigSpaceWithGhosts_layout(std::array<ptrdiff_t, NDim>{}, nGhostCells),
           mNGridPoints(fftLayout.getNGridPoints()), mNGhostCells(nGhostCells)

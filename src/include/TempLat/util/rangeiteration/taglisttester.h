@@ -23,7 +23,7 @@ namespace TempLat
   class TagListTester
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TagListTester() {}
 
   private:

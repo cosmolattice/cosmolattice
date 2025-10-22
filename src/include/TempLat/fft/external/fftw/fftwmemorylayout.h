@@ -34,11 +34,10 @@ namespace TempLat
    *
    * Unit test: make test-fftwmemorylayout
    **/
-
   template <size_t NDim> class FFTWMemoryLayout : public FFTWPlanner<NDim>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FFTWMemoryLayout() {}
 
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGridPoints,

@@ -71,7 +71,7 @@ namespace TempLat
   class AssignableCollectionBase<Q>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     AssignableCollectionBase() {}
     template <int N> int operator()(Tag<N> t) { return 0; }
     template <int N> int getComp(Tag<N> t) { return 0; }
@@ -85,7 +85,7 @@ namespace TempLat
   public:
     using AssignableCollectionBase<Q, Field<NDim, T>>::operator=;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <class... Args>
     CollectionBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
                    LatticeParameters<T> pLatPar = LatticeParameters<T>())
@@ -111,7 +111,7 @@ namespace TempLat
   class CollectionBase<Q, NDim, T, ISMOMENTUM> : public AssignableCollectionBase<Q>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     CollectionBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
                    LatticeParameters<T> pLatPar = LatticeParameters<T>())
     {

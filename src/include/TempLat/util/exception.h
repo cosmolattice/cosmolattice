@@ -33,7 +33,7 @@ namespace TempLat
   class Exception : public std::exception
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Exception(const char *itheWhat) : theWhat(itheWhat), strtrace(Stacktrace())
     {
       //    std::cerr << "Constructing exception: " << theWhat << "\n" << trace() << "\n";

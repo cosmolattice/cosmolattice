@@ -27,7 +27,7 @@ namespace TempLat
                                            std::max(GetNDim::get<B>(), std::max(GetNDim::get<C>(), GetNDim::get<D>())))>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2DoubletWrapper() {}
 
     SU2DoubletWrapper(const A &pA, const B &pB, const C &pC, const D &pD) : mData(pA, pB, pC, pD) {}

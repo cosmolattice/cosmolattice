@@ -21,7 +21,7 @@ namespace TempLat
   class IdeaTester
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     IdeaTester() {}
 
   private:

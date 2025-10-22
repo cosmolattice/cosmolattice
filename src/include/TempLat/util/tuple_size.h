@@ -35,7 +35,7 @@ namespace TempLat
   class tuple_sizeTester
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     tuple_sizeTester() {}
 
   private:

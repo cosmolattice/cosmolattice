@@ -26,7 +26,7 @@ namespace TempLat
   {
   public:
     using SU2DoubletUnaryOperator<R>::mR;
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2DoubletShifter(const R &pR) : SU2DoubletUnaryOperator<R>(pR)
     {
       shiftString = shift<N...>(mR.SU2DoubletGet(0_c)).getString({N...});
@@ -69,7 +69,7 @@ namespace TempLat
 
   public:
     using SU2DoubletUnaryOperator<R>::mR;
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2DoubletShifterByOne(const R &pR)
         : SU2DoubletUnaryOperator<R>(mR),
           expr(SU2DoubletWrap(shift<N>(mR.SU2DoubletGet(0_c)), shift<N>(mR.SU2DoubletGet(1_c)),

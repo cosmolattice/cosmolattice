@@ -10,46 +10,41 @@
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "CosmoInterface/initializers/fluctuationsgenerator.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
+  /** \brief A class which is used to initialize the gravitational waves fields.
+   *
+   *
+   * Unit test: make test-scalarinitializer
+   **/
 
-    /** \brief A class which is used to initialize the gravitational waves fields.
-     *
-     *
-     * Unit test: make test-scalarinitializer
-     **/
+  class GWsInitializer
+  {
+  public:
+    // Put public methods here. These should change very little over time.
+    GWsInitializer() = delete;
 
-    class GWsInitializer {
-    public:
-        /* Put public methods here. These should change very little over time. */
-        GWsInitializer() = delete;
+    template <class Model> static void initializeGWs(Model &model)
+    {
 
-        template<class Model>
-        static void initializeGWs(Model& model)
-        {
+      ForLoop(i, 0, Model::NGWs - 1, (*model.fldGWs)(i) = 0.;);
+    }
 
-            ForLoop(i, 0, Model::NGWs - 1, (*model.fldGWs)(i)= 0.;);
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+  };
 
-        }
+  struct GWsInitializerTester {
+#ifdef TEMPLATTEST
+    static inline void Test(TDDAssertion &tdd);
+#endif
+  };
 
-
-    private:
-        /* Put all member variables and private methods here. These may change arbitrarily. */
-
-    };
-
-    struct GWsInitializerTester{
-      #ifdef TEMPLATTEST
-              static inline void Test(TDDAssertion& tdd);
-      #endif
-    };
-
-
-} /* TempLat */
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "CosmoInterface/initializers/gwsinitializer_test.h"
 #endif
-
 
 #endif

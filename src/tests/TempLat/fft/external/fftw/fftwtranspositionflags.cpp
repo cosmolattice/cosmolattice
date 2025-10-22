@@ -1,12 +1,14 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+
 #include "TempLat/fft/external/fftw/fftwtranspositionflags.h"
+#include "TempLat/fft/external/fftw/fftwtranspositionflags_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::FFTWTranspositionFlags> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::FFTWTranspositionFlags<3>> test;
 }
-

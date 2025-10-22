@@ -48,7 +48,7 @@ namespace TempLat
   template <typename R, int N> class ListShifterByOne : public ListUnaryOperator<R>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ListShifterByOne(const R &pR) : ListUnaryOperator<R>(pR), mR(pR) {}
 
     template <int M> DEVICE_FORCEINLINE_FUNCTION auto getComp(Tag<M> t) const

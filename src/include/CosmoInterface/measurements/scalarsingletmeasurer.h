@@ -23,7 +23,7 @@ namespace TempLat
   template <typename T> class ScalarSingletMeasurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename Model>
     ScalarSingletMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par,
                           bool append)

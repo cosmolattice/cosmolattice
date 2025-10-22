@@ -30,7 +30,7 @@ namespace TempLat
   template <size_t NDim> class KokkosFFTPlanner : public FFTLibraryInterface<NDim>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     KokkosFFTPlanner() {}
 
     virtual void setPlannerPatience(int level) {}

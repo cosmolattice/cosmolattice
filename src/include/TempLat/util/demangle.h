@@ -33,7 +33,7 @@ namespace TempLat
   class Demangle
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
 /* from http://stackoverflow.com/a/4541470/2295722 */
 #ifdef __GNUG__

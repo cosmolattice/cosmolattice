@@ -26,7 +26,7 @@ namespace TempLat
   template <typename R, typename T> class ScalarComplexFieldMultiply : public ComplexFieldBinaryOperator<R, T>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using ComplexFieldBinaryOperator<R, T>::mR;
     using ComplexFieldBinaryOperator<R, T>::mT;

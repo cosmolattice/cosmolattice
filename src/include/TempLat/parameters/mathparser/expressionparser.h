@@ -20,7 +20,7 @@ namespace TempLat
   class ExpressionParser
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ExpressionParser() = delete;
 
     static double get(std::string name, ParameterParser &parser)

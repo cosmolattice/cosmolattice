@@ -26,7 +26,7 @@ namespace TempLat
   class MPISendReceive
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MPISendReceive(MPICommReference comm) : mpiComm(comm) {}
 
     template <typename T> void send(std::vector<T> *theVec, int toRank, int tag)

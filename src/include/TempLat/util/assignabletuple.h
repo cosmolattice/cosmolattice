@@ -29,7 +29,7 @@ namespace TempLat
     using AssignableCollectionBase<AssignableTuple<Shift, Args...>, Args...>::operator=;
     using AssignableCollectionBase<AssignableTuple<Shift, Args...>, Args...>::size;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     AssignableTuple(Args... args) : AssignableCollectionBase<AssignableTuple<Shift, Args...>, Args...>(args...) {}
 
     template <int N> auto &getComp(Tag<N> t)

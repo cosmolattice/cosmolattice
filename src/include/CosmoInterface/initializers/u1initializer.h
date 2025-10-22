@@ -29,7 +29,7 @@ namespace TempLat
   class U1Initializer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     U1Initializer() = delete;
 
     // INITIALIZATION: U(1) GAUGE FIELDS

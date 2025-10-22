@@ -61,7 +61,6 @@ namespace TempLat
   };
 
 #define Total(i, beg, end, expr) sum_in_range<beg, end + 1>([&](auto i) { return expr; })
-
 } // namespace TempLat
 
 #endif

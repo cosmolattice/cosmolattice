@@ -24,7 +24,7 @@ namespace TempLat
   template <size_t NDim> class JumpsHolder
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     /** \brief Default constructor is only there to have it explicitly... */
     JumpsHolder() : mLayout({1}, 0), mIsEmpty(true) {}

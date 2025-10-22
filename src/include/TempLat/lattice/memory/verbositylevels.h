@@ -19,7 +19,7 @@ namespace TempLat
 
   struct VerbosityLevels {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     VerbosityLevels()
         : fieldAssignment(true), ghostUpdating(true), ghostsStale(false), allocation(false), spaceConfirmation(false),
           ghostConfirmationSteps(false)

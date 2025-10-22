@@ -25,7 +25,7 @@ namespace TempLat
   class MPIDomainSplit
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     /** \brief Constructor.
      *
      *  \param total the number of processors in total in the group.

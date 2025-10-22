@@ -7,15 +7,14 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-inline void TempLat::KokkosGuard::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::device_kokkos::DeviceGuard::Test(TempLat::TDDAssertion &tdd)
 {
-
-  if (KokkosGuard::InstanceCounter() < 1) {
-    KokkosGuard guard(0, NULL, true);
+  if (DeviceGuard::InstanceCounter() < 1) {
+    DeviceGuard guard(0, NULL, true);
   } else {
-    /* there is an instance of KokkosGuard in the calling main, which is a good thing. Then we can test if the multiple
+    /* there is an instance of DeviceGuard in the calling main, which is a good thing. Then we can test if the multiple
      * instantiation protection works. */
-    tdd.verify(Throws<KokkosGuardInstantiationException>([]() { KokkosGuard guard(0, NULL, true); }));
+    tdd.verify(Throws<KokkosDeviceGuardInstantiationException>([]() { DeviceGuard guard(0, NULL, true); }));
   }
 }
 

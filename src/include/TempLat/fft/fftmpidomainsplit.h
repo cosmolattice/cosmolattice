@@ -21,7 +21,7 @@ namespace TempLat
   template <size_t NDim> class FFTMPIDomainSplit
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     static std::vector<int> makeDomainDecomposition(ptrdiff_t groupSize, ptrdiff_t nDimensions)
     {

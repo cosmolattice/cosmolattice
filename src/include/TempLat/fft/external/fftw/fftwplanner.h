@@ -26,7 +26,7 @@ namespace TempLat
   template <size_t NDim> class FFTWPlanner : public FFTLibraryInterface<NDim>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FFTWPlanner() : patienceFlag(FFTW_ESTIMATE) {}
 
     virtual void setPlannerPatience(int level)

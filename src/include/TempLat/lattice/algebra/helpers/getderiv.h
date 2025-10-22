@@ -20,7 +20,7 @@ namespace TempLat
   class GetDeriv
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename U, typename T>
       requires HasDerivMethod<U>
     static inline auto get(U &obj, T &other)

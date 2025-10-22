@@ -22,7 +22,7 @@ namespace TempLat
   class ConfirmSpace
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename U, size_t NDim>
       requires HasSpaceConfirmationMethods<U, NDim>
     static inline void apply(U &obj, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)

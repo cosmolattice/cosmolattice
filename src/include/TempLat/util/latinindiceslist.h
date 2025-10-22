@@ -24,7 +24,7 @@ namespace TempLat
   template <class... Args> class LatinIndicesList : public AssignableCollectionBase<LatinIndicesList<Args...>, Args...>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     using AssignableCollectionBase<LatinIndicesList<Args...>, Args...>::operator=;
 
     LatinIndicesList(Args... args) : AssignableCollectionBase<LatinIndicesList<Args...>, Args...>(args...) {}

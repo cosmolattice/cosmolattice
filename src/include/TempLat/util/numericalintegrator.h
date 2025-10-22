@@ -19,7 +19,7 @@ namespace TempLat
   class NumericalIntegrator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     NumericalIntegrator() {}
 
     template <typename T> static T integrate(const std::vector<T> &vec, T dt)

@@ -36,7 +36,7 @@ namespace TempLat
   template <typename T> class FFTMallocFree
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename S = T>
       requires std::is_same_v<double, S>
     static void *malloc(size_t n)

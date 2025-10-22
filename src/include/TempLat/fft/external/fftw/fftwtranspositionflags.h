@@ -38,7 +38,7 @@ namespace TempLat
   template <size_t NDim> class FFTWTranspositionFlags
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FFTWTranspositionFlags(const FFTLayoutStruct<NDim> &layout)
     {
       bool transposedC = layout.fourierSpace.isTransposed();

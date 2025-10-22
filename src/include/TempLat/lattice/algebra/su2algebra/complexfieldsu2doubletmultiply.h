@@ -31,7 +31,7 @@ namespace TempLat
     using SU2DoubletBinaryOperator<R, T>::mR;
     using SU2DoubletBinaryOperator<R, T>::mT;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ComplexFieldSU2DoubletMultiplication(const R &pR, const T &pT) : SU2DoubletBinaryOperator<R, T>(pR, pT) {}
 
     DEVICE_FORCEINLINE_FUNCTION

@@ -22,7 +22,7 @@ namespace TempLat
   template <typename T> class MultipleParameterGetter
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MultipleParameterGetter() {}
 
     void push_back(const ParameterGetter<T> &p) { params.push_back(p); }

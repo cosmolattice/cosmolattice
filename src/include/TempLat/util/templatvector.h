@@ -26,7 +26,7 @@ namespace TempLat
   template <typename T, int shift = 0> class TempLatVector
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TempLatVector() {}
 
     TempLatVector(const std::vector<T> &vec) : mVec(vec) {}

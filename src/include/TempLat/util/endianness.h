@@ -22,7 +22,7 @@ namespace TempLat
   class Endianness
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Endianness() : mIsLittleEndian(true)
     {
       /* see https://stackoverflow.com/a/1001326/2295722 and the comment about int16_t */

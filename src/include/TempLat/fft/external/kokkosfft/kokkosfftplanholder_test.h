@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-template <typename T> inline void TempLat::KokkosFFTPlanHolder<T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::KokkosFFTPlanHolder<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   tdd.verify(true);
 }

@@ -22,7 +22,7 @@ namespace TempLat
   template <typename T> class ScaleFactorMeasurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename Model>
     ScaleFactorMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
         : expansion(par.expansion),

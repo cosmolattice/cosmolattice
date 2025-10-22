@@ -46,7 +46,7 @@ namespace TempLat
   class ParameterParser
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ParameterParser(int argc, char *argv[], bool pVerbose = false)
         : params(), pairMaker(), mVerbose(pVerbose), mOverride(false)
     {

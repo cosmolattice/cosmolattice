@@ -36,7 +36,7 @@ namespace TempLat
 #else
     typedef pfft_plan plan;
 #endif
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     PFFTPlanHolder(MPICartesianGroup group, plan planR2C, plan planC2R)
         : mGroup(group), /* need a reference to the group, to make sure the group is alive as long as the plans are
                             alive. */

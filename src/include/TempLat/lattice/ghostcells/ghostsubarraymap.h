@@ -22,7 +22,7 @@ namespace TempLat
   template <size_t NDim> class GhostSubarrayMap
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     GhostSubarrayMap(JumpsHolder<NDim> jumpsHolder, ptrdiff_t ghostDepth)
         : mJumpsHolder(jumpsHolder), mGhostDepth(ghostDepth)
     {

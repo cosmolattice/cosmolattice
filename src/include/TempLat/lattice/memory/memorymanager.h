@@ -27,7 +27,7 @@ namespace TempLat
   template <size_t NDim, typename T> class MemoryManager
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MemoryManager(std::shared_ptr<MemoryToolBox<NDim>> toolBox, std::string name = "")
         : mToolBox(toolBox), mName(name), mAllocated(false)
     {

@@ -24,7 +24,7 @@ namespace TempLat
   template <typename R, int... N> class SU2Shifter : public SU2UnaryOperator<R>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using SV = typename SU2GetGetReturnType<R>::type;
     using SU2UnaryOperator<R>::mR;
@@ -79,7 +79,7 @@ namespace TempLat
     typedef typename SU2GetGetReturnType<R>::type SV;
     using SU2UnaryOperator<R>::mR;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2ShifterByOne(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
     template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N>(mR.SU2Get(t)); }

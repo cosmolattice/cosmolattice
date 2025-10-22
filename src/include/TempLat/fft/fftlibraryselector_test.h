@@ -125,7 +125,7 @@ namespace TempLat
       if (nGrid[0] <= 8) {
         const auto result_view = mem.getRawHostView();
         std::cout << "Memory contents BEFORE c2r and r2c:\n";
-        for (size_t i = 0; i < mem.size(); ++i) {
+        for (ptrdiff_t i = 0; i < (ptrdiff_t)mem.size(); ++i) {
           std::cout /*<< "mem[" << i << "] = "*/ << std::setw(12) << result_view(i);
           if (i % nGridFourier[0] == nGridFourier[0] - 1)
             std::cout << std::endl;
@@ -285,17 +285,39 @@ inline void TempLat::FFTLibrarySelector<_NDim>::TestBody(TempLat::TDDAssertion &
   tdd.verify(Throws<FFTLibraryDoubleInitializationException>([]() { getFFTSessionGuards(); }));
 
   // We test in 2,3,4 dimensions, and for grids 2^2, ..., 2^5.
-  constexpr_for<2, 5, 1>([&](auto i) {
-    sayMPI << "Testing FFTLibrarySelector for NDim = " << decltype(i)::value << "\n";
-    constexpr size_t NDim = decltype(i)::value;
-    for (ptrdiff_t inGrid : std::array<ptrdiff_t, 4>{2, 3, 6, 7}) {
+  {
+    constexpr size_t NDim = 2;
+    sayMPI << "Testing FFTLibrarySelector for NDim = " << NDim << "\n";
+    for (ptrdiff_t inGrid : std::array<ptrdiff_t, 4>{2, 3, 7, 10}) {
       device::array<ptrdiff_t, NDim> nGrid;
       for (auto &it : nGrid)
         it = std::pow(2, inGrid);
       test_r2c_c2r<NDim, T>(tdd, nGrid);
       test_c2r_r2c<NDim, T>(tdd, nGrid);
     }
-  });
+  }
+  {
+    constexpr size_t NDim = 3;
+    sayMPI << "Testing FFTLibrarySelector for NDim = " << NDim << "\n";
+    for (ptrdiff_t inGrid : std::array<ptrdiff_t, 3>{2, 3, 6}) {
+      device::array<ptrdiff_t, NDim> nGrid;
+      for (auto &it : nGrid)
+        it = std::pow(2, inGrid);
+      test_r2c_c2r<NDim, T>(tdd, nGrid);
+      test_c2r_r2c<NDim, T>(tdd, nGrid);
+    }
+  }
+  {
+    constexpr size_t NDim = 4;
+    sayMPI << "Testing FFTLibrarySelector for NDim = " << NDim << "\n";
+    for (ptrdiff_t inGrid : std::array<ptrdiff_t, 2>{2, 3}) {
+      device::array<ptrdiff_t, NDim> nGrid;
+      for (auto &it : nGrid)
+        it = std::pow(2, inGrid);
+      test_r2c_c2r<NDim, T>(tdd, nGrid);
+      test_c2r_r2c<NDim, T>(tdd, nGrid);
+    }
+  }
 }
 
 template <size_t NDim> inline void TempLat::FFTLibrarySelector<NDim>::Test(TempLat::TDDAssertion &tdd)

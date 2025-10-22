@@ -21,7 +21,7 @@ namespace TempLat
   template <typename T> class ParameterGetter
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ParameterGetter(T instance, std::string name) : mName(name), mInstance(instance) {}
     ParameterGetter(const ParameterGetter<T> &other) : mName(other.mName), mInstance(other.mInstance) {}
     const T &operator()() { return this->mInstance; }

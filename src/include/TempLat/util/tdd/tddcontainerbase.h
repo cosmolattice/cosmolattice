@@ -18,7 +18,7 @@ namespace TempLat
   class TDDContainerBase
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     virtual int Test() = 0;
 
   private:

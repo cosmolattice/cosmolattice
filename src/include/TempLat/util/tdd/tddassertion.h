@@ -22,7 +22,7 @@ namespace TempLat
   class TDDAssertion
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TDDAssertion() : results(std::make_shared<std::vector<std::pair<bool, std::string>>>()), goodScore(0), badScore(0)
     {
     }

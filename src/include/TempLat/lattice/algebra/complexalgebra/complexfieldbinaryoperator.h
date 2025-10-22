@@ -27,7 +27,7 @@ namespace TempLat
   template <typename R, typename T> class ComplexFieldBinaryOperator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     DEVICE_FUNCTION
     ComplexFieldBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 

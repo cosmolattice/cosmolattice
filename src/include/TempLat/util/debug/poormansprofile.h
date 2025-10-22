@@ -25,7 +25,7 @@ namespace TempLat
   class PoorMansProfile
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     PoorMansProfile() {}
 
     ~PoorMansProfile()

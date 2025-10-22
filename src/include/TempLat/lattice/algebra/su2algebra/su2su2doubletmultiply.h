@@ -26,7 +26,7 @@ namespace TempLat
   template <class R, class T> class SU2SU2DoubletMultiplication : public SU2DoubletBinaryOperator<R, T>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using SU2DoubletBinaryOperator<R, T>::mR;
     using SU2DoubletBinaryOperator<R, T>::mT;

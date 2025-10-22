@@ -7,32 +7,33 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <cstddef>
+#include "TempLat/fft/external/fftw/fftwinterface.h"
+
 template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-
   MPICommReference world;
 
   //    FFTWMemoryLayout mem; // cannot do this. Need the descending class for that.
 
-  auto &&computeExpectation = [&](const auto &nGrid) {
-    constexpr size_t nDim = nGrid.size();
+  auto computeExpectation = [&](const auto &nGrid, const auto tag) {
+    constexpr size_t nDim = decltype(tag)::value;
     FFTWInterface<nDim> mem;
 
-    FFTLayoutStruct expected(nGrid, true, false);
-    std::vector<ptrdiff_t> confLocalSizes(nGrid);
-    std::vector<ptrdiff_t> confLocalStarts(nDim, 0);
-    std::vector<ptrdiff_t> fourLocalSizes(nGrid);
-    std::vector<ptrdiff_t> fourLocalStarts(nDim, 0);
-    std::vector<ptrdiff_t> fourTransposition(nDim);
-    std::iota(fourTransposition.begin(), fourTransposition.end(), 0);
+    FFTLayoutStruct<nDim> expected(nGrid, true, false, false);
+    std::array<ptrdiff_t, nDim> confLocalSizes(nGrid);
+    std::array<ptrdiff_t, nDim> confLocalStarts{};
+    std::array<ptrdiff_t, nDim> fourLocalSizes(nGrid);
+    std::array<ptrdiff_t, nDim> fourLocalStarts{};
+    std::array<ptrdiff_t, nDim> fourTransposition{};
+    for (size_t i = 0; i < nDim; ++i)
+      fourTransposition[i] = i;
 
-    fourLocalSizes.back() = fourLocalSizes.back() / 2 + 1;
-    confLocalSizes.back() = 2 * fourLocalSizes.back();
+    fourLocalSizes[nDim - 1] = fourLocalSizes[nDim - 1] / 2 + 1;
+    confLocalSizes[nDim - 1] = 2 * fourLocalSizes[nDim - 1];
 
     expected.fourierSpace = LayoutStruct<nDim>::createGlobalFFTLayout(nGrid);
 
-    confLocalSizes.back() = 2 * expected.fourierSpace.getLocalSizes().back();
+    confLocalSizes[nDim - 1] = 2 * expected.fourierSpace.getLocalSizes()[nDim - 1];
 
     if (nDim > 1) {
       confLocalStarts[0] = (nGrid[0] * (ptrdiff_t)world.rank()) / (ptrdiff_t)world.size();
@@ -64,13 +65,13 @@ template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(Tem
     tdd.verify(test_Only_Works_For_World_Size_Which_Is_A_Factor_Of_128);
   } else {
 
-    auto &&doSingleTest = [&](const auto &nGrid) {
-      constexpr size_t nDim = nGrid.size();
+    auto &&doSingleTest = [&](const auto &nGrid, const auto tag) {
+      constexpr size_t nDim = decltype(tag)::value;
       std::vector<int> decompose(nDim, 1);
       decompose[0] = world.size();
       FFTWInterface<nDim> mem;
       auto fromLibrary = mem.computeLocalSizes(MPICartesianGroup(nDim, decompose), nGrid);
-      auto expected = computeExpectation(nGrid);
+      auto expected = computeExpectation(nGrid, tag);
       bool result = fromLibrary == expected;
       tdd.verify(fromLibrary == expected);
       if (!result) {
@@ -78,9 +79,9 @@ template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(Tem
       }
     };
 
-    doSingleTest({128, 128});
-    doSingleTest({128, 128, 128, 128});
-    doSingleTest({128, 128, 128, 128, 128, 128});
+    doSingleTest(std::array<ptrdiff_t, 2>{128, 128}, Tag<2>{});
+    doSingleTest(std::array<ptrdiff_t, 4>{128, 128, 128, 128}, Tag<4>{});
+    doSingleTest(std::array<ptrdiff_t, 6>{128, 128, 128, 128, 128, 128}, Tag<6>{});
 
     //        tdd.verify( mem.computeLocalSizes(MPICartesianGroup(4, {{ world.size(), 1, 1, 1}} ), 4, 128) ==
     //        computeExpectation(4, 128)); tdd.verify( mem.computeLocalSizes(MPICartesianGroup(2, {{ world.size(), 1}}

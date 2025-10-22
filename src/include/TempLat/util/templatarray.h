@@ -23,7 +23,7 @@ namespace TempLat
   template <typename T, int N, int shift = 0> class TempLatArray
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TempLatArray() {}
 
     TempLatArray(const std::array<T, N> &vec) : mVec(vec) {}

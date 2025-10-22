@@ -33,7 +33,7 @@ namespace TempLat
     using SU2BinaryOperator<R, T>::mR;
     using SU2BinaryOperator<R, T>::mT;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2Multiplication(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
     DEVICE_FORCEINLINE_FUNCTION

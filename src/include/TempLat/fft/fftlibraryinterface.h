@@ -49,7 +49,7 @@ namespace TempLat
   template <size_t NDim> class FFTLibraryInterface
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FFTLibraryInterface() {}
     virtual ~FFTLibraryInterface() {}
 

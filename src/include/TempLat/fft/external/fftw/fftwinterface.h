@@ -22,7 +22,7 @@ namespace TempLat
   template <size_t NDim> class FFTWInterface : public FFTWMemoryLayout<NDim>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FFTWInterface()
     {
       // Sanity check: our complex type should be perfectly compatible with FFTW complex.

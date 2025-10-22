@@ -21,7 +21,7 @@ namespace TempLat
   class ParenthesisStripper
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ParenthesisStripper() = delete;
 
     static void strip(std::string &toStrip)

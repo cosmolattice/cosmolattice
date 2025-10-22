@@ -23,7 +23,7 @@ namespace TempLat
   template <size_t NDim> class Coordinates
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Coordinates(const JumpsHolder<NDim> &jumpsHolder, const LayoutStruct<NDim> &layoutStruct)
         : mLayouts(layoutStruct), mJumps(jumpsHolder), mIStart(0), jumps(mJumps.getJumpsInMemoryOrder()),
           vect(jumps.size())

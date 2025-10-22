@@ -27,7 +27,7 @@ namespace TempLat
   template <size_t NDim, typename T> class ComplexFieldFourierView
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ComplexFieldFourierView(FourierView<NDim, T> r, FourierView<NDim, T> i)
         : mR(r), mI(i), mToolBox(mR.getToolBox() == nullptr ? mI.getToolBox() : mR.getToolBox()),
           mLayout(mToolBox->mLayouts.getFourierSpaceLayout())

@@ -24,7 +24,7 @@ namespace TempLat
   class ConditionalFileStream : public ConditionalStream
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ConditionalFileStream(const std::string &fname_, bool enabled_, std::ios_base::openmode mode = std::ios_base::out)
         : ConditionalStream(stream, enabled_), fname(fname_), mMode(mode)
     {

@@ -45,7 +45,7 @@ namespace TempLat
   public:
     typedef typename GetFloatType<T>::type floatType;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     RadialProjectionResult(ptrdiff_t nBins, bool pUseBinCentralValues = false, bool pIsInFourier = false)
         : std::vector<RadialProjectionSingleBinAndValue<T>>(), finalizedOnce(false), mNBins(nBins), mValues(mNBins),
           mBinBounds(mNBins), mUseBinCentralValues(pUseBinCentralValues), mIsInFourier(pIsInFourier)

@@ -30,7 +30,7 @@ namespace TempLat
   class MPIGuard
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     MPIGuard(int argc, char **argv, bool verbose = false)
         : instanceProtectionKey(InstanceCounter(1)), mVerbose(verbose)

@@ -4,11 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+
 #include "TempLat/fft/external/fftw/fftwmemorylayout.h"
-#include "TempLat/fft/external/fftw/fftwinterface.h"
 #include "TempLat/fft/external/fftw/fftwmemorylayout_test.h"
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTWMemoryLayout> test;
+  TempLat::TDDContainer<TempLat::FFTWMemoryLayout<3>> test;
 }

@@ -27,7 +27,7 @@ namespace TempLat
   template <size_t _NDim, typename T> class ComplexField
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     static constexpr size_t NDim = _NDim;
 

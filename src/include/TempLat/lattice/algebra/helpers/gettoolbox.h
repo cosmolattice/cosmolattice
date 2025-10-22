@@ -24,7 +24,7 @@ namespace TempLat
   public:
     GetToolBox() = delete;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename U>
       requires HasToolBox<U>
     static auto get(U &&obj)

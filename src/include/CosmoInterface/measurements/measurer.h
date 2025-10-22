@@ -35,7 +35,7 @@ namespace TempLat
   template <typename Model, typename T = double> class Measurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Measurer(Model &model, const RunParameters<T> &par)
         : filesManager(SimulationManager<Model::NDim>::base_filename(par, model), model.getToolBox(), false,
                        par.hdf5Spectra,

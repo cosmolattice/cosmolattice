@@ -27,7 +27,7 @@ namespace TempLat
   template <typename T> class SpectrumSaverHDF5
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <size_t NDim>
     SpectrumSaverHDF5(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool append, const RunParameters<T> &rPar)

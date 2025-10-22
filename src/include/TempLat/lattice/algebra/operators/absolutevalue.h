@@ -36,7 +36,7 @@ namespace TempLat
     public:
       using UnaryOperator<R>::mR;
 
-      /* Put public methods here. These should change very little over time. */
+      // Put public methods here. These should change very little over time.
       DEVICE_FUNCTION
       AbsoluteValue(const R &a) : UnaryOperator<R>(a) {}
 

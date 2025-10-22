@@ -25,7 +25,7 @@ namespace TempLat
 
   template <typename T> struct LatticeParameters {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     LatticeParameters(T pDx, T pLSide, T pKIR) : dx(pDx), lSide(pLSide), kIR(pKIR)
     {
       if (!AlmostEqual(kIR, 2 * Constants::pi<T> / lSide))

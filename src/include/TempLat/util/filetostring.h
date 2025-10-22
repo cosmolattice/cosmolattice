@@ -25,7 +25,7 @@ namespace TempLat
   class FileToString
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FileToString(const std::string fName) : mFName(fName), didIt(false) {}
 
     operator std::string()

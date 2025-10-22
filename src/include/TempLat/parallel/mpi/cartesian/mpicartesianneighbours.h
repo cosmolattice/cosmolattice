@@ -24,7 +24,7 @@ namespace TempLat
   class MPICartesianNeighbours
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MPICartesianNeighbours(MPICartesianGroup group)
         : mCartesianGroup(group), mNDimensions(mCartesianGroup.getNDimensions())
     {

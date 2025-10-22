@@ -35,7 +35,7 @@ namespace TempLat
   public:
     static bool PFFTWITHTRANSPOSITION() { return false; }
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     PFFTMemoryLayout() {}
 
     virtual FFTLayoutStruct computeLocalSizes(MPICartesianGroup group, std::vector<ptrdiff_t> nGrid,

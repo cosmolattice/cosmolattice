@@ -22,7 +22,7 @@ namespace TempLat
   template <size_t NDim> class KokkosFFTInterface : public KokkosFFTMemoryLayout<NDim>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     KokkosFFTInterface() {}
 
     virtual ptrdiff_t getMaximumNumberOfDimensionsToDivide(ptrdiff_t nDimensions)

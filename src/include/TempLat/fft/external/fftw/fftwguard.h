@@ -36,7 +36,7 @@ namespace TempLat
   class FFTWGuard : public FFTSessionGuard
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     FFTWGuard(bool verbose = true) : mVerbose(verbose)
     {

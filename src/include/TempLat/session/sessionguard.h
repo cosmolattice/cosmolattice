@@ -27,7 +27,7 @@ namespace TempLat
   class SessionGuard
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SessionGuard(int argc, char *argv[], bool verbose = false)
         : instanceProtectionKey(InstanceCounter(1)), mMPIGuard(argc, argv, verbose), mDeviceGuard(argc, argv, verbose),
           mFFTSessionGuards(getFFTSessionGuards(verbose))

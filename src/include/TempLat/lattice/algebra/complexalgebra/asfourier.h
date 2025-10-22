@@ -23,7 +23,7 @@ namespace TempLat
   template <typename R> class ComplexFieldAsFourier
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     using mRType = typename ComplexGetGetReturnType<R>::type;
 
     ComplexFieldAsFourier(const R &pR) : mR(pR) {}

@@ -29,7 +29,7 @@ namespace TempLat
   template <size_t NDim> class WaveNumber /*: public Vector*/
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox)
         : mToolBox(toolBox), mLayout(toolBox->mLayouts.getFourierSpaceLayout())

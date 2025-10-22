@@ -65,7 +65,7 @@ namespace TempLat
   class KeccakHashBareClass
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     /** \brief Initialize the states, 0 and 0..n */
     KeccakHashBareClass() : hasBeenUsed(false)

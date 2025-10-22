@@ -25,7 +25,7 @@ namespace TempLat
   template <size_t NDim> class FileSaverPureMPI
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FileSaverPureMPI() {}
     void open(std::string fn, std::shared_ptr<MemoryToolBox<NDim>> toolBox)
     {

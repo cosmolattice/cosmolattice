@@ -27,7 +27,7 @@ namespace TempLat
   template <size_t NDim> class FileLoaderPureMPI
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FileLoaderPureMPI() {}
 
     template <typename R> void load(R &&r)

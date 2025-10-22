@@ -31,7 +31,7 @@ namespace TempLat
   class TDDRegister
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     static void add(TDDContainerBase *ptr, const char *idName)
     {
       if (ptr != NULL && idName != NULL) {

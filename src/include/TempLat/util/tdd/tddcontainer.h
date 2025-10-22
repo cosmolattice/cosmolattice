@@ -22,7 +22,7 @@ namespace TempLat
   template <class TESTME> class TDDContainer : public TDDContainerBase
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TDDContainer() { TDDRegister::add(this, typeid(TESTME).name()); }
 
     /** \brief Since we unsafely pass a pointer to `this` in our constructor, we must avoid copying this class at all

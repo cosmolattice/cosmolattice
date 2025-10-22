@@ -26,7 +26,7 @@ namespace TempLat
   template <typename T> class MeasurementsSaverStd
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <size_t NDim>
     MeasurementsSaverStd(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool appendMode,
                          const std::vector<std::string> &headers = {})

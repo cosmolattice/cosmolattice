@@ -26,7 +26,7 @@ namespace TempLat
   template <class A, class B, class C> class SU2GroupWrapper : public SU2Operator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     using SV = typename GetGetReturnType<A>::type;
 
     SU2GroupWrapper(const A &pA, const B &pB, const C &pC) : mA(pA), mB(pB), mC(pC) {}

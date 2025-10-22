@@ -37,7 +37,7 @@ namespace TempLat
   class FileSaverHDF5
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FileSaverHDF5() { std::cout << "FileSaverHDF5: Called constructor."; }
 
     void open(std::string fn)

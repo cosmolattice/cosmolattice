@@ -28,7 +28,7 @@ namespace TempLat
   template <size_t NDim> class SpaceStateInterface
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     /** \brief A preparation function: pass this call to all the members in the tree / chain, make sure everyone is in
      * configuration or fourier space, and everyone has the actual same layout. */

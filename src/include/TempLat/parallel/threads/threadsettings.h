@@ -25,7 +25,7 @@ namespace TempLat
   class ThreadSettings
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     /** \brief Yes, a global variable. Inline, so it remains header only. Constructor is private.
         All you can do with this instance is pass it to a stream:

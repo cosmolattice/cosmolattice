@@ -25,7 +25,7 @@ namespace TempLat
   class FileToJSON : public json::JSON
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FileToJSON(const std::string fname) : json::JSON(json::JSON::Load(FileToString(fname))) {}
 
   private:

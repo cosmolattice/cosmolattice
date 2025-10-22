@@ -32,7 +32,7 @@ namespace TempLat
     {
     }
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <int N, typename U>
       requires HasDoWeNeedGhostsMethodIndexed<N, U>
     static void apply(U &obj, Tag<N> i)
@@ -46,7 +46,7 @@ namespace TempLat
     {
     }
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename U>
       requires HasDoWeNeedGhostsMethodIndexedDyn<U>
     static void apply(U &obj, ptrdiff_t i)

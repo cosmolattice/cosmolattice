@@ -19,7 +19,7 @@ namespace TempLat
   class HermitianValueAccounting
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     DEVICE_FUNCTION
     HermitianValueAccounting(ptrdiff_t realCount, ptrdiff_t imaginaryCount)
         : mRealCount(realCount), mImaginaryCount(imaginaryCount)

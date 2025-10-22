@@ -5,11 +5,9 @@
 
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
-#ifdef KOKKOS_FFT
 #include "TempLat/fft/external/kokkosfft/kokkosfftmemorylayout.h"
-#include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
+#include "TempLat/fft/external/kokkosfft/kokkosfftmemorylayout_test.h"
 namespace
 {
-  TempLat::TDDContainer<TempLat::KokkosFFTMemoryLayout> test;
+  TempLat::TDDContainer<TempLat::KokkosFFTMemoryLayout<3>> test;
 }
-#endif

@@ -19,7 +19,7 @@ namespace TempLat
   template <size_t NDim> class SU2DoubletOperator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2DoubletOperator() {}
     static constexpr size_t size = 4;
     using Getter = SU2DoubletGetter;

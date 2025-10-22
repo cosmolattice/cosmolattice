@@ -19,7 +19,7 @@ namespace TempLat
   class GetNGrid
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <typename U>
       requires HasToolBox<U>

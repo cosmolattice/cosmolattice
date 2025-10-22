@@ -28,7 +28,7 @@ namespace TempLat
     template <typename R> class ComplexConjugate : public UnaryOperator<R>
     {
     public:
-      /* Put public methods here. These should change very little over time. */
+      // Put public methods here. These should change very little over time.
       using UnaryOperator<R>::mR;
 
       DEVICE_FUNCTION

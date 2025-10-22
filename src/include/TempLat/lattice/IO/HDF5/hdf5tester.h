@@ -23,7 +23,7 @@ namespace TempLat
   class HDF5Tester
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     HDF5Tester() {}
 
   private:

@@ -9,5 +9,6 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTMPIDomainSplit> test;
-}
+  TempLat::TDDContainer<TempLat::FFTMPIDomainSplit<2>> test2;
+  TempLat::TDDContainer<TempLat::FFTMPIDomainSplit<3>> test3;
+} // namespace

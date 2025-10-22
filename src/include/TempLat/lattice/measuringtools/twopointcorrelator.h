@@ -29,7 +29,7 @@ namespace TempLat
     using ToolWithOwnMemory<NDim, T>::getFieldForMeasurement;
 
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TwoPointCorrelatorBuilder(T instance, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
         : ToolWithOwnMemory<NDim, T>(instance), mToolBox(pToolBox)
     {

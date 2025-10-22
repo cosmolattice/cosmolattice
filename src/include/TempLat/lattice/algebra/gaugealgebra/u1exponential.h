@@ -26,7 +26,7 @@ namespace TempLat
   {
   public:
     using SV = typename GetGetReturnType<R>::type;
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     using ComplexFieldUnaryOperator<R>::mR;
 
     U1Exponential(const R &pR) : ComplexFieldUnaryOperator<R>(pR) {}

@@ -25,7 +25,7 @@ namespace TempLat
   class HDF5Object
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     HDF5Object() {}
 
     HDF5Object(const hid_t &id) : mId(id) {}

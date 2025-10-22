@@ -32,7 +32,7 @@ namespace TempLat
     using ComplexFieldBinaryOperator<R, T>::mR;
     using ComplexFieldBinaryOperator<R, T>::mT;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ComplexFieldSubtraction(const R &pR, const T &pT) : ComplexFieldBinaryOperator<R, T>(pR, pT) {}
 
     DEVICE_FORCEINLINE_FUNCTION

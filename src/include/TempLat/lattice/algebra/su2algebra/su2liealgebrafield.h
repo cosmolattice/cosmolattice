@@ -20,7 +20,7 @@ namespace TempLat
   template <size_t NDim, typename T> class SU2LieAlgebraField : public SU2FieldBase<NDim, T>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using SU2FieldBase<NDim, T>::fs;
 

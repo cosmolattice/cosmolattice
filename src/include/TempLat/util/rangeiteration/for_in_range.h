@@ -19,7 +19,6 @@ namespace TempLat
    *
    * Unit test: make test-for_in_range
    **/
-
   class for_in_range_Tester
   {
   public:

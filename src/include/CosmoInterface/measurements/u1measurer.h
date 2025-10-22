@@ -29,7 +29,7 @@ namespace TempLat
   template <typename T> class U1Measurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename Model>
     U1Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
     {

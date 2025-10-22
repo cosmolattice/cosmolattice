@@ -22,7 +22,7 @@ namespace TempLat
   template <typename R, int... SHIFTS> class ExpressionShifter : public UnaryOperator<R>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     using UnaryOperator<R>::mR;
 
     static constexpr size_t dim = sizeof...(SHIFTS);
@@ -74,7 +74,7 @@ namespace TempLat
     static constexpr int N = _N > 0 ? _N : -_N;
     static constexpr int dir = _N > 0 ? 1 : -1;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     using UnaryOperator<R>::mR;
 
     DEVICE_FUNCTION
@@ -139,7 +139,7 @@ namespace TempLat
   //    template <typename r>
   //    class expressionshifter<0,r> : public unaryoperator<r> {
   //    public:
-  //        /* put public methods here. these should change very little over time. */
+  //        // Put public methods here. These should change very little over time.
   //        using unaryoperator<r>::mr;
   //
   //        expressionshifter(const r& pr, const std::vector<ptrdiff_t>& shifts) :

@@ -43,7 +43,7 @@ namespace TempLat
   template <size_t NDim> class GhostUpdater
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     GhostUpdater(MPICartesianExchange exchange, JumpsHolder<NDim> jumpsHolder)
         : mExchange(exchange), mJumpsHolder(jumpsHolder), mGhostDepth(mJumpsHolder.getPadding()[0][0]),
           mGhostSubarrayMap(mJumpsHolder, mGhostDepth)

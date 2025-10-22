@@ -30,7 +30,7 @@ namespace TempLat
   template <size_t NDim, typename T> class KokkosFFTPlanHolder : public FFTPlanInterface<NDim, T>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <size_t _NDim = NDim>
     using PlanType_c2r =

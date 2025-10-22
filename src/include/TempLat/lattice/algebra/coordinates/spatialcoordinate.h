@@ -23,7 +23,7 @@ namespace TempLat
   template <size_t NDim> class SpatialCoordinate : public CoordinateVector<NDim>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     SpatialCoordinate(std::shared_ptr<MemoryToolBox<NDim>> toolBox)
         : mToolBox(toolBox), mLayout(toolBox->mLayouts.getConfigSpaceLayout())

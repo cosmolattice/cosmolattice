@@ -25,7 +25,7 @@ namespace TempLat
   template <size_t NDim> class SimulationManager
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     // This is where we decide whether the simulation is running in restart mode or not. We start by
     // reading the "load_file" argument. If the user provides one, then it means they want to restart the simulation.

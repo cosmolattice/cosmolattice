@@ -21,7 +21,7 @@ namespace TempLat
   template <typename T> class KBins
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     KBins(const ptrdiff_t &nGrid, const RadialProjectionResult<T> &res, const T &pKir)
         : ks((int)(std::pow(3, 0.5) / 2.0 * (T)nGrid)), vs((int)(std::pow(3, 0.5) / 2.0 * (T)nGrid)),
           ms((int)(std::pow(3, 0.5) / 2.0 * (T)nGrid)), kir(pKir)

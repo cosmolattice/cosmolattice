@@ -31,7 +31,7 @@ namespace TempLat
   template <size_t NDim, typename T> class MemoryBlock
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     /** \brief Default constructor: empty. */
     MemoryBlock() : mSize(0u), mHostMirrorOutdated(true) {}

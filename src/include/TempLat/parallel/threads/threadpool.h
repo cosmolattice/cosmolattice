@@ -23,7 +23,7 @@ namespace TempLat
   class ThreadPool
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ThreadPool() {}
     template <typename F> void addThread(F &&f) { mThreads.push_back(std::thread(std::forward<F>(f))); }
 

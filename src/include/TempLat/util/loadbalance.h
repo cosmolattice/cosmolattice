@@ -23,7 +23,7 @@ namespace TempLat
   class LoadBalance
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     LoadBalance() {}
 
     inline static std::vector<ptrdiff_t> getConf(ptrdiff_t nPoints, ptrdiff_t nThreads)

@@ -4,10 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+
 #include "TempLat/fft/external/fftw/fftwinterface.h"
 #include "TempLat/fft/external/fftw/fftwinterface_test.h"
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTWInterface> test;
+  TempLat::TDDContainer<TempLat::FFTWInterface<3>> test;
 }

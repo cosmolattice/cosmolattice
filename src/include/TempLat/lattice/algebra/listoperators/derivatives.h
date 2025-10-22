@@ -22,7 +22,7 @@ namespace TempLat
   class Derivatives
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Derivatives() {}
 
   private:

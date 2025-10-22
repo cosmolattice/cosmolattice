@@ -28,7 +28,7 @@ namespace TempLat
   public:
     using SV = typename GetGetReturnType<A>::type;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2Wrapper() {}
 
     SU2Wrapper(const A &pA, const B &pB, const C &pC, const D &pD) : data(pA, pB, pC, pD) {}

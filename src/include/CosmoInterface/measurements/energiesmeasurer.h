@@ -29,7 +29,7 @@ namespace TempLat
   template <typename T> class EnergiesMeasurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename Model>
     EnergiesMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
         : amIRoot(model.getToolBox()->amIRoot()), expansion(par.expansion),

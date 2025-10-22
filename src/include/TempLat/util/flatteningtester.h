@@ -26,7 +26,7 @@ namespace TempLat
   class FlatteningTester
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FlatteningTester() {}
 
   private:

@@ -20,7 +20,7 @@ namespace TempLat
   class ConfirmGhosts
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename U>
       requires HasGhostMethod<U>
     static inline ptrdiff_t apply(U &obj)

@@ -23,7 +23,7 @@ namespace TempLat
     using INT2 = typename RandomUniform<>::IntegerType;
 
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using IntegerType = INT2;
 

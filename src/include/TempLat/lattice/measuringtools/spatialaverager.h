@@ -36,7 +36,7 @@ namespace TempLat
     // TODO (Franz)
     static constexpr size_t NDim = T::NDim;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SpatialAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
     {
       if (mSpaceType != SpaceStateType::Configuration)

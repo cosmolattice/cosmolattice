@@ -31,7 +31,7 @@ namespace TempLat
   template <size_t _NDim, typename R> class LatticeForwardGradient : public UnaryOperator<R>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     using GetReturnType = typename GetGetReturnType<R>::type;
     using FloatType = typename GetFloatType<GetReturnType>::type;
 

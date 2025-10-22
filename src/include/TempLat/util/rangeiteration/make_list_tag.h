@@ -18,7 +18,6 @@ namespace TempLat
    *
    * Unit test: make test-make_list_tag
    **/
-
   template <int Start, typename F, int... I>
   inline auto make_list_tag_impl(F &&f, std::integer_sequence<int, I...> iseq)
   {

@@ -20,7 +20,7 @@ namespace TempLat
   class ComplexFieldOperator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     DEVICE_FUNCTION
     ComplexFieldOperator() {}
 

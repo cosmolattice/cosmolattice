@@ -32,7 +32,7 @@ namespace TempLat
   public:
     static constexpr bool KOKKOSFFTWITHTRANSPOSITION() { return false; }
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     KokkosFFTMemoryLayout() {}
 
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid,

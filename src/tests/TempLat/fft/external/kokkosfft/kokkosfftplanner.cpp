@@ -7,11 +7,11 @@
 #ifdef KOKKOS_FFT
 
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanner.h"
-#include "TempLat/fft/external/kokkosfft/kokkosfftplannner_test.h"
+#include "TempLat/fft/external/kokkosfft/kokkosfftplanner_test.h"
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::KokkosFFTPlanner> test;
+  TempLat::TDDContainer<TempLat::KokkosFFTPlanner<3>> test;
 }
 
 #endif

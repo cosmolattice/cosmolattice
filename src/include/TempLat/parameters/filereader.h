@@ -24,7 +24,7 @@ namespace TempLat
   class FileReader
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FileReader() {}
     const std::string &operator[](int i) const { return vec[i]; }
     size_t size() const { return vec.size(); }

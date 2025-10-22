@@ -12,48 +12,41 @@
 #include "CosmoInterface/definitions/PITensor.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
+  /** \brief A class which stores the kernel for the GWs fields.
+   *
+   *
+   * Unit test: make test-gwskernels
+   **/
 
-    /** \brief A class which stores the kernel for the GWs fields.
-     *
-     * 
-     * Unit test: make test-gwskernels
-     **/
+  class GWsKernels
+  {
+  public:
+    // Put public methods here. These should change very little over time.
+    GWsKernels() = delete;
 
+    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    {
 
-    class GWsKernels {
-    public:
-        /* Put public methods here. These should change very little over time. */
-        GWsKernels() = delete;
+      return (pow(model.aI, 1 + model.alpha) * LatLapl<Model::NDim>((*model.fldGWs)(n)) +
+              pow(model.aI, 1 + model.alpha) * 2. * (PITensor::totalTensor(model, n)));
+    }
 
-        template <class Model, int N>
-        static auto get(Model& model, Tag<N> n){
-        	
-            return (pow(model.aI, 1 + model.alpha) *
-                    LatLapl<Model::NDim>( (*model.fldGWs)(n))
-                     + pow(model.aI, 1 + model.alpha) * 2. * (PITensor::totalTensor(model,n)));
-        }
-		
-		
-    private:
-        /* Put all member variables and private methods here. These may change arbitrarily. */
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
 
-
-
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
+  };
 
-
-
-} /* FCN */
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "CosmoInterface/evolvers/kernels/gwskernels_test.h"
 #endif
-
 
 #endif

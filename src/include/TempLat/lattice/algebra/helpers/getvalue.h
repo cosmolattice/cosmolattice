@@ -27,7 +27,7 @@ namespace TempLat
   class GetValue
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <typename U, typename... IDX>
       requires TypeHasGet<U, IDX...>

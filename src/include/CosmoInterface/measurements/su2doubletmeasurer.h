@@ -25,7 +25,7 @@ namespace TempLat
   template <typename T> class SU2DoubletMeasurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <class Model>
     SU2DoubletMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
     {

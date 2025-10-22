@@ -21,7 +21,7 @@ namespace TempLat
   template <size_t NDim> class CoordinateVector
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     CoordinateVector() {}
     void doWeNeedGhosts(ptrdiff_t i) {}
 

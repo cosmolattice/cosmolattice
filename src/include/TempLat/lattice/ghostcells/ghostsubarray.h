@@ -23,7 +23,7 @@ namespace TempLat
   template <size_t NDim> class GhostSubarray
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     /** \brief Constructor
      *  \param jumpsHolder The layout of the memory.
      *  \param dimension The dimension in which to create the array.

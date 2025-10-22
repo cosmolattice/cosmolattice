@@ -20,7 +20,7 @@ namespace TempLat
   template <class T> class StringConverter
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     StringConverter() {}
     void operator()(const std::string &str, MultipleParameterGetter<T> &arr, const std::string &name)
     {

@@ -30,7 +30,7 @@ namespace TempLat
   class MPIAllReduce
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MPIAllReduce(MPI_Comm comm) : mComm(comm) {}
 
 #ifndef NOMPI

@@ -36,7 +36,7 @@ namespace TempLat
     // TODO (Franz)
     static constexpr size_t NDim = GetNDim::get<T>();
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Averager(const T &pT, SpaceStateType spaceType)
       requires requires {
         { pT.getToolBox() } -> std::same_as<std::shared_ptr<MemoryToolBox<NDim>>>;

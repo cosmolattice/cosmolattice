@@ -26,7 +26,7 @@ namespace TempLat
   template <typename T> class ModelInitializer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <class Model> ModelInitializer(Model &model, T pLSide, std::string pSeed) : fg(model, pLSide, pSeed) {}
 
     template <class Model> void initialize(Model &model, RunParameters<T> &rPar)

@@ -25,7 +25,7 @@ namespace TempLat
   template <typename R> class ComplexFieldUnaryOperator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     DEVICE_FUNCTION
     ComplexFieldUnaryOperator(const R &pR) : mR(pR) {}
 

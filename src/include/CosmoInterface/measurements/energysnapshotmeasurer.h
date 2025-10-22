@@ -25,7 +25,7 @@ namespace TempLat
   template <typename Model> class EnergySnapshotsMeasurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     EnergySnapshotsMeasurer(Model &model, FilesManager<Model::NDim> &fm, std::vector<std::string> toSave)
         : mRoot(fm.getTag() + fm.getWorkingDir())
     {

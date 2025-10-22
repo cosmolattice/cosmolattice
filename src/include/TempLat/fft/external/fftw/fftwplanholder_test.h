@@ -9,7 +9,6 @@
 
 template <size_t NDim, typename T> inline void TempLat::FFTWPlanHolder<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-
   tdd.verify(true);
 }
 

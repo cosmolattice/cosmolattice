@@ -23,7 +23,7 @@ namespace TempLat
   class TimeSpent
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TimeSpent() : mStart(now()) {}
 
     /** \brief Static value which returns the age of the total process */

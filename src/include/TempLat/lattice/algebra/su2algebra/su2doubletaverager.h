@@ -45,7 +45,7 @@ namespace TempLat
 
     using arrVType = std::array<vType, size>;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2DoubletAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
     {
       mToolBox = mT.SU2DoubletGet(0_c).getToolBox();

@@ -32,7 +32,7 @@ namespace TempLat
     class DeviceGuard
     {
     public:
-      /* Put public methods here. These should change very little over time. */
+      // Put public methods here. These should change very little over time.
 
       DeviceGuard(int argc, char **argv, bool verbose = false)
           : instanceProtectionKey(InstanceCounter(1)), mVerbose(verbose)
@@ -42,10 +42,7 @@ namespace TempLat
         Kokkos::initialize(argc, argv);
       }
 
-      ~DeviceGuard()
-      {
-        Kokkos::finalize();
-      }
+      ~DeviceGuard() { Kokkos::finalize(); }
 
     private:
       /* Put all member variables and private methods here. These may change arbitrarily. */

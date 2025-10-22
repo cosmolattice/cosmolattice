@@ -7,6 +7,9 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-inline void TempLat::KokkosFFTTranspositionFlags::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
+template <size_t NDim> inline void TempLat::KokkosFFTTranspositionFlags<NDim>::Test(TempLat::TDDAssertion &tdd)
+{
+  tdd.verify(true);
+}
 
 #endif

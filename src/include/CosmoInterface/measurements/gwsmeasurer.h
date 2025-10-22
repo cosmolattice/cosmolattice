@@ -31,7 +31,7 @@ namespace TempLat
   template <typename T> class GWsMeasurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename Model>
     GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
         : PSType(par.powerSpectrumType)

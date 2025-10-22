@@ -20,7 +20,7 @@ namespace TempLat
   class DoEval
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename U, typename... IDX>
       requires HasEval<U>
     DEVICE_FORCEINLINE_FUNCTION static void eval(U &&obj, const IDX &...idx)

@@ -19,7 +19,7 @@ namespace TempLat
   class PrettyToString
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     PrettyToString() {}
 
     template <typename R> static std::string get(R x, int prec = 14)

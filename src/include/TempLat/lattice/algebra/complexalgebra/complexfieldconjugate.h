@@ -23,7 +23,7 @@ namespace TempLat
   template <typename R> class ComplexFieldConjugate : public ComplexFieldUnaryOperator<R>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using ComplexFieldUnaryOperator<R>::mR;
 

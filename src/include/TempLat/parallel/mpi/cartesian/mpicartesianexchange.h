@@ -27,7 +27,7 @@ namespace TempLat
   class MPICartesianExchange
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MPICartesianExchange(MPICartesianGroup group) : mGroup(group), mNeighbours(mGroup) {}
 
     void exchangeUp(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive, int sendCount = 1)

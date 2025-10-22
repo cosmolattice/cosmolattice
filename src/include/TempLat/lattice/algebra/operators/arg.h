@@ -32,7 +32,7 @@ namespace TempLat
     template <typename R, typename T> class Arg : public BinaryOperator<R, T>
     {
     public:
-      /* Put public methods here. These should change very little over time. */
+      // Put public methods here. These should change very little over time.
       using BinaryOperator<R, T>::mR;
       using BinaryOperator<R, T>::mT;
 

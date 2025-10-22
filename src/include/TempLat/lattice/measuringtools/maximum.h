@@ -35,7 +35,7 @@ namespace TempLat
 
     static constexpr size_t NDim = GetNDim::get<T>();
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Maximum(const T &pT, SpaceStateType spaceType)
         : mT(pT), mSpaceType(spaceType), mToolBox(mT.getToolBox()), mLayout(mToolBox->mLayouts.getConfigSpaceLayout())
     {

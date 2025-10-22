@@ -39,7 +39,7 @@ namespace TempLat
   class make_tuple_tagTester
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     make_tuple_tagTester() {}
 
   private:

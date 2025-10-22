@@ -20,7 +20,7 @@ namespace TempLat
   class PairMaker
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     PairMaker(const char &sep = '=', const char &com = '#') : separator(sep), comment(com) {}
 
     std::string getKey() { return key; }

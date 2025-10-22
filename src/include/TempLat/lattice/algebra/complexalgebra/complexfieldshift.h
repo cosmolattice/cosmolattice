@@ -24,7 +24,7 @@ namespace TempLat
   template <typename R, int... N> class ComplexFieldShifter : public ComplexFieldUnaryOperator<R>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using ComplexFieldUnaryOperator<R>::mR;
 
@@ -65,7 +65,7 @@ namespace TempLat
   template <typename R, int N> class ComplexFieldShifterByOne : public ComplexFieldUnaryOperator<R>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using ComplexFieldUnaryOperator<R>::mR;
 

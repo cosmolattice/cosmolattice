@@ -20,7 +20,7 @@ namespace TempLat
   class ConditionalSayShort
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ConditionalSayShort(bool enabled_) : enabled(enabled_) {}
 
     template <typename T> ConditionalSayShort &operator<<(const T &t)

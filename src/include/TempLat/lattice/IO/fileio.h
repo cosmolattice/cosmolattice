@@ -33,7 +33,7 @@ namespace TempLat
   template <size_t NDim = 3> class FileIO
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FileIO() {}
 
     template <class R>

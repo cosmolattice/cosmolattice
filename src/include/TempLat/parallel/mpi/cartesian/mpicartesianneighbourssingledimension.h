@@ -21,7 +21,7 @@ namespace TempLat
   class MPICartesianNeighboursSingleDimension
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MPICartesianNeighboursSingleDimension(MPICartesianGroup cartesianGroup, ptrdiff_t dimension)
         : mCartesianGroup(cartesianGroup), mDimension(dimension), mUpperNeighbourRank(0), mLowerNeighbourRank(0)
     {

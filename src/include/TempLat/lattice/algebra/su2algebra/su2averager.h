@@ -36,7 +36,7 @@ namespace TempLat
   template <typename T> class SU2Averager
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     using vType = typename SU2GetGetReturnType<T>::type;
     static constexpr bool isComplexValued = IsComplexType<vType>;
     static constexpr size_t size = tuple_size<T>::value;

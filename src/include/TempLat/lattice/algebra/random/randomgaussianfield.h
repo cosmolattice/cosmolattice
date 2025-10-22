@@ -47,7 +47,7 @@ namespace TempLat
     using RNGInteger = typename RandomGaussian::IntegerType;
 
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     RandomGaussianFieldHelper(std::string baseSeed, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
         : DimensionCountRecorder<NDim>(SpaceStateType::undefined), mBaseSeed(baseSeed), prng(baseSeed),
           mToolBox(pToolBox), mLayout(mToolBox->mLayouts.getFourierSpaceLayout()), generation(0),

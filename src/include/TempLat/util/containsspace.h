@@ -22,7 +22,7 @@ namespace TempLat
   class ContainsSpace
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     static inline bool test(const std::string &input)
     {

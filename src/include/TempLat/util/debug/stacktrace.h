@@ -23,7 +23,7 @@ namespace TempLat
   class Stacktrace
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Stacktrace(ptrdiff_t skipBegin = 0, ptrdiff_t maxSize = 128) { CollectStack(skipBegin, maxSize); }
 
     operator std::string() { return value; }

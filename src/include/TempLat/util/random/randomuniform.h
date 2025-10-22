@@ -32,7 +32,7 @@ namespace TempLat
     using INT2 = typename RNG2::ctr_type::value_type;
 
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using IntegerType = INT2;
 

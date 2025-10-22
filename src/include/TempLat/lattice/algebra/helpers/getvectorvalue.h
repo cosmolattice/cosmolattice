@@ -23,7 +23,7 @@ namespace TempLat
   class GetVectorValue
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <typename U, typename... JDX>
       requires(TypeHasVectorGet<U, JDX...> && (sizeof...(JDX) >= 1))

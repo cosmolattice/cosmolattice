@@ -20,7 +20,7 @@ namespace TempLat
   class GetJumps
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <size_t NDim, typename U>
       requires HasJumpMethods<NDim, U>

@@ -33,15 +33,13 @@ elseif(NOT MPI)
 elseif(NOT PFFT AND MPI)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DNOPFFT")
 endif()
-if(HDF5)
-  if(MPI)
-    set(HDF5_PREFER_PARALLEL ON)
-  endif()
-  find_package(HDF5 REQUIRED)
-  # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${HDF5_INCLUDE_DIRS} -DHDF5")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHDF5")
-  include_directories(${HDF5_INCLUDE_DIRS})
-endif()
+
+include(./src/cmake/libs/hdf5.cmake)
+
+# if(HDF5) if(MPI) set(HDF5_PREFER_PARALLEL ON) endif() find_package(HDF5
+# REQUIRED) # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${HDF5_INCLUDE_DIRS}
+# -DHDF5") set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHDF5")
+# include_directories(${HDF5_INCLUDE_DIRS}) endif()
 
 if(TESTING)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DTEMPLATTEST")

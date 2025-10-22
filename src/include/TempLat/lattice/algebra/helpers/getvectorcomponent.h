@@ -26,7 +26,7 @@ namespace TempLat
   template <typename R> class GetVectorComponentHelper
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     GetVectorComponentHelper(const R &pR, ptrdiff_t pJ) : mR(pR), mJ(pJ) {}
 
     template <typename... IDX>

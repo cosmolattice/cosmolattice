@@ -27,7 +27,7 @@ namespace TempLat
   template <typename vType, bool isComplexValued> class AveragerHelper
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     AveragerHelper() {}
     template <typename T> static void onBeforeAverageFourier(T &&pT, SpaceStateType pSpaceType)
     {

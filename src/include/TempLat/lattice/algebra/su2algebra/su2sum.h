@@ -24,7 +24,7 @@ namespace TempLat
   template <typename R, typename T> class SU2Addition : public SU2BinaryOperator<R, T>
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     using SU2BinaryOperator<R, T>::mR;
     using SU2BinaryOperator<R, T>::mT;

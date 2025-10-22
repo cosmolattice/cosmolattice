@@ -25,7 +25,7 @@ namespace TempLat
   class NamedTmpFile
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     NamedTmpFile()
         : // # removing the deprecation warning here, because the security issue is not an issue for us, this class is

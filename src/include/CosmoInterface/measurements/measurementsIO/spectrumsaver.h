@@ -21,7 +21,7 @@ namespace TempLat
   template <typename T> class SpectrumSaver
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <size_t NDim>
     SpectrumSaver(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool appendMode, const RunParameters<T> &rPar,

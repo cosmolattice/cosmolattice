@@ -27,7 +27,7 @@ namespace TempLat
   template <typename R, typename T> class SU2DoubletBinaryOperator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2DoubletBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     static constexpr size_t size = 4;

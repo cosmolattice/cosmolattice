@@ -11,7 +11,6 @@
 #include <array>
 
 inline void TempLat::AlmostEqualTester::Test(TempLat::TDDAssertion& tdd) {
-    
     std::array<double, 5> list { {3., 3.4, 72435.62, 234., 123.} };
     
     for ( auto&& it : list) {

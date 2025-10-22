@@ -87,7 +87,7 @@ echo "${inserttabs}     **/"
 echo
 echo "${inserttabs}    class ${className} {"
 echo "${inserttabs}    public:"
-echo "${inserttabs}        /* Put public methods here. These should change very little over time. */"
+echo "${inserttabs}        // Put public methods here. These should change very little over time."
 echo "${inserttabs}        ${className}() {"
 echo
 echo "${inserttabs}        }"

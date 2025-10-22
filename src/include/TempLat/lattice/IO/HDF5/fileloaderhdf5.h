@@ -16,6 +16,7 @@
 #include "TempLat/parameters/parameterparser.h"
 
 #include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_memory.h"
 
 namespace TempLat
 {
@@ -29,7 +30,7 @@ namespace TempLat
   class FileLoaderHDF5
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FileLoaderHDF5() {}
 
     void open(std::string fn) { mFile.open(fn); }

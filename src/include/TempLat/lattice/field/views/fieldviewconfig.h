@@ -25,6 +25,7 @@
 namespace TempLat
 {
   MakeException(FieldViewConfigWrongSpaceConfirmation);
+  MakeException(FieldViewConfigMissingToolBox);
 
   /** \brief A view on the field which, when interacted with, assures every time again that things are in
    *   configuration space, and possibly the ghost cells are updated when needed.
@@ -35,19 +36,19 @@ namespace TempLat
   template <size_t _NDim, typename T> class ConfigView : public AbstractField<_NDim, T>
   {
   public:
+    // Put public methods here. These should change very little over time.
     static constexpr size_t NDim = _NDim;
 
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
 
-    /* Put public methods here. These should change very little over time. */
     ConfigView(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
         : AbstractField<NDim, T>(name, toolBox, pLatPar), mDisableFFTBlocking(false)
     {
       if (toolBox != nullptr)
         mLayout = mToolBox->mLayouts.getConfigSpaceLayout();
       else
-        return;
+        throw FieldViewConfigMissingToolBox("A FieldViewConfig must be constructed with a valid MemoryToolBox.");
 
       mManager->setGhostsAreStale();
       mManager->confirmConfigSpace(); // allocation happens here

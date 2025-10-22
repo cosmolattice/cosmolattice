@@ -25,7 +25,7 @@ namespace TempLat
   template <size_t NDim> class CoordinatesInitializer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     CoordinatesInitializer(const JumpsHolder<NDim> &jumpsHolder, const LayoutStruct<NDim> &layoutStruct)
         : mJumpsHolder(jumpsHolder), mLayoutStruct(layoutStruct), mNDimensions(mJumpsHolder.getSizesInMemory().size())
     {

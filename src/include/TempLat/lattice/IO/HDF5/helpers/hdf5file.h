@@ -28,7 +28,7 @@ namespace TempLat
   class HDF5File
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     HDF5File() {}
 
     void create(std::string fn, FileMode flag = Overwrite)

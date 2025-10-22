@@ -21,7 +21,7 @@ namespace TempLat
   class MemoryLayoutState
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MemoryLayoutState() : mState(undefined) {}
 
     void setToConfigSpace() { setState(configSpace); }

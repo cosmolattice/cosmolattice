@@ -26,7 +26,7 @@ namespace TempLat
   template <class R, class T> class ComplexFieldWrapper : public ComplexFieldOperator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     DEVICE_FUNCTION
     ComplexFieldWrapper() {}

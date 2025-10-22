@@ -20,7 +20,7 @@ namespace TempLat
   class Splitter
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Splitter() = delete;
 
     static std::vector<std::string> split(std::string str, char op, char parOpen = '(')

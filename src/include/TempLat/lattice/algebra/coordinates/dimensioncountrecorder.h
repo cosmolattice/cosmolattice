@@ -26,7 +26,7 @@ namespace TempLat
   template <size_t NDim> class DimensionCountRecorder
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     DimensionCountRecorder(SpaceStateType spaceType)
         : mFixedSingleSpaceType(spaceType), mCurrentSpaceType(spaceType), mCurrentLayout({}, 0)
     {

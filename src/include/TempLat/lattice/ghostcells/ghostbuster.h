@@ -47,7 +47,7 @@ namespace TempLat
   template <size_t NDim> class GhostBuster
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     GhostBuster(const JumpsHolder<NDim> &from, const JumpsHolder<NDim> &to, bool verbose = false)
         : mFrom(from), mTo(to),

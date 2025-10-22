@@ -20,7 +20,7 @@ namespace TempLat
   class PostGet
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename U>
       requires requires(U obj) { obj.postGet(); }
     static inline void apply(U &obj)

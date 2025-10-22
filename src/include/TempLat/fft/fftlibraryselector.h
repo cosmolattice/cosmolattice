@@ -85,7 +85,7 @@ namespace TempLat
   template <size_t NDim> class FFTLibrarySelector
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FFTLibrarySelector(MPICartesianGroup group, const std::array<ptrdiff_t, NDim> &nGridPoints,
                        bool forbidTransposition = false)
         : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints, true, false, false), madePlansFloat(false),

@@ -45,7 +45,7 @@ namespace TempLat
 
     using arrVType = std::array<vType, size>;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ComplexFieldAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
     {
       mToolBox = mT.ComplexFieldGet(Tag<0>()).getToolBox();

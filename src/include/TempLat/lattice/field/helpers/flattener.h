@@ -20,7 +20,7 @@ namespace TempLat
   class Flattener
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <typename U>
     static inline typename std::enable_if<HasAsTupleCat<U>::value, decltype(std::declval<U>().asTupleCat())>::type

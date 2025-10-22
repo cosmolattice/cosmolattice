@@ -21,7 +21,7 @@ namespace TempLat
   class MeansMeasurer
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     MeansMeasurer() = delete;
 
     template <typename S, typename Q, typename T> static void measure(MeasurementsSaver<T> &ms, S fld, Q mom, T t)

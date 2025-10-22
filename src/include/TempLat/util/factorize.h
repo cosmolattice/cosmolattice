@@ -25,7 +25,7 @@ namespace TempLat
   class Factorize
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     Factorize(ptrdiff_t total) : factors(performFactorization(total)) {}
 
     /** \brief access */

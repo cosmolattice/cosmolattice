@@ -23,7 +23,7 @@ namespace TempLat
   class ConditionalStream
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ConditionalStream(std::ostream &stream_, bool enabled_) : stream(stream_), enabled(enabled_) {}
 
     template <typename T> ConditionalStream &operator<<(const T &t)

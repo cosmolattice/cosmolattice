@@ -31,7 +31,7 @@ namespace TempLat
     typedef typename GetFloatType<SV>::type S;
     typedef Field<NDim, S> fieldType;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ToolWithOwnMemory(T instance) : mInstance(instance), usePersistentField(false), allocatedPersistentField(false) {}
 
     void setPersistentMemory() { usePersistentField = true; }

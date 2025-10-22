@@ -1,12 +1,13 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 #include "CosmoInterface/measurements/energysnapshotmeasurer.h"
+#include "CosmoInterface/measurements/energysnapshotmeasurer_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::EnergySnapshotsMeasurer> test;
+namespace
+{
+  // TempLat::TDDContainer<TempLat::EnergySnapshotsMeasurer> test;
 }
-

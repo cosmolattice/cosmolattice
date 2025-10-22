@@ -25,7 +25,7 @@ namespace TempLat
   template <size_t _NDim, typename T> class SU2FieldBase
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     static constexpr size_t NDim = _NDim;
 
     SU2FieldBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3)

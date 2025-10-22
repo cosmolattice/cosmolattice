@@ -36,7 +36,7 @@ namespace TempLat
 
     typedef std::array<vType, size> arrVType;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     ListAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}
 
     /* operator vType()

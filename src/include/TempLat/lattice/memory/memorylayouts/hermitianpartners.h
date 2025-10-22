@@ -28,7 +28,7 @@ namespace TempLat
   template <size_t NDim> class HermitianPartners
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <typename C = std::array<ptrdiff_t, NDim>>
       requires IsNDArray<C, NDim>
     DEVICE_FUNCTION HermitianPartners(const C &initNGrid) : mode(HermitianPartnersMode::none)

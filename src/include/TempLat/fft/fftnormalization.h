@@ -27,7 +27,7 @@ namespace TempLat
   template <size_t NDim> class FFTNormalization
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     FFTNormalization(FFTLayoutStruct<NDim> layout) : mLayout(layout), mN(1), mNorm(1), mType(0)
     {
       // we always normalize the entire memory, including padding.

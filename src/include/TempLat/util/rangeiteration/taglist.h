@@ -22,7 +22,7 @@ namespace TempLat
   template <int... I> class TagListBase
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     TagListBase() : tags(std::make_tuple(Tag<I>()...)) {}
 
     // private:

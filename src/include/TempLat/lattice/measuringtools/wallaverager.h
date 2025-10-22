@@ -31,7 +31,7 @@ namespace TempLat
   public:
     typedef typename GetGetReturnType<T>::type vType;
 
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     WallAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
     {
       for (ptrdiff_t i = 0; i < mT.getToolBox()->mNDimensions; ++i) {

@@ -19,7 +19,7 @@ namespace TempLat
   class SU2Operator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     SU2Operator() {}
 
     static constexpr size_t size = 4;

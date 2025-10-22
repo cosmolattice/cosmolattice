@@ -29,7 +29,7 @@ namespace TempLat
   template <size_t _NDim> class LayoutStructLocalTransposed
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     static constexpr size_t NDim = _NDim;
 
     template <typename C = std::array<ptrdiff_t, NDim>>

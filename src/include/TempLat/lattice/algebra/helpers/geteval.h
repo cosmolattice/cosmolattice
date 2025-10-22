@@ -22,7 +22,7 @@ namespace TempLat
   class GetEval
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <typename U, typename... IDX>
       requires HasGetEval<U, IDX...>

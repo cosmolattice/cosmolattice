@@ -9,7 +9,7 @@
 
 #include <algorithm>
 
-inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
 {
   constexpr size_t N = 1e8;
   RandomGaussian prng("Hello CosmoLattice world!");

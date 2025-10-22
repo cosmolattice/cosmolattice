@@ -24,7 +24,7 @@ namespace TempLat
   template <typename T> class FluctuationsGenerator
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
     template <class Model>
     FluctuationsGenerator(Model &model, T pLSide, std::string pSeed) : lSide(pLSide), baseSeed(pSeed)
     {

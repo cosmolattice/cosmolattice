@@ -19,7 +19,7 @@ namespace TempLat
   class GetDx
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
 
     template <typename U>
       requires HasDx<U>

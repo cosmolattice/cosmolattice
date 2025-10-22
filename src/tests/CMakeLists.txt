@@ -6,6 +6,8 @@ set(NPROCESSES
 add_custom_target(test-all)
 add_custom_target(test-all-untested)
 
+set(testFolderList "")
+
 # Glob all test sources and then create targets for each of them
 file(GLOB_RECURSE test_sources "${CMAKE_SOURCE_DIR}/src/tests/*.cpp")
 foreach(fn ${test_sources})
@@ -38,12 +40,51 @@ foreach(fn ${test_sources})
 
     # Add to the target to run all tests (test-all)
     add_dependencies(test-all ${target_name})
-  endif()
 
+    # Split fn into its folder components
+    string(REPLACE "${CMAKE_SOURCE_DIR}/src/tests/" "" folder_components
+                   "${fn}")
+    string(REPLACE "/" ";" folder_components "${folder_components}")
+    # Remove the last component (the filename)
+    list(POP_BACK folder_components)
+    # Rebuild the full folder path
+    string(REPLACE ";" "/" full_folder "${folder_components}")
+
+    # Iterate over the components to create custom targets for each folder
+    set(folder "")
+    foreach(folderpart ${folder_components})
+      # The folder is the concatenation of all parts up to this one
+      if(folder STREQUAL "")
+        set(folder "${folderpart}")
+      else()
+        set(folder "${folder}-${folderpart}")
+      endif()
+
+      string(REPLACE ";" "-" folder_target_name "test-${folder}")
+      if(NOT folder IN_LIST testFolderList)
+        list(APPEND testFolderList ${folder})
+        add_custom_target(${folder_target_name})
+
+        add_custom_target(${folder_target_name}-untested)
+        add_custom_command(
+          TARGET ${folder_target_name}-untested
+          POST_BUILD # to run directly the test after building
+          COMMAND
+            ${CMAKE_SOURCE_DIR}/src/tests/make_all_untested.sh
+            ${CMAKE_SOURCE_DIR}/src/tests/${full_folder}
+            ${CMAKE_BINARY_DIR}/src/tests/${full_folder}
+            ${CMAKE_BINARY_DIR}/src/tests/)
+      endif()
+
+      add_dependencies(${folder_target_name} ${target_name})
+    endforeach()
+  endif()
 endforeach()
 
 add_custom_command(
   TARGET test-all-untested
   POST_BUILD # to run directly the test after building
-  COMMAND ${CMAKE_SOURCE_DIR}/src/tests/make_all_untested.sh
-          ${CMAKE_SOURCE_DIR}/src/tests ${CMAKE_BINARY_DIR}/src/tests/)
+  COMMAND
+    ${CMAKE_SOURCE_DIR}/src/tests/make_all_untested.sh
+    ${CMAKE_SOURCE_DIR}/src/tests ${CMAKE_BINARY_DIR}/src/tests/
+    ${CMAKE_BINARY_DIR}/src/tests/)
