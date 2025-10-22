@@ -31,13 +31,13 @@ template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Te
   if constexpr (NDim == 3) {
     MemoryBlock<NDim, T> test(16 * 16 * 16);
 
-    auto view = test.getNDView<T>({16, 16, 16});
+    auto view = test.getNDView<T>(std::array<ptrdiff_t, 3>{{16, 16, 16}});
 
     Kokkos::parallel_for(
         Kokkos::MDRangePolicy<Kokkos::Rank<3>>({0, 0, 0}, {16, 16, 16}),
         DEVICE_LAMBDA(const size_t i, const size_t j, const size_t k) { view(i, j, k) = i * 256 + j * 16 + k; });
 
-    auto host_view = test.getNDHostView<T>({16, 16, 16});
+    auto host_view = test.getNDHostView<T>(std::array<ptrdiff_t, 3>{{16, 16, 16}});
 
     bool all_true = true;
     for (size_t i = 0; i < 16; ++i) {

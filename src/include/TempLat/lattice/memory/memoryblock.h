@@ -80,6 +80,7 @@ namespace TempLat
           },
           localSizes);
     }
+
     template <typename R = T>
       requires(!std::is_same_v<std::array<ptrdiff_t, NDim>, device::array<ptrdiff_t, NDim>>)
     auto getNDView(const device::array<ptrdiff_t, NDim> &localSizes) const

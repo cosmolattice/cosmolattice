@@ -15,15 +15,13 @@
 
 namespace TempLat
 {
+  MakeException(PureMPILoaderNotImplemented);
 
   /** \brief A class which should implement mpi IO, but does not.
    *
    *
    * Unit test: make test-fileloaderpurempi
    **/
-
-  MakeException(PureMPILoaderNotImplemented);
-
   template <size_t NDim> class FileLoaderPureMPI
   {
   public:

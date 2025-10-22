@@ -18,9 +18,9 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   };
 
   /* arbitrary irregular sizing */
-  Kokkos::Array<ptrdiff_t, 3> nGrid{{62, 22, 24}};
+  device::array<ptrdiff_t, 3> nGrid{{62, 22, 24}};
 
-  LayoutStruct<3> layout(nGrid);
+  LayoutStruct<3> layout(nGrid, 1);
 
   layout.setLocalSizes(nGrid);
 
@@ -79,7 +79,7 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   tdd.verify(jumper == JumpsHolder(layout, nGhost));
 
   nGrid[0] *= 2;
-  LayoutStruct<3> layout2(nGrid);
+  LayoutStruct<3> layout2(nGrid, 1);
 
   layout.setLocalSizes(nGrid);
 

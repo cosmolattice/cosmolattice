@@ -1,4 +1,3 @@
-
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
@@ -9,5 +8,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FileLoaderPureMPI> test;
+  TempLat::TDDContainer<TempLat::FileLoaderPureMPI<3>> test;
 }
