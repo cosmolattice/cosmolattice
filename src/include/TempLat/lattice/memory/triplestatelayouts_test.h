@@ -9,13 +9,11 @@
 
 template <size_t NDim> inline void TempLat::TripleStateLayouts<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-
   FFTLibrarySelector<4> theLibrary(MPICartesianGroup(4, {{MPICommReference().size(), 1, 1, 1}}), {256, 256, 256, 256});
 
-  TripleStateLayouts tsl(theLibrary.getLayout(), 10);
+  TripleStateLayouts<4> tsl(theLibrary.getLayout(), 10);
 
   if (TDDRegister::isSingleUnitTest()) {
-
     say << tsl << "\n";
   }
 

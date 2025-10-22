@@ -9,7 +9,7 @@
 
 template <size_t NDim> inline void TempLat::MemoryToolBox<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  MemoryToolBox mtb(NDim, 256, 2);
+  MemoryToolBox<NDim> mtb(256, 2);
 
   // nothing to test: it is a collection of tools, tested elsewhere.
   //    tdd.verify( true );

@@ -10,10 +10,10 @@
 template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* test the operator== */
-  LayoutStructLocalTransposed<3> a({0, 0, 0});
-  LayoutStructLocalTransposed<3> b({0, 0, 0});
-  LayoutStructLocalTransposed<2> c({0, 0});
-  LayoutStructLocalTransposed<3> d({0, 0, 0});
+  LayoutStructLocalTransposed<3> a({0, 0, 0}, 0);
+  LayoutStructLocalTransposed<3> b({0, 0, 0}, 0);
+  LayoutStructLocalTransposed<2> c({0, 0}, 0);
+  LayoutStructLocalTransposed<3> d({0, 0, 0}, 0);
 
   d.getLocal().getLocalSizes()[1] = 2;
 
@@ -22,7 +22,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::T
   tdd.verify(!(a == d));
 
   /* */
-  a = LayoutStructLocalTransposed({16, 16, 16});
+  a = LayoutStructLocalTransposed({16, 16, 16}, 0);
 
   std::array<ptrdiff_t, 3> newLocalStarts{{7, 8, 9}};
   a.getLocal().setLocalStarts(newLocalStarts);
@@ -71,7 +71,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::T
   tdd.verify(memVec[1] == memVec2[1]);
   tdd.verify(memVec[2] == memVec2[2]);
 
-  a = LayoutStructLocalTransposed({12, 16, 18});
+  a = LayoutStructLocalTransposed({12, 16, 18}, 0);
 
   newLocalStarts = std::array<ptrdiff_t, 3>{{7, 8, 9}};
   a.getLocal().setLocalStarts(newLocalStarts);
