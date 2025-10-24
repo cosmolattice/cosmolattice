@@ -1,0 +1,40 @@
+#!/bin/sh
+#		convertbiblio: a script for converting standard
+#		bibliography to the database format for BibTex/LaTex
+#		use this script as a filter, e.g.:
+#		convertbiblio listOfBibitemRefs.tex > somefilename.bib
+#		and then replace the references in latex with the 2 lines:
+#		\bibliographystyle{unsrt} % or prsty or something else
+#		\bibliography{somefilename} % the output of convertbiblio
+#		run latex / bibtex / latex / latex ... et voila!
+#
+#		(was rewritten in python, see convertbiblio.py)
+#					v. 2.94	-  Nick  -  14/03/2017
+
+name=`basename $0`
+cat <<EOF
+% This is an automatically generated bibligraphy file.
+% DO NOT EDIT, but, if changes are needed, edit the originating
+% list of references $*
+% and then re-generate this file using again $name
+% freely available from http://materia.fisica.unimi.it/manini/scripts.html
+%
+EOF
+			      # drop all latex comments:
+sed '	s/\([^\\]\)%.*/\1/g
+	s/^%.*//g' $* |
+awk '	{nu++;string[nu]=$0} # concatenate lines in the same bibitem
+	/\\bibitem/{for (i=1;i<nu;i++){printf "%s ",string[i]}
+					printf "\n%s ",string[nu];nu=0}
+	END{for (i=1;i<=nu;i++){printf "%s ",string[i]}
+                                        printf "\n"}
+	' |		     # fix after-point spaces:
+sed    's/\([A-Zh]\)\.\s*\([{A-Z]\)\.\s*\([{A-Z]\)/\1.\\ \2.\\ \3/g
+	s/\([A-Zh]\)\.\s*\([{A-Z]\)/\1.\\ \2/g
+	s/\([A-Z][a-z]*\)\.\s*\([{A-Z]\)/\1.\\ \2/g
+	s/\([A-Z][a-z]*\)\.\s*\([{A-Z]\)/\1.\\ \2/g' |
+awk '{if (NR>1) print}'|     # put bibtex keywords:
+sed '	s/\\bibitem/\
+\@misc/
+	s/}/, note=\"\{/
+	s/\.* *$/}\"\}/'

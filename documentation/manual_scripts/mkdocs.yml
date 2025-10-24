@@ -1,0 +1,28 @@
+site_name: CosmoLattice Manual
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.code.select
+
+plugins:
+  - bibtex:
+      bib_file: "refs.bib"
+
+markdown_extensions:
+  - markdown_katex:
+      no_inline_svg: True
+      insert_fonts_css: True
+  - footnotes
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+nav:
+  - Home: index.md
+  - Manual:

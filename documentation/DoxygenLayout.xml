@@ -5,6 +5,7 @@
   <navindex>
     <tab type="mainpage" visible="yes" title=""/>
     <tab type="user" url="@ref TechNotes" title="Technical Notes"/>
+    <tab type="user" url="" title="Manual"/>
    <!-- <tab type="pages" visible="yes" title="" intro=""/>
     <tab type="topics" visible="yes" title="" intro=""/>
     <tab type="modules" visible="yes" title="" intro="">

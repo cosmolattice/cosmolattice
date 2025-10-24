@@ -7,9 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template<typename T>
-inline void TempLat::UnaryOperator<T>::Test(TempLat::TDDAssertion &tdd) {
-    tdd.verify(true);
-}
+template <typename T> inline void TempLat::UnaryOperator<T>::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
 
 #endif

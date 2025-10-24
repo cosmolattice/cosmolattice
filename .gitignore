@@ -8,3 +8,4 @@ dependencies/*/
 *.DS_Store
 */.DS_Store
 */*/.DS_Store
+documentation/manual/
