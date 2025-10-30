@@ -109,6 +109,13 @@ namespace TempLat {
         return SU2Dagger<R>(r);
     };
 
+    template < class R >
+    typename std::enable_if<HasSU2Get<R>::value, SU2Dagger<R> >::type
+    dag(const R& r)
+    {
+        return dagger(r);
+    };
+
 
 } /* TempLat */
 
