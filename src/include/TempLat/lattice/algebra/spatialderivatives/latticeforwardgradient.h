@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
@@ -30,6 +31,9 @@ namespace TempLat
    **/
   template <size_t _NDim, typename R> class LatticeForwardGradient : public UnaryOperator<R>
   {
+  private:
+    using UnaryOperator<R>::mR;
+
   public:
     // Put public methods here. These should change very little over time.
     using GetReturnType = typename GetGetReturnType<R>::type;
@@ -38,19 +42,19 @@ namespace TempLat
     static constexpr size_t NDim = _NDim;
 
     DEVICE_FUNCTION
-    LatticeForwardGradient(const R &pR) : mR(pR), dx(GetDx::getDx(mR)) {}
+    LatticeForwardGradient(const R &pR) : UnaryOperator<R>(pR), dx(GetDx::getDx(mR)) {}
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {
         requires IsVariadicNDIndex<NDim, IDX...>;
         GetValue::get(r, idx...);
       }
-    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx) const
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)
         return ZeroType();
       else {
-        auto other_point = std::array<ptrdiff_t, NDim>{{idx...}};
+        auto other_point = device::array<ptrdiff_t, NDim>{{static_cast<ptrdiff_t>(idx)...}};
         other_point[i] += 1;
         auto result = -GetValue::get(mR, idx...);
         device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); }, other_point);
@@ -94,6 +98,7 @@ namespace TempLat
     }
 
     template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return ConfirmGhosts::apply(mR, i); }
+
     inline JumpsHolder<NDim> getJumps()
     { // Don't need indexing for get jumps.
       return GetJumps::apply(mR);
@@ -109,7 +114,6 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    R mR;
     const FloatType dx;
   };
 

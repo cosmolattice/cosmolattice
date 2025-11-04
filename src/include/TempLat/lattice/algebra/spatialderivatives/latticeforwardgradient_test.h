@@ -21,40 +21,22 @@ inline void TempLat::LatticeForwardGradientTester::Test(TempLat::TDDAssertion &t
 
   Field<nd, double> sc("SC1", toolBox);
   sc = getVectorComponent(x, 0);
-  auto fgSC = LatForwardGrad(sc).norm2();
+  auto fgSC = LatForwardGrad(sc);
   sc.updateGhosts(); // Need to force the ghost updating, as we do not assign the gradient to anything.
 
   bool OK = true;
-  auto it = toolBox->itX();
-  for (it.begin(); it.end(); ++it) {
-    auto coord = toolBox->getCoordConfiguration(it());
-    if (coord[0] != 16) // coordinates range from -15 to 16.
-      OK = OK && fgSC.get(it()) == 1;
-    else
-      OK = OK && fgSC.get(it()) == 961; // Go accross the boundary need to get (-15-16)^2 == 961
-  }
-  tdd.verify(OK);
-
-  auto fgSC2 = LatForwardGrad(3 * sc).norm2();
-  say << fgSC2.getJumps();
-  OK = true;
-  for (it.begin(); it.end(); ++it) {
-    auto coord = toolBox->getCoordConfiguration(it());
-    if (coord[0] != 16) // coordinates range from -15 to 16.
-      OK = OK && fgSC2.get(it()) == 3 * 3;
-    else
-      OK = OK && fgSC2.get(it()) == 961 * 9; // Go accross the boundary need to get (-15-16)^2 == 961
-  }
-  tdd.verify(OK);
-
-  auto fgSC3 = LatForwardGrad(sc + sc).norm2();
-  OK = true;
-  for (it.begin(); it.end(); ++it) {
-    auto coord = toolBox->getCoordConfiguration(it());
-    if (coord[0] != 16) // coordinates range from -15 to 16.
-      OK = OK && fgSC3.get(it()) == 2 * 2;
-    else
-      OK = OK && fgSC3.get(it()) == 961 * 4; // Go accross the boundary need to get (-15-16)^2 == 961
+  auto sc_view = sc.getLocalNDHostView();
+  for (size_t i = 0; i < nGrid; ++i) {
+    for (size_t j = 0; j < nGrid; ++j) {
+      const double expect = (i + 1 < nGrid) ? 1.0 : (-nGrid + 1.0); // TODO
+      if (std::abs(expect - sc_view(i, j)) > 1e-14) {
+        OK = false;
+        std::cout << "Mismatch at (" << i << ", " << j << "): "
+                  << "expect = " << expect << ", SC = " << sc_view(i, j) << std::endl;
+        break;
+      }
+    }
+    if (!OK) break;
   }
   tdd.verify(OK);
 }

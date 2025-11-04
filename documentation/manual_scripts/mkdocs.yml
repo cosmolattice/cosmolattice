@@ -5,15 +5,38 @@ theme:
   features:
     - content.code.copy
     - content.code.select
+  icon:
+    admonition:
+      note: fontawesome/solid/note-sticky
+      abstract: fontawesome/solid/book
+      info: fontawesome/solid/circle-info
+      tip: fontawesome/solid/bullhorn
+      success: fontawesome/solid/check
+      question: fontawesome/solid/circle-question
+      warning: fontawesome/solid/triangle-exclamation
+      failure: fontawesome/solid/bomb
+      danger: fontawesome/solid/skull
+      bug: fontawesome/solid/robot
+      example: fontawesome/solid/flask
+      quote: fontawesome/solid/quote-left
 
 plugins:
   - bibtex:
       bib_file: "refs.bib"
+  - mkdoxy:
+      projects:
+        CosmoLattice: # name of project must be alphanumeric + numbers (without spaces)
+          src-dirs: ../../src/ # path to source code (support multiple paths separated by space) => INPUT
+          full-doc: True # if you want to generate full documentation
+          doxy-cfg: # standard doxygen configuration (key: value)
+            FILE_PATTERNS: "*.cpp *.h" # specify file patterns to filter out
+            RECURSIVE: True # recursive search in source directories
+            EXCLUDE_PATTERNS: "*/*_test.h */*/*_test.h */*/*/*_test.h */*/*/*/*_test.h  */*/*/*/*/*_test.h */*_tester.h */*/*_tester.h */*/*/*_tester.h */*/*/*/*_tester.h  */*/*/*/*/*_tester.h"
+  - search
+  - autorefs
 
 markdown_extensions:
-  - markdown_katex:
-      no_inline_svg: True
-      insert_fonts_css: True
+  - attr_list
   - footnotes
   - pymdownx.highlight:
       anchor_linenums: true
@@ -22,7 +45,36 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - markdown_katex:
+      no_inline_svg: True
+      insert_fonts_css: True
+  - admonition
+  - pymdownx.details
+
+use_directory_urls: true # (optional) for better links without .html extension
 
 nav:
   - Home: index.md
+  - API:
+      - "Links": "CosmoLattice/links.md"
+      - "Classes":
+          - "Class List": "CosmoLattice/annotated.md"
+          - "Class Index": "CosmoLattice/classes.md"
+          - "Class Hierarchy": "CosmoLattice/hierarchy.md"
+          - "Class Members": "CosmoLattice/class_members.md"
+          - "Class Member Functions": "CosmoLattice/class_member_functions.md"
+          - "Class Member Variables": "CosmoLattice/class_member_variables.md"
+          - "Class Member Typedefs": "CosmoLattice/class_member_typedefs.md"
+          - "Class Member Enumerations": "CosmoLattice/class_member_enums.md"
+      - "Namespaces":
+          - "Namespace List": "CosmoLattice/namespaces.md"
+          - "Namespace Members": "CosmoLattice/namespace_members.md"
+          - "Namespace Member Functions": "CosmoLattice/namespace_member_functions.md"
+          - "Namespace Member Variables": "CosmoLattice/namespace_member_variables.md"
+          - "Namespace Member Typedefs": "CosmoLattice/namespace_member_typedefs.md"
+          - "Namespace Member Enumerations": "CosmoLattice/namespace_member_enums.md"
+      - "Functions": "CosmoLattice/functions.md"
+      - "Variables": "CosmoLattice/variables.md"
+      - "Macros": "CosmoLattice/macros.md"
+      - "Files": "CosmoLattice/files.md"
   - Manual:

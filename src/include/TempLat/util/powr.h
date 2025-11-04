@@ -1,5 +1,5 @@
-#ifndef TEMPLAT_UTIL_POW_H
-#define TEMPLAT_UTIL_POW_H
+#ifndef TEMPLAT_UTIL_POWR_H
+#define TEMPLAT_UTIL_POWR_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -38,6 +38,14 @@ namespace TempLat
     else
       return powr<n / 2>(x) * powr<n / 2>(x) * x;
   }
+
+#ifdef TEMPLATTEST
+  class PowrTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

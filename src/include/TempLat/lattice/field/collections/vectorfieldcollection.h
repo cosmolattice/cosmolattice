@@ -45,6 +45,8 @@ namespace TempLat
           [&](auto i) { (*this).getComp(i) = (*this).getComp(i) + std::remove_reference<R>::type::Getter::get(r, i); });
     }
 
+    std::string toString(ptrdiff_t i) const { return fs[i - SHIFTIND].toString(); }
+
     using Getter = GetComponent;
     static constexpr size_t size = N;
 

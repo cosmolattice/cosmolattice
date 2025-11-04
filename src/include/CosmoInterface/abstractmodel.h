@@ -190,6 +190,8 @@ namespace TempLat
 
     T dx, kIR, dt; // Length element and time step
 
+    T t0, time;
+
     // name of the model
     std::string name;
 

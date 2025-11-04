@@ -22,11 +22,11 @@ namespace TempLat
                       std::is_same_v<std::array<typename T::value_type, NDim>, T> ||
                       std::is_same_v<Kokkos::Array<typename T::value_type, NDim>, T>;
 
-  struct IsNDArrayTester {
 #ifdef TEMPLATTEST
+  struct IsNDArrayTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
 

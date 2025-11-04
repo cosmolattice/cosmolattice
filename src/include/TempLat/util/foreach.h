@@ -48,13 +48,13 @@ namespace TempLat
                          std::make_index_sequence<N>{});
   }
 
+#ifdef TEMPLATTEST
   class ForEachTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

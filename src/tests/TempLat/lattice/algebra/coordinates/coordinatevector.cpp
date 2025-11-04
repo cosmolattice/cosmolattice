@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::CoordinateVector> test;
+  TempLat::TDDContainer<TempLat::CoordinateVector<3>> test;
 }

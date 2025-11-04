@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/rangeiteration/for_in_range.h"
-#include "TempLat/util/nakedtype.h"
 #include "TempLat/util/tuplemaker.h"
 
 #include "TempLat/util/tdd/tdd.h"
@@ -37,32 +36,32 @@ namespace TempLat
     FileIO() {}
 
     template <class R>
-      requires HasStaticGetter<typename NakedType<R>::type>
+      requires HasStaticGetter<typename std::decay_t<R>>
     void save(R &&r)
     {
-      using nakedR = typename NakedType<R>::type;
+      using nakedR = std::decay_t<R>;
       for_in_range<number_to_skip_as_tuple<nakedR>::value, nakedR::size>(
           [&](auto i) { save(nakedR::Getter::get(r, i)); });
     }
 
     template <class R>
-      requires(!HasStaticGetter<typename NakedType<R>::type>)
+      requires(!HasStaticGetter<typename std::decay_t<R>>)
     void save(R &&r)
     {
       saver.save(r);
     }
 
     template <class R>
-      requires HasStaticGetter<typename NakedType<R>::type>
+      requires HasStaticGetter<typename std::decay_t<R>>
     void load(R &&r)
     {
-      using nakedR = typename NakedType<R>::type;
+      using nakedR = std::decay_t<R>;
       for_in_range<number_to_skip_as_tuple<nakedR>::value, nakedR::size>(
           [&](auto i) { load(nakedR::Getter::get(r, i)); });
     }
 
     template <class R>
-      requires(!HasStaticGetter<typename NakedType<R>::type>)
+      requires(!HasStaticGetter<typename std::decay_t<R>>)
     void load(R &&r)
     {
       loader.load(r);

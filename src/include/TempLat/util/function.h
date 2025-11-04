@@ -17,14 +17,13 @@ namespace TempLat
    *
    * Unit test: make test-function
    **/
-
 #define Function(x, expr) [&](auto x) { return expr; }
 
-  struct FunctionTester {
 #ifdef TEMPLATTEST
+  struct FunctionTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

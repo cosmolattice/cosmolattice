@@ -20,11 +20,11 @@ template <typename T> inline void TempLat::GetGetReturnTypeTester::Test(T &tdd)
   };
 
   //  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(std::is_same<GetGetReturnType<tmp>::type, double>::value);
+  tdd.verify(std::is_same_v<typename GetGetReturnType<tmp>::type, double>);
   tdd.verify(!GetGetReturnType<tmp>::isComplex);
 
-  tdd.verify(!std::is_same<GetGetReturnType<tmp2>::type, double>::value);
-  tdd.verify(std::is_same<GetGetReturnType<tmp2>::type, complex<double>>::value);
+  tdd.verify(!std::is_same_v<typename GetGetReturnType<tmp2>::type, double>);
+  tdd.verify(std::is_same_v<typename GetGetReturnType<tmp2>::type, complex<double>>);
   tdd.verify(GetGetReturnType<tmp2>::isComplex);
 }
 

@@ -19,7 +19,6 @@ namespace TempLat
    *
    * Unit test: make test-makeflatlist
    **/
-
   template <typename... Args> auto make_flat_list(Args... args)
   {
     return flatten_tuple(std::make_tuple(make_tuple_from(args)...));

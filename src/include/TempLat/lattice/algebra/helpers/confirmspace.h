@@ -44,20 +44,34 @@ namespace TempLat
     }
 
     template <int N, typename U, size_t NDim>
-      requires(!HasSpaceConfirmationMethodsIndexed<N, U, NDim>)
-    static inline void apply(U &obj, ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+      requires(!HasSpaceConfirmationMethodsIndexed<N, U, NDim> && HasSpaceConfirmationMethodsElement<N, U, NDim>)
+    static inline void apply(U &&obj, Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    {
+      obj(i).confirmSpace(newLayout, spaceType);
+    }
+
+    template <int N, typename U, size_t NDim>
+      requires(!HasSpaceConfirmationMethodsIndexed<N, U, NDim> && !HasSpaceConfirmationMethodsElement<N, U, NDim>)
+    static inline void apply(U &obj, Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
     }
 
     template <typename U, size_t NDim>
-      requires HasSpaceConfirmationMethodsIndexedDyn<U, NDim>
+      requires HasSpaceConfirmationMethodsDirectIndexed<U, NDim>
     static inline void apply(U &obj, ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       obj.confirmSpace(i, newLayout, spaceType);
     }
 
     template <typename U, size_t NDim>
-      requires(!HasSpaceConfirmationMethodsIndexedDyn<U, NDim>)
+      requires(!HasSpaceConfirmationMethodsDirectIndexed<U, NDim> && HasSpaceConfirmationMethodsDirectElement<U, NDim>)
+    static inline void apply(U &obj, ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    {
+      obj(i).confirmSpace(newLayout, spaceType);
+    }
+
+    template <typename U, size_t NDim>
+      requires(!HasSpaceConfirmationMethodsDirectIndexed<U, NDim> && !HasSpaceConfirmationMethodsDirectElement<U, NDim>)
     static inline void apply(U &obj, ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
     }

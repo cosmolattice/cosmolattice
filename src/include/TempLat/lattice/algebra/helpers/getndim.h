@@ -20,10 +20,6 @@ namespace TempLat
    **/
   class GetNDim
   {
-    template <typename T> struct always_false {
-      enum { value = false };
-    };
-
   public:
     template <typename U>
       requires requires {

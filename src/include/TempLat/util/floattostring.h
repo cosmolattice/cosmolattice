@@ -12,14 +12,12 @@
 
 namespace TempLat
 {
-
   /** \brief A class which holds one static method (format) which returns
    *  a nicer string representation of a floating point value,
    *  for display purposes (not too many significant digits).
    *
    * Unit test: make test-floattostring
    **/
-
   class FloatToString
   {
   public:

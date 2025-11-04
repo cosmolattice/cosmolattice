@@ -18,7 +18,6 @@ namespace TempLat
    *
    * Unit test: make test-getcpptypename
    **/
-
   class GetCPPTypeName
   {
   public:

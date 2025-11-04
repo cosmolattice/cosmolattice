@@ -13,6 +13,11 @@
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/util/constexpr_for.h"
+
+#include "TempLat/parallel/device.h"
+
+#include "TempLat/util/tuple_tools.h"
 
 namespace TempLat
 {
@@ -21,14 +26,12 @@ namespace TempLat
    *
    * Unit test: make test-normgradientsquare
    **/
-  template <size_t _NDim, typename R> class NormGradientSquare : public UnaryOperator<R>
+  template <size_t NDim, typename R> class NormGradientSquare : public UnaryOperator<R>
   {
   public:
     // Put public methods here. These should change very little over time.
     using GetReturnType = typename GetGetReturnType<R>::type;
     using FloatType = typename GetFloatType<GetReturnType>::type;
-
-    static constexpr size_t NDim = _NDim;
 
     using UnaryOperator<R>::mR;
 
@@ -37,7 +40,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
+        requires IsVariadicNDIndex<NDim, IDX...>;
         GetValue::get(mR, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -94,14 +97,14 @@ namespace TempLat
 #endif
   };
 
-  template <int nDimensions = 3, typename R>
+  template <int nDimensions, typename R>
     requires HasGetMethod<R>
   DEVICE_FORCEINLINE_FUNCTION auto Grad2(R pR)
   {
     return NormGradientSquare<nDimensions, R>(pR);
   }
 
-  template <int nDimensions = 3, typename R>
+  template <int nDimensions, typename R>
     requires(!HasGetMethod<R>)
   DEVICE_FORCEINLINE_FUNCTION auto Grad2(R pR)
   {

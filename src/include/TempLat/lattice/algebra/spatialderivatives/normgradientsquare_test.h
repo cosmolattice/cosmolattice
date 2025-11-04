@@ -24,14 +24,29 @@ inline void TempLat::NormGradientSquareTester::Test(TempLat::TDDAssertion &tdd)
   gaussian += 0;
 
   Field<nd, double> normGradSq("normGradSq", toolBox);
-  normGradSq = Grad2(gaussian);
+  normGradSq = Grad2<nd>(gaussian);
   Field<nd, double> LatForwardGradNorm2("LatForwardGradNorm2", toolBox);
-  LatForwardGradNorm2 = LatForwardGrad(gaussian).norm2();
+  LatForwardGradNorm2 = LatForwardGrad<nd>(gaussian).norm2();
 
   bool allGood = true;
-  // for (itX.begin(); itX.end(); ++itX) {
-  // allGood = allGood && AlmostEqual(Grad2(gaussian).get(itX()), LatForwardGrad(gaussian).norm2().get(itX()));
-  //
+
+  // Check element-wise equality between LatForwardGradNorm2 and normGradSq
+  auto normGradSq_view = normGradSq.getLocalNDHostView();
+  auto LatForwardGradNorm2_view = LatForwardGradNorm2.getLocalNDHostView();
+
+  for (size_t i = 0; i < nGrid; ++i) {
+    for (size_t j = 0; j < nGrid; ++j) {
+      if (std::abs(LatForwardGradNorm2_view(i, j) - normGradSq_view(i, j)) > 1e-14) { // TODO
+        allGood = false;
+        std::cout << "Mismatch at (" << i << ", " << j << "): "
+                  << "LatForwardGradNorm2 = " << LatForwardGradNorm2_view(i, j)
+                  << ", normGradSq = " << normGradSq_view(i, j) << std::endl;
+        break;
+      }
+    }
+    if (!allGood) break;
+  }
+
   tdd.verify(allGood);
 }
 

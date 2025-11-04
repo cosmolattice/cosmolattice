@@ -43,7 +43,35 @@ namespace TempLat
     }
 
     template <int N, typename U>
-      requires(!HasGhostMethodIndexed<N, U>)
+      requires(!HasGhostMethodIndexed<N, U> && HasGhostMethodElement<N, U>)
+    static inline ptrdiff_t apply(U &obj, Tag<N> i)
+    {
+      return obj(i).confirmGhostsUpToDate();
+    }
+
+    template <int N, typename U>
+      requires(!HasGhostMethodIndexed<N, U> && !HasGhostMethodElement<N, U>)
+    static inline ptrdiff_t apply(U &obj, Tag<N> i)
+    {
+      return 0;
+    }
+
+    template <typename U>
+      requires HasGhostMethodDirectIndexed<U>
+    static inline ptrdiff_t apply(U &obj, ptrdiff_t i)
+    {
+      return obj.confirmGhostsUpToDate(i);
+    }
+
+    template <typename U>
+      requires(!HasGhostMethodDirectIndexed<U> && HasGhostMethodDirectElement<U>)
+    static inline ptrdiff_t apply(U &obj, ptrdiff_t i)
+    {
+      return obj(i).confirmGhostsUpToDate();
+    }
+
+    template <typename U>
+      requires(!HasGhostMethodDirectIndexed<U> && !HasGhostMethodDirectElement<U>)
     static inline ptrdiff_t apply(U &obj, ptrdiff_t i)
     {
       return 0;

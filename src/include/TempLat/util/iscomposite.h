@@ -30,11 +30,11 @@ namespace TempLat
   using IsComposite = IsCompositeHelper<R, tuple_size<decltype(std::remove_reference<R>::type::Getter::get(
                                                std::declval<R &>(), std::declval<Tag<0>>()))>::value>;
 
-  struct IsCompositeTester {
 #ifdef TEMPLATTEST
+  struct IsCompositeTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
 

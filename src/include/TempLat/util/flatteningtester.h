@@ -16,13 +16,12 @@
 
 namespace TempLat
 {
-
+#ifdef TEMPLATTEST
   /** \brief A class which tests the tuple flattener.
    *
    *
    * Unit test: make test-flatteningtester
    **/
-
   class FlatteningTester
   {
   public:
@@ -33,11 +32,9 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
+#endif
 } // namespace TempLat
 
 #endif

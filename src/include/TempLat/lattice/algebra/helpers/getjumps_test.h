@@ -12,7 +12,10 @@ inline void TempLat::GetJumps::Test(TempLat::TDDAssertion &tdd)
   constexpr size_t NDim = 3;
 
   struct MyTestOne {
-    JumpsHolder<3> getJumps() { return JumpsHolder<3>(LayoutStruct<3>({4, 4, 4}), {{{{1, 1}}, {{1, 1}}, {{1, 1}}}}); }
+    JumpsHolder<3> getJumps()
+    {
+      return JumpsHolder<3>(LayoutStruct<3>({4, 4, 4}, 1), {{{{1, 1}}, {{1, 1}}, {{1, 1}}}});
+    }
   };
   MyTestOne one;
 

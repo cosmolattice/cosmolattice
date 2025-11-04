@@ -3,11 +3,12 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2020
-#include "TempLat/util/nakedtype.h"
-#include "TempLat/util/nakedtype_test.h"
+// File info: Main contributor(s): Franz R. Sattler, Year: 2025
+
+#include "TempLat/util/powr.h"
+#include "TempLat/util/powr_test.h"
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::NakedTypeTester> test;
+  TempLat::TDDContainer<TempLat::PowrTester> test;
 }

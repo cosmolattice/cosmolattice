@@ -7,8 +7,9 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/util/tdd/tdd.h"
+
+#include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
@@ -29,11 +30,12 @@ namespace TempLat
    **/
   template <ptrdiff_t NDim, typename R> class LatticeLaplacian : public UnaryOperator<R>
   {
+  private:
+    using UnaryOperator<R>::mR;
+
   public:
     using GetReturnType = typename GetGetReturnType<R>::type;
     using FloatType = typename GetFloatType<GetReturnType>::type;
-
-    using UnaryOperator<R>::mR;
 
     DEVICE_FUNCTION
     LatticeLaplacian(R pR) : UnaryOperator<R>(pR), dx2(pow(GetDx::getDx(pR), 2)) {}

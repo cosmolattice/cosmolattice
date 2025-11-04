@@ -7,14 +7,19 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-inline void TempLat::HasStaticGetterDummy::Test(TempLat::TDDAssertion &tdd)
+namespace TempLat
 {
   class MyClass
   {
   public:
-    static auto get(ptrdiff_t i, Tag<0> tag) { return 1; }
+    struct Getter {
+      template <typename T, int N> static auto get(T &, Tag<N> tag) { return N; }
+    };
   };
+} // namespace TempLat
 
+inline void TempLat::HasStaticGetterDummy::Test(TempLat::TDDAssertion &tdd)
+{
   static_assert(HasStaticGetter<MyClass> == true);
 
   /* Default is to fail: to remind yourself to implement something here. */

@@ -9,6 +9,7 @@
 
 #include "TempLat/util/rangeiteration/make_tuple_tag.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
+#include "TempLat/util/tuple_size.h"
 #include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat

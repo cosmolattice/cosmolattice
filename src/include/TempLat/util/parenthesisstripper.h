@@ -12,7 +12,6 @@
 
 namespace TempLat
 {
-
   /** \brief A class which strips a string of its parenthesis if they are first and last characters.
    *
    *
@@ -47,8 +46,8 @@ namespace TempLat
       return count;
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

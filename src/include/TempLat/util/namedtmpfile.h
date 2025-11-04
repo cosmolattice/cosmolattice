@@ -21,7 +21,6 @@ namespace TempLat
    *
    * Unit test: make test-namedtmpfile
    **/
-
   class NamedTmpFile
   {
   public:
@@ -62,8 +61,8 @@ namespace TempLat
     std::string name;
     std::ofstream outfile;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

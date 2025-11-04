@@ -4,8 +4,9 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
+
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
-#include "templat/lattice/algebra/helpers/getderiv_test.h"
+#include "TempLat/lattice/algebra/helpers/getderiv_test.h"
 
 namespace
 {

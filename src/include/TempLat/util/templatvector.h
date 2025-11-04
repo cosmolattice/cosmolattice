@@ -12,7 +12,6 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
-#include "TempLat/util/nakedtype.h"
 
 namespace TempLat
 {
@@ -91,7 +90,7 @@ namespace TempLat
   template <typename... Args> auto make_templatvector(Args... args)
   {
     auto list = make_list(args...);
-    return TempLatVector<typename NakedType<decltype(list.getComp(0_c))>::type>(args...);
+    return TempLatVector<std::decay_t<decltype(list.getComp(0_c))>>(args...);
   }
 } // namespace TempLat
 

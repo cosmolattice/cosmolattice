@@ -52,14 +52,14 @@ namespace TempLat
 
   template <typename R>
     requires HasStaticGetter<std::decay_t<R>>
-  decltype(TupleMaker<R>()(std::forward<R>(std::declval<R>()))) make_tuple_from(R &&r)
+  auto make_tuple_from(R &&r)
   {
     return TupleMaker<R>()(std::forward<R>(r));
   }
 
   template <typename R>
     requires(!HasStaticGetter<std::decay_t<R>>)
-  decltype(std::make_tuple(std::forward<R>(std::declval<R>()))) make_tuple_from(R &&r)
+  auto make_tuple_from(R &&r)
   {
     return std::make_tuple(std::forward<R>(r));
   }

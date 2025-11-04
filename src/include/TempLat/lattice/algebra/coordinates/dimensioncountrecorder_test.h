@@ -9,13 +9,13 @@
 template <size_t NDim> inline void TempLat::DimensionCountRecorder<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   {
-    DimensionCountRecorder<2> cn(SpaceStateInterface<2>::SpaceType::Fourier);
-    cn.confirmSpace(LayoutStruct<2>({1, 1}), SpaceStateInterface<2>::SpaceType::Fourier);
+    DimensionCountRecorder<2> cn(SpaceStateType::Fourier);
+    cn.confirmSpace(LayoutStruct<2>({1, 1}, 1), SpaceStateType::Fourier);
     tdd.verify(cn.getNDimensions() == 2);
   }
   {
-    DimensionCountRecorder<8> cn(SpaceStateInterface<8>::SpaceType::Fourier);
-    cn.confirmSpace(LayoutStruct<8>({1, 1, 1, 1, 1, 1, 1, 1}), SpaceStateInterface<8>::SpaceType::Fourier);
+    DimensionCountRecorder<8> cn(SpaceStateType::Fourier);
+    cn.confirmSpace(LayoutStruct<8>({1, 1, 1, 1, 1, 1, 1, 1}, 1), SpaceStateType::Fourier);
     tdd.verify(cn.getNDimensions() == 8);
   }
 }

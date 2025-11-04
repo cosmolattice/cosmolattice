@@ -61,11 +61,10 @@ namespace TempLat
 
 #endif
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
+#ifdef TEMPLATTEST
   public:
     template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
+#endif
   };
 } // namespace TempLat
 

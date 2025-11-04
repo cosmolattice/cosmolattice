@@ -11,7 +11,9 @@
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/util/latinindiceslist.h"
 #include "TempLat/lattice/field/collections/helpers/id.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
+#include <string>
 
 namespace TempLat
 {
@@ -24,10 +26,10 @@ namespace TempLat
   template <class Arg, class T, int N, bool flatAssign = false, int SHIFTIND = 0> class FieldCollection
   {
   public:
-    static constexpr size_t NDim = Arg::NDim;
+    static constexpr size_t NDim = GetNDim::get<Arg>();
 
     FieldCollection(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
-                    LatticeParameters<T> pLatPar = LatticeParameters<T>()) //:
+                    LatticeParameters<T> pLatPar = LatticeParameters<T>())
     {
       for (int i = 0; i < N; ++i) {
         fs.push_back(Arg(name + "_" + std::to_string(i + SHIFTIND), toolBox, pLatPar));
@@ -35,6 +37,10 @@ namespace TempLat
     }
 
     template <int M> auto operator()(Tag<M> t) const { return fs[t - Tag<SHIFTIND>()]; }
+    template <int M> auto operator[](Tag<M> t) const { return fs[t - Tag<SHIFTIND>()]; }
+    auto operator()(size_t i) const { return fs[i - Tag<SHIFTIND>()]; }
+    auto operator[](size_t i) const { return fs[i - Tag<SHIFTIND>()]; }
+
     template <int M> auto getComp(Tag<M> t) { return fs[t]; }
 
     template <typename R> void operator=(R &&r)
@@ -50,6 +56,8 @@ namespace TempLat
       for (size_t i = 0; i < fs.size(); ++i)
         fs[i] = other.fs[i];
     }
+
+    std::string toString(ptrdiff_t i) const { return fs[i - SHIFTIND].toString(); }
 
     using Getter = GetComponent;
     static constexpr size_t size = N;

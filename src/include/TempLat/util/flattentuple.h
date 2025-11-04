@@ -56,14 +56,13 @@ namespace TempLat
     return flatten_tuple(std::forward<T>(t), std::make_index_sequence<std::tuple_size<std::decay_t<T>>{}>{});
   }
 
+#ifdef TEMPLATTEST
   class FlattenTupleTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
+#endif
 } // namespace TempLat
 
 #endif

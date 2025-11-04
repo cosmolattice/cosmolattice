@@ -7,18 +7,25 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/field/collections/fieldcollection.h"
+#include "TempLat/lattice/field/field.h"
 
 template <typename T> inline void TempLat::GetVectorComponentHelper<T>::Test(TempLat::TDDAssertion &tdd)
 {
   // TODO but this is much.
   auto toolBox = MemoryToolBox<3>::makeShared(32, 1);
   toolBox->setVerbose();
-  FieldCollection<double> fc(3, "abcdefg", toolBox);
+  FieldCollection<Field<3, double>, double, 3> fc("abcdefg", toolBox);
+
+  fc[1] = 1;
   fc[2].inFourierSpace() = 2;
-  auto test1 = GetVectorComponentHelper<FieldCollection<double>>(fc, 1);
-  auto test2 = GetVectorComponentHelper<FieldCollection<double>>(fc, 2);
+  tdd.verify(fc[1].isFourierSpace() == false);
+  tdd.verify(fc[2].isFourierSpace() == true);
+
+  auto test1 = GetVectorComponentHelper<FieldCollection<Field<3, double>, double, 3>>(fc, 1);
+  auto test2 = GetVectorComponentHelper<FieldCollection<Field<3, double>, double, 3>>(fc, 2);
 
   test1.confirmSpace(toolBox->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
   tdd.verify(fc[2].isFourierSpace() == true);
@@ -31,7 +38,7 @@ template <typename T> inline void TempLat::GetVectorComponentHelper<T>::Test(Tem
   test1.confirmGhostsUpToDate();
   tdd.verify(fc[1].areGhostsStale() == false);
 
-  tdd.verify(test1.toString() == "abcdefg#1");
+  tdd.verify(test1.toString() == "abcdefg_1(x)");
 }
 
 #endif

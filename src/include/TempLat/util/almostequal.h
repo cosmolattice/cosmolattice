@@ -55,20 +55,13 @@ namespace TempLat
    * Unit test: make test-almostequal
    */
 
+#ifdef TEMPLATTEST
   class AlmostEqualTester
   {
   public:
-    // Put public methods here. These should change very little over time.
-    AlmostEqualTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

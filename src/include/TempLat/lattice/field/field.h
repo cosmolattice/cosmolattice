@@ -30,6 +30,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
 
     static constexpr size_t NDim = _NDim;
+    using value_type = T;
 
     using ConfigView<NDim, T>::mManager;
 
@@ -39,7 +40,7 @@ namespace TempLat
     {
     }
 
-    Field() : ConfigView<NDim, T>("do not use", nullptr, LatticeParameters<T>()), mFourierView(*this) {}
+    //    Field() : ConfigView<NDim, T>("do not use", nullptr, LatticeParameters<T>()), mFourierView(*this) {}
 
     template <typename R> void operator=(R &&g) { ConfigView<NDim, T>::operator=(g); }
 

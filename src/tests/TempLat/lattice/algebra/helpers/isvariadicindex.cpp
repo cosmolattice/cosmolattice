@@ -5,7 +5,7 @@
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
-#include "TempLat/lattice/algebra/helpers/IsVariadicIndex_test.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex_test.h"
 
 namespace
 {

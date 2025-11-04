@@ -17,7 +17,6 @@ namespace TempLat
    *
    * Unit test: make test-ideatester
    **/
-
   class IdeaTester
   {
   public:

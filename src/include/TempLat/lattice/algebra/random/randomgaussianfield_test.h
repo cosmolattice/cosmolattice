@@ -55,7 +55,7 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
 
     // Check that the values are identical
     bool rewinding = true;
-    for (size_t i = 0; i < localFourierGridPoints; ++i)
+    for (ptrdiff_t i = 0; i < localFourierGridPoints; ++i)
       rewinding &= AlmostEqual(a_host(i), b_host(i)) && std::isfinite(abs(a_host(i))) && std::isfinite(abs(b_host(i)));
     tdd.verify(rewinding);
   }

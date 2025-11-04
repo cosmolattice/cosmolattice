@@ -21,7 +21,6 @@ namespace TempLat
    *
    * Unit test: make test-filetostring
    **/
-
   class FileToString
   {
   public:

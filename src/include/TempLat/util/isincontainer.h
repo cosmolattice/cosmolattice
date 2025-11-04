@@ -20,7 +20,6 @@ namespace TempLat
    *
    * Unit test: make test-isincontainer
    **/
-
   class IsInContainer
   {
   public:

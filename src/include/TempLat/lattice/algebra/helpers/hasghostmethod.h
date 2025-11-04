@@ -23,6 +23,15 @@ namespace TempLat
   template <int N, class T>
   concept HasGhostMethodIndexed = requires(T t, Tag<N> tag) { t.confirmGhostsUpToDate(tag); };
 
+  template <class T>
+  concept HasGhostMethodDirectIndexed = requires(T t, ptrdiff_t i) { t.confirmGhostsUpToDate(i); };
+
+  template <int N, class T>
+  concept HasGhostMethodElement = requires(T t, Tag<N> tag) { t(tag).confirmGhostsUpToDate(); };
+
+  template <class T>
+  concept HasGhostMethodDirectElement = requires(T t, ptrdiff_t i) { t(i).confirmGhostsUpToDate(); };
+
   /** \brief a mini tester class... */
   struct HasGhostMethodTester {
 #ifdef TEMPLATTEST

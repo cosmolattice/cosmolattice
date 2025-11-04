@@ -25,10 +25,10 @@ inline void TempLat::GetToolBox::Test(TempLat::TDDAssertion &tdd)
   MyTestTwo two;
 
   tdd.verify(GetToolBox::get(one)->mNDimensions == 3);
-  tdd.verify(GetToolBox::get(two).get() == NULL);
+  tdd.verify(std::same_as<std::decay_t<decltype(GetToolBox::get(two))>, std::nullptr_t>);
+  tdd.verify(Throws<GetToolBoxException>([&]() { GetToolBox::get(two); }));
 
   //  auto toolBox = MemoryToolBox::makeShared(3, 32, 1);
-
   //  Field<double> base("base", toolBox);
 
   //  WaveNumber k(toolBox);

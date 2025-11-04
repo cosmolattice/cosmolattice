@@ -52,11 +52,11 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-  struct AssignableTupleTester {
 #ifdef TEMPLATTEST
+  struct AssignableTupleTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   template <class... Args> auto make_list(Args... args) { return AssignableTuple<0, Args...>(args...); }
   template <class... Args> auto make_vector(Args... args) { return AssignableTuple<1, Args...>(args...); }

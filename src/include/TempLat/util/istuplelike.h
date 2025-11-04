@@ -23,12 +23,12 @@ namespace TempLat
   template <class T> struct IsTupleLike<T, std::void_t<typename std::tuple_size<T>::type>> : std::true_type {
   };
 
+#ifdef TEMPLATTEST
   struct IsTupleLikeTester {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
 

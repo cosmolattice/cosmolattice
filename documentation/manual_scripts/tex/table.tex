@@ -1,0 +1,91 @@
+\documentclass[multi=figure,11pt]{standalone}
+
+\textwidth 18.0cm
+
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{subfigure}
+\usepackage{esvect}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{fix-cm} %allows large fonts
+\usepackage{cite}
+\usepackage{soul}
+\usepackage{mdframed}
+\usepackage{lipsum}
+\usepackage{multicol}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{setspace}
+\usepackage{tabularx}
+\usepackage{ltablex}
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[fileext=frm,placement={!ht},name=Box]{boxfloat}
+\usepackage{capt-of}
+\usepackage[htt]{hyphenat} %To break texttt over lines.
+\usepackage{hyperref}
+\usepackage{url}
+
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathreplacing}
+
+\newcommand{\CL}{{\tt ${\mathcal C}$osmo${\mathcal L}$attice}~}
+\newcommand{\CLns}{{\tt ${\mathcal C}$osmo${\mathcal L}$attice}}
+\newcommand{\dx}{\ensuremath{\delta x}}
+\newcommand{\dt}{\delta t}
+\newcommand{\deta}{\delta\eta}
+\newcommand{\bn}{{\bf n}}
+\newcommand{\dd}{\text{d}}
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+
+\newcommand{\nn}{\nonumber}
+\newcommand{\lag}{{\mathcal L}}
+\newcommand{\mn}{{\mu\nu}}
+\newcommand{\ab}{{\alpha\beta}}
+%\newcommand{{\rm ij}}{\rm ij}
+\newcommand{\hI}{\hspace{1cm}}
+\newcommand{\hVII}{\hspace{.7cm}}
+\newcommand{\hV}{\hspace{.5cm}}
+\newcommand{\Lin}{U_{\mu,n}}
+\newcommand{\Pla}{U_{\mn,n}}
+\newcommand{\hu}{{\mathcal H}}
+\newcommand{\lqn}[1]{\lefteqn{#1}}
+\newcommand{\lb}{\left\lbrace}
+\newcommand{\rb}{\right\rbrace}
+\newcommand{\rh}{{\rm rh}}
+
+\newcommand{\piSc}{\tilde\pi_\phi}
+\newcommand{\piSingl}{\tilde\pi_\varphi}
+\newcommand{\piSinglpar}{\left(\piSingl\right)}
+\newcommand{\piA}{\tilde\pi_A}
+\newcommand{\piApar}{\left(\piA\right)}
+\newcommand{\piDoubl}{\widetilde\pi_\Phi}
+\newcommand{\piDoublpar}{\left(\piDoubl\right)}
+\newcommand{\piB}{\tilde\pi_B}
+\newcommand{\piBpar}{\left(\piB\right)}
+
+\newcommand{\EKsutwo}{E_K^B}
+\newcommand{\EGsutwo}{E_G^B}
+
+\newcommand{\kersutwo}{\mathcal{K}_{B_i}}
+\newcommand{\kersutwoComp}{\mathcal{K}_{B_i^a}}
+
+\makeatletter
+\renewenvironment{figure}%
+{\def\@captype{figure}%
+\minipage{\textwidth}}%
+{\endminipage}
+\makeatother
+
+\let\efloatseparator=\empty
+
+\begin{document}
+\input{tmp.tex}
+\end{document}

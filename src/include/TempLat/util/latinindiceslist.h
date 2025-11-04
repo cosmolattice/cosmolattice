@@ -20,7 +20,6 @@ namespace TempLat
    *
    * Unit test: make test-latinindiceslist
    **/
-
   template <class... Args> class LatinIndicesList : public AssignableCollectionBase<LatinIndicesList<Args...>, Args...>
   {
   public:
@@ -40,12 +39,12 @@ namespace TempLat
 
   template <class... Args> auto make_latinindices_list(Args... args) { return LatinIndicesList<Args...>(args...); }
 
+#ifdef TEMPLATTEST
   struct LatinIndicesListTester {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
 
