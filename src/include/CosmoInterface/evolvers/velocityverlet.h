@@ -27,7 +27,7 @@ namespace TempLat
 {
 
   /** \brief A class which implements a velocity verlet algorithm that evolves scalar singlets, complex scalars, SU2
-    *doublets, and U(1) and SU(2) gauge fields.
+   *doublets, and U(1) and SU(2) gauge fields.
    *
    *
    **/
@@ -65,9 +65,14 @@ namespace TempLat
 
       size_t stages = (parSize - 1) * 2 + 1; // Number of operations in each iteration
 
+      T w_sum = 0;
+
       for (size_t i = 0; i < stages; ++i) { // loop over operations...
 
         w = ws[(i < parSize ? i : stages - i - 1)];
+
+        model.t = model.t0 + tMinust0 + w_sum * model.dt;
+        w_sum += w;
 
         // We start by computing the kicks (pi_0 --> pi_1/2):
         if (expansion && !fixedBackground) kickScaleFactorHalf(model, w); // only if self-consistent expansion
@@ -96,6 +101,7 @@ namespace TempLat
         if (expansion && !fixedBackground) storeFieldsAverages(model);
 
         // Now we compute the second kick (pi_1/2 --> pi_1)
+        model.t += 0.5 * w * model.dt;
 
         if (model.Ns > 0) kickScalar(model, w);
         if (model.fldGWs != nullptr) kickGWs(model, w);

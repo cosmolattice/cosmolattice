@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/cosmointerface.h"
+#include "TempLat/lattice/algebra/constants/zerotype.h"
 
 // Include cosmointerface to have access to all of the library.
 
@@ -22,10 +23,11 @@ namespace TempLat
 
   struct ModelPars : public TempLat::DefaultModelPars {
     static constexpr size_t NScalars = 2;
-    // Let's go for O(2)
-    static constexpr size_t NPotTerms = 2;
+    // In our phi4 example, we only want 2 scalar fields.
+    static constexpr size_t NPotTerms = 1;
     // Our potential naturaly splits into two terms: the inflaton potential
     // and the interaction with the daughter field.
+    static constexpr size_t NDim = 2;
 
     // All the numbers of fields are 0 by default, so we need only
     // to specify that we want two scalar fields.
@@ -47,7 +49,8 @@ namespace TempLat
   {
     //...
   private:
-    double g, lambda, q;
+    double m2, lambda;
+    double A, omega;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
 
@@ -61,7 +64,11 @@ namespace TempLat
     // fldS : The actual object which contains the scalar fields.
 
   public:
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar, std::shared_ptr<MemoryToolBox> toolBox)
+    static constexpr size_t NDim = Model<MODELNAME>::NDim;
+    static constexpr size_t N = Model<MODELNAME>::Ns;
+    using Model<MODELNAME>::t;
+
+    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar, std::shared_ptr<MemoryToolBox<NDim>> toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
                            STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.
@@ -77,19 +84,17 @@ namespace TempLat
       // we declare a new parameter which needs to be in the input data.  Its name is
       // "lambda" and we specify it is a 'double'.
 
-      q = parser.get<double>("q");
-      // In the same way, we declare an input parameter 'q'.
-
-      g = sqrt(q * lambda);
-      // For convenience, we also define g as a function of lambda and q.
+      m2 = parser.get<double>("m2");
+      A = parser.get<double>("A");
+      omega = parser.get<double>("omega");
 
       /////////
       // Initial homogeneous components of the fields
       // (read from parameters file, or specified here if not)
       /////////
 
-      fldS0 = parser.get<double, 2>("initial_amplitudes");
-      piS0 = parser.get<double, 2>("initial_momenta", {0, 0});
+      fldS0 = parser.get<double, N>("initial_amplitudes");
+      piS0 = parser.get<double, N>("initial_momenta", std::vector<double>(N));
 
       // Then, we need to specify the initial homogeneous
       // value of our fields. We read them again from the input file. The int '2' means
@@ -129,7 +134,7 @@ namespace TempLat
     // Program potential (add as many functions as terms are in the potential)
     /////////
 
-    auto potentialTerms(Tag<0>) // Inflaton potential energy
+    auto potentialTerms(Tag<0>) const // Potential energy of the fields
     //
     // Now we need to define the physics of the model. We start by defining the potential.
     // We need to specify as  many potential  terms as we specified in the ModelParams,
@@ -138,7 +143,8 @@ namespace TempLat
     // to define different function with the same name. The 'auto' keyword lets the compiler
     // figure out on itself what is the actual return type of the function.
     {
-      return 0.25 * pow<2>(pow<2>(fldS(0_c)) + pow<2>(fldS(1_c)));
+      return Total(j, 0, N - 1, m2 * pow<2>(fldS(j))) +
+             Total(i, 0, N - 1, Total(j, 0, N - 1, 0.25 * lambda * pow<2>(fldS(i)) * pow<2>(fldS(j))));
       // Some notations.  The scalar fields are stored in a collection called 'fldS'.
       // The scalar fields are labelled  from 0 to Ns-1. The field say number 1 is
       // accessed through the syntax 'fldS(0_c)'. The function 'pow<N>(x)'. Works with the
@@ -148,10 +154,6 @@ namespace TempLat
       // These 'pow' functions are just one example of the many algebraic functions which
       // can be applied to our fields,  see the manual for an exhaustive list
       // and what to do if you want to implement a new one.
-    }
-    auto potentialTerms(Tag<1>) // Interaction energy
-    {
-      return ZeroType();
     }
 
     // Advanced note (ignore if you are satisfied with the above) :
@@ -168,17 +170,14 @@ namespace TempLat
     // (add one function for each field).
     /////////
 
-    auto potDeriv(Tag<0>) // Derivative with respect to the inflaton.
+    template <int D> auto potDeriv(Tag<D> tagD) // Derivative with respect to the D-th scalar field.
     // In exactly the same fashion, we  need to define one derivative of the potential
-    // per scalar field (2 in this case).  The integer in Tag<0> tells you the field with
+    // per scalar field (N in this case).  The integer in Tag<D> tells you the field with
     // respect to which you are defining the derivative of the potential of.
     {
-      return pow<3>(fldS(0_c)) + q * fldS(0_c) * pow<2>(fldS(1_c));
-    }
-
-    auto potDeriv(Tag<1>) // Derivative with respect to the daughter field.
-    {
-      return q * fldS(1_c) * pow<2>(fldS(0_c));
+      return m2 * fldS(tagD) + Total(j, 0, N - 1, 0.25 * lambda * 2 * fldS(tagD) * pow<2>(fldS(j))) +
+             0.25 * lambda * 2 * fldS(tagD) * pow<2>(fldS(tagD)) // missing part of the phi^4 self-interaction (4) - 2
+             + ZeroType();                                       // Add Driving here
     }
 
     /////////
@@ -186,17 +185,14 @@ namespace TempLat
     // (add one function for each field)
     /////////
 
-    auto potDeriv2(Tag<0>) // Second derivative with respect inflaton
+    template <int D> auto potDeriv2(Tag<D> tagD) // Second derivative with respect D-th scalar field.
     // Finally, for the purpose of initializing the masses, the user needs to define
     // in the same fashion the second derivatives of the potential
     // (put 'return 0' if you are not using this feature).
     {
-      return 3 * pow<2>(fldS(0_c)) + q * pow<2>(fldS(1_c));
-    }
-
-    auto potDeriv2(Tag<1>) // Second derivative with respect daughter field
-    {
-      return q * pow<2>(fldS(0_c));
+      return m2 + Total(j, 0, N - 1, 0.25 * lambda * 2 * pow<2>(fldS(j))) +
+             0.25 * lambda * 10 * pow<2>(fldS(tagD)) // missing part of the phi^4 self-interaction (4 * 3) - 2
+             + ZeroType();                           // Add Driving here
     }
   };
 } // namespace TempLat

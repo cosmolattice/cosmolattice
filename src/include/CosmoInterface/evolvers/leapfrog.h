@@ -16,7 +16,7 @@ namespace TempLat
 {
 
   /** \brief A class which implements a leapfrog scheme to evolve  scalar singlets, complex scalars, SU2 doublets, and
-    *U(1) and SU(2) gauge fields.
+   *U(1) and SU(2) gauge fields.
    *
    **/
 
@@ -56,6 +56,8 @@ namespace TempLat
       // a time step and we need to evolve them only by another half time step.
       T weight = synced ? 0.5 : 1.0;
 
+      model.t = model.t0 + tMinust0 + (0.5 - weight) * model.dt;
+
       if (model.Ns > 0) kickScalar(model, weight);
       if (model.fldGWs != nullptr) kickGWs(model, weight);
       if (model.NCs > 0) kickCS(model, weight);
@@ -76,6 +78,8 @@ namespace TempLat
         driftScaleFactor(model, tMinust0 + model.dt);
       }
 
+      model.t = model.t0 + tMinust0;
+
       if (model.Ns > 0) driftScalar(model);
       if (model.fldGWs != nullptr) driftGWs(model);
       if (model.NCs > 0) driftCS(model);
@@ -94,6 +98,8 @@ namespace TempLat
     template <class Model> void sync(Model &model, T tMinust0)
     {
       if (!synced) {
+        model.t = model.t0 + tMinust0 + model.dt;
+
         if (model.Ns > 0) kickScalar(model, 0.5);
         if (model.fldGWs != nullptr) kickGWs(model, 0.5);
         if (model.NCs > 0) kickCS(model, 0.5);

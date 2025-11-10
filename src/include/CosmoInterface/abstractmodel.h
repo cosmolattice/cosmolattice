@@ -91,7 +91,7 @@ namespace TempLat
     static constexpr size_t NU1 = NU1FLDS;
     static constexpr size_t NSU2 = NSU2FLDS;
     static constexpr size_t NDim = NDIM;
-    static constexpr size_t NGWs = 6;
+    static constexpr size_t NGWs = 0;                      // TODO (Franz): was 6 before
     static constexpr T MPl = Constants::reducedMPlanck<T>; // Reduced Planck mass, MPl=2.435*10^18 GeV
 
     // Coupling managers between complex scalar/SU2 doublets and gauge fields
@@ -190,7 +190,7 @@ namespace TempLat
 
     T dx, kIR, dt; // Length element and time step
 
-    T t0, time;
+    T t0, t;
 
     // name of the model
     std::string name;
@@ -247,42 +247,42 @@ namespace TempLat
     //  Note: A better alternative is to use if constexpr in the main, but this is c++17. Could also use macro but don't
     //  like it.
 
-    template <int N> auto potDeriv(Tag<N> t)
+    template <int N> auto potDeriv(Tag<N> i)
     {
       throw(PotentialDerivativeNotDefined("You tried to call potDeriv N = " + std::to_string(N) +
                                           ", which is not defined in your model. Abort."));
       return ZeroType(); // the simulation aborts if the function is not defined in the model. The return ZeroType is to
                          // have a return type.
     }
-    template <int N> auto potDeriv2(Tag<N> t)
+    template <int N> auto potDeriv2(Tag<N> i)
     {
       throw(PotentialDerivativeNotDefined("You tried to call potDeriv2 N = " + std::to_string(N) +
                                           ", which is not defined in your model. Abort."));
       return ZeroType(); // the simulation aborts if the function is not defined in the model
     }
 
-    template <int N> auto potDerivNormCS(Tag<N> t)
+    template <int N> auto potDerivNormCS(Tag<N> i)
     {
       throw(PotentialDerivativeNotDefined("You tried to call potDerivNormCS N = " + std::to_string(N) +
                                           ", which is not defined in your model. Abort."));
       return ZeroType(); // the simulation aborts if the function is not defined in the model
     }
 
-    template <int N> auto potDeriv2NormCS(Tag<N> t)
+    template <int N> auto potDeriv2NormCS(Tag<N> i)
     {
       throw(PotentialDerivativeNotDefined("You tried to call potDeriv2NormCS N = " + std::to_string(N) +
                                           ", which is not defined in your model. Abort."));
       return ZeroType(); // the simulation aborts if the function is not defined in the model
     }
 
-    template <int N> auto potDerivNormSU2Doublet(Tag<N> t)
+    template <int N> auto potDerivNormSU2Doublet(Tag<N> i)
     {
       throw(PotentialDerivativeNotDefined("You tried to call potDerivNormSU2Doublet N = " + std::to_string(N) +
                                           ", which is not defined in your model. Abort."));
       return ZeroType(); // the simulation aborts if the function is not defined in the model
     }
 
-    template <int N> auto potDeriv2NormSU2Doublet(Tag<N> t)
+    template <int N> auto potDeriv2NormSU2Doublet(Tag<N> i)
     {
       throw(PotentialDerivativeNotDefined("You tried to call potDeriv2NormSU2Doublet N = " + std::to_string(N) +
                                           ", which is not defined in your model. Abort."));

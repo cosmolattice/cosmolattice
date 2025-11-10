@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
   // - the command line,
   // - or from previous simulations
 
-  SimulationManager manager(parser);
+  SimulationManager<ModelType::NDim> manager(parser);
   // The SimulationManager takes care of saving the simulations at the end,
   // backing up or restarting simulations, when appropriate options are passed.
   // It is also in charge of printing the output parameter file.
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
   //  of magnetic fields are built in gauge theories. Changing nGhost here requires
   //  re-compiling CosmoLattice.
 
-  auto toolBox = MemoryToolBox::makeShared(ModelType::NDim, runParams.N, nGhost);
+  auto toolBox = MemoryToolBox<ModelType::NDim>::makeShared(runParams.N, nGhost);
   // The MemoryToolBox contains the memory management and parallelisation machinery
   // of CosmoLattice.  Unless you are an advanced user, you can simply forget about this.
   // Keep this line here in either case.
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
   // You can check in this way, in the console output,
   // that you are running indeed the model you intended.
 
-  double t = 0;
+  typename ModelType::FloatType t = 0;
   // Our time variable. Initialized below.
 
   if (not manager.doWeRestart()) // If this is a new simulation:
@@ -103,12 +103,15 @@ int main(int argc, char *argv[])
     // The model is reloaded from an appropriate file created by a previous simulation.
   }
 
+  // We communicate t0 to the model, in case it needs it internally.
+  model.t0 = runParams.t0;
+
   Evolver<ModelType> evolver(model, runParams);
   // Here an algorithm -- evolver -- to solve the field EoM is chosen. The type of evolver
   // is specified by the user in the input parameter file, and here is passed through
   // runParams. Model is passed as well to have access to normalisations.
 
-  Measurer<double> measurer(model, runParams);
+  Measurer<ModelType, double> measurer(model, runParams);
   // Creates an object of the class responsible for performing and outputting all the required
   // measurements (averages, energies, spectra...).
 
@@ -127,7 +130,7 @@ int main(int argc, char *argv[])
     if (measurer.areWeMeasuring(i))
     // We proceed to measure
     {
-      evolver.sync(model, t, runParams.t0);
+      evolver.sync(model, t - runParams.t0);
       // Some evolvers like staggered leapfrog have fields and momenta which
       // do not live at the same timesteps. Before measuring, we synchronize them.
       measurer.measure(i, t, model);
