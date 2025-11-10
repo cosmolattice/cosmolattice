@@ -17,6 +17,8 @@ namespace TempLat
   {
     namespace iteration
     {
+      // ===== FOREACH =====
+      // 1. foreach: device_kokkos::array
       template <size_t NDim, typename Functor, typename I>
         requires requires(Functor functor) { functor(device_kokkos::IdxArray<NDim>{}); }
       void foreach (const std::string &name, const device_kokkos::array<I, NDim> &starts,
@@ -25,6 +27,7 @@ namespace TempLat
         Kokkos::parallel_for(name, getLocalKokkosPolicy(starts, stops),
                              device_kokkos::KokkosNDLambdaWrapper<NDim, Functor>(functor));
       }
+      // 2. foreach: std::array
       template <size_t NDim, typename Functor, typename I>
         requires requires(Functor functor) {
           functor(device_kokkos::IdxArray<NDim>{});
@@ -36,7 +39,7 @@ namespace TempLat
         Kokkos::parallel_for(name, getLocalKokkosPolicy(starts, stops),
                              device_kokkos::KokkosNDLambdaWrapper<NDim, Functor>(functor));
       }
-
+      // 3. foreach: LayoutStruct
       template <size_t NDim, typename Functor>
         requires requires(Functor functor) { functor(device_kokkos::IdxArray<NDim>{}); }
       void foreach (const std::string &name, const LayoutStruct<NDim> &mLayout, const Functor &functor)
@@ -45,6 +48,8 @@ namespace TempLat
                              device_kokkos::KokkosNDLambdaWrapper<NDim, Functor>(functor));
       }
 
+      // ===== REDUCE =====
+      // 1. reduce: device_kokkos::array
       template <size_t NDim, typename Functor, typename I, typename T>
         requires requires(Functor functor, T &update) { functor(device_kokkos::IdxArray<NDim>{}, update); }
       void reduce(const std::string &name, const device_kokkos::array<I, NDim> &starts,
@@ -53,6 +58,7 @@ namespace TempLat
         Kokkos::parallel_reduce(name, getLocalKokkosPolicy(starts, stops),
                                 device_kokkos::KokkosNDLambdaWrapperReduction<NDim, Functor>(functor), result);
       }
+      // 2. reduce: std::array
       template <size_t NDim, typename Functor, typename I, typename T>
         requires requires(Functor functor, T &update) {
           functor(device_kokkos::IdxArray<NDim>{}, update);
@@ -64,7 +70,7 @@ namespace TempLat
         Kokkos::parallel_reduce(name, getLocalKokkosPolicy(starts, stops),
                                 device_kokkos::KokkosNDLambdaWrapperReduction<NDim, Functor>(functor), result);
       }
-
+      // 3. reduce: LayoutStruct
       template <size_t NDim, typename Functor, typename T>
         requires requires(Functor functor, T &update) { functor(device_kokkos::IdxArray<NDim>{}, update); }
       void reduce(const std::string &name, const LayoutStruct<NDim> &mLayout, const Functor &functor, T &result)
@@ -72,7 +78,7 @@ namespace TempLat
         Kokkos::parallel_reduce(name, device_kokkos::getLocalKokkosPolicy(mLayout),
                                 device_kokkos::KokkosNDLambdaWrapperReduction<NDim, Functor>(functor), result);
       }
-
+      // 4. reduce: LayoutStruct into View or Reduction object
       template <size_t NDim, typename Functor, typename View>
         requires requires(Functor functor, typename View::value_type &update) {
           functor(device_kokkos::IdxArray<NDim>{}, update);
@@ -83,6 +89,13 @@ namespace TempLat
                                 device_kokkos::KokkosNDLambdaWrapperReduction<NDim, Functor>(functor), view);
       }
 
+      // ===== REDUCERS =====
+      using Kokkos::Max;
+      using Kokkos::Min;
+      using Kokkos::Prod;
+      using Kokkos::Sum;
+
+      // ===== FENCE =====
       inline void fence() { Kokkos::fence(); }
     } // namespace iteration
   } // namespace device_kokkos

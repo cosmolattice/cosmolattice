@@ -26,6 +26,11 @@ namespace TempLat
       using export_device_namespace::iteration::fence;
       using export_device_namespace::iteration::foreach;
       using export_device_namespace::iteration::reduce;
+
+      using export_device_namespace::iteration::Max;
+      using export_device_namespace::iteration::Min;
+      using export_device_namespace::iteration::Prod;
+      using export_device_namespace::iteration::Sum;
     } // namespace iteration
   } // namespace device
 } // namespace TempLat

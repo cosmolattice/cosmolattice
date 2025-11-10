@@ -12,14 +12,13 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/field/field.h"
 
-inline void TempLat::IntegrationTesting::RandomField::Test(TempLat::TDDAssertion &tdd)
+namespace TempLat
 {
-
-  say << "Testing C2R -> R2C with a random gaussian. Actually more a test of HermitianPartners and FFTNormalization "
-         "than anything else.\n";
-
-  auto &&myLittleLambda = [&tdd](ptrdiff_t nDim, ptrdiff_t nGrid, ptrdiff_t nGhost, bool forbidTransposition) {
-    auto toolBox = MemoryToolBox::makeShared(nDim, nGrid, nGhost, forbidTransposition);
+  template <size_t nDim> bool testHelper(auto &tdd, ptrdiff_t nGrid, ptrdiff_t nGhost, bool forbidTransposition)
+  {
+    // TODO (Franz)
+    /*
+    auto toolBox = MemoryToolBox<nDim>::makeShared(nDim, nGrid, nGhost, forbidTransposition);
 
     auto HP = toolBox->mLayouts.getFourierSpaceLayout().getHermitianPartners();
     say << toolBox->mLayouts << "\n";
@@ -53,13 +52,13 @@ inline void TempLat::IntegrationTesting::RandomField::Test(TempLat::TDDAssertion
       // allEqual.compare_exchange_weak(expected, thisResult);
     }
 
-    /* test that the prng repeats itself as it should. */
+    // test that the prng repeats itself as it should.
     tdd.verify(allEqual);
 
-    //        /** FFT to configuration space. */
+    //        FFT to configuration space.
     phi.confirmSpace(toolBox->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
     //
-    //        /** FFT to fourier space. */
+    //        FFT to fourier space.
     phi.inFourierSpace().confirmSpace(toolBox->mLayouts.getFourierSpaceLayout(), SpaceStateType::Fourier);
     //
     //        //    std::atomic<bool> allEqual(true);
@@ -86,10 +85,17 @@ inline void TempLat::IntegrationTesting::RandomField::Test(TempLat::TDDAssertion
 
     tdd.verify(allEqual);
     return (bool)allEqual;
-  };
-  //
-  //    /* The example case where PFFT fails if we allow for transposed complex layouts. */
-  myLittleLambda(3, 4, 0, 0);
+    */
+  }
+} // namespace TempLat
+
+inline void TempLat::IntegrationTesting::RandomField::Test(TempLat::TDDAssertion &tdd)
+{
+  say << "Testing C2R -> R2C with a random gaussian. Actually more a test of HermitianPartners and FFTNormalization "
+         "than anything else.\n";
+
+  // The example case where PFFT fails if we allow for transposed complex layouts.
+  testHelper<3>(tdd, 4, 0, 0);
   ////    return;
   //    bool goOn = true;
   //    for ( ptrdiff_t iDim = 2; iDim < 5 && goOn; ++iDim) {

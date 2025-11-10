@@ -17,15 +17,15 @@
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 
+#include "TempLat/lattice/algebra/helpers/getndim.h"
+
 namespace TempLat
 {
-
   /** \brief A class which implements the average for list objects.
    *
    *
    * Unit test: make test-listaverager
    **/
-
   template <typename T> class ListAverager
   {
   public:
@@ -33,6 +33,7 @@ namespace TempLat
     typedef typename GetGetReturnType<memberType>::type vType;
     static constexpr bool isComplexValued = GetGetReturnType<memberType>::isComplex;
     static constexpr size_t size = tuple_size<T>::value;
+    static constexpr size_t NDim = GetNDim::get<memberType>();
 
     typedef std::array<vType, size> arrVType;
 
@@ -97,7 +98,7 @@ namespace TempLat
     std::string toString() const { return "<" + GetString::get(mT) + ">"; }
 
     /** For measurement objects. */
-    inline std::shared_ptr<MemoryToolBox> getToolBox() const { return GetToolBox::get(mT); }
+    inline auto getToolBox() const { return GetToolBox::get(mT); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -124,17 +125,11 @@ namespace TempLat
   }
 
   template <typename T>
-  typename std::enable_if<
-      IsTempLatGettable<0, T>::value,
-      decltype(make_list_from_array(
-          std::declval<
-              std::array<typename GetGetReturnType<decltype(GetComponent::get(std::declval<T &>(), Tag<0>()))>::type,
-                         T::size>>()))>::type
-  // auto
-  average(T instance, SpaceStateType spaceType =
-                          GetGetReturnType<decltype(GetComponent::get(std::declval<T &>(), Tag<0>()))>::isComplex
-                              ? SpaceStateType::Fourier
-                              : SpaceStateType::Configuration)
+    requires IsTempLatGettable<0, T>
+  auto average(T instance, SpaceStateType spaceType =
+                               GetGetReturnType<decltype(GetComponent::get(std::declval<T &>(), Tag<0>()))>::isComplex
+                                   ? SpaceStateType::Fourier
+                                   : SpaceStateType::Configuration)
   {
     return make_list_from_array(ListAverager<T>(instance, spaceType).compute());
   }

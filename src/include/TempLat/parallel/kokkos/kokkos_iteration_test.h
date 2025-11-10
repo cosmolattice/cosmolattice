@@ -21,8 +21,14 @@ template <size_t NDim> void TempLat::KokkosIterationTester<NDim>::Test(TempLat::
       // change from "base 2" to base 10
       size_t base10_idx = 0;
       for (size_t i = 0; i < NDim; ++i) {
-        base10_idx += idx[i] * static_cast<size_t>(pow(2, i));
+        // Doing it manually to avoid faulty rounding from pow
+        size_t power = 1;
+        for (size_t j = 0; j < i; ++j)
+          power *= 2;
+        base10_idx += idx[i] * power;
       }
+      Kokkos::printf("Indices: %lu, %lu, %lu, %lu -> Index in base 10: %lu\n", idx[0], idx[1], idx[2], idx[3],
+                     base10_idx);
       a(base10_idx) = NDim; // just to test that the lambda works
     };
 
@@ -35,14 +41,19 @@ template <size_t NDim> void TempLat::KokkosIterationTester<NDim>::Test(TempLat::
       Kokkos::parallel_for("init", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start, stop),
                            device_kokkos::KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
     else
-      Kokkos::parallel_for("init", Kokkos::RangePolicy(0, 2), device_kokkos::KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
+      Kokkos::parallel_for("init", Kokkos::RangePolicy(0, 2),
+                           device_kokkos::KokkosNDLambdaWrapper<NDim, decltype(functor)>(functor));
     Kokkos::fence();
 
     auto host_view = Kokkos::create_mirror_view(a);
     Kokkos::deep_copy(host_view, a);
     bool all_correct = true;
-    for (size_t i = 0; i < a.size(); ++i)
+    for (size_t i = 0; i < a.size(); ++i) {
       all_correct &= TempLat::AlmostEqual(host_view[i], (double)NDim);
+      if (!TempLat::AlmostEqual(host_view[i], (double)NDim)) {
+        std::cout << "Error at index " << i << " value is " << host_view[i] << " expected " << (double)NDim << "\n";
+      }
+    }
     tdd.verify(all_correct);
   }
 
@@ -64,8 +75,7 @@ template <size_t NDim> void TempLat::KokkosIterationTester<NDim>::Test(TempLat::
 
     if constexpr (NDim > 1) {
       Kokkos::parallel_reduce("init", Kokkos::MDRangePolicy<Kokkos::Rank<NDim>>(start, stop),
-                              device_kokkos::KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor),
-                              result);
+                              device_kokkos::KokkosNDLambdaWrapperReduction<NDim, decltype(functor)>(functor), result);
     } else {
       Kokkos::parallel_reduce(
           "init", Kokkos::RangePolicy(0, 2),

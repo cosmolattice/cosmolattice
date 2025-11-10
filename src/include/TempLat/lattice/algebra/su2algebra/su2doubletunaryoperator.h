@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 
 namespace TempLat
 {
