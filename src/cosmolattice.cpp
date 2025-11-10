@@ -7,12 +7,7 @@
 // YourModel.h was loaded during compilation through a variable called MODELINCLUDE in CMake,
 // see CMakeList.txt. Here STRINGIFY is just a macro that converts MODELINCLUDE into a string.
 
-using namespace TempLat;
-// All the classes and functions of CosmoLattice are in the namespace TempLat.
-// Here we load it so that, when calling one of its  functions in this file,
-// we don't need to specify the namespace TempLat
-
-using ModelType = MODELTYPE;
+using ModelType = TempLat::MODELTYPE;
 // We relabel the macro MODELTYPE (which contains the model you decided to study,
 // indicated to CMake when compiling), into a type ModelType.
 
@@ -20,6 +15,10 @@ using ModelType = MODELTYPE;
 
 int main(int argc, char *argv[])
 {
+  using namespace TempLat;
+  // All the classes and functions of CosmoLattice are in the namespace TempLat.
+  // Here we load it so that, when using one of its members in the main function,
+  // we don't need to specify the namespace TempLat
 
   SessionGuard guard(argc, argv, false);
   // Instantiating the class SessionGuard is needed to take care of allocation
