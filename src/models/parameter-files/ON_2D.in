@@ -35,3 +35,5 @@ lambda = 0.1
 m2 = 0.1
 A = 0.1
 omega = 0.1
+highCut = 1
+lowCut = 0

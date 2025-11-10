@@ -51,6 +51,7 @@ namespace TempLat
   private:
     double m2, lambda;
     double A, omega;
+    double highCut, lowCut;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
 
@@ -68,10 +69,14 @@ namespace TempLat
     static constexpr size_t N = Model<MODELNAME>::Ns;
     using Model<MODELNAME>::t;
 
+    Field<NDim, typename Model<MODELNAME>::FloatType> DriveProfile;
+
     MODELNAME(ParameterParser &parser, RunParameters<double> &runPar, std::shared_ptr<MemoryToolBox<NDim>> toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
                            STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.
+          ,
+          DriveProfile("DriveProfile", toolBox, runPar.getLatParams())
     {
 
       /////////
@@ -87,6 +92,9 @@ namespace TempLat
       m2 = parser.get<double>("m2");
       A = parser.get<double>("A");
       omega = parser.get<double>("omega");
+
+      highCut = parser.get<double>("highCut");
+      lowCut = parser.get<double>("lowCut");
 
       /////////
       // Initial homogeneous components of the fields
@@ -131,6 +139,11 @@ namespace TempLat
         masses2S = {..., ...};
         setInitialPotentialFromPotential();
        */
+
+      FourierSite<NDim> ntilde(toolBox);
+      // Fourier lattice site, see eq.(57) of arXiv:2006.15122v2
+      auto k = ntilde.norm() * runPar.kIR;
+      DriveProfile.inFourierSpace() = heaviside(highCut - k) * heaviside(k - lowCut);
     }
 
     /////////
@@ -182,7 +195,7 @@ namespace TempLat
     {
       return m2 * fldS(tagD) + Total(j, 0, N - 1, 0.25 * lambda * 2 * fldS(tagD) * pow<2>(fldS(j))) +
              0.25 * lambda * 2 * fldS(tagD) * pow<2>(fldS(tagD)) // missing part of the phi^4 self-interaction (4) - 2
-             + A * sin(omega * t);                               // Add Driving here
+             + A * sin(omega * t) * DriveProfile;                // Add Driving here
     }
 
     /////////

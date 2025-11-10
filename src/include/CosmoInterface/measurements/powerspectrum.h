@@ -57,6 +57,9 @@ namespace TempLat
         } else if (PSType == 1) {
           fk2.sumInsteadOfAverage();
           return Function(ntilde, kIR * ntilde * dx / pow<5>(N) / 2.0 / Constants::pi<T>) * fk2;
+        } else if (PSType == 0) {
+          fk2.sumInsteadOfAverage();
+          return Function(ntilde, dx / pow<5>(N) / 2.0 / Constants::pi<T>) * fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return fk2; // To remove moot warning.
@@ -74,6 +77,10 @@ namespace TempLat
               projectRadiallyFourier(ntilde.norm() * pow<2>(abs(f.inFourierSpace())), false).measure(nbins, kMaxBins);
           fk2.sumInsteadOfAverage();
           return (kIR * dx / pow<5>(N) / 2.0 / Constants::pi<T>)*fk2;
+        } else if (PSType == 0) {
+          auto fk2 = projectRadiallyFourier(pow<2>(abs(f.inFourierSpace())), false).measure(nbins, kMaxBins);
+          fk2.sumInsteadOfAverage();
+          return (dx / pow<5>(N) / 2.0 / Constants::pi<T>)*fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return projectRadiallyFourier(abs(f.inFourierSpace()), false)

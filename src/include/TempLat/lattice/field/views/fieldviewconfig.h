@@ -188,15 +188,9 @@ namespace TempLat
     // MPI aware seetting of value. Use exceptionnaly (remove zero mode for example)
     template <typename... Args> void set(const T &toSet, Args... args)
     {
-      std::vector<ptrdiff_t> asVec{{args...}};
-      set(toSet, asVec);
-    }
-
-    void set(const T &toSet, std::vector<ptrdiff_t> vec)
-    {
-      bool tmp;
-      auto &res = (*this)(tmp, vec);
-      if (tmp) res = toSet;
+      // do
+      // things
+      throw std::runtime_error("Not implemented yet.");
     }
 
     std::string to_string() const { return mManager->getName() + "(x)"; }
