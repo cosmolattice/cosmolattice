@@ -1,5 +1,6 @@
 #Output
-outputfile = ./
+outputfile = ./run_
+print_headers = true
 
 #Evolution
 expansion = false
@@ -8,12 +9,12 @@ evolver = LF
 #Lattice
 N = 1024
 dt = 0.01
-kIR = 0.75
+kIR = 0.1 # smallest momentum we resolve
 
 #Times
 tOutputFreq = 1
 tOutputInfreq = 10
-tMax = 10
+tMax = 100
 
 
 #Spectra options
@@ -25,12 +26,12 @@ GWprojectorType = 1
 withGWs=false
 
 #IC
-#kCutOff = 4
-initial_amplitudes = 5.6964e18 0  # homogeneous amplitudes in GeV
-initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
+kCutOff = 1 # cutoff of the initial momentum distribution
+initial_amplitudes = 1.0  # homogeneous amplitudes in GeV
+initial_momenta = 0   # homogeneous amplitudes in GeV2
 
 #Model Parameters
-lambda = 9e-14
+lambda = 0.1
 m2 = 0.1
 A = 0.1
 omega = 0.1

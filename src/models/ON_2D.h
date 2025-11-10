@@ -93,8 +93,11 @@ namespace TempLat
       // (read from parameters file, or specified here if not)
       /////////
 
-      fldS0 = parser.get<double, N>("initial_amplitudes");
-      piS0 = parser.get<double, N>("initial_momenta", std::vector<double>(N));
+      // We assume all scalar fields have identical initial amplitudes and momenta
+      for (uint i = 0; i < N; ++i) {
+        fldS0[i] = parser.get<double>("initial_amplitudes");
+        piS0[i] = parser.get<double>("initial_momenta", 0.);
+      }
 
       // Then, we need to specify the initial homogeneous
       // value of our fields. We read them again from the input file. The int '2' means
@@ -111,7 +114,7 @@ namespace TempLat
 
       alpha = 1;
       fStar = fldS0[0];
-      omegaStar = sqrt(lambda) * fStar;
+      omegaStar = sqrt(m2) + sqrt(0.5 * lambda) * fStar;
       // We now need to specify the rescaling from physical units to program units.
       // This consists of the  time rescaling exponent alpha, the field rescaling fStar
       // and the velocity rescaling omegaStar.
@@ -145,6 +148,8 @@ namespace TempLat
     {
       return Total(j, 0, N - 1, m2 * pow<2>(fldS(j))) +
              Total(i, 0, N - 1, Total(j, 0, N - 1, 0.25 * lambda * pow<2>(fldS(i)) * pow<2>(fldS(j))));
+      // Driving term is not in here, as the potential should reflect the true potential energy of the fields only.
+
       // Some notations.  The scalar fields are stored in a collection called 'fldS'.
       // The scalar fields are labelled  from 0 to Ns-1. The field say number 1 is
       // accessed through the syntax 'fldS(0_c)'. The function 'pow<N>(x)'. Works with the
@@ -177,7 +182,7 @@ namespace TempLat
     {
       return m2 * fldS(tagD) + Total(j, 0, N - 1, 0.25 * lambda * 2 * fldS(tagD) * pow<2>(fldS(j))) +
              0.25 * lambda * 2 * fldS(tagD) * pow<2>(fldS(tagD)) // missing part of the phi^4 self-interaction (4) - 2
-             + ZeroType();                                       // Add Driving here
+             + A * sin(omega * t);                               // Add Driving here
     }
 
     /////////
@@ -192,7 +197,7 @@ namespace TempLat
     {
       return m2 + Total(j, 0, N - 1, 0.25 * lambda * 2 * pow<2>(fldS(j))) +
              0.25 * lambda * 10 * pow<2>(fldS(tagD)) // missing part of the phi^4 self-interaction (4 * 3) - 2
-             + ZeroType();                           // Add Driving here
+             + ZeroType();                           // Driving here
     }
   };
 } // namespace TempLat
