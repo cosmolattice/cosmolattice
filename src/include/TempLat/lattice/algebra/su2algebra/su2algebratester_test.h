@@ -15,6 +15,8 @@
 #include "TempLat/lattice/algebra/su2algebra/su2generators.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 
+#include "TempLat/parallel/device_memory.h"
+
 using namespace TempLat::Constants;
 
 inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
@@ -86,15 +88,15 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
   auto D = Complexify(1.0, 2.0) * C;
 
   // Multiplication by a complex number
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(0_c), zero), 0.6));
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(0_c), zero), 0.6));
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(0_c), zero), 0.6));
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(1_c), zero), 2.2));
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(1_c), zero), 2.2));
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(2_c), zero), -0.15));
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(2_c), zero), -0.15));
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(3_c), zero), 0.4));
-  tdd.verify(AlmostEqual(getAtOnePoint(D.SU2DoubletGet(3_c), zero), 0.4));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(0_c), zero), 0.6));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(0_c), zero), 0.6));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(0_c), zero), 0.6));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(1_c), zero), 2.2));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(1_c), zero), 2.2));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(2_c), zero), -0.15));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(2_c), zero), -0.15));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(3_c), zero), 0.4));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint(D.SU2DoubletGet(3_c), zero), 0.4));
 
   auto A2 = A * A;
   auto A3 = A * A * A;
@@ -109,11 +111,12 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
   say << "Notice: \n " << (A * A * B * B).SU2Get(0_c) << " \n  vs \n " << ((A * A) * (B * B)).SU2Get(0_c) << "\n";
 
   auto B2 = A2 * A2 * A2;
-  tdd.verify(AlmostEqual(getAtOnePoint((B2).SU2Get(2_c), zero), getAtOnePoint((A3 * A3).SU2Get(2_c), zero)));
-  tdd.verify(
-      AlmostEqual(getAtOnePoint((B2).SU2Get(2_c), zero), getAtOnePoint(((A * A * A * A) * (A * A)).SU2Get(2_c), zero)));
-  tdd.verify(AlmostEqual(getAtOnePoint((B2).SU2Get(2_c), zero),
-                         getAtOnePoint(((A * A) * (A * A) * (A * A)).SU2Get(2_c), zero)));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint((B2).SU2Get(2_c), zero),
+                         device::memory::getAtOnePoint((A3 * A3).SU2Get(2_c), zero)));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint((B2).SU2Get(2_c), zero),
+                         device::memory::getAtOnePoint(((A * A * A * A) * (A * A)).SU2Get(2_c), zero)));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint((B2).SU2Get(2_c), zero),
+                         device::memory::getAtOnePoint(((A * A) * (A * A) * (A * A)).SU2Get(2_c), zero)));
 
   // Funny stuff: uncomment to get a segfault! Morale: use too much memory on the stack and crashes
   //  say << (A*A*A*A*A*A*A*A).SU2Get(0_c);
@@ -136,10 +139,14 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
   say << (commutator2).SU2Get(2_c);
   say << (commutator2).SU2Get(3_c);
 
-  tdd.verify(AlmostEqual(getAtOnePoint((comm).SU2Get(0_c), zero), getAtOnePoint((commutator2).SU2Get(0_c), zero)));
-  tdd.verify(AlmostEqual(getAtOnePoint((comm).SU2Get(1_c), zero), getAtOnePoint((commutator2).SU2Get(1_c), zero)));
-  tdd.verify(AlmostEqual(getAtOnePoint((comm).SU2Get(2_c), zero), getAtOnePoint((commutator2).SU2Get(2_c), zero)));
-  tdd.verify(AlmostEqual(getAtOnePoint((comm).SU2Get(3_c), zero), getAtOnePoint((commutator2).SU2Get(3_c), zero)));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint((comm).SU2Get(0_c), zero),
+                         device::memory::getAtOnePoint((commutator2).SU2Get(0_c), zero)));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint((comm).SU2Get(1_c), zero),
+                         device::memory::getAtOnePoint((commutator2).SU2Get(1_c), zero)));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint((comm).SU2Get(2_c), zero),
+                         device::memory::getAtOnePoint((commutator2).SU2Get(2_c), zero)));
+  tdd.verify(AlmostEqual(device::memory::getAtOnePoint((comm).SU2Get(3_c), zero),
+                         device::memory::getAtOnePoint((commutator2).SU2Get(3_c), zero)));
 }
 
 #endif

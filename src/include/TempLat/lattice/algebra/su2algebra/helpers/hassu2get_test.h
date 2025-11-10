@@ -21,8 +21,8 @@ inline void TempLat::HasSU2GetTester::Test(TempLat::TDDAssertion &tdd)
     double getComp(Tag<0> t) { return 87; };
   };
 
-  tdd.verify(HasSU2Get<MyStruct>::value == true);
-  tdd.verify(HasSU2Get<MyStruct2>::value == false);
+  tdd.verify(HasSU2Get<MyStruct> == true);
+  tdd.verify(HasSU2Get<MyStruct2> == false);
 }
 
 #endif

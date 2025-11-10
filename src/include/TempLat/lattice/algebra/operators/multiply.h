@@ -110,9 +110,19 @@ namespace TempLat
   }
 
   /** \brief Specialize for possible zero input! */
-  template <typename T> DEVICE_FORCEINLINE_FUNCTION ZeroType operator*(const T &a, ZeroType b) { return b; }
+  template <typename T>
+    requires(!std::is_same_v<T, ZeroType>)
+  DEVICE_FORCEINLINE_FUNCTION ZeroType operator*(const T &a, ZeroType b)
+  {
+    return b;
+  }
   /** \brief Specialize for possible zero input! */
-  template <typename T> DEVICE_FORCEINLINE_FUNCTION ZeroType operator*(ZeroType a, const T &b) { return a; }
+  template <typename T>
+    requires(!std::is_same_v<T, ZeroType>)
+  DEVICE_FORCEINLINE_FUNCTION ZeroType operator*(ZeroType a, const T &b)
+  {
+    return a;
+  }
 
   /** \brief Specialize for possible unit input! */
   template <typename T>

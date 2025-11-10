@@ -241,14 +241,14 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
         for (ptrdiff_t j = 0; j < mView.extent(1); ++j) {
           for (ptrdiff_t k = 0; k < mView.extent(2); ++k) {
             bool localRight = (mView(i, j, k) == oView(i, j, k)) &&
-                              (mView(i, j, k) == x.get(nGhost + i, nGhost + j, nGhost + k, dir));
+                              (mView(i, j, k) == x.vectorGet(dir, nGhost + i, nGhost + j, nGhost + k));
             verifySetup = verifySetup && localRight;
             if (!localRight) {
               std::stringstream ss;
               ss << "Setting up the test failed at " << i << ", " << j << ", " << k << "\n";
               ss << "mView: " << mView(i, j, k) << "\n";
               ss << "oView: " << oView(i, j, k) << "\n";
-              ss << "x:     " << x.get(nGhost + i, nGhost + j, nGhost + k, dir) << "\n";
+              ss << "x:     " << x.vectorGet(dir, nGhost + i, nGhost + j, nGhost + k) << "\n";
               sayMPI << ss.str();
             }
           }
@@ -278,14 +278,14 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
         for (ptrdiff_t j = 0; j < mView.extent(1); ++j) {
           for (ptrdiff_t k = 0; k < mView.extent(2); ++k) {
             bool localRight = (mView(i, j, k) == oView(i, j, k)) &&
-                              (mView(i, j, k) == x.get(nGhost + i, nGhost + j, nGhost + k, dir));
+                              (mView(i, j, k) == x.vectorGet(dir, nGhost + i, nGhost + j, nGhost + k));
             MPIallRight = MPIallRight && localRight;
             if (!localRight) {
               std::stringstream ss;
               ss << "MPI GhostBuster test failed at " << i << ", " << j << ", " << k << "\n";
               ss << "mView: " << mView(i, j, k) << "\n";
               ss << "oView: " << oView(i, j, k) << "\n";
-              ss << "x:     " << x.get(nGhost + i, nGhost + j, nGhost + k, dir) << "\n";
+              ss << "x:     " << x.vectorGet(dir, nGhost + i, nGhost + j, nGhost + k) << "\n";
               sayMPI << ss.str();
             }
           }
@@ -317,14 +317,14 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
         for (ptrdiff_t j = 0; j < mView.extent(1); ++j) {
           for (ptrdiff_t k = 0; k < mView.extent(2); ++k) {
             bool localRight = (mView(i, j, k) == oView(i, j, k)) &&
-                              (mView(i, j, k) == x.get(nGhost + i, nGhost + j, nGhost + k, dir));
+                              (mView(i, j, k) == x.vectorGet(dir, nGhost + i, nGhost + j, nGhost + k));
             MPIallRight = MPIallRight && localRight;
             if (!localRight) {
               std::stringstream ss;
               ss << "MPI GhostBuster test failed at " << i << ", " << j << ", " << k << "\n";
               ss << "mView: " << mView(i, j, k) << "\n";
               ss << "oView: " << oView(i, j, k) << "\n";
-              ss << "x:     " << x.get(nGhost + i, nGhost + j, nGhost + k, dir) << "\n";
+              ss << "x:     " << x.vectorGet(dir, nGhost + i, nGhost + j, nGhost + k) << "\n";
               sayMPI << ss.str();
             }
           }

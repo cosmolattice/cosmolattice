@@ -20,7 +20,6 @@ namespace TempLat
   /** \brief A class which returns one component of a vector as an object, keeping all fourier and co mechanics
    *consistent. Mostly useful for wave numbers.
    *
-   *
    * Unit test: make test-getvectorcomponent
    **/
   template <typename R> class GetVectorComponentHelper
@@ -29,14 +28,14 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     GetVectorComponentHelper(const R &pR, ptrdiff_t pJ) : mR(pR), mJ(pJ) {}
 
-    template <typename... IDX>
-      requires requires(R mR, ptrdiff_t mJ, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        GetValue::get(mR, idx..., mJ);
+    template <typename... JDX>
+      requires requires(R mR, ptrdiff_t mJ, JDX... idx) {
+        requires IsVariadicIndex<JDX...>;
+        mR.vectorGet(mJ, idx...);
       }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const JDX &...jdx) const
     {
-      return GetValue::get(mR, idx..., mJ);
+      return mR.vectorGet(mJ, jdx...);
     }
 
     void doWeNeedGhosts() { GhostsHunter::apply(mR, mJ); }

@@ -41,8 +41,8 @@ template <size_t NDim_> inline void TempLat::SpatialCoordinate<NDim_>::Test(Temp
       const ptrdiff_t x_val = global_x > nGrid / 2 ? global_x - nGrid : global_x;
       const ptrdiff_t y_val = global_y > nGrid / 2 ? global_y - nGrid : global_y;
 
-      correct &= (phix_view(i, j) == x_val) && (x.get(nGhost + i, nGhost + j, 0) == x_val);
-      correct &= (phiy_view(i, j) == y_val) && (x.get(nGhost + i, nGhost + j, 1) == y_val);
+      correct &= (phix_view(i, j) == x_val) && (x.vectorGet(0, nGhost + i, nGhost + j) == x_val);
+      correct &= (phiy_view(i, j) == y_val) && (x.vectorGet(1, nGhost + i, nGhost + j) == y_val);
 
       if (!(phix_view(i, j) == x_val))
         sayMPI << "Failed: phix.get(" << i << ", " << j << ") = " << phix_view(i, j) << ", expect " << x_val << "\n";

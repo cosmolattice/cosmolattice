@@ -38,30 +38,9 @@ namespace TempLat
 
     constexpr static size_t getVectorSize() { return NDim; }
 
-    template <typename... IDX>
-      requires IsVariadicNDIndex<NDim + 1, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-    {
-      return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
-    }
-
-    template <typename... IDX>
-      requires IsVariadicNDIndex<NDim + 1, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX &...idx) const
-    {
-      return get_impl(std::tie(idx...), std::make_index_sequence<sizeof...(IDX) - 1>{});
-    }
-
-    template <typename... IDX, size_t... InputIndexes>
-    DEVICE_FORCEINLINE_FUNCTION auto get_impl(std::tuple<const IDX &...> allIdx,
-                                              std::index_sequence<InputIndexes...>) const
-    {
-      auto constexpr lastIdx = sizeof...(IDX) - 1;
-      return get_impl(std::get<lastIdx>(allIdx), std::get<InputIndexes>(allIdx)...);
-    }
-
     template <typename IDX1, typename... IDX>
-    DEVICE_FORCEINLINE_FUNCTION auto get_impl(const IDX1 component, const IDX &...idx) const
+      requires IsVariadicNDIndex<NDim, IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX1 component, const IDX &...idx) const
     {
       device::array<ptrdiff_t, NDim> result;
       mLayout.putSpatialLocationFromMemoryIndexInto(result, idx...);

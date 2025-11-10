@@ -13,7 +13,7 @@
 inline void TempLat::LatticeForwardGradientTester::Test(TempLat::TDDAssertion &tdd)
 {
   constexpr size_t nd = 2;
-  const ptrdiff_t nGrid = 32, nGhost = 1;
+  const ptrdiff_t nGrid = 6, nGhost = 1;
 
   auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
   SpatialCoordinate x(toolBox);
@@ -21,19 +21,19 @@ inline void TempLat::LatticeForwardGradientTester::Test(TempLat::TDDAssertion &t
 
   Field<nd, double> sc("SC1", toolBox);
   sc = getVectorComponent(x, 0);
-  auto fgSC = LatForwardGrad(sc);
-  sc.updateGhosts(); // Need to force the ghost updating, as we do not assign the gradient to anything.
+  Field<nd, double> fgsc("fgSC1", toolBox);
+  fgsc = getVectorComponent(LatForwardGrad<nd>(sc), 0);
 
   bool OK = true;
   auto sc_view = sc.getLocalNDHostView();
+  auto fgsc_view = fgsc.getLocalNDHostView();
   for (size_t i = 0; i < nGrid; ++i) {
     for (size_t j = 0; j < nGrid; ++j) {
-      const double expect = (i + 1 < nGrid) ? 1.0 : (-nGrid + 1.0); // TODO
-      if (std::abs(expect - sc_view(i, j)) > 1e-14) {
+      const double expect = sc_view(i + 1, j) - sc_view(i, j);
+      if (std::abs(expect - fgsc_view(i, j)) > 1e-14) {
         OK = false;
         std::cout << "Mismatch at (" << i << ", " << j << "): "
-                  << "expect = " << expect << ", SC = " << sc_view(i, j) << std::endl;
-        break;
+                  << "expect = " << expect << ", fgSC = " << fgsc_view(i, j) << std::endl;
       }
     }
     if (!OK) break;

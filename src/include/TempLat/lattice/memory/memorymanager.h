@@ -110,7 +110,7 @@ namespace TempLat
           mToolBox->mFFTLibrary.c2r(mBlock);
           // normalize after FFT
           ++result;
-          mToolBox->mFFTNormalization.c2r(mBlock, 1.);
+          mToolBox->mFFTNormalization.c2r(mBlock, T{1});
           mLayoutState.setToFFTConfigSpace();
           if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT C2R.\n";
         }
@@ -146,7 +146,7 @@ namespace TempLat
           mToolBox->mFFTLibrary.c2r(mBlock);
           // normalize after FFT
           ++result;
-          mToolBox->mFFTNormalization.c2r(mBlock, 1.);
+          mToolBox->mFFTNormalization.c2r(mBlock, T{1});
           mLayoutState.setToFFTConfigSpace();
           if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT C2R.\n";
         } else if (mLayoutState.isConfigSpace()) {
@@ -184,7 +184,7 @@ namespace TempLat
           mToolBox->mFFTLibrary.r2c(mBlock);
           // normalize after FFT
           ++result;
-          mToolBox->mFFTNormalization.r2c(mBlock, 1.);
+          mToolBox->mFFTNormalization.r2c(mBlock, T{1});
           if (mToolBox->verbosity.spaceConfirmation) sayMPI << "Performed FFT R2C.\n";
         }
         mBlock.flagHostMirrorOutdated();

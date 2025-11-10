@@ -125,7 +125,7 @@ namespace TempLat
 #endif
   };
 
-  template <int nDimensions = 3, typename R>
+  template <int nDimensions, typename R>
   DEVICE_FORCEINLINE_FUNCTION LatticeForwardGradient<nDimensions, R> LatForwardGrad(R pR)
   {
     return LatticeForwardGradient<nDimensions, R>(pR);

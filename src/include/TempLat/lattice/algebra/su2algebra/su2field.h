@@ -128,15 +128,15 @@ namespace TempLat
     device::array<Field<NDim, T>, 3> fs;
     const std::string mName;
     LayoutStruct<NDim> mLayout;
-  };
 
-  struct SU2FieldTester {
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
 
   template <size_t NDim, typename T> using SU2Field = SU2FieldBase<NDim, T>;
+  // TODO: What is the point of this aliasing?
 } // namespace TempLat
 
 #endif
