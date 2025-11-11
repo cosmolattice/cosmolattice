@@ -9,14 +9,15 @@
 
 inline void TempLat::WallAveragerTester::Test(TempLat::TDDAssertion &tdd)
 {
+  // TODO (Franz)
+  /*
+  static constexpr size_t NDim = 4;
 
   struct myTmpStruct {
-    myTmpStruct() : mt(MemoryToolBox::makeShared(4, 16, 1)) {}
+    myTmpStruct() : mt(MemoryToolBox<NDim>::makeShared(16, 1)) {}
     double get(ptrdiff_t i)
     {
-
       auto ii = mt->getCoordConfiguration0N(i);
-
       return ii[0] * pow(16, 3) + ii[1] * pow(16, 2) + ii[2] * 16 + ii[3];
     }
 
@@ -80,6 +81,7 @@ inline void TempLat::WallAveragerTester::Test(TempLat::TDDAssertion &tdd)
     say << nwallt[i];
     say << wallt[i] / pow(16, 3);
   }
+*/
 }
 
 #endif

@@ -7,29 +7,30 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include <atomic>
-#include <cstddef>
 #include "TempLat/lattice/field/field.h"
+#include "TempLat/util/ndloop.h"
 
 template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-  const ptrdiff_t nGrid = 4, nGhost = 1;
+  const ptrdiff_t nGrid = 16, nGhost = 1;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
+  toolBox->setVerbose();
 
-  Field<NDim, double> a("a", toolBox);
-  Field<NDim, double> x("x", toolBox);
+  Field<NDim, T> a("a", toolBox);
+  Field<NDim, T> x("x", toolBox);
 
-  a.inFourierSpace() = 100;
-  x.inFourierSpace() = 100;
+  constexpr T value = 100. * nGrid * NDim * nGhost;
+
+  a.inFourierSpace() = value;
+  x.inFourierSpace() = value;
 
   // get host views
-  auto a_host = a.inFourierSpace().getRawHostView();
-  auto x_host = x.inFourierSpace().getRawHostView();
+  auto a_host = a.inFourierSpace().getLocalNDHostView();
+  auto x_host = x.inFourierSpace().getLocalNDHostView();
 
   bool same = true;
-  for (size_t i = 0; i < a_host.size(); ++i)
-    same = same && AlmostEqual(a_host[i], x_host[i]);
+  NDLoop<NDim>(a_host, [&](const auto &...idx) { same = same && AlmostEqual(a_host(idx...), x_host(idx...)); });
   tdd.verify(same);
 
   /*ptrdiff_t nGrid = 256, nGhost = 2;

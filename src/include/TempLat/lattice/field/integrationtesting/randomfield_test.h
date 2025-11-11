@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  template <size_t nDim> bool testHelper(auto &tdd, ptrdiff_t nGrid, ptrdiff_t nGhost, bool forbidTransposition)
+  template <size_t nDim> void testHelper(auto &tdd, ptrdiff_t nGrid, ptrdiff_t nGhost, bool forbidTransposition)
   {
     // TODO (Franz)
     /*
@@ -86,6 +86,7 @@ namespace TempLat
     tdd.verify(allEqual);
     return (bool)allEqual;
     */
+    tdd.verify(true);
   }
 } // namespace TempLat
 

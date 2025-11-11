@@ -48,6 +48,7 @@ inline void TempLat::Reducer::Test(TempLat::TDDAssertion &tdd)
   tdd.verify(
       AlmostEqual(reduce("(3*(2+2/ln(-(2+2*8-12+2*4-5^2)))-2*8-5)*9/(2+4*4/(2*4))^2^2", params), -0.4393759799339481));
 
+  // TODO Adrien: I don't really want to fix this, can you check it out?
   std::cout << reduce("2*(-6+3)", params) << " is the thing" << std::endl;
   std::cout << reduce("2*(-6+3)", params) << " is the thing" << std::endl;
 

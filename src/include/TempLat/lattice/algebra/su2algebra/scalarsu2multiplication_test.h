@@ -9,19 +9,21 @@
 
 #include "TempLat/lattice/algebra/su2algebra/su2field.h"
 #include "TempLat/lattice/field/field.h"
+#include "TempLat/util/ndloop.h"
 
-inline void TempLat::ComplexFieldSU2MultiplyTester::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T>
+inline void TempLat::ComplexFieldSU2MultiplyTester<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-  auto toolBox = std::make_shared<MemoryToolBox<3>>(16, 1);
-  Field<3, float> field("testField", toolBox);
-  SU2Field<3, float> su2("testSU2", toolBox);
-  SU2Field<3, float> result("testResultSU2", toolBox);
+  auto toolBox = std::make_shared<MemoryToolBox<NDim>>(16, 1);
+  Field<NDim, T> field("testField", toolBox);
+  SU2Field<NDim, T> su2("testSU2", toolBox);
+  SU2Field<NDim, T> result("testResultSU2", toolBox);
 
-  field = -3.0f;
+  field = -3;
 
-  su2(1_c) = 1.0f;
-  su2(2_c) = 1.5f;
-  su2(3_c) = 2.0f;
+  su2(1_c) = 1;
+  su2(2_c) = 1.5;
+  su2(3_c) = 2;
 
   result = field * su2;
 
@@ -30,18 +32,16 @@ inline void TempLat::ComplexFieldSU2MultiplyTester::Test(TempLat::TDDAssertion &
   auto f3view = result(3_c).getLocalNDHostView();
 
   bool all_true = true;
-  for (size_t i = 0; i < f1view.extent(0); ++i)
-    for (size_t j = 0; j < f1view.extent(1); ++j)
-      for (size_t k = 0; k < f1view.extent(2); ++k) {
-        all_true = all_true && (f1view(i, j, k) == -3.0f);
-        all_true = all_true && (f2view(i, j, k) == 4.5f);
-        all_true = all_true && (f3view(i, j, k) == -6.0f);
+  NDLoop<NDim>(f1view, [&](const auto &...idx) {
+    all_true = all_true && AlmostEqual(f1view(idx...), T(-3));
+    all_true = all_true && AlmostEqual(f2view(idx...), T(-4.5));
+    all_true = all_true && AlmostEqual(f3view(idx...), T(-6));
 
-        if (!all_true) {
-          std::cout << "Failed at index " << i << " " << j << " " << k << "\n";
-          std::cout << "Values are: " << f1view(i, j, k) << " " << f2view(i, j, k) << " " << f3view(i, j, k) << "\n";
-        }
-      }
+    if (!all_true) {
+      std::cout << "Failed at index " << std::vector<size_t>{{idx...}} << "\n";
+      std::cout << "Values are: " << f1view(idx...) << " " << f2view(idx...) << " " << f3view(idx...) << "\n";
+    }
+  });
   tdd.verify(all_true);
 }
 

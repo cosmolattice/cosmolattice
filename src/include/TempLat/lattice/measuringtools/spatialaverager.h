@@ -119,8 +119,8 @@ namespace TempLat
 
     std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
 
-    Kokkos::Array<device::Idx, NDim - 1> start_iteration{};
-    Kokkos::Array<device::Idx, NDim - 1> stop_iteration{};
+    device::array<device::Idx, NDim - 1> start_iteration{};
+    device::array<device::Idx, NDim - 1> stop_iteration{};
 
     Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> localResult;
 

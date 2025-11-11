@@ -33,10 +33,11 @@ namespace TempLat
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-        typedef typename GetGetReturnType<R>::type mType;
+        using mType = typename GetGetReturnType<R>::type;
         mType objValue = GetValue::get(mR, idx...);
-        bool isZero = objValue == mType(0);
-        return isZero ? std::numeric_limits<mType>::infinity() : mType(0);
+        const bool isZero = objValue == mType(0);
+        // TODO (Franz): What is actually the intended behaviour here?
+        return isZero ? std::numeric_limits<mType>::max() : mType(0);
       }
 
       /** \brief Does anyone need derivatives of the delta function? If so, go ahead and figure it out. */

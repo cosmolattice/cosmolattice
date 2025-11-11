@@ -5,35 +5,33 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
 #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 #include "TempLat/lattice/algebra/operators/complexconjugate.h"
 #include "TempLat/lattice/algebra/operators/squareroot.h"
 #include "TempLat/lattice/algebra/operators/exponential.h"
+#include "TempLat/lattice/field/field.h"
 
-inline void TempLat::TwoPointCorrelatorTester::Test(TempLat::TDDAssertion &tdd)
+namespace TempLat
 {
+  template <size_t NDim> void tester(ptrdiff_t nGrid, ptrdiff_t nGhost, double expo, TDDAssertion &tdd)
+  {
+    // this test is a quite tautological, as we define the result from the beginning in fourier space.
+    // It actually only tests taking the absolute value squared.
 
-  /* this test is a quite tautological, as we define the result from the beginning in fourier space.
-   * It actually only tests taking the absolute value squared.
-   */
-  auto &&myLittleLambda = [&tdd](ptrdiff_t nDim, ptrdiff_t nGrid, ptrdiff_t nGhost, double expo) {
-    auto toolBox = MemoryToolBox::makeShared(nDim, nGrid, nGhost);
+    auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
-    Field<double> base("base", toolBox);
+    Field<NDim, double> base("base", toolBox);
+    Field<NDim, double> ic("ic", toolBox);
 
-    Field<double> ic("ic", toolBox);
-
-    /* make two-point correlation r^n */
-
+    // make two-point correlation r^n
     WaveNumber k(toolBox);
 
     /* now equal to two-point correlation */
     /* Ugly line to get 1 if r == 0, r otherwise: Heaviside(r - 1) * (r - 1) + 1 */
     base.inFourierSpace() = pow(k.norm(), expo);
-
     ic.inFourierSpace() = base.inFourierSpace();
 
     auto checkResult = projectRadially(ic, SpaceStateType::Configuration, toolBox, false).measure();
@@ -43,7 +41,7 @@ inline void TempLat::TwoPointCorrelatorTester::Test(TempLat::TDDAssertion &tdd)
 
     /* now decompose |f_k|^2 into random phased re(f_k) and im(f_k) */
 
-    auto phaseAsGauss = RandomGaussianField<double>("hoi", toolBox);
+    auto phaseAsGauss = RandomGaussianField<NDim, double>("hoi", toolBox);
 
     /* exp(i phi) - take the imaginary part of the gaussian field as phase, because
      * that one is zero at the real-valued places -> preserve that.
@@ -58,7 +56,7 @@ inline void TempLat::TwoPointCorrelatorTester::Test(TempLat::TDDAssertion &tdd)
     //        base.inFourierSpace().iterate([&base](auto &piter) { say << piter.getCoordinates() << " " <<
     //        base.inFourierSpace().get(piter) << "\n"; return true; });
 
-    auto fr = TwoPointCorrelator(base);
+    auto fr = TwoPointCorrelator<NDim>(base);
 
     auto result = fr.measure(-1);
 
@@ -74,10 +72,12 @@ inline void TempLat::TwoPointCorrelatorTester::Test(TempLat::TDDAssertion &tdd)
     }
 
     tdd.verify(allGood);
-    // say << result << "\n";
-  };
+  }
+} // namespace TempLat
 
-  myLittleLambda(2, 16, 1, 1);
+inline void TempLat::TwoPointCorrelatorTester::Test(TempLat::TDDAssertion &tdd)
+{
+  tester<2>(16, 1, 1, tdd);
 
   //    myLittleLambda(3, 256, 1, 4);
 

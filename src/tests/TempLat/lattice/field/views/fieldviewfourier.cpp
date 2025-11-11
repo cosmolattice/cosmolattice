@@ -9,8 +9,16 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FourierView<1, double>> test1;
+  // KokkosFFT segfaults on 1D!!!!!!!!!!!!! TODO FRANZ
+  // TempLat::TDDContainer<TempLat::FourierView<1, double>> test1;
   TempLat::TDDContainer<TempLat::FourierView<2, double>> test2;
   TempLat::TDDContainer<TempLat::FourierView<3, double>> test3;
   TempLat::TDDContainer<TempLat::FourierView<4, double>> test4;
+
+#ifndef NOFFTFLOAT
+  TempLat::TDDContainer<TempLat::FourierView<1, float>> test1f;
+  TempLat::TDDContainer<TempLat::FourierView<2, float>> test2f;
+  TempLat::TDDContainer<TempLat::FourierView<3, float>> test3f;
+  TempLat::TDDContainer<TempLat::FourierView<4, float>> test4f;
+#endif
 } // namespace

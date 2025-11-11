@@ -20,7 +20,6 @@ namespace TempLat
 
 inline void TempLat::HeavisideStepFunctionTester::Test(TempLat::TDDAssertion &tdd)
 {
-
   using namespace TestScratch;
   HeavisideTesterTemplate<1> positive;
   HeavisideTesterTemplate<0> zero;

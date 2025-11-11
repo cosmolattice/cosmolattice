@@ -8,29 +8,30 @@
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/field/field.h"
+#include "TempLat/util/ndloop.h"
 
 template <size_t NDim, typename T> inline void TempLat::ConfigView<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   const ptrdiff_t nGrid = 16, nGhost = 2;
 
-  auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
+  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
-  Field<NDim, double> a("a", toolBox);
-  Field<NDim, double> b("b", toolBox);
+  Field<NDim, T> a("a", toolBox);
+  Field<NDim, T> b("b", toolBox);
 
-  a = 100;
-  b = 100;
+  constexpr T value = 100. * nGrid * NDim * nGhost;
+
+  a = value;
+  b = value;
 
   // get host views
-  auto a_host = a.getRawHostView();
-  auto b_host = b.getRawHostView();
-
-  for (size_t i = 0; i < a_host.size(); ++i)
-    std::cout << "a = " << a_host[i] << ", b = " << b_host[i] << std::endl;
+  auto a_host = a.getLocalNDHostView();
+  auto b_host = b.getLocalNDHostView();
 
   bool same = true;
-  for (size_t i = 0; i < a_host.size(); ++i)
-    same = same && AlmostEqual(a_host[i], b_host[i]) && AlmostEqual(a_host[i], 100.0);
+  NDLoop<NDim>(a_host, [&](const auto &...idx) {
+    same = same && AlmostEqual(a_host(idx...), b_host(idx...)) && AlmostEqual(a_host(idx...), value);
+  });
   tdd.verify(same);
 
   /*ptrdiff_t nGrid = 256, nGhost = 2;

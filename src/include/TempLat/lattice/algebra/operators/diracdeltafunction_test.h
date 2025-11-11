@@ -29,7 +29,7 @@ inline void TempLat::DiracDeltaFunctionTester::Test(TempLat::TDDAssertion &tdd)
   /* not weird. We use -ffast-math. https://stackoverflow.com/a/22931368/2295722 */
 
   //    tdd.verify( ! std::isfinite( DiracDelta(zero).get(pIterCoords) ) );
-  tdd.verify(DiracDelta(zero).get(0) > std::numeric_limits<double>::max());
+  tdd.verify(DiracDelta(zero).get(0) > std::numeric_limits<double>::max() / 1.1);
 
   tdd.verify(DiracDelta(positive).get(0) == 0);
 

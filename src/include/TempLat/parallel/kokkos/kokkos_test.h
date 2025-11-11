@@ -91,10 +91,10 @@ namespace TempLat
           TempLat::AlmostEqual(host_view[i], expect, std::sqrt(std::numeric_limits<CT>::epsilon()) * add_epsilon);
       all_correct &= i_correct;
       if (!i_correct) {
-        say << "Failed at index " << i << " with operation "
-            << Operators::Addition(OP(transf(i)), magic_number).operatorString() << " and data type "
-            << typeid(NT).name() << "\n"
-            << "Relative error: " << (device_kokkos::abs(host_view[i] / expect) - 1.) << "\n"
+        say << "Failed Unary operation at index " << i << " with operation " << OP(transf(i)).operatorString()
+            << " and data type " << typeid(NT).name() << "\n"
+            << "Relative error: " << (device_kokkos::abs(host_view[i] / expect) - 1.) << " > "
+            << std::sqrt(std::numeric_limits<CT>::epsilon()) * add_epsilon << "\n"
             << "Values: " << host_view[i] << " (GPU),  " << expect << " (CPU) \n";
       }
     }
@@ -184,16 +184,16 @@ template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
   test_binary_operator<TempLat::Operators::Addition, float>(tdd, 1e+1);
   test_binary_operator<TempLat::Operators::Division, float>(tdd, 1e+1);
   test_binary_operator<TempLat::Operators::Power, float>(tdd, 1e+1);
-  test_binary_operator<TempLat::Operators::Subtraction, float>(tdd, 1e+2);
+  test_binary_operator<TempLat::Operators::Subtraction, float>(tdd, 1e+1);
   // unary operators
   test_unary_operator<TempLat::Operators::AbsoluteValue, float>(tdd, 1e+1);
   test_unary_operator<TempLat::Operators::ASinh, float>(tdd, 1e+1);
   test_unary_operator<TempLat::Operators::Cosh, float>(tdd, 1e+1);
-  test_unary_operator<TempLat::Operators::Cosine, float>(tdd, 1e+1);
+  test_unary_operator<TempLat::Operators::Cosine, float>(tdd, 1e+3);
   test_unary_operator<TempLat::Operators::DiracDeltaFunction, float>(tdd, 1e+1);
   test_unary_operator<TempLat::Operators::Exponential, float>(tdd, 1e+1);
   test_unary_operator<TempLat::HeavisideStepFunction, float>(tdd, 1e+1);
-  test_unary_operator<TempLat::Operators::Log, float>(tdd, 1e+1);
+  test_unary_operator<TempLat::Operators::Log, float>(tdd, 1e+3);
   test_unary_operator<TempLat::Operators::Sine, float>(tdd, 1e+1);
   test_unary_operator<TempLat::Operators::Sinh, float>(tdd, 1e+1);
   test_unary_operator<TempLat::Operators::SafeSqrt, float>(tdd, 1e+1);

@@ -26,7 +26,8 @@ namespace TempLat
     else if (b == 0)
       return std::abs(a) < epsilon;
     else
-      return std::abs(a / b - 1) < epsilon;
+      // I added a test of absolute difference to catch the edge-case where both values are effectively zero.
+      return std::abs(a / b - 1) < epsilon || std::abs(a - b) < std::numeric_limits<T3>::epsilon() * 2;
   };
 
   /** \brief overload for complex values.  */

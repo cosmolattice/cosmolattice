@@ -12,9 +12,9 @@ dt = 0.01
 kIR = 0.1 # smallest momentum we resolve
 
 #Times
-tOutputFreq = 1
-tOutputInfreq = 10
-tMax = 100
+tOutputFreq = 10
+tOutputInfreq = 100
+tMax = 1000
 
 
 #Spectra options
@@ -33,7 +33,7 @@ initial_momenta = 0   # homogeneous amplitudes in GeV2
 #Model Parameters
 lambda = 0.1
 m2 = 0.1
-A = 0.1
+A = 0.0
 omega = 0.1
 highCut = 1
 lowCut = 0

@@ -96,7 +96,7 @@ namespace TempLat
     std::string toString() const { return "<" + GetString::get(mT) + ">_walls"; }
 
     /** For measurement objects. */
-    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mT); }
+    inline auto getToolBox() const { return GetToolBox::get(mT); }
 
     auto getWall(size_t dim) const { return mWorkspace[dim]; }
 
@@ -107,9 +107,7 @@ namespace TempLat
     std::vector<std::vector<vType>> mWorkspace;
   };
 
-  template <typename T>
-  typename std::enable_if<!IsTempLatGettable<0, T>::value, WallAverager<T>>::type
-  wallAverager(T instance, SpaceStateType spaceType = SpaceStateType::Configuration)
+  template <typename T> auto wallAverager(T instance, SpaceStateType spaceType = SpaceStateType::Configuration)
   {
     return WallAverager<T>(instance, spaceType);
   }

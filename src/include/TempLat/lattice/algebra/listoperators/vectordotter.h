@@ -34,22 +34,22 @@ namespace TempLat
     /** \brief Getter for two instances: return type automatically determined by the type which we get by multiplying
      * one element of T with one element of S. */
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) { mR.vectorGet(idx..., 0) * mT.vectorGet(idx..., 0); }
+      requires requires(R mR, T mT, IDX... idx) { mR.vectorGet(0, idx...) * mT.vectorGet(0, idx...); }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      decltype(GetVectorValue::vectorGet(mR, idx..., 0) * GetVectorValue::vectorGet(mT, idx..., 0)) result = 0;
+      decltype(GetVectorValue::vectorGet(mR, 0, idx...) * GetVectorValue::vectorGet(mT, 0, idx...)) result = 0;
 
       /* sorry, an if-statement inside a getter function: if T and S are the same thing, let's not call its getter twice
        * (it might be an expensive algebraic operation. */
       if ((void *)&mR == (void *)&mT) {
         constexpr_for<0, mVectorSize, 1>([&](auto _j) {
           constexpr size_t j = decltype(_j)::value;
-          result += pow<2>(GetVectorValue::vectorGet(mR, idx..., j));
+          result += pow<2>(GetVectorValue::vectorGet(mR, j, idx...));
         });
       } else {
         constexpr_for<0, mVectorSize, 1>([&](auto _j) {
           constexpr size_t j = decltype(_j)::value;
-          result += GetVectorValue::vectorGet(mR, idx..., j) * GetVectorValue::vectorGet(mT, idx..., j);
+          result += GetVectorValue::vectorGet(mR, j, idx...) * GetVectorValue::vectorGet(mT, j, idx...);
         });
       }
       return result;

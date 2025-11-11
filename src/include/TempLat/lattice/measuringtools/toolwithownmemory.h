@@ -62,12 +62,13 @@ namespace TempLat
 
     friend struct ToolWithOwnMemoryTester;
   };
+
+#ifdef TEMPLATTEST
   struct ToolWithOwnMemoryTester {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

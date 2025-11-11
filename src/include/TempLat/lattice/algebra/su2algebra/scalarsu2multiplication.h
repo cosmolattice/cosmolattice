@@ -87,11 +87,11 @@ namespace TempLat
     virtual std::string operatorString() const override { return "*"; }
   };
 
-  struct ComplexFieldSU2MultiplyTester {
 #ifdef TEMPLATTEST
+  template <size_t NDim, typename T> struct ComplexFieldSU2MultiplyTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   /* template <typename R, typename T>
    typename std::enable_if<HasComplexFieldGet<R>::value && HasSU2Get<T>::value,

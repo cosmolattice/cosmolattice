@@ -17,10 +17,10 @@
 
 #include "TempLat/parallel/device_memory.h"
 
-using namespace TempLat::Constants;
-
 inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
 {
+  using namespace TempLat::Constants;
+
   tdd.verify(HasSU2DoubletGet<decltype(sigma3)> == false);
   tdd.verify(HasSU2Get<decltype(sigma3)> == true);
   tdd.verify(HasSU2DoubletGet<decltype(sigma1)> == false);
