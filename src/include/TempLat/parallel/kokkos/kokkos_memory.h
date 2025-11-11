@@ -45,6 +45,8 @@ namespace TempLat
                        Kokkos::MemoryTraits<Kokkos::Unmanaged> // No allocation: Attach to existing memory
                        >;
 
+      using Kokkos::subview;
+
       template <typename OBJ, size_t NDim, typename T>
       void setAtOnePoint(OBJ &&obj, device_kokkos::array<ptrdiff_t, NDim> pos, T val)
       {

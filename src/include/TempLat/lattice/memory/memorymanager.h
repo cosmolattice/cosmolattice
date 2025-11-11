@@ -56,7 +56,7 @@ namespace TempLat
                       const std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> &slices) const
     {
       auto view = mBlock.template getNDView<R>(localSizes);
-      auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
+      auto subView = std::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
       return subView;
     }
     template <typename R = T>
@@ -64,7 +64,7 @@ namespace TempLat
                           const std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> &slices) const
     {
       auto view = mBlock.template getNDHostView<R>(localSizes);
-      auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
+      auto subView = std::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
       return subView;
     }
 

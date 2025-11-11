@@ -42,6 +42,7 @@ namespace TempLat
     using export_device_namespace::get;
     using export_device_namespace::index_sequence;
     using export_device_namespace::make_index_sequence;
+    using export_device_namespace::make_pair;
     using export_device_namespace::make_tuple;
     using export_device_namespace::tie;
     using export_device_namespace::tuple;

@@ -137,9 +137,11 @@ namespace TempLat
 
         // Get Subviews to the full data
         auto sendSubView = std::apply(
-            [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, send_slices);
+            [&](const auto &...args) { return device::memory::subview(block.getNDView(full_sizes), args...); },
+            send_slices);
         auto receiveSubView = std::apply(
-            [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, receive_slices);
+            [&](const auto &...args) { return device::memory::subview(block.getNDView(full_sizes), args...); },
+            receive_slices);
 
         // Copy the data to the send slab
         auto copy_to_slab_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
@@ -179,9 +181,11 @@ namespace TempLat
 
         // Get Subviews to the full data
         auto sendSubView = std::apply(
-            [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, send_slices);
+            [&](const auto &...args) { return device::memory::subview(block.getNDView(full_sizes), args...); },
+            send_slices);
         auto receiveSubView = std::apply(
-            [&](const auto &...args) { return Kokkos::subview(block.getNDView(full_sizes), args...); }, receive_slices);
+            [&](const auto &...args) { return device::memory::subview(block.getNDView(full_sizes), args...); },
+            receive_slices);
 
         // Copy the data to the send slab
         auto copy_to_slab_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
@@ -312,13 +316,13 @@ namespace TempLat
                                     : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
             }
             auto btf_fromSubView =
-                std::apply([&](const auto &...args) { return Kokkos::subview(View, args...); }, btf_slicesFrom);
+                std::apply([&](const auto &...args) { return device::memory::subview(View, args...); }, btf_slicesFrom);
             auto btf_toSubView =
-                std::apply([&](const auto &...args) { return Kokkos::subview(View, args...); }, btf_slicesTo);
+                std::apply([&](const auto &...args) { return device::memory::subview(View, args...); }, btf_slicesTo);
             auto ftb_fromSubView =
-                std::apply([&](const auto &...args) { return Kokkos::subview(View, args...); }, ftb_slicesFrom);
+                std::apply([&](const auto &...args) { return device::memory::subview(View, args...); }, ftb_slicesFrom);
             auto ftb_toSubView =
-                std::apply([&](const auto &...args) { return Kokkos::subview(View, args...); }, ftb_slicesTo);
+                std::apply([&](const auto &...args) { return device::memory::subview(View, args...); }, ftb_slicesTo);
 
             auto btf_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
             {

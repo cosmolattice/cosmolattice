@@ -80,9 +80,9 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
         memory.flagHostMirrorOutdated();
         auto full_view = memory.getNDHostView(fullSizes);
 
-        auto sub_view = Kokkos::subview(full_view, Kokkos::make_pair(gh[0][0], gh[0][0] + nGrid[0]),
-                                        Kokkos::make_pair(gh[1][0], gh[1][0] + nGrid[1]),
-                                        Kokkos::make_pair(gh[2][0], gh[2][0] + nGrid[2]));
+        auto sub_view = device::memory::subview(full_view, std::make_pair(gh[0][0], gh[0][0] + nGrid[0]),
+                                                std::make_pair(gh[1][0], gh[1][0] + nGrid[1]),
+                                                std::make_pair(gh[2][0], gh[2][0] + nGrid[2]));
 
         // print a 2D slice of the 3D data, for x=0
         for (ptrdiff_t x = 0; x < nGrid[0]; ++x) {

@@ -50,7 +50,7 @@ inline void TempLat::Reducer::Test(TempLat::TDDAssertion &tdd)
 
   // TODO Adrien: I don't really want to fix this, can you check it out?
   std::cout << reduce("2*(-6+3)", params) << " is the thing" << std::endl;
-  std::cout << reduce("2*(-6+3)", params) << " is the thing" << std::endl;
+  // std::cout << reduce("2*(-6+3)", params) << " is the thing" << std::endl;
 
   tdd.verify(AlmostEqual(reduce("2*(-6+3)", params), -6));
   tdd.verify(AlmostEqual(reduce("exp(2*(-6+3))", params), 0.0024787521766663585));

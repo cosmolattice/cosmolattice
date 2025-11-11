@@ -86,7 +86,7 @@ namespace TempLat
         for (size_t k = 0; k < NDim; ++k)
           slices[k] = std::make_pair(nGhost, nGhost + localSizes[k]);
 
-        auto subView = std::apply([&](const auto &...args) { return Kokkos::subview(view, args...); }, slices);
+        auto subView = std::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
         auto functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
         {
           device::array<ptrdiff_t, NDim> val;

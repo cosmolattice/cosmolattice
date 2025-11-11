@@ -117,8 +117,8 @@ namespace TempLat
         // nGhosts) to memoryPos[dim]+nGrid[dim].
         auto subview = device::apply(
             [&](const auto &...args) {
-              return Kokkos::subview(r.getView(), args...,
-                                     std::pair<ptrdiff_t, ptrdiff_t>(memoryPos[dim], memoryPos[dim] + subdims[dim]));
+              return device::memory::subview(
+                  r.getView(), args..., std::pair<ptrdiff_t, ptrdiff_t>(memoryPos[dim], memoryPos[dim] + subdims[dim]));
             },
             subMemoryPos);
 

@@ -64,6 +64,7 @@ namespace TempLat
     using cuda::std::get;
     using cuda::std::index_sequence;
     using cuda::std::make_index_sequence;
+    using cuda::std::make_pair;
     using cuda::std::make_tuple;
     using cuda::std::tie;
     using cuda::std::tuple;
@@ -78,6 +79,7 @@ namespace TempLat
     using std::get;
     using std::index_sequence;
     using std::make_index_sequence;
+    using std::make_pair;
     using std::make_tuple;
     using std::tie;
     using std::tuple;

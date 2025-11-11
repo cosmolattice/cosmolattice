@@ -100,7 +100,7 @@ namespace TempLat
               idx);
         };
         device::iteration::reduce("Averager", start_iteration, stop_iteration, functor,
-                                  Kokkos::subview(localResult, cur_lidx - nGhosts));
+                                  device::memory::subview(localResult, cur_lidx - nGhosts));
       }
       device::memory::copyDeviceToHost(localResult, result.data());
 

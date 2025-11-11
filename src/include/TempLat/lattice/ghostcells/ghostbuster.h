@@ -12,7 +12,6 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/timer.h"
@@ -190,8 +189,9 @@ namespace TempLat
         }
 
         auto fromSubView =
-            std::apply([&](const auto &...args) { return Kokkos::subview(fromView, args...); }, slabSliceFrom);
-        auto toSubView = std::apply([&](const auto &...args) { return Kokkos::subview(toView, args...); }, slabSliceTo);
+            std::apply([&](const auto &...args) { return device::memory::subview(fromView, args...); }, slabSliceFrom);
+        auto toSubView =
+            std::apply([&](const auto &...args) { return device::memory::subview(toView, args...); }, slabSliceTo);
 
         // Copy to the temporary
         device::memory::copyDeviceToDevice(fromSubView, tslab);
