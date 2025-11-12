@@ -196,7 +196,9 @@ if(NOT ${G++OPT} STREQUAL "G")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wshadow ")
+set(CMAKE_CXX_FLAGS
+    "${CMAKE_CXX_FLAGS} -Wall -Wshadow -fconstexpr-loop-limit=2621440 -fconstexpr-ops-limit=335544320"
+)
 
 message(
   "The compiler will be called with the following flags: ${CMAKE_CXX_FLAGS}")

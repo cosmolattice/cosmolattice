@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2get.h"
@@ -44,7 +45,7 @@ namespace TempLat
     {
     }
 
-    template <int N> auto SU2Get(Tag<N> t) const { return this->operator()(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return this->operator()(t); }
 
     auto operator()(Tag<0> t) const { return sqrt(1.0 - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2])); }
 

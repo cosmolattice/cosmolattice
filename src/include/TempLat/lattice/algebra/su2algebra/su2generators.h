@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
@@ -21,10 +22,14 @@ namespace TempLat
   namespace Constants
   {
     struct Sigma0 {
-      static OneType SU2Get(Tag<0> t) { return OneType(); }
-      static ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
-      static ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
-      static ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr OneType SU2Get(Tag<0> t) { return OneType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
 
       static std::string toString() { return "Id"; }
       static constexpr size_t size = 4;
@@ -32,41 +37,57 @@ namespace TempLat
     constexpr Sigma0 sigma0;
 
     struct Sigma1 {
-      static ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
-      static OneType SU2Get(Tag<1> t) { return OneType(); }
-      static ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
-      static ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
-      static constexpr size_t size = 4;
+      static constexpr ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr OneType SU2Get(Tag<1> t) { return OneType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
 
       static std::string toString() { return "i\u03C3_1"; }
+      static constexpr size_t size = 4;
     };
     constexpr Sigma1 sigma1;
 
     struct Sigma2 {
-      static ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
-      static ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
-      static OneType SU2Get(Tag<2> t) { return OneType(); }
-      static ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr OneType SU2Get(Tag<2> t) { return OneType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<3> t) { return ZeroType(); }
+
       static std::string toString() { return "i\u03C3_2"; }
       static constexpr size_t size = 4;
     };
     constexpr Sigma2 sigma2;
 
     struct Sigma3 {
-      static ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
-      static ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
-      static ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
-      static OneType SU2Get(Tag<3> t) { return OneType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<0> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<1> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr ZeroType SU2Get(Tag<2> t) { return ZeroType(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      static constexpr OneType SU2Get(Tag<3> t) { return OneType(); }
 
       static std::string toString() { return "i\u03C3_3"; }
       static constexpr size_t size = 4;
     };
     constexpr Sigma3 sigma3;
 
-    inline Sigma0 i_sigma(Tag<0> t) { return sigma0; }
-    inline Sigma1 i_sigma(Tag<1> t) { return sigma1; }
-    inline Sigma2 i_sigma(Tag<2> t) { return sigma2; }
-    inline Sigma3 i_sigma(Tag<3> t) { return sigma3; }
+    DEVICE_FORCEINLINE_FUNCTION
+    constexpr Sigma0 i_sigma(Tag<0> t) { return sigma0; }
+    DEVICE_FORCEINLINE_FUNCTION
+    constexpr Sigma1 i_sigma(Tag<1> t) { return sigma1; }
+    DEVICE_FORCEINLINE_FUNCTION
+    constexpr Sigma2 i_sigma(Tag<2> t) { return sigma2; }
+    DEVICE_FORCEINLINE_FUNCTION
+    constexpr Sigma3 i_sigma(Tag<3> t) { return sigma3; }
   }; // namespace Constants
 } // namespace TempLat
 
