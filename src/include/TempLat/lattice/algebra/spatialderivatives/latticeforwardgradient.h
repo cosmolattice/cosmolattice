@@ -46,7 +46,8 @@ namespace TempLat
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {
-        requires IsVariadicNDIndex<NDim, IDX...>;
+        // requires IsVariadicNDIndex<NDim, IDX...>;
+        // Commented out, as this fails under gcc. Seems to be obscure, as it succeeds under clang
         GetValue::get(r, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx) const
