@@ -58,32 +58,23 @@ namespace TempLat
    * @brief Pass a tuple of indices and add the second argument to the n-th value of the tuple.
    *
    * @tparam n which index of the tuple is to be changed
-   * @tparam I type of the value to add
+   * @tparam add the value to add
    * @tparam IDX types of the tuple elements
    * @param tt the tuple to modify
-   * @param add the value to add
    * @return auto the modified tuple
    */
-  template <size_t n, typename I, typename... IDX>
-  DEVICE_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(device::tuple<IDX...> &&tt, const I &add)
+  template <size_t n, int add, typename... IDX>
+  DEVICE_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(device::tuple<IDX...> &tt)
   {
     static_assert(n < sizeof...(IDX));
     device::get<n>(tt) += add;
     return tt;
   }
 
-  template <size_t n, typename I, typename... IDX>
-  DEVICE_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth_mod(device::tuple<IDX...> &tt, const I &add)
+  template <size_t n, int add, typename... IDX>
+  DEVICE_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth(const device::tuple<IDX...> &tt)
   {
-    static_assert(n < sizeof...(IDX));
-    device::get<n>(tt) += add;
-    return tt;
-  }
-
-  template <size_t n, typename I, typename... IDX>
-  DEVICE_FORCEINLINE_FUNCTION constexpr auto tuple_add_to_nth(const device::tuple<IDX...> &tt, const I &add)
-  {
-    constexpr size_t len = sizeof...(IDX);
+    constexpr int len = sizeof...(IDX);
     if constexpr (n >= 1) {
       return device::tuple_cat(tuple_first<n>(tt), device::make_tuple(device::get<n>(tt) + add),
                                tuple_last<len - n - 1>(tt));

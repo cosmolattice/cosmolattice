@@ -37,7 +37,7 @@ namespace TempLat
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        tuple_add_to_nth<d>(device::tie(idx...), device::get<d>(shifts));
+        tuple_add_to_nth<d, device::get<d>(shifts)>(device::tie(idx...));
       });
       return GetValue::get(mR, idx...);
     }
@@ -48,7 +48,7 @@ namespace TempLat
     {
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        tuple_add_to_nth<d>(device::tie(idx...), device::get<d>(shifts));
+        tuple_add_to_nth<d, device::get<d>(shifts)>(device::tie(idx...));
       });
       return DoEval::eval(mR, idx...);
     }
@@ -84,11 +84,11 @@ namespace TempLat
       requires requires(R r, IDX... idx) {
         requires IsVariadicIndex<IDX...>;
         GetValue::get(r, idx...);
-        tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
+        tuple_add_to_nth<N - 1, dir>(device::tie(idx...));
       }
-    DEVICE_FORCEINLINE_FUNCTION auto get(IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX... idx) const
     {
-      tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
+      tuple_add_to_nth<N - 1, dir>(device::tie(idx...));
       return GetValue::get(mR, idx...);
     }
 
@@ -96,7 +96,7 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
-      tuple_add_to_nth<N - 1>(device::tie(idx...), dir);
+      tuple_add_to_nth<N - 1, dir>(device::tie(idx...));
       return DoEval::eval(mR, idx...);
     }
 

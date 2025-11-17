@@ -32,9 +32,9 @@ namespace TempLat
 
     SU2Subtraction(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
-    template <int N> auto SU2Get(Tag<N> t) { return mR.SU2Get(t) - mT.SU2Get(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return mR.SU2Get(t) - mT.SU2Get(t); }
 
-    template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
     template <typename... IDX> struct RightIndices {
       static constexpr bool value = requires(R r, T t, IDX... idx) {

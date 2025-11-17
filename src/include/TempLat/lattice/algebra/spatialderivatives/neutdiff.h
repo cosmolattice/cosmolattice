@@ -51,9 +51,9 @@ namespace TempLat
         constexpr size_t d = static_cast<size_t>(dir) - 1;
         FloatType result{};
         device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                      tuple_add_to_nth<d>(device::tie(idx...), 1));
+                      tuple_add_to_nth<d, 1>(device::tie(idx...)));
         device::apply([&](const auto &...shifted_idx) { result -= GetValue::get(mR, shifted_idx...); },
-                      tuple_add_to_nth<d>(device::tie(idx...), -1));
+                      tuple_add_to_nth<d, -1>(device::tie(idx...)));
         return result / (2 * dx);
       }
     }
@@ -69,9 +69,9 @@ namespace TempLat
     {
       constexpr size_t d = static_cast<size_t>(dir) - 1;
       device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                    tuple_add_to_nth<d>(device::tie(idx...), 1));
+                    tuple_add_to_nth<d, 1>(device::tie(idx...)));
       device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                    tuple_add_to_nth<d>(device::tie(idx...), -1));
+                    tuple_add_to_nth<d, -1>(device::tie(idx...)));
     }
 
   private:

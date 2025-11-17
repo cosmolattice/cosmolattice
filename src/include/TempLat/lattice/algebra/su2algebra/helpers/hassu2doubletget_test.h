@@ -10,10 +10,12 @@
 inline void TempLat::HasSU2DoubletGetTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct MyStruct {
-    double SU2DoubletGet(Tag<0> t) { return 87; };
+    DEVICE_FORCEINLINE_FUNCTION
+    double SU2DoubletGet(Tag<0> t) const { return 87; };
   };
   struct MyStruct2 {
-    double SU2Get(Tag<0> t) { return 87; };
+    DEVICE_FORCEINLINE_FUNCTION
+    double SU2Get(Tag<0> t) const { return 87; };
   };
 
   tdd.verify(HasSU2DoubletGet<MyStruct> == true);

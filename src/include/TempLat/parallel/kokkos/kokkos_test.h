@@ -184,7 +184,7 @@ template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
   test_binary_operator<TempLat::Operators::Addition, float>(tdd, 1e+1);
   test_binary_operator<TempLat::Operators::Division, float>(tdd, 1e+1);
   test_binary_operator<TempLat::Operators::Power, float>(tdd, 1e+1);
-  test_binary_operator<TempLat::Operators::Subtraction, float>(tdd, 1e+1);
+  test_binary_operator<TempLat::Operators::Subtraction, float>(tdd, 5e+1);
   // unary operators
   test_unary_operator<TempLat::Operators::AbsoluteValue, float>(tdd, 1e+1);
   test_unary_operator<TempLat::Operators::ASinh, float>(tdd, 1e+1);

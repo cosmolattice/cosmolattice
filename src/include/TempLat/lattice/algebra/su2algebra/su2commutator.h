@@ -34,7 +34,11 @@ namespace TempLat
 
     using SV = typename SU2GetGetReturnType<R>::type;
 
+    DEVICE_FUNCTION
     SU2Commutator(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
+
+    DEVICE_FUNCTION
+    SU2Commutator(const SU2Commutator &other) : SU2BinaryOperator<R, T>(other.mR, other.mT) {}
 
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const { return ZeroType(); }
@@ -47,9 +51,9 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    auto SU2Get(const IDX &...idx) const
+    DEVICE_FUNCTION auto SU2Get(const IDX &...idx) const
     {
-      return std::move(cache);
+      return cache;
     }
     template <int N, typename... IDX> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
@@ -78,9 +82,9 @@ namespace TempLat
     }
 
     virtual std::string operatorString() const override { return "commutator"; }
+    mutable device::array<SV, 4> cache;
 
   private:
-    mutable device::array<SV, 4> cache;
   };
 
   struct SU2CommutatorTester {

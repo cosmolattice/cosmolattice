@@ -51,7 +51,7 @@ namespace TempLat
         constexpr size_t d = static_cast<size_t>(dir) - 1;
         auto result = GetValue::get(mR, idx...);
         device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                      tuple_add_to_nth<d>(device::tie(idx...), 1));
+                      tuple_add_to_nth<d, 1>(device::tie(idx...)));
         return result / dx;
       }
     }
@@ -68,7 +68,7 @@ namespace TempLat
       constexpr size_t d = static_cast<size_t>(dir) - 1;
       DoEval::eval(mR, idx...);
       device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                    tuple_add_to_nth<d>(device::tie(idx...), 1));
+                    tuple_add_to_nth<d, 1>(device::tie(idx...)));
     }
 
   private:

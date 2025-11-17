@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien,  Year: 2019
 
+#include "TempLat/parallel/device.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
@@ -19,7 +20,7 @@ namespace TempLat
   class SU2Getter
   {
   public:
-    template <typename R, int N> static inline auto get(R &&r, Tag<N> t) { return r.SU2Get(t); }
+    template <typename R, int N> DEVICE_FORCEINLINE_FUNCTION static auto get(R &&r, Tag<N> t) { return r.SU2Get(t); }
   };
 } // namespace TempLat
 

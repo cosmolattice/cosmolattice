@@ -45,9 +45,13 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
   struct MySU2Doublet {
     MySU2Doublet(double i, double j, double k, double l) : arr{{i, j, k, l}} {}
 
+    DEVICE_FORCEINLINE_FUNCTION
     double SU2DoubletGet(Tag<0> t) const { return arr[0]; }
+    DEVICE_FORCEINLINE_FUNCTION
     double SU2DoubletGet(Tag<1> t) const { return arr[1]; }
+    DEVICE_FORCEINLINE_FUNCTION
     double SU2DoubletGet(Tag<2> t) const { return arr[2]; }
+    DEVICE_FORCEINLINE_FUNCTION
     double SU2DoubletGet(Tag<3> t) const { return arr[3]; }
 
     std::string toString() const
@@ -118,8 +122,8 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
   tdd.verify(AlmostEqual(device::memory::getAtOnePoint((B2).SU2Get(2_c), zero),
                          device::memory::getAtOnePoint(((A * A) * (A * A) * (A * A)).SU2Get(2_c), zero)));
 
-  // Funny stuff: uncomment to get a segfault! Morale: use too much memory on the stack and crashes
-  //  say << (A*A*A*A*A*A*A*A).SU2Get(0_c);
+  // Funny stuff: uncomment to get a segfault! Morale: use too much memory on the stack and it crashes
+  // say << (A * A * A * A * A * A * A * A).SU2Get(0_c);
   //  say << (A*A*A*A*A*A*A*A).SU2Get(0_c).get(tmp);
   /*say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c);
   say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c).get(tmp);*/

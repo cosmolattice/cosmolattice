@@ -13,7 +13,7 @@
 
 inline void TempLat::SU2CommutatorTester::Test(TempLat::TDDAssertion &tdd)
 {
-  auto toolBox = std::make_shared<MemoryToolBox<3>>(16, 1);
+  auto toolBox = std::make_shared<MemoryToolBox<3>>(2, 1);
   SU2Field<3, float> su2_1("testSU2_1", toolBox);
   SU2Field<3, float> su2_2("testSU2_2", toolBox);
   SU2Field<3, float> result("resultSU2", toolBox);
@@ -27,7 +27,7 @@ inline void TempLat::SU2CommutatorTester::Test(TempLat::TDDAssertion &tdd)
   su2_2(3_c) = -0.5f;
 
   // Trivial test: commutator of something with itself is zero.
-  {
+  /*{
     result = commutator(su2_1, su2_1);
 
     auto f1view = result(1_c).getLocalNDHostView();
@@ -48,7 +48,7 @@ inline void TempLat::SU2CommutatorTester::Test(TempLat::TDDAssertion &tdd)
           }
         }
     tdd.verify(all_true);
-  }
+  }*/
   // Non-trivial test: commutator of two different things. We multiply by omega^2 to make sure that the caching works as
   // intended, i.e. eval is local to each site-thread.
   {

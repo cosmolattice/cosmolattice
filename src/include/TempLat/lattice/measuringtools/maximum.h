@@ -57,7 +57,7 @@ namespace TempLat
         device::apply(
             [&](auto &&...args) {
               DoEval::eval(mT, args...);
-              update = max(mT.get(args...), update);
+              update = device::max(mT.get(args...), update);
             },
             idx);
       };

@@ -56,9 +56,9 @@ namespace TempLat
         constexpr_for<0, NDim, 1>([&](const auto _d) {
           constexpr size_t d = decltype(_d)::value;
           device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                        tuple_add_to_nth<d>(device::tie(idx...), 1));
+                        tuple_add_to_nth<d, 1>(device::tie(idx...)));
           device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                        tuple_add_to_nth<d>(device::tie(idx...), -1));
+                        tuple_add_to_nth<d, -1>(device::tie(idx...)));
         });
         return result / dx2;
       }
@@ -77,7 +77,7 @@ namespace TempLat
       constexpr_for<0, NDim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                      tuple_add_to_nth<d>(device::tie(idx...), 1));
+                      tuple_add_to_nth<d, 1>(device::tie(idx...)));
       });
     }
 

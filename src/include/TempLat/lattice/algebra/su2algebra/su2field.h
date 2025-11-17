@@ -47,17 +47,19 @@ namespace TempLat
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return this->operator()(t); }
 
-    auto operator()(Tag<0> t) const { return sqrt(1.0 - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2])); }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto operator()(Tag<0> t) const { return sqrt(T(1) - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2])); }
 
     template <int M>
       requires(M > 0)
-    auto &operator()(Tag<M> t)
+    DEVICE_FORCEINLINE_FUNCTION auto &operator()(Tag<M> t)
     {
       return fs[M - 1];
     }
+
     template <int M>
       requires(M > 0)
-    const auto &operator()(Tag<M> t) const
+    DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<M> t) const
     {
       return fs[M - 1];
     }
@@ -67,7 +69,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
       return sqrt(
-          1.0 - pow<2>(fs[0].get(idx...)) - pow<2>(fs[1].get(idx...)) -
+          T(1) - pow<2>(fs[0].get(idx...)) - pow<2>(fs[1].get(idx...)) -
           pow<2>(fs[2].get(
               idx...))); // Apriori not optimal, as we compute several time c0, but does not seem to make a difference.
     }

@@ -196,9 +196,13 @@ if(NOT ${G++OPT} STREQUAL "G")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
-set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} -Wall -Wshadow -fconstexpr-loop-limit=2621440 -fconstexpr-ops-limit=335544320"
-)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  set(CMAKE_CXX_FLAGS
+      "${CMAKE_CXX_FLAGS} -fconstexpr-loop-limit=2621440 -fconstexpr-ops-limit=335544320"
+  )
+endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wshadow")
 
 message(
   "The compiler will be called with the following flags: ${CMAKE_CXX_FLAGS}")
