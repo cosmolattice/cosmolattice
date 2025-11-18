@@ -42,6 +42,11 @@ namespace TempLat
     {
     }
 
+#ifdef __CUDA_ARCH__
+    DEVICE_FUNCTION
+    AbstractField(const AbstractField &other) : mToolBox(nullptr), mManager(nullptr), latPar(other.latPar) {}
+#endif
+
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
       switch (spaceType) {

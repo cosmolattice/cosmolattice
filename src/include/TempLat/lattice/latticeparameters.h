@@ -35,20 +35,6 @@ namespace TempLat
 
     LatticeParameters() : dx(1), lSide(1), kIR(1) {}
 
-    /*  LatticeParameters(const LatticeParameters<T>& lat) :
-      dx(lat.dx),
-      lSide(lat.lSide),
-      kIR(lat.kIR)
-      {
-      }
-
-      void operator=(const LatticeParameters<T>& lat)
-      {
-        dx = lat.dx;
-        lSide = lat.lSide;
-        kIR = lat.kIR;
-      }*/
-
     DEVICE_FORCEINLINE_FUNCTION
     T getDx() const { return dx; }
 

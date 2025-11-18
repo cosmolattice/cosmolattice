@@ -45,7 +45,12 @@ namespace TempLat
     {
     }
 
-    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return this->operator()(t); }
+#ifdef __CUDA_ARCH__
+    DEVICE_FUNCTION
+    SU2FieldBase(const SU2FieldBase &other) : fs{{other.fs[0], other.fs[1], other.fs[2]}}, mLayout(other.mLayout) {}
+#endif
+
+    template <int N> DEVICE_FORCEINLINE_FUNCTION const auto &SU2Get(Tag<N> t) const { return fs[N - 1]; }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto operator()(Tag<0> t) const { return sqrt(T(1) - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2])); }
@@ -73,6 +78,7 @@ namespace TempLat
           pow<2>(fs[2].get(
               idx...))); // Apriori not optimal, as we compute several time c0, but does not seem to make a difference.
     }
+
     template <int M, typename... IDX>
       requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
@@ -98,12 +104,19 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
+        // The problem here is that NVCC copies the given captures to constant memory. Clang moves them to registers,
+        // which is what we need, as we need to use the cache.
+#if defined(__NVCC__)
+        std::decay_t<R> __r = r;
+#else
+        const auto &__r = r;
+#endif
         device::apply(
             [&](auto &&...args) {
               DoEval::eval(r, args...);
-              view1(args...) = r.SU2Get(1_c, args...);
-              view2(args...) = r.SU2Get(2_c, args...);
-              view3(args...) = r.SU2Get(3_c, args...);
+              view1(args...) = __r.SU2Get(1_c, args...);
+              view2(args...) = __r.SU2Get(2_c, args...);
+              view3(args...) = __r.SU2Get(3_c, args...);
             },
             idx);
       };

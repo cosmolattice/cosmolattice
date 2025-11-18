@@ -19,6 +19,7 @@
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
 
+#include "TempLat/parallel/device.h"
 #include "TempLat/parallel/device_memory.h"
 #include "TempLat/parallel/device_iteration.h"
 
@@ -65,6 +66,16 @@ namespace TempLat
       mView = mManager->getNDView(memorySizes);
       mRawView = mManager->getRawView();
     }
+
+#ifdef __CUDA_ARCH__
+    DEVICE_FUNCTION
+    ConfigView(const ConfigView &other)
+        : AbstractField<NDim, T>(other), mLayout(other.mLayout), mView(other.mView), mRawView(other.mRawView),
+          memorySizes(other.memorySizes), localSlicing(other.localSlicing),
+          mDisableFFTBlocking(other.mDisableFFTBlocking)
+    {
+    }
+#endif
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getView() const { return mView; }

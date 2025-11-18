@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/field/views/fieldviewconfig.h"
 #include "TempLat/lattice/field/views/fieldviewfourier.h"
+#include "TempLat/parallel/device.h"
 #include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
@@ -39,6 +40,11 @@ namespace TempLat
         : ConfigView<NDim, T>(name, toolBox, pLatPar), mFourierView(*this)
     {
     }
+
+#ifdef __CUDA_ARCH__
+    DEVICE_FUNCTION
+    Field(const Field &other) : ConfigView<NDim, T>(other), mFourierView(*this) {}
+#endif
 
     //    Field() : ConfigView<NDim, T>("do not use", nullptr, LatticeParameters<T>()), mFourierView(*this) {}
 

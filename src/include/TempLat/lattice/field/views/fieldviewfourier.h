@@ -17,6 +17,7 @@
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
 
+#include "TempLat/parallel/device.h"
 #include "TempLat/parallel/device_memory.h"
 #include "TempLat/parallel/device_iteration.h"
 
@@ -43,6 +44,11 @@ namespace TempLat
 
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
+
+#ifdef __CUDA_ARCH__
+    DEVICE_FUNCTION
+    FourierView(const FourierView &other) : AbstractField<NDim, T>(other), mView(other.mView) {}
+#endif
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
@@ -165,8 +171,10 @@ namespace TempLat
     template <size_t __NDim, typename S> friend class Field;
 
   private:
+    DEVICE_FUNCTION
     FourierView(const AbstractField<NDim, T> &f) : AbstractField<NDim, T>(f)
     {
+#ifndef __CUDA_ARCH__
       if (mToolBox == nullptr) return;
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
 
@@ -175,6 +183,7 @@ namespace TempLat
 
       mView = mManager->template getNDView<complex<T>>(memorySizes);
       mRawView = mManager->template getRawView<complex<T>>();
+#endif
     }
 
     device::memory::NDViewUnmanaged<NDim, complex<T>> mView;
