@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2get.h"
@@ -15,6 +14,11 @@
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/operators/squareroot.h"
+
+#include "TempLat/parallel/device.h"
+
+#include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
+#include "TempLat/lattice/algebra/su2algebra/su2commutator.h"
 
 namespace TempLat
 {
@@ -50,6 +54,10 @@ namespace TempLat
     SU2FieldBase(const SU2FieldBase &other) : fs{{other.fs[0], other.fs[1], other.fs[2]}}, mLayout(other.mLayout) {}
 #endif
 
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t) const
+    {
+      return sqrt(T(1) - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2]));
+    }
     template <int N> DEVICE_FORCEINLINE_FUNCTION const auto &SU2Get(Tag<N> t) const { return fs[N - 1]; }
 
     DEVICE_FORCEINLINE_FUNCTION
@@ -111,9 +119,10 @@ namespace TempLat
 #else
         const auto &__r = r;
 #endif
+
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(r, args...);
+              DoEval::eval(__r, args...);
               view1(args...) = __r.SU2Get(1_c, args...);
               view2(args...) = __r.SU2Get(2_c, args...);
               view3(args...) = __r.SU2Get(3_c, args...);
