@@ -31,10 +31,10 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox)
-        : mToolBox(toolBox), mLayout(toolBox->mLayouts.getFourierSpaceLayout())
-    {
-    }
+    WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mLayout(toolBox->mLayouts.getFourierSpaceLayout()) {}
+
+    DEVICE_FUNCTION
+    WaveNumber(const WaveNumber &other) : mLayout(other.mLayout) {}
 
     constexpr static size_t getVectorSize() { return NDim; }
 
@@ -68,14 +68,8 @@ namespace TempLat
       }
     }
 
-    inline auto getToolBox() const
-    { // just take toolbox from first component
-      return mToolBox;
-    }
-
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
   };
 

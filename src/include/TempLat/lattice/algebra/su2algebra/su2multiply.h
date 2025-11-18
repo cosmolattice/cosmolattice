@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
@@ -35,6 +36,9 @@ namespace TempLat
 
     // Put public methods here. These should change very little over time.
     SU2Multiplication(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
+
+    DEVICE_FUNCTION
+    SU2Multiplication(const SU2Multiplication &other) : SU2BinaryOperator<R, T>(other.mR, other.mT) {}
 
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const

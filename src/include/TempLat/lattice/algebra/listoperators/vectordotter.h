@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/power.h"
@@ -27,7 +28,12 @@ namespace TempLat
   public:
     using BinaryOperator<R, T>::mR;
     using BinaryOperator<R, T>::mT;
+
+    DEVICE_FUNCTION
     VectorDotter(R &a, T &b) : BinaryOperator<R, T>(a, b) {}
+
+    DEVICE_FUNCTION
+    VectorDotter(const VectorDotter &other) : BinaryOperator<R, T>(other.mR, other.mT) {}
 
     static_assert(R::getVectorSize() == T::getVectorSize(), "VectorDotter: R and T must have the same vector size.");
 

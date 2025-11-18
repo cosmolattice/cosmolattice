@@ -119,6 +119,7 @@ namespace TempLat
 #else
         const auto &__r = r;
 #endif
+        // std::to_string(__r);
 
         device::apply(
             [&](auto &&...args) {

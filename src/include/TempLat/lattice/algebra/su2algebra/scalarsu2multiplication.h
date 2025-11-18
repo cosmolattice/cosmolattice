@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler  Year: 2025
 
+#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldmultiply.h"
@@ -25,11 +26,15 @@ namespace TempLat
   template <typename R, typename T> class ScalarSU2Multiplication : public SU2BinaryOperator<R, T>
   {
   public:
+    // Put public methods here. These should change very little over time.
     using SU2BinaryOperator<R, T>::mR;
     using SU2BinaryOperator<R, T>::mT;
 
-    // Put public methods here. These should change very little over time.
+    DEVICE_FUNCTION
     ScalarSU2Multiplication(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
+
+    DEVICE_FUNCTION
+    ScalarSU2Multiplication(const ScalarSU2Multiplication &other) : SU2BinaryOperator<R, T>(other.mR, other.mT) {}
 
     using SV = typename SU2GetGetReturnType<T>::type;
 
