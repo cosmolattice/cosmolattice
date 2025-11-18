@@ -20,6 +20,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
+    DEVICE_FUNCTION
     SU2Operator() {}
 
     static constexpr size_t size = 4;

@@ -31,6 +31,9 @@ namespace TempLat
     DEVICE_FUNCTION
     ComplexFieldBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
+    DEVICE_FUNCTION
+    ComplexFieldBinaryOperator(const ComplexFieldBinaryOperator &other) : mR(other.mR), mT(other.mT) {}
+
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */

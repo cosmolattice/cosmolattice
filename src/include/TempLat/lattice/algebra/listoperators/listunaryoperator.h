@@ -34,6 +34,9 @@ namespace TempLat
   public:
     ListUnaryOperator(const R &pR) : mR(pR) {}
 
+    DEVICE_FUNCTION
+    ListUnaryOperator(const ListUnaryOperator &other) : mR(other.mR) {}
+
     template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return ConfirmGhosts::apply(mR, i); }
 
     template <int N, size_t NDim>

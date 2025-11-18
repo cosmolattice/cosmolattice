@@ -8,21 +8,26 @@
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
 #include "TempLat/lattice/algebra/su2algebra/su2field.h"
+#include "TempLat/util/ndloop.h"
+#include <limits>
 
 inline void TempLat::SU2MultiplyTester::Test(TempLat::TDDAssertion &tdd)
 {
-  auto toolBox = std::make_shared<MemoryToolBox<3>>(16, 1);
-  SU2Field<3, float> su2_1("testSU2_1", toolBox);
-  SU2Field<3, float> su2_2("testSU2_2", toolBox);
-  SU2Field<3, float> result("resultSU2", toolBox);
+  static constexpr size_t NDim = 3;
+  using T = float;
 
-  su2_1(1_c) = 1.0f;
-  su2_1(2_c) = -1.5f;
-  su2_1(3_c) = 2.0f;
+  auto toolBox = std::make_shared<MemoryToolBox<3>>(2, 1);
+  SU2Field<NDim, T> su2_1("testSU2_1", toolBox);
+  SU2Field<NDim, T> su2_2("testSU2_2", toolBox);
+  SU2Field<NDim, T> result("resultSU2", toolBox);
 
-  su2_2(1_c) = 0.5f;
-  su2_2(2_c) = 1.0f;
-  su2_2(3_c) = -0.5f;
+  su2_1(1_c) = 0.1;
+  su2_1(2_c) = 0.2;
+  su2_1(3_c) = 0.3;
+
+  su2_2(1_c) = 0.4;
+  su2_2(2_c) = 0.5;
+  su2_2(3_c) = 0.6;
 
   result = su2_1 * su2_2;
 
@@ -30,21 +35,26 @@ inline void TempLat::SU2MultiplyTester::Test(TempLat::TDDAssertion &tdd)
   auto f2view = result(2_c).getLocalNDHostView();
   auto f3view = result(3_c).getLocalNDHostView();
 
-  bool all_true = true;
-  for (size_t i = 0; i < f1view.extent(0); ++i)
-    for (size_t j = 0; j < f1view.extent(1); ++j)
-      for (size_t k = 0; k < f1view.extent(2); ++k) {
-        all_true = all_true && (f1view(i, j, k) == 1.25f);
-        all_true = all_true && (f2view(i, j, k) == -1.5f);
-        all_true = all_true && (f3view(i, j, k) == 1.75f);
-        // I just checked it in Mathematica.
+  {
+    bool all_true = true;
+    NDLoop<NDim>(f1view, [&](const auto... idx) {
+      bool this_true = true;
+      this_true &= AlmostEqual(f1view(idx...), (T)0.3889030550529554, sqrt(std::numeric_limits<T>::epsilon()));
+      this_true &= AlmostEqual(f2view(idx...), (T)0.6195975552410395, sqrt(std::numeric_limits<T>::epsilon()));
+      this_true &= AlmostEqual(f3view(idx...), (T)0.6702920554291238, sqrt(std::numeric_limits<T>::epsilon()));
+      // Checked just in Mathematica
 
-        if (!all_true) {
-          std::cout << "Failed at index " << i << " " << j << " " << k << "\n";
-          std::cout << "Values are: " << f1view(i, j, k) << " " << f2view(i, j, k) << " " << f3view(i, j, k) << "\n";
-        }
+      if (!this_true) {
+        std::cout << "Mismatch at index: ";
+        ((std::cout << idx << " "), ...);
+        std::cout << " got " << f1view(idx...) << " " << f2view(idx...) << " " << f3view(idx...);
+        std::cout << " expected " << (T)0.3889030550529554 << " " << (T)0.6195975552410395 << " "
+                  << (T)0.6702920554291238 << "\n";
       }
-  tdd.verify(all_true);
+      all_true &= this_true;
+    });
+    tdd.verify(all_true);
+  }
 }
 
 #endif

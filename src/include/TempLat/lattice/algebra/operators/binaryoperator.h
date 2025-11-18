@@ -43,6 +43,9 @@ namespace TempLat
     DEVICE_FUNCTION
     BinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
+    DEVICE_FUNCTION
+    BinaryOperator(const BinaryOperator &other) : mR(other.mR), mT(other.mT) {}
+
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
     void doWeNeedGhosts()

@@ -30,6 +30,9 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     SU2DoubletBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
+    DEVICE_FUNCTION
+    SU2DoubletBinaryOperator(const SU2DoubletBinaryOperator &other) : mR(other.mR), mT(other.mT) {}
+
     static constexpr size_t size = 4;
     using Getter = SU2DoubletGetter;
 

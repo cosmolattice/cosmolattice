@@ -33,6 +33,9 @@ namespace TempLat
 
     SU2Wrapper(const A &pA, const B &pB, const C &pC, const D &pD) : data(pA, pB, pC, pD) {}
 
+    DEVICE_FUNCTION
+    SU2Wrapper(const SU2Wrapper &other) : data(other.data) {}
+
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return device::get<N>(data); }
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 

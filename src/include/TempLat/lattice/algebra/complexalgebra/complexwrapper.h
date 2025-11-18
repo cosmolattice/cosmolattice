@@ -34,6 +34,9 @@ namespace TempLat
     DEVICE_FUNCTION
     ComplexFieldWrapper(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
+    DEVICE_FUNCTION
+    ComplexFieldWrapper(const ComplexFieldWrapper &other) : mR(other.mR), mT(other.mT) {}
+
     DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<0> t) const { return mR; }
     DEVICE_FORCEINLINE_FUNCTION

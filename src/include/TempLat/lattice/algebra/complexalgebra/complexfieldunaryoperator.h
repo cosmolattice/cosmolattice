@@ -30,6 +30,9 @@ namespace TempLat
     DEVICE_FUNCTION
     ComplexFieldUnaryOperator(const R &pR) : mR(pR) {}
 
+    DEVICE_FUNCTION
+    ComplexFieldUnaryOperator(const ComplexFieldUnaryOperator &other) : mR(other.mR) {}
+
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
 
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */

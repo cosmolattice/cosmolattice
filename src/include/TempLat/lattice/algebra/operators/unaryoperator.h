@@ -47,6 +47,9 @@ namespace TempLat
     DEVICE_FUNCTION
     UnaryOperator(const R &pR) : mR(pR) {}
 
+    DEVICE_FUNCTION
+    UnaryOperator(const UnaryOperator &other) : mR(other.mR) {}
+
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
 
     void doWeNeedGhosts() { GhostsHunter::apply(mR); }

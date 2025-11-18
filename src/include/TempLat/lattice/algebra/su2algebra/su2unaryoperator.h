@@ -35,6 +35,9 @@ namespace TempLat
 
     SU2UnaryOperator(const R &pR) : mR(pR) {}
 
+    DEVICE_FUNCTION
+    SU2UnaryOperator(const SU2UnaryOperator &other) : mR(other.mR) {}
+
     /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return " "; }
 
