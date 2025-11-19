@@ -33,7 +33,7 @@ namespace TempLat
 
     SU2Addition(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
-    template <int N> auto SU2Get(Tag<N> t) const { return mT.SU2Get(t) + mR.SU2Get(t); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return mT.SU2Get(t) + mR.SU2Get(t); }
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
     template <typename... IDX> struct RightIndices {
@@ -55,9 +55,10 @@ namespace TempLat
     {
       return mT.SU2Get(t, idx...) + mR.SU2Get(t, idx...);
     }
+
     template <int N, typename... IDX>
       requires RightIndices<IDX...>::value
-    device::array<SV, 4> SU2Get(const IDX &...i) const
+    DEVICE_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...i) const
     {
       return {SU2Get(0_c, i...), SU2Get(1_c, i...), SU2Get(2_c, i...), SU2Get(3_c, i...)};
     }

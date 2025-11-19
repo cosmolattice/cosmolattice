@@ -39,17 +39,17 @@ inline void TempLat::SU2MultiplyTester::Test(TempLat::TDDAssertion &tdd)
     bool all_true = true;
     NDLoop<NDim>(f1view, [&](const auto... idx) {
       bool this_true = true;
-      this_true &= AlmostEqual(f1view(idx...), (T)0.3889030550529554, sqrt(std::numeric_limits<T>::epsilon()));
-      this_true &= AlmostEqual(f2view(idx...), (T)0.6195975552410395, sqrt(std::numeric_limits<T>::epsilon()));
-      this_true &= AlmostEqual(f3view(idx...), (T)0.6702920554291238, sqrt(std::numeric_limits<T>::epsilon()));
+      this_true &= AlmostEqual(f1view(idx...), (T)0.44890305505295536, sqrt(std::numeric_limits<T>::epsilon()));
+      this_true &= AlmostEqual(f2view(idx...), (T)0.49959755524103955, sqrt(std::numeric_limits<T>::epsilon()));
+      this_true &= AlmostEqual(f3view(idx...), (T)0.7302920554291238, sqrt(std::numeric_limits<T>::epsilon()));
       // Checked just in Mathematica
 
       if (!this_true) {
         std::cout << "Mismatch at index: ";
         ((std::cout << idx << " "), ...);
         std::cout << " got " << f1view(idx...) << " " << f2view(idx...) << " " << f3view(idx...);
-        std::cout << " expected " << (T)0.3889030550529554 << " " << (T)0.6195975552410395 << " "
-                  << (T)0.6702920554291238 << "\n";
+        std::cout << " expected " << (T)0.44890305505295536 << " " << (T)0.49959755524103955 << " "
+                  << (T)0.7302920554291238 << "\n";
       }
       all_true &= this_true;
     });

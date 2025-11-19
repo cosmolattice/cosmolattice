@@ -107,10 +107,10 @@ namespace TempLat
         cR[j] = mT.SU2Get(j, idx...);
       });
 
-      cache[0] = cR[0] * cL[0] - cR[1] * cL[1] - cR[2] * cL[2] - cR[3] * cL[3];
-      cache[1] = cR[0] * cL[1] + cR[1] * cL[0] + cR[3] * cL[2] - cR[2] * cL[3];
-      cache[2] = cR[0] * cL[2] + cR[2] * cL[0] + cR[1] * cL[3] - cR[3] * cL[1];
-      cache[3] = cR[0] * cL[3] + cR[3] * cL[0] + cR[2] * cL[1] - cR[1] * cL[2];
+      cache[0] = cL[0] * cR[0] - cL[1] * cR[1] - cL[2] * cR[2] - cL[3] * cR[3];
+      cache[1] = cL[0] * cR[1] + cL[1] * cR[0] + cL[3] * cR[2] - cL[2] * cR[3];
+      cache[2] = cL[0] * cR[2] + cL[2] * cR[0] + cL[1] * cR[3] - cL[3] * cR[1];
+      cache[3] = cL[0] * cR[3] + cL[3] * cR[0] + cL[2] * cR[1] - cL[1] * cR[2];
     }
 
     virtual std::string operatorString() const override { return "."; }

@@ -123,6 +123,7 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
                          device::memory::getAtOnePoint(((A * A) * (A * A) * (A * A)).SU2Get(2_c), zero)));
 
   // Funny stuff: uncomment to get a segfault! Morale: use too much memory on the stack and it crashes
+  // say << (A * A * A * A * A * A).SU2Get(0_c);
   // say << (A * A * A * A * A * A * A * A).SU2Get(0_c);
   //  say << (A*A*A*A*A*A*A*A).SU2Get(0_c).get(tmp);
   /*say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c);
