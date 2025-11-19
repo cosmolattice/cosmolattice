@@ -1,4 +1,5 @@
 #include "TempLat/lattice/algebra/su2algebra/su2dagger.h"
+#include "TempLat/lattice/algebra/su2algebra/su2doubletdagger.h"
 #include "TempLat/lattice/algebra/su2algebra/su2multiply.h"
 #include "TempLat/lattice/algebra/su2algebra/su2generators.h"
 #include "TempLat/lattice/algebra/su2algebra/su2su2doubletmultiply.h"

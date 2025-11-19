@@ -77,12 +77,12 @@ namespace TempLat
 #endif
   };
 
-  template <class A, class B, class C, class D> auto SU2Wrap(A &&pA, B &&pB, C &&pC, D &&pD)
+  template <class A, class B, class C, class D> auto SU2Wrap(const A &pA, const B &pB, const C &pC, const D &pD)
   {
     return SU2Wrapper<A, B, C, D>(pA, pB, pC, pD);
   }
 
-  template <typename F> auto SU2Wrap(F &&f) { return SU2Wrap(f(0_c), f(1_c), f(2_c), f(3_c)); }
+  template <typename F> auto SU2Wrap(const F &f) { return SU2Wrap(f(0_c), f(1_c), f(2_c), f(3_c)); }
 
 #define MakeSU2(a, expr) SU2Wrap([&](auto a) { return expr; })
 } // namespace TempLat

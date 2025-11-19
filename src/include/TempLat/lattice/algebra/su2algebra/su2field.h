@@ -144,6 +144,15 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(fs[0]); }
 
+    inline auto getToolBox() { return GetToolBox::get(fs[0]); }
+
+    inline void updateGhosts()
+    {
+      fs[0].updateGhosts();
+      fs[1].updateGhosts();
+      fs[2].updateGhosts();
+    }
+
     using Getter = SU2Getter;
 
     static constexpr size_t SHIFTIND = 0;

@@ -129,6 +129,9 @@ namespace TempLat
   template <int N> DEVICE_FORCEINLINE_FUNCTION OneType shift(OneType) { return OneType(); }
   template <int N> DEVICE_FORCEINLINE_FUNCTION OneType shift(OneType, Tag<N>) { return OneType(); }
 
+  template <int N> ZeroType shift(ZeroType) { return ZeroType(); }
+  template <int N> ZeroType shift(ZeroType, Tag<N>) { return ZeroType(); }
+
   struct ExpressionShifterTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

@@ -11,6 +11,7 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
+#include "TempLat/lattice/algebra/su2algebra/helpers/paulivectorsalgebra.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
@@ -92,25 +93,12 @@ namespace TempLat
       return cache[N];
     }
 
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FUNCTION void eval(const IDX &...idx) const
+    void eval(ptrdiff_t i)
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
-
-      device::array<SV, 4> cL;
-      device::array<SV, 4> cR;
-
-      constexpr_for<0, 4, 1>([&](auto j) {
-        cL[j] = mR.SU2Get(j, idx...);
-        cR[j] = mT.SU2Get(j, idx...);
-      });
-
-      cache[0] = cL[0] * cR[0] - cL[1] * cR[1] - cL[2] * cR[2] - cL[3] * cR[3];
-      cache[1] = cL[0] * cR[1] + cL[1] * cR[0] + cL[3] * cR[2] - cL[2] * cR[3];
-      cache[2] = cL[0] * cR[2] + cL[2] * cR[0] + cL[1] * cR[3] - cL[3] * cR[1];
-      cache[3] = cL[0] * cR[3] + cL[3] * cR[0] + cL[2] * cR[1] - cL[1] * cR[2];
+      DoEval::eval(mR, i);
+      DoEval::eval(mT, i);
+      ForLoop(j, 0, 3, cL[j] = this->mR.SU2Get(j, i); cR[j] = this->mT.SU2Get(j, i););
+      PauliVectorsAlgebra::multiply_inplace(cache, cL, cR);
     }
 
     virtual std::string operatorString() const override { return "."; }
@@ -146,19 +134,20 @@ namespace TempLat
     return r;
   }
 
-  template <typename T>
-    requires HasSU2Get<T>
-  auto operator*(ZeroType r, const T &t)
+  template <typename T> typename std::enable_if<HasSU2Get<T>::value, ZeroType>::type operator*(ZeroType r, const T &t)
   {
     return r;
   }
 
-  template <typename R>
-    requires(HasSU2Get<R>)
-  auto operator*(const R &r, ZeroType t)
+  template <typename R> typename std::enable_if<HasSU2Get<R>::value, ZeroType>::type operator*(const R &r, ZeroType t)
   {
     return t;
   }
+
 } // namespace TempLat
+
+#ifdef TEMPLATTEST
+#include "TempLat/lattice/algebra/su2algebra/su2multiply_test.h"
+#endif
 
 #endif
