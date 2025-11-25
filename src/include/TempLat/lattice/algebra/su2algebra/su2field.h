@@ -38,7 +38,7 @@ namespace TempLat
     {
     }
 
-    SU2FieldBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+    SU2FieldBase(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                  LatticeParameters<T> pLatPar = LatticeParameters<T>())
         : fs{{
               Field<NDim, T>(name + "_1", toolBox, pLatPar), //
@@ -49,7 +49,7 @@ namespace TempLat
     {
     }
 
-#ifdef __CUDA_ARCH__
+#ifdef DEVICE_REGION
     DEVICE_FUNCTION
     SU2FieldBase(const SU2FieldBase &other) : fs{{other.fs[0], other.fs[1], other.fs[2]}}, mLayout(other.mLayout) {}
 #endif

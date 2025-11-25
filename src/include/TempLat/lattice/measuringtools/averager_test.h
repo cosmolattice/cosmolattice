@@ -38,7 +38,7 @@ namespace TempLat
 
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
 
-    std::shared_ptr<MemoryToolBox<NDim>> mt;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mt;
 
     std::string toString() const { return "myTmpStruct"; }
   };
@@ -65,7 +65,7 @@ namespace TempLat
 
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
 
-    std::shared_ptr<MemoryToolBox<NDim>> mt;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mt;
 
     LayoutStruct<NDim> mLayout;
   };

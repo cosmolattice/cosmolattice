@@ -117,7 +117,7 @@ namespace TempLat
     FourierView<NDim, T> mR;
     FourierView<NDim, T> mI;
 
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
 
     LayoutStruct<NDim> mLayout;
   };

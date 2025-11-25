@@ -51,7 +51,7 @@ namespace TempLat
     // TODO (Franz)
     static constexpr size_t NDim = GetNDim::get<T>();
 
-    RadialProjector(const T &instance, SpaceStateType spaceType, std::shared_ptr<MemoryToolBox<NDim>> pToolBox,
+    RadialProjector(const T &instance, SpaceStateType spaceType, device::memory::host_ptr<MemoryToolBox<NDim>> pToolBox,
                     bool pUseCentralBinValues)
         : mSpaceType(spaceType), mInstance(instance), mToolBox(pToolBox), mUseBinCentralValues(pUseCentralBinValues),
           mLayout((mSpaceType == SpaceStateType::Fourier) ? mToolBox->mLayouts.getFourierSpaceLayout()
@@ -92,7 +92,7 @@ namespace TempLat
   private:
     const SpaceStateType mSpaceType;
     T mInstance;
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     bool mUseBinCentralValues;
     LayoutStruct<NDim> mLayout;
 
@@ -211,7 +211,7 @@ namespace TempLat
 
   template <size_t NDim, typename T>
   RadialProjector<T> projectRadially(T instance, SpaceStateType spaceType,
-                                     std::shared_ptr<MemoryToolBox<NDim>> pToolBox, bool useBinCentralValues)
+                                     device::memory::host_ptr<MemoryToolBox<NDim>> pToolBox, bool useBinCentralValues)
   {
     return RadialProjector<T>(instance, spaceType, pToolBox, useBinCentralValues);
   }
@@ -223,7 +223,6 @@ namespace TempLat
 
   template <typename T> RadialProjector<T> projectRadiallyFourier(T instance, bool useBinCentralValues = false)
   {
-    std::shared_ptr<MemoryToolBox<GetNDim::get<T>()>> toolBox = GetToolBox::get(instance);
     return projectRadially(instance, SpaceStateType::Fourier, GetToolBox::get(instance), useBinCentralValues);
   }
 

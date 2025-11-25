@@ -26,7 +26,8 @@ namespace TempLat
 
     SU2LieAlgebraField(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3) : SU2FieldBase<NDim, T>(f1, f2, f3) {}
 
-    SU2LieAlgebraField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
+    SU2LieAlgebraField(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
+                       LatticeParameters<T> pLatPar)
         : SU2FieldBase<NDim, T>(name, toolBox, pLatPar)
     {
     }

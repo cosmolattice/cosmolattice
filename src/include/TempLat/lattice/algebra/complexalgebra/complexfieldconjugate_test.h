@@ -11,7 +11,9 @@ inline void TempLat::ComplexFieldConjugateTester::Test(TempLat::TDDAssertion &td
 {
   /* Default is to fail: to remind yourself to implement something here. */
   struct MyStruct {
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<0> t) const { return 1; }
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<1> t) const { return 2; }
   };
   tdd.verify(Real(conj(MyStruct())) == 1);

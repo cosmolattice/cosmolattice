@@ -34,7 +34,7 @@ namespace TempLat
         : fs{{f1, f2, f3, f4}}, mName("NoName"), mLayout(f1.getToolBox()->mLayouts.getConfigSpaceLayout())
     {
     }
-    SU2DoubletBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+    SU2DoubletBase(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                    LatticeParameters<T> pLatPar = LatticeParameters<T>())
         : mName(name), fs{{
                            Field<NDim, T>(name + "_0", toolBox, pLatPar), //
@@ -91,7 +91,7 @@ namespace TempLat
 
     std::string toString() const { return mName; }
 
-    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(fs[0]); }
+    device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(fs[0]); }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(fs[0]); }

@@ -7,7 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/lattice/algebra/operators/squareroot.h"
+#include "TempLat/lattice/algebra/operators/operators.h"
+#include "TempLat/lattice/algebra/operators/shift.h"
+#include "TempLat/lattice/field/field.h"
 
 namespace TempLat
 {
@@ -70,6 +72,17 @@ inline void TempLat::ConditionalBinaryGetterTester::Test(TempLat::TDDAssertion &
   //            MyVecClass
   //        >::type templatedType5;
   // passed
+  using A = TempLat::Operators::Multiplication<
+      TempLat::Operators::Cosine<TempLat::Operators::Multiplication<double, TempLat::Field<3UL, double>>>,
+      TempLat::ExpressionShifterByOne<TempLat::Field<3UL, double>, 1>>;
+
+  using B = TempLat::Operators::Multiplication<
+      TempLat::Operators::Sine<TempLat::Operators::Multiplication<double, TempLat::Field<3UL, double>>>,
+      TempLat::ExpressionShifterByOne<TempLat::Field<3UL, double>, 1>>;
+
+  tdd.verify(ConditionalBinaryGetter<A, B> == true);
+
+  static_assert(ConditionalBinaryGetter<A, B>);
 }
 
 #endif

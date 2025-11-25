@@ -58,7 +58,7 @@ namespace TempLat
     virtual inline JumpsHolder<NDim> getFourierSpaceJumps() = 0;
 
     /** For measurement objects. */
-    virtual inline std::shared_ptr<MemoryToolBox<3>> getToolBox() = 0;
+    virtual inline device::memory::host_ptr<MemoryToolBox<3>> getToolBox() = 0;
 
     static inline std::string SpaceTypeString(SpaceStateType st)
     {

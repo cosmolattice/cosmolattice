@@ -151,7 +151,7 @@ namespace TempLat
     T mT;
     SpaceStateType mSpaceType;
 
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
   };
 
   class ComplexFieldAveragerTester

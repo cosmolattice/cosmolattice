@@ -87,7 +87,7 @@ namespace TempLat
 
     // Put public methods here. These should change very little over time.
     template <class... Args>
-    CollectionBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+    CollectionBase(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                    LatticeParameters<T> pLatPar = LatticeParameters<T>())
         : AssignableCollectionBase<Q, Args...>(
               Args(name + std::to_string(I - std::get<0>(std::make_tuple(I...))), toolBox, pLatPar)...)
@@ -112,7 +112,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    CollectionBase(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+    CollectionBase(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                    LatticeParameters<T> pLatPar = LatticeParameters<T>())
     {
     }

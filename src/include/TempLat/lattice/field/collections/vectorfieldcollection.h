@@ -20,7 +20,7 @@ namespace TempLat
   template <class Arg, class T, int NDim, int N, int SHIFTIND = 0, bool flatAssign = false> class VectorFieldCollection
   {
   public:
-    VectorFieldCollection(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+    VectorFieldCollection(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                           LatticeParameters<T> pLatPar = LatticeParameters<T>()) //:
     {
       if constexpr (N > 0)

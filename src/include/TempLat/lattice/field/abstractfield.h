@@ -37,14 +37,17 @@ namespace TempLat
 
     static constexpr size_t NDim = _NDim;
 
-    AbstractField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
-        : mToolBox(toolBox), mManager(std::make_shared<MemoryManager<NDim, T>>(mToolBox, name)), latPar(pLatPar)
+    AbstractField(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
+        : mToolBox(toolBox), mManager(mToolBox, name), latPar(pLatPar)
     {
     }
 
-#ifdef __CUDA_ARCH__
+#ifdef DEVICE_REGION
     DEVICE_FUNCTION
     AbstractField(const AbstractField &other) : mToolBox(nullptr), mManager(nullptr), latPar(other.latPar) {}
+
+    DEVICE_FUNCTION
+    ~AbstractField() {}
 #endif
 
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
@@ -60,7 +63,7 @@ namespace TempLat
       }
     }
 
-    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return mToolBox; }
+    device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return mToolBox; }
 
     ptrdiff_t confirmGhostsUpToDate() { return this->mManager->confirmGhostsUpToDate(); }
 
@@ -75,7 +78,7 @@ namespace TempLat
     void setGhostsAreStale() { mManager->setGhostsAreStale(); }
     bool areGhostsStale() const { return mManager->areGhostsStale(); }
 
-    std::shared_ptr<MemoryManager<NDim, T>> getMemoryManager() { return mManager; }
+    device::memory::host_ptr<MemoryManager<NDim, T>> getMemoryManager() { return mManager; }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return latPar.getDx(); }
@@ -85,32 +88,11 @@ namespace TempLat
 
   protected:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
-    std::shared_ptr<MemoryManager<NDim, T>> mManager;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryManager<NDim, T>> mManager;
 
-    LatticeParameters<T> latPar; // Information about the lattice (dx, kir...)
-                                 // Conceptually not amazing but really useful.
-
-    /*
-ptrdiff_t getOffsetFromCoords(bool &test, std::vector<ptrdiff_t> position)
-{
-auto mJumps = getJumps();
-
-if (mJumps.size() != position.size())
-throw FieldValueGetterException(
-"Wrong size / number of arguments to Field<T>::operator(). Dimensionality of field:", mJumps.size(),
-", dimensionality of your arguments:", position.size());
-
-ptrdiff_t offset = mJumps.getTotalOffsetFromSpatialCoordinates(position);
-
-// our hack to give something that is not in the memory, without throwing an exception.
-if (offset > -1)
-test = true;
-else
-test = false;
-return offset;
-}
-*/
+    const LatticeParameters<T> latPar; // Information about the lattice (dx, kir...)
+                                       // Conceptually not amazing but really useful.
   };
 } // namespace TempLat
 

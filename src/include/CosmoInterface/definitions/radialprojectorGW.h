@@ -69,7 +69,7 @@ namespace TempLat
     }
 
   private:
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     bool mUseBinCentralValues;
     int mPRJType;
     int mPSType;

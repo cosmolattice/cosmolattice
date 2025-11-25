@@ -200,7 +200,7 @@ namespace TempLat
     std::unique_ptr<FieldCollection<Field<NDim, T>, T, 6, true>> piGWs;
 
     AbstractModel(ParameterParser &parser, const LatticeParameters<T> &par,
-                  std::shared_ptr<MemoryToolBox<NDim>> toolBox, T pDt, std::string pName = "")
+                  device::memory::host_ptr<MemoryToolBox<NDim>> toolBox, T pDt, std::string pName = "")
         : isInitialized(toolBox->template initializeFFT<T>()), fldS("scalar", toolBox, par),
           piS("pi_scalar", toolBox, par), fldCS("cmplx_scalar", toolBox, par), piCS("pi_cmplx_scalar", toolBox, par),
           fldSU2Doublet("SU2Doublet", toolBox, par), piSU2Doublet("pi_SU2Doublet", toolBox, par),
@@ -332,7 +332,7 @@ namespace TempLat
     // informations about
     // the intrinsic parameter of the library. Sometimes, some of the classes need the MemoryToolBox to be created. This
     // function the user to quickly get it from the model.
-    std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return getOneField().getToolBox(); }
+    device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return getOneField().getToolBox(); }
 
     // set the initial value of the potential and the masses of the fields from the expression of the potential.
     void setInitialPotentialAndMassesFromPotential()

@@ -35,7 +35,10 @@ namespace TempLat
     DEVICE_FUNCTION
     SU2DoubletWrapper(const SU2DoubletWrapper &other) : mData(other.mData) {}
 
-    template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t) const { return device::get<N>(mData); }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION const auto &SU2DoubletGet(Tag<N> t) const
+    {
+      return device::get<N>(mData);
+    }
 
     template <int N, typename... IDX>
       requires requires(A a, B b, C c, D d, IDX... idx) {

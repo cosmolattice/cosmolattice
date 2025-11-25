@@ -13,7 +13,6 @@
 #include "TempLat/lattice/algebra/su2algebra/su2doubletunaryoperator.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -71,13 +70,13 @@ namespace TempLat
     using SU2DoubletUnaryOperator<R>::mR;
     // Put public methods here. These should change very little over time.
     SU2DoubletShifterByOne(const R &pR)
-        : SU2DoubletUnaryOperator<R>(mR),
-          expr(SU2DoubletWrap(shift<N>(mR.SU2DoubletGet(0_c)), shift<N>(mR.SU2DoubletGet(1_c)),
-                              shift<N>(mR.SU2DoubletGet(2_c)), shift<N>(mR.SU2DoubletGet(3_c))))
+        : SU2DoubletUnaryOperator<R>(pR),
+          expr(SU2DoubletWrap(shift<N>(pR.SU2DoubletGet(0_c)), shift<N>(pR.SU2DoubletGet(1_c)),
+                              shift<N>(pR.SU2DoubletGet(2_c)), shift<N>(pR.SU2DoubletGet(3_c))))
     {
     }
 
-    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const { return expr; }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const { return expr.SU2DoubletGet(t); }
 
     template <int M, typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }

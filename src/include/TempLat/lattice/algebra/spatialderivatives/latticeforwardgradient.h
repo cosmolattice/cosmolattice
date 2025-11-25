@@ -106,7 +106,7 @@ namespace TempLat
     }
 
     /** For measurement objects. */
-    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mR); }
+    inline device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mR); }
 
     template <typename S> inline auto d(const S &other)
     {

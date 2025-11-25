@@ -30,7 +30,7 @@ namespace TempLat
 
   public:
     // Put public methods here. These should change very little over time.
-    TwoPointCorrelatorBuilder(T instance, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
+    TwoPointCorrelatorBuilder(T instance, device::memory::host_ptr<MemoryToolBox<NDim>> pToolBox)
         : ToolWithOwnMemory<NDim, T>(instance), mToolBox(pToolBox)
     {
     }
@@ -53,7 +53,7 @@ namespace TempLat
     }
 
   private:
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 

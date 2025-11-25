@@ -110,14 +110,14 @@ namespace TempLat
     std::string toString() const { return "<" + GetString::get(mT) + ">_spat"; }
 
     /** For measurement objects. */
-    inline std::shared_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mT); }
+    inline device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mT); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
     SpaceStateType mSpaceType;
 
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
 
     device::array<device::Idx, NDim - 1> start_iteration{};
     device::array<device::Idx, NDim - 1> stop_iteration{};

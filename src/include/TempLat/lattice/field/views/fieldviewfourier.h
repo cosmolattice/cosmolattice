@@ -45,9 +45,12 @@ namespace TempLat
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
 
-#ifdef __CUDA_ARCH__
+#ifdef DEVICE_REGION
     DEVICE_FUNCTION
     FourierView(const FourierView &other) : AbstractField<NDim, T>(other), mView(other.mView) {}
+
+    DEVICE_FUNCTION
+    ~FourierView() {}
 #endif
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
@@ -174,7 +177,7 @@ namespace TempLat
     DEVICE_FUNCTION
     FourierView(const AbstractField<NDim, T> &f) : AbstractField<NDim, T>(f)
     {
-#ifndef __CUDA_ARCH__
+#ifndef DEVICE_REGION
       if (mToolBox == nullptr) return;
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
 

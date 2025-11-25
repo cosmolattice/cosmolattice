@@ -22,37 +22,37 @@ template <size_t NDim, typename T> inline void TempLat::MemoryManager<NDim, T>::
   }
 
   /* first allocation */
-  tdd.verify(mManager.confirmConfigSpace() > 0);
+  tdd.verify(mManager->confirmConfigSpace() > 0);
 
   /* fft necessary */
-  tdd.verify(mManager.confirmFourierSpace() > 0);
+  tdd.verify(mManager->confirmFourierSpace() > 0);
 
   /* fft not necessary */
-  tdd.verify(mManager.confirmFourierSpace() == 0);
+  tdd.verify(mManager->confirmFourierSpace() == 0);
 
   /* fft necessary */
-  tdd.verify(mManager.confirmConfigSpace() > 0);
+  tdd.verify(mManager->confirmConfigSpace() > 0);
 
   /* fft not necessary */
-  tdd.verify(mManager.confirmConfigSpace() == 0);
+  tdd.verify(mManager->confirmConfigSpace() == 0);
 
   /* ghost update necessary */
-  tdd.verify(mManager.confirmGhostsUpToDate() > 0);
+  tdd.verify(mManager->confirmGhostsUpToDate() > 0);
 
   /* ghost update not necessary */
-  tdd.verify(mManager.confirmGhostsUpToDate() == 0);
+  tdd.verify(mManager->confirmGhostsUpToDate() == 0);
 
   /* fft not necessary */
-  tdd.verify(mManager.confirmConfigSpace() == 0);
+  tdd.verify(mManager->confirmConfigSpace() == 0);
 
   /* ghost update not necessary */
-  tdd.verify(mManager.confirmGhostsUpToDate() == 0);
+  tdd.verify(mManager->confirmGhostsUpToDate() == 0);
 
   /* fft necessary */
-  tdd.verify(mManager.confirmFourierSpace() > 0);
+  tdd.verify(mManager->confirmFourierSpace() > 0);
 
   /* fft && ghost update necessary */
-  tdd.verify(mManager.confirmGhostsUpToDate() > 0);
+  tdd.verify(mManager->confirmGhostsUpToDate() > 0);
 }
 
 #endif

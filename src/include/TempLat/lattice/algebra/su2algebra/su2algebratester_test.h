@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/su2algebra/su2doublet.h"
 #include "TempLat/lattice/algebra/su2algebra/su2generators.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
+#include "TempLat/lattice/algebra/gaugealgebra/u1exponential.h"
 
 #include "TempLat/parallel/device_memory.h"
 
@@ -152,6 +153,38 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
                          device::memory::getAtOnePoint((commutator2).SU2Get(2_c), zero)));
   tdd.verify(AlmostEqual(device::memory::getAtOnePoint((comm).SU2Get(3_c), zero),
                          device::memory::getAtOnePoint((commutator2).SU2Get(3_c), zero)));
+
+  // For my sanity: checking that some complicated expressions just work.
+
+  static_assert(HasSU2DoubletGet<TempLat::ComplexFieldSU2DoubletMultiplication<
+                    TempLat::U1Exponential<TempLat::Operators::Multiplication<double, TempLat::Field<3, double>>>,
+                    TempLat::SU2DoubletShifterByOne<TempLat::SU2DoubletBase<3, double>, 1>>>);
+
+  static_assert(HasSU2DoubletGet<TempLat::SU2SU2DoubletMultiplication<
+                    TempLat::SU2FieldBase<3, double>,
+                    TempLat::ComplexFieldSU2DoubletMultiplication<
+                        TempLat::U1Exponential<TempLat::Operators::Multiplication<double, TempLat::Field<3, double>>>,
+                        TempLat::SU2DoubletShifterByOne<TempLat::SU2DoubletBase<3, double>, 1>>>>);
+
+  static_assert(HasSU2DoubletGet<
+                TempLat::SU2DoubletSubtract<TempLat::SU2DoubletBase<3, double>, TempLat::SU2DoubletBase<3, double>>>);
+
+  static_assert(
+      HasSU2DoubletGet<TempLat::SU2DoubletSubtract<
+          TempLat::SU2DoubletBase<3, double>,
+          TempLat::SU2SU2DoubletMultiplication<TempLat::SU2FieldBase<3, double>, TempLat::SU2DoubletBase<3, double>>>>);
+
+  static_assert(HasSU2DoubletGet<TempLat::SU2DoubletSubtract<
+                    TempLat::SU2DoubletBase<3, double>,
+                    TempLat::ComplexFieldSU2DoubletMultiplication<
+                        TempLat::U1Exponential<TempLat::Operators::Multiplication<double, TempLat::Field<3, double>>>,
+                        TempLat::SU2DoubletBase<3, double>>>>);
+
+  static_assert(HasSU2DoubletGet<TempLat::SU2DoubletShifterByOne<TempLat::SU2DoubletBase<3, double>, 1>>);
+
+  static_assert(
+      HasSU2DoubletGet<TempLat::SU2DoubletSubtract<
+          TempLat::SU2DoubletBase<3, double>, TempLat::SU2DoubletShifterByOne<TempLat::SU2DoubletBase<3, double>, 1>>>);
 }
 
 #endif

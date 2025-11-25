@@ -39,7 +39,7 @@ namespace TempLat
     /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
      */
-    std::string toString() const
+    virtual std::string toString() const
     {
       std::string result = GetString::get(mR);
 

@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -34,7 +33,7 @@ namespace TempLat
 
     auto getToolBox() const { return mt; }
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
-    std::shared_ptr<MemoryToolBox<NDim>> mt;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mt;
     std::string toString() const { return "myTmpStruct"; }
 
     LayoutStruct<NDim> mLayout;

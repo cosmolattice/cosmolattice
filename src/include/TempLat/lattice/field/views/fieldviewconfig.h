@@ -43,7 +43,7 @@ namespace TempLat
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
 
-    ConfigView(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
+    ConfigView(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox, LatticeParameters<T> pLatPar)
         : AbstractField<NDim, T>(name, toolBox, pLatPar), mDisableFFTBlocking(false)
     {
       if (toolBox != nullptr)
@@ -67,7 +67,7 @@ namespace TempLat
       mRawView = mManager->getRawView();
     }
 
-#ifdef __CUDA_ARCH__
+#ifdef DEVICE_REGION
     DEVICE_FUNCTION
     ConfigView(const ConfigView &other)
         : AbstractField<NDim, T>(other), mLayout(other.mLayout), mView(other.mView), mRawView(other.mRawView),
@@ -75,6 +75,9 @@ namespace TempLat
           mDisableFFTBlocking(other.mDisableFFTBlocking)
     {
     }
+
+    DEVICE_FUNCTION
+    ~ConfigView() {}
 #endif
 
     DEVICE_FORCEINLINE_FUNCTION

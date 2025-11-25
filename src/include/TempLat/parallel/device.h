@@ -87,6 +87,15 @@ namespace TempLat
 
   // The complex type is used in many places, so we re-export it at the top level.
   using device::complex;
+
+#ifdef TEMPLATTEST
+  class DeviceTester
+  {
+  public:
+    template <typename _TDDAssertion> static inline void Test(_TDDAssertion &tdd);
+  };
+#endif
+
 } // namespace TempLat
 
 // Including this here, as we need that anywhere basically, where Kokkos is explicitly used.

@@ -38,7 +38,7 @@ namespace TempLat
     {
     }
 
-    ComplexField(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+    ComplexField(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                  LatticeParameters<T> pLatPar = LatticeParameters<T>())
         : mR("Re_" + name, toolBox, pLatPar), mI("Im_" + name, toolBox, pLatPar), mName(name), mToolBox(toolBox),
           mLayout(mToolBox->mLayouts.getConfigSpaceLayout())
@@ -154,7 +154,7 @@ namespace TempLat
 
     const std::string mName;
 
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
 
     LayoutStruct<NDim> mLayout;
 

@@ -76,10 +76,10 @@ namespace TempLat
   {
     constexpr int len = sizeof...(IDX);
     if constexpr (n >= 1) {
-      return device::tuple_cat(tuple_first<n>(tt), device::make_tuple(device::get<n>(tt) + add),
+      return device::tuple_cat(tuple_first<n>(tt), device::make_tuple((int)device::get<n>(tt) + add),
                                tuple_last<len - n - 1>(tt));
     } else if constexpr (n == 0) {
-      return device::tuple_cat(device::make_tuple(device::get<0>(tt) + add), tuple_last<len - 1>(tt));
+      return device::tuple_cat(device::make_tuple((int)device::get<0>(tt) + add), tuple_last<len - 1>(tt));
     }
   }
 

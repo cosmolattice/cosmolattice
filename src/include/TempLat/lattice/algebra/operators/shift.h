@@ -11,7 +11,9 @@
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/tdd/tdd.h"
+
 #include "TempLat/util/tuple_size.h"
+#include "TempLat/util/tuple_tools.h"
 
 namespace TempLat
 {
@@ -83,8 +85,7 @@ namespace TempLat
     template <typename... IDX>
       requires requires(R r, IDX... idx) {
         requires IsVariadicIndex<IDX...>;
-        GetValue::get(r, idx...);
-        tuple_add_to_nth<N - 1, dir>(device::tie(idx...));
+        GetValue::get(mR, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX... idx) const
     {
@@ -93,7 +94,10 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(R r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(mR, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
       tuple_add_to_nth<N - 1, dir>(device::tie(idx...));

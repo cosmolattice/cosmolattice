@@ -27,7 +27,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
     FileSaverPureMPI() {}
-    void open(std::string fn, std::shared_ptr<MemoryToolBox<NDim>> toolBox)
+    void open(std::string fn, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
     {
       throw PureMPISaverNotImplemented(
           "The pure MPI IO interface is yet to be implemented. If you require I/O for your lattice, please use the "

@@ -28,7 +28,7 @@ namespace TempLat
   public:
     static constexpr size_t NDim = GetNDim::get<Arg>();
 
-    FieldCollection(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+    FieldCollection(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                     LatticeParameters<T> pLatPar = LatticeParameters<T>())
     {
       for (int i = 0; i < N; ++i) {

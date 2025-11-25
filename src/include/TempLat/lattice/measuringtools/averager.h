@@ -39,7 +39,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     Averager(const T &pT, SpaceStateType spaceType)
       requires requires {
-        { pT.getToolBox() } -> std::same_as<std::shared_ptr<MemoryToolBox<NDim>>>;
+        { pT.getToolBox() } -> std::same_as<device::memory::host_ptr<MemoryToolBox<NDim>>>;
       }
         : mT(pT), mSpaceType(spaceType)
     {
@@ -131,7 +131,7 @@ namespace TempLat
     T mT;
     SpaceStateType mSpaceType;
 
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
   };
 
   template <typename T>

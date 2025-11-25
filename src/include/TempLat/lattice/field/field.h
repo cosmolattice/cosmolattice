@@ -35,15 +35,18 @@ namespace TempLat
 
     using ConfigView<NDim, T>::mManager;
 
-    Field(std::string name, std::shared_ptr<MemoryToolBox<NDim>> toolBox,
+    Field(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
           LatticeParameters<T> pLatPar = LatticeParameters<T>())
         : ConfigView<NDim, T>(name, toolBox, pLatPar), mFourierView(*this)
     {
     }
 
-#ifdef __CUDA_ARCH__
+#ifdef DEVICE_REGION
     DEVICE_FUNCTION
     Field(const Field &other) : ConfigView<NDim, T>(other), mFourierView(*this) {}
+
+    DEVICE_FUNCTION
+    ~Field() {}
 #endif
 
     //    Field() : ConfigView<NDim, T>("do not use", nullptr, LatticeParameters<T>()), mFourierView(*this) {}

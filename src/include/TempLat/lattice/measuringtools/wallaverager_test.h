@@ -33,7 +33,7 @@ inline void TempLat::WallAveragerTester::Test(TempLat::TDDAssertion &tdd)
 
     auto getToolBox() const { return mt; }
     void confirmSpace(const LayoutStruct &newLayout, const SpaceStateType &spaceType) {}
-    std::shared_ptr<MemoryToolBox> mt;
+    device::memory::host_ptr<MemoryToolBox> mt;
     std::string toString() const { return "myTmpStruct"; }
   };
 

@@ -31,7 +31,10 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    WaveNumber(std::shared_ptr<MemoryToolBox<NDim>> toolBox) : mLayout(toolBox->mLayouts.getFourierSpaceLayout()) {}
+    WaveNumber(device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
+        : mLayout(toolBox->mLayouts.getFourierSpaceLayout())
+    {
+    }
 
     DEVICE_FUNCTION
     WaveNumber(const WaveNumber &other) : mLayout(other.mLayout) {}

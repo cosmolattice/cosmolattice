@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
 #include "TempLat/parallel/device.h"
+#include "TempLat/parallel/kokkos/kokkos.h"
 
 #ifdef DEVICE_KOKKOS
 
@@ -15,6 +16,24 @@
 
 #else
 
+static_assert(false, "No device memory backend selected.");
+
+#endif
+
+#ifndef DEVICE_FUNCTION
+static_assert(false, "No DEVICE_FUNCTION defined.");
+#endif
+#ifndef DEVICE_FORCEINLINE_FUNCTION
+static_assert(false, "No DEVICE_FORCEINLINE_FUNCTION defined.");
+#endif
+#ifndef DEVICE_INLINE_FUNCTION
+static_assert(false, "No DEVICE_INLINE_FUNCTION defined.");
+#endif
+#ifndef DEVICE_LAMBDA
+static_assert(false, "No DEVICE_LAMBDA defined.");
+#endif
+#ifndef DEVICE_CLASS_LAMBDA
+static_assert(false, "No DEVICE_CLASS_LAMBDA defined.");
 #endif
 
 namespace TempLat
@@ -34,6 +53,112 @@ namespace TempLat
       using export_device_namespace::memory::copyHostToDevice;
       using export_device_namespace::memory::getAtOnePoint;
       using export_device_namespace::memory::setAtOnePoint;
+
+      template <typename T> class host_ptr
+      {
+      public:
+        // delete the default constructor
+        DEVICE_FUNCTION
+        host_ptr()
+        {
+#ifndef DEVICE_REGION
+          mPtr = nullptr;
+          mRefCount = nullptr;
+#endif
+        }
+
+        template <typename... ARGS>
+          requires requires(ARGS... args) { T(args...); }
+        DEVICE_FUNCTION host_ptr(const ARGS &...args)
+        {
+#ifndef DEVICE_REGION
+          mPtr = new T(args...);
+          mRefCount = new size_t(1);
+#endif
+        }
+
+        DEVICE_FUNCTION host_ptr(T *ptr)
+        {
+#ifndef DEVICE_REGION
+          if (ptr == nullptr) {
+            mPtr = nullptr;
+            mRefCount = nullptr;
+          } else {
+            mPtr = ptr;
+            mRefCount = new size_t(1);
+          }
+#endif
+        }
+
+        DEVICE_FUNCTION
+        host_ptr<T> &operator=(T *ptr)
+        {
+#ifndef DEVICE_REGION
+          if (mRefCount != nullptr) {
+            --(*mRefCount);
+            update_ref_count();
+          }
+          if (ptr == nullptr) {
+            mPtr = nullptr;
+            mRefCount = nullptr;
+          } else {
+            mPtr = ptr;
+            mRefCount = new size_t(1);
+          }
+#endif
+          return *this;
+        }
+
+        DEVICE_FUNCTION
+        host_ptr(const host_ptr &other)
+        {
+#ifndef DEVICE_REGION
+          mPtr = other.mPtr;
+          mRefCount = other.mRefCount;
+          if (mRefCount != nullptr) ++(*mRefCount);
+#endif
+        }
+
+        DEVICE_FUNCTION
+        ~host_ptr()
+        {
+#ifndef DEVICE_REGION
+          if (mRefCount == nullptr) return;
+          --(*mRefCount);
+          update_ref_count();
+#endif
+        }
+
+        DEVICE_FUNCTION
+        T *operator->() const { return this->get(); }
+        DEVICE_FUNCTION
+        T &operator*() const { return *(this->get()); }
+        DEVICE_FUNCTION
+        T *get() const { return mPtr; }
+
+        DEVICE_FUNCTION
+        bool operator==(const host_ptr &other) const { return mPtr == other.mPtr; }
+
+        size_t use_count() const
+        {
+#ifndef DEVICE_REGION
+          if (mRefCount != nullptr) return *mRefCount;
+#endif
+          return 0;
+        }
+
+      private:
+        T *mPtr = nullptr;
+        size_t *mRefCount = nullptr;
+
+        void update_ref_count()
+        {
+          if (mRefCount != nullptr && *mRefCount == 0) {
+            delete mPtr;
+            delete mRefCount;
+          }
+        }
+      };
     } // namespace memory
   } // namespace device
 } // namespace TempLat

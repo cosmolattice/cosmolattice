@@ -25,7 +25,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    SpatialCoordinate(std::shared_ptr<MemoryToolBox<NDim>> toolBox)
+    SpatialCoordinate(device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
         : mToolBox(toolBox), mLayout(toolBox->mLayouts.getConfigSpaceLayout())
     {
     }
@@ -66,7 +66,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
 
   public:

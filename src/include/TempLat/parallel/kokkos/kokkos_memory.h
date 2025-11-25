@@ -13,6 +13,7 @@
 
 #include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/parallel/kokkos/kokkos_internal.h"
+
 #include <sstream>
 
 namespace TempLat

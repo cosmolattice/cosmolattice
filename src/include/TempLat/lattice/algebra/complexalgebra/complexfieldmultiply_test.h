@@ -10,11 +10,15 @@
 inline void TempLat::ComplexFieldMultiplyTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct MyStruct {
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<0> t) const { return 1; }
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<1> t) const { return 2; }
   };
   struct MyStruct2 {
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<0> t) const { return 3; }
+    DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<1> t) const { return 4; }
   };
 

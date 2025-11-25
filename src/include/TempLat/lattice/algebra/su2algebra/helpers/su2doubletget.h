@@ -9,7 +9,6 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {

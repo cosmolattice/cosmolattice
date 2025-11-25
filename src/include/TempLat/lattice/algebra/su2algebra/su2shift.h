@@ -95,19 +95,19 @@ namespace TempLat
       return GetValue::get(shift<N>(mR.SU2Get(t)), idx...);
     }
 
-    template <int Q> auto operator()(Tag<Q> t) const { return SU2Get(t); }
+    template <int Q> DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<Q> t) const { return SU2Get(t); }
 
     template <typename... IDX>
       requires(RightIndices<0, IDX...>::value && RightIndices<1, IDX...>::value && RightIndices<2, IDX...>::value &&
                RightIndices<3, IDX...>::value)
-    device::array<SV, 4> SU2Get(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
     {
       return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
     }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(shift<N>(mR.SU2Get(1_c)), idx...);
       DoEval::eval(shift<N>(mR.SU2Get(2_c)), idx...);

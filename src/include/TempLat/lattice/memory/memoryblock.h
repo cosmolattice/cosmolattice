@@ -21,7 +21,7 @@ namespace TempLat
 
   /** \brief A class which holds a block of memory.
    * Feel free to pass it around and copy: the pointer
-   * is itself kept inside a shared_ptr. Only when the
+   * is itself kept inside a shared pointer. Only when the
    * last owner is destructed, the memory is freed.
    *
    * Templated for double / float.

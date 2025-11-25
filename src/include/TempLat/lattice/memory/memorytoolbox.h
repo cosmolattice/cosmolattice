@@ -22,6 +22,8 @@
 #include "TempLat/lattice/memory/verbositylevels.h"
 #include "TempLat/util/makeuniformarray.h"
 
+#include "TempLat/parallel/device_memory.h"
+
 #include <cstddef>
 #include <sstream>
 #include <stdexcept>
@@ -29,6 +31,8 @@
 
 namespace TempLat
 {
+  MakeException(InconsistentDomainSplitting);
+  MakeException(InconsistentDimensions);
 
   /** \brief A class which collects all the tool classes which deal with memory(-state) manipulation.
    * Make one toolbox using the makeShared method, and instantiate as many memory managers as you want, with identical
@@ -36,10 +40,6 @@ namespace TempLat
    *
    * Unit test: make test-memorytoolbox
    **/
-
-  MakeException(InconsistentDomainSplitting);
-  MakeException(InconsistentDimensions);
-
   template <size_t _NDim> class MemoryToolBox
   {
   public:
@@ -53,10 +53,10 @@ namespace TempLat
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and MPI_COMM_WORLD. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(ptrdiff_t nGridPoints, ptrdiff_t ghostDepth,
-                                                                  bool forbidTransposition = false)
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>> makeShared(ptrdiff_t nGridPoints, ptrdiff_t ghostDepth,
+                                                                           bool forbidTransposition = false)
     {
-      return std::make_shared<MemoryToolBox<NDim>>(nGridPoints, ghostDepth, forbidTransposition);
+      return device::memory::host_ptr<MemoryToolBox<NDim>>(nGridPoints, ghostDepth, forbidTransposition);
     }
 
     /** \brief Constructor with default MPI layout and MPI_COMM_WORLD. */
@@ -65,10 +65,10 @@ namespace TempLat
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and MPI_COMM_WORLD. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>>
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>>
     makeShared(std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, bool forbidTransposition = false)
     {
-      return std::make_shared<MemoryToolBox<NDim>>(nGrid, ghostDepth, forbidTransposition);
+      return device::memory::host_ptr<MemoryToolBox<NDim>>(nGrid, ghostDepth, forbidTransposition);
     }
 
     /** \brief Constructor with default MPI layout and MPI_COMM_WORLD but custom number of threads. */
@@ -78,10 +78,10 @@ namespace TempLat
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and MPI_COMM_WORLD. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(ptrdiff_t nGridPoints, ptrdiff_t ghostDepth,
-                                                                  ptrdiff_t nThreads, bool forbidTransposition = false)
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>>
+    makeShared(ptrdiff_t nGridPoints, ptrdiff_t ghostDepth, ptrdiff_t nThreads, bool forbidTransposition = false)
     {
-      return std::make_shared<MemoryToolBox<NDim>>(nGridPoints, ghostDepth, nThreads, forbidTransposition);
+      return device::memory::host_ptr<MemoryToolBox<NDim>>(nGridPoints, ghostDepth, nThreads, forbidTransposition);
     }
 
     /** \brief Constructor with default MPI layout and MPI_COMM_WORLD but custom number of threads. */
@@ -90,11 +90,11 @@ namespace TempLat
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and MPI_COMM_WORLD. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(std::array<ptrdiff_t, NDim> nGrid,
-                                                                  ptrdiff_t ghostDepth, ptrdiff_t nThreads,
-                                                                  bool forbidTransposition = false)
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>> makeShared(std::array<ptrdiff_t, NDim> nGrid,
+                                                                           ptrdiff_t ghostDepth, ptrdiff_t nThreads,
+                                                                           bool forbidTransposition = false)
     {
-      return std::make_shared<MemoryToolBox<NDim>>(nGrid, ghostDepth, nThreads, forbidTransposition);
+      return device::memory::host_ptr<MemoryToolBox<NDim>>(nGrid, ghostDepth, nThreads, forbidTransposition);
     }
 
     /** \brief Constructor with default MPI layout and but custom MPI_Comm. */
@@ -103,10 +103,10 @@ namespace TempLat
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and but custom MPI_Comm. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>>
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>>
     makeShared(MPICommReference comm, ptrdiff_t nGridPoints, ptrdiff_t ghostDepth, bool forbidTransposition = false)
     {
-      return std::make_shared<MemoryToolBox<NDim>>(comm, nGridPoints, ghostDepth, forbidTransposition);
+      return device::memory::host_ptr<MemoryToolBox<NDim>>(comm, nGridPoints, ghostDepth, forbidTransposition);
     }
 
     /** \brief Constructor with default MPI layout and but custom MPI_Comm. */
@@ -116,12 +116,12 @@ namespace TempLat
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and but custom MPI_Comm. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(MPICommReference comm,
-                                                                  std::array<ptrdiff_t, NDim> nGrid,
-                                                                  ptrdiff_t ghostDepth,
-                                                                  bool forbidTransposition = false)
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>> makeShared(MPICommReference comm,
+                                                                           std::array<ptrdiff_t, NDim> nGrid,
+                                                                           ptrdiff_t ghostDepth,
+                                                                           bool forbidTransposition = false)
     {
-      return std::make_shared<MemoryToolBox<NDim>>(comm, nGrid, ghostDepth, forbidTransposition);
+      return device::memory::host_ptr<MemoryToolBox<NDim>>(comm, nGrid, ghostDepth, forbidTransposition);
     }
 
     /** \brief Constructor with user chosen MPI layout. */
@@ -131,10 +131,10 @@ namespace TempLat
     {
     }
     /** \brief Shared-pointer constructor with user chosen MPI layout. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>>
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>>
     makeShared(MPICartesianGroup group, ptrdiff_t nGridPoints, ptrdiff_t ghostDepth, bool forbidTransposition = false)
     {
-      return std::make_shared<MemoryToolBox<NDim>>(group, nGridPoints, ghostDepth, 1, forbidTransposition);
+      return device::memory::host_ptr<MemoryToolBox<NDim>>(group, nGridPoints, ghostDepth, 1, forbidTransposition);
     }
 
     /** \brief Constructor with user chosen MPI layout. */
@@ -144,12 +144,12 @@ namespace TempLat
     {
     }
     /** \brief Shared-pointer constructor with user chosen MPI layout. */
-    static inline std::shared_ptr<MemoryToolBox<NDim>> makeShared(MPICartesianGroup group,
-                                                                  std::array<ptrdiff_t, NDim> nGrid,
-                                                                  ptrdiff_t ghostDepth,
-                                                                  bool forbidTransposition = false)
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>> makeShared(MPICartesianGroup group,
+                                                                           std::array<ptrdiff_t, NDim> nGrid,
+                                                                           ptrdiff_t ghostDepth,
+                                                                           bool forbidTransposition = false)
     {
-      return std::make_shared<MemoryToolBox<NDim>>(group, nGrid, ghostDepth, 1, forbidTransposition);
+      return device::memory::host_ptr<MemoryToolBox<NDim>>(group, nGrid, ghostDepth, 1, forbidTransposition);
     }
 
     /** \brief Constructor with user chosen MPI layout and number of threads. */

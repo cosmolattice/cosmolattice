@@ -48,7 +48,7 @@ namespace TempLat
           "HighFive/HDF5 interface. If you don't, then just disable the options/functions which requires I/O");
     }
 
-    void open(std::string fn, std::shared_ptr<MemoryToolBox<NDim>> toolBox)
+    void open(std::string fn, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
     {
       throw PureMPILoaderNotImplemented(
           "The pure MPI IO interface is yet to be implemented. If you require I/O for your lattice, please use the "

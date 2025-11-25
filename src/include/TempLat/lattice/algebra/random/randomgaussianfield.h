@@ -48,7 +48,7 @@ namespace TempLat
 
   public:
     // Put public methods here. These should change very little over time.
-    RandomGaussianFieldHelper(std::string baseSeed, std::shared_ptr<MemoryToolBox<NDim>> pToolBox)
+    RandomGaussianFieldHelper(std::string baseSeed, device::memory::host_ptr<MemoryToolBox<NDim>> pToolBox)
         : DimensionCountRecorder<NDim>(SpaceStateType::undefined), mBaseSeed(baseSeed), prng(baseSeed),
           mToolBox(pToolBox), mLayout(mToolBox->mLayouts.getFourierSpaceLayout()), generation(0),
           mGlobalSizes(mLayout.getGlobalSizes())
@@ -131,7 +131,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::string mBaseSeed;
     mutable RandomGaussian prng;
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
     RNGInteger generation;
     device::array<ptrdiff_t, NDim> mGlobalSizes;

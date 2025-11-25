@@ -24,8 +24,8 @@ namespace TempLat
   template <size_t NDim> class FilesManager
   {
   public:
-    FilesManager(std::string fn, std::shared_ptr<MemoryToolBox<NDim>> toolbox, bool pUseHDF5, bool pUseHDF5Spectra,
-                 bool pPrintHeaders, std::string pTag = "")
+    FilesManager(std::string fn, device::memory::host_ptr<MemoryToolBox<NDim>> toolbox, bool pUseHDF5,
+                 bool pUseHDF5Spectra, bool pPrintHeaders, std::string pTag = "")
         : mToolbox(toolbox), mUseHDF5Spectra(pUseHDF5Spectra), mPrintHeaders(pPrintHeaders), workingDir(fn), tag(pTag)
     {
     }
@@ -45,7 +45,7 @@ namespace TempLat
     std::string getTag() const { return tag; }
 
   private:
-    std::shared_ptr<MemoryToolBox<NDim>> mToolbox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolbox;
     bool mUseHDF5Spectra;
     bool mPrintHeaders;
     std::string workingDir;

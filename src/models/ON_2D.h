@@ -71,7 +71,8 @@ namespace TempLat
 
     Field<NDim, typename Model<MODELNAME>::FloatType> DriveProfile;
 
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar, std::shared_ptr<MemoryToolBox<NDim>> toolBox)
+    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
+              device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
                            STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.

@@ -14,7 +14,6 @@
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/lattice/algebra/operators/multiply.h"
 #include "TempLat/lattice/algebra/operators/subtract.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {

@@ -12,12 +12,28 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Complex.hpp>
 
-#ifdef KOKKOS_ENABLE_CUDA
+#ifdef KOKKOS_ENABLE_CUDA // CUDA GPU
+
 #include <cuda/std/array>
 #include <cuda/std/tuple>
-#else
+
+#if defined(__NVCC__) && defined(__CUDACC__) && defined(__CUDA_ARCH__)
+#define DEVICE_REGION
+#endif
+
+#if defined(__clang__) && defined(__CUDA__) && !defined(__CUDA_ARCH__)
+#undef DEVICE_REGION
+#endif
+
+#if defined(__clang__) && defined(__CUDA__) && defined(__CUDA_ARCH__)
+#define DEVICE_REGION
+#endif
+
+#else // NO GPU
+
 #include <array>
 #include <tuple>
+
 #endif
 
 #define DEVICE_FUNCTION KOKKOS_FUNCTION

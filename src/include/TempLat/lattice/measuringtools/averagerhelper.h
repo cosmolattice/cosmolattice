@@ -48,7 +48,8 @@ namespace TempLat
     }
 
     template <size_t NDim>
-    static vType normalize(std::shared_ptr<MemoryToolBox<NDim>> toolBox, SpaceStateType pSpaceType, const vType &value)
+    static vType normalize(device::memory::host_ptr<MemoryToolBox<NDim>> toolBox, SpaceStateType pSpaceType,
+                           const vType &value)
     {
 
       const auto &layout = pSpaceType == SpaceStateType::Fourier ? toolBox->mLayouts.getFourierSpaceLayout()

@@ -70,7 +70,6 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   // ------------------------------------------------------------------------------------------
 
   {
-
     Field<NDim, T> phi("phi", toolBox);
     Field<NDim, T> chi("chi", toolBox);
     WaveNumber k(toolBox);

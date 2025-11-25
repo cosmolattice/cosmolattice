@@ -11,6 +11,7 @@
 #include "TempLat/lattice/memory/memoryblock.h"
 #include "TempLat/lattice/memory/memorylayoutstate.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
+#include "TempLat/parallel/device_memory.h"
 #include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
@@ -28,7 +29,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    MemoryManager(std::shared_ptr<MemoryToolBox<NDim>> toolBox, std::string name = "")
+    MemoryManager(device::memory::host_ptr<MemoryToolBox<NDim>> toolBox, std::string name = "")
         : mToolBox(toolBox), mName(name), mAllocated(false)
     {
     }
@@ -254,7 +255,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::shared_ptr<MemoryToolBox<NDim>> mToolBox;
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     std::string mName;
     bool mAllocated;
     MemoryBlock<NDim, T> mBlock;
