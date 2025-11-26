@@ -91,6 +91,21 @@ namespace TempLat
         }
 
         DEVICE_FUNCTION
+        host_ptr<T> &operator=(const host_ptr<T> &other)
+        {
+#ifndef DEVICE_REGION
+          if (this->mRefCount != nullptr) {
+            --(*this->mRefCount);
+            update_ref_count();
+          }
+          this->mPtr = other.mPtr;
+          this->mRefCount = other.mRefCount;
+          if (this->mRefCount != nullptr) ++(*this->mRefCount);
+#endif
+          return *this;
+        }
+
+        DEVICE_FUNCTION
         host_ptr<T> &operator=(T *ptr)
         {
 #ifndef DEVICE_REGION

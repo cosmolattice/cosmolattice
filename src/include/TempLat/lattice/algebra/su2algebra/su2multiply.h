@@ -130,34 +130,6 @@ namespace TempLat
   {
     return SU2Multiplication<R, T>(r, t);
   }
-
-  template <typename T>
-    requires HasSU2Get<T>
-  auto operator*(OneType r, const T &t)
-  {
-    return t;
-  }
-
-  template <typename R>
-    requires HasSU2Get<R>
-  auto operator*(const R &r, OneType t)
-  {
-    return r;
-  }
-
-  template <typename T>
-    requires HasSU2Get<T>
-  auto operator*(ZeroType r, const T &t)
-  {
-    return r;
-  }
-
-  template <typename R>
-    requires(HasSU2Get<R>)
-  auto operator*(const R &r, ZeroType t)
-  {
-    return t;
-  }
 } // namespace TempLat
 
 #endif

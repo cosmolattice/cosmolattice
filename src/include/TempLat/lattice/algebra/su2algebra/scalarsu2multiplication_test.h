@@ -14,7 +14,7 @@
 template <size_t NDim, typename T>
 inline void TempLat::ComplexFieldSU2MultiplyTester<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-  auto toolBox = std::make_shared<MemoryToolBox<NDim>>(16, 1);
+  auto toolBox = MemoryToolBox<NDim>::makeShared(16, 1);
   Field<NDim, T> field("testField", toolBox);
   SU2Field<NDim, T> su2("testSU2", toolBox);
   SU2Field<NDim, T> result("testResultSU2", toolBox);

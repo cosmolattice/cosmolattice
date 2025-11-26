@@ -10,7 +10,7 @@
 inline void TempLat::SU2DoubletTester::Test(TempLat::TDDAssertion &tdd)
 {
   // Test the SU2Doublet class
-  auto toolBox = std::make_shared<MemoryToolBox<3>>(16, 1);
+  auto toolBox = MemoryToolBox<3>::makeShared(16, 1);
   SU2Doublet<3, float> doublet("testDoublet", toolBox);
   SU2Doublet<3, float> doublet2("testDoublet2", toolBox);
 

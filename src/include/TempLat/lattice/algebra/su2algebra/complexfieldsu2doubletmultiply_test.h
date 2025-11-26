@@ -14,7 +14,7 @@
 inline void TempLat::ComplexFieldSU2DoubletMultiplyTester::Test(TempLat::TDDAssertion &tdd)
 {
   // Test the SU2Doublet class
-  auto toolBox = std::make_shared<MemoryToolBox<3>>(16, 1);
+  auto toolBox = MemoryToolBox<3>::makeShared(16, 1);
   ComplexField<3, float> cfield("testCField", toolBox);
   SU2Doublet<3, float> doublet2("testDoublet2", toolBox);
   SU2Doublet<3, float> doublet3("testDoublet3", toolBox);

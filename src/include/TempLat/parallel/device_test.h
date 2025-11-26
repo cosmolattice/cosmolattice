@@ -15,25 +15,55 @@ template <typename _TDDAssertion> inline void TempLat::DeviceTester::Test(_TDDAs
   // Test device::memory::host_ptr base functionality
   {
     int value = 42;
+    // Original pointer
     device::memory::host_ptr<int> devPtr(value);
     tdd.verify(*devPtr == value);
+
+    // Copy constructor
     device::memory::host_ptr<int> devPtr2 = devPtr;
     tdd.verify(*devPtr2 == value);
     tdd.verify(devPtr.get() == devPtr2.get());
     tdd.verify(devPtr.use_count() == 2);
     tdd.verify(devPtr2.use_count() == 2);
-    std::cout << "NNN" << std::endl;
+
+    // Copy assignment
+    device::memory::host_ptr<int> devPtr3;
+    devPtr3 = devPtr2;
+    tdd.verify(*devPtr3 == value);
+    tdd.verify(devPtr3.get() == devPtr.get());
+    tdd.verify(devPtr.use_count() == 3);
+    tdd.verify(devPtr2.use_count() == 3);
+    tdd.verify(devPtr3.use_count() == 3);
+
+    // Reset pointers
     devPtr2 = nullptr;
-    std::cout << "NNN" << std::endl;
-    tdd.verify(devPtr.use_count() == 1);
+    tdd.verify(devPtr.use_count() == 2);
     tdd.verify(devPtr2.use_count() == 0);
+    tdd.verify(devPtr3.use_count() == 2);
     tdd.verify(devPtr.get() != nullptr);
     tdd.verify(devPtr2.get() == nullptr);
+    tdd.verify(devPtr3.get() != nullptr);
     tdd.verify(*devPtr == value);
+    tdd.verify(*devPtr3 == value);
 
+    // Reset original pointer
     devPtr = nullptr;
     tdd.verify(devPtr.use_count() == 0);
+    tdd.verify(devPtr2.use_count() == 0);
+    tdd.verify(devPtr3.use_count() == 1);
     tdd.verify(devPtr.get() == nullptr);
+    tdd.verify(devPtr2.get() == nullptr);
+    tdd.verify(devPtr3.get() != nullptr);
+    tdd.verify(*devPtr3 == value);
+
+    // Reset last pointer
+    devPtr3 = nullptr;
+    tdd.verify(devPtr.use_count() == 0);
+    tdd.verify(devPtr2.use_count() == 0);
+    tdd.verify(devPtr3.use_count() == 0);
+    tdd.verify(devPtr.get() == nullptr);
+    tdd.verify(devPtr2.get() == nullptr);
+    tdd.verify(devPtr3.get() == nullptr);
   }
 
   // Test that we can construct, copy and assign device::memory::host_ptr in a kernel

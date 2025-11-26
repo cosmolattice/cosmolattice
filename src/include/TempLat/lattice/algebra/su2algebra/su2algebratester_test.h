@@ -126,9 +126,9 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
   // Funny stuff: uncomment to get a segfault! Morale: use too much memory on the stack and it crashes
   // say << (A * A * A * A * A * A).SU2Get(0_c);
   // say << (A * A * A * A * A * A * A * A).SU2Get(0_c);
-  //  say << (A*A*A*A*A*A*A*A).SU2Get(0_c).get(tmp);
-  /*say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c);
-  say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c).get(tmp);*/
+  // say << (A*A*A*A*A*A*A*A).SU2Get(0_c).get(tmp);
+  // say << ((A * A * A * A) * (A * A * A * A)).SU2Get(0_c);
+  // say << ((A*A*A*A)*(A*A*A*A)).SU2Get(0_c).get(tmp);
 
   // commutator
   B = SU2Wrap(sqrt(1 - pow<2>(0.56) - pow<2>(0.1) - pow<2>(0.01)), 0.56, 0.1, 0.01);

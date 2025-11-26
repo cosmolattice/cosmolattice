@@ -11,7 +11,7 @@
 
 inline void TempLat::SU2SumTester::Test(TempLat::TDDAssertion &tdd)
 {
-  auto toolBox = std::make_shared<MemoryToolBox<3>>(16, 1);
+  auto toolBox = MemoryToolBox<3>::makeShared(16, 1);
   SU2Field<3, float> su2_1("testSU2_1", toolBox);
   SU2Field<3, float> su2_2("testSU2_2", toolBox);
   SU2Field<3, float> result("resultSU2", toolBox);
