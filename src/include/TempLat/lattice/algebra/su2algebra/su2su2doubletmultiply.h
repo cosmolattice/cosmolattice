@@ -107,7 +107,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    device::array<SV, 4> cache;
+    mutable device::array<SV, 4> cache;
   };
 
   struct SU2SU2DoubletMultiplyTester {

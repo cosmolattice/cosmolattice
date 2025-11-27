@@ -37,7 +37,7 @@ namespace TempLat
                        ZeroType());
   }
 
-  template <class Tuple> constexpr auto total(Tuple &&tup)
+  template <class Tuple> DEVICE_FUNCTION constexpr auto total(Tuple &&tup)
   {
     return binary_fold([](auto x, auto y) { return x + y; }, std::forward<Tuple>(tup), [](auto x) { return x; },
                        ZeroType());

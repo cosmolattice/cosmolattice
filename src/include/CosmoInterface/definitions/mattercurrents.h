@@ -135,11 +135,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/mattercurrents_test.h"
-#endif
 
 #endif

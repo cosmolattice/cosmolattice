@@ -44,7 +44,9 @@ namespace TempLat
 
 #ifdef DEVICE_REGION
     DEVICE_FUNCTION
-    AbstractField(const AbstractField &other) : mToolBox(nullptr), mManager(nullptr), latPar(other.latPar) {}
+    AbstractField(const AbstractField &other) : mToolBox(other.mToolBox), mManager(other.mManager), latPar(other.latPar)
+    {
+    }
 
     DEVICE_FUNCTION
     ~AbstractField() {}

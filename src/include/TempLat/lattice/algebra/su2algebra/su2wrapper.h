@@ -68,7 +68,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    device::tuple<A, B, C, D> data;
+    device::tuple<std::decay_t<A>, std::decay_t<B>, std::decay_t<C>, std::decay_t<D>> data;
   };
 
   struct SU2WrapperTester {

@@ -104,7 +104,7 @@ namespace TempLat
     template <typename R> void operator=(R &&r)
     {
       ForLoop(i, 1, size - 1, fs[i - 1].onBeforeAssignment(std::remove_reference<R>::type::Getter::get(r, i)););
-      ForLoop(j, 0, 2, PreGet::apply(fs[j]));
+      ForLoop(j, 1, size - 1, PreGet::apply(fs[j]));
 
       const auto view1 = fs[0].getView();
       const auto view2 = fs[1].getView();
@@ -119,7 +119,6 @@ namespace TempLat
 #else
         const auto &__r = r;
 #endif
-        // std::to_string(__r);
 
         device::apply(
             [&](auto &&...args) {
@@ -132,8 +131,11 @@ namespace TempLat
       };
       device::iteration::foreach ("SU2ConfigViewAssign", mLayout, functor);
 
-      ForLoop(j, 0, 2, PostGet::apply(fs[j]));
-      ForLoop(j, 0, 2, fs[j].setGhostsAreStale());
+      Kokkos::fence();
+      std::cout << "Finished SU2 assignment. " << std::endl;
+
+      ForLoop(j, 1, size - 1, PostGet::apply(fs[j - 1]));
+      ForLoop(j, 1, size - 1, fs[j - 1].setGhostsAreStale());
     }
 
     std::string toString() const { return mName; }

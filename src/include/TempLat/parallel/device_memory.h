@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
 #include "TempLat/parallel/device.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
 
 #ifdef DEVICE_KOKKOS
 
@@ -59,13 +58,7 @@ namespace TempLat
       public:
         // delete the default constructor
         DEVICE_FUNCTION
-        host_ptr()
-        {
-#ifndef DEVICE_REGION
-          mPtr = nullptr;
-          mRefCount = nullptr;
-#endif
-        }
+        host_ptr() : mPtr(nullptr), mRefCount(nullptr) {}
 
         template <typename... ARGS>
           requires requires(ARGS... args) { T(args...); }
@@ -74,6 +67,9 @@ namespace TempLat
 #ifndef DEVICE_REGION
           mPtr = new T(args...);
           mRefCount = new size_t(1);
+#else
+          mPtr = nullptr;
+          mRefCount = nullptr;
 #endif
         }
 
@@ -87,6 +83,9 @@ namespace TempLat
             mPtr = ptr;
             mRefCount = new size_t(1);
           }
+#else
+          mPtr = nullptr;
+          mRefCount = nullptr;
 #endif
         }
 
@@ -101,6 +100,9 @@ namespace TempLat
           this->mPtr = other.mPtr;
           this->mRefCount = other.mRefCount;
           if (this->mRefCount != nullptr) ++(*this->mRefCount);
+#else
+          mPtr = nullptr;
+          mRefCount = nullptr;
 #endif
           return *this;
         }
@@ -120,6 +122,9 @@ namespace TempLat
             mPtr = ptr;
             mRefCount = new size_t(1);
           }
+#else
+          mPtr = nullptr;
+          mRefCount = nullptr;
 #endif
           return *this;
         }
@@ -131,6 +136,9 @@ namespace TempLat
           mPtr = other.mPtr;
           mRefCount = other.mRefCount;
           if (mRefCount != nullptr) ++(*mRefCount);
+#else
+          mPtr = nullptr;
+          mRefCount = nullptr;
 #endif
         }
 

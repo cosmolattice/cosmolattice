@@ -13,6 +13,8 @@
 #include "TempLat/lattice/algebra/operators/add.h"
 #include "TempLat/lattice/algebra/listoperators/total.h"
 
+#include "TempLat/parallel/device.h"
+
 namespace TempLat
 {
 
@@ -45,7 +47,7 @@ namespace TempLat
         return sum_in_range_impl(std::forward<F>(func), Tag<end-1>(), Tag<end-1-begin>());
       }*/
 
-  template <int begin, int end, typename F> constexpr auto sum_in_range(F &&func)
+  template <int begin, int end, typename F> DEVICE_FORCEINLINE_FUNCTION constexpr auto sum_in_range(F &&func)
   {
     constexpr bool test = end >= begin;
     return static_if<test>(total(make_tuple_tag<begin, end>(std::forward<F>(func))), ZeroType());

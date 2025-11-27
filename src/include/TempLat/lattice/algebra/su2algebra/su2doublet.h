@@ -59,32 +59,32 @@ namespace TempLat
 
     template <typename R> void operator=(R &&r)
     {
-      constexpr_for<0, size, 1>([&](auto _i) {
-        constexpr size_t i = decltype(_i)::value;
-        fs[i].onBeforeAssignment(std::remove_reference<R>::type::Getter::get(r, _i));
-        PreGet::apply(fs[i]);
-      });
+      ForLoop(i, 0, size - 1, fs[i].onBeforeAssignment(std::decay_t<R>::Getter::get(r, i)););
+      ForLoop(j, 0, size - 1, PreGet::apply(fs[j]));
 
       const auto views = device::make_tuple(fs[0].getView(), fs[1].getView(), fs[2].getView(), fs[3].getView());
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
       {
+#if defined(__NVCC__)
+        std::decay_t<R> __r = r;
+#else
+        const auto &__r = r;
+#endif
         device::apply(
             [&](auto &&...args) {
+              DoEval::eval(__r, args...);
               constexpr_for<0, size, 1>([&](auto _i) {
                 constexpr size_t i = decltype(_i)::value;
-                device::get<i>(views)(args...) = r.SU2DoubletGet(_i, args...);
+                device::get<i>(views)(args...) = __r.SU2DoubletGet(_i, args...);
               });
             },
             idx);
       };
       device::iteration::foreach ("SU2DoubleConfigViewAssign", mLayout, functor);
 
-      constexpr_for<0, size, 1>([&](auto _i) {
-        constexpr size_t i = decltype(_i)::value;
-        PreGet::apply(fs[i]);
-        fs[i].setGhostsAreStale();
-      });
+      ForLoop(j, 0, size - 1, PostGet::apply(fs[j]));
+      ForLoop(j, 0, size - 1, fs[j].setGhostsAreStale());
     }
 
     template <typename R> void operator+=(R &&r) { (*this) = (*this) + r; }
