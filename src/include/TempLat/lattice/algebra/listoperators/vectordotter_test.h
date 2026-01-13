@@ -10,7 +10,6 @@
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/algebra/listoperators/vectordotter.h"
 #include "TempLat/lattice/algebra/coordinates/spatialcoordinate.h"
-#include <cstddef>
 
 inline void TempLat::VectorDotterTester::Test(TempLat::TDDAssertion &tdd)
 {

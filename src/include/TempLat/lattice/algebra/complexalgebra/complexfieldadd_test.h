@@ -17,7 +17,7 @@ inline void TempLat::ComplexFieldAddTester::Test(TempLat::TDDAssertion &tdd)
     DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<1> t) const { return 2; }
 
-    using Getter = ComplexFieldGetter;
+    using Getter [[maybe_unused]] = ComplexFieldGetter;
   };
   struct MyStruct2 {
     DEVICE_FORCEINLINE_FUNCTION
@@ -25,7 +25,7 @@ inline void TempLat::ComplexFieldAddTester::Test(TempLat::TDDAssertion &tdd)
     DEVICE_FORCEINLINE_FUNCTION
     int ComplexFieldGet(Tag<1> t) const { return 4; }
 
-    using Getter = ComplexFieldGetter;
+    using Getter [[maybe_unused]] = ComplexFieldGetter;
   };
 
   auto test = MyStruct() + MyStruct2();

@@ -1,14 +1,14 @@
 #ifndef COSMOINTERFACE_COMPLEXFIELDALGEBRA_HELPERS_REAL_TEST_H
 #define COSMOINTERFACE_COMPLEXFIELDALGEBRA_HELPERS_REAL_TEST_H
-#include <Kokkos_Macros.hpp>
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
 #include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
+#include "TempLat/util/ndloop.h"
 
 inline void TempLat::RealTester::Test(TempLat::TDDAssertion &tdd)
 {
@@ -30,9 +30,48 @@ inline void TempLat::RealTester::Test(TempLat::TDDAssertion &tdd)
   toolBox->setVerbose();
 
   ComplexField<NDim, T> fa("a", toolBox);
-  ComplexField<NDim, T> fb("b", toolBox);
+  Field<NDim, T> fb("b", toolBox);
+  Field<NDim, T> fc("c", toolBox);
 
-  fb = ComplexFieldWrapper(Real(fa), ZeroType());
+  fa = Complexify(3.0, 4.0);
+  fb = Real(fa);
+
+  // fa
+  {
+    auto viewRe = fa.ComplexFieldGet(0_c).getLocalNDHostView();
+    auto viewIm = fa.ComplexFieldGet(1_c).getLocalNDHostView();
+    bool all_correct = true;
+    NDLoop<NDim>(viewRe, [&](const auto... idx) {
+      bool this_correct = true;
+      this_correct &= AlmostEqual(viewRe(idx...), 3.0);
+      this_correct &= AlmostEqual(viewIm(idx...), 4.0);
+      if (!this_correct) {
+        std::cout << "ComplexField operation test failed at index (";
+        ((std::cout << idx << ", "), ...);
+        std::cout << ") got (" << viewRe(idx...) << ", " << viewIm(idx...) << "), expected (" << 3.0 << ", " << 4.0
+                  << ")\n";
+      }
+      all_correct = all_correct && this_correct;
+    });
+    tdd.verify(all_correct);
+  }
+
+  // fb
+  {
+    auto view = fb.getLocalNDHostView();
+    bool all_correct = true;
+    NDLoop<NDim>(view, [&](const auto... idx) {
+      bool this_correct = true;
+      this_correct &= AlmostEqual(view(idx...), 3.0);
+      if (!this_correct) {
+        std::cout << "real test failed at index (";
+        ((std::cout << idx << ", "), ...);
+        std::cout << ") got " << view(idx...) << ", expected (" << 3.0 << ")\n";
+      }
+      all_correct = all_correct && this_correct;
+    });
+    tdd.verify(all_correct);
+  }
 }
 
 #endif
