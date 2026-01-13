@@ -11,6 +11,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/power.h"
+#include "TempLat/lattice/algebra/operators/squareroot.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/lattice/algebra/helpers/getvectorvalue.h"
@@ -89,12 +90,12 @@ namespace TempLat
 
   template <typename R>
     requires HasVectorGetMethod<R>
-  auto norm2(R r)
+  auto norm2(const R &r)
   {
     return VectorDotter<R, R>(r, r);
   }
 
-  template <typename R> auto norm(R r) { return sqrt(norm2(r)); }
+  template <typename R> auto norm(const R &r) { return sqrt(norm2(r)); }
 
   class VectorDotterTester
   {

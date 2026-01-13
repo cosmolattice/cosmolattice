@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -39,25 +39,55 @@ namespace TempLat
 
     std::array<T, N> &asArr() { return mVec; }
 
-    /*  operator std::array<T,N>()
-      {
-          return mVec;
-      }*/
+    template <int M> T getComp(Tag<M> t) const noexcept
+    {
+      static_assert(M >= 0 && M < N, "Index out of bounds in TempLatArray::getComp");
+      return mVec[M];
+    }
 
-    template <int M> T getComp(Tag<M> t) const noexcept { return mVec[M]; }
+    T operator[](ptrdiff_t i) const
+    {
+      // Index checking here makes sense:
+      // - access happens very few times (accessing fields, not lattice sites)
+      // - user errors are very likely here, so it's nice to tell them when they do something wrong
+      if (i < 0 || i >= ptrdiff_t(N)) {
+        throw std::out_of_range("Index out of bounds in TempLatArray::operator[], bounds are [0," + std::to_string(N) +
+                                "), got " + std::to_string(i));
+      }
+      return mVec[i];
+    }
 
-    T operator[](ptrdiff_t i) const { return mVec[i]; }
+    T operator()(ptrdiff_t i) const
+    {
+      // see above
+      if (i < shift || i >= ptrdiff_t(N) + shift) {
+        throw std::out_of_range("Index out of bounds in TempLatArray::operator[], bounds are [0," + std::to_string(N) +
+                                "), got " + std::to_string(i));
+      }
+      return mVec[i - shift];
+    }
 
-    T operator()(ptrdiff_t i) const { return mVec[i - shift]; }
+    T &operator[](ptrdiff_t i)
+    {
+      // see above
+      if (i < 0 || i >= ptrdiff_t(N)) {
+        throw std::out_of_range("Index out of bounds in TempLatArray::operator[], bounds are [0," + std::to_string(N) +
+                                "), got " + std::to_string(i));
+      }
+      return mVec[i];
+    }
 
-    T &operator[](ptrdiff_t i) { return mVec[i]; }
+    T &operator()(ptrdiff_t i)
+    {
+      // see above
+      if (i < shift || i >= ptrdiff_t(N) + shift) {
+        throw std::out_of_range("Index out of bounds in TempLatArray::operator[], bounds are [0," + std::to_string(N) +
+                                "), got " + std::to_string(i));
+      }
+      return mVec[i - shift];
+    }
 
-    T &operator()(ptrdiff_t i) { return mVec[i - shift]; }
-
-    // size_t size() const
-    //{
-    //     return mVec.size();
-    // }
+    // static constexpr size_t size() { return N; }
 
     using Getter = GetComponent;
     static constexpr size_t size = N;

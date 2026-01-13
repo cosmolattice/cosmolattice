@@ -93,14 +93,14 @@ namespace TempLat
     requires(HasComplexFieldGet<R> && IsScalarType<T>)
   DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
-    return ScalarComplexFieldMultiply<T, R>{t, r};
+    return ScalarComplexFieldMultiply<T, R>(t, r);
   }
 
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && IsScalarType<T>)
   DEVICE_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
   {
-    return ScalarComplexFieldMultiply<T, R>{1_c / t, r};
+    return ScalarComplexFieldMultiply(1_c / t, r);
   }
 } // namespace TempLat
 

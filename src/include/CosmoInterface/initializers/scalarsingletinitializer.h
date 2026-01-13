@@ -26,18 +26,19 @@ namespace TempLat
     template <class Model, typename T>
     static void initializeScalars(Model &model, const FluctuationsGenerator<T> &fg, T kCutOff)
     {
+      if constexpr (Model::Ns > 0) {
+        // We set fluctuations to the scalar singlets:
+        ForLoop(i, 0, Model::Ns - 1,
+                fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI,
+                                                 kCutOff););
 
-      // We set fluctuations to the scalar singlets:
-      ForLoop(i, 0, Model::Ns - 1,
-              fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI,
-                                               kCutOff););
-
-      // We set the initial homogeneous components of the fields and derivatives.
-      // model.fldCS0(i) and model.piCS0(i) are introduced in physical
-      // (dimensionful variables), so we transform them to program variables
-      // by dividing them by f_* and f_* omega_* respectively.
-      model.fldS += model.fldS0 / model.fStar;
-      model.piS += model.piS0 / model.fStar / model.omegaStar;
+        // We set the initial homogeneous components of the fields and derivatives.
+        // model.fldCS0(i) and model.piCS0(i) are introduced in physical
+        // (dimensionful variables), so we transform them to program variables
+        // by dividing them by f_* and f_* omega_* respectively.
+        model.fldS += model.fldS0 / model.fStar;
+        model.piS += model.piS0 / model.fStar / model.omegaStar;
+      }
     }
 
   private:

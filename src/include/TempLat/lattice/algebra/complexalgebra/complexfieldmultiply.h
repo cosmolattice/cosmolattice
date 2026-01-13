@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/parallel/device_memory.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "real.h"
 #include "imag.h"
@@ -104,29 +105,8 @@ namespace TempLat
   }
 
   template <typename R>
-    requires(HasComplexFieldGet<R> && !std::is_same_v<R, OneType>)
-  DEVICE_FORCEINLINE_FUNCTION auto operator*(OneType, const R &r)
-  {
-    return r;
-  }
-
-  template <typename R>
-    requires(HasComplexFieldGet<R> && !std::is_same_v<R, ZeroType>)
-  auto operator*(const R &r, ZeroType)
-  {
-    return ZeroType();
-  }
-
-  template <typename R>
-    requires(HasComplexFieldGet<R> && !std::is_same_v<R, ZeroType>)
-  DEVICE_FORCEINLINE_FUNCTION auto operator*(ZeroType, const R &r)
-  {
-    return ZeroType();
-  }
-
-  template <typename R>
     requires HasComplexFieldGet<R>
-  DEVICE_FORCEINLINE_FUNCTION auto norm2(R &&r)
+  auto norm2(R &&r)
   {
     return pow<2>(r.ComplexFieldGet(0_c)) + pow<2>(r.ComplexFieldGet(1_c));
   }

@@ -16,12 +16,10 @@
 
 namespace TempLat
 {
-
   /** \brief A class which contains standard measurements for the complex scalars.
    *
    *
    **/
-
   template <typename T> class ComplexScalarMeasurer
   {
   public:

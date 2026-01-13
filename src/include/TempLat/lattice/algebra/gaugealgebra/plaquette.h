@@ -18,7 +18,6 @@ namespace TempLat
    *
    * Unit test: make test-plaquette
    **/
-
   struct PlaquetteTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

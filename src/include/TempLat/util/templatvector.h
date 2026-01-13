@@ -33,7 +33,7 @@ namespace TempLat
 
     template <typename... Args>
     TempLatVector(Args... args)
-        : mVec({args...}){
+        : mVec({static_cast<T>(args)...}){
 
           };
     TempLatVector(std::initializer_list<T> l)

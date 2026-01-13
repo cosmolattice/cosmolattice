@@ -17,7 +17,6 @@ namespace TempLat
    *
    *
    **/
-
   class ComplexScalarKernels
   {
   public:
@@ -26,7 +25,6 @@ namespace TempLat
 
     template <class Model, int N> static auto get(Model &model, Tag<N> n)
     {
-
       // Returns kernel for complex scalars (formed by the covariant laplacian and potential derivative terms):
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianCS(model, n) -
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivCS(model, n);
