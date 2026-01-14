@@ -1,0 +1,83 @@
+#if !defined(TempLat_FFT_EXTERNAL_PARAFAFT_PARAFAFTINTERFACE_H) && !defined(NOPARAFAFT)
+#define TempLat_FFT_EXTERNAL_PARAFAFT_PARAFAFTINTERFACE_H
+
+/* This file is part of CosmoLattice, available at www.cosmolattice.net .
+   Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
+   Released under the MIT license, see LICENSE.md. */
+
+// File info: Main contributor(s): Adrien Florio,  Year: 2026
+
+#include "TempLat/util/tdd/tdd.h"
+#include "TempLat/fft/external/parafaft/parafaftmemorylayout.h"
+#include "TempLat/fft/external/parafaft/parafaftguard.h"
+
+namespace TempLat {
+
+    /** \brief Top-level interface for parafaft FFT backend.
+     *
+     * Parafaft uses pencil decomposition to parallelize FFTs across D-1 dimensions.
+     * For 3D, this means 2D parallelization (same as PFFT), but using MPI_Alltoallw
+     * instead of local transposes.
+     *
+     * Inheritance hierarchy:
+     * ParafaftInterface -> ParafaftMemoryLayout -> ParafaftPlanner -> FFTLibraryInterface
+     *
+     * Unit test: make test-parafaftinterface
+     **/
+
+    class ParafaftInterface : public ParafaftMemoryLayout {
+    public:
+        ParafaftInterface() {
+        }
+
+        /**
+         * @brief Returns maximum number of dimensions that can be parallelized.
+         *
+         * Parafaft supports D-1 dimensional decomposition (pencil decomposition).
+         * For 3D data, this returns 2 (distribute over 2 dimensions).
+         */
+        virtual ptrdiff_t getMaximumNumberOfDimensionsToDivide(ptrdiff_t nDimensions) override {
+            // Pencil decomposition: all but one dimension can be distributed
+            return std::max((ptrdiff_t)1, nDimensions - 1);
+        }
+
+        /**
+         * @brief Returns intrinsic rescaling factors.
+         *
+         * Parafaft (via FFTW) produces unnormalized FFTs, same as FFTW/PFFT.
+         * Returns default IntrinsicScales (1.0, 1.0).
+         */
+        virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(
+            ptrdiff_t nDimensions,
+            ptrdiff_t nGridPoints) override {
+            return IntrinsicScales();
+        }
+
+        /**
+         * @brief Returns session guard for library initialization/cleanup.
+         *
+         * Parafaft is header-only with no global state, but we return a guard
+         * to satisfy the interface. FFTW initialization is handled by FFTWGuard.
+         */
+        virtual std::shared_ptr<SessionGuard> getSessionGuard(bool pVerbose = true) override {
+            return std::make_shared<ParafaftGuard>(pVerbose);
+        }
+
+    private:
+
+    public:
+#ifdef TEMPLATTEST
+        static inline void Test(TDDAssertion& tdd);
+#endif
+    };
+}
+
+#ifdef TEMPLATTEST
+#include "TempLat/fft/external/parafaft/parafaftinterface_test.h"
+#endif
+#ifdef TEMPLATTEST
+#include "TempLat/fft/external/parafaft/parafaftmemorylayout_test.h"
+#endif
+
+
+#endif

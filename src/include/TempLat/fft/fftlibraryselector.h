@@ -18,6 +18,9 @@
 #ifndef NOPFFT
 #include "TempLat/fft/external/pfft/pfftinterface.h"
 #endif
+#ifndef NOPARAFAFT
+#include "TempLat/fft/external/parafaft/parafaftinterface.h"
+#endif
 #endif
 #endif
 
@@ -47,12 +50,23 @@ namespace TempLat {
             /* here we take the decisions, although the decision to split the group has been made already. */
             ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
             bool havePFFT = false;
+            bool haveParafaft = false;
 #ifndef NOMPI
 #ifndef NOPFFT
             havePFFT = true;
 #endif
+#ifndef NOPARAFAFT
+            haveParafaft = true;
 #endif
-            if ( havePFFT && nDimSplit > 1 ) {
+#endif
+            // Priority: Parafaft > PFFT > FFTW (when multi-dimensional split needed)
+            if ( haveParafaft && nDimSplit > 1 ) {
+#ifndef NOMPI
+#ifndef NOPARAFAFT
+                theLibrary = std::make_shared<ParafaftInterface>();
+#endif
+#endif
+            } else if ( havePFFT && nDimSplit > 1 ) {
 #ifndef NOMPI
 #ifndef NOPFFT
                 theLibrary = std::make_shared<PFFTInterface>();
@@ -79,6 +93,9 @@ namespace TempLat {
 #ifndef NOPFFT
             result = PFFTInterface().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #endif
+#ifndef NOPARAFAFT
+            result = ParafaftInterface().getMaximumNumberOfDimensionsToDivide(nDimensions);
+#endif
 #endif
             return result;
         };
@@ -94,11 +111,14 @@ namespace TempLat {
              destruct before FFTW, you should be safe if you add your thing after FFTW.
              */
 #ifndef NOFFT
-            
+
             result.push_back(FFTWInterface().getSessionGuard(pVerbose));
 #ifndef NOMPI
 #ifndef NOPFFT
             result.push_back(PFFTInterface().getSessionGuard(pVerbose));
+#endif
+#ifndef NOPARAFAFT
+            result.push_back(ParafaftInterface().getSessionGuard(pVerbose));
 #endif
 #endif
 

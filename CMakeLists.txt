@@ -12,6 +12,7 @@ project (CosmoLattice CXX C)
 
 set(MPI OFF CACHE BOOL "Set to ON to build with MPI (default = OFF)")
 set(PFFT OFF CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
+set(PARAFAFT OFF CACHE BOOL "Set to ON to build with PARAFAFT (default = OFF)")
 set(HDF5 OFF CACHE BOOL "Set to ON to build with HDF5 support for saving fields (default = OFF)")
 set(TESTING OFF CACHE BOOL "Set to ON to be abble to build the tests (default = OFF)")
 
@@ -55,6 +56,9 @@ set(MYFFTW3_PATH "insert/here" CACHE STRING "FFTW3 guess path")
 
 set(MYHDF5_PATH "insert/here" CACHE STRING "HDF5 guess path")
 
+#if you have parafaft elsewhere, help cmake by adding the path below.
+
+set(MYPARAFAFT_PATH "" CACHE STRING "path to PARAFAFT installation directory")
 
 #if for some reason you have other exotic installations the cmake can't find, just repeat the above procedure below.
 
@@ -64,6 +68,7 @@ set(MYHDF5_PATH "insert/here" CACHE STRING "HDF5 guess path")
 #cmake will be remembered, so don't hesitate to continue using it.
 
 set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYPFFT_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}" )
+# Note: MYPARAFAFT_PATH is handled separately in configure.cmake (header-only library)
 
 
 
