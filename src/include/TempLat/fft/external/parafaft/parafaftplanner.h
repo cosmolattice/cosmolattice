@@ -22,6 +22,7 @@
 #include "TempLat/lattice/memory/memoryblock.h"
 
 #include <memory>
+#include <array>
 
 namespace TempLat {
 
@@ -101,7 +102,30 @@ namespace TempLat {
                 globalShape, group.getBaseComm()
             );
 
-            return std::make_shared<ParafaftPlanHolder<double>>(group, parafaftObj);
+            // TEMPORARY WORKAROUND: Compute layout information for memory conversion
+            // CosmoLattice uses padded r2c layout, parafaft expects unpadded.
+            // This info is used by ParafaftPlanHolder to copy between layouts.
+            // FUTURE: Add stride support to parafaft to eliminate these copies.
+            auto confLocalSizes = layout.configurationSpace.getLocalSizes();
+
+            // CosmoLattice padded shape
+            std::array<ptrdiff_t, 3> paddedShape = {
+                confLocalSizes[0],
+                confLocalSizes[1],
+                confLocalSizes[2]  // Already padded: 2*(N/2+1)
+            };
+
+            // Parafaft unpadded shape
+            int realShape[3];
+            parafaftObj->get_local_real_shape(realShape);
+            std::array<ptrdiff_t, 3> unpaddedShape = {
+                static_cast<ptrdiff_t>(realShape[0]),
+                static_cast<ptrdiff_t>(realShape[1]),
+                static_cast<ptrdiff_t>(realShape[2])
+            };
+
+            return std::make_shared<ParafaftPlanHolder<double>>(
+                group, parafaftObj, paddedShape, unpaddedShape);
 #else
             throw ParafaftPlannerException("Parafaft is disabled (NOPARAFAFT defined).");
             return std::shared_ptr<PlanInterface<double>>();
