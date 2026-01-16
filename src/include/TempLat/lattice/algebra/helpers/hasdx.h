@@ -18,7 +18,7 @@ namespace TempLat
    **/
 
   template <class T>
-  concept HasDx = requires(T t) {
+  concept HasDx = requires(std::decay_t<T> t) {
     { t.getDx() } -> std::convertible_to<double>;
   };
 

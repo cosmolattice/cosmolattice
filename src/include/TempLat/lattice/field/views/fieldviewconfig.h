@@ -67,7 +67,7 @@ namespace TempLat
       mRawView = mManager->getRawView();
     }
 
-#ifdef DEVICE_REGION
+#ifdef DEVICE_REGION // TODO: needed?
     DEVICE_FUNCTION
     ConfigView(const ConfigView &other)
         : AbstractField<NDim, T>(other), mLayout(other.mLayout), mView(other.mView), mRawView(other.mRawView),
@@ -135,7 +135,7 @@ namespace TempLat
 
     const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
 
-    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       switch (spaceType) {
       case SpaceStateType::Fourier:
@@ -153,9 +153,9 @@ namespace TempLat
       }
     }
 
-    const auto &getLayout() { return mLayout; }
+    const auto &getLayout() const { return mLayout; }
 
-    void updateGhosts() { this->mManager->updateGhosts(); }
+    void updateGhosts() const { this->mManager->updateGhosts(); }
 
     std::string toString() const { return mManager->getName() + "(x)"; }
 

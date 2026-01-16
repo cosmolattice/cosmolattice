@@ -13,7 +13,7 @@
 namespace TempLat
 {
   template <typename T>
-  concept IsArithmetic = (std::is_arithmetic_v<T> || IsComplexType<T>);
+  concept IsArithmetic = (std::is_arithmetic_v<std::decay_t<T>> || IsComplexType<std::decay_t<T>>);
 }
 
 #endif

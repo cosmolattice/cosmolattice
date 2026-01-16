@@ -51,31 +51,31 @@ namespace TempLat
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
-    void doWeNeedGhosts()
+    void doWeNeedGhosts() const
     {
       GhostsHunter::apply(mR);
       GhostsHunter::apply(mT);
     }
 
-    void preGet()
+    void preGet() const
     {
       PreGet::apply(mR);
       PreGet::apply(mT);
     }
 
-    void postGet()
+    void postGet() const
     {
       PostGet::apply(mR);
       PostGet::apply(mT);
     }
 
-    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
       ConfirmSpace::apply(mT, newLayout, spaceType);
     }
 
-    ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR) + ConfirmGhosts::apply(mT); }
+    ptrdiff_t confirmGhostsUpToDate() const { return ConfirmGhosts::apply(mR) + ConfirmGhosts::apply(mT); }
 
     template <size_t NDim> DEVICE_FORCEINLINE_FUNCTION JumpsHolder<NDim> getJumps() const
     {

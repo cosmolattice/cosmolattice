@@ -15,26 +15,30 @@
 namespace TempLat
 {
   template <class T, size_t NDim>
-  concept HasSpaceConfirmationMethods =
-      requires(T t, LayoutStruct<NDim> layout, SpaceStateType spaceType) { t.confirmSpace(layout, spaceType); };
+  concept HasSpaceConfirmationMethods = requires(std::decay_t<T> t, LayoutStruct<NDim> layout,
+                                                 SpaceStateType spaceType) { t.confirmSpace(layout, spaceType); };
 
   template <int N, class T, size_t NDim>
-  concept HasSpaceConfirmationMethodsIndexed = requires(
-      Tag<N> tag, T t, LayoutStruct<NDim> layout, SpaceStateType spaceType) { t.confirmSpace(tag, layout, spaceType); };
+  concept HasSpaceConfirmationMethodsIndexed =
+      requires(Tag<N> tag, std::decay_t<T> t, LayoutStruct<NDim> layout, SpaceStateType spaceType) {
+        t.confirmSpace(tag, layout, spaceType);
+      };
 
   template <class T, size_t NDim>
   concept HasSpaceConfirmationMethodsDirectIndexed =
-      requires(ptrdiff_t idx, T t, LayoutStruct<NDim> layout, SpaceStateType spaceType) {
+      requires(ptrdiff_t idx, std::decay_t<T> t, LayoutStruct<NDim> layout, SpaceStateType spaceType) {
         t.confirmSpace(idx, layout, spaceType);
       };
 
   template <int N, class T, size_t NDim>
-  concept HasSpaceConfirmationMethodsElement = requires(
-      Tag<N> tag, T t, LayoutStruct<NDim> layout, SpaceStateType spaceType) { t(tag).confirmSpace(layout, spaceType); };
+  concept HasSpaceConfirmationMethodsElement =
+      requires(Tag<N> tag, std::decay_t<T> t, LayoutStruct<NDim> layout, SpaceStateType spaceType) {
+        t(tag).confirmSpace(layout, spaceType);
+      };
 
   template <class T, size_t NDim>
   concept HasSpaceConfirmationMethodsDirectElement =
-      requires(ptrdiff_t idx, T t, LayoutStruct<NDim> layout, SpaceStateType spaceType) {
+      requires(ptrdiff_t idx, std::decay_t<T> t, LayoutStruct<NDim> layout, SpaceStateType spaceType) {
         t(idx).confirmSpace(layout, spaceType);
       };
 

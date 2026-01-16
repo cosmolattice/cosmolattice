@@ -17,7 +17,7 @@ namespace TempLat
    * Unit test: make test-hastoolbox
    **/
   template <class T>
-  concept HasToolBox = requires(T t) { t.getToolBox(); };
+  concept HasToolBox = requires(std::decay_t<T> t) { t.getToolBox(); };
 
   /** \brief a mini tester class... */
   struct HasToolBoxTester {

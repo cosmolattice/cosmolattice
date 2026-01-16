@@ -35,7 +35,7 @@ endif()
 # control over what is happening.
 # ##############################################################################
 
-set(KOKKOS_VERSION 4.7.00)
+set(KOKKOS_VERSION 5.0.1)
 
 message(STATUS "Fetching Kokkos ${KOKKOS_VERSION}")
 execute_process(
@@ -53,7 +53,6 @@ execute_process(
 execute_process(
   COMMAND
     bash -c "cmake \
-        -DCMAKE_CXX_FLAGS=-fPIC \
         -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
         -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/Kokkos \
         -DCMAKE_BUILD_TYPE=Release \
@@ -68,18 +67,21 @@ execute_process(
         -DKokkos_ENABLE_SERIAL=ON \
         -DKokkos_ENABLE_TESTS=OFF \
         ../kokkos-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_config.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
+                    COMMAND_ERROR_IS_FATAL ANY)
 
 message(DEBUG "Building Kokkos...")
 execute_process(
   COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_build.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
+                    COMMAND_ERROR_IS_FATAL ANY)
 
 message(DEBUG "Installing Kokkos...")
 execute_process(
   COMMAND bash -c
           "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_install.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin)
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-bin
+                    COMMAND_ERROR_IS_FATAL ANY)
 
 # Kokkos by default does not support extensions, so we force them off
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -104,30 +106,34 @@ else()
       bash -c
       "mkdir -p _dep && git clone https://github.com/kokkos/kokkos-tools.git --depth 1 --branch ${KOKKOS_TOOLS_VERSION} _dep/kokkos-tools-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    OUTPUT_QUIET)
+    OUTPUT_QUIET COMMAND_ERROR_IS_FATAL ANY)
 
   message(DEBUG "Configure Kokkos tools...")
   execute_process(
     COMMAND bash -c "mkdir -p _dep/kokkos-tools-bin"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    OUTPUT_QUIET)
+    OUTPUT_QUIET COMMAND_ERROR_IS_FATAL ANY)
+
   execute_process(
     COMMAND
       bash -c "cmake -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
            -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/Kokkos-Tools \
            ../kokkos-tools-repo \
            2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin
+                      COMMAND_ERROR_IS_FATAL ANY)
 
   message(DEBUG "Building Kokkos tools...")
   execute_process(
     COMMAND bash -c
             "make -j8 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin
+                      COMMAND_ERROR_IS_FATAL ANY)
 
   message(DEBUG "Installing Kokkos tools...")
   execute_process(
     COMMAND bash -c
             "make install 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin)
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-tools-bin
+                      COMMAND_ERROR_IS_FATAL ANY)
 endif()

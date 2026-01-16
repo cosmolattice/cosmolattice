@@ -13,7 +13,7 @@
 namespace TempLat
 {
   template <typename U, typename... IDX>
-  concept TypeHasGet = requires(U obj, IDX... i) { obj.get(i...); };
+  concept TypeHasGet = requires(std::decay_t<U> obj, IDX... i) { obj.get(i...); };
 
   template <typename U, typename... IDX>
   concept TypeGetsItself = (std::is_arithmetic_v<std::decay_t<U>> || IsComplexType<std::decay_t<U>>);

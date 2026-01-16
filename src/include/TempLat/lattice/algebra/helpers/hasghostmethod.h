@@ -18,19 +18,19 @@ namespace TempLat
    * Unit test: make test-hasgetmethod
    **/
   template <class T>
-  concept HasGhostMethod = requires(T t) { t.confirmGhostsUpToDate(); };
+  concept HasGhostMethod = requires(std::decay_t<T> t) { t.confirmGhostsUpToDate(); };
 
   template <int N, class T>
-  concept HasGhostMethodIndexed = requires(T t, Tag<N> tag) { t.confirmGhostsUpToDate(tag); };
+  concept HasGhostMethodIndexed = requires(std::decay_t<T> t, Tag<N> tag) { t.confirmGhostsUpToDate(tag); };
 
   template <class T>
-  concept HasGhostMethodDirectIndexed = requires(T t, ptrdiff_t i) { t.confirmGhostsUpToDate(i); };
+  concept HasGhostMethodDirectIndexed = requires(std::decay_t<T> t, ptrdiff_t i) { t.confirmGhostsUpToDate(i); };
 
   template <int N, class T>
-  concept HasGhostMethodElement = requires(T t, Tag<N> tag) { t(tag).confirmGhostsUpToDate(); };
+  concept HasGhostMethodElement = requires(std::decay_t<T> t, Tag<N> tag) { t(tag).confirmGhostsUpToDate(); };
 
   template <class T>
-  concept HasGhostMethodDirectElement = requires(T t, ptrdiff_t i) { t(i).confirmGhostsUpToDate(); };
+  concept HasGhostMethodDirectElement = requires(std::decay_t<T> t, ptrdiff_t i) { t(i).confirmGhostsUpToDate(); };
 
   /** \brief a mini tester class... */
   struct HasGhostMethodTester {

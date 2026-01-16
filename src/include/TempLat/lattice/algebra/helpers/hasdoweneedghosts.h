@@ -19,13 +19,13 @@ namespace TempLat
    * Unit test: make test-hasdoweneedghosts
    **/
   template <class T>
-  concept HasDoWeNeedGhostsMethod = requires(T t) { t.doWeNeedGhosts(); };
+  concept HasDoWeNeedGhostsMethod = requires(std::decay_t<T> t) { t.doWeNeedGhosts(); };
 
   template <int N, class T>
-  concept HasDoWeNeedGhostsMethodIndexed = requires(T t, Tag<N> tag) { t.doWeNeedGhosts(tag); };
+  concept HasDoWeNeedGhostsMethodIndexed = requires(std::decay_t<T> t, Tag<N> tag) { t.doWeNeedGhosts(tag); };
 
   template <class T>
-  concept HasDoWeNeedGhostsMethodIndexedDyn = requires(T t, ptrdiff_t idx) { t.doWeNeedGhosts(idx); };
+  concept HasDoWeNeedGhostsMethodIndexedDyn = requires(std::decay_t<T> t, ptrdiff_t idx) { t.doWeNeedGhosts(idx); };
 
   struct HasDoWeNeedGhostsTester {
   public:

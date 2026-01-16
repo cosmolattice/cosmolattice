@@ -14,7 +14,7 @@
 namespace TempLat
 {
   template <typename U, typename... IDX>
-  concept TypeHasVectorGet = requires(U obj, IDX... i) { obj.vectorGet(i...); };
+  concept TypeHasVectorGet = requires(std::decay_t<U> obj, IDX... i) { obj.vectorGet(i...); };
 
   /** \brief A getter for the vector-like algebra.
    *

@@ -35,7 +35,7 @@ namespace TempLat
     /** \brief When making sure everyone is in configuration or fourier space, steal the number of dimensions, which we
      * need in the coordinate manipulating objects.. */
     DEVICE_FUNCTION
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       if (mFixedSingleSpaceType != SpaceStateType::undefined && mFixedSingleSpaceType != spaceType) {
 #ifndef DEVICE_KOKKOS
@@ -67,9 +67,9 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    SpaceStateType mFixedSingleSpaceType;
-    SpaceStateType mCurrentSpaceType;
-    LayoutStruct<NDim> mCurrentLayout;
+    mutable SpaceStateType mFixedSingleSpaceType;
+    mutable SpaceStateType mCurrentSpaceType;
+    mutable LayoutStruct<NDim> mCurrentLayout;
 
   public:
 #ifdef TEMPLATTEST

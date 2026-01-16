@@ -18,7 +18,7 @@ namespace TempLat
    * Unit test: make test-istemplatgettable
    **/
   template <int N, class T>
-  concept IsTempLatGettable = requires(T t, Tag<N> tag) { t.getComp(tag); };
+  concept IsTempLatGettable = requires(std::decay_t<T> t, Tag<N> tag) { t.getComp(tag); };
 
   struct IsTempLatGettableTester {
   public:

@@ -1,5 +1,6 @@
 #Output
-#outputfile = ./
+outputfile = ./
+print_headers = true
 
 #Evolution
 expansion = true

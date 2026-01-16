@@ -36,7 +36,7 @@ namespace TempLat
     DEVICE_FUNCTION
     BackDiff(R pR) : UnaryOperator<R>(pR), dx(GetDx::getDx(pR)) {}
 
-    void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
+    void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
     template <typename... IDX>
       requires requires(IDX... idx) {

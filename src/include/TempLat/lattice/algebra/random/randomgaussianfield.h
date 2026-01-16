@@ -58,7 +58,7 @@ namespace TempLat
 
     void reset() { generation = 0; }
 
-    void postGet()
+    void postGet() const
     {
       // This is called after the get, so we can increase the generation.
       generation++;
@@ -133,7 +133,7 @@ namespace TempLat
     mutable RandomGaussian prng;
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
-    RNGInteger generation;
+    mutable RNGInteger generation;
     device::array<ptrdiff_t, NDim> mGlobalSizes;
   };
 

@@ -13,7 +13,7 @@
 namespace TempLat
 {
   template <size_t NDim, class T>
-  concept HasJumpMethods = requires(T t) {
+  concept HasJumpMethods = requires(std::decay_t<T> t) {
     { t.getJumps() } -> std::convertible_to<JumpsHolder<NDim>>;
   };
 

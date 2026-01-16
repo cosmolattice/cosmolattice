@@ -32,7 +32,7 @@ namespace TempLat
 
     template <typename U, size_t NDim>
       requires(!HasSpaceConfirmationMethods<U, NDim>)
-    static inline void apply(U &obj, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    static constexpr inline void apply(U &obj, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
     {
     }
 

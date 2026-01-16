@@ -16,7 +16,7 @@ namespace TempLat
    * Unit test: make test-haskir
    **/
   template <class T>
-  concept HasKIR = requires(T t) { t.getKIR(); };
+  concept HasKIR = requires(std::decay_t<T> t) { t.getKIR(); };
 
   struct HasKIRTester {
   public:

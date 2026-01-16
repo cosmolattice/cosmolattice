@@ -17,6 +17,7 @@ namespace TempLat
    *
    *
    **/
+
   class ComplexScalarKernels
   {
   public:

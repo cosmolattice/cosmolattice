@@ -55,15 +55,15 @@ namespace TempLat
 
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
 
-    void doWeNeedGhosts() { GhostsHunter::apply(mR); }
+    void doWeNeedGhosts() const { GhostsHunter::apply(mR); }
 
-    void preGet() { PreGet::apply(mR); }
+    void preGet() const { PreGet::apply(mR); }
 
-    void postGet() { PostGet::apply(mR); }
+    void postGet() const { PostGet::apply(mR); }
 
-    ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR); }
+    ptrdiff_t confirmGhostsUpToDate() const { return ConfirmGhosts::apply(mR); }
 
-    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
     }
@@ -75,7 +75,7 @@ namespace TempLat
       DoEval::eval(mR, idx...);
     }
 
-    template <size_t NDim> JumpsHolder<NDim> getJumps() { return GetJumps::apply<NDim>(mR); }
+    template <size_t NDim> JumpsHolder<NDim> getJumps() const { return GetJumps::apply<NDim>(mR); }
 
     /** For measurement objects. */
     auto getToolBox() const { return GetToolBox::get(mR); }

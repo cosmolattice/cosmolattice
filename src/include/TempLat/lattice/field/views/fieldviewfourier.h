@@ -57,7 +57,7 @@ namespace TempLat
 
     template <typename R> void assign(R &&g)
     {
-      auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
+      const auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
 
       onBeforeAssignment(g);
 
@@ -110,7 +110,7 @@ namespace TempLat
 
     virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getFourierSpaceJumps(); }
 
-    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       switch (spaceType) {
       case SpaceStateType::Configuration:
@@ -128,7 +128,7 @@ namespace TempLat
 
     std::string toString() const { return mManager->getName() + "(k)"; }
 
-    const auto &getLayout() { return mToolBox->mLayouts.getFourierSpaceLayout(); }
+    const auto &getLayout() const { return mToolBox->mLayouts.getFourierSpaceLayout(); }
 
     /** \brief Getting a single entry from an array. Variadic because the number of dimensions is variable.
      *  Use for tests only, never for actual integrations and iterations.
@@ -165,6 +165,8 @@ namespace TempLat
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
       device::apply([&](const auto &...idx) { layout.putMemoryIndexFromSpatialLocationInto(mem_pos, idx...); },
                     global_coord);
+
+      // TODO: do this only if this process owns the zero mode!
 
       device::memory::setAtOnePoint(*this, mem_pos, toSet);
     }

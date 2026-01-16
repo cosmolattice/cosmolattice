@@ -12,15 +12,13 @@
 
 namespace TempLat
 {
-  /** \brief A concept which determines at compile time whether an object has a method `get`.
+  /** \brief A helper concept for HasVectorGetMethod for a given set of indices.
    *
    */
-  // template <typename U, typename... IDX>
-  // concept HasVectorGetMethodHelper = requires(U u, IDX... idx) { u.vectorGet(idx...); };
   template <typename U, typename... IDX>
-  concept HasVectorGetMethodHelper = requires(U u, IDX... idx) { u.vectorGet(idx...); };
+  concept HasVectorGetMethodHelper = requires(std::decay_t<U> u, IDX... idx) { u.vectorGet(idx...); };
 
-  /** \brief A concept which determines at compile time whether an object has a method `get`.
+  /** \brief A concept which determines at compile time whether an object has a method `vectorGet`.
    *
    **/
   template <class T>

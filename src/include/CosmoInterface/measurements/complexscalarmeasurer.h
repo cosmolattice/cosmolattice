@@ -63,8 +63,9 @@ namespace TempLat
               standardReOut(i).save();
               MeansMeasurer::measure(standardImOut(i), sqrt(2) * model.fldCS(i)(1_c),
                                      sqrt(2) * model.piCS(i)(1_c) * pow(model.aI, model.alpha - 3), t);
-              standardImOut(i).save(); MeansMeasurer::measure(standardNormOut(i), norm(model.fldCS(i)),
-                                                              norm(model.piCS(i) * pow(model.aI, model.alpha - 3)), t);
+              standardImOut(i).save(); //
+              MeansMeasurer::measure(standardNormOut(i), norm(model.fldCS(i)),
+                                     norm(model.piCS(i) * pow(model.aI, model.alpha - 3)), t);
               standardNormOut(i).save(););
     }
 

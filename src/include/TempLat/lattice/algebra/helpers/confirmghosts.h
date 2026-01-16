@@ -30,7 +30,7 @@ namespace TempLat
 
     template <typename U>
       requires(!HasGhostMethod<U>)
-    static inline ptrdiff_t apply(U &obj)
+    static constexpr inline ptrdiff_t apply(U &obj)
     {
       return 0;
     }
@@ -51,7 +51,7 @@ namespace TempLat
 
     template <int N, typename U>
       requires(!HasGhostMethodIndexed<N, U> && !HasGhostMethodElement<N, U>)
-    static inline ptrdiff_t apply(U &obj, Tag<N> i)
+    static constexpr inline ptrdiff_t apply(U &obj, Tag<N> i)
     {
       return 0;
     }
@@ -72,7 +72,7 @@ namespace TempLat
 
     template <typename U>
       requires(!HasGhostMethodDirectIndexed<U> && !HasGhostMethodDirectElement<U>)
-    static inline ptrdiff_t apply(U &obj, ptrdiff_t i)
+    static constexpr inline ptrdiff_t apply(U &obj, ptrdiff_t i)
     {
       return 0;
     }

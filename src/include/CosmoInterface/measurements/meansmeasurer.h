@@ -9,6 +9,7 @@
 
 #include "CosmoInterface/measurements/measurementsIO/measurementssaver.h"
 #include "TempLat/lattice/algebra/operators/power.h"
+#include "TempLat/lattice/measuringtools/averager.h"
 
 namespace TempLat
 {

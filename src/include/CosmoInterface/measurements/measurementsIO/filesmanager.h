@@ -16,7 +16,7 @@ namespace TempLat
   MakeException(UseHDF5ButNotCompiled);
 
   /** \brief Interface to switch between hdf5 and std output for measurements. This class hides the polymorphism under
-   *the hood. It is mostly useful for the averages, which are not implemented in hdf5 yet.
+   * the hood. It is mostly useful for the averages, which are not implemented in hdf5 yet.
    *
    *
    * Unit test: make test-filesmanager
@@ -24,6 +24,16 @@ namespace TempLat
   template <size_t NDim> class FilesManager
   {
   public:
+    /**
+     * @brief Construct a files manager that handles the output of measurements.
+     *
+     * @param fn Directory name where to store the files.
+     * @param toolbox a pointer to the memory toolbox.
+     * @param pUseHDF5  whether to use HDF5 for output.
+     * @param pUseHDF5Spectra whether to use HDF5 for spectra output.
+     * @param pPrintHeaders whether to print headers.
+     * @param pTag a tag to identify the output files.
+     */
     FilesManager(std::string fn, device::memory::host_ptr<MemoryToolBox<NDim>> toolbox, bool pUseHDF5,
                  bool pUseHDF5Spectra, bool pPrintHeaders, std::string pTag = "")
         : mToolbox(toolbox), mUseHDF5Spectra(pUseHDF5Spectra), mPrintHeaders(pPrintHeaders), workingDir(fn), tag(pTag)

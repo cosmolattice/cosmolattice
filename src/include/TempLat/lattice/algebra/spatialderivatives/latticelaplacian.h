@@ -40,7 +40,7 @@ namespace TempLat
     DEVICE_FUNCTION
     LatticeLaplacian(R pR) : UnaryOperator<R>(pR), dx2(pow(GetDx::getDx(pR), 2)) {}
 
-    void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
+    void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
     template <typename... IDX>
       requires requires(IDX... idx) {

@@ -14,7 +14,7 @@
 namespace TempLat
 {
   template <typename U, typename... IDX>
-  concept HasGetMethodHelper = requires(U u, IDX... idx) { u.get(idx...); };
+  concept HasGetMethodHelper = requires(std::decay_t<U> u, IDX... idx) { u.get(idx...); };
 
   /** \brief A concept which determines at compile time whether an object has a method `get`.
    *

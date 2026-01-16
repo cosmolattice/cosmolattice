@@ -43,13 +43,13 @@ namespace TempLat
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
     template <int N, size_t NDim>
-    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
       ConfirmSpace::apply(mT, i, newLayout, spaceType);
     }
 
-    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i)
+    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const
     {
       return ConfirmGhosts::apply(mR, i) + ConfirmGhosts::apply(mT, i);
     }

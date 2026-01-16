@@ -19,13 +19,13 @@ namespace TempLat
    * Unit test: make test-hasgetmethod
    **/
   template <class T>
-  concept HasStringMethod = requires(T t) { t.toString(); };
+  concept HasStringMethod = requires(std::decay_t<T> t) { t.toString(); };
 
   template <class T>
   concept HasNoStringMethod = !HasStringMethod<T>;
 
   template <int N, class T>
-  concept HasStringMethodIndexed = requires(T t, Tag<N> tag) { t.toString(tag); };
+  concept HasStringMethodIndexed = requires(std::decay_t<T> t, Tag<N> tag) { t.toString(tag); };
 
   template <int N, class T>
   concept HasNoStringMethodIndexed = !HasStringMethodIndexed<N, T>;

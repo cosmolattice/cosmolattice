@@ -62,7 +62,7 @@ namespace TempLat
 
     std::string toString() const { return "|Grad(" + GetString::get(mR) + ")|^2"; }
 
-    void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
+    void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {

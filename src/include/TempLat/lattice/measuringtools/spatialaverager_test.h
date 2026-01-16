@@ -32,7 +32,7 @@ namespace TempLat
     }
 
     auto getToolBox() const { return mt; }
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) {}
+    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const {}
     device::memory::host_ptr<MemoryToolBox<NDim>> mt;
     std::string toString() const { return "myTmpStruct"; }
 

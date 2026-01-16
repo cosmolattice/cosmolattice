@@ -29,18 +29,21 @@ execute_process(
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD} \
         ../kokkos-fft-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_config.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin)
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin
+                    COMMAND_ERROR_IS_FATAL ANY)
 
 message(DEBUG "Building Kokkos-FFT...")
 execute_process(
   COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_build.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin)
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin
+                    COMMAND_ERROR_IS_FATAL ANY)
 
 message(DEBUG "Installing Kokkos-FFT...")
 execute_process(
   COMMAND bash -c
           "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_install.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin)
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin
+                    COMMAND_ERROR_IS_FATAL ANY)
 
 # Kokkos by default does not support extensions, so we force them off
 set(CMAKE_CXX_EXTENSIONS OFF)

@@ -29,7 +29,7 @@ namespace TempLat
     GetVectorComponentHelper(const R &pR, ptrdiff_t pJ) : mR(pR), mJ(pJ) {}
 
     template <typename... JDX>
-      requires requires(R mR, ptrdiff_t mJ, JDX... idx) {
+      requires requires(std::decay_t<R> mR, ptrdiff_t mJ, JDX... idx) {
         requires IsVariadicIndex<JDX...>;
         mR.vectorGet(mJ, idx...);
       }
@@ -38,16 +38,16 @@ namespace TempLat
       return mR.vectorGet(mJ, jdx...);
     }
 
-    void doWeNeedGhosts() { GhostsHunter::apply(mR, mJ); }
+    void doWeNeedGhosts() const { GhostsHunter::apply(mR, mJ); }
 
-    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       ConfirmSpace::apply(mR, mJ, newLayout, spaceType);
     }
 
-    ptrdiff_t confirmGhostsUpToDate() { return ConfirmGhosts::apply(mR, mJ); }
+    ptrdiff_t confirmGhostsUpToDate() const { return ConfirmGhosts::apply(mR, mJ); }
 
-    template <size_t NDim> inline JumpsHolder<NDim> getJumps()
+    template <size_t NDim> inline JumpsHolder<NDim> getJumps() const
     { // Just take jumps from the first component
       return GetJumps::apply(mR);
     }

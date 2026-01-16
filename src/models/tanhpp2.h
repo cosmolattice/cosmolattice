@@ -24,7 +24,7 @@ namespace TempLat
     static constexpr size_t NScalars = 2;
     // In our phi4 example, we only want 2 scalar fields.
     static constexpr size_t NPotTerms = 2;
-    // Our potential naturaly splits into two terms: the inflaton potential
+    // Our potential naturally splits into two terms: the inflaton potential
     // and the interaction with the daughter field.
 
     // All the numbers of fields are 0 by default, so we need only

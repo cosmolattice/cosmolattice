@@ -55,7 +55,7 @@ namespace TempLat
       return DoEval::eval(mR, idx...);
     }
 
-    void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
+    void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
     virtual std::string operatorString() const override
     {
@@ -104,7 +104,7 @@ namespace TempLat
       return DoEval::eval(mR, idx...);
     }
 
-    void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
+    void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
     std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }
   };

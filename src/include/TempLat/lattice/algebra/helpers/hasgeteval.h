@@ -12,7 +12,7 @@
 namespace TempLat
 {
   template <typename U, typename... IDX>
-  concept HasGetEval = requires(U obj, IDX... idx) { obj.getEval(idx...); };
+  concept HasGetEval = requires(std::decay_t<U> obj, IDX... idx) { obj.getEval(idx...); };
 
   struct HasGetEvalTester {
 #ifdef TEMPLATTEST

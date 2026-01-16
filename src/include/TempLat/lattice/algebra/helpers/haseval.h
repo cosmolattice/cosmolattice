@@ -17,7 +17,7 @@ namespace TempLat
    * Unit test: make test-haseval
    **/
   template <class T>
-  concept HasEval = requires(T t, ptrdiff_t idx) { t.eval(idx); };
+  concept HasEval = requires(std::decay_t<T> t, ptrdiff_t idx) { t.eval(idx); };
 
   struct HasEvalTester {
   public:

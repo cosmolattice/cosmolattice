@@ -9,6 +9,7 @@
 
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/util/ndloop.h"
+#include "TempLat/lattice/algebra/helpers/confirmspace.h"
 
 template <size_t NDim, typename T> inline void TempLat::ConfigView<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
@@ -23,6 +24,8 @@ template <size_t NDim, typename T> inline void TempLat::ConfigView<NDim, T>::Tes
 
   a = value;
   b = value;
+
+  tdd.verify(HasSpaceConfirmationMethods<Field<NDim, T>, NDim>);
 
   // get host views
   auto a_host = a.getLocalNDHostView();

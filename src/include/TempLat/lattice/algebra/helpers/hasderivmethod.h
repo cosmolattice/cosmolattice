@@ -15,14 +15,14 @@ namespace TempLat
    *
    **/
   template <class T>
-  concept HasDerivMethod = requires(T t, ptrdiff_t idx) { t.d(idx); };
+  concept HasDerivMethod = requires(std::decay_t<T> t, ptrdiff_t idx) { t.d(idx); };
 
   /** \brief a mini tester class... */
-  struct HasDerivMethodTester {
 #ifdef TEMPLATTEST
+  struct HasDerivMethodTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
 

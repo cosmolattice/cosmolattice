@@ -59,7 +59,7 @@ namespace TempLat
     static std::string toString(ptrdiff_t j) { return "k_" + std::to_string(j); }
     static std::string toString() { return "k"; }
 
-    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       switch (spaceType) {
       case SpaceStateType::Configuration:

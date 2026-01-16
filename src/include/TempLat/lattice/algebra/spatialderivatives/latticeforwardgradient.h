@@ -86,21 +86,21 @@ namespace TempLat
 
     std::string toString() const { return "Grad(" + GetString::get(mR) + ")"; }
 
-    void doWeNeedGhosts() { mR.confirmGhostsUpToDate(); }
+    void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return dx; }
     DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
-    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
     }
 
-    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return ConfirmGhosts::apply(mR, i); }
+    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const { return ConfirmGhosts::apply(mR, i); }
 
-    inline JumpsHolder<NDim> getJumps()
+    inline JumpsHolder<NDim> getJumps() const
     { // Don't need indexing for get jumps.
       return GetJumps::apply(mR);
     }

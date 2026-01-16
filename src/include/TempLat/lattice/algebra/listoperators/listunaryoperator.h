@@ -37,15 +37,15 @@ namespace TempLat
     DEVICE_FUNCTION
     ListUnaryOperator(const ListUnaryOperator &other) : mR(other.mR) {}
 
-    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return ConfirmGhosts::apply(mR, i); }
+    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const { return ConfirmGhosts::apply(mR, i); }
 
     template <int N, size_t NDim>
-    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
     }
 
-    inline auto getJumps()
+    inline auto getJumps() const
     { // Don't need indexing for get jumps.
       return GetJumps::apply(mR);
     }

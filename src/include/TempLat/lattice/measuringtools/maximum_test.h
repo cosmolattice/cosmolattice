@@ -21,7 +21,7 @@ namespace TempLat
       return std::get<0>(std::tie(idx...)) > 40 ? 0 : std::get<0>(std::tie(idx...));
     }
     auto getToolBox() const { return mt; }
-    void confirmSpace(const LayoutStruct<3> &newLayout, const SpaceStateType &spaceType) {}
+    void confirmSpace(const LayoutStruct<3> &newLayout, const SpaceStateType &spaceType) const {}
     device::memory::host_ptr<MemoryToolBox<3>> mt;
     std::string toString() const { return "myTmpStruct"; }
   };

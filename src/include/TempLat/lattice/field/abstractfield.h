@@ -42,7 +42,7 @@ namespace TempLat
     {
     }
 
-#ifdef DEVICE_REGION
+#ifdef DEVICE_REGION // TODO: needed?
     DEVICE_FUNCTION
     AbstractField(const AbstractField &other) : mToolBox(other.mToolBox), mManager(other.mManager), latPar(other.latPar)
     {
@@ -52,7 +52,7 @@ namespace TempLat
     ~AbstractField() {}
 #endif
 
-    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType)
+    inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       switch (spaceType) {
       case SpaceStateType::Fourier:
@@ -67,7 +67,7 @@ namespace TempLat
 
     device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return mToolBox; }
 
-    ptrdiff_t confirmGhostsUpToDate() { return this->mManager->confirmGhostsUpToDate(); }
+    ptrdiff_t confirmGhostsUpToDate() const { return this->mManager->confirmGhostsUpToDate(); }
 
     // Mostly for testing purpose
 
@@ -77,10 +77,10 @@ namespace TempLat
     /** \brief Check the current state. */
     bool isFourierSpace() const { return mManager->isFourierSpace(); }
 
-    void setGhostsAreStale() { mManager->setGhostsAreStale(); }
+    void setGhostsAreStale() const { mManager->setGhostsAreStale(); }
     bool areGhostsStale() const { return mManager->areGhostsStale(); }
 
-    device::memory::host_ptr<MemoryManager<NDim, T>> getMemoryManager() { return mManager; }
+    device::memory::host_ptr<MemoryManager<NDim, T>> getMemoryManager() const { return mManager; }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return latPar.getDx(); }
