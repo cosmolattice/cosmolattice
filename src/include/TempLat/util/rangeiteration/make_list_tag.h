@@ -25,16 +25,18 @@ namespace TempLat
   }
   template <int Start, int End, typename F> inline constexpr auto make_list_tag(F &&f)
   {
-    constexpr bool test = End > Start;
-    return static_if<test>(
-        make_list_tag_impl<Start>(std::forward<F>(f), std::make_integer_sequence<int, End - Start>()), std::tuple<>());
+    if constexpr (End > Start)
+      return make_list_tag_impl<Start>(std::forward<F>(f), std::make_integer_sequence<int, End - Start>());
+    else
+      return std::tuple<>();
   }
 
   template <int End, typename F> inline constexpr auto make_list_tag(F &&f)
   {
-    constexpr bool test = End > 0;
-    return static_if<test>(make_list_tag_impl<0>(std::forward<F>(f), std::make_integer_sequence<int, End>()),
-                           std::tuple<>());
+    if constexpr (End > 0)
+      return make_list_tag_impl<0>(std::forward<F>(f), std::make_integer_sequence<int, End>());
+    else
+      return std::tuple<>();
   }
 
   template <int Start, typename F, int... I>
@@ -44,17 +46,18 @@ namespace TempLat
   }
   template <int Start, int End, typename F> inline constexpr auto make_vector_tag(F &&f)
   {
-    constexpr bool test = End > Start;
-    return static_if<test>(
-        make_vector_tag_impl<Start>(std::forward<F>(f), std::make_integer_sequence<int, End - Start>()),
-        std::tuple<>());
+    if constexpr (End > Start)
+      return make_vector_tag_impl<Start>(std::forward<F>(f), std::make_integer_sequence<int, End - Start>());
+    else
+      return std::tuple<>();
   }
 
   template <int End, typename F> inline constexpr auto make_vector_tag(F &&f)
   {
-    constexpr bool test = End > 0;
-    return static_if<test>(make_vector_tag_impl<0>(std::forward<F>(f), std::make_integer_sequence<int, End>()),
-                           std::tuple<>());
+    if constexpr (End > 0)
+      return make_vector_tag_impl<0>(std::forward<F>(f), std::make_integer_sequence<int, End>());
+    else
+      return std::tuple<>();
   }
 
   struct MakeListTagTester {

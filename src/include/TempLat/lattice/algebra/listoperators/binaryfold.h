@@ -45,11 +45,12 @@ namespace TempLat
   template <class BinaryOp, class Tuple, typename Function, typename Unity>
   constexpr auto binary_fold(BinaryOp &&op, Tuple &&tup, Function &&func, Unity &&unit)
   {
-    constexpr int tupSize = tuple_size<std::remove_reference_t<Tuple>>::value;
-    return static_if<(tupSize > 0)>(binary_fold_impl(std::forward<BinaryOp>(op), std::forward<Tuple>(tup),
-                                                     std::forward<Function>(func), std::forward<Unity>(unit),
-                                                     Tag<tupSize - 1>()),
-                                    unit);
+    constexpr int tupSize = tuple_size<std::decay_t<Tuple>>::value;
+    if constexpr (tupSize > 0)
+      return binary_fold_impl(std::forward<BinaryOp>(op), std::forward<Tuple>(tup), std::forward<Function>(func),
+                              std::forward<Unity>(unit), Tag<tupSize - 1>());
+    else
+      return unit;
   }
 
 } // namespace TempLat

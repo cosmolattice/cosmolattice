@@ -111,7 +111,7 @@ namespace TempLat
 
   private:
     using DeviceView = device::memory::NDView<1, T>;
-    using HostMirror = typename DeviceView::HostMirror;
+    using HostMirror = typename DeviceView::host_mirror_type;
 
     DeviceView mAveragesDevice;
     DeviceView mVariancesDevice;

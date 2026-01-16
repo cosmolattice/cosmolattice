@@ -9,6 +9,8 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/squareroot.h"
+#include "TempLat/lattice/algebra/operators/power.h"
+#include "TempLat/lattice/algebra/listoperators/total.h"
 
 namespace TempLat
 {

@@ -5,49 +5,72 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
-#include "binaryfold.h"
-#include "total.h"
+#include "TempLat/util/tuple_size.h"
 
 namespace TempLat
 {
-  /** \brief A class which
-   *  reduces a list over multiplication. Specialisation of binary fold.
-   *
+  template <class Tuple, typename Function, typename Unit, int... INT>
+  constexpr auto fold_multiply_impl(Tuple &&tup, Function &&func, Unit &&unit, std::integer_sequence<int, INT...> iseq)
+  {
+    return (unit * ... * func(GetComponent::get(tup, Tag<INT>())));
+  }
+
+  /** @brief Multiplies all the components of a tuple after applying func to them.
    *
    * Unit test: make test-foldmultiply
+   *
+   *  @param tup the tuple to multiply over
+   *  @param func the function to apply to each component before multiplying
    **/
-  struct FoldMultiplyTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <class Tuple, typename Function> constexpr auto fold_multiply(Tuple &&tup, Function &&func)
   {
-    return binary_fold([](auto x, auto y) { return x * y; }, std::forward<Tuple>(tup), std::forward<Function>(func),
-                       OneType());
+    return fold_multiply_impl(std::forward<Tuple>(tup), std::forward<Function>(func), OneType(),
+                              std::make_integer_sequence<int, tuple_size<Tuple>::value>());
   }
 
+  /** @brief Multiplies all the components of a tuple.
+   *
+   * Unit test: make test-foldmultiply
+   *
+   *  @param tup the tuple to multiply over
+   **/
   template <class Tuple> constexpr auto fold_multiply(Tuple &&tup)
   {
-    constexpr bool test = tuple_size<Tuple>::value > 0;
-    return static_if<test>(binary_fold([](auto x, auto y) { return x * y; }, std::forward<Tuple>(tup),
-                                       [](auto x) { return x; }, OneType()),
-                           OneType());
+    if constexpr (tuple_size<Tuple>::value > 0)
+      return fold_multiply_impl(
+          std::forward<Tuple>(tup), [](auto x) { return x; }, OneType(),
+          std::make_integer_sequence<int, tuple_size<Tuple>::value>());
+    else
+      return OneType();
   }
 
+  /** @brief Multiplies all the components of a tuple after applying func to them, starting from unit.
+   *
+   * Unit test: make test-foldmultiply
+   *
+   *  @param tup the tuple to multiply over
+   *  @param func the function to apply to each component before multiplying
+   *  @param unit the unit to start multiplying from
+   **/
   template <class Tuple, class Unit> constexpr auto fold_multiply_unit(Tuple &&tup, Unit &&unit)
   {
-    constexpr bool test = tuple_size<Tuple>::value > 0;
-    return static_if<test>(binary_fold([](auto x, auto y) { return x * y; }, std::forward<Tuple>(tup),
-                                       [](auto x) { return x; }, std::forward<Unit>(unit)),
-                           OneType());
+    if constexpr (tuple_size<Tuple>::value > 0)
+      return fold_multiply_impl(
+          std::forward<Tuple>(tup), [](auto x) { return x; }, std::forward<Unit>(unit),
+          std::make_integer_sequence<int, tuple_size<Tuple>::value>());
+    else
+      return OneType();
   }
 
+#ifdef TEMPLATTEST
+  struct FoldMultiplyTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

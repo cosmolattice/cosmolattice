@@ -20,8 +20,10 @@ namespace TempLat
   template <int N> class Tag
   {
   public:
-    constexpr operator int() const { return N; }
     static constexpr int value = N;
+    constexpr operator int() const { return N; }
+
+    consteval Tag() {}
 
     static std::string toString() { return "Tag<" + std::to_string(N) + ">"; }
   };

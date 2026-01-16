@@ -19,18 +19,16 @@ namespace TempLat
    *
    * Unit test: make test-make_tuple_tag
    **/
-
-  template <int Start, typename F, int... I>
-  inline auto make_tuple_tag_impl(F &&f, std::integer_sequence<int, I...> iseq)
+  template <int Start, typename F, int... I> auto make_tuple_tag_impl(F &&f, std::integer_sequence<int, I...> iseq)
   {
     return std::make_tuple(f(Tag<I + Start>())...);
   }
-  template <int Start, int End, typename F> inline auto make_tuple_tag(F &&f)
+  template <int Start, int End, typename F> auto make_tuple_tag(F &&f)
   {
     return make_tuple_tag_impl<Start>(std::forward<F>(f), std::make_integer_sequence<int, End - Start>());
   }
 
-  template <int End, typename F> DEVICE_FORCEINLINE_FUNCTION auto make_tuple_tag(F &&f)
+  template <int End, typename F> auto make_tuple_tag(F &&f)
   {
     return make_tuple_tag_impl<0>(std::forward<F>(f), std::make_integer_sequence<int, End>());
   }

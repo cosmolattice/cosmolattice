@@ -5,62 +5,38 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/rangeiteration/make_tuple_tag.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/operators/add.h"
-#include "TempLat/lattice/algebra/listoperators/total.h"
-
-#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
-
-  /** \brief A class which "reduce", "sums over" tuple-like objects.
-   *
-   *
-   * Unit test: make test-sum_in_range
-   **/
-
-  // TODO: implement binary_in_range (used with a lambda) and see if there is a difference.
-  //  Extra : need to give as template parameter the identity corresponding to the operator.
-
-  // NOTE: Actually, available in c++17 through fold expressions! Possibly need invoke as well.
-
-  /*    template<typename F, int I>
-      constexpr auto sum_in_range_impl(F&& func, Tag<I> t1, Tag<-1> t2)
-      {
-        return ZeroType();
-      }
-
-      template<typename F, int I, int J>
-      constexpr auto sum_in_range_impl(F&& func, Tag<I> t1, Tag<J> t2)
-      {
-        return func(t1) + sum_in_range_impl(std::forward<F>(func),Tag<I-1>(), Tag<J-1>());
-      }
-
-      template<int begin, int end, typename F>
-      constexpr auto sum_in_range(F&& func)
-      {
-        return sum_in_range_impl(std::forward<F>(func), Tag<end-1>(), Tag<end-1-begin>());
-      }*/
-
-  template <int begin, int end, typename F> DEVICE_FORCEINLINE_FUNCTION constexpr auto sum_in_range(F &&func)
+  template <int begin, typename F, int... INT>
+  constexpr auto sum_in_range_impl(F &&func, std::integer_sequence<int, INT...> iseq)
   {
-    constexpr bool test = end >= begin;
-    return static_if<test>(total(make_tuple_tag<begin, end>(std::forward<F>(func))), ZeroType());
+    return (func(Tag<begin + INT>()) + ... + ZeroType());
   }
 
+  /** @brief A function which applies + to the results of func(Tag<i>()) for i in [begin, end).
+   *
+   * Unit test: make test-sum_in_range
+   *
+   * @param func the function to apply to each integer in the range before summing
+   **/
+  template <int begin, int end, typename F> constexpr auto sum_in_range(F &&func)
+  {
+    return sum_in_range_impl<begin>(std::forward<F>(func), std::make_integer_sequence<int, end - begin>());
+  }
+
+#ifdef TEMPLATTEST
   class sum_in_range_Tester
   {
-
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 #define Total(i, beg, end, expr) sum_in_range<beg, end + 1>([&](auto i) { return expr; })
 } // namespace TempLat

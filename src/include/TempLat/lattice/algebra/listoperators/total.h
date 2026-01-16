@@ -5,43 +5,56 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "binaryfold.h"
+#include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/operators/add.h"
 #include "listadd.h"
+#include "TempLat/util/tuple_size.h"
 
 namespace TempLat
 {
-  /** \brief A function which applies + to the element of a list, elementwise. Specialisation of binary_fold.
-   *
-   *
+  template <typename Tuple, typename F, int... INT>
+  constexpr auto total_impl(Tuple &&tup, F &&func, std::integer_sequence<int, INT...> iseq)
+  {
+    return (func(GetComponent::get(tup, Tag<INT>())) + ... + ZeroType());
+  }
+
+  /** @brief Sums all the components of a tuple after applying func to them.
    *
    * Unit test: make test-total
+   *
+   *  @param tup the tuple to sum over
+   *  @param func the function to apply to each component before summing
    **/
-
-  class TotalTester
-  {
-
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <class Tuple, typename Function> constexpr auto total(Tuple &&tup, Function &&func)
   {
-    return binary_fold([](auto x, auto y) { return x + y; }, std::forward<Tuple>(tup), std::forward<Function>(func),
-                       ZeroType());
+    return total_impl(std::forward<Tuple>(tup), std::forward<Function>(func),
+                      std::make_integer_sequence<int, tuple_size<std::decay_t<Tuple>>::value>());
   }
 
-  template <class Tuple> DEVICE_FUNCTION constexpr auto total(Tuple &&tup)
+  /** @brief Sums all the components of a tuple.
+   *
+   * Unit test: make test-total
+   *
+   *  @param tup the tuple to sum over
+   **/
+  template <class Tuple> constexpr auto total(Tuple &&tup)
   {
-    return binary_fold([](auto x, auto y) { return x + y; }, std::forward<Tuple>(tup), [](auto x) { return x; },
-                       ZeroType());
+    return total_impl(
+        std::forward<Tuple>(tup), [](auto x) { return x; },
+        std::make_integer_sequence<int, tuple_size<std::decay_t<Tuple>>::value>());
   }
+
+#ifdef TEMPLATTEST
+  class TotalTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
+
 } // namespace TempLat
 
 #endif
