@@ -1,0 +1,4 @@
+tmp/
+website/
+build/
+scripts/__pycache__

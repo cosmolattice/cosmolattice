@@ -7,6 +7,7 @@ blocks = [
     ["table", (r"\begin{table}", r"\end{table}")],
     ["table", (r"\begin{tabularx}", r"\end{tabularx}")],
     ["table", (r"\begin{longtable}", r"\end{longtable}")],
+    ["table", (r"\begin{tabular}", r"\end{tabular}")],
 ]
 
 

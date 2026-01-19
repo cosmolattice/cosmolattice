@@ -20,8 +20,6 @@ def table_block(block_content, tmpdir):
         outfile.write(r"\setcounter{table}{" + f"{table_counter-1}" + "}")
         outfile.write(block_content)
 
-    print("we are in the folder ", os.getcwd(), file=sys.stderr)
-
     # Then, use pdflatex
     subprocess.run(
         [
@@ -37,14 +35,14 @@ def table_block(block_content, tmpdir):
     # using imagemagick to convert pdf to png
     subprocess.run(
         [
-            "convert",
+            "magick",
             "-density",
             "300",
+            "./table.pdf",
             "-quality",
             "90",
             "-trim",
-            "table.pdf",
-            "table.png",
+            "./table.png",
         ],
         stdout=subprocess.DEVNULL,
         # stderr=subprocess.DEVNULL,
@@ -58,8 +56,8 @@ def table_block(block_content, tmpdir):
     if not os.path.exists(tmpdir + "/assets/tables"):
         os.makedirs(tmpdir + "/assets/tables")
     # Move the generated PDF to /assets/tables/tableN.png
-    output_filename = f"/assets/tables/table{table_counter}.png"
-    shutil.move(tmpdir + "/tex/table.png", tmpdir + output_filename)
+    output_filename = f"assets/tables/table{table_counter}.png"
+    shutil.move(tmpdir + "/tex/table.png", tmpdir + "/" + output_filename)
 
     # extract label if any
     label_dict = {}

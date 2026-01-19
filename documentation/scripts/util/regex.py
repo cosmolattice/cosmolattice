@@ -48,29 +48,40 @@ repl_pass_1 = {
     r"\\color\{.+?\}": r"",
     r"\\vspace\{.+?\}": r"",
     r"\\vspace\*\{.+?\}": r"",
-    r"\\hspace\{.+?\}": r"",
-    r"\\hspace\*\{.+?\}": r"",
+    # r"\\hspace\{.+?\}": r"",
+    # r"\\hspace\*\{.+?\}": r"",
+    # Comments
+    r"^%.*\n": r"",
     r"([^\\])%[^\n]*": r"\1",
+    # Lists
     r"\\begin\{itemize\}": r"",
     r"\\end\{itemize\}": r"",
     r"\\begin\{enumerate\}": r"",
     r"\\end\{enumerate\}": r"",
     r"\\item": r"- ",
-    r"\\ ": r" ",
+    r"([^\\])\\ ": r"\1 ",
     # Erroneous spaces in math mode
     r"\s\$\s(\g<body>)\$": r" $\2$",
+    # extra characters
+    re.escape(r"a\^"): r"â",
+    # very specific replacements
+    r"In the lattice": r"On the lattice",
+    r"in the lattice": r"on the lattice",
+    re.escape("----- U(1) toolkit -----"): r"     **U(1) toolkit**\n_____\n",
+    re.escape("----- SU(N) toolkit -----"): r"     **SU(2) toolkit**\n_____\n",
+    r"\\appendix": r"",
 }
 
 repl_pass_2 = {
     # Hyperlinks
-    r"\\href\{(.+?)\}\{(.+?)\}": r"[\2](\1)",
+    # r"\\href\{(.+?)\}\{(.+?)\}": r"[\2](\1)",
 }
 
 shortcut_replacements = {
     r"\\dx": r"\\delta x",
     r"\\dt": r"\\delta t",
     r"\\deta": r"\\delta\\eta",
-    r"\\bn": r"**n**",
+    r"\\bn": r"{\\bf n}",
     r"\\dd": r"\\text{d}",
     #
     r"\\nn": r"",

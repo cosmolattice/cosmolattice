@@ -12,6 +12,10 @@ default_pass = {
     ## code environments
     r"\\begin\{shell-sessioncode\}([\s\S]+?)\\end\{shell-sessioncode\}": r"```bash\1```",
     r"\\begin\{C\+\+code\}([\s\S]+?)\\end\{C\+\+code\}": r"```cpp\1```",
+    # Hyperlinks
+    r"\\href\{(.+?)\}\{(.+?)\}": r"[\2](\1)",
+}
+text_formatting = {
     # Text formatting
     r"\{\s*?\\it\s?\\bf\s?(\g<body>)\s*\}": r"***\1***",
     r"\{\s*?\\bf\s?\\it\s?(\g<body>)\s*\}": r"***\1***",
@@ -22,8 +26,11 @@ default_pass = {
     r"\\textbf\{\s*(\g<body>)\s*\}": r"**\1**",
     r"\\texttt\{\s*(\g<body>)\s*\}": r"`\1`",
     r"\\emph\{\s*(\g<body>)\s*\}": r"*\1*",
+    r"\\_": r"_",
+    " -\.": ": ",
 }
 default_pass = insert_body(default_pass)
+text_formatting = insert_body(text_formatting)
 
 clean_labels = {
     # remove formatting things
@@ -91,16 +98,55 @@ def replace_labels(lines):
             )
         label_dict[label_name] = cleaned_section_name
 
+    # now get rid of these damn labels
+    label_cleanup_pattern = re.compile(r"\\label\{(.+?)\}")
+    lines = label_cleanup_pattern.sub(r"", lines)
+
     return lines, label_dict
+
+
+inline_math_patterns = {
+    # Text formatting
+    # r"\{\s*?\\it\s?\\bf\s?(\g<body>)\s*\}": r"\textit{\textbf{\1}}",
+    # r"\{\s*?\\bf\s?\\it\s?(\g<body>)\s*\}": r"\textbf{\textit{\1}}",
+    # r"\{\s*?\\it\s?(\g<body>)\s*\}": r"\\textit{\1}",
+    # r"\{\s*?\\bf\s?(\g<body>)\s*\}": r"\\textbf{\1}",
+    # r"\{\s*?\\tt\s?(\g<body>)\s*\}": r"\\texttt{\1}",
+}
+inline_math_patterns = insert_body(inline_math_patterns)
 
 
 def fix_inline_math(lines):
     # Get rid of newlines inside any inline math $...$
     inline_math_pattern = re.compile(r"\$(.+?)\$", re.DOTALL)
+    math_list = {}
+
     for match in inline_math_pattern.finditer(lines):
         math_content = match.group(1)
         math_content_clean = math_content.replace("\n", " ")
-        lines = lines.replace(match.group(0), f"${math_content_clean}$")
+        while True:
+            old_content = math_content_clean
+            # for old, new in inline_math_patterns.items():
+            #    math_content_clean = re.sub(
+            #        old, new, math_content_clean, flags=re.MULTILINE
+            #    )
+            if math_content_clean == old_content:
+                break
+        # Store the cleaned math content to avoid reprocessing
+        math_list[len(math_list)] = math_content_clean
+        lines = lines.replace(match.group(0), f"____INLINEMATH{len(math_list)-1}____")
+
+    # Now, we can actually do the text formatting!
+    while True:
+        old_lines = lines
+        for old, new in text_formatting.items():
+            lines = re.sub(old, new, lines, flags=re.MULTILINE)
+        if lines == old_lines:
+            break
+
+    # Finally, restore the cleaned inline math content
+    for i, math_content_clean in math_list.items():
+        lines = lines.replace(f"____INLINEMATH{i}____", f"${math_content_clean}$")
 
     return lines
 

@@ -35,14 +35,14 @@ def figure_block(block_content, tmpdir):
     # using imagemagick to convert pdf to png
     subprocess.run(
         [
-            "convert",
+            "magick",
             "-density",
             "300",
+            "./figure.pdf",
             "-quality",
             "90",
             "-trim",
-            "figure.pdf",
-            "figure.png",
+            "./figure.png",
         ],
         stdout=subprocess.DEVNULL,
         # stderr=subprocess.DEVNULL,
@@ -56,8 +56,8 @@ def figure_block(block_content, tmpdir):
     if not os.path.exists(tmpdir + "/assets/figures"):
         os.makedirs(tmpdir + "/assets/figures")
     # Move the generated PDF to /assets/figures/figureN.pdf
-    output_filename = f"/assets/figures/figure{figure_counter}.png"
-    shutil.move(tmpdir + "/tex/figure.png", tmpdir + output_filename)
+    output_filename = f"assets/figures/figure{figure_counter}.png"
+    shutil.move(tmpdir + "/tex/figure.png", tmpdir + "/" + output_filename)
 
     # extract label if any
     label_dict = {}

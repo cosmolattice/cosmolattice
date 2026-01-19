@@ -16,22 +16,24 @@ def math_labels(lines):
 
     label_pattern = re.compile(r"\$\$\n(.*?)\$\$", re.DOTALL)
     for match in label_pattern.finditer(lines):
+        prefix = ""
         label_content = match.group(1)
         label_name = re.search(r"\\label\{(.+?)\}", label_content)
-        if label_name:
-            label_content = re.sub(r"\\label\{(.+?)\}", "", label_content)
+        while label_name:
+            label_content = label_content.replace(
+                label_name.group(0), r"\tag{" + str(tag_counter) + "}"
+            )
             label_name = label_name.group(1)
             repl = label_name.replace(":", "_")
-            lines = lines.replace(
-                match.group(0),
-                "[](){ #"
-                + f"{repl}"
-                + " }\n$$\n"
-                + label_content
-                + f"\\tag{{ {tag_counter} }}$$",
-            )
+            prefix += "[](){ #" + f"{repl}" + " }\n"
             label_dict[label_name] = f"{tag_counter}"
             tag_counter += 1
+            label_name = re.search(r"\\label\{(.+?)\}", label_content)
+
+        lines = lines.replace(
+            match.group(0),
+            prefix + "$$\n" + label_content + f"\n$$",
+        )
 
     # now get rid of these damn labels
     label_cleanup_pattern = re.compile(r"\\label\{(.+?)\}")
@@ -41,9 +43,16 @@ def math_labels(lines):
 
 
 def math_block(lines):
-    # get rid of \\
+    # get rid of superfluous \n
     lines = lines.replace("\\begin{align}\n\n", "\\begin{align}\n")
     lines = lines.replace("\n\n\\end{align}", "\n\\end{align}")
+    lines = lines.replace("&&", "&")
+
+    # remove comments
+    # first, lines that are only comments
+    # lines = re.sub(r"^\s*%.*$\n", r"", lines, flags=re.MULTILINE)
+    # then, comments at the end of lines
+    # lines = re.sub(r"(?<!\\)%.*$", r"", lines, flags=re.MULTILINE)
 
     lines, label_dict = math_labels(lines)
     lines = katex(lines)

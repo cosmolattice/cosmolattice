@@ -5,6 +5,12 @@ theme:
   features:
     - content.code.copy
     - content.code.select
+    - navigation.tabs
+  logo: assets/CL_Icon.png
+  favicon: assets/CL_Icon.png
+  palette:
+    primary: white
+    accent: light blue
   icon:
     admonition:
       note: fontawesome/solid/note-sticky
@@ -19,6 +25,7 @@ theme:
       bug: fontawesome/solid/robot
       example: fontawesome/solid/flask
       quote: fontawesome/solid/quote-left
+extra_css: [extra.css]
 
 plugins:
   - bibtex:
@@ -51,7 +58,7 @@ markdown_extensions:
   - admonition
   - pymdownx.details
 
-use_directory_urls: true # (optional) for better links without .html extension
+use_directory_urls: false # (optional) for better links without .html extension
 
 nav:
   - Home: index.md
@@ -77,4 +84,3 @@ nav:
       - "Variables": "CosmoLattice/variables.md"
       - "Macros": "CosmoLattice/macros.md"
       - "Files": "CosmoLattice/files.md"
-  - Manual:
