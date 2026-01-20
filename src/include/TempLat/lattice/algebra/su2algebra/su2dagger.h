@@ -90,6 +90,13 @@ namespace TempLat
     return SU2Dagger<R>(r);
   };
 
+  template <class R>
+    requires HasSU2Get<R>
+  auto dag(const R &r)
+  {
+    return dagger(r);
+  };
+
 #ifdef TEMPLATTEST
   struct SU2DaggerTester {
     static inline void Test(TDDAssertion &tdd);
