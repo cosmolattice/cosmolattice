@@ -10,6 +10,8 @@
 #include "TempLat/lattice/algebra/coordinates/spatialcoordinate.h"
 
 #include <sstream>
+#include <iostream>
+#include <functional>
 
 namespace TempLat
 {
@@ -21,6 +23,143 @@ namespace TempLat
     };
   } // namespace Testing
 } // namespace TempLat
+
+template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
+{
+  using namespace TempLat;
+  sayMPI << "Testing GhostBuster in " << NDim << " dimensions.\n";
+
+  // Set up grid sizes for each dimension (smaller than 3D test to reduce complexity)
+  std::array<ptrdiff_t, NDim> nGrid;
+  for (size_t i = 0; i < NDim; ++i) {
+    nGrid[i] = 8; // Small grid size for all dimensions
+  }
+
+  // Create layout
+  std::array<ptrdiff_t, NDim> globalSizes;
+  for (size_t i = 0; i < NDim; ++i) {
+    globalSizes[i] = 16; // Global size larger than local
+  }
+  LayoutStruct<NDim> layout(globalSizes, 1);
+  layout.setLocalSizes(nGrid);
+
+  // Define two different ghost layouts to test transformation between them
+  std::array<std::array<ptrdiff_t, 2u>, NDim> nGhost1{};
+  std::array<std::array<ptrdiff_t, 2u>, NDim> nGhost2{};
+
+  // Set up asymmetric ghost configurations for testing
+  for (size_t i = 0; i < NDim; ++i) {
+    nGhost1[i][0] = 2; // left ghost cells
+    nGhost1[i][1] = 1; // right ghost cells
+    nGhost2[i][0] = 1; // left ghost cells
+    nGhost2[i][1] = 2; // right ghost cells
+  }
+
+  auto testGhostTransformation = [&](const auto &nGhostFrom, const auto &nGhostTo) {
+    // Calculate memory sizes needed for both layouts
+    ptrdiff_t memSize1 = 1, memSize2 = 1;
+    for (size_t i = 0; i < NDim; ++i) {
+      memSize1 *= (nGrid[i] + nGhostFrom[i][0] + nGhostFrom[i][1]);
+      memSize2 *= (nGrid[i] + nGhostTo[i][0] + nGhostTo[i][1]);
+    }
+
+    JumpsHolder<NDim> jumperFrom(layout, nGhostFrom);
+    JumpsHolder<NDim> jumperTo(layout, nGhostTo);
+
+    MemoryBlock<NDim, Testing::datum> memory(std::max(memSize1, memSize2));
+
+    // Initialize memory with coordinate values
+    {
+      auto memory_view = memory.getRawHostView();
+
+      // Use a lambda to handle N-dimensional initialization recursively
+      std::function<void(std::array<ptrdiff_t, NDim> &, size_t, ptrdiff_t)> initMemory =
+          [&](std::array<ptrdiff_t, NDim> &coords, size_t dim, ptrdiff_t offset) {
+            if (dim == NDim) {
+              // Base case: set the memory value
+              memory_view[offset].x = coords[0];
+              memory_view[offset].y = (NDim > 1) ? coords[1] : 0;
+              memory_view[offset].z = (NDim > 2) ? coords[2] : 0;
+              return;
+            }
+
+            ptrdiff_t stride = 1;
+            for (size_t j = dim + 1; j < NDim; ++j) {
+              stride *= (nGrid[j] + nGhostFrom[j][0] + nGhostFrom[j][1]);
+            }
+
+            for (ptrdiff_t i = -nGhostFrom[dim][0]; i < nGrid[dim] + nGhostFrom[dim][1]; ++i) {
+              coords[dim] = i;
+              ptrdiff_t newOffset = offset + (i + nGhostFrom[dim][0]) * stride;
+              initMemory(coords, dim + 1, newOffset);
+            }
+          };
+
+      std::array<ptrdiff_t, NDim> coords{};
+      initMemory(coords, 0, 0);
+      memory.pushHostView();
+    }
+
+    // Perform ghost transformation
+    GhostBuster<NDim> ghostBuster(jumperFrom, jumperTo);
+    ghostBuster(memory);
+
+    // Verify the transformation
+    memory.flagHostMirrorOutdated();
+    auto memory_view = memory.getRawHostView();
+
+    bool allCorrect = true;
+
+    // Use recursive lambda to verify N-dimensional memory
+    std::function<void(std::array<ptrdiff_t, NDim> &, size_t)> verifyMemory = [&](std::array<ptrdiff_t, NDim> &coords,
+                                                                                  size_t dim) {
+      if (dim == NDim) {
+        // Base case: check this coordinate
+        ptrdiff_t pos = jumperTo.toOrigin();
+        for (size_t i = 0; i < NDim; ++i) {
+          pos += jumperTo.getJumpsInMemoryOrder()[i] * coords[i];
+        }
+
+        const Testing::datum &dat = memory_view[pos];
+        bool thisCorrect =
+            (dat.x == coords[0]) && (dat.y == ((NDim > 1) ? coords[1] : 0)) && (dat.z == ((NDim > 2) ? coords[2] : 0));
+        allCorrect = allCorrect && thisCorrect;
+        return;
+      }
+
+      for (ptrdiff_t i = 0; i < nGrid[dim]; ++i) {
+        coords[dim] = i;
+        verifyMemory(coords, dim + 1);
+      }
+    };
+
+    std::array<ptrdiff_t, NDim> coords{};
+    verifyMemory(coords, 0);
+
+    return allCorrect;
+  };
+
+  // Test transformation from layout 1 to layout 2
+  bool test1 = testGhostTransformation(nGhost1, nGhost2);
+  tdd.verify(test1);
+
+  // Test transformation from layout 2 to layout 1 (reverse)
+  bool test2 = testGhostTransformation(nGhost2, nGhost1);
+  tdd.verify(test2);
+
+  // Test with uniform ghost layout
+  std::array<std::array<ptrdiff_t, 2u>, NDim> nGhostUniform{};
+  for (size_t i = 0; i < NDim; ++i) {
+    nGhostUniform[i][0] = 1;
+    nGhostUniform[i][1] = 1;
+  }
+
+  bool test3 = testGhostTransformation(nGhost1, nGhostUniform);
+  tdd.verify(test3);
+
+  bool test4 = testGhostTransformation(nGhostUniform, nGhost2);
+  tdd.verify(test4);
+}
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDDAssertion &tdd)
@@ -210,6 +349,13 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
     myLittleLambda(nGhost1, nGhost2);
     myLittleLambda(nGhost2, nGhost1);
   }
+
+  // quick N-dimensional test
+  constexpr_for<1, 5, 1>([&](auto N) {
+    constexpr size_t nd = decltype(N)::value;
+    run_nd_test<nd>(tdd);
+  });
+
   return;
 
   // MPI test. This is a bit of an integration test, as it uses the MemoryManager and Field classes.

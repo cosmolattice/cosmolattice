@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 
@@ -25,9 +25,8 @@ namespace TempLat
 
   enum CANONICALTYPE { AMPLITUDE, MOMENTUM };
 
-  /** \brief A simple class which provides a get method for basic types.
-   * Field class
-   *
+  /** @brief A base class for a one-component field, providing common functionality and holding relevant pointers to
+   * memory tools.
    *
    **/
   template <size_t _NDim, typename T> class AbstractField
@@ -71,10 +70,16 @@ namespace TempLat
 
     // Mostly for testing purpose
 
-    /** \brief Check the current state. */
+    /** @brief Check the current state.
+     *
+     * @return true if in configuration space
+     */
     bool isConfigSpace() const { return mManager->isConfigSpace(); }
 
-    /** \brief Check the current state. */
+    /** @brief Check the current state.
+     *
+     * @return true if in fourier space
+     */
     bool isFourierSpace() const { return mManager->isFourierSpace(); }
 
     void setGhostsAreStale() const { mManager->setGhostsAreStale(); }
@@ -90,6 +95,7 @@ namespace TempLat
 
   protected:
     /* Put all member variables and private methods here. These may change arbitrarily. */
+
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     device::memory::host_ptr<MemoryManager<NDim, T>> mManager;
 

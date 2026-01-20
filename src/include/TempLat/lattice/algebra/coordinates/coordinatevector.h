@@ -23,11 +23,12 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
     CoordinateVector() {}
-    void doWeNeedGhosts(ptrdiff_t i) {}
+    void doWeNeedGhosts(ptrdiff_t i) const {}
 
-    virtual void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) = 0;
-    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) { return 1; }
-    inline virtual JumpsHolder<NDim> getJumps() = 0;
+    virtual void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
+                              const SpaceStateType &spaceType) const = 0;
+    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const { return 1; }
+    inline virtual JumpsHolder<NDim> getJumps() const = 0;
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

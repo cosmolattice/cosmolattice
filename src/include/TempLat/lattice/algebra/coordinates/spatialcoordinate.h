@@ -41,9 +41,10 @@ namespace TempLat
       return result[component];
     }
 
-    JumpsHolder<NDim> getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
+    virtual JumpsHolder<NDim> getJumps() const override { return mToolBox->mLayouts.getConfigSpaceJumps(); }
 
-    void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
+    virtual void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
+                              const SpaceStateType &spaceType) const override
     {
       switch (spaceType) {
       case SpaceStateType::Fourier:

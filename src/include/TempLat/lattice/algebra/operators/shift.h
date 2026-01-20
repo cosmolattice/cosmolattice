@@ -69,7 +69,7 @@ namespace TempLat
 
   template <typename R, int _N> class ExpressionShifterByOne : public UnaryOperator<R>
   {
-    // TODO: override confirmspace to force configuration space.
+    // TODO: override confirmspace to force configuration space. (Why? shifting in fourier space is fine, too, right?)
   public:
     static_assert(_N != 0, "_N cannot be 0.");
 

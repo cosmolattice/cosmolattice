@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which allows to make collections of vector fields.
+  /** @brief A class which allows to make collections of vector fields.
    *
    *
    * Unit test: make test-vectorfieldcollection
@@ -30,19 +30,18 @@ namespace TempLat
     }
 
     template <int M> auto operator()(Tag<M> t) const { return fs[t - Tag<SHIFTIND>()]; }
-    template <int M> auto getComp(Tag<M> t) { return fs[t]; }
+    template <int M> auto getComp(Tag<M> t) const { return fs[t]; }
 
     template <typename R> void operator=(R &&r)
     {
-      for_in_range<0, std::remove_reference<R>::type::size>(
-          [&](auto i) { (*this).getComp(i) = std::remove_reference<R>::type::Getter::get(r, i); });
+      for_in_range<0, std::decay_t<R>::size>([&](auto i) { (*this).getComp(i) = std::decay_t<R>::Getter::get(r, i); });
     }
 
     template <typename R> void operator+=(R &&r)
     {
       //  (*this) = (*this) + r;
-      for_in_range<0, std::remove_reference<R>::type::size>(
-          [&](auto i) { (*this).getComp(i) = (*this).getComp(i) + std::remove_reference<R>::type::Getter::get(r, i); });
+      for_in_range<0, std::decay_t<R>::size>(
+          [&](auto i) { (*this).getComp(i) = (*this).getComp(i) + std::decay_t<R>::Getter::get(r, i); });
     }
 
     std::string toString(ptrdiff_t i) const { return fs[i - SHIFTIND].toString(); }

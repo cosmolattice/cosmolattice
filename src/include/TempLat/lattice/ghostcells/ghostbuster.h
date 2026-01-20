@@ -5,12 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-
-#include <cstddef>
-#include <functional>
-#include <cstring>
-#include <stdexcept>
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2026
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
@@ -141,6 +136,25 @@ namespace TempLat
       const auto from_sizes = mFrom.getSizesInMemory();
       const auto to_sizes = mTo.getSizesInMemory();
 
+      // Perform a check whether input and output are identical
+      bool identical = true;
+      for (size_t d = 0; d < NDim; ++d) {
+        if (from_padding[d][0] != to_padding[d][0] || from_padding[d][1] != to_padding[d][1] ||
+            from_sizes[d] != to_sizes[d]) {
+          identical = false;
+          break;
+        }
+      }
+      if (identical) return;
+
+      // std::cout << "GhostBuster: busting:\n"
+      //           << " from padding: " << from_padding << "\n"
+      //           << " from sizes:   " << from_sizes << "\n"
+      //           << " to padding:   " << to_padding << "\n"
+      //           << " to sizes:     " << to_sizes << "\n"
+      //           << " direction:    " << mDirection << "\n"
+      //           << std::endl;
+
       device::array<ptrdiff_t, NDim> from_full_sizes{};
       device::array<ptrdiff_t, NDim> to_full_sizes{};
       for (size_t i = 0; i < NDim; ++i) {
@@ -171,7 +185,9 @@ namespace TempLat
           std::apply([&](const auto &...args) { return device::memory::NDView<NDim, T>("GhostBusterTSlab", args...); },
                      tslab_sizes);
 
-      for (int _j = 0; _j < to_sizes[dim]; ++_j) {
+      int _j_lim = mDirection > 0 ? std::min(to_sizes[dim], from_sizes[dim] + from_padding[dim][1])
+                                  : std::min(to_sizes[dim], from_sizes[dim] + from_padding[dim][0]);
+      for (int _j = 0; _j < _j_lim; ++_j) {
         // If we shrink (mDirection==1), we go from 0 to max. (slabs are dropping to "lower" memory)
         // If we expand (mDirection==-1), we go from max to 0. (slabs are rising to "higher" memory)
         const int j = mDirection > 0 ? _j : to_sizes[dim] - 1 - _j;
