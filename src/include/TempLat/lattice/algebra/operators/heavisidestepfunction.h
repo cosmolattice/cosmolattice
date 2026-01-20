@@ -57,11 +57,11 @@ namespace TempLat
   DEVICE_FORCEINLINE_FUNCTION
   OneType heaviside(OneType a) { return OneType(); }
 
-  struct HeavisideStepFunctionTester {
 #ifdef TEMPLATTEST
+  struct HeavisideStepFunctionTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

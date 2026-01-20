@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/constants/halftype.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
@@ -63,14 +63,6 @@ namespace TempLat
   template <typename T> DEVICE_FORCEINLINE_FUNCTION T &operator-(T &&a, ZeroType b) { return a; }
 
   /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
-  //    template <typename T, typename S>
-  //    inline
-  //    typename std::enable_if<HasGetMethod<T>::value && std::is_same<T, S>::value, ZeroType>::type
-  //    operator-( T&& a, T&& b) {
-  //        return ZeroType();
-  //    }
-
-  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires(!std::is_same_v<T, ZeroType>)
   DEVICE_FORCEINLINE_FUNCTION auto operator-(ZeroType a, const T &b)
@@ -95,12 +87,12 @@ namespace TempLat
   /** \brief Specialize for possible OneType OneType input */
   inline auto operator-(OneType a, OneType b) { return ZeroType(); }
 
+#ifdef TEMPLATTEST
   /** \brief A mini struct for instiating the test case. */
   struct SubtractTester {
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

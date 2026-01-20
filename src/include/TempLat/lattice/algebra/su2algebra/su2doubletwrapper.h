@@ -67,12 +67,6 @@ namespace TempLat
   public:
   };
 
-  struct SU2DoubletWrapperTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <class A, class B, class C, class D> auto SU2DoubletWrap(A &&pA, B &&pB, C &&pC, D &&pD)
   {
     return SU2DoubletWrapper<A, B, C, D>(pA, pB, pC, pD);
@@ -81,6 +75,12 @@ namespace TempLat
   template <typename F> auto SU2DoubletWrap(F &&f) { return SU2DoubletWrap(f(0_c), f(1_c), f(2_c), f(3_c)); }
 
 #define MakeSU2Doublet(a, expr) SU2DoubletWrap([&](auto a) { return expr; })
+
+#ifdef TEMPLATTEST
+  struct SU2DoubletWrapperTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

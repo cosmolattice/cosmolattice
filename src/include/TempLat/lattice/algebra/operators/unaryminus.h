@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
@@ -48,13 +48,6 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief A mini struct for instantiating the test case. */
-  struct UnaryMinusTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   /** \brief Exposing our newly defined subtraction operation to the world. */
   template <typename T>
     requires HasGetMethod<T>
@@ -72,6 +65,13 @@ namespace TempLat
   {
     return a;
   }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instantiating the test case. */
+  struct UnaryMinusTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

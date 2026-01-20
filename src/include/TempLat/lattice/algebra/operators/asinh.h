@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2020
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
@@ -21,7 +21,7 @@ namespace TempLat
   using device::asinh;
   namespace Operators
   {
-    /** \brief A class which computes the asinh.
+    /** @brief A class which computes the asinh.
      *
      * Unit test: make test-asinh
      **/
@@ -52,13 +52,6 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief A mini struct for instiating the test case. */
-  struct ASinhTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   /** \brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
@@ -66,6 +59,13 @@ namespace TempLat
   {
     return Operators::ASinh<T>(a);
   }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instiating the test case. */
+  struct ASinhTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

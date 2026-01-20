@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 
@@ -18,16 +18,16 @@
 
 namespace TempLat
 {
-  /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
+  /** @brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
    * them. */
   using device::exp;
 
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which exponentiate a field.
+    /** @brief A class which exponentiates an expression.
      *
-     * Unit test: make test-multiply
+     * Unit test: make test-exponential
      **/
     template <typename T> class Exponential : public UnaryOperator<T>
     {
@@ -56,14 +56,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief A mini struct for instiating the test case. */
-  struct ExponentialTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
-  /** \brief Exposing our newly define exp operation to the world. */
+  /** @brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
   DEVICE_FORCEINLINE_FUNCTION auto exp(T a)
@@ -71,9 +64,16 @@ namespace TempLat
     return Operators::Exponential<T>(a);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType exp(ZeroType a) { return OneType(); }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instiating the test case. */
+  struct ExponentialTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

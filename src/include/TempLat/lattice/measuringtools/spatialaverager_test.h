@@ -20,7 +20,7 @@ namespace TempLat
       requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION double get(const IDX &...idx) const
     {
-      Kokkos::Array<ptrdiff_t, NDim> ii;
+      device::array<ptrdiff_t, NDim> ii;
       mLayout.putSpatialLocationFromMemoryIndexInto0N(ii, idx...);
 
       return ii[0] * pow(16, 3) + ii[1] * pow(16, 2) + ii[2] * 16 + ii[3];

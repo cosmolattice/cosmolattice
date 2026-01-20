@@ -50,17 +50,17 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief A mini struct for instiating the test case. */
-  struct DiracDeltaFunctionTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename T> DEVICE_FORCEINLINE_FUNCTION Operators::DiracDeltaFunction<T> DiracDelta(const T &a)
   {
     return Operators::DiracDeltaFunction<T>(a);
   }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instiating the test case. */
+  struct DiracDeltaFunctionTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 #endif

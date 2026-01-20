@@ -18,10 +18,10 @@
 
 namespace TempLat
 {
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which multiplies two getters. Holds the expression, only evaluates for a single element when you
+    /** @brief A class which divides two expressions. Holds the expression, only evaluates for a single element when you
      *call Divide::get(pIterCoords).
      *
      * Unit test: make test-divide
@@ -55,8 +55,7 @@ namespace TempLat
       }
     };
 
-    /*
-     * \brief Check  if numerator if roughly zero, don't do the division.
+    /** @brief Check  if numerator if roughly zero, don't do the division.
      * Useful for spectrum fluctuation, when normalising with a cutoff
      */
     template <typename R, typename T> struct SafeDivision : public BinaryOperator<R, T> {
@@ -93,13 +92,6 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief A mini struct for instiating the test case. */
-  struct DivideTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
@@ -125,6 +117,13 @@ namespace TempLat
   {
     return a;
   }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instiating the test case. */
+  struct DivideTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

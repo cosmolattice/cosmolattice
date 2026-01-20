@@ -89,13 +89,13 @@ namespace TempLat
     FloatType dx2;
   };
 
+#ifdef TEMPLATTEST
   class NormGradientSquareTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   template <int nDimensions, typename R>
     requires HasGetMethod<R>

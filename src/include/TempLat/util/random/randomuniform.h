@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include <Kokkos_Array.hpp>
-#include <Kokkos_Macros.hpp>
 #include <cstdint>
 #include <random>
 
@@ -50,7 +48,7 @@ namespace TempLat
     double get(INT2 r, INT2 c, INT2 gen) const { return getPair(r, c, gen)[0]; }
 
     DEVICE_FORCEINLINE_FUNCTION
-    Kokkos::Array<double, 2> getPair(INT2 r, INT2 c, INT2 gen) const
+    device::array<double, 2> getPair(INT2 r, INT2 c, INT2 gen) const
     {
       const RNG2 rng;
 

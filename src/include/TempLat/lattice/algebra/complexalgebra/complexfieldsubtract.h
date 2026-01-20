@@ -17,7 +17,6 @@
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/complexalgebra/real.h"
 #include "TempLat/lattice/algebra/complexalgebra/imag.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -74,13 +73,6 @@ namespace TempLat
     virtual std::string operatorString() const override { return "-"; }
   };
 
-  struct ComplexFieldSubtractTester {
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && HasComplexFieldGet<T>)
   auto operator-(const R &r, const T &t)
@@ -101,6 +93,13 @@ namespace TempLat
   {
     return ComplexFieldSubtraction{r, Complexify(t, ZeroType())};
   }
+
+#ifdef TEMPLATTEST
+  struct ComplexFieldSubtractTester {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

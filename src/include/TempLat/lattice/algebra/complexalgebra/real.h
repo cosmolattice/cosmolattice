@@ -11,7 +11,6 @@
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -34,11 +33,11 @@ namespace TempLat
     return t.real();
   }
 
-  struct RealTester {
 #ifdef TEMPLATTEST
+  struct RealTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

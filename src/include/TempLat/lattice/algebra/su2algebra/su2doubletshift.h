@@ -121,12 +121,11 @@ namespace TempLat
     return SU2DoubletShifterByOne<R, N>(pR);
   }
 
-  struct SU2DoubletShiftTester {
 #ifdef TEMPLATTEST
+  struct SU2DoubletShiftTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
+#endif
 } // namespace TempLat
 
 #endif

@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
@@ -31,9 +31,7 @@
 
 namespace TempLat
 {
-  /** \brief A parent class which implements the common methods that all binary operators (*, +, -,... ) share.
-   *  Inherits from SpaceStateInterface in order to make the confirm(Config/Fourier)Space methods
-   *  accessible from any type of template instance.
+  /** @brief A parent class which implements the common methods that all binary operators (*, +, -,... ) share.
    *
    * Unit test: make test-binaryoperator
    **/

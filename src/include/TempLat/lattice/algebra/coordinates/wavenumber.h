@@ -15,7 +15,6 @@
 #include "TempLat/lattice/algebra/listoperators/vectordotter.h"
 #include "TempLat/lattice/algebra/helpers/getvectorcomponent.h"
 #include "TempLat/util/rangeiteration/tag.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -78,11 +77,11 @@ namespace TempLat
 
   template <size_t NDim> using FourierSite = WaveNumber<NDim>;
 
-  struct WaveNumberTester {
 #ifdef TEMPLATTEST
+  struct WaveNumberTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

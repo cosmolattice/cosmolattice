@@ -182,7 +182,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     device::array<ptrdiff_t, NDim> mNGrid;
     HermitianPartnersMode mode;
-    Kokkos::Array<ptrdiff_t, NDim> mSignConversionMidpoint;
+    device::array<ptrdiff_t, NDim> mSignConversionMidpoint;
 
   public:
 #ifdef TEMPLATTEST

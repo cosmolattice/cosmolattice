@@ -154,14 +154,6 @@ namespace TempLat
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
   };
 
-  class ComplexFieldAveragerTester
-  {
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename T>
     requires HasComplexFieldGet<T>
   auto complexfieldaverage(T instance,
@@ -172,6 +164,13 @@ namespace TempLat
     return make_list_from_array(ComplexFieldAverager<T>(instance, spaceType).compute());
   }
 
+#ifdef TEMPLATTEST
+  class ComplexFieldAveragerTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

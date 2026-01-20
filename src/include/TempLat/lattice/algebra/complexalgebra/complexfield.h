@@ -20,7 +20,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements complex-valued fields.
+  /** @brief A class which implements complex-valued fields.
    *
    * Unit test: make test-complexfield
    **/

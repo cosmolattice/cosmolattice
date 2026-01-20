@@ -16,7 +16,7 @@
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
-#include <Kokkos_Macros.hpp>
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {

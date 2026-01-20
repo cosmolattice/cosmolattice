@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
@@ -73,18 +73,18 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-  struct SU2SubtractTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires(HasSU2Get<R> && HasSU2Get<T>)
   auto operator-(const R &r, const T &t)
   {
     return SU2Subtraction{r, t};
   }
+
+#ifdef TEMPLATTEST
+  struct SU2SubtractTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

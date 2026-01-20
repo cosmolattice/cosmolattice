@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
@@ -17,17 +17,16 @@
 
 namespace TempLat
 {
-  /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
+  /** @brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
    * them. */
   using device::log;
 
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which applies a minus sign. Holds the expression, only evaluates for a single element when you
-     *call Multiply::get(pIterCoords).
+    /** @brief Get the logarithm of a given expression.
      *
-     * Unit test: make test-multiply
+     * Unit test: make test-log
      **/
     template <typename T> class Log : public UnaryOperator<T>
     {
@@ -57,14 +56,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief A mini struct for instiating the test case. */
-  struct LogTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
-  /** \brief Exposing our newly define log operation to the world. */
+  /** @brief Exposing our newly define log operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
   DEVICE_FORCEINLINE_FUNCTION auto log(T a)
@@ -72,9 +64,16 @@ namespace TempLat
     return Operators::Log<T>(a);
   }
 
-  /** \brief Specialize for possible zero output! */
+  /** @brief Specialize for possible zero output! */
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType log(OneType a) { return ZeroType(); }
+
+#ifdef TEMPLATTEST
+  /** @brief A mini struct for instantiating the test case. */
+  struct LogTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

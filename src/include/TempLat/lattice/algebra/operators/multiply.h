@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
@@ -23,11 +23,10 @@
 
 namespace TempLat
 {
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which multiplies two getters. Holds the expression, only evaluates for a single element when you
-     *call Multiply::get(pIterCoords).
+    /** @brief A class which multiplies two expressions.
      *
      * Unit test: make test-multiply
      **/
@@ -79,13 +78,6 @@ namespace TempLat
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other) { return N * mR; }
     };
   } // namespace Operators
-
-  /** \brief A mini struct for instiating the test case. */
-  struct MultiplyTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
@@ -142,6 +134,13 @@ namespace TempLat
   /** \brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType operator*(OneType a, OneType b) { return a; }
+
+#ifdef TEMPLATTEST
+  /** @brief A mini struct for instiating the test case. */
+  struct MultiplyTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

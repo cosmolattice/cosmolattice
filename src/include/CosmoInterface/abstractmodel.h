@@ -22,7 +22,6 @@
 
 #include "TempLat/parameters/parameterparser.h"
 #include "CosmoInterface/runparameters.h"
-#include <Kokkos_Core.hpp>
 
 namespace TempLat
 {

@@ -16,7 +16,6 @@
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -82,13 +81,13 @@ namespace TempLat
 #endif
   };
 
+#ifdef TEMPLATTEST
   class BackDiffTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   template <class R, int N>
     requires HasGetMethod<R>

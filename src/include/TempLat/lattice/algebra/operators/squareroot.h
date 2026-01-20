@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/util/tdd/tdd.h"
@@ -17,13 +17,6 @@ namespace TempLat
   /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
    * them. */
   using device::sqrt;
-
-  /** \brief A mini struct for instiating the test case. */
-  struct SqrtTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
   namespace Operators
   {
@@ -80,6 +73,13 @@ namespace TempLat
   /** \brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType sqrt(OneType a) { return a; }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instiating the test case. */
+  struct SqrtTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

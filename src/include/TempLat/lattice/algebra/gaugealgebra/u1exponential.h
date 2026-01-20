@@ -13,7 +13,6 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldunaryoperator.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {

@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2020
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -113,18 +113,18 @@ namespace TempLat
     mutable device::array<SV, 4> cache;
   };
 
-  struct SU2GroupWrapperTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <class A, class B, class C> auto SU2GroupWrap(A &&pA, B &&pB, C &&pC)
   {
     return SU2GroupWrapper<A, B, C>(pA, pB, pC);
   }
 
   template <class R> auto toSU2(R r) { return SU2GroupWrap(r.SU2Get(1_c), r.SU2Get(2_c), r.SU2Get(3_c)); }
+
+#ifdef TEMPLATTEST
+  struct SU2GroupWrapperTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

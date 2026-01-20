@@ -118,18 +118,18 @@ namespace TempLat
     mutable device::array<SV, 4> cache;
   };
 
-  struct SU2MultiplyTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires(HasSU2Get<R> && HasSU2Get<T>)
   auto operator*(const R &r, const T &t)
   {
     return SU2Multiplication<R, T>(r, t);
   }
+
+#ifdef TEMPLATTEST
+  struct SU2MultiplyTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

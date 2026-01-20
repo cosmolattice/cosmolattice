@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"
 #include "TempLat/util/constexpr_for.h"
@@ -20,24 +20,10 @@ namespace TempLat
 {
   MakeException(RandomGaussianFieldNegativeFrequencyException);
 
-  /** \brief A class which initializes your complex random gaussian field. ONLY WORKS FOR FFTW R2C complex layouts. It
-   * has a state, only call for monotonically increasing last dimension, and walk an entire rod in the last dimension
-   *  before moving sideways. Otherwise this will be freaking slow.
-   *  This field is aware of wavenumbers: same layout is repeated
-   *  for different resolutions. Increasing the resolution with the
-   *  same random seed, means that you keep the same structure that
-   *  you had at the lower resolution, with additional high frequency
-   *  randomness.
-   *
-   *  And yet, the current implementation is slow: on each call to get
-   *  we allocate a new std::vector, because we now take into account
-   *  that the gaussian random field must have hermitian symmetry.
-   *  If we didn't do this, FFTW would have no problem and still
-   *  produce a real field with C2R and a hermitian symmetric
-   *  field with a consequential R2C, but this field then would not
-   *  be exactly equal to the input. Just for consistency, we chose to
-   *  sacrifice the speed and provide an input which has exactly
-   *  the hermitian symmetry which FFTW would otherwise impose.
+  /** @brief A class which initializes a complex random gaussian field. ONLY WORKS FOR FFTW R2C complex layouts.
+   *  It has a state, which counts the number of times it has been used. As in the backend a deterministic,
+   *  stateless RNG is used, we need to keep track of this in order to generate a new set of random numbers
+   *  each time
    *
    * Unit test: make test-randomgaussianfield
    **/

@@ -118,11 +118,11 @@ namespace TempLat
     return ComplexFieldShifterByOne<R, N>(pR);
   }
 
-  struct ComplexFieldShiftTester {
 #ifdef TEMPLATTEST
+  struct ComplexFieldShiftTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

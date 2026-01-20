@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler  Year: 2025
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldmultiply.h"
@@ -15,6 +14,7 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -98,19 +98,6 @@ namespace TempLat
   };
 #endif
 
-  /* template <typename R, typename T>
-   typename std::enable_if<HasComplexFieldGet<R>::value && HasSU2Get<T>::value,
-   ComplexFieldSU2Multiplication<R,T>>::type operator*(const R& r, const T& t)
-   {
-       return {r,t};
-   }
-
-   template <typename R, typename T>
-   typename std::enable_if<HasComplexFieldGet<T>::value && HasSU2Get<R>::value,
-   ComplexFieldSU2Multiplication<T,R>>::type operator*(const R& r, const T& t)
-   {
-       return {t,r};
-   }*/
   template <typename R, typename T>
     requires(HasGetMethod<R> && HasSU2Get<T>)
   auto operator*(const R &r, const T &t)

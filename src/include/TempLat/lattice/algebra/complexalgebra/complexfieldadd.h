@@ -75,13 +75,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-  struct ComplexFieldAddTester {
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && HasComplexFieldGet<T>)
   DEVICE_FORCEINLINE_FUNCTION auto operator+(const R &r, const T &t)
@@ -102,6 +95,13 @@ namespace TempLat
   {
     return ComplexFieldAddition<R, ComplexFieldWrapper<T, ZeroType>>{r, Complexify(t, ZeroType())};
   }
+
+#ifdef TEMPLATTEST
+  struct ComplexFieldAddTester {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

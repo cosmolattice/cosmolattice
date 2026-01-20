@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
@@ -144,11 +144,11 @@ namespace TempLat
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
   };
 
-  struct SU2AveragerTester {
 #ifdef TEMPLATTEST
+  struct SU2AveragerTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   template <typename T>
     requires HasSU2Get<T>

@@ -97,13 +97,13 @@ namespace TempLat
 #endif
   };
 
+#ifdef TEMPLATTEST
   template <size_t NDim> class LatticeLaplacianTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   template <int NDim, typename R>
     requires HasGetMethod<R>

@@ -87,12 +87,6 @@ namespace TempLat
   private:
   };
 
-  struct SU2CommutatorTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires(HasSU2Get<R> && HasSU2Get<T>)
   auto commutator(const R &r, const T &t)
@@ -127,6 +121,12 @@ namespace TempLat
   {
     return ZeroType();
   }
+
+#ifdef TEMPLATTEST
+  struct SU2CommutatorTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

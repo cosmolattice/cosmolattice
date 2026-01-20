@@ -73,12 +73,6 @@ namespace TempLat
     virtual std::string operatorString() const override { return "*"; }
   };
 
-  struct ScalarComplexFieldMultiplyTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename T>
   concept IsScalarType = (std::is_arithmetic_v<T> || HasGetMethod<T>) && !HasComplexFieldGet<T>;
 
@@ -102,6 +96,12 @@ namespace TempLat
   {
     return ScalarComplexFieldMultiply(1_c / t, r);
   }
+
+#ifdef TEMPLATTEST
+  struct ScalarComplexFieldMultiplyTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

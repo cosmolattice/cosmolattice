@@ -122,13 +122,13 @@ namespace TempLat
     LayoutStruct<NDim> mLayout;
   };
 
+#ifdef TEMPLATTEST
   class ComplexFieldFourierViewTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

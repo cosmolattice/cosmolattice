@@ -15,8 +15,7 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator.h"
-#include <Kokkos_Macros.hpp>
-#include <type_traits>
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -113,11 +112,11 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-  struct ComplexFieldSU2DoubletMultiplyTester {
 #ifdef TEMPLATTEST
+  struct ComplexFieldSU2DoubletMultiplyTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   template <typename R, typename T>
     requires((HasComplexFieldGet<R> || IsComplexType<R>) && HasSU2DoubletGet<T>)

@@ -12,7 +12,6 @@
 #include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -60,18 +59,18 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-  struct SU2DoubletSumTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires(HasSU2DoubletGet<R> && HasSU2DoubletGet<T>)
   auto operator+(const R &r, const T &t)
   {
     return SU2DoubletAddition<R, T>(r, t);
   }
+
+#ifdef TEMPLATTEST
+  struct SU2DoubletSumTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

@@ -114,11 +114,11 @@ namespace TempLat
 
   template <size_t NDim, typename T> using SU2Doublet = SU2DoubletBase<NDim, T>;
 
-  struct SU2DoubletTester {
 #ifdef TEMPLATTEST
+  struct SU2DoubletTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

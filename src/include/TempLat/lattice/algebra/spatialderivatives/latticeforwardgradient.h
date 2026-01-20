@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/tdd/tdd.h"
@@ -118,13 +118,13 @@ namespace TempLat
     const FloatType dx;
   };
 
+#ifdef TEMPLATTEST
   class LatticeForwardGradientTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   template <int nDimensions, typename R>
   DEVICE_FORCEINLINE_FUNCTION LatticeForwardGradient<nDimensions, R> LatForwardGrad(R pR)

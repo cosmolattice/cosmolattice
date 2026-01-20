@@ -7,11 +7,12 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {

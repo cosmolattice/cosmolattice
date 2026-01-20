@@ -46,16 +46,16 @@ namespace TempLat
     R mR;
   };
 
-  struct AsFourierTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R> ComplexFieldAsFourier<R> asFourier(R &&r)
   {
     return ComplexFieldAsFourier<R>(std::forward<R>(r));
   }
+
+#ifdef TEMPLATTEST
+  struct AsFourierTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

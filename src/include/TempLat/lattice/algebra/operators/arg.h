@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2020
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
@@ -58,18 +58,18 @@ namespace TempLat
     };
   } // namespace Operators
 
-  struct ArgTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
   DEVICE_FORCEINLINE_FUNCTION auto arg(R r, T t)
   {
     return Operators::Arg<R, T>{r, t};
   }
+
+#ifdef TEMPLATTEST
+  struct ArgTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

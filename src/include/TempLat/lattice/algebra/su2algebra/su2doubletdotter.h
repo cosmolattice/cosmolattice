@@ -89,12 +89,6 @@ namespace TempLat
     }
   };
 
-  struct SU2DoubletDotterTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <class R, class T>
     requires(HasSU2DoubletGet<R> && HasSU2DoubletGet<T>)
   auto scalar_prod(const R &r, const T &t)
@@ -122,6 +116,12 @@ namespace TempLat
   {
     return Real(scalar_prod(r, r));
   }
+
+#ifdef TEMPLATTEST
+  struct SU2DoubletDotterTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

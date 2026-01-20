@@ -91,9 +91,6 @@ namespace TempLat
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
 
     LayoutStruct<NDim> mLayout;
-
-    Kokkos::Array<device::Idx, NDim> start_iteration{};
-    Kokkos::Array<device::Idx, NDim> stop_iteration{};
   };
 
   template <typename T>

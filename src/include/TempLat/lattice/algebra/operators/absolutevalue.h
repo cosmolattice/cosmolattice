@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 // imperative to include this:
 // otherwise abs might be defined for integers only, with possibly desastrous consequences.
@@ -26,21 +26,19 @@ namespace TempLat
 
   namespace Operators
   {
-    /** \brief A class which applies takes the absolute value.
-     * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
+    /** \brief A class which takes the absolute value of a given expression.
      *
      * Unit test: make test-multiply
      **/
     template <typename R> class AbsoluteValue : public UnaryOperator<R>
     {
     public:
+      // Put public methods here. These should change very little over time.
       using UnaryOperator<R>::mR;
 
-      // Put public methods here. These should change very little over time.
       DEVICE_FUNCTION
       AbsoluteValue(const R &a) : UnaryOperator<R>(a) {}
 
-      /** \brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -50,20 +48,13 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return "abs"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief Passing on the automatic / symbolic derivatives. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mR, other) * (-heaviside(-mR) + heaviside(mR));
       }
     };
   } // namespace Operators
-
-  /** \brief A mini struct for instiating the test case. */
-  struct AbsoluteValueTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
   /** \brief Exposing our newly defined absolute value operation to the world. */
   template <typename T>
@@ -72,6 +63,13 @@ namespace TempLat
   {
     return Operators::AbsoluteValue<T>(a);
   }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instiating the test case. */
+  struct AbsoluteValueTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

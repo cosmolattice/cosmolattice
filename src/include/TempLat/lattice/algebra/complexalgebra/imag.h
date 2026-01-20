@@ -31,11 +31,11 @@ namespace TempLat
     return t.imag();
   }
 
-  struct ImagTester {
 #ifdef TEMPLATTEST
+  struct ImagTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -81,13 +81,13 @@ namespace TempLat
 #endif
   };
 
+#ifdef TEMPLATTEST
   class ForwDiffTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
   template <class R, int N>
     requires HasGetMethod<R>

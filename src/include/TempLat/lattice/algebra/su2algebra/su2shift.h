@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/shift.h"
@@ -141,11 +141,11 @@ namespace TempLat
     return SU2ShifterByOne<R, N>(pR);
   }
 
-  struct SU2ShiftTester {
 #ifdef TEMPLATTEST
+  struct SU2ShiftTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

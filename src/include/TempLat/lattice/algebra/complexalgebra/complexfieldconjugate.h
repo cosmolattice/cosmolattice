@@ -65,12 +65,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-  struct ComplexFieldConjugateTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R>
     requires HasComplexFieldGet<R>
   DEVICE_FORCEINLINE_FUNCTION auto conj(const R &r)
@@ -95,6 +89,11 @@ namespace TempLat
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType dagger(ZeroType t) { return t; };
 
+#ifdef TEMPLATTEST
+  struct ComplexFieldConjugateTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

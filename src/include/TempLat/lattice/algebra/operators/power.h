@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
@@ -27,8 +27,7 @@ namespace TempLat
   /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which takes one getter to the power of another getter. Holds the expression, only evaluates for a
-     *single element when you call Power::get(pIterCoords).
+    /** @brief A class which takes one expression to the power of another expression.
      *
      * Unit test: make test-power
      **/
@@ -61,7 +60,6 @@ namespace TempLat
       }
     };
 
-    // This class is to make sure std::pow get a static integer. Might be a more elegant way to do it!
     template <ptrdiff_t N, typename R> class PowerN : public UnaryOperator<R>
     {
     public:
@@ -145,12 +143,12 @@ namespace TempLat
     return a;
   }
 
+#ifdef TEMPLATTEST
   /** \brief A mini struct for instiating the test case. */
   struct PowerTester {
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

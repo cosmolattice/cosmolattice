@@ -14,7 +14,6 @@
 #include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
-#include <Kokkos_Macros.hpp>
 
 namespace TempLat
 {
@@ -80,18 +79,18 @@ namespace TempLat
     T mT;
   };
 
-  struct ComplexFieldWrapperTester {
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
   DEVICE_FORCEINLINE_FUNCTION ComplexFieldWrapper<R, T> Complexify(const R &r, const T &t)
   {
     return {r, t};
   }
+
+#ifdef TEMPLATTEST
+  struct ComplexFieldWrapperTester {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

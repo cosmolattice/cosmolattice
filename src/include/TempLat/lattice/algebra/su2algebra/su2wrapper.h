@@ -71,12 +71,6 @@ namespace TempLat
     device::tuple<std::decay_t<A>, std::decay_t<B>, std::decay_t<C>, std::decay_t<D>> data;
   };
 
-  struct SU2WrapperTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <class A, class B, class C, class D> auto SU2Wrap(const A &pA, const B &pB, const C &pC, const D &pD)
   {
     return SU2Wrapper<A, B, C, D>(pA, pB, pC, pD);
@@ -85,6 +79,12 @@ namespace TempLat
   template <typename F> auto SU2Wrap(const F &f) { return SU2Wrap(f(0_c), f(1_c), f(2_c), f(3_c)); }
 
 #define MakeSU2(a, expr) SU2Wrap([&](auto a) { return expr; })
+
+#ifdef TEMPLATTEST
+  struct SU2WrapperTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

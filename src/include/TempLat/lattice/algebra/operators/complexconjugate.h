@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -20,8 +20,7 @@ namespace TempLat
 
   namespace Operators
   {
-    /** \brief A class which applies complex conjugation to a complex number.
-     * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
+    /** @brief A class which applies complex conjugation to a complex number.
      *
      * Unit test: make test-multiply
      **/
@@ -47,13 +46,6 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief A mini struct for instiating the test case. */
-  struct ComplexConjugateTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   /** \brief Exposing our newly define multiplication operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
@@ -61,6 +53,13 @@ namespace TempLat
   {
     return Operators::ComplexConjugate<T>(a);
   }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instiating the test case. */
+  struct ComplexConjugateTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

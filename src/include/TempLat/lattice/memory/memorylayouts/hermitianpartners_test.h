@@ -12,7 +12,7 @@ template <size_t NDim> inline void TempLat::HermitianPartners<NDim>::Test(TempLa
   /* simply test the default implementation */
   tdd.verify(hp.qualify(std::array<ptrdiff_t, 4>{{0, 0, 0, 0}}) == HermitianRedundancy::none);
 
-  Kokkos::Array<ptrdiff_t, 4> global{{16, 16, 16, 16}}, hpvec{{0, 0, 0, 0}};
+  device::array<ptrdiff_t, 4> global{{16, 16, 16, 16}}, hpvec{{0, 0, 0, 0}};
   hp.putHermitianPartner(global, hpvec);
   bool correct = true;
   for (ptrdiff_t i = 0; i < 4; ++i)

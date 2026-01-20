@@ -65,11 +65,11 @@ namespace TempLat
     static constexpr size_t numberToSkipAsTuple = 1;
   };
 
-  struct SU2LieAlgebraFieldTester {
 #ifdef TEMPLATTEST
+  struct SU2LieAlgebraFieldTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

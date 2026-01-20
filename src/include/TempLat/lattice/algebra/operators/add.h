@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/constants/halftype.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
@@ -19,7 +19,7 @@
 
 namespace TempLat
 {
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace for expression template algebra, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
     /** \brief A class which adds two getters.
@@ -56,13 +56,6 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief A mini struct for instiating the test case. */
-  struct AddTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
   DEVICE_FORCEINLINE_FUNCTION auto operator+(const R &r, const T &t)
@@ -91,6 +84,13 @@ namespace TempLat
   {
     return b;
   }
+
+#ifdef TEMPLATTEST
+  /** \brief A mini struct for instiating the test case. */
+  struct AddTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

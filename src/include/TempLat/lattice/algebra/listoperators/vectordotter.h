@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/parallel/kokkos/kokkos.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/power.h"
@@ -15,6 +14,8 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/lattice/algebra/helpers/getvectorvalue.h"
+
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {

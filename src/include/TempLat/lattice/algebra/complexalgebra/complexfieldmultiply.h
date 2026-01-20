@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/parallel/device_memory.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "real.h"
 #include "imag.h"
@@ -76,13 +75,6 @@ namespace TempLat
     virtual std::string operatorString() const override { return "*"; }
   };
 
-  struct ComplexFieldMultiplyTester {
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
   template <typename R, typename T>
     requires(HasComplexFieldGet<R> && HasComplexFieldGet<T>)
   DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
@@ -110,6 +102,13 @@ namespace TempLat
   {
     return pow<2>(r.ComplexFieldGet(0_c)) + pow<2>(r.ComplexFieldGet(1_c));
   }
+
+#ifdef TEMPLATTEST
+  struct ComplexFieldMultiplyTester {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

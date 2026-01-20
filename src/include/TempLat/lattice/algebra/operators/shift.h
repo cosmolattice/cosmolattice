@@ -136,87 +136,11 @@ namespace TempLat
   template <int N> ZeroType shift(ZeroType) { return ZeroType(); }
   template <int N> ZeroType shift(ZeroType, Tag<N>) { return ZeroType(); }
 
-  struct ExpressionShifterTester {
 #ifdef TEMPLATTEST
+  struct ExpressionShifterTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-  //
-  //    template <typename r>
-  //    class expressionshifter<0,r> : public unaryoperator<r> {
-  //    public:
-  //        // Put public methods here. These should change very little over time.
-  //        using unaryoperator<r>::mr;
-  //
-  //        expressionshifter(const r& pr, const std::vector<ptrdiff_t>& shifts) :
-  //        unaryoperator<r>(pr)//,
-  //        //shift(computeshifts(shifts)),
-  //        //shiftstring(getstring(shifts))
-  //        {
-  //
-  //            shift = computeshifts(shifts);
-  //            shiftstring = getstring(shifts) ;
-  //        }
-  //
-  //        inline
-  //        auto get(ptrdiff_t i)
-  //        {
-  //            return getvalue::get(mr,i + shift);
-  //        }
-  //
-  //        void doweneedghosts() override
-  //        {
-  //            mr.confirmghostsuptodate();
-  //        }
-  //        std::string operatorstring() const override{
-  //            return shiftstring;
-  //        }
-  //
-  //
-  //    private:
-  //        /* put all member variables and private methods here. these may change arbitrarily. */
-  //        ptrdiff_t computeshifts(const std::vector<ptrdiff_t>& shifts)
-  //        {
-  //            shiftedcoordinatesmanager mshifts(shifts);
-  //
-  //            mshifts.setjumps(getjumps::apply(mr));
-  //            return mshifts.memoryjump();
-  //
-  //        }
-  //        std::string getstring(const std::vector<ptrdiff_t>& shifts) const
-  //        {
-  //            std::string res = "_(";
-  //            for(auto x : shifts) res+=std::to_string(x)+",";
-  //            res.pop_back();
-  //            return res+")";
-  //        }
-  //        ptrdiff_t shift;
-  //        std::string shiftstring;
-  //
-  //
-  //
-  //    public:
-#ifdef templattest
-  //        static inline void test(tddassertion& tdd);
 #endif
-  //    };
-  //
-  //    template <typename r>
-  //    auto shift(const r& pr, const std::vector<ptrdiff_t>& shifts)
-  //    {
-  //        return expressionshifter<0,r>(pr,shifts);
-  //    }
-  //
-  //    template <int n, class r>
-  //    auto shift(const r& pr)
-  //    {
-  //        return expressionshifter<n,r>(pr);
-  //    }
 } // namespace TempLat
-
-#ifdef templattest
-#include "shift_test.h"
-#endif
 
 #endif

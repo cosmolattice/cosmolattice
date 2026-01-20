@@ -14,8 +14,6 @@
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanholder.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanner.h"
 #include "TempLat/lattice/memory/memoryblock.h"
-#include <Kokkos_Core_fwd.hpp>
-#include <memory>
 
 namespace TempLat
 {
