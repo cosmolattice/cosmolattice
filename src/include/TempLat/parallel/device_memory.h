@@ -11,7 +11,7 @@
 
 #ifdef DEVICE_KOKKOS
 
-#include "TempLat/parallel/kokkos/kokkos_memory.h"
+#include "TempLat/parallel/devices/kokkos/kokkos_memory.h"
 
 #else
 

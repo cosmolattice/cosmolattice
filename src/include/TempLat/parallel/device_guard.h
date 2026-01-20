@@ -9,7 +9,7 @@
 
 #ifdef DEVICE_KOKKOS
 
-#include "TempLat/parallel/kokkos/session/kokkos_guard.h"
+#include "TempLat/parallel/devices/kokkos/session/kokkos_guard.h"
 namespace TempLat
 {
   namespace export_device_namespace = device_kokkos;

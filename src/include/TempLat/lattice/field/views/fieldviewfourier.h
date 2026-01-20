@@ -162,13 +162,13 @@ namespace TempLat
       device::array<ptrdiff_t, NDim> global_coord{{}};
       device::array<ptrdiff_t, NDim> mem_pos{{}};
 
-      auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
-      device::apply([&](const auto &...idx) { layout.putMemoryIndexFromSpatialLocationInto(mem_pos, idx...); },
-                    global_coord);
+      const auto &layout = mToolBox->mLayouts.getFourierSpaceLayout();
+      const bool owned = device::apply(
+          [&](const auto &...idx) { return layout.putMemoryIndexFromSpatialLocationInto(mem_pos, idx...); },
+          global_coord);
 
-      // TODO: do this only if this process owns the zero mode!
-
-      device::memory::setAtOnePoint(*this, mem_pos, toSet);
+      // do this only if this process owns the zero mode!
+      if (owned) device::memory::setAtOnePoint(*this, mem_pos, toSet);
     }
 
     std::string to_string() const { return mManager->getName() + "(k)"; }

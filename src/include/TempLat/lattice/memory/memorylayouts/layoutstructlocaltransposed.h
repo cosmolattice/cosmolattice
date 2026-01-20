@@ -83,6 +83,7 @@ namespace TempLat
     /** \brief A dictionary for return values for memory to coordinate mapping. */
     struct CoordinateMapping {
       ptrdiff_t atIndex, withValue;
+      bool owned;
     };
 
     /** \brief With transposition, go from actual memory index in memoryDimension to spatial coordinate value at spatial
@@ -94,6 +95,7 @@ namespace TempLat
       result.atIndex = mTranspositionMap_memoryToGlobalSpace.getForward(memoryDimension);
       /* in this function we pass the new forward transposed index to the mLocal. */
       result.withValue = mLocal.memoryIndexToSpatialCoordinate(index, result.atIndex);
+      result.owned = result.withValue >= 0 && result.withValue < mLocal.getLocalSizes()[result.atIndex];
       return result;
     }
 

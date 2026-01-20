@@ -9,7 +9,7 @@
 
 #ifdef DEVICE_KOKKOS
 
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/devices/kokkos/kokkos.h"
 
 namespace TempLat
 {

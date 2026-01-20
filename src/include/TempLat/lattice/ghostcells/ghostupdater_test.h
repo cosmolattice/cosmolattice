@@ -72,8 +72,9 @@ namespace TempLat
 
       if constexpr (NDim == 1) {
         auto view = block.getRawView();
-        Kokkos::parallel_for(
-            Kokkos::RangePolicy(0, localSizes[0]), DEVICE_LAMBDA(const size_t i) {
+        device::iteration::foreach (
+            "DatumInitialize1D", device::array<int, 1>(0), device::array<int, 1>(localSizes[0]),
+            DEVICE_LAMBDA(const size_t i) {
               view(nGhost + i) = datum<NDim>{layout.getLocalStarts()[0] + (ptrdiff_t)i + 1};
             });
       } else {
@@ -98,7 +99,7 @@ namespace TempLat
           device::apply([&](const auto &...args) { subView(idx[args]...) = datum<NDim>{val[args]...}; }, inc);
         };
 
-        std::array<ptrdiff_t, NDim> it_stop{};
+        device::array<ptrdiff_t, NDim> it_stop{};
         for (size_t k = 0; k < NDim; ++k)
           it_stop[k] = localSizes[k];
 

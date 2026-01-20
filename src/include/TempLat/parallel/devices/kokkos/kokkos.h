@@ -156,6 +156,6 @@ namespace TempLat
 #endif
 } // namespace TempLat
 
-#include "TempLat/parallel/kokkos/kokkos_internal.h"
+#include "TempLat/parallel/devices/kokkos/kokkos_internal.h"
 
 #endif // KOKKOS_H

@@ -94,20 +94,23 @@ namespace TempLat
         if (target[j] < 0) target[j] = target[j] + getGlobal().getGlobalSizes()[j];
     }
 
-    /** \brief Inverse of putSpatialLocationFromMemoryIndexInto: from spatial
+    /** @brief Inverse of putSpatialLocationFromMemoryIndexInto: from spatial
      *  coordinate to memory indices, in memory-layout order (that is,
      *  transposed, ready to be applied to `JumpsHolder::getJumpsInMemoryOrder()`.
      */
     template <typename Container, typename... IDX>
       requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void putMemoryIndexFromSpatialLocationInto(Container &target, const IDX... pos) const
+    DEVICE_FORCEINLINE_FUNCTION bool putMemoryIndexFromSpatialLocationInto(Container &target, const IDX... pos) const
     {
       const auto positions = device::tie(pos...);
+      bool owned = true;
       constexpr_for<0, NDim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         auto map = getTransposed().getMemoryIndexFromSpatialLocation(device::get<d>(positions), d);
         target[map.atIndex] = map.withValue;
+        owned &= map.owned;
       });
+      return owned;
     }
 
     DEVICE_FORCEINLINE_FUNCTION

@@ -102,10 +102,10 @@ namespace TempLat
     template <typename T> void update_forDimension_device(MemoryBlock<NDim, T> &block, ptrdiff_t dimension)
     {
       // We will copy slabs of thickness ghostDepth in the dimension 'dimension'.
-      auto full_sizes = mJumpsHolder.getSizesInMemory();
+      device::array<ptrdiff_t, NDim> full_sizes = mJumpsHolder.getSizesInMemory();
       for (size_t i = 0; i < NDim; ++i)
         full_sizes[i] += 2 * mGhostDepth;
-      auto slab_sizes = mJumpsHolder.getSizesInMemory();
+      device::array<ptrdiff_t, NDim> slab_sizes = mJumpsHolder.getSizesInMemory();
       for (size_t i = 0; i < NDim; ++i)
         slab_sizes[i] += 2 * mGhostDepth;
       slab_sizes[dimension] = mGhostDepth;

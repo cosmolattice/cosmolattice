@@ -15,19 +15,17 @@
 namespace TempLat
 {
 
-  /** \brief A class which does bookkeeping, number of threads allowed by hardware, number of threads allowed by user,
+  /** @brief A class which does bookkeeping, number of threads allowed by hardware, number of threads allowed by user,
    *etc.
-   *
    *
    * Unit test: make test-threadsettings
    **/
-
   class ThreadSettings
   {
   public:
     // Put public methods here. These should change very little over time.
 
-    /** \brief Yes, a global variable. Inline, so it remains header only. Constructor is private.
+    /** @brief Yes, a global variable. Inline, so it remains header only. Constructor is private.
         All you can do with this instance is pass it to a stream:
         `std::cout << ThreadSettings::getInstance() << "\n";`
     */

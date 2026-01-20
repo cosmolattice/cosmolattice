@@ -4,9 +4,8 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#define KOKKOS_SOURCE
-#include "TempLat/parallel/kokkos/kokkos_iteration.h"
-#include "TempLat/parallel/kokkos/kokkos_iteration_test.h"
+#include "TempLat/parallel/devices/kokkos/kokkos_iteration.h"
+#include "TempLat/parallel/devices/kokkos/kokkos_iteration_test.h"
 
 namespace
 {

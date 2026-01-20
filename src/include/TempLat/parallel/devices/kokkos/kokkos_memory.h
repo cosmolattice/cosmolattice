@@ -11,8 +11,8 @@
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/geteval.h"
 
-#include "TempLat/parallel/kokkos/kokkos.h"
-#include "TempLat/parallel/kokkos/kokkos_internal.h"
+#include "TempLat/parallel/devices/kokkos/kokkos.h"
+#include "TempLat/parallel/devices/kokkos/kokkos_internal.h"
 
 #include <sstream>
 

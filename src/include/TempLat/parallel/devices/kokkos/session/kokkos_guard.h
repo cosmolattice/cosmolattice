@@ -9,7 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/devices/kokkos/kokkos.h"
 
 namespace TempLat
 {

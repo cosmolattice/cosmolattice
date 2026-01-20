@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/parallel/kokkos/kokkos.h"
+#include "TempLat/parallel/devices/kokkos/kokkos.h"
 
 namespace TempLat
 {
@@ -57,31 +57,6 @@ namespace TempLat
         const int _d = device_kokkos::reverse_access_pattern ? (int)NDim - 1 - d : d;
         start_iteration[_d] = nGhosts;
         stop_iteration[_d] = start_iteration[_d] + localSizes[d];
-      }
-
-      if constexpr (NDim == 1) {
-        return Kokkos::RangePolicy<DefaultExecutionSpace>(start_iteration[0], stop_iteration[0]);
-      } else {
-        return Kokkos::MDRangePolicy<DefaultExecutionSpace, Kokkos::Rank<NDim>>(start_iteration, stop_iteration);
-      }
-    }
-
-    template <size_t NDim, typename I>
-      requires(!std::is_same_v<std::array<I, NDim>, device_kokkos::array<I, NDim>>)
-    auto getLocalKokkosPolicy(const std::array<I, NDim> &starts, const std::array<I, NDim> &stops)
-    {
-      Kokkos::Array<uint64_t, NDim> start_iteration;
-      Kokkos::Array<uint64_t, NDim> stop_iteration;
-
-      // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
-      // However, we do not want to impose this on the level of the memory layouts. In particular, this would
-      // require additional transpositions when going to Fourier space, which is not what we want. So we do the
-      // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
-      // on CPU, we do not reverse the access pattern.
-      for (int d = 0; d < (int)NDim; ++d) {
-        const int _d = device_kokkos::reverse_access_pattern ? (int)NDim - 1 - d : d;
-        start_iteration[_d] = starts[d];
-        stop_iteration[_d] = start_iteration[_d] + stops[d];
       }
 
       if constexpr (NDim == 1) {
