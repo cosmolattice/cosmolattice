@@ -9,7 +9,6 @@
 
 namespace
 {
-  // KokkosFFT segfaults on 1D!!!!!!!!!!!!! TODO FRANZ
   TempLat::TDDContainer<TempLat::FourierView<1, double>> test1;
   TempLat::TDDContainer<TempLat::FourierView<2, double>> test2;
   TempLat::TDDContainer<TempLat::FourierView<3, double>> test3;
