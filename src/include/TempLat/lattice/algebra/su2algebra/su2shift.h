@@ -141,6 +141,10 @@ namespace TempLat
     return SU2ShifterByOne<R, N>(pR);
   }
 
+  template <class R> auto sh1(const R &pR) { return pR; }
+
+  template <int I, int... J, class R> auto sh1(const R &pR) { return shift<I>(sh1<J...>(pR)); }
+
 #ifdef TEMPLATTEST
   struct SU2ShiftTester {
     static inline void Test(TDDAssertion &tdd);

@@ -16,6 +16,9 @@
 #ifndef NOPFFT
 #include "TempLat/fft/external/pfft/pfftinterface.h"
 #endif
+#ifndef NOPARAFAFT
+#include "TempLat/fft/external/parafaft/parafaftinterface.h"
+#endif
 #endif
 
 #ifdef KOKKOS_FFT
@@ -30,9 +33,9 @@ namespace TempLat
 
   /**
    * @brief I wrapped this in a struct for a very specific case: If we have multiple translation units (cpp files)
-   * which include this header, and each calls getFFTSessionGuards, then we will have multiple static variables, one per
-   * translation unit, and the guards will not work as intended. By wrapping it in a struct, we ensure that there is
-   * only one instance of the static variable, no matter how many translation units include this header.
+   * which include this header, and each calls getFFTSessionGuards, then we will have multiple static variables, one
+   * per translation unit, and the guards will not work as intended. By wrapping it in a struct, we ensure that
+   * there is only one instance of the static variable, no matter how many translation units include this header.
    *
    */
   struct holdStaticGuard {
@@ -100,32 +103,41 @@ namespace TempLat
       [[maybe_unused]] constexpr bool havePFFT = false;
 #endif
 
+#ifndef NOPARAFAFT
+      [[maybe_unused]] constexpr bool haveParafaft = true;
+#else
+      [[maybe_unused]] constexpr bool haveParafaft = false;
+#endif
+
 #ifdef KOKKOS_FFT
       [[maybe_unused]] constexpr bool haveKOKKOSFFT = true;
 #else
       [[maybe_unused]] constexpr bool haveKOKKOSFFT = false;
 #endif
 
+      // Priority: Parafaft > PFFT > KokkosFFT > FFTW (when multi-dimensional split needed)
+// MPI case
 #ifndef NOMPI
-      if constexpr (haveKOKKOSFFT && (NDim <= 3)) {
-#ifdef KOKKOS_FFT
-        theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
-        backend = "KOKKOS_FFT";
-#endif // KOKKOS_FFT
-      } else if constexpr (havePFFT && nDimSplit > 1) {
+#ifndef NOPARAFAFT
+      if constexpr (haveParafaft && nDimSplit > 1) {
+        theLibrary = std::make_shared<ParafaftInterface>();
+      } else
+#endif
 #ifndef NOPFFT
+          if constexpr (havePFFT && nDimSplit > 1) {
         theLibrary = std::make_shared<PFFTInterface>();
         backend = "PFFT";
-#endif // NOPFFT
       } else
+#endif // NOPFFT
 #endif // NOMPI
       {
-        if constexpr (haveKOKKOSFFT && (NDim <= 3)) {
 #ifdef KOKKOS_FFT
+        if constexpr (haveKOKKOSFFT && (NDim <= 3)) {
           theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
           backend = "KOKKOS_FFT";
+        } else
 #endif // KOKKOS_FFT
-        } else {
+        {
           theLibrary = std::make_shared<FFTWInterface<NDim>>();
           backend = "FFTW";
         }
@@ -146,6 +158,9 @@ namespace TempLat
 #ifndef NOMPI
 #ifndef NOPFFT
       result = PFFTInterface().getMaximumNumberOfDimensionsToDivide(nDimensions);
+#endif
+#ifndef NOPARAFAFT
+      result = ParafaftInterface().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #endif
 #endif
       return result;

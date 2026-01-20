@@ -31,6 +31,7 @@ set(DEVICE
 set(PFFT
     OFF
     CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
+set(PARAFAFT OFF CACHE BOOL "Set to ON to build with PARAFAFT (default = OFF)")
 set(HDF5
     OFF
     CACHE
@@ -85,8 +86,11 @@ set(MYHDF5_PATH
     "insert/here"
     CACHE STRING "HDF5 guess path")
 
-# if for some reason you have other exotic installations the cmake can't find,
-# just repeat the above procedure below.
+#if you have parafaft elsewhere, help cmake by adding the path below.
+
+set(MYPARAFAFT_PATH "" CACHE STRING "path to PARAFAFT installation directory")
+
+# if for some reason you have other exotic installations the cmake can't find, just repeat the above procedure below.
 
 # ...
 
@@ -94,11 +98,12 @@ set(MYHDF5_PATH
 # add to CMAKE_PREFIX_PATH upon calling cmake will be remembered, so don't
 # hesitate to continue using it.
 
-set(CMAKE_PREFIX_PATH
-    "${CMAKE_PREFIX_PATH};${MYPFFT_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}")
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYPFFT_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}" )
+# Note: MYPARAFAFT_PATH is handled separately in configure.cmake (header-only library)
 
-# ##########The CMake shenanigans are hidden in this file. You can check it out
-# if interested ############################
+
+
+###########The CMake shenanigans are hidden in this file. You can check it out if interested ############################
 include(src/cmake/configure.cmake)
 # ##############################################################################
 

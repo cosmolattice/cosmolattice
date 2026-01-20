@@ -1,0 +1,73 @@
+#ifndef TEMPLAT_FFT_EXTERNAL_PARAFAFT_PARAFAFTGUARD_H
+#define TEMPLAT_FFT_EXTERNAL_PARAFAFT_PARAFAFTGUARD_H
+
+/* This file is part of CosmoLattice, available at www.cosmolattice.net .
+   Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
+   Released under the MIT license, see LICENSE.md. */
+
+// File info: Main contributor(s): Adrien Florio,  Year: 2026
+
+#include "TempLat/util/tdd/tdd.h"
+#include "TempLat/fft/fftlibraryinterface.h"
+
+#ifndef NOMPI
+#include <mpi.h>
+#endif
+
+namespace TempLat {
+
+    /** \brief RAII guard for parafaft initialization/cleanup.
+     *
+     * Parafaft is a header-only library that uses FFTW internally.
+     * Since FFTW initialization is handled by FFTWGuard, this guard
+     * only needs to exist to satisfy the interface - no actual
+     * initialization or cleanup is required.
+     *
+     * Unit test: make test-parafaftguard
+     **/
+
+    class ParafaftGuard : public FFTLibraryInterface::SessionGuard {
+    public:
+
+        ParafaftGuard(bool verbose = true) : mVerbose(verbose) {
+            if (mVerbose) { }; /* just for the compiler warnings */
+#ifndef NOMPI
+#ifndef NOPARAFAFT
+#ifdef TEMPLATTEST
+            if (mVerbose) sayShort << "Parafaft guard constructed (header-only, no initialization needed).\n";
+#endif
+#endif
+#endif
+        }
+
+        ~ParafaftGuard() {
+#ifndef NOMPI
+#ifndef NOPARAFAFT
+#ifdef TEMPLATTEST
+            if (mVerbose) sayShort << "Parafaft guard destructed (no cleanup needed).\n";
+#endif
+#endif
+#endif
+        }
+
+        /* delete the copy constructor and copy assignment */
+        ParafaftGuard(const ParafaftGuard& other) = delete;
+        ParafaftGuard& operator=(const ParafaftGuard& other) = delete;
+        ParafaftGuard& operator=(ParafaftGuard&& other) = delete;
+
+    private:
+        bool mVerbose;
+
+    public:
+#ifdef TEMPLATTEST
+        static inline void Test(TDDAssertion& tdd);
+#endif
+    };
+}
+
+#ifdef TEMPLATTEST
+#include "TempLat/fft/external/parafaft/parafaftguard_test.h"
+#endif
+
+
+#endif

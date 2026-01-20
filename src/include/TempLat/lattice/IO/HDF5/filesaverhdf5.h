@@ -9,8 +9,11 @@
 
 #ifdef HDF5
 
+#include <cstring>
 #include "TempLat/util/prettytostring.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
+#include "TempLat/lattice/algebra/helpers/confirmspace.h"
+#include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -181,6 +184,139 @@ namespace TempLat
       } else {
         // Recursive call to loop over an arbitrary number of dimensions.
         for (int i = 0; i < sizes[dim]; ++i) {
+          std::vector<ptrdiff_t> newCoords(coords);
+          newCoords.emplace_back(starts[dim] + i);
+          saveDim(r, dim + 1, newCoords);
+        }
+      }
+    }
+
+    void create(std::string fn, FileMode flag = Overwrite)
+    {
+      mFile.create(fn, flag);
+      std::vector<std::string> parStr;
+      std::string tmp;
+      for (auto x : r.getParams()) {
+        if (x.second != "inf") {
+          parStr.emplace_back(x.first + "=" + x.second);
+        }
+      }
+
+      // Create a flat buffer of fixed-size strings
+      std::vector<char> stringData(parStr.size() * HDF5TypeConstant::FixedSizeStringLength, 0);
+      for (size_t i = 0; i < parStr.size(); ++i) {
+        if (parStr[i].size() > HDF5TypeConstant::FixedSizeStringLength)
+          throw StringIsTooLong("Well, that's a bit embarassing. One of your parameters contains too many characters "
+                                "(the total string should be smaller than " +
+                                std::to_string(HDF5TypeConstant::FixedSizeStringLength) +
+                                " char by default, for our hdf5). If you managed to make HDF5 with variable string "
+                                "length, please let us know! If you just want to change the hardcoded number, look in "
+                                "the file TempLat/lattice/IO/HDF5/helpers/hdf5type.h .");
+        std::strncpy(&stringData[i * HDF5TypeConstant::FixedSizeStringLength], parStr[i].c_str(),
+                     HDF5TypeConstant::FixedSizeStringLength - 1);
+      }
+
+      // Create dataset and write directly with H5Dwrite using proper string type
+      mDataset = mFile.createDataset<const char *>("Parameters", std::vector<hsize_t>(1, parStr.size()));
+      HDF5Type<const char *> strtype;
+      H5Dwrite(mDataset, strtype.type, H5S_ALL, H5S_ALL, H5P_DEFAULT, stringData.data());
+      strtype.close();
+      mDataset.close();
+    }
+
+    void save_attr(ParameterParser &r)
+    { // Conceptually, may be better as attributes? But nightmare to save vector of strings, did nt manage to do it in a
+      // finite amount of time.
+      std::ostringstream oss;
+
+      std::vector<std::string> parStr;
+      std::string tmp;
+      mDataset = mFile.createDataset<const char *>("Parameters", std::vector<hsize_t>(1, parStr.size()));
+      for (auto x : r.getParams()) {
+        if (x.second != "inf") {
+          // parStr.emplace_back(x.first + "=" + x.second);
+          mDataset.addAtribute(x.first, x.second);
+        }
+      }
+      /* for(size_t i = 0; i < parStr.size(); ++i){
+           if(parStr[i].size() > HDF5TypeConstant::FixedSizeStringLength) throw StringIsTooLong("Well, that's a bit
+       embarassing. One of your parameters contains too many characters (the total string should be smaller than
+       "+std::to_string(HDF5TypeConstant::FixedSizeStringLength)+" char by default, for our hdf5). If you managed to
+       make HDF5 with variable string length, please let us know! If you just want to change the hardcoded number, look
+       in the file TempLat/lattice/IO/HDF5/helpers/hdf5type.h .");
+           mDataset.writeElement(parStr[i].c_str(),std::vector<hsize_t>(1,i));
+       }*/
+      mDataset.close();
+    }
+
+    template <typename R> void save(R r)
+    { // used to store an entity directly to a dataset, using it's own name.
+      typedef typename GetGetReturnType<R>::type vType;
+      ConfirmSpace::apply(r, r.getToolBox()->mLayouts.getConfigSpaceLayout(),
+                          SpaceStateInterface::SpaceType::Configuration);
+      GhostsHunter::apply(r);
+      mDataset = mFile.createDataset<vType>(GetString::get(r), r.getToolBox()->mNGridPointsVec);
+      saveDim(r, 0, {});
+      mDataset.close();
+    }
+
+    template <typename R, typename T> void save(T t, R r, std::string name)
+    { // used to store an entity in a time series. The name is the one of the group, data set labelled by t.
+      typedef typename GetGetReturnType<R>::type vType;
+      ConfirmSpace::apply(r, r.getToolBox()->mLayouts.getConfigSpaceLayout(),
+                          SpaceStateInterface::SpaceType::Configuration);
+      GhostsHunter::apply(r);
+      mDataset = mFile.createOrOpenGroup(name).createDataset<vType>(PrettyToString::get(t, 10),
+                                                                    r.getToolBox()->mNGridPointsVec);
+      saveDim(r, 0, {});
+      mDataset.close();
+    }
+
+    template <typename R> void save(R t, std::string name)
+    { // used to store a number. The name is the one of the dataset which contains this number.
+      typedef typename GetGetReturnType<R>::type vType;
+      mDataset = mFile.createDataset<vType>(name, std::vector<hsize_t>(1, 1));
+      mDataset.writeElement(&t, std::vector<hsize_t>(1, 0));
+      mDataset.close();
+    }
+
+    // To save our fields, we use the fact that the last dimension is not parallelised.
+    // We iterate over the first N-1 dimensions, and for each of these we save the whole
+    // last dimension to file.
+    template <typename R> void saveDim(R r, int dim, std::vector<ptrdiff_t> coords)
+    {
+      auto toolBox = r.getToolBox();
+
+      auto itX = toolBox->itX();
+
+      auto starts = toolBox->mLayouts.getConfigSpaceStarts(); // Local mpi offset.
+      auto sizes = toolBox->mLayouts.getConfigSpaceSizes();   // Local mpi sizes.
+
+      if (dim == toolBox->mNDimensions - 1) // Last dimension, saved as a full rod.
+      {
+        coords.emplace_back(
+            0); // look at index 0 in the last dimension. The next nGrid[last dimension] points are stored continuously.
+        ptrdiff_t offset = r.getJumps().getTotalOffsetFromSpatialCoordinates(coords);
+
+        std::vector<hsize_t> subdims(
+            toolBox->mNDimensions,
+            1); // for hdf5, tell it we want to store a sub array of size (1,1,1...,nGrid[last dimension]).
+        subdims.back() = toolBox->mNGridPointsVec[dim];
+        std::vector<hsize_t> offsets; // at position (i,j,k,...,0) in the global lattice file.
+        for (size_t i = 0; i < coords.size(); ++i)
+          offsets.emplace_back(coords[i]);
+        offsets.back() = 0;
+
+        typedef typename GetGetReturnType<R>::type vType;
+
+        std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
+        for (size_t i = 0; i < sdata.size(); ++i) {
+          sdata[i] = r.get(offset + i);
+        }
+
+        mDataset.writeSlices(sdata, subdims, offsets);
+      } else {
+        for (int i = 0; i < sizes[dim]; ++i) { // Recursive call to loop over an arbitrary number of dimensions.
           std::vector<ptrdiff_t> newCoords(coords);
           newCoords.emplace_back(starts[dim] + i);
           saveDim(r, dim + 1, newCoords);
