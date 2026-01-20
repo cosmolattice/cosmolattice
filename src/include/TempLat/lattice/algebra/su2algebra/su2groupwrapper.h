@@ -35,7 +35,7 @@ namespace TempLat
     SU2GroupWrapper(const SU2GroupWrapper &other) : mA(other.mA), mB(other.mB), mC(other.mC) {}
 
     DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<0> t) const { return sqrt(1.0 - Total(i, 1, 3, pow<2>(SU2Get(i)))); }
+    auto SU2Get(Tag<0> t) const { return sqrt(1.0 - pow<2>(mA) - pow<2>(mB) - pow<2>(mC)); }
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<1> t) const { return mA; }
     DEVICE_FORCEINLINE_FUNCTION

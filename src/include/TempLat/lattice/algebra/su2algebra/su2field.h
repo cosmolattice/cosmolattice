@@ -131,9 +131,6 @@ namespace TempLat
       };
       device::iteration::foreach ("SU2ConfigViewAssign", mLayout, functor);
 
-      Kokkos::fence();
-      std::cout << "Finished SU2 assignment. " << std::endl;
-
       ForLoop(j, 1, size - 1, PostGet::apply(fs[j - 1]));
       ForLoop(j, 1, size - 1, fs[j - 1].setGhostsAreStale());
     }
