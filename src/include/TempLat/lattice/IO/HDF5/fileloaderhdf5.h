@@ -126,6 +126,88 @@ namespace TempLat {
             str = std::string(buffer.data());
         }
 
+        /**
+         * @brief Load per-rank string data from a shared dataset (parallel HDF5 safe)
+         * @param str String to load into
+         * @param name Dataset name (shared across all ranks)
+         * @param mpiRank This rank's index
+         *
+         * Reads from a dataset of size [nRanks] where each rank reads its element.
+         */
+        void loadPerRank(std::string& str, const std::string& name, int mpiRank) {
+            constexpr size_t LargeStringLength = 16384;
+
+            std::vector<char> buffer(LargeStringLength, 0);
+
+            std::string fullName = "/" + name;
+            auto dataset = H5Dopen2(mFile.getHandle(), fullName.c_str(), H5P_DEFAULT);
+            auto dtype = H5Dget_type(dataset);
+            size_t typeSize = H5Tget_size(dtype);
+
+            // Create memory type matching file type size
+            auto memtype = H5Tcopy(H5T_C_S1);
+            H5Tset_size(memtype, typeSize);
+
+            // Select hyperslab for this rank's element
+            auto filespace = H5Dget_space(dataset);
+            hsize_t start[1] = {static_cast<hsize_t>(mpiRank)};
+            hsize_t count[1] = {1};
+            H5Sselect_hyperslab(filespace, H5S_SELECT_SET, start, nullptr, count, nullptr);
+
+            // Memory space for single element
+            hsize_t memDims[1] = {1};
+            auto memspace = H5Screate_simple(1, memDims, nullptr);
+
+            // Read with independent I/O
+            auto plist = H5Pcreate(H5P_DATASET_XFER);
+#ifndef NOMPI
+            H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
+#endif
+            H5Dread(dataset, memtype, memspace, filespace, plist, buffer.data());
+
+            H5Pclose(plist);
+            H5Sclose(memspace);
+            H5Sclose(filespace);
+            H5Tclose(memtype);
+            H5Tclose(dtype);
+            H5Dclose(dataset);
+
+            str = std::string(buffer.data());
+        }
+
+        /**
+         * @brief Load per-rank double data from a shared dataset (parallel HDF5 safe)
+         * @param value The value to load into
+         * @param name Dataset name (shared across all ranks)
+         * @param mpiRank This rank's index
+         */
+        void loadPerRank(double& value, const std::string& name, int mpiRank) {
+            std::string fullName = "/" + name;
+            auto dataset = H5Dopen2(mFile.getHandle(), fullName.c_str(), H5P_DEFAULT);
+
+            // Select hyperslab for this rank's element
+            auto filespace = H5Dget_space(dataset);
+            hsize_t start[1] = {static_cast<hsize_t>(mpiRank)};
+            hsize_t count[1] = {1};
+            H5Sselect_hyperslab(filespace, H5S_SELECT_SET, start, nullptr, count, nullptr);
+
+            // Memory space for single element
+            hsize_t memDims[1] = {1};
+            auto memspace = H5Screate_simple(1, memDims, nullptr);
+
+            // Read with independent I/O
+            auto plist = H5Pcreate(H5P_DATASET_XFER);
+#ifndef NOMPI
+            H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
+#endif
+            H5Dread(dataset, H5T_NATIVE_DOUBLE, memspace, filespace, plist, &value);
+
+            H5Pclose(plist);
+            H5Sclose(memspace);
+            H5Sclose(filespace);
+            H5Dclose(dataset);
+        }
+
         template<typename R>
         void load(R r)
         {

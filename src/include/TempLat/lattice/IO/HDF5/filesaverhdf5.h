@@ -189,6 +189,96 @@ namespace TempLat {
             H5Tclose(memtype);
         }
 
+        /**
+         * @brief Save per-rank string data to a shared dataset (parallel HDF5 safe)
+         * @param str The string to save
+         * @param name Dataset name (shared across all ranks)
+         * @param mpiRank This rank's index
+         * @param nRanks Total number of MPI ranks
+         *
+         * Creates a dataset of size [nRanks] where each rank writes to its element.
+         * This is parallel HDF5 safe - all ranks participate in collective operations.
+         */
+        void savePerRank(const std::string& str, const std::string& name, int mpiRank, int nRanks) {
+            constexpr size_t LargeStringLength = 16384;
+
+            if (str.size() >= LargeStringLength) {
+                throw StringIsTooLong("String too long for HDF5 dataset '" + name + "': " + std::to_string(str.size()) + " chars (max " + std::to_string(LargeStringLength) + ")");
+            }
+
+            std::vector<char> buffer(LargeStringLength, 0);
+            std::strncpy(buffer.data(), str.c_str(), LargeStringLength - 1);
+
+            // Create custom string type
+            auto memtype = H5Tcopy(H5T_C_S1);
+            H5Tset_size(memtype, LargeStringLength);
+
+            // Create dataspace with nRanks elements (collective operation)
+            std::string fullName = "/" + name;
+            hsize_t dims[1] = {static_cast<hsize_t>(nRanks)};
+            auto filespace = H5Screate_simple(1, dims, nullptr);
+            auto dataset = H5Dcreate2(mFile.getHandle(), fullName.c_str(), memtype, filespace,
+                                      H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+            // Select hyperslab for this rank's element
+            hsize_t start[1] = {static_cast<hsize_t>(mpiRank)};
+            hsize_t count[1] = {1};
+            H5Sselect_hyperslab(filespace, H5S_SELECT_SET, start, nullptr, count, nullptr);
+
+            // Memory space for single element
+            hsize_t memDims[1] = {1};
+            auto memspace = H5Screate_simple(1, memDims, nullptr);
+
+            // Write with independent I/O (each rank writes its own element)
+            auto plist = H5Pcreate(H5P_DATASET_XFER);
+#ifndef NOMPI
+            H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
+#endif
+            H5Dwrite(dataset, memtype, memspace, filespace, plist, buffer.data());
+
+            H5Pclose(plist);
+            H5Sclose(memspace);
+            H5Dclose(dataset);
+            H5Sclose(filespace);
+            H5Tclose(memtype);
+        }
+
+        /**
+         * @brief Save per-rank double data to a shared dataset (parallel HDF5 safe)
+         * @param value The value to save
+         * @param name Dataset name (shared across all ranks)
+         * @param mpiRank This rank's index
+         * @param nRanks Total number of MPI ranks
+         */
+        void savePerRank(double value, const std::string& name, int mpiRank, int nRanks) {
+            std::string fullName = "/" + name;
+            hsize_t dims[1] = {static_cast<hsize_t>(nRanks)};
+            auto filespace = H5Screate_simple(1, dims, nullptr);
+            auto dataset = H5Dcreate2(mFile.getHandle(), fullName.c_str(), H5T_NATIVE_DOUBLE, filespace,
+                                      H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+            // Select hyperslab for this rank's element
+            hsize_t start[1] = {static_cast<hsize_t>(mpiRank)};
+            hsize_t count[1] = {1};
+            H5Sselect_hyperslab(filespace, H5S_SELECT_SET, start, nullptr, count, nullptr);
+
+            // Memory space for single element
+            hsize_t memDims[1] = {1};
+            auto memspace = H5Screate_simple(1, memDims, nullptr);
+
+            // Write with independent I/O
+            auto plist = H5Pcreate(H5P_DATASET_XFER);
+#ifndef NOMPI
+            H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
+#endif
+            H5Dwrite(dataset, H5T_NATIVE_DOUBLE, memspace, filespace, plist, &value);
+
+            H5Pclose(plist);
+            H5Sclose(memspace);
+            H5Dclose(dataset);
+            H5Sclose(filespace);
+        }
+
         //To save our fields, we use the fact that the last dimension is not parallelised.
         //We iterate over the first N-1 dimensions, and for each of these we save the whole
         //last dimension to file.
