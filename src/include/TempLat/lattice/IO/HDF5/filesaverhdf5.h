@@ -134,24 +134,59 @@ namespace TempLat {
         }
 
         /**
+         * @brief Save a double scalar to a named dataset
+         * @param value The value to save
+         * @param name Dataset name
+         *
+         * This overload explicitly handles double without GetGetReturnType
+         */
+        void save(double value, const std::string& name) {
+            // Use "/" prefix for root group (matching openDataset pattern)
+            std::string fullName = "/" + name;
+            hsize_t dims[1] = {1};
+            auto dataspace = H5Screate_simple(1, dims, nullptr);
+            auto dataset = H5Dcreate2(mFile.getHandle(), fullName.c_str(), H5T_NATIVE_DOUBLE, dataspace,
+                                      H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+            H5Dwrite(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value);
+
+            H5Dclose(dataset);
+            H5Sclose(dataspace);
+        }
+
+        /**
          * @brief Save a string to a named dataset
          * @param str The string to save
          * @param name Dataset name
+         *
+         * Uses a large fixed-size buffer (8KB) to accommodate RNG states (~5KB)
          */
         void save(const std::string& str, const std::string& name) {
-            // RNG state is ~5KB, allow up to FixedSizeStringLength (8KB by default)
-            if (str.size() >= HDF5TypeConstant::FixedSizeStringLength) {
-                throw StringIsTooLong("String too long for HDF5 dataset '" + name + "': " + std::to_string(str.size()) + " chars");
+            constexpr size_t LargeStringLength = 16384;  // 16KB for combined RNG states
+
+            if (str.size() >= LargeStringLength) {
+                throw StringIsTooLong("String too long for HDF5 dataset '" + name + "': " + std::to_string(str.size()) + " chars (max " + std::to_string(LargeStringLength) + ")");
             }
 
-            std::vector<char> buffer(HDF5TypeConstant::FixedSizeStringLength, 0);
-            std::strncpy(buffer.data(), str.c_str(), HDF5TypeConstant::FixedSizeStringLength - 1);
+            std::vector<char> buffer(LargeStringLength, 0);
+            std::strncpy(buffer.data(), str.c_str(), LargeStringLength - 1);
 
-            mDataset = mFile.createDataset<const char*>(name, std::vector<hsize_t>(1, 1));
-            HDF5Type<const char*> strtype;
-            H5Dwrite(mDataset, strtype.type, H5S_ALL, H5S_ALL, H5P_DEFAULT, buffer.data());
-            strtype.close();
-            mDataset.close();
+            // Create custom string type with larger size
+            auto memtype = H5Tcopy(H5T_C_S1);
+            H5Tset_size(memtype, LargeStringLength);
+
+            // Create dataspace and dataset (use "/" prefix for root group)
+            std::string fullName = "/" + name;
+            hsize_t dims[1] = {1};
+            auto dataspace = H5Screate_simple(1, dims, nullptr);
+            auto dataset = H5Dcreate2(mFile.getHandle(), fullName.c_str(), memtype, dataspace,
+                                      H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+            H5Dwrite(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, buffer.data());
+
+            H5Dclose(dataset);
+            H5Sclose(dataspace);
+            H5Tclose(memtype);
         }
 
         //To save our fields, we use the fact that the last dimension is not parallelised.

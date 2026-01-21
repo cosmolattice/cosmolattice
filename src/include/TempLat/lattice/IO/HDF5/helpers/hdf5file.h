@@ -98,6 +98,14 @@ namespace TempLat {
             return {H5Dopen2(file_id, name.c_str(), H5P_DEFAULT)};
         }
 
+        /**
+         * @brief Get the underlying HDF5 file handle
+         * @return The HDF5 file identifier
+         */
+        hid_t getHandle() const {
+            return file_id;
+        }
+
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
 

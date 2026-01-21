@@ -79,19 +79,51 @@ namespace TempLat {
         }
 
         /**
+         * @brief Load a double scalar from a named dataset
+         * @param value The value to load into
+         * @param name Dataset name
+         *
+         * This overload explicitly handles double
+         */
+        void load(double& value, const std::string& name) {
+            // Use "/" prefix for root group (matching openDataset pattern)
+            std::string fullName = "/" + name;
+            auto dataset = H5Dopen2(mFile.getHandle(), fullName.c_str(), H5P_DEFAULT);
+
+            H5Dread(dataset, H5T_NATIVE_DOUBLE, H5S_ALL, H5S_ALL, H5P_DEFAULT, &value);
+
+            H5Dclose(dataset);
+        }
+
+        /**
          * @brief Load a string from a named dataset
          * @param str String to load into
          * @param name Dataset name
+         *
+         * Uses a large fixed-size buffer (8KB) to accommodate RNG states (~5KB)
          */
         void load(std::string& str, const std::string& name) {
-            char buffer[HDF5TypeConstant::FixedSizeStringLength];
-            std::memset(buffer, 0, HDF5TypeConstant::FixedSizeStringLength);
+            constexpr size_t LargeStringLength = 16384;  // 16KB for combined RNG states
 
-            mDataset = mFile.openDataset(name);
-            mDataset.readElement(buffer, std::vector<hsize_t>(1, 0));
-            mDataset.close();
+            std::vector<char> buffer(LargeStringLength, 0);
 
-            str = std::string(buffer);
+            // Use "/" prefix for root group (matching openDataset pattern)
+            std::string fullName = "/" + name;
+            auto dataset = H5Dopen2(mFile.getHandle(), fullName.c_str(), H5P_DEFAULT);
+            auto dtype = H5Dget_type(dataset);
+            size_t typeSize = H5Tget_size(dtype);
+
+            // Create memory type matching the file type size
+            auto memtype = H5Tcopy(H5T_C_S1);
+            H5Tset_size(memtype, typeSize);
+
+            H5Dread(dataset, memtype, H5S_ALL, H5S_ALL, H5P_DEFAULT, buffer.data());
+
+            H5Tclose(memtype);
+            H5Tclose(dtype);
+            H5Dclose(dataset);
+
+            str = std::string(buffer.data());
         }
 
         template<typename R>
