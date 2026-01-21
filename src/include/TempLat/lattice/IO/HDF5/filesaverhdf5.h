@@ -133,6 +133,27 @@ namespace TempLat {
             mDataset.close();
         }
 
+        /**
+         * @brief Save a string to a named dataset
+         * @param str The string to save
+         * @param name Dataset name
+         */
+        void save(const std::string& str, const std::string& name) {
+            // RNG state is ~5KB, allow up to FixedSizeStringLength (8KB by default)
+            if (str.size() >= HDF5TypeConstant::FixedSizeStringLength) {
+                throw StringIsTooLong("String too long for HDF5 dataset '" + name + "': " + std::to_string(str.size()) + " chars");
+            }
+
+            std::vector<char> buffer(HDF5TypeConstant::FixedSizeStringLength, 0);
+            std::strncpy(buffer.data(), str.c_str(), HDF5TypeConstant::FixedSizeStringLength - 1);
+
+            mDataset = mFile.createDataset<const char*>(name, std::vector<hsize_t>(1, 1));
+            HDF5Type<const char*> strtype;
+            H5Dwrite(mDataset, strtype.type, H5S_ALL, H5S_ALL, H5P_DEFAULT, buffer.data());
+            strtype.close();
+            mDataset.close();
+        }
+
         //To save our fields, we use the fact that the last dimension is not parallelised.
         //We iterate over the first N-1 dimensions, and for each of these we save the whole
         //last dimension to file.

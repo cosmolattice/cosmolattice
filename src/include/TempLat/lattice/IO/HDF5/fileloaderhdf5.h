@@ -9,7 +9,7 @@
 
 #ifdef HDF5
 
-
+#include <cstring>
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5file.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
@@ -76,6 +76,22 @@ namespace TempLat {
             mDataset = mFile.openDataset(name);
             mDataset.readElement(&t, std::vector<hsize_t>(1,0));
             mDataset.close();
+        }
+
+        /**
+         * @brief Load a string from a named dataset
+         * @param str String to load into
+         * @param name Dataset name
+         */
+        void load(std::string& str, const std::string& name) {
+            char buffer[HDF5TypeConstant::FixedSizeStringLength];
+            std::memset(buffer, 0, HDF5TypeConstant::FixedSizeStringLength);
+
+            mDataset = mFile.openDataset(name);
+            mDataset.readElement(buffer, std::vector<hsize_t>(1, 0));
+            mDataset.close();
+
+            str = std::string(buffer);
         }
 
         template<typename R>
