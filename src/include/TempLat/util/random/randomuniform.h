@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <random>
+#include <sstream>
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/hash/keccakhash.h"
@@ -52,6 +53,25 @@ namespace TempLat {
 
         const size_t& getState() const {
             return mStateCounter;
+        }
+
+        /**
+         * @brief Serializes the complete RNG state to a string
+         * @return String containing serialized mt19937_64 state and counter
+         */
+        std::string saveState() const {
+            std::ostringstream oss;
+            oss << mMersenneTwister << " " << mStateCounter;
+            return oss.str();
+        }
+
+        /**
+         * @brief Restores RNG state from a serialized string
+         * @param state String produced by saveState()
+         */
+        void loadState(const std::string& state) {
+            std::istringstream iss(state);
+            iss >> mMersenneTwister >> mStateCounter;
         }
 
         typename RandomGenerator::result_type getNextBareUInt() {

@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <algorithm>
+#include <vector>
 
 inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion& tdd) {
 
@@ -36,6 +37,58 @@ inline void TempLat::Util::RandomGaussian::Test(TempLat::TDDAssertion& tdd) {
     for ( auto&& it : measure ) {
         if ( it > 0 ) std::cerr << std::string(it / 100, '*') << "\n";
     }
+
+    // Test saveState/loadState round-trip
+    RandomGaussian rng("serialization_test");
+    std::string savedState = rng.saveState();
+
+    // Generate 1000 values after saving state
+    std::vector<double> seq1;
+    for (int i = 0; i < 1000; ++i) {
+        seq1.push_back(rng());
+    }
+
+    // Restore state and generate again
+    rng.loadState(savedState);
+    std::vector<double> seq2;
+    for (int i = 0; i < 1000; ++i) {
+        seq2.push_back(rng());
+    }
+
+    // Verify sequences are identical
+    bool sequencesMatch = true;
+    for (int i = 0; i < 1000; ++i) {
+        if (seq1[i] != seq2[i]) {
+            sequencesMatch = false;
+            break;
+        }
+    }
+    tdd.verify(sequencesMatch, "saveState/loadState round-trip produces identical sequence");
+
+    // Also test with cached value (odd number of draws)
+    RandomGaussian rng2("cache_test");
+    rng2();  // Draw one value to create cached state
+    std::string savedStateWithCache = rng2.saveState();
+
+    std::vector<double> seq3;
+    for (int i = 0; i < 999; ++i) {
+        seq3.push_back(rng2());
+    }
+
+    rng2.loadState(savedStateWithCache);
+    std::vector<double> seq4;
+    for (int i = 0; i < 999; ++i) {
+        seq4.push_back(rng2());
+    }
+
+    bool cacheSequencesMatch = true;
+    for (int i = 0; i < 999; ++i) {
+        if (seq3[i] != seq4[i]) {
+            cacheSequencesMatch = false;
+            break;
+        }
+    }
+    tdd.verify(cacheSequencesMatch, "saveState/loadState with cached value produces identical sequence");
 
 }
 
