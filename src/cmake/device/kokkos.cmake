@@ -62,6 +62,7 @@ execute_process(
         -DKokkos_ENABLE_CUDA=${CUDA} \
         -DKokkos_ENABLE_CUDA_CONSTEXPR=${CUDA} \
         -DKokkos_ENABLE_HIP=${HIP} \
+        -DHIP_PLATFORM=amd \
         -DKokkos_ENABLE_OPENMP=${OPENMP} \
         -DKokkos_ENABLE_THREADS=${THREADS} \
         -DKokkos_ENABLE_SERIAL=ON \
