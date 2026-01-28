@@ -35,11 +35,6 @@ namespace TempLat
       return IntrinsicScales{1., 1};
     }
 
-    virtual std::shared_ptr<FFTSessionGuard> getSessionGuard(bool pVerbose = true)
-    {
-      return std::make_shared<KokkosFFTGuard>(pVerbose);
-    }
-
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 

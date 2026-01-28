@@ -8,7 +8,7 @@ set(MODELS_PATH ./src/models/) # path to the cosmolattice models. If for some
 
 message(${CMAKE_MODULE_PATH})
 
-project(CosmoLattice CXX)
+project(CosmoLattice C CXX)
 
 set(CMAKE_CXX_STANDARD 20) # This is likely to evolve in future releases.
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

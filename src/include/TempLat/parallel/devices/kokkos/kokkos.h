@@ -139,13 +139,6 @@ namespace TempLat
     template <typename T> using complex = Kokkos::complex<T>;
   } // namespace device_kokkos
 
-  template <typename T, size_t N>
-    requires(!std::is_same_v<std::array<T, N>, device_kokkos::array<T, N>>)
-  std::ostream &operator<<(std::ostream &stream, const device_kokkos::array<T, N> &vec)
-  {
-    return PutToStream(stream, vec);
-  };
-
 #ifdef TEMPLATTEST
   class KokkosTest
   {

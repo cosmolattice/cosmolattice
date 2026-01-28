@@ -119,27 +119,30 @@ namespace TempLat
 // MPI case
 #ifndef NOMPI
 #ifndef NOPARAFAFT
-      if constexpr (haveParafaft && nDimSplit > 1) {
-        theLibrary = std::make_shared<ParafaftInterface>();
+      if constexpr (haveParafaft) {
+        theLibrary = std::make_shared<ParafaftInterface<NDim>>();
+        std::cout << "Using Parafaft FFT backend for FFTs." << std::endl;
       } else
 #endif
 #ifndef NOPFFT
-          if constexpr (havePFFT && nDimSplit > 1) {
-        theLibrary = std::make_shared<PFFTInterface>();
+          if (havePFFT && nDimSplit > 1) {
+        theLibrary = std::make_shared<PFFTInterface<NDim>>();
         backend = "PFFT";
       } else
 #endif // NOPFFT
 #endif // NOMPI
       {
 #ifdef KOKKOS_FFT
-        if constexpr (haveKOKKOSFFT && (NDim <= 3)) {
+        if (haveKOKKOSFFT && (NDim <= 3) && (group.size() == 1)) {
           theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
           backend = "KOKKOS_FFT";
+          std::cout << "Using Kokkos FFT backend for FFTs." << std::endl;
         } else
 #endif // KOKKOS_FFT
         {
           theLibrary = std::make_shared<FFTWInterface<NDim>>();
           backend = "FFTW";
+          std::cout << "Using FFTW backend for FFTs." << std::endl;
         }
       }
       mLayout = theLibrary->computeLocalSizes(mGroup, mNGridPoints, forbidTransposition);
@@ -157,10 +160,10 @@ namespace TempLat
       ptrdiff_t result = FFTWInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #ifndef NOMPI
 #ifndef NOPFFT
-      result = PFFTInterface().getMaximumNumberOfDimensionsToDivide(nDimensions);
+      result = PFFTInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #endif
 #ifndef NOPARAFAFT
-      result = ParafaftInterface().getMaximumNumberOfDimensionsToDivide(nDimensions);
+      result = ParafaftInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #endif
 #endif
       return result;

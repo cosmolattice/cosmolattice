@@ -34,11 +34,6 @@ namespace TempLat
 
     virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nGridPoints) { return IntrinsicScales(); }
 
-    virtual std::shared_ptr<SessionGuard> getSessionGuard(bool pVerbose = true)
-    {
-      return std::make_shared<PFFTGuard>(pVerbose);
-    }
-
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 

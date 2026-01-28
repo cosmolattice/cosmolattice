@@ -84,7 +84,7 @@ namespace TempLat
     template <typename T> void pUpdate(MemoryBlock<NDim, T> &block)
     {
       /* iterate dimensions */
-      for (ptrdiff_t d = 0; d < NDim; ++d) {
+      for (size_t d = 0; d < NDim; ++d) {
 #if defined(KOKKOS_ENABLE_CUDA) || defined(KOKKOS_ENABLE_HIP) || defined(KOKKOS_ENABLE_SYCL)
         update_forDimension_device(block, d);
 #else
@@ -94,7 +94,7 @@ namespace TempLat
     }
 
   public:
-    template <typename T> void update_forDimension_device(MemoryBlock<NDim, T> &block, ptrdiff_t dimension)
+    template <typename T> void update_forDimension_device(MemoryBlock<NDim, T> &block, size_t dimension)
     {
       // We will copy slabs of thickness ghostDepth in the dimension 'dimension'.
       device::array<ptrdiff_t, NDim> full_sizes = mJumpsHolder.getSizesInMemory();
@@ -109,9 +109,9 @@ namespace TempLat
         total_size *= slab_sizes[i];
 
       // We need two slabs of thickness ghostDepth
-      auto sendSlab = std::apply(
+      auto sendSlab = device::apply(
           [&](const auto &...args) { return device::memory::NDView<NDim, T>("sendSlab", args...); }, slab_sizes);
-      auto receiveSlab = std::apply(
+      auto receiveSlab = device::apply(
           [&](const auto &...args) { return device::memory::NDView<NDim, T>("receiveSlab", args...); }, slab_sizes);
 
       // To get the right subviews of the full data, we need to create slices for each dimension
@@ -287,7 +287,8 @@ namespace TempLat
           if constexpr (NDim == 1) {
             // For NDim == 1, we just need to copy the corners.
             device::iteration::foreach (
-                "GhostUpdater", device::IdxArray<1>{0}, device::IdxArray<1>{1}, DEVICE_LAMBDA(const size_t) {
+                "GhostUpdater", device::IdxArray<1>{0}, device::IdxArray<1>{1},
+                DEVICE_LAMBDA(const device::IdxArray<1> &i) {
                   View(ghostDepth - depth) = View(ghostDepth + sizes[0] - depth);
                   View(ghostDepth + sizes[0] + (depth - 1)) = View(ghostDepth + (depth - 1));
                 });

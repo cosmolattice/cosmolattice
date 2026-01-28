@@ -41,7 +41,7 @@ namespace TempLat
       MPI_Datatype dataType = MPITypeSelect<T>();
       if (mSubArrays.count(dataType) < 1) {
         std::vector<GhostSubarray<NDim>> arraySet;
-        for (ptrdiff_t idimension = 0; idimension < NDim; ++idimension) {
+        for (size_t idimension = 0; idimension < NDim; ++idimension) {
           arraySet.emplace_back(mJumpsHolder, idimension, mGhostDepth, dataType);
         }
         mSubArrays[dataType] = arraySet;

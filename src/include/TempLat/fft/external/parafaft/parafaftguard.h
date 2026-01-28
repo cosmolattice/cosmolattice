@@ -14,60 +14,59 @@
 #include <mpi.h>
 #endif
 
-namespace TempLat {
+namespace TempLat
+{
 
-    /** \brief RAII guard for parafaft initialization/cleanup.
-     *
-     * Parafaft is a header-only library that uses FFTW internally.
-     * Since FFTW initialization is handled by FFTWGuard, this guard
-     * only needs to exist to satisfy the interface - no actual
-     * initialization or cleanup is required.
-     *
-     * Unit test: make test-parafaftguard
-     **/
+  /** \brief RAII guard for parafaft initialization/cleanup.
+   *
+   * Parafaft is a header-only library that uses FFTW internally.
+   * Since FFTW initialization is handled by FFTWGuard, this guard
+   * only needs to exist to satisfy the interface - no actual
+   * initialization or cleanup is required.
+   *
+   * Unit test: make test-parafaftguard
+   **/
 
-    class ParafaftGuard : public FFTLibraryInterface::SessionGuard {
-    public:
-
-        ParafaftGuard(bool verbose = true) : mVerbose(verbose) {
-            if (mVerbose) { }; /* just for the compiler warnings */
+  class ParafaftGuard : public FFTSessionGuard
+  {
+  public:
+    ParafaftGuard(bool verbose = true) : mVerbose(verbose)
+    {
+      if (mVerbose) {
+      }; /* just for the compiler warnings */
 #ifndef NOMPI
 #ifndef NOPARAFAFT
 #ifdef TEMPLATTEST
-            if (mVerbose) sayShort << "Parafaft guard constructed (header-only, no initialization needed).\n";
+      if (mVerbose) sayShort << "Parafaft guard constructed (header-only, no initialization needed).\n";
 #endif
 #endif
 #endif
-        }
+    }
 
-        ~ParafaftGuard() {
+    ~ParafaftGuard()
+    {
 #ifndef NOMPI
 #ifndef NOPARAFAFT
 #ifdef TEMPLATTEST
-            if (mVerbose) sayShort << "Parafaft guard destructed (no cleanup needed).\n";
+      if (mVerbose) sayShort << "Parafaft guard destructed (no cleanup needed).\n";
 #endif
 #endif
 #endif
-        }
+    }
 
-        /* delete the copy constructor and copy assignment */
-        ParafaftGuard(const ParafaftGuard& other) = delete;
-        ParafaftGuard& operator=(const ParafaftGuard& other) = delete;
-        ParafaftGuard& operator=(ParafaftGuard&& other) = delete;
+    /* delete the copy constructor and copy assignment */
+    ParafaftGuard(const ParafaftGuard &other) = delete;
+    ParafaftGuard &operator=(const ParafaftGuard &other) = delete;
+    ParafaftGuard &operator=(ParafaftGuard &&other) = delete;
 
-    private:
-        bool mVerbose;
+  private:
+    bool mVerbose;
 
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-}
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/parafaft/parafaftguard_test.h"
-#endif
-
+  };
+} // namespace TempLat
 
 #endif

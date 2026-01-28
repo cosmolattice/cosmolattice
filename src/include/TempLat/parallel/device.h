@@ -88,6 +88,29 @@ namespace TempLat
   // The complex type is used in many places, so we re-export it at the top level.
   using device::complex;
 
+  template <typename T, size_t N>
+    requires(!std::is_same_v<device::array<T, N>, std::array<T, N>>)
+  std::ostream &operator<<(std::ostream &stream, const device::array<T, N> &vec)
+  {
+    stream << "{{ ";
+    bool first = true;
+    int limiter = 0;
+    for (auto &&it : vec) {
+      if (++limiter > 10) {
+        stream << ", ...";
+        break;
+      }
+      if (first) {
+        first = false;
+      } else {
+        stream << ", ";
+      }
+      stream << it;
+    }
+    stream << " }}";
+    return stream;
+  };
+
 #ifdef TEMPLATTEST
   class DeviceTester
   {

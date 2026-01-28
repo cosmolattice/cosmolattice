@@ -63,7 +63,6 @@ namespace TempLat
       MemoryBlock<NDim, float> temp(layout.getMinimalMemorySize());
       std::vector<int> globalSizes_INT(layout.configurationSpace.getGlobalSizes().begin(),
                                        layout.configurationSpace.getGlobalSizes().end());
-
       auto c2r =
 #ifndef NOMPI
           fftwf_mpi_plan_dft_c2r(

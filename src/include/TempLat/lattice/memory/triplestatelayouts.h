@@ -42,7 +42,7 @@ namespace TempLat
                                atom now. So back to atom size 1 std::complex, as opposed to 2 double/float. */
           );
 
-      std::array<std::array<ptrdiff_t, 2u>, NDim> tmpPadding{};
+      device::array<device::array<ptrdiff_t, 2u>, NDim> tmpPadding{};
       // FFT padding for in-place c2r r2c (see https://fftw.org/fftw3_doc/Multi_002dDimensional-DFTs-of-Real-Data.html)
       // The padding is already included in the memory size of the FFTConfigurationSpace layout.
 

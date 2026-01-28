@@ -37,9 +37,10 @@ namespace TempLat
     ptrdiff_t allocate()
     {
       if (mAllocated) return 0;
-      if (mToolBox->verbosity.allocation) sayMPI << "Allocating memory.\n";
+      const size_t size = mToolBox->mLayouts.getNecessaryMemoryAllocation();
+      if (mToolBox->verbosity.allocation) sayMPI << "Allocating memory with " << size << " elements.\n";
       mAllocated = true;
-      mBlock = MemoryBlock<NDim, T>(mToolBox->mLayouts.getNecessaryMemoryAllocation());
+      mBlock = MemoryBlock<NDim, T>(size);
       return 1;
     }
 
@@ -201,6 +202,7 @@ namespace TempLat
 
       if (mToolBox->verbosity.ghostConfirmationSteps)
         sayMPI << "Confirming that ghost cells are up to date. " << getName() << "\n" << mGhostStateKeeper << "\n";
+
       if (mGhostStateKeeper.isStale()) {
         if (mToolBox->verbosity.ghostConfirmationSteps) sayMPI << "Need to update ghost cells.\n";
         ++result;
