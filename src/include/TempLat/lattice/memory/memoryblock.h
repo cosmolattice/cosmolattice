@@ -190,7 +190,7 @@ namespace TempLat
         ostream << "Data (first 64 elements): \n";
       auto data = mb.getRawHostView();
       mb.flagHostMirrorOutdated();
-      for (size_t i = 0; i < std::min(64, (int)mb.mSize); ++i) {
+      for (size_t i = 0; i < std::min((size_t)64, mb.mSize); ++i) {
         if (i > 0) ostream << ", ";
         ostream << data(i);
       }

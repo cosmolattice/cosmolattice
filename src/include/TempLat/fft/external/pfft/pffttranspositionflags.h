@@ -25,18 +25,16 @@ namespace TempLat
    *
    * Unit test: make test-pffttranspositionflags
    **/
-
-  class PFFTTranspositionFlags
+  template <size_t NDim> class PFFTTranspositionFlags
   {
   public:
     // Put public methods here. These should change very little over time.
-    PFFTTranspositionFlags(const FFTLayoutStruct &layout)
+    PFFTTranspositionFlags(const FFTLayoutStruct<NDim> &layout)
     {
-      bool transposedC = layout.fourierSpace.isTransposed();
-      bool transposedR = layout.configurationSpace.isTransposed();
+      const bool transposedC = layout.fourierSpace.isTransposed();
+      const bool transposedR = layout.configurationSpace.isTransposed();
 
       mFlagC2R = (transposedC ? PFFT_TRANSPOSED_IN : 0) | (transposedR ? PFFT_TRANSPOSED_OUT : 0);
-
       mFlagR2C = (transposedC ? PFFT_TRANSPOSED_OUT : 0) | (transposedR ? PFFT_TRANSPOSED_IN : 0);
     }
 
@@ -69,9 +67,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/pfft/pffttranspositionflags_test.h"
-#endif
 
 #endif

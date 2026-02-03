@@ -21,7 +21,6 @@
 
 namespace TempLat
 {
-
   MakeException(PFFTMemoryLayoutException);
 
   /** \brief Implements part of FFTLibraryInterface, computes the local memory associated to the global problem, for
@@ -29,8 +28,7 @@ namespace TempLat
    *
    * Unit test: make test-pfftmemorylayout
    **/
-
-  class PFFTMemoryLayout : public PFFTPlanner
+  template <size_t NDim> class PFFTMemoryLayout : public PFFTPlanner<NDim>
   {
   public:
     static bool PFFTWITHTRANSPOSITION() { return false; }
@@ -38,10 +36,9 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     PFFTMemoryLayout() {}
 
-    virtual FFTLayoutStruct computeLocalSizes(MPICartesianGroup group, std::vector<ptrdiff_t> nGrid,
-                                              bool forbidTransposition = PFFTWITHTRANSPOSITION())
+    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid,
+                                                    bool forbidTransposition = PFFTWITHTRANSPOSITION())
     {
-
       if (!forbidTransposition && !PFFTWITHTRANSPOSITION()) {
         forbidTransposition = true;
         if (group.getRank() == 0)
@@ -52,22 +49,20 @@ namespace TempLat
                       "transposed output in PFFT.\n" KRESET;
       }
 
-      ptrdiff_t nDimensions = nGrid.size();
-
-      if (group.getNumberOfDividedDimensions() >= nDimensions)
+      if (group.getNumberOfDividedDimensions() >= (ptrdiff_t)NDim)
         throw PFFTMemoryLayoutException("Inconsistent: the number of dimensions in which your Cartesian MPIGroup is "
                                         "split, is larger than / equal to the number of dimensions in the lattice:",
-                                        group.getNumberOfDividedDimensions(), " >= ", nDimensions);
+                                        group.getNumberOfDividedDimensions(), " >= ", NDim);
 
-      FFTLayoutStruct result(nGrid, false, true, false);
+      FFTLayoutStruct<NDim> result(nGrid, false, true, false);
       /* default: everything is local. */
-      std::vector<ptrdiff_t> globalLayout(nGrid);
+      std::array<ptrdiff_t, NDim> globalLayout(nGrid);
 
-      std::vector<ptrdiff_t> confLocalSizes(nGrid);
-      std::vector<ptrdiff_t> confLocalStarts(nDimensions, 0);
-      std::vector<ptrdiff_t> fourLocalSizes(nGrid);
-      std::vector<ptrdiff_t> fourLocalStarts(nDimensions, 0);
-      std::vector<ptrdiff_t> fourTransposition(nDimensions);
+      std::array<ptrdiff_t, NDim> confLocalSizes(nGrid);
+      std::array<ptrdiff_t, NDim> confLocalStarts{};
+      std::array<ptrdiff_t, NDim> fourLocalSizes(nGrid);
+      std::array<ptrdiff_t, NDim> fourLocalStarts{};
+      std::array<ptrdiff_t, NDim> fourTransposition{};
       std::iota(fourTransposition.begin(), fourTransposition.end(), 0);
 
       fourLocalSizes.back() = fourLocalSizes.back() / 2 + 1;
@@ -75,9 +70,9 @@ namespace TempLat
 
       ptrdiff_t pfftRequiredMemory = 0;
 
-      if (nDimensions > 1) {
+      if (NDim > 1) {
 
-        bool doTranspose = nDimensions > 2 && group.size() > 1;
+        bool doTranspose = NDim > 2 && group.size() > 1;
 
         doTranspose = doTranspose && !forbidTransposition;
 
@@ -88,7 +83,7 @@ namespace TempLat
         //                say << "globalLayout: " << globalLayout << "\ninput: " << result << "\n";
 
         pfftRequiredMemory = pfft_local_size_dft_r2c(
-            (int)nDimensions, globalLayout.data(),
+            (int)NDim, globalLayout.data(),
             group.getComm_onlyDividedDimensions(), /* crucial this, for pfft. Only split MPI group in the dimensions in
                                                       which we have more than 1 owners. */
             flags, confLocalSizes.data(), confLocalStarts.data(), fourLocalSizes.data(), fourLocalStarts.data());
@@ -110,7 +105,7 @@ namespace TempLat
            */
 
           ptrdiff_t nSplit = group.getNumberOfDividedDimensions();
-          if (nSplit >= nDimensions) nSplit = nDimensions - 1;
+          if (nSplit >= (ptrdiff_t)NDim) nSplit = NDim - 1;
 
           for (ptrdiff_t i = 0; i < nSplit; ++i) {
             fourTransposition[i] = i + 1;
@@ -136,9 +131,8 @@ namespace TempLat
                                                               addExternalMemoryRequest expects units of real numbers. */
 
       result.fourierSpace.setHermitianPartners(
-          FFTWHermitianPartners::create(result.configurationSpace.getGlobalSizes()));
+          FFTWHermitianPartners<NDim>::create(result.configurationSpace.getGlobalSizes()));
 
-      //            say << "output: " << result << "\n";
       return result;
     };
 

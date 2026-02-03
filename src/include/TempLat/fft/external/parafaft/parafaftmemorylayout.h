@@ -86,7 +86,7 @@ namespace TempLat
       temp.get_local_real_shape(realShape);
       temp.get_real_global_start(realStart);
 
-      for (int i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i) {
         confLocalSizes[i] = realShape[i];
         confLocalStarts[i] = realStart[i];
       }
@@ -101,7 +101,7 @@ namespace TempLat
       temp.get_local_complex_shape(complexShape);
       temp.get_complex_global_start(complexStart);
 
-      for (int i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i) {
         fourLocalSizes[i] = complexShape[i];
         fourLocalStarts[i] = complexStart[i];
       }
@@ -109,17 +109,17 @@ namespace TempLat
       // Compute memory requirement
       // Parafaft needs max of real size and complex size
       ptrdiff_t realSize = 1;
-      for (int i = 0; i < NDim; ++i)
+      for (size_t i = 0; i < NDim; ++i)
         realSize *= confLocalSizes[i];
 
       ptrdiff_t complexSize = 2; // Complex = 2 reals
-      for (int i = 0; i < NDim; ++i)
+      for (size_t i = 0; i < NDim; ++i)
         complexSize *= fourLocalSizes[i];
 
       parafaftRequiredMemory = std::max(realSize, complexSize);
 #else
       // Non-parafaft fallback (shouldn't happen)
-      for (ptrdiff_t i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i) {
         confLocalSizes[i] = nGridPoints[i];
         fourLocalSizes[i] = nGridPoints[i];
       }
@@ -128,7 +128,7 @@ namespace TempLat
 #endif
 #else
       // Non-MPI fallback (shouldn't happen since parafaft requires MPI)
-      for (ptrdiff_t i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i) {
         confLocalSizes[i] = nGridPoints[i];
         fourLocalSizes[i] = nGridPoints[i];
       }

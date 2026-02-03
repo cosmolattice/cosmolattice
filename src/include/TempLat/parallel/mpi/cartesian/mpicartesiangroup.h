@@ -23,7 +23,6 @@ namespace TempLat
    *
    * Unit test: make test-mpicartesiangroup
    **/
-
   class MPICartesianGroup
   {
   public:

@@ -27,8 +27,7 @@ namespace TempLat
    *
    * Unit test: make test-pfftplanholder
    **/
-
-  template <typename T> class PFFTPlanHolder : public FFTLibraryInterface::PlanInterface<T>
+  template <size_t NDim, typename T> class PFFTPlanHolder : public FFTPlanInterface<NDim, T>
   {
   public:
 #ifndef NOFFTFLOAT
@@ -53,8 +52,8 @@ namespace TempLat
       }
     }
 
-    virtual void c2r(MemoryBlock<T> &mBlock) { execute_c2r(*mPlanC2R, mBlock); };
-    virtual void r2c(MemoryBlock<T> &mBlock) { execute_r2c(*mPlanR2C, mBlock); };
+    virtual void c2r(MemoryBlock<NDim, T> &mBlock) { execute_c2r(*mPlanC2R, mBlock); };
+    virtual void r2c(MemoryBlock<NDim, T> &mBlock) { execute_r2c(*mPlanR2C, mBlock); };
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -78,35 +77,41 @@ namespace TempLat
 #endif
     template <typename S = T>
       requires std::is_same_v<S, double>
-    void execute_r2c(plan somePlan, MemoryBlock<S> &mBlock)
+    void execute_r2c(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
-      pfft_execute_dft_r2c(somePlan, mBlock.ptr(), (pfft_complex *)mBlock.ptr());
+      auto block_view = mBlock.getRawHostView();
+      pfft_execute_dft_r2c(somePlan, block_view.data(), (pfft_complex *)mBlock.data());
+      mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 
 #ifndef NOFFTFLOAT
     template <typename S = T>
       requires std::is_same_v<S, float>
-    void execute_r2c(plan somePlan, MemoryBlock<S> &mBlock)
+    void execute_r2c(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
-      pfftf_execute_dft_r2c(somePlan, mBlock.ptr(), (pfftf_complex *)mBlock.ptr());
+      auto block_view = mBlock.getRawHostView();
+      pfftf_execute_dft_r2c(somePlan, block_view.data(), (pfftf_complex *)block_view.data());
+      mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 #endif
 
     template <typename S = T>
       requires std::is_same_v<S, double>
-    void execute_c2r(plan somePlan, MemoryBlock<S> &mBlock)
+    void execute_c2r(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
-      // sayMPI << "PFFT double c2r starting.\n";
-      pfft_execute_dft_c2r(somePlan, (pfft_complex *)mBlock.ptr(), mBlock.ptr());
-      // sayMPI << "PFFT double c2r done.\n";
+      auto block_view = mBlock.getRawHostView();
+      pfft_execute_dft_c2r(somePlan, (pfft_complex *)block_view.data(), block_view.data());
+      mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 
 #ifndef NOFFTFLOAT
     template <typename S = T>
       requires std::is_same_v<S, float>
-    void execute_c2r(plan somePlan, MemoryBlock<S> &mBlock)
+    void execute_c2r(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
-      pfftf_execute_dft_c2r(somePlan, (pfftf_complex *)mBlock.ptr(), mBlock.ptr());
+      auto block_view = mBlock.getRawHostView();
+      pfftf_execute_dft_c2r(somePlan, (pfftf_complex *)block_view.data(), block_view.data());
+      mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 #endif
 

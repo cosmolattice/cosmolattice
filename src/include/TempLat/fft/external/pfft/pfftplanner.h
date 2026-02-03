@@ -27,7 +27,7 @@ namespace TempLat
    * Unit test: make test-pfftplanner
    **/
 
-  class PFFTPlanner : public FFTLibraryInterface
+  template <size_t NDim> class PFFTPlanner : public FFTLibraryInterface<NDim>
   {
   public:
     // Put public methods here. These should change very little over time.
@@ -58,16 +58,16 @@ namespace TempLat
 
     /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
-    virtual std::shared_ptr<PlanInterface<float>> getPlans_float(const MPICartesianGroup &group,
-                                                                 const FFTLayoutStruct &layout)
+    virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
+                                                                          const FFTLayoutStruct<NDim> &layout)
     {
 #ifdef NOFFTFLOAT
       throw PFFTCompiledWithoutSinglePrecisionSupport();
-      return std::shared_ptr<PlanInterface<float>>();
+      return std::shared_ptr<FFTPlanInterface<NDim, float>>();
 #else
-      PFFTTranspositionFlags trFlags(layout);
+      PFFTTranspositionFlags<NDim> trFlags(layout);
 
-      MemoryBlock<float> temp(layout.getMinimalMemorySize());
+      MemoryBlock<NDim, float> temp(layout.getMinimalMemorySize());
 
       auto c2r =
           pfftf_plan_dft_c2r(layout.getNDimensions(), layout.configurationSpace.getGlobalSizes().data(),
@@ -85,7 +85,7 @@ namespace TempLat
 
       /* damned, get the order of the plans right here! Perhaps should have use structs in order to make the compiler
        * throw an error when these are swapped... */
-      return std::make_shared<PFFTPlanHolder<float>>(group, r2c, c2r);
+      return std::make_shared<PFFTPlanHolder<NDim, float>>(group, r2c, c2r);
 #endif
     };
 
@@ -93,13 +93,12 @@ namespace TempLat
      */
     /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
-    virtual std::shared_ptr<PlanInterface<double>> getPlans_double(const MPICartesianGroup &group,
-                                                                   const FFTLayoutStruct &layout)
+    virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
+                                                                            const FFTLayoutStruct<NDim> &layout)
     {
+      PFFTTranspositionFlags<NDim> trFlags(layout);
 
-      PFFTTranspositionFlags trFlags(layout);
-
-      MemoryBlock<double> temp(layout.getMinimalMemorySize());
+      MemoryBlock<NDim, double> temp(layout.getMinimalMemorySize());
       // say << "Making plans for PFFT. Sizes: " << layout.configurationSpace.getGlobalSizes() << " Flags: " << trFlags
       // << "\n";
       auto c2r =
@@ -116,7 +115,7 @@ namespace TempLat
                                    temp);
       }
 
-      return std::make_shared<PFFTPlanHolder<double>>(group, r2c, c2r);
+      return std::make_shared<PFFTPlanHolder<NDim, double>>(group, r2c, c2r);
     };
 
   private:
@@ -129,9 +128,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/pfft/pfftplanner_test.h"
-#endif
 
 #endif

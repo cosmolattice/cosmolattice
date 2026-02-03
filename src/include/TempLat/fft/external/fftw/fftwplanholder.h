@@ -83,10 +83,8 @@ namespace TempLat
       requires std::is_same_v<S, double>
     void execute_r2c(plan somePlan, MemoryBlock<NDim, S> &mBlock)
     {
-      // sayMPI << "FFTW double r2c starting. Plan: " << somePlan << "\n";
       auto block_view = mBlock.getRawHostView();
       fftw_execute_dft_r2c(somePlan, block_view.data(), (fftw_complex *)block_view.data());
-      // sayMPI << "FFTW double r2c done.\n";
       mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 

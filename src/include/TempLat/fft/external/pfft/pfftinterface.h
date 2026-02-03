@@ -20,8 +20,7 @@ namespace TempLat
    *
    * Unit test: make test-pfftinterface
    **/
-
-  class PFFTInterface : public PFFTMemoryLayout
+  template <size_t NDim> class PFFTInterface : public PFFTMemoryLayout<NDim>
   {
   public:
     // Put public methods here. These should change very little over time.
@@ -43,12 +42,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/pfft/pfftinterface_test.h"
-#endif
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/pfft/pfftmemorylayout_test.h"
-#endif
 
 #endif
