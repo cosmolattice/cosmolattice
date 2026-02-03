@@ -93,8 +93,8 @@ namespace TempLat
 
       // Apply r2c padding to configuration space (last dimension)
       // FFTW convention: real data is padded to 2*(N/2+1)
-      ptrdiff_t fourierLastDim = nGridPoints[2] / 2 + 1;
-      confLocalSizes[2] = 2 * fourierLastDim;
+      ptrdiff_t fourierLastDim = nGridPoints[NDim - 1] / 2 + 1;
+      confLocalSizes[NDim - 1] = 2 * fourierLastDim;
 
       // Query complex (Fourier) space layout
       int complexShape[NDim], complexStart[NDim];
