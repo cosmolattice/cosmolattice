@@ -17,6 +17,7 @@
 #include "TempLat/util/tdd/tddmacros.h"
 
 #include "TempLat/util/log/log.h"
+#include "TempLat/util/log/saycomplete.h"
 
 namespace TempLat
 {

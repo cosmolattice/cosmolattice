@@ -112,7 +112,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
         //   std::cout << cIdx[l];
         //   if (l != NDim - 1) std::cout << ", ";
         // }
-        std::apply(
+        device::apply(
             [&](const auto &...args) {
               //      std::cout << ") = " << view(args...) << std::endl;
               all_correct = AlmostEqual(view(args...), expected);

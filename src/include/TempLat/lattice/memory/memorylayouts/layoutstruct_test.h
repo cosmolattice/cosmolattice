@@ -46,7 +46,7 @@ template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TD
   memVec[1] = 2;
   memVec[2] = 3;
 
-  std::apply([&](const auto... idx) { a.putSpatialLocationFromMemoryIndexInto(posVec, idx...); }, memVec);
+  device::apply([&](const auto... idx) { a.putSpatialLocationFromMemoryIndexInto(posVec, idx...); }, memVec);
 
   say << "memVec " << memVec << " -> posVec " << posVec << "\n";
 
@@ -59,7 +59,7 @@ template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TD
   /* mem pos 1 at mem dim 0 -> global dim 2 -> global pos 1 + 9 = 10 -> 10 - 16 = -6 */
   tdd.verify(posVec[2] == -6);
 
-  std::apply([&](const auto... idx) { a.putMemoryIndexFromSpatialLocationInto(memVec2, idx...); }, posVec);
+  device::apply([&](const auto... idx) { a.putMemoryIndexFromSpatialLocationInto(memVec2, idx...); }, posVec);
 
   say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
   say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
