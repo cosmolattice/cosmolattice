@@ -4,9 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s):  Adrien Florio, Year: 2025
+
 #include "TempLat/lattice/algebra/su2algebra/su2doubletdagger.h"
+#include "TempLat/lattice/algebra/su2algebra/su2doubletdagger_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::SU2DoubletDaggerTester> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::SU2DoubletDaggerTester> test;
 }
-
