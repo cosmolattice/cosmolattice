@@ -97,10 +97,10 @@ namespace TempLat
     template <typename T> void update_forDimension_device(MemoryBlock<NDim, T> &block, size_t dimension)
     {
       // We will copy slabs of thickness ghostDepth in the dimension 'dimension'.
-      device::array<ptrdiff_t, NDim> full_sizes = mJumpsHolder.getSizesInMemory();
+      device::IdxArray<NDim> full_sizes = mJumpsHolder.getSizesInMemory();
       for (size_t i = 0; i < NDim; ++i)
         full_sizes[i] += 2 * mGhostDepth;
-      device::array<ptrdiff_t, NDim> slab_sizes = mJumpsHolder.getSizesInMemory();
+      device::IdxArray<NDim> slab_sizes = mJumpsHolder.getSizesInMemory();
       for (size_t i = 0; i < NDim; ++i)
         slab_sizes[i] += 2 * mGhostDepth;
       slab_sizes[dimension] = mGhostDepth;
@@ -115,8 +115,8 @@ namespace TempLat
           [&](const auto &...args) { return device::memory::NDView<NDim, T>("receiveSlab", args...); }, slab_sizes);
 
       // To get the right subviews of the full data, we need to create slices for each dimension
-      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> send_slices{};
-      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> receive_slices{};
+      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> send_slices{};
+      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> receive_slices{};
 
       // UP
       {
@@ -131,10 +131,10 @@ namespace TempLat
         }
 
         // Get Subviews to the full data
-        auto sendSubView = std::apply(
+        auto sendSubView = device::apply(
             [&](const auto &...args) { return device::memory::subview(block.getNDView(full_sizes), args...); },
             send_slices);
-        auto receiveSubView = std::apply(
+        auto receiveSubView = device::apply(
             [&](const auto &...args) { return device::memory::subview(block.getNDView(full_sizes), args...); },
             receive_slices);
 
@@ -175,10 +175,10 @@ namespace TempLat
         }
 
         // Get Subviews to the full data
-        auto sendSubView = std::apply(
+        auto sendSubView = device::apply(
             [&](const auto &...args) { return device::memory::subview(block.getNDView(full_sizes), args...); },
             send_slices);
-        auto receiveSubView = std::apply(
+        auto receiveSubView = device::apply(
             [&](const auto &...args) { return device::memory::subview(block.getNDView(full_sizes), args...); },
             receive_slices);
 
@@ -265,10 +265,10 @@ namespace TempLat
           throw GhostUpdaterException(
               "Can only work with identical padding at start and end of each dimension, not this.");
         }
-      device::array<ptrdiff_t, NDim> sizes;
+      device::IdxArray<NDim> sizes;
       for (size_t i = 0; i < NDim; ++i)
         sizes[i] = mJumpsHolder.getSizesInMemory()[i];
-      std::array<ptrdiff_t, NDim> full_sizes{};
+      device::IdxArray<NDim> full_sizes{};
       for (size_t i = 0; i < NDim; ++i)
         full_sizes[i] = ghostDepth + sizes[i] + ghostDepth;
       auto View = block.getNDView(full_sizes);
@@ -276,10 +276,10 @@ namespace TempLat
       // Create subviews for the from and to views
       // We need to create slices for each dimension, taking into account the padding
       // and the layout of the views
-      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> btf_slicesFrom{};
-      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> btf_slicesTo{};
-      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> ftb_slicesFrom{};
-      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> ftb_slicesTo{};
+      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> btf_slicesFrom{};
+      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> btf_slicesTo{};
+      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> ftb_slicesFrom{};
+      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> ftb_slicesTo{};
 
       for (size_t dim = 0; dim < NDim; ++dim) {
         for (size_t depth = 1; depth <= (size_t)mGhostDepth; ++depth) {
@@ -311,14 +311,14 @@ namespace TempLat
                                                                            ghostDepth + sizes[i] + (depth - 1) + 1)
                                     : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
             }
-            auto btf_fromSubView =
-                std::apply([&](const auto &...args) { return device::memory::subview(View, args...); }, btf_slicesFrom);
-            auto btf_toSubView =
-                std::apply([&](const auto &...args) { return device::memory::subview(View, args...); }, btf_slicesTo);
-            auto ftb_fromSubView =
-                std::apply([&](const auto &...args) { return device::memory::subview(View, args...); }, ftb_slicesFrom);
-            auto ftb_toSubView =
-                std::apply([&](const auto &...args) { return device::memory::subview(View, args...); }, ftb_slicesTo);
+            auto btf_fromSubView = device::apply(
+                [&](const auto &...args) { return device::memory::subview(View, args...); }, btf_slicesFrom);
+            auto btf_toSubView = device::apply(
+                [&](const auto &...args) { return device::memory::subview(View, args...); }, btf_slicesTo);
+            auto ftb_fromSubView = device::apply(
+                [&](const auto &...args) { return device::memory::subview(View, args...); }, ftb_slicesFrom);
+            auto ftb_toSubView = device::apply(
+                [&](const auto &...args) { return device::memory::subview(View, args...); }, ftb_slicesTo);
 
             auto btf_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
             {

@@ -73,8 +73,8 @@ template <typename _TDDAssertion> inline void TempLat::DeviceTester::Test(_TDDAs
 
     // We reduce over some indices and copy the ptr inside the kernel. This way, we test that both the copy constructor
     // can be used without errors (runtime or compile-time), and the destructor can be called without errors.
-    const device::array<size_t, 1> start{0};
-    const device::array<size_t, 1> stop{8};
+    const device::IdxArray<1> start{0};
+    const device::IdxArray<1> stop{8};
     int reduction = 0;
     device::iteration::reduce(
         "Test", start, stop,

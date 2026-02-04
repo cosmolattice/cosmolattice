@@ -49,7 +49,7 @@ namespace TempLat
      * Creates a temporary parafaft object to query local sizes, then
      * populates FFTLayoutStruct with the configuration and Fourier space layouts.
      */
-    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGridPoints,
+    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, device::IdxArray<NDim> nGridPoints,
                                                     bool forbidTransposition = false) override
     {
       // if constexpr (NDim != 3) {
@@ -62,11 +62,11 @@ namespace TempLat
       FFTLayoutStruct<NDim> result(nGridPoints, true, false, false);
 
       // Initialize arrays for local layout
-      std::array<ptrdiff_t, NDim> confLocalSizes{};
-      std::array<ptrdiff_t, NDim> confLocalStarts{};
-      std::array<ptrdiff_t, NDim> fourLocalSizes{};
-      std::array<ptrdiff_t, NDim> fourLocalStarts{};
-      std::array<ptrdiff_t, NDim> fourTransposition{};
+      device::IdxArray<NDim> confLocalSizes{};
+      device::IdxArray<NDim> confLocalStarts{};
+      device::IdxArray<NDim> fourLocalSizes{};
+      device::IdxArray<NDim> fourLocalStarts{};
+      device::IdxArray<NDim> fourTransposition{};
       std::iota(fourTransposition.begin(), fourTransposition.end(), 0);
 
       ptrdiff_t parafaftRequiredMemory = 0;

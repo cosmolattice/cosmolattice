@@ -88,7 +88,7 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
   C = SU2DoubletWrap(1., 0.2, 0.13, 0.14);
 
   // zero is 1, because of the ghosts!
-  const device::array<ptrdiff_t, 3> zero{{1, 1, 1}};
+  const device::IdxArray<3> zero{{1, 1, 1}};
 
   auto D = Complexify(1.0, 2.0) * C;
 

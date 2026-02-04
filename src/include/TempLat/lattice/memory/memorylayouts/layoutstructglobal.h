@@ -27,9 +27,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     static constexpr size_t NDim = _NDim;
 
-    template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    LayoutStructGlobal(const C &initNGrid)
+    LayoutStructGlobal(const device::IdxArray<NDim> &initNGrid)
     {
       for (size_t i = 0; i < NDim; ++i) {
         mGlobalSizes[i] = initNGrid[i];
@@ -38,9 +36,9 @@ namespace TempLat
     }
 
     DEVICE_FORCEINLINE_FUNCTION
-    device::array<ptrdiff_t, NDim> &getGlobalSizes() { return mGlobalSizes; }
+    device::IdxArray<NDim> &getGlobalSizes() { return mGlobalSizes; }
     DEVICE_FORCEINLINE_FUNCTION
-    const device::array<ptrdiff_t, NDim> &getGlobalSizes() const { return mGlobalSizes; }
+    const device::IdxArray<NDim> &getGlobalSizes() const { return mGlobalSizes; }
 
     /** returns the largest possible distance from the origin. mSignConversionMidpoint holds the
      *  maximum value of each dimension. Check that in localIndexToGlobalCoordinate.
@@ -98,8 +96,8 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    device::array<ptrdiff_t, NDim> mGlobalSizes;
-    device::array<ptrdiff_t, NDim> mSignConversionMidpoint;
+    device::IdxArray<NDim> mGlobalSizes;
+    device::IdxArray<NDim> mSignConversionMidpoint;
 
   public:
 #ifdef TEMPLATTEST

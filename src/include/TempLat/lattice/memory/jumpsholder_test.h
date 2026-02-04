@@ -18,14 +18,14 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   };
 
   /* arbitrary irregular sizing */
-  device::array<ptrdiff_t, 3> nGrid{{62, 22, 24}};
+  device::IdxArray<3> nGrid{{62, 22, 24}};
 
   LayoutStruct<3> layout(nGrid, 1);
 
   layout.setLocalSizes(nGrid);
 
   /* arbitrary irregular ghosting */
-  std::array<std::array<ptrdiff_t, 2u>, NDim> nGhost{};
+  device::array<device::array<ptrdiff_t, 2u>, NDim> nGhost{};
   nGhost[0][0] = 6;
   nGhost[0][1] = 5;
   nGhost[1][0] = 4;
@@ -56,7 +56,7 @@ template <size_t NDim> inline void TempLat::JumpsHolder<NDim>::Test(TempLat::TDD
   /* verify the setup, not controlled, but using the jumps which are under scrutiny */
   JumpsHolder<3> jumper(layout, nGhost);
   bool allRight = true;
-  std::array<ptrdiff_t, NDim> shifts{};
+  device::IdxArray<NDim> shifts{};
   for (ptrdiff_t i = 0; i < nGrid[0]; ++i) {
     shifts[0] = i;
     for (ptrdiff_t j = 0; j < nGrid[1]; ++j) {

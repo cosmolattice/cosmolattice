@@ -38,7 +38,7 @@ inline void TempLat::ComplexFieldSU2MultiplyTester<NDim, T>::Test(TempLat::TDDAs
     all_true = all_true && AlmostEqual(f3view(idx...), T(-6));
 
     if (!all_true) {
-      std::cout << "Failed at index " << std::vector<size_t>{{idx...}} << "\n";
+      std::cout << "Failed at index " << std::vector<device::Idx>{{idx...}} << "\n";
       std::cout << "Values are: " << f1view(idx...) << " " << f2view(idx...) << " " << f3view(idx...) << "\n";
     }
   });

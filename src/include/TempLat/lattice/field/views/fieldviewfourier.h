@@ -62,7 +62,7 @@ namespace TempLat
       onBeforeAssignment(g);
 
       PreGet::apply(g);
-      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
       };
@@ -159,8 +159,8 @@ namespace TempLat
     template <typename... Args> void setZeroMode(const complex<T> &toSet)
     {
       // This is dimension-aware.
-      device::array<ptrdiff_t, NDim> global_coord{{}};
-      device::array<ptrdiff_t, NDim> mem_pos{{}};
+      device::IdxArray<NDim> global_coord{{}};
+      device::IdxArray<NDim> mem_pos{{}};
 
       const auto &layout = mToolBox->mLayouts.getFourierSpaceLayout();
       const bool owned = device::apply(
@@ -195,8 +195,8 @@ namespace TempLat
     device::memory::NDViewUnmanaged<1, complex<T>> mRawView;
     device::memory::NDViewUnmanagedHost<NDim, complex<T>> mHostView;
 
-    std::array<ptrdiff_t, NDim> memorySizes;
-    std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
+    device::IdxArray<NDim> memorySizes;
+    device::array<device::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
 
   public:
 #ifdef TEMPLATTEST

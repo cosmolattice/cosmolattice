@@ -12,6 +12,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/listoperators/foldmultiply.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
+#include "TempLat/lattice/algebra/helpers/getdx.h"
 
 namespace TempLat
 {

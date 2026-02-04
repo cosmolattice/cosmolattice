@@ -342,7 +342,7 @@ namespace TempLat
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with
       // "removeInitValue()"
 
-      device::array<ptrdiff_t, NDim> pos0{{}};
+      device::IdxArray<NDim> pos0{{}};
 
       pot0 = device::memory::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
 
@@ -371,7 +371,7 @@ namespace TempLat
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with
       // "removeInitValue()"
 
-      device::array<ptrdiff_t, NDim> pos0{{}};
+      device::IdxArray<NDim> pos0{{}};
       pot0 = device::memory::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
 
       // Compute initial potential at t=0
@@ -386,7 +386,7 @@ namespace TempLat
     // This sets the homogeneous components of the fields at a single point.
     void addInitValueOnePoint()
     {
-      device::array<ptrdiff_t, NDim> pos0{{}};
+      device::IdxArray<NDim> pos0{{}};
       ForLoop(j, 0, Ns - 1, device::memory::setAtOnePoint(fldS(j), pos0, fldS0[j] / fStar););
       ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(fldCS(j)(i), pos0, fldCS0(j)(i) / fStar);));
       ForLoop(
@@ -397,7 +397,7 @@ namespace TempLat
     // This removes the homogeneous components of the fields at a single point.
     void removeInitValue()
     {
-      device::array<ptrdiff_t, NDim> pos0{{}};
+      device::IdxArray<NDim> pos0{{}};
       ForLoop(j, 0, Ns - 1, device::memory::setAtOnePoint(fldS(j), pos0, 0.););
       ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(fldCS(j)(i), pos0, 0.);));
       ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, device::memory::setAtOnePoint(fldSU2Doublet(j)(i), pos0, 0.);));

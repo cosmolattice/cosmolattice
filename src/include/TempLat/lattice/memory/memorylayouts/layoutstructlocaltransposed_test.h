@@ -24,7 +24,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::T
   /* */
   a = LayoutStructLocalTransposed({16, 16, 16}, 0);
 
-  std::array<ptrdiff_t, 3> newLocalStarts{{7, 8, 9}};
+  device::IdxArray<3> newLocalStarts{{7, 8, 9}};
   a.getLocal().setLocalStarts(newLocalStarts);
 
   /* test that these propagate correctly */
@@ -38,7 +38,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::T
   tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[2]);
   tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[0]);
 
-  std::array<ptrdiff_t, 3> memVec{}, posVec{}, memVec2{};
+  device::IdxArray<3> memVec{}, posVec{}, memVec2{};
 
   memVec[0] = 1;
   memVec[1] = 2;
@@ -73,7 +73,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::T
 
   a = LayoutStructLocalTransposed({12, 16, 18}, 0);
 
-  newLocalStarts = std::array<ptrdiff_t, 3>{{7, 8, 9}};
+  newLocalStarts = device::IdxArray<3>{{7, 8, 9}};
   a.getLocal().setLocalStarts(newLocalStarts);
 
   /* test that these propagate correctly */

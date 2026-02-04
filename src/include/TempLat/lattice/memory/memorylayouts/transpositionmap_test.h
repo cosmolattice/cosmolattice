@@ -25,7 +25,7 @@ template <size_t NDim> inline void TempLat::TranspositionMap<NDim>::Test(TempLat
   tdd.verify(allRight);
   tdd.verify(!map.isTransposed());
 
-  std::array<ptrdiff_t, nd> input{};
+  device::IdxArray<nd> input{};
   for (ptrdiff_t i = 0; i < nd; ++i) {
     input[i] = nd - i - 1;
   }

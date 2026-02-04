@@ -87,8 +87,8 @@ namespace TempLat
         }
       }
 
-      std::array<int, NDim> configSizes;
-      std::array<int, NDim> fourierSizes;
+      device::array<int, NDim> configSizes;
+      device::array<int, NDim> fourierSizes;
     };
 
     KokkosFFTPlanHolder(MPICartesianGroup group, const PlanChain &planChain) : mGroup(group), mPlanChain(planChain) {}
@@ -106,15 +106,15 @@ namespace TempLat
     void execute_r2c(MemoryBlock<NDim, T> &mBlock)
     {
       device::iteration::fence();
-      auto fourier_view = std::apply(
+      auto fourier_view = device::apply(
           [&](auto &&...args) {
             return device::memory::NDViewUnmanaged<NDim, complex<T>>(reinterpret_cast<complex<T> *>(mBlock.data()),
                                                                      args...);
           },
           mPlanChain.fourierSizes);
-      auto config_view =
-          std::apply([&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, T>(mBlock.data(), args...); },
-                     mPlanChain.configSizes);
+      auto config_view = device::apply(
+          [&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, T>(mBlock.data(), args...); },
+          mPlanChain.configSizes);
 
       mPlanChain.execute_r2c(config_view, fourier_view);
       device::iteration::fence();
@@ -123,15 +123,15 @@ namespace TempLat
     void execute_c2r(MemoryBlock<NDim, T> &mBlock)
     {
       device::iteration::fence();
-      auto fourier_view = std::apply(
+      auto fourier_view = device::apply(
           [&](auto &&...args) {
             return device::memory::NDViewUnmanaged<NDim, complex<T>>(reinterpret_cast<complex<T> *>(mBlock.data()),
                                                                      args...);
           },
           mPlanChain.fourierSizes);
-      auto config_view =
-          std::apply([&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, T>(mBlock.data(), args...); },
-                     mPlanChain.configSizes);
+      auto config_view = device::apply(
+          [&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, T>(mBlock.data(), args...); },
+          mPlanChain.configSizes);
 
       mPlanChain.execute_c2r(fourier_view, config_view);
       device::iteration::fence();

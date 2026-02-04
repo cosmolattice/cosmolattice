@@ -35,17 +35,17 @@ namespace TempLat
     }
   void NDLoop(const View &view, const Functor &functor)
   {
-    std::array<size_t, NDim> extents;
-    for (size_t i = 0; i < NDim; ++i)
+    std::array<ptrdiff_t, NDim> extents;
+    for (ptrdiff_t i = 0; i < NDim; ++i)
       extents[i] = view.extent(i);
 
-    std::array<size_t, NDim> idx;
-    for (size_t i = 0; i < NDim; ++i)
+    std::array<ptrdiff_t, NDim> idx;
+    for (ptrdiff_t i = 0; i < NDim; ++i)
       idx[i] = 0;
 
     while (true) {
       std::apply(functor, idx);
-      size_t dim = NDim - 1;
+      ptrdiff_t dim = NDim - 1;
       while (dim < NDim) {
         idx[dim]++;
         if (idx[dim] < extents[dim]) {

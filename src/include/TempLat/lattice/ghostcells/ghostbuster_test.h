@@ -30,13 +30,13 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
   sayMPI << "Testing GhostBuster in " << NDim << " dimensions.\n";
 
   // Set up grid sizes for each dimension (smaller than 3D test to reduce complexity)
-  std::array<ptrdiff_t, NDim> nGrid;
+  device::IdxArray<NDim> nGrid;
   for (size_t i = 0; i < NDim; ++i) {
     nGrid[i] = 8; // Small grid size for all dimensions
   }
 
   // Create layout
-  std::array<ptrdiff_t, NDim> globalSizes;
+  device::IdxArray<NDim> globalSizes;
   for (size_t i = 0; i < NDim; ++i) {
     globalSizes[i] = 16; // Global size larger than local
   }
@@ -44,8 +44,8 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
   layout.setLocalSizes(nGrid);
 
   // Define two different ghost layouts to test transformation between them
-  std::array<std::array<ptrdiff_t, 2u>, NDim> nGhost1{};
-  std::array<std::array<ptrdiff_t, 2u>, NDim> nGhost2{};
+  device::array<device::array<ptrdiff_t, 2u>, NDim> nGhost1{};
+  device::array<device::array<ptrdiff_t, 2u>, NDim> nGhost2{};
 
   // Set up asymmetric ghost configurations for testing
   for (size_t i = 0; i < NDim; ++i) {
@@ -73,29 +73,29 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
       auto memory_view = memory.getRawHostView();
 
       // Use a lambda to handle N-dimensional initialization recursively
-      std::function<void(std::array<ptrdiff_t, NDim> &, size_t, ptrdiff_t)> initMemory =
-          [&](std::array<ptrdiff_t, NDim> &coords, size_t dim, ptrdiff_t offset) {
-            if (dim == NDim) {
-              // Base case: set the memory value
-              memory_view[offset].x = coords[0];
-              memory_view[offset].y = (NDim > 1) ? coords[1] : 0;
-              memory_view[offset].z = (NDim > 2) ? coords[2] : 0;
-              return;
-            }
+      std::function<void(device::IdxArray<NDim> &, size_t, ptrdiff_t)> initMemory = [&](device::IdxArray<NDim> &coords,
+                                                                                        size_t dim, ptrdiff_t offset) {
+        if (dim == NDim) {
+          // Base case: set the memory value
+          memory_view[offset].x = coords[0];
+          memory_view[offset].y = (NDim > 1) ? coords[1] : 0;
+          memory_view[offset].z = (NDim > 2) ? coords[2] : 0;
+          return;
+        }
 
-            ptrdiff_t stride = 1;
-            for (size_t j = dim + 1; j < NDim; ++j) {
-              stride *= (nGrid[j] + nGhostFrom[j][0] + nGhostFrom[j][1]);
-            }
+        ptrdiff_t stride = 1;
+        for (size_t j = dim + 1; j < NDim; ++j) {
+          stride *= (nGrid[j] + nGhostFrom[j][0] + nGhostFrom[j][1]);
+        }
 
-            for (ptrdiff_t i = -nGhostFrom[dim][0]; i < nGrid[dim] + nGhostFrom[dim][1]; ++i) {
-              coords[dim] = i;
-              ptrdiff_t newOffset = offset + (i + nGhostFrom[dim][0]) * stride;
-              initMemory(coords, dim + 1, newOffset);
-            }
-          };
+        for (ptrdiff_t i = -nGhostFrom[dim][0]; i < nGrid[dim] + nGhostFrom[dim][1]; ++i) {
+          coords[dim] = i;
+          ptrdiff_t newOffset = offset + (i + nGhostFrom[dim][0]) * stride;
+          initMemory(coords, dim + 1, newOffset);
+        }
+      };
 
-      std::array<ptrdiff_t, NDim> coords{};
+      device::IdxArray<NDim> coords{};
       initMemory(coords, 0, 0);
       memory.pushHostView();
     }
@@ -111,8 +111,8 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
     bool allCorrect = true;
 
     // Use recursive lambda to verify N-dimensional memory
-    std::function<void(std::array<ptrdiff_t, NDim> &, size_t)> verifyMemory = [&](std::array<ptrdiff_t, NDim> &coords,
-                                                                                  size_t dim) {
+    std::function<void(device::IdxArray<NDim> &, size_t)> verifyMemory = [&](device::IdxArray<NDim> &coords,
+                                                                             size_t dim) {
       if (dim == NDim) {
         // Base case: check this coordinate
         ptrdiff_t pos = jumperTo.toOrigin();
@@ -133,7 +133,7 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
       }
     };
 
-    std::array<ptrdiff_t, NDim> coords{};
+    device::IdxArray<NDim> coords{};
     verifyMemory(coords, 0);
 
     return allCorrect;
@@ -148,7 +148,7 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
   tdd.verify(test2);
 
   // Test with uniform ghost layout
-  std::array<std::array<ptrdiff_t, 2u>, NDim> nGhostUniform{};
+  device::array<device::array<ptrdiff_t, 2u>, NDim> nGhostUniform{};
   for (size_t i = 0; i < NDim; ++i) {
     nGhostUniform[i][0] = 1;
     nGhostUniform[i][1] = 1;
@@ -167,7 +167,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
   // Test the ghostbuster on a single node.
   {
     // arbitrary irregular sizing. If you want to see debug prints of what happens, set them to <= 4
-    std::array<ptrdiff_t, 3> nGrid{{256, 64, 128}};
+    device::IdxArray<3> nGrid{{256, 64, 128}};
 
     LayoutStruct<3> layout({62, 62, 62}, 1);
     layout.setLocalSizes(nGrid);
@@ -207,7 +207,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
       }
 
       auto print_it = [&](const auto gh, const std::string name) {
-        std::array<ptrdiff_t, 3> fullSizes;
+        device::IdxArray<3> fullSizes;
         for (size_t i = 0; i < 3; ++i) {
           fullSizes[i] = nGrid[i] + gh[i][0] + gh[i][1];
           // no debug print for too large arrays
@@ -296,7 +296,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
     };
 
     // arbitrary irregular ghosting A
-    std::array<std::array<ptrdiff_t, 2u>, 3> nGhost1{};
+    device::array<device::array<ptrdiff_t, 2u>, 3> nGhost1{};
 
     nGhost1[0][0] = 6;
     nGhost1[0][1] = 5;
@@ -305,7 +305,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
     nGhost1[2][0] = 2;
     nGhost1[2][1] = 1;
 
-    std::array<std::array<ptrdiff_t, 2u>, 3> nGhost2{};
+    device::array<device::array<ptrdiff_t, 2u>, 3> nGhost2{};
 
     // arbitrary irregular ghosting B: by choice slightly smaller than A, to be safe.
     nGhost2[0][0] = 5;

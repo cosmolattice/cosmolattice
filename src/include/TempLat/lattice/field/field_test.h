@@ -39,11 +39,21 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
 
     // get host views
     copy.getMemoryManager()->confirmFourierSpace();
+
+    // make sure the copy is different from the original
+    bool different = false;
+    auto original_host = original.getRawHostView();
+    auto copy_host = copy.getRawHostView();
+    for (size_t i = 0; i < original_host.size(); ++i) {
+      different = different || !AlmostEqual(original_host[i], copy_host[i]);
+    }
+    tdd.verify(different);
+    copy.getMemoryManager()->flagHostMirrorOutdated();
+
     copy.getMemoryManager()->confirmConfigSpace();
     copy.updateGhosts();
 
-    auto original_host = original.getRawHostView();
-    auto copy_host = copy.getRawHostView();
+    copy_host = copy.getRawHostView();
 
     bool backforthWorks = true;
     for (size_t i = 0; i < original_host.size(); ++i) {
@@ -80,14 +90,14 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
       auto view = f.getLocalNDHostView();
 
       size_t total_size = 1;
-      std::array<size_t, NDim> extents;
+      device::IdxArray<NDim> extents;
       for (size_t i = 0; i < NDim; ++i) {
         extents[i] = view.extent(i);
         total_size *= extents[i];
       }
 
       bool all_correct = true;
-      std::array<size_t, NDim> cIdx{};
+      device::IdxArray<NDim> cIdx{};
       for (size_t i = 0; i < total_size; ++i) {
         // Linear index to cartesian index
         size_t lsize = 1;

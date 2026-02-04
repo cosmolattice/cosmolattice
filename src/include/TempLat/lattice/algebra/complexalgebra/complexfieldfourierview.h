@@ -87,7 +87,7 @@ namespace TempLat
       const auto viewR = mR.getView();
       const auto viewI = mI.getView();
 
-      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         device::apply(
             [&](auto &&...args) {

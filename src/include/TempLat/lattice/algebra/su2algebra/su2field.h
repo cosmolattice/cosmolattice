@@ -110,7 +110,7 @@ namespace TempLat
       const auto view2 = fs[1].getView();
       const auto view3 = fs[2].getView();
 
-      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         // The problem here is that NVCC copies the given captures to constant memory. Clang moves them to registers,
         // which is what we need, as we need to use the cache.

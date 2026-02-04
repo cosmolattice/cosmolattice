@@ -155,8 +155,8 @@ namespace TempLat
       //           << " direction:    " << mDirection << "\n"
       //           << std::endl;
 
-      device::array<ptrdiff_t, NDim> from_full_sizes{};
-      device::array<ptrdiff_t, NDim> to_full_sizes{};
+      device::IdxArray<NDim> from_full_sizes{};
+      device::IdxArray<NDim> to_full_sizes{};
       for (size_t i = 0; i < NDim; ++i) {
         from_full_sizes[i] = from_padding[i][0] + from_sizes[i] + from_padding[i][1];
         to_full_sizes[i] = to_padding[i][0] + to_sizes[i] + to_padding[i][1];
@@ -164,8 +164,8 @@ namespace TempLat
       auto fromView = block.template getNDView<T>(from_full_sizes);
       auto toView = block.template getNDView<T>(to_full_sizes);
 
-      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slicesFrom{};
-      std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slicesTo{};
+      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slicesFrom{};
+      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slicesTo{};
       for (size_t i = 0; i < NDim; ++i) {
         slicesFrom[i] = std::make_pair(from_padding[i][0], from_padding[i][0] + from_sizes[i]);
         slicesTo[i] = std::make_pair(to_padding[i][0], to_padding[i][0] + to_sizes[i]);
@@ -174,16 +174,16 @@ namespace TempLat
       // We always do slabs in the first (most striding) dimension.
       const int dim = 0;
 
-      std::array<ptrdiff_t, NDim> tslab_sizes{};
+      device::IdxArray<NDim> tslab_sizes{};
       for (size_t i = 0; i < NDim; ++i) {
         if (i == dim)
           tslab_sizes[i] = 1;
         else
           tslab_sizes[i] = to_sizes[i];
       }
-      auto tslab =
-          std::apply([&](const auto &...args) { return device::memory::NDView<NDim, T>("GhostBusterTSlab", args...); },
-                     tslab_sizes);
+      auto tslab = device::apply(
+          [&](const auto &...args) { return device::memory::NDView<NDim, T>("GhostBusterTSlab", args...); },
+          tslab_sizes);
 
       int _j_lim = mDirection > 0 ? std::min(to_sizes[dim], from_sizes[dim] + from_padding[dim][1])
                                   : std::min(to_sizes[dim], from_sizes[dim] + from_padding[dim][0]);
@@ -192,8 +192,8 @@ namespace TempLat
         // If we expand (mDirection==-1), we go from max to 0. (slabs are rising to "higher" memory)
         const int j = mDirection > 0 ? _j : to_sizes[dim] - 1 - _j;
 
-        std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slabSliceFrom{};
-        std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slabSliceTo{};
+        device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slabSliceFrom{};
+        device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slabSliceTo{};
         for (size_t i = 0; i < NDim; ++i) {
           if (i == dim) {
             slabSliceFrom[i] = std::make_pair(from_padding[i][0] + j, from_padding[i][0] + j + 1);
@@ -204,10 +204,10 @@ namespace TempLat
           }
         }
 
-        auto fromSubView =
-            std::apply([&](const auto &...args) { return device::memory::subview(fromView, args...); }, slabSliceFrom);
+        auto fromSubView = device::apply(
+            [&](const auto &...args) { return device::memory::subview(fromView, args...); }, slabSliceFrom);
         auto toSubView =
-            std::apply([&](const auto &...args) { return device::memory::subview(toView, args...); }, slabSliceTo);
+            device::apply([&](const auto &...args) { return device::memory::subview(toView, args...); }, slabSliceTo);
 
         // Copy to the temporary
         device::memory::copyDeviceToDevice(fromSubView, tslab);

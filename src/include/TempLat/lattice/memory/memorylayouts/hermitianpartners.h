@@ -29,9 +29,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    DEVICE_FUNCTION HermitianPartners(const C &initNGrid) : mode(HermitianPartnersMode::none)
+    DEVICE_FUNCTION HermitianPartners(const device::IdxArray<NDim> &initNGrid) : mode(HermitianPartnersMode::none)
     {
       for (size_t i = 0; i < NDim; ++i) {
         mNGrid[i] = initNGrid[i];
@@ -180,9 +178,9 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    device::array<ptrdiff_t, NDim> mNGrid;
+    device::IdxArray<NDim> mNGrid;
     HermitianPartnersMode mode;
-    device::array<ptrdiff_t, NDim> mSignConversionMidpoint;
+    device::IdxArray<NDim> mSignConversionMidpoint;
 
   public:
 #ifdef TEMPLATTEST

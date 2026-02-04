@@ -63,7 +63,7 @@ namespace TempLat
       return mData(i);
     }
 
-    template <typename R = T> auto getNDView(const std::array<ptrdiff_t, NDim> &localSizes) const
+    template <typename R = T> auto getNDView(const device::IdxArray<NDim> &localSizes) const
     {
 #ifdef CHECKBOUNDS
       size_t total_size = 1;
@@ -74,24 +74,14 @@ namespace TempLat
                                               " is larger than allocated size ", mSize);
 #endif
 
-      return std::apply(
+      return device::apply(
           [&](auto &&...args) {
             return device::memory::NDViewUnmanaged<NDim, R>(reinterpret_cast<R *>(mData.data()), args...);
           },
           localSizes);
     }
 
-    template <typename R = T>
-      requires(!std::is_same_v<std::array<ptrdiff_t, NDim>, device::array<ptrdiff_t, NDim>>)
-    auto getNDView(const device::array<ptrdiff_t, NDim> &localSizes) const
-    {
-      std::array<ptrdiff_t, NDim> ls;
-      for (size_t i = 0; i < NDim; ++i)
-        ls[i] = localSizes[i];
-      return getNDView<R>(ls);
-    }
-
-    template <typename R = T> auto getNDHostView(const std::array<ptrdiff_t, NDim> &localSizes) const
+    template <typename R = T> auto getNDHostView(const device::IdxArray<NDim> &localSizes) const
     {
 #ifdef CHECKBOUNDS
       size_t total_size = 1;
@@ -103,20 +93,11 @@ namespace TempLat
 #endif
       pullHostView(); // ensure host mirror is up to date
 
-      return std::apply(
+      return device::apply(
           [&](auto &&...args) {
             return device::memory::NDViewUnmanagedHost<NDim, R>(reinterpret_cast<R *>(mHostMirror.data()), args...);
           },
           localSizes);
-    }
-    template <typename R = T>
-      requires(!std::is_same_v<std::array<ptrdiff_t, NDim>, device::array<ptrdiff_t, NDim>>)
-    auto getNDHostView(const device::array<ptrdiff_t, NDim> &localSizes) const
-    {
-      std::array<ptrdiff_t, NDim> ls;
-      for (size_t i = 0; i < NDim; ++i)
-        ls[i] = localSizes[i];
-      return getNDHostView<R>(ls);
     }
 
     void flagHostMirrorOutdated() const { mHostMirrorOutdated = true; }

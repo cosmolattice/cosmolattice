@@ -73,7 +73,7 @@ namespace TempLat
     /** \brief Compute the total jump for a multidimensional offset/ shift vector: these take account for possible
      * transposition. Input is expected to be in the space of the logical problem, NOT necessarily the ordering of
      * memory. */
-    inline ptrdiff_t getJump(const device::array<ptrdiff_t, NDim> &shifts) const
+    inline ptrdiff_t getJump(const device::IdxArray<NDim> &shifts) const
     {
       // if (shifts.size() != mJumps.size())
       //   throw JumpsHolderException("Called ptrdiff_t getJump(std::vector<ptrdiff_t> shifts) with shift of different "
@@ -91,14 +91,14 @@ namespace TempLat
      *  offset if the requested coordinates are not in our space. No exception thrown.
      *  "position" is the global coordinate in the lattice, not the mpi-local one.
      */
-    inline ptrdiff_t getTotalOffsetFromSpatialCoordinates(const device::array<ptrdiff_t, NDim> &position) const
+    inline ptrdiff_t getTotalOffsetFromSpatialCoordinates(const device::IdxArray<NDim> &position) const
     {
       // if (position.size() != mJumps.size())
       //   throw JumpsHolderException("Called ptrdiff_t getTotalOffsetFromSpatialCoordinates(std::vector<ptrdiff_t> "
       //                              "position) with position of different dimensionality than our jumps. Jumps size:",
       //                              mJumps.size(), ", your input position size:", position.size());
 
-      device::array<ptrdiff_t, NDim> memoryIndices{};
+      device::IdxArray<NDim> memoryIndices{};
 
       for (ptrdiff_t i = 0, iEnd = position.size(); i < iEnd; ++i) {
         mLayout.putMemoryIndexFromSpatialLocationInto(position[i], i, memoryIndices);
@@ -157,14 +157,14 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     /** \brief The layout that we are jumping on, for compact referencing... */
     LayoutStruct<NDim> mLayout;
-    device::array<ptrdiff_t, NDim> mSizesInMemory;
+    device::IdxArray<NDim> mSizesInMemory;
     device::array<device::array<ptrdiff_t, 2u>, NDim> mPadding;
     /** \brief If there is padding, the first owned iterable memory is at some distance from the start of the memory
      * block */
     ptrdiff_t mJumpToIteratableStart;
     /** \brief The final jumps in each direction. Add this to your (typed!) pointer, and you end up one step up or down
      * in that dimension. */
-    device::array<ptrdiff_t, NDim> mJumps;
+    device::IdxArray<NDim> mJumps;
 
     bool mIsEmpty;
 

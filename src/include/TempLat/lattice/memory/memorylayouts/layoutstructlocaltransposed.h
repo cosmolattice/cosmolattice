@@ -32,9 +32,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     static constexpr size_t NDim = _NDim;
 
-    template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    LayoutStructLocalTransposed(const C &initNGrid, const ptrdiff_t nGhosts)
+    LayoutStructLocalTransposed(const device::IdxArray<NDim> &initNGrid, const ptrdiff_t nGhosts)
         : mLocal(initNGrid, nGhosts), mNGhosts(nGhosts)
     {
       for (size_t i = 0; i < NDim; ++i)
@@ -53,7 +51,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     bool isTransposed() const { return mTranspositionMap_memoryToGlobalSpace.isTransposed(); }
 
-    template <typename C = device::array<ptrdiff_t, NDim>> void setLocalSizes(const C &input)
+    void setLocalSizes(const device::IdxArray<NDim> &input)
     {
       getLocal().setLocalSizes(input);
       adaptMemorySizesFromTranspositionMap();
@@ -64,9 +62,7 @@ namespace TempLat
       getLocal().setNGhosts(nGhosts);
     }
 
-    template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    void setTranspositionMap_memoryToGlobalSpace(const C &input)
+    void setTranspositionMap_memoryToGlobalSpace(const device::IdxArray<NDim> &input)
     {
       mTranspositionMap_memoryToGlobalSpace.setMap(input);
       adaptMemorySizesFromTranspositionMap();
@@ -78,7 +74,7 @@ namespace TempLat
     }
 
     DEVICE_FORCEINLINE_FUNCTION
-    const device::array<ptrdiff_t, NDim> &getSizesInMemory() const { return mSizesInMemory; }
+    const device::IdxArray<NDim> &getSizesInMemory() const { return mSizesInMemory; }
 
     /** \brief A dictionary for return values for memory to coordinate mapping. */
     struct CoordinateMapping {
@@ -140,7 +136,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     LayoutStructLocal<NDim> mLocal;
     TranspositionMap<NDim> mTranspositionMap_memoryToGlobalSpace;
-    device::array<ptrdiff_t, NDim> mSizesInMemory;
+    device::IdxArray<NDim> mSizesInMemory;
     ptrdiff_t mNGhosts;
 
     void adaptMemorySizesFromTranspositionMap()

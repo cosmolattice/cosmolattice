@@ -60,13 +60,13 @@ namespace TempLat
     }
 
     /** \brief Constructor with default MPI layout and MPI_COMM_WORLD. */
-    MemoryToolBox(std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, bool forbidTransposition = false)
+    MemoryToolBox(device::IdxArray<NDim> nGrid, ptrdiff_t ghostDepth, bool forbidTransposition = false)
         : MemoryToolBox(FFTMPIDomainSplit<NDim>::makeMPIGroup(NDim), nGrid, ghostDepth, forbidTransposition)
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and MPI_COMM_WORLD. */
     static inline device::memory::host_ptr<MemoryToolBox<NDim>>
-    makeShared(std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, bool forbidTransposition = false)
+    makeShared(device::IdxArray<NDim> nGrid, ptrdiff_t ghostDepth, bool forbidTransposition = false)
     {
       return device::memory::host_ptr<MemoryToolBox<NDim>>(nGrid, ghostDepth, forbidTransposition);
     }
@@ -85,14 +85,13 @@ namespace TempLat
     }
 
     /** \brief Constructor with default MPI layout and MPI_COMM_WORLD but custom number of threads. */
-    MemoryToolBox(std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads, bool forbidTransposition)
+    MemoryToolBox(device::IdxArray<NDim> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads, bool forbidTransposition)
         : MemoryToolBox(FFTMPIDomainSplit<NDim>::makeMPIGroup(NDim), nGrid, ghostDepth, nThreads, forbidTransposition)
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and MPI_COMM_WORLD. */
-    static inline device::memory::host_ptr<MemoryToolBox<NDim>> makeShared(std::array<ptrdiff_t, NDim> nGrid,
-                                                                           ptrdiff_t ghostDepth, ptrdiff_t nThreads,
-                                                                           bool forbidTransposition = false)
+    static inline device::memory::host_ptr<MemoryToolBox<NDim>>
+    makeShared(device::IdxArray<NDim> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads, bool forbidTransposition = false)
     {
       return device::memory::host_ptr<MemoryToolBox<NDim>>(nGrid, ghostDepth, nThreads, forbidTransposition);
     }
@@ -110,14 +109,14 @@ namespace TempLat
     }
 
     /** \brief Constructor with default MPI layout and but custom MPI_Comm. */
-    MemoryToolBox(MPICommReference comm, std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth,
+    MemoryToolBox(MPICommReference comm, device::IdxArray<NDim> nGrid, ptrdiff_t ghostDepth,
                   bool forbidTransposition = false)
         : MemoryToolBox(FFTMPIDomainSplit<NDim>::makeMPIGroup(comm, NDim), nGrid, ghostDepth, forbidTransposition)
     {
     }
     /** \brief Shared-pointer constructor with default MPI layout and but custom MPI_Comm. */
     static inline device::memory::host_ptr<MemoryToolBox<NDim>> makeShared(MPICommReference comm,
-                                                                           std::array<ptrdiff_t, NDim> nGrid,
+                                                                           device::IdxArray<NDim> nGrid,
                                                                            ptrdiff_t ghostDepth,
                                                                            bool forbidTransposition = false)
     {
@@ -138,14 +137,14 @@ namespace TempLat
     }
 
     /** \brief Constructor with user chosen MPI layout. */
-    MemoryToolBox(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth,
+    MemoryToolBox(MPICartesianGroup group, device::IdxArray<NDim> nGrid, ptrdiff_t ghostDepth,
                   bool forbidTransposition = false)
         : MemoryToolBox(group, nGrid, ghostDepth, 1, forbidTransposition)
     {
     }
     /** \brief Shared-pointer constructor with user chosen MPI layout. */
     static inline device::memory::host_ptr<MemoryToolBox<NDim>> makeShared(MPICartesianGroup group,
-                                                                           std::array<ptrdiff_t, NDim> nGrid,
+                                                                           device::IdxArray<NDim> nGrid,
                                                                            ptrdiff_t ghostDepth,
                                                                            bool forbidTransposition = false)
     {
@@ -160,7 +159,7 @@ namespace TempLat
     {
     }
 
-    MemoryToolBox(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads,
+    MemoryToolBox(MPICartesianGroup group, device::IdxArray<NDim> nGrid, ptrdiff_t ghostDepth, ptrdiff_t nThreads,
                   bool forbidTransposition = false)
         : mGroup(group),
           // mNGridPoints(nGridPoints),
@@ -238,7 +237,7 @@ namespace TempLat
     MPICartesianGroup mGroup;
     static constexpr ptrdiff_t mNDimensions = NDim; // Dimensions of the problem
     // ptrdiff_t mNGridPoints;
-    std::array<ptrdiff_t, NDim> mNGridPointsVec; // Lattice size in each dimension
+    device::IdxArray<NDim> mNGridPointsVec; // Lattice size in each dimension
     ptrdiff_t mGhostDepth;
     FFTLibrarySelector<NDim> mFFTLibrary;
     TripleStateLayouts<NDim> mLayouts;

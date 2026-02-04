@@ -43,7 +43,7 @@ namespace TempLat
     };
 
     template <size_t NDim> struct datum {
-      device::array<ptrdiff_t, NDim> data;
+      device::IdxArray<NDim> data;
 
       friend std::ostream &operator<<(std::ostream &ostream, const datum &dat)
       {
@@ -73,24 +73,25 @@ namespace TempLat
       if constexpr (NDim == 1) {
         auto view = block.getRawView();
         device::iteration::foreach (
-            "DatumInitialize1D", device::array<int, 1>(0), device::array<int, 1>(localSizes[0]),
+            "DatumInitialize1D", device::IdxArray<1>{0}, device::IdxArray<1>(localSizes[0]),
             DEVICE_LAMBDA(const size_t i) {
               view(nGhost + i) = datum<NDim>{layout.getLocalStarts()[0] + (ptrdiff_t)i + 1};
             });
       } else {
-        std::array<ptrdiff_t, NDim> viewSizes;
+        device::IdxArray<NDim> viewSizes;
         for (size_t k = 0; k < NDim; ++k)
           viewSizes[k] = localSizes[k] + 2 * nGhost;
         auto view = block.getNDView(viewSizes);
 
-        std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slices{};
+        device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> slices{};
         for (size_t k = 0; k < NDim; ++k)
           slices[k] = std::make_pair(nGhost, nGhost + localSizes[k]);
 
-        auto subView = std::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
+        auto subView =
+            device::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
         auto functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
         {
-          device::array<ptrdiff_t, NDim> val;
+          device::IdxArray<NDim> val;
           for (size_t k = 0; k < NDim; ++k)
             val[k] = idx[k] + layout.getLocalStarts()[k] + 1;
           device::IdxArray<NDim> inc;
@@ -99,7 +100,7 @@ namespace TempLat
           device::apply([&](const auto &...args) { subView(idx[args]...) = datum<NDim>{val[args]...}; }, inc);
         };
 
-        device::array<ptrdiff_t, NDim> it_stop{};
+        device::IdxArray<NDim> it_stop{};
         for (size_t k = 0; k < NDim; ++k)
           it_stop[k] = localSizes[k];
 
@@ -118,7 +119,7 @@ namespace TempLat
       GhostUpdater<nd> ghostUpdater(mGroup, fullLayout.getConfigSpaceJumps());
 
       const auto localSizes = fullLayout.getConfigSpaceLayout().getLocalSizes();
-      std::array<ptrdiff_t, nd> fullLocalSizes{};
+      device::IdxArray<nd> fullLocalSizes{};
       for (size_t i = 0; i < nd; ++i)
         fullLocalSizes[i] = localSizes[i] + 2 * nGhost;
 
@@ -129,7 +130,7 @@ namespace TempLat
         size_t total_size = 1;
         for (size_t i = 0; i < nd; ++i)
           total_size *= fullLocalSizes[i];
-        std::array<size_t, nd> cIdx{};
+        device::IdxArray<nd> cIdx{};
         std::stringstream gridArrayStr;
         for (size_t i = 0; i < total_size; ++i) {
           // Linear index to cartesian index
@@ -156,7 +157,7 @@ namespace TempLat
       size_t total_size = 1;
       for (size_t i = 0; i < nd; ++i)
         total_size *= fullLocalSizes[i];
-      std::array<ptrdiff_t, nd> cIdx{};
+      device::IdxArray<nd> cIdx{};
 
       auto view = block.getRawHostView();
       print_it(view);
@@ -186,7 +187,7 @@ namespace TempLat
           if (cIdx[d] > nGrid) should_value[d] -= nGrid;
         }
 
-        std::array<ptrdiff_t, nd> is_value;
+        device::IdxArray<nd> is_value;
         for (size_t d = 0; d < nd; ++d)
           is_value[d] = view(i).data[d];
 

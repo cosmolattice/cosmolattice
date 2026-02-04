@@ -90,8 +90,8 @@ namespace TempLat
     {
       auto block_view = mBlock.getRawView();
       auto functor = DEVICE_LAMBDA(const device::IdxArray<1> &i) { block_view(i[0]) *= norm; };
-      device::iteration::foreach ("FFTNormalization", device::IdxArray<1>{0}, device::IdxArray<1>{mBlock.size()},
-                                  functor);
+      device::iteration::foreach ("FFTNormalization", device::IdxArray<1>{0},
+                                  device::IdxArray<1>{(device::Idx)mBlock.size()}, functor);
     }
 
   private:

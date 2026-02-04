@@ -35,7 +35,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     KokkosFFTMemoryLayout() {}
 
-    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGrid,
+    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, device::IdxArray<NDim> nGrid,
                                                     bool forbidTransposition = !KOKKOSFFTWITHTRANSPOSITION())
     {
       forbidTransposition = true || forbidTransposition;
@@ -43,11 +43,11 @@ namespace TempLat
       FFTLayoutStruct<NDim> result(nGrid, false, false, true, IntrinsicScales{1., 1.});
       /* default: everything is local. */
 
-      std::array<ptrdiff_t, NDim> confLocalSizes(nGrid);
-      std::array<ptrdiff_t, NDim> confLocalStarts{};
-      std::array<ptrdiff_t, NDim> fourLocalSizes(nGrid);
-      std::array<ptrdiff_t, NDim> fourLocalStarts{};
-      std::array<ptrdiff_t, NDim> fourTransposition{};
+      device::IdxArray<NDim> confLocalSizes(nGrid);
+      device::IdxArray<NDim> confLocalStarts{};
+      device::IdxArray<NDim> fourLocalSizes(nGrid);
+      device::IdxArray<NDim> fourLocalStarts{};
+      device::IdxArray<NDim> fourTransposition{};
       std::iota(fourTransposition.begin(), fourTransposition.end(), 0);
 
       fourLocalSizes.back() = fourLocalSizes.back() / 2 + 1;

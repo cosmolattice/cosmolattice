@@ -14,7 +14,7 @@
 
 template <size_t NDim> inline void TempLat::FFTNormalization<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  std::array<ptrdiff_t, NDim> nGrid;
+  device::IdxArray<NDim> nGrid;
   for (size_t i = 0; i < NDim; ++i)
     nGrid[i] = 256;
 

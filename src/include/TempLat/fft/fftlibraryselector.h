@@ -89,7 +89,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    FFTLibrarySelector(MPICartesianGroup group, const std::array<ptrdiff_t, NDim> &nGridPoints,
+    FFTLibrarySelector(MPICartesianGroup group, const device::IdxArray<NDim> &nGridPoints,
                        bool forbidTransposition = false)
         : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints, true, false, false), madePlansFloat(false),
           madePlansDouble(false), verbose(false)
@@ -221,7 +221,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICartesianGroup mGroup;
-    std::array<ptrdiff_t, NDim> mNGridPoints;
+    device::IdxArray<NDim> mNGridPoints;
     std::shared_ptr<FFTLibraryInterface<NDim>> theLibrary;
     FFTLayoutStruct<NDim> mLayout;
 

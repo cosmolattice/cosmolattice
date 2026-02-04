@@ -63,8 +63,8 @@ int main(int argc, char **argv)
     // pi.updateGhosts();
     for (size_t j = 0; j < layout.getLocalSizes()[0] + 2 * nGhost; ++j) {
       for (size_t k = 0; k < layout.getLocalSizes()[1] + 2 * nGhost; ++k) {
-        ss << std::setw(7) << std::setprecision(3)
-           << device::memory::getAtOnePoint(phi, device::array<size_t, NDim>{j, k}) << std::setw(3) << " ";
+        ss << std::setw(7) << std::setprecision(3) << device::memory::getAtOnePoint(phi, device::IdxArray<NDim>{j, k})
+           << std::setw(3) << " ";
       }
       ss << "\n";
     }

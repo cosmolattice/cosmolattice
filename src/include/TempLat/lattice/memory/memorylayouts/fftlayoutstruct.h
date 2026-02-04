@@ -36,13 +36,12 @@ namespace TempLat
   template <size_t NDim> class FFTLayoutStruct
   {
   public:
-    FFTLayoutStruct(const std::array<ptrdiff_t, NDim> &nGridPoints, bool isFFTW_, bool isPFFT_, bool isKOKKOSFFT_,
+    FFTLayoutStruct(const device::IdxArray<NDim> &nGridPoints, bool isFFTW_, bool isPFFT_, bool isKOKKOSFFT_,
                     IntrinsicScales scales = IntrinsicScales())
         : configurationSpace(nGridPoints, 0), fourierSpace(LayoutStruct<NDim>::createGlobalFFTLayout(nGridPoints)),
-          mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_), mIsKOKKOSFFT(isKOKKOSFFT_), mScales(scales)
+          mNGridPoints(nGridPoints), mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_),
+          mIsKOKKOSFFT(isKOKKOSFFT_), mScales(scales)
     {
-      for (size_t i = 0; i < NDim; ++i)
-        mNGridPoints[i] = nGridPoints[i];
 
       if ((int)mIsFFTW + (int)mIsPFFT + (int)mIsKOKKOSFFT != 1)
         throw FFTLayoutStructException("Must be either FFTW, PFFT or KOKKOSFFT!");
@@ -60,7 +59,7 @@ namespace TempLat
 
     /* no, these aren't public members. Just getter methods. */
     constexpr ptrdiff_t getNDimensions() const { return NDim; }
-    const device::array<ptrdiff_t, NDim> &getNGridPoints() const { return mNGridPoints; }
+    const device::IdxArray<NDim> &getNGridPoints() const { return mNGridPoints; }
     const bool &isFFTW() const { return mIsFFTW; }
     const bool &isPFFT() const { return mIsPFFT; }
     const bool &isKOKKOSFFT() const { return mIsKOKKOSFFT; }
@@ -109,7 +108,7 @@ namespace TempLat
     IntrinsicScales getIntrinsicScales() const { return mScales; }
 
   private:
-    device::array<ptrdiff_t, NDim> mNGridPoints;
+    device::IdxArray<NDim> mNGridPoints;
     ptrdiff_t mExternalMemoryRequirement;
 
     bool mIsFFTW;

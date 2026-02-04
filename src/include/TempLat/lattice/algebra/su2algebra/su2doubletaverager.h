@@ -118,7 +118,7 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              device::array<ptrdiff_t, NDim> global_coord;
+              device::IdxArray<NDim> global_coord;
               mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, args...);
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners

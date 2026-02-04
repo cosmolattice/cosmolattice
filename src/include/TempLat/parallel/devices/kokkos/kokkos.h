@@ -82,11 +82,12 @@ namespace TempLat
     using cuda::std::make_index_sequence;
     using cuda::std::make_pair;
     using cuda::std::make_tuple;
+    using cuda::std::pair;
     using cuda::std::tie;
     using cuda::std::tuple;
     using cuda::std::tuple_cat;
 
-    using Idx = uint64_t;
+    using Idx = int64_t;
     template <size_t NDim> using IdxArray = cuda::std::array<Idx, NDim>;
 #else
     template <typename T, std::size_t N> using array = std::array<T, N>;
@@ -97,11 +98,12 @@ namespace TempLat
     using std::make_index_sequence;
     using std::make_pair;
     using std::make_tuple;
+    using std::pair;
     using std::tie;
     using std::tuple;
     using std::tuple_cat;
 
-    using Idx = uint64_t;
+    using Idx = int64_t;
     template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
 #endif
 

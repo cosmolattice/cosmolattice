@@ -37,23 +37,18 @@ namespace TempLat
      * @param nGhosts The number of ghost cells in each dimension.
      * @return requires
      */
-    template <typename C = device::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    LayoutStruct(const C &initNGrid, const ptrdiff_t nGhosts)
+    LayoutStruct(const device::IdxArray<NDim> &initNGrid, const ptrdiff_t nGhosts)
         : mTransposed(initNGrid, nGhosts), mHermitianPartners(initNGrid), mNGhosts(nGhosts)
     {
     }
 
     LayoutStruct()
-        : mTransposed(device::array<ptrdiff_t, NDim>{{1}}, 0), mHermitianPartners(device::array<ptrdiff_t, NDim>{{1}}),
-          mNGhosts(0)
+        : mTransposed(device::IdxArray<NDim>{{1}}, 0), mHermitianPartners(device::IdxArray<NDim>{{1}}), mNGhosts(0)
     {
     }
 
     /** \brief An almost constructor: return a new instance which has a default global FFT layout */
-    template <typename C = device::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    static LayoutStruct<NDim> createGlobalFFTLayout(const C &initNGrid)
+    static LayoutStruct<NDim> createGlobalFFTLayout(const device::IdxArray<NDim> &initNGrid)
     {
       LayoutStruct result(initNGrid, 0);
       result.getGlobal().getGlobalSizes()[NDim - 1] = result.getGlobal().getGlobalSizes()[NDim - 1] / 2 + 1;
@@ -114,7 +109,7 @@ namespace TempLat
     }
 
     DEVICE_FORCEINLINE_FUNCTION
-    const device::array<ptrdiff_t, NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
+    const device::IdxArray<NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
 
     template <typename C>
       requires IsNDArray<C, NDim>
@@ -131,25 +126,18 @@ namespace TempLat
 
     ptrdiff_t getNGhosts() const { return mNGhosts; }
 
-    device::array<ptrdiff_t, NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
+    device::IdxArray<NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
     DEVICE_FORCEINLINE_FUNCTION
-    const device::array<ptrdiff_t, NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
+    const device::IdxArray<NDim> &getLocalSizes() const { return getLocal().getLocalSizes(); }
 
     DEVICE_FORCEINLINE_FUNCTION
-    const device::array<ptrdiff_t, NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
+    const device::IdxArray<NDim> &getSizesInMemory() const { return getTransposed().getSizesInMemory(); }
 
-    template <typename C = device::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    void setLocalStarts(const C &input)
-    {
-      getLocal().setLocalStarts(input);
-    }
+    void setLocalStarts(const device::IdxArray<NDim> &input) { getLocal().setLocalStarts(input); }
     DEVICE_FORCEINLINE_FUNCTION
-    const device::array<ptrdiff_t, NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
+    const device::IdxArray<NDim> &getLocalStarts() const { return getLocal().getLocalStarts(); }
 
-    template <typename C = device::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    void setTranspositionMap_memoryToGlobalSpace(const C &input)
+    void setTranspositionMap_memoryToGlobalSpace(const device::IdxArray<NDim> &input)
     {
       getTransposed().setTranspositionMap_memoryToGlobalSpace(input);
     }

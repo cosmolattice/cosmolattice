@@ -30,7 +30,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
     TripleStateLayouts(FFTLayoutStruct<NDim> fftLayout, ptrdiff_t nGhostCells)
-        : mFFTLayout(fftLayout), mConfigSpaceWithGhosts_layout(std::array<ptrdiff_t, NDim>{}, nGhostCells),
+        : mFFTLayout(fftLayout), mConfigSpaceWithGhosts_layout(device::IdxArray<NDim>{}, nGhostCells),
           mNGridPoints(fftLayout.getNGridPoints()), mNGhostCells(nGhostCells)
     {
       measureFFTPadding();
@@ -52,7 +52,7 @@ namespace TempLat
       /** Config space memory layouts are given to us. Construct jumps without FFT padding, with ghost cells. */
       /* first copy all the values, including those to be modified */
       mConfigSpaceWithGhosts_layout = mFFTLayout.configurationSpace;
-      std::array<ptrdiff_t, NDim> localConfigSize{};
+      device::IdxArray<NDim> localConfigSize{};
       for (size_t i = 0; i < NDim; ++i) {
         tmpPadding[i][0] = mNGhostCells;
         tmpPadding[i][1] = mNGhostCells;
@@ -112,14 +112,14 @@ namespace TempLat
     FFTLayoutStruct<NDim> mFFTLayout;
     LayoutStruct<NDim> mConfigSpaceWithGhosts_layout;
     /** \brief Using ptrdiff_t's even though these numbers are positive definite. We want to be safe in subtractions. */
-    device::array<ptrdiff_t, NDim> mNGridPoints;
+    device::IdxArray<NDim> mNGridPoints;
     ptrdiff_t mNGhostCells;
     ptrdiff_t mMemUsedFFTBothSpaces;
     ptrdiff_t mMemUsedConfigGhostSpace;
     ptrdiff_t mNecessaryMemoryAllocation;
 
     /** \brief The padding needed in configuration space when being passed to perform an FFT to Fourier space. */
-    device::array<ptrdiff_t, NDim> mFFTConfigSpacePadding;
+    device::IdxArray<NDim> mFFTConfigSpacePadding;
 
     JumpsHolder<NDim> mJumps_fftConfigSpace;
     JumpsHolder<NDim> mJumps_fftFourierSpace;

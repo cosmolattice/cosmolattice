@@ -12,9 +12,9 @@ inline void TempLat::PauliVectorsAlgebra::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
 
-  std::array<double, 4> A = {2.4, 0.96, 0.1, 0.01};
-  std::array<double, 4> B = {2.4, 0.56, 3.4, 0.01};
-  std::array<double, 4> c;
+  device::array<double, 4> A = {2.4, 0.96, 0.1, 0.01};
+  device::array<double, 4> B = {2.4, 0.56, 3.4, 0.01};
+  device::array<double, 4> c;
 
   PauliVectorsAlgebra::multiply_inplace(c, A, B);
 

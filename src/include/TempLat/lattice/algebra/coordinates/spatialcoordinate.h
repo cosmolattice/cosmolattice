@@ -36,7 +36,7 @@ namespace TempLat
       requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX1 component, const IDX &...idx) const
     {
-      device::array<ptrdiff_t, NDim> result;
+      device::IdxArray<NDim> result;
       mLayout.putSpatialLocationFromMemoryIndexInto(result, idx...);
       return result[component];
     }

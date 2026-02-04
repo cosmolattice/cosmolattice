@@ -30,8 +30,7 @@ namespace TempLat
         : mJumpsHolder(jumpsHolder), mLayoutStruct(layoutStruct), mNDimensions(mJumpsHolder.getSizesInMemory().size())
     {
     }
-    void initCoords(const ptrdiff_t &stride, device::array<ptrdiff_t, NDim> &mOffsets, ptrdiff_t &mIStart,
-                    ptrdiff_t &mIEnd)
+    void initCoords(const ptrdiff_t &stride, device::IdxArray<NDim> &mOffsets, ptrdiff_t &mIStart, ptrdiff_t &mIEnd)
     {
       bool allCarryOn = true;
 
@@ -49,7 +48,7 @@ namespace TempLat
     int countNum; // AF: dummy count because I am dumb.
 
     /** \brief TODO: This function is a legacy function which should be refactored out. Nothing to do with threading. */
-    void setupRunInitPerThread(const ptrdiff_t &stride, bool &allCarryOn, const std::array<ptrdiff_t, 2u> &workShare,
+    void setupRunInitPerThread(const ptrdiff_t &stride, bool &allCarryOn, const device::IdxArray<2u> &workShare,
                                std::vector<ptrdiff_t> &mOffsets, ptrdiff_t &mIStart, ptrdiff_t &mIEnd)
     {
       /* we are a friend class of IterationCoordinates: allowed to construct these things. */
@@ -57,7 +56,7 @@ namespace TempLat
       countNum = 0;
       performIterationInit(mJumpsHolder.toOrigin(), mOffsets, 0, stride, allCarryOn);
     }
-    void initCoordinates(const std::array<ptrdiff_t, 2u> &workShare, std::vector<ptrdiff_t> &mOffsets,
+    void initCoordinates(const device::array<ptrdiff_t, 2u> &workShare, std::vector<ptrdiff_t> &mOffsets,
                          ptrdiff_t &mIStart, ptrdiff_t &mIEnd)
     {
       ptrdiff_t thisMemorySize = 1;
@@ -86,7 +85,7 @@ namespace TempLat
     */
     inline bool performIterationInit(ptrdiff_t offset, std::vector<ptrdiff_t> &mOffsets, ptrdiff_t thisDim,
                                      const ptrdiff_t &stride, bool &allCarryOn,
-                                     const std::array<ptrdiff_t, 2u> &workShare = {{0, 1}})
+                                     const device::array<ptrdiff_t, 2u> &workShare = {{0, 1}})
     {
       bool carryOn = true;
 

@@ -103,7 +103,7 @@ namespace TempLat
       const auto viewR = mR.getView();
       const auto viewI = mI.getView();
 
-      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         device::apply(
             [&](auto &&...args) {
@@ -152,7 +152,7 @@ namespace TempLat
     Field<NDim, T> mR;
     Field<NDim, T> mI;
 
-    const std::string mName;
+    std::string mName;
 
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
 

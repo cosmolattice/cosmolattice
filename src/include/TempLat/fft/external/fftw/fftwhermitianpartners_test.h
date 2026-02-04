@@ -12,7 +12,7 @@
 template <size_t NDim> inline void TempLat::FFTWHermitianPartners<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
-  std::array<ptrdiff_t, NDim> grid{};
+  device::IdxArray<NDim> grid{};
   for (auto &val : grid)
     val = 128;
   HermitianPartners<NDim> hermitianPartners = FFTWHermitianPartners<NDim>::create(grid);

@@ -64,7 +64,7 @@ namespace TempLat
 
       const auto views = device::make_tuple(fs[0].getView(), fs[1].getView(), fs[2].getView(), fs[3].getView());
 
-      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
 #if defined(__NVCC__)
         std::decay_t<R> __r = r;

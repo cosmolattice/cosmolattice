@@ -51,7 +51,7 @@ namespace TempLat
     }
 
     DEVICE_FORCEINLINE_FUNCTION std::tuple<RNGInteger, RNGInteger>
-    gidx_to_idx2(const device::array<ptrdiff_t, NDim> &gidx) const
+    gidx_to_idx2(const device::IdxArray<NDim> &gidx) const
     {
       constexpr size_t nd1 = NDim / 2;
 
@@ -82,10 +82,10 @@ namespace TempLat
       requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
     {
-      device::array<ptrdiff_t, NDim> global_coord;
+      device::IdxArray<NDim> global_coord;
       mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, idx...);
 
-      device::array<ptrdiff_t, NDim> hermitianPartner;
+      device::IdxArray<NDim> hermitianPartner;
       auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners().putHermitianPartner(
           global_coord, hermitianPartner);
 
@@ -120,7 +120,7 @@ namespace TempLat
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
     mutable RNGInteger generation;
-    device::array<ptrdiff_t, NDim> mGlobalSizes;
+    device::IdxArray<NDim> mGlobalSizes;
   };
 
   class RandomGaussianFieldTester

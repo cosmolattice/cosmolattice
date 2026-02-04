@@ -73,7 +73,7 @@ namespace TempLat
 
     /** \brief given an actual setup, return the description of the subarray of the global problem that this process
      * holds. */
-    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGridPoints,
+    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, device::IdxArray<NDim> nGridPoints,
                                                     bool forbidTransposition = false) = 0;
 
     /** \brief If your library has different levels of patience for the planning phase, set it here.

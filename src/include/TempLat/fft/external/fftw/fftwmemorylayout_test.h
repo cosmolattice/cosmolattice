@@ -20,11 +20,11 @@ template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(Tem
     FFTWInterface<nDim> mem;
 
     FFTLayoutStruct<nDim> expected(nGrid, true, false, false);
-    std::array<ptrdiff_t, nDim> confLocalSizes(nGrid);
-    std::array<ptrdiff_t, nDim> confLocalStarts{};
-    std::array<ptrdiff_t, nDim> fourLocalSizes(nGrid);
-    std::array<ptrdiff_t, nDim> fourLocalStarts{};
-    std::array<ptrdiff_t, nDim> fourTransposition{};
+    device::IdxArray<nDim> confLocalSizes(nGrid);
+    device::IdxArray<nDim> confLocalStarts{};
+    device::IdxArray<nDim> fourLocalSizes(nGrid);
+    device::IdxArray<nDim> fourLocalStarts{};
+    device::IdxArray<nDim> fourTransposition{};
     for (size_t i = 0; i < nDim; ++i)
       fourTransposition[i] = i;
 
@@ -79,9 +79,9 @@ template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(Tem
       }
     };
 
-    doSingleTest(std::array<ptrdiff_t, 2>{128, 128}, Tag<2>{});
-    doSingleTest(std::array<ptrdiff_t, 4>{128, 128, 128, 128}, Tag<4>{});
-    doSingleTest(std::array<ptrdiff_t, 6>{128, 128, 128, 128, 128, 128}, Tag<6>{});
+    doSingleTest(device::IdxArray<2>{128, 128}, Tag<2>{});
+    doSingleTest(device::IdxArray<4>{128, 128, 128, 128}, Tag<4>{});
+    doSingleTest(device::IdxArray<6>{128, 128, 128, 128, 128, 128}, Tag<6>{});
 
     //        tdd.verify( mem.computeLocalSizes(MPICartesianGroup(4, {{ world.size(), 1, 1, 1}} ), 4, 128) ==
     //        computeExpectation(4, 128)); tdd.verify( mem.computeLocalSizes(MPICartesianGroup(2, {{ world.size(), 1}}

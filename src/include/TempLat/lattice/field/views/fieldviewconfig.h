@@ -216,8 +216,8 @@ namespace TempLat
     device::memory::NDViewUnmanaged<1, T> mRawView;
     device::memory::NDViewUnmanagedHost<NDim, T> mHostView;
 
-    std::array<ptrdiff_t, NDim> memorySizes;
-    std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
+    device::IdxArray<NDim> memorySizes;
+    device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
 
     bool mDisableFFTBlocking;
 

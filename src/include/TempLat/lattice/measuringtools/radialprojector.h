@@ -104,10 +104,10 @@ namespace TempLat
     {
       confirmGetterSpace();
 
-      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         // Get the global coordinates of this index.
-        device::array<ptrdiff_t, NDim> global_coords;
+        device::IdxArray<NDim> global_coords;
         device::apply([&](auto &&...args) { mLayout.putSpatialLocationFromMemoryIndexInto(global_coords, args...); },
                       idx);
 
@@ -149,10 +149,10 @@ namespace TempLat
     {
       confirmGetterSpace();
 
-      auto functor = DEVICE_CLASS_LAMBDA(const device::array<size_t, NDim> &idx)
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         // Get the global coordinates of this index.
-        device::array<ptrdiff_t, NDim> global_coords;
+        device::IdxArray<NDim> global_coords;
         device::apply([&](auto &&...args) { mLayout.putSpatialLocationFromMemoryIndexInto(global_coords, args...); },
                       idx);
 

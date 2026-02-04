@@ -23,7 +23,7 @@ template <size_t NDim> inline void TempLat::LayoutStructGlobal<NDim>::Test(TempL
 
   a = LayoutStructGlobal({10, 10, 10});
 
-  std::array<ptrdiff_t, 3> memVec{}, posVec{}, memVec2{};
+  device::IdxArray<3> memVec{}, posVec{}, memVec2{};
 
   memVec[0] = 1;
   memVec[1] = 2;

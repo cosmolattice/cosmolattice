@@ -39,9 +39,7 @@ namespace TempLat
     ptrdiff_t getInverse(ptrdiff_t index) const { return mFromBtoA[index]; }
 
     /** \brief Provide your forward mapping, which will be the new output of getForward. */
-    template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    void setMap(const C &input)
+    void setMap(const device::IdxArray<NDim> &input)
     {
       for (size_t i = 0; i < NDim; ++i)
         mFromAtoB[i] = input[i];
@@ -83,8 +81,8 @@ namespace TempLat
 
   private:
     /* From C to D means that entry at position 0 in C is at position mFromCtoD[0] in D. */
-    device::array<ptrdiff_t, NDim> mFromAtoB;
-    device::array<ptrdiff_t, NDim> mFromBtoA;
+    device::IdxArray<NDim> mFromAtoB;
+    device::IdxArray<NDim> mFromBtoA;
 
   public:
 #ifdef TEMPLATTEST

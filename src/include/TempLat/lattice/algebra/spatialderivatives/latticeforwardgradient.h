@@ -55,7 +55,7 @@ namespace TempLat
       if constexpr (UnaryOperator<R>::getNDim() == 0)
         return ZeroType();
       else {
-        auto other_point = device::array<ptrdiff_t, NDim>{{static_cast<ptrdiff_t>(idx)...}};
+        auto other_point = device::IdxArray<NDim>{{static_cast<ptrdiff_t>(idx)...}};
         other_point[i] += 1;
         auto result = -GetValue::get(mR, idx...);
         device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); }, other_point);
@@ -73,7 +73,7 @@ namespace TempLat
       DoEval::eval(mR, idx...);
       constexpr_for<0, NDim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        auto other_point = std::array<ptrdiff_t, NDim>{{idx...}};
+        auto other_point = device::IdxArray<NDim>{{idx...}};
         other_point[d] += 1;
         device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, other_point);
       });

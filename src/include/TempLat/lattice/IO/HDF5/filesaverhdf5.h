@@ -138,14 +138,14 @@ namespace TempLat
 
         // We have the coordinate, now we need to convert this to an index in local memory. Let's buffer the coords in a
         // device array to use with putMemoryIndexFromSpatialLocationInto.
-        device::array<ptrdiff_t, NDim> memoryPos;
+        device::IdxArray<NDim> memoryPos;
         for (size_t i = 0; i < coords.size(); ++i)
           memoryPos[i] = coords[i];
         // Then, overwrite memoryPos with the actual memory indices.
         device::apply([&](auto... idx) { mLayout.putMemoryIndexFromSpatialLocationInto(memoryPos, idx...); },
                       memoryPos);
         // To get the subview, we make another copy with one dimension less.
-        device::array<ptrdiff_t, NDim - 1> subMemoryPos;
+        device::IdxArray<NDim - 1> subMemoryPos;
         for (size_t i = 0; i < NDim - 1; ++i)
           subMemoryPos[i] = memoryPos[i];
 

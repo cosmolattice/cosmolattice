@@ -44,29 +44,29 @@ namespace TempLat
       return 1;
     }
 
-    template <typename R = T> auto getNDView(const std::array<ptrdiff_t, NDim> &localSizes) const
+    template <typename R = T> auto getNDView(const device::IdxArray<NDim> &localSizes) const
     {
       return mBlock.template getNDView<R>(localSizes);
     }
-    template <typename R = T> auto getNDHostView(const std::array<ptrdiff_t, NDim> &localSizes) const
+    template <typename R = T> auto getNDHostView(const device::IdxArray<NDim> &localSizes) const
     {
       return mBlock.template getNDHostView<R>(localSizes);
     }
 
     template <typename R = T>
-    auto getNDSubView(const std::array<ptrdiff_t, NDim> &localSizes,
-                      const std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> &slices) const
+    auto getNDSubView(const device::IdxArray<NDim> &localSizes,
+                      const device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> &slices) const
     {
       auto view = mBlock.template getNDView<R>(localSizes);
-      auto subView = std::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
+      auto subView = device::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
       return subView;
     }
     template <typename R = T>
-    auto getNDHostSubView(const std::array<ptrdiff_t, NDim> &localSizes,
-                          const std::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> &slices) const
+    auto getNDHostSubView(const device::IdxArray<NDim> &localSizes,
+                          const device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> &slices) const
     {
       auto view = mBlock.template getNDHostView<R>(localSizes);
-      auto subView = std::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
+      auto subView = device::apply([&](const auto &...args) { return device::memory::subview(view, args...); }, slices);
       return subView;
     }
 

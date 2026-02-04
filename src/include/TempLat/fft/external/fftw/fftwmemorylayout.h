@@ -39,17 +39,17 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     FFTWMemoryLayout() {}
 
-    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, std::array<ptrdiff_t, NDim> nGridPoints,
+    virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, device::IdxArray<NDim> nGridPoints,
                                                     bool forbidTransposition = false)
     {
       FFTLayoutStruct<NDim> result(nGridPoints, true, false, false);
       /* default: everything is local. */
 
-      std::array<ptrdiff_t, NDim> confLocalSizes(nGridPoints);
-      std::array<ptrdiff_t, NDim> confLocalStarts{};
-      std::array<ptrdiff_t, NDim> fourLocalSizes(nGridPoints);
-      std::array<ptrdiff_t, NDim> fourLocalStarts{};
-      std::array<ptrdiff_t, NDim> fourTransposition{};
+      device::IdxArray<NDim> confLocalSizes(nGridPoints);
+      device::IdxArray<NDim> confLocalStarts{};
+      device::IdxArray<NDim> fourLocalSizes(nGridPoints);
+      device::IdxArray<NDim> fourLocalStarts{};
+      device::IdxArray<NDim> fourTransposition{};
       std::iota(fourTransposition.begin(), fourTransposition.end(), 0);
 
       fourLocalSizes.back() = fourLocalSizes.back() / 2 + 1;

@@ -23,7 +23,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocal<NDim>::Test(TempLa
 
   a = LayoutStructLocal({16, 16, 16}, 0);
 
-  std::array<ptrdiff_t, 3> newLocalStarts{{7, 8, 9}};
+  device::IdxArray<3> newLocalStarts{{7, 8, 9}};
   a.setLocalStarts(newLocalStarts);
 
   std::vector<ptrdiff_t> memVec(3), posVec(3), memVec2(3);
@@ -55,7 +55,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocal<NDim>::Test(TempLa
 
   a = LayoutStructLocal({12, 16, 18}, 0);
 
-  newLocalStarts = std::array<ptrdiff_t, NDim>{{7, 8, 9}};
+  newLocalStarts = device::IdxArray<3>{{7, 8, 9}};
   a.setLocalStarts(newLocalStarts);
 
   memVec[0] = 1;

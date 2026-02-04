@@ -59,11 +59,11 @@ namespace TempLat
     std::shared_ptr<KokkosFFTPlanHolder<NDim, T>> make_plans(const MPICartesianGroup &group,
                                                              const FFTLayoutStruct<NDim> &layout)
     {
-      std::array<int, NDim> configStarts;
-      std::array<int, NDim> fourierStarts;
+      device::array<int, NDim> configStarts;
+      device::array<int, NDim> fourierStarts;
 
-      std::array<int, NDim> configSizes;
-      std::array<int, NDim> fourierSizes;
+      device::array<int, NDim> configSizes;
+      device::array<int, NDim> fourierSizes;
       for (size_t i = 0; i < NDim; ++i) {
         configStarts[i] = layout.configurationSpace.getLocalStarts()[i];
         fourierStarts[i] = layout.fourierSpace.getLocalStarts()[i];
@@ -74,11 +74,11 @@ namespace TempLat
       configSizes[NDim - 1] -= 2;
 
       complex<T> *dummy_f = nullptr;
-      auto fourier_view = std::apply(
+      auto fourier_view = device::apply(
           [&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, complex<T>>(dummy_f, args...); },
           fourierSizes);
       T *dummy_c = nullptr;
-      auto config_view = std::apply(
+      auto config_view = device::apply(
           [&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, T>(dummy_c, args...); }, configSizes);
 
       typename KokkosFFTPlanHolder<NDim, T>::PlanChain planChain;

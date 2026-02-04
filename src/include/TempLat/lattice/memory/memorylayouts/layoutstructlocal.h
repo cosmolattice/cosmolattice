@@ -28,9 +28,7 @@ namespace TempLat
   public:
     static constexpr size_t NDim = _NDim;
 
-    template <typename C = std::array<ptrdiff_t, NDim>>
-      requires IsNDArray<C, NDim>
-    LayoutStructLocal(const C &initNGrid, const ptrdiff_t nGhosts)
+    LayoutStructLocal(const device::IdxArray<NDim> &initNGrid, const ptrdiff_t nGhosts)
         : mGlobal(initNGrid), mLocalStarts{}, mNGhosts(nGhosts)
     {
       for (size_t i = 0; i < NDim; ++i)
@@ -42,7 +40,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return mGlobal; }
 
-    template <typename C = device::array<ptrdiff_t, NDim>> void setLocalSizes(const C &input)
+    void setLocalSizes(const device::IdxArray<NDim> &input)
     {
       for (size_t i = 0; i < NDim; ++i)
         mLocalSizes[i] = input[i];
@@ -50,19 +48,19 @@ namespace TempLat
     void setNGhosts(ptrdiff_t nGhosts) { mNGhosts = nGhosts; }
 
     DEVICE_FORCEINLINE_FUNCTION
-    device::array<ptrdiff_t, NDim> &getLocalSizes() { return mLocalSizes; }
+    device::IdxArray<NDim> &getLocalSizes() { return mLocalSizes; }
     DEVICE_FORCEINLINE_FUNCTION
-    const device::array<ptrdiff_t, NDim> &getLocalSizes() const { return mLocalSizes; }
+    const device::IdxArray<NDim> &getLocalSizes() const { return mLocalSizes; }
 
-    template <typename C = device::array<ptrdiff_t, NDim>> void setLocalStarts(const C &input)
+    void setLocalStarts(const device::IdxArray<NDim> &input)
     {
       for (size_t i = 0; i < NDim; ++i)
         mLocalStarts[i] = input[i];
     }
     DEVICE_FORCEINLINE_FUNCTION
-    device::array<ptrdiff_t, NDim> &getLocalStarts() { return mLocalStarts; }
+    device::IdxArray<NDim> &getLocalStarts() { return mLocalStarts; }
     DEVICE_FORCEINLINE_FUNCTION
-    const device::array<ptrdiff_t, NDim> &getLocalStarts() const { return mLocalStarts; }
+    const device::IdxArray<NDim> &getLocalStarts() const { return mLocalStarts; }
 
     /** \brief For both configuration and fourier space, the index values are not the same as coordinate
      *  values. Assuming periodic boundary conditions, we get that always c = i > half ? i - N : i;
@@ -107,8 +105,8 @@ namespace TempLat
 
   private:
     LayoutStructGlobal<NDim> mGlobal;
-    device::array<ptrdiff_t, NDim> mLocalSizes;
-    device::array<ptrdiff_t, NDim> mLocalStarts;
+    device::IdxArray<NDim> mLocalSizes;
+    device::IdxArray<NDim> mLocalStarts;
 
     ptrdiff_t mNGhosts;
 

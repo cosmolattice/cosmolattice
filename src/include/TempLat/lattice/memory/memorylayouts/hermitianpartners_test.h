@@ -10,9 +10,9 @@ template <size_t NDim> inline void TempLat::HermitianPartners<NDim>::Test(TempLa
 {
   HermitianPartners<4> hp({16, 16, 16, 16});
   /* simply test the default implementation */
-  tdd.verify(hp.qualify(std::array<ptrdiff_t, 4>{{0, 0, 0, 0}}) == HermitianRedundancy::none);
+  tdd.verify(hp.qualify(device::IdxArray<4>{{0, 0, 0, 0}}) == HermitianRedundancy::none);
 
-  device::array<ptrdiff_t, 4> global{{16, 16, 16, 16}}, hpvec{{0, 0, 0, 0}};
+  device::IdxArray<4> global{{16, 16, 16, 16}}, hpvec{{0, 0, 0, 0}};
   hp.putHermitianPartner(global, hpvec);
   bool correct = true;
   for (ptrdiff_t i = 0; i < 4; ++i)

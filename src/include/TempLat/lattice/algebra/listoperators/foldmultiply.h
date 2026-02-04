@@ -10,6 +10,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/util/tuple_size.h"
+#include "TempLat/lattice/algebra/helpers/getcomponent.h"
 
 namespace TempLat
 {
