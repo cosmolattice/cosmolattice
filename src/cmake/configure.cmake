@@ -17,10 +17,10 @@ find_package(Threads REQUIRED)
 
 if(NOT MPI)
 	#set(CMAKE_CXX_COMPILER ${CXX_COMPILER})
-else  ()
+else()
 	find_package(MPI COMPONENTS C CXX REQUIRED)
 	# set(CMAKE_CXX_COMPILER ${MPI_CXX_COMPILER})
-endif ()
+endif()
 
 # Fourier transformation things
 if(PFFT AND  MPI)

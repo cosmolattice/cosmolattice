@@ -22,7 +22,7 @@
 #endif
 
 #include "TempLat/fft/fftlibraryinterface.h"
-#include "TempLat/parallel/threads/threadsettings.h"
+#include "TempLat/parallel/threadsettings.h"
 
 namespace TempLat
 {

@@ -9,7 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
-#include "TempLat/parallel/threads/threadsettings.h"
+#include "TempLat/parallel/threadsettings.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 
 namespace TempLat

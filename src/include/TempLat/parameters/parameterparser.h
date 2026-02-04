@@ -19,7 +19,6 @@
 #ifndef NOMPI
 #include <mpi.h> //This is to make getSeed MPI safe.
 #endif
-// #include "TempLat/parameters/mathparser/reducer.h"
 
 namespace TempLat
 {

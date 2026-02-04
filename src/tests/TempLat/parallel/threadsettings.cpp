@@ -1,13 +1,13 @@
-
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2020
-#include "TempLat/parameters/mathparser/splitter.h"
-#include "TempLat/parameters/mathparser/splitter_test.h"
+// File info: Main contributor(s): Franz R. Sattler,  Year: 2025
+
+#include "TempLat/parallel/threadsettings.h"
+#include "TempLat/parallel/threadsettings_test.h"
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Splitter> test;
+  TempLat::TDDContainer<TempLat::ThreadSettings> test;
 }
