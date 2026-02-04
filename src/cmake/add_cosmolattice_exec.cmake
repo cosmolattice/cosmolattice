@@ -10,6 +10,9 @@ function(add_cosmolattice execName path ofile)
   endif()
   target_link_libraries(${execName} PUBLIC Threads::Threads)
   target_link_libraries(${execName} PUBLIC ${FFTW_LIBRARIES})
+  if(PARAFAFT AND MPI)
+    target_link_libraries(${execName} PUBLIC parafaft::parafaft)
+  endif()
 
   # Custom function to link to the chosen device backend
   target_link_device(${execName})

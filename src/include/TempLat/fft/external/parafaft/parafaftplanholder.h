@@ -26,6 +26,17 @@
 
 namespace TempLat
 {
+  // Depending on the device, we alias ParaFaFT_Backend to the appropriate backend type. Parafaft supports multiple
+  // backends (FFTW, cuFFT, HIPFFT), and we select the one based on compile-time definitions set by CMake when detecting
+  // the device and available libraries. This allows us to write device-agnostic code in the ParafaftPlanHolder, while
+  // still leveraging the performance benefits of the appropriate backend for the target platform.
+#ifdef CL_CUDA
+  using ParaFaFT_Backend = parafaft::CuFFTBackend;
+#elif defined(CL_HIP)
+  using ParaFaFT_Backend = parafaft::HipFFTBackend;
+#else
+  using ParaFaFT_Backend = parafaft::FFTWBackend;
+#endif
 
   MakeException(ParafaftPlanHolderException);
   MakeException(ParafaftCompiledWithoutSinglePrecisionSupport);
@@ -52,7 +63,8 @@ namespace TempLat
      *
      * We store the MPICartesianGroup to keep the MPI communicator alive.
      */
-    ParafaftPlanHolder(MPICartesianGroup group, std::shared_ptr<parafaft::ParaFaFT_R2C<NDim>> parafaftObj)
+    ParafaftPlanHolder(MPICartesianGroup group,
+                       std::shared_ptr<parafaft::ParaFaFT_R2C<NDim, ParaFaFT_Backend>> parafaftObj)
         : mGroup(group), mParafaft(parafaftObj)
     {
     }
@@ -88,7 +100,7 @@ namespace TempLat
     MPICartesianGroup mGroup;
 
     // Shared pointer to parafaft object
-    std::shared_ptr<parafaft::ParaFaFT_R2C<NDim>> mParafaft;
+    std::shared_ptr<parafaft::ParaFaFT_R2C<NDim, ParaFaFT_Backend>> mParafaft;
 
 #endif
 #endif
@@ -102,9 +114,7 @@ namespace TempLat
 #ifndef NOPARAFAFT
       // Parafaft's forward_in_place accepts padded buffers directly
       // Buffer layout: [N0_local][N1_local][2*(N/2+1)] - matches CosmoLattice
-      auto block_view = mBlock.getRawHostView();
-      mParafaft->forward_in_place(block_view.data());
-      mBlock.pushHostView();
+      mParafaft->forward_in_place(mBlock.data());
 #endif
 #endif
     }
@@ -118,9 +128,7 @@ namespace TempLat
 #ifndef NOPARAFAFT
       // Parafaft's backward_in_place accepts padded buffers directly
       // Buffer layout: [N0_local][N1_local][2*(N/2+1)] - matches CosmoLattice
-      auto block_view = mBlock.getRawHostView();
-      mParafaft->backward_in_place(block_view.data());
-      mBlock.pushHostView();
+      mParafaft->backward_in_place(mBlock.data());
 #endif
 #endif
     }

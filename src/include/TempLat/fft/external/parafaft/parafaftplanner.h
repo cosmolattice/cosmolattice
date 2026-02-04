@@ -72,7 +72,7 @@ namespace TempLat
     /**
      * @brief Create double-precision plans.
      *
-     * Creates a parafaft::ParaFaFT_R2C<NDim> object and wraps it in ParafaftPlanHolder.
+     * Creates a parafaft::ParaFaFT_R2C<NDim, ParaFaFT_Backend> object and wraps it in ParafaftPlanHolder.
      * Parafaft's in-place API accepts padded buffers matching CosmoLattice's layout.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>>
@@ -94,7 +94,8 @@ namespace TempLat
         globalShape[i] = static_cast<int>(globalSizes[i]);
 
       // Create parafaft object using base communicator
-      auto parafaftObj = std::make_shared<parafaft::ParaFaFT_R2C<NDim>>(globalShape, group.getBaseComm());
+      auto parafaftObj =
+          std::make_shared<parafaft::ParaFaFT_R2C<NDim, ParaFaFT_Backend>>(globalShape, group.getBaseComm());
 
       return std::make_shared<ParafaftPlanHolder<NDim, double>>(group, parafaftObj);
 #else

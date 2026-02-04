@@ -19,7 +19,7 @@ if(NOT MPI)
 	#set(CMAKE_CXX_COMPILER ${CXX_COMPILER})
 else  ()
 	find_package(MPI COMPONENTS C CXX REQUIRED)
-	set(CMAKE_CXX_COMPILER ${MPI_CXX_COMPILER})
+	# set(CMAKE_CXX_COMPILER ${MPI_CXX_COMPILER})
 endif ()
 
 # Fourier transformation things
@@ -35,12 +35,11 @@ endif()
 # Parafaft configuration
 if(PARAFAFT AND MPI)
 	# Parafaft is header-only, just need include path
-	if(MYPARAFAFT_PATH)
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${MYPARAFAFT_PATH}")
-	endif()
+	include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/parafaft.cmake)
 elseif(NOT PARAFAFT)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOPARAFAFT")
 endif()
+
 if(HDF5)
 	if(MPI)
 		set(HDF5_PREFER_PARALLEL ON)

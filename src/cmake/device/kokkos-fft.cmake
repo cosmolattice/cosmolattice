@@ -9,13 +9,13 @@ message(STATUS "Fetching Kokkos-FFT ${KOKKOS_FFT_VERSION}")
 execute_process(
   COMMAND
     bash -c
-    "mkdir -p _dep && git clone https://github.com/kokkos/kokkos-fft.git --recursive --branch ${KOKKOS_FFT_VERSION} _dep/kokkos-fft-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft.log"
+    "mkdir -p _deps && git clone https://github.com/kokkos/kokkos-fft.git --recursive --branch ${KOKKOS_FFT_VERSION} _deps/kokkos-fft-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   OUTPUT_QUIET)
 
 message(DEBUG "Configure Kokkos-FFT...")
 execute_process(
-  COMMAND bash -c "mkdir -p _dep/kokkos-fft-bin"
+  COMMAND bash -c "mkdir -p _deps/kokkos-fft-bin"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   OUTPUT_QUIET)
 execute_process(
@@ -29,20 +29,20 @@ execute_process(
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD} \
         ../kokkos-fft-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_config.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-fft-bin
                     COMMAND_ERROR_IS_FATAL ANY)
 
 message(DEBUG "Building Kokkos-FFT...")
 execute_process(
   COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_build.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-fft-bin
                     COMMAND_ERROR_IS_FATAL ANY)
 
 message(DEBUG "Installing Kokkos-FFT...")
 execute_process(
   COMMAND bash -c
           "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_install.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_dep/kokkos-fft-bin
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-fft-bin
                     COMMAND_ERROR_IS_FATAL ANY)
 
 # Kokkos by default does not support extensions, so we force them off

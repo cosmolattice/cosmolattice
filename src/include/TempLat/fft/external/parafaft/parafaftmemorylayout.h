@@ -79,7 +79,7 @@ namespace TempLat
         globalShape[i] = static_cast<int>(nGridPoints[i]);
 
       // Use the base communicator - parafaft will create its own Cartesian topology
-      parafaft::ParaFaFT_R2C<NDim> temp(globalShape, group.getBaseComm());
+      parafaft::ParaFaFT_R2C<NDim, ParaFaFT_Backend> temp(globalShape, group.getBaseComm());
 
       // Query real (configuration) space layout
       int realShape[NDim], realStart[NDim];
