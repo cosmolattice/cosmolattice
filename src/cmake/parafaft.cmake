@@ -8,7 +8,7 @@ set(PARAFAFT_HIP ${HIP} CACHE BOOL "")
 # declare ParaFaFT
 FetchContent_Declare(ParaFaFT                              # name of the content
   GIT_REPOSITORY https://github.com/aflorio2/parafaft.git  # the repository
-  GIT_TAG        cuda                                      # the tag
+  GIT_TAG        main                                      # the tag
   )
 # make available
 FetchContent_MakeAvailable(ParaFaFT)

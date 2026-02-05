@@ -49,29 +49,26 @@ template <size_t NDim> inline void TempLat::WaveNumber<NDim>::Test(TempLat::TDDA
   auto phinorm_view = phinorm.inFourierSpace().getLocalNDHostView();
   auto phinorm2_view = phinorm2.inFourierSpace().getLocalNDHostView();
 
+  // Get Fourier space layout for MPI support (handles transposition)
+  auto layout = toolBox->mLayouts.getFourierSpaceLayout();
+
   // Check that the fourier coordinate is correct
   bool correct = true;
 
-  // Helper to compute expected wavenumber value for a given index in a given dimension
-  auto expectedWaveNumber = [nGrid](ptrdiff_t idx, size_t dim, size_t totalDims) -> double {
-    // Last dimension in Fourier space is truncated (real-to-complex FFT)
-    if (dim == totalDims - 1) {
-      // For the last dimension, index is always in range [0, nGrid/2]
-      return static_cast<double>(idx);
-    }
-    // For other dimensions, wrap around at nGrid/2
-    return idx > nGrid / 2 ? static_cast<double>(idx - nGrid) : static_cast<double>(idx);
-  };
-
   NDLoop<NDim>(phinorm_view, [&](const auto &...indices) {
-    std::array<ptrdiff_t, NDim> idx_arr = {static_cast<ptrdiff_t>(indices)...};
+    std::array<ptrdiff_t, NDim> local_idx = {static_cast<ptrdiff_t>(indices)...};
+
+    // Use layout to compute global spatial coordinates from local memory indices
+    // This correctly handles transposition in MPI distributed FFTs
+    device::IdxArray<NDim> global_idx;
+    layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
 
     bool this_correct = true;
 
-    // Check each wavenumber component
+    // Check each wavenumber component - the value should match the global spatial coordinate
     double norm2 = 0.0;
     for (size_t d = 0; d < NDim; ++d) {
-      const double expected_val = expectedWaveNumber(idx_arr[d], d, NDim);
+      const double expected_val = static_cast<double>(global_idx[d]);
       norm2 += expected_val * expected_val;
 
       this_correct &= AlmostEqual(phi_views[d](indices...).real(), expected_val);
@@ -87,17 +84,22 @@ template <size_t NDim> inline void TempLat::WaveNumber<NDim>::Test(TempLat::TDDA
     correct &= this_correct;
 
     if (!this_correct) {
-      sayShort << "Error at (";
+      sayMPI << "Error at local (";
       for (size_t d = 0; d < NDim; ++d) {
-        sayShort << idx_arr[d];
-        if (d < NDim - 1) sayShort << ", ";
+        sayMPI << local_idx[d];
+        if (d < NDim - 1) sayMPI << ", ";
       }
-      sayShort << "): ";
+      sayMPI << "), global (";
       for (size_t d = 0; d < NDim; ++d) {
-        sayShort << "phi[" << d << "] = " << phi_views[d](indices...);
-        if (d < NDim - 1) sayShort << ", ";
+        sayMPI << global_idx[d];
+        if (d < NDim - 1) sayMPI << ", ";
       }
-      sayShort << ", phinorm = " << phinorm_view(indices...) << ", phinorm2 = " << phinorm2_view(indices...) << "\n";
+      sayMPI << "): ";
+      for (size_t d = 0; d < NDim; ++d) {
+        sayMPI << "phi[" << d << "] = " << phi_views[d](indices...);
+        if (d < NDim - 1) sayMPI << ", ";
+      }
+      sayMPI << ", phinorm = " << phinorm_view(indices...) << ", phinorm2 = " << phinorm2_view(indices...) << "\n";
     }
   });
 

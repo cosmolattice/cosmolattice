@@ -121,7 +121,7 @@ namespace TempLat
 #ifndef NOPARAFAFT
       if constexpr (haveParafaft) {
         theLibrary = std::make_shared<ParafaftInterface<NDim>>();
-        std::cout << "Using Parafaft FFT backend for FFTs." << std::endl;
+        backend = "Parafaft";
       } else
 #endif
 #ifndef NOPFFT
@@ -136,15 +136,14 @@ namespace TempLat
         if (haveKOKKOSFFT && (NDim <= 3) && (group.size() == 1)) {
           theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
           backend = "KOKKOS_FFT";
-          std::cout << "Using Kokkos FFT backend for FFTs." << std::endl;
         } else
 #endif // KOKKOS_FFT
         {
           theLibrary = std::make_shared<FFTWInterface<NDim>>();
           backend = "FFTW";
-          std::cout << "Using FFTW backend for FFTs." << std::endl;
         }
       }
+      if (mGroup.getRank() == 0) sayShort << "Using " << backend << " backend for FFTs.\n";
       mLayout = theLibrary->computeLocalSizes(mGroup, mNGridPoints, forbidTransposition);
     }
 

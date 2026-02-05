@@ -81,6 +81,18 @@ namespace TempLat
       // Use the base communicator - parafaft will create its own Cartesian topology
       parafaft::ParaFaFT_R2C<NDim, ParaFaFT_Backend> temp(globalShape, group.getBaseComm());
 
+      // Verify that the decomposition matches the library's expectations
+      const auto &decomposition = group.getDecomposition();
+      int parafaftDecomposition[NDim];
+      temp.get_domain_decomposition(parafaftDecomposition);
+      for (size_t i = 0; i < NDim; ++i) {
+        if (decomposition[i] != parafaftDecomposition[i]) {
+          throw ParafaftMemoryLayoutException(
+              "Parafaft decomposition does not match the provided MPI Cartesian group decomposition. Dimension ", i,
+              ": expected ", parafaftDecomposition[i], ", got ", decomposition[i], ".");
+        }
+      }
+
       // Query real (configuration) space layout
       int realShape[NDim], realStart[NDim];
       temp.get_local_real_shape(realShape);
