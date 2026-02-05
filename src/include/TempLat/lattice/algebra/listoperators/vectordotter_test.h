@@ -30,11 +30,15 @@ inline void TempLat::VectorDotterTester::Test(TempLat::TDDAssertion &tdd)
     const auto fieldX_view = fieldX.getLocalNDHostView();
 
     bool correct = true;
-    for (ptrdiff_t i = 0; i < nGrid; ++i) {
-      for (ptrdiff_t j = 0; j < nGrid; ++j) {
-        const ptrdiff_t x_val = i > nGrid / 2 ? i - nGrid : i;
-        const ptrdiff_t y_val = j > nGrid / 2 ? j - nGrid : j;
+    for (ptrdiff_t i = 0; i < fieldX_view.extent(0); ++i) {
+      for (ptrdiff_t j = 0; j < fieldX_view.extent(1); ++j) {
+        const ptrdiff_t x_val = x.vectorGet(0, nGhost + i, nGhost + j);
+        const ptrdiff_t y_val = x.vectorGet(1, nGhost + i, nGhost + j);
         correct &= (fieldX_view(i, j) == x_val * x_val + y_val * y_val);
+        if (!(fieldX_view(i, j) == x_val * x_val + y_val * y_val)) {
+          std::cout << "Mismatch at (" << i << ", " << j << "): fieldX_view = " << fieldX_view(i, j)
+                    << ", expected = " << (x_val * x_val + y_val * y_val) << std::endl;
+        }
       }
     }
 
@@ -55,10 +59,10 @@ inline void TempLat::VectorDotterTester::Test(TempLat::TDDAssertion &tdd)
     const auto fieldX_view = fieldX.getLocalNDHostView();
 
     bool correct = true;
-    for (ptrdiff_t i = 0; i < nGrid; ++i) {
-      for (ptrdiff_t j = 0; j < nGrid; ++j) {
-        const ptrdiff_t x_val = i > nGrid / 2 ? i - nGrid : i;
-        const ptrdiff_t y_val = j > nGrid / 2 ? j - nGrid : j;
+    for (ptrdiff_t i = 0; i < fieldX_view.extent(0); ++i) {
+      for (ptrdiff_t j = 0; j < fieldX_view.extent(1); ++j) {
+        const ptrdiff_t x_val = x.vectorGet(0, nGhost + i, nGhost + j);
+        const ptrdiff_t y_val = x.vectorGet(1, nGhost + i, nGhost + j);
         correct &= (fieldX_view(i, j) == x_val * x_val + y_val * y_val);
       }
     }

@@ -13,7 +13,7 @@
 inline void TempLat::LatticeForwardGradientTester::Test(TempLat::TDDAssertion &tdd)
 {
   constexpr size_t nd = 2;
-  const ptrdiff_t nGrid = 6, nGhost = 1;
+  const ptrdiff_t nGrid = 8, nGhost = 1;
 
   auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
   SpatialCoordinate x(toolBox);
