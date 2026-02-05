@@ -67,6 +67,19 @@ namespace TempLat
       mRawView = mManager->getRawView();
     }
 
+#ifdef DEVICE_REGION
+    DEVICE_FUNCTION
+    ConfigView(const ConfigView &other)
+        : AbstractField<NDim, T>(other), mLayout(other.mLayout), mView(other.mView), mRawView(other.mRawView),
+          memorySizes(other.memorySizes), localSlicing(other.localSlicing),
+          mDisableFFTBlocking(other.mDisableFFTBlocking)
+    {
+    }
+
+    DEVICE_FUNCTION
+    ~ConfigView() {}
+#endif
+
     DEVICE_FORCEINLINE_FUNCTION
     auto getView() const { return mView; }
 

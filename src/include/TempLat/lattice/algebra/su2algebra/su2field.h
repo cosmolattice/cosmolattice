@@ -49,6 +49,11 @@ namespace TempLat
     {
     }
 
+#ifdef DEVICE_REGION
+    DEVICE_FUNCTION
+    SU2FieldBase(const SU2FieldBase &other) : fs{{other.fs[0], other.fs[1], other.fs[2]}}, mLayout(other.mLayout) {}
+#endif
+
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t) const
     {
       return sqrt(T(1) - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2]));
