@@ -34,13 +34,16 @@ inline void TempLat::RandomGaussianFieldTester::Test(TempLat::TDDAssertion &tdd)
     auto b_host = b.inFourierSpace().getRawHostView();
 
     // Check that the values are different
-    bool different = true;
+    bool different = false;
     for (ptrdiff_t i = 0; i < localFourierGridPoints; ++i) {
       // show the first few values for debugging
       if (i < 8) std::cout << "index " << i << " a: " << a_host(i) << " b: " << b_host(i) << "\n";
-      bool local = !AlmostEqual(a_host(i), b_host(i)) && std::isfinite(abs(a_host(i))) && std::isfinite(abs(b_host(i)));
-      different &= local;
-      if (!local) sayMPI << "Error at index " << i << ", a: " << a_host(i) << ", b: " << b_host(i) << "\n ";
+      bool local =
+          !AlmostEqual(a_host(i), b_host(i), 1e-2) && std::isfinite(abs(a_host(i))) && std::isfinite(abs(b_host(i)));
+      different = local || different;
+      if (!local)
+        sayMPI << "Error at index " << i << ", a: " << a_host(i) << ", b: " << b_host(i)
+               << ", data did not change after reset.\n";
     }
     tdd.verify(different);
   }

@@ -11,7 +11,8 @@
 
 template <size_t NDim, typename T> void TempLat::SU2FieldBase<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
-  auto toolBox = MemoryToolBox<NDim>::makeShared(2, 1);
+  const device::Idx nGrid = 8, nGhost = 1;
+  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
   Field<NDim, T> f1("myField1", toolBox);
   Field<NDim, T> f2("myField2", toolBox);

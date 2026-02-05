@@ -48,7 +48,6 @@ namespace TempLat
     using floatType = typename RadialProjectionResult<sType>::floatType;
     using resultType = RadialProjectionResult<sType>;
 
-    // TODO (Franz)
     static constexpr size_t NDim = GetNDim::get<T>();
 
     RadialProjector(const T &instance, SpaceStateType spaceType, device::memory::host_ptr<MemoryToolBox<NDim>> pToolBox,
@@ -69,8 +68,7 @@ namespace TempLat
     {
       if (nLinearBins < 0) {
         ptrdiff_t nGrid = mLayout.getGlobalSizes()[0];
-        ptrdiff_t nDim = mLayout.getGlobalSizes().size();
-        nLinearBins = std::pow(nGrid, std::max((ptrdiff_t)1, nDim - 1));
+        nLinearBins = std::pow(nGrid, std::max((ptrdiff_t)1, NDim - 1));
       }
 
       RadialProjectionResult<sType> baseWorkSpace(nLinearBins, mUseBinCentralValues,

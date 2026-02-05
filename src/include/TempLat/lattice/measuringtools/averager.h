@@ -33,7 +33,6 @@ namespace TempLat
     using vType = typename GetGetReturnType<T>::type;
     static constexpr bool isComplexValued = GetGetReturnType<T>::isComplex;
 
-    // TODO (Franz)
     static constexpr size_t NDim = GetNDim::get<T>();
 
     // Put public methods here. These should change very little over time.

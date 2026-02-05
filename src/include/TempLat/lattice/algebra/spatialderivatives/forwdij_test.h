@@ -5,12 +5,177 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-inline void TempLat::ForwDijTester::Test(TempLat::TDDAssertion &tdd)
+#include "TempLat/lattice/algebra/helpers/getvectorcomponent.h"
+#include "TempLat/lattice/algebra/coordinates/spatialcoordinate.h"
+#include "TempLat/lattice/field/field.h"
+#include "TempLat/util/ndloop.h"
+#include "TempLat/util/rangeiteration/tag.h"
+
+template <size_t NDim> inline void TempLat::ForwDijTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
+  const device::Idx nGrid = 8, nGhost = 1;
+
+  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
+  SpatialCoordinate<NDim> x(toolBox);
+  toolBox->setVerbose();
+
+  // Get layout for computing global coordinates (for error reporting)
+  auto layout = toolBox->mLayouts.getConfigSpaceLayout();
+
+  // Test forward sum (ForwDij) in each dimension
+  // ForwDij<dir> computes: (f[idx] + f[idx + e_dir]) / dx
+  constexpr_for<1, NDim + 1, 1>([&](auto _dir) {
+    constexpr int dir = decltype(_dir)::value;
+    constexpr size_t d = static_cast<size_t>(dir) - 1;
+
+    Field<NDim, double> sc("SC_" + std::to_string(d), toolBox);
+    sc = getVectorComponent(x, d);
+    sc.updateGhosts();
+
+    Field<NDim, double> fijsc("fijSC_" + std::to_string(d), toolBox);
+    fijsc = forwDij(sc, Tag<dir>{});
+
+    bool OK = true;
+    auto sc_view = sc.getFullNDHostView();
+    auto fijsc_view = fijsc.getLocalNDHostView();
+
+    // Use NDLoop to iterate
+    // For forward sum in dir: fijsc[idx] = (sc[idx+nGhost] + sc[idx+nGhost+e_dir]) / dx
+    NDLoop<NDim>(fijsc_view, [&](const auto &...indices) {
+      // Build index arrays for accessing full view (with ghosts)
+      device::IdxArray<NDim> idx_base = {(indices + nGhost)...};
+      device::IdxArray<NDim> idx_next = idx_base;
+      idx_next[d] += 1;
+
+      // Get values
+      const double val_current = device::apply([&](auto... i) { return sc_view(i...); }, idx_base);
+      const double val_next = device::apply([&](auto... i) { return sc_view(i...); }, idx_next);
+      const double val_fijsc = fijsc_view(indices...);
+
+      const double dx = 1.0; // dx = 1 by default in these tests
+      const double expect = (val_current + val_next) / dx;
+
+      if (std::abs(expect - val_fijsc) > 1e-14) {
+        OK = false;
+
+        // Compute global coordinates for error message
+        device::IdxArray<NDim> global_idx;
+        layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
+
+        sayMPI << "ForwDij mismatch in dir " << d << " at global (";
+        for (size_t i = 0; i < NDim; ++i) {
+          sayMPI << global_idx[i];
+          if (i < NDim - 1) sayMPI << ", ";
+        }
+        sayMPI << "): expect = " << expect << ", fijSC = " << val_fijsc << "\n";
+      }
+    });
+    tdd.verify(OK);
+  });
+
+  // Test 2: ForwDij of quadratic function sc^2
+  // For f(x) = x^2, forward sum is (x^2 + (x+1)^2) / dx = (2x^2 + 2x + 1) / dx
+  {
+    Field<NDim, double> sc("SC_sq", toolBox);
+    sc = getVectorComponent(x, 0);
+    sc.updateGhosts();
+
+    Field<NDim, double> sc_sq("SC_sq_field", toolBox);
+    sc_sq = sc * sc;
+    sc_sq.updateGhosts();
+
+    Field<NDim, double> fijsc_sq("fijSC_sq", toolBox);
+    fijsc_sq = forwDij(sc * sc, Tag<1>{});
+
+    bool OK = true;
+    auto sc_sq_view = sc_sq.getFullNDHostView();
+    auto fijsc_sq_view = fijsc_sq.getLocalNDHostView();
+
+    constexpr size_t d = 0;
+
+    NDLoop<NDim>(fijsc_sq_view, [&](const auto &...indices) {
+      device::IdxArray<NDim> idx_base = {(indices + nGhost)...};
+      device::IdxArray<NDim> idx_next = idx_base;
+      idx_next[d] += 1;
+
+      const double val_current = device::apply([&](auto... i) { return sc_sq_view(i...); }, idx_base);
+      const double val_next = device::apply([&](auto... i) { return sc_sq_view(i...); }, idx_next);
+      const double val_fijsc_sq = fijsc_sq_view(indices...);
+
+      const double dx = 1.0;
+      const double expect = (val_current + val_next) / dx;
+
+      if (std::abs(expect - val_fijsc_sq) > 1e-14) {
+        OK = false;
+
+        device::IdxArray<NDim> global_idx;
+        layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
+
+        sayMPI << "ForwDij sq mismatch at global (";
+        for (size_t i = 0; i < NDim; ++i) {
+          sayMPI << global_idx[i];
+          if (i < NDim - 1) sayMPI << ", ";
+        }
+        sayMPI << "): expect = " << expect << ", fijSC_sq = " << val_fijsc_sq << "\n";
+      }
+    });
+    tdd.verify(OK);
+  }
+
+  // Test 3: ForwDij of product of coordinates (if NDim >= 2)
+  if constexpr (NDim >= 2) {
+    Field<NDim, double> sc1("SC1_prod", toolBox);
+    sc1 = getVectorComponent(x, 0);
+    sc1.updateGhosts();
+
+    Field<NDim, double> sc2("SC2_prod", toolBox);
+    sc2 = getVectorComponent(x, 1);
+    sc2.updateGhosts();
+
+    Field<NDim, double> sc_prod("SC_prod_field", toolBox);
+    sc_prod = sc1 * sc2;
+    sc_prod.updateGhosts();
+
+    // Test forward sum in direction 1 (index 0)
+    Field<NDim, double> fij_prod_dir1("fij_prod_dir1", toolBox);
+    fij_prod_dir1 = forwDij(sc1 * sc2, Tag<1>{});
+
+    bool OK = true;
+    auto sc_prod_view = sc_prod.getFullNDHostView();
+    auto fij_prod_dir1_view = fij_prod_dir1.getLocalNDHostView();
+
+    constexpr size_t d = 0;
+
+    NDLoop<NDim>(fij_prod_dir1_view, [&](const auto &...indices) {
+      device::IdxArray<NDim> idx_base = {(indices + nGhost)...};
+      device::IdxArray<NDim> idx_next = idx_base;
+      idx_next[d] += 1;
+
+      const double val_current = device::apply([&](auto... i) { return sc_prod_view(i...); }, idx_base);
+      const double val_next = device::apply([&](auto... i) { return sc_prod_view(i...); }, idx_next);
+      const double val_fij = fij_prod_dir1_view(indices...);
+
+      const double dx = 1.0;
+      const double expect = (val_current + val_next) / dx;
+
+      if (std::abs(expect - val_fij) > 1e-14) {
+        OK = false;
+
+        device::IdxArray<NDim> global_idx;
+        layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
+
+        sayMPI << "ForwDij prod dir1 mismatch at global (";
+        for (size_t i = 0; i < NDim; ++i) {
+          sayMPI << global_idx[i];
+          if (i < NDim - 1) sayMPI << ", ";
+        }
+        sayMPI << "): expect = " << expect << ", fij = " << val_fij << "\n";
+      }
+    });
+    tdd.verify(OK);
+  }
 }
 
 #endif

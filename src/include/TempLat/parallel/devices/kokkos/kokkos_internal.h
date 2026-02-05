@@ -196,9 +196,9 @@ namespace TempLat
         // transposition within the thread dispatch, if we are on a GPU. Otherwise, for optimal cached memory access
         // on CPU, we do not reverse the access pattern.
         if constexpr (device_kokkos::reverse_access_pattern)
-          fun(device_kokkos::reverse_array(device_kokkos::IdxArray<NDim>{{args...}}));
+          fun(device_kokkos::reverse_array(device_kokkos::IdxArray<NDim>{{static_cast<Idx>(args)...}}));
         else
-          fun({{args...}});
+          fun({{static_cast<Idx>(args)...}});
       }
 
       FUN fun;
@@ -243,8 +243,8 @@ namespace TempLat
         requires(sizeof...(Args) == NDim)
       DEVICE_FORCEINLINE_FUNCTION auto makeArray(device_kokkos::tuple<Args...> &&tuple) const
       {
-        return device_kokkos::apply([](const auto &...args) { return device_kokkos::IdxArray<NDim>{{args...}}; },
-                                    tuple);
+        return device_kokkos::apply(
+            [](const auto &...args) { return device_kokkos::IdxArray<NDim>{{static_cast<Idx>(args)...}}; }, tuple);
       }
     };
   } // namespace device_kokkos

@@ -119,7 +119,7 @@ namespace TempLat
 // MPI case
 #ifndef NOMPI
 #ifndef NOPARAFAFT
-      if constexpr (haveParafaft) {
+      if constexpr (haveParafaft && (NDim >= 2)) {
         theLibrary = std::make_shared<ParafaftInterface<NDim>>();
         backend = "Parafaft";
       } else

@@ -66,7 +66,7 @@ namespace TempLat
     using std::tie;
     using std::tuple_cat;
 
-    using Idx = uint64_t;
+    using Idx = int64_t;
     template <size_t NDim> using IdxArray = std::array<Idx, NDim>;
 
     // ------------------------------------------------

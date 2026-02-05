@@ -18,6 +18,7 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 
 #include "TempLat/parallel/device_memory.h"
 #include "TempLat/parallel/device_iteration.h"
@@ -34,7 +35,7 @@ namespace TempLat
     using vType = typename GetGetReturnType<T>::type;
 
     // TODO (Franz)
-    static constexpr size_t NDim = T::NDim;
+    static constexpr size_t NDim = GetNDim::get<T>();
 
     // Put public methods here. These should change very little over time.
     SpatialAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)

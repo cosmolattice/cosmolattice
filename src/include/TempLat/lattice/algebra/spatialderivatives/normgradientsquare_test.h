@@ -5,28 +5,28 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler  Year: 2025
 
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
+#include "TempLat/util/ndloop.h"
 
-inline void TempLat::NormGradientSquareTester::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::NormGradientSquareTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  constexpr size_t nd = 2;
-  const ptrdiff_t nGrid = 32, nGhost = 1;
+  const device::Idx nGrid = 8, nGhost = 2;
 
-  auto toolBox = MemoryToolBox<nd>::makeShared(nGrid, nGhost);
+  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
   /* create the random field once, keep in memory. Trade off between RAM use and redundant computations. */
-  Field<nd, double> gaussian("gaussian", toolBox);
-  gaussian.inFourierSpace() = 1 * RandomGaussianField<nd, double>("hoi", toolBox);
+  Field<NDim, double> gaussian("gaussian", toolBox);
+  gaussian.inFourierSpace() = 1 * RandomGaussianField<NDim, double>("hoi", toolBox);
   gaussian += 0;
 
-  Field<nd, double> normGradSq("normGradSq", toolBox);
-  normGradSq = Grad2<nd>(gaussian);
-  Field<nd, double> LatForwardGradNorm2("LatForwardGradNorm2", toolBox);
-  LatForwardGradNorm2 = LatForwardGrad<nd>(gaussian).norm2();
+  Field<NDim, double> normGradSq("normGradSq", toolBox);
+  normGradSq = Grad2<NDim>(gaussian);
+  Field<NDim, double> LatForwardGradNorm2("LatForwardGradNorm2", toolBox);
+  LatForwardGradNorm2 = LatForwardGrad<NDim>(gaussian).norm2();
 
   bool allGood = true;
 
@@ -34,18 +34,35 @@ inline void TempLat::NormGradientSquareTester::Test(TempLat::TDDAssertion &tdd)
   auto normGradSq_view = normGradSq.getLocalNDHostView();
   auto LatForwardGradNorm2_view = LatForwardGradNorm2.getLocalNDHostView();
 
-  for (size_t i = 0; i < nGrid; ++i) {
-    for (size_t j = 0; j < nGrid; ++j) {
-      if (std::abs(LatForwardGradNorm2_view(i, j) - normGradSq_view(i, j)) > 1e-14) { // TODO
-        allGood = false;
-        std::cout << "Mismatch at (" << i << ", " << j << "): "
-                  << "LatForwardGradNorm2 = " << LatForwardGradNorm2_view(i, j)
-                  << ", normGradSq = " << normGradSq_view(i, j) << std::endl;
-        break;
+  // Get layout for computing global coordinates (for error reporting)
+  auto layout = toolBox->mLayouts.getConfigSpaceLayout();
+
+  NDLoop<NDim>(normGradSq_view, [&](const auto &...indices) {
+    device::IdxArray<NDim> local_idx = {indices...};
+
+    const double val_normGradSq = normGradSq_view(indices...);
+    const double val_LatForwardGradNorm2 = LatForwardGradNorm2_view(indices...);
+
+    if (std::abs(val_LatForwardGradNorm2 - val_normGradSq) > 1e-14) {
+      allGood = false;
+
+      // Compute global coordinates for error message
+      device::IdxArray<NDim> global_idx;
+      layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
+
+      sayMPI << "Mismatch at local (";
+      for (device::Idx d = 0; d < NDim; ++d) {
+        sayMPI << local_idx[d];
+        if (d < (device::Idx)NDim - 1) sayMPI << ", ";
       }
+      sayMPI << "), global (";
+      for (device::Idx d = 0; d < NDim; ++d) {
+        sayMPI << global_idx[d];
+        if (d < (device::Idx)NDim - 1) sayMPI << ", ";
+      }
+      sayMPI << "): LatForwardGradNorm2 = " << val_LatForwardGradNorm2 << ", normGradSq = " << val_normGradSq << "\n";
     }
-    if (!allGood) break;
-  }
+  });
 
   tdd.verify(allGood);
 }

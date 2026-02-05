@@ -16,10 +16,9 @@
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
+#include "TempLat/util/tuple_tools.h"
 
 #include "TempLat/parallel/device.h"
-
-#include "TempLat/util/tuple_tools.h"
 
 namespace TempLat
 {
@@ -90,11 +89,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     const FloatType dx2;
-
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
 #ifdef TEMPLATTEST

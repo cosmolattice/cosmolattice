@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
 
@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/util/constexpr_for.h"
+#include "TempLat/util/tuple_tools.h"
 
 #include "TempLat/parallel/device.h"
 
@@ -90,7 +91,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-  class NormGradientSquareTester
+  template <size_t NDim> class NormGradientSquareTester
   {
   public:
     static inline void Test(TDDAssertion &tdd);

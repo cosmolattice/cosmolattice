@@ -20,6 +20,7 @@
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/listoperators/vectordotter.h"
+#include "TempLat/util/tuple_tools.h"
 
 namespace TempLat
 {
@@ -119,7 +120,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-  class LatticeForwardGradientTester
+  template <size_t NDim> class LatticeForwardGradientTester
   {
   public:
     static inline void Test(TDDAssertion &tdd);

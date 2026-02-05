@@ -21,9 +21,9 @@ namespace TempLat
   {
     if (std::isnan(a) || std::isnan(b)) return false;
     if (a == b) return true;
-    if (a == 0)
+    if (std::abs(a) < epsilon)
       return std::abs(b) < epsilon;
-    else if (b == 0)
+    else if (std::abs(b) < epsilon)
       return std::abs(a) < epsilon;
     else
       // I added a test of absolute difference to catch the edge-case where both values are effectively zero.
