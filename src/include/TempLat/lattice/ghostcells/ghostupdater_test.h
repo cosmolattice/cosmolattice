@@ -7,14 +7,14 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_iteration.h"
+
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/lattice/memory/triplestatelayouts.h"
 #include "TempLat/lattice/algebra/operators/power.h"
-
-#include "TempLat/parallel/device.h"
-#include "TempLat/parallel/device_iteration.h"
 
 namespace TempLat
 {

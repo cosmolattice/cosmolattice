@@ -12,9 +12,6 @@
 #include "TempLat/util/log/logmutex.h"
 #include "TempLat/util/tdd/tddmacros.h"
 
-// Why? Because we need the stream definition for device::array.
-#include "TempLat/parallel/device.h"
-
 namespace TempLat
 {
 

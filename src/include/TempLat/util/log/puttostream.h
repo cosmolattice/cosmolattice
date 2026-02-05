@@ -15,10 +15,27 @@
 
 namespace TempLat
 {
+  template <typename T> std::ostream &PutToStream(std::ostream &stream, const T &vec);
+
   /* expose these to for vectors of arrays of vectors... */
-  template <typename T> std::ostream &operator<<(std::ostream &stream, const std::vector<T> &vec);
-  template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const std::array<T, N> &vec);
-  template <typename T, typename K> std::ostream &operator<<(std::ostream &stream, const std::pair<T, K> &p);
+  template <typename T, typename K> std::ostream &operator<<(std::ostream &stream, const std::pair<T, K> &p)
+  {
+    stream << "( " << p.first << ", " << p.second << " )";
+    return stream;
+  };
+
+  template <typename C>
+    requires requires(C c) {
+      c.begin();
+      c.end();
+      c.size();
+      c[0];
+      requires !std::is_same_v<std::string, C>;
+    }
+  std::ostream &operator<<(std::ostream &stream, const C &vec)
+  {
+    return PutToStream(stream, vec);
+  };
 
   /** \brief Simple outputing of arrays and vectors: not exposing as operator<<, because below we want to limit it to
    * vectors and arrays, without needing to know the exact number of template parameters for this systems implementation
@@ -44,24 +61,8 @@ namespace TempLat
     return stream;
   }
 
-  template <typename T> std::ostream &operator<<(std::ostream &stream, const std::vector<T> &vec)
-  {
-    return PutToStream(stream, vec);
-  };
-
-  template <typename T, typename K> std::ostream &operator<<(std::ostream &stream, const std::pair<T, K> &p)
-  {
-    stream << "( " << p.first << ", " << p.second << " )";
-    return stream;
-  };
-
-  template <typename T, size_t N> std::ostream &operator<<(std::ostream &stream, const std::array<T, N> &vec)
-  {
-    return PutToStream(stream, vec);
-  };
-
+#ifdef TEMPLATTEST
   /** \brief A class which tests PutToStream.
-   *
    *
    * Unit test: make test-puttostream
    */
@@ -70,6 +71,7 @@ namespace TempLat
   public:
     template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
   };
+#endif
 } // namespace TempLat
 
 #endif

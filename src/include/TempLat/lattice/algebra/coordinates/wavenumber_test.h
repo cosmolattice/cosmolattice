@@ -11,52 +11,96 @@
 #include "TempLat/lattice/algebra/coordinates/spatialcoordinate.h"
 #include "TempLat/util/log/saycomplete.h"
 
-inline void TempLat::WaveNumberTester::Test(TempLat::TDDAssertion &tdd)
+#include "TempLat/util/ndloop.h"
+
+#include <vector>
+
+template <size_t NDim> inline void TempLat::WaveNumber<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  static constexpr size_t NDim = 2;
-  ptrdiff_t nGrid = 8, nGhost = 0;
+  const ptrdiff_t nGrid = 16, nGhost = 0;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
-  Field<NDim, double> phix("phix", toolBox);
-  Field<NDim, double> phiy("phiy", toolBox);
+  // Create fields for each wavenumber component
+  std::vector<Field<NDim, double>> phi_components;
+  phi_components.reserve(NDim);
+  for (size_t d = 0; d < NDim; ++d) {
+    phi_components.emplace_back("phi_" + std::to_string(d), toolBox);
+  }
+
   Field<NDim, double> phinorm("phinorm", toolBox);
   Field<NDim, double> phinorm2("phinorm2", toolBox);
 
-  WaveNumber<NDim> x(toolBox);
-  phix.inFourierSpace() = getVectorComponent(x, 0);
-  phiy.inFourierSpace() = getVectorComponent(x, 1);
-  phinorm.inFourierSpace() = x.norm();
-  phinorm2.inFourierSpace() = x.norm2();
+  WaveNumber<NDim> k(toolBox);
 
-  auto phix_view = phix.inFourierSpace().getLocalNDHostView();
-  auto phiy_view = phiy.inFourierSpace().getLocalNDHostView();
+  // Assign wavenumber components to fields
+  for (size_t d = 0; d < NDim; ++d) {
+    phi_components[d].inFourierSpace() = getVectorComponent(k, d);
+  }
+  phinorm.inFourierSpace() = k.norm();
+  phinorm2.inFourierSpace() = k.norm2();
+
+  // Get host views for all component fields
+  std::vector<decltype(phi_components[0].inFourierSpace().getLocalNDHostView())> phi_views;
+  phi_views.reserve(NDim);
+  for (size_t d = 0; d < NDim; ++d) {
+    phi_views.push_back(phi_components[d].inFourierSpace().getLocalNDHostView());
+  }
   auto phinorm_view = phinorm.inFourierSpace().getLocalNDHostView();
   auto phinorm2_view = phinorm2.inFourierSpace().getLocalNDHostView();
 
   // Check that the fourier coordinate is correct
   bool correct = true;
-  for (ptrdiff_t i = 0; i < nGrid; ++i) {
-    for (ptrdiff_t j = 0; j < nGrid / 2 + 1; ++j) {
-      bool this_correct = true;
-      const double x_val = i > nGrid / 2 ? i - nGrid : i;
-      this_correct &= AlmostEqual(phix_view(i, j).real(), x_val);
-      this_correct &= AlmostEqual(phix_view(i, j).imag(), 0.);
-      const double y_val = j > nGrid / 2 ? j - nGrid : j;
-      this_correct &= AlmostEqual(phiy_view(i, j).real(), y_val);
-      this_correct &= AlmostEqual(phiy_view(i, j).imag(), 0.);
-      const double norm2 = (x_val * x_val + y_val * y_val);
-      this_correct &= AlmostEqual(phinorm2_view(i, j).real(), norm2);
-      this_correct &= AlmostEqual(phinorm2_view(i, j).imag(), 0.);
-      this_correct &= AlmostEqual(phinorm_view(i, j).real(), sqrt(norm2));
-      this_correct &= AlmostEqual(phinorm_view(i, j).imag(), 0.);
-      correct &= this_correct;
-      if (!this_correct)
-        sayShort << "Error at (" << i << ", " << j << "): "
-                 << " phix = " << phix_view(i, j) << ", phiy = " << phiy_view(i, j)
-                 << ", phinorm = " << phinorm_view(i, j) << ", phinorm2 = " << phinorm2_view(i, j) << "\n";
+
+  // Helper to compute expected wavenumber value for a given index in a given dimension
+  auto expectedWaveNumber = [nGrid](ptrdiff_t idx, size_t dim, size_t totalDims) -> double {
+    // Last dimension in Fourier space is truncated (real-to-complex FFT)
+    if (dim == totalDims - 1) {
+      // For the last dimension, index is always in range [0, nGrid/2]
+      return static_cast<double>(idx);
     }
-  }
+    // For other dimensions, wrap around at nGrid/2
+    return idx > nGrid / 2 ? static_cast<double>(idx - nGrid) : static_cast<double>(idx);
+  };
+
+  NDLoop<NDim>(phinorm_view, [&](const auto &...indices) {
+    std::array<ptrdiff_t, NDim> idx_arr = {static_cast<ptrdiff_t>(indices)...};
+
+    bool this_correct = true;
+
+    // Check each wavenumber component
+    double norm2 = 0.0;
+    for (size_t d = 0; d < NDim; ++d) {
+      const double expected_val = expectedWaveNumber(idx_arr[d], d, NDim);
+      norm2 += expected_val * expected_val;
+
+      this_correct &= AlmostEqual(phi_views[d](indices...).real(), expected_val);
+      this_correct &= AlmostEqual(phi_views[d](indices...).imag(), 0.);
+    }
+
+    // Check norm2 and norm
+    this_correct &= AlmostEqual(phinorm2_view(indices...).real(), norm2);
+    this_correct &= AlmostEqual(phinorm2_view(indices...).imag(), 0.);
+    this_correct &= AlmostEqual(phinorm_view(indices...).real(), sqrt(norm2));
+    this_correct &= AlmostEqual(phinorm_view(indices...).imag(), 0.);
+
+    correct &= this_correct;
+
+    if (!this_correct) {
+      sayShort << "Error at (";
+      for (size_t d = 0; d < NDim; ++d) {
+        sayShort << idx_arr[d];
+        if (d < NDim - 1) sayShort << ", ";
+      }
+      sayShort << "): ";
+      for (size_t d = 0; d < NDim; ++d) {
+        sayShort << "phi[" << d << "] = " << phi_views[d](indices...);
+        if (d < NDim - 1) sayShort << ", ";
+      }
+      sayShort << ", phinorm = " << phinorm_view(indices...) << ", phinorm2 = " << phinorm2_view(indices...) << "\n";
+    }
+  });
+
   tdd.verify(correct);
 
   // WaveNumber cn;

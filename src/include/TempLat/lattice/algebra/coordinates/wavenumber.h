@@ -73,15 +73,14 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     LayoutStruct<NDim> mLayout;
+
+  public:
+#ifdef TEMPLATTEST
+    static inline void Test(TDDAssertion &tdd);
+#endif
   };
 
   template <size_t NDim> using FourierSite = WaveNumber<NDim>;
-
-#ifdef TEMPLATTEST
-  struct WaveNumberTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

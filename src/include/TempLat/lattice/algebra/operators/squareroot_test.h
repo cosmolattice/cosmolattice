@@ -20,7 +20,7 @@ inline void TempLat::SqrtTester::Test(TempLat::TDDAssertion &tdd)
     auto get(const double &i) const { return i; }
 
   private:
-    double a;
+    [[maybe_unused]] double a;
   };
 
   myClass a(4);
