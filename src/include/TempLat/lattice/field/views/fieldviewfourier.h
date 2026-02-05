@@ -45,14 +45,6 @@ namespace TempLat
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
 
-#ifdef DEVICE_REGION
-    DEVICE_FUNCTION
-    FourierView(const FourierView &other) : AbstractField<NDim, T>(other), mView(other.mView) {}
-
-    DEVICE_FUNCTION
-    ~FourierView() {}
-#endif
-
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
     template <typename R> void assign(R &&g)
