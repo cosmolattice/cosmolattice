@@ -16,6 +16,9 @@
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/parameters/parameterparser.h"
 
+#include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_memory.h"
+
 namespace TempLat
 {
 
@@ -24,11 +27,11 @@ namespace TempLat
    *
    * Unit test: make test-fileloaderhdf5
    **/
-
   class FileLoaderHDF5
   {
   public:
-    /* Put public methods here. These should change very little over time. */
+    // Put public methods here. These should change very little over time.
+
     FileLoaderHDF5() {}
 
     void open(std::string fn) { mFile.open(fn); }
@@ -37,16 +40,16 @@ namespace TempLat
 
     void load(ParameterParser &par)
     {
-
       mDataset = mFile.openDataset("Parameters");
 
       std::vector<std::string> parStr;
       char tmp[HDF5TypeConstant::FixedSizeStringLength];
 
-      hid_t dspace = H5Dget_space(mDataset); // get number of parameters stored.
+      // get number of parameters stored.
+      hid_t dspace = H5Dget_space(mDataset);
       const int ndims = H5Sget_simple_extent_ndims(dspace);
-      hsize_t dims[ndims];
-      H5Sget_simple_extent_dims(dspace, dims, NULL);
+      std::vector<hsize_t> dims(ndims);
+      H5Sget_simple_extent_dims(dspace, dims.data(), NULL);
       auto nElements = dims[0];
 
       for (size_t i = 0; i < nElements; ++i) {
@@ -210,35 +213,60 @@ namespace TempLat
     {
       auto toolBox = r.getToolBox();
 
+      constexpr size_t NDim = std::decay_t<decltype(*toolBox)>::NDim;
+
       auto starts = toolBox->mLayouts.getConfigSpaceStarts(); // Local mpi offset.
       auto sizes = toolBox->mLayouts.getConfigSpaceSizes();   // Local mpi sizes.
 
+      const auto mLayout = toolBox->mLayouts.getConfigSpaceLayout();
+
       if (dim == toolBox->mNDimensions - 1) // Last dimension, saved as a full rod.
       {
-        coords.emplace_back(
-            0); // look at index 0 in the last dimension. The next nGrid[last dimension] points are stored continuously.
-        ptrdiff_t offset = r.getJumps().getTotalOffsetFromSpatialCoordinates(coords);
+        // look at index 0 in the last dimension. The next nGrid[last dimension] points are stored continuously.
+        coords.emplace_back(0);
 
-        std::vector<hsize_t> subdims(
-            toolBox->mNDimensions,
-            1); // for hdf5, tell it we want to store a sub array of size (1,1,1...,nGrid[last dimension]).
+        // for hdf5, tell it we want to store a sub array of size (1,1,1...,nGrid[last dimension]).
+        std::vector<hsize_t> subdims(toolBox->mNDimensions, 1);
         subdims.back() = toolBox->mNGridPointsVec[dim];
-        std::vector<hsize_t> offsets; // at position (i,j,k,...,0) in the global lattice file.
+
+        // at position (i,j,k,...,0) in the global lattice file.
+        std::vector<hsize_t> offsets;
         for (size_t i = 0; i < coords.size(); ++i)
           offsets.emplace_back(coords[i]);
         offsets.back() = 0;
 
-        typedef typename GetGetReturnType<R>::type vType;
+        using vType = typename GetGetReturnType<R>::type;
 
+        // We have the coordinate, now we need to convert this to an index in local memory. Let's buffer the coords in a
+        // device array to use with putMemoryIndexFromSpatialLocationInto.
+        device::IdxArray<NDim> memoryPos;
+        for (size_t i = 0; i < coords.size(); ++i)
+          memoryPos[i] = coords[i];
+        // Then, overwrite memoryPos with the actual memory indices.
+        device::apply([&](auto... idx) { mLayout.putMemoryIndexFromSpatialLocationInto(memoryPos, idx...); },
+                      memoryPos);
+        // To get the subview, we make another copy with one dimension less.
+        device::IdxArray<NDim - 1> subMemoryPos;
+        for (size_t i = 0; i < NDim - 1; ++i)
+          subMemoryPos[i] = memoryPos[i];
+        // And apply this to get the subview, with the last dimension as a range starting from memoryPos[dim] (which is
+        // nGhosts) to memoryPos[dim]+nGrid[dim].
+        auto subview = device::apply(
+            [&](const auto &...args) {
+              return device::memory::subview(
+                  r.getView(), args..., std::pair<ptrdiff_t, ptrdiff_t>(memoryPos[dim], memoryPos[dim] + subdims[dim]));
+            },
+            subMemoryPos);
+
+        // Now read from file to a temporary buffer on host
         std::vector<vType> rdata(toolBox->mNGridPointsVec[dim]);
         mDataset.readSlices(rdata, subdims, offsets);
 
-        for (size_t i = 0; i < rdata.size(); ++i) {
-          r.getSet(offset + i) = rdata[i];
-        }
-
+        // And copy to device.
+        device::memory::copyHostToDevice(rdata.data(), subview);
       } else {
-        for (int i = 0; i < sizes[dim]; ++i) { // Recursive call to loop over an arbitrary number of dimensions.
+        // Recursive call to loop over an arbitrary number of dimensions.
+        for (int i = 0; i < sizes[dim]; ++i) {
           std::vector<ptrdiff_t> newCoords(coords);
           newCoords.emplace_back(starts[dim] + i);
           loadDim(r, dim + 1, newCoords);
@@ -258,10 +286,6 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/IO/HDF5/fileloaderhdf5_test.h"
-#endif
 
 #endif
 

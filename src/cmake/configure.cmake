@@ -45,12 +45,12 @@ if(HDF5)
 		set(HDF5_PREFER_PARALLEL ON)
 	endif()
 	find_package(HDF5 REQUIRED)
+	include(./src/cmake/libs/hdf5.cmake)
 	#set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${HDF5_INCLUDE_DIRS} -DHDF5")
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHDF5")
 	include_directories(${HDF5_INCLUDE_DIRS})
 endif()
 
-include(./src/cmake/libs/hdf5.cmake)
 
 # if(HDF5) if(MPI) set(HDF5_PREFER_PARALLEL ON) endif() find_package(HDF5
 # REQUIRED) # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${HDF5_INCLUDE_DIRS}
