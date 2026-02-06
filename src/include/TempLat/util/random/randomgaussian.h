@@ -7,6 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <iomanip>
+#include <sstream>
+
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/random/randomuniform.h"
 
@@ -47,6 +50,18 @@ namespace TempLat
               << "\" - seed value: " << pr.mRandomUniform.getSeed();
       return ostream;
     }
+
+    /**
+     * @brief Serializes the complete Gaussian RNG state to a string
+     * @return String containing underlying uniform RNG state, counter, and Box-Muller cache
+     */
+    std::string saveState() const { return mRandomUniform.saveState(); }
+
+    /**
+     * @brief Restores Gaussian RNG state from a serialized string
+     * @param state String produced by saveState()
+     */
+    void loadState(const std::string &state) { mRandomUniform.loadState(state); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

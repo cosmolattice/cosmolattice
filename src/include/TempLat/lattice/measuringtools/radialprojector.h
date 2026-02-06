@@ -68,7 +68,7 @@ namespace TempLat
     {
       if (nLinearBins < 0) {
         ptrdiff_t nGrid = mLayout.getGlobalSizes()[0];
-        nLinearBins = std::pow(nGrid, std::max((ptrdiff_t)1, NDim - 1));
+        nLinearBins = std::pow(nGrid, std::max((size_t)1, NDim - 1));
       }
 
       RadialProjectionResult<sType> baseWorkSpace(nLinearBins, mUseBinCentralValues,

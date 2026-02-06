@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <algorithm>
+#include <vector>
 
 inline void TempLat::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
 {
@@ -33,14 +34,32 @@ inline void TempLat::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
 
   tdd.verify(AlmostEqual(x, 2672.0293294442953992984257638454));
 
-  say << "Does this look gaussian enough?";
-  auto host_mirror = Kokkos::create_mirror_view(measure);
-  Kokkos::deep_copy(host_mirror, measure);
-  for (size_t i = 0; i < host_mirror.extent(0); ++i) {
-    const auto it = host_mirror[i];
-    if (it > 0) std::cerr << std::string(it / (N / 200), '*') << "\n";
+  // Test saveState/loadState round-trip
+  RandomGaussian rng("serialization_test");
+  std::string savedState = rng.saveState();
+
+  // Generate 1000 values after saving state
+  std::vector<double> seq1;
+  for (int i = 0; i < 1000; ++i) {
+    seq1.push_back(rng.get(i, 0, 0));
   }
-  std::cerr << "\n\n";
+
+  // Restore state and generate again
+  rng.loadState(savedState);
+  std::vector<double> seq2;
+  for (int i = 0; i < 1000; ++i) {
+    seq2.push_back(rng.get(i, 0, 0));
+  }
+
+  // Verify sequences are identical
+  bool sequencesMatch = true;
+  for (int i = 0; i < 1000; ++i) {
+    if (seq1[i] != seq2[i]) {
+      sequencesMatch = false;
+      break;
+    }
+  }
+  tdd.verify(sequencesMatch, "saveState/loadState round-trip produces identical sequence");
 }
 
 #endif

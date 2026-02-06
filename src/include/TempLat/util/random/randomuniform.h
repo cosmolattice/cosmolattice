@@ -9,6 +9,7 @@
 
 #include <cstdint>
 #include <random>
+#include <sstream>
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/hash/keccakhash.h"
@@ -38,6 +39,29 @@ namespace TempLat
         : mStringSeed(stringSeed), mHashSeed(KeccakHash::compute(mStringSeed)),
           mSeed(static_cast<INT2>((uint64_t)mHashSeed))
     {
+    }
+
+    /**
+     * @brief Serializes the complete RNG state to a string
+     * @return String containing serialized mt19937_64 state and counter
+     */
+    std::string saveState() const
+    {
+      std::ostringstream oss;
+      oss << mStringSeed;
+      return oss.str();
+    }
+
+    /**
+     * @brief Restores RNG state from a serialized string
+     * @param state String produced by saveState()
+     */
+    void loadState(const std::string &state)
+    {
+      std::istringstream iss(state);
+      iss >> mStringSeed;
+      mHashSeed = KeccakHash::compute(mStringSeed);
+      mSeed = static_cast<INT2>((uint64_t)mHashSeed);
     }
 
     const std::string &getSeedString() const { return mStringSeed; }

@@ -50,6 +50,31 @@ namespace TempLat
       generation++;
     }
 
+    /**
+     * @brief Serializes the complete Gaussian RNG state to a string
+     * @return String containing underlying uniform RNG state, counter, and Box-Muller cache
+     */
+    std::string saveState() const
+    {
+      std::ostringstream oss;
+      oss << prng.saveState() << "\n"; // Underlying RNG state
+      oss << generation << " ";        // Generation counter
+      return oss.str();
+    }
+
+    /**
+     * @brief Restores Gaussian RNG state from a serialized string
+     * @param state String produced by saveState()
+     */
+    void loadState(const std::string &state)
+    {
+      std::istringstream iss(state);
+      std::string uniformState;
+      std::getline(iss, uniformState);
+      prng.loadState(uniformState);
+      iss >> generation;
+    }
+
     DEVICE_FORCEINLINE_FUNCTION std::tuple<RNGInteger, RNGInteger>
     gidx_to_idx2(const device::IdxArray<NDim> &gidx) const
     {
