@@ -34,6 +34,10 @@ namespace TempLat
     HDF5Dataset(const hid_t &id) : HDF5Object(id), alreadyClosed(false) {}
 
     HDF5Dataset(hid_t &&id) : HDF5Object(id), alreadyClosed(false) {}
+    ~HDF5Dataset()
+    {
+      //  this->close();
+    }
 
     void close()
     {

@@ -95,17 +95,6 @@ namespace TempLat
       return {H5Dopen2(file_id, name.c_str(), H5P_DEFAULT)};
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-    hid_t file_id;
-
-    HDF5Dataset openDataset(std::string name)
-    {
-      name = "/" + name;
-      return {H5Dopen2(file_id, name.c_str(), H5P_DEFAULT)};
-    }
-
     /**
      * @brief Get the underlying HDF5 file handle
      * @return The HDF5 file identifier
@@ -113,7 +102,7 @@ namespace TempLat
     hid_t getHandle() const { return file_id; }
 
   private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
+    // Put all member variables and private methods here. These may change arbitrarily.
 
     hid_t file_id;
 

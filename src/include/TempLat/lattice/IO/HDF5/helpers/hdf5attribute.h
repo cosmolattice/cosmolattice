@@ -20,7 +20,6 @@ namespace TempLat
    *
    * Unit test: make test-hdf5attribute
    **/
-
   class HDF5Attribute
   {
   public:
