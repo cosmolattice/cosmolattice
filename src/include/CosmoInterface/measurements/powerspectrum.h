@@ -16,12 +16,12 @@
 
 namespace TempLat
 {
+  MakeException(WrongPSType);
+
   /** \brief A class which computes the power spectrum, with the appropriate rescaling to make it volume independent.
    *
    *
    **/
-  MakeException(WrongPSType);
-
   class PowerSpectrumMeasurer
   {
   public:
@@ -42,10 +42,10 @@ namespace TempLat
 
     template <size_t NDim, typename T> auto powerSpectrum(Field<NDim, T> f, ptrdiff_t N, T kIR)
     {
-      ptrdiff_t N3 = pow<3>(N);
-      T dx = 2 * Constants::pi<T> / kIR / N; // lattice spacing
+      const ptrdiff_t N3 = pow<3>(N);
+      const T dx = 2 * Constants::pi<T> / kIR / N; // lattice spacing
 
-      T kMaxBins = std::floor(sqrt(3.) / 2.0 * N) + 1;
+      const T kMaxBins = std::floor(sqrt(3.) / 2.0 * N) + 1;
 
       if (PSVersion != 3) {
         auto fk2 = projectRadiallyFourier(pow<2>(abs(f.inFourierSpace())), PSVersion == 1)
@@ -105,18 +105,13 @@ namespace TempLat
     int PSVersion;
   };
 
+#ifdef TEMPLATTEST
   class PowerSpectrumTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/powerspectrum_test.h"
 #endif
+} // namespace TempLat
 
 #endif

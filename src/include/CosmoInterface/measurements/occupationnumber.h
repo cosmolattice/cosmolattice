@@ -59,18 +59,14 @@ namespace TempLat
     ptrdiff_t nbins;
   };
 
+#ifdef TEMPLATTEST
   class OccupationNumberTester
   {
-
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/occupationnumber_test.h"
-#endif
 
 #endif

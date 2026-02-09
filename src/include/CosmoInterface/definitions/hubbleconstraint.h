@@ -17,7 +17,6 @@ namespace TempLat
    *
    *
    **/
-
   class HubbleConstraint
   {
   public:
@@ -46,9 +45,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/hubbleconstraint_test.h"
-#endif
 
 #endif

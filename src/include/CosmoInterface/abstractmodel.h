@@ -25,11 +25,6 @@
 
 namespace TempLat
 {
-  /** \brief A class which contains everything a model should have; models derive from here.
-   *
-   *
-   **/
-
   // Exceptions that kill the program when some conditions are met (used below)
   MakeException(PotentialDerivativeNotDefined);
   MakeException(EmptyModel);
@@ -74,7 +69,10 @@ namespace TempLat
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, double)>
 
-  // Mother of all the models. The arguments are passed as template parameters.
+  /** \brief A class which contains everything a model should have; models derive from here.
+   * Mother of all the models. The arguments are passed as template parameters.
+   *
+   **/
   template <class R, size_t NPOTTERMS, size_t NS, size_t NC, size_t NU1FLDS, size_t NSU2DOUBLET, size_t NSU2FLDS,
             typename CSU1COUPLINGS, typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS,
             typename T = double, int NDIM = 3>
@@ -90,7 +88,7 @@ namespace TempLat
     static constexpr size_t NU1 = NU1FLDS;
     static constexpr size_t NSU2 = NSU2FLDS;
     static constexpr size_t NDim = NDIM;
-    static constexpr size_t NGWs = 0;                      // TODO (Franz): was 6 before
+    static constexpr size_t NGWs = 6;
     static constexpr T MPl = Constants::reducedMPlanck<T>; // Reduced Planck mass, MPl=2.435*10^18 GeV
 
     // Coupling managers between complex scalar/SU2 doublets and gauge fields
@@ -372,9 +370,9 @@ namespace TempLat
       // "removeInitValue()"
 
       device::IdxArray<NDim> pos0{{}};
-      pot0 = device::memory::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
 
       // Compute initial potential at t=0
+      pot0 = device::memory::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
 
       // This removes the homogeneous component at one point added previously with "addInitValueOnePoint()"
       this->removeInitValue();
@@ -411,9 +409,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/abstractmodel_test.h"
-#endif
 
 #endif

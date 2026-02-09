@@ -89,18 +89,14 @@ namespace TempLat
     TempLatVector<SpectrumSaver<T>> spectraNormOut; // Contains spectra of norm
   };
 
+#ifdef TEMPLATTEST
   class ComplexScalarMeasurerTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/complexscalarmeasurer_test.h"
-#endif
 
 #endif

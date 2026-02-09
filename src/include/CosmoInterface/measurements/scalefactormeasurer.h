@@ -48,17 +48,14 @@ namespace TempLat
     MeasurementsSaver<T> scaleOut;
   };
 
+#ifdef TEMPLATTEST
   class ScaleFactorMeasurerTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/scalefactormeasurer_test.h"
-#endif
 
 #endif

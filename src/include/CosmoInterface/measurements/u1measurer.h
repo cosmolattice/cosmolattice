@@ -94,18 +94,13 @@ namespace TempLat
     TempLatVector<SpectrumSaver<T>> spectra;
   };
 
+#ifdef TEMPLATTEST
   class U1MeasurerTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/u1measurer_test.h"
 #endif
+} // namespace TempLat
 
 #endif

@@ -182,18 +182,13 @@ namespace TempLat
     int mType;
   };
 
+#ifdef TEMPLATTEST
   class GWsProjectorTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/GWsProjector_test.h"
 #endif
+} // namespace TempLat
 
 #endif

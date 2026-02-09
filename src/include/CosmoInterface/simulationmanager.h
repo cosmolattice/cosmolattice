@@ -13,7 +13,6 @@
 #include "CosmoInterface/abstractmodel.h"
 #include "CosmoInterface/runparameters.h"
 #include "TempLat/util/conditionaloutput/conditionalfilestream.h"
-#include <cstddef>
 
 namespace TempLat
 {
@@ -174,7 +173,7 @@ namespace TempLat
     }
 
   private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
+    // Put all member variables and private methods here. These may change arbitrarily.
 
     // Manager to load and save fields to disk.
     FileIO<NDim> fIO;

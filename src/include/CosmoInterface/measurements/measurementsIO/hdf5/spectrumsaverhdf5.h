@@ -165,21 +165,15 @@ namespace TempLat
     T nGrid, kIR;
   };
 
+#ifdef TEMPLATTEST
   class SpectrumSaverHDF5Tester
   {
   public:
-#ifdef TEMPLATTEST
-
     static inline void Test(TDDAssertion &tdd);
-
-#endif
   };
+#endif
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/measurementsIO/hdf5/spectrumsaverhdf5_test.h"
 #endif
-#endif
-
 #endif

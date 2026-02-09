@@ -57,16 +57,11 @@ namespace TempLat
 #endif
   };
 
+#ifdef TEMPLATTEST
   struct SpectrumGWSaverTester {
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/measurementsIO/spectrumGWsaver_test.h"
 #endif
+} // namespace TempLat
 
 #endif

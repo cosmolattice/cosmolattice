@@ -125,16 +125,11 @@ namespace TempLat
     bool printHeader;
   };
 
+#ifdef TEMPLATTEST
   struct SpectrumSaverStdTester {
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/measurementsIO/std/spectrumsaverstd_test.h"
 #endif
+} // namespace TempLat
 
 #endif

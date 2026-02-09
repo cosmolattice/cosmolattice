@@ -157,18 +157,14 @@ namespace TempLat
     MeasurementsSaver<T> energyCons;
   };
 
+#ifdef TEMPLATTEST
   class EnergiesMeasurerTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/energiesmeasurer_test.h"
-#endif
 
 #endif

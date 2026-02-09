@@ -7,13 +7,9 @@
 
 // File info: Main contributor(s): Jorge Baeza-Ballesteros, Adrien Florio, Nicolás Layza,  Year: 2022
 
-//#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
-//#include "TempLat/lattice/field/field.h"
+// #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+// #include "TempLat/lattice/field/field.h"
 
-inline void TempLat::RadialProjectorGWTester::Test(TempLat::TDDAssertion& tdd) {
-
-    tdd.verify( true );
-
-}
+inline void TempLat::RadialProjectorGWTester::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
 
 #endif

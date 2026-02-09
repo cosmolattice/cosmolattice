@@ -46,18 +46,14 @@ namespace TempLat
     T H0;
   };
 
+#ifdef TEMPLATTEST
   class FixedBackgroundExpansionTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/fixedbackgroundexpansion_test.h"
-#endif
 
 #endif

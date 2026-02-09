@@ -15,7 +15,7 @@ namespace TempLat
 {
 
   /** \brief A class which implements common measurement to all fields, like mean and variance, in a standardized
-   *format.
+   * format.
    *
    *
    **/
@@ -68,9 +68,5 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/meansmeasurer_test.h"
-#endif
 
 #endif

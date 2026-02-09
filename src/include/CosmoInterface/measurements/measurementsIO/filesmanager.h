@@ -64,8 +64,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/measurementsIO/filesmanager_test.h"
-#endif
-
 #endif

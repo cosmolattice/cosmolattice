@@ -131,16 +131,11 @@ namespace TempLat
     const int PSVersion;
   };
 
+#ifdef TEMPLATTEST
   struct SpectrumGWSaverStdTester {
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/measurementsIO/std/spectrumGWsaverstd_test.h"
 #endif
+} // namespace TempLat
 
 #endif

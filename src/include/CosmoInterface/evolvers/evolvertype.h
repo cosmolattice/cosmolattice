@@ -10,63 +10,80 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 
+namespace TempLat
+{
 
-namespace TempLat {
+  /** \brief An enum for the different evolvers.
+   *
+   *
+   **/
 
+  MakeException(NotAnEvolverType);
 
-    /** \brief An enum for the different evolvers.
-     *
-     *
-     **/
+  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_4, RK3_4_A };
 
-    MakeException(NotAnEvolverType);
+  std::istream &operator>>(std::istream &in, EvolverType &eType)
+  {
+    std::string tmp;
+    in >> tmp;
+    if (tmp == "LF" || tmp == "0")
+      eType = LF; // leapfrog
+    else if (tmp == "VV2" || tmp == "1")
+      eType = VV2; // velocity verlet: order 2
+    else if (tmp == "VV4" || tmp == "2")
+      eType = VV4; // ...order 4
+    else if (tmp == "VV6" || tmp == "3")
+      eType = VV6; // ...order 6
+    else if (tmp == "VV8" || tmp == "4")
+      eType = VV8; // ...order 8
+    else if (tmp == "VV10" || tmp == "5")
+      eType = VV10; // ...order 10
+    else if (tmp == "VV6_2" || tmp == "6")
+      eType = VV6_2; // alternative scheme for VV6 (see documentation)
+    else if (tmp == "RK2" || tmp == "7")
+      eType = RK2; // RK2
+    else if (tmp == "RK3_4" || tmp == "8")
+      eType = RK3_4; // 3rd order 4 stages low storage RK
+    else if (tmp == "RK3_4_A" || tmp == "9")
+      eType = RK3_4_A; // 3rd order 4 stages adaptative low storage RK
+    else if (tmp.empty()) {
+    } // Otherwise crash for optional parameters.
+    else
+      throw(NotAnEvolverType(tmp + " is not an evolver type, abort."));
+    return in;
+  };
 
+  std::string to_string(EvolverType eType)
+  {
+    if (eType == LF)
+      return "LF";
+    else if (eType == VV2)
+      return "VV2";
+    else if (eType == VV4)
+      return "VV4";
+    else if (eType == VV6)
+      return "VV6";
+    else if (eType == VV8)
+      return "VV8";
+    else if (eType == VV10)
+      return "VV10";
+    else if (eType == VV6_2)
+      return "VV6_2";
+    else if (eType == RK2)
+      return "RK2";
+    else if (eType == RK3_4)
+      return "RK3_4";
+    else if (eType == RK3_4_A)
+      return "RK3_4_A";
+    else
+      return "";
+  }
 
-    enum EvolverType {LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_4, RK3_4_A};
-
-    std::istream& operator>>(std::istream& in, EvolverType& eType){
-        std::string tmp;
-        in>>tmp;
-        if(tmp=="LF"||tmp=="0") eType=LF; // leapfrog
-        else if(tmp=="VV2"||tmp=="1") eType=VV2;  // velocity verlet: order 2
-        else if(tmp=="VV4"||tmp=="2") eType=VV4;  // ...order 4
-        else if(tmp=="VV6"||tmp=="3") eType=VV6;  // ...order 6
-        else if(tmp=="VV8"||tmp=="4") eType=VV8;  // ...order 8
-        else if(tmp=="VV10"||tmp=="5") eType=VV10;  // ...order 10
-        else if(tmp=="VV6_2"||tmp=="6") eType=VV6_2;  // alternative scheme for VV6 (see documentation)
-        else if(tmp=="RK2"||tmp=="7") eType=RK2;  // RK2
-        else if(tmp=="RK3_4"||tmp=="8") eType=RK3_4;  // 3rd order 4 stages low storage RK
-        else if(tmp=="RK3_4_A"||tmp=="9") eType=RK3_4_A;  // 3rd order 4 stages adaptative low storage RK
-        else if(tmp.empty()){} //Otherwise crash for optional parameters.
-        else throw(NotAnEvolverType(tmp +" is not an evolver type, abort."));
-        return in;
-    };
-
-    std::string to_string(EvolverType eType){
-        if(eType == LF) return "LF";
-        else if(eType == VV2) return "VV2";  
-        else if(eType == VV4) return "VV4";  
-        else if(eType == VV6) return "VV6";  
-        else if(eType == VV8) return "VV8";  
-        else if(eType == VV10) return "VV10";  
-        else if(eType == VV6_2) return "VV6_2";  
-        else if(eType == RK2) return "RK2";  
-        else if(eType == RK3_4) return "RK3_4";  
-        else if(eType == RK3_4_A) return "RK3_4_A";  
-        else return "";
-    }
-
-    struct EvolverTypeTester{
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+  struct EvolverTypeTester {
+    static inline void Test(TDDAssertion &tdd);
+  };
 #endif
-    };
-} /* TempLat */
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/evolvertype_test.h"
-#endif
-
+} // namespace TempLat
 
 #endif
-

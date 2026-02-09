@@ -23,7 +23,6 @@ namespace TempLat
   /** \brief A class which contains standard measurements for the SU2 gauge fields.
    *
    **/
-
   template <typename T> class SU2Measurer
   {
   public:
@@ -95,18 +94,13 @@ namespace TempLat
     EvolverType eType;
   };
 
+#ifdef TEMPLATTEST
   class SU2MeasurerTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/su2measurer_test.h"
 #endif
+} // namespace TempLat
 
 #endif

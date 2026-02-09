@@ -84,18 +84,14 @@ namespace TempLat
     const int PSType;
   };
 
+#ifdef TEMPLATTEST
   class ScalarSingletMeasurerTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/scalarsingletmeasurer_test.h"
-#endif
 
 #endif

@@ -175,8 +175,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "CosmoInterface/initializers/u1initializer_test.h"
-#endif
-
 #endif

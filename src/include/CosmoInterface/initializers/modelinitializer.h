@@ -63,16 +63,11 @@ namespace TempLat
     FluctuationsGenerator<T> fg;
   };
 
+#ifdef TEMPLATTEST
   struct ModelInitializerTester {
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/initializers/modelinitializer_test.h"
 #endif
+} // namespace TempLat
 
 #endif

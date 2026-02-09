@@ -150,15 +150,11 @@ namespace TempLat
     return RadialProjectorGW<Model, T>(model, useBinCentralValues, PRJType, PSType, PSVersion);
   }
 
+#ifdef TEMPLATTEST
   struct RadialProjectorGWTester {
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/radialprojectorGW_test.h"
 #endif
+} // namespace TempLat
 
 #endif

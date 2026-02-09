@@ -87,16 +87,11 @@ namespace TempLat
     bool headerSaved;
   };
 
+#ifdef TEMPLATTEST
   struct MeasurementsSaverStdTester {
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-} // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/measurementsIO/std/measurementssaverstd_test.h"
 #endif
+} // namespace TempLat
 
 #endif

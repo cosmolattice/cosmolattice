@@ -21,7 +21,6 @@ namespace TempLat
    *
    *
    **/
-
   template <typename T> class SU2DoubletMeasurer
   {
   public:
@@ -92,18 +91,14 @@ namespace TempLat
     EvolverType eType;
   };
 
+#ifdef TEMPLATTEST
   class SU2DoubletMeasurerTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/su2doubletmeasurer_test.h"
-#endif
 
 #endif

@@ -96,16 +96,12 @@ namespace TempLat
 #endif
   };
 
-  struct SpectrumSaverTester {
 #ifdef TEMPLATTEST
+  struct SpectrumSaverTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/measurementsIO/spectrumsaver_test.h"
-#endif
 
 #endif

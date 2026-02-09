@@ -83,18 +83,14 @@ namespace TempLat
     const int PSType;
   };
 
+#ifdef TEMPLATTEST
   class GWsMeasurerTester
   {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/gwsmeasurer_test.h"
-#endif
 
 #endif

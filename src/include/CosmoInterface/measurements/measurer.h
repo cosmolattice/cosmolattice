@@ -174,8 +174,4 @@ namespace TempLat
 
 } // namespace TempLat
 
-#ifdef TEMPLATTEST
-#include "CosmoInterface/measurements/measurer_test.h"
-#endif
-
 #endif

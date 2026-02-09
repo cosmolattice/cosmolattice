@@ -15,7 +15,7 @@ namespace TempLat
 {
 
   /** \brief A class which computes the energy when working with our verlet-type algorithms. Assumes that the averages
-    *have already been computed.
+   * have already been computed.
    *
    *
    **/
@@ -179,9 +179,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/energies_test.h"
-#endif
 
 #endif
