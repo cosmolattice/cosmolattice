@@ -35,7 +35,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto get(IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       auto tup = device::tie(idx...);
       constexpr_for<0, dim, 1>([&](const auto _d) {
@@ -47,7 +47,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       auto tup = device::tie(idx...);
       constexpr_for<0, dim, 1>([&](const auto _d) {
@@ -88,7 +88,7 @@ namespace TempLat
         requires IsVariadicIndex<IDX...>;
         GetValue::get(mR, idx...);
       }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
       return device::apply([&](const auto... shifted_idx) { return GetValue::get(mR, shifted_idx...); },
                            tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
@@ -99,7 +99,7 @@ namespace TempLat
         requires IsVariadicIndex<IDX...>;
         DoEval::eval(mR, idx...);
       }
-    DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       return device::apply([&](const auto... shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
                            tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
