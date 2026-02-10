@@ -23,7 +23,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-sessionguard
    **/
-
   class SessionGuard
   {
   public:

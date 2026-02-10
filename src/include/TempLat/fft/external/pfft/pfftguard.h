@@ -30,7 +30,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-pfftguard
    **/
-
   class PFFTGuard : public FFTSessionGuard
   {
   public:

@@ -26,7 +26,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-mpicommreference
    **/
-
   class MPICommReference : public MPIAllReduce
   {
   public:

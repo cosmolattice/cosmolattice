@@ -17,7 +17,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-tuple_size_tester
    **/
-
   class tuple_size_Tester
   {
   public:

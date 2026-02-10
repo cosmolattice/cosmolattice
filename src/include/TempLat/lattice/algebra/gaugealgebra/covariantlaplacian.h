@@ -19,7 +19,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-covariantlaplacian
    **/
-
   class CovariantLaplacianTester
   {
   public:

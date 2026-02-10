@@ -22,7 +22,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-complexfieldget
    **/
-
   class ComplexFieldGetter
   {
   public:

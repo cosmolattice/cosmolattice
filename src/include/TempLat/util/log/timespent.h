@@ -19,7 +19,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-timespent
    */
-
   class TimeSpent
   {
   public:

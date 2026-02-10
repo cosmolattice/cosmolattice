@@ -26,7 +26,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-mpiallreduce
    **/
-
   class MPIAllReduce
   {
   public:

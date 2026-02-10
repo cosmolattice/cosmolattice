@@ -18,7 +18,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-fieldstrength
    **/
-
   class FieldStrengthTester
   {
   public:

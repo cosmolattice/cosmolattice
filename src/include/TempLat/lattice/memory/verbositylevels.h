@@ -16,7 +16,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-verbositylevels
    **/
-
   struct VerbosityLevels {
   public:
     // Put public methods here. These should change very little over time.

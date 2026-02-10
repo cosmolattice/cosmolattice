@@ -18,7 +18,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-tddassertion
    */
-
   class TDDAssertion
   {
   public:

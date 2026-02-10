@@ -29,7 +29,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-demangle
    */
-
   class Demangle
   {
   public:

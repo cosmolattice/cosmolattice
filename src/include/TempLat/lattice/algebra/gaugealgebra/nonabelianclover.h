@@ -18,7 +18,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-nonabelianclover
    **/
-
   struct NonAbelianCloverTester {
   public:
     static inline void Test(TDDAssertion &tdd);

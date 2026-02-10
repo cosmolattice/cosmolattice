@@ -54,7 +54,6 @@ namespace TempLat
   /** @brief A class which just does the test.
    * Unit test: ctest -R test-saycomplete
    */
-
   class SayCompleteTest
   {
   public:

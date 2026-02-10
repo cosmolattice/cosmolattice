@@ -10,7 +10,6 @@
 inline void TempLat::HasSU2GetTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
-
   struct MyStruct {
     DEVICE_FORCEINLINE_FUNCTION
     double SU2Get(Tag<0> t) { return 87; };

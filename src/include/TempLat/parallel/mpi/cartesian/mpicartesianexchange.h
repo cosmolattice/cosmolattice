@@ -23,7 +23,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-mpicartesianexchange
    **/
-
   class MPICartesianExchange
   {
   public:

@@ -21,7 +21,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-mpidomainsplit
    **/
-
   class MPIDomainSplit
   {
   public:

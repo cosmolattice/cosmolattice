@@ -20,7 +20,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-mpicartesianneighbours
    **/
-
   class MPICartesianNeighbours
   {
   public:

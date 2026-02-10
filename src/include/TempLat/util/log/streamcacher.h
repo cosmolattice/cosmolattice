@@ -21,7 +21,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-streamcacher
    */
-
   class StreamCacher
   {
   public:

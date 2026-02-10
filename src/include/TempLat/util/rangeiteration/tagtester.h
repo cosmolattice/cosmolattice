@@ -17,7 +17,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-tagtester
    **/
-
   class TagTester
   {
   public:

@@ -21,7 +21,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-filetojson
    **/
-
   class FileToJSON : public json::JSON
   {
   public:

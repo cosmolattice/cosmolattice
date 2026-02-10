@@ -19,7 +19,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-hdf5tester
    **/
-
   class HDF5Tester
   {
   public:

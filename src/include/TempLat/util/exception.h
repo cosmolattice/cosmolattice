@@ -29,7 +29,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-exception
    */
-
   class Exception : public std::exception
   {
   public:

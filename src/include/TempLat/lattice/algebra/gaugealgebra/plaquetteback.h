@@ -20,7 +20,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-plaquetteback
    **/
-
   struct PlaquetteBackTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

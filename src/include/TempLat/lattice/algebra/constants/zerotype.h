@@ -23,7 +23,6 @@ namespace TempLat
        ptrdiff_t get(ptrdiff_t i) { return 0; }
        static constexpr bool ISCONSTANT = true;
    };*/
-
   struct ZeroType {
     //        operator ptrdiff_t() const { return 0; }
     static std::string toString() { return "(ZeroType)0"; }

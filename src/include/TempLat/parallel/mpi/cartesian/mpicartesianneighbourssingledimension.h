@@ -17,7 +17,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-mpicartesianneighbourssingledimension
    **/
-
   class MPICartesianNeighboursSingleDimension
   {
   public:

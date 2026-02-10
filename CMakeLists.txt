@@ -39,7 +39,7 @@ set(HDF5
       "Set to ON to build with HDF5 support for saving fields (default = OFF)")
 set(TESTING
     OFF
-    CACHE BOOL "Set to ON to be abble to build the tests (default = OFF)")
+    CACHE BOOL "Set to ON to be able to build the tests (default = OFF)")
 set(PROFILING
     OFF
     CACHE BOOL "Set to ON to build with tools for profiling (default = OFF)")

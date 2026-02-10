@@ -22,7 +22,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-mpisendreceive
    **/
-
   class MPISendReceive
   {
   public:

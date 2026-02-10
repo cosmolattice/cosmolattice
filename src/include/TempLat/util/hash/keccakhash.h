@@ -25,7 +25,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-keccakhash
    **/
-
   class KeccakHash
   {
   public:

@@ -32,7 +32,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-tddregister
    */
-
   class TDDRegister
   {
   public:

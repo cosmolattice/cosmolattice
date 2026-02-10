@@ -44,7 +44,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-throws
    */
-
   class ThrowsTester
   {
   public:
