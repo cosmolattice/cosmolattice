@@ -26,7 +26,6 @@ namespace TempLat
    *
    * Unit test: make test-parafaftguard
    **/
-
   class ParafaftGuard : public FFTSessionGuard
   {
   public:

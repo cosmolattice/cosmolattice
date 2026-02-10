@@ -5,10 +5,10 @@
 
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
+#ifdef KOKKOS_FFT
 #include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftinterface_test.h"
 
-#ifdef KOKKOS_FFT
 namespace
 {
   TempLat::TDDContainer<TempLat::KokkosFFTInterface<3>> test;

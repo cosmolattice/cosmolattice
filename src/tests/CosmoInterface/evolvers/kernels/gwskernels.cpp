@@ -4,8 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
-#include "CosmoInterface/evolvers/kernels/gwskernels.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::GWsKernels> test;
+#include "CosmoInterface/evolvers/kernels/gwskernels.h"
+#include "CosmoInterface/evolvers/kernels/gwskernels_test.h"
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::GWsKernels> test;
 }

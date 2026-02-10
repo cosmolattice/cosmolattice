@@ -50,7 +50,6 @@ namespace TempLat
    *
    * Unit test: make test-parafaftplanholder
    **/
-
   template <size_t NDim, typename T> class ParafaftPlanHolder : public FFTPlanInterface<NDim, T>
   {
   public:

@@ -25,7 +25,6 @@
 
 namespace TempLat
 {
-
   MakeException(ParafaftPlannerException);
 
   /** @brief Plan creation for parafaft FFT transforms.

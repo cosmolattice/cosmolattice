@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   /** @brief Transposition flags for parafaft.
    *
    * Parafaft does not support transposition - it always returns data in the
@@ -23,7 +22,6 @@ namespace TempLat
    *
    * Unit test: make test-parafafttranspositionflags
    **/
-
   class ParafaftTranspositionFlags
   {
   public:
@@ -56,10 +54,6 @@ namespace TempLat
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/parafaft/parafafttranspositionflags_test.h"
-#endif
 
 #endif // NOPARAFAFT
 

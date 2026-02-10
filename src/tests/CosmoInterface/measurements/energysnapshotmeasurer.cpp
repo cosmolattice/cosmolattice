@@ -4,6 +4,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
+
 #include "CosmoInterface/measurements/energysnapshotmeasurer.h"
 #include "CosmoInterface/measurements/energysnapshotmeasurer_test.h"
 

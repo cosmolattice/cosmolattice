@@ -9,7 +9,7 @@ add_custom_target(test-all-untested)
 set(testFolderList "")
 
 # Glob all test sources and then create targets for each of them
-file(GLOB_RECURSE test_sources "${CMAKE_SOURCE_DIR}/src/tests/*.cpp")
+file(GLOB_RECURSE test_sources "${CMAKE_SOURCE_DIR}/src/tests/*/*.cpp")
 foreach(fn ${test_sources})
   get_filename_component(f_name ${fn} NAME) # extract the filename from the full
                                             # path

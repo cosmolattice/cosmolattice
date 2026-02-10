@@ -6,6 +6,7 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include "CosmoInterface/abstractmodel.h"
+#include "CosmoInterface/abstractmodel_test.h"
 
 // namespace {
 //     TempLat::TDDContainer<TempLat::AbstractModel> test;

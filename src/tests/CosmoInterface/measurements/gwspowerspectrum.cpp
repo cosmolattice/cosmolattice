@@ -4,8 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
-#include "CosmoInterface/measurements/gwspowerspectrum.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::GWsPowerSpectrumTester> test;
+#include "CosmoInterface/measurements/gwspowerspectrum.h"
+#include "CosmoInterface/measurements/gwspowerspectrum_test.h"
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::GWsPowerSpectrumTester> test;
 }

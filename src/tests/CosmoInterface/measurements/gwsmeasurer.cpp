@@ -4,8 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
-#include "CosmoInterface/measurements/gwsmeasurer.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::GWsMeasurerTester> test;
+#include "CosmoInterface/measurements/gwsmeasurer.h"
+#include "CosmoInterface/measurements/gwsmeasurer_test.h"
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::GWsMeasurerTester> test;
 }

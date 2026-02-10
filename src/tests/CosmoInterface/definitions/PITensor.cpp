@@ -4,8 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
-#include "CosmoInterface/definitions/PITensor.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::PITensorTest> test;
+#include "CosmoInterface/definitions/PITensor.h"
+#include "CosmoInterface/definitions/PITensor_test.h"
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::PITensorTest> test;
 }

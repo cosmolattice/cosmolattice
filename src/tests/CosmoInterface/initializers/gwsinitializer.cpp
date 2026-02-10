@@ -4,8 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
-#include "CosmoInterface/initializers/gwsinitializer.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::GWsInitializerTester> test;
+#include "CosmoInterface/initializers/gwsinitializer.h"
+#include "CosmoInterface/initializers/gwsinitializer_test.h"
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::GWsInitializerTester> test;
 }

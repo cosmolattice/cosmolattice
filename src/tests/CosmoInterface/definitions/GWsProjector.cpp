@@ -4,8 +4,11 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
-#include "CosmoInterface/definitions/GWsProjector.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::GWsProjectorTester> test;
+#include "CosmoInterface/definitions/GWsProjector.h"
+#include "CosmoInterface/definitions/GWsProjector_test.h"
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::GWsProjectorTester> test;
 }

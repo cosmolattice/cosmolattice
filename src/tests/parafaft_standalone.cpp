@@ -27,6 +27,14 @@ constexpr int N1 = 16; // Grid size in dimension 1
 constexpr int N2 = 16; // Grid size in dimension 2
 constexpr double TOLERANCE = 1e-10;
 
+#ifdef CL_CUDA
+using ParaFaFT_Backend = parafaft::CuFFTBackend;
+#elif defined(CL_HIP)
+using ParaFaFT_Backend = parafaft::HipFFTBackend;
+#else
+using ParaFaFT_Backend = parafaft::FFTWBackend;
+#endif
+
 // Helper to check if two doubles are approximately equal
 bool approx_equal(double a, double b, double tol = TOLERANCE)
 {

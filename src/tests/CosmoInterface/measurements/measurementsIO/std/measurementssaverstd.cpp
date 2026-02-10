@@ -1,12 +1,14 @@
- 
+
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
-   Released under the MIT license, see LICENSE.md. */ 
-   
+   Released under the MIT license, see LICENSE.md. */
+
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
+
 #include "CosmoInterface/measurements/measurementsIO/std/measurementssaverstd.h"
+#include "CosmoInterface/measurements/measurementsIO/std/measurementssaverstd_test.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::MeasurementsSaverStdTester> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::MeasurementsSaverStdTester> test;
 }
-
