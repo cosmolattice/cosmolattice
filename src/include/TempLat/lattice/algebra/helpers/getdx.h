@@ -12,7 +12,7 @@
 #include "TempLat/parallel/device.h"
 namespace TempLat
 {
-  /** \brief A getter for dx.
+  /** @brief A getter for dx.
    *
    * Unit test: make test-getdx
    **/

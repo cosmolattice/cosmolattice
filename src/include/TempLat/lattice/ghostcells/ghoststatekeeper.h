@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which only holds the state of ghost cells: stale or up to date.
+  /** @brief A class which only holds the state of ghost cells: stale or up to date.
    *
    * Unit test: make test-ghoststatekeeper
    **/

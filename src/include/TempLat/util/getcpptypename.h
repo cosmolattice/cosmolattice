@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which calls typeid and demangles it if possible.
+  /** @brief A class which calls typeid and demangles it if possible.
    *
    *
    * Unit test: make test-getcpptypename

@@ -17,7 +17,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements shifts in coordinates.
+  /** @brief A class which implements shifts in coordinates.
    *
    * Unit test: make test-shift
    **/

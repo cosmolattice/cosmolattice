@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes the complex conjugate of a complex field.
+  /** @brief A class which computes the complex conjugate of a complex field.
    *
    * Unit test: make test-complexfieldconjugate
    **/

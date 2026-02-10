@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which handles the exchange between neighbours in the cartesian group.
+  /** @brief A class which handles the exchange between neighbours in the cartesian group.
    *  Has two methods: exchangeUp and exchangeDown, which take as input a datatype, a dimension
    *  (because you need to specify what is up and down),
    *  a pointer for the sending memory and a pointer

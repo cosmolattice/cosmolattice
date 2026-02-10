@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which reads a file into a std::string.
+  /** @brief A class which reads a file into a std::string.
    * Constructor does not work, reading is actually done when
    * the class is cast to a string.
    *

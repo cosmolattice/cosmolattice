@@ -35,7 +35,7 @@
 
 namespace TempLat
 {
-  /** \brief A parent class which implements the common methods that all unary operators (-, sqrt ) share.
+  /** @brief A parent class which implements the common methods that all unary operators (-, sqrt ) share.
    *
    * Unit test: make test-unaryoperator
    **/
@@ -78,7 +78,7 @@ namespace TempLat
     /** For measurement objects. */
     auto getToolBox() const { return GetToolBox::get(mR); }
 
-    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return " "; }
 
     DEVICE_FORCEINLINE_FUNCTION
@@ -87,7 +87,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
-    /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
+    /** @brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
      */
     std::string toString() const

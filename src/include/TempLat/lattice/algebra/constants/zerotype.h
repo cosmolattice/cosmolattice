@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which represents zero. Attempt to simplify derivative expressions.
+  /** @brief A class which represents zero. Attempt to simplify derivative expressions.
    *
    * Unit test: make test-zerotype
    **/

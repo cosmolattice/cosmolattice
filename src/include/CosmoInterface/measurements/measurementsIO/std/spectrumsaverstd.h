@@ -17,13 +17,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which implements the std spectra output.
+  /** @brief A class which implements the std spectra output.
    *
    *
    * Unit test: make test-spectrumsaverstd
    **/
-
   template <typename T> class SpectrumSaverStd
   {
   public:

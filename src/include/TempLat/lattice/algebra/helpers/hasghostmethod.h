@@ -13,7 +13,7 @@
 // #include "TempLat/lattice/field/fieldshiftedviewdetection.h"
 namespace TempLat
 {
-  /** \brief A concept which determines at compile time whether an object has a method `confirmGhostsUpToDate`.
+  /** @brief A concept which determines at compile time whether an object has a method `confirmGhostsUpToDate`.
    * See HasGetMethod.
    * Unit test: make test-hasgetmethod
    **/
@@ -32,7 +32,7 @@ namespace TempLat
   template <class T>
   concept HasGhostMethodDirectElement = requires(std::decay_t<T> t, ptrdiff_t i) { t(i).confirmGhostsUpToDate(); };
 
-  /** \brief a mini tester class... */
+  /** @brief a mini tester class... */
   struct HasGhostMethodTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

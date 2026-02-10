@@ -18,7 +18,7 @@ namespace TempLat
   template <typename U, typename... IDX>
   concept TypeGetsItself = (std::is_arithmetic_v<std::decay_t<U>> || IsComplexType<std::decay_t<U>>);
 
-  /** \brief A template-programming class which helps to get the 'get'-value from any type,
+  /** @brief A template-programming class which helps to get the 'get'-value from any type,
    * whether it has the get-method or it is a scalar value.
    * Now you can use an int as if it had a get method for example.
    *

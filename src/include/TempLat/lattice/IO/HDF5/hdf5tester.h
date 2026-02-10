@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which tests the hdf5 routines.
+  /** @brief A class which tests the hdf5 routines.
    *
    *
    * Unit test: make test-hdf5tester

@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which compute the hermitean conjugate of Doublets
+  /** @brief A class which compute the hermitean conjugate of Doublets
    *
    *
    * Unit test: make test-su2doubletdagger

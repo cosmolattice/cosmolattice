@@ -19,13 +19,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which computes spatial scalar and (covariant) gauge derivatives
-   *
-   **/
-
   MakeException(MoreThanOneDoublet);
 
+  /** @brief A class which computes spatial scalar and (covariant) gauge derivatives
+   *
+   **/
   class GaugeDerivatives
   {
   public:
@@ -163,9 +161,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/gaugederivatives_test.h"
-#endif
 
 #endif

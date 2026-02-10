@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which is part of the implementation of the list algebra. Conditionally returns some binary
+  /** @brief A class which is part of the implementation of the list algebra. Conditionally returns some binary
    *operation type.
    *
    * Unit test: make test-conditionalbinarygetterscalarvector

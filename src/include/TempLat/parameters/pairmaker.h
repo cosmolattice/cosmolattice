@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief Small class which splits strings into two and make a pair out of it.
+  /** @brief Small class which splits strings into two and make a pair out of it.
    *
    *
    * Unit test: make test-pairmaker

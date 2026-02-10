@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which
+  /** @brief A class which
    *
    *
    * Unit test: make test-make_list_tag

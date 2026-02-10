@@ -92,7 +92,7 @@ namespace TempLat
 #endif
 } // namespace TempLat
 
-/** \brief This one is not related to our algebra, but somehow not
+/** @brief This one is not related to our algebra, but somehow not
  *  by default enabled in C++ standard library.
  */
 template <typename T, typename S>
@@ -103,7 +103,7 @@ operator*(complex<T> a, S b)
   return a * (T)b;
 }
 
-/** \brief This one is not related to our algebra, but somehow not
+/** @brief This one is not related to our algebra, but somehow not
  *  by default enabled in C++ standard library.
  */
 template <typename T, typename S>

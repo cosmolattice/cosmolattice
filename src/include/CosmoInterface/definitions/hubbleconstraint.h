@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class that computes the hubble law in order to monitor "energy conservation"
+  /** @brief A class that computes the hubble law in order to monitor "energy conservation"
    *
    *
    **/

@@ -17,7 +17,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which creates a named temporary file, accepts input, and can close and delete.
+  /** @brief A class which creates a named temporary file, accepts input, and can close and delete.
    *
    * Unit test: make test-namedtmpfile
    **/

@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which construct a SU2-like object.
+  /** @brief A class which construct a SU2-like object.
    *
    *
    * Unit test: make test-su2wrapper

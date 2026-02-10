@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A class for the poor man's profiling: prints out the map upon destruction.
+  /** @brief A class for the poor man's profiling: prints out the map upon destruction.
    *
    * Unit test: make test-poormansprofile
    */
@@ -52,7 +52,7 @@ namespace TempLat
       ++theMap[value];
     }
 
-    /** \brief And here our poor mans profiler: call this function to manually track where the most calls to a function
+    /** @brief And here our poor mans profiler: call this function to manually track where the most calls to a function
      * come from. */
     static inline void TrackMe()
     {

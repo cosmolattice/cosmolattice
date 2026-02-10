@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the logarithm for the list algebra.
+  /** @brief A class which implements the logarithm for the list algebra.
    *
    *
    * Unit test: make test-listlog
@@ -36,7 +36,7 @@ namespace TempLat
     static const size_t size = tuple_size<R>::value;
   };
 
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct ListLogTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

@@ -16,7 +16,7 @@ namespace TempLat
 {
   MakeException(FileReaderProblemInputFile);
 
-  /** \brief A class which reads input files.
+  /** @brief A class which reads input files.
    *
    *
    * Unit test: make test-filereader

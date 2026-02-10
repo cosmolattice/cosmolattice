@@ -17,7 +17,7 @@
 namespace TempLat
 {
 
-  /** \brief RAII guard for parafaft initialization/cleanup.
+  /** @brief RAII guard for parafaft initialization/cleanup.
    *
    * Parafaft is a header-only library that uses FFTW internally.
    * Since FFTW initialization is handled by FFTWGuard, this guard

@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which chooses between get and getEval, to allow for some intermediate caching
+  /** @brief A class which chooses between get and getEval, to allow for some intermediate caching
    * (useful for operations that derive from matrix multiplication for example).
    *
    *

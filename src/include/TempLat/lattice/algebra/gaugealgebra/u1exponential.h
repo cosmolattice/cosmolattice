@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief Exponential map for U(1).
+  /** @brief Exponential map for U(1).
    *
    *
    * Unit test: make test-u1wrapper

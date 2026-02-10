@@ -15,7 +15,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which makes array compatible which getComp algebra.
+  /** @brief A class which makes array compatible which getComp algebra.
    *
    *
    * Unit test: make test-templatarray

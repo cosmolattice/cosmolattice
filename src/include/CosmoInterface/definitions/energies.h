@@ -14,12 +14,11 @@
 namespace TempLat
 {
 
-  /** \brief A class which computes the energy when working with our verlet-type algorithms. Assumes that the averages
+  /** @brief A class which computes the energy when working with our verlet-type algorithms. Assumes that the averages
    * have already been computed.
    *
    *
    **/
-
   class Energies
   {
   public:

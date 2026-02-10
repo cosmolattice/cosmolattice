@@ -51,7 +51,7 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return "*"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mT, other) * mR + mT * GetDeriv::get(mR, other);
@@ -74,12 +74,12 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return std::to_string(N) + "*"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other) { return N * mR; }
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define multiplication operation to the world. */
+  /** @brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
   DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
@@ -101,14 +101,14 @@ namespace TempLat
     return Operators::MultiplicationN<R, N>(r);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   template <typename T>
     requires(!std::is_same_v<T, ZeroType>)
   DEVICE_FORCEINLINE_FUNCTION ZeroType operator*(const T &a, ZeroType b)
   {
     return b;
   }
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   template <typename T>
     requires(!std::is_same_v<T, ZeroType>)
   DEVICE_FORCEINLINE_FUNCTION ZeroType operator*(ZeroType a, const T &b)
@@ -116,14 +116,14 @@ namespace TempLat
     return a;
   }
 
-  /** \brief Specialize for possible unit input! */
+  /** @brief Specialize for possible unit input! */
   template <typename T>
     requires(!std::is_same_v<T, OneType> && !std::is_same_v<T, ZeroType>)
   DEVICE_FORCEINLINE_FUNCTION auto operator*(const T &a, const OneType b)
   {
     return a;
   }
-  /** \brief Specialize for possible unit input! */
+  /** @brief Specialize for possible unit input! */
   template <typename T>
     requires(!std::is_same_v<T, OneType> && !std::is_same_v<T, ZeroType>)
   DEVICE_FORCEINLINE_FUNCTION auto operator*(const OneType &a, const T &b)
@@ -131,7 +131,7 @@ namespace TempLat
     return b;
   }
 
-  /** \brief Specialize for possible unit input! */
+  /** @brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType operator*(OneType a, OneType b) { return a; }
 

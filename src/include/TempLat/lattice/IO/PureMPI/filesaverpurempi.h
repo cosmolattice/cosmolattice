@@ -17,7 +17,7 @@ namespace TempLat
 
   MakeException(PureMPISaverNotImplemented);
 
-  /** \brief A class which should be imlemented if someone wants to save files only with mpi.
+  /** @brief A class which should be imlemented if someone wants to save files only with mpi.
    *
    *
    * Unit test: make test-filesaverpurempi

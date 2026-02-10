@@ -41,7 +41,7 @@ namespace TempLat
   MakeException(ParafaftPlanHolderException);
   MakeException(ParafaftCompiledWithoutSinglePrecisionSupport);
 
-  /** \brief Plan holder for parafaft FFT transforms.
+  /** @brief Plan holder for parafaft FFT transforms.
    *
    * This class holds a parafaft::ParaFaFT_R2C object and implements the
    * PlanInterface<T> methods for r2c and c2r transforms.

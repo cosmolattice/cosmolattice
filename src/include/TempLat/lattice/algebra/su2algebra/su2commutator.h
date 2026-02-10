@@ -20,7 +20,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes the commutator of two SU(2) matrices.
+  /** @brief A class which computes the commutator of two SU(2) matrices.
    *
    * Unit test: make test-su2commutator
    **/

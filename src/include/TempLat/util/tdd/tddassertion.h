@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief The function to call for the evaluation of each test.
+  /** @brief The function to call for the evaluation of each test.
    *
    * Unit test: make test-tddassertion
    */
@@ -27,7 +27,7 @@ namespace TempLat
     {
     }
 
-    /** \brief Call with assert( a == b, "A must equal B."). */
+    /** @brief Call with assert( a == b, "A must equal B."). */
     void operator()(const char *stringifiedExpression, const char *fName, int line, bool result,
                     std::string description = std::string())
     {
@@ -46,7 +46,7 @@ namespace TempLat
                                << " " << description << "\n";
     }
 
-    /** \brief Overload for Throws. */
+    /** @brief Overload for Throws. */
     void ASSERT(const char *stringifiedExpression, const char *fName, int line, std::pair<bool, std::string> result,
                 std::string description = std::string())
     {

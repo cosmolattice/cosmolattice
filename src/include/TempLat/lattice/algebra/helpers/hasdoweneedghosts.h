@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief concept to see if the doWeNeedGhost method is defined.
+  /** @brief concept to see if the doWeNeedGhost method is defined.
    *
    * Unit test: make test-hasdoweneedghosts
    **/

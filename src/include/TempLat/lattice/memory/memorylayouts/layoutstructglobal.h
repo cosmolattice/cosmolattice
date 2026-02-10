@@ -16,7 +16,7 @@ namespace TempLat
   // Forward declaration of LayoutStruct template
   template <size_t NDim> struct LayoutStruct;
 
-  /** \brief A class which holds some memory informations.
+  /** @brief A class which holds some memory informations.
    *
    *
    * Unit test: make test-layoutstructglobal
@@ -51,7 +51,7 @@ namespace TempLat
       return device::sqrt(r2);
     }
 
-    /** \brief For both configuration and fourier space, the index values are not the same as coordinate
+    /** @brief For both configuration and fourier space, the index values are not the same as coordinate
      *  values. Assuming periodic boundary conditions, we get that always c = i > half ? i - N : i;
      *  Don't mix up the arguments! Does not do transposition, so input pre-transposed dimension!
      */
@@ -62,7 +62,7 @@ namespace TempLat
       return index > tSize ? index - mGlobalSizes[dimension] : index;
     }
 
-    /** \brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
+    /** @brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
     DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
     {

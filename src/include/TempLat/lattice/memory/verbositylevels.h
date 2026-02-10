@@ -12,7 +12,7 @@
 namespace TempLat
 {
 
-  /** \brief A struct with a bunch of flags with enable various output messages. Use to your advantage.
+  /** @brief A struct with a bunch of flags with enable various output messages. Use to your advantage.
    *
    * Unit test: make test-verbositylevels
    **/
@@ -26,30 +26,30 @@ namespace TempLat
     {
     }
 
-    /** \brief Show a message when a field receives an expression and takes its result as new value. */
+    /** @brief Show a message when a field receives an expression and takes its result as new value. */
     bool fieldAssignment;
 
-    /** \brief Show a message when a field performs an in-place FFT. */
+    /** @brief Show a message when a field performs an in-place FFT. */
     bool fftPerformance;
 
-    /** \brief Show a message when a field updates the ghost cells, which happens just before a non-local operation
+    /** @brief Show a message when a field updates the ghost cells, which happens just before a non-local operation
      * (spatial derivatives). */
     bool ghostUpdating;
 
-    /** \brief Show a message when a field's values are changed, and consequentially the ghost-are-stale flag is set. */
+    /** @brief Show a message when a field's values are changed, and consequentially the ghost-are-stale flag is set. */
     bool ghostsStale;
 
-    /** \brief Show a message when memory is allocated. */
+    /** @brief Show a message when memory is allocated. */
     bool allocation;
 
-    /** \brief Show many messages outlining the entire process of confirming Fourier vs. configuration space states of a
+    /** @brief Show many messages outlining the entire process of confirming Fourier vs. configuration space states of a
      * field. */
     bool spaceConfirmation;
 
-    /** \brief Show many messages outlining the entire process of checking and updating ghost cells. */
+    /** @brief Show many messages outlining the entire process of checking and updating ghost cells. */
     bool ghostConfirmationSteps;
 
-    /** \brief Open Pandora's box. */
+    /** @brief Open Pandora's box. */
     void setAllOn()
     {
       fieldAssignment = true;
@@ -61,7 +61,7 @@ namespace TempLat
       ghostConfirmationSteps = true;
     }
 
-    /** \brief Close Pandora's box. */
+    /** @brief Close Pandora's box. */
     void setAllOff()
     {
       fieldAssignment = false;

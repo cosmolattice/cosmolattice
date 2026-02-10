@@ -22,7 +22,7 @@ namespace TempLat
   /** @brief Extra namespace for expression template algebra, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which adds two getters.
+    /** @brief A class which adds two getters.
      * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
      *
      * Unit test: make test-multiply
@@ -48,7 +48,7 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return "+"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mT, other) + GetDeriv::get(mR, other);
@@ -63,21 +63,21 @@ namespace TempLat
     return Operators::Addition<R, T>(r, t);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION auto operator+(const ZeroType a, const ZeroType b) { return ZeroType(); }
 
-  /** \brief Specialize for possible half input! */
+  /** @brief Specialize for possible half input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType operator+(const HalfType a, const HalfType b) { return OneType(); }
 
-  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
+  /** @brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires(!std::is_same<T, ZeroType>::value)
   DEVICE_FORCEINLINE_FUNCTION T operator+(const ZeroType a, const T b)
   {
     return b;
   }
-  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
+  /** @brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires(!std::is_same<T, ZeroType>::value)
   DEVICE_FORCEINLINE_FUNCTION T operator+(const T b, const ZeroType a)
@@ -86,7 +86,7 @@ namespace TempLat
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct AddTester {
     static inline void Test(TDDAssertion &tdd);
   };

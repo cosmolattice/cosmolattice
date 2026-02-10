@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which unpack the return type of a complex type.
+  /** @brief A class which unpack the return type of a complex type.
    *
    * Unit test: make test-complexgetgetreturntype
    **/

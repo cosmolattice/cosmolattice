@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief concept to detect if the haseval method has been defined.
+  /** @brief concept to detect if the haseval method has been defined.
    *
    * Unit test: make test-haseval
    **/

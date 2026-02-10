@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which returns the own type of its template parameter.
+  /** @brief A class which returns the own type of its template parameter.
    *
    *
    * Unit test: make test-id

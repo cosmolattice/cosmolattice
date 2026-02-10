@@ -16,7 +16,7 @@
 namespace TempLat
 {
   MakeException(RandomGaussianWrongCallOrderException);
-  /** \brief A gaussian random variable. Is aware of its own state and counts the number of values that have been
+  /** @brief A gaussian random variable. Is aware of its own state and counts the number of values that have been
    *returned.
    *
    * Unit test: make test-randomgaussian

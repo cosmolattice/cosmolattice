@@ -15,7 +15,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which takes a std::vector<RadialProjectionSingleBinAndValue<T>> and rebins it into
+  /** @brief A class which takes a std::vector<RadialProjectionSingleBinAndValue<T>> and rebins it into
    *  a smaller number of bins.
    *
    * Unit test: make test-radialprojectionrebinner
@@ -50,7 +50,7 @@ namespace TempLat
     }
 
   private:
-    /** \brief Only one static method. No instantiation. */
+    /** @brief Only one static method. No instantiation. */
     RadialProjectionRebinner() {}
 
   public:

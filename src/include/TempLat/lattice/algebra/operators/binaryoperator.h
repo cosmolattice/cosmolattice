@@ -98,10 +98,10 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return HasKIR<R> ? GetKIR::getKIR(mR) : (HasKIR<T> ? GetKIR::getKIR(mT) : 1.); }
 
-    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const = 0;
 
-    /** \brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
+    /** @brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
      * OP is * or whatever), this toString method does all the work for you. */
     std::string toString() const
     {

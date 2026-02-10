@@ -24,7 +24,7 @@ namespace TempLat
   // https://www.justsoftwaresolutions.co.uk/cplusplus/getting-tuple-elements-with-runtime-index.html
   // seems hardly compatible with indexed fields though.
 
-  /** \brief A class which implements collections of object which are assignable.
+  /** @brief A class which implements collections of object which are assignable.
    *
    *
    * Unit test: make test-assignablefieldcollection

@@ -15,14 +15,14 @@ namespace TempLat
 {
   MakeException(TranspositionMapOutOfBounds);
 
-  /** \brief A class which maps between two orderings.
+  /** @brief A class which maps between two orderings.
    *
    * Unit test: make test-transpositionmap
    **/
   template <size_t NDim> class TranspositionMap
   {
   public:
-    /** \brief Default constructor: untransposed, both maps are a linear range. */
+    /** @brief Default constructor: untransposed, both maps are a linear range. */
     TranspositionMap() : mFromAtoB{}, mFromBtoA{}
     {
       for (uint i = 0; i < NDim; ++i) {
@@ -38,7 +38,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t getInverse(ptrdiff_t index) const { return mFromBtoA[index]; }
 
-    /** \brief Provide your forward mapping, which will be the new output of getForward. */
+    /** @brief Provide your forward mapping, which will be the new output of getForward. */
     void setMap(const device::IdxArray<NDim> &input)
     {
       for (size_t i = 0; i < NDim; ++i)

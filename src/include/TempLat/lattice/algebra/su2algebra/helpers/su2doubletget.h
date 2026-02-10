@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which return the SU2DouletGet method.
+  /** @brief A class which return the SU2DouletGet method.
    *
    * Unit test: make test-su2doubletget
    **/

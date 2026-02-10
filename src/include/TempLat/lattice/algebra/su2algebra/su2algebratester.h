@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class to test the su2 algebra.
+  /** @brief A class to test the su2 algebra.
    *
    *
    * Unit test: make test-su2algebratester

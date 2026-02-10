@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which holds the stacktrace to the point where it was
+  /** @brief A class which holds the stacktrace to the point where it was
    * instantiated.
    *
    *

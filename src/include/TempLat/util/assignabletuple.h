@@ -17,7 +17,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which makes tuple out of things that have an operator equal. Dispatch the equal.
+  /** @brief A class which makes tuple out of things that have an operator equal. Dispatch the equal.
    *
    *
    * Unit test: make test-assignabletuple

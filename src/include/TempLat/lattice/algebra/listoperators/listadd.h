@@ -17,7 +17,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which adds two getters. Holds the expression, only evaluates for a single element when you call
+  /** @brief A class which adds two getters. Holds the expression, only evaluates for a single element when you call
    *Multiply::get(pIterCoords).
    *
    * Unit test: make test-multiply
@@ -41,7 +41,7 @@ namespace TempLat
     static const size_t size = static_max<tuple_size<R>::value, tuple_size<T>::value>::value;
   };
 
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct ListAddTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

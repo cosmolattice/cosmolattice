@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief Top-level interface for parafaft FFT backend.
+  /** @brief Top-level interface for parafaft FFT backend.
    *
    * Parafaft uses pencil decomposition to parallelize FFTs across D-1 dimensions.
    * For 3D, this means 2D parallelization (same as PFFT), but using MPI_Alltoallw

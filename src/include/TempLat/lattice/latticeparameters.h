@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which holds physical paramteters of the lattice. Note that dx and kIr are equivalent only for
+  /** @brief A class which holds physical paramteters of the lattice. Note that dx and kIr are equivalent only for
    *isotropic lattices. For anisotropic, only one of th e two should be specified.
    *
    *

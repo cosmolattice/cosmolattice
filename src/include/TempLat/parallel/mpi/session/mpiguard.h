@@ -17,7 +17,7 @@ namespace TempLat
 
   MakeException(MPIGuardInstantiationException);
 
-  /** \brief A class which guards intialization and finalization of pure MPI.
+  /** @brief A class which guards intialization and finalization of pure MPI.
    * Only used by MPIGuard, which manually calls its destructor, but which also holds the FFTW and PFFT guards.
    *
    * No public methods. What?!?? Yes. We made MPIGuard a friend,
@@ -112,7 +112,7 @@ namespace TempLat
     int instanceProtectionKey;
     bool mVerbose;
 
-    /** \brief A sub-group of all the processes, which is local on the same node. This can be used to compute the best
+    /** @brief A sub-group of all the processes, which is local on the same node. This can be used to compute the best
      number of threads per process. By default we are greedy: use all the cpu power on a node. Set arguments upon launch
      to avoid that. (Not implemented yet.) */
 #ifndef NOMPI

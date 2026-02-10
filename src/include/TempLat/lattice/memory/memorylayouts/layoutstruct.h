@@ -21,7 +21,7 @@ namespace TempLat
   MakeException(LayoutStructWrongSizeException);
   MakeException(LayoutStructOutOfBoundsExcetion);
 
-  /** \brief Holds the result of FFTLibraryInterface::computeLocalSizes.
+  /** @brief Holds the result of FFTLibraryInterface::computeLocalSizes.
    *  In itself, has practically no logic, only forwards all the getters and setters to their respective owners.
    *  See LayoutStructGlobal, LayoutStructLocal and LayoutStructLocalTransposed.
    *
@@ -47,7 +47,7 @@ namespace TempLat
     {
     }
 
-    /** \brief An almost constructor: return a new instance which has a default global FFT layout */
+    /** @brief An almost constructor: return a new instance which has a default global FFT layout */
     static LayoutStruct<NDim> createGlobalFFTLayout(const device::IdxArray<NDim> &initNGrid)
     {
       LayoutStruct result(initNGrid, 0);
@@ -64,7 +64,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     bool isTransposed() const { return getTransposed().isTransposed(); }
 
-    /** \brief local index in some dimension of the memory layout, goes into its corresponding spatial dimension
+    /** @brief local index in some dimension of the memory layout, goes into its corresponding spatial dimension
      *  in the target memory. No bounds checking!
      */
     template <typename Container, typename... IDX>
@@ -171,7 +171,7 @@ namespace TempLat
 
   private:
     LayoutStructLocalTransposed<NDim> mTransposed;
-    /** \brief signed wavenumber and coordinate x = index > n/2 ? index - n : index. Need to provide this n/2 for each
+    /** @brief signed wavenumber and coordinate x = index > n/2 ? index - n : index. Need to provide this n/2 for each
      * dimensions. */
     HermitianPartners<NDim> mHermitianPartners;
     ptrdiff_t mNGhosts;

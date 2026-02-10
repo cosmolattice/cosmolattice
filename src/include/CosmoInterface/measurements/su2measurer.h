@@ -19,8 +19,7 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which contains standard measurements for the SU2 gauge fields.
+  /** @brief A class which contains standard measurements for the SU2 gauge fields.
    *
    **/
   template <typename T> class SU2Measurer

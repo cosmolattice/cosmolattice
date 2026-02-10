@@ -42,7 +42,7 @@ namespace TempLat
         t(idx).confirmSpace(layout, spaceType);
       };
 
-  /** \brief a mini tester class... */
+  /** @brief a mini tester class... */
   struct HasSpaceConfirmationMethodsTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

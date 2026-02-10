@@ -14,12 +14,11 @@
 namespace TempLat
 {
 
-  /** \brief A class that computes the kernel for the scalar singlets.
+  /** @brief A class that computes the kernel for the scalar singlets.
    *
    *
    * Unit test: make test-scalarkernels
    **/
-
   class ScalarSingletKernels
   {
   public:
@@ -44,9 +43,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/kernels/scalarsingletkernels_test.h"
-#endif
 
 #endif

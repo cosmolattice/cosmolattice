@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which holds an MPI_Datatype which is a subarray of
+  /** @brief A class which holds an MPI_Datatype which is a subarray of
    * the lattice, created by MPI_Type_create_subarray. The subarray
    * is the ghost padding of the lattice, in one single dimension.
    *
@@ -24,7 +24,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    /** \brief Constructor
+    /** @brief Constructor
      *  \param jumpsHolder The layout of the memory.
      *  \param dimension The dimension in which to create the array.
      *  \param depth The number of ghost steps at either side of the array.

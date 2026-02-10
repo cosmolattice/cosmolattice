@@ -21,11 +21,9 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which contains measurements of energies and scale factor.
+  /** @brief A class which contains measurements of energies and scale factor.
    *
    **/
-
   template <typename T> class EnergiesMeasurer
   {
   public:

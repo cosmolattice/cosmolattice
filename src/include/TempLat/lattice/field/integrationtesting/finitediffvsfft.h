@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief Possibly the ultimate test for the implementations of
+  /** @brief Possibly the ultimate test for the implementations of
    *   various spatial derivatives: compare finite difference results
    *   with FFT results.
    *

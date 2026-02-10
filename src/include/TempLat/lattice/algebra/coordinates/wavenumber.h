@@ -20,7 +20,7 @@ namespace TempLat
 {
   MakeException(WaveNumberWrongSpaceConfirmation);
 
-  /** \brief A class which allows for accessing (unscaled, dimensionless, index-valued) various
+  /** @brief A class which allows for accessing (unscaled, dimensionless, index-valued) various
    *  expressions involving the fourier coordinates.
    *
    * Unit test: make test-wavenumber

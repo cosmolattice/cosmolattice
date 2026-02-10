@@ -14,10 +14,10 @@
 namespace TempLat
 {
 
-  /** \brief Recursion stopper for helper function for unpacking the variadic arguments of the Exception constructor. */
+  /** @brief Recursion stopper for helper function for unpacking the variadic arguments of the Exception constructor. */
   inline void ExceptionArgumentUnpacker(std::stringstream &stream) { /* stop the recursion. */ }
 
-  /** \brief Helper function for unpacking the variadic arguments of the Exception constructor. */
+  /** @brief Helper function for unpacking the variadic arguments of the Exception constructor. */
   template <typename T, typename... Args>
   inline void ExceptionArgumentUnpacker(std::stringstream &stream, T t, Args... args)
   {
@@ -25,7 +25,7 @@ namespace TempLat
     ExceptionArgumentUnpacker(stream, args...);
   }
 
-  /** \brief An exception which takes variadic arguments, all recorded into an error message.
+  /** @brief An exception which takes variadic arguments, all recorded into an error message.
    *
    * Unit test: make test-exception
    */

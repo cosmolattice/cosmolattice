@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief Enable use of this operator without prefixing std:: or TempLat::.
+  /** @brief Enable use of this operator without prefixing std:: or TempLat::.
    * The compiler can distinguish between them. */
   using device::conj;
 
@@ -33,7 +33,7 @@ namespace TempLat
       DEVICE_FUNCTION
       ComplexConjugate(const R &a) : UnaryOperator<R>(a) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -41,12 +41,12 @@ namespace TempLat
         return conj(GetValue::get(mR, idx...));
       }
 
-      /** \brief Complex conjugation and copmlex differentiation aren't friends. */
+      /** @brief Complex conjugation and copmlex differentiation aren't friends. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other) = delete;
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define multiplication operation to the world. */
+  /** @brief Exposing our newly define multiplication operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
   DEVICE_FORCEINLINE_FUNCTION auto conj(const T &a)
@@ -55,7 +55,7 @@ namespace TempLat
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct ComplexConjugateTester {
     static inline void Test(TDDAssertion &tdd);
   };

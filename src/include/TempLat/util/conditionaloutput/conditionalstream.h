@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief  Because of MPI, we often only want to stream if we are root, etc. To simplify the notation,
+  /** @brief  Because of MPI, we often only want to stream if we are root, etc. To simplify the notation,
    * and simply always be able to write output << ..., we create a wrapper that accepts
    * input with operator<<, and does the 'if'-ing inside that operator.
    *

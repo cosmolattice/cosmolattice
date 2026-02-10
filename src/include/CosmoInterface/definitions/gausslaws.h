@@ -16,12 +16,10 @@
 
 namespace TempLat
 {
-
-  /** \brief A class that checks the preservation of the Gauss constraints, for both U1 and SU2 gauge sectors.
+  /** @brief A class that checks the preservation of the Gauss constraints, for both U1 and SU2 gauge sectors.
    *
    *
    **/
-
   class GaussLaws
   {
   public:
@@ -80,9 +78,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/gausslaws_test.h"
-#endif
 
 #endif

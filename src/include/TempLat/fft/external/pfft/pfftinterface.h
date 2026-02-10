@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements all of FFTLibraryInterface. The larger methods are implemented in classes from
+  /** @brief A class which implements all of FFTLibraryInterface. The larger methods are implemented in classes from
    *which we inherit, in a linear chain: PFFTMemoryLayout and PFFTPlanner.
    *
    *

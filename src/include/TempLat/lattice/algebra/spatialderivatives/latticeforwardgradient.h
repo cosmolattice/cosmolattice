@@ -25,7 +25,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements the forward gradient.
+  /** @brief A class which implements the forward gradient.
    *
    *
    * Unit test: make test-forwardgradientlocal

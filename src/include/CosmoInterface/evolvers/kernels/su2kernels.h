@@ -16,13 +16,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class that computes the kernel for the SU2 gauge fields.
+  /** @brief A class that computes the kernel for the SU2 gauge fields.
    *
    *
    * Unit test: make test-su2kernels
    **/
-
   class SU2Kernels
   {
   public:
@@ -64,11 +62,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/kernels/su2kernels_test.h"
-#endif
 
 #endif

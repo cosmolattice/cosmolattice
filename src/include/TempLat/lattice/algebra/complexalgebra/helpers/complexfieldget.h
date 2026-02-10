@@ -17,7 +17,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which get real and imaginary part.
+  /** @brief A class which get real and imaginary part.
    *
    *
    * Unit test: make test-complexfieldget

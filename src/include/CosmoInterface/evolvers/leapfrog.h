@@ -15,11 +15,10 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements a leapfrog scheme to evolve  scalar singlets, complex scalars, SU2 doublets, and
+  /** @brief A class which implements a leapfrog scheme to evolve  scalar singlets, complex scalars, SU2 doublets, and
    * U(1) and SU(2) gauge fields.
    *
    **/
-
   template <class T> class LeapFrog
   {
   public:
@@ -38,7 +37,6 @@ namespace TempLat
 
     template <class Model> void evolve(Model &model, T tMinust0)
     {
-
       /*
        * Leapfrog has momenta living at half-integer steps
        * and coordinates at integer steps.

@@ -24,7 +24,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which selects the appropriate malloc and free functions for the lattice memory. Templated for
+  /** @brief A class which selects the appropriate malloc and free functions for the lattice memory. Templated for
    *double and float. Preprocessor flags for FFTW, FFTW_MPI or PFFT. If you want another memory alignment, just change
    *it here globally. We can't be bothered to implement the templating for the various allocators that the libraries all
    *pass. In the end they all only care about the same thing, alignment of the first entry with an x-sized block, for
@@ -57,7 +57,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    /** \brief private constructor: no one should instantiate this thing. */
+    /** @brief private constructor: no one should instantiate this thing. */
     FFTMallocFree() {}
 
   public:

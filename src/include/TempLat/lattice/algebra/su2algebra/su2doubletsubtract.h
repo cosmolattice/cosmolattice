@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implement the Subtraction between two su2 doublets.
+  /** @brief A class which implement the Subtraction between two su2 doublets.
    *
    *
    * Unit test: make test-su2doubletsubtract

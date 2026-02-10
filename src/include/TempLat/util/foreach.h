@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which
+  /** @brief A class which
    *
    *
    * A tuple friendly for_each. From https://codereview.stackexchange.com/a/163802

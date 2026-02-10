@@ -17,7 +17,7 @@ namespace TempLat
     { t.getJumps() } -> std::convertible_to<JumpsHolder<NDim>>;
   };
 
-  /** \brief a mini tester class... */
+  /** @brief a mini tester class... */
   struct HasJumpMethodsTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

@@ -16,7 +16,7 @@ namespace TempLat
 {
   MakeException(LayoutStructLocalSizeException);
 
-  /** \brief A class which
+  /** @brief A class which
    *  localSizes: the local size in each dimension.
    *  localStart: the coordinate of the first entry in local memory, in the global coordinate space.
    *
@@ -62,7 +62,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     const device::IdxArray<NDim> &getLocalStarts() const { return mLocalStarts; }
 
-    /** \brief For both configuration and fourier space, the index values are not the same as coordinate
+    /** @brief For both configuration and fourier space, the index values are not the same as coordinate
      *  values. Assuming periodic boundary conditions, we get that always c = i > half ? i - N : i;
      *  Don't mix up the arguments! Does not do transposition, so input pre-transposed dimension!
      */
@@ -72,7 +72,7 @@ namespace TempLat
       return mGlobal.memoryIndexToSpatialCoordinate(index + mLocalStarts[dimension] - mNGhosts, dimension);
     }
 
-    /** \brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
+    /** @brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
     DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
     {

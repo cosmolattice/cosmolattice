@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which
+  /** @brief A class which
    * Class to store your constant. Some basic constants here, inherit from here and make a new class
    * in your project if you want more.
    *

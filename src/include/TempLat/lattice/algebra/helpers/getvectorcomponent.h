@@ -17,7 +17,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which returns one component of a vector as an object, keeping all fourier and co mechanics
+  /** @brief A class which returns one component of a vector as an object, keeping all fourier and co mechanics
    *consistent. Mostly useful for wave numbers.
    *
    * Unit test: make test-getvectorcomponent

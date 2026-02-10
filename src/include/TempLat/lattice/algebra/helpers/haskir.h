@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A concept to detect if the getKIR method is defined.
+  /** @brief A concept to detect if the getKIR method is defined.
    *
    * Unit test: make test-haskir
    **/

@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the SU2 Subtraction.
+  /** @brief A class which implements the SU2 Subtraction.
    *
    * Unit test: make test-su2sum
    **/

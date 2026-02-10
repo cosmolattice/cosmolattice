@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which shifts a doublet in space.
+  /** @brief A class which shifts a doublet in space.
    *
    *
    * Unit test: make test-su2shift

@@ -17,7 +17,7 @@ namespace TempLat
   MakeException(JumpsHolderException);
   MakeException(DifferentJumpsHolderException);
 
-  /** \brief A class which holds jumps for one particular layout of the memory.
+  /** @brief A class which holds jumps for one particular layout of the memory.
    *
    * Unit test: make test-jumpsholder
    **/
@@ -26,10 +26,10 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    /** \brief Default constructor is only there to have it explicitly... */
+    /** @brief Default constructor is only there to have it explicitly... */
     JumpsHolder() : mLayout({1}, 0), mIsEmpty(true) {}
 
-    /** \brief Constructor needs to know the following:
+    /** @brief Constructor needs to know the following:
      *  \param mSizesInMemory The memory that should be iterated over.
      *  \param padding The padding on each end of each dimension. Padding is not in principle iterated over, but matters
      * hugely for the jumps, of course.
@@ -70,7 +70,7 @@ namespace TempLat
 
     inline const auto &getJumpsInMemoryOrder() const { return mJumps; }
 
-    /** \brief Compute the total jump for a multidimensional offset/ shift vector: these take account for possible
+    /** @brief Compute the total jump for a multidimensional offset/ shift vector: these take account for possible
      * transposition. Input is expected to be in the space of the logical problem, NOT necessarily the ordering of
      * memory. */
     inline ptrdiff_t getJump(const device::IdxArray<NDim> &shifts) const
@@ -86,7 +86,7 @@ namespace TempLat
       return result;
     }
 
-    /** \brief Compute the jump to a logical space coordinate (which can be negative),
+    /** @brief Compute the jump to a logical space coordinate (which can be negative),
      *  not from a memory index vector. Bounds checking is done: returns a negative
      *  offset if the requested coordinates are not in our space. No exception thrown.
      *  "position" is the global coordinate in the lattice, not the mpi-local one.
@@ -155,14 +155,14 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    /** \brief The layout that we are jumping on, for compact referencing... */
+    /** @brief The layout that we are jumping on, for compact referencing... */
     LayoutStruct<NDim> mLayout;
     device::IdxArray<NDim> mSizesInMemory;
     device::array<device::array<ptrdiff_t, 2u>, NDim> mPadding;
-    /** \brief If there is padding, the first owned iterable memory is at some distance from the start of the memory
+    /** @brief If there is padding, the first owned iterable memory is at some distance from the start of the memory
      * block */
     ptrdiff_t mJumpToIteratableStart;
-    /** \brief The final jumps in each direction. Add this to your (typed!) pointer, and you end up one step up or down
+    /** @brief The final jumps in each direction. Add this to your (typed!) pointer, and you end up one step up or down
      * in that dimension. */
     device::IdxArray<NDim> mJumps;
 

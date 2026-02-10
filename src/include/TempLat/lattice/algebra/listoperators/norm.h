@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes the norm of a list.
+  /** @brief A class which computes the norm of a list.
    *
    * Unit test: make test-norm
    **/

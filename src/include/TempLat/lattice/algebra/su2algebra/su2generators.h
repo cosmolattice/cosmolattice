@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the i*sigma matrices
+  /** @brief A class which implements the i*sigma matrices
    *
    * Unit test: make test-paulimatrices
    **/

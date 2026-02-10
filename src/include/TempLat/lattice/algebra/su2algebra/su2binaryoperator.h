@@ -21,7 +21,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements basic features of su2 binary operators.
+  /** @brief A class which implements basic features of su2 binary operators.
    *
    *
    * Unit test: make test-su2binaryoperator
@@ -39,10 +39,10 @@ namespace TempLat
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
-    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return ""; };
 
-    /** \brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
+    /** @brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
      * OP is * or whatever), this toString method does all the work for you. */
     std::string toString() const
     {

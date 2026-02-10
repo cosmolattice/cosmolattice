@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which aaplies vectorially the automatic derivative. Not used anywhere.
+  /** @brief A class which aaplies vectorially the automatic derivative. Not used anywhere.
    *
    *
    * Unit test: make test-derivatives

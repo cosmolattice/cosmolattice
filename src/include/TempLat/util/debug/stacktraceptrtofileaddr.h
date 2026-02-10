@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief Posix's backtrace gives current memory addresses, which are good for runtime business, but not useful for
+  /** @brief Posix's backtrace gives current memory addresses, which are good for runtime business, but not useful for
    finding source code locations. Need to convert that to file addresses, using this offset. */
   inline ptrdiff_t SetStacktracePtrToFileAddress()
   {

@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes centered covariant derivatives.
+  /** @brief A class which computes centered covariant derivatives.
    *
    *
    * Unit test: make test-centeredcovariantderivative

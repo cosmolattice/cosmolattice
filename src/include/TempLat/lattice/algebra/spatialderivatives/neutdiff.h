@@ -20,7 +20,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements neutral finite differences.
+  /** @brief A class which implements neutral finite differences.
    *
    *
    * Unit test: make test-neutdiff

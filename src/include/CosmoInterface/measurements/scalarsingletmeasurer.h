@@ -16,8 +16,7 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which contains standard measurements for scalar singlets.
+  /** @brief A class which contains standard measurements for scalar singlets.
    *
    **/
   template <typename T> class ScalarSingletMeasurer

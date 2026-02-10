@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which understands three layouts of the memory for one MPI task in a global exact hypercube.
+  /** @brief A class which understands three layouts of the memory for one MPI task in a global exact hypercube.
    * - receives the pre-FFT configuration space layout (usually padded in the last dimension to hold 2 * (N / 2 + 1 )
    *entries.
    * - receives the Fourier space layout (some fraction of the global N x N x ... x (N / 2 + 1) )
@@ -111,14 +111,14 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     FFTLayoutStruct<NDim> mFFTLayout;
     LayoutStruct<NDim> mConfigSpaceWithGhosts_layout;
-    /** \brief Using ptrdiff_t's even though these numbers are positive definite. We want to be safe in subtractions. */
+    /** @brief Using ptrdiff_t's even though these numbers are positive definite. We want to be safe in subtractions. */
     device::IdxArray<NDim> mNGridPoints;
     ptrdiff_t mNGhostCells;
     ptrdiff_t mMemUsedFFTBothSpaces;
     ptrdiff_t mMemUsedConfigGhostSpace;
     ptrdiff_t mNecessaryMemoryAllocation;
 
-    /** \brief The padding needed in configuration space when being passed to perform an FFT to Fourier space. */
+    /** @brief The padding needed in configuration space when being passed to perform an FFT to Fourier space. */
     device::IdxArray<NDim> mFFTConfigSpacePadding;
 
     JumpsHolder<NDim> mJumps_fftConfigSpace;

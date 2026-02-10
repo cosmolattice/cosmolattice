@@ -22,13 +22,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which computes the componentes of the Anisotropic Tensor source of Gravitational Waves.
+  /** @brief A class which computes the componentes of the Anisotropic Tensor source of Gravitational Waves.
    *
    *
    * Unit test: make test-PITensor
    **/
-
   class PITensor
   {
   public:
@@ -92,16 +90,12 @@ namespace TempLat
     }
   };
 
-  struct PITensorTest {
 #ifdef TEMPLATTEST
+  struct PITensorTest {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/PITensor_test.h"
-#endif
 
 #endif

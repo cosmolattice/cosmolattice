@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which overloads tuple_size for the fcn composite objects.
+  /** @brief A class which overloads tuple_size for the fcn composite objects.
    *
    *
    * Unit test: make test-tuple_size

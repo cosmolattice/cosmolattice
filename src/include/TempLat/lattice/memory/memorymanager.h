@@ -18,7 +18,7 @@ namespace TempLat
 {
   MakeException(MemoryManagerAccessOutOfBounds);
 
-  /** \brief A class which holds a single lattice in memory, and tracks and moves between various ghost states.
+  /** @brief A class which holds a single lattice in memory, and tracks and moves between various ghost states.
    *Templated for the memory type, typically float or double. All the confirm___Space() functions return a ptrdiff_t,
    *which counts the amount of work done. Ignore that, but it is important for testing purposes. NOTE that the memory
    *access operators (T* and operator[]) do NOT verify if memory was allocated.
@@ -223,7 +223,7 @@ namespace TempLat
       mBlock.flagHostMirrorOutdated();
     }
 
-    /** \brief this is the only state the one may need to set from the outside: if a field is updated in the integrator.
+    /** @brief this is the only state the one may need to set from the outside: if a field is updated in the integrator.
      */
     void setGhostsAreStale()
     {
@@ -234,10 +234,10 @@ namespace TempLat
 
     bool areGhostsStale() const { return mGhostStateKeeper.isStale(); }
 
-    /** \brief Check the current state. */
+    /** @brief Check the current state. */
     bool isConfigSpace() const { return mLayoutState.isConfigSpace(); }
 
-    /** \brief Check the current state. */
+    /** @brief Check the current state. */
     bool isFourierSpace() const { return mLayoutState.isFourierSpace(); }
 
     std::string getName() const { return mName; }

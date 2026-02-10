@@ -13,8 +13,7 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which implements common measurement to all fields, like mean and variance, in a standardized
+  /** @brief A class which implements common measurement to all fields, like mean and variance, in a standardized
    * format.
    *
    *

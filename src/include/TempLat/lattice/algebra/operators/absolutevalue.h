@@ -20,13 +20,13 @@
 
 namespace TempLat
 {
-  /** \brief Enable use of this operator without prefixing std:: or TempLat::.
+  /** @brief Enable use of this operator without prefixing std:: or TempLat::.
    * The compiler can distinguish between them. */
   using device::abs;
 
   namespace Operators
   {
-    /** \brief A class which takes the absolute value of a given expression.
+    /** @brief A class which takes the absolute value of a given expression.
      *
      * Unit test: make test-multiply
      **/
@@ -56,7 +56,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly defined absolute value operation to the world. */
+  /** @brief Exposing our newly defined absolute value operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
   DEVICE_FORCEINLINE_FUNCTION auto abs(const T &a)
@@ -65,7 +65,7 @@ namespace TempLat
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct AbsoluteValueTester {
     static inline void Test(TDDAssertion &tdd);
   };

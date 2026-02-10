@@ -14,13 +14,13 @@
 
 namespace TempLat
 {
-  /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
+  /** @brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
    * them. */
   using device::sqrt;
 
   namespace Operators
   {
-    /** \brief A function which applies a square root, by forwarding to power(x, 0.5), with 0.5 templated explicitly.
+    /** @brief A function which applies a square root, by forwarding to power(x, 0.5), with 0.5 templated explicitly.
      * Holds the expression, only evaluates for a single element when you call SquareRoot::get(pIterCoords).
      *
      * Unit test: make test-multiply
@@ -33,7 +33,7 @@ namespace TempLat
       SafeSqrt(const R &pR) : UnaryOperator<R>(pR) {}
 
       /**
-       * \brief Check  if numerator if roughly zero, don't do the division.
+       * @brief Check  if numerator if roughly zero, don't do the division.
        *  Useful for spectrum fluctuation, when normalising with a cutoff
        **/
       template <typename... IDX>
@@ -47,7 +47,7 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return "safe_sqrt"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION void d(const U &other) = delete;
     };
   } // namespace Operators
@@ -66,16 +66,16 @@ namespace TempLat
     return Operators::Power<T, HalfType>(a, HalfType());
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType sqrt(ZeroType a) { return a; }
 
-  /** \brief Specialize for possible unit input! */
+  /** @brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType sqrt(OneType a) { return a; }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct SqrtTester {
     static inline void Test(TDDAssertion &tdd);
   };

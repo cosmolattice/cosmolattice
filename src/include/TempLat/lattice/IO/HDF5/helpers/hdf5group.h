@@ -16,7 +16,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which overloads hdf5 groups.
+  /** @brief A class which overloads hdf5 groups.
    *
    *
    * Unit test: make test-hdf5group

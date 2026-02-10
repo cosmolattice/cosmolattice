@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which only spits out to TTY if enabled == true.
+  /** @brief A class which only spits out to TTY if enabled == true.
    *
    *
    * Unit test: make test-conditionalsayshort

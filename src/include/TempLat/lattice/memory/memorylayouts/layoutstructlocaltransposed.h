@@ -17,7 +17,7 @@ namespace TempLat
 
   MakeException(LayoutStructLocalTransposedSizeException);
 
-  /** \brief
+  /** @brief
    *  transitionMap: a map of the dimensions, for transposition in memory. E.g. {0, 1, 2, 3} is untransposed 4d, {1, 0,
    *2, 3} is FFTW transposed. In other words, the entries in transitionMap are in line with the entries in
    *localStarts/-Sizes, and their value indicates the physical-space dimension of that entry.
@@ -76,13 +76,13 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     const device::IdxArray<NDim> &getSizesInMemory() const { return mSizesInMemory; }
 
-    /** \brief A dictionary for return values for memory to coordinate mapping. */
+    /** @brief A dictionary for return values for memory to coordinate mapping. */
     struct CoordinateMapping {
       ptrdiff_t atIndex, withValue;
       bool owned;
     };
 
-    /** \brief With transposition, go from actual memory index in memoryDimension to spatial coordinate value at spatial
+    /** @brief With transposition, go from actual memory index in memoryDimension to spatial coordinate value at spatial
      * dimension. */
     DEVICE_FORCEINLINE_FUNCTION
     CoordinateMapping getSpatialLocationFromMemoryIndex(ptrdiff_t index, ptrdiff_t memoryDimension) const
@@ -95,7 +95,7 @@ namespace TempLat
       return result;
     }
 
-    /** \brief With transposition, go from spatial coordinate value at spatial dimension to actual memory index in
+    /** @brief With transposition, go from spatial coordinate value at spatial dimension to actual memory index in
      * memoryDimension. */
     DEVICE_FORCEINLINE_FUNCTION
     CoordinateMapping getMemoryIndexFromSpatialLocation(ptrdiff_t position, ptrdiff_t spatialDimension) const

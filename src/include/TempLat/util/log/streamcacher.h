@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief A container that sits at the receiving end of a stream,
+  /** @brief A container that sits at the receiving end of a stream,
    *     and spits out everything to the mutexed std::cerr only
    *     when it is destructed -> that the end of the line;.
    *

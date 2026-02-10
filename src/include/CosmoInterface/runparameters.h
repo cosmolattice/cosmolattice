@@ -16,16 +16,13 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which contains the parameters useful to run a simulation but not model specific (dt for example).
-   *
-   *
-   *
-   **/
-
   MakeException(RunParametersMissing);
   MakeException(RunParametersInconsistent);
 
+  /** @brief A class which contains the parameters useful to run a simulation but not model specific (dt for example).
+   *
+   *
+   **/
   template <typename T = double> class RunParameters
   {
   public:
@@ -208,9 +205,6 @@ namespace TempLat
       return ret;
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
@@ -220,9 +214,5 @@ namespace TempLat
   template <typename R> auto createParams(int argc, char *argv[]) { return std::make_shared<R>(argc, argv); }
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/runparameters_test.h"
-#endif
 
 #endif

@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which treats a complex field as an object in fourier space.
+  /** @brief A class which treats a complex field as an object in fourier space.
    *
    * Unit test: make test-asfourier
    **/

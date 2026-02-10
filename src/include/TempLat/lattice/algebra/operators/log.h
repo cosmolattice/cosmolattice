@@ -21,7 +21,7 @@ namespace TempLat
    * them. */
   using device::log;
 
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
     /** @brief Get the logarithm of a given expression.
@@ -37,7 +37,7 @@ namespace TempLat
       DEVICE_FUNCTION
       Log(const T &a) : UnaryOperator<T>(a) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -45,7 +45,7 @@ namespace TempLat
         return log(GetValue::get(mR, idx...));
       }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         /* not using pow for 1/mInstanceT because pow imports us, log.h */

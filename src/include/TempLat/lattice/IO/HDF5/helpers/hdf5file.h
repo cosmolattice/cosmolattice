@@ -17,7 +17,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which overloads c hdf5 file interface.
+  /** @brief A class which overloads c hdf5 file interface.
    *
    *
    * Unit test: make test-hdf5file

@@ -22,7 +22,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes the gradient square norm.
+  /** @brief A class which computes the gradient square norm.
    *
    *
    * Unit test: make test-normgradientsquare

@@ -22,7 +22,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the laplacian.
+  /** @brief A class which implements the laplacian.
    *
    *
    * Unit test: make test-laplacianlocal
@@ -80,7 +80,7 @@ namespace TempLat
       });
     }
 
-    /** \brief Symbolic derivatives. */
+    /** @brief Symbolic derivatives. */
     template <typename S> DEVICE_FORCEINLINE_FUNCTION auto d(const S &other)
     {
       return LatticeLaplacian<NDim, R>(GetDeriv::get(mR, other));

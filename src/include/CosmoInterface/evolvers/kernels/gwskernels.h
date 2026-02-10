@@ -15,12 +15,11 @@
 namespace TempLat
 {
 
-  /** \brief A class which stores the kernel for the GWs fields.
+  /** @brief A class which stores the kernel for the GWs fields.
    *
    *
    * Unit test: make test-gwskernels
    **/
-
   class GWsKernels
   {
   public:
@@ -44,9 +43,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/kernels/gwskernels_test.h"
-#endif
 
 #endif

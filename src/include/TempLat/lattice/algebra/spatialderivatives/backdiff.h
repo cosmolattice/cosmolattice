@@ -20,7 +20,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements backward finite differences.
+  /** @brief A class which implements backward finite differences.
    *
    *
    * Unit test: make test-backdiff

@@ -17,7 +17,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which overloads hdf5 dataset and implement relevant write method.
+  /** @brief A class which overloads hdf5 dataset and implement relevant write method.
    *
    *
    * Unit test: make test-hdf5dataset

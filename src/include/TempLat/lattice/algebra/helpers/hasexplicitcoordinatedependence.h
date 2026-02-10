@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief Enables adapting
+  /** @brief Enables adapting
    *  the coordinates inside a possible shifted view on this
    *  object. This is very expensive, time-wasting, which is
    *  why we want to be able to detect such an explicit
@@ -27,22 +27,22 @@ namespace TempLat
    * Unit test: make test-hasexplicitcoordinatedependence
    **/
 
-  /** \brief Default: no dependence. */
+  /** @brief Default: no dependence. */
   template <class T, class S = std::void_t<>> struct HasExplicitCoordinateDependence : public std::false_type {
   };
 
-  /** \brief Specialization: single object that mentions its explicit coordinate dependence. */
+  /** @brief Specialization: single object that mentions its explicit coordinate dependence. */
   template <class T> struct HasExplicitCoordinateDependence<T, std::void_t<decltype(T::EXPLICITCOORDINATEDEPENDENCE)>> {
     static constexpr bool value = T::EXPLICITCOORDINATEDEPENDENCE;
   };
 
-  /** \brief Specialization: template object (Getter) whose enclosed class might mention its explicit coordinate
+  /** @brief Specialization: template object (Getter) whose enclosed class might mention its explicit coordinate
    * dependence. */
   template <template <typename SS> class T, typename S> struct HasExplicitCoordinateDependence<T<S>, std::void_t<>> {
     static constexpr bool value = HasExplicitCoordinateDependence<S>::value;
   };
 
-  /** \brief Specialization: template object (Getter) whose enclosed class might mention its explicit coordinate
+  /** @brief Specialization: template object (Getter) whose enclosed class might mention its explicit coordinate
    * dependence. */
   template <template <typename SS, typename SSS> class T, typename S1, typename S2>
   struct HasExplicitCoordinateDependence<T<S1, S2>, std::void_t<>> {

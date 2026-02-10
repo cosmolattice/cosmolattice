@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which group different features of hdf5 objects. They can all have attributes from example, and are
+  /** @brief A class which group different features of hdf5 objects. They can all have attributes from example, and are
    * all defined by an hid_t.
    *
    *

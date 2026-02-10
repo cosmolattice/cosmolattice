@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which tests some features of the complex fields.
+  /** @brief A class which tests some features of the complex fields.
    *
    * Unit test: make test-complexfieldtester
    **/

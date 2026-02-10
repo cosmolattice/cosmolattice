@@ -25,7 +25,7 @@ namespace TempLat
   using device::atan2;
   namespace Operators
   {
-    /** \brief A class to compute the argument of a complex field.
+    /** @brief A class to compute the argument of a complex field.
      *
      * Unit test: make test-arg
      **/
@@ -42,7 +42,7 @@ namespace TempLat
       DEVICE_FUNCTION
       Arg() : BinaryOperator<R, T>(R(), T()) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -51,7 +51,7 @@ namespace TempLat
         return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
       }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> void d(const U &other) = delete;
 
       virtual std::string operatorString() const override { return "arg"; }

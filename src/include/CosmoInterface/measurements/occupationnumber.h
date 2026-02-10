@@ -18,8 +18,7 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which computes the occupation number.
+  /** @brief A class which computes the occupation number.
    *
    *
    **/

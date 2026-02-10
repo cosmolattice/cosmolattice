@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements the SU2 algebra at the single element level.
+  /** @brief A class which implements the SU2 algebra at the single element level.
    *
    *
    * Unit test: make test-paulivectorsalgebra

@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes an element of the group SU(2).
+  /** @brief A class which computes an element of the group SU(2).
    * By that, we mean that det=1 is imposed as a constrained on the 0th element, like in the SU2Fields.
    *
    * Unit test: make test-su2groupwrapper

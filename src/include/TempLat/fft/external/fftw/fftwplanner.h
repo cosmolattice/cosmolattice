@@ -18,7 +18,7 @@ namespace TempLat
 {
   MakeException(FFTWCompiledWithoutSinglePrecisionSupport);
 
-  /** \brief A class which partially implements FFTLibraryInterface, namely the getPlans parts. That is, here the calls
+  /** @brief A class which partially implements FFTLibraryInterface, namely the getPlans parts. That is, here the calls
    *to the FFTW planner are made.
    *
    * Unit test: make test-fftwplanner
@@ -49,7 +49,7 @@ namespace TempLat
       }
     }
 
-    /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
+    /** @brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
                                                                           const FFTLayoutStruct<NDim> &layout)
@@ -101,9 +101,9 @@ namespace TempLat
       return std::make_shared<FFTWPlanHolder<float>>(group, r2c, c2r);
 #endif
     };
-    /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
+    /** @brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
-    /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
+    /** @brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
                                                                             const FFTLayoutStruct<NDim> &layout)

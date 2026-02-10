@@ -12,7 +12,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which can be used to test random implementation ideas.
+  /** @brief A class which can be used to test random implementation ideas.
    *
    *
    * Unit test: make test-ideatester

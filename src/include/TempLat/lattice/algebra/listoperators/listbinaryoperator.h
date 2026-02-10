@@ -26,7 +26,7 @@
 namespace TempLat
 {
 
-  /** \brief Wrapper for algebra with FieldCollection. Here we define the base methods for checking and everything.
+  /** @brief Wrapper for algebra with FieldCollection. Here we define the base methods for checking and everything.
    * Can use this algebra to implement matrix and vector algebra! IDEA: statically type MATRIXTYPE type and template
    * methods of the type AddMatrixTypes<R,T>::type.
    *
@@ -63,10 +63,10 @@ namespace TempLat
       return a.isEmpty() ? b : a;
     }
 
-    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const = 0;
 
-    /** \brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
+    /** @brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
      * OP is * or whatever), this toString method does all the work for you. */
     template <int N> std::string toString(Tag<N> i) const
     {

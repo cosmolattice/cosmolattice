@@ -16,7 +16,7 @@ namespace TempLat
 {
   namespace Operators
   {
-    /** \brief A class which implements the Dirac delta function.
+    /** @brief A class which implements the Dirac delta function.
      *
      * Unit test: make test-diracdeltafunction
      **/
@@ -28,7 +28,7 @@ namespace TempLat
       DEVICE_FUNCTION
       DiracDeltaFunction(const R &a) : UnaryOperator<R>(a) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -40,7 +40,7 @@ namespace TempLat
         return isZero ? std::numeric_limits<mType>::max() : mType(0);
       }
 
-      /** \brief Does anyone need derivatives of the delta function? If so, go ahead and figure it out. */
+      /** @brief Does anyone need derivatives of the delta function? If so, go ahead and figure it out. */
       template <typename U> void d(const U &other) = delete;
       //            {
       //                return GetDeriv::get(mInstanceT, other) * DiracDelta(mInstanceT);
@@ -50,14 +50,14 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define multiplication operation to the world. */
+  /** @brief Exposing our newly define multiplication operation to the world. */
   template <typename T> DEVICE_FORCEINLINE_FUNCTION Operators::DiracDeltaFunction<T> DiracDelta(const T &a)
   {
     return Operators::DiracDeltaFunction<T>(a);
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct DiracDeltaFunctionTester {
     static inline void Test(TDDAssertion &tdd);
   };

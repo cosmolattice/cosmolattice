@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which return the magnetic field from the gauge potential. Specialise to 3D.
+  /** @brief A class which return the magnetic field from the gauge potential. Specialise to 3D.
    *
    *
    * Unit test: make test-magneticfield

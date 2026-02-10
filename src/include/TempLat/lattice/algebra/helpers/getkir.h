@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A getter for kIR.
+  /** @brief A getter for kIR.
    *
    * Careful, this method works only on types which also have a get method.
    * Need this to deduce the return type.

@@ -14,8 +14,7 @@
 
 namespace TempLat
 {
-
-  /** \brief  A class that contains functions related with initial random fluctuations for scalar fields.
+  /** @brief  A class that contains functions related with initial random fluctuations for scalar fields.
    *
    *  The functions of this class deal with the initial random fluctuations of the scalar singlets.
    *  As described in the documentation, they consist in a sum of left-moving and right-moving waves in momentum space,

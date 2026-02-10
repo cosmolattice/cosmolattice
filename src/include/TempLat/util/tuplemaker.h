@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which make a tuple from a composite object.
+  /** @brief A class which make a tuple from a composite object.
    *
    *
    * Unit test: make test-tuplemaker

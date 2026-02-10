@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which handles output, with convenient savetxt function.
+  /** @brief A class which handles output, with convenient savetxt function.
    *
    *
    * Unit test: make test-outputstream

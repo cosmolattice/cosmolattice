@@ -18,7 +18,7 @@ namespace TempLat
 {
   MakeException(WrongPSType);
 
-  /** \brief A class which computes the power spectrum, with the appropriate rescaling to make it volume independent.
+  /** @brief A class which computes the power spectrum, with the appropriate rescaling to make it volume independent.
    *
    *
    **/

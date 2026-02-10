@@ -20,7 +20,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements forward finite sums.
+  /** @brief A class which implements forward finite sums.
    *
    *
    * Unit test: make test-forwdij

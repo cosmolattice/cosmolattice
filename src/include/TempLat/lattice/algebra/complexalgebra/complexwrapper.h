@@ -17,7 +17,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which wraps two objects as a complex field.
+  /** @brief A class which wraps two objects as a complex field.
    *
    *
    * Unit test: make test-complexwrapper

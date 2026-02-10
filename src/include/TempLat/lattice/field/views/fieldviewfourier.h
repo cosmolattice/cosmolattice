@@ -25,7 +25,7 @@ namespace TempLat
 {
   MakeException(FieldViewFourierWrongSpaceConfirmation);
 
-  /** \brief A view on the field which, when interacted with, assures every time again that things are in
+  /** @brief A view on the field which, when interacted with, assures every time again that things are in
    *   *fourier* space, and possibly the ghost cells are updated when needed.
    *
    *   No public constructor: only the friend class Field can instantiate this view on its own memory.
@@ -33,7 +33,7 @@ namespace TempLat
    * Unit test: make test-fieldviewconfig
    **/
 
-  /** \brief A simple class which provides a get method for basic types.
+  /** @brief A simple class which provides a get method for basic types.
    * Field class
    *
    **/
@@ -130,7 +130,7 @@ namespace TempLat
 
     const auto &getLayout() const { return mToolBox->mLayouts.getFourierSpaceLayout(); }
 
-    /** \brief Getting a single entry from an array. Variadic because the number of dimensions is variable.
+    /** @brief Getting a single entry from an array. Variadic because the number of dimensions is variable.
      *  Use for tests only, never for actual integrations and iterations.
      *  The arguments are in LOCAL SPACE!! Not global. Use true array indices, but not accounting for ghosts.
      *  At the same time, the arguments are in original dimension order, not transposed.

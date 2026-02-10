@@ -20,7 +20,7 @@ namespace TempLat
 {
   enum class HermitianPartnersMode { none, fftw };
 
-  /** \brief An almost abstract class which your FFT library must implement, which maps the redundant entries in
+  /** @brief An almost abstract class which your FFT library must implement, which maps the redundant entries in
    *  the complex representation of the FFT of your real values data, to their hermitian-conjugate partners.
    *
    * Unit test: make test-hermitianpartners
@@ -37,7 +37,7 @@ namespace TempLat
       }
     }
 
-    /** \brief For testing purposes: track which entries in the layout carry redundant information, and if so, what
+    /** @brief For testing purposes: track which entries in the layout carry redundant information, and if so, what
      * information. The default implementation returns HermitianRedundancy::none, which you could (uselessly) use for
      * configuration-space layouts.
      */
@@ -73,7 +73,7 @@ namespace TempLat
       return HermitianRedundancy::none;
     }
 
-    /** \brief If the entry at your input globalCoordinate has a partner which is its hermitian conjugate,
+    /** @brief If the entry at your input globalCoordinate has a partner which is its hermitian conjugate,
      *  then return the coordinates to that partner. Otherwise return the input. No bounds checking!
      */
     template <typename Container1, typename Container2>
@@ -107,7 +107,7 @@ namespace TempLat
       return HermitianRedundancy::positivePartner;
     }
 
-    /** \brief Compute the number of unique / independent real and imaginary floating point values in a memory layout.
+    /** @brief Compute the number of unique / independent real and imaginary floating point values in a memory layout.
      */
     DEVICE_FUNCTION
     HermitianValueAccounting getNumberOfIndependentValues() const

@@ -24,7 +24,7 @@ namespace TempLat
 {
   MakeException(GhostUpdaterException);
 
-  /** \brief A class which updates the ghost cells in our total memory block.
+  /** @brief A class which updates the ghost cells in our total memory block.
    * By having the JumpsHolder, this class knows what is the ghostDepth.
    *
    * Has one public method, update<T>(T* ptr), which, based on JumpsHolder,

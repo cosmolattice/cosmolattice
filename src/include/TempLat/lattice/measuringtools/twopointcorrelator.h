@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which computes the two-point correlation == FFT::C2R(|f_k|^2) of
+  /** @brief A class which computes the two-point correlation == FFT::C2R(|f_k|^2) of
    *   whatever getter you give as input, then projects onto radius
    *   to get a function of distance only.
    *
@@ -64,7 +64,7 @@ namespace TempLat
 #endif
   };
 
-  /** \brief The object to call, PowerSpectrum(yourObject) returns a newly constructed PowerSpectrumBuilder<T>,
+  /** @brief The object to call, PowerSpectrum(yourObject) returns a newly constructed PowerSpectrumBuilder<T>,
    *  on which you can call PowerSpectrumBuilder<T>#measure to get your power spectrum.
    */
   template <size_t NDim, typename T> auto TwoPointCorrelator(T instance)

@@ -21,7 +21,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements basic features of su2 unary operators.
+  /** @brief A class which implements basic features of su2 unary operators.
    *
    *
    * Unit test: make test-su2unaryoperator
@@ -38,10 +38,10 @@ namespace TempLat
     DEVICE_FUNCTION
     SU2UnaryOperator(const SU2UnaryOperator &other) : mR(other.mR) {}
 
-    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return " "; }
 
-    /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
+    /** @brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
      */
     std::string toString() const

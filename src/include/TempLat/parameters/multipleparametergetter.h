@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which returns multiple parameters.
+  /** @brief A class which returns multiple parameters.
    *
    *
    * Unit test: make test-multipleparametergetter

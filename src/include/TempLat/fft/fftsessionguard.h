@@ -3,7 +3,7 @@
 
 namespace TempLat
 {
-  /** \brief Yes, another nested class interface: for the session guard. Your constructor should take care of
+  /** @brief Yes, another nested class interface: for the session guard. Your constructor should take care of
    * your_library_init(), your destructor should take care of your_library_cleanup(). These are the session-wide
    * initialization / finalization calls.
    *

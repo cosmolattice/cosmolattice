@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which defines plaquette operator.
+  /** @brief A class which defines plaquette operator.
    *
    *
    * Unit test: make test-plaquette

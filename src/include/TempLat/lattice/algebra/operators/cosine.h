@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which applies cosine.
+    /** @brief A class which applies cosine.
      *
      * Unit test: make test-multiply
      **/
@@ -38,7 +38,7 @@ namespace TempLat
       DEVICE_FUNCTION
       Cosine(const T &a) : UnaryOperator<T>(a) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -46,7 +46,7 @@ namespace TempLat
         return cos(GetValue::get(mR, idx...));
       }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return -GetDeriv::get(mR, other) * sin(mR);
@@ -56,7 +56,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define exp operation to the world. */
+  /** @brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
   DEVICE_FORCEINLINE_FUNCTION auto cos(T a)
@@ -64,12 +64,12 @@ namespace TempLat
     return Operators::Cosine<T>(a);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType cos(ZeroType a) { return OneType(); }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct CosineTester {
     static inline void Test(TDDAssertion &tdd);
   };

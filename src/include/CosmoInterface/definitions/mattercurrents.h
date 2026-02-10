@@ -11,13 +11,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which computes the matter currents and charge densities of the gauge fields
+  /** @brief A class which computes the matter currents and charge densities of the gauge fields
    *
    *
    * Unit test: make test-mattercurrents
    **/
-
   class MatterCurrents
   {
   public:

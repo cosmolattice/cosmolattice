@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which calls getComp.
+  /** @brief A class which calls getComp.
    *
    * Unit test: make test-getcomponent
    **/

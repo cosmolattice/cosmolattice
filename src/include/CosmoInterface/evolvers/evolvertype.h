@@ -13,13 +13,21 @@
 namespace TempLat
 {
 
-  /** \brief An enum for the different evolvers.
-   *
-   *
-   **/
-
   MakeException(NotAnEvolverType);
 
+  /** @brief An enum, listing all available evolver types:
+   * - LF: leapfrog
+   * - VV2: velocity verlet, order 2
+   * - VV4: velocity verlet, order 4
+   * - VV6: velocity verlet, order 6
+   * - VV8: velocity verlet, order 8
+   * - VV10: velocity verlet, order 10
+   * - VV6_2: alternative scheme for velocity verlet order 6 (see documentation)
+   * - RK2: Runge-Kutta order 2
+   * - RK3_4: 3rd order 4 stages low storage Runge-Kutta
+   * - RK3_4_A: 3rd order 4 stages adaptative low storage Runge-Kutta
+   *
+   **/
   enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_4, RK3_4_A };
 
   std::istream &operator>>(std::istream &in, EvolverType &eType)

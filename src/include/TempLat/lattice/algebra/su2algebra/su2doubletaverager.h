@@ -29,7 +29,7 @@
 
 namespace TempLat
 {
-  /** \brief An averager specialised for SU2Doublet. Allows to take into account cached operations consistently.
+  /** @brief An averager specialised for SU2Doublet. Allows to take into account cached operations consistently.
    *
    *
    * Unit test: make test-su2doubletaverager

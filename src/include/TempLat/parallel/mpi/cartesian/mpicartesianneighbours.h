@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which fetches and stores the neighbours in all dimensions.
+  /** @brief A class which fetches and stores the neighbours in all dimensions.
    * Internally just contructs a std::vector<MPICartesianNeighboursSingleDimension>
    * with each entry corresponding to its associated dimension.
    *

@@ -37,7 +37,7 @@ namespace TempLat
     return PutToStream(stream, vec);
   };
 
-  /** \brief Simple outputing of arrays and vectors: not exposing as operator<<, because below we want to limit it to
+  /** @brief Simple outputing of arrays and vectors: not exposing as operator<<, because below we want to limit it to
    * vectors and arrays, without needing to know the exact number of template parameters for this systems implementation
    * of array and vector. */
   template <typename T> std::ostream &PutToStream(std::ostream &stream, const T &vec)
@@ -62,7 +62,7 @@ namespace TempLat
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A class which tests PutToStream.
+  /** @brief A class which tests PutToStream.
    *
    * Unit test: make test-puttostream
    */

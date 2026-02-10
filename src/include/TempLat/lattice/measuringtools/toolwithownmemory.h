@@ -18,7 +18,7 @@
 namespace TempLat
 {
 
-  /** \brief A base class for powerspectrum and twopointcorrelator: holds an optionally
+  /** @brief A base class for powerspectrum and twopointcorrelator: holds an optionally
    *  persistent block of memory of the same shape as the Getter that you pass to it.
    *
    * Unit test: make test-toolwithownmemory
@@ -37,7 +37,7 @@ namespace TempLat
     void setPersistentMemory() { usePersistentField = true; }
 
   private:
-    /** \brief Put in a shared_ptr so we do not need to construct upon construction. */
+    /** @brief Put in a shared_ptr so we do not need to construct upon construction. */
     T mInstance;
     std::shared_ptr<fieldType> persistentField;
     bool usePersistentField;
@@ -46,7 +46,7 @@ namespace TempLat
   protected:
     T &getInstance() { return mInstance; }
 
-    /** \brief Return a new field if it should be disposed of, return the persistent storage if it should be kept. */
+    /** @brief Return a new field if it should be disposed of, return the persistent storage if it should be kept. */
     fieldType getFieldForMeasurement(std::string postfix)
     {
       auto toolBox = mInstance.getToolBox();

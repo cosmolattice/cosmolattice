@@ -21,7 +21,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which determines the transpose-flags for the PFFT planners, corresponding to a given layout.
+  /** @brief A class which determines the transpose-flags for the PFFT planners, corresponding to a given layout.
    *
    * Unit test: make test-pffttranspositionflags
    **/

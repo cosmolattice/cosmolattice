@@ -22,7 +22,7 @@ namespace TempLat
     static constexpr int dataShiftGhostCells = __LINE__;
   }; // namespace MPITags
 
-  /** \brief A class which just compiles.
+  /** @brief A class which just compiles.
    * Unit test: make test-mpitags
    **/
   class MPITagsJustCompile

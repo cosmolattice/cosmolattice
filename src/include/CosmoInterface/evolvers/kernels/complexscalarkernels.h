@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class that computes the kernels for the complex scalars.
+  /** @brief A class that computes the kernels for the complex scalars.
    *
    *
    **/

@@ -17,7 +17,7 @@ namespace TempLat
 
   MakeException(FactorizationFailed);
 
-  /** \brief A class which factorizes an integer into its primes.
+  /** @brief A class which factorizes an integer into its primes.
    *
    * Unit test: make test-factorize
    **/
@@ -27,10 +27,10 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     Factorize(ptrdiff_t total) : factors(performFactorization(total)) {}
 
-    /** \brief access */
+    /** @brief access */
     const ptrdiff_t &operator[](ptrdiff_t i) const { return factors[i]; }
 
-    /** \brief size */
+    /** @brief size */
     size_t size() const { return factors.size(); }
 
     /** iterate */

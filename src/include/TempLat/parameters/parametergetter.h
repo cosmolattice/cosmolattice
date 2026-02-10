@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief
+  /** @brief
    *  Class for parameter .handler. Special getter which can directly cast
    * to T.
    *

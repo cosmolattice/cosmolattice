@@ -20,7 +20,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements complex subtraction.
+  /** @brief A class which implements complex subtraction.
    *
    *
    * Unit test: make test-complexfieldadd

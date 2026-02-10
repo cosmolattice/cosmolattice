@@ -19,7 +19,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which holds complex field in fourier space.
+  /** @brief A class which holds complex field in fourier space.
    *
    *
    * Unit test: make test-complexfieldfourierview

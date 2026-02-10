@@ -15,7 +15,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which makes vector compatible with GetComponent algebra and defines a operator(int i).
+  /** @brief A class which makes vector compatible with GetComponent algebra and defines a operator(int i).
    *
    *
    *

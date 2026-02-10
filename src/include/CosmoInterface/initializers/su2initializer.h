@@ -20,11 +20,9 @@
 
 namespace TempLat
 {
-
-  /** \brief A class that initializes the SU(2) gauge sector (both non-Abelian gauge fields and SU2 doublets)
+  /** @brief A class that initializes the SU(2) gauge sector (both non-Abelian gauge fields and SU2 doublets)
    *
    **/
-
   class SU2Initializer
   {
   public:
@@ -168,15 +166,11 @@ namespace TempLat
           ););
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
 
 #endif

@@ -13,12 +13,10 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which measure the scale factor, its derivative and the Hubble rate.
+  /** @brief A class which measure the scale factor, its derivative and the Hubble rate.
    *
    *
    **/
-
   template <typename T> class ScaleFactorMeasurer
   {
   public:

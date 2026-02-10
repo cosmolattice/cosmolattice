@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A namespace purely for test structures / classes. Quick simple structs for whatever test you need go in
+  /** @brief A namespace purely for test structures / classes. Quick simple structs for whatever test you need go in
    * here. */
   namespace TestScratch
   {

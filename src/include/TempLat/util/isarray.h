@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief Checks if a type is an array of a specific size,
+  /** @brief Checks if a type is an array of a specific size,
    * i.e. it has the size() NDim and an operator[].
    *
    **/

@@ -22,7 +22,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements shifts for the list algebra.
+  /** @brief A class which implements shifts for the list algebra.
    *
    *
    * Unit test: make test-listshift
@@ -61,7 +61,7 @@ namespace TempLat
     R mR;
   };
 
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct ListShifterTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

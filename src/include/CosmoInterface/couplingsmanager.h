@@ -12,19 +12,17 @@
 
 namespace TempLat
 {
-
   MakeException(NotEnoughChargesForThisCouplingsManager);
   MakeException(NotEnoughCouplingsForThisCouplingsManager);
 
-  /** \brief A class which stores statically an array of booleans; useful to manage what couples to what.
+  /** @brief A class which stores statically an array of booleans; useful to manage what couples to what.
    *
+   * This class stores in its type an arbitrary number of booleans, which are used to define which field couple to which
+   * other field. The best way to understand how this class work is to see how it is used in the GaugeDerivatives and
+   * MatterCurrent classes.
    *
    * Unit test: make test-couplingsmanager
    **/
-
-  // This class stores in its type an arbitrary number of booleans, which are used to define which field couple to which
-  // other field. The best way to understand how this class work is to see how it is used in the GaugeDerivatives and
-  // MatterCurrent classes.
   template <int NMatter, int NGauge, bool... Bools> class CouplingsManager
   {
   public:

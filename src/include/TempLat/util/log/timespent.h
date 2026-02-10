@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which measures the wall time since its construction.
+  /** @brief A class which measures the wall time since its construction.
    *
    *
    * Unit test: make test-timespent
@@ -26,10 +26,10 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     TimeSpent() : mStart(now()) {}
 
-    /** \brief Static value which returns the age of the total process */
+    /** @brief Static value which returns the age of the total process */
     static auto getProcessAge() { return (now() - getProcessStart()).count(); }
 
-    /** \brief Returns the age of this instance. */
+    /** @brief Returns the age of this instance. */
     auto get() const { return (now() - mStart).count(); }
 
     friend std::ostream &operator<<(std::ostream &ostream, const TimeSpent &ts)
@@ -47,7 +47,7 @@ namespace TempLat
       return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch());
     }
 
-    /** \brief A trick to instantiate the static theList in a header-only file: make it a static variable inside an
+    /** @brief A trick to instantiate the static theList in a header-only file: make it a static variable inside an
      * inline function / method. */
     inline static std::chrono::milliseconds getProcessStart()
     {

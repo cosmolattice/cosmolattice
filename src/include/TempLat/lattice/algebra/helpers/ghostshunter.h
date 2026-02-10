@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which helps implementing the automatic management of updating the ghost cells.
+  /** @brief A class which helps implementing the automatic management of updating the ghost cells.
    *
    * Unit test: make test-ghostshunter
    **/

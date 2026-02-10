@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief A concept which checks if instance is a complex field.
+  /** @brief A concept which checks if instance is a complex field.
    *
    * Unit test: make test-hascomplexfieldget
    **/

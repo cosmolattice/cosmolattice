@@ -15,7 +15,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implemets a backward plaquette. Useful in equations of motions for example.
+  /** @brief A class which implemets a backward plaquette. Useful in equations of motions for example.
    *
    *
    * Unit test: make test-plaquetteback

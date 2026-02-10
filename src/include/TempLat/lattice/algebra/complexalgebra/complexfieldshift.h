@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements spatial shifts for complex algebra.
+  /** @brief A class which implements spatial shifts for complex algebra.
    *
    *
    * Unit test: make test-complexfieldshift

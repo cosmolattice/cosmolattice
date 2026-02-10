@@ -15,7 +15,7 @@ namespace TempLat
 {
   MakeException(GetToolBoxException);
 
-  /** \brief A class which gets jumps from all classes, also those that do not have jumps.
+  /** @brief A class which gets jumps from all classes, also those that do not have jumps.
    *
    * Unit test: make test-getjumps
    **/

@@ -11,12 +11,10 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which implements fixed background expansion.
+  /** @brief A class which implements fixed background expansion.
    *
    *
    **/
-
   template <typename T> class FixedBackgroundExpansion
   {
   public:

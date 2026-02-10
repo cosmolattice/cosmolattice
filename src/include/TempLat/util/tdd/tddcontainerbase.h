@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which provides the interface for TDDContainers.
+  /** @brief A class which provides the interface for TDDContainers.
    *
    * Unit test: make test-tddcontainerbase
    */

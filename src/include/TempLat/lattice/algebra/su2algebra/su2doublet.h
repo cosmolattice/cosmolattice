@@ -19,7 +19,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements su2doublets.
+  /** @brief A class which implements su2doublets.
    *
    *
    * Unit test: make test-su2doublet

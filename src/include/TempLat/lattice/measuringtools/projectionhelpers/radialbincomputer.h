@@ -15,7 +15,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which returns an integer bin for a given fp value.
+  /** @brief A class which returns an integer bin for a given fp value.
    *
    * Unit test: make test-radialbincomputer
    **/
@@ -28,7 +28,7 @@ namespace TempLat
       if (mRange <= 0) mRange = 1;
     }
 
-    /** \brief Call this for your value, receive a bin index in return. */
+    /** @brief Call this for your value, receive a bin index in return. */
     DEVICE_FUNCTION
     ptrdiff_t operator()(double value) const
     {

@@ -25,13 +25,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which implements a velocity verlet algorithm that evolves scalar singlets, complex scalars, SU2
+  /** @brief A class which implements a velocity verlet algorithm that evolves scalar singlets, complex scalars, SU2
    * doublets, and U(1) and SU(2) gauge fields.
    *
    *
    **/
-
   template <typename T = double> class VelocityVerlet
   {
   public:

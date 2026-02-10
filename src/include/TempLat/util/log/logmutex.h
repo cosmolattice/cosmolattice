@@ -16,7 +16,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which holds a mutex, specific for output (log).
+  /** @brief A class which holds a mutex, specific for output (log).
    *
    * Unit test: make test-logmutex
    */
@@ -47,7 +47,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    /** \brief A trick to instantiate the static theList in a header-only file: make it a static variable inside an
+    /** @brief A trick to instantiate the static theList in a header-only file: make it a static variable inside an
      * inline function / method. */
     inline static std::shared_ptr<std::recursive_mutex> mutex()
     {

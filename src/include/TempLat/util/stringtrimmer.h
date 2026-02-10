@@ -20,7 +20,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which trims strings on all ends.
+  /** @brief A class which trims strings on all ends.
    * In place: [lr]trim(std::string).
    * Copy: std::string [lr]trimmed(std::string)
    *

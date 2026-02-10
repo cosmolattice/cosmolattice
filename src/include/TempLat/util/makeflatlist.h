@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which creates a flat tuple from potentially a list of composite objects.
+  /** @brief A class which creates a flat tuple from potentially a list of composite objects.
    *
    *
    * Unit test: make test-makeflatlist

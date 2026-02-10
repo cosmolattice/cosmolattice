@@ -12,7 +12,7 @@
 namespace TempLat
 {
 
-  /** \brief A macro to simplify writing lambda function. Don't use it in TempLat, for the interfaces.
+  /** @brief A macro to simplify writing lambda function. Don't use it in TempLat, for the interfaces.
    *
    *
    * Unit test: make test-function

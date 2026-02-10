@@ -17,7 +17,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which applies the shift method to su2 objects.
+  /** @brief A class which applies the shift method to su2 objects.
    *
    * Unit test: make test-su2shift
    **/

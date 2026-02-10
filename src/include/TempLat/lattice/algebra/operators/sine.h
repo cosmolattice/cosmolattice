@@ -53,7 +53,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define exp operation to the world. */
+  /** @brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
   DEVICE_FORCEINLINE_FUNCTION auto sin(T a)
@@ -61,12 +61,12 @@ namespace TempLat
     return Operators::Sine<T>(a);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType sin(ZeroType a) { return ZeroType(); }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct SineTester {
     static inline void Test(TDDAssertion &tdd);
   };

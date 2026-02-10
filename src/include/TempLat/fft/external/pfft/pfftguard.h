@@ -25,7 +25,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which guards intialization and finalization of PFFT. Replace this if you replace PFFT with an
+  /** @brief A class which guards intialization and finalization of PFFT. Replace this if you replace PFFT with an
    *alternative library. Only used by MPIGuard, which manually calls its destructor.
    *
    * Unit test: make test-pfftguard

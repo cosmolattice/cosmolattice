@@ -13,13 +13,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class that computes the kernel for the scale factor equation.
+  /** @brief A class that computes the kernel for the scale factor equation.
    *
    *
    * Unit test: make test-scalefactorkernels
    **/
-
   class ScaleFactorKernels
   {
   public:
@@ -120,11 +118,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/kernels/scalefactorkernels_test.h"
-#endif
 
 #endif

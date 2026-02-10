@@ -19,7 +19,7 @@ namespace TempLat
 
   MakeException(MPICommReferenceBookKeepingException);
 
-  /** \brief A class which holds an MPIComm. The Comm WILL DESTRUCT when
+  /** @brief A class which holds an MPIComm. The Comm WILL DESTRUCT when
    * the last owner of a reference to this class destructs its instance.
    * Unless it is MPI_COMM_WORLD, of course.
    *
@@ -37,14 +37,14 @@ namespace TempLat
       BookKeeper(mComm, true, false);
     }
 
-    /** \brief Copy constructor: must implement this for the bookkeeping. */
+    /** @brief Copy constructor: must implement this for the bookkeeping. */
     MPICommReference(const MPICommReference &other)
         : MPIAllReduce(other.mComm), mComm(other.mComm), mSize(other.mSize), mRank(other.mRank)
     {
       BookKeeper(mComm, true, false);
     }
 
-    /** \brief Copy assignment: must implement this for the bookkeeping. */
+    /** @brief Copy assignment: must implement this for the bookkeeping. */
     MPICommReference &operator=(const MPICommReference &other)
     {
       mComm = other.mComm;

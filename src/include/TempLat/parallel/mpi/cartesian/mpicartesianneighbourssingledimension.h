@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which fetches and stores the two neighbours in a single dimension.
+  /** @brief A class which fetches and stores the two neighbours in a single dimension.
    *
    * Unit test: make test-mpicartesianneighbourssingledimension
    **/

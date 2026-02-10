@@ -24,7 +24,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which
+  /** @brief A class which
    *
    *
    * Unit test: make test-listunaryoperator
@@ -53,10 +53,10 @@ namespace TempLat
     /** For measurement objects. */
     inline auto getToolBox() const { return GetToolBox::get(mR); }
 
-    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return " "; }
 
-    /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
+    /** @brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
      */
     template <int N> std::string toString(Tag<N> i) const

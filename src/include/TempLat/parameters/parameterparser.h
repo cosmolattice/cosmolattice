@@ -24,7 +24,7 @@ namespace TempLat
 {
   enum ParameterImportance { Important, Normal };
 
-  /** \brief The outside-world interface for parameter parsing. Pass your argc/argv, receive
+  /** @brief The outside-world interface for parameter parsing. Pass your argc/argv, receive
    *   an object that parsed everything that you put on the command line interface,
    *   where 'everything' means that you pass arguments in the form:
    *

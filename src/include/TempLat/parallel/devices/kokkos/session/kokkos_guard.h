@@ -49,7 +49,7 @@ namespace TempLat
       int instanceProtectionKey;
       bool mVerbose;
 
-      /** \brief A sub-group of all the processes, which is local on the same node. This can be used to compute the best
+      /** @brief A sub-group of all the processes, which is local on the same node. This can be used to compute the best
        number of threads per process. By default we are greedy: use all the cpu power on a node. Set arguments upon
        launch to avoid that. (Not implemented yet.) */
 

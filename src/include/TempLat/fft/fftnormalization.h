@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which applies the normalization to a block of memory after C2R and R2C fft's.
+  /** @brief A class which applies the normalization to a block of memory after C2R and R2C fft's.
    * You can choose between:
    * fourier: C2R: 1/N, R2C: 1,
    * mixed:   C2R: 1/sqrt(N), R2C: 1/sqrt(N),

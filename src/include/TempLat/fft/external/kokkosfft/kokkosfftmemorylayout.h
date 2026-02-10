@@ -22,7 +22,7 @@ namespace TempLat
 {
   MakeException(KokkosFFTMemoryLayoutException);
 
-  /** \brief Implements part of FFTLibraryInterface, computes the local memory associated to the global problem, for
+  /** @brief Implements part of FFTLibraryInterface, computes the local memory associated to the global problem, for
    *KokkosFFT. Build on this to replace KokkosFFT.
    *
    * Unit test: make test-kokkosfftmemorylayout

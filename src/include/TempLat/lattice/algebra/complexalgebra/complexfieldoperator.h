@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements common features of complex fields operators.
+  /** @brief A class which implements common features of complex fields operators.
    *
    *
    * Unit test: make test-complexfieldoperator

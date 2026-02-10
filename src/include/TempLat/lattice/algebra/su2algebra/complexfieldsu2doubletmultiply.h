@@ -19,7 +19,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the fundamental action of SU2.
+  /** @brief A class which implements the fundamental action of SU2.
    *
    *
    * Unit test: make test-complexfieldsu2multiply

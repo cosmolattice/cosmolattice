@@ -19,7 +19,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which gives pseudo random sequences, based on a string random seed, stable across platforms.
+  /** @brief A class which gives pseudo random sequences, based on a string random seed, stable across platforms.
    * Implementation note: the C++14 standard guarantees cross-platform stability of Mersenne-Twister std::mt19937_64.
    * So we use that. Note: not sure about the other random generator.
    *
@@ -91,7 +91,7 @@ namespace TempLat
              static_cast<double>(std::numeric_limits<T>::max());
     }
 
-    /** \brief For testing purposes, we need to compare prng's, specifically their seeds. */
+    /** @brief For testing purposes, we need to compare prng's, specifically their seeds. */
     friend bool operator==(const RandomUniform &a, const RandomUniform &b) { return a.getSeed() == b.getSeed(); }
 
     friend std::ostream &operator<<(std::ostream &ostream, const RandomUniform &pr)

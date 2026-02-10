@@ -19,7 +19,7 @@ namespace TempLat
 {
   MakeException(KokkosFFTPlannerException);
 
-  /** \brief A class which implements part of FFTLibraryInterface, the planner part. Here all calls to KokkosFFT_plan
+  /** @brief A class which implements part of FFTLibraryInterface, the planner part. Here all calls to KokkosFFT_plan
    *... are made.
    *
    *
@@ -33,7 +33,7 @@ namespace TempLat
 
     virtual void setPlannerPatience(int level) {}
 
-    /** \brief Create fully working plans, which must self-destruct in the FFTPlanInterface's destructor. Use
+    /** @brief Create fully working plans, which must self-destruct in the FFTPlanInterface's destructor. Use
      * shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
@@ -42,7 +42,7 @@ namespace TempLat
       return make_plans<float>(group, layout);
     };
 
-    /** \brief Create fully working plans, which must self-destruct in the FFTPlanInterface's destructor. Use
+    /** @brief Create fully working plans, which must self-destruct in the FFTPlanInterface's destructor. Use
      * shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,

@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the concept of a coordinate.
+  /** @brief A class which implements the concept of a coordinate.
    *
    *
    * Unit test: make test-coordinatevector

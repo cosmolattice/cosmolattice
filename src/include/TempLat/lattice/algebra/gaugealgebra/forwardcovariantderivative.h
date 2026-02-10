@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes the forward covariant derivative with an arbitrary number of gauge fields.
+  /** @brief A class which computes the forward covariant derivative with an arbitrary number of gauge fields.
    *
    *
    * Unit test: make test-forwardcovariantderivative

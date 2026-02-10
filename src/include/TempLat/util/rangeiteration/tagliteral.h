@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements a litteral to create tags, comes from Boost Hana.
+  /** @brief A class which implements a litteral to create tags, comes from Boost Hana.
    *
    *
    * Unit test: make test-tagliteral

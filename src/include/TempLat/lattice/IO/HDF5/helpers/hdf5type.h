@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief SFINAE class to get appropriate hdf5 type-
+  /** @brief SFINAE class to get appropriate hdf5 type-
    *
    *
    * Unit test: make test-hdf5type

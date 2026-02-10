@@ -19,7 +19,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes a O(dx^4) discrete covariant derivative.
+  /** @brief A class which computes a O(dx^4) discrete covariant derivative.
    *
    *
    * Unit test: make test-centeredcovariantderivativeo4

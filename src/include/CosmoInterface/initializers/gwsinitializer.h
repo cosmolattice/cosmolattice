@@ -12,13 +12,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which is used to initialize the gravitational waves fields.
+  /** @brief A class which is used to initialize the gravitational waves fields.
    *
    *
    * Unit test: make test-scalarinitializer
    **/
-
   class GWsInitializer
   {
   public:

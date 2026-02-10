@@ -21,7 +21,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which computes (statically) the keccak hash of one string.
+  /** @brief A class which computes (statically) the keccak hash of one string.
    *
    * Unit test: make test-keccakhash
    **/
@@ -42,7 +42,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    /** \brief Constructor is private: no need to instantiate, just call the static compute. */
+    /** @brief Constructor is private: no need to instantiate, just call the static compute. */
     KeccakHash() {}
 
   public:

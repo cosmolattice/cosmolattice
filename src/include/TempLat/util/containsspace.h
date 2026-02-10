@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which checks if a string contains a space.
+  /** @brief A class which checks if a string contains a space.
    *
    * Unit test: make test-containsspace
    **/

@@ -27,7 +27,7 @@ namespace TempLat
 
   MakeException(ParafaftMemoryLayoutException);
 
-  /** \brief Memory layout computation for parafaft.
+  /** @brief Memory layout computation for parafaft.
    *
    * Parafaft uses a (D-1)-dimensional pencil decomposition. For 3D:
    * - Real space: distributed in dimensions [0,1], full in dimension [2]

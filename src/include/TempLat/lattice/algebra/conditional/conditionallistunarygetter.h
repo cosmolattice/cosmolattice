@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which is part of the implementation of the list algebra.
+  /** @brief A class which is part of the implementation of the list algebra.
    *
    * Unit test: make test-conditionallistunarygetter
    **/

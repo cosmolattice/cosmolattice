@@ -16,7 +16,7 @@
 namespace TempLat
 {
 
-  /** \brief A standalone function for testing of an exception is properly thrown. Returns a bool and a description. */
+  /** @brief A standalone function for testing of an exception is properly thrown. Returns a bool and a description. */
   template <typename Exception, typename Lambda> std::pair<bool, std::string> Throws(Lambda ll)
   {
     bool success = false;
@@ -30,7 +30,7 @@ namespace TempLat
     return {success, std::string("Must throw " + Demangle::demangle(typeid(Exception).name()) + ".")};
   }
 
-  /** \brief A helper for negating Throws. */
+  /** @brief A helper for negating Throws. */
   template <typename Exception, typename Lambda> auto DoesNotThrow(Lambda ll)
   {
     auto result = Throws<Exception, Lambda>(ll);
@@ -39,7 +39,7 @@ namespace TempLat
     return result;
   }
 
-  /** \brief A class which tests TempLat::Throws
+  /** @brief A class which tests TempLat::Throws
    *
    *
    * Unit test: make test-throws

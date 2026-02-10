@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which tests whether or not a class behaves like a tuple.
+  /** @brief A class which tests whether or not a class behaves like a tuple.
    *
    *
    * Unit test: make test-istuplelike

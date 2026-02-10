@@ -17,7 +17,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which is a classical field on your n-dimensional equisized grid.
+  /** @brief A class which is a classical field on your n-dimensional equisized grid.
    * You use it as a scalar field, a vector component, whatever.
    * Template parameter is your type of floating point precision: float or double. Default: double.
    *
@@ -65,7 +65,7 @@ namespace TempLat
     {
       return ZeroType();
     }
-    /** \brief The real overlord: is it a Field, then we must compare. */
+    /** @brief The real overlord: is it a Field, then we must compare. */
     ptrdiff_t d(const Field<NDim, T> &other) const { return *this == other ? 1 : 0; }
 
     friend bool operator==(const Field<NDim, T> &a, const Field<NDim, T> &b) { return a.mManager == b.mManager; }

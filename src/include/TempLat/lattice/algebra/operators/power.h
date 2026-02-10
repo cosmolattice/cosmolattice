@@ -20,11 +20,11 @@
 
 namespace TempLat
 {
-  /** \brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
+  /** @brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
    * them. */
   using device::pow;
 
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
     /** @brief A class which takes one expression to the power of another expression.
@@ -52,7 +52,7 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return "^"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
@@ -77,7 +77,7 @@ namespace TempLat
 
       std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other) const
       {
         /* so the compiler chooses without problems between std::log and TempLat::Operators::log */
@@ -97,7 +97,7 @@ namespace TempLat
 
   template <typename T> DEVICE_FORCEINLINE_FUNCTION OneType pow(const T &a, ZeroType b) { return OneType(); }
 
-  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
+  /** @brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires std::is_same_v<T, ZeroType>
   DEVICE_FORCEINLINE_FUNCTION auto pow(ZeroType a, const T &b)
@@ -127,7 +127,7 @@ namespace TempLat
     return powr<N>(r);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   template <ptrdiff_t N, typename T>
     requires(N == 0)
   constexpr DEVICE_FORCEINLINE_FUNCTION auto pow(const T &a)
@@ -135,7 +135,7 @@ namespace TempLat
     return OneType();
   }
 
-  /** \brief Specialize for possible one input! */
+  /** @brief Specialize for possible one input! */
   template <ptrdiff_t N, typename T>
     requires(N == 1)
   DEVICE_FORCEINLINE_FUNCTION T pow(const T &a)
@@ -144,7 +144,7 @@ namespace TempLat
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct PowerTester {
     static inline void Test(TDDAssertion &tdd);
   };

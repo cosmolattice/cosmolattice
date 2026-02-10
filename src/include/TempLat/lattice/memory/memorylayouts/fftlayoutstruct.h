@@ -15,7 +15,7 @@ namespace TempLat
 {
   MakeException(FFTLayoutStructException);
 
-  /** \brief The result holder for getIntrinsicRescaleToGetUnnormalizedFFT:
+  /** @brief The result holder for getIntrinsicRescaleToGetUnnormalizedFFT:
    *  two labeled double values.
    */
   struct IntrinsicScales {
@@ -26,7 +26,7 @@ namespace TempLat
     bool isDefault() { return c2r == 1 && r2c == 1; }
   };
 
-  /** \brief A struct which holds two memory layouts, which are unseparable:
+  /** @brief A struct which holds two memory layouts, which are unseparable:
    * - the pre-FFT layout in configuration space, no padding or ghosting.
    * - the Fourier space (complex values!) layout.
    *
@@ -64,7 +64,7 @@ namespace TempLat
     const bool &isPFFT() const { return mIsPFFT; }
     const bool &isKOKKOSFFT() const { return mIsKOKKOSFFT; }
 
-    /** \brief Compute on the fly, as our members may be modified by others. That's why OOP... */
+    /** @brief Compute on the fly, as our members may be modified by others. That's why OOP... */
     ptrdiff_t getMinimalMemorySize() const
     {
       ptrdiff_t resultC = 2; /* complex... */
@@ -79,7 +79,7 @@ namespace TempLat
       return std::max(mExternalMemoryRequirement, std::max(resultR, resultC));
     }
 
-    /** \brief Your library may require more memory than the simple final layout of the result.
+    /** @brief Your library may require more memory than the simple final layout of the result.
      *  Pass that number here.
      *  This is specifically the case for non-transposed FFTW in/outputs:
      *  needs some extra space for the final transposition into normal layout.

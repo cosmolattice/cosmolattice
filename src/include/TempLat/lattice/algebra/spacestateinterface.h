@@ -17,10 +17,10 @@
 
 namespace TempLat
 {
-  /** \brief An enum for passing the right space type, all while having the compiler type check it. */
+  /** @brief An enum for passing the right space type, all while having the compiler type check it. */
   enum class SpaceStateType { Configuration, Fourier, undefined };
 
-  /** \brief An interface class which all getter-like objects inherit from, so we can access their
+  /** @brief An interface class which all getter-like objects inherit from, so we can access their
    *confirm(Config/Fourier)Space methods by their virtualness.
    *
    * Unit test: make test-spacestateinterface
@@ -30,11 +30,11 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    /** \brief A preparation function: pass this call to all the members in the tree / chain, make sure everyone is in
+    /** @brief A preparation function: pass this call to all the members in the tree / chain, make sure everyone is in
      * configuration or fourier space, and everyone has the actual same layout. */
     virtual void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) = 0;
 
-    /** \brief A preparation function: pass this call to all the members in the tree / chain.
+    /** @brief A preparation function: pass this call to all the members in the tree / chain.
      *   We only want to update ghost cells on those fields where this expression tree actually uses
      *   a spatially shifted view (which needs ghost cells). So only such views have permission
      *   to toggle the value of the detector to true. The Fields on the receiving end of this chain,
@@ -43,14 +43,14 @@ namespace TempLat
     // virtual
     // ptrdiff_t confirmGhostsUpToDate(FieldShiftedViewDetection detector) = 0;
 
-    /** \brief In order to take spatial derivatives, the GetterShifted needs to know the jumps.
+    /** @brief In order to take spatial derivatives, the GetterShifted needs to know the jumps.
      *  This way the user has the most minimal need-to-know interface for spatial derivatives.
      *  Also, this is the perfect moment for verifying that all elements in
      *  the tree are of the same layout (or a constant).
      */
     virtual inline JumpsHolder<NDim> getConfigSpaceJumps() = 0;
 
-    /** \brief In order to take spatial derivatives, the GetterShifted needs to know the jumps.
+    /** @brief In order to take spatial derivatives, the GetterShifted needs to know the jumps.
      *  This way the user has the most minimal need-to-know interface for spatial derivatives.
      *  Also, this is the perfect moment for verifying that all elements in
      *  the tree are of the same layout (or a constant).

@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which groups common features to su2doublets unary operators.
+  /** @brief A class which groups common features to su2doublets unary operators.
    *
    * Unit test: make test-su2doubletunaryoperator
    **/
@@ -33,10 +33,10 @@ namespace TempLat
 
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
 
-    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return " "; }
 
-    /** \brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
+    /** @brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
      */
     virtual std::string toString() const

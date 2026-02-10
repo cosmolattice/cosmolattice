@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which encapsulate some newto-cotes integration formula. Assume that the point are equispaced.
+  /** @brief A class which encapsulate some newto-cotes integration formula. Assume that the point are equispaced.
    *
    *
    * Unit test: make test-numericalintegrator

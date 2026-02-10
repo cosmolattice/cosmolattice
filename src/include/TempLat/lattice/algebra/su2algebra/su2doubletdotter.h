@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which computes the scalar product of two doublets.
+  /** @brief A class which computes the scalar product of two doublets.
    *
    *
    * Unit test: make test-su2doubletdotter

@@ -20,12 +20,10 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which contains standard measurements for the U1 gauge fields.
+  /** @brief A class which contains standard measurements for the U1 gauge fields.
    *
    *
    **/
-
   template <typename T> class U1Measurer
   {
   public:

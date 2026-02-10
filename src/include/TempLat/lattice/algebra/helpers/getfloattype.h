@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A template which extracts the float type from complexes.
+  /** @brief A template which extracts the float type from complexes.
    *
    * Unit test: make test-getfloattype
    **/

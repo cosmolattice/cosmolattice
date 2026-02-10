@@ -22,7 +22,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements a SU2 field (group).
+  /** @brief A class which implements a SU2 field (group).
    *
    *
    * Unit test: make test-su2field

@@ -15,7 +15,7 @@ namespace TempLat
 
   MakeException(MPIDomainSplitException);
 
-  /** \brief A class which factorizes an integer into N roughly
+  /** @brief A class which factorizes an integer into N roughly
    * equal-size integers. That is, our best guess for the domain
    * decomposition.
    *
@@ -26,7 +26,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    /** \brief Constructor.
+    /** @brief Constructor.
      *
      *  \param total the number of processors in total in the group.
      *   Don't pass a prime number.

@@ -28,7 +28,7 @@ namespace TempLat
   MakeException(FieldViewConfigWrongSpaceConfirmation);
   MakeException(FieldViewConfigMissingToolBox);
 
-  /** \brief A view on the field which, when interacted with, assures every time again that things are in
+  /** @brief A view on the field which, when interacted with, assures every time again that things are in
    *   configuration space, and possibly the ghost cells are updated when needed.
    *   The final Field class defaults to config space, which means it inherits from this class.
    *
@@ -159,7 +159,7 @@ namespace TempLat
 
     std::string toString() const { return mManager->getName() + "(x)"; }
 
-    /** \brief Disable the blocking of going from configuration space to fourier space.
+    /** @brief Disable the blocking of going from configuration space to fourier space.
      *  Used by PowerSpectrumBuilder, which uses newly allocate memory which is filled in configuration space,
      *  and then FFT'ed to fourier space.
      */
@@ -173,7 +173,7 @@ namespace TempLat
           return operator()(test, asVec);
         }
          */
-    /** \brief Getting a single entry from an array. Variadic because the number of dimensions is variable.
+    /** @brief Getting a single entry from an array. Variadic because the number of dimensions is variable.
      *  Use for tests only, never for actual integrations and iterations.
      *  The arguments are in LOCAL SPACE!! Not global. Use true array indices, but not accounting for ghosts.
      *  At the same time, the arguments are in original dimension order, not transposed.

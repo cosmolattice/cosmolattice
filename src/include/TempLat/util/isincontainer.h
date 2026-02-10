@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which checks wheter container contains some objects. Need to be std compatible.
+  /** @brief A class which checks wheter container contains some objects. Need to be std compatible.
    *https://stackoverflow.com/a/19299611
    *
    *

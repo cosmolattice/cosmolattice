@@ -19,7 +19,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which takes two VectorGetters, and implements a
+  /** @brief A class which takes two VectorGetters, and implements a
    *  special get method which returns the dot-product / contraction of
    *  the two vectors.
    *
@@ -39,7 +39,7 @@ namespace TempLat
 
     static_assert(R::getVectorSize() == T::getVectorSize(), "VectorDotter: R and T must have the same vector size.");
 
-    /** \brief Getter for two instances: return type automatically determined by the type which we get by multiplying
+    /** @brief Getter for two instances: return type automatically determined by the type which we get by multiplying
      * one element of T with one element of S. */
     template <typename... IDX>
       requires requires(R mR, T mT, IDX... idx) { mR.vectorGet(0, idx...) * mT.vectorGet(0, idx...); }

@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which compute the maximum at compile time.
+  /** @brief A class which compute the maximum at compile time.
    *
    *
    * Unit test: make test-static_max

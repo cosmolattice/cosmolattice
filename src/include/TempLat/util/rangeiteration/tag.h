@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements homemade compile time constants.
+  /** @brief A class which implements homemade compile time constants.
    *
    * Unit test: make test-tag
    **/

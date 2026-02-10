@@ -12,7 +12,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which concatenates lists.
+  /** @brief A class which concatenates lists.
    *
    * Unit test: make test-concat
    **/

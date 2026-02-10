@@ -26,7 +26,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which projects any N-D lattice on its positive-definite radial coordinate. In other
+  /** @brief A class which projects any N-D lattice on its positive-definite radial coordinate. In other
    *  words, integrating out all the angular dimensions.
    *  When in Fourier-space, this routine takes into account what the redundancies are.
    *  Only the unique values are counted. Real-valued entries get weight 0.5
@@ -58,7 +58,7 @@ namespace TempLat
     {
     }
 
-    /** \brief Measure the projection of your n-dimensional lattice onto the
+    /** @brief Measure the projection of your n-dimensional lattice onto the
      *  radial direction. Only supports linear binning, so if you want to
      *  transform to e.g. logarithmic binning, you will simply have a pass
      *  a large number of linear bins here, and do the logarithmic binning yourself.
@@ -198,7 +198,7 @@ namespace TempLat
       GhostsHunter::apply(mInstance);
     }
 
-    /** \brief Creates the lambda that maps the IterationCoordinates to a bin. */
+    /** @brief Creates the lambda that maps the IterationCoordinates to a bin. */
     inline auto makeBinComputer(ptrdiff_t nLinearBins, sType minValue, sType customRange = -1)
     {
       auto rMax = customRange < 0 ? mLayout.getMaxRadius() : customRange;

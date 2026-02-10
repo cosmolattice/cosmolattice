@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which wraps the calls to confirm(Configuration/Fourier)Space, for classes that have it and objects
+  /** @brief A class which wraps the calls to confirm(Configuration/Fourier)Space, for classes that have it and objects
    *that don't.
    *
    * Unit test: make test-confirmspace

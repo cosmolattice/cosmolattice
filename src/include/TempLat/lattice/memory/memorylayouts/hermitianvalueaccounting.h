@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A number of unique / independent real and imaginary floating point values in a memory layout.
+  /** @brief A number of unique / independent real and imaginary floating point values in a memory layout.
    *
    *
    * Unit test: make test-hermitianvalueaccounting

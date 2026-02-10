@@ -18,7 +18,7 @@ namespace TempLat
 
   MakeException(MPICartesianGroupException);
 
-  /** \brief A class keeps the books regarding the process layout
+  /** @brief A class keeps the books regarding the process layout
    * relative to the physics lattice.
    *
    * Unit test: make test-mpicartesiangroup
@@ -27,7 +27,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    /** \brief Constructor: templated for the optional proposed decomposition, if you are unhappy
+    /** @brief Constructor: templated for the optional proposed decomposition, if you are unhappy
      *        with the built-in decomposition.
      *
      *  \param mBaseGroup the MPI Comm from which you start (typically just MPICommReference() == MPI_COMM_WORLD).
@@ -49,13 +49,13 @@ namespace TempLat
       createGroups();
     }
 
-    /** \brief convenience short-hand constructor with MPI_COMM_WORLD */
+    /** @brief convenience short-hand constructor with MPI_COMM_WORLD */
     MPICartesianGroup(ptrdiff_t nDimensions, std::vector<int> decomposition)
         : MPICartesianGroup(MPICommReference(), nDimensions, decomposition)
     {
     }
 
-    /** \brief Get the MPI_Comm already. */
+    /** @brief Get the MPI_Comm already. */
     MPI_Comm getComm() const { return mCartesianGroup; }
     MPI_Comm getComm_onlyDividedDimensions() const { return mCartesianGroup_onlyDividedDimensions; }
     MPICommReference getBaseComm() const { return mBaseGroup; }
@@ -64,14 +64,14 @@ namespace TempLat
 
     ptrdiff_t getNDimensions() { return mNDimensions; }
 
-    /** \brief Returns the position of the current process in the cartesian grid. Values are relative
+    /** @brief Returns the position of the current process in the cartesian grid. Values are relative
      *         to the rank layout, nothing else. */
     const std::vector<int> &getPosition() const { return mSelfPosition; }
 
-    /** \brief Returns number of dimensions in which a splitting is performed. */
+    /** @brief Returns number of dimensions in which a splitting is performed. */
     const ptrdiff_t &getNumberOfDividedDimensions() const { return mNumDividedDimensions; }
 
-    /** \brief Only for testing purposes: get the decomposition of this group to verify whatever. */
+    /** @brief Only for testing purposes: get the decomposition of this group to verify whatever. */
     const std::vector<int> &getDecomposition() const { return mDecomposition; }
 
     const auto size() const { return mBaseGroup.size(); }

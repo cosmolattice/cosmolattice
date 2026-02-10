@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief
+  /** @brief
    * Use as shifted_index_sequence<SHIFT>(std::make_index_sequence<N>{})
    * To get an index sequence<SHIFT,SHIFT+1,...,SHIFT+N-1>
    *

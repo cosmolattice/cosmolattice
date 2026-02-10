@@ -20,7 +20,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements neutral finite sums.
+  /** @brief A class which implements neutral finite sums.
    *
    *
    * Unit test: make test-neutdij

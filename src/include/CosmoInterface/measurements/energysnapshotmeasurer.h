@@ -17,11 +17,9 @@
 
 namespace TempLat
 {
-
-  /** \brief A class that prints snapshots of energy densities in configuration space.
+  /** @brief A class that prints snapshots of energy densities in configuration space.
    *
    **/
-
   template <typename Model> class EnergySnapshotsMeasurer
   {
   public:

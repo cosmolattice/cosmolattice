@@ -23,7 +23,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which demangles from internal c++ to source code naming, taken from
+  /** @brief A class which demangles from internal c++ to source code naming, taken from
    * http://stackoverflow.com/a/4541470/2295722
    *
    *

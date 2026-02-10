@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A concept which is used to enably our operator overloads only when the input type
+  /** @brief A concept which is used to enably our operator overloads only when the input type
    *  has a get method. This avoids overriding the unary operators
    *  everywhere else. We don't want to override operator-(double), for example.
    *

@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which flattents a composite collection.
+  /** @brief A class which flattents a composite collection.
    *
    *
    * Unit test: make test-flattener

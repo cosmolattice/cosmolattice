@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which gets derivates from all classes, also those that do not have derivative.
+  /** @brief A class which gets derivates from all classes, also those that do not have derivative.
    *
    * Unit test: make test-getderiv
    **/

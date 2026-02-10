@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A concept which which checks for the existence of getComp-
+  /** @brief A concept which which checks for the existence of getComp-
    *
    *
    * Unit test: make test-istemplatgettable

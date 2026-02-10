@@ -20,7 +20,7 @@ namespace TempLat
   MakeException(PFFTPlannerException);
   MakeException(PFFTCompiledWithoutSinglePrecisionSupport);
 
-  /** \brief A class which implements part of FFTLibraryInterface, the planner part. Here all calls to PFFT_plan ... are
+  /** @brief A class which implements part of FFTLibraryInterface, the planner part. Here all calls to PFFT_plan ... are
    *made.
    *
    *
@@ -56,7 +56,7 @@ namespace TempLat
       }
     }
 
-    /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
+    /** @brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
                                                                           const FFTLayoutStruct<NDim> &layout)
@@ -89,9 +89,9 @@ namespace TempLat
 #endif
     };
 
-    /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
+    /** @brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
-    /** \brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
+    /** @brief Create fully working plans, which must self-destruct in the PlanInterface's destructor. Use shared_ptr's.
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
                                                                             const FFTLayoutStruct<NDim> &layout)

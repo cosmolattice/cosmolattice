@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which holds one static method (format) which returns
+  /** @brief A class which holds one static method (format) which returns
    *  a nicer string representation of a floating point value,
    *  for display purposes (not too many significant digits).
    *
@@ -45,7 +45,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    /** \brief Replace zeros and optional dot by `replacement`, counting back from rend up to rbegin. */
+    /** @brief Replace zeros and optional dot by `replacement`, counting back from rend up to rbegin. */
     static inline void stripTrailingZeros(char *begin, char *end, char replacement)
     {
 
@@ -73,7 +73,7 @@ namespace TempLat
       }
     }
 
-    /** \brief Finds the E/e character in a scientifically formatted float. Expects a C-style zero-terminated string. */
+    /** @brief Finds the E/e character in a scientifically formatted float. Expects a C-style zero-terminated string. */
     static inline char *findThe_E(char *string)
     {
       while (*string != '\0' && *string != 'e' && *string != 'E')
@@ -81,7 +81,7 @@ namespace TempLat
       return string;
     }
 
-    /** \brief Removes characters matching `replacement`, by moving the following characters forward. Expects a C-style
+    /** @brief Removes characters matching `replacement`, by moving the following characters forward. Expects a C-style
      * zero-terminated string. */
     static inline void squashChars(char *string, char replacement)
     {

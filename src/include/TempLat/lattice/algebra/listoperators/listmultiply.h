@@ -37,7 +37,7 @@ namespace TempLat
     static const size_t size = static_max<tuple_size<R>::value, tuple_size<T>::value>::value;
   };
 
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct ListMultiplicationTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

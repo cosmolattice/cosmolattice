@@ -69,7 +69,7 @@ namespace TempLat
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, double)>
 
-  /** \brief A class which contains everything a model should have; models derive from here.
+  /** @brief A class which contains everything a model should have; models derive from here.
    * Mother of all the models. The arguments are passed as template parameters.
    *
    **/
@@ -401,7 +401,6 @@ namespace TempLat
       ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, device::memory::setAtOnePoint(fldSU2Doublet(j)(i), pos0, 0.);));
     }
 
-  public:
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

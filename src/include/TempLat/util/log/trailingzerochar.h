@@ -10,7 +10,7 @@
 namespace TempLat
 {
 
-  /** \brief Performed by the compiler, if the const char* is a string at compile time. */
+  /** @brief Performed by the compiler, if the const char* is a string at compile time. */
   constexpr const char *TrailingZeroChar(const char *name) { return *name == '\0' ? name : TrailingZeroChar(name + 1); }
 
 } // namespace TempLat

@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief Function that creates a tuple of (f(Tag<0>, ..., f(Tag<N>) ).
+  /** @brief Function that creates a tuple of (f(Tag<0>, ..., f(Tag<N>) ).
    *
    *
    * Unit test: make test-make_tuple_tag

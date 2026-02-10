@@ -18,7 +18,7 @@
 namespace TempLat
 {
 
-  /** \brief Instantiate a container that eats up all the stream that you put in it,
+  /** @brief Instantiate a container that eats up all the stream that you put in it,
    only locking the mutex and throwing up into std::cerr upon destruction.
    Provide the filename and line number of the place of invocation.
    Use the macro 'say' defined below.
@@ -43,7 +43,7 @@ namespace TempLat
     result << "\n" KRESET;
     return result;
   }
-  /** \brief A macro to put time and file info as prompt before the actual output. */
+  /** @brief A macro to put time and file info as prompt before the actual output. */
 #define say TempLat::SayComplete(TempLat::StripPathFromFileName(__FILE__), __LINE__)
 #define sayShort TempLat::SayComplete(NULL, 0)
 #define sayMPI                                                                                                         \
@@ -52,7 +52,7 @@ namespace TempLat
                            .c_str(),                                                                                   \
                        __LINE__)
 
-  /** \brief A class which just does the test.
+  /** @brief A class which just does the test.
    * Unit test: make test-saycomplete
    */
 

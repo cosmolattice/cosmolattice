@@ -11,13 +11,13 @@
 
 namespace TempLat
 {
-  /** \brief A namespace for integration tests of the field class, since many of the building blocks are actually only
+  /** @brief A namespace for integration tests of the field class, since many of the building blocks are actually only
    * fully testable using the final product, the field. Note: Integration testing has nothing to do with mathematical
    * integrals, but everything with 'testing the integral(= entire) software product'.
    */
   namespace IntegrationTesting
   {
-    /** \brief A class which tests the gaussian random field.
+    /** @brief A class which tests the gaussian random field.
      *
      * Unit test: make test-randomfield
      **/

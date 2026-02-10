@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which returns the number of dimensions.
+  /** @brief A class which returns the number of dimensions.
    *
    * Unit test: make test-getndim
    **/

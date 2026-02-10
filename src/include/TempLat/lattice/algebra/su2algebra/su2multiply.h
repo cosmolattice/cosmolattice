@@ -23,7 +23,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which
+  /** @brief A class which
    *  implement SU(2) matrix multiplication.
    *
    * Unit test: make test-su2multiply

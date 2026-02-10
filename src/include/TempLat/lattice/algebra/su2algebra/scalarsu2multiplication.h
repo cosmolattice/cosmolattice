@@ -18,7 +18,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which multiplies SU2 field by complex fields.
+  /** @brief A class which multiplies SU2 field by complex fields.
    *
    *
    * Unit test: make test-complexfieldsu2multiply

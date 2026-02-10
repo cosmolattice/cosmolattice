@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A concept which is part of the implementation of the scalar multiplication for the vector algebra.
+  /** @brief A concept which is part of the implementation of the scalar multiplication for the vector algebra.
    *
    * Unit test: make test-conditionalbinarygetterscalarvector
    **/

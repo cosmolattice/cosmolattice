@@ -26,7 +26,7 @@ namespace TempLat
   template <typename U>
   concept HasNoStringConverter = !CanBeConvertedToString<U> && !HasStringMethod<U> && !IsComplexType<U>;
 
-  /** \brief A template-programming class which helps to get the 'toString'-value from any type, whether it has the
+  /** @brief A template-programming class which helps to get the 'toString'-value from any type, whether it has the
    *toString-method or it is a scalar value.
    *
    * Unit test: make test-getstring
@@ -96,7 +96,7 @@ namespace TempLat
 #endif
   };
 
-  /** \brief Enable simple operator<< for all objects with a toString method.
+  /** @brief Enable simple operator<< for all objects with a toString method.
    */
   template <typename T>
     requires HasStringMethod<T>

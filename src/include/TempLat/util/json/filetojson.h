@@ -16,7 +16,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which reads a file which contains valid JSON,
+  /** @brief A class which reads a file which contains valid JSON,
    * and parses it into a json::JSON object.
    *
    * Unit test: make test-filetojson

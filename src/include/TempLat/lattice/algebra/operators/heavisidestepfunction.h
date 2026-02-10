@@ -33,7 +33,7 @@ namespace TempLat
       return (GetValue::get(mR, idx...) >= 0 ? 1. : 0);
     }
 
-    /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+    /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
     template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
     {
       return GetDeriv::get(mR, other) * DiracDelta(mR);
@@ -49,11 +49,11 @@ namespace TempLat
     return HeavisideStepFunction<R>(r);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType heaviside(ZeroType a) { return OneType(); }
 
-  /** \brief Specialize for possible unit input! */
+  /** @brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType heaviside(OneType a) { return OneType(); }
 

@@ -16,8 +16,7 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which contains standard measurements for the SU2 doublets.
+  /** @brief A class which contains standard measurements for the SU2 doublets.
    *
    *
    **/

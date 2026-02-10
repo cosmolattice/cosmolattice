@@ -19,14 +19,12 @@
 
 namespace TempLat
 {
+  MakeException(WrongPSTypeGW);
 
-  /** \brief A class which computes the power spectrum, with the appropriate rescaling to make it volume independent.
+  /** @brief A class which computes the power spectrum, with the appropriate rescaling to make it volume independent.
    *
    *
    **/
-
-  MakeException(WrongPSTypeGW);
-
   class GWsPowerSpectrumMeasurer
   {
   public:

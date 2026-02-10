@@ -27,7 +27,7 @@
 
 namespace TempLat
 {
-  /** \brief Implements part of FFTLibraryInterface, computes the local memory associated to the global problem, for
+  /** @brief Implements part of FFTLibraryInterface, computes the local memory associated to the global problem, for
    *FFTW.
    *
    *

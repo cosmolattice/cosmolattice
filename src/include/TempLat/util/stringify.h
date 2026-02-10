@@ -9,7 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 
-/** \brief A macro used to parse preprocessor variable as strings, credits https://stackoverflow.com/a/34252436.
+/** @brief A macro used to parse preprocessor variable as strings, credits https://stackoverflow.com/a/34252436.
  *
  *
  *

@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the sum of su2 matrices.
+  /** @brief A class which implements the sum of su2 matrices.
    *
    *
    * Unit test: make test-su2sum

@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implement 1/2 as a type. Useful for squareroots.
+  /** @brief A class which implement 1/2 as a type. Useful for squareroots.
    *
    * Unit test: make test-halftype
    **/
@@ -27,7 +27,7 @@ namespace TempLat
       return 0.5;
     }
 
-    /** \brief Need a static instance of halftype, for constructing `Power(T& a, HalfType& ht);` */
+    /** @brief Need a static instance of halftype, for constructing `Power(T& a, HalfType& ht);` */
     static DEVICE_FORCEINLINE_FUNCTION HalfType &getStatic()
     {
       static HalfType ht;

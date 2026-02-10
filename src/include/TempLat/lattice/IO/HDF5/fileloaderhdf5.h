@@ -22,7 +22,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements loading in pure HDF5.
+  /** @brief A class which implements loading in pure HDF5.
    *
    *
    * Unit test: make test-fileloaderhdf5

@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief Performed by the compiler, if the const char* is a string at compile time. */
+  /** @brief Performed by the compiler, if the const char* is a string at compile time. */
   /* constexpr functions and constexpr constructors are implicitly inline */
   /* inline */
   constexpr const char *StripPathFromFileName(const char *name) noexcept

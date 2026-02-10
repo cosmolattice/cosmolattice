@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which creates a doublet out of some preexisting objects
+  /** @brief A class which creates a doublet out of some preexisting objects
    *
    *
    * Unit test: make test-su2doubletwrapper

@@ -23,7 +23,7 @@ namespace TempLat
 {
   MakeException(PFFTMemoryLayoutException);
 
-  /** \brief Implements part of FFTLibraryInterface, computes the local memory associated to the global problem, for
+  /** @brief Implements part of FFTLibraryInterface, computes the local memory associated to the global problem, for
    *PFFT. Build on this to replace PFFT.
    *
    * Unit test: make test-pfftmemorylayout

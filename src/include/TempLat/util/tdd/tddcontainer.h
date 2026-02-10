@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief The container to instantiate if you want to register your class for testing.
+  /** @brief The container to instantiate if you want to register your class for testing.
    *
    * Unit test: make test-tddcontainer
    */
@@ -25,11 +25,11 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     TDDContainer() { TDDRegister::add(this, typeid(TESTME).name()); }
 
-    /** \brief Since we unsafely pass a pointer to `this` in our constructor, we must avoid copying this class at all
+    /** @brief Since we unsafely pass a pointer to `this` in our constructor, we must avoid copying this class at all
      * times. */
     TDDContainer(const TDDContainer &other) = delete;
 
-    /** \brief Since we unsafely pass a pointer to `this` in our constructor, we must avoid copying this class at all
+    /** @brief Since we unsafely pass a pointer to `this` in our constructor, we must avoid copying this class at all
      * times. */
     TDDContainer &operator=(const TDDContainer &other) = delete;
 

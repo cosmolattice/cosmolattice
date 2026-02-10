@@ -12,7 +12,7 @@
 namespace TempLat
 {
 
-  /** \brief A class to test the tags and related operations.
+  /** @brief A class to test the tags and related operations.
    *
    *
    * Unit test: make test-tagtester

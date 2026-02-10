@@ -19,7 +19,7 @@ namespace TempLat
 
   MakeException(FFTWHermitianPartnersWrongSizeException);
 
-  /** \brief A class which holds all information about the redundancy in
+  /** @brief A class which holds all information about the redundancy in
    *  the complex values from a r2c fft. The redundancy comes from
    *  hermitian symmetry, so certain elements must be each other's
    *  complex conjugate. This class tells you which elements are each
@@ -31,7 +31,7 @@ namespace TempLat
   template <size_t NDim> class FFTWHermitianPartners : public HermitianPartners<NDim>
   {
   public:
-    /** \brief Construct a std::shared_ptr to a new instance. */
+    /** @brief Construct a std::shared_ptr to a new instance. */
     static HermitianPartners<NDim> create(const device::IdxArray<NDim> &globalSizes)
     {
       auto instance = HermitianPartners<NDim>(globalSizes);

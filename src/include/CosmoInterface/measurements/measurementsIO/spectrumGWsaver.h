@@ -11,8 +11,7 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which saves spectra to files.
+  /** @brief A class which saves spectra to files.
    *
    * Unit test: make test-spectrumsaver
    **/

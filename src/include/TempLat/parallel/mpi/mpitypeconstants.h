@@ -31,13 +31,13 @@ typedef int MPI_Status;
 namespace TempLat
 {
 
-  /** \brief A bunch of compile-time templates for getting the
+  /** @brief A bunch of compile-time templates for getting the
    * right MPI constants for your type.
    *
    * Unit test: make test-mpitypeconstants
    **/
 
-  /** \brief or without having to define a dummy variable to pass on, how about some templates: */
+  /** @brief or without having to define a dummy variable to pass on, how about some templates: */
 #ifndef NOMPI
   template <typename T>
     requires std::is_same_v<char, T>
@@ -102,7 +102,7 @@ namespace TempLat
     return MPI_UNSIGNED_LONG_LONG;
   }
 
-  /** \brief If you call any method that relies on MPITypeSelect, but you want to pass
+  /** @brief If you call any method that relies on MPITypeSelect, but you want to pass
    * a custom class with a custom type, your class can implement the method
    * `static MPI_Datatype getMPIType();` (see ghostupdater_test.h of an example!)
    * which is then detected by the following concept:

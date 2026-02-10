@@ -13,12 +13,10 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which manipulates the potential and the its derivatives.
+  /** @brief A class which manipulates the potential and the its derivatives.
    *
    *
    **/
-
   class Potential
   {
   public:
@@ -105,11 +103,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/potential_test.h"
-#endif
 
 #endif

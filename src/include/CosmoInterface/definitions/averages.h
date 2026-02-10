@@ -12,12 +12,10 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which is used to compute common averages.
+  /** @brief A class used to compute common averages.
    *
    *
    **/
-
   class Averages
   {
   public:
@@ -125,9 +123,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/averages_test.h"
-#endif
 
 #endif

@@ -11,13 +11,13 @@
 
 namespace TempLat
 {
-  /** \brief A concept which finds out whether a method has  derivatives implemented.
+  /** @brief A concept which finds out whether a method has  derivatives implemented.
    *
    **/
   template <class T>
   concept HasDerivMethod = requires(std::decay_t<T> t, ptrdiff_t idx) { t.d(idx); };
 
-  /** \brief a mini tester class... */
+  /** @brief a mini tester class... */
 #ifdef TEMPLATTEST
   struct HasDerivMethodTester {
     static inline void Test(TDDAssertion &tdd);

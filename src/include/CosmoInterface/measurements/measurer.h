@@ -27,7 +27,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which contains the measurements.
+  /** @brief A class which contains the measurements.
    *
    *
    **/

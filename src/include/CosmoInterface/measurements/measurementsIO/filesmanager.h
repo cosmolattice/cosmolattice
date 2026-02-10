@@ -15,7 +15,7 @@ namespace TempLat
 {
   MakeException(UseHDF5ButNotCompiled);
 
-  /** \brief Interface to switch between hdf5 and std output for measurements. This class hides the polymorphism under
+  /** @brief Interface to switch between hdf5 and std output for measurements. This class hides the polymorphism under
    * the hood. It is mostly useful for the averages, which are not implemented in hdf5 yet.
    *
    *

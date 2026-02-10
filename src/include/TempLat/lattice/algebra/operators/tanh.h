@@ -24,7 +24,7 @@ namespace TempLat
 
   namespace Operators
   {
-    /** \brief A class which implements the Tanh.
+    /** @brief A class which implements the Tanh.
      *
      * Unit test: make test-tanh
      **/
@@ -37,7 +37,7 @@ namespace TempLat
       DEVICE_FUNCTION
       Tanh(const T &a) : UnaryOperator<T>(a) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -45,7 +45,7 @@ namespace TempLat
         return tanh(GetValue::get(mR, idx...));
       }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mR, other) / pow<2>(sinh(*this));
@@ -55,7 +55,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define exp operation to the world. */
+  /** @brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires(!std::is_arithmetic_v<T> && !IsComplexType<T>)
   DEVICE_FORCEINLINE_FUNCTION auto tanh(T a)
@@ -63,12 +63,12 @@ namespace TempLat
     return Operators::Tanh<T>(a);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType tanh(ZeroType a) { return ZeroType(); }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct TanhTester {
     static inline void Test(TDDAssertion &tdd);
   };

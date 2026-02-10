@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A concept which checks whether the object has a su2get method or not.
+  /** @brief A concept which checks whether the object has a su2get method or not.
    *
    * Unit test: make test-hassu2get
    **/

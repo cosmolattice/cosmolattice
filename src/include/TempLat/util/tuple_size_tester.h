@@ -12,7 +12,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which tests the tuple_size class.
+  /** @brief A class which tests the tuple_size class.
    *
    *
    * Unit test: make test-tuple_size_tester

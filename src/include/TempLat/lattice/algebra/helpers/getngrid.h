@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which returns the number of grid points in a specific dimensions.
+  /** @brief A class which returns the number of grid points in a specific dimensions.
    *
    * Unit test: make test-getngrid
    **/

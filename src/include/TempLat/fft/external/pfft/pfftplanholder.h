@@ -22,7 +22,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements part of FFTLibraryInterface::PlanInterface, holding the pfft plans in shared_ptr's
+  /** @brief A class which implements part of FFTLibraryInterface::PlanInterface, holding the pfft plans in shared_ptr's
    *- only freed when the last instance of this class is destructed.
    *
    * Unit test: make test-pfftplanholder

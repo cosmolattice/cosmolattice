@@ -20,12 +20,10 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which stores expressions of field functionals.
+  /** @brief A class which stores expressions of field functionals.
    *
    *
    **/
-
   class FieldFunctionals
   {
   public:
@@ -129,9 +127,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/definitions/fieldfunctionals_test.h"
-#endif
 
 #endif

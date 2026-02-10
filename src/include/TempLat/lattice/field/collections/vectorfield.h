@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which
+  /** @brief A class which
    * Field collections. Allows to have vector fields, index starting from one.
    *
    *

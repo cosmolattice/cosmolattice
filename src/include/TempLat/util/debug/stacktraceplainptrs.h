@@ -57,7 +57,7 @@
 namespace TempLat
 {
 
-  /** \brief Templated size: just throw in your array and we fill it to at most its size. Plain backtrace version. */
+  /** @brief Templated size: just throw in your array and we fill it to at most its size. Plain backtrace version. */
   template <size_t N>
   inline typename std::enable_if<N != 1u && N != 0u && !TEMPLATEUNWIND, void>::type
   StacktracePlainptrs(std::array<void *, N> *result, int *addrlen)
@@ -74,7 +74,7 @@ namespace TempLat
     return;
   }
 
-  /** \brief Templated size: just throw in your array and we fill it to at most its size. Libunwind (better!) version.
+  /** @brief Templated size: just throw in your array and we fill it to at most its size. Libunwind (better!) version.
    */
   template <size_t N>
   inline typename std::enable_if<N != 1u && N != 0u && TEMPLATEUNWIND, void>::type

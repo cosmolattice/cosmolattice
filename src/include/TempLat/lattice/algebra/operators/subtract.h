@@ -15,10 +15,10 @@
 
 namespace TempLat
 {
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which subtracts two getters.
+    /** @brief A class which subtracts two getters.
      * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
      *
      * Unit test: make test-multiply
@@ -44,7 +44,7 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return "-"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mR, other) - GetDeriv::get(mT, other);
@@ -59,10 +59,10 @@ namespace TempLat
     return Operators::Subtraction<R, T>(r, t);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   template <typename T> DEVICE_FORCEINLINE_FUNCTION T &operator-(T &&a, ZeroType b) { return a; }
 
-  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
+  /** @brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires(!std::is_same_v<T, ZeroType>)
   DEVICE_FORCEINLINE_FUNCTION auto operator-(ZeroType a, const T &b)
@@ -70,25 +70,25 @@ namespace TempLat
     return Operators::UnaryMinus<T>(b);
   }
 
-  /** \brief Specialize for unary minus. */
+  /** @brief Specialize for unary minus. */
   template <typename T, typename S> DEVICE_FORCEINLINE_FUNCTION auto operator-(T &&a, Operators::UnaryMinus<S> &&b)
   {
     return a + (-b); /* let the double-unary-minus detection take care of peeling b out if it */
   }
 
-  /** \brief Specialize for possible half input! */
+  /** @brief Specialize for possible half input! */
   DEVICE_FORCEINLINE_FUNCTION
   HalfType operator-(const OneType a, const HalfType b) { return b; }
 
-  /** \brief Specialize for possible half input! */
+  /** @brief Specialize for possible half input! */
   DEVICE_FORCEINLINE_FUNCTION
   auto operator-(HalfType a, OneType b) { return Operators::UnaryMinus<HalfType>(a); }
 
-  /** \brief Specialize for possible OneType OneType input */
+  /** @brief Specialize for possible OneType OneType input */
   inline auto operator-(OneType a, OneType b) { return ZeroType(); }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct SubtractTester {
     static inline void Test(TDDAssertion &tdd);
   };

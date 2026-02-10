@@ -15,7 +15,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the sum of 2 su2 doublets.
+  /** @brief A class which implements the sum of 2 su2 doublets.
    *
    *
    * Unit test: make test-su2doubletsum

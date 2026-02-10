@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which
+  /** @brief A class which
    * holds offsets and vector coordinates. Used to cache the coordinate access and have loopers in arbitrary dimensions.
    *
    *

@@ -34,7 +34,7 @@ namespace TempLat
       DEVICE_FUNCTION
       ASinh(const T &a) : UnaryOperator<T>(a) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -42,7 +42,7 @@ namespace TempLat
         return asinh(GetValue::get(mR, idx...));
       }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return 1 / sqrt(1 + (*this) * (*this)) * GetDeriv::get(mR, other);
@@ -52,7 +52,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define exp operation to the world. */
+  /** @brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
   DEVICE_FORCEINLINE_FUNCTION auto asinh(T a)
@@ -61,7 +61,7 @@ namespace TempLat
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct ASinhTester {
     static inline void Test(TDDAssertion &tdd);
   };

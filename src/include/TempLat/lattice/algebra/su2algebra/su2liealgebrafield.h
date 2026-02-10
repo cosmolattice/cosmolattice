@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements a SU2 field (algebra). Same than the group, except set 0 component to 0 and has a
+  /** @brief A class which implements a SU2 field (algebra). Same than the group, except set 0 component to 0 and has a
    *function which returns its components wrt to sigma/2 instead of sigma, which is more conventional for the algebra
    *(but internally, also expanded as a function of sigma).
    *

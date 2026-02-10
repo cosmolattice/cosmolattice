@@ -20,7 +20,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which gtoups common features of binary field operators.
+  /** @brief A class which gtoups common features of binary field operators.
    *
    * Unit test: make test-complexfieldbinaryoperator
    **/
@@ -36,10 +36,10 @@ namespace TempLat
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 
-    /** \brief Override this method in your derived class, to have an easy implementation of your toString method. */
+    /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const = 0;
 
-    /** \brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
+    /** @brief If your descending class implements `operatorString()` and your operator is of the type "a OP b" (where
      * OP is * or whatever), this toString method does all the work for you. */
     std::string toString() const
     {

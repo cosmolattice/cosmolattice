@@ -13,13 +13,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which holds the kernels for the SU2Doublet.
+  /** @brief A class which holds the kernels for the SU2Doublet.
    *
    *
    * Unit test: make test-su2doubletkernels
    **/
-
   class SU2DoubletKernels
   {
   public:
@@ -41,11 +39,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/kernels/su2doubletkernels_test.h"
-#endif
 
 #endif

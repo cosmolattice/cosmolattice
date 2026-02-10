@@ -16,7 +16,7 @@ namespace TempLat
 {
   MakeException(SpatialCoordinateConfigWrongSpaceConfirmation);
 
-  /** \brief A class which implements spatial coordinates.
+  /** @brief A class which implements spatial coordinates.
    *
    * Unit test: make test-spatialcoordinate
    **/

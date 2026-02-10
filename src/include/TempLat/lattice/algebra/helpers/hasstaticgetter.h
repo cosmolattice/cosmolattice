@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A concept which can be used to detect whether something is a composite object or not.
+  /** @brief A concept which can be used to detect whether something is a composite object or not.
    *
    *
    * Unit test: make test-hasstaticgetter

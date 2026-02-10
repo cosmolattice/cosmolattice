@@ -16,11 +16,9 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which is used to initialize the scale factor.
+  /** @brief A class which is used to initialize the scale factor.
    *
    **/
-
   class ScaleFactorInitializer
   {
   public:
@@ -57,19 +55,11 @@ namespace TempLat
       }
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/initializers/scalefactorinitializer_test.h"
-#endif
 
 #endif

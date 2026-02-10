@@ -21,7 +21,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements part of FFTLibraryInterface::PlanInterface, holding the KokkosFFT plans in
+  /** @brief A class which implements part of FFTLibraryInterface::PlanInterface, holding the KokkosFFT plans in
    *shared_ptr's
    *- only freed when the last instance of this class is destructed.
    *

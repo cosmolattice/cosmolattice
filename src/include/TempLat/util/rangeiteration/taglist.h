@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements an enumerated list.
+  /** @brief A class which implements an enumerated list.
    *
    *
    * Unit test: make test-taglist

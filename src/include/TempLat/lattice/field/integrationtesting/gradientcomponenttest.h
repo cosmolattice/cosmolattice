@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which tests getting vector components, specifically on gradients.
+  /** @brief A class which tests getting vector components, specifically on gradients.
    *
    * Unit test: make test-gradientcomponenttest
    **/

@@ -16,8 +16,7 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which handles start and stop of a simulation. Also used to create the info file.
+  /** @brief A class which handles start and stop of a simulation. Also used to create the info file.
    *
    *
    **/
@@ -189,9 +188,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/simulationmanager_test.h"
-#endif
 
 #endif

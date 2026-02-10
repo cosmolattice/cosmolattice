@@ -57,7 +57,7 @@ namespace TempLat
 {
   MakeException(KeccakHashBareClassReuseException);
 
-  /** \brief A class which computes the keccak hash of one string, which is passed to the method compute.
+  /** @brief A class which computes the keccak hash of one string, which is passed to the method compute.
    * Can compute only once, then keeps the state. Throws an exception if compute is called twice.
    *
    * Unit test: make test-keccakhashbareclass
@@ -67,17 +67,17 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    /** \brief Initialize the states, 0 and 0..n */
+    /** @brief Initialize the states, 0 and 0..n */
     KeccakHashBareClass() : hasBeenUsed(false)
     {
       for (auto &&it : hash)
         it = 0;
     }
 
-    /** \brief Hash an input array. */
+    /** @brief Hash an input array. */
     void compute(const std::vector<unsigned char> &data) { absorb(data); }
 
-    /** \brief Hash an input array as String. */
+    /** @brief Hash an input array as String. */
     void compute(const std::string &data)
     {
 

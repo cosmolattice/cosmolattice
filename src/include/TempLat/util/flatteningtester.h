@@ -17,7 +17,7 @@
 namespace TempLat
 {
 #ifdef TEMPLATTEST
-  /** \brief A class which tests the tuple flattener.
+  /** @brief A class which tests the tuple flattener.
    *
    *
    * Unit test: make test-flatteningtester

@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which helps implementing the intermediate evaluation mechanism,
+  /** @brief A class which helps implementing the intermediate evaluation mechanism,
    * extremely useful for matrix algebra.
    *
    * Unit test: make test-doeval

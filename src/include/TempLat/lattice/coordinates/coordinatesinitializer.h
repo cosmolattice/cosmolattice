@@ -14,7 +14,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which
+  /** @brief A class which
    * \todo Create a set of coordinates according to the layout, in arbitrary (integer...) dimensions
    * TODO: Would win in readability with a bit of refactoring. The original idea was to use that directly for iteration.
    *Now we just use it to initialise the coordinates which are saved to memory. Hence, no threading whatsoever appears
@@ -47,7 +47,7 @@ namespace TempLat
     const ptrdiff_t mNDimensions;
     int countNum; // AF: dummy count because I am dumb.
 
-    /** \brief TODO: This function is a legacy function which should be refactored out. Nothing to do with threading. */
+    /** @brief TODO: This function is a legacy function which should be refactored out. Nothing to do with threading. */
     void setupRunInitPerThread(const ptrdiff_t &stride, bool &allCarryOn, const device::IdxArray<2u> &workShare,
                                std::vector<ptrdiff_t> &mOffsets, ptrdiff_t &mIStart, ptrdiff_t &mIEnd)
     {
@@ -73,10 +73,10 @@ namespace TempLat
         mOffsets.push_back(0);
       }
     }
-    /** \brief Original recursive iteration, used to cache the coordinates to memory at initialisation
+    /** @brief Original recursive iteration, used to cache the coordinates to memory at initialisation
 
   */
-    /** \brief Iterate one dimension, at each step call recursively the same function to iterate the next dimension. At
+    /** @brief Iterate one dimension, at each step call recursively the same function to iterate the next dimension. At
        the last dimension, call the innerBody lambda.
 
         Takes a reference as input, to avoid endless copy constructors at each recursion

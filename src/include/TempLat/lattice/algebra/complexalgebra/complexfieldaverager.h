@@ -29,7 +29,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which averages complex fields.
+  /** @brief A class which averages complex fields.
    *
    *
    * Unit test: make test-complexfieldaverager

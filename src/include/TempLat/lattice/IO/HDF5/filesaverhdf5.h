@@ -30,7 +30,7 @@ namespace TempLat
 {
   MakeException(StringIsTooLong);
 
-  /** \brief A class which implements saving in pure HDF5.
+  /** @brief A class which implements saving in pure HDF5.
    *
    *
    * Unit test: make test-filesaverhdf5

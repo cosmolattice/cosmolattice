@@ -26,7 +26,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which holds FFT plans, and implements FFTLibraryInterface::PlanInterface<T>.
+  /** @brief A class which holds FFT plans, and implements FFTLibraryInterface::PlanInterface<T>.
    * The plans are implemented in std::shared_ptr's, so they are only desctructed when the last instance is destructed.
    *
    * Unit test: make test-fftwplanholder

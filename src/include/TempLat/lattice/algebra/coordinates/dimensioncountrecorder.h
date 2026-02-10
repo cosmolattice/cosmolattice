@@ -15,7 +15,7 @@ namespace TempLat
   MakeException(DimensionCountRecorderException);
   MakeException(DimensionCountRecorder_CoordinateSpaceException);
 
-  /** \brief A super class which records the number of dimensions on any
+  /** @brief A super class which records the number of dimensions on any
    *  call to confirmSpace.
    *
    *  The constructor takes one argument, which is used by the derived classes which insist on a single space only:
@@ -32,7 +32,7 @@ namespace TempLat
     {
     }
 
-    /** \brief When making sure everyone is in configuration or fourier space, steal the number of dimensions, which we
+    /** @brief When making sure everyone is in configuration or fourier space, steal the number of dimensions, which we
      * need in the coordinate manipulating objects.. */
     DEVICE_FUNCTION
     void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const

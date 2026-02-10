@@ -21,11 +21,9 @@
 
 namespace TempLat
 {
-
-  /** \brief A class that initializes the U(1) gauge sector (both Abelian gauge fields and complex scalars)
+  /** @brief A class that initializes the U(1) gauge sector (both Abelian gauge fields and complex scalars)
    *
    **/
-
   class U1Initializer
   {
   public:
@@ -164,15 +162,11 @@ namespace TempLat
       );
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
 
 #endif

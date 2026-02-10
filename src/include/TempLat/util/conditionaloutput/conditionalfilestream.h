@@ -17,7 +17,7 @@ namespace TempLat
 {
   MakeException(ConditionalFileStreamError);
 
-  /** \brief A class which adds an owned file stream to the ConditionalStream
+  /** @brief A class which adds an owned file stream to the ConditionalStream
    *
    * Unit test: make test-conditionalfilestream
    */

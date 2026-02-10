@@ -23,7 +23,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which make the choice between pure mpi or highfive saving happen.
+  /** @brief A class which make the choice between pure mpi or highfive saving happen.
    *
    *
    *

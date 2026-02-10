@@ -18,7 +18,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements the complex conjugation for the list algebra.
+  /** @brief A class which implements the complex conjugation for the list algebra.
    *
    *
    * Unit test: make test-listcomplexconjugate
@@ -37,7 +37,7 @@ namespace TempLat
     static const size_t size = tuple_size<R>::value;
   };
 
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct ListComplexConjugateTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

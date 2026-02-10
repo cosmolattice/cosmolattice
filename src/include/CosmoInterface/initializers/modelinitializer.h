@@ -18,11 +18,9 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which is used to initialize the model.
+  /** @brief A class which is used to initialize the model.
    *
    **/
-
   template <typename T> class ModelInitializer
   {
   public:

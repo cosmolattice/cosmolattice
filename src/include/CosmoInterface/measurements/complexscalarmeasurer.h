@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which contains standard measurements for the complex scalars.
+  /** @brief A class which contains standard measurements for the complex scalars.
    *
    *
    **/

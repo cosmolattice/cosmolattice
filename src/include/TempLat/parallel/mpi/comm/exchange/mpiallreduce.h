@@ -20,7 +20,7 @@ namespace TempLat
 
   MakeException(MPIAllReduceException);
 
-  /** \brief A class which calls MPI_Allreduce, meaning that all
+  /** @brief A class which calls MPI_Allreduce, meaning that all
    *   processes submit their value and receive the combined value of
    *   all processes, given an operation to combine the values.
    *
@@ -34,7 +34,7 @@ namespace TempLat
     MPIAllReduce(MPI_Comm comm) : mComm(comm) {}
 
 #ifndef NOMPI
-    /** \brief Makes a copy of your value, applies the reduction
+    /** @brief Makes a copy of your value, applies the reduction
      *  in-place on the copied value, returns the resulting value.
      */
     template <typename T>
@@ -51,7 +51,7 @@ namespace TempLat
       return copyValue;
     }
 
-    /** \brief The vector / array versions perform the reduction in-
+    /** @brief The vector / array versions perform the reduction in-
      *  place, you loose your original array.
      */
     template <typename T>
@@ -67,7 +67,7 @@ namespace TempLat
       return *value;
     }
 
-    /** \brief The vector / array versions perform the reduction in-
+    /** @brief The vector / array versions perform the reduction in-
      *  place, you loose your original array.
      */
     template <typename View>
@@ -90,7 +90,7 @@ namespace TempLat
       return value;
     }
 
-    /** \brief The vector / array versions perform the reduction in-
+    /** @brief The vector / array versions perform the reduction in-
      *  place, you loose your original array.
      */
     template <typename T, size_t N>
@@ -107,7 +107,7 @@ namespace TempLat
       return *value;
     }
 
-    /** \brief The vector / array versions perform the reduction in-
+    /** @brief The vector / array versions perform the reduction in-
      *  place, you loose your original array.
      */
     template <typename T, size_t N>
@@ -122,7 +122,7 @@ namespace TempLat
       return *value;
     }
 
-    /** \brief Treat complex values as array of size 2.
+    /** @brief Treat complex values as array of size 2.
      */
     template <typename T>
     complex<T> Allreduce(complex<T> value, MPI_Op operation, ptrdiff_t size = 2, int *error = NULL)
@@ -133,13 +133,13 @@ namespace TempLat
     }
 
 #else
-    /** \brief Dummy's for the MPI-less compilation. */
+    /** @brief Dummy's for the MPI-less compilation. */
     template <typename T> const T &Allreduce(const T &whatever, MPI_Op operation, ptrdiff_t size = 1, int *error = NULL)
     {
       return whatever;
     }
 
-    /** \brief Dummy's for the MPI-less compilation. */
+    /** @brief Dummy's for the MPI-less compilation. */
     template <typename T> T &Allreduce(T *whatever, MPI_Op operation, int *error = NULL) { return *whatever; }
 #endif
     template <typename T> T computeAllSum(const T &value, size_t size = 1, int *error = NULL)

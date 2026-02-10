@@ -15,13 +15,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class that computes the kernel of the U(1) gauge fields.
+  /** @brief A class that computes the kernel of the U(1) gauge fields.
    *
    *
    * Unit test: make test-u1kernels
    **/
-
   class U1Kernels
   {
   public:
@@ -52,9 +50,6 @@ namespace TempLat
       return normGrad * (LaplU1(a) - GradU1(a)) - normU1Source * U1Source(a);
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
@@ -62,9 +57,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/kernels/u1kernels_test.h"
-#endif
 
 #endif

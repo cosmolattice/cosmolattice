@@ -47,7 +47,7 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return "/"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         /* not using pow for mT * mT, because pow imports log which imports us, divide.h */
@@ -83,7 +83,7 @@ namespace TempLat
 
       virtual std::string operatorString() const override { return "/safe/"; }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         /* not using pow for mT * mT, because pow imports log which imports us, divide.h */
@@ -92,7 +92,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define multiplication operation to the world. */
+  /** @brief Exposing our newly define multiplication operation to the world. */
   template <typename R, typename T>
     requires ConditionalBinaryGetter<R, T>
   DEVICE_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
@@ -107,10 +107,10 @@ namespace TempLat
     return Operators::SafeDivision<R, T>(r, t);
   }
 
-  /** \brief Specialize for possible unit input! Simplify derivatives for example. */
+  /** @brief Specialize for possible unit input! Simplify derivatives for example. */
   template <typename T> DEVICE_FORCEINLINE_FUNCTION T operator/(const T &a, OneType b) { return a; }
 
-  /** \brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
+  /** @brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>
     requires std::is_same_v<T, ZeroType>
   DEVICE_FORCEINLINE_FUNCTION auto operator/(const ZeroType &a, const T &b)
@@ -119,7 +119,7 @@ namespace TempLat
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct DivideTester {
     static inline void Test(TDDAssertion &tdd);
   };

@@ -20,7 +20,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implements complex field addition.
+  /** @brief A class which implements complex field addition.
    *
    * Unit test: make test-complexfieldadd
    **/

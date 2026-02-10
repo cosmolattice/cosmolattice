@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which determines what is the return type of the composite su2 objects
+  /** @brief A class which determines what is the return type of the composite su2 objects
    *
    *
    * Unit test: make test-su2getgetreturntype

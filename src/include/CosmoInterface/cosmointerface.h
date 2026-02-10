@@ -11,11 +11,9 @@
 #include "CosmoInterface/initializers/modelinitializer.h"
 #include "CosmoInterface/simulationmanager.h"
 
-
 #include "CosmoInterface/evolvers/leapfrog.h"
 #include "CosmoInterface/evolvers/velocityverlet.h"
 
-
-//To really have access to the whole algebra
+// To really have access to the whole algebra
 
 #include "TempLat/lattice/algebra/algebra.h"

@@ -122,7 +122,7 @@ namespace TempLat
       return baseWorkSpace;
     }
 
-    /** \brief Creates the lambda that maps the IterationCoordinates to a bin. */
+    /** @brief Creates the lambda that maps the IterationCoordinates to a bin. */
     inline auto makeBinComputer(ptrdiff_t nLinearBins, sType minValue, sType customRange = -1)
     {
       auto layout = getLayout();

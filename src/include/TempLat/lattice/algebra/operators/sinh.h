@@ -20,10 +20,10 @@ namespace TempLat
 {
   using device::sinh;
 
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which implements the Sinh.
+    /** @brief A class which implements the Sinh.
      *
      * Unit test: make test-sinh
      **/
@@ -36,7 +36,7 @@ namespace TempLat
       DEVICE_FUNCTION
       Sinh(const T &a) : UnaryOperator<T>(a) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -44,7 +44,7 @@ namespace TempLat
         return sinh(GetValue::get(mR, idx...));
       }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
         return GetDeriv::get(mR, other) * (exp(*this) + exp(-(*this))) / 2.0;
@@ -54,7 +54,7 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly define exp operation to the world. */
+  /** @brief Exposing our newly define exp operation to the world. */
   template <typename T>
     requires ConditionalUnaryGetter<T>
   DEVICE_FORCEINLINE_FUNCTION auto sinh(T a)
@@ -62,12 +62,12 @@ namespace TempLat
     return Operators::Sinh<T>(a);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType sinh(ZeroType a) { return ZeroType(); }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct SinhTester {
     static inline void Test(TDDAssertion &tdd);
   };

@@ -23,7 +23,7 @@
 namespace TempLat
 {
 
-  /** \brief
+  /** @brief
    * KokkosFFT abstracts away all of the initialization and finalization of its dependencies. Therefore, this guard does
    * nothing. It is only here for symmetry with FFTW and PFFT.
    *

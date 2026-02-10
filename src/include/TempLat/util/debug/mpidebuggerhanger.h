@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which can be used to hang a serial debugger like gdb to individual threads.
+  /** @brief A class which can be used to hang a serial debugger like gdb to individual threads.
    *
    *
    * Unit test: make test-mpidebuggerhanger

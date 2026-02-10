@@ -28,7 +28,7 @@ namespace TempLat
 
   MakeException(ParafaftPlannerException);
 
-  /** \brief Plan creation for parafaft FFT transforms.
+  /** @brief Plan creation for parafaft FFT transforms.
    *
    * Creates parafaft::ParaFaFT_R2C objects wrapped in ParafaftPlanHolder.
    * Currently only supports 3D and double precision.

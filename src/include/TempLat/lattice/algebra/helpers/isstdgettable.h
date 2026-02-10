@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A concept which checks compatibility with std::get.
+  /** @brief A concept which checks compatibility with std::get.
    *
    * Unit test: make test-isstdgettable
    **/

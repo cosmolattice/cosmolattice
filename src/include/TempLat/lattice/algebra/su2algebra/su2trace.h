@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A function which takes the trace of su2 matrices.
+  /** @brief A function which takes the trace of su2 matrices.
    *
    * Unit test: make test-su2trace
    **/

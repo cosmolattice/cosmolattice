@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A concept which determines at compile time whether an object has a method `get`.
+  /** @brief A concept which determines at compile time whether an object has a method `get`.
    * See HasGetMethod.
    * Unit test: make test-hasgetmethod
    **/
@@ -30,7 +30,7 @@ namespace TempLat
   template <int N, class T>
   concept HasNoStringMethodIndexed = !HasStringMethodIndexed<N, T>;
 
-  /** \brief a mini tester class... */
+  /** @brief a mini tester class... */
   struct HasStringMethodTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

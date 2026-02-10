@@ -21,7 +21,7 @@ namespace TempLat
   MakeException(GhostBusterOrderException);
   MakeException(GhostBusterBoundsException);
 
-  /** \brief A class which adds and removes (busts!) ghost cells to your layout.
+  /** @brief A class which adds and removes (busts!) ghost cells to your layout.
    * Pass the original layout and the target layout to the constructor.
    * Then pass any pointer which satisfies for origin layout to the function call operator.
    * And the rest will be history.
@@ -99,7 +99,7 @@ namespace TempLat
       }
     }
 
-    /** \brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
+    /** @brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
     template <template <size_t _NDim, typename S, typename... MArgs> class M, typename T, typename... Args>
     void operator()(M<NDim, T, Args...> &obj)
     {
@@ -107,7 +107,7 @@ namespace TempLat
       bustTheGhosts(obj);
     }
 
-    /** \brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
+    /** @brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
     template <template <typename S, typename... MArgs> class M, typename T, typename... Args>
     void operator()(M<T, Args...> &obj)
     {
@@ -117,7 +117,7 @@ namespace TempLat
 #ifdef __INTEL_COMPILER
     // for some reasons, icc does not understand the default nested template for zero arguments.
 
-    /** \brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
+    /** @brief overload for passing objects which have a data() and a size() method, like std::vector<T> */
     template <template <size_t _NDim, typename S> class M, typename T> void operator()(M<NDim, T> &obj)
     {
       operator()((T *)obj.data(), obj.size());

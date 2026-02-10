@@ -39,7 +39,7 @@ namespace TempLat
    *
    */
   struct holdStaticGuard {
-    /** \brief An inline function for storing a static global variable in a header. A lock that
+    /** @brief An inline function for storing a static global variable in a header. A lock that
         verifies that we do not accidentally call the FFT initi/fin-alizations twice. */
     static bool getSessionGuardsWasCalledOnce()
     {
@@ -80,7 +80,7 @@ namespace TempLat
     return result;
   }
 
-  /** \brief A class which sets up the interface with the appropriate FFT library.
+  /** @brief A class which sets up the interface with the appropriate FFT library.
    * Once you have implemented the FFTLibraryInterface for your library, add it to the logic here.
    *
    * Unit test: make test-fftlibraryselector

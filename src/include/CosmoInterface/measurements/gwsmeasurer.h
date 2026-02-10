@@ -21,13 +21,11 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which contains standard measurements for the GWs sector.
+  /** @brief A class which contains standard measurements for the GWs sector.
    *
    *
    * Unit test: make test-gwsmeasurer
    **/
-
   template <typename T> class GWsMeasurer
   {
   public:

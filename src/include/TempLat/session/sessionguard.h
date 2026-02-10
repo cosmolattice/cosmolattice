@@ -17,7 +17,7 @@ namespace TempLat
 {
   MakeException(SessionGuardInstantiationException);
 
-  /** \brief A class which holds all the guards: fftw, pfft and mpi.
+  /** @brief A class which holds all the guards: fftw, pfft and mpi.
    * Only one instance per process is allowed. Throws an exception if
    * that condition is violated.
    *

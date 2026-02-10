@@ -12,48 +12,50 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/fftlayoutstruct.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-    /** \brief Transposition flags for parafaft.
-     *
-     * Parafaft does not support transposition - it always returns data in the
-     * canonical order without local transposes. This class returns 0 for both
-     * directions (no transposition flags).
-     *
-     * Unit test: make test-parafafttranspositionflags
-     **/
+  /** @brief Transposition flags for parafaft.
+   *
+   * Parafaft does not support transposition - it always returns data in the
+   * canonical order without local transposes. This class returns 0 for both
+   * directions (no transposition flags).
+   *
+   * Unit test: make test-parafafttranspositionflags
+   **/
 
-    class ParafaftTranspositionFlags {
-    public:
-        ParafaftTranspositionFlags(const FFTLayoutStruct& layout) {
-            // Parafaft doesn't support transposition - always uses canonical order
-            (void)layout; // unused, but kept for interface compatibility
-            mFlagC2R = 0u;
-            mFlagR2C = 0u;
-        }
+  class ParafaftTranspositionFlags
+  {
+  public:
+    ParafaftTranspositionFlags(const FFTLayoutStruct &layout)
+    {
+      // Parafaft doesn't support transposition - always uses canonical order
+      (void)layout; // unused, but kept for interface compatibility
+      mFlagC2R = 0u;
+      mFlagR2C = 0u;
+    }
 
-        unsigned int c2r() const { return mFlagC2R; }
-        unsigned int r2c() const { return mFlagR2C; }
+    unsigned int c2r() const { return mFlagC2R; }
+    unsigned int r2c() const { return mFlagR2C; }
 
-        friend
-        std::ostream& operator<< ( std::ostream& ostream, const ParafaftTranspositionFlags& tr) {
-            (void)tr; // unused
-            ostream << "C2R : not transposed (parafaft does not support transposition).\n";
-            ostream << "R2C : not transposed (parafaft does not support transposition).\n";
-            return ostream;
-        }
+    friend std::ostream &operator<<(std::ostream &ostream, const ParafaftTranspositionFlags &tr)
+    {
+      (void)tr; // unused
+      ostream << "C2R : not transposed (parafaft does not support transposition).\n";
+      ostream << "R2C : not transposed (parafaft does not support transposition).\n";
+      return ostream;
+    }
 
-    private:
-        unsigned int mFlagC2R;
-        unsigned int mFlagR2C;
+  private:
+    unsigned int mFlagC2R;
+    unsigned int mFlagR2C;
 
-
-    public:
+  public:
 #ifdef TEMPLATTEST
-        static inline void Test(TDDAssertion& tdd);
+    static inline void Test(TDDAssertion &tdd);
 #endif
-    };
-}
+  };
+} // namespace TempLat
 
 #ifdef TEMPLATTEST
 #include "TempLat/fft/external/parafaft/parafafttranspositionflags_test.h"

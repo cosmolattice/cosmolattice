@@ -12,7 +12,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which implement a static if container.
+  /** @brief A class which implement a static if container.
    *
    *
    * Unit test: make test-staticif

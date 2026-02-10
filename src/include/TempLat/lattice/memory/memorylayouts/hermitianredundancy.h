@@ -12,29 +12,29 @@
 namespace TempLat
 {
 
-  /** \brief A class which
+  /** @brief A class which
    *
    * Unit test: make test-hermitianredundancy
    **/
 
-  /** \brief For testing purposes: track which entries in the layout carry redundant information, and if so, what
+  /** @brief For testing purposes: track which entries in the layout carry redundant information, and if so, what
    * information. This again assumes FFTW layout. none - the complex value at this wavenumber has no redundancy, and can
    * take any value. negativePartner - the value at this wavenumber is the complex conjugate of another value in the
    * globalSpace, and we chose that this partner is the negative one. positivePartner - well, you guess. realValued -
    * the complex value at this wavenumber must have zero imaginary part.
    */
   enum class HermitianRedundancy {
-    /** \brief the complex value at this wavenumber has no redundancy, and can take any value. */
+    /** @brief the complex value at this wavenumber has no redundancy, and can take any value. */
     none,
 
-    /** \brief the value at this wavenumber is the complex conjugate of another value in the globalSpace, and we chose
+    /** @brief the value at this wavenumber is the complex conjugate of another value in the globalSpace, and we chose
        that this partner is the negative one.  */
     negativePartner,
 
-    /** \brief well, you guess. */
+    /** @brief well, you guess. */
     positivePartner,
 
-    /** \brief the complex value at this wavenumber must have zero imaginary part. */
+    /** @brief the complex value at this wavenumber must have zero imaginary part. */
     realValued
   };
   inline std::ostream &operator<<(std::ostream &ostream, const HermitianRedundancy &hr)

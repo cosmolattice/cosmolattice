@@ -31,7 +31,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which creates the transposition flags for FFTW, based on a layout.
+  /** @brief A class which creates the transposition flags for FFTW, based on a layout.
    *
    * Unit test: make test-fftwtranspositionflags
    **/

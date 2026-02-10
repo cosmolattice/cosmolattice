@@ -19,7 +19,7 @@ namespace TempLat
 {
   MakeException(MemoryBlockOutOfBoundsException);
 
-  /** \brief A class which holds a block of memory.
+  /** @brief A class which holds a block of memory.
    * Feel free to pass it around and copy: the pointer
    * is itself kept inside a shared pointer. Only when the
    * last owner is destructed, the memory is freed.
@@ -33,10 +33,10 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    /** \brief Default constructor: empty. */
+    /** @brief Default constructor: empty. */
     MemoryBlock() : mSize(0u), mHostMirrorOutdated(true) {}
 
-    /** \brief Constructor with a size to allocate. */
+    /** @brief Constructor with a size to allocate. */
     MemoryBlock(size_t size) : mSize(size), mHostMirrorOutdated(true)
     {
       mData = device::memory::NDView<1, T>("MemoryBlock", mSize);
@@ -46,7 +46,7 @@ namespace TempLat
     /** getter */
     size_t size() const { return mSize; }
 
-    /** \brief state modify: zero out */
+    /** @brief state modify: zero out */
     void zero() { fill(T{0}); }
 
     void fill(const T &value)
@@ -55,7 +55,7 @@ namespace TempLat
       mHostMirrorOutdated = true; // mark host mirror as outdated
     }
 
-    /** \brief access */
+    /** @brief access */
     DEVICE_FORCEINLINE_FUNCTION
     T &operator[](ptrdiff_t i) const
     {

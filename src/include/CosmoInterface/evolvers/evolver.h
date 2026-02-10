@@ -15,7 +15,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which interfaces the evolver, so we don't need to use pointers in the main.
+  /** @brief A class which interfaces the evolver, so we don't need to use pointers in the main.
    *
    *
    **/
@@ -92,9 +92,5 @@ namespace TempLat
 #endif
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/evolver_test.h"
-#endif
 
 #endif

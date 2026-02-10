@@ -21,7 +21,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements the average for list objects.
+  /** @brief A class which implements the average for list objects.
    *
    *
    * Unit test: make test-listaverager

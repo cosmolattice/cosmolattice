@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief
+  /** @brief
    * concept to detect whether something has a getDx() method or not.
    *
    * Unit test: make test-hasdx

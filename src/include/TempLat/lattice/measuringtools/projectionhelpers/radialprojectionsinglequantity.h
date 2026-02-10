@@ -21,7 +21,7 @@ namespace TempLat
 {
   MakeException(RadialProjectionSingleQuantityException);
 
-  /** \brief A class which holds properties of a quantity (average, variance, min, max),
+  /** @brief A class which holds properties of a quantity (average, variance, min, max),
    *  each in a separate vector. Useful during the integration, will be transposed after
    *  the integration is done.
    *
@@ -51,7 +51,7 @@ namespace TempLat
 
     size_t size() const { return mAverages.size(); }
 
-    /** \brief Add one new weighted value to the collection of properties. */
+    /** @brief Add one new weighted value to the collection of properties. */
     DEVICE_FUNCTION
     void add_device(ptrdiff_t i, const T &value, const T &weight) const
     {
@@ -87,7 +87,7 @@ namespace TempLat
       Kokkos::deep_copy(mMaxsDevice, mMaxs);
     }
 
-    /** \brief This is why we keep stuff in vectors, sum up all the results from all processes in an easy way: vectors
+    /** @brief This is why we keep stuff in vectors, sum up all the results from all processes in an easy way: vectors
      * of the same things and same size just add up. */
     void finalize(MPICommReference comm)
     {
@@ -99,7 +99,7 @@ namespace TempLat
       comm.Allreduce(mMaxs, MPI_MAX);
     }
 
-    /** \brief to be called only after finalize, returning the normalized result, this time transposed: all info per
+    /** @brief to be called only after finalize, returning the normalized result, this time transposed: all info per
      * bin, instead of all bins per info. */
     RadialProjectionSingleDatum<T> getFinal(ptrdiff_t i, const T &multiplicity)
     {

@@ -4,7 +4,9 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
+
 #include "CosmoInterface/simulationmanager.h"
+#include "CosmoInterface/simulationmanager_test.h"
 
 namespace
 {

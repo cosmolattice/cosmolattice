@@ -15,7 +15,7 @@
 
 namespace TempLat
 {
-  /** \brief get(IterationCoordinates&) might be a function which returns a real value or a complex
+  /** @brief get(IterationCoordinates&) might be a function which returns a real value or a complex
    * value. Sometimes we need to explicitly access what type it is.
    *
    * Unit test: make test-getgetreturntype

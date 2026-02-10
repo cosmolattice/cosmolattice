@@ -19,7 +19,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which applies a minus sign. Holds the expression, only evaluates for a single element when you call
+  /** @brief A class which applies a minus sign. Holds the expression, only evaluates for a single element when you call
    *Multiply::get(pIterCoords).
    *
    * Unit test: make test-multiply
@@ -38,7 +38,7 @@ namespace TempLat
     static const size_t size = tuple_size<R>::value;
   };
 
-  /** \brief A mini struct for instiating the test case. */
+  /** @brief A mini struct for instiating the test case. */
   struct ListLaplacianTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

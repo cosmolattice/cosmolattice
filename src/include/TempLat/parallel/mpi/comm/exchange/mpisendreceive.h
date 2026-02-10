@@ -16,7 +16,7 @@ namespace TempLat
 
   MakeException(MPISendReceiveException);
 
-  /** \brief A class which holds all methods that do plain Send and Receive in MPI.
+  /** @brief A class which holds all methods that do plain Send and Receive in MPI.
    * Just call the send and receive methods with any scalar or vector-like input, associated rank numbers and tags.
    * Unused for now.
    *

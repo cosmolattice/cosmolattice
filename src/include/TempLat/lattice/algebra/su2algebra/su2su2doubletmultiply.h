@@ -19,7 +19,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which implemetns SU2 SU2Doublet multiplication.
+  /** @brief A class which implemetns SU2 SU2Doublet multiplication.
    *
    * Unit test: make test-su2su2doubletmultiply
    **/

@@ -12,7 +12,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which keeps track of all subarray types for a given
+  /** @brief A class which keeps track of all subarray types for a given
    *  layout, which in turn is described by the JumpsHolder. The map is
    *  for datatypes and dimensions. getSubArray<T>(dimension) is the
    *  only necessary public method.

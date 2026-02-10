@@ -16,7 +16,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which
+  /** @brief A class which
    * Average Routimes common to single field and list averager.
    *
    *

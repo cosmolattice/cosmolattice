@@ -16,7 +16,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which holds a single bin which results from the radial
+  /** @brief A class which holds a single bin which results from the radial
    *   projection of something. Used for describing both the bin position and values,
    *   namely combined in `RadialProjectionSingleBinAndValue`.
    *
@@ -26,7 +26,7 @@ namespace TempLat
 
     typedef typename GetFloatType<T>::type floatType;
 
-    /** \brief default constructor: values such that adding a non-default constructed RadialProjectionSingleDatum<T>
+    /** @brief default constructor: values such that adding a non-default constructed RadialProjectionSingleDatum<T>
      * leads to the right RadialProjectionSingleDatum<T> */
     RadialProjectionSingleDatum()
         : multiplicity(0), average(0), sampleVariance(0), minVal(std::numeric_limits<T>::max()),
@@ -80,7 +80,7 @@ namespace TempLat
       return ostream;
     }
 
-    /** \brief For rescaling your results. */
+    /** @brief For rescaling your results. */
     RadialProjectionSingleDatum<T> &operator*=(floatType value)
     {
       average *= value;
@@ -90,14 +90,14 @@ namespace TempLat
       return *this;
     }
 
-    /** \brief For  getting a sum instead of an average */
+    /** @brief For  getting a sum instead of an average */
     RadialProjectionSingleDatum<T> &sumInsteadOfAverage()
     {
       floatType intMultiplicity = 2 * multiplicity; // *2 is to get the full number of modes, against original design
       return (*this) *= intMultiplicity;
     }
 
-    /** \brief Summing two instances, lets you do a re-binning without having to think. Combines both values taking into
+    /** @brief Summing two instances, lets you do a re-binning without having to think. Combines both values taking into
      * account their original weights. */
     friend RadialProjectionSingleDatum<T> combine(const RadialProjectionSingleDatum<T> &a,
                                                   const RadialProjectionSingleDatum<T> &b)

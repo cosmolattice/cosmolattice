@@ -12,14 +12,14 @@
 
 namespace TempLat
 {
-  /** \brief A concept which determines at compile time whether an object has a method `getToolBox`.
+  /** @brief A concept which determines at compile time whether an object has a method `getToolBox`.
    * See HasGetMethod.
    * Unit test: make test-hastoolbox
    **/
   template <class T>
   concept HasToolBox = requires(std::decay_t<T> t) { t.getToolBox(); };
 
-  /** \brief a mini tester class... */
+  /** @brief a mini tester class... */
   struct HasToolBoxTester {
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);

@@ -14,7 +14,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which combines a pair of RadialProjectionSingleDatums, one for
+  /** @brief A class which combines a pair of RadialProjectionSingleDatums, one for
    *  the bin position, one for the function value for that bin.
    *
    *
@@ -22,7 +22,7 @@ namespace TempLat
    **/
   template <typename T> struct RadialProjectionSingleBinAndValue {
   public:
-    /** \brief Default-construct binInformation and valueInformation: zeros (and equivalent), useful for summing up
+    /** @brief Default-construct binInformation and valueInformation: zeros (and equivalent), useful for summing up
      * multiple entries. */
     RadialProjectionSingleBinAndValue() {}
 
@@ -82,7 +82,7 @@ namespace TempLat
     const RadialProjectionSingleDatum<T> &getBin() const { return mBinInformation; }
     const RadialProjectionSingleDatum<T> &getValue() const { return mValueInformation; }
 
-    /** \brief Summing two instances, lets you do a re-binning without having to think. Combines both values taking into
+    /** @brief Summing two instances, lets you do a re-binning without having to think. Combines both values taking into
      * account their original weights. */
     friend RadialProjectionSingleBinAndValue<T> combine(const RadialProjectionSingleBinAndValue<T> &a,
                                                         const RadialProjectionSingleBinAndValue<T> &b)
@@ -91,7 +91,7 @@ namespace TempLat
                                                   combine(a.mValueInformation, b.mValueInformation));
     }
 
-    /** \brief Summing two instances, lets you do a re-binning without having to think. Combines both values taking into
+    /** @brief Summing two instances, lets you do a re-binning without having to think. Combines both values taking into
      * account their original weights. */
     RadialProjectionSingleBinAndValue<T> &combineTo(const RadialProjectionSingleBinAndValue<T> &other)
     {

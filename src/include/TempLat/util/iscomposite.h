@@ -13,7 +13,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which allows to check whether a class is composite or not. Allows to write general function that
+  /** @brief A class which allows to check whether a class is composite or not. Allows to write general function that
    *works on composite classes.
    *
    *

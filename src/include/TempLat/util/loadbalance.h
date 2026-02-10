@@ -13,7 +13,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which
+  /** @brief A class which
    * given and a number of threads nth, return nth integer which reprensents the most even splitting of the number
    *
    *

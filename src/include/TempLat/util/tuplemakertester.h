@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which tests the tuple makker class.
+  /** @brief A class which tests the tuple makker class.
    *
    *
    * Unit test: make test-tuplemakertester

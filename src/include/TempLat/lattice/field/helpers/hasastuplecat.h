@@ -11,7 +11,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which detects whether or not an object has the hasTuplCat method.
+  /** @brief A class which detects whether or not an object has the hasTuplCat method.
    *
    *
    * Unit test: make test-hasastuplecat

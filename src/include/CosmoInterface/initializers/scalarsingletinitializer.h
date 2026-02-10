@@ -12,11 +12,9 @@
 
 namespace TempLat
 {
-
-  /** \brief A class which is used to initialize the scalar singlets.
+  /** @brief A class which is used to initialize the scalar singlets.
    *
    **/
-
   class ScalarSingletInitializer
   {
   public:
@@ -41,9 +39,6 @@ namespace TempLat
       }
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
   public:
 #ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
@@ -51,9 +46,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/initializers/scalarsingletinitializer_test.h"
-#endif
 
 #endif

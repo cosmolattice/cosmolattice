@@ -21,7 +21,7 @@ namespace TempLat
   MakeException(RadialProjectionResultSizeException);
   MakeException(RadialProjectionResultFinalizationException);
 
-  /** \brief A class which holds the result of a radial projection, with per bin
+  /** @brief A class which holds the result of a radial projection, with per bin
    *  the average position of each entry (the horizontal axis in your plot..),
    *  the variance in the position,
    *  the average value,
@@ -53,7 +53,7 @@ namespace TempLat
       mMultiplicities = Kokkos::create_mirror_view(mMultiplicitiesDevice);
     }
 
-    /** \brief operator+= is a requirement for use as a workspace in FieldlessGetteration. */
+    /** @brief operator+= is a requirement for use as a workspace in FieldlessGetteration. */
     /*
     Whatever the intention of this, it's an absolute disaster.
     RadialProjectionResult<T> operator+=(const RadialProjectionResult &other)
@@ -72,7 +72,7 @@ namespace TempLat
     }
 */
 
-    /** \brief Decrease the number of bins on demand. */
+    /** @brief Decrease the number of bins on demand. */
     RadialProjectionResult &rebin(ptrdiff_t nBins, T customRange = -1)
     {
       std::vector<RadialProjectionSingleBinAndValue<T>>::operator=(
@@ -80,7 +80,7 @@ namespace TempLat
       return *this;
     }
 
-    /** \brief Rescale the results with a function of x or k (bin location),
+    /** @brief Rescale the results with a function of x or k (bin location),
      *  using for now a simple lambda function of single float parameter, which
      *  is your x in f(x). In other words, you give f(x).
      */
@@ -118,7 +118,7 @@ namespace TempLat
       return energy;
     }
 
-    /** \brief Rescale the bin positions with a normalization (for example dimensionful).
+    /** @brief Rescale the bin positions with a normalization (for example dimensionful).
      */
     RadialProjectionResult &rescaleBins(T scale)
     {
@@ -214,7 +214,7 @@ namespace TempLat
       Kokkos::deep_copy(mMultiplicitiesDevice, mMultiplicities);
     }
 
-    /** \brief RadialProjector calls this as the last step, does the transposition of the result vecotrs into one vector
+    /** @brief RadialProjector calls this as the last step, does the transposition of the result vecotrs into one vector
      * of RadialProjectionSingleBinAndValue<T>. */
     RadialProjectionResult &finalize(MPICommReference comm)
     {

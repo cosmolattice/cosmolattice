@@ -16,10 +16,10 @@
 
 namespace TempLat
 {
-  /** \brief Extra namespace, as names such as Add and Subtract are too generic. */
+  /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** \brief A class which applies a minus sign.
+    /** @brief A class which applies a minus sign.
      * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
      *
      * Unit test: make test-multiply
@@ -33,7 +33,7 @@ namespace TempLat
       DEVICE_FUNCTION
       UnaryMinus(const T &a) : UnaryOperator<T>(a) {}
 
-      /** \brief Getter for two instances. */
+      /** @brief Getter for two instances. */
       template <typename... IDX>
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
@@ -41,14 +41,14 @@ namespace TempLat
         return -GetValue::get(mR, idx...);
       }
 
-      /** \brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
+      /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other) { return -GetDeriv::get(mR, other); }
 
       virtual std::string operatorString() const override { return "-"; }
     };
   } // namespace Operators
 
-  /** \brief Exposing our newly defined subtraction operation to the world. */
+  /** @brief Exposing our newly defined subtraction operation to the world. */
   template <typename T>
     requires HasGetMethod<T>
   DEVICE_FORCEINLINE_FUNCTION auto operator-(const T &a)
@@ -56,18 +56,18 @@ namespace TempLat
     return Operators::UnaryMinus<T>(a);
   }
 
-  /** \brief Specialize for possible zero input! */
+  /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType operator-(ZeroType a) { return a; }
 
-  /** \brief Specialize for double minus signs. */
+  /** @brief Specialize for double minus signs. */
   template <typename T> DEVICE_FORCEINLINE_FUNCTION auto operator-(Operators::UnaryMinus<Operators::UnaryMinus<T>> &&a)
   {
     return a;
   }
 
 #ifdef TEMPLATTEST
-  /** \brief A mini struct for instantiating the test case. */
+  /** @brief A mini struct for instantiating the test case. */
   struct UnaryMinusTester {
     static inline void Test(TDDAssertion &tdd);
   };

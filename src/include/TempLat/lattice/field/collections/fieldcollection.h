@@ -17,7 +17,7 @@
 
 namespace TempLat
 {
-  /** \brief A class which
+  /** @brief A class which
    * Field collections. Allows to have collection of composite vector fields as well.
    *
    *

@@ -27,7 +27,7 @@
 namespace TempLat
 {
 
-  /** \brief A class which guards intialization and finalization of FFTW.
+  /** @brief A class which guards intialization and finalization of FFTW.
    * Only used by MPIGuard, which manually calls its destructor.
    *
    *
