@@ -22,7 +22,7 @@ namespace TempLat
    * Inheritance hierarchy:
    * ParafaftInterface -> ParafaftMemoryLayout -> ParafaftPlanner -> FFTLibraryInterface
    *
-   * Unit test: make test-parafaftinterface
+   * Unit test: ctest -R test-parafaftinterface
    **/
   template <size_t NDim> class ParafaftInterface : public ParafaftMemoryLayout<NDim>
   {

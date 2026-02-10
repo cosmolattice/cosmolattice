@@ -33,7 +33,7 @@ namespace TempLat
   /** @brief A class which implements saving in pure HDF5.
    *
    *
-   * Unit test: make test-filesaverhdf5
+   * Unit test: ctest -R test-filesaverhdf5
    **/
   class FileSaverHDF5
   {

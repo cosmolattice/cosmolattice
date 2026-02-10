@@ -18,7 +18,7 @@ namespace TempLat
    * the lattice, created by MPI_Type_create_subarray. The subarray
    * is the ghost padding of the lattice, in one single dimension.
    *
-   * Unit test: make test-ghostsubarray
+   * Unit test: ctest -R test-ghostsubarray
    **/
   template <size_t NDim> class GhostSubarray
   {

@@ -32,7 +32,7 @@ namespace TempLat
    * Creates parafaft::ParaFaFT_R2C objects wrapped in ParafaftPlanHolder.
    * Currently only supports 3D and double precision.
    *
-   * Unit test: make test-parafaftplanner
+   * Unit test: ctest -R test-parafaftplanner
    **/
   template <size_t NDim> class ParafaftPlanner : public FFTLibraryInterface<NDim>
   {

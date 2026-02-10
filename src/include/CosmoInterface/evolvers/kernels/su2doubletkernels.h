@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which holds the kernels for the SU2Doublet.
    *
    *
-   * Unit test: make test-su2doubletkernels
+   * Unit test: ctest -R test-su2doubletkernels
    **/
   class SU2DoubletKernels
   {

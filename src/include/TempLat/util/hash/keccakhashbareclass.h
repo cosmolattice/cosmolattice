@@ -60,7 +60,7 @@ namespace TempLat
   /** @brief A class which computes the keccak hash of one string, which is passed to the method compute.
    * Can compute only once, then keeps the state. Throws an exception if compute is called twice.
    *
-   * Unit test: make test-keccakhashbareclass
+   * Unit test: ctest -R test-keccakhashbareclass
    **/
   class KeccakHashBareClass
   {

@@ -20,7 +20,7 @@ namespace TempLat
 {
   /** @brief A class for the poor man's profiling: prints out the map upon destruction.
    *
-   * Unit test: make test-poormansprofile
+   * Unit test: ctest -R test-poormansprofile
    */
   class PoorMansProfile
   {

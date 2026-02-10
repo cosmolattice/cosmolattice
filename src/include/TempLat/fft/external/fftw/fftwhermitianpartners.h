@@ -26,7 +26,7 @@ namespace TempLat
    *  other's
    *
    *
-   * Unit test: make test-fftwhermitianpartners
+   * Unit test: ctest -R test-fftwhermitianpartners
    **/
   template <size_t NDim> class FFTWHermitianPartners : public HermitianPartners<NDim>
   {

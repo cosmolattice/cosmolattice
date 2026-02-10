@@ -14,7 +14,7 @@ namespace TempLat
 {
   /** @brief A class which groups some features of the SU2Doublet ops.
    *
-   * Unit test: make test-su2doubletoperator
+   * Unit test: ctest -R test-su2doubletoperator
    **/
   template <size_t NDim> class SU2DoubletOperator
   {

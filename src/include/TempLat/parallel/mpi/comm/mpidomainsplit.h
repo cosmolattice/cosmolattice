@@ -19,7 +19,7 @@ namespace TempLat
    * equal-size integers. That is, our best guess for the domain
    * decomposition.
    *
-   * Unit test: make test-mpidomainsplit
+   * Unit test: ctest -R test-mpidomainsplit
    **/
 
   class MPIDomainSplit

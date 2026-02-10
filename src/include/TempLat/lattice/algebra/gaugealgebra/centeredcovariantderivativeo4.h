@@ -22,7 +22,7 @@ namespace TempLat
   /** @brief A class which computes a O(dx^4) discrete covariant derivative.
    *
    *
-   * Unit test: make test-centeredcovariantderivativeo4
+   * Unit test: ctest -R test-centeredcovariantderivativeo4
    **/
 
   template <size_t dim, class... Args> auto CenteredCovariantDerivativeO4(Args... args)

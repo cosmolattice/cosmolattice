@@ -16,7 +16,7 @@ namespace TempLat
 {
   /** @brief concept to see if the doWeNeedGhost method is defined.
    *
-   * Unit test: make test-hasdoweneedghosts
+   * Unit test: ctest -R test-hasdoweneedghosts
    **/
   template <class T>
   concept HasDoWeNeedGhostsMethod = requires(std::decay_t<T> t) { t.doWeNeedGhosts(); };

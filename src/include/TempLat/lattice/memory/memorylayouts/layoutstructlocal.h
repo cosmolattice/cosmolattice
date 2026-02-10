@@ -21,7 +21,7 @@ namespace TempLat
    *  localStart: the coordinate of the first entry in local memory, in the global coordinate space.
    *
    *
-   * Unit test: make test-layoutstructlocal
+   * Unit test: ctest -R test-layoutstructlocal
    **/
   template <size_t _NDim> class LayoutStructLocal
   {

@@ -20,7 +20,7 @@ namespace TempLat
   /** @brief A class which multiplies two complex fields.
    *
    *
-   * Unit test: make test-complexfieldmultiply
+   * Unit test: ctest -R test-complexfieldmultiply
    **/
   template <class R, class T> class ComplexFieldMultiplication : public ComplexFieldBinaryOperator<R, T>
   {

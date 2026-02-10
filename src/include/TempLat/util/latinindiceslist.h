@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which an enumerated list which starts from 1 rather than 0.
    *
    *
-   * Unit test: make test-latinindiceslist
+   * Unit test: ctest -R test-latinindiceslist
    **/
   template <class... Args> class LatinIndicesList : public AssignableCollectionBase<LatinIndicesList<Args...>, Args...>
   {

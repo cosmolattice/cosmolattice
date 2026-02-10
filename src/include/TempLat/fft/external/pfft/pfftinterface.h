@@ -18,7 +18,7 @@ namespace TempLat
    *which we inherit, in a linear chain: PFFTMemoryLayout and PFFTPlanner.
    *
    *
-   * Unit test: make test-pfftinterface
+   * Unit test: ctest -R test-pfftinterface
    **/
   template <size_t NDim> class PFFTInterface : public PFFTMemoryLayout<NDim>
   {

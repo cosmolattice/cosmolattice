@@ -23,7 +23,7 @@ namespace TempLat
 
   /** @brief A class which determines the transpose-flags for the PFFT planners, corresponding to a given layout.
    *
-   * Unit test: make test-pffttranspositionflags
+   * Unit test: ctest -R test-pffttranspositionflags
    **/
   template <size_t NDim> class PFFTTranspositionFlags
   {

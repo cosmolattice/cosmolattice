@@ -64,7 +64,7 @@ namespace TempLat
 #ifdef TEMPLATTEST
   /** @brief A class which tests PutToStream.
    *
-   * Unit test: make test-puttostream
+   * Unit test: ctest -R test-puttostream
    */
   class PutToStreamTester
   {

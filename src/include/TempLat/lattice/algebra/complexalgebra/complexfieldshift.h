@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which implements spatial shifts for complex algebra.
    *
    *
-   * Unit test: make test-complexfieldshift
+   * Unit test: ctest -R test-complexfieldshift
    **/
   template <typename R, int... N> class ComplexFieldShifter : public ComplexFieldUnaryOperator<R>
   {

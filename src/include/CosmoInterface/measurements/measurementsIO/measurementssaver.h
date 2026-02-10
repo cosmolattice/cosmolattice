@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which implements an interface to the measurement IO. Allow to switch between different format, but
    * for now only std is implemented (in the future, may want to have a hdf5 format for the measurements as well).
    *
-   * Unit test: make test-measurementssaver
+   * Unit test: ctest -R test-measurementssaver
    **/
   template <typename T> class MeasurementsSaver
   {

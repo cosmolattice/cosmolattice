@@ -23,7 +23,7 @@ namespace TempLat
   {
     /** @brief A class which computes the asinh.
      *
-     * Unit test: make test-asinh
+     * Unit test: ctest -R test-asinh
      **/
     template <typename T> class ASinh : public UnaryOperator<T>
     {

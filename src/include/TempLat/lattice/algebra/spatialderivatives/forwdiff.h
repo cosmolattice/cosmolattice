@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief A class which implements forward finite differences.
    *
    *
-   * Unit test: make test-forwdiff
+   * Unit test: ctest -R test-forwdiff
    **/
   template <int dir, typename R> class ForwDiff : public UnaryOperator<R>
   {

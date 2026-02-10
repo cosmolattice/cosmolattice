@@ -38,7 +38,7 @@ namespace TempLat
   /** @brief A function which implements a static for loop.
    * Note that this for-loop is INCLUSIVE of the start AND end
    *
-   * Unit test: make test-for_in_range
+   * Unit test: ctest -R test-for_in_range
    **/
   template <int i, int j, typename F> void for_in_range(F &&f)
   {

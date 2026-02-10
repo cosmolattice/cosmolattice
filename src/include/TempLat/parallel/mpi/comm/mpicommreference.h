@@ -24,7 +24,7 @@ namespace TempLat
    * Unless it is MPI_COMM_WORLD, of course.
    *
    *
-   * Unit test: make test-mpicommreference
+   * Unit test: ctest -R test-mpicommreference
    **/
 
   class MPICommReference : public MPIAllReduce

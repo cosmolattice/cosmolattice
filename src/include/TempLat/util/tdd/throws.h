@@ -42,7 +42,7 @@ namespace TempLat
   /** @brief A class which tests TempLat::Throws
    *
    *
-   * Unit test: make test-throws
+   * Unit test: ctest -R test-throws
    */
 
   class ThrowsTester

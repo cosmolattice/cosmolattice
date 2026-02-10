@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief A class which implements forward finite sums.
    *
    *
-   * Unit test: make test-forwdij
+   * Unit test: ctest -R test-forwdij
    **/
   template <int dir, typename R> class ForwDij : public UnaryOperator<R>
   {

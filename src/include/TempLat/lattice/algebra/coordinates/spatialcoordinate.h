@@ -18,7 +18,7 @@ namespace TempLat
 
   /** @brief A class which implements spatial coordinates.
    *
-   * Unit test: make test-spatialcoordinate
+   * Unit test: ctest -R test-spatialcoordinate
    **/
   template <size_t NDim> class SpatialCoordinate : public CoordinateVector<NDim>
   {

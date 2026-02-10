@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which stores the kernel for the GWs fields.
    *
    *
-   * Unit test: make test-gwskernels
+   * Unit test: ctest -R test-gwskernels
    **/
   class GWsKernels
   {

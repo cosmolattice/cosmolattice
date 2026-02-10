@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which wraps a single function, splitting it in lines and passing each
    *  line to ParameterGetter, returning the result in your provided MultipleParameterGetter<T>.
    *
-   * Unit test: make test-stringconverter
+   * Unit test: ctest -R test-stringconverter
    **/
   template <class T> class StringConverter
   {

@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief Small class which splits strings into two and make a pair out of it.
    *
    *
-   * Unit test: make test-pairmaker
+   * Unit test: ctest -R test-pairmaker
    **/
   class PairMaker
   {

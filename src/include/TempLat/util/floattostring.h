@@ -16,7 +16,7 @@ namespace TempLat
    *  a nicer string representation of a floating point value,
    *  for display purposes (not too many significant digits).
    *
-   * Unit test: make test-floattostring
+   * Unit test: ctest -R test-floattostring
    **/
   class FloatToString
   {

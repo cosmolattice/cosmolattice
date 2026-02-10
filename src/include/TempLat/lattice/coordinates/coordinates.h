@@ -18,7 +18,7 @@ namespace TempLat
    * holds offsets and vector coordinates. Used to cache the coordinate access and have loopers in arbitrary dimensions.
    *
    *
-   * Unit test: make test-coordinates
+   * Unit test: ctest -R test-coordinates
    **/
   template <size_t NDim> class Coordinates
   {

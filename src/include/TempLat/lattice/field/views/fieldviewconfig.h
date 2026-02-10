@@ -32,7 +32,7 @@ namespace TempLat
    *   configuration space, and possibly the ghost cells are updated when needed.
    *   The final Field class defaults to config space, which means it inherits from this class.
    *
-   * Unit test: make test-fieldviewconfig
+   * Unit test: ctest -R test-fieldviewconfig
    **/
   template <size_t _NDim, typename T> class ConfigView : public AbstractField<_NDim, T>
   {

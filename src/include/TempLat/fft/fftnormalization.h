@@ -22,7 +22,7 @@ namespace TempLat
    * mixed:   C2R: 1/sqrt(N), R2C: 1/sqrt(N),
    * config:  C2R: 1, R2C: 1/N,
    *
-   * Unit test: make test-fftnormalization
+   * Unit test: ctest -R test-fftnormalization
    **/
   template <size_t NDim> class FFTNormalization
   {

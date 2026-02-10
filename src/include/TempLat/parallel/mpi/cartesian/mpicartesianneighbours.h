@@ -18,7 +18,7 @@ namespace TempLat
    * Internally just contructs a std::vector<MPICartesianNeighboursSingleDimension>
    * with each entry corresponding to its associated dimension.
    *
-   * Unit test: make test-mpicartesianneighbours
+   * Unit test: ctest -R test-mpicartesianneighbours
    **/
 
   class MPICartesianNeighbours

@@ -13,7 +13,7 @@ namespace TempLat
 {
   /** @brief A class which tests getting vector components, specifically on gradients.
    *
-   * Unit test: make test-gradientcomponenttest
+   * Unit test: ctest -R test-gradientcomponenttest
    **/
   class GradientComponentTest
   {

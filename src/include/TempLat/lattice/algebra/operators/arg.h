@@ -27,7 +27,7 @@ namespace TempLat
   {
     /** @brief A class to compute the argument of a complex field.
      *
-     * Unit test: make test-arg
+     * Unit test: ctest -R test-arg
      **/
     template <typename R, typename T> class Arg : public BinaryOperator<R, T>
     {

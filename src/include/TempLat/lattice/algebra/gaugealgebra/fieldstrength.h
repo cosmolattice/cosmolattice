@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which implements fieldstrength tensor as finite differences. Useful for non-compact U(1) mostly.
    *
    *
-   * Unit test: make test-fieldstrength
+   * Unit test: ctest -R test-fieldstrength
    **/
 
   class FieldStrengthTester

@@ -24,7 +24,7 @@ namespace TempLat
   /** @brief A class which implements the average for list objects.
    *
    *
-   * Unit test: make test-listaverager
+   * Unit test: ctest -R test-listaverager
    **/
   template <typename T> class ListAverager
   {

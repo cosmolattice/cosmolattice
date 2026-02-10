@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A class which represents zero. Attempt to simplify derivative expressions.
    *
-   * Unit test: make test-zerotype
+   * Unit test: ctest -R test-zerotype
    **/
   /* struct ZeroType {
  //        operator ptrdiff_t() const { return 0; }

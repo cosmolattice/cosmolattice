@@ -14,7 +14,7 @@ namespace TempLat
   /** @brief A class which returns the own type of its template parameter.
    *
    *
-   * Unit test: make test-id
+   * Unit test: ctest -R test-id
    **/
   template <class T> struct id {
     using type = T;

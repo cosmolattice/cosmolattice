@@ -18,7 +18,7 @@ namespace TempLat
    *https://stackoverflow.com/a/19299611
    *
    *
-   * Unit test: make test-isincontainer
+   * Unit test: ctest -R test-isincontainer
    **/
   class IsInContainer
   {

@@ -22,7 +22,7 @@ namespace TempLat
   {
     /** @brief A class which applies complex conjugation to a complex number.
      *
-     * Unit test: make test-multiply
+     * Unit test: ctest -R test-multiply
      **/
     template <typename R> class ComplexConjugate : public UnaryOperator<R>
     {

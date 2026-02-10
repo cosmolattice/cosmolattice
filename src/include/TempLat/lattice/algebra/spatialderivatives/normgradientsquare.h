@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief A class which computes the gradient square norm.
    *
    *
-   * Unit test: make test-normgradientsquare
+   * Unit test: ctest -R test-normgradientsquare
    **/
   template <size_t NDim, typename R> class NormGradientSquare : public UnaryOperator<R>
   {

@@ -24,7 +24,7 @@ namespace TempLat
   /** @brief A class which implements basic features of su2 binary operators.
    *
    *
-   * Unit test: make test-su2binaryoperator
+   * Unit test: ctest -R test-su2binaryoperator
    **/
 
   template <typename R, typename T> class SU2BinaryOperator

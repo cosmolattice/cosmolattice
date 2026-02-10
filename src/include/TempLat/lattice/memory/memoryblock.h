@@ -26,7 +26,7 @@ namespace TempLat
    *
    * Templated for double / float.
    *
-   * Unit test: make test-memoryblock
+   * Unit test: ctest -R test-memoryblock
    **/
   template <size_t NDim, typename T> class MemoryBlock
   {

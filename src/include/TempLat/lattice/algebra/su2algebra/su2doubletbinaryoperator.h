@@ -22,7 +22,7 @@ namespace TempLat
 {
   /** @brief A class which implements common features to SU2Doublet binary operators.
    *
-   * Unit test: make test-su2doubletbinaryoperator
+   * Unit test: ctest -R test-su2doubletbinaryoperator
    **/
   template <typename R, typename T> class SU2DoubletBinaryOperator
   {

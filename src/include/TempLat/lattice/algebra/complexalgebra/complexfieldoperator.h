@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which implements common features of complex fields operators.
    *
    *
-   * Unit test: make test-complexfieldoperator
+   * Unit test: ctest -R test-complexfieldoperator
    **/
   class ComplexFieldOperator
   {

@@ -24,7 +24,7 @@ namespace TempLat
   /** @brief A class which contains standard measurements for the GWs sector.
    *
    *
-   * Unit test: make test-gwsmeasurer
+   * Unit test: ctest -R test-gwsmeasurer
    **/
   template <typename T> class GWsMeasurer
   {

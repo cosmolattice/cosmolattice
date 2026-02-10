@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A class which combines the MPIDomainSplit with the FFTLibrarySelector limits on domain splitting.
    *
-   * Unit test: make test-fftmpidomainsplit
+   * Unit test: ctest -R test-fftmpidomainsplit
    **/
 
   template <size_t NDim> class FFTMPIDomainSplit

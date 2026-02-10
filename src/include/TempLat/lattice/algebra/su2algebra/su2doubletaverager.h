@@ -32,7 +32,7 @@ namespace TempLat
   /** @brief An averager specialised for SU2Doublet. Allows to take into account cached operations consistently.
    *
    *
-   * Unit test: make test-su2doubletaverager
+   * Unit test: ctest -R test-su2doubletaverager
    **/
   template <typename T> class SU2DoubletAverager
   {

@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief A class which computes the componentes of the Anisotropic Tensor source of Gravitational Waves.
    *
    *
-   * Unit test: make test-PITensor
+   * Unit test: ctest -R test-PITensor
    **/
   class PITensor
   {

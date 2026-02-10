@@ -25,7 +25,7 @@ namespace TempLat
   {
     /** @brief A class which implements the Cosh for a given expression.
      *
-     * Unit test: make test-cosh
+     * Unit test: ctest -R test-cosh
      **/
     template <typename T> class Cosh : public UnaryOperator<T>
     {

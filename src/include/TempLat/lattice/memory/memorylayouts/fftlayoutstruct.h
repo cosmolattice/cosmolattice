@@ -31,7 +31,7 @@ namespace TempLat
    * - the Fourier space (complex values!) layout.
    *
    *
-   * Unit test: make test-fftlayoutstruct
+   * Unit test: ctest -R test-fftlayoutstruct
    **/
   template <size_t NDim> class FFTLayoutStruct
   {

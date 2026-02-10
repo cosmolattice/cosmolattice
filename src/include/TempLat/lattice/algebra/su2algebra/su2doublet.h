@@ -22,7 +22,7 @@ namespace TempLat
   /** @brief A class which implements su2doublets.
    *
    *
-   * Unit test: make test-su2doublet
+   * Unit test: ctest -R test-su2doublet
    **/
   template <size_t _NDim, typename T> class SU2DoubletBase
   {

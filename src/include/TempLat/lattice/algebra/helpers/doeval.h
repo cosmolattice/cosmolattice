@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which helps implementing the intermediate evaluation mechanism,
    * extremely useful for matrix algebra.
    *
-   * Unit test: make test-doeval
+   * Unit test: ctest -R test-doeval
    **/
   class DoEval
   {

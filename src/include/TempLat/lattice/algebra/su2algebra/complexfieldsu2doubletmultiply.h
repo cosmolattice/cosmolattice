@@ -22,7 +22,7 @@ namespace TempLat
   /** @brief A class which implements the fundamental action of SU2.
    *
    *
-   * Unit test: make test-complexfieldsu2multiply
+   * Unit test: ctest -R test-complexfieldsu2multiply
    **/
   template <typename R, typename T> class ComplexFieldSU2DoubletMultiplication : public SU2DoubletBinaryOperator<R, T>
   {

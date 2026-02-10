@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class that computes the kernel for the scale factor equation.
    *
    *
-   * Unit test: make test-scalefactorkernels
+   * Unit test: ctest -R test-scalefactorkernels
    **/
   class ScaleFactorKernels
   {

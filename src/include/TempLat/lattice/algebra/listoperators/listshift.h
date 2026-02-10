@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief A class which implements shifts for the list algebra.
    *
    *
-   * Unit test: make test-listshift
+   * Unit test: ctest -R test-listshift
    **/
 
   template <class R, int... N> class ListShifter : public ListUnaryOperator<R>

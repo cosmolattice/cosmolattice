@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which takes an r2c fft, and verifies that the symmetries in the
    *  result correspond to what your HermitianPartners prescribes.
    *
-   * Unit test: make test-verifyhermitianlayout
+   * Unit test: ctest -R test-verifyhermitianlayout
    **/
   class VerifyHermitianLayout
   {

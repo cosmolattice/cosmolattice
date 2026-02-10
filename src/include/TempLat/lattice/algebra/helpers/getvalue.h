@@ -22,7 +22,7 @@ namespace TempLat
    * whether it has the get-method or it is a scalar value.
    * Now you can use an int as if it had a get method for example.
    *
-   * Unit test: make test-getvalue
+   * Unit test: ctest -R test-getvalue
    **/
   class GetValue
   {

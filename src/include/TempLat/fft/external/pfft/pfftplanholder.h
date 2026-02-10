@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief A class which implements part of FFTLibraryInterface::PlanInterface, holding the pfft plans in shared_ptr's
    *- only freed when the last instance of this class is destructed.
    *
-   * Unit test: make test-pfftplanholder
+   * Unit test: ctest -R test-pfftplanholder
    **/
   template <size_t NDim, typename T> class PFFTPlanHolder : public FFTPlanInterface<NDim, T>
   {

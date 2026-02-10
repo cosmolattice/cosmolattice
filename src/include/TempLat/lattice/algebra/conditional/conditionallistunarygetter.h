@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A class which is part of the implementation of the list algebra.
    *
-   * Unit test: make test-conditionallistunarygetter
+   * Unit test: ctest -R test-conditionallistunarygetter
    **/
   template <typename S>
   concept ConditionalListUnaryGetter = IsSTDGettable<0, S> || IsTempLatGettable<0, S>;

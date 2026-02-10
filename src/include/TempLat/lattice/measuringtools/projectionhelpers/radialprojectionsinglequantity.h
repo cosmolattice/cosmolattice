@@ -26,7 +26,7 @@ namespace TempLat
    *  the integration is done.
    *
    *
-   * Unit test: make test-radialprojectionsinglequantity
+   * Unit test: ctest -R test-radialprojectionsinglequantity
    **/
   template <typename T> class RadialProjectionSingleQuantity
   {

@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which returns date and time, pre C++17.
    *
    *
-   * Unit test: make test-cstyletime
+   * Unit test: ctest -R test-cstyletime
    **/
   class CStyleTime
   {

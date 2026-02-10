@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which tests the hdf5 routines.
    *
    *
-   * Unit test: make test-hdf5tester
+   * Unit test: ctest -R test-hdf5tester
    **/
 
   class HDF5Tester

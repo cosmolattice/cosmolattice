@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief A class which computes the average value of a getter.
    *
    *
-   * Unit test: make test-averager
+   * Unit test: ctest -R test-averager
    **/
   template <typename T> class Averager
   {

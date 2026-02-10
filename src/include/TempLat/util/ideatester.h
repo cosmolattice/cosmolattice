@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which can be used to test random implementation ideas.
    *
    *
-   * Unit test: make test-ideatester
+   * Unit test: ctest -R test-ideatester
    **/
   class IdeaTester
   {

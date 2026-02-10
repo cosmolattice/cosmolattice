@@ -16,7 +16,7 @@ namespace TempLat
 {
   /** @brief A class which computes the norm of a list.
    *
-   * Unit test: make test-norm
+   * Unit test: ctest -R test-norm
    **/
   template <typename R>
     requires(IsTempLatGettable<0, R> || IsSTDGettable<0, R>)

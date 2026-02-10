@@ -18,7 +18,7 @@ namespace TempLat
 
   /** @brief A class which holds a mutex, specific for output (log).
    *
-   * Unit test: make test-logmutex
+   * Unit test: ctest -R test-logmutex
    */
 
   class LogMutex

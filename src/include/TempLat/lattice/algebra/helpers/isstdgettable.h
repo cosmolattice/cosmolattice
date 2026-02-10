@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A concept which checks compatibility with std::get.
    *
-   * Unit test: make test-isstdgettable
+   * Unit test: ctest -R test-isstdgettable
    **/
   template <int N, class T>
   concept IsSTDGettable = requires(T t) { std::get<N>(t); };

@@ -20,7 +20,7 @@ namespace TempLat
   /** @brief A class which returns one component of a vector as an object, keeping all fourier and co mechanics
    *consistent. Mostly useful for wave numbers.
    *
-   * Unit test: make test-getvectorcomponent
+   * Unit test: ctest -R test-getvectorcomponent
    **/
   template <typename R> class GetVectorComponentHelper
   {

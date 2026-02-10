@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class which groups common features of unary complex field operators.
    *
    *
-   * Unit test: make test-complexfieldunaryoperator
+   * Unit test: ctest -R test-complexfieldunaryoperator
    **/
   template <typename R> class ComplexFieldUnaryOperator
   {

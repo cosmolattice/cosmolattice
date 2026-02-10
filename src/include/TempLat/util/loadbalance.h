@@ -17,7 +17,7 @@ namespace TempLat
    * given and a number of threads nth, return nth integer which reprensents the most even splitting of the number
    *
    *
-   * Unit test: make test-loadbalance
+   * Unit test: ctest -R test-loadbalance
    **/
   class LoadBalance
   {

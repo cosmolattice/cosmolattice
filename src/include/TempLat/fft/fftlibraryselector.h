@@ -83,7 +83,7 @@ namespace TempLat
   /** @brief A class which sets up the interface with the appropriate FFT library.
    * Once you have implemented the FFTLibraryInterface for your library, add it to the logic here.
    *
-   * Unit test: make test-fftlibraryselector
+   * Unit test: ctest -R test-fftlibraryselector
    **/
   template <size_t NDim> class FFTLibrarySelector
   {

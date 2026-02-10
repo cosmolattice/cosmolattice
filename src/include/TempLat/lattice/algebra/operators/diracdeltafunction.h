@@ -18,7 +18,7 @@ namespace TempLat
   {
     /** @brief A class which implements the Dirac delta function.
      *
-     * Unit test: make test-diracdeltafunction
+     * Unit test: ctest -R test-diracdeltafunction
      **/
     template <typename R> class DiracDeltaFunction : public UnaryOperator<R>
     {

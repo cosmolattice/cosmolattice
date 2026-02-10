@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class which computes the scalar product of two doublets.
    *
    *
-   * Unit test: make test-su2doubletdotter
+   * Unit test: ctest -R test-su2doubletdotter
    **/
   template <typename R, typename T> class SU2DoubletDotter : public ComplexFieldBinaryOperator<R, T>
   {

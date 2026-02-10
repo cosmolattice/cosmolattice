@@ -32,7 +32,7 @@ namespace TempLat
   /** @brief A class which averages complex fields.
    *
    *
-   * Unit test: make test-complexfieldaverager
+   * Unit test: ctest -R test-complexfieldaverager
    **/
   template <typename T> class ComplexFieldAverager
   {

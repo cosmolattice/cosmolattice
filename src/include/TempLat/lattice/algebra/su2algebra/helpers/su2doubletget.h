@@ -14,7 +14,7 @@ namespace TempLat
 {
   /** @brief A class which return the SU2DouletGet method.
    *
-   * Unit test: make test-su2doubletget
+   * Unit test: ctest -R test-su2doubletget
    **/
   class SU2DoubletGetter
   {

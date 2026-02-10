@@ -19,7 +19,7 @@ namespace TempLat
    *isotropic lattices. For anisotropic, only one of th e two should be specified.
    *
    *
-   * Unit test: make test-latticeparameters
+   * Unit test: ctest -R test-latticeparameters
    **/
   MakeException(LatticeParametersInconsistent);
 

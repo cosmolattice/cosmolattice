@@ -14,7 +14,7 @@ namespace TempLat
 {
   /** @brief A class which helps implementing the automatic management of updating the ghost cells.
    *
-   * Unit test: make test-ghostshunter
+   * Unit test: ctest -R test-ghostshunter
    **/
   class GhostsHunter
   {

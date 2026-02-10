@@ -16,7 +16,7 @@ namespace TempLat
    *  has a get method. This avoids overriding the unary operators
    *  everywhere else. We don't want to override operator-(double), for example.
    *
-   * Unit test: make test-conditionalunarygetter
+   * Unit test: ctest -R test-conditionalunarygetter
    **/
   template <typename T>
   concept ConditionalUnaryGetter = HasGetMethod<T>;

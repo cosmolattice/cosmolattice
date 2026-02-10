@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief A class which implements the laplacian.
    *
    *
-   * Unit test: make test-laplacianlocal
+   * Unit test: ctest -R test-laplacianlocal
    **/
   template <ptrdiff_t NDim, typename R> class LatticeLaplacian : public UnaryOperator<R>
   {

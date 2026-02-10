@@ -29,7 +29,7 @@ namespace TempLat
   {
     /** @brief A class which takes one expression to the power of another expression.
      *
-     * Unit test: make test-power
+     * Unit test: ctest -R test-power
      **/
     template <typename R, typename T> class Power : public TempLat::BinaryOperator<R, T>
     {

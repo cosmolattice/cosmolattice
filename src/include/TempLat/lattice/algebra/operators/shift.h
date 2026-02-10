@@ -19,7 +19,7 @@ namespace TempLat
 {
   /** @brief A class which implements shifts in coordinates.
    *
-   * Unit test: make test-shift
+   * Unit test: ctest -R test-shift
    **/
   template <typename R, int... SHIFTS> class ExpressionShifter : public UnaryOperator<R>
   {

@@ -14,7 +14,7 @@ namespace TempLat
 {
   /** @brief A class which gets the size of a vector like composite object.
    *
-   * Unit test: make test-getvectorsize
+   * Unit test: ctest -R test-getvectorsize
    **/
   class GetVectorSize
   {

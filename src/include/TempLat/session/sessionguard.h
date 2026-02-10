@@ -21,7 +21,7 @@ namespace TempLat
    * Only one instance per process is allowed. Throws an exception if
    * that condition is violated.
    *
-   * Unit test: make test-sessionguard
+   * Unit test: ctest -R test-sessionguard
    **/
 
   class SessionGuard

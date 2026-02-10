@@ -27,7 +27,7 @@ namespace TempLat
    *
    *
    *
-   * Unit test: make test-fileio
+   * Unit test: ctest -R test-fileio
    **/
   template <size_t NDim = 3> class FileIO
   {

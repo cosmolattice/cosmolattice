@@ -28,7 +28,7 @@ namespace TempLat
   {
     /** @brief A class which takes the absolute value of a given expression.
      *
-     * Unit test: make test-multiply
+     * Unit test: ctest -R test-multiply
      **/
     template <typename R> class AbsoluteValue : public UnaryOperator<R>
     {

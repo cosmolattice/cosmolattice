@@ -27,7 +27,7 @@ namespace TempLat
 
   /** @brief An exception which takes variadic arguments, all recorded into an error message.
    *
-   * Unit test: make test-exception
+   * Unit test: ctest -R test-exception
    */
 
   class Exception : public std::exception

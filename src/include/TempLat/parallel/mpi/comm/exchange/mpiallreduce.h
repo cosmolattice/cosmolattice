@@ -24,7 +24,7 @@ namespace TempLat
    *   processes submit their value and receive the combined value of
    *   all processes, given an operation to combine the values.
    *
-   * Unit test: make test-mpiallreduce
+   * Unit test: ctest -R test-mpiallreduce
    **/
 
   class MPIAllReduce

@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which handles output, with convenient savetxt function.
    *
    *
-   * Unit test: make test-outputstream
+   * Unit test: ctest -R test-outputstream
    **/
   template <typename R> class OutputStream : public ConditionalFileStream
   {

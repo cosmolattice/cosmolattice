@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A class which implement 1/2 as a type. Useful for squareroots.
    *
-   * Unit test: make test-halftype
+   * Unit test: ctest -R test-halftype
    **/
   struct HalfType {
     static std::string toString() { return "(HalfType)1/2"; }

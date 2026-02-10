@@ -14,7 +14,7 @@ namespace TempLat
   /** @brief A class which computes the matter currents and charge densities of the gauge fields
    *
    *
-   * Unit test: make test-mattercurrents
+   * Unit test: ctest -R test-mattercurrents
    **/
   class MatterCurrents
   {

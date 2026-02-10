@@ -17,7 +17,7 @@ namespace TempLat
    *works on composite classes.
    *
    *
-   * Unit test: make test-iscomposite
+   * Unit test: ctest -R test-iscomposite
    **/
   template <class, int N> struct IsCompositeHelper : std::true_type {
   };

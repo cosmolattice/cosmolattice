@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which is part of the implementation of the list algebra. Conditionally returns some binary
    *operation type.
    *
-   * Unit test: make test-conditionalbinarygetterscalarvector
+   * Unit test: ctest -R test-conditionalbinarygetterscalarvector
    **/
   template <typename S, typename T>
   concept ConditionalListBinaryGetter =

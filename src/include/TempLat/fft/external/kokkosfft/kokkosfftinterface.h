@@ -17,7 +17,7 @@ namespace TempLat
    *which we inherit, in a linear chain: KokkosFFTMemoryLayout and KokkosFFTPlanner.
    *
    *
-   * Unit test: make test-kokkosinterface
+   * Unit test: ctest -R test-kokkosinterface
    **/
   template <size_t NDim> class KokkosFFTInterface : public KokkosFFTMemoryLayout<NDim>
   {

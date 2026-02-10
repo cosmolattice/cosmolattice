@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief An interface class which all getter-like objects inherit from, so we can access their
    *confirm(Config/Fourier)Space methods by their virtualness.
    *
-   * Unit test: make test-spacestateinterface
+   * Unit test: ctest -R test-spacestateinterface
    **/
   template <size_t NDim> class SpaceStateInterface
   {

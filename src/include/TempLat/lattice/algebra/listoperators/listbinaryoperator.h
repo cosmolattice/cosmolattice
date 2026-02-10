@@ -30,7 +30,7 @@ namespace TempLat
    * Can use this algebra to implement matrix and vector algebra! IDEA: statically type MATRIXTYPE type and template
    * methods of the type AddMatrixTypes<R,T>::type.
    *
-   * Unit test: make test-binaryoperator
+   * Unit test: ctest -R test-binaryoperator
    **/
   template <typename R, typename T> class ListBinaryOperator
   {

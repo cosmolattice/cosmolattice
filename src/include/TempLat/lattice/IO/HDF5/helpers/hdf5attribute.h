@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which overloads hdf5 attrbute.
    *
    *
-   * Unit test: make test-hdf5attribute
+   * Unit test: ctest -R test-hdf5attribute
    **/
   class HDF5Attribute
   {

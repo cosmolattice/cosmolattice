@@ -14,7 +14,7 @@ namespace TempLat
 {
   /** @brief concept to detect if the haseval method has been defined.
    *
-   * Unit test: make test-haseval
+   * Unit test: ctest -R test-haseval
    **/
   template <class T>
   concept HasEval = requires(std::decay_t<T> t, ptrdiff_t idx) { t.eval(idx); };

@@ -19,7 +19,7 @@ namespace TempLat
 
   /** @brief A class which factorizes an integer into its primes.
    *
-   * Unit test: make test-factorize
+   * Unit test: ctest -R test-factorize
    **/
   class Factorize
   {

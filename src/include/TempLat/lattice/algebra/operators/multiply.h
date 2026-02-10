@@ -28,7 +28,7 @@ namespace TempLat
   {
     /** @brief A class which multiplies two expressions.
      *
-     * Unit test: make test-multiply
+     * Unit test: ctest -R test-multiply
      **/
     template <typename R, typename T> class Multiplication : public BinaryOperator<R, T>
     {

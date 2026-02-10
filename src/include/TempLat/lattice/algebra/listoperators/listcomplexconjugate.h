@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class which implements the complex conjugation for the list algebra.
    *
    *
-   * Unit test: make test-listcomplexconjugate
+   * Unit test: ctest -R test-listcomplexconjugate
    **/
 
   template <typename R> class ListComplexConjugate : public ListUnaryOperator<R>

@@ -30,7 +30,7 @@ namespace TempLat
    *
    *   No public constructor: only the friend class Field can instantiate this view on its own memory.
    *
-   * Unit test: make test-fieldviewconfig
+   * Unit test: ctest -R test-fieldviewconfig
    **/
 
   /** @brief A simple class which provides a get method for basic types.

@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A concept which which checks for the existence of getComp-
    *
    *
-   * Unit test: make test-istemplatgettable
+   * Unit test: ctest -R test-istemplatgettable
    **/
   template <int N, class T>
   concept IsTempLatGettable = requires(std::decay_t<T> t, Tag<N> tag) { t.getComp(tag); };

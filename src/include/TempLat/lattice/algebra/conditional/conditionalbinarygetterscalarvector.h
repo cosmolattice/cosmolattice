@@ -14,7 +14,7 @@ namespace TempLat
 {
   /** @brief A concept which is part of the implementation of the scalar multiplication for the vector algebra.
    *
-   * Unit test: make test-conditionalbinarygetterscalarvector
+   * Unit test: ctest -R test-conditionalbinarygetterscalarvector
    **/
   template <typename S, typename T, bool OVERRIDE = true>
   concept ConditionalBinaryGetterScalarVector =

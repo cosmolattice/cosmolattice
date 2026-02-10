@@ -13,7 +13,7 @@ namespace TempLat
 {
   /** @brief A template which extracts the float type from complexes.
    *
-   * Unit test: make test-getfloattype
+   * Unit test: ctest -R test-getfloattype
    **/
   template <typename T> struct GetFloatType {
     typedef T type;

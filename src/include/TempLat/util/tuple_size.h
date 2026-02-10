@@ -14,7 +14,7 @@ namespace TempLat
   /** @brief A class which overloads tuple_size for the fcn composite objects.
    *
    *
-   * Unit test: make test-tuple_size
+   * Unit test: ctest -R test-tuple_size
    **/
   template <typename Tuple, class = std::void_t<>> struct tuple_size_helper {
     static const size_t value = 1;

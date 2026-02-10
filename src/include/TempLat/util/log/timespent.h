@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which measures the wall time since its construction.
    *
    *
-   * Unit test: make test-timespent
+   * Unit test: ctest -R test-timespent
    */
 
   class TimeSpent

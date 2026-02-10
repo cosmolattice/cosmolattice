@@ -27,7 +27,7 @@ namespace TempLat
   /** @brief A class which
    *
    *
-   * Unit test: make test-listunaryoperator
+   * Unit test: ctest -R test-listunaryoperator
    **/
   template <typename R> class ListUnaryOperator
   {

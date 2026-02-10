@@ -27,7 +27,7 @@ namespace TempLat
    * http://stackoverflow.com/a/4541470/2295722
    *
    *
-   * Unit test: make test-demangle
+   * Unit test: ctest -R test-demangle
    */
 
   class Demangle

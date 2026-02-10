@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which calls typeid and demangles it if possible.
    *
    *
-   * Unit test: make test-getcpptypename
+   * Unit test: ctest -R test-getcpptypename
    **/
   class GetCPPTypeName
   {

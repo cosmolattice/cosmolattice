@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which implements an enumerated list.
    *
    *
-   * Unit test: make test-taglist
+   * Unit test: ctest -R test-taglist
    **/
   template <int... I> class TagListBase
   {

@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which implemets a backward plaquette. Useful in equations of motions for example.
    *
    *
-   * Unit test: make test-plaquetteback
+   * Unit test: ctest -R test-plaquetteback
    **/
 
   struct PlaquetteBackTester {

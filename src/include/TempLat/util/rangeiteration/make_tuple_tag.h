@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief Function that creates a tuple of (f(Tag<0>, ..., f(Tag<N>) ).
    *
    *
-   * Unit test: make test-make_tuple_tag
+   * Unit test: ctest -R test-make_tuple_tag
    **/
   template <int Start, typename F, int... I> auto make_tuple_tag_impl(F &&f, std::integer_sequence<int, I...> iseq)
   {

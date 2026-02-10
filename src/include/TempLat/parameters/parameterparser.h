@@ -34,7 +34,7 @@ namespace TempLat
    *   in which you put all the parameters at once.
    *
    *
-   * Unit test: make test-parameters
+   * Unit test: ctest -R test-parameters
    **/
   MakeException(ParameterParserMissingMandatory);
   MakeException(ParameterParserMismatchSizes);

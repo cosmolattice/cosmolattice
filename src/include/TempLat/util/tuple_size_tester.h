@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which tests the tuple_size class.
    *
    *
-   * Unit test: make test-tuple_size_tester
+   * Unit test: ctest -R test-tuple_size_tester
    **/
 
   class tuple_size_Tester

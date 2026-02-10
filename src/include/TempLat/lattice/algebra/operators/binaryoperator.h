@@ -33,7 +33,7 @@ namespace TempLat
 {
   /** @brief A parent class which implements the common methods that all binary operators (*, +, -,... ) share.
    *
-   * Unit test: make test-binaryoperator
+   * Unit test: ctest -R test-binaryoperator
    **/
   template <typename R, typename T> class BinaryOperator
   {

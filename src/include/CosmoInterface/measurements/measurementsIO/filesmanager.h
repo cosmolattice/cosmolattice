@@ -19,7 +19,7 @@ namespace TempLat
    * the hood. It is mostly useful for the averages, which are not implemented in hdf5 yet.
    *
    *
-   * Unit test: make test-filesmanager
+   * Unit test: ctest -R test-filesmanager
    **/
   template <size_t NDim> class FilesManager
   {

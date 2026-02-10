@@ -16,7 +16,7 @@ namespace TempLat
 
   /** @brief A class which checks if a string contains a space.
    *
-   * Unit test: make test-containsspace
+   * Unit test: ctest -R test-containsspace
    **/
   class ContainsSpace
   {

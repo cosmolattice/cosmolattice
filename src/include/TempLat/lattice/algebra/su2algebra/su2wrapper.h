@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class which construct a SU2-like object.
    *
    *
-   * Unit test: make test-su2wrapper
+   * Unit test: ctest -R test-su2wrapper
    **/
   template <class A, class B, class C, class D> class SU2Wrapper : public SU2Operator
   {

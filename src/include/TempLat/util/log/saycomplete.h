@@ -17,14 +17,13 @@
 
 namespace TempLat
 {
-
   /** @brief Instantiate a container that eats up all the stream that you put in it,
    only locking the mutex and throwing up into std::cerr upon destruction.
    Provide the filename and line number of the place of invocation.
    Use the macro 'say' defined below.
     *
     *
-    * Unit test: make test-saycomplete
+    * Unit test: ctest -R test-saycomplete
    */
   inline StreamCacher SayComplete(const char *fname, int line)
   {
@@ -53,7 +52,7 @@ namespace TempLat
                        __LINE__)
 
   /** @brief A class which just does the test.
-   * Unit test: make test-saycomplete
+   * Unit test: ctest -R test-saycomplete
    */
 
   class SayCompleteTest

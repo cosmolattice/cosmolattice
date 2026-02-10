@@ -23,7 +23,7 @@ namespace TempLat
     /** @brief A function which applies a square root, by forwarding to power(x, 0.5), with 0.5 templated explicitly.
      * Holds the expression, only evaluates for a single element when you call SquareRoot::get(pIterCoords).
      *
-     * Unit test: make test-multiply
+     * Unit test: ctest -R test-multiply
      **/
     template <typename R> struct SafeSqrt : public UnaryOperator<R> {
     public:

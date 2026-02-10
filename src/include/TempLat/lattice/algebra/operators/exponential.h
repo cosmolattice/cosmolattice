@@ -27,7 +27,7 @@ namespace TempLat
   {
     /** @brief A class which exponentiates an expression.
      *
-     * Unit test: make test-exponential
+     * Unit test: ctest -R test-exponential
      **/
     template <typename T> class Exponential : public UnaryOperator<T>
     {

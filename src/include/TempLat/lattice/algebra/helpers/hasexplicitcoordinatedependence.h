@@ -24,7 +24,7 @@ namespace TempLat
    *  we can grab it down the entire chain of nested
    *  getters and operators, and store the resulting value.
    *
-   * Unit test: make test-hasexplicitcoordinatedependence
+   * Unit test: ctest -R test-hasexplicitcoordinatedependence
    **/
 
   /** @brief Default: no dependence. */

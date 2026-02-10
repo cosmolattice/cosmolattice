@@ -23,7 +23,7 @@ namespace TempLat
    *... are made.
    *
    *
-   * Unit test: make test-kokkosfftplanner
+   * Unit test: ctest -R test-kokkosfftplanner
    **/
   template <size_t NDim> class KokkosFFTPlanner : public FFTLibraryInterface<NDim>
   {

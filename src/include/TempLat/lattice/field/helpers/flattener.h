@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which flattents a composite collection.
    *
    *
-   * Unit test: make test-flattener
+   * Unit test: ctest -R test-flattener
    **/
   class Flattener
   {

@@ -19,7 +19,7 @@ namespace TempLat
    * the class is cast to a string.
    *
    *
-   * Unit test: make test-filetostring
+   * Unit test: ctest -R test-filetostring
    **/
   class FileToString
   {

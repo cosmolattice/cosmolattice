@@ -36,7 +36,7 @@ namespace TempLat
    *  data transposition after the integration is done.
    *
    *
-   * Unit test: make test-radialprojectionresult
+   * Unit test: ctest -R test-radialprojectionresult
    **/
 
   template <typename T = double> class RadialProjectionResult : public std::vector<RadialProjectionSingleBinAndValue<T>>

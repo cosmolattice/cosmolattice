@@ -16,7 +16,7 @@ namespace TempLat
 {
   /** @brief A class which returns the number of dimensions.
    *
-   * Unit test: make test-getndim
+   * Unit test: ctest -R test-getndim
    **/
   class GetNDim
   {

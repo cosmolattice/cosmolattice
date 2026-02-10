@@ -14,7 +14,7 @@ namespace TempLat
   /** @brief A class which attempts to write a float removing the unnnecessary 0 at the end. Not completely robust
    * as this is a complicated problem but good enough for our purposes.
    *
-   * Unit test: make test-prettytostring
+   * Unit test: ctest -R test-prettytostring
    **/
   class PrettyToString
   {

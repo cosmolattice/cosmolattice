@@ -30,7 +30,7 @@ namespace TempLat
    *pass. In the end they all only care about the same thing, alignment of the first entry with an x-sized block, for
    *vectorization of the instructions. FFTW does a great job.
    *
-   * Unit test: make test-fftmallocfree
+   * Unit test: ctest -R test-fftmallocfree
    **/
 
   template <typename T> class FFTMallocFree

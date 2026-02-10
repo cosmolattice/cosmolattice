@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class which multiplies SU2 field by complex fields.
    *
    *
-   * Unit test: make test-complexfieldsu2multiply
+   * Unit test: ctest -R test-complexfieldsu2multiply
    **/
   template <typename R, typename T> class ScalarSU2Multiplication : public SU2BinaryOperator<R, T>
   {

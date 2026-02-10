@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A concept which can be used to detect whether something is a composite object or not.
    *
    *
-   * Unit test: make test-hasstaticgetter
+   * Unit test: ctest -R test-hasstaticgetter
    **/
   template <typename T>
   concept HasStaticGetter = requires(T t, Tag<0> tag) { T::Getter::get(t, tag); };

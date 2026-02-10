@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief A class which implements backward finite differences.
    *
    *
-   * Unit test: make test-backdiff
+   * Unit test: ctest -R test-backdiff
    **/
   template <int dir, typename R> class BackDiff : public UnaryOperator<R>
   {

@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which implement a static if container.
    *
    *
-   * Unit test: make test-staticif
+   * Unit test: ctest -R test-staticif
    **/
   template <typename F, typename G, bool B> class static_if_helper
   {

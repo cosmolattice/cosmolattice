@@ -19,7 +19,7 @@ namespace TempLat
    * all defined by an hid_t.
    *
    *
-   * Unit test: make test-hdf5object
+   * Unit test: ctest -R test-hdf5object
    **/
 
   class HDF5Object

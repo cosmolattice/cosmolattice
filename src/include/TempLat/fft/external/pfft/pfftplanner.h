@@ -24,7 +24,7 @@ namespace TempLat
    *made.
    *
    *
-   * Unit test: make test-pfftplanner
+   * Unit test: ctest -R test-pfftplanner
    **/
 
   template <size_t NDim> class PFFTPlanner : public FFTLibraryInterface<NDim>

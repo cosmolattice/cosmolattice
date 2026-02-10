@@ -14,7 +14,7 @@ namespace TempLat
 
   /** @brief A class which
    *
-   * Unit test: make test-hermitianredundancy
+   * Unit test: ctest -R test-hermitianredundancy
    **/
 
   /** @brief For testing purposes: track which entries in the layout carry redundant information, and if so, what

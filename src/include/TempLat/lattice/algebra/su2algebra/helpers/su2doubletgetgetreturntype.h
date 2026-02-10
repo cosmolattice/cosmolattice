@@ -16,7 +16,7 @@ namespace TempLat
 {
   /** @brief A class which gives the return type of the get function of one of the doublet element.
    *
-   * Unit test: make test-su2doubletgetgetreturntype
+   * Unit test: ctest -R test-su2doubletgetgetreturntype
    **/
   template <typename T> struct SU2DoubletGetGetReturnType {
     using type = typename GetGetReturnType<

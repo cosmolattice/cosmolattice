@@ -17,7 +17,7 @@ namespace TempLat
 {
   /** @brief A class which returns an integer bin for a given fp value.
    *
-   * Unit test: make test-radialbincomputer
+   * Unit test: ctest -R test-radialbincomputer
    **/
   class RadialBinComputer
   {

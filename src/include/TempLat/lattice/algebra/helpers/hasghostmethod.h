@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A concept which determines at compile time whether an object has a method `confirmGhostsUpToDate`.
    * See HasGetMethod.
-   * Unit test: make test-hasgetmethod
+   * Unit test: ctest -R test-hasgetmethod
    **/
   template <class T>
   concept HasGhostMethod = requires(std::decay_t<T> t) { t.confirmGhostsUpToDate(); };

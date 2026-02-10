@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which reads a file which contains valid JSON,
    * and parses it into a json::JSON object.
    *
-   * Unit test: make test-filetojson
+   * Unit test: ctest -R test-filetojson
    **/
 
   class FileToJSON : public json::JSON

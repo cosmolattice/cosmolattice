@@ -14,7 +14,7 @@ namespace TempLat
 {
   /** @brief A getter for dx.
    *
-   * Unit test: make test-getdx
+   * Unit test: ctest -R test-getdx
    **/
   class GetDx
   {

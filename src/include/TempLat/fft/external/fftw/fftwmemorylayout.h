@@ -31,7 +31,7 @@ namespace TempLat
    *FFTW.
    *
    *
-   * Unit test: make test-fftwmemorylayout
+   * Unit test: ctest -R test-fftwmemorylayout
    **/
   template <size_t NDim> class FFTWMemoryLayout : public FFTWPlanner<NDim>
   {

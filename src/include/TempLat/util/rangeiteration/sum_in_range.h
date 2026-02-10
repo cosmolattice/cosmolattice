@@ -21,7 +21,7 @@ namespace TempLat
 
   /** @brief A function which applies + to the results of func(Tag<i>()) for i in [begin, end).
    *
-   * Unit test: make test-sum_in_range
+   * Unit test: ctest -R test-sum_in_range
    *
    * @param func the function to apply to each integer in the range before summing
    **/

@@ -22,7 +22,7 @@ namespace TempLat
 
   /** @brief Multiplies all the components of a tuple after applying func to them.
    *
-   * Unit test: make test-foldmultiply
+   * Unit test: ctest -R test-foldmultiply
    *
    *  @param tup the tuple to multiply over
    *  @param func the function to apply to each component before multiplying
@@ -35,7 +35,7 @@ namespace TempLat
 
   /** @brief Multiplies all the components of a tuple.
    *
-   * Unit test: make test-foldmultiply
+   * Unit test: ctest -R test-foldmultiply
    *
    *  @param tup the tuple to multiply over
    **/
@@ -51,7 +51,7 @@ namespace TempLat
 
   /** @brief Multiplies all the components of a tuple after applying func to them, starting from unit.
    *
-   * Unit test: make test-foldmultiply
+   * Unit test: ctest -R test-foldmultiply
    *
    *  @param tup the tuple to multiply over
    *  @param func the function to apply to each component before multiplying

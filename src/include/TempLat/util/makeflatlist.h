@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which creates a flat tuple from potentially a list of composite objects.
    *
    *
-   * Unit test: make test-makeflatlist
+   * Unit test: ctest -R test-makeflatlist
    **/
   template <typename... Args> auto make_flat_list(Args... args)
   {

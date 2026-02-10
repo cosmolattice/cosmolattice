@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief An almost abstract class which your FFT library must implement, which maps the redundant entries in
    *  the complex representation of the FFT of your real values data, to their hermitian-conjugate partners.
    *
-   * Unit test: make test-hermitianpartners
+   * Unit test: ctest -R test-hermitianpartners
    **/
   template <size_t NDim> class HermitianPartners
   {

@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class that computes the kernel for the scalar singlets.
    *
    *
-   * Unit test: make test-scalarkernels
+   * Unit test: ctest -R test-scalarkernels
    **/
   class ScalarSingletKernels
   {

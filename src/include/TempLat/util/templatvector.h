@@ -19,7 +19,7 @@ namespace TempLat
    *
    *
    *
-   * Unit test: make test-templatvector
+   * Unit test: ctest -R test-templatvector
    **/
 
   template <typename T, int shift = 0> class TempLatVector

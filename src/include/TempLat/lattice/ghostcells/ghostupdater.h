@@ -33,7 +33,7 @@ namespace TempLat
    * appriate datatypes for the subarrays.
    *
    *
-   * Unit test: make test-ghostupdater
+   * Unit test: ctest -R test-ghostupdater
    **/
   template <size_t NDim> class GhostUpdater
   {

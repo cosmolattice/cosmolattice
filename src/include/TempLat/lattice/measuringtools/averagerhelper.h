@@ -20,7 +20,7 @@ namespace TempLat
    * Average Routimes common to single field and list averager.
    *
    *
-   * Unit test: make test-averagerhelper
+   * Unit test: ctest -R test-averagerhelper
    **/
   MakeException(AveragerWrongSpace);
 

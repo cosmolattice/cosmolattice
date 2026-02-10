@@ -28,7 +28,7 @@ namespace TempLat
   /** @brief A class which implements the forward gradient.
    *
    *
-   * Unit test: make test-forwardgradientlocal
+   * Unit test: ctest -R test-forwardgradientlocal
    **/
   template <size_t _NDim, typename R> class LatticeForwardGradient : public UnaryOperator<R>
   {

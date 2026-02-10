@@ -17,7 +17,7 @@ namespace TempLat
 
   /** @brief A class which maps between two orderings.
    *
-   * Unit test: make test-transpositionmap
+   * Unit test: ctest -R test-transpositionmap
    **/
   template <size_t NDim> class TranspositionMap
   {

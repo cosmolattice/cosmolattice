@@ -17,7 +17,7 @@ namespace TempLat
    * in your project if you want more.
    *
    *
-   * Unit test: make test-constants
+   * Unit test: ctest -R test-constants
    **/
   namespace Constants
   {

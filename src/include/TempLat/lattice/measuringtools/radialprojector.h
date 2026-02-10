@@ -35,7 +35,7 @@ namespace TempLat
    *
    *  See `RadialProjectionResult` for a description of the result type.
    *
-   * Unit test: make test-radialprojector
+   * Unit test: ctest -R test-radialprojector
    **/
 
   template <typename T> class RadialProjector

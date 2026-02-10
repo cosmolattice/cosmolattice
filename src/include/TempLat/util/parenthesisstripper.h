@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which strips a string of its parenthesis if they are first and last characters.
    *
    *
-   * Unit test: make test-parenthesisstripper
+   * Unit test: ctest -R test-parenthesisstripper
    **/
   class ParenthesisStripper
   {

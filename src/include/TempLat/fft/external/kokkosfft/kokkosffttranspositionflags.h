@@ -21,7 +21,7 @@ namespace TempLat
 
   /** @brief A class which determines the transpose-flags for the KokkosFFT planners, corresponding to a given layout.
    *
-   * Unit test: make test-kokkosffttranspositionflags
+   * Unit test: ctest -R test-kokkosffttranspositionflags
    **/
   template <size_t NDim> class KokkosFFTTranspositionFlags
   {

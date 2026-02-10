@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which implements the hermitian conjugation.
    *
    *
-   * Unit test: make test-su2dagger
+   * Unit test: ctest -R test-su2dagger
    **/
   template <typename R> class SU2Dagger : public SU2UnaryOperator<R>
   {

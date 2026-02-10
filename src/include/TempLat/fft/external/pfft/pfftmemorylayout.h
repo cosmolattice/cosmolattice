@@ -26,7 +26,7 @@ namespace TempLat
   /** @brief Implements part of FFTLibraryInterface, computes the local memory associated to the global problem, for
    *PFFT. Build on this to replace PFFT.
    *
-   * Unit test: make test-pfftmemorylayout
+   * Unit test: ctest -R test-pfftmemorylayout
    **/
   template <size_t NDim> class PFFTMemoryLayout : public PFFTPlanner<NDim>
   {

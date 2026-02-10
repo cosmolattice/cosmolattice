@@ -21,7 +21,7 @@ namespace TempLat
     /** @brief A class which subtracts two getters.
      * Holds the expression, only evaluates for a single element when you call Multiply::get(pIterCoords).
      *
-     * Unit test: make test-multiply
+     * Unit test: ctest -R test-multiply
      **/
     template <typename R, typename T> class Subtraction : public BinaryOperator<R, T>
     {

@@ -16,7 +16,7 @@ namespace TempLat
    *  Class for parameter .handler. Special getter which can directly cast
    * to T.
    *
-   * Unit test: make test-parametergetter
+   * Unit test: ctest -R test-parametergetter
    **/
   template <typename T> class ParameterGetter
   {

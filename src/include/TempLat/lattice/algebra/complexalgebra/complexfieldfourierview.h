@@ -22,7 +22,7 @@ namespace TempLat
   /** @brief A class which holds complex field in fourier space.
    *
    *
-   * Unit test: make test-complexfieldfourierview
+   * Unit test: ctest -R test-complexfieldfourierview
    **/
   template <size_t NDim, typename T> class ComplexFieldFourierView
   {

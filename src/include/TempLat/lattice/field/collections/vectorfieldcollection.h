@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which allows to make collections of vector fields.
    *
    *
-   * Unit test: make test-vectorfieldcollection
+   * Unit test: ctest -R test-vectorfieldcollection
    **/
   template <class Arg, class T, int NDim, int N, int SHIFTIND = 0, bool flatAssign = false> class VectorFieldCollection
   {

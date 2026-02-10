@@ -21,7 +21,7 @@ namespace TempLat
 {
   /** @brief A class which implemetns SU2 SU2Doublet multiplication.
    *
-   * Unit test: make test-su2su2doubletmultiply
+   * Unit test: ctest -R test-su2su2doubletmultiply
    **/
   template <class R, class T> class SU2SU2DoubletMultiplication : public SU2DoubletBinaryOperator<R, T>
   {

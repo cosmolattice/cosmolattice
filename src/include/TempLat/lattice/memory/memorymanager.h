@@ -23,7 +23,7 @@ namespace TempLat
    *which counts the amount of work done. Ignore that, but it is important for testing purposes. NOTE that the memory
    *access operators (T* and operator[]) do NOT verify if memory was allocated.
    *
-   * Unit test: make test-memorymanager
+   * Unit test: ctest -R test-memorymanager
    **/
   template <size_t NDim, typename T> class MemoryManager
   {

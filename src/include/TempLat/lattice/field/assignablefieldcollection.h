@@ -27,7 +27,7 @@ namespace TempLat
   /** @brief A class which implements collections of object which are assignable.
    *
    *
-   * Unit test: make test-assignablefieldcollection
+   * Unit test: ctest -R test-assignablefieldcollection
    **/
   template <class Q, class... Args> class AssignableCollectionBase
   {

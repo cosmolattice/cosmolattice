@@ -16,7 +16,7 @@ namespace TempLat
 
   /** @brief A class which detects, at runtime, the endianness of the system.
    *
-   * Unit test: make test-endianness
+   * Unit test: ctest -R test-endianness
    **/
   class Endianness
   {

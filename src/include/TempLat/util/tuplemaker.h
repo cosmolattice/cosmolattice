@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which make a tuple from a composite object.
    *
    *
-   * Unit test: make test-tuplemaker
+   * Unit test: ctest -R test-tuplemaker
    **/
   template <typename R, class = std::void_t<>> struct number_to_skip_as_tuple {
     static const size_t value = 0;

@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A concept which checks whether the object has a su2get method or not.
    *
-   * Unit test: make test-hassu2get
+   * Unit test: ctest -R test-hassu2get
    **/
   template <typename T>
   concept HasSU2Get = requires(T t) { t.SU2Get(0_c); } || requires(T t) { t.SU2Get(1_c); } ||

@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A base class for powerspectrum and twopointcorrelator: holds an optionally
    *  persistent block of memory of the same shape as the Getter that you pass to it.
    *
-   * Unit test: make test-toolwithownmemory
+   * Unit test: ctest -R test-toolwithownmemory
    **/
 
   template <size_t NDim, typename T> class ToolWithOwnMemory

@@ -24,7 +24,7 @@ namespace TempLat
    *
    * Also, this class manages the sizes in memory!
    *
-   * Unit test: make test-layoutstructlocaltransposed
+   * Unit test: ctest -R test-layoutstructlocaltransposed
    **/
   template <size_t _NDim> class LayoutStructLocalTransposed
   {

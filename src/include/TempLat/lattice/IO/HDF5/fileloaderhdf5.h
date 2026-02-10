@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief A class which implements loading in pure HDF5.
    *
    *
-   * Unit test: make test-fileloaderhdf5
+   * Unit test: ctest -R test-fileloaderhdf5
    **/
   class FileLoaderHDF5
   {

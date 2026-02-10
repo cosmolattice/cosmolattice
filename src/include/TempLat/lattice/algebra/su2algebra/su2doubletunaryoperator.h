@@ -20,7 +20,7 @@ namespace TempLat
 {
   /** @brief A class which groups common features to su2doublets unary operators.
    *
-   * Unit test: make test-su2doubletunaryoperator
+   * Unit test: ctest -R test-su2doubletunaryoperator
    **/
   template <typename R> class SU2DoubletUnaryOperator
   {

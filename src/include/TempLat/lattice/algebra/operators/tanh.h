@@ -26,7 +26,7 @@ namespace TempLat
   {
     /** @brief A class which implements the Tanh.
      *
-     * Unit test: make test-tanh
+     * Unit test: ctest -R test-tanh
      **/
     template <typename T> class Tanh : public UnaryOperator<T>
     {

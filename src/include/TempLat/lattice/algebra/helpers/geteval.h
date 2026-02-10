@@ -17,7 +17,7 @@ namespace TempLat
    * (useful for operations that derive from matrix multiplication for example).
    *
    *
-   * Unit test: make test-geteval
+   * Unit test: ctest -R test-geteval
    **/
   class GetEval
   {

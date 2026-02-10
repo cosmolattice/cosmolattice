@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which aaplies vectorially the automatic derivative. Not used anywhere.
    *
    *
-   * Unit test: make test-derivatives
+   * Unit test: ctest -R test-derivatives
    **/
   class Derivatives
   {

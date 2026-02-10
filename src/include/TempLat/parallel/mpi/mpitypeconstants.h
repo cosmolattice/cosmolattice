@@ -34,7 +34,7 @@ namespace TempLat
   /** @brief A bunch of compile-time templates for getting the
    * right MPI constants for your type.
    *
-   * Unit test: make test-mpitypeconstants
+   * Unit test: ctest -R test-mpitypeconstants
    **/
 
   /** @brief or without having to define a dummy variable to pass on, how about some templates: */

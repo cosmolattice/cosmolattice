@@ -23,7 +23,7 @@ namespace TempLat
 
   /** @brief Sums all the components of a tuple after applying func to them.
    *
-   * Unit test: make test-total
+   * Unit test: ctest -R test-total
    *
    *  @param tup the tuple to sum over
    *  @param func the function to apply to each component before summing
@@ -36,7 +36,7 @@ namespace TempLat
 
   /** @brief Sums all the components of a tuple.
    *
-   * Unit test: make test-total
+   * Unit test: ctest -R test-total
    *
    *  @param tup the tuple to sum over
    **/

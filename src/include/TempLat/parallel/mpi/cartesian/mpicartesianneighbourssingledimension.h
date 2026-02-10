@@ -15,7 +15,7 @@ namespace TempLat
 
   /** @brief A class which fetches and stores the two neighbours in a single dimension.
    *
-   * Unit test: make test-mpicartesianneighbourssingledimension
+   * Unit test: ctest -R test-mpicartesianneighbourssingledimension
    **/
 
   class MPICartesianNeighboursSingleDimension

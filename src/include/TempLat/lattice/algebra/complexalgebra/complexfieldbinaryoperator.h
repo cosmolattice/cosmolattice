@@ -22,7 +22,7 @@ namespace TempLat
 {
   /** @brief A class which gtoups common features of binary field operators.
    *
-   * Unit test: make test-complexfieldbinaryoperator
+   * Unit test: ctest -R test-complexfieldbinaryoperator
    **/
   template <typename R, typename T> class ComplexFieldBinaryOperator
   {

@@ -16,7 +16,7 @@ namespace TempLat
 
   /** @brief The function to call for the evaluation of each test.
    *
-   * Unit test: make test-tddassertion
+   * Unit test: ctest -R test-tddassertion
    */
 
   class TDDAssertion

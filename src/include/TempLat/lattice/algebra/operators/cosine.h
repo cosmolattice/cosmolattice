@@ -27,7 +27,7 @@ namespace TempLat
   {
     /** @brief A class which applies cosine.
      *
-     * Unit test: make test-multiply
+     * Unit test: ctest -R test-multiply
      **/
     template <typename T> class Cosine : public UnaryOperator<T>
     {

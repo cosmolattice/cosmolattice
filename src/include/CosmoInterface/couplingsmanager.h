@@ -21,7 +21,7 @@ namespace TempLat
    * other field. The best way to understand how this class work is to see how it is used in the GaugeDerivatives and
    * MatterCurrent classes.
    *
-   * Unit test: make test-couplingsmanager
+   * Unit test: ctest -R test-couplingsmanager
    **/
   template <int NMatter, int NGauge, bool... Bools> class CouplingsManager
   {

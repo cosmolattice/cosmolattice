@@ -9,7 +9,7 @@
 
 /** \file Includes all tdd-related headers.
  *
- * Unit test: make test-tdd
+ * Unit test: ctest -R test-tdd
  */
 
 #include "TempLat/util/tdd/tddcontainer.h"

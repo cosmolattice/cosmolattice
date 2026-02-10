@@ -19,7 +19,7 @@ namespace TempLat
    *     and spits out everything to the mutexed std::cerr only
    *     when it is destructed -> that the end of the line;.
    *
-   * Unit test: make test-streamcacher
+   * Unit test: ctest -R test-streamcacher
    */
 
   class StreamCacher
@@ -33,7 +33,7 @@ namespace TempLat
       if (cache.use_count() < 2) {
         if (cache->rdbuf()->in_avail()) {
           auto guard = LogMutex::guard();
-          std::cout << cache->rdbuf() << "\n";
+          std::cout << cache->rdbuf() << std::endl;
         }
       }
     }

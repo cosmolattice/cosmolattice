@@ -19,7 +19,7 @@ namespace TempLat
   {
     /** @brief A class which tests the gaussian random field.
      *
-     * Unit test: make test-randomfield
+     * Unit test: ctest -R test-randomfield
      **/
 
     class RandomField

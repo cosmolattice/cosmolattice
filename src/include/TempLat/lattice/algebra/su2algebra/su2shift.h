@@ -19,7 +19,7 @@ namespace TempLat
 {
   /** @brief A class which applies the shift method to su2 objects.
    *
-   * Unit test: make test-su2shift
+   * Unit test: ctest -R test-su2shift
    **/
   template <typename R, int... N> class SU2Shifter : public SU2UnaryOperator<R>
   {

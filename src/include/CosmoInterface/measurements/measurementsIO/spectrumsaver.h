@@ -16,7 +16,7 @@ namespace TempLat
 {
   /** @brief A class which saves spectra to files.
    *
-   * Unit test: make test-spectrumsaver
+   * Unit test: ctest -R test-spectrumsaver
    **/
   template <typename T> class SpectrumSaver
   {

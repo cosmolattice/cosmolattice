@@ -23,7 +23,7 @@ namespace TempLat
    *  special get method which returns the dot-product / contraction of
    *  the two vectors.
    *
-   * Unit test: make test-vectordotter
+   * Unit test: ctest -R test-vectordotter
    **/
   template <typename R, typename T> class VectorDotter : public BinaryOperator<R, T>
   {

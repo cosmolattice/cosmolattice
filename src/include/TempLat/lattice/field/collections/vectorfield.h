@@ -16,7 +16,7 @@ namespace TempLat
    * Field collections. Allows to have vector fields, index starting from one.
    *
    *
-   * Unit test: make test-vectorfield3d
+   * Unit test: ctest -R test-vectorfield3d
    **/
   template <class Arg, class T, int N, bool flatAssign = false>
   using VectorField = FieldCollection<Arg, T, N, flatAssign, 1>;

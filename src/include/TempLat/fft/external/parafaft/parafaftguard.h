@@ -24,7 +24,7 @@ namespace TempLat
    * only needs to exist to satisfy the interface - no actual
    * initialization or cleanup is required.
    *
-   * Unit test: make test-parafaftguard
+   * Unit test: ctest -R test-parafaftguard
    **/
   class ParafaftGuard : public FFTSessionGuard
   {

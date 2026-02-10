@@ -19,7 +19,7 @@ namespace TempLat
 
   /** @brief A class which holds jumps for one particular layout of the memory.
    *
-   * Unit test: make test-jumpsholder
+   * Unit test: ctest -R test-jumpsholder
    **/
   template <size_t NDim> class JumpsHolder
   {

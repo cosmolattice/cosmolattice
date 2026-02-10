@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class to test the su2 algebra.
    *
    *
-   * Unit test: make test-su2algebratester
+   * Unit test: ctest -R test-su2algebratester
    **/
   class SU2AlgebraTester
   {

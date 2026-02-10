@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class which implements the logarithm for the list algebra.
    *
    *
-   * Unit test: make test-listlog
+   * Unit test: ctest -R test-listlog
    **/
   template <typename R> class ListLog : public ListUnaryOperator<R>
   {

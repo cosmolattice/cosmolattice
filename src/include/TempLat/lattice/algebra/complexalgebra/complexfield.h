@@ -22,7 +22,7 @@ namespace TempLat
 {
   /** @brief A class which implements complex-valued fields.
    *
-   * Unit test: make test-complexfield
+   * Unit test: ctest -R test-complexfield
    **/
   template <size_t _NDim, typename T> class ComplexField
   {

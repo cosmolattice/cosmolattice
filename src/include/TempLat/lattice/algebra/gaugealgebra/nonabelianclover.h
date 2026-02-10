@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which implement the clover discretization of non-abelian magnetic fields.
    *
    *
-   * Unit test: make test-nonabelianclover
+   * Unit test: ctest -R test-nonabelianclover
    **/
 
   struct NonAbelianCloverTester {

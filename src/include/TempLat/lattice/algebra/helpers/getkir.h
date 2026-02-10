@@ -18,7 +18,7 @@ namespace TempLat
    * Careful, this method works only on types which also have a get method.
    * Need this to deduce the return type.
    *
-   * Unit test: make test-getkir
+   * Unit test: ctest -R test-getkir
    **/
   class GetKIR
   {

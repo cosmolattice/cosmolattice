@@ -18,7 +18,7 @@ namespace TempLat
 {
   /** @brief A class which computes the complex conjugate of a complex field.
    *
-   * Unit test: make test-complexfieldconjugate
+   * Unit test: ctest -R test-complexfieldconjugate
    **/
   template <typename R> class ComplexFieldConjugate : public ComplexFieldUnaryOperator<R>
   {

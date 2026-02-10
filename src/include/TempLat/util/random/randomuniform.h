@@ -23,7 +23,7 @@ namespace TempLat
    * Implementation note: the C++14 standard guarantees cross-platform stability of Mersenne-Twister std::mt19937_64.
    * So we use that. Note: not sure about the other random generator.
    *
-   * Unit test: make test-randomuniform
+   * Unit test: ctest -R test-randomuniform
    **/
   template <typename dummy = void> class RandomUniform
   {

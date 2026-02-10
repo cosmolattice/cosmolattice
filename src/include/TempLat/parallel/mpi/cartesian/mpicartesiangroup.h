@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class keeps the books regarding the process layout
    * relative to the physics lattice.
    *
-   * Unit test: make test-mpicartesiangroup
+   * Unit test: ctest -R test-mpicartesiangroup
    **/
   class MPICartesianGroup
   {

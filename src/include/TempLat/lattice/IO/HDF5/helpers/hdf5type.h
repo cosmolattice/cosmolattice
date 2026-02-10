@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief SFINAE class to get appropriate hdf5 type-
    *
    *
-   * Unit test: make test-hdf5type
+   * Unit test: ctest -R test-hdf5type
    **/
 
   namespace HDF5TypeConstant

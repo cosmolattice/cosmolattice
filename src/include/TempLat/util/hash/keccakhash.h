@@ -23,7 +23,7 @@ namespace TempLat
 
   /** @brief A class which computes (statically) the keccak hash of one string.
    *
-   * Unit test: make test-keccakhash
+   * Unit test: ctest -R test-keccakhash
    **/
 
   class KeccakHash

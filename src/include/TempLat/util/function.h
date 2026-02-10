@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A macro to simplify writing lambda function. Don't use it in TempLat, for the interfaces.
    *
    *
-   * Unit test: make test-function
+   * Unit test: ctest -R test-function
    **/
 #define Function(x, expr) [&](auto x) { return expr; }
 

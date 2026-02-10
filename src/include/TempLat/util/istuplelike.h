@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which tests whether or not a class behaves like a tuple.
    *
    *
-   * Unit test: make test-istuplelike
+   * Unit test: ctest -R test-istuplelike
    **/
   template <class, class = std::void_t<>> struct IsTupleLike : std::false_type {
   };

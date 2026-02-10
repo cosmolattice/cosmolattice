@@ -20,7 +20,7 @@ namespace TempLat
    * Just call the send and receive methods with any scalar or vector-like input, associated rank numbers and tags.
    * Unused for now.
    *
-   * Unit test: make test-mpisendreceive
+   * Unit test: ctest -R test-mpisendreceive
    **/
 
   class MPISendReceive

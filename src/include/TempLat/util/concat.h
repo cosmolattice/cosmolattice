@@ -14,7 +14,7 @@ namespace TempLat
 
   /** @brief A class which concatenates lists.
    *
-   * Unit test: make test-concat
+   * Unit test: ctest -R test-concat
    **/
   template <class S1, class S2> struct Concat;
   template <class S1, class S2> using Concat_t = typename Concat<S1, S2>::type;

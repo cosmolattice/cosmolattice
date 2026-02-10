@@ -37,7 +37,7 @@ namespace TempLat
 {
   /** @brief A parent class which implements the common methods that all unary operators (-, sqrt ) share.
    *
-   * Unit test: make test-unaryoperator
+   * Unit test: ctest -R test-unaryoperator
    **/
   template <typename R> class UnaryOperator
   {

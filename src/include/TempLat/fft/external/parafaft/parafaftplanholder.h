@@ -48,7 +48,7 @@ namespace TempLat
    *
    * Note: Parafaft only supports double precision currently.
    *
-   * Unit test: make test-parafaftplanholder
+   * Unit test: ctest -R test-parafaftplanholder
    **/
   template <size_t NDim, typename T> class ParafaftPlanHolder : public FFTPlanInterface<NDim, T>
   {

@@ -20,7 +20,7 @@ namespace TempLat
   /** @brief A class which tests the tuple flattener.
    *
    *
-   * Unit test: make test-flatteningtester
+   * Unit test: ctest -R test-flatteningtester
    **/
   class FlatteningTester
   {

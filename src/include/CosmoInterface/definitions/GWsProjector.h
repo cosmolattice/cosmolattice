@@ -31,7 +31,7 @@ namespace TempLat
   /** @brief A class computes the projected product of h_ij h_ij^* in base of the u fields. See Technical Note II.
    *
    *
-   * Unit test: make test-GWsProjector
+   * Unit test: ctest -R test-GWsProjector
    **/
   class GWsProjector
   {

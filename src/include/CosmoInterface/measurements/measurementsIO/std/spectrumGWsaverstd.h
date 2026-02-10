@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief A class which implements the std spectra output.
    *
    *
-   * Unit test: make test-spectrumsaverstd
+   * Unit test: ctest -R test-spectrumsaverstd
    **/
   template <typename T> class SpectrumGWSaverStd
   {

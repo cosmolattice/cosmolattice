@@ -14,7 +14,7 @@ namespace TempLat
   /** @brief A number of unique / independent real and imaginary floating point values in a memory layout.
    *
    *
-   * Unit test: make test-hermitianvalueaccounting
+   * Unit test: ctest -R test-hermitianvalueaccounting
    **/
   class HermitianValueAccounting
   {

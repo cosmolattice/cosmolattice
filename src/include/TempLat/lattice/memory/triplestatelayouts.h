@@ -23,7 +23,7 @@ namespace TempLat
    *
    * But the class doesn't do anything. Just compute the layouts.
    *
-   * Unit test: make test-triplestatelayouts
+   * Unit test: ctest -R test-triplestatelayouts
    **/
   template <size_t NDim> class TripleStateLayouts
   {

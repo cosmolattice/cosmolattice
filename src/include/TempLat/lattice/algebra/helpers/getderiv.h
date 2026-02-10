@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A class which gets derivates from all classes, also those that do not have derivative.
    *
-   * Unit test: make test-getderiv
+   * Unit test: ctest -R test-getderiv
    **/
   class GetDeriv
   {

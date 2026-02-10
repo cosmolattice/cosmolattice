@@ -25,7 +25,7 @@ namespace TempLat
   {
     /** @brief A class which implements the Sinh.
      *
-     * Unit test: make test-sinh
+     * Unit test: ctest -R test-sinh
      **/
     template <typename T> class Sinh : public UnaryOperator<T>
     {

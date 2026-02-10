@@ -26,7 +26,7 @@ namespace TempLat
   {
     /** @brief A class which applies the sine to an expression.
      *
-     * Unit test: make test-sine
+     * Unit test: ctest -R test-sine
      **/
     template <typename T> class Sine : public UnaryOperator<T>
     {

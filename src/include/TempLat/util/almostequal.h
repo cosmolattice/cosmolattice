@@ -53,7 +53,7 @@ namespace TempLat
   /** @brief A class for testing AlmostEqual
    *
    *
-   * Unit test: make test-almostequal
+   * Unit test: ctest -R test-almostequal
    */
 
 #ifdef TEMPLATTEST

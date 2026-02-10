@@ -19,7 +19,7 @@ namespace TempLat
 
   /** @brief A class which adds an owned file stream to the ConditionalStream
    *
-   * Unit test: make test-conditionalfilestream
+   * Unit test: ctest -R test-conditionalfilestream
    */
   class ConditionalFileStream : public ConditionalStream
   {

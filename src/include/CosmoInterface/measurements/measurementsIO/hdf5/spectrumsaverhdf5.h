@@ -20,7 +20,7 @@ namespace TempLat
   /** @brief A class which save the spectrum (or any RadialProjectionResults) in a hdf5 format.
    *
    *
-   * Unit test: make test-spectrumsaverhdf5
+   * Unit test: ctest -R test-spectrumsaverhdf5
    **/
   template <typename T> class SpectrumSaverHDF5
   {

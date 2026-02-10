@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 /** \file includes all log-related headers.
- * Unit test: make test-log
+ * Unit test: ctest -R test-log
  */
 
 #include "TempLat/util/log/colors.h"

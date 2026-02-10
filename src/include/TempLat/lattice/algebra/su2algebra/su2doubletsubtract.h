@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which implement the Subtraction between two su2 doublets.
    *
    *
-   * Unit test: make test-su2doubletsubtract
+   * Unit test: ctest -R test-su2doubletsubtract
    **/
   template <typename R, typename T> class SU2DoubletSubtract : public SU2DoubletBinaryOperator<R, T>
   {

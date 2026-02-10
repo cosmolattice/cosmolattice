@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which tracks the three layout states the memory can have. If state is undefined, all the
    *   is___Space() variants return true. So you don't wast time FFT'ing trash etc.
    *
-   * Unit test: make test-memorylayoutstate
+   * Unit test: ctest -R test-memorylayoutstate
    **/
 
   class MemoryLayoutState

@@ -25,7 +25,7 @@ namespace TempLat
    *  stateless RNG is used, we need to keep track of this in order to generate a new set of random numbers
    *  each time
    *
-   * Unit test: make test-randomgaussianfield
+   * Unit test: ctest -R test-randomgaussianfield
    **/
   template <size_t NDim, typename T, bool Real, bool Unitary>
   class RandomGaussianFieldHelper : public DimensionCountRecorder<NDim>

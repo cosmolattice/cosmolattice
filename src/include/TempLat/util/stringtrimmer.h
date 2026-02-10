@@ -24,7 +24,7 @@ namespace TempLat
    * In place: [lr]trim(std::string).
    * Copy: std::string [lr]trimmed(std::string)
    *
-   * Unit test: make test-stringtrimmer
+   * Unit test: ctest -R test-stringtrimmer
    */
 
   class StringTrimmer

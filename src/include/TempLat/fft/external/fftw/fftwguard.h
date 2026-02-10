@@ -31,7 +31,7 @@ namespace TempLat
    * Only used by MPIGuard, which manually calls its destructor.
    *
    *
-   * Unit test: make test-fftwguard
+   * Unit test: ctest -R test-fftwguard
    **/
   class FFTWGuard : public FFTSessionGuard
   {

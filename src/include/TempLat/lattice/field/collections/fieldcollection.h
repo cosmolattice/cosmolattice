@@ -21,7 +21,7 @@ namespace TempLat
    * Field collections. Allows to have collection of composite vector fields as well.
    *
    *
-   * Unit test: make test-fieldcollection
+   * Unit test: ctest -R test-fieldcollection
    **/
   template <class Arg, class T, int N, bool flatAssign = false, int SHIFTIND = 0> class FieldCollection
   {

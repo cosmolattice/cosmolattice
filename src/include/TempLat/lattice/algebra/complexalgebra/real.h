@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which get real parts of fields.
    *
    *
-   * Unit test: make test-real
+   * Unit test: ctest -R test-real
    **/
   template <class T>
     requires requires(T t) { t.ComplexFieldGet(0_c); }

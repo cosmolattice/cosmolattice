@@ -18,7 +18,7 @@ namespace TempLat
    *  the bin position, one for the function value for that bin.
    *
    *
-   * Unit test: make test-radialprojectionsinglebinandvalue
+   * Unit test: ctest -R test-radialprojectionsinglebinandvalue
    **/
   template <typename T> struct RadialProjectionSingleBinAndValue {
   public:

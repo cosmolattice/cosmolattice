@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which creates a doublet out of some preexisting objects
    *
    *
-   * Unit test: make test-su2doubletwrapper
+   * Unit test: ctest -R test-su2doubletwrapper
    **/
   template <class A, class B, class C, class D>
   class SU2DoubletWrapper

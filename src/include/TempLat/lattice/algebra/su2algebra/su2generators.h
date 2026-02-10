@@ -18,7 +18,7 @@ namespace TempLat
 {
   /** @brief A class which implements the i*sigma matrices
    *
-   * Unit test: make test-paulimatrices
+   * Unit test: ctest -R test-paulimatrices
    **/
   namespace Constants
   {

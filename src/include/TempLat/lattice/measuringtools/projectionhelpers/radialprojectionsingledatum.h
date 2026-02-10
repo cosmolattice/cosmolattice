@@ -20,7 +20,7 @@ namespace TempLat
    *   projection of something. Used for describing both the bin position and values,
    *   namely combined in `RadialProjectionSingleBinAndValue`.
    *
-   * Unit test: make test-radialprojectionsingledatum
+   * Unit test: ctest -R test-radialprojectionsingledatum
    **/
   template <typename T> struct RadialProjectionSingleDatum {
 

@@ -18,7 +18,7 @@ namespace TempLat
 {
   /** @brief A class which treats a complex field as an object in fourier space.
    *
-   * Unit test: make test-asfourier
+   * Unit test: ctest -R test-asfourier
    **/
   template <typename R> class ComplexFieldAsFourier
   {

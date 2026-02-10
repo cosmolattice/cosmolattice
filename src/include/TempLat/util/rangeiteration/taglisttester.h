@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class to test the tag list and related operations.
    *
    *
-   * Unit test: make test-taglisttester
+   * Unit test: ctest -R test-taglisttester
    **/
 
   class TagListTester

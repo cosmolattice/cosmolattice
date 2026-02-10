@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief A class which implements complex subtraction.
    *
    *
-   * Unit test: make test-complexfieldadd
+   * Unit test: ctest -R test-complexfieldadd
    **/
   template <class R, class T> class ComplexFieldSubtraction : public ComplexFieldBinaryOperator<R, T>
   {

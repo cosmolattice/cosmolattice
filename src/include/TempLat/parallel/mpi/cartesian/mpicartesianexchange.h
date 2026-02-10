@@ -21,7 +21,7 @@ namespace TempLat
    *  a pointer for the sending memory and a pointer
    *  for the receiving memory.
    *
-   * Unit test: make test-mpicartesianexchange
+   * Unit test: ctest -R test-mpicartesianexchange
    **/
 
   class MPICartesianExchange

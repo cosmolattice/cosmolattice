@@ -13,7 +13,7 @@ namespace TempLat
 {
   /** @brief A concept to detect if the getKIR method is defined.
    *
-   * Unit test: make test-haskir
+   * Unit test: ctest -R test-haskir
    **/
   template <class T>
   concept HasKIR = requires(std::decay_t<T> t) { t.getKIR(); };

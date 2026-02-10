@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which
    *
    *
-   * Unit test: make test-backwardcovariantderivative
+   * Unit test: ctest -R test-backwardcovariantderivative
    **/
   template <size_t dim, class... Args> auto BackwardCovariantDerivative(Args... args)
   {

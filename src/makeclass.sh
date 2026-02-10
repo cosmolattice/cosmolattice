@@ -79,7 +79,7 @@ mkdir -p "${dname}"
   echo "${inserttabs}     * \todo Write this. "
   echo "${inserttabs}     * "
   echo "${inserttabs}     * "
-  echo "${inserttabs}     * Unit test: make test-${lowerCase}"
+  echo "${inserttabs}     * Unit test: ctest -R test-${lowerCase}"
   echo "${inserttabs}     **/"
   echo
   echo "${inserttabs}    class ${className} {"

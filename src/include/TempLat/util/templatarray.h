@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which makes array compatible which getComp algebra.
    *
    *
-   * Unit test: make test-templatarray
+   * Unit test: ctest -R test-templatarray
    **/
   template <typename T, int N, int shift = 0> class TempLatArray
   {

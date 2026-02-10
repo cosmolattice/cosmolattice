@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which does bookkeeping, number of threads allowed by hardware, number of threads allowed by user,
    *etc.
    *
-   * Unit test: make test-threadsettings
+   * Unit test: ctest -R test-threadsettings
    **/
   class ThreadSettings
   {

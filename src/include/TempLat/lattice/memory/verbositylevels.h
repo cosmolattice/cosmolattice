@@ -14,7 +14,7 @@ namespace TempLat
 
   /** @brief A struct with a bunch of flags with enable various output messages. Use to your advantage.
    *
-   * Unit test: make test-verbositylevels
+   * Unit test: ctest -R test-verbositylevels
    **/
 
   struct VerbosityLevels {

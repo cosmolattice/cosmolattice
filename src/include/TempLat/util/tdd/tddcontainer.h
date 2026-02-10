@@ -17,7 +17,7 @@ namespace TempLat
 
   /** @brief The container to instantiate if you want to register your class for testing.
    *
-   * Unit test: make test-tddcontainer
+   * Unit test: ctest -R test-tddcontainer
    */
   template <class TESTME> class TDDContainer : public TDDContainerBase
   {

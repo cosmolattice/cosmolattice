@@ -24,7 +24,7 @@ namespace TempLat
    * so it has access to private methods, and hence is the only thing
    * in the world which can construct and hold an instance of FFTWGuard.
    *
-   * Unit test: make test-mpiguardactualmpi
+   * Unit test: ctest -R test-mpiguardactualmpi
    **/
 
   class MPIGuard

@@ -36,7 +36,7 @@ namespace TempLat
    * Note: We use the FFTW flag for FFTLayoutStruct compatibility since
    * parafaft uses FFTW conventions for r2c padding.
    *
-   * Unit test: make test-parafaftmemorylayout
+   * Unit test: ctest -R test-parafaftmemorylayout
    **/
   template <size_t NDim> class ParafaftMemoryLayout : public ParafaftPlanner<NDim>
   {

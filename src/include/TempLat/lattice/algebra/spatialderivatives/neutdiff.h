@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief A class which implements neutral finite differences.
    *
    *
-   * Unit test: make test-neutdiff
+   * Unit test: ctest -R test-neutdiff
    **/
   template <int dir, typename R> class NeutDiff : public UnaryOperator<R>
   {

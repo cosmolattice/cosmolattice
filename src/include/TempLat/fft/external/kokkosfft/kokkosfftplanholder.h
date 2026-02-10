@@ -25,7 +25,7 @@ namespace TempLat
    *shared_ptr's
    *- only freed when the last instance of this class is destructed.
    *
-   * Unit test: make test-kokkosfftplanholder
+   * Unit test: ctest -R test-kokkosfftplanholder
    **/
   template <size_t NDim, typename T> class KokkosFFTPlanHolder : public FFTPlanInterface<NDim, T>
   {

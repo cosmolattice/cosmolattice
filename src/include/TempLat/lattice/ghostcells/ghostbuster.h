@@ -36,7 +36,7 @@ namespace TempLat
    *
    * Memory allocation of the pointer is NOT affected. This is a memmove-like routine.
    *
-   * Unit test: make test-ghostbuster
+   * Unit test: ctest -R test-ghostbuster
    **/
   template <size_t NDim> class GhostBuster
   {

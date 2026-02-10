@@ -16,7 +16,7 @@ namespace TempLat
 {
   /** @brief A concept which determines at compile time whether an object has a method `get`.
    * See HasGetMethod.
-   * Unit test: make test-hasgetmethod
+   * Unit test: ctest -R test-hasgetmethod
    **/
   template <class T>
   concept HasStringMethod = requires(std::decay_t<T> t) { t.toString(); };

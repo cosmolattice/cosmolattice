@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which is used to save measurements using the standard library.
    *
    *
-   * Unit test: make test-measurementssaverstd
+   * Unit test: ctest -R test-measurementssaverstd
    **/
   template <typename T> class MeasurementsSaverStd
   {

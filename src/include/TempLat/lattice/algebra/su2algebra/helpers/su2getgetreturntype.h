@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which determines what is the return type of the composite su2 objects
    *
    *
-   * Unit test: make test-su2getgetreturntype
+   * Unit test: ctest -R test-su2getgetreturntype
    **/
   template <typename T> struct SU2GetGetReturnType {
     using type = typename GetGetReturnType<

@@ -20,7 +20,7 @@ namespace TempLat
   /** @brief A class which applies statically a binary operation to a list.
    *
    *
-   * Unit test: make test-binaryfold
+   * Unit test: ctest -R test-binaryfold
    **/
   struct BinaryFoldTester {
   public:

@@ -22,7 +22,7 @@ namespace TempLat
 
   /** @brief A class which implements complex field addition.
    *
-   * Unit test: make test-complexfieldadd
+   * Unit test: ctest -R test-complexfieldadd
    **/
   template <class R, class T> class ComplexFieldAddition : public ComplexFieldBinaryOperator<R, T>
   {

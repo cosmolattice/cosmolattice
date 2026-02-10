@@ -16,7 +16,7 @@ namespace TempLat
    *  Simple convenience class which maps any bining to one integer ks. Useful for test purposes.
    *
    *
-   * Unit test: make test-kbins
+   * Unit test: ctest -R test-kbins
    **/
   template <typename T> class KBins
   {

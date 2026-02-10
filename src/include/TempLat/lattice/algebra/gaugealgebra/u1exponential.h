@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief Exponential map for U(1).
    *
    *
-   * Unit test: make test-u1wrapper
+   * Unit test: ctest -R test-u1wrapper
    **/
   template <typename R> class U1Exponential : public ComplexFieldUnaryOperator<R>
   {

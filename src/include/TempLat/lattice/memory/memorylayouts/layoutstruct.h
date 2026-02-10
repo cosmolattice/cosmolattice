@@ -26,7 +26,7 @@ namespace TempLat
    *  See LayoutStructGlobal, LayoutStructLocal and LayoutStructLocalTransposed.
    *
    *
-   * Unit test: make test-layoutstruct
+   * Unit test: ctest -R test-layoutstruct
    **/
   template <size_t NDim> struct LayoutStruct {
     /**

@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class that computes the kernel of the U(1) gauge fields.
    *
    *
-   * Unit test: make test-u1kernels
+   * Unit test: ctest -R test-u1kernels
    **/
   class U1Kernels
   {

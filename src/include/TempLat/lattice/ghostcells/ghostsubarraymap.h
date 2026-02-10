@@ -17,7 +17,7 @@ namespace TempLat
    *  for datatypes and dimensions. getSubArray<T>(dimension) is the
    *  only necessary public method.
    *
-   * Unit test: make test-ghostsubarraymap
+   * Unit test: ctest -R test-ghostsubarraymap
    **/
   template <size_t NDim> class GhostSubarrayMap
   {

@@ -20,7 +20,7 @@ namespace TempLat
   /** @brief A class which wraps two objects as a complex field.
    *
    *
-   * Unit test: make test-complexwrapper
+   * Unit test: ctest -R test-complexwrapper
    **/
   template <class R, class T> class ComplexFieldWrapper : public ComplexFieldOperator
   {

@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which defines plaquette operator.
    *
    *
-   * Unit test: make test-plaquette
+   * Unit test: ctest -R test-plaquette
    **/
   struct PlaquetteTester {
 #ifdef TEMPLATTEST

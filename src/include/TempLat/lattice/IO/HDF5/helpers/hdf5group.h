@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which overloads hdf5 groups.
    *
    *
-   * Unit test: make test-hdf5group
+   * Unit test: ctest -R test-hdf5group
    **/
 
   class HDF5Group : public HDF5Object

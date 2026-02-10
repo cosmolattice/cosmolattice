@@ -15,7 +15,7 @@ namespace TempLat
 {
   /** @brief A class which implements homemade compile time constants.
    *
-   * Unit test: make test-tag
+   * Unit test: ctest -R test-tag
    **/
   template <int N> class Tag
   {

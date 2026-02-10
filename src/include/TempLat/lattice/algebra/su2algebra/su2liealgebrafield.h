@@ -15,7 +15,7 @@ namespace TempLat
    *function which returns its components wrt to sigma/2 instead of sigma, which is more conventional for the algebra
    *(but internally, also expanded as a function of sigma).
    *
-   * Unit test: make test-su2liealgebrafield
+   * Unit test: ctest -R test-su2liealgebrafield
    **/
   template <size_t NDim, typename T> class SU2LieAlgebraField : public SU2FieldBase<NDim, T>
   {

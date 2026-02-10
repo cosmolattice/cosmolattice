@@ -21,7 +21,7 @@ namespace TempLat
 
   /** @brief A class which implements the exponentiation for the list algebra.
    *
-   * Unit test: make test-listexponential
+   * Unit test: ctest -R test-listexponential
    **/
   template <typename R> class ListExponential : public ListUnaryOperator<R>
   {

@@ -20,7 +20,7 @@ namespace TempLat
    *Now we just use it to initialise the coordinates which are saved to memory. Hence, no threading whatsoever appears
    *here.
    *
-   * Unit test: make test-coordinatesinitializer
+   * Unit test: ctest -R test-coordinatesinitializer
    **/
   template <size_t NDim> class CoordinatesInitializer
   {

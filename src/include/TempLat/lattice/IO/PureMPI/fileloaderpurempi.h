@@ -20,7 +20,7 @@ namespace TempLat
   /** @brief A class which should implement mpi IO, but does not.
    *
    *
-   * Unit test: make test-fileloaderpurempi
+   * Unit test: ctest -R test-fileloaderpurempi
    **/
   template <size_t NDim> class FileLoaderPureMPI
   {

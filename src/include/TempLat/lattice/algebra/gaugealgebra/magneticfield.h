@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which return the magnetic field from the gauge potential. Specialise to 3D.
    *
    *
-   * Unit test: make test-magneticfield
+   * Unit test: ctest -R test-magneticfield
    **/
   template <typename R> auto magneticField(R As, Tag<1> t) { return fieldStrength(As, 2_c, 3_c); }
 

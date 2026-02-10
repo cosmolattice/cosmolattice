@@ -20,7 +20,7 @@ namespace TempLat
    *   to get a function of distance only.
    *
    *
-   * Unit test: make test-twopointcorrelator
+   * Unit test: ctest -R test-twopointcorrelator
    **/
   template <size_t NDim, typename T> class TwoPointCorrelatorBuilder : public ToolWithOwnMemory<NDim, T>
   {

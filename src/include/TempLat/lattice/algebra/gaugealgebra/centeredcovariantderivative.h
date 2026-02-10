@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which computes centered covariant derivatives.
    *
    *
-   * Unit test: make test-centeredcovariantderivative
+   * Unit test: ctest -R test-centeredcovariantderivative
    **/
   template <size_t dim, class... Args> auto CenteredCovariantDerivative(Args... args)
   {

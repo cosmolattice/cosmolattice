@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class that computes the kernel for the SU2 gauge fields.
    *
    *
-   * Unit test: make test-su2kernels
+   * Unit test: ctest -R test-su2kernels
    **/
   class SU2Kernels
   {

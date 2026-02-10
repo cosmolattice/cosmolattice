@@ -23,7 +23,7 @@ namespace TempLat
    *
    *  Implements a get method, and is hence suitable for all algebra.
    *
-   * Unit test: make test-field
+   * Unit test: ctest -R test-field
    **/
   template <size_t _NDim, typename T> class Field : public ConfigView<_NDim, T>
   {

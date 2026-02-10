@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which implements the sum of 2 su2 doublets.
    *
    *
-   * Unit test: make test-su2doubletsum
+   * Unit test: ctest -R test-su2doubletsum
    **/
   template <typename R, typename T> class SU2DoubletAddition : public SU2DoubletBinaryOperator<R, T>
   {

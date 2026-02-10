@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which implements the sum of su2 matrices.
    *
    *
-   * Unit test: make test-su2sum
+   * Unit test: ctest -R test-su2sum
    **/
   template <typename R, typename T> class SU2Addition : public SU2BinaryOperator<R, T>
   {

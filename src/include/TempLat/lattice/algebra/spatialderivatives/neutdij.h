@@ -23,7 +23,7 @@ namespace TempLat
   /** @brief A class which implements neutral finite sums.
    *
    *
-   * Unit test: make test-neutdij
+   * Unit test: ctest -R test-neutdij
    **/
   template <int dir, typename R> class NeutDij : public UnaryOperator<R>
   {

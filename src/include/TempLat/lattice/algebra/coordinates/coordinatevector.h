@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief A class which implements the concept of a coordinate.
    *
    *
-   * Unit test: make test-coordinatevector
+   * Unit test: ctest -R test-coordinatevector
    **/
   template <size_t NDim> class CoordinateVector
   {

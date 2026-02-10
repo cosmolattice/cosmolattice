@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which returns multiple parameters.
    *
    *
-   * Unit test: make test-multipleparametergetter
+   * Unit test: ctest -R test-multipleparametergetter
    **/
   template <typename T> class MultipleParameterGetter
   {

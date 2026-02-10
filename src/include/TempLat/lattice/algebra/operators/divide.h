@@ -24,7 +24,7 @@ namespace TempLat
     /** @brief A class which divides two expressions. Holds the expression, only evaluates for a single element when you
      *call Divide::get(pIterCoords).
      *
-     * Unit test: make test-divide
+     * Unit test: ctest -R test-divide
      **/
     template <typename R, typename T> class Division : public BinaryOperator<R, T>
     {

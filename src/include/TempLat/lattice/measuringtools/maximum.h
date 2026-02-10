@@ -24,7 +24,7 @@ namespace TempLat
   /** @brief A class which computes the maximum value of a getter.
    *
    *
-   * Unit test: make test-maximum
+   * Unit test: ctest -R test-maximum
    **/
   MakeException(MaximumWrongSpace);
 

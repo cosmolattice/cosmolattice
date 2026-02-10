@@ -17,7 +17,7 @@ namespace TempLat
    *which we inherit, in a linear chain: FFTWMemoryLayout and FFTWPlanner.
    *
    *
-   * Unit test: make test-fftwinterface
+   * Unit test: ctest -R test-fftwinterface
    **/
   template <size_t NDim> class FFTWInterface : public FFTWMemoryLayout<NDim>
   {

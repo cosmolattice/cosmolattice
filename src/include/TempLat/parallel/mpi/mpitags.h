@@ -23,7 +23,7 @@ namespace TempLat
   }; // namespace MPITags
 
   /** @brief A class which just compiles.
-   * Unit test: make test-mpitags
+   * Unit test: ctest -R test-mpitags
    **/
   class MPITagsJustCompile
   {

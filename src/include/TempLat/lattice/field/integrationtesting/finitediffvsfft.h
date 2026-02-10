@@ -16,7 +16,7 @@ namespace TempLat
    *   various spatial derivatives: compare finite difference results
    *   with FFT results.
    *
-   * Unit test: make test-finitediffvsfft
+   * Unit test: ctest -R test-finitediffvsfft
    **/
   class FiniteDiffVSFFT
   {

@@ -15,7 +15,7 @@ namespace TempLat
    * Use as shifted_index_sequence<SHIFT>(std::make_index_sequence<N>{})
    * To get an index sequence<SHIFT,SHIFT+1,...,SHIFT+N-1>
    *
-   * Unit test: make test-shiftedindexsequence
+   * Unit test: ctest -R test-shiftedindexsequence
    **/
   template <int SHIFT, size_t... I> auto shifted_index_sequence(std::index_sequence<I...>)
   {

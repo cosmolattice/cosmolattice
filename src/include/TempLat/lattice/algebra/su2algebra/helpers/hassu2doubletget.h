@@ -15,7 +15,7 @@ namespace TempLat
 
   /** @brief A concept which checks whether the object has a su2doubletget method or not.
    *
-   * Unit test: make test-hassu2doubletget
+   * Unit test: ctest -R test-hassu2doubletget
    **/
   template <typename T>
   concept HasSU2DoubletGet = requires(T t, Tag<0> tag) { t.SU2DoubletGet(tag); };

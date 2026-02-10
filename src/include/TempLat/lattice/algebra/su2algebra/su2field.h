@@ -25,7 +25,7 @@ namespace TempLat
   /** @brief A class which implements a SU2 field (group).
    *
    *
-   * Unit test: make test-su2field
+   * Unit test: ctest -R test-su2field
    **/
   template <size_t _NDim, typename T> class SU2FieldBase
   {

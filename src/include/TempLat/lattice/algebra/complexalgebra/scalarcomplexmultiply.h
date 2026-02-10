@@ -20,7 +20,7 @@ namespace TempLat
 {
   /** @brief A class which implements scalar multiplication over complex numbers.
    *
-   * Unit test: make test-scalarcomplexfieldmultiply
+   * Unit test: ctest -R test-scalarcomplexfieldmultiply
    **/
 
   template <typename R, typename T> class ScalarComplexFieldMultiply : public ComplexFieldBinaryOperator<R, T>

@@ -18,7 +18,7 @@ namespace TempLat
    * instantiated.
    *
    *
-   * Unit test: make test-stacktrace
+   * Unit test: ctest -R test-stacktrace
    */
   class Stacktrace
   {

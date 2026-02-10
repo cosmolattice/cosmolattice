@@ -26,7 +26,7 @@ namespace TempLat
   {
     /** @brief Get the logarithm of a given expression.
      *
-     * Unit test: make test-log
+     * Unit test: ctest -R test-log
      **/
     template <typename T> class Log : public UnaryOperator<T>
     {

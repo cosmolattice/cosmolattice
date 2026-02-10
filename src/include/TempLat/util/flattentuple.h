@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A class which flatten all directions of a composite object.
    *
    *
-   * Unit test: make test-flattentuple
+   * Unit test: ctest -R test-flattentuple
    **/
 
   // from https://stackoverflow.com/a/32166787

@@ -44,7 +44,7 @@ namespace TempLat
   /** @brief A pure abstract class (interface!) which defines the methods that you must implement for your new fft
    *library to play well with us.
    *
-   * Unit test: make test-fftlibraryinterface
+   * Unit test: ctest -R test-fftlibraryinterface
    **/
   template <size_t NDim> class FFTLibraryInterface
   {

@@ -20,7 +20,7 @@ namespace TempLat
   /** @brief A class which should be imlemented if someone wants to save files only with mpi.
    *
    *
-   * Unit test: make test-filesaverpurempi
+   * Unit test: ctest -R test-filesaverpurempi
    **/
   template <size_t NDim> class FileSaverPureMPI
   {

@@ -26,7 +26,7 @@ namespace TempLat
   /** @brief A class which
    *  implement SU(2) matrix multiplication.
    *
-   * Unit test: make test-su2multiply
+   * Unit test: ctest -R test-su2multiply
    **/
   template <typename R, typename T> class SU2Multiplication : public SU2BinaryOperator<R, T>
   {

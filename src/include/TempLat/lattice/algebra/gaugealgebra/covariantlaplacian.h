@@ -17,7 +17,7 @@ namespace TempLat
   /** @brief A class which
    *
    *
-   * Unit test: make test-covariantlaplacian
+   * Unit test: ctest -R test-covariantlaplacian
    **/
 
   class CovariantLaplacianTester

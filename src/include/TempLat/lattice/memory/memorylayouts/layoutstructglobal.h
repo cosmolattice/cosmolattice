@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which holds some memory informations.
    *
    *
-   * Unit test: make test-layoutstructglobal
+   * Unit test: ctest -R test-layoutstructglobal
    **/
   template <size_t _NDim> class LayoutStructGlobal
   {

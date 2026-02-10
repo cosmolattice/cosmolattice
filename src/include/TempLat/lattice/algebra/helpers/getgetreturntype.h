@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief get(IterationCoordinates&) might be a function which returns a real value or a complex
    * value. Sometimes we need to explicitly access what type it is.
    *
-   * Unit test: make test-getgetreturntype
+   * Unit test: ctest -R test-getgetreturntype
    **/
   template <typename T> struct GetGetReturnType {
     using type = std::decay_t<decltype(TempLat::GetValue::get_example(std::declval<std::decay_t<T>>()))>;

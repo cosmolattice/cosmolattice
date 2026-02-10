@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which shifts a doublet in space.
    *
    *
-   * Unit test: make test-su2shift
+   * Unit test: ctest -R test-su2shift
    **/
   template <typename R, int... N> class SU2DoubletShifter : public SU2DoubletUnaryOperator<R>
   {

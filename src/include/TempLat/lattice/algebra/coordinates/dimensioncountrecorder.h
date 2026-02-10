@@ -21,7 +21,7 @@ namespace TempLat
    *  The constructor takes one argument, which is used by the derived classes which insist on a single space only:
    *WaveNumber and SpatialCoordinate.
    *
-   * Unit test: make test-dimensioncountrecorder
+   * Unit test: ctest -R test-dimensioncountrecorder
    **/
   template <size_t NDim> class DimensionCountRecorder
   {

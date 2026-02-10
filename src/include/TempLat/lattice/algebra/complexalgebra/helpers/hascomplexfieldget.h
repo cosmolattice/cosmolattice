@@ -15,7 +15,7 @@ namespace TempLat
 
   /** @brief A concept which checks if instance is a complex field.
    *
-   * Unit test: make test-hascomplexfieldget
+   * Unit test: ctest -R test-hascomplexfieldget
    **/
   template <class T>
   concept HasComplexFieldGet = requires(T t, Tag<0> tag) { t.ComplexFieldGet(tag); };

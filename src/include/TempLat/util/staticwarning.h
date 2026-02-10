@@ -15,7 +15,7 @@ namespace TempLat
   /** @brief A compile-time warning based on template programming values. Taken from
    *https://www.reddit.com/r/cpp/comments/66o1ju/does_a_static_warn_exist/.
    *
-   * Unit test: make test-staticwarning
+   * Unit test: ctest -R test-staticwarning
    **/
   template <bool condition> struct warn_if {
   };

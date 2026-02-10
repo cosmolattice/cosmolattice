@@ -14,7 +14,7 @@ namespace TempLat
   /** @brief A class which detects whether or not an object has the hasTuplCat method.
    *
    *
-   * Unit test: make test-hasastuplecat
+   * Unit test: ctest -R test-hasastuplecat
    **/
   template <class, class = std::void_t<>> struct HasAsTupleCat : std::false_type {
   };

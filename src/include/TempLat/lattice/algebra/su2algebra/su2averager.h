@@ -31,7 +31,7 @@ namespace TempLat
 {
   /** @brief An averager for su2. Allows to take into account cached operations consistently.
    *
-   * Unit test: make test-su2averager
+   * Unit test: ctest -R test-su2averager
    **/
   template <typename T> class SU2Averager
   {

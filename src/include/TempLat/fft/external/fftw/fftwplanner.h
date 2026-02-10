@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class which partially implements FFTLibraryInterface, namely the getPlans parts. That is, here the calls
    *to the FFTW planner are made.
    *
-   * Unit test: make test-fftwplanner
+   * Unit test: ctest -R test-fftwplanner
    **/
   template <size_t NDim> class FFTWPlanner : public FFTLibraryInterface<NDim>
   {

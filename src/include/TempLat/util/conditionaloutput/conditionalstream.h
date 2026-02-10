@@ -18,7 +18,7 @@ namespace TempLat
    * input with operator<<, and does the 'if'-ing inside that operator.
    *
    * https://stackoverflow.com/a/7694321/2295722
-   * Unit test: make test-conditionalstream
+   * Unit test: ctest -R test-conditionalstream
    */
   class ConditionalStream
   {

@@ -16,7 +16,7 @@ namespace TempLat
 {
   /** @brief A class which calls getComp.
    *
-   * Unit test: make test-getcomponent
+   * Unit test: ctest -R test-getcomponent
    **/
   class GetComponent
   { // need two is gettable cause need to know what function to use in the return types.

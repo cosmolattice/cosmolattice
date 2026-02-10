@@ -20,7 +20,7 @@ namespace TempLat
    * canonical order without local transposes. This class returns 0 for both
    * directions (no transposition flags).
    *
-   * Unit test: make test-parafafttranspositionflags
+   * Unit test: ctest -R test-parafafttranspositionflags
    **/
   class ParafaftTranspositionFlags
   {

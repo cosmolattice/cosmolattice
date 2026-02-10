@@ -14,7 +14,7 @@ namespace TempLat
   /** @brief A class which compute the maximum at compile time.
    *
    *
-   * Unit test: make test-static_max
+   * Unit test: ctest -R test-static_max
    **/
   template <size_t N, size_t M> struct static_max {
     static const size_t value = N < M ? M : N;

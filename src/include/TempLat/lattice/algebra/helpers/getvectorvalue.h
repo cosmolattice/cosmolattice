@@ -18,7 +18,7 @@ namespace TempLat
 
   /** @brief A getter for the vector-like algebra.
    *
-   * Unit test: make test-getvectorvalue
+   * Unit test: ctest -R test-getvectorvalue
    **/
   class GetVectorValue
   {

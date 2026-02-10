@@ -27,7 +27,7 @@ namespace TempLat
 {
   /** @brief A class which computes the average value of a getter over the first n-1 coordinates, returns a vector.
    *
-   * Unit test: make test-spatialaverager
+   * Unit test: ctest -R test-spatialaverager
    **/
   template <typename T> class SpatialAverager
   {

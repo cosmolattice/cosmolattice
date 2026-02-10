@@ -19,7 +19,7 @@ namespace TempLat
   /** @brief A class which reads input files.
    *
    *
-   * Unit test: make test-filereader
+   * Unit test: ctest -R test-filereader
    **/
   class FileReader
   {

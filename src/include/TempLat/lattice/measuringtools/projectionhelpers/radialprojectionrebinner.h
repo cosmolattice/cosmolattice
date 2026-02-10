@@ -18,7 +18,7 @@ namespace TempLat
   /** @brief A class which takes a std::vector<RadialProjectionSingleBinAndValue<T>> and rebins it into
    *  a smaller number of bins.
    *
-   * Unit test: make test-radialprojectionrebinner
+   * Unit test: ctest -R test-radialprojectionrebinner
    **/
   template <typename T> class RadialProjectionRebinner
   {

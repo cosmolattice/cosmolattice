@@ -21,7 +21,7 @@ namespace TempLat
   /** @brief A class which compute the hermitean conjugate of Doublets
    *
    *
-   * Unit test: make test-su2doubletdagger
+   * Unit test: ctest -R test-su2doubletdagger
    **/
   template <typename R> class SU2DoubletDagger : public SU2DoubletUnaryOperator<R>
   {
