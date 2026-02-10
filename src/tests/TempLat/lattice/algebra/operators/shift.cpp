@@ -9,5 +9,8 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ExpressionShifterTester> test;
-}
+  TempLat::TDDContainer<TempLat::ExpressionShifterTester<1>> test1;
+  TempLat::TDDContainer<TempLat::ExpressionShifterTester<2>> test2;
+  TempLat::TDDContainer<TempLat::ExpressionShifterTester<3>> test3;
+  TempLat::TDDContainer<TempLat::ExpressionShifterTester<4>> test4;
+} // namespace

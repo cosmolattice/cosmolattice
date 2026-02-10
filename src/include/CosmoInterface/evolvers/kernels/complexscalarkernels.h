@@ -12,12 +12,10 @@
 
 namespace TempLat
 {
-
   /** \brief A class that computes the kernels for the complex scalars.
    *
    *
    **/
-
   class ComplexScalarKernels
   {
   public:
@@ -38,9 +36,5 @@ namespace TempLat
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/evolvers/kernels/complexscalarkernels_test.h"
-#endif
 
 #endif

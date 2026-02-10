@@ -37,22 +37,24 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto get(IDX... idx) const
     {
+      auto tup = device::tie(idx...);
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        tuple_add_to_nth<d, device::get<d>(shifts)>(device::tie(idx...));
+        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      return GetValue::get(mR, idx...);
+      return device::apply([&](const auto... shifted_idx) { return GetValue::get(mR, shifted_idx...); }, tup);
     }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
+      auto tup = device::tie(idx...);
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
-        tuple_add_to_nth<d, device::get<d>(shifts)>(device::tie(idx...));
+        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      return DoEval::eval(mR, idx...);
+      return device::apply([&](const auto... shifted_idx) { return DoEval::eval(mR, shifted_idx...); }, tup);
     }
 
     void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
@@ -88,8 +90,8 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX... idx) const
     {
-      tuple_add_to_nth<N - 1, dir>(device::tie(idx...));
-      return GetValue::get(mR, idx...);
+      return device::apply([&](const auto... shifted_idx) { return GetValue::get(mR, shifted_idx...); },
+                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     template <typename... IDX>
@@ -99,8 +101,8 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION void eval(IDX... idx) const
     {
-      tuple_add_to_nth<N - 1, dir>(device::tie(idx...));
-      return DoEval::eval(mR, idx...);
+      return device::apply([&](const auto... shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
+                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
@@ -136,7 +138,7 @@ namespace TempLat
   template <int N> ZeroType shift(ZeroType, Tag<N>) { return ZeroType(); }
 
 #ifdef TEMPLATTEST
-  struct ExpressionShifterTester {
+  template <size_t NDim> struct ExpressionShifterTester {
     static inline void Test(TDDAssertion &tdd);
   };
 #endif

@@ -13,8 +13,6 @@
 
 #include "TempLat/util/ndloop.h"
 
-#include <vector>
-
 template <size_t NDim> inline void TempLat::WaveNumber<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   const ptrdiff_t nGrid = 16, nGhost = 0;

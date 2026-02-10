@@ -14,11 +14,6 @@
 
 namespace TempLat
 {
-  /** \brief A class which implements a static for loop.
-   *
-   *
-   * Unit test: make test-for_in_range
-   **/
   class for_in_range_Tester
   {
   public:
@@ -40,6 +35,11 @@ namespace TempLat
     template <typename F> static void run(F &&f) {}
   };
 
+  /** \brief A function which implements a static for loop.
+   * Note that this for-loop is INCLUSIVE of the start AND end
+   *
+   * Unit test: make test-for_in_range
+   **/
   template <int i, int j, typename F> void for_in_range(F &&f)
   {
     // TagList<i,j-1> tg;
@@ -47,6 +47,11 @@ namespace TempLat
     ForRangeHelper<i, j>::run(f);
   }
 
+  /**
+   * @brief A macro to simplify the usage of the for_in_range function.
+   * Note that this for-loop is INCLUSIVE of the start AND end
+   *
+   */
 #define ForLoop(i, start, end, expr) for_in_range<start, end + 1>([&](auto i) { expr; })
 
 } // namespace TempLat
