@@ -13,7 +13,6 @@
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglebinandvalue.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionrebinner.h"
-#include <emmintrin.h>
 
 #include "TempLat/parallel/device.h"
 

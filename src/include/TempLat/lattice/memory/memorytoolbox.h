@@ -154,7 +154,7 @@ namespace TempLat
     /** \brief Constructor with user chosen MPI layout and number of threads. */
     MemoryToolBox(MPICartesianGroup group, ptrdiff_t nGridPoints, ptrdiff_t ghostDepth, ptrdiff_t nThreads,
                   bool forbidTransposition = false)
-        : MemoryToolBox(group, makeUniformArray<ptrdiff_t, NDim>(nGridPoints), ghostDepth, nThreads,
+        : MemoryToolBox(group, makeUniformArray<device::Idx, NDim>(nGridPoints), ghostDepth, nThreads,
                         forbidTransposition)
     {
     }
