@@ -140,7 +140,7 @@ namespace TempLat
     {
       for (size_t i = 0; i < NDim; ++i)
         mFFTConfigSpacePadding[i] =
-            std::max((ptrdiff_t)0, mFFTLayout.configurationSpace.getLocalSizes()[i] - mNGridPoints[i]);
+            std::max((device::Idx)0, mFFTLayout.configurationSpace.getLocalSizes()[i] - mNGridPoints[i]);
     }
 
   public:

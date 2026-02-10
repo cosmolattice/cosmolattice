@@ -67,20 +67,20 @@ execute_process(
         -DKokkos_ENABLE_THREADS=${THREADS} \
         -DKokkos_ENABLE_SERIAL=ON \
         -DKokkos_ENABLE_TESTS=OFF \
-        ../kokkos-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_config.log"
+        ../kokkos-repo >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_config.log 2>&1"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-bin
                     COMMAND_ERROR_IS_FATAL ANY)
 
 message(DEBUG "Building Kokkos...")
 execute_process(
-  COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_build.log"
+  COMMAND bash -c "make -j >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_build.log 2>&1"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-bin
                     COMMAND_ERROR_IS_FATAL ANY)
 
 message(DEBUG "Installing Kokkos...")
 execute_process(
   COMMAND bash -c
-          "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_install.log"
+          "make install >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_install.log 2>&1"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-bin
                     COMMAND_ERROR_IS_FATAL ANY)
 

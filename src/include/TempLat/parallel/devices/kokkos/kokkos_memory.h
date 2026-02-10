@@ -49,7 +49,7 @@ namespace TempLat
       using Kokkos::subview;
 
       template <typename OBJ, size_t NDim, typename T>
-      void setAtOnePoint(OBJ &&obj, device_kokkos::array<ptrdiff_t, NDim> pos, T val)
+      void setAtOnePoint(OBJ &&obj, device_kokkos::IdxArray<NDim> pos, T val)
       {
         Kokkos::parallel_for(
             "Set a point", Kokkos::RangePolicy(0, 1), DEVICE_LAMBDA(const uint) {
