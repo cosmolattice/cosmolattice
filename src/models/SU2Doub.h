@@ -26,7 +26,7 @@ namespace TempLat
     static constexpr size_t NU1Flds = 0;
     static constexpr size_t NSU2Doublet = 1;
     static constexpr size_t NSU2Flds = 0;
-    static constexpr size_t NPotTerms = 0;
+    static constexpr size_t NPotTerms = 1;
 
     // Coupling managers:  they deal with the different couplings between
     // the gauge fields and complex scalars/SU2 doublets
