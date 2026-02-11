@@ -59,8 +59,13 @@ namespace TempLat
 
     template <typename R> void operator=(R &&r)
     {
-      ForLoop(i, 0, size - 1, fs[i].onBeforeAssignment(std::decay_t<R>::Getter::get(r, i)););
-      ForLoop(j, 0, size - 1, PreGet::apply(fs[j]));
+      fs[0].onBeforeAssignment(std::decay_t<R>::Getter::get(r, 0_c));
+      fs[1].onBeforeAssignment(std::decay_t<R>::Getter::get(r, 1_c));
+      fs[2].onBeforeAssignment(std::decay_t<R>::Getter::get(r, 2_c));
+      fs[3].onBeforeAssignment(std::decay_t<R>::Getter::get(r, 3_c));
+      // ForLoop(i, 0, size - 1, fs[i].onBeforeAssignment(std::decay_t<R>::Getter::get(r, i)););
+      //  TODO::
+      // ForLoop(j, 0, size - 1, PreGet::apply(fs[j]));
 
       const auto views = device::make_tuple(fs[0].getView(), fs[1].getView(), fs[2].getView(), fs[3].getView());
 
@@ -83,8 +88,12 @@ namespace TempLat
       };
       device::iteration::foreach ("SU2DoubleConfigViewAssign", mLayout, functor);
 
-      ForLoop(j, 0, size - 1, PostGet::apply(fs[j]));
-      ForLoop(j, 0, size - 1, fs[j].setGhostsAreStale());
+      // ForLoop(j, 0, size - 1, PostGet::apply(fs[j]));
+      // ForLoop(j, 0, size - 1, fs[j].setGhostsAreStale());
+      fs[0].setGhostsAreStale();
+      fs[1].setGhostsAreStale();
+      fs[2].setGhostsAreStale();
+      fs[3].setGhostsAreStale();
     }
 
     template <typename R> void operator+=(R &&r) { (*this) = (*this) + r; }

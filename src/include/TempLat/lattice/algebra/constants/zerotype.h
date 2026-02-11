@@ -7,9 +7,15 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
+
 #include "TempLat/parallel/device.h"
+
+// Forward-declare Tag to break circular dependency with tag.h
+namespace TempLat
+{
+  template <int N> class Tag;
+}
 
 namespace TempLat
 {
@@ -17,14 +23,7 @@ namespace TempLat
    *
    * Unit test: ctest -R test-zerotype
    **/
-  /* struct ZeroType {
- //        operator ptrdiff_t() const { return 0; }
-       std::string toString() const { return "(ZeroType)0"; }
-       ptrdiff_t get(ptrdiff_t i) { return 0; }
-       static constexpr bool ISCONSTANT = true;
-   };*/
   struct ZeroType {
-    //        operator ptrdiff_t() const { return 0; }
     static std::string toString() { return "(ZeroType)0"; }
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
@@ -32,9 +31,8 @@ namespace TempLat
     {
       return 0;
     }
+    template <int N> constexpr auto operator()(const Tag<N> t) { return ZeroType(); }
     static constexpr bool ISCONSTANT = true;
-
-    // operator double() const { return 0; }
   };
 } // namespace TempLat
 
