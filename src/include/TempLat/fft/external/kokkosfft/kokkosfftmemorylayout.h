@@ -9,7 +9,7 @@
 
 #include <cstddef>
 #ifndef NOFFT
-#ifdef KOKKOS_FFT
+#ifdef KOKKOSFFT
 #include <KokkosFFT.hpp>
 #endif
 #endif

@@ -22,12 +22,11 @@ set(DOCUMENTATION
 set(MPI
     OFF
     CACHE BOOL "Set to ON to build with MPI (default = OFF)")
-set(DEVICE
-    KOKKOS
+set(DEVICE_PROVIDER
+    Kokkos
     CACHE
       BOOL
-      "Set to the device to use for shared memory and/or GPU parallelization (default = KOKKOS)"
-)
+      "Set to the device provider to use for shared memory and/or GPU parallelization (default = Kokkos)")
 set(PFFT
     OFF
     CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
@@ -125,16 +124,16 @@ set(DEFAULT_MODEL lphi4)
 set(MODEL
     ${DEFAULT_MODEL}
     CACHE STRING "Model that is compiled.")
-message("The model which is going to be compiled is: ${MODEL}.")
+message(STATUS "----- The model which is going to be compiled is: ${MODEL} -----")
 set(MODEL_LABEL ${MODEL}) # Allows to customise the name below if wanted.
 
-# Next lines looks to see if a file name Model.cmake exists at the same place
-# than the model. If so, loads it, allows you to custom the cmake behaviour
+# Next few lines are to see if a file name Model.cmake exists at the same place
+# as the model. If so, we load it, which allows you to customize the cmake behaviour
 # depending on the model
 
 find_file(MODELS_CMAKE ${MODEL}.cmake ${MODELS_PATH})
 if(NOT MODELS_CMAKE)
-  message("With no special options.")
+  message(STATUS "(With no special options)")
 else()
   include(${MODELS_CMAKE})
 endif()
@@ -147,6 +146,7 @@ set(CMAKE_CXX_FLAGS
 
 # Compiler options. We let them here so they are easy to access. You can move it
 # in cmake/configure.cmake if you prefer.
+
 set(G++OPT
     Ofast
     CACHE
@@ -195,9 +195,9 @@ elseif(NOT ${G++AVX} STREQUAL OFF)
   message(FATAL_ERROR "G++AVX=${G++AVX} is not a valid option.")
 endif()
 
-# you can target your computer architecture by changing the arch here.
+# You can target your computer architecture by changing the arch here.
 if(NOT ${G++OPT} STREQUAL "G")
-  # example: set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native ")
+  # Example: set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native ")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
@@ -209,8 +209,8 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wshadow")
 
-message(
-  "The compiler will be called with the following flags: ${CMAKE_CXX_FLAGS}")
+message(STATUS
+  "The compiler will be called with the following flags:\n  ${CMAKE_CXX_FLAGS}")
 
 # ##############################################################################
 # _____                     _        _     _ | ____|_  _____  ___ _   _| |_ __

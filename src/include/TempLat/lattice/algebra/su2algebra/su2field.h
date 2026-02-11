@@ -103,8 +103,14 @@ namespace TempLat
 
     template <typename R> void operator=(R &&r)
     {
-      ForLoop(i, 1, size - 1, fs[i - 1].onBeforeAssignment(std::remove_reference<R>::type::Getter::get(r, i)););
-      ForLoop(j, 1, size - 1, PreGet::apply(fs[j]));
+      fs[0].onBeforeAssignment(r.SU2Get(1_c));
+      fs[1].onBeforeAssignment(r.SU2Get(2_c));
+      fs[2].onBeforeAssignment(r.SU2Get(3_c));
+
+      // TODO: Merge into onBeforeAssignment
+      // PreGet::apply(r.SU2Get(1_c));
+      // PreGet::apply(r.SU2Get(2_c));
+      // PreGet::apply(r.SU2Get(3_c));
 
       const auto view1 = fs[0].getView();
       const auto view2 = fs[1].getView();
@@ -131,8 +137,14 @@ namespace TempLat
       };
       device::iteration::foreach ("SU2ConfigViewAssign", mLayout, functor);
 
-      ForLoop(j, 1, size - 1, PostGet::apply(fs[j - 1]));
-      ForLoop(j, 1, size - 1, fs[j - 1].setGhostsAreStale());
+      // TODO: Merge into postAssignment
+      // PostGet::apply(r.SU2Get(1_c));
+      // PostGet::apply(r.SU2Get(2_c));
+      // PostGet::apply(r.SU2Get(3_c));
+
+      fs[0].setGhostsAreStale();
+      fs[1].setGhostsAreStale();
+      fs[2].setGhostsAreStale();
     }
 
     std::string toString() const { return mName; }

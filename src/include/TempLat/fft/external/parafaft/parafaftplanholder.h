@@ -30,7 +30,7 @@ namespace TempLat
   // backends (FFTW, cuFFT, HIPFFT), and we select the one based on compile-time definitions set by CMake when detecting
   // the device and available libraries. This allows us to write device-agnostic code in the ParafaftPlanHolder, while
   // still leveraging the performance benefits of the appropriate backend for the target platform.
-#ifdef CL_CUDA
+#ifdef DEVICE_CUDA
   using ParaFaFT_Backend = parafaft::CuFFTBackend;
 #elif defined(CL_HIP)
   using ParaFaFT_Backend = parafaft::HipFFTBackend;

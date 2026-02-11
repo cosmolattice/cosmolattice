@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
 #ifndef NOFFT
-#ifdef KOKKOS_FFT
+#ifdef KOKKOSFFT
 #include <KokkosFFT.hpp>
 #endif
 #endif

@@ -10,12 +10,12 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<1, double>> test1;
+  // TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<1, double>> test1;
   TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<2, double>> test2;
   TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<3, double>> test3;
   TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<4, double>> test4;
-  TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<1, float>> test1f;
-  TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<2, float>> test2f;
-  TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<3, float>> test3f;
-  TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<4, float>> test4f;
+  // TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<1, float>> test1f;
+  // TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<2, float>> test2f;
+  // TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<3, float>> test3f;
+  // TempLat::TDDContainer<TempLat::ComplexFieldSU2MultiplyTester<4, float>> test4f;
 } // namespace

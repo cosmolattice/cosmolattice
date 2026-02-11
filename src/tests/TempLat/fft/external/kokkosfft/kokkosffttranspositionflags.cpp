@@ -5,7 +5,7 @@
 
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
-#ifdef KOKKOS_FFT
+#ifdef KOKKOSFFT
 
 #include "TempLat/fft/external/kokkosfft/kokkosffttranspositionflags.h"
 #include "TempLat/fft/external/kokkosfft/kokkosffttranspositionflags_test.h"

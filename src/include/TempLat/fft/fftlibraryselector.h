@@ -21,7 +21,7 @@
 #endif
 #endif
 
-#ifdef KOKKOS_FFT
+#ifdef KOKKOSFFT
 #include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
 #endif
 
@@ -70,7 +70,7 @@ namespace TempLat
     result.push_back(getPFFTSessionGuard(pVerbose));
 #endif
 
-#ifdef KOKKOS_FFT
+#ifdef KOKKOSFFT
     result.push_back(getKokkosFFTSessionGuard(pVerbose));
 #endif
 
@@ -109,7 +109,7 @@ namespace TempLat
       [[maybe_unused]] constexpr bool haveParafaft = false;
 #endif
 
-#ifdef KOKKOS_FFT
+#ifdef KOKKOSFFT
       [[maybe_unused]] constexpr bool haveKOKKOSFFT = true;
 #else
       [[maybe_unused]] constexpr bool haveKOKKOSFFT = false;
@@ -132,12 +132,12 @@ namespace TempLat
 #endif // NOPFFT
 #endif // NOMPI
       {
-#ifdef KOKKOS_FFT
+#ifdef KOKKOSFFT
         if (haveKOKKOSFFT && (NDim <= 3) && (group.size() == 1)) {
           theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
-          backend = "KOKKOS_FFT";
+          backend = "KOKKOSFFT";
         } else
-#endif // KOKKOS_FFT
+#endif // KOKKOSFFT
         {
           theLibrary = std::make_shared<FFTWInterface<NDim>>();
           backend = "FFTW";

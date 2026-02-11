@@ -68,5 +68,7 @@ endif()
 # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FFTW_INCLUDES}" )
 include_directories(${FFTW_INCLUDES})
 
-message(STATUS "MPI CXX compiler: ${MPI_CXX_COMPILER}")
+if(MPI)
+  message(STATUS "MPI CXX compiler: ${MPI_CXX_COMPILER}")
+endif()
 message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")

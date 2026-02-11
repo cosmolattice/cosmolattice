@@ -3,9 +3,24 @@
 # ##############################################################################
 include(CheckLanguage)
 
-option(CUDA "Enable CUDA support" ON)
-option(HIP "Enable HIP support" ON)
-option(OpenMP "Enable OpenMP support" ON)
+option(CUDA "Enable CUDA support" OFF)
+option(HIP "Enable HIP support" OFF)
+option(OpenMP "Enable OpenMP support" OFF)
+option(Threads "Enable Threads support" OFF)
+option(Serial "Enable Serial support" OFF)
+
+if(NOT CUDA
+   AND NOT HIP
+   AND NOT OpenMP
+   AND NOT Threads
+   AND NOT Serial)
+  message(STATUS "----- No device specified, trying to auto-detect -----")
+  set(CUDA ON)
+  set(HIP ON)
+  set(OpenMP ON)
+  set(Threads ON)
+  set(Serial ON)
+endif()
 
 if(CUDA)
   # Let's see if we have a CUDA compiler
@@ -13,59 +28,73 @@ if(CUDA)
   if(CMAKE_CUDA_COMPILER)
     set(CUDA ON)
     set(HIP OFF)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCL_CUDA")
+    set(OpenMP OFF)
+    set(Threads OFF)
+    set(Serial OFF)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_CUDA")
   else()
     set(CUDA OFF)
   endif()
 endif()
 
-if(HIP AND NOT CUDA)
+if(HIP)
   # Let's see if we have a HIP compiler
   check_language(HIP)
   if(CMAKE_HIP_COMPILER)
     set(HIP ON)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DCL_HIP")
+    set(CUDA OFF)
+    set(OpenMP OFF)
+    set(Threads OFF)
+    set(Serial OFF)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_HIP")
   else()
     set(HIP OFF)
   endif()
 endif()
 
-if(OpenMP
-   AND NOT CUDA
-   AND NOT HIP)
+if(Serial)
+  set(Serial ON)
+  set(CUDA OFF)
+  set(HIP OFF)
+  set(OpenMP OFF)
+  set(Threads OFF)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_CPU")
+else()
+  set(Threads ON)
+  set(Serial OFF)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_CPU")
+endif()
+
+if(OpenMP)
   check_language(OpenMP)
   find_package(OpenMP QUIET)
   if(OpenMP_CXX_FOUND)
-    set(OPENMP ON)
-    set(THREADS OFF)
+    set(OpenMP ON)
+    set(Threads OFF)
+    set(Serial OFF)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_CPU")
   else()
-    set(OPENMP OFF)
+    set(OpenMP OFF)
+    set(Threads ON)
+    set(Serial OFF)
   endif()
 else()
-  set(OPENMP OFF)
-endif()
-
-if(NOT CUDA
-   AND NOT HIP
-   AND NOT OPENMP)
-  set(THREADS ON)
-else()
-  set(THREADS OFF)
+  set(OpenMP OFF)
 endif()
 
 message(
   STATUS
-    "Device configuration: \n    CUDA: ${CUDA} \n    HIP: ${HIP} \n    OpenMP: ${OPENMP} \n    Threads: ${THREADS}"
+    "Device configuration: \n    CUDA: ${CUDA} \n    HIP: ${HIP} \n    OpenMP: ${OpenMP} \n    Threads: ${Threads} \n    Serial: ${Serial}"
 )
 
 # ##############################################################################
 # Choose a device provider
 # ##############################################################################
 
-if(DEVICE STREQUAL "KOKKOS")
+if(DEVICE_PROVIDER STREQUAL "Kokkos")
   set(KOKKOS ON)
 
-  message(STATUS "Using Kokkos as device provider.")
+  message(STATUS "----- Using Kokkos as device provider -----")
 
   include(src/cmake/device/kokkos.cmake)
   if(CUDA OR HIP)
@@ -84,12 +113,12 @@ if(DEVICE STREQUAL "KOKKOS")
 
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_KOKKOS")
   if(CUDA OR HIP)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DKOKKOS_FFT")
-    set(KOKKOS_FFT ON)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DKOKKOSFFT")
+    set(KOKKOSFFT ON)
   endif()
 else()
-  message(FATAL_ERROR "Unknown DEVICE option: ${DEVICE}.
-      Supported options: KOKKOS")
+  message(FATAL_ERROR "Unknown DEVICE_PROVIDER option: ${DEVICE_PROVIDER}.
+      Supported options: Kokkos")
 endif()
 
 function(target_link_device target)
@@ -98,7 +127,7 @@ function(target_link_device target)
   endif()
   if(KOKKOS)
     target_link_libraries(${target} PUBLIC Kokkos::kokkos)
-    if(KOKKOS_FFT)
+    if(KOKKOSFFT)
       target_link_libraries(${target} PUBLIC KokkosFFT::fft)
     endif()
   endif()

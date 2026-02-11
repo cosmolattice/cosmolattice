@@ -3,13 +3,13 @@
 # greatest control over what is happening.
 # ##############################################################################
 
-set(KOKKOS_FFT_VERSION v0.4.0)
+set(KOKKOSFFT_VERSION v0.4.0)
 
-message(STATUS "Fetching Kokkos-FFT ${KOKKOS_FFT_VERSION}")
+message(STATUS "Fetching Kokkos-FFT ${KOKKOSFFT_VERSION}")
 execute_process(
   COMMAND
     bash -c
-    "mkdir -p _deps && git clone https://github.com/kokkos/kokkos-fft.git --recursive --branch ${KOKKOS_FFT_VERSION} _deps/kokkos-fft-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft.log"
+    "mkdir -p _deps && git clone https://github.com/kokkos/kokkos-fft.git --recursive --branch ${KOKKOSFFT_VERSION} _deps/kokkos-fft-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft.log"
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
   OUTPUT_QUIET)
 
