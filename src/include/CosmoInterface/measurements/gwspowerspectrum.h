@@ -42,7 +42,6 @@ namespace TempLat
 
     template <class Model, typename T> auto gwspowerSpectrum(Model &model, ptrdiff_t N, T kIR)
     {
-
       ptrdiff_t N3 = pow<3>(N);
       T dx = 2 * Constants::pi<T> / kIR / N; // lattice spacing
 

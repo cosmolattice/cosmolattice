@@ -34,7 +34,6 @@ namespace TempLat
 
     template <class Model, typename T> static void initializeSU2(Model &model, FluctuationsGenerator<T> &fg, T kCutOff)
     {
-
       // 1. We set the homogeneous components and fluctuations of the SU(2) doublets.
       initializeSU2Doublet(model, fg.getBaseSeed(), fg, kCutOff);
 

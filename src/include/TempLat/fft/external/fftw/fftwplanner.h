@@ -108,7 +108,6 @@ namespace TempLat
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
                                                                             const FFTLayoutStruct<NDim> &layout)
     {
-
       FFTWTranspositionFlags trFlags(layout);
 
       MemoryBlock<NDim, double> temp(layout.getMinimalMemorySize());

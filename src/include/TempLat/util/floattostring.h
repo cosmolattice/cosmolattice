@@ -48,7 +48,6 @@ namespace TempLat
     /** @brief Replace zeros and optional dot by `replacement`, counting back from rend up to rbegin. */
     static inline void stripTrailingZeros(char *begin, char *end, char replacement)
     {
-
       if (end <= begin) return;
 
       bool goOn = true;
@@ -85,7 +84,6 @@ namespace TempLat
      * zero-terminated string. */
     static inline void squashChars(char *string, char replacement)
     {
-
       bool insideBatch = false;
 
       char *batchStart = string;

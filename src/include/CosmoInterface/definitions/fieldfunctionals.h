@@ -71,7 +71,6 @@ namespace TempLat
     template <class Model, int I> // <D_i[f]^2> (sum over i)
     static inline auto grad2SU2Doublet(Model &model, Tag<I> i)
     {
-
       return Total(j, 1, Model::NDim, norm2(GaugeDerivatives::forwardCovGradientSU2Doublet(model, i, j)));
     }
 
@@ -113,7 +112,6 @@ namespace TempLat
     template <class Model, int A> // <pi^2>
     static inline auto pi2SU2(Model &model, Tag<A> a)
     {
-
       return Total(i, 1, Model::NDim, Total(b, 1, 3, pow<2>(model.piSU2(a)(i).SU2LieAlgebraGet(b))));
     }
 

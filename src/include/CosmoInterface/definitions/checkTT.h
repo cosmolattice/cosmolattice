@@ -51,7 +51,6 @@ namespace TempLat
 
     template <class Model, int I, int J, typename T = double> inline auto PrR(Model &model, Tag<I> i, Tag<J> j)
     {
-
       auto toolBox = model.getToolBox();
       WaveNumber ntilde(toolBox);
       size_t N = model.getToolBox()->mNGridPointsVec[0];
@@ -64,7 +63,6 @@ namespace TempLat
 
     template <class Model, int I, int J, typename T = double> inline auto PrCB(Model &model, Tag<I> i, Tag<J> j)
     {
-
       auto toolBox = model.getToolBox();
       WaveNumber ntilde(toolBox);
 
@@ -80,7 +78,6 @@ namespace TempLat
 
     template <class Model, int I, int J, typename T = double> inline auto PrCF(Model &model, Tag<I> i, Tag<J> j)
     {
-
       auto toolBox = model.getToolBox();
       WaveNumber ntilde(toolBox);
 
@@ -98,14 +95,12 @@ namespace TempLat
     template <class Model, int I, int J, int L, int M>
     inline auto LambdaR(Model &model, Tag<I> i, Tag<J> j, Tag<L> l, Tag<M> m)
     {
-
       return PrR(model, i, l) * PrR(model, j, m) - 0.5 * PrR(model, i, j) * (PrR(model, l, m));
     }
 
     template <class Model, int I, int J, int L, int M>
     inline auto LambdaC(Model &model, Tag<I> i, Tag<J> j, Tag<L> l, Tag<M> m)
     {
-
       if (PRJType == 2) {
         return PrCB(model, i, l) * conj(PrCB(model, j, m)) - 0.5 * PrCB(model, i, j) * conj(PrCB(model, l, m));
       } else {
@@ -115,14 +110,12 @@ namespace TempLat
 
     template <class Model, int I, int J> inline auto LambdaUR(Model &model, Tag<I> i, Tag<J> j)
     {
-
       return Total(k, 1, Model::NDim,
                    Total(l, 1, Model::NDim, (LambdaR(model, i, j, k, l)) * model.GWtensor(k, l).inFourierSpace()));
     }
 
     template <class Model, int I, int J> inline auto LambdaUC(Model &model, Tag<I> i, Tag<J> j)
     {
-
       return Total(k, 1, Model::NDim,
                    Total(l, 1, Model::NDim, (LambdaC(model, i, j, k, l)) * model.GWtensor(k, l).inFourierSpace()));
     }
@@ -151,7 +144,6 @@ namespace TempLat
 
     template <typename Model, int I> auto checkTrans(Model &model, Tag<I> i)
     {
-
       double avgGrad, avgDihij;
 
       if (PRJType == 2) {
@@ -182,7 +174,6 @@ namespace TempLat
 
     template <typename Model> auto checkTrace(Model &model)
     {
-
       double Trhij, Trhij2;
 
       if (PRJType == 2 || PRJType == 3) {

@@ -59,7 +59,6 @@ namespace TempLat
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
                                                                           const FFTLayoutStruct<NDim> &layout) override
     {
-
 #ifdef NOFFTFLOAT
       throw ParafaftCompiledWithoutSinglePrecisionSupport("CosmoLattice compiled without float FFT support.");
 #else
@@ -77,7 +76,6 @@ namespace TempLat
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>>
     getPlans_double(const MPICartesianGroup &group, const FFTLayoutStruct<NDim> &layout) override
     {
-
 #ifndef NOMPI
 #ifndef NOPARAFAFT
       // Get global sizes

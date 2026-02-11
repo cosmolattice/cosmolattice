@@ -80,7 +80,6 @@ namespace TempLat
     /** @brief Hash an input array as String. */
     void compute(const std::string &data)
     {
-
       /* skip the trailing '\0', if it is there. */
       std::vector<unsigned char> asVec(data.begin(), data.end());
       while (asVec.size() && asVec.back() == '\0')

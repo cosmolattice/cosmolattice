@@ -66,7 +66,6 @@ namespace TempLat
           mHardwareAllowedThreadsPerProcess(mHardwareNumCores / mMPILocalSize),
           mUserAllowedThreadsPerProcess(mHardwareAllowedThreadsPerProcess)
     {
-
       if (mHardwareAllowedThreadsPerProcess < 1) mHardwareAllowedThreadsPerProcess = 1;
     }
 

@@ -65,7 +65,6 @@ namespace TempLat
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
                            STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.
     {
-
       /////////
       // Initial homogeneous components of the fields
       // (read from parameters file, or specified here if not)

@@ -43,7 +43,6 @@ namespace TempLat
 
     void compute()
     {
-
       if (mSpaceType == SpaceStateType::Fourier)
         throw AveragerWrongSpace("Wall averager works only in configuration space.");
 

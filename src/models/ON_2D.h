@@ -79,7 +79,6 @@ namespace TempLat
           ,
           DriveProfile("DriveProfile", toolBox, runPar.getLatParams())
     {
-
       /////////
       // Independent parameters of the model (read from parameters file)
       /////////

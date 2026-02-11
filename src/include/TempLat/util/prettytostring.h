@@ -24,7 +24,6 @@ namespace TempLat
 
     template <typename R> static std::string get(R x, int prec = 14)
     {
-
       std::ostringstream out;
       out.precision(prec);
       out << std::fixed << x;

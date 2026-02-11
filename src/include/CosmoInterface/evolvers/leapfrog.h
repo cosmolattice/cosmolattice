@@ -187,7 +187,6 @@ namespace TempLat
 
     template <class Model> void driftGWs(Model &model)
     {
-
       (*model.fldGWs) += pow(model.aSI, model.alpha - 3) * (model.dt * (*model.piGWs));
     }
 

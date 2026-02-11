@@ -37,11 +37,10 @@ namespace TempLat
 
     template <typename T> void addAtribute(std::string name, T value) // single value attribute
     {
+      const hsize_t dim = 1;
+      const auto dataspace_id = H5Screate_simple(1, &dim, NULL);
 
-      hsize_t dim = 1;
-      auto dataspace_id = H5Screate_simple(1, &dim, NULL);
-
-      auto attr_id = H5Acreate2(mId, name.c_str(), HDF5Type<T>().type, dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
+      const auto attr_id = H5Acreate2(mId, name.c_str(), HDF5Type<T>().type, dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
 
       H5Awrite(attr_id, HDF5Type<T>().type, value);
       H5Aclose(attr_id);
@@ -54,11 +53,10 @@ namespace TempLat
 
     template <typename T> void addAtribute(std::string name, std::vector<T> values) // one-d table of value attribute
     {
+      const hsize_t dim = values.size();
+      const auto dataspace_id = H5Screate_simple(1, &dim, NULL);
 
-      hsize_t dim = values.size();
-      auto dataspace_id = H5Screate_simple(1, &dim, NULL);
-
-      auto attr_id = H5Acreate2(mId, name.c_str(), HDF5Type<T>().type, dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
+      const auto attr_id = H5Acreate2(mId, name.c_str(), HDF5Type<T>().type, dataspace_id, H5P_DEFAULT, H5P_DEFAULT);
 
       H5Awrite(attr_id, HDF5Type<T>().type, values.data());
       H5Aclose(attr_id);

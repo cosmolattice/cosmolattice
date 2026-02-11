@@ -69,7 +69,6 @@ namespace TempLat
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
                            STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.
     {
-
       /////////
       // Independent parameters of the model (read from parameters file)
       /////////

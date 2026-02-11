@@ -30,7 +30,6 @@ namespace TempLat
 
     ~PoorMansProfile()
     {
-
       /* sort by count, and then print out */
       std::vector<std::pair<std::string, size_t>> sortedList;
       sortedList.reserve(theMap.size());

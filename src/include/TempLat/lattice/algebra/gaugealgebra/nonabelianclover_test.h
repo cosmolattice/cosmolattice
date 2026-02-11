@@ -6,11 +6,10 @@
 
 // File info: Main contributor(s):  Adrien Florio, Year: 2024
 
-inline void TempLat::NonAbelianCloverTester::Test(TempLat::TDDAssertion& tdd) {
-
-    /* Default is to fail: to remind yourself to implement something here. */
-    tdd.verify( true );
-
+inline void TempLat::NonAbelianCloverTester::Test(TempLat::TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
 }
 
 #endif

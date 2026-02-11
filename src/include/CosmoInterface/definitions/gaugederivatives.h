@@ -84,7 +84,6 @@ namespace TempLat
     static auto U1sForCSCovDerivs(Model &model, Tag<N> n,
                                   Tag<I> i) // N is the matter index and i is the spatial dimension
     {
-
       return fold_multiply(
           MakeArray(a, 0, Model::NU1 - 1,
                     IfElse(Model::CsU1Couplings::couples(Tag<N>(), a),

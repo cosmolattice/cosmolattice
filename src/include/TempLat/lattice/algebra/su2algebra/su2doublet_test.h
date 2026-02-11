@@ -42,6 +42,13 @@ inline void TempLat::SU2DoubletTester::Test(TempLat::TDDAssertion &tdd)
         }
       }
   tdd.verify(all_true);
+
+  std::vector<SU2Doublet<3, double>> fs;
+  for (int i = 0; i < 4; ++i) {
+    fs.push_back(SU2Doublet<3, double>("dd_" + std::to_string(i + 0), toolBox));
+  }
+
+  std::vector<SU2Doublet<3, double>> fs2(fs);
 }
 
 #endif

@@ -21,25 +21,25 @@ namespace TempLat
   // number of fields of each species and the type of interactions.
 
   struct ModelPars : public TempLat::DefaultModelPars {
-    static constexpr size_t NScalars = 1;
-    static constexpr size_t NCScalars = 1;
-    static constexpr size_t NU1Flds = 1;
+    static constexpr size_t NScalars = 0;
+    static constexpr size_t NCScalars = 0;
+    static constexpr size_t NU1Flds = 0;
     static constexpr size_t NSU2Doublet = 1;
-    static constexpr size_t NSU2Flds = 1;
-    static constexpr size_t NPotTerms = 3;
+    static constexpr size_t NSU2Flds = 0;
+    static constexpr size_t NPotTerms = 0;
 
     // Coupling managers:  they deal with the different couplings between
     // the gauge fields and complex scalars/SU2 doublets
     //  --> If a type of interaction is not present, comment the corresponding line
-    typedef TempLat::CouplingsManager<NCScalars, NU1Flds, true> CsU1Couplings;
+    // typedef TempLat::CouplingsManager<NCScalars, NU1Flds, true> CsU1Couplings;
     // activates coupling U(1)-complex scalar
-    typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings;
+    // typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings;
     // activates coupling U(1)-doublet
-    typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds, true> SU2DoubletSU2Couplings;
+    // typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds, true> SU2DoubletSU2Couplings;
     // activates coupling SU(2)-doublet
   };
 
-#define MODELNAME lphi4SU2U1
+#define MODELNAME SU2Doub
   // Here we define the name of the model. This should match the name of your file.
 
   template <class R> using Model = MakeModel(R, ModelPars);
@@ -69,19 +69,6 @@ namespace TempLat
       // Initial homogeneous components of the fields
       // (read from parameters file, or specified here if not)
       /////////
-
-      // SCALAR SINGLET: initial homogeneous amplitude and derivative
-      fldS0(0_c) = parser.get<double>("initial_amplitudes");
-      piS0(0_c) = parser.get<double>("initial_momenta");
-
-      // COMPLEX SCALAR NORM: initial homogeneous amplitude and derivative
-      double normCmplx0 = parser.get<double>("cmplx_field_initial_norm");
-      double normPiCmplx0 = parser.get<double>("cmplx_momentum_initial_norm");
-
-      // We distribute the norm equally between the two components
-      // using the "Complexify" function
-      fldCS0(0_c) = Complexify(normCmplx0 / sqrt(2.0), normCmplx0 / sqrt(2.0));
-      piCS0(0_c) = Complexify(normPiCmplx0 / sqrt(2.0), normPiCmplx0 / sqrt(2.0));
 
       // SU(2) COMPLEX NORM: initial homogeneous amplitude and derivative
       double normDoublet0 = parser.get<double>("SU2Doublet_initial_norm");
@@ -169,8 +156,7 @@ namespace TempLat
     auto potDerivNormSU2Doublet(Tag<0>)
     // Derivative with respect SU(2) doublet norm
     {
-      return 4 * pow<3>(norm(fldSU2Doublet(0_c))) +
-             norm(fldSU2Doublet(0_c)) * (2 * qG * pow<2>(fldS(0_c)) + 4 * qH * pow<2>(norm(fldCS(0_c))));
+      return 4 * pow<3>(norm(fldSU2Doublet(0_c)));
     }
 
     /////////
@@ -192,7 +178,7 @@ namespace TempLat
     auto potDeriv2NormSU2Doublet(Tag<0>)
     // 2nd derivative with respect SU(2) doublet norm
     {
-      return 12 * pow<2>(norm(fldSU2Doublet(0_c))) + 2 * qG * pow<2>(fldS(0_c)) + 4 * qH * pow<2>(norm(fldCS(0_c)));
+      return 12 * pow<2>(norm(fldSU2Doublet(0_c)));
     }
   };
 } // namespace TempLat

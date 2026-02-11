@@ -9,7 +9,6 @@
 
 inline void TempLat::GetDx::Test(TempLat::TDDAssertion &tdd)
 {
-
   /* Default is to fail: to remind yourself to implement something here. */
   struct myTest {
     DEVICE_FORCEINLINE_FUNCTION

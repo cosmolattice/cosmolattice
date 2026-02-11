@@ -46,7 +46,6 @@ namespace TempLat
 
     friend std::ostream &operator<<(std::ostream &ostream, const ConditionalFileStream &obj)
     {
-
       ostream << "File(" << obj.fname << ")";
       if (!obj.stream.is_open()) ostream << " (disabled)";
 

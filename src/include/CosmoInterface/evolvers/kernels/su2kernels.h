@@ -29,7 +29,6 @@ namespace TempLat
 
     template <class Model, int N> static auto get(Model &model, Tag<N> n)
     {
-
       // Computes different terms in the SU(2) gauge kernels:
 
       // SU(2) gauge current

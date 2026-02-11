@@ -6,7 +6,7 @@
 // File info: Main contributor(s):  , Year: 2025
 #include "TempLat/lattice/algebra/su2algebra/helpers/paulivectorsalgebra.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::PauliVectorsAlgebra> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::PauliVectorsAlgebra> test;
 }
-

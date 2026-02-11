@@ -102,7 +102,6 @@ namespace TempLat
 
     inline static ptrdiff_t BookKeeper(MPI_Comm comm, bool construct, bool destruct)
     {
-
       static std::map<MPI_Comm, ptrdiff_t> theBook;
 
       if (comm == MPI_COMM_WORLD) return 1; /* never free the world. */
