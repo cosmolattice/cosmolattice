@@ -124,7 +124,7 @@ set(DEFAULT_MODEL lphi4)
 set(MODEL
     ${DEFAULT_MODEL}
     CACHE STRING "Model that is compiled.")
-message(STATUS "----- The model which is going to be compiled is: ${MODEL} -----")
+message(STATUS "---------- The model which is going to be compiled is: ${MODEL} ----------")
 set(MODEL_LABEL ${MODEL}) # Allows to customise the name below if wanted.
 
 # Next few lines are to see if a file name Model.cmake exists at the same place
@@ -137,6 +137,8 @@ if(NOT MODELS_CMAKE)
 else()
   include(${MODELS_CMAKE})
 endif()
+
+message("")
 
 set(CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS}  -DMODELTYPE=${MODEL} -DMODELINCLUDE=models/${MODEL}.h -DMODELLABEL=${MODEL_LABEL}"
@@ -209,6 +211,10 @@ endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wshadow")
 
+if(MPI)
+  message(STATUS "MPI CXX compiler: ${MPI_CXX_COMPILER}")
+endif()
+message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
 message(STATUS
   "The compiler will be called with the following flags:\n  ${CMAKE_CXX_FLAGS}")
 

@@ -3,48 +3,19 @@
 # greatest control over what is happening.
 # ##############################################################################
 
-set(KOKKOSFFT_VERSION v0.4.0)
+message(STATUS "---------- Getting KokkosFFT ----------")
 
-message(STATUS "Fetching Kokkos-FFT ${KOKKOSFFT_VERSION}")
-execute_process(
-  COMMAND
-    bash -c
-    "mkdir -p _deps && git clone https://github.com/kokkos/kokkos-fft.git --recursive --branch ${KOKKOSFFT_VERSION} _deps/kokkos-fft-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  OUTPUT_QUIET)
+include(FetchContent)
+FetchContent_Declare(
+    KokkosFFT
+    DOWNLOAD_EXTRACT_TIMESTAMP FALSE
+    URL      https://github.com/kokkos/kokkos-fft/archive/refs/tags/v1.0.0.zip
+    URL_HASH SHA256=80e9c1abdf71df2342ae713c845ba2aeabf1c1a0c2e116795534a8e67734c177
+    SYSTEM
+)
+FetchContent_MakeAvailable(KokkosFFT)
 
-message(DEBUG "Configure Kokkos-FFT...")
-execute_process(
-  COMMAND bash -c "mkdir -p _deps/kokkos-fft-bin"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  OUTPUT_QUIET)
-execute_process(
-  COMMAND
-    bash -c
-    "cmake \
-        -DCMAKE_CXX_FLAGS=-fPIC \
-        -DCMAKE_PREFIX_PATH=${CMAKE_CURRENT_BINARY_DIR}/Kokkos \
-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
-        -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/Kokkos-FFT \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD} \
-        ../kokkos-fft-repo &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_config.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-fft-bin
-                    COMMAND_ERROR_IS_FATAL ANY)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DKOKKOSFFT")
+set(KOKKOSFFT ON)
 
-message(DEBUG "Building Kokkos-FFT...")
-execute_process(
-  COMMAND bash -c "make -j &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_build.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-fft-bin
-                    COMMAND_ERROR_IS_FATAL ANY)
-
-message(DEBUG "Installing Kokkos-FFT...")
-execute_process(
-  COMMAND bash -c
-          "make install &>> ${CMAKE_CURRENT_BINARY_DIR}/kokkos-fft_install.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-fft-bin
-                    COMMAND_ERROR_IS_FATAL ANY)
-
-# Kokkos by default does not support extensions, so we force them off
-set(CMAKE_CXX_EXTENSIONS OFF)
-# Make the package available
+message(STATUS "---------- Getting KokkosFFT DONE ----------\n")

@@ -9,12 +9,14 @@ option(OpenMP "Enable OpenMP support" OFF)
 option(Threads "Enable Threads support" OFF)
 option(Serial "Enable Serial support" OFF)
 
+message("")
+
 if(NOT CUDA
    AND NOT HIP
    AND NOT OpenMP
    AND NOT Threads
    AND NOT Serial)
-  message(STATUS "----- No device specified, trying to auto-detect -----")
+  message(STATUS "---------- No device specified, trying to auto-detect ----------")
   set(CUDA ON)
   set(HIP ON)
   set(OpenMP ON)
@@ -94,28 +96,17 @@ message(
 if(DEVICE_PROVIDER STREQUAL "Kokkos")
   set(KOKKOS ON)
 
-  message(STATUS "----- Using Kokkos as device provider -----")
+  message(STATUS "---------- Using Kokkos as device provider ----------\n")
 
   include(src/cmake/device/kokkos.cmake)
-  if(CUDA OR HIP)
-    include(src/cmake/device/kokkos-fft.cmake)
-  endif()
+  include(src/cmake/device/kokkos-fft.cmake)
 
   set(CMAKE_REQUIRED_QUIET ON)
 
   set(CMAKE_MESSAGE_LOG_LEVEL WARNING)
-  find_package(Kokkos REQUIRED HINTS ${CMAKE_CURRENT_BINARY_DIR}/Kokkos QUIET)
-  if(CUDA OR HIP)
-    find_package(KokkosFFT REQUIRED HINTS
-                 ${CMAKE_CURRENT_BINARY_DIR}/Kokkos-FFT QUIET)
-  endif()
   set(CMAKE_MESSAGE_LOG_LEVEL STATUS)
 
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_KOKKOS")
-  if(CUDA OR HIP)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DKOKKOSFFT")
-    set(KOKKOSFFT ON)
-  endif()
 else()
   message(FATAL_ERROR "Unknown DEVICE_PROVIDER option: ${DEVICE_PROVIDER}.
       Supported options: Kokkos")

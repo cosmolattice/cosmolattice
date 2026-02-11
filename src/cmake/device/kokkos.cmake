@@ -2,7 +2,9 @@
 # Get Kokkos
 # ##############################################################################
 
-if(GPU)
+message(STATUS "---------- Getting Kokkos ----------")
+
+if(CUDA OR HIP)
   if(NOT DEFINED Kokkos_ARCH)
     set(Kokkos_ARCH_NATIVE
         ON
@@ -35,106 +37,22 @@ endif()
 # control over what is happening.
 # ##############################################################################
 
-set(KOKKOS_VERSION 5.0.1)
+set(Kokkos_ENABLE_CUDA ${CUDA} CACHE BOOL "")
+set(Kokkos_ENABLE_CUDA_CONSTEXPR ${CUDA} CACHE BOOL "")
+set(Kokkos_ENABLE_HIP ${HIP} CACHE BOOL "")
+set(Kokkos_ENABLE_OPENMP ${OpenMP} CACHE BOOL "")
+set(Kokkos_ENABLE_THREADS ${Threads} CACHE BOOL "")
+set(Kokkos_ENABLE_SERIAL ${Serial} CACHE BOOL "")
+set(Kokkos_ENABLE_TESTS OFF CACHE BOOL "")
 
-message(STATUS "Fetching Kokkos ${KOKKOS_VERSION}")
-execute_process(
-  COMMAND
-    bash -c
-    "mkdir -p _deps && git clone https://github.com/kokkos/kokkos.git --depth 1 --branch ${KOKKOS_VERSION} _deps/kokkos-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos.log"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  OUTPUT_QUIET)
+include(FetchContent)
+FetchContent_Declare(
+    Kokkos
+    DOWNLOAD_EXTRACT_TIMESTAMP FALSE
+    URL      https://github.com/kokkos/kokkos/releases/download/5.0.2/kokkos-5.0.2.tar.gz
+    URL_HASH SHA256=188817bb452ca805ee8701f1c5adbbb4fb83dc8d1c50624566a18a719ba0fa5e
+    SYSTEM
+)
+FetchContent_MakeAvailable(Kokkos)
 
-message(DEBUG "Configure Kokkos...")
-execute_process(
-  COMMAND bash -c "mkdir -p _deps/kokkos-bin"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-  OUTPUT_QUIET)
-execute_process(
-  COMMAND
-    bash -c "cmake \
-        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
-        -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/Kokkos \
-        -DCMAKE_BUILD_TYPE=Release \
-        -DCMAKE_CXX_STANDARD=${CMAKE_CXX_STANDARD} \
-        -DKokkos_ARCH_NATIVE=${Kokkos_ARCH_NATIVE} \
-        ${Kokkos_ARCH_LIST} \
-        -DKokkos_ENABLE_CUDA=${CUDA} \
-        -DKokkos_ENABLE_CUDA_CONSTEXPR=${CUDA} \
-        -DKokkos_ENABLE_HIP=${HIP} \
-        -DHIP_PLATFORM=amd \
-        -DKokkos_ENABLE_OPENMP=${OPENMP} \
-        -DKokkos_ENABLE_THREADS=${THREADS} \
-        -DKokkos_ENABLE_SERIAL=ON \
-        -DKokkos_ENABLE_TESTS=OFF \
-        ../kokkos-repo >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_config.log 2>&1"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-bin
-                    COMMAND_ERROR_IS_FATAL ANY)
-
-message(DEBUG "Building Kokkos...")
-execute_process(
-  COMMAND bash -c "make -j >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_build.log 2>&1"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-bin
-                    COMMAND_ERROR_IS_FATAL ANY)
-
-message(DEBUG "Installing Kokkos...")
-execute_process(
-  COMMAND bash -c
-          "make install >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_install.log 2>&1"
-  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-bin
-                    COMMAND_ERROR_IS_FATAL ANY)
-
-# Kokkos by default does not support extensions, so we force them off
-set(CMAKE_CXX_EXTENSIONS OFF)
-# Make the package available
-
-# ##############################################################################
-# If profiling is requested, we add the kokkos-tools repository
-# ##############################################################################
-
-if(DEFINED PROFILING)
-  if(NOT PROFILING)
-    return()
-  endif()
-else()
-  message(STATUS "Profiling is enabled, downloading Kokkos tools.")
-
-  set(KOKKOS_TOOLS_VERSION develop)
-
-  message(STATUS "Downloading Kokkos tools ${KOKKOS_TOOLS_VERSION}")
-  execute_process(
-    COMMAND
-      bash -c
-      "mkdir -p _deps && git clone https://github.com/kokkos/kokkos-tools.git --depth 1 --branch ${KOKKOS_TOOLS_VERSION} _deps/kokkos-tools-repo  2>&1 > ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    OUTPUT_QUIET COMMAND_ERROR_IS_FATAL ANY)
-
-  message(DEBUG "Configure Kokkos tools...")
-  execute_process(
-    COMMAND bash -c "mkdir -p _deps/kokkos-tools-bin"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    OUTPUT_QUIET COMMAND_ERROR_IS_FATAL ANY)
-
-  execute_process(
-    COMMAND
-      bash -c "cmake -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER} \
-           -DCMAKE_INSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/Kokkos-Tools \
-           ../kokkos-tools-repo \
-           2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-tools-bin
-                      COMMAND_ERROR_IS_FATAL ANY)
-
-  message(DEBUG "Building Kokkos tools...")
-  execute_process(
-    COMMAND bash -c
-            "make -j8 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-tools-bin
-                      COMMAND_ERROR_IS_FATAL ANY)
-
-  message(DEBUG "Installing Kokkos tools...")
-  execute_process(
-    COMMAND bash -c
-            "make install 2>&1 >> ${CMAKE_CURRENT_BINARY_DIR}/kokkos_tools.log"
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/_deps/kokkos-tools-bin
-                      COMMAND_ERROR_IS_FATAL ANY)
-endif()
+message(STATUS "---------- Getting Kokkos DONE ----------\n")
