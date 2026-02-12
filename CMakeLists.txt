@@ -31,7 +31,7 @@ set(PFFT
     OFF
     CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
 set(PARAFAFT OFF CACHE BOOL "Set to ON to build with PARAFAFT (default = OFF)")
-set(KokkosFFT ON CACHE BOOL "Enable Kokkos FFT support (default = ON), acts as a fallback for non-mpi GPU builds")
+set(KOKKOSFFT ON CACHE BOOL "Enable KokkosFFT support (default = ON), acts as a fallback for non-MPI GPU builds")
 
 set(HDF5
     OFF
