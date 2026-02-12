@@ -96,7 +96,9 @@ if(DEVICE_PROVIDER STREQUAL "Kokkos")
   message(STATUS "---------- Using Kokkos as device provider ----------\n")
 
   include(src/cmake/device/kokkos.cmake)
-  include(src/cmake/device/kokkos-fft.cmake)
+  if(KOKKOSFFT)
+    include(src/cmake/device/kokkos-fft.cmake)
+  endif()
 
   set(CMAKE_REQUIRED_QUIET ON)
 
