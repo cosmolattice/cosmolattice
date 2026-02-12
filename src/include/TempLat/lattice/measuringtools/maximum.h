@@ -31,7 +31,7 @@ namespace TempLat
   template <typename T> class Maximum
   {
   public:
-    typedef typename GetGetReturnType<T>::type vType;
+    using vType = GetGetReturnType<T>::type;
 
     static constexpr size_t NDim = GetNDim::get<T>();
 

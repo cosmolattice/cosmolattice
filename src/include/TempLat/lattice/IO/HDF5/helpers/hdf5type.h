@@ -14,13 +14,11 @@
 
 namespace TempLat
 {
-
   /** @brief SFINAE class to get appropriate hdf5 type-
    *
    *
    * Unit test: ctest -R test-hdf5type
    **/
-
   namespace HDF5TypeConstant
   {
     static constexpr int FixedSizeStringLength = 256;
@@ -31,31 +29,31 @@ namespace TempLat
   };
 
   template <> struct HDF5Type<double> {
-    HDF5Type<double>() { type = H5T_NATIVE_DOUBLE; }
+    HDF5Type() { type = H5T_NATIVE_DOUBLE; }
     void close() {}
     hid_t type;
   };
 
   template <> struct HDF5Type<float> {
-    HDF5Type<float>() { type = H5T_NATIVE_FLOAT; }
+    HDF5Type() { type = H5T_NATIVE_FLOAT; }
     void close() {}
     hid_t type;
   };
 
   template <> struct HDF5Type<double *> {
-    HDF5Type<double *>() { type = H5T_NATIVE_DOUBLE; }
+    HDF5Type() { type = H5T_NATIVE_DOUBLE; }
     void close() {}
     hid_t type;
   };
 
   template <> struct HDF5Type<float *> {
-    HDF5Type<float *>() { type = H5T_NATIVE_FLOAT; }
+    HDF5Type() { type = H5T_NATIVE_FLOAT; }
     void close() {}
     hid_t type;
   };
 
   template <> struct HDF5Type<const char *> {
-    HDF5Type<const char *>()
+    HDF5Type()
     {
       auto memtype = H5Tcopy(H5T_C_S1);
       H5Tset_size(memtype, HDF5TypeConstant::FixedSizeStringLength);
@@ -66,7 +64,7 @@ namespace TempLat
   };
 
   template <> struct HDF5Type<char *> {
-    HDF5Type<char *>()
+    HDF5Type()
     {
       auto memtype = H5Tcopy(H5T_C_S1);
       H5Tset_size(memtype, HDF5TypeConstant::FixedSizeStringLength);
@@ -76,7 +74,7 @@ namespace TempLat
     hid_t type;
   };
   template <> struct HDF5Type<char[HDF5TypeConstant::FixedSizeStringLength]> {
-    HDF5Type<char[HDF5TypeConstant::FixedSizeStringLength]>()
+    HDF5Type()
     {
       auto memtype = H5Tcopy(H5T_C_S1);
       H5Tset_size(memtype, HDF5TypeConstant::FixedSizeStringLength);
@@ -86,12 +84,11 @@ namespace TempLat
     hid_t type;
   };
 
-  struct HDF5TypeTester {
 #ifdef TEMPLATTEST
+  struct HDF5TypeTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
+#endif
 } // namespace TempLat
 
 #endif

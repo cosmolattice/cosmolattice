@@ -102,7 +102,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::string mStringSeed;
+    std::string mStringSeed; // TODO -> device::string
     KeccakHash::ResultType mHashSeed;
     INT2 mSeed;
   };

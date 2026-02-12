@@ -29,58 +29,29 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     SU2Dagger(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<0> t) const { return mR.SU2Get(0_c); }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<1> t) const { return -mR.SU2Get(1_c); }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<2> t) const { return -mR.SU2Get(2_c); }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<3> t) const { return -mR.SU2Get(3_c); }
-
+    template <int N>
+      requires(N >= 0 && N <= 3)
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const
+    {
+      return mR.SU2Get(Tag<N>());
+    }
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
-    template <typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2Get(0_c, idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
+    template <int N>
+      requires(N >= 0 && N <= 3)
+    DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const
     {
-      return mR.SU2Get(0_c, idx...);
-    }
-    template <typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2Get(1_c, idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
-    {
-      return -mR.SU2Get(1_c, idx...);
-    }
-    template <typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2Get(2_c, idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
-    {
-      return -mR.SU2Get(2_c, idx...);
-    }
-    template <typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2Get(3_c, idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
-    {
-      return -mR.SU2Get(3_c, idx...);
+      return SU2Get(t);
     }
 
-    template <typename... IDX>
-      requires requires(R r, IDX... idx) {
-        r.SU2Get(0_c, idx...);
-        r.SU2Get(1_c, idx...);
-        r.SU2Get(2_c, idx...);
-        r.SU2Get(3_c, idx...);
-      }
-    device::array<SV, 4> SU2Get(const IDX &...idx)
+    template <int N, typename... IDX>
+      requires requires(R r, IDX... idx) { r.SU2Get(Tag<N>(), idx...); }
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
-      return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
+      return mR.SU2Get(Tag<N>(), idx...);
     }
 
     std::string toString() const { return GetString::get(mR) + "^\u2020"; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
   template <class R>

@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   /** @brief A class which computes the two-point correlation == FFT::C2R(|f_k|^2) of
    *   whatever getter you give as input, then projects onto radius
    *   to get a function of distance only.

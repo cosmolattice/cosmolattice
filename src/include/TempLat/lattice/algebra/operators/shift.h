@@ -42,7 +42,7 @@ namespace TempLat
         constexpr size_t d = decltype(_d)::value;
         tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      return device::apply([&](const auto... shifted_idx) { return GetValue::get(mR, shifted_idx...); }, tup);
+      return device::apply([&](const auto &...shifted_idx) { return GetValue::get(mR, shifted_idx...); }, tup);
     }
 
     template <typename... IDX>
@@ -54,7 +54,7 @@ namespace TempLat
         constexpr size_t d = decltype(_d)::value;
         tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      return device::apply([&](const auto... shifted_idx) { return DoEval::eval(mR, shifted_idx...); }, tup);
+      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); }, tup);
     }
 
     void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
@@ -90,7 +90,7 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      return device::apply([&](const auto... shifted_idx) { return GetValue::get(mR, shifted_idx...); },
+      return device::apply([&](const auto &...shifted_idx) { return GetValue::get(mR, shifted_idx...); },
                            tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
@@ -101,7 +101,7 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      return device::apply([&](const auto... shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
+      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
                            tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 

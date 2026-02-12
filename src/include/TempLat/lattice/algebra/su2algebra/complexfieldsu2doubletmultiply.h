@@ -107,9 +107,6 @@ namespace TempLat
     }
 
     virtual std::string operatorString() const override { return "*"; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
 #ifdef TEMPLATTEST

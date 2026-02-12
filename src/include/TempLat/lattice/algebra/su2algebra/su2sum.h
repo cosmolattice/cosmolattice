@@ -36,31 +36,11 @@ namespace TempLat
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return mT.SU2Get(t) + mR.SU2Get(t); }
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
-    template <typename... IDX> struct RightIndices {
-      static constexpr bool value = requires(R r, T t, IDX... idx) {
-        r.SU2Get(0_c, idx...);
-        r.SU2Get(1_c, idx...);
-        r.SU2Get(2_c, idx...);
-        r.SU2Get(3_c, idx...);
-        t.SU2Get(0_c, idx...);
-        t.SU2Get(1_c, idx...);
-        t.SU2Get(2_c, idx...);
-        t.SU2Get(3_c, idx...);
-      };
-    };
-
     template <int N, typename... IDX>
-      requires RightIndices<IDX...>::value
+      requires requires(R r, T t, IDX... idx) { r.SU2Get(Tag<N>(), idx...); }
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       return mT.SU2Get(t, idx...) + mR.SU2Get(t, idx...);
-    }
-
-    template <int N, typename... IDX>
-      requires RightIndices<IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...i) const
-    {
-      return {SU2Get(0_c, i...), SU2Get(1_c, i...), SU2Get(2_c, i...), SU2Get(3_c, i...)};
     }
 
     virtual std::string operatorString() const override { return "+"; }

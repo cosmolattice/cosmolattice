@@ -49,12 +49,6 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<3> t) const { return 2 * (mR.SU2Get(2_c) * mT.SU2Get(1_c) - mR.SU2Get(1_c) * mT.SU2Get(2_c)); }
 
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(const IDX &...idx) const
-    {
-      return cache;
-    }
     template <int N, typename... IDX> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       return cache[N];
@@ -82,9 +76,9 @@ namespace TempLat
     }
 
     virtual std::string operatorString() const override { return "commutator"; }
-    mutable device::array<SV, 4> cache;
 
   private:
+    mutable device::array<SV, 4> cache;
   };
 
   template <typename R, typename T>

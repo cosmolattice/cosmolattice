@@ -153,11 +153,11 @@ namespace TempLat
 
   template <class Q, size_t NDim, typename T, CANONICALTYPE ISMOMENTUM, int N, int SHIFT, bool ENABLE>
   struct CollectionSelector {
-    typedef CollectionBase<Q, NDim, T, ISMOMENTUM> type;
+    using type = CollectionBase<Q, NDim, T, ISMOMENTUM>;
   };
   template <class Q, size_t NDim, typename T, CANONICALTYPE ISMOMENTUM, int N, int SHIFT>
   struct CollectionSelector<Q, NDim, T, ISMOMENTUM, N, SHIFT, false> {
-    typedef typename CollectionHelper<Q, NDim, T, ISMOMENTUM, SHIFT, N + SHIFT - 1>::type type;
+    using type = typename CollectionHelper<Q, NDim, T, ISMOMENTUM, SHIFT, N + SHIFT - 1>::type;
   };
 
   template <class Q, size_t NDim, typename T, CANONICALTYPE ISMOMENTUM, int N, int SHIFT>

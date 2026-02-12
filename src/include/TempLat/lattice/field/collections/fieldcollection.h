@@ -36,8 +36,18 @@ namespace TempLat
       }
     }
 
-    template <int M> auto operator()(Tag<M> t) const { return fs[t - Tag<SHIFTIND>()]; }
-    template <int M> auto operator[](Tag<M> t) const { return fs[t - Tag<SHIFTIND>()]; }
+    template <int M>
+      requires(M >= SHIFTIND && M < N + SHIFTIND)
+    auto operator()(Tag<M> t) const
+    {
+      return fs[t - Tag<SHIFTIND>()];
+    }
+    template <int M>
+      requires(M >= SHIFTIND && M < N + SHIFTIND)
+    auto operator[](Tag<M> t) const
+    {
+      return fs[t - Tag<SHIFTIND>()];
+    }
     auto operator()(size_t i) const { return fs[i - Tag<SHIFTIND>()]; }
     auto operator[](size_t i) const { return fs[i - Tag<SHIFTIND>()]; }
 

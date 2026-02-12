@@ -92,13 +92,6 @@ namespace TempLat
 
     template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
 
-    template <typename... IDX>
-      requires RightIndices<IDX...>::value
-    device::array<SV, 4> SU2Get(const IDX &...idx) const
-    {
-      return std::move(cache);
-    }
-
     std::string toString() const
     {
       return "SU2Group(" + GetString::get(mA) + "," + GetString::get(mB) + "," + GetString::get(mC) + ")";

@@ -38,53 +38,21 @@ namespace TempLat
 
     using SV = typename SU2GetGetReturnType<T>::type;
 
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<0> t) const { return mR * mT.SU2Get(0_c); }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<1> t) const { return mR * mT.SU2Get(1_c); }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<2> t) const { return mR * mT.SU2Get(2_c); }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<3> t) const { return mR * mT.SU2Get(3_c); }
+    template <int N>
+      requires(N >= 0 && N <= 3)
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const
+    {
+      return mR * mT.SU2Get(t);
+    }
 
-    template <int N, typename... IDX> struct RightIndices {
-      static constexpr bool value = requires(R r, T t, IDX... idx) {
+    template <int N, typename... IDX>
+      requires requires(R r, T t, IDX... idx) {
         GetValue::get(r, idx...);
         t.SU2Get(Tag<N>(), idx...);
-      };
-    };
-
-    template <typename... IDX>
-      requires RightIndices<0, IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
+      }
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
-      return GetValue::get(mR, idx...) * mT.SU2Get(0_c, idx...);
-    }
-    template <typename... IDX>
-      requires RightIndices<1, IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
-    {
-      return GetValue::get(mR, idx...) * mT.SU2Get(1_c, idx...);
-    }
-    template <typename... IDX>
-      requires RightIndices<2, IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
-    {
-      return GetValue::get(mR, idx...) * mT.SU2Get(2_c, idx...);
-    }
-    template <typename... IDX>
-      requires RightIndices<3, IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
-    {
-      return GetValue::get(mR, idx...) * mT.SU2Get(3_c, idx...);
-    }
-
-    template <typename... IDX>
-      requires(RightIndices<0, IDX...>::value && RightIndices<1, IDX...>::value && RightIndices<2, IDX...>::value &&
-               RightIndices<3, IDX...>::value)
-    DEVICE_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
-    {
-      return {{SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)}};
+      return GetValue::get(mR, idx...) * mT.SU2Get(t, idx...);
     }
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }

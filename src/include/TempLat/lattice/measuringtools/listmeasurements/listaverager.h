@@ -30,12 +30,11 @@ namespace TempLat
   {
   public:
     using memberType = decltype(GetComponent::get(std::declval<T &>(), Tag<0>()));
-    typedef typename GetGetReturnType<memberType>::type vType;
+    using vType = GetGetReturnType<memberType>::type;
     static constexpr bool isComplexValued = GetGetReturnType<memberType>::isComplex;
     static constexpr size_t size = tuple_size<T>::value;
     static constexpr size_t NDim = GetNDim::get<memberType>();
-
-    typedef std::array<vType, size> arrVType;
+    using arrVType = std::array<vType, size>;
 
     // Put public methods here. These should change very little over time.
     ListAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType) {}

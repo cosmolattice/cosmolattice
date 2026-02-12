@@ -43,16 +43,6 @@ inline void TempLat::ConditionalBinaryGetterTester::Test(TempLat::TDDAssertion &
 
   tdd.verify(ConditionalBinaryGetter<double, double> == false);
 
-  //     second test: this should not compile:
-  //    typedef typename ConditionalBinaryGetter<
-  //        TestScratch::BinaryDummy,
-  //        double,
-  //        double
-  //    >::type templatedType4;
-  // passed.
-
-  //   third test: should not compile either
-
   class MyClass2
   {
   public:
@@ -66,12 +56,6 @@ inline void TempLat::ConditionalBinaryGetterTester::Test(TempLat::TDDAssertion &
 
   sqrt(MyClass2(1)).get(1, 2, 3); // should compile
 
-  //        typedef typename ConditionalBinaryGetter<
-  //            TestScratch::BinaryDummy,
-  //            MyVecClass,
-  //            MyVecClass
-  //        >::type templatedType5;
-  // passed
   using A = TempLat::Operators::Multiplication<
       TempLat::Operators::Cosine<TempLat::Operators::Multiplication<double, TempLat::Field<3UL, double>>>,
       TempLat::ExpressionShifterByOne<TempLat::Field<3UL, double>, 1>>;

@@ -25,11 +25,10 @@ namespace TempLat
    *
    * Unit test: ctest -R test-averager
    **/
-
   template <typename T> class WallAverager
   {
   public:
-    typedef typename GetGetReturnType<T>::type vType;
+    using vType = typename GetGetReturnType<T>::type;
 
     // Put public methods here. These should change very little over time.
     WallAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)

@@ -35,9 +35,9 @@ namespace TempLat
   {
   public:
 #ifndef NOFFTFLOAT
-    typedef typename std::conditional<std::is_same<float, T>::value, fftwf_plan, fftw_plan>::type plan;
+    using plan = typename std::conditional_t<std::is_same_v<float, T>, fftwf_plan, fftw_plan>;
 #else
-    typedef fftw_plan plan;
+    using plan = fftw_plan;
 #endif
     // Put public methods here. These should change very little over time.
     FFTWPlanHolder(MPICartesianGroup group, plan planR2C, plan planC2R)

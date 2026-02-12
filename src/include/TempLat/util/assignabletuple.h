@@ -39,7 +39,7 @@ namespace TempLat
 
     auto getComp(ptrdiff_t i)
     {
-      typedef typename GetGetReturnType<decltype((*this)(std::declval<Tag<0>>()))>::type SV;
+      using SV = GetGetReturnType<decltype((*this)(std::declval<Tag<0>>()))>::type;
       std::array<SV, size> ret;
       for_in_range<0, size>([&](auto j) { ret[j] = GetValue::get(getComp(j), i); });
       return ret;

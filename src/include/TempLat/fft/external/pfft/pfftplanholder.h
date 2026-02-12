@@ -21,7 +21,6 @@
 
 namespace TempLat
 {
-
   /** @brief A class which implements part of FFTLibraryInterface::PlanInterface, holding the pfft plans in shared_ptr's
    *- only freed when the last instance of this class is destructed.
    *
@@ -31,9 +30,9 @@ namespace TempLat
   {
   public:
 #ifndef NOFFTFLOAT
-    typedef typename std::conditional<std::is_same<float, T>::value, pfftf_plan, pfft_plan>::type plan;
+    using plan = typename std::conditional_t<std::is_same_v<float, T>, pfftf_plan, pfft_plan>;
 #else
-    typedef pfft_plan plan;
+    using plan = pfft_plan;
 #endif
     // Put public methods here. These should change very little over time.
     PFFTPlanHolder(MPICartesianGroup group, plan planR2C, plan planC2R)

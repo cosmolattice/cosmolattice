@@ -80,13 +80,6 @@ namespace TempLat
       };
     };
 
-    template <typename... IDX>
-      requires RequiredIndices<IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(const IDX &...idx) const
-    {
-      return cache;
-    }
-
     template <int N, typename... IDX>
       requires RequiredIndices<IDX...>::value
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const

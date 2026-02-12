@@ -23,8 +23,7 @@ namespace TempLat
    * Unit test: ctest -R test-radialprojectionsingledatum
    **/
   template <typename T> struct RadialProjectionSingleDatum {
-
-    typedef typename GetFloatType<T>::type floatType;
+    using floatType = typename GetFloatType<T>::type;
 
     /** @brief default constructor: values such that adding a non-default constructed RadialProjectionSingleDatum<T>
      * leads to the right RadialProjectionSingleDatum<T> */

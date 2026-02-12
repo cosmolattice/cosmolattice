@@ -64,7 +64,7 @@ namespace TempLat
     auto operator()(Tag<0> t) const { return sqrt(T(1) - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2])); }
 
     template <int M>
-      requires(M > 0)
+      requires(M > 0 && M < 4)
     DEVICE_FORCEINLINE_FUNCTION auto &operator()(Tag<M> t)
     {
       return fs[M - 1];
@@ -77,18 +77,11 @@ namespace TempLat
       return fs[M - 1];
     }
 
-    template <typename... IDX>
-      requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
-    {
-      return cache[0];
-    }
-
     template <int M, typename... IDX>
-      requires IsVariadicNDIndex<NDim, IDX...>
+      requires(IsVariadicNDIndex<NDim, IDX...> && M < 4 && M >= 0)
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
-      return cache[M - 1];
+      return cache[M];
     }
 
     template <typename R> void operator=(R &&r)
@@ -159,10 +152,10 @@ namespace TempLat
     DEVICE_FUNCTION void eval(const IDX &...idx) const
     {
       return;
-      cache[1] = fs[0].get(idx...);
-      cache[2] = fs[1].get(idx...);
-      cache[3] = fs[2].get(idx...);
-      cache[0] = sqrt(T(1) - pow<2>(cache[1]) - pow<2>(cache[2]) - pow<2>(cache[3]));
+      cache[0] = sqrt(T(1) - pow<2>(fs[0].get(idx...)) - pow<2>(fs[1].get(idx...)) - pow<2>(fs[2].get(idx...)));
+      cache[1] = fs[1].get(idx...);
+      cache[2] = fs[2].get(idx...);
+      cache[3] = fs[3].get(idx...);
     }
 
     using Getter = SU2Getter;

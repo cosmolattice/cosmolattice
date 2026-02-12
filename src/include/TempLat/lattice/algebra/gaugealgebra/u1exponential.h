@@ -55,6 +55,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
+
       const SV tmp = GetEval::getEval(mR, idx...);
       mCacheRe = cos(tmp);
       mCacheIm = sin(tmp);

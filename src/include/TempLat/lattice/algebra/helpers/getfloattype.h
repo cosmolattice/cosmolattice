@@ -16,18 +16,18 @@ namespace TempLat
    * Unit test: ctest -R test-getfloattype
    **/
   template <typename T> struct GetFloatType {
-    typedef T type;
+    using type = T;
   };
 
   template <typename S> struct GetFloatType<complex<S>> {
-    typedef S type;
+    using type = S;
   };
 
-  struct GetFloatTypeTester {
 #ifdef TEMPLATTEST
+  struct GetFloatTypeTester {
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

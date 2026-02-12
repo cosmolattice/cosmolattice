@@ -42,7 +42,7 @@ namespace TempLat
   template <typename T = double> class RadialProjectionResult : public std::vector<RadialProjectionSingleBinAndValue<T>>
   {
   public:
-    typedef typename GetFloatType<T>::type floatType;
+    using floatType = typename GetFloatType<T>::type;
 
     // Put public methods here. These should change very little over time.
     RadialProjectionResult(ptrdiff_t nBins, bool pUseBinCentralValues = false, bool pIsInFourier = false)
