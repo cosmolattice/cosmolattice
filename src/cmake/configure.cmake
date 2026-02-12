@@ -11,6 +11,14 @@ include(./src/cmake/device/device.cmake)
 
 find_package(FFTW)
 
+# Ensure the FFTW library directory is in the linker search path.
+# This is needed because KokkosFFT may propagate -lfftw3 as a bare flag
+# (without a full path), so the linker needs to know where to find it.
+if(FFTW_LIB)
+	get_filename_component(FFTW_LIB_DIR "${FFTW_LIB}" DIRECTORY)
+	link_directories(${FFTW_LIB_DIR})
+endif()
+
 # Need pthread to compile the non-mpi version
 set(THREADS_PREFER_PTHREAD ON)
 find_package(Threads REQUIRED)
