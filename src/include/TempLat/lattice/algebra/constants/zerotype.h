@@ -31,7 +31,7 @@ namespace TempLat
     {
       return 0;
     }
-    template <int N> constexpr auto operator()(const Tag<N> t) { return ZeroType(); }
+    template <int N> constexpr auto operator()(const Tag<N> t) const { return ZeroType(); }
     static constexpr bool ISCONSTANT = true;
   };
 } // namespace TempLat

@@ -125,33 +125,9 @@ namespace TempLat
       return pow<4>(norm(fldSU2Doublet(0_c)));
     }
 
-    auto potentialTerms(Tag<1>)
-    // Term 1: Interaction between SU(2) doublet and scalar singlet
-    {
-      return qG * pow<2>(norm(fldSU2Doublet(0_c)) * fldS(0_c));
-    }
-
-    auto potentialTerms(Tag<2>)
-    // Term 2: Interaction between SU(2) doublet and complex scalar
-    {
-      return 2 * qH * pow<2>(norm(fldSU2Doublet(0_c)) * norm(fldCS(0_c)));
-    }
-
     /////////
     // Derivatives of the program potential with respect fields
     /////////
-
-    auto potDeriv(Tag<0>)
-    // Derivative with respect scalar singlet
-    {
-      return 2 * qG * pow<2>(norm(fldSU2Doublet(0_c))) * fldS(0_c);
-    }
-
-    auto potDerivNormCS(Tag<0>)
-    // Derivative with respect complex scalar norm
-    {
-      return 4 * qH * pow<2>(norm(fldSU2Doublet(0_c))) * norm(fldCS(0_c));
-    }
 
     auto potDerivNormSU2Doublet(Tag<0>)
     // Derivative with respect SU(2) doublet norm

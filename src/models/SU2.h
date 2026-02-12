@@ -24,9 +24,9 @@ namespace TempLat
     static constexpr size_t NScalars = 0;
     static constexpr size_t NCScalars = 0;
     static constexpr size_t NU1Flds = 0;
-    static constexpr size_t NSU2Doublet = 0;
+    static constexpr size_t NSU2Doublet = 1;
     static constexpr size_t NSU2Flds = 1;
-    static constexpr size_t NPotTerms = 0;
+    static constexpr size_t NPotTerms = 1;
 
     // Coupling managers:  they deal with the different couplings between
     // the gauge fields and complex scalars/SU2 doublets
@@ -35,7 +35,7 @@ namespace TempLat
     // activates coupling U(1)-complex scalar
     // typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings;
     // activates coupling U(1)-doublet
-    // typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds, true> SU2DoubletSU2Couplings;
+    typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds, true> SU2DoubletSU2Couplings;
     // activates coupling SU(2)-doublet
   };
 
@@ -70,6 +70,15 @@ namespace TempLat
       // (read from parameters file, or specified here if not)
       /////////
 
+      // SU(2) COMPLEX NORM: initial homogeneous amplitude and derivative
+      double normDoublet0 = parser.get<double>("SU2Doublet_initial_norm");
+      double normPiDoublet0 = parser.get<double>("SU2Doublet_initial_momenta_norm");
+
+      // We distribute the norm equally between the four components
+      // using the "MakeSU2Doublet" function
+      fldSU2Doublet0(0_c) = MakeSU2Doublet(a, normDoublet0 / 2);
+      piSU2Doublet0(0_c) = MakeSU2Doublet(a, normPiDoublet0 / 2);
+
       /////////
       // Parameters of the model (read from parameters file)
       /////////
@@ -88,8 +97,8 @@ namespace TempLat
       /////////
 
       alpha = 1;
-      fStar = 1;
-      omegaStar = sqrt(lambda);
+      fStar = normDoublet0;
+      omegaStar = sqrt(lambda) * normDoublet0;
       // We now need to specify the rescaling from physical units to program units.
       // This consists of the  time rescaling exponent alpha, the field rescaling fStar
       // and the velocity rescaling omegaStar.
@@ -116,39 +125,14 @@ namespace TempLat
       return pow<4>(norm(fldSU2Doublet(0_c)));
     }
 
-    auto potentialTerms(Tag<1>)
-    // Term 1: Interaction between SU(2) doublet and scalar singlet
-    {
-      return qG * pow<2>(norm(fldSU2Doublet(0_c)) * fldS(0_c));
-    }
-
-    auto potentialTerms(Tag<2>)
-    // Term 2: Interaction between SU(2) doublet and complex scalar
-    {
-      return 2 * qH * pow<2>(norm(fldSU2Doublet(0_c)) * norm(fldCS(0_c)));
-    }
-
     /////////
     // Derivatives of the program potential with respect fields
     /////////
 
-    auto potDeriv(Tag<0>)
-    // Derivative with respect scalar singlet
-    {
-      return 2 * qG * pow<2>(norm(fldSU2Doublet(0_c))) * fldS(0_c);
-    }
-
-    auto potDerivNormCS(Tag<0>)
-    // Derivative with respect complex scalar norm
-    {
-      return 4 * qH * pow<2>(norm(fldSU2Doublet(0_c))) * norm(fldCS(0_c));
-    }
-
     auto potDerivNormSU2Doublet(Tag<0>)
     // Derivative with respect SU(2) doublet norm
     {
-      return 4 * pow<3>(norm(fldSU2Doublet(0_c))) +
-             norm(fldSU2Doublet(0_c)) * (2 * qG * pow<2>(fldS(0_c)) + 4 * qH * pow<2>(norm(fldCS(0_c))));
+      return 4 * pow<3>(norm(fldSU2Doublet(0_c)));
     }
 
     /////////
@@ -170,7 +154,7 @@ namespace TempLat
     auto potDeriv2NormSU2Doublet(Tag<0>)
     // 2nd derivative with respect SU(2) doublet norm
     {
-      return 12 * pow<2>(norm(fldSU2Doublet(0_c))) + 2 * qG * pow<2>(fldS(0_c)) + 4 * qH * pow<2>(norm(fldCS(0_c)));
+      return 12 * pow<2>(norm(fldSU2Doublet(0_c)));
     }
   };
 } // namespace TempLat
