@@ -18,9 +18,14 @@ inline void TempLat::HasEvalTester::Test(TempLat::TDDAssertion &tdd)
     DEVICE_FORCEINLINE_FUNCTION
     double eval() { return 777; }
   };
+  struct myTest3 {
+    DEVICE_FORCEINLINE_FUNCTION
+    double eval(int i, int j, int x) { return i + j + x; }
+  };
 
-  tdd.verify(HasEval<myTest> == true);
-  tdd.verify(HasEval<myTest2> == false);
+  tdd.verify(HasEval<myTest, int> == true);
+  tdd.verify(HasEval<myTest2, int> == false);
+  tdd.verify(HasEval<myTest3, ptrdiff_t, ptrdiff_t, ptrdiff_t> == true);
   tdd.verify(HasEval<double> == false);
 }
 

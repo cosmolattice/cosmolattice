@@ -9,8 +9,45 @@
 
 inline void TempLat::DoEval::Test(TempLat::TDDAssertion &tdd)
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
+  struct myTest {
+    DEVICE_FORCEINLINE_FUNCTION
+    void eval(ptrdiff_t i)
+    {
+      ev = true;
+      m = 76;
+    }
+    double m;
+
+    bool ev = false;
+  } mT1;
+  struct myTest2 {
+    DEVICE_FORCEINLINE_FUNCTION
+    double eval()
+    {
+      ev = true;
+      return 777;
+    }
+
+    bool ev = false;
+  } mT2;
+  struct myTest3 {
+    DEVICE_FORCEINLINE_FUNCTION
+    double eval(int i, int j, int x)
+    {
+      ev = true;
+      return i + j + x;
+    }
+
+    bool ev = false;
+  } mT3;
+
+  DoEval::eval(mT1, 0);
+  DoEval::eval(mT2);
+  DoEval::eval(mT3, 1, 2, 3);
+
+  tdd.verify(mT1.ev);
+  tdd.verify(mT2.ev);
+  tdd.verify(mT3.ev);
 }
 
 #endif
