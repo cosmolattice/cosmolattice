@@ -94,7 +94,6 @@ namespace TempLat
     static void addFluctuationsCScalarFromPhases(Model &model, std::string baseSeed, FluctuationsGenerator<T> &fg,
                                                  T aDot, T kCutOff)
     {
-
       // When imposing initial fluctuations to the complex scalars, one must ensure that the Gauss constraints are
       // preserved initially. Here we follow the procedure described in arXiv:2006.15122 which guarantees precisely
       // this. In particular, we impose a sum of left-moving and right-moving waves to the two components in momentum

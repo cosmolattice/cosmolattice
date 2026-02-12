@@ -6,7 +6,7 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2024
 #include "TempLat/lattice/algebra/gaugealgebra/nonabelianclover.h"
 
-namespace {
-    TempLat::TDDContainer<TempLat::NonAbelianCloverTester> test;
+namespace
+{
+  TempLat::TDDContainer<TempLat::NonAbelianCloverTester> test;
 }
-

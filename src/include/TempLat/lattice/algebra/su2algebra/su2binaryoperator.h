@@ -26,7 +26,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-su2binaryoperator
    **/
-
   template <typename R, typename T> class SU2BinaryOperator
   {
   public:

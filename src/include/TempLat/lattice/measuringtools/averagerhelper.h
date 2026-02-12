@@ -51,7 +51,6 @@ namespace TempLat
     static vType normalize(device::memory::host_ptr<MemoryToolBox<NDim>> toolBox, SpaceStateType pSpaceType,
                            const vType &value)
     {
-
       const auto &layout = pSpaceType == SpaceStateType::Fourier ? toolBox->mLayouts.getFourierSpaceLayout()
                                                                  : toolBox->mLayouts.getConfigSpaceLayout();
 
@@ -66,9 +65,8 @@ namespace TempLat
     template <bool forComplex = isComplexValued, typename std::enable_if<forComplex>::type *dummy = nullptr>
     static vType normalizeTypeSpecific(vType value, HermitianValueAccounting accounting)
     {
-
-      double normRe = accounting.getRealValueCount();
-      double normIm = accounting.getImaginaryValueCount();
+      const double normRe = accounting.getRealValueCount();
+      const double normIm = accounting.getImaginaryValueCount();
 
       return vType(value.real() / normRe, value.imag() / normIm);
     }
@@ -76,8 +74,7 @@ namespace TempLat
     template <bool forComplex = isComplexValued, typename std::enable_if<!forComplex>::type *dummy = nullptr>
     static vType normalizeTypeSpecific(vType value, HermitianValueAccounting accounting)
     {
-
-      double normRe = accounting.getRealValueCount();
+      const double normRe = accounting.getRealValueCount();
 
       return value / normRe;
     }

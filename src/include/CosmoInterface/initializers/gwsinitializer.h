@@ -25,7 +25,6 @@ namespace TempLat
 
     template <class Model> static void initializeGWs(Model &model)
     {
-
       ForLoop(i, 0, Model::NGWs - 1, (*model.fldGWs)(i) = 0.;);
     }
 

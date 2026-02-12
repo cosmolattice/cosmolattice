@@ -47,13 +47,15 @@ namespace TempLat
         throw(NotEnoughCouplingsForThisCouplingsManager(std::to_string(couplings.size()) +
                                                         " couplings were specified while " + std::to_string(NGauge) +
                                                         " gauge fields are present. Abort."));
-      size_t count = 0;
-      for (size_t i = 0; i < doesCouples.size(); ++i) {
-        if (doesCouples[i]) {
-          effectiveCharges[i] = charges[count] * couplings[i % NGauge];
-          ++count;
-        } else
-          effectiveCharges[i] = 0;
+      if constexpr (NGauge > 0) {
+        size_t count = 0;
+        for (size_t i = 0; i < doesCouples.size(); ++i) {
+          if (doesCouples[i]) {
+            effectiveCharges[i] = charges[count] * couplings[i % NGauge];
+            ++count;
+          } else
+            effectiveCharges[i] = 0;
+        }
       }
     }
 

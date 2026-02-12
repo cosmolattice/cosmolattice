@@ -34,7 +34,6 @@ namespace TempLat
     GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
         : PSType(par.powerSpectrumType)
     {
-
       bool amIRoot = model.getToolBox()->amIRoot();
       // We create a file containing the spectra
       spectraOut.emplace_back(

@@ -47,7 +47,6 @@ namespace TempLat
                   const RunParameters<T> &rPar, bool dontCreate = false)
         : useHDF5(fm.getUseHDF5Spectra())
     {
-
       if (useHDF5) {
 #ifdef HDF5
         saverHDF5 = std::make_shared<SpectrumSaverHDF5<T>>(fm, fld, amIRoot, appendMode, rPar);

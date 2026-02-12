@@ -101,7 +101,6 @@ namespace TempLat
 
     template <class Model, int N, int I> static auto SU2Current(Model &model, Tag<N>, Tag<I> i)
     {
-
       auto SU2Part = Total(
           a, 0, Model::NSU2Doublet - 1, // sum over SU(2) matter field
           IfElse(

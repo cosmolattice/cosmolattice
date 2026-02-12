@@ -47,7 +47,6 @@ namespace TempLat
 
     template <class Model> void evolve(Model &model, T tMinust0)
     {
-
       /*
        * Velocity Verlet can be understood as moving momenta by half step, fields by a step and momenta by half a step
        * again.
@@ -123,27 +122,23 @@ namespace TempLat
     // Evolves piS(i)
     template <class Model> void kickScalar(Model &model, T w)
     {
-
       ForLoop(i, 0, Model::Ns - 1, model.piS(i) += (w * model.dt / 2) * ScalarSingletKernels::get(model, i););
     }
 
     template <class Model> void kickGWs(Model &model, T w)
     {
-
       ForLoop(i, 0, Model::NGWs - 1, (*model.piGWs)(i) += (w * model.dt / 2) * GWsKernels::get(model, i););
     }
 
     // Evolves piCS(n)
     template <class Model> void kickCS(Model &model, T w)
     {
-
       ForLoop(n, 0, Model::NCs - 1, model.piCS(n) += model.dt / 2 * w * ComplexScalarKernels::get(model, n););
     }
 
     // Evolves piSU2Doublet(n)
     template <class Model> void kickSU2Doublet(Model &model, T w)
     {
-
       ForLoop(n, 0, Model::NSU2Doublet - 1,
               model.piSU2Doublet(n) += model.dt / 2 * w * (SU2DoubletKernels::get(model, n)););
     }
@@ -151,7 +146,6 @@ namespace TempLat
     // Evolves piU1(a)
     template <class Model> void kickU1Vector(Model &model, T w)
     {
-
       ForLoop(a, 0, Model::NU1 - 1, model.piU1(a) += model.dt * w / 2 * U1Kernels::get(model, a));
     }
 

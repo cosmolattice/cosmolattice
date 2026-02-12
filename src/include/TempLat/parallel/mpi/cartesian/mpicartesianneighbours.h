@@ -27,7 +27,6 @@ namespace TempLat
     MPICartesianNeighbours(MPICartesianGroup group)
         : mCartesianGroup(group), mNDimensions(mCartesianGroup.getNDimensions())
     {
-
       for (ptrdiff_t dim = 0; dim < mNDimensions; ++dim) {
         allNeighbours.emplace_back(mCartesianGroup, dim);
         //                sayMPI << allNeighbours.back() << "\n";

@@ -63,9 +63,9 @@ namespace TempLat
     void addAverage(const T &r) { (*stream) << std::setprecision(15) << "    " << r; }
 
     void addHeader(const std::string &str) { (*headerStream) << "    " << str; }
+
     void save()
     {
-
       if (!headerSaved) {
         (*outputAv) << "#" << StringTrimmer::ltrimmed(headerStream->str()) << "\n";
         headerSaved = true;

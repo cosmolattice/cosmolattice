@@ -45,7 +45,6 @@ namespace TempLat
     template <class Model, class Looper, int I, int J, typename T = double>
     inline auto Pr(Model &model, Looper &it, Tag<I> i, Tag<J> j)
     {
-
       auto pVec = it.getVec();
 
       size_t N = GetNGrid::get(model.getOneField());
@@ -77,7 +76,6 @@ namespace TempLat
 
     template <class Model, class Looper> auto projectedGW_complex(Model &model, Looper &it)
     {
-
       auto P11 = Pr(model, it, 1_c, 1_c);
       auto P12 = Pr(model, it, 1_c, 2_c);
       auto P13 = Pr(model, it, 1_c, 3_c);
@@ -128,7 +126,6 @@ namespace TempLat
 
     template <class Model, class Looper> auto projectedGW_real(Model &model, Looper &it)
     {
-
       auto P11 = Pr(model, it, 1_c, 1_c);
       auto P12 = Pr(model, it, 1_c, 2_c);
       auto P13 = Pr(model, it, 1_c, 3_c);

@@ -334,7 +334,6 @@ namespace TempLat
     // set the initial value of the potential and the masses of the fields from the expression of the potential.
     void setInitialPotentialAndMassesFromPotential()
     {
-
       // This adds the homogeneous components of the fields at one point:
       this->addInitValueOnePoint();
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with
@@ -363,7 +362,6 @@ namespace TempLat
     //  the masses not from the second derivative of the potential; you will still need to compute pot0.
     void setInitialPotentialFromPotential()
     {
-
       // This adds the homogeneous components of the fields at one point:
       this->addInitValueOnePoint();
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with

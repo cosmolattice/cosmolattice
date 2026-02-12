@@ -18,7 +18,6 @@ namespace TempLat
 
 inline void TempLat::ConditionalListBinaryGetterTester::Test(TempLat::TDDAssertion &tdd)
 {
-
   /* Default is to fail: to remind yourself to implement something here. */
   class MyClass
   {

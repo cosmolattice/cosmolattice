@@ -42,7 +42,6 @@ namespace TempLat
           mNGridPoints(nGridPoints), mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_),
           mIsKOKKOSFFT(isKOKKOSFFT_), mScales(scales)
     {
-
       if ((int)mIsFFTW + (int)mIsPFFT + (int)mIsKOKKOSFFT != 1)
         throw FFTLayoutStructException("Must be either FFTW, PFFT or KOKKOSFFT!");
 

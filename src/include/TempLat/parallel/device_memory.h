@@ -35,6 +35,8 @@ static_assert(false, "No DEVICE_LAMBDA defined.");
 static_assert(false, "No DEVICE_CLASS_LAMBDA defined.");
 #endif
 
+#include <atomic>
+
 namespace TempLat
 {
   namespace device
@@ -66,7 +68,7 @@ namespace TempLat
         {
 #ifndef DEVICE_REGION
           mPtr = new T(args...);
-          mRefCount = new size_t(1);
+          mRefCount = new std::atomic<size_t>(1);
 #else
           mPtr = nullptr;
           mRefCount = nullptr;
@@ -81,7 +83,7 @@ namespace TempLat
             mRefCount = nullptr;
           } else {
             mPtr = ptr;
-            mRefCount = new size_t(1);
+            mRefCount = new std::atomic<size_t>(1);
           }
 #else
           mPtr = nullptr;
@@ -120,7 +122,7 @@ namespace TempLat
             mRefCount = nullptr;
           } else {
             mPtr = ptr;
-            mRefCount = new size_t(1);
+            mRefCount = new std::atomic<size_t>(1);
           }
 #else
           mPtr = nullptr;
@@ -133,6 +135,10 @@ namespace TempLat
         host_ptr(const host_ptr &other)
         {
 #ifndef DEVICE_REGION
+          if (mRefCount != nullptr) {
+            --(*mRefCount);
+            update_ref_count();
+          }
           mPtr = other.mPtr;
           mRefCount = other.mRefCount;
           if (mRefCount != nullptr) ++(*mRefCount);
@@ -172,13 +178,15 @@ namespace TempLat
 
       private:
         T *mPtr = nullptr;
-        size_t *mRefCount = nullptr;
+        std::atomic<size_t> *mRefCount = nullptr;
 
         void update_ref_count()
         {
           if (mRefCount != nullptr && *mRefCount == 0) {
             delete mPtr;
             delete mRefCount;
+            mPtr = nullptr;
+            mRefCount = nullptr;
           }
         }
       };

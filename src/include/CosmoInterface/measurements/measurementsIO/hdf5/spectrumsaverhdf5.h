@@ -57,7 +57,6 @@ namespace TempLat
 
     void save(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
     {
-
       if (nBins > -1) {
         for (size_t i = 0; i < arr.size(); ++i) {
           //  arr[i]->rebin(nBins , std::floor(pow(3, 0.5) / 2.0 * nGrid));  // The second argument is the total length

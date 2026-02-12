@@ -31,6 +31,8 @@ set(PFFT
     OFF
     CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
 set(PARAFAFT OFF CACHE BOOL "Set to ON to build with PARAFAFT (default = OFF)")
+set(KOKKOSFFT ON CACHE BOOL "Enable KokkosFFT support (default = ON), acts as a fallback for non-MPI GPU builds")
+
 set(HDF5
     OFF
     CACHE
@@ -169,7 +171,7 @@ set(G++AVX
 )
 
 if(${G++OPT} STREQUAL "G")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g ")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address  ")
 elseif(${G++OPT} STREQUAL "O1")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 ")
 elseif(${G++OPT} STREQUAL "O2")

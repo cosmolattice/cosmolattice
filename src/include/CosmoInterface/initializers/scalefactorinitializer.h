@@ -27,7 +27,6 @@ namespace TempLat
 
     template <class Model, typename T> static void initializeScaleFactor(Model &model, RunParameters<T> &rPar)
     {
-
       // If fixed background, the initial Hubble parameter H0 is given by the user
       if (rPar.fixedBackground) {
         model.aDotI = rPar.H0 / model.omegaStar;

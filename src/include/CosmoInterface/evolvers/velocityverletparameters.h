@@ -49,7 +49,6 @@ namespace TempLat
     // Returns accuracy order of the velocity-verlet algorithm
     static size_t getOrder(EvolverType ev)
     {
-
       size_t res = 0;
 
       if (ev == VV2)

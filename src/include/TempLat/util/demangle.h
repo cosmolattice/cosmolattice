@@ -39,7 +39,6 @@ namespace TempLat
 
     static inline std::string demangle(const char *name)
     {
-
       int status = -4; // some arbitrary value to eliminate the compiler warning
 
       // enable c++11 by passing the flag -std=c++11 to g++
