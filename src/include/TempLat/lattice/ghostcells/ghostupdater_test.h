@@ -123,7 +123,7 @@ namespace TempLat
       for (size_t i = 0; i < nd; ++i)
         fullLocalSizes[i] = localSizes[i] + 2 * nGhost;
 
-      constexpr bool verbose = nd == 2;
+      const bool verbose = (nd == 2) && (nGrid <= 16);
 
       auto print_it = [&](auto view) {
         if (!verbose) return;

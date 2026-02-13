@@ -49,7 +49,12 @@ namespace TempLat
       return result[component];
     }
 
-    template <int N> auto operator()(Tag<N> t) { return getVectorComponent(*this, N - 1); }
+    template <int N>
+      requires(N > 0)
+    auto operator()(Tag<N> t)
+    {
+      return getVectorComponent(*this, N - 1);
+    }
 
     auto operator[](const ptrdiff_t &i) { return getVectorComponent(*this, i); }
     auto norm2() const { return dot(*this, *this); }

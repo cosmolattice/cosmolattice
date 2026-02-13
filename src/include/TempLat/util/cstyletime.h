@@ -5,14 +5,13 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
 #include "TempLat/util/tdd/tdd.h"
-#include <ctime>
+#include <chrono>
 
 namespace TempLat
 {
-
   /** @brief A class which returns date and time, pre C++17.
    *
    *
@@ -28,15 +27,19 @@ namespace TempLat
 
     void now()
     {
-      time_t now = std::time(0);
-      tm *ltm = localtime(&now);
-      // afficher divers member de la structure tm.
-      year = 1900 + ltm->tm_year;
-      month = 1 + ltm->tm_mon;
-      day = ltm->tm_mday;
-      hour = 1 + ltm->tm_hour;
-      minute = (1 + ltm->tm_min) % 60;
-      second = 1 + ltm->tm_sec;
+      using namespace std::chrono;
+      const auto now = zoned_time{current_zone(), system_clock::now()}.get_local_time();
+      const auto td = floor<days>(now);
+      const auto ts = floor<seconds>(now - td);
+      const year_month_day ymd{td};
+      const hh_mm_ss hms{ts};
+
+      year = static_cast<int>(ymd.year());
+      month = static_cast<unsigned>(ymd.month());
+      day = static_cast<unsigned>(ymd.day());
+      hour = hms.hours().count();
+      minute = hms.minutes().count();
+      second = hms.seconds().count();
     }
 
     std::string date(std::string sep = "_")
@@ -64,7 +67,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
 
 #endif

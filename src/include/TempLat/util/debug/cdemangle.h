@@ -14,7 +14,6 @@ namespace TempLat
 {
   inline void CDemangle(std::ostream &stream, char *start)
   {
-
     // allocate string which will be filled with the demangled function name
     size_t funcnamesize = 4096;
     char *funcname = (char *)malloc(funcnamesize);

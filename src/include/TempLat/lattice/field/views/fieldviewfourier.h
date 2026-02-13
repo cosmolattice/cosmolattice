@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
+#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/preget.h"
@@ -55,11 +56,12 @@ namespace TempLat
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
-    template <typename R> void assign(R &&g)
+    template <typename R>
+      requires HasGetMethod<R>
+    void assign(R &&g)
     {
       const auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
-
-      onBeforeAssignment(g);
+      onBeforeAssignment(g); // PREGET IS MISSING< TODO
 
       PreGet::apply(g);
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
@@ -67,6 +69,33 @@ namespace TempLat
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
       };
       device::iteration::foreach ("FourierViewAssign", layout, functor);
+
+      PostGet::apply(g);
+    }
+
+    template <typename R>
+      requires requires(R r) {
+        r.ComplexFieldGet(0_c);
+        r.ComplexFieldGet(1_c);
+      }
+    void assign(R &&g)
+    {
+      const auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
+      onBeforeAssignment(g);
+
+      PreGet::apply(g);
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              DoEval::eval(g, args...);
+              mView(args...) = complex<T>(GetValue::get(g.ComplexFieldGet(0_c), args...),
+                                          GetValue::get(g.ComplexFieldGet(1_c), args...));
+            },
+            idx);
+      };
+      device::iteration::foreach ("FourierViewAssign", layout, functor);
+
       PostGet::apply(g);
     }
 
@@ -166,6 +195,8 @@ namespace TempLat
       const bool owned = device::apply(
           [&](const auto &...idx) { return layout.putMemoryIndexFromSpatialLocationInto(mem_pos, idx...); },
           global_coord);
+
+      std::cout << "Setting zero mode at mem_pos " << mem_pos << ", owned is " << owned << std::endl;
 
       // do this only if this process owns the zero mode!
       if (owned) device::memory::setAtOnePoint(*this, mem_pos, toSet);

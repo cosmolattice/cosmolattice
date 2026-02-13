@@ -92,10 +92,6 @@ namespace TempLat
     std::array<double, sizeof...(Bools)> gs;
   };
 
-  // Pre c++17, need redundant out of line definition for static constexpr.
-  template <int NMatter, int NGauge, bool... Bools>
-  constexpr std::array<bool, sizeof...(Bools)> CouplingsManager<NMatter, NGauge, Bools...>::doesCouples;
-
   // Below is an empty class, which is needed to make the program compile when one or some of the coupling manager
   // is not used.
   template <> class CouplingsManager<0, 0>

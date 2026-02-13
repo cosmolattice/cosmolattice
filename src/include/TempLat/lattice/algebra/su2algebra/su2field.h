@@ -88,7 +88,7 @@ namespace TempLat
       requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
     {
-      return cache[M - 1];
+      return cache[M];
     }
 
     template <typename R> void operator=(R &&r)
@@ -108,8 +108,8 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        // The problem here is that NVCC copies the given captures to constant memory. Clang moves them to registers,
-        // which is what we need, as we need to use the cache.
+        // The problem here is that NVCC copies the given captures to constant memory (DEVICE_CLASS_LAMBDA translates to
+        // [=, ...]). Clang moves them to (thread-local) registers, which is what we need, as we need to use the cache.
 #if defined(__NVCC__)
         std::decay_t<R> __r = r;
 #else
@@ -156,9 +156,8 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      return;
       cache[1] = fs[0].get(idx...);
       cache[2] = fs[1].get(idx...);
       cache[3] = fs[2].get(idx...);

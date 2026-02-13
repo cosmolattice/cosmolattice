@@ -81,61 +81,23 @@ namespace TempLat
       auto config_view = device::apply(
           [&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, T>(dummy_c, args...); }, configSizes);
 
-      typename KokkosFFTPlanHolder<NDim, T>::PlanChain planChain;
-      planChain.configSizes = configSizes;
-      planChain.fourierSizes = fourierSizes;
+      typename KokkosFFTPlanHolder<NDim, T>::Plans plans;
+      plans.configSizes = configSizes;
+      plans.fourierSizes = fourierSizes;
 
-      if constexpr (NDim >= 3) {
-        for (size_t j = 0; j < NDim / 3; ++j) {
-          using c2rType = typename KokkosFFTPlanHolder<NDim, T>::template PlanType_c2r<3>;
-          using r2cType = typename KokkosFFTPlanHolder<NDim, T>::template PlanType_r2c<3>;
+      using c2rType = typename KokkosFFTPlanHolder<NDim, T>::PlanType_c2r;
+      using r2cType = typename KokkosFFTPlanHolder<NDim, T>::PlanType_r2c;
 
-          auto axes = KokkosFFT::axis_type<3>{};
-          for (size_t i = 0; i < 3; ++i)
-            axes[2 - i] = -j * 3 - i - 1;
+      auto axes = KokkosFFT::axis_type<NDim>{};
+      for (int i = 0; i < NDim; ++i)
+        axes[i] = i;
 
-          auto plan_c2r = std::shared_ptr<c2rType>(new c2rType(Kokkos::DefaultExecutionSpace(), fourier_view,
-                                                               config_view, KokkosFFT::Direction::backward, axes));
-          auto plan_r2c = std::shared_ptr<r2cType>(new r2cType(Kokkos::DefaultExecutionSpace(), config_view,
-                                                               fourier_view, KokkosFFT::Direction::forward, axes));
-          planChain.c2rPlans_3D.push_back(plan_c2r);
-          planChain.r2cPlans_3D.push_back(plan_r2c);
-        }
-      }
+      plans.c2rPlan = std::shared_ptr<c2rType>(new c2rType(Kokkos::DefaultExecutionSpace(), fourier_view, config_view,
+                                                           KokkosFFT::Direction::backward, axes));
+      plans.r2cPlan = std::shared_ptr<r2cType>(
+          new r2cType(Kokkos::DefaultExecutionSpace(), config_view, fourier_view, KokkosFFT::Direction::forward, axes));
 
-      if constexpr (NDim >= 2) {
-        if (NDim % 3 == 2) {
-          using c2rType = typename KokkosFFTPlanHolder<NDim, T>::template PlanType_c2r<2>;
-          using r2cType = typename KokkosFFTPlanHolder<NDim, T>::template PlanType_r2c<2>;
-
-          auto axes = KokkosFFT::axis_type<2>{};
-          axes[1] = 1;
-          axes[0] = 0;
-
-          auto plan_c2r = std::shared_ptr<c2rType>(new c2rType(Kokkos::DefaultExecutionSpace(), fourier_view,
-                                                               config_view, KokkosFFT::Direction::backward, axes));
-          auto plan_r2c = std::shared_ptr<r2cType>(new r2cType(Kokkos::DefaultExecutionSpace(), config_view,
-                                                               fourier_view, KokkosFFT::Direction::forward, axes));
-          planChain.c2rPlans_2D.push_back(plan_c2r);
-          planChain.r2cPlans_2D.push_back(plan_r2c);
-        }
-      }
-      if (NDim % 3 == 1) {
-        using c2rType = typename KokkosFFTPlanHolder<NDim, T>::template PlanType_c2r<1>;
-        using r2cType = typename KokkosFFTPlanHolder<NDim, T>::template PlanType_r2c<1>;
-
-        auto axes = KokkosFFT::axis_type<1>{};
-        axes[0] = 0;
-
-        auto plan_c2r = std::shared_ptr<c2rType>(new c2rType(Kokkos::DefaultExecutionSpace(), fourier_view, config_view,
-                                                             KokkosFFT::Direction::backward, axes));
-        auto plan_r2c = std::shared_ptr<r2cType>(new r2cType(Kokkos::DefaultExecutionSpace(), config_view, fourier_view,
-                                                             KokkosFFT::Direction::forward, axes));
-        planChain.c2rPlans_1D.push_back(plan_c2r);
-        planChain.r2cPlans_1D.push_back(plan_r2c);
-      }
-
-      return std::make_shared<KokkosFFTPlanHolder<NDim, T>>(group, planChain);
+      return std::make_shared<KokkosFFTPlanHolder<NDim, T>>(group, plans);
     }
 
   public:

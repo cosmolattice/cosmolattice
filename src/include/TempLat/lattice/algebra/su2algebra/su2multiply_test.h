@@ -16,7 +16,7 @@ inline void TempLat::SU2MultiplyTester::Test(TempLat::TDDAssertion &tdd)
   static constexpr size_t NDim = 3;
   using T = float;
 
-  auto toolBox = MemoryToolBox<3>::makeShared(2, 1);
+  auto toolBox = MemoryToolBox<3>::makeShared(8, 1);
   SU2Field<NDim, T> su2_1("testSU2_1", toolBox);
   SU2Field<NDim, T> su2_2("testSU2_2", toolBox);
   SU2Field<NDim, T> result("resultSU2", toolBox);

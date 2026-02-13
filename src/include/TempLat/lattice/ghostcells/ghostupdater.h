@@ -183,24 +183,14 @@ namespace TempLat
             receive_slices);
 
         // Copy the data to the send slab
-        auto copy_to_slab_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
-        {
-          device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
-        };
-        device::iteration::foreach ("copy_to_slab", {}, slab_sizes, copy_to_slab_functor);
-        // We must fence the operation, as we need the data to be in the slab before we call MPI.
+        device::memory::copyDeviceToDevice(sendSubView, sendSlab);
         device::iteration::fence();
 
         // Exchange the slabs
         mExchange.exchangeDown(MPITypeSelect<T>(), dimension, sendSlab.data(), receiveSlab.data(), total_size);
 
         // Copy the data from the receive slab
-        auto copy_from_slab_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
-        {
-          device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
-        };
-        device::iteration::foreach ("copy_from_slab", {}, slab_sizes, copy_from_slab_functor);
-        // We must fence the operation, as we need the data to be in the slab before we call MPI.
+        device::memory::copyDeviceToDevice(sendSlab, receiveSubView);
         device::iteration::fence();
       }
     }

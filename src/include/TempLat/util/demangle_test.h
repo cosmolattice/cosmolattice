@@ -9,7 +9,6 @@
 
 template <typename TestObjectUnknownHere> inline void TempLat::Demangle::Test(TestObjectUnknownHere &tdd)
 {
-
   tdd.verify(true);
 }
 

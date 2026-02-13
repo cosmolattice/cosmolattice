@@ -91,7 +91,8 @@ namespace TempLat
       result.atIndex = mTranspositionMap_memoryToGlobalSpace.getForward(memoryDimension);
       /* in this function we pass the new forward transposed index to the mLocal. */
       result.withValue = mLocal.memoryIndexToSpatialCoordinate(index, result.atIndex);
-      result.owned = result.withValue >= 0 && result.withValue < mLocal.getLocalSizes()[result.atIndex];
+      result.owned = index >= 0 && index < mLocal.getLocalSizes()[memoryDimension];
+
       return result;
     }
 
@@ -104,6 +105,7 @@ namespace TempLat
       result.atIndex = mTranspositionMap_memoryToGlobalSpace.getInverse(spatialDimension);
       /* in this function we pass the input untransposed index to the mLocal. */
       result.withValue = mLocal.spatialCoordinateToMemoryIndex(position, spatialDimension);
+      result.owned = result.withValue >= 0 && result.withValue < mLocal.getLocalSizes()[result.atIndex];
       return result;
     }
 

@@ -78,7 +78,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires RightIndices<IDX...>::value
-    void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mA, idx...);
       DoEval::eval(mB, idx...);

@@ -32,14 +32,12 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    template <size_t _NDim = NDim>
     using PlanType_c2r =
         typename KokkosFFT::Plan<Kokkos::DefaultExecutionSpace, device::memory::NDViewUnmanaged<NDim, complex<T>>,
-                                 device::memory::NDViewUnmanaged<NDim, T>, _NDim>;
-    template <size_t _NDim = NDim>
+                                 device::memory::NDViewUnmanaged<NDim, T>, NDim>;
     using PlanType_r2c =
         typename KokkosFFT::Plan<Kokkos::DefaultExecutionSpace, device::memory::NDViewUnmanaged<NDim, T>,
-                                 device::memory::NDViewUnmanaged<NDim, complex<T>>, _NDim>;
+                                 device::memory::NDViewUnmanaged<NDim, complex<T>>, NDim>;
 
     /**
      * @brief What's the intention here? Well, KokkosFFT does not support multi-dimensional FFTs directly, but only 1D,
@@ -53,45 +51,25 @@ namespace TempLat
      * transposition or I (or someone else) implement it themselves.
      *
      */
-    struct PlanChain {
-      std::vector<std::shared_ptr<PlanType_c2r<3>>> c2rPlans_3D;
-      std::vector<std::shared_ptr<PlanType_r2c<3>>> r2cPlans_3D;
-      std::vector<std::shared_ptr<PlanType_c2r<2>>> c2rPlans_2D;
-      std::vector<std::shared_ptr<PlanType_r2c<2>>> r2cPlans_2D;
-      std::vector<std::shared_ptr<PlanType_c2r<1>>> c2rPlans_1D;
-      std::vector<std::shared_ptr<PlanType_r2c<1>>> r2cPlans_1D;
+    struct Plans {
+      std::shared_ptr<PlanType_c2r> c2rPlan;
+      std::shared_ptr<PlanType_r2c> r2cPlan;
 
       void execute_c2r(const auto &src, const auto &dest)
       {
-        for (const auto &plan : c2rPlans_3D) {
-          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
-        }
-        for (const auto &plan : c2rPlans_2D) {
-          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
-        }
-        for (const auto &plan : c2rPlans_1D) {
-          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
-        }
+        KokkosFFT::execute(*c2rPlan, src, dest, KokkosFFT::Normalization::none);
       }
 
       void execute_r2c(const auto &src, const auto &dest)
       {
-        for (const auto &plan : r2cPlans_3D) {
-          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
-        }
-        for (const auto &plan : r2cPlans_2D) {
-          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
-        }
-        for (const auto &plan : r2cPlans_1D) {
-          KokkosFFT::execute(*plan, src, dest, KokkosFFT::Normalization::none);
-        }
+        KokkosFFT::execute(*r2cPlan, src, dest, KokkosFFT::Normalization::none);
       }
 
       device::array<int, NDim> configSizes;
       device::array<int, NDim> fourierSizes;
     };
 
-    KokkosFFTPlanHolder(MPICartesianGroup group, const PlanChain &planChain) : mGroup(group), mPlanChain(planChain) {}
+    KokkosFFTPlanHolder(MPICartesianGroup group, const Plans &plans) : mGroup(group), mPlans(plans) {}
 
     virtual ~KokkosFFTPlanHolder() {}
 
@@ -101,7 +79,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICartesianGroup mGroup;
-    PlanChain mPlanChain;
+    Plans mPlans;
 
     void execute_r2c(MemoryBlock<NDim, T> &mBlock)
     {
@@ -111,12 +89,12 @@ namespace TempLat
             return device::memory::NDViewUnmanaged<NDim, complex<T>>(reinterpret_cast<complex<T> *>(mBlock.data()),
                                                                      args...);
           },
-          mPlanChain.fourierSizes);
+          mPlans.fourierSizes);
       auto config_view = device::apply(
           [&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, T>(mBlock.data(), args...); },
-          mPlanChain.configSizes);
+          mPlans.configSizes);
 
-      mPlanChain.execute_r2c(config_view, fourier_view);
+      mPlans.execute_r2c(config_view, fourier_view);
       device::iteration::fence();
     }
 
@@ -128,12 +106,12 @@ namespace TempLat
             return device::memory::NDViewUnmanaged<NDim, complex<T>>(reinterpret_cast<complex<T> *>(mBlock.data()),
                                                                      args...);
           },
-          mPlanChain.fourierSizes);
+          mPlans.fourierSizes);
       auto config_view = device::apply(
           [&](auto &&...args) { return device::memory::NDViewUnmanaged<NDim, T>(mBlock.data(), args...); },
-          mPlanChain.configSizes);
+          mPlans.configSizes);
 
-      mPlanChain.execute_c2r(fourier_view, config_view);
+      mPlans.execute_c2r(fourier_view, config_view);
       device::iteration::fence();
     }
 
