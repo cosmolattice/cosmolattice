@@ -196,8 +196,6 @@ namespace TempLat
           [&](const auto &...idx) { return layout.putMemoryIndexFromSpatialLocationInto(mem_pos, idx...); },
           global_coord);
 
-      std::cout << "Setting zero mode at mem_pos " << mem_pos << ", owned is " << owned << std::endl;
-
       // do this only if this process owns the zero mode!
       if (owned) device::memory::setAtOnePoint(*this, mem_pos, toSet);
     }
