@@ -63,6 +63,8 @@ namespace TempLat
       MemoryBlock<NDim, float> temp(layout.getMinimalMemorySize());
       std::vector<int> globalSizes_INT(layout.configurationSpace.getGlobalSizes().begin(),
                                        layout.configurationSpace.getGlobalSizes().end());
+      std::vector<ptrdiff_t> globalSizes_PTRDIFF(layout.configurationSpace.getGlobalSizes().begin(),
+                                                  layout.configurationSpace.getGlobalSizes().end());
       auto c2r =
 #ifndef NOMPI
           fftwf_mpi_plan_dft_c2r(
@@ -71,7 +73,7 @@ namespace TempLat
 #endif
               layout.getNDimensions(),
 #ifndef NOMPI
-              layout.configurationSpace.getGlobalSizes().data(),
+              globalSizes_PTRDIFF.data(),
 #else
               globalSizes_INT.data(),
 #endif
@@ -88,7 +90,7 @@ namespace TempLat
 #endif
               layout.getNDimensions(),
 #ifndef NOMPI
-              layout.configurationSpace.getGlobalSizes().data(),
+              globalSizes_PTRDIFF.data(),
 #else
               globalSizes_INT.data(),
 #endif
@@ -115,6 +117,8 @@ namespace TempLat
       std::vector<int> globalSizes_INT(layout.configurationSpace.getGlobalSizes().size());
       for (size_t i = 0; i < layout.configurationSpace.getGlobalSizes().size(); ++i)
         globalSizes_INT[i] = (int)layout.configurationSpace.getGlobalSizes()[i];
+      std::vector<ptrdiff_t> globalSizes_PTRDIFF(layout.configurationSpace.getGlobalSizes().begin(),
+                                                  layout.configurationSpace.getGlobalSizes().end());
 
       auto c2r =
 #ifndef NOMPI
@@ -124,7 +128,7 @@ namespace TempLat
 #endif
               layout.getNDimensions(),
 #ifndef NOMPI
-              layout.configurationSpace.getGlobalSizes().data(),
+              globalSizes_PTRDIFF.data(),
 #else
               globalSizes_INT.data(),
 #endif
@@ -142,7 +146,7 @@ namespace TempLat
 #endif
               layout.getNDimensions(),
 #ifndef NOMPI
-              layout.configurationSpace.getGlobalSizes().data(),
+              globalSizes_PTRDIFF.data(),
 #else
               globalSizes_INT.data(),
 #endif

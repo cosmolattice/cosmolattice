@@ -66,13 +66,21 @@ namespace TempLat
         doTranspose = doTranspose && !forbidTransposition;
 
         if (doTranspose) {
+          ptrdiff_t tmp_ln0, tmp_ls0, tmp_ln1, tmp_ls1;
           fftwRequiredMemory = fftw_mpi_local_size_transposed((int)NDim, globalLayout.data(), group.getComm(),
-                                                              confLocalSizes.data(), confLocalStarts.data(),
-                                                              fourLocalSizes.data() + 1, fourLocalStarts.data() + 1);
+                                                              &tmp_ln0, &tmp_ls0,
+                                                              &tmp_ln1, &tmp_ls1);
+          confLocalSizes[0] = tmp_ln0;
+          confLocalStarts[0] = tmp_ls0;
+          fourLocalSizes[1] = tmp_ln1;
+          fourLocalStarts[1] = tmp_ls1;
           std::swap(fourTransposition[0], fourTransposition[1]);
         } else {
+          ptrdiff_t tmp_ln0, tmp_ls0;
           fftwRequiredMemory = fftw_mpi_local_size((int)NDim, globalLayout.data(), group.getComm(),
-                                                   fourLocalSizes.data(), fourLocalStarts.data());
+                                                   &tmp_ln0, &tmp_ls0);
+          fourLocalSizes[0] = tmp_ln0;
+          fourLocalStarts[0] = tmp_ls0;
           std::copy(fourLocalSizes.begin(), fourLocalSizes.end(), confLocalSizes.begin());
           std::copy(fourLocalStarts.begin(), fourLocalStarts.end(), confLocalStarts.begin());
           confLocalSizes.back() *= 2;
