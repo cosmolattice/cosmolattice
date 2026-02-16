@@ -54,7 +54,7 @@ namespace TempLat
         constexpr size_t d = decltype(_d)::value;
         tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); }, tup);
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, tup);
     }
 
     void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
@@ -101,8 +101,8 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
-                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
+                    tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }

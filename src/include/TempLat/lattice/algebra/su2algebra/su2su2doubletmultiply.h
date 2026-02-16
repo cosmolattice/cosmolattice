@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -60,22 +61,8 @@ namespace TempLat
              mR.SU2Get(0_c) * mT.SU2DoubletGet(3_c) - mR.SU2Get(3_c) * mT.SU2DoubletGet(2_c);
     }
 
-    template <typename... IDX> struct RightIndices {
-      static constexpr bool value = requires(R r, T t, IDX... idx) {
-        r.SU2Get(0_c, idx...);
-        r.SU2Get(1_c, idx...);
-        r.SU2Get(2_c, idx...);
-        r.SU2Get(3_c, idx...);
-
-        t.SU2DoubletGet(0_c, idx...);
-        t.SU2DoubletGet(1_c, idx...);
-        t.SU2DoubletGet(2_c, idx...);
-        t.SU2DoubletGet(3_c, idx...);
-      };
-    };
-
     template <int N, typename... IDX>
-      requires RightIndices<IDX...>::value
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
     {
       return cache[N];

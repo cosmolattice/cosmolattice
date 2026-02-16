@@ -24,12 +24,13 @@ namespace TempLat
   template <typename R, int... N> class SU2DoubletShifter : public SU2DoubletUnaryOperator<R>
   {
   public:
-    using SU2DoubletUnaryOperator<R>::mR;
     // Put public methods here. These should change very little over time.
-    SU2DoubletShifter(const R &pR) : SU2DoubletUnaryOperator<R>(pR)
-    {
-      shiftString = shift<N...>(mR.SU2DoubletGet(0_c)).getString({N...});
-    }
+    static constexpr size_t dim = sizeof...(N);
+    static constexpr auto shifts = device::make_tuple(N...);
+
+    using SU2DoubletUnaryOperator<R>::mR;
+
+    SU2DoubletShifter(const R &pR) : SU2DoubletUnaryOperator<R>(pR) {}
 
     template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const
     {
@@ -37,68 +38,67 @@ namespace TempLat
     }
 
     template <int M, typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2DoubletGet(1_c, idx...); }
+      requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }
     DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
     {
-      return GetValue::get(shift<N...>(mR.SU2DoubletGet(t)), idx...);
+      auto tup = device::tie(idx...);
+      constexpr_for<0, dim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
+      });
+      return device::apply([&](const auto &...shifted_idx) { return mR.SU2DoubletGet(t, shifted_idx...); }, tup);
     }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      DoEval::eval(SU2DoubletGet(0_c), idx...);
-      DoEval::eval(SU2DoubletGet(1_c), idx...);
-      DoEval::eval(SU2DoubletGet(2_c), idx...);
-      DoEval::eval(SU2DoubletGet(3_c), idx...);
+      auto tup = device::tie(idx...);
+      constexpr_for<0, dim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
+      });
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, tup);
     }
 
-    virtual std::string operatorString() const override { return shiftString; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::string shiftString;
+    virtual std::string operatorString() const override { return shift<N...>(mR.SU2DoubletGet(0_c)).getString({N...}); }
   };
 
-  template <typename R, int N> class SU2DoubletShifterByOne : public SU2DoubletUnaryOperator<R>
+  template <typename R, int _N> class SU2DoubletShifterByOne : public SU2DoubletUnaryOperator<R>
   {
-    decltype(SU2DoubletWrap(
-        shift<N>(std::declval<R>().SU2DoubletGet(0_c)), shift<N>(std::declval<R>().SU2DoubletGet(1_c)),
-        shift<N>(std::declval<R>().SU2DoubletGet(2_c)), shift<N>(std::declval<R>().SU2DoubletGet(3_c)))) expr;
+    static_assert(_N != 0, "_N cannot be 0.");
+
+    static constexpr int N = _N > 0 ? _N : -_N;
+    static constexpr int dir = _N > 0 ? 1 : -1;
 
   public:
-    using SU2DoubletUnaryOperator<R>::mR;
     // Put public methods here. These should change very little over time.
-    SU2DoubletShifterByOne(const R &pR)
-        : SU2DoubletUnaryOperator<R>(pR),
-          expr(SU2DoubletWrap(shift<N>(pR.SU2DoubletGet(0_c)), shift<N>(pR.SU2DoubletGet(1_c)),
-                              shift<N>(pR.SU2DoubletGet(2_c)), shift<N>(pR.SU2DoubletGet(3_c))))
-    {
-    }
+    using SU2DoubletUnaryOperator<R>::mR;
 
-    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const { return expr.SU2DoubletGet(t); }
+    SU2DoubletShifterByOne(const R &pR) : SU2DoubletUnaryOperator<R>(pR) {}
+
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const
+    {
+      return shift<N>(mR.SU2DoubletGet(t));
+    }
 
     template <int M, typename... IDX>
       requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }
     DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
     {
-      return GetValue::get(expr.SU2DoubletGet(t), idx...);
+      return device::apply([&](const auto &...shifted_idx) { return mR.SU2DoubletGet(t, shifted_idx...); },
+                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      DoEval::eval(SU2DoubletGet(0_c), idx...);
-      DoEval::eval(SU2DoubletGet(1_c), idx...);
-      DoEval::eval(SU2DoubletGet(2_c), idx...);
-      DoEval::eval(SU2DoubletGet(3_c), idx...);
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
+                    tuple_add_to_nth<N - 1, 1>(device::tie(idx...)));
     }
 
     std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
   template <int... shifts, class R>

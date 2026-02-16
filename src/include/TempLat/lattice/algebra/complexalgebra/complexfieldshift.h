@@ -25,6 +25,8 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
+    static constexpr size_t dim = sizeof...(N);
+    static constexpr auto shifts = device::make_tuple(N...);
 
     using ComplexFieldUnaryOperator<R>::mR;
 
@@ -45,15 +47,24 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
     {
-      return GetValue::get(shift<N...>(mR.ComplexFieldGet(t)), idx...);
+      auto tup = device::tie(idx...);
+      constexpr_for<0, dim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
+      });
+      return device::apply([&](const auto &...shifted_idx) { return mR.ComplexFieldGet(t, shifted_idx...); }, tup);
     }
 
     template <int M, typename... IDX>
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      DoEval::eval(ComplexFieldGet(0_c), idx...);
-      DoEval::eval(ComplexFieldGet(1_c), idx...);
+      auto tup = device::tie(idx...);
+      constexpr_for<0, dim, 1>([&](const auto _d) {
+        constexpr size_t d = decltype(_d)::value;
+        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
+      });
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, tup);
     }
 
     std::string operatorString() const { return shiftString; }
@@ -62,8 +73,13 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::string shiftString;
   };
-  template <typename R, int N> class ComplexFieldShifterByOne : public ComplexFieldUnaryOperator<R>
+  template <typename R, int _N> class ComplexFieldShifterByOne : public ComplexFieldUnaryOperator<R>
   {
+    static_assert(_N != 0, "_N cannot be 0.");
+
+    static constexpr int N = _N > 0 ? _N : -_N;
+    static constexpr int dir = _N > 0 ? 1 : -1;
+
   public:
     // Put public methods here. These should change very little over time.
 
@@ -80,21 +96,19 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
     {
-      return shift<N>(mR.ComplexFieldGet(t)).get(idx...);
+      return device::apply([&](const auto &...shifted_idx) { return mR.ComplexFieldGet(t, shifted_idx...); },
+                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     template <int M, typename... IDX>
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
-      DoEval::eval(ComplexFieldGet(0_c), idx...);
-      DoEval::eval(ComplexFieldGet(1_c), idx...);
+      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
+                    tuple_add_to_nth<N - 1, 1>(device::tie(idx...)));
     }
 
     std::string toString() const { return GetString::get(mR) + "(->" + std::to_string(N) + ")"; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
   template <int... shifts, class R>

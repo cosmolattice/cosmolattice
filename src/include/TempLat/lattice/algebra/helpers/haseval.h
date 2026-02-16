@@ -12,20 +12,19 @@
 
 namespace TempLat
 {
-  /** @brief concept to detect if the haseval method has been defined.
+  /** @brief concept to detect if the eval method has been defined in a given class.
    *
    * Unit test: ctest -R test-haseval
    **/
   template <typename U, typename... IDX>
   concept HasEval = requires(std::decay_t<U> obj, IDX... idx) { obj.eval(idx...); };
 
+#ifdef TEMPLATTEST
   struct HasEvalTester {
   public:
-#ifdef TEMPLATTEST
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
+#endif
 } // namespace TempLat
 
 #endif
