@@ -87,8 +87,7 @@ namespace TempLat
         device::apply(
             [&](auto &&...args) {
               DoEval::eval(g, args...);
-              mView(args...) = complex<T>(GetValue::get(g.ComplexFieldGet(0_c), args...),
-                                          GetValue::get(g.ComplexFieldGet(1_c), args...));
+              mView(args...) = complex<T>(g.ComplexFieldGet(0_c, args...), g.ComplexFieldGet(1_c, args...));
             },
             idx);
       };

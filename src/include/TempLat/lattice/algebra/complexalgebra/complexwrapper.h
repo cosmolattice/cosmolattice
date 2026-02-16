@@ -53,7 +53,7 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      return GetEval::getEval(mR, idx...);
+      return GetValue::get(mR, idx...);
     }
 
     template <typename... IDX>
@@ -63,7 +63,7 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
-      return GetEval::getEval(mT, idx...);
+      return GetValue::get(mT, idx...);
     }
 
     template <typename... IDX>

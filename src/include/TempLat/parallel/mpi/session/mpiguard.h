@@ -14,7 +14,6 @@
 
 namespace TempLat
 {
-
   MakeException(MPIGuardInstantiationException);
 
   /** @brief A class which guards intialization and finalization of pure MPI.

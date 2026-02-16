@@ -11,7 +11,7 @@
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
+#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include <type_traits>
@@ -48,7 +48,7 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      return GetEval::getEval(mR, idx...) * mT.ComplexFieldGet(0_c, idx...);
+      return GetValue::get(mR, idx...) * mT.ComplexFieldGet(0_c, idx...);
     }
 
     template <typename... IDX>
@@ -59,7 +59,7 @@ namespace TempLat
       }
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
-      return GetEval::getEval(mR, idx...) * mT.ComplexFieldGet(1_c, idx...);
+      return GetValue::get(mR, idx...) * mT.ComplexFieldGet(1_c, idx...);
     }
 
     template <typename... IDX>
