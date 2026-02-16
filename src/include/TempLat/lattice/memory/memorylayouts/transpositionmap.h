@@ -25,7 +25,7 @@ namespace TempLat
     /** @brief Default constructor: untransposed, both maps are a linear range. */
     TranspositionMap() : mFromAtoB{}, mFromBtoA{}
     {
-      for (uint i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i) {
         mFromAtoB[i] = i;
         mFromBtoA[i] = i;
       }

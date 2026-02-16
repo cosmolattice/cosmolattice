@@ -121,7 +121,7 @@ namespace TempLat
 
         // get the radius
         sType r{};
-        for (uint i = 0; i < NDim; ++i)
+        for (size_t i = 0; i < NDim; ++i)
           r += global_coords[i] * global_coords[i];
         r = device::sqrt(r);
 
@@ -168,7 +168,7 @@ namespace TempLat
         if (quality != HermitianRedundancy::negativePartner) {
           // get the radius
           sType r{};
-          for (uint i = 0; i < NDim; ++i)
+          for (size_t i = 0; i < NDim; ++i)
             r += global_coords[i] * global_coords[i];
           r = device::sqrt(r);
 

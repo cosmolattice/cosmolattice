@@ -115,7 +115,7 @@ namespace TempLat
           global_coord, hermitianPartner);
 
       // We do not need coordinates actually, but rather (positive!) global indices.
-      for (uint d = 0; d < NDim; ++d) {
+      for (size_t d = 0; d < NDim; ++d) {
         if (global_coord[d] < 0) global_coord[d] += mGlobalSizes[d];
         if (hermitianPartner[d] < 0) hermitianPartner[d] += mGlobalSizes[d];
       }

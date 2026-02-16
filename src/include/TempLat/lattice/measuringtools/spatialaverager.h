@@ -90,7 +90,7 @@ namespace TempLat
       device::memory::NDViewUnmanaged<1, vType> localResultHostView(result.data(),
                                                                     stop_iteration[0] - start_iteration[0]);
 
-      for (uint cur_lidx = nGhosts; cur_lidx < result.size() + nGhosts; ++cur_lidx) {
+      for (size_t cur_lidx = nGhosts; cur_lidx < result.size() + nGhosts; ++cur_lidx) {
         auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim - 1> &idx, vType &update)
         {
           device::apply(
