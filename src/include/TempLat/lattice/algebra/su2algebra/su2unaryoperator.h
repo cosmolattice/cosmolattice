@@ -17,6 +17,9 @@
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/util/tdd/tdd.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2get.h"
 
 namespace TempLat
@@ -56,6 +59,10 @@ namespace TempLat
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
+
+    void preGet() const { PreGet::apply(mR); }
+
+    void postGet() const { PostGet::apply(mR); }
 
     inline auto getToolBox() const { return GetToolBox::get(mR); }
 

@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/rangeiteration/sum_in_range.h"
@@ -15,6 +16,10 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/operators/power.h"
+
+#include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
 
 namespace TempLat
 {
@@ -36,61 +41,55 @@ namespace TempLat
 
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const { return sqrt(1.0 - pow<2>(mA) - pow<2>(mB) - pow<2>(mC)); }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<1> t) const { return mA; }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<2> t) const { return mB; }
-    DEVICE_FORCEINLINE_FUNCTION
-    auto SU2Get(Tag<3> t) const { return mC; }
 
-    template <typename... IDX> struct RightIndices {
-      static constexpr bool value = requires(A a, B b, C c, IDX... idx) {
-        GetValue::get(a, idx...);
-        GetValue::get(b, idx...);
-        GetValue::get(c, idx...);
-      };
-    };
+    template <int N>
+      requires(N > 0)
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const
+    {
+      return device::get<N - 1>(device::tie(mA, mB, mC));
+    }
 
     template <typename... IDX>
-      requires RightIndices<IDX...>::value
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
     {
-      return cache[0];
+      return cache_0;
     }
-    template <typename... IDX>
-      requires RightIndices<IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<1> t, const IDX &...idx) const
+    template <int N, typename... IDX>
+      requires(IsVariadicIndex<IDX...> && N > 0)
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
-      return cache[1];
-    }
-    template <typename... IDX>
-      requires RightIndices<IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<2> t, const IDX &...idx) const
-    {
-      return cache[2];
-    }
-    template <typename... IDX>
-      requires RightIndices<IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<3> t, const IDX &...idx) const
-    {
-      return cache[3];
+      return GetValue::get(device::get<N - 1>(device::tie(mA, mB, mC)), idx...);
     }
 
     template <typename... IDX>
-      requires RightIndices<IDX...>::value
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       DoEval::eval(mA, idx...);
       DoEval::eval(mB, idx...);
       DoEval::eval(mC, idx...);
 
-      cache[1] = GetValue::get(mA, idx...);
-      cache[2] = GetValue::get(mB, idx...);
-      cache[3] = GetValue::get(mC, idx...);
-      cache[0] = sqrt(1.0 - pow<2>(cache[1]) - pow<2>(cache[2]) - pow<2>(cache[3]));
+      // We only cache the 0th element, as the others are directly given by the wrapped objects.
+      cache_0 = sqrt(1.0 - pow<2>(GetValue::get(mA, idx...)) - pow<2>(GetValue::get(mB, idx...)) -
+                     pow<2>(GetValue::get(mC, idx...)));
     }
 
     template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
+
+    void preGet() const
+    {
+      PreGet::apply(mA);
+      PreGet::apply(mB);
+      PreGet::apply(mC);
+    }
+
+    void postGet() const
+    {
+      PostGet::apply(mA);
+      PostGet::apply(mB);
+      PostGet::apply(mC);
+    }
 
     std::string toString() const
     {
@@ -103,7 +102,7 @@ namespace TempLat
     B mB;
     C mC;
 
-    mutable device::array<SV, 4> cache;
+    mutable SV cache_0;
   };
 
   template <class A, class B, class C> auto SU2GroupWrap(A &&pA, B &&pB, C &&pC)

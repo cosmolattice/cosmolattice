@@ -8,14 +8,14 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
-#include "TempLat/lattice/algebra/helpers/hasgeteval.h"
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
-  /** @brief A class which chooses between get and getEval, to allow for some intermediate caching
-   * (useful for operations that derive from matrix multiplication for example).
-   *
+  /** @brief A class providing a function which automatically calls DoEval::eval before GetValue::get. Only for
+   * convenience, but should not be used in anything but assignments/readouts on the single-field level (i.e. ConfigView
+   * and FourierView).
    *
    * Unit test: ctest -R test-geteval
    **/
@@ -24,25 +24,16 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    template <typename U, typename... IDX>
-      requires HasGetEval<U, IDX...>
-    static DEVICE_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
+    /**
+     * @brief Calls DoEval::eval on the object, and then returns the value via GetValue::get.
+     *
+     * @param obj The object to evaluate and get the value from.
+     * @param idx The indices to get the value at.
+     * @return The value of the object at the given indices, after evaluating it.
+     */
+    template <typename U, typename... IDX> static DEVICE_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
     {
-      // static_assert(std::is_same_v<decltype(obj.getEval(i)), decltype(GetValue::get(obj, i))> && false,
-      //               "The return type of getEval must be the same as the return type of get.");
-      return obj.getEval(idx...);
-    }
-
-    template <typename T> auto extract()
-    {
-      static_assert(std::is_same_v<double, T> && false,
-                    "The return type of getEval must be the same as the return type of get.");
-    }
-
-    template <typename U, typename... IDX>
-      requires(!HasGetEval<U, IDX...>)
-    static DEVICE_FORCEINLINE_FUNCTION auto getEval(U &&obj, const IDX &...idx)
-    {
+      DoEval::eval(obj);
       return GetValue::get(obj, idx...);
     }
 
@@ -50,8 +41,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     GetEval() {}
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

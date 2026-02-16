@@ -63,8 +63,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     device::tuple<A, B, C, D> mData; // to make sure the data is on the device if needed.
-
-  public:
   };
 
   template <class A, class B, class C, class D> auto SU2DoubletWrap(A &&pA, B &&pB, C &&pC, D &&pD)

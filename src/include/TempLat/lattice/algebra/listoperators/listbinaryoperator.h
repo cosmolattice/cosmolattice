@@ -23,6 +23,9 @@
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 namespace TempLat
 {
 
@@ -90,6 +93,18 @@ namespace TempLat
         return GetToolBox::get(mT);
       else
         return nullptr;
+    }
+
+    void preGet() const
+    {
+      PreGet::apply(mR);
+      PreGet::apply(mT);
+    }
+
+    void postGet() const
+    {
+      PostGet::apply(mR);
+      PostGet::apply(mT);
     }
 
     using Getter = GetComponent;

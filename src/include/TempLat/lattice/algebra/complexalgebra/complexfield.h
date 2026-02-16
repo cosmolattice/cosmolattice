@@ -97,8 +97,7 @@ namespace TempLat
       mR.onBeforeAssignment(gR);
       mI.onBeforeAssignment(gI);
 
-      PreGet::apply(gR);
-      PreGet::apply(gI);
+      PreGet::apply(g);
 
       const auto viewR = mR.getView();
       const auto viewI = mI.getView();
@@ -114,8 +113,7 @@ namespace TempLat
       };
       device::iteration::foreach ("ComplexConfigViewAssign", mLayout, functor);
 
-      PostGet::apply(gR);
-      PostGet::apply(gI);
+      PostGet::apply(g);
 
       mR.setGhostsAreStale();
       mI.setGhostsAreStale();

@@ -12,14 +12,14 @@
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/util/tdd/tdd.h"
-// #include "TempLat/lattice/algebra/helpers/getderiv.h"
+#include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
-#include "TempLat/lattice/algebra/helpers/getndim.h"
 
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"

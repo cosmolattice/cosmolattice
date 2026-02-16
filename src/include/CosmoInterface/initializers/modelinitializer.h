@@ -18,7 +18,10 @@
 
 namespace TempLat
 {
-  /** @brief A class which is used to initialize the model.
+  /** @brief A class initializes a model's fields and the scale factor.
+   *
+   * On calling initialize(), the model is set up with the appropriate initial conditions
+   * for all fields and parameters.
    *
    **/
   template <typename T> class ModelInitializer
@@ -27,23 +30,30 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     template <class Model> ModelInitializer(Model &model, T pLSide, std::string pSeed) : fg(model, pLSide, pSeed) {}
 
+    /**
+     * @brief Initializes the model's fields and scale factor, according to the RunParameters and the model's field
+     * content.
+     *
+     * @param model The model to initialize.
+     * @param rPar The run parameters, which determine the initial conditions for the fields and scale factor.
+     */
     template <class Model> void initialize(Model &model, RunParameters<T> &rPar)
     {
       // Initialize scale factor:
       if (rPar.expansion) ScaleFactorInitializer::initializeScaleFactor(model, rPar);
 
       // Initialize scalar singlets:
-      if (Model::Ns > 0) ScalarSingletInitializer::initializeScalars(model, fg, rPar.kCutoff);
+      if constexpr (Model::Ns > 0) ScalarSingletInitializer::initializeScalars(model, fg, rPar.kCutoff);
 
       // Initialize GWs:
       if (model.fldGWs != nullptr) GWsInitializer::initializeGWs(model);
 
       // Initialize the SU2 gauge fields and SU2 doublets:
       //  --> Note: It is important to initialize SU2 first, as the doublet contributes to the U1 currents.
-      if (Model::NSU2Doublet > 0) SU2Initializer::initializeSU2(model, fg, rPar.kCutoff);
+      if constexpr (Model::NSU2Doublet > 0) SU2Initializer::initializeSU2(model, fg, rPar.kCutoff);
 
       // Initialize the U1 gauge fields and complex scalars:
-      if (Model::NCs > 0 or (Model::NSU2Doublet > 0 && Model::NU1 > 0))
+      if constexpr (Model::NCs > 0 || (Model::NSU2Doublet > 0 && Model::NU1 > 0))
         U1Initializer::initializeU1(model, fg, rPar.kCutoff);
 
       Averages::setAllAverages(model);

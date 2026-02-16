@@ -7,6 +7,14 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
+#include "TempLat/lattice/algebra/su2algebra/su2wrapper.h"
+#include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
+#include "TempLat/lattice/algebra/gaugealgebra/u1exponential.h"
+#include "TempLat/lattice/field/views/fieldviewfourier.h"
+#include "TempLat/lattice/field/collections/vectorfield.h"
+#include "TempLat/lattice/memory/memorytoolbox.h"
+#include "TempLat/util/tdd/tdd.h"
+
 inline void TempLat::SU2Initializer::Test(TempLat::TDDAssertion &tdd)
 {
   static constexpr size_t NDim = 3;
@@ -21,7 +29,6 @@ inline void TempLat::SU2Initializer::Test(TempLat::TDDAssertion &tdd)
   auto keffm2 = Total(i, 1, NDim, norm2(keffm(i))); // |keffm|^2
 
   const auto &fftSizes = toolBox->mLayouts.getFourierSpaceSizes();
-
   auto print_it = [&](const auto obj) {
     device::IdxArray<3> see_at{};
     for (device::Idx i = 0; i < 1; ++i) {
@@ -83,12 +90,20 @@ inline void TempLat::SU2Initializer::Test(TempLat::TDDAssertion &tdd)
   Field<NDim, T> j0a("j0a", toolBox);
   j0a.inFourierSpace() = Complexify(1.0, 1.0);
 
-  auto expr = asFourier(conj(keffm(3_c)) * (1 / keffm2)) * j0a.inFourierSpace();
-  std::cout << "expr (in Fourier space):" << std::endl;
-  print_it(expr);
+  auto expr1 = asFourier(conj(keffm(1_c)) * (1 / keffm2)) * j0a.inFourierSpace();
+  auto expr2 = asFourier(conj(keffm(2_c)) * (1 / keffm2)) * j0a.inFourierSpace();
+  auto expr3 = asFourier(conj(keffm(3_c)) * (1 / keffm2)) * j0a.inFourierSpace();
+  std::cout << "expr(1_c) (in Fourier space):" << std::endl;
+  print_it(expr1);
+
+  std::cout << "expr(2_c) (in Fourier space):" << std::endl;
+  print_it(expr2);
+
+  std::cout << "expr(3_c) (in Fourier space):" << std::endl;
+  print_it(expr3);
 
   Field<NDim, T> result("result", toolBox);
-  result.inFourierSpace() = expr;
+  result.inFourierSpace() = expr1;
   result.inFourierSpace().setZeroMode(0);
   std::cout << "result (in Fourier space):" << std::endl;
   print_it(result.inFourierSpace());

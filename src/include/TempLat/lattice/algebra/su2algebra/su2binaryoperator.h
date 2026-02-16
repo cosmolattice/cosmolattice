@@ -19,6 +19,9 @@
 #include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 namespace TempLat
 {
   /** @brief A class which implements basic features of su2 binary operators.
@@ -79,6 +82,18 @@ namespace TempLat
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
+    }
+
+    void preGet() const
+    {
+      PreGet::apply(mR);
+      PreGet::apply(mT);
+    }
+
+    void postGet() const
+    {
+      PostGet::apply(mR);
+      PostGet::apply(mT);
     }
 
     static constexpr size_t size = 4;

@@ -97,10 +97,7 @@ namespace TempLat
       fs[1].onBeforeAssignment(r.SU2Get(2_c));
       fs[2].onBeforeAssignment(r.SU2Get(3_c));
 
-      // TODO: Merge into onBeforeAssignment
-      // PreGet::apply(r.SU2Get(1_c));
-      // PreGet::apply(r.SU2Get(2_c));
-      // PreGet::apply(r.SU2Get(3_c));
+      PreGet::apply(r);
 
       const auto view1 = fs[0].getView();
       const auto view2 = fs[1].getView();
@@ -117,7 +114,7 @@ namespace TempLat
 #endif
 
         device::apply(
-            [&](auto &&...args) {
+            [&](const auto &...args) {
               DoEval::eval(__r, args...);
               view1(args...) = __r.SU2Get(1_c, args...);
               view2(args...) = __r.SU2Get(2_c, args...);
@@ -127,10 +124,7 @@ namespace TempLat
       };
       device::iteration::foreach ("SU2ConfigViewAssign", mLayout, functor);
 
-      // TODO: Merge into postAssignment
-      // PostGet::apply(r.SU2Get(1_c));
-      // PostGet::apply(r.SU2Get(2_c));
-      // PostGet::apply(r.SU2Get(3_c));
+      PostGet::apply(r);
 
       fs[0].setGhostsAreStale();
       fs[1].setGhostsAreStale();

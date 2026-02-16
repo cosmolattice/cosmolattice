@@ -17,6 +17,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
+#include "TempLat/util/rangeiteration/tagliteral.h"
 
 #include "TempLat/parallel/device.h"
 #include "TempLat/parallel/device_memory.h"
@@ -32,11 +33,6 @@ namespace TempLat
    *   No public constructor: only the friend class Field can instantiate this view on its own memory.
    *
    * Unit test: ctest -R test-fieldviewconfig
-   **/
-
-  /** @brief A simple class which provides a get method for basic types.
-   * Field class
-   *
    **/
   template <size_t _NDim, typename T> class FourierView : public AbstractField<_NDim, T>
   {
@@ -61,9 +57,10 @@ namespace TempLat
     void assign(R &&g)
     {
       const auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
-      onBeforeAssignment(g); // PREGET IS MISSING< TODO
+      onBeforeAssignment(g);
 
       PreGet::apply(g);
+
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
@@ -84,6 +81,7 @@ namespace TempLat
       onBeforeAssignment(g);
 
       PreGet::apply(g);
+
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         device::apply(

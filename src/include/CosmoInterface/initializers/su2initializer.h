@@ -17,11 +17,14 @@
 #include "CosmoInterface/definitions/potential.h"
 #include "CosmoInterface/definitions/averages.h"
 #include "CosmoInterface/definitions/mattercurrents.h"
+#include <iostream>
 
 namespace TempLat
 {
   /** @brief A class that initializes the SU(2) gauge sector (both non-Abelian gauge fields and SU2 doublets)
    *
+   * The electric components of the gauge fields (i.e. \f$\pi_{SU2}(i)(a)\f$) are initialized by imposing the Gauss
+   * constraint in momentum space, where the current (given by the SU2 doublet components) sources the gauge fields.
    **/
   class SU2Initializer
   {
@@ -42,14 +45,15 @@ namespace TempLat
       // This is done by imposing the Gauss constraint in momentum space, where
       // the current (given by the SU2 doublet components) sources the gauge fields.
 
-      if (model.NSU2 > 0) {
-
+      if constexpr (model.NSU2 > 0) {
         FourierSite<Model::NDim> ntilde(model.getToolBox());
 
-        size_t N = GetNGrid::get(model); // Reads N (number of points per dimension)
+        const size_t N = GetNGrid::get(model); // Reads N (number of points per dimension)
 
         // We define keffm as the backward (complex) lattice momentum, consistent with
         // choosing the backward spatial derivative in the Gauss constraint
+
+        const auto &toolBox = model.fldSU2Doublet(0_c)(0_c).getToolBox();
 
         auto expIK =
             MakeVector(i, 1, Model::NDim, complexPhase(-2.0 * Constants::pi<T> / N * ntilde(i))); // e^(-2*pi*k/N)
@@ -69,8 +73,9 @@ namespace TempLat
                         ForLoop(i, 1, Model::NDim,
                                 model.piSU2(n)(i)(a).inFourierSpace() =
                                     asFourier(conj(keffm(i)) * (1 / keffm2)) * j0a.inFourierSpace();
+                                //  Set the zero mode to 0.
                                 model.piSU2(n)(i)(a).inFourierSpace().setZeroMode(0);
-                                // Set the zero mode to 0.
+
                         ););
 
                 // We set the amplitude of the gauge links to unity (gauge fields to 0).

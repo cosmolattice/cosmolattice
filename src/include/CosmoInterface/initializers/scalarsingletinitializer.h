@@ -21,6 +21,17 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     ScalarSingletInitializer() = delete;
 
+    /**
+     * @brief Initializes the scalar singlet fields and their derivatives with Gaussian fluctuations, according to the
+     * model's parameters and the given cutoff scale.
+     * The initial homogeneous components are set, respectively, to
+     *   - `model.fldS += model.fldS0 / model.fStar;`
+     *   - `model.piS += model.piS0 / model.fStar / model.omegaStar;`
+     *
+     * @param model The model to initialize.
+     * @param fg The fluctuations generator to use for creating the initial fluctuations.
+     * @param kCutOff The cutoff scale for the fluctuations.
+     */
     template <class Model, typename T>
     static void initializeScalars(Model &model, const FluctuationsGenerator<T> &fg, T kCutOff)
     {

@@ -16,6 +16,9 @@
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 namespace TempLat
 {
   /** @brief A class which groups common features to su2doublets unary operators.
@@ -35,6 +38,10 @@ namespace TempLat
 
     /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return " "; }
+
+    void preGet() const { PreGet::apply(mR); }
+
+    void postGet() const { PostGet::apply(mR); }
 
     /** @brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.

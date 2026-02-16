@@ -7,12 +7,17 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2operator.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
+
+#include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
 
 #include "TempLat/parallel/device.h"
 
@@ -39,30 +44,43 @@ namespace TempLat
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return device::get<N>(data); }
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
-    template <int N, typename... IDX> struct RightIndices {
-      static constexpr bool value =
-          requires(device::tuple<A, B, C, D> t, IDX... idx) { GetValue::get(device::get<N>(t), idx...); };
-    };
-
     template <int N, typename... IDX>
-      requires RightIndices<N, IDX...>::value
+      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
       return GetValue::get(device::get<N>(data), idx...);
-    }
-
-    template <typename... IDX>
-      requires(RightIndices<0, IDX...>::value && RightIndices<1, IDX...>::value && RightIndices<2, IDX...>::value &&
-               RightIndices<3, IDX...>::value)
-    DEVICE_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
-    {
-      return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
     }
 
     std::string toString() const
     {
       return "SU2(" + GetString::get(device::get<0>(data)) + "," + GetString::get(device::get<1>(data)) + "," +
              GetString::get(device::get<2>(data)) + "," + GetString::get(device::get<3>(data)) + ")";
+    }
+
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    {
+      DoEval::eval(device::get<0>(data), idx...);
+      DoEval::eval(device::get<1>(data), idx...);
+      DoEval::eval(device::get<2>(data), idx...);
+      DoEval::eval(device::get<3>(data), idx...);
+    }
+
+    void preGet() const
+    {
+      PreGet::apply(device::get<0>(data));
+      PreGet::apply(device::get<1>(data));
+      PreGet::apply(device::get<2>(data));
+      PreGet::apply(device::get<3>(data));
+    }
+
+    void postGet() const
+    {
+      PostGet::apply(device::get<0>(data));
+      PostGet::apply(device::get<1>(data));
+      PostGet::apply(device::get<2>(data));
+      PostGet::apply(device::get<3>(data));
     }
 
   private:

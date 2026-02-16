@@ -16,6 +16,9 @@
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 namespace TempLat
 {
   /** @brief A class which groups common features of unary complex field operators.
@@ -62,6 +65,10 @@ namespace TempLat
     {
       DoEval::eval(mR, idx...);
     }
+
+    void preGet() const { PreGet::apply(mR); }
+
+    void postGet() const { PostGet::apply(mR); }
 
     static constexpr size_t size = 2;
     using Getter = ComplexFieldGetter;

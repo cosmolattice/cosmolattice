@@ -15,6 +15,9 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 namespace TempLat
 {
   /** @brief A class which wraps two objects as a complex field.
@@ -69,6 +72,18 @@ namespace TempLat
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
+    }
+
+    void preGet() const
+    {
+      PreGet::apply(mR);
+      PreGet::apply(mT);
+    }
+
+    void postGet() const
+    {
+      PostGet::apply(mR);
+      PostGet::apply(mT);
     }
 
     std::string toString() const { return "Complex(" + GetString::get(mR) + "," + GetString::get(mT) + ")"; }

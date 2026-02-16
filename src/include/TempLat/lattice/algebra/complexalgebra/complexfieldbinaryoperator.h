@@ -18,6 +18,9 @@
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
 #include "TempLat/parallel/device.h"
 
+#include "TempLat/lattice/algebra/helpers/preget.h"
+#include "TempLat/lattice/algebra/helpers/postget.h"
+
 namespace TempLat
 {
   /** @brief A class which gtoups common features of binary field operators.
@@ -68,6 +71,18 @@ namespace TempLat
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
+    }
+
+    void preGet() const
+    {
+      PreGet::apply(mR);
+      PreGet::apply(mT);
+    }
+
+    void postGet() const
+    {
+      PostGet::apply(mR);
+      PostGet::apply(mT);
     }
 
     inline auto getToolBox() const

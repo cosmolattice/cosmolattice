@@ -23,28 +23,28 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     template <typename U>
       requires requires(std::decay_t<U> obj) { obj.preGet(); }
-    static inline void apply(U &obj)
+    static inline void apply(U &&obj)
     {
       obj.preGet();
     }
 
     template <typename U>
       requires(!requires(std::decay_t<U> obj) { obj.preGet(); })
-    static inline void apply(U &)
+    static inline void apply(U &&)
     {
       // do nothing
     }
 
     template <typename U, int N>
       requires requires(std::decay_t<U> obj, Tag<N> t) { obj.preGet(t); }
-    static inline void apply(U &obj, Tag<N> t)
+    static inline void apply(U &&obj, Tag<N> t)
     {
       obj.preGet(t);
     }
 
     template <typename U, int N>
       requires(!requires(std::decay_t<U> obj, Tag<N> t) { obj.preGet(t); })
-    static inline void apply(U &, Tag<N>)
+    static inline void apply(U &&, Tag<N>)
     {
       // do nothing
     }

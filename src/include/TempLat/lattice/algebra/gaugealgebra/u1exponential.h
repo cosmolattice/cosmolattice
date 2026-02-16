@@ -18,6 +18,7 @@ namespace TempLat
 {
   /** @brief Exponential map for U(1).
    *
+   * TODO: Caching seems unnecessary here, could be even harmful: need to check
    *
    * Unit test: ctest -R test-u1wrapper
    **/

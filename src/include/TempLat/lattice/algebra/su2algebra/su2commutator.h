@@ -51,7 +51,10 @@ namespace TempLat
 
     template <int N, typename... IDX> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
-      return cache[N];
+      if constexpr (N == 0) {
+        return ZeroType();
+      } else
+        return cache[N - 1];
     }
 
     template <typename... IDX>
@@ -61,24 +64,23 @@ namespace TempLat
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
 
-      device::array<SV, 4> cL;
-      device::array<SV, 4> cR;
+      device::array<SV, 3> cL;
+      device::array<SV, 3> cR;
 
-      constexpr_for<0, 4, 1>([&](auto j) {
-        cL[j] = mR.SU2Get(j, idx...);
-        cR[j] = mT.SU2Get(j, idx...);
+      constexpr_for<1, 4, 1>([&](auto j) {
+        cL[j - 1] = mR.SU2Get(j, idx...);
+        cR[j - 1] = mT.SU2Get(j, idx...);
       });
 
-      cache[0] = 0;
-      cache[1] = 2 * (cL[3] * cR[2] - cL[2] * cR[3]);
-      cache[2] = 2 * (cL[1] * cR[3] - cL[3] * cR[1]);
-      cache[3] = 2 * (cL[2] * cR[1] - cL[1] * cR[2]);
+      cache[0] = 2 * (cL[3 - 1] * cR[2 - 1] - cL[2 - 1] * cR[3 - 1]);
+      cache[1] = 2 * (cL[1 - 1] * cR[3 - 1] - cL[3 - 1] * cR[1 - 1]);
+      cache[2] = 2 * (cL[2 - 1] * cR[1 - 1] - cL[1 - 1] * cR[2 - 1]);
     }
 
     virtual std::string operatorString() const override { return "commutator"; }
 
   private:
-    mutable device::array<SV, 4> cache;
+    mutable device::array<SV, 3> cache;
   };
 
   template <typename R, typename T>

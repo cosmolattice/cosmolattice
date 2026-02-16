@@ -63,9 +63,8 @@ namespace TempLat
       fs[1].onBeforeAssignment(std::decay_t<R>::Getter::get(r, 1_c));
       fs[2].onBeforeAssignment(std::decay_t<R>::Getter::get(r, 2_c));
       fs[3].onBeforeAssignment(std::decay_t<R>::Getter::get(r, 3_c));
-      // ForLoop(i, 0, size - 1, fs[i].onBeforeAssignment(std::decay_t<R>::Getter::get(r, i)););
-      //  TODO::
-      // ForLoop(j, 0, size - 1, PreGet::apply(fs[j]));
+
+      PreGet::apply(r);
 
       const auto views = device::make_tuple(fs[0].getView(), fs[1].getView(), fs[2].getView(), fs[3].getView());
 
@@ -88,8 +87,8 @@ namespace TempLat
       };
       device::iteration::foreach ("SU2DoubleConfigViewAssign", mLayout, functor);
 
-      // ForLoop(j, 0, size - 1, PostGet::apply(fs[j]));
-      // ForLoop(j, 0, size - 1, fs[j].setGhostsAreStale());
+      PostGet::apply(r);
+
       fs[0].setGhostsAreStale();
       fs[1].setGhostsAreStale();
       fs[2].setGhostsAreStale();
