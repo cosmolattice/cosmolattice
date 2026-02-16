@@ -44,8 +44,7 @@ namespace TempLat
       // gauge fields (the amplitudes are set exactly to 0 at all lattice points).
       // This is done by imposing the Gauss constraint in momentum space, where
       // the current (given by the SU2 doublet components) sources the gauge fields.
-
-      if constexpr (model.NSU2 > 0) {
+      if constexpr (Model::NSU2 > 0) {
         FourierSite<Model::NDim> ntilde(model.getToolBox());
 
         const size_t N = GetNGrid::get(model); // Reads N (number of points per dimension)
