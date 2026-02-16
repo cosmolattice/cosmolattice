@@ -52,12 +52,7 @@ namespace TempLat
         auto expIK =
             MakeVector(i, 1, Model::NDim, complexPhase(-2.0 * Constants::pi<T> / N * ntilde(i))); // e^(-2*pi*k/N)
         auto keffm = MakeVector(i, 1, Model::NDim, 1_c - expIK(i));
-        auto keffm2Raw = Total(i, 1, Model::NDim, norm2(keffm(i)));
-        // Guard against division by zero at the zero mode (keffm2 == 0 when k == 0).
-        // Without this, 1/keffm2 produces inf and conj(keffm)*inf gives NaN, which is
-        // undefined behaviour under -ffast-math (-ffinite-math-only). The zero mode is
-        // overwritten to 0 immediately after, so the regularisation value is irrelevant.
-        auto keffm2 = keffm2Raw + T(1e-30);
+        auto keffm2 = Total(i, 1, Model::NDim, norm2(keffm(i)));
 
         // We compute the total Abelian current. As a trick, we use model.fldU1(1_c) to store it temporally.
         ForLoop(
