@@ -28,6 +28,7 @@ if(NOT MPI)
 else()
 	find_package(MPI COMPONENTS C CXX REQUIRED)
 	# set(CMAKE_CXX_COMPILER ${MPI_CXX_COMPILER})
+	include_directories(${MPI_CXX_INCLUDE_DIRS})
 endif()
 
 # Fourier transformation things

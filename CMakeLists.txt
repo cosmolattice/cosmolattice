@@ -100,6 +100,10 @@ set(MYPARAFAFT_PATH "" CACHE STRING "path to PARAFAFT installation directory")
 # hesitate to continue using it.
 
 set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYPFFT_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}" )
+# Also set FFTW_ROOT so KokkosFFT's FindFFTW.cmake uses the local path
+if(NOT MYFFTW3_PATH STREQUAL "insert/here")
+  set(FFTW_ROOT "${MYFFTW3_PATH}" CACHE PATH "FFTW root for KokkosFFT" FORCE)
+endif()
 # Note: MYPARAFAFT_PATH is handled separately in configure.cmake (header-only library)
 
 
