@@ -6,3 +6,4 @@
 - Offline compilation must work flawlessly
 - Make sure HIP works.
 - Get rid of the JumpsHolder
+- Remove all explicit Kokkos:: and replace with device:: analogues.

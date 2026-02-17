@@ -118,6 +118,15 @@ namespace TempLat
 #endif
 
     // ------------------------------------------------
+    // Atomics
+    // ------------------------------------------------
+
+    using Kokkos::atomic_add;
+    using Kokkos::atomic_inc;
+    using Kokkos::atomic_max;
+    using Kokkos::atomic_min;
+
+    // ------------------------------------------------
     // Arithmetic defaults in device_kokkos namespace
     // ------------------------------------------------
 

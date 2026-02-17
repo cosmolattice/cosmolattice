@@ -197,7 +197,7 @@ namespace TempLat
     {
       mValues.add_device(i, value, weight);
       mBinBounds.add_device(i, position, weight);
-      Kokkos::atomic_add(&mMultiplicitiesDevice(i), weight);
+      device::atomic_add(&mMultiplicitiesDevice(i), weight);
     }
 
     void pull()

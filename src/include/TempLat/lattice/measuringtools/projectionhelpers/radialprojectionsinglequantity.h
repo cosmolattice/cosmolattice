@@ -56,10 +56,10 @@ namespace TempLat
     void add_device(ptrdiff_t i, const T &value, const T &weight) const
     {
       checkBounds(i);
-      Kokkos::atomic_add(&mAveragesDevice(i), weight * value);
-      Kokkos::atomic_add(&mVariancesDevice(i), weight * value * value);
-      Kokkos::atomic_min(&mMinsDevice(i), value);
-      Kokkos::atomic_max(&mMaxsDevice(i), value);
+      device::atomic_add(&mAveragesDevice(i), weight * value);
+      device::atomic_add(&mVariancesDevice(i), weight * value * value);
+      device::atomic_min(&mMinsDevice(i), value);
+      device::atomic_max(&mMaxsDevice(i), value);
     }
 
     void clear()

@@ -28,7 +28,7 @@ inline void TempLat::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
         sum += next;
         ptrdiff_t index = measure_center + std::round(next * measure_center / 3); /* 5 ? yes, 5 i_sigma happens. */
         index = std::max(ptrdiff_t(0), std::min(2 * measure_center - 1, index));
-        Kokkos::atomic_inc(&measure[index]);
+        device::atomic_inc(&measure[index]);
       },
       x);
 
