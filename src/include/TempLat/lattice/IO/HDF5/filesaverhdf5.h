@@ -350,9 +350,10 @@ namespace TempLat
           mDataset.writeSlices(sdata, subdims, offsets);
         } else {
           // Otherwise, we use GetEval to get the data point by point.
-          Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
-          auto functor = DEVICE_CLASS_LAMBDA(size_t i)
+          device::memory::NDView<1, vType> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
+          auto functor = DEVICE_CLASS_LAMBDA(device::IdxArray<1> idx)
           {
+            device::Idx i = idx[0];
             std::decay_t<decltype(r)> __r = r;
             device::apply(
                 [&](const auto &...idx) {
@@ -361,8 +362,8 @@ namespace TempLat
                 },
                 subMemoryPos);
           };
-          Kokkos::parallel_for("SaveDimBufferFilling",
-                               Kokkos::RangePolicy(memoryPos[dim], memoryPos[dim] + subdims[dim]), functor);
+          device::iteration::foreach ("SaveDimBufferFilling", {memoryPos[dim]}, {memoryPos[dim] + subdims[dim]},
+                                      functor);
 
           // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
           std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);

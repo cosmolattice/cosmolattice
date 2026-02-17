@@ -204,14 +204,14 @@ namespace TempLat
     {
       mValues.pull();
       mBinBounds.pull();
-      Kokkos::deep_copy(mMultiplicities, mMultiplicitiesDevice);
+      device::memory::copyDeviceToHost(mMultiplicitiesDevice, mMultiplicities.data());
     }
 
     void push()
     {
       mValues.push();
       mBinBounds.push();
-      Kokkos::deep_copy(mMultiplicitiesDevice, mMultiplicities);
+      device::memory::copyHostToDevice(mMultiplicities.data(), mMultiplicitiesDevice);
     }
 
     /** @brief RadialProjector calls this as the last step, does the transposition of the result vecotrs into one vector
