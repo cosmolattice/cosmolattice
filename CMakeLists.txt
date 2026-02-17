@@ -25,7 +25,7 @@ set(MPI
 set(DEVICE_PROVIDER
     Kokkos
     CACHE
-      BOOL
+    STRING
       "Set to the device provider to use for shared memory and/or GPU parallelization (default = Kokkos)")
 set(PFFT
     OFF

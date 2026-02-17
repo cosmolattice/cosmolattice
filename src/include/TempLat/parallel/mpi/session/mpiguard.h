@@ -129,8 +129,8 @@ namespace TempLat
       return counter;
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

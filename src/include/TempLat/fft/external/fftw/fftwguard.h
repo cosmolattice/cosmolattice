@@ -111,8 +111,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     bool mVerbose;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

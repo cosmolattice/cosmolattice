@@ -35,16 +35,15 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
     RandomGaussianFieldHelper(std::string baseSeed, device::memory::host_ptr<MemoryToolBox<NDim>> pToolBox)
-        : DimensionCountRecorder<NDim>(SpaceStateType::undefined), mBaseSeed(baseSeed), prng(baseSeed),
-          mToolBox(pToolBox), mLayout(mToolBox->mLayouts.getFourierSpaceLayout()), generation(0),
-          mGlobalSizes(mLayout.getGlobalSizes())
+        : DimensionCountRecorder<NDim>(SpaceStateType::undefined), prng(baseSeed), mToolBox(pToolBox),
+          mLayout(mToolBox->mLayouts.getFourierSpaceLayout()), generation(0), mGlobalSizes(mLayout.getGlobalSizes())
     {
       DimensionCountRecorder<NDim>::confirmSpace(mLayout, SpaceStateType::Fourier);
     }
 
     void reset() { generation = 0; }
 
-    void postGet() const
+    void postGet()
     {
       // This is called after the get, so we can increase the generation.
       generation++;
@@ -134,24 +133,23 @@ namespace TempLat
       }
     }
 
-    std::string toString() const { return "Random gaussian field with seed: \"" + mBaseSeed + "\""; }
+    std::string toString() const { return "Random gaussian field with seed: \"" + prng.getSeedString() + "\""; }
 
     const auto getCurrentSeed() const { return prng.getSeed(); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::string mBaseSeed;
-    mutable RandomGaussian prng;
+    RandomGaussian prng;
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
-    mutable RNGInteger generation;
+    RNGInteger generation;
     device::IdxArray<NDim> mGlobalSizes;
   };
 
   class RandomGaussianFieldTester
   {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -58,8 +58,8 @@ namespace TempLat
     std::vector<T> ms; // multiplicities, to check
     T kir;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -47,8 +47,8 @@ namespace TempLat
 
     std::vector<std::string> vec;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

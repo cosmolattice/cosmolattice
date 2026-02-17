@@ -91,7 +91,13 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        device::apply([&](auto &&...args) { mView(args...) = GetEval::getEval(g, args...); }, idx);
+        std::decay_t<decltype(g)> __g = g;
+        device::apply(
+            [&](auto &&...args) {
+              DoEval::eval(__g, args...);
+              mView(args...) = GetValue::get(__g, args...);
+            },
+            idx);
       };
       device::iteration::foreach ("ConfigViewAssign", mLayout, functor);
 
@@ -190,8 +196,8 @@ namespace TempLat
 
     bool mDisableFFTBlocking;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

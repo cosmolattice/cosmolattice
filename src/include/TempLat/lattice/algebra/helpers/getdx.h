@@ -35,8 +35,8 @@ namespace TempLat
       return 1.f;
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

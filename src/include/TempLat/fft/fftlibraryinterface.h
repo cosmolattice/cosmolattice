@@ -92,12 +92,9 @@ namespace TempLat
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
                                                                             const FFTLayoutStruct<NDim> &layout) = 0;
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-//    public:
 #ifdef TEMPLATTEST
-//        static inline void Test(TDDAssertion& tdd);
+  public:
+    static inline void Test(TDDAssertion &tdd);
 #endif
   };
 } // namespace TempLat

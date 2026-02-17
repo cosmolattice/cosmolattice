@@ -60,8 +60,8 @@ namespace TempLat
     std::string fname;
     std::ios_base::openmode mMode;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

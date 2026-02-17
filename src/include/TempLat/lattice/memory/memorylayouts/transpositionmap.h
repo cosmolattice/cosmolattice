@@ -84,8 +84,8 @@ namespace TempLat
     device::IdxArray<NDim> mFromAtoB;
     device::IdxArray<NDim> mFromBtoA;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

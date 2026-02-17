@@ -79,8 +79,8 @@ namespace TempLat
 
     GetValue() = delete;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     template <typename T> static inline void Test(T &tdd);
 #endif
   };

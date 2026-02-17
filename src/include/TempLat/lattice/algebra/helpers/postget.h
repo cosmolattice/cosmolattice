@@ -54,8 +54,8 @@ namespace TempLat
 
     PostGet() = delete;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

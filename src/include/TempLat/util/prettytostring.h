@@ -41,8 +41,8 @@ namespace TempLat
         x.pop_back();
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

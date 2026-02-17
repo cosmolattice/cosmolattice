@@ -19,8 +19,8 @@ namespace TempLat
   concept HasKIR = requires(std::decay_t<T> t) { t.getKIR(); };
 
   struct HasKIRTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

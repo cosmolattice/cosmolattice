@@ -48,7 +48,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       auto tup = device::tie(idx...);
       constexpr_for<0, dim, 1>([&](const auto _d) {
@@ -86,7 +86,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
                     tuple_add_to_nth<N - 1, 1>(device::tie(idx...)));

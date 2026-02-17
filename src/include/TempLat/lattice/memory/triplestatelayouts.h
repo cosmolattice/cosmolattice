@@ -143,8 +143,8 @@ namespace TempLat
             std::max((device::Idx)0, mFFTLayout.configurationSpace.getLocalSizes()[i] - mNGridPoints[i]);
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

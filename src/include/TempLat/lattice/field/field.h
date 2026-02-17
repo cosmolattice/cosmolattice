@@ -81,8 +81,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     FourierView<NDim, T> mFourierView;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

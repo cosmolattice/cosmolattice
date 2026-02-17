@@ -71,8 +71,8 @@ namespace TempLat
     mutable SpaceStateType mCurrentSpaceType;
     mutable LayoutStruct<NDim> mCurrentLayout;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

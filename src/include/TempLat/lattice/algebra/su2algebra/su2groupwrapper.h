@@ -64,7 +64,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(mA, idx...);
       DoEval::eval(mB, idx...);
@@ -77,14 +77,14 @@ namespace TempLat
 
     template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
 
-    void preGet() const
+    void preGet()
     {
       PreGet::apply(mA);
       PreGet::apply(mB);
       PreGet::apply(mC);
     }
 
-    void postGet() const
+    void postGet()
     {
       PostGet::apply(mA);
       PostGet::apply(mB);
@@ -102,7 +102,7 @@ namespace TempLat
     B mB;
     C mC;
 
-    mutable SV cache_0;
+    SV cache_0;
   };
 
   template <class A, class B, class C> auto SU2GroupWrap(A &&pA, B &&pB, C &&pC)

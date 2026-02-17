@@ -57,8 +57,8 @@ namespace TempLat
         str.erase(0, 1);
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -25,8 +25,8 @@ namespace TempLat
 
     template <typename T> static inline std::string get() { return Demangle::demangle(typeid(T).name()); }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

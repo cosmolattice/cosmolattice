@@ -181,8 +181,8 @@ namespace TempLat
     // Info file.
     std::unique_ptr<ConditionalFileStream> info;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

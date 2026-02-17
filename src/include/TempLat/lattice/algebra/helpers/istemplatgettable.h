@@ -21,8 +21,8 @@ namespace TempLat
   concept IsTempLatGettable = requires(std::decay_t<T> t, Tag<N> tag) { t.getComp(tag); };
 
   struct IsTempLatGettableTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -97,11 +97,12 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
+        std::decay_t<R> __g = g;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(g, args...);
-              viewR(args...) = g.ComplexFieldGet(0_c, args...);
-              viewI(args...) = g.ComplexFieldGet(1_c, args...);
+              DoEval::eval(__g, args...);
+              viewR(args...) = __g.ComplexFieldGet(0_c, args...);
+              viewI(args...) = __g.ComplexFieldGet(1_c, args...);
             },
             idx);
       };
@@ -115,7 +116,7 @@ namespace TempLat
 
     template <typename R> void operator+=(R &&r) { (*this) = (*this) + r; }
 
-    std::string toString() const { return "(" + mR.toString() + ", " + mI.toString() + ")"; }
+    std::string toString() const { return *mName; }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return mR.getDx(); }
@@ -144,14 +145,14 @@ namespace TempLat
     Field<NDim, T> mR;
     Field<NDim, T> mI;
 
-    std::string mName;
+    device::memory::host_string mName;
 
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
 
     LayoutStruct<NDim> mLayout;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

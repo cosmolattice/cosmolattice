@@ -70,11 +70,7 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-#if defined(__NVCC__)
         std::decay_t<R> __r = r;
-#else
-        const auto &__r = r;
-#endif
         device::apply(
             [&](auto &&...args) {
               DoEval::eval(__r, args...);
@@ -97,7 +93,7 @@ namespace TempLat
 
     template <typename R> void operator+=(R &&r) { (*this) = (*this) + r; }
 
-    std::string toString() const { return mName; }
+    std::string toString() const { return *mName; }
 
     device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(fs[0]); }
 
@@ -113,7 +109,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    const std::string mName;
+    const device::memory::host_string mName;
 
     device::array<Field<NDim, T>, 4> fs;
 

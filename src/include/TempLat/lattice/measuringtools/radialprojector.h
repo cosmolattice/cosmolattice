@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <cstddef>
 
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
@@ -128,9 +129,15 @@ namespace TempLat
         // Map the radius to a bin
         const ptrdiff_t bin = binComputer(r);
 
+        std::decay_t<T> __t = mInstance;
+
         // Add the bin contribution to the workspace.
-        device::apply([&](auto &&...args) { baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, 1.); },
-                      idx);
+        device::apply(
+            [&](auto &&...args) {
+              DoEval::eval(__t, args...);
+              baseWorkSpace.add_device(bin, GetValue::get(__t, args...), r, 1.);
+            },
+            idx);
       };
 
       device::iteration::foreach ("RadialProjectorConfiguration", mLayout, functor);
@@ -178,9 +185,14 @@ namespace TempLat
           // don't over-weight the real-valued entries: only one float value, only half the weight.
           floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
 
+          std::decay_t<T> __t = mInstance;
+
           // Add the bin contribution to the workspace.
           device::apply(
-              [&](auto &&...args) { baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, weight); },
+              [&](auto &&...args) {
+                DoEval::eval(__t, args...);
+                baseWorkSpace.add_device(bin, GetValue::get(__t, args...), r, weight);
+              },
               idx);
         }
       };

@@ -39,9 +39,9 @@ namespace TempLat
     /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */
     virtual std::string operatorString() const { return " "; }
 
-    void preGet() const { PreGet::apply(mR); }
+    void preGet() { PreGet::apply(mR); }
 
-    void postGet() const { PostGet::apply(mR); }
+    void postGet() { PostGet::apply(mR); }
 
     /** @brief If your descending class implements `operatorString()` and your operator is of the type "OP b" (where OP
      * is * or whatever), this toString method does all the work for you, only adding parentheses if b contains spaces.
@@ -63,7 +63,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(mR, idx...);
     }
@@ -75,8 +75,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     R mR;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

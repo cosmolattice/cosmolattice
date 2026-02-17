@@ -116,8 +116,8 @@ namespace TempLat
 
     IntrinsicScales mScales;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

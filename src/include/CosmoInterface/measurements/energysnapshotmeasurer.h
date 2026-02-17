@@ -189,8 +189,8 @@ namespace TempLat
     std::string nameSU2Mag, nameSU2El;
     std::string namePot;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

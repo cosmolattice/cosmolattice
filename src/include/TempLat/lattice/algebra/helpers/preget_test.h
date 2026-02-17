@@ -16,7 +16,7 @@ public:
 class WithPreGet
 {
 public:
-  void preGet() const { called = true; }
+  void preGet() { called = true; }
   static bool called;
 };
 bool WithPreGet::called = false; // Initialize static member variable

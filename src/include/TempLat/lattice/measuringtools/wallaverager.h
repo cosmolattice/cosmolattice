@@ -113,8 +113,8 @@ namespace TempLat
   auto wallAverager(ZeroType a) { return 0; }
 
   struct WallAveragerTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

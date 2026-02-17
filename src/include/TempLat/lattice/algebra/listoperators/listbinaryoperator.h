@@ -95,13 +95,13 @@ namespace TempLat
         return nullptr;
     }
 
-    void preGet() const
+    void preGet()
     {
       PreGet::apply(mR);
       PreGet::apply(mT);
     }
 
-    void postGet() const
+    void postGet()
     {
       PostGet::apply(mR);
       PostGet::apply(mT);
@@ -113,8 +113,8 @@ namespace TempLat
     R mR;
     T mT;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

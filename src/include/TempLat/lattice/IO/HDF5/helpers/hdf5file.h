@@ -106,8 +106,8 @@ namespace TempLat
 
     hid_t file_id;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

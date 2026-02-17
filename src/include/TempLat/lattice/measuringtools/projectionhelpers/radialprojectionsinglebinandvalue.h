@@ -105,8 +105,8 @@ namespace TempLat
     RadialProjectionSingleDatum<T> mBinInformation;
     RadialProjectionSingleDatum<T> mValueInformation;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

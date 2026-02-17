@@ -21,8 +21,8 @@ namespace TempLat
   concept IsSTDGettable = requires(T t) { std::get<N>(t); };
 
   struct IsSTDGettableTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

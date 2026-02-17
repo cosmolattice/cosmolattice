@@ -35,11 +35,8 @@ namespace TempLat
       return make_templatvector((LHS - RHS) / (LHS + RHS), LHS, RHS);
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

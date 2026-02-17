@@ -35,8 +35,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     ContainsSpace() {}
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

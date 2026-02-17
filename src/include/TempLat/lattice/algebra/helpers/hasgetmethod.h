@@ -29,8 +29,8 @@ namespace TempLat
                          || HasGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t>;
 
   struct HasGetMethodTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     template <typename T> static inline void Test(T &tdd);
 #endif
   };

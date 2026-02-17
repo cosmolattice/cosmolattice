@@ -29,8 +29,8 @@ namespace TempLat
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivCS(model, n);
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

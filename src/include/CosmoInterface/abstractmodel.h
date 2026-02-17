@@ -399,8 +399,8 @@ namespace TempLat
       ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, device::memory::setAtOnePoint(fldSU2Doublet(j)(i), pos0, 0.);));
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

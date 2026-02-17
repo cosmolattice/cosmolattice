@@ -73,8 +73,8 @@ namespace TempLat
   private:
     bool mVerbose;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
@@ -84,9 +84,5 @@ namespace TempLat
     return std::make_shared<PFFTGuard>(pVerbose);
   }
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/pfft/pfftguard_test.h"
-#endif
 
 #endif

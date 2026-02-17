@@ -60,8 +60,8 @@ namespace TempLat
       payload = buffer;
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

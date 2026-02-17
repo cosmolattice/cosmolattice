@@ -105,13 +105,7 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        // The problem here is that NVCC copies the given captures to constant memory (DEVICE_CLASS_LAMBDA translates to
-        // [=, ...]). Clang moves them to (thread-local) registers, which is what we need, as we need to use the cache.
-#if defined(__NVCC__)
         std::decay_t<R> __r = r;
-#else
-        const auto &__r = r;
-#endif
 
         device::apply(
             [&](const auto &...args) {
@@ -131,7 +125,7 @@ namespace TempLat
       fs[2].setGhostsAreStale();
     }
 
-    std::string toString() const { return mName; }
+    std::string toString() const { return *mName; }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return GetDx::getDx(fs[0]); }
@@ -150,7 +144,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       cache[1] = fs[0].get(idx...);
       cache[2] = fs[1].get(idx...);
@@ -166,13 +160,13 @@ namespace TempLat
 
   protected:
     device::array<Field<NDim, T>, 3> fs;
-    const std::string mName;
+    const device::memory::host_string mName;
     LayoutStruct<NDim> mLayout;
 
-    mutable device::array<T, 4> cache;
+    device::array<T, 4> cache;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

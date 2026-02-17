@@ -103,8 +103,8 @@ namespace TempLat
     std::array<MPI_Request, 4> mRequests;
 #endif
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

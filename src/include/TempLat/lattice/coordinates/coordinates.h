@@ -64,16 +64,12 @@ namespace TempLat
     ptrdiff_t mIEnd;
     std::vector<ptrdiff_t> jumps, vect;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/loopers/coordinates_test.h"
-#endif
 
 #endif

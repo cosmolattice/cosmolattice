@@ -39,16 +39,12 @@ namespace TempLat
       res[3] = cL[0] * cR[3] + cL[3] * cR[0] + cL[2] * cR[1] - cL[1] * cR[2];
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/su2algebra/helpers/paulivectorsalgebra_test.h"
-#endif
 
 #endif

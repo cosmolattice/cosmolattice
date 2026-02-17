@@ -279,8 +279,8 @@ namespace TempLat
     HDF5File mFile;
     HDF5Dataset mDataset;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

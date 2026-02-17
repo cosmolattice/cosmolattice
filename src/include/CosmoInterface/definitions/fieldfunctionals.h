@@ -115,11 +115,8 @@ namespace TempLat
       return Total(i, 1, Model::NDim, Total(b, 1, 3, pow<2>(model.piSU2(a)(i).SU2LieAlgebraGet(b))));
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

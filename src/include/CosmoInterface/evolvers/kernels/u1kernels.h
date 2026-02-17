@@ -49,8 +49,8 @@ namespace TempLat
       return normGrad * (LaplU1(a) - GradU1(a)) - normU1Source * U1Source(a);
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

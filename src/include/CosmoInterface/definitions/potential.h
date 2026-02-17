@@ -98,8 +98,8 @@ namespace TempLat
                                                        model.potDeriv2NormSU2Doublet(n), model.fldSU2Doublet(n), a));
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

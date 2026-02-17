@@ -24,8 +24,8 @@ namespace TempLat
 
     class RandomField
     {
-    public:
 #ifdef TEMPLATTEST
+    public:
       static inline void Test(TDDAssertion &tdd);
 #endif
     };

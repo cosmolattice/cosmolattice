@@ -59,7 +59,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
@@ -80,7 +80,7 @@ namespace TempLat
     virtual std::string operatorString() const override { return "commutator"; }
 
   private:
-    mutable device::array<SV, 3> cache;
+    device::array<SV, 3> cache;
   };
 
   template <typename R, typename T>

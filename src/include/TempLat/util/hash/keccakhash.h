@@ -44,8 +44,8 @@ namespace TempLat
     /** @brief Constructor is private: no need to instantiate, just call the static compute. */
     KeccakHash() {}
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -48,8 +48,8 @@ namespace TempLat
     KokkosFFTGuard &operator=(const KokkosFFTGuard &other) = delete;
     KokkosFFTGuard &operator=(KokkosFFTGuard &&other) = delete;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

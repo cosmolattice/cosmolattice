@@ -49,8 +49,8 @@ namespace TempLat
       return mSubArrays[dataType][dimension];
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -33,6 +33,7 @@ namespace TempLat
     RandomGaussian(const std::string &seed) : mRandomUniform(seed) {}
 
     const auto getSeed() const { return mRandomUniform.getSeed(); }
+    const auto getSeedString() const { return mRandomUniform.getSeedString(); }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getPair(INT2 r, INT2 c, INT2 g, bool real = false, bool unitary = false) const
@@ -87,8 +88,8 @@ namespace TempLat
       return {{boxMullerR * device::cos(boxMullerTheta), boxMullerR * device::sin(boxMullerTheta)}};
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

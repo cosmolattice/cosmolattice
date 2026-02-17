@@ -26,16 +26,12 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/util/tuple_size_tester_test.h"
-#endif
 
 #endif

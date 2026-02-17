@@ -48,8 +48,8 @@ namespace TempLat
     int mUpperNeighbourRank;
     int mLowerNeighbourRank;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

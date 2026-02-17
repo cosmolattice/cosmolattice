@@ -48,8 +48,8 @@ namespace TempLat
     T dx, lSide, kIR;
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -57,7 +57,7 @@ namespace TempLat
 
     template <int M, typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       auto tup = device::tie(idx...);
       constexpr_for<0, dim, 1>([&](const auto _d) {

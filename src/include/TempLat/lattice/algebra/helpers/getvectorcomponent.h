@@ -64,8 +64,8 @@ namespace TempLat
     R mR;
     const int mJ;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

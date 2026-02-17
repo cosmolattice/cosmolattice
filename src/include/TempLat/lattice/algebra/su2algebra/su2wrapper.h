@@ -59,7 +59,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(device::get<0>(data), idx...);
       DoEval::eval(device::get<1>(data), idx...);
@@ -67,7 +67,7 @@ namespace TempLat
       DoEval::eval(device::get<3>(data), idx...);
     }
 
-    void preGet() const
+    void preGet()
     {
       PreGet::apply(device::get<0>(data));
       PreGet::apply(device::get<1>(data));
@@ -75,7 +75,7 @@ namespace TempLat
       PreGet::apply(device::get<3>(data));
     }
 
-    void postGet() const
+    void postGet()
     {
       PostGet::apply(device::get<0>(data));
       PostGet::apply(device::get<1>(data));

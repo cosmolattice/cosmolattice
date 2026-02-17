@@ -82,8 +82,8 @@ namespace TempLat
 
     ptrdiff_t pGetMaxThreadCount() { return mHardwareAllowedThreadsPerProcess; }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

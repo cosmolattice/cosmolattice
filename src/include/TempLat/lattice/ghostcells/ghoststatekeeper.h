@@ -46,8 +46,8 @@ namespace TempLat
     bool mCurrentlyStale;
     bool mCurrentlyUpToDate;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

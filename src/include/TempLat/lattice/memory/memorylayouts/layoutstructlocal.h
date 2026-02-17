@@ -110,8 +110,8 @@ namespace TempLat
 
     ptrdiff_t mNGhosts;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

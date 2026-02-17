@@ -2,7 +2,7 @@ find_library(PFFT_LIB
 NAMES "pfft"
 )
 
-if(FlOATFFT)
+if(FLOATFFT)
 find_library(PFFTF_LIB
 NAMES "pfftf"
 )

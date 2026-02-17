@@ -40,8 +40,8 @@ namespace TempLat
     std::string mName;
     T mInstance;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

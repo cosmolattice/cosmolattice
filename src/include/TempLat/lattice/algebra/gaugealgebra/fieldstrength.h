@@ -20,8 +20,8 @@ namespace TempLat
    **/
   class FieldStrengthTester
   {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

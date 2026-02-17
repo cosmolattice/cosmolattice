@@ -18,6 +18,7 @@
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
 
 #include "TempLat/parallel/device.h"
+#include <ratio>
 
 namespace TempLat
 {
@@ -54,10 +55,11 @@ namespace TempLat
       vType localResult{};
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
+        std::decay_t<decltype(mT)> __t = mT;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(mT, args...);
-              update = device::max(mT.get(args...), update);
+              DoEval::eval(__t, args...);
+              update = device::max(__t.get(args...), update);
             },
             idx);
       };
@@ -104,8 +106,8 @@ namespace TempLat
   auto max(ZeroType a) { return 0; }
 
   struct MaximumTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -76,8 +76,8 @@ namespace TempLat
       value = stream.str();
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -70,8 +70,8 @@ namespace TempLat
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

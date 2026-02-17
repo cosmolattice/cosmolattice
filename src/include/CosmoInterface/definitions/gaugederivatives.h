@@ -150,11 +150,8 @@ namespace TempLat
       return MakeVector(i, 1, Model::NDim, SU2sForSU2DoubletCovDerivs(model, t, i));
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

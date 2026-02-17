@@ -60,8 +60,8 @@ namespace TempLat
     /** @brief private constructor: no one should instantiate this thing. */
     FFTMallocFree() {}
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

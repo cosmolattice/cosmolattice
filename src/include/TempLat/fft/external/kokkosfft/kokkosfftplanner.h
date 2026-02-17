@@ -89,7 +89,7 @@ namespace TempLat
       using r2cType = typename KokkosFFTPlanHolder<NDim, T>::PlanType_r2c;
 
       auto axes = KokkosFFT::axis_type<NDim>{};
-      for (int i = 0; i < NDim; ++i)
+      for (size_t i = 0; i < NDim; ++i)
         axes[i] = i;
 
       plans.c2rPlan = std::shared_ptr<c2rType>(new c2rType(Kokkos::DefaultExecutionSpace(), fourier_view, config_view,
@@ -100,8 +100,8 @@ namespace TempLat
       return std::make_shared<KokkosFFTPlanHolder<NDim, T>>(group, plans);
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

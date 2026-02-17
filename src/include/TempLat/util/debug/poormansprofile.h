@@ -63,8 +63,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::map<std::string, size_t> theMap;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -42,10 +42,7 @@ namespace TempLat
       return complex<mRType>(mR.ComplexFieldGet(0_c, idx...), mR.ComplexFieldGet(1_c, idx...));
     }
 
-    template <typename... IDX> DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
-    {
-      DoEval::eval(mR, idx...);
-    }
+    template <typename... IDX> DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) { DoEval::eval(mR, idx...); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

@@ -33,8 +33,8 @@ namespace TempLat
        || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t, size_t>);
 
   struct HasVectorGetMethodTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

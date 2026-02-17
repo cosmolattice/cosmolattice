@@ -53,8 +53,8 @@ namespace TempLat
     /** @brief Only one static method. No instantiation. */
     RadialProjectionRebinner() {}
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

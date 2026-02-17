@@ -67,19 +67,19 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
     }
 
-    void preGet() const
+    void preGet()
     {
       PreGet::apply(mR);
       PreGet::apply(mT);
     }
 
-    void postGet() const
+    void postGet()
     {
       PostGet::apply(mR);
       PostGet::apply(mT);
@@ -103,11 +103,11 @@ namespace TempLat
   protected:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    const R mR;
-    const T mT;
+    R mR;
+    T mT;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

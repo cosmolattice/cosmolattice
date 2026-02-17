@@ -61,14 +61,14 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(mR, idx...);
     }
 
-    void preGet() const { PreGet::apply(mR); }
+    void preGet() { PreGet::apply(mR); }
 
-    void postGet() const { PostGet::apply(mR); }
+    void postGet() { PostGet::apply(mR); }
 
     static constexpr size_t size = 2;
     using Getter = ComplexFieldGetter;
@@ -78,8 +78,8 @@ namespace TempLat
 
     R mR;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -168,11 +168,8 @@ namespace TempLat
               model.potAvI); // we also include the potential energy to the sum
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

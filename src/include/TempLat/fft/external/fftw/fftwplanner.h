@@ -64,7 +64,7 @@ namespace TempLat
       std::vector<int> globalSizes_INT(layout.configurationSpace.getGlobalSizes().begin(),
                                        layout.configurationSpace.getGlobalSizes().end());
       std::vector<ptrdiff_t> globalSizes_PTRDIFF(layout.configurationSpace.getGlobalSizes().begin(),
-                                                  layout.configurationSpace.getGlobalSizes().end());
+                                                 layout.configurationSpace.getGlobalSizes().end());
       auto c2r =
 #ifndef NOMPI
           fftwf_mpi_plan_dft_c2r(
@@ -118,7 +118,7 @@ namespace TempLat
       for (size_t i = 0; i < layout.configurationSpace.getGlobalSizes().size(); ++i)
         globalSizes_INT[i] = (int)layout.configurationSpace.getGlobalSizes()[i];
       std::vector<ptrdiff_t> globalSizes_PTRDIFF(layout.configurationSpace.getGlobalSizes().begin(),
-                                                  layout.configurationSpace.getGlobalSizes().end());
+                                                 layout.configurationSpace.getGlobalSizes().end());
 
       auto c2r =
 #ifndef NOMPI
@@ -165,15 +165,11 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     unsigned int patienceFlag;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/fftw/fftwplanner_test.h"
-#endif
 
 #endif

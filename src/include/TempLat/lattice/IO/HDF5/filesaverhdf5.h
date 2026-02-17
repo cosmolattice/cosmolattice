@@ -353,8 +353,13 @@ namespace TempLat
           Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
           auto functor = DEVICE_CLASS_LAMBDA(size_t i)
           {
-            device::apply([&](const auto &...idx) { device_buf(i - memoryPos[dim]) = GetEval::getEval(r, idx..., i); },
-                          subMemoryPos);
+            std::decay_t<decltype(r)> __r = r;
+            device::apply(
+                [&](const auto &...idx) {
+                  DoEval::eval(__r, idx..., i);
+                  device_buf(i - memoryPos[dim]) = GetValue::get(__r, idx..., i);
+                },
+                subMemoryPos);
           };
           Kokkos::parallel_for("SaveDimBufferFilling",
                                Kokkos::RangePolicy(memoryPos[dim], memoryPos[dim] + subdims[dim]), functor);
@@ -380,8 +385,8 @@ namespace TempLat
     HDF5File mFile;
     HDF5Dataset mDataset;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

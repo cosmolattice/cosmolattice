@@ -77,8 +77,8 @@ namespace TempLat
 
     std::vector<ParameterGetter<T>> params;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

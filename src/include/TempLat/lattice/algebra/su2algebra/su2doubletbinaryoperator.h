@@ -79,8 +79,8 @@ namespace TempLat
     R mR;
     T mT;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

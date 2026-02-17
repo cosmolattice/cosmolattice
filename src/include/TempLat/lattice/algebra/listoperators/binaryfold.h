@@ -23,8 +23,8 @@ namespace TempLat
    * Unit test: ctest -R test-binaryfold
    **/
   struct BinaryFoldTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

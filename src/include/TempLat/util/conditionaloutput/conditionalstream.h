@@ -42,8 +42,8 @@ namespace TempLat
     std::ostream &stream;
     bool enabled;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

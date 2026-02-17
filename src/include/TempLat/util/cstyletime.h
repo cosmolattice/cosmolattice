@@ -31,7 +31,7 @@ namespace TempLat
     void now()
     {
 // Apple Clang's libc++ does not yet support C++20 chrono timezone features
-      // (zoned_time, current_zone), so we fall back to C-style localtime.
+// (zoned_time, current_zone), so we fall back to C-style localtime.
 #if defined(__cpp_lib_chrono) && __cpp_lib_chrono >= 201907L
       using namespace std::chrono;
       const auto now = zoned_time{current_zone(), system_clock::now()}.get_local_time();
@@ -78,8 +78,8 @@ namespace TempLat
 
     int day, month, year, second, minute, hour;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

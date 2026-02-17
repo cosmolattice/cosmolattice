@@ -67,9 +67,8 @@ namespace TempLat
 
         if (doTranspose) {
           ptrdiff_t tmp_ln0, tmp_ls0, tmp_ln1, tmp_ls1;
-          fftwRequiredMemory = fftw_mpi_local_size_transposed((int)NDim, globalLayout.data(), group.getComm(),
-                                                              &tmp_ln0, &tmp_ls0,
-                                                              &tmp_ln1, &tmp_ls1);
+          fftwRequiredMemory = fftw_mpi_local_size_transposed((int)NDim, globalLayout.data(), group.getComm(), &tmp_ln0,
+                                                              &tmp_ls0, &tmp_ln1, &tmp_ls1);
           confLocalSizes[0] = tmp_ln0;
           confLocalStarts[0] = tmp_ls0;
           fourLocalSizes[1] = tmp_ln1;
@@ -77,8 +76,7 @@ namespace TempLat
           std::swap(fourTransposition[0], fourTransposition[1]);
         } else {
           ptrdiff_t tmp_ln0, tmp_ls0;
-          fftwRequiredMemory = fftw_mpi_local_size((int)NDim, globalLayout.data(), group.getComm(),
-                                                   &tmp_ln0, &tmp_ls0);
+          fftwRequiredMemory = fftw_mpi_local_size((int)NDim, globalLayout.data(), group.getComm(), &tmp_ln0, &tmp_ls0);
           fourLocalSizes[0] = tmp_ln0;
           fourLocalStarts[0] = tmp_ls0;
           std::copy(fourLocalSizes.begin(), fourLocalSizes.end(), confLocalSizes.begin());
@@ -107,8 +105,8 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

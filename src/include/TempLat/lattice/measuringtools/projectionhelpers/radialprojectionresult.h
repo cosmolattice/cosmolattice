@@ -244,8 +244,8 @@ namespace TempLat
       return *this;
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

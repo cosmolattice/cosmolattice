@@ -60,15 +60,15 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     auto getKIR() const { return GetKIR::getKIR(mR); }
 
-    void preGet() const { PreGet::apply(mR); }
+    void preGet() { PreGet::apply(mR); }
 
-    void postGet() const { PostGet::apply(mR); }
+    void postGet() { PostGet::apply(mR); }
 
     inline auto getToolBox() const { return GetToolBox::get(mR); }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(mR, idx...);
     }

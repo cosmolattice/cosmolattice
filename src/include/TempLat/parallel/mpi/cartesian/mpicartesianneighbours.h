@@ -53,8 +53,8 @@ namespace TempLat
     ptrdiff_t mNDimensions;
     std::vector<MPICartesianNeighboursSingleDimension> allNeighbours;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

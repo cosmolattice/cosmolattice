@@ -61,8 +61,8 @@ namespace TempLat
   private:
     bool mVerbose;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

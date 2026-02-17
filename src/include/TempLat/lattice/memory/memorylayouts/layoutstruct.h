@@ -190,8 +190,8 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -57,8 +57,8 @@ namespace TempLat
     std::string theStringWhat;
     const std::string strtrace;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

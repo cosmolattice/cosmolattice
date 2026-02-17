@@ -162,8 +162,8 @@ namespace TempLat
 #endif
   class MPITypeConstants
   {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

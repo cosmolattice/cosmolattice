@@ -16,7 +16,7 @@ public:
 class WithPostGet
 {
 public:
-  void postGet() const { called = true; }
+  void postGet() { called = true; }
   static bool called;
 };
 bool WithPostGet::called = false; // Initialize static member variable

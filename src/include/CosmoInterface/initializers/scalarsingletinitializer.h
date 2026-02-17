@@ -50,8 +50,8 @@ namespace TempLat
       }
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

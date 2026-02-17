@@ -126,16 +126,12 @@ namespace TempLat
       return carryOn;
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
 
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/loopers/coordinatesinitializer_test.h"
-#endif
 
 #endif

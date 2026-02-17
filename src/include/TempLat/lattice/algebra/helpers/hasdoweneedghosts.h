@@ -28,8 +28,8 @@ namespace TempLat
   concept HasDoWeNeedGhostsMethodIndexedDyn = requires(std::decay_t<T> t, ptrdiff_t idx) { t.doWeNeedGhosts(idx); };
 
   struct HasDoWeNeedGhostsTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

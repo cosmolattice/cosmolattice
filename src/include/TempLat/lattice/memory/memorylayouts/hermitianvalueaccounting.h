@@ -43,8 +43,8 @@ namespace TempLat
     ptrdiff_t mRealCount;
     ptrdiff_t mImaginaryCount;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

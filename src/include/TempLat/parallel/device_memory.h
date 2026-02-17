@@ -190,6 +190,8 @@ namespace TempLat
           }
         }
       };
+
+      using host_string = host_ptr<std::string>;
     } // namespace memory
   } // namespace device
 } // namespace TempLat

@@ -40,20 +40,21 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      return mCacheRe;
+      // return mCacheRe;
+      return cos(GetEval::getEval(mR, idx...));
     }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
-      return mCacheIm;
-      // return sin(GetEval::getEval(mR, idx...));
+      // return mCacheIm;
+      return sin(GetEval::getEval(mR, idx...));
     }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(mR, idx...);
       const SV tmp = GetValue::get(mR, idx...);
@@ -66,13 +67,13 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    mutable SV mCacheRe;
-    mutable SV mCacheIm;
+    SV mCacheRe;
+    SV mCacheIm;
   };
 
   struct U1ExponentialTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

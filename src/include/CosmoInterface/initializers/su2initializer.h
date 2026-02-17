@@ -51,9 +51,7 @@ namespace TempLat
 
         // We define keffm as the backward (complex) lattice momentum, consistent with
         // choosing the backward spatial derivative in the Gauss constraint
-
-        const auto &toolBox = model.fldSU2Doublet(0_c)(0_c).getToolBox();
-
+        // const auto &toolBox = model.fldSU2Doublet(0_c)(0_c).getToolBox();
         auto expIK =
             MakeVector(i, 1, Model::NDim, complexPhase(-2.0 * Constants::pi<T> / N * ntilde(i))); // e^(-2*pi*k/N)
         auto keffm = MakeVector(i, 1, Model::NDim, 1_c - expIK(i));
@@ -84,7 +82,6 @@ namespace TempLat
 
     // INITIALIZATION: SU2 doublets
     // --> Note: aDot has to be initialized before calling this function.
-
     template <class Model, typename T>
     static void initializeSU2Doublet(Model &model, std::string baseSeed, FluctuationsGenerator<T> &fg, T kCutOff)
     {
@@ -169,8 +166,8 @@ namespace TempLat
           ););
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

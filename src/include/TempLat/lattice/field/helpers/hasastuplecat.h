@@ -24,8 +24,8 @@ namespace TempLat
   };
 
   struct HasAsTupleCatTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

@@ -36,7 +36,7 @@ namespace TempLat
     using IntegerType = INT2;
 
     RandomUniform(const std::string &stringSeed)
-        : mStringSeed(stringSeed), mHashSeed(KeccakHash::compute(mStringSeed)),
+        : mStringSeed(stringSeed), mHashSeed(KeccakHash::compute(stringSeed)),
           mSeed(static_cast<INT2>((uint64_t)mHashSeed))
     {
     }
@@ -48,7 +48,7 @@ namespace TempLat
     std::string saveState() const
     {
       std::ostringstream oss;
-      oss << mStringSeed;
+      oss << *mStringSeed;
       return oss.str();
     }
 
@@ -59,14 +59,14 @@ namespace TempLat
     void loadState(const std::string &state)
     {
       std::istringstream iss(state);
-      iss >> mStringSeed;
-      mHashSeed = KeccakHash::compute(mStringSeed);
+      iss >> *mStringSeed;
+      mHashSeed = KeccakHash::compute(*mStringSeed);
       mSeed = static_cast<INT2>((uint64_t)mHashSeed);
     }
 
-    const std::string &getSeedString() const { return mStringSeed; }
-
     const auto getSeed() const { return mSeed; }
+
+    const std::string &getSeedString() const { return *mStringSeed; }
 
     DEVICE_FORCEINLINE_FUNCTION
     double get(INT2 r, INT2 c, INT2 gen) const { return getPair(r, c, gen)[0]; }
@@ -102,7 +102,7 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    std::string mStringSeed; // TODO -> device::string
+    device::memory::host_string mStringSeed;
     KeccakHash::ResultType mHashSeed;
     INT2 mSeed;
   };

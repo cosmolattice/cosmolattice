@@ -93,10 +93,11 @@ namespace TempLat
       for (uint cur_lidx = nGhosts; cur_lidx < result.size() + nGhosts; ++cur_lidx) {
         auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim - 1> &idx, vType &update)
         {
+          std::decay_t<T> __t = mT;
           device::apply(
               [&](auto &&...args) {
-                DoEval::eval(mT, args..., cur_lidx);
-                update += mT.get(args..., cur_lidx);
+                DoEval::eval(__t, args..., cur_lidx);
+                update += __t.get(args..., cur_lidx);
               },
               idx);
         };
@@ -138,8 +139,8 @@ namespace TempLat
   auto spatialAverage(ZeroType a) { return 0; }
 
   struct SpatialAveragerTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

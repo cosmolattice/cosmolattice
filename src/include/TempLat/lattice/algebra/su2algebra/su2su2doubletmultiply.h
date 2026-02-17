@@ -70,7 +70,7 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
     {
       DoEval::eval(mR, idx...);
       DoEval::eval(mT, idx...);
@@ -94,7 +94,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    mutable device::array<SV, 4> cache;
+    device::array<SV, 4> cache;
   };
 
   template <typename R, typename T>

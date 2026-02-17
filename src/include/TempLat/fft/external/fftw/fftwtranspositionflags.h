@@ -74,16 +74,12 @@ namespace TempLat
     unsigned int mFlagC2R;
     unsigned int mFlagR2C;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/fftw/fftwtranspositionflags_test.h"
-#endif
 
 #undef FFTWTRANSPOSITIONFLAGS_TRANSPOSED_IN
 #undef FFTWTRANSPOSITIONFLAGS_TRANSPOSED_OUT

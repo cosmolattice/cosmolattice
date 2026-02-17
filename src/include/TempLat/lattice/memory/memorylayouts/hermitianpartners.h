@@ -182,8 +182,8 @@ namespace TempLat
     HermitianPartnersMode mode;
     device::IdxArray<NDim> mSignConversionMidpoint;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

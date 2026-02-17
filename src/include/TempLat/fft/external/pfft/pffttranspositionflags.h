@@ -61,8 +61,8 @@ namespace TempLat
     unsigned int mFlagC2R;
     unsigned int mFlagR2C;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

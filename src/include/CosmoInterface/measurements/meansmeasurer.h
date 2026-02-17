@@ -58,11 +58,8 @@ namespace TempLat
       return {"t", "<|E|>", "<|B|>", "<|E|^2>", "<|B|^2>", "rms(|E|)", "rms(|B|)"};
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

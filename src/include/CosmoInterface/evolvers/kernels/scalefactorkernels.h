@@ -110,11 +110,8 @@ namespace TempLat
               (model.alpha - 1) * (EelU1 + EmagU1 + EelSU2 + EmagSU2) + (model.alpha + 1) * model.potAvSI);
     }
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

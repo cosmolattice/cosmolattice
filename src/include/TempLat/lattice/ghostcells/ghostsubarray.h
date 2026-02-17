@@ -82,8 +82,8 @@ namespace TempLat
 #endif
     std::shared_ptr<MPI_Datatype> mSubarrayMPIDataType;
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

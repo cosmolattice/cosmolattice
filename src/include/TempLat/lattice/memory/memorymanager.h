@@ -286,8 +286,8 @@ namespace TempLat
         throw MemoryManagerAccessOutOfBounds("pointer casting from double to complex failed:", ptr1, "!=", ptr2);
     }
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };

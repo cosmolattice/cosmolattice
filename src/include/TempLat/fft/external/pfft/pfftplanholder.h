@@ -114,15 +114,11 @@ namespace TempLat
     }
 #endif
 
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/fft/external/pfft/pfftplanholder_test.h"
-#endif
 
 #endif

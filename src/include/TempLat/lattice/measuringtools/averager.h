@@ -83,10 +83,11 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
+        std::decay_t<T> __t = mT;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(mT, args...);
-              update += mT.get(args...);
+              DoEval::eval(__t, args...);
+              update += __t.get(args...);
             },
             idx);
       };
@@ -103,6 +104,7 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
+        std::decay_t<T> __t = mT;
         device::apply(
             [&](auto &&...args) {
               device::IdxArray<NDim> global_coord;
@@ -110,8 +112,8 @@ namespace TempLat
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners
 
-              DoEval::eval(mT, args...);
-              update += mT.get(args...);
+              DoEval::eval(__t, args...);
+              update += __t.get(args...);
             },
             idx);
       };
@@ -159,8 +161,8 @@ namespace TempLat
   }
 
   struct AveragerTester {
-  public:
 #ifdef TEMPLATTEST
+  public:
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
