@@ -67,7 +67,7 @@ namespace TempLat
 
     template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const
     {
-      return shift<N>(mR.SU2DoubletGet(t));
+      return shift<_N>(mR.SU2DoubletGet(t));
     }
 
     template <typename... IDX>

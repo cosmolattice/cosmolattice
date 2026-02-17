@@ -89,7 +89,7 @@ namespace TempLat
 
     template <int M> DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t) const
     {
-      return shift<N>(mR.ComplexFieldGet(t));
+      return shift<_N>(mR.ComplexFieldGet(t));
     }
 
     template <int M, typename... IDX>
@@ -105,7 +105,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                    tuple_add_to_nth<N - 1, 1>(device::tie(idx...)));
+                    tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     std::string toString() const { return GetString::get(mR) + "(->" + std::to_string(N) + ")"; }

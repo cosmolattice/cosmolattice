@@ -64,7 +64,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     SU2ShifterByOne(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
-    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N>(mR.SU2Get(t)); }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<_N>(mR.SU2Get(t)); }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
@@ -72,7 +72,7 @@ namespace TempLat
     {
       return device::apply(
           [&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
-          tuple_add_to_nth<N - 1, 1>(device::tie(idx...)));
+          tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }
