@@ -52,7 +52,7 @@ namespace TempLat
       void setAtOnePoint(OBJ &&obj, device_kokkos::IdxArray<NDim> pos, T val)
       {
         Kokkos::parallel_for(
-            "Set a point", Kokkos::RangePolicy(0, 1), DEVICE_LAMBDA(const uint) {
+            "Set a point", Kokkos::RangePolicy(0, 1), DEVICE_LAMBDA(const unsigned int) {
               device_kokkos::apply([&](const auto... idx) { obj.getSet(idx...) = val; }, pos);
             });
       }
@@ -64,7 +64,7 @@ namespace TempLat
         T ret;
         Kokkos::parallel_reduce(
             "Get a point", Kokkos::RangePolicy(0, 1),
-            DEVICE_LAMBDA(const uint, T &update) {
+            DEVICE_LAMBDA(const unsigned int, T &update) {
               device_kokkos::apply([&](const auto... idx) { update = GetEval::getEval(obj, idx...); }, pos);
             },
             ret);

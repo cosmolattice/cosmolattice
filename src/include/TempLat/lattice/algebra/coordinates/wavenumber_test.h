@@ -131,8 +131,8 @@ template <size_t NDim> inline void TempLat::WaveNumber<NDim>::Test(TempLat::TDDA
 
     auto field_view = field.getLocalNDHostView();
 
-    for (uint i = 0; i < nGrid; ++i) {
-      for (uint j = 0; j < nGrid; ++j) {
+    for (size_t i = 0; i < nGrid; ++i) {
+      for (size_t j = 0; j < nGrid; ++j) {
         const ptrdiff_t x_val = i > nGrid / 2 ? i - nGrid : i;
         const ptrdiff_t y_val = j > nGrid / 2 ? j - nGrid : j;
 

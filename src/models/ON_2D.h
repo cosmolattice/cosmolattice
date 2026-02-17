@@ -102,7 +102,7 @@ namespace TempLat
       /////////
 
       // We assume all scalar fields have identical initial amplitudes and momenta
-      for (uint i = 0; i < N; ++i) {
+      for (size_t i = 0; i < N; ++i) {
         fldS0[i] = parser.get<double>("initial_amplitudes");
         piS0[i] = parser.get<double>("initial_momenta", 0.);
       }

@@ -110,7 +110,7 @@ namespace TempLat
       // warmup
       if (n >= 10) {
         sayMPI << "Running warmup for " << std::max((size_t)10, n / 2) << " iterations.\n";
-        for (uint i = 0; i < std::max((size_t)10, n / 2); ++i)
+        for (size_t i = 0; i < std::max((size_t)10, n / 2); ++i)
           mFunction(dead_measurer);
       }
 

@@ -186,7 +186,10 @@ elseif(${G++OPT} STREQUAL "Ofast")
   # We disable the warnings about NaN checking in Ofast, if you use fast-math,
   # you should be aware of what you do.
   set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -O3 -ffast-math -Wno-nan-infinity-disabled")
+      "${CMAKE_CXX_FLAGS} -O3 -ffast-math")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nan-infinity-disabled")
+  endif()
 else()
   message(FATAL_ERROR "G++OPT=${G++OPT} is not a valid option.")
 endif()

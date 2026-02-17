@@ -44,7 +44,7 @@ namespace TempLat
           mGhostSubarrayMap(mJumpsHolder, mGhostDepth)
     {
       auto full_sizes = mJumpsHolder.getSizesInMemory();
-      for (uint i = 0; i < NDim; ++i) {
+      for (size_t i = 0; i < NDim; ++i) {
         if (mGhostDepth > full_sizes[i]) {
           throw GhostUpdaterException("Ghost depth is larger than local size in dimension " + std::to_string(i) + ":",
                                       mGhostDepth, " > ", full_sizes[i]);
