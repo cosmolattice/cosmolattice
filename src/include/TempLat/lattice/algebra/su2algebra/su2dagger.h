@@ -29,12 +29,15 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     SU2Dagger(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
+    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t) const { return mR.SU2Get(Tag<0>()); }
+
     template <int N>
-      requires(N >= 0 && N <= 3)
+      requires(N >= 1 && N <= 3)
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const
     {
-      return mR.SU2Get(Tag<N>());
+      return -mR.SU2Get(Tag<N>());
     }
+
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
     template <int N>
@@ -48,7 +51,10 @@ namespace TempLat
       requires requires(R r, IDX... idx) { r.SU2Get(Tag<N>(), idx...); }
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
     {
-      return mR.SU2Get(Tag<N>(), idx...);
+      if constexpr (N == 0)
+        return mR.SU2Get(Tag<0>(), idx...);
+      else
+        return -mR.SU2Get(Tag<N>(), idx...);
     }
 
     std::string toString() const { return GetString::get(mR) + "^\u2020"; }
