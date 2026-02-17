@@ -14,7 +14,6 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/util/tuple_tools.h"
-#include "TempLat/lattice/algebra/helpers/getvectorvalue.h"
 
 #include "TempLat/parallel/device.h"
 
@@ -43,25 +42,24 @@ namespace TempLat
     /** @brief Getter for two instances: return type automatically determined by the type which we get by multiplying
      * one element of T with one element of S. */
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) { mR.vectorGet(0, idx...) * mT.vectorGet(0, idx...); }
+      requires requires(std::decay_t<R> mR, std::decay_t<T> mT, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(mR, idx...);
+        DoEval::eval(mT, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      decltype(GetVectorValue::vectorGet(mR, 0, idx...) * GetVectorValue::vectorGet(mT, 0, idx...)) result = 0;
-
       /* sorry, an if-statement inside a getter function: if T and S are the same thing, let's not call its getter twice
        * (it might be an expensive algebraic operation. */
       if ((void *)&mR == (void *)&mT) {
-        constexpr_for<0, mVectorSize>([&](auto _j) {
-          constexpr size_t j = decltype(_j)::value;
-          result += pow<2>(GetVectorValue::vectorGet(mR, j, idx...));
-        });
+        auto cache = DoEval::eval(mR, idx...);
+        return device::apply([&](const auto &...args) { return (pow<2>(args) + ...); }, cache);
       } else {
-        constexpr_for<0, mVectorSize>([&](auto _j) {
-          constexpr size_t j = decltype(_j)::value;
-          result += GetVectorValue::vectorGet(mR, j, idx...) * GetVectorValue::vectorGet(mT, j, idx...);
-        });
+        auto cache1 = DoEval::eval(mR, idx...);
+        auto cache2 = DoEval::eval(mT, idx...);
+        return device::apply([&](const auto &...args) { return ((cache1[args] * cache2[args]) + ...); },
+                             make_tuple_sequence<mVectorSize>());
       }
-      return result;
     }
 
     template <typename... IDX>

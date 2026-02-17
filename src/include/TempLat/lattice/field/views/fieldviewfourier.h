@@ -52,9 +52,7 @@ namespace TempLat
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
-    template <typename R>
-      requires HasGetMethod<R>
-    void assign(R &&g)
+    template <typename R> void assign(R &&g)
     {
       const auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
       onBeforeAssignment(g);
@@ -63,12 +61,7 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        device::apply(
-            [&](auto &&...args) {
-              DoEval::eval(g, args...);
-              mView(args...) = GetValue::get(g, args...);
-            },
-            idx);
+        device::apply([&](auto &&...args) { mView(args...) = DoEval::eval(g, args...); }, idx);
       };
       device::iteration::foreach ("FourierViewAssign", layout, functor);
 
@@ -91,7 +84,7 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              auto result = DoEval::eval(g, args...);
+              const auto result = DoEval::eval(g, args...);
               mView(args...) = complex<T>(result[0], result[1]);
             },
             idx);

@@ -40,12 +40,8 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      auto val = GetValue::get(mR, idx...);
-      device::array<decltype(cos(val)), 2> result;
-      result[0] = cos(val);
-      result[1] = sin(val);
-      return result;
+      const auto val = DoEval::eval(mR, idx...);
+      return device::array<decltype(val), 2>{cos(val), sin(val)};
     }
 
     std::string toString() const { return "U1(" + GetString::get(mR) + ")"; }

@@ -21,6 +21,7 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/listoperators/vectordotter.h"
 #include "TempLat/util/tuple_tools.h"
+#include "TempLat/lattice/algebra/spatialderivatives/forwdiff.h"
 
 namespace TempLat
 {
@@ -46,25 +47,6 @@ namespace TempLat
     LatticeForwardGradient(const R &pR) : UnaryOperator<R>(pR), dx(GetDx::getDx(mR)) {}
 
     template <typename... IDX>
-      requires requires(R r, IDX... idx) {
-        // requires IsVariadicNDIndex<NDim, IDX...>;
-        // Commented out, as this fails under gcc. Seems to be obscure, as it succeeds under clang
-        GetValue::get(r, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(ptrdiff_t i, const IDX &...idx) const
-    {
-      if constexpr (UnaryOperator<R>::getNDim() == 0)
-        return ZeroType();
-      else {
-        auto other_point = device::IdxArray<NDim>{{static_cast<ptrdiff_t>(idx)...}};
-        other_point[i] += 1;
-        auto result = -GetValue::get(mR, idx...);
-        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); }, other_point);
-        return result / dx;
-      }
-    }
-
-    template <typename... IDX>
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
@@ -82,6 +64,20 @@ namespace TempLat
         });
         return result;
       }
+    }
+
+    template <int N>
+      requires(N > 0)
+    auto vectorGet(Tag<N> t) const
+    {
+      return ForwDiff<N, R>(mR);
+    }
+
+    template <int N>
+      requires(N > 0)
+    auto operator()(Tag<N> t) const
+    {
+      return vectorGet(t);
     }
 
     static constexpr size_t getVectorSize() { return NDim; }

@@ -12,7 +12,7 @@
 #include "TempLat/lattice/field/collections/fieldcollection.h"
 #include "TempLat/lattice/field/field.h"
 
-template <typename T> inline void TempLat::GetVectorComponentHelper<T>::Test(TempLat::TDDAssertion &tdd)
+template <int N, typename T> inline void TempLat::GetVectorComponentHelper<N, T>::Test(TempLat::TDDAssertion &tdd)
 {
   // TODO but this is much.
   auto toolBox = MemoryToolBox<3>::makeShared(32, 1);
@@ -24,8 +24,8 @@ template <typename T> inline void TempLat::GetVectorComponentHelper<T>::Test(Tem
   tdd.verify(fc[1].isFourierSpace() == false);
   tdd.verify(fc[2].isFourierSpace() == true);
 
-  auto test1 = GetVectorComponentHelper<FieldCollection<Field<3, double>, double, 3>>(fc, 1);
-  auto test2 = GetVectorComponentHelper<FieldCollection<Field<3, double>, double, 3>>(fc, 2);
+  auto test1 = GetVectorComponentHelper<1, FieldCollection<Field<3, double>, double, 3>>(fc);
+  auto test2 = GetVectorComponentHelper<2, FieldCollection<Field<3, double>, double, 3>>(fc);
 
   test1.confirmSpace(toolBox->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
   tdd.verify(fc[2].isFourierSpace() == true);

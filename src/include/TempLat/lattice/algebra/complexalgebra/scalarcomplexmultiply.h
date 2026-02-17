@@ -44,9 +44,8 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      auto cmplx = DoEval::eval(mT, idx...);
-      auto scalar = GetValue::get(mR, idx...);
+      const auto cmplx = DoEval::eval(mT, idx...);
+      const auto scalar = DoEval::eval(mR, idx...);
       device::array<decltype(scalar * cmplx[0]), 2> result;
       result[0] = scalar * cmplx[0];
       result[1] = scalar * cmplx[1];

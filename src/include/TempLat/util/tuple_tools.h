@@ -105,12 +105,12 @@ namespace TempLat
     return reverse_array(array, std::make_index_sequence<N>());
   }
 
-  template <typename T, T... I> auto make_tuple_sequence_helper(std::integer_sequence<T, I...>)
+  template <typename T, T... I> constexpr auto make_tuple_sequence_helper(std::integer_sequence<T, I...>)
   {
     return device::make_tuple(I...);
   }
 
-  template <std::size_t I, typename T = std::size_t> auto make_tuple_sequence()
+  template <std::size_t I, typename T = std::size_t> constexpr auto make_tuple_sequence()
   {
     return make_tuple_sequence_helper(std::make_integer_sequence<T, I>());
   }

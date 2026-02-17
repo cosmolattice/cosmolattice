@@ -185,11 +185,7 @@ namespace TempLat
 
           // Add the bin contribution to the workspace.
           device::apply(
-              [&](auto &&...args) {
-                DoEval::eval(mInstance, args...);
-                baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, weight);
-              },
-              idx);
+              [&](auto &&...args) { baseWorkSpace.add_device(bin, DoEval::eval(mInstance, args...), r, weight); }, idx);
         }
       };
       device::iteration::foreach ("RadialProjectorFourier", mLayout, functor);

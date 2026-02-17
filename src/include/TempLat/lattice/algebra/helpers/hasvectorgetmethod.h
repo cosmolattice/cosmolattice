@@ -8,29 +8,15 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
-#include <type_traits>
+#include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
 {
-  /** @brief A helper concept for HasVectorGetMethod for a given set of indices.
-   *
-   */
-  template <typename U, typename... IDX>
-  concept HasVectorGetMethodHelper = requires(std::decay_t<U> u, IDX... idx) { u.vectorGet(idx...); };
-
   /** @brief A concept which determines at compile time whether an object has a method `vectorGet`.
    *
    **/
-  template <class T>
-  concept HasVectorGetMethod =
-      (HasVectorGetMethodHelper<T, size_t>                                                    //
-       || HasVectorGetMethodHelper<T, size_t, size_t>                                         //
-       || HasVectorGetMethodHelper<T, size_t, size_t, size_t>                                 //
-       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t>                         //
-       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t>                 //
-       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t>         //
-       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t> //
-       || HasVectorGetMethodHelper<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t, size_t>);
+  template <class U>
+  concept HasVectorGetMethod = requires(std::decay_t<U> u) { u.vectorGet(Tag<1>()); };
 
   struct HasVectorGetMethodTester {
 #ifdef TEMPLATTEST

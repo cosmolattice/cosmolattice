@@ -13,7 +13,6 @@
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
-#include "TempLat/lattice/algebra/helpers/getvectorvalue.h"
 
 namespace TempLat
 {
@@ -22,7 +21,7 @@ namespace TempLat
    *
    * Unit test: ctest -R test-getvectorcomponent
    **/
-  template <typename R, int N> class GetVectorComponentHelper
+  template <int N, typename R> class GetVectorComponentHelper
   {
   public:
     // Put public methods here. These should change very little over time.
@@ -31,18 +30,21 @@ namespace TempLat
     template <typename... JDX>
       requires requires(std::decay_t<R> mR, JDX... idx) {
         requires IsVariadicIndex<JDX...>;
-        mR.vectorGet(N, idx...);
+        mR.vectorGet(Tag<N>());
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const JDX &...jdx) const
     {
-      return mR.vectorGet(N, jdx...);
+      return DoEval::eval(mR.vectorGet(Tag<N>()), jdx...);
     }
 
     template <typename... JDX>
-      requires IsVariadicIndex<JDX...>
+      requires requires(std::decay_t<R> mR, JDX... idx) {
+        requires IsVariadicIndex<JDX...>;
+        mR.vectorGet(Tag<N>());
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const JDX &...jdx) const
     {
-      return DoEval::eval(mR, jdx...)[N];
+      return DoEval::eval(mR.vectorGet(Tag<N>()), jdx...);
     }
 
     void doWeNeedGhosts() const { GhostsHunter::apply(mR, N); }
@@ -76,9 +78,9 @@ namespace TempLat
 #endif
   };
 
-  template <int N, typename R> GetVectorComponentHelper<R, N> getVectorComponent(const R &pR, Tag<N>)
+  template <int N, typename R> GetVectorComponentHelper<N, R> getVectorComponent(const R &pR, Tag<N>)
   {
-    return GetVectorComponentHelper<R, N>(pR);
+    return GetVectorComponentHelper<N, R>(pR);
   }
 } // namespace TempLat
 
