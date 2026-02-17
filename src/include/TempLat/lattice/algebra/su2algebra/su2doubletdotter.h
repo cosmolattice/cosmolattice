@@ -50,8 +50,8 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      auto rr = DoEval::eval(mR, idx...);
-      auto tt = DoEval::eval(mT, idx...);
+      const auto rr = DoEval::eval(mR, idx...);
+      const auto tt = DoEval::eval(mT, idx...);
       device::array<decltype(rr[0] * tt[0]), 2> result;
       result[0] = rr[0] * tt[0] + rr[1] * tt[1] + rr[2] * tt[2] + rr[3] * tt[3];
       result[1] = rr[0] * tt[1] - rr[1] * tt[0] + rr[2] * tt[3] - rr[3] * tt[2];

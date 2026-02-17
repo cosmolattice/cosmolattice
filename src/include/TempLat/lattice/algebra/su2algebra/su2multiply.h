@@ -71,8 +71,8 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      auto cL = DoEval::eval(mR, idx...);
-      auto cR = DoEval::eval(mT, idx...);
+      const auto cL = DoEval::eval(mR, idx...);
+      const auto cR = DoEval::eval(mT, idx...);
       device::array<SV, 4> result;
       PauliVectorsAlgebra::multiply_inplace(result, cL, cR);
       return result;

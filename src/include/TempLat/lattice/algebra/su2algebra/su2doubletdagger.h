@@ -47,18 +47,14 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto child = DoEval::eval(mR, idx...);
-      device::array<SV, 4> result;
-      result[0] = child[0];
-      result[1] = -child[1];
-      result[2] = child[2];
-      result[3] = -child[3];
-      return result;
+      // child[0] = child[0];
+      child[1] = -child[1];
+      // child[2] = child[2];
+      child[3] = -child[3];
+      return child;
     }
 
     virtual std::string toString() const override { return GetString::get(mR) + "^\u2020"; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
   template <class R>

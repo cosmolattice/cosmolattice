@@ -54,10 +54,10 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::array<T, 4> result;
-      result[0] = fs[0].get(idx...);
-      result[1] = fs[1].get(idx...);
-      result[2] = fs[2].get(idx...);
-      result[3] = fs[3].get(idx...);
+      result[0] = DoEval::eval(fs[0], idx...);
+      result[1] = DoEval::eval(fs[1], idx...);
+      result[2] = DoEval::eval(fs[2], idx...);
+      result[3] = DoEval::eval(fs[3], idx...);
       return result;
     }
 
