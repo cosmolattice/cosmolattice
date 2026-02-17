@@ -42,8 +42,8 @@ foreach(fn ${test_sources})
   else()
     add_test(
       NAME ${target_name}
-      COMMAND bash -c "make ${target_name} && $<TARGET_FILE:${target_name}>
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}")
+      COMMAND bash -c "make ${target_name} && $<TARGET_FILE:${target_name}>"
+      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
   endif()
 
   # Add labels for filtering tests by folder

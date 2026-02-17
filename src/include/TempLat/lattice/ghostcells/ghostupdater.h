@@ -310,24 +310,9 @@ namespace TempLat
             auto ftb_toSubView = device::apply(
                 [&](const auto &...args) { return device::memory::subview(View, args...); }, ftb_slicesTo);
 
-            // TODO: replace with device::memory::copyDeviceToDevice
-            auto btf_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
-            {
-              device::apply([&](auto &&...args) { btf_toSubView(args...) = btf_fromSubView(args...); }, idx);
-            };
-            auto ftb_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
-            {
-              device::apply([&](auto &&...args) { ftb_toSubView(args...) = ftb_fromSubView(args...); }, idx);
-            };
-
-            const device::IdxArray<NDim> it_start{};
-            device::IdxArray<NDim> it_stop{};
-            for (size_t k = 0; k < NDim; ++k)
-              it_stop[k] = btf_fromSubView.extent(k);
-            device::iteration::foreach ("GhostUpdater", it_start, it_stop, btf_functor);
-            for (size_t k = 0; k < NDim; ++k)
-              it_stop[k] = ftb_fromSubView.extent(k);
-            device::iteration::foreach ("GhostUpdater", it_start, it_stop, ftb_functor);
+            // Copy the data in both directions
+            device::memory::copyDeviceToDevice(btf_fromSubView, btf_toSubView);
+            device::memory::copyDeviceToDevice(ftb_fromSubView, ftb_toSubView);
           }
         }
       }
