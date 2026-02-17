@@ -17,15 +17,25 @@
 #include <cuda/std/array>
 #include <cuda/std/tuple>
 
+// nvcc compiling CUDA device code
 #if defined(__NVCC__) && defined(__CUDACC__) && defined(__CUDA_ARCH__)
 #define DEVICE_REGION
 #endif
 
+// clang compiling CUDA host code
 #if defined(__clang__) && defined(__CUDA__) && !defined(__CUDA_ARCH__)
 #undef DEVICE_REGION
 #endif
 
+// clang compiling CUDA device code
 #if defined(__clang__) && defined(__CUDA__) && defined(__CUDA_ARCH__)
+#define DEVICE_REGION
+#endif
+
+#elif defined(KOKKOS_ENABLE_HIP) // HIP GPU
+
+// hipcc/clang compiling HIP device code
+#if defined(__HIP_DEVICE_COMPILE__)
 #define DEVICE_REGION
 #endif
 

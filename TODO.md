@@ -5,3 +5,4 @@
 - Correctly implement PostGet/PreGet for other things than just the bare field.
 - Offline compilation must work flawlessly
 - Hunt down manual copy operations where device::memory::copyDeviceToDevice should be used instead. (Ghostupdater, e.g.)
+- Make sure HIP works.

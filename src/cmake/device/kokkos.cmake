@@ -4,11 +4,6 @@
 
 message(STATUS "---------- Getting Kokkos ----------")
 
-# ##############################################################################
-# Build Kokkos! This will happen very manually - this way we have the greatest
-# control over what is happening.
-# ##############################################################################
-
 set(Kokkos_ENABLE_CUDA ${CUDA} CACHE BOOL "")
 set(Kokkos_ENABLE_CUDA_CONSTEXPR ${CUDA} CACHE BOOL "")
 set(Kokkos_ENABLE_HIP ${HIP} CACHE BOOL "")
@@ -16,6 +11,7 @@ set(Kokkos_ENABLE_OPENMP ${OpenMP} CACHE BOOL "")
 set(Kokkos_ENABLE_THREADS ${Threads} CACHE BOOL "")
 set(Kokkos_ENABLE_SERIAL ${Serial} CACHE BOOL "")
 set(Kokkos_ENABLE_TESTS OFF CACHE BOOL "")
+set(Kokkos_ENABLE_AGGRESSIVE_VECTORIZATION ON CACHE BOOL "")
 
 include(FetchContent)
 FetchContent_Declare(
@@ -26,5 +22,7 @@ FetchContent_Declare(
     SYSTEM
 )
 FetchContent_MakeAvailable(Kokkos)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_KOKKOS")
 
 message(STATUS "---------- Getting Kokkos DONE ----------\n")
