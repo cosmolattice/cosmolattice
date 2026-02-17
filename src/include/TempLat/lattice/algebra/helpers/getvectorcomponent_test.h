@@ -11,6 +11,8 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/field/collections/fieldcollection.h"
 #include "TempLat/lattice/field/field.h"
+#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 
 template <int N, typename T> inline void TempLat::GetVectorComponentHelper<N, T>::Test(TempLat::TDDAssertion &tdd)
 {
@@ -26,6 +28,11 @@ template <int N, typename T> inline void TempLat::GetVectorComponentHelper<N, T>
 
   auto test1 = GetVectorComponentHelper<1, FieldCollection<Field<3, double>, double, 3>>(fc);
   auto test2 = GetVectorComponentHelper<2, FieldCollection<Field<3, double>, double, 3>>(fc);
+
+  auto test_wavenumber = GetVectorComponentHelper<1, WaveNumber<3>>(WaveNumber<3>(toolBox));
+
+  tdd.verify(HasGetMethod<decltype(test_wavenumber)>);
+  static_assert(HasGetMethod<decltype(test_wavenumber)>);
 
   test1.confirmSpace(toolBox->mLayouts.getConfigSpaceLayout(), SpaceStateType::Configuration);
   tdd.verify(fc[2].isFourierSpace() == true);

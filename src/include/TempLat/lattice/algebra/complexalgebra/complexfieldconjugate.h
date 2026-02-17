@@ -37,8 +37,8 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      auto child = DoEval::eval(mR, idx...);
-      device::array<std::remove_reference_t<decltype(child[0])>, 2> result;
+      const auto child = DoEval::eval(mR, idx...);
+      device::array<std::decay_t<decltype(child[0])>, 2> result;
       result[0] = child[0];
       result[1] = -child[1];
       return result;

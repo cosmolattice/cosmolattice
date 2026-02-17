@@ -30,21 +30,21 @@ namespace TempLat
     template <typename... JDX>
       requires requires(std::decay_t<R> mR, JDX... idx) {
         requires IsVariadicIndex<JDX...>;
-        mR.vectorGet(Tag<N>());
+        DoEval::eval(mR, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const JDX &...jdx) const
     {
-      return DoEval::eval(mR.vectorGet(Tag<N>()), jdx...);
+      return DoEval::eval(mR, jdx...)[N];
     }
 
     template <typename... JDX>
       requires requires(std::decay_t<R> mR, JDX... idx) {
         requires IsVariadicIndex<JDX...>;
-        mR.vectorGet(Tag<N>());
+        DoEval::eval(mR, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const JDX &...jdx) const
     {
-      return DoEval::eval(mR.vectorGet(Tag<N>()), jdx...);
+      return DoEval::eval(mR, jdx...)[N];
     }
 
     void doWeNeedGhosts() const { GhostsHunter::apply(mR, N); }
