@@ -91,11 +91,10 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2doubletresult &update)
       {
-        std::decay_t<decltype(mT)> __t = mT;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(__t, args...);
-              constexpr_for<0, size, 1>([&](auto j) { update[j] += __t.SU2DoubletGet(j, args...); });
+              auto result = DoEval::eval(mT, args...);
+              constexpr_for<0, size, 1>([&](auto j) { update[j] += result[j]; });
             },
             idx);
       };
@@ -117,7 +116,6 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, su2doubletresult &update)
       {
-        std::decay_t<decltype(mT)> __t = mT;
         device::apply(
             [&](auto &&...args) {
               device::IdxArray<NDim> global_coord;
@@ -125,8 +123,8 @@ namespace TempLat
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners
 
-              DoEval::eval(__t, args...);
-              constexpr_for<0, size, 1>([&](auto j) { update[j] += __t.SU2DoubletGet(j, args...); });
+              auto result = DoEval::eval(mT, args...);
+              constexpr_for<0, size, 1>([&](auto j) { update[j] += result[j]; });
             },
             idx);
       };

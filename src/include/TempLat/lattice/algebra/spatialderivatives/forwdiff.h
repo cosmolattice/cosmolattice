@@ -64,7 +64,7 @@ namespace TempLat
         requires IsVariadicIndex<IDX...>;
         DoEval::eval(r, idx...);
       }
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
       constexpr size_t d = static_cast<size_t>(dir) - 1;
       DoEval::eval(mR, idx...);

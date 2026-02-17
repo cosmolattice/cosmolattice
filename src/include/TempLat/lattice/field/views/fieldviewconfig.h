@@ -91,11 +91,10 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        std::decay_t<decltype(g)> __g = g;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(__g, args...);
-              mView(args...) = GetValue::get(__g, args...);
+              DoEval::eval(g, args...);
+              mView(args...) = GetValue::get(g, args...);
             },
             idx);
       };

@@ -43,67 +43,19 @@ namespace TempLat
     auto SU2DoubletGet(Tag<3> t) const { return Imag(mR * Complexify(mT.SU2DoubletGet(2_c), mT.SU2DoubletGet(3_c))); }
 
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(0_c, idx...);
-        mT.SU2DoubletGet(0_c, idx...);
-        mR.ComplexFieldGet(1_c, idx...);
-        mT.SU2DoubletGet(1_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<0> t, const IDX &...idx) const
-    {
-      return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(0_c, idx...) -
-             mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(1_c, idx...);
-    }
-
-    template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(0_c, idx...);
-        mT.SU2DoubletGet(0_c, idx...);
-        mR.ComplexFieldGet(1_c, idx...);
-        mT.SU2DoubletGet(1_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<1> t, const IDX &...idx) const
-    {
-      return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(1_c, idx...) +
-             mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(0_c, idx...);
-    }
-
-    template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(0_c, idx...);
-        mT.SU2DoubletGet(2_c, idx...);
-        mR.ComplexFieldGet(1_c, idx...);
-        mT.SU2DoubletGet(3_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<2> t, const IDX &...idx) const
-    {
-      return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(2_c, idx...) -
-             mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(3_c, idx...);
-    }
-
-    template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(0_c, idx...);
-        mT.SU2DoubletGet(2_c, idx...);
-        mR.ComplexFieldGet(1_c, idx...);
-        mT.SU2DoubletGet(3_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<3> t, const IDX &...idx) const
-    {
-      return mR.ComplexFieldGet(0_c, idx...) * mT.SU2DoubletGet(3_c, idx...) +
-             mR.ComplexFieldGet(1_c, idx...) * mT.SU2DoubletGet(2_c, idx...);
-    }
-
-    template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
+      DoEval::eval(mR, idx...);   // complex child — void eval
+      auto doublet = DoEval::eval(mT, idx...);   // doublet child — returns array
+      auto re = mR.ComplexFieldGet(0_c, idx...);
+      auto im = mR.ComplexFieldGet(1_c, idx...);
+      device::array<decltype(re * doublet[0]), 4> result;
+      result[0] = re * doublet[0] - im * doublet[1];
+      result[1] = re * doublet[1] + im * doublet[0];
+      result[2] = re * doublet[2] - im * doublet[3];
+      result[3] = re * doublet[3] + im * doublet[2];
+      return result;
     }
 
     virtual std::string operatorString() const override { return "*"; }

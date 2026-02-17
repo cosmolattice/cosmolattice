@@ -50,28 +50,24 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
     {
-      return mR.SU2DoubletGet(0_c, idx...) * mT.SU2DoubletGet(0_c, idx...) +
-             mR.SU2DoubletGet(1_c, idx...) * mT.SU2DoubletGet(1_c, idx...) +
-             mR.SU2DoubletGet(2_c, idx...) * mT.SU2DoubletGet(2_c, idx...) +
-             mR.SU2DoubletGet(3_c, idx...) * mT.SU2DoubletGet(3_c, idx...);
+      auto rr = DoEval::eval(mR, idx...);
+      auto tt = DoEval::eval(mT, idx...);
+      return rr[0] * tt[0] + rr[1] * tt[1] + rr[2] * tt[2] + rr[3] * tt[3];
     }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
     {
-      return mR.SU2DoubletGet(0_c, idx...) * mT.SU2DoubletGet(1_c, idx...) -
-             mR.SU2DoubletGet(1_c, idx...) * mT.SU2DoubletGet(0_c, idx...) +
-             mR.SU2DoubletGet(2_c, idx...) * mT.SU2DoubletGet(3_c, idx...) -
-             mR.SU2DoubletGet(3_c, idx...) * mT.SU2DoubletGet(2_c, idx...);
+      auto rr = DoEval::eval(mR, idx...);
+      auto tt = DoEval::eval(mT, idx...);
+      return rr[0] * tt[1] - rr[1] * tt[0] + rr[2] * tt[3] - rr[3] * tt[2];
     }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
     }
 
     virtual std::string operatorString() const override { return "·"; }

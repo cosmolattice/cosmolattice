@@ -353,11 +353,10 @@ namespace TempLat
           Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
           auto functor = DEVICE_CLASS_LAMBDA(size_t i)
           {
-            std::decay_t<decltype(r)> __r = r;
             device::apply(
                 [&](const auto &...idx) {
-                  DoEval::eval(__r, idx..., i);
-                  device_buf(i - memoryPos[dim]) = GetValue::get(__r, idx..., i);
+                  DoEval::eval(r, idx..., i);
+                  device_buf(i - memoryPos[dim]) = GetValue::get(r, idx..., i);
                 },
                 subMemoryPos);
           };

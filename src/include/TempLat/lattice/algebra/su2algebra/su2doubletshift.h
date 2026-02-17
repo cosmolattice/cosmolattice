@@ -37,28 +37,16 @@ namespace TempLat
       return shift<N...>(mR.SU2DoubletGet(t));
     }
 
-    template <int M, typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
-    {
-      auto tup = device::tie(idx...);
-      constexpr_for<0, dim, 1>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
-      });
-      return device::apply([&](const auto &...shifted_idx) { return mR.SU2DoubletGet(t, shifted_idx...); }, tup);
-    }
-
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto tup = device::tie(idx...);
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, tup);
+      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); }, tup);
     }
 
     virtual std::string operatorString() const override { return shift<N...>(mR.SU2DoubletGet(0_c)).getString({N...}); }
@@ -82,20 +70,13 @@ namespace TempLat
       return shift<N>(mR.SU2DoubletGet(t));
     }
 
-    template <int M, typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
-    {
-      return device::apply([&](const auto &...shifted_idx) { return mR.SU2DoubletGet(t, shifted_idx...); },
-                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
-    }
-
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                    tuple_add_to_nth<N - 1, 1>(device::tie(idx...)));
+      return device::apply(
+          [&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
+          tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }

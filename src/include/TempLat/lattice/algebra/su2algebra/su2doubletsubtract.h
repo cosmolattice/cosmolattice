@@ -34,22 +34,19 @@ namespace TempLat
     {
       return mR.SU2DoubletGet(t) - mT.SU2DoubletGet(t);
     }
-    template <int N, typename... IDX>
-      requires requires(R r, T t, IDX... idx) {
-        r.SU2DoubletGet(1_c, idx...);
-        t.SU2DoubletGet(1_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
-    {
-      return mR.SU2DoubletGet(t, idx...) - mT.SU2DoubletGet(t, idx...);
-    }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
+      auto cL = DoEval::eval(mR, idx...);
+      auto cR = DoEval::eval(mT, idx...);
+      device::array<decltype(cL[0] - cR[0]), 4> result;
+      result[0] = cL[0] - cR[0];
+      result[1] = cL[1] - cR[1];
+      result[2] = cL[2] - cR[2];
+      result[3] = cL[3] - cR[3];
+      return result;
     }
 
     virtual std::string operatorString() const override { return "-"; }

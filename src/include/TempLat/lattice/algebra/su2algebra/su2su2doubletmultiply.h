@@ -61,40 +61,24 @@ namespace TempLat
              mR.SU2Get(0_c) * mT.SU2DoubletGet(3_c) - mR.SU2Get(3_c) * mT.SU2DoubletGet(2_c);
     }
 
-    template <int N, typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
-    {
-      return cache[N];
-    }
-
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
+      auto cL = DoEval::eval(mR, idx...);
+      auto cR = DoEval::eval(mT, idx...);
 
-      device::array<SV, 4> cL;
-      device::array<SV, 4> cR;
-
-      constexpr_for<0, 4, 1>([&](auto j) {
-        cL[j] = mR.SU2Get(j, idx...);
-        cR[j] = mT.SU2DoubletGet(j, idx...);
-      });
-
-      cache[0] = cL[0] * cR[0] + cL[2] * cR[2] - cL[3] * cR[1] - cL[1] * cR[3];
-      cache[1] = cL[0] * cR[1] + cL[3] * cR[0] + cL[2] * cR[3] + cL[1] * cR[2];
-      cache[2] = -cL[1] * cR[1] + cL[3] * cR[3] - cL[2] * cR[0] + cL[0] * cR[2];
-      cache[3] = -cL[2] * cR[1] + cL[1] * cR[0] + cL[0] * cR[3] - cL[3] * cR[2];
+      device::array<SV, 4> result;
+      result[0] = cL[0] * cR[0] + cL[2] * cR[2] - cL[3] * cR[1] - cL[1] * cR[3];
+      result[1] = cL[0] * cR[1] + cL[3] * cR[0] + cL[2] * cR[3] + cL[1] * cR[2];
+      result[2] = -cL[1] * cR[1] + cL[3] * cR[3] - cL[2] * cR[0] + cL[0] * cR[2];
+      result[3] = -cL[2] * cR[1] + cL[1] * cR[0] + cL[0] * cR[3] - cL[3] * cR[2];
+      return result;
     }
 
     virtual std::string operatorString() const override { return "*"; }
 
   private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-    device::array<SV, 4> cache;
   };
 
   template <typename R, typename T>
