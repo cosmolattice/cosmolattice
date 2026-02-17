@@ -32,8 +32,8 @@ namespace TempLat
     DEVICE_FUNCTION
     ptrdiff_t operator()(double value) const
     {
-      ptrdiff_t bin = Kokkos::round(mNBins * (value - mMinVal) / mRange);
-      return Kokkos::min(mHighestBin, Kokkos::max(ptrdiff_t(0), bin));
+      ptrdiff_t bin = device::round(mNBins * (value - mMinVal) / mRange);
+      return device::min(mHighestBin, device::max(ptrdiff_t(0), bin));
     }
 
     template <typename T> void setCentralBinBounds(std::vector<T> &res)

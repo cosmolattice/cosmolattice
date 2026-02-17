@@ -51,7 +51,7 @@ namespace TempLat
 
     void fill(const T &value)
     {
-      Kokkos::deep_copy(mData, value);
+      device::memory::fill(mData, value);
       mHostMirrorOutdated = true; // mark host mirror as outdated
     }
 
@@ -105,8 +105,8 @@ namespace TempLat
     void pullHostView() const
     {
       if (mHostMirrorOutdated) {
-        if (!mHostMirror.is_allocated()) mHostMirror = Kokkos::create_mirror_view(mData);
-        Kokkos::deep_copy(mHostMirror, mData);
+        if (!mHostMirror.is_allocated()) mHostMirror = device::memory::createMirrorView(mData);
+        device::memory::copyDeviceToHost(mData, mHostMirror.data());
       }
       mHostMirrorOutdated = false;
     }
@@ -116,13 +116,13 @@ namespace TempLat
       if (!mHostMirror.is_allocated())
         throw MemoryBlockOutOfBoundsException(
             "Cannot push host view: host mirror is not allocated. Call getRawHostView() or getNDHostView() first.");
-      Kokkos::deep_copy(mData, mHostMirror);
+      device::memory::copyHostToDevice(mHostMirror.data(), mData);
       mHostMirrorOutdated = false;
     }
 
     void deallocateHostView()
     {
-      mHostMirror = typename Kokkos::View<T *, Kokkos::DefaultExecutionSpace>::host_mirror_type();
+      mHostMirror = HostView();
       mHostMirrorOutdated = true; // mark as outdated
     }
 
@@ -158,7 +158,7 @@ namespace TempLat
     MemoryBlock duplicate()
     {
       MemoryBlock newblock(mSize);
-      Kokkos::deep_copy(newblock.getRawView(), mData);
+      device::memory::copyDeviceToDevice(mData, newblock.getRawView());
       return newblock;
     }
 
@@ -184,8 +184,10 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     size_t mSize;
-    device::memory::NDView<1, T> mData;
-    mutable typename device::memory::NDView<1, T>::host_mirror_type mHostMirror;
+    using DeviceView = device::memory::NDView<1, T>;
+    using HostView = typename DeviceView::host_mirror_type;
+    DeviceView mData;
+    mutable HostView mHostMirror;
     static constexpr size_t TSIZE = sizeof(T);
     mutable bool mHostMirrorOutdated = true;
 

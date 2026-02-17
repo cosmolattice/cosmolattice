@@ -47,11 +47,13 @@ namespace TempLat
       using export_device_namespace::memory::NDViewUnmanaged;
       using export_device_namespace::memory::NDViewUnmanagedHost;
 
+      using export_device_namespace::memory::createMirrorView;
       using export_device_namespace::memory::subview;
 
       using export_device_namespace::memory::copyDeviceToDevice;
       using export_device_namespace::memory::copyDeviceToHost;
       using export_device_namespace::memory::copyHostToDevice;
+      using export_device_namespace::memory::fill;
       using export_device_namespace::memory::getAtOnePoint;
       using export_device_namespace::memory::setAtOnePoint;
 

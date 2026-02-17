@@ -14,6 +14,7 @@
 #include "TempLat/parallel/devices/kokkos/kokkos.h"
 #include "TempLat/parallel/devices/kokkos/kokkos_internal.h"
 
+#include <Kokkos_Core.hpp>
 #include <sstream>
 
 namespace TempLat
@@ -48,6 +49,8 @@ namespace TempLat
 
       using Kokkos::subview;
 
+      template <typename A> auto createMirrorView(const A &a) { return Kokkos::create_mirror_view(a); }
+
       template <typename OBJ, size_t NDim, typename T>
       void setAtOnePoint(OBJ &&obj, device_kokkos::IdxArray<NDim> pos, T val)
       {
@@ -56,6 +59,8 @@ namespace TempLat
               device_kokkos::apply([&](const auto... idx) { obj.getSet(idx...) = val; }, pos);
             });
       }
+
+      template <typename View, typename T> void fill(View &view, const T &value) { Kokkos::deep_copy(view, value); }
 
       template <typename OBJ, size_t NDim, typename I = ptrdiff_t>
       GetGetReturnType<OBJ>::type getAtOnePoint(OBJ &&obj, const device_kokkos::array<I, NDim> &pos)

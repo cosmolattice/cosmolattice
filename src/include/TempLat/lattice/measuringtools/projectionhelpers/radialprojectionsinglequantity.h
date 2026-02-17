@@ -41,11 +41,11 @@ namespace TempLat
       mMaxsDevice = DeviceView("RadialProjectionSingleQuantity::mMaxsDevice", size);
       Kokkos::deep_copy(mMaxsDevice, -std::numeric_limits<T>::max());
 
-      mAverages = Kokkos::create_mirror_view(mAveragesDevice);
-      mVariances = Kokkos::create_mirror_view(mVariancesDevice);
-      mMins = Kokkos::create_mirror_view(mMinsDevice);
+      mAverages = device::memory::createMirrorView(mAveragesDevice);
+      mVariances = device::memory::createMirrorView(mVariancesDevice);
+      mMins = device::memory::createMirrorView(mMinsDevice);
       Kokkos::deep_copy(mMins, std::numeric_limits<T>::max());
-      mMaxs = Kokkos::create_mirror_view(mMaxsDevice);
+      mMaxs = device::memory::createMirrorView(mMaxsDevice);
       Kokkos::deep_copy(mMaxs, -std::numeric_limits<T>::max());
     }
 

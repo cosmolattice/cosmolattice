@@ -50,7 +50,7 @@ namespace TempLat
           mBinBounds(mNBins), mUseBinCentralValues(pUseBinCentralValues), mIsInFourier(pIsInFourier)
     {
       mMultiplicitiesDevice = DeviceView("RadialProjectionResult::mMultiplicitiesDevice", mNBins);
-      mMultiplicities = Kokkos::create_mirror_view(mMultiplicitiesDevice);
+      mMultiplicities = device::memory::createMirrorView(mMultiplicitiesDevice);
     }
 
     /** @brief operator+= is a requirement for use as a workspace in FieldlessGetteration. */

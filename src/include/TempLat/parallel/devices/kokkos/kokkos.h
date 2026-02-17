@@ -151,6 +151,7 @@ namespace TempLat
     using Kokkos::min;
     using Kokkos::pow;
     using Kokkos::real;
+    using Kokkos::round;
     using Kokkos::sin;
     using Kokkos::sinh;
     using Kokkos::sqrt;

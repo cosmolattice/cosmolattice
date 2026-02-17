@@ -86,6 +86,7 @@ namespace TempLat
     using export_device_namespace::min;
     using export_device_namespace::pow;
     using export_device_namespace::real;
+    using export_device_namespace::round;
     using export_device_namespace::sin;
     using export_device_namespace::sinh;
     using export_device_namespace::sqrt;

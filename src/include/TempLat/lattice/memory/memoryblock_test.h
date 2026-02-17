@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/almostequal.h"
+#include "TempLat/parallel/device_iteration.h"
 
 template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
@@ -15,9 +16,7 @@ template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Te
   {
     MemoryBlock<NDim, T> test(128);
 
-    Kokkos::parallel_for(
-        Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, test.size()),
-        DEVICE_LAMBDA(const size_t i) { test[i] = i; });
+    device::iteration::foreach<1>("it1", {0}, {128}, DEVICE_LAMBDA(const device::IdxArray<1> i) { test[i[0]] = i[0]; });
 
     const auto view = test.getRawHostView();
 
@@ -33,9 +32,9 @@ template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Te
 
     auto view = test.getNDView<T>(device::IdxArray<3>{{16, 16, 16}});
 
-    Kokkos::parallel_for(
-        Kokkos::MDRangePolicy<Kokkos::Rank<3>>({0, 0, 0}, {16, 16, 16}),
-        DEVICE_LAMBDA(const size_t i, const size_t j, const size_t k) { view(i, j, k) = i * 256 + j * 16 + k; });
+    device::iteration::foreach<3>(
+        "it2", {0, 0, 0}, {16, 16, 16},
+        DEVICE_LAMBDA(const device::IdxArray<3> i) { view(i[0], i[1], i[2]) = i[0] * 256 + i[1] * 16 + i[2]; });
 
     auto host_view = test.getNDHostView<T>(device::IdxArray<3>{{16, 16, 16}});
 
