@@ -32,24 +32,15 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     AssignableTuple(Args... args) : AssignableCollectionBase<AssignableTuple<Shift, Args...>, Args...>(args...) {}
 
-    template <int N> auto &getComp(Tag<N> t)
+    template <int N>
+      requires(N >= 0 && N < size)
+    auto &getComp(Tag<N> t)
     {
       return (*this)(t + Tag<Shift>()); // get component runs from 0 to N-1 always. (internal getter).
     }
 
-    auto getComp(ptrdiff_t i)
-    {
-      using SV = GetGetReturnType<decltype((*this)(std::declval<Tag<0>>()))>::type;
-      std::array<SV, size> ret;
-      for_in_range<0, size>([&](auto j) { ret[j] = GetValue::get(getComp(j), i); });
-      return ret;
-    }
-
     using Getter = GetComponent;
     static constexpr int SHIFTIND = Shift;
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
 #ifdef TEMPLATTEST
@@ -61,22 +52,9 @@ namespace TempLat
   template <class... Args> auto make_list(Args... args) { return AssignableTuple<0, Args...>(args...); }
   template <class... Args> auto make_vector(Args... args) { return AssignableTuple<1, Args...>(args...); }
 
-  template <typename T, class... Args> auto make_list_from_array_impl(std::array<T, 1> arr, Args... args)
-  {
-    return make_list(arr[0], args...);
-  }
-
-  template <typename T, size_t N, class... Args> auto make_list_from_array_impl(std::array<T, N> arr, Args... args)
-  {
-    std::array<T, N - 1> nArr;
-    for (int i = 0; i < (int)N - 1; ++i)
-      nArr[i] = arr[i];
-    return make_list_from_array_impl(nArr, arr[N - 1], args...);
-  }
-
   template <typename T, size_t N> auto make_list_from_array(std::array<T, N> arr)
   {
-    return make_list_from_array_impl(arr);
+    return std::apply([&](const auto &...args) { return make_list(args...); }, arr);
   }
 
   template <typename T> int make_list_from_array(std::array<T, 0> arr) { return 0; }
