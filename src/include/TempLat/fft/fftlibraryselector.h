@@ -133,9 +133,14 @@ namespace TempLat
 #endif // HAVE_MPI
       {
 #ifdef HAVE_KOKKOSFFT
-        if (haveKOKKOSFFT && (NDim <= 3) && (group.size() == 1)) {
-          theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
-          backend = "KokkosFFT";
+        if constexpr (haveKOKKOSFFT && (NDim <= 3)) {
+          if (group.size() == 1) {
+            theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
+            backend = "KokkosFFT";
+          } else {
+            theLibrary = std::make_shared<FFTWInterface<NDim>>();
+            backend = "FFTW";
+          }
         } else
 #endif // HAVE_KOKKOSFFT
         {

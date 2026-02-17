@@ -6,3 +6,4 @@
 - Offline compilation must work flawlessly
 - Hunt down manual copy operations where device::memory::copyDeviceToDevice should be used instead. (Ghostupdater, e.g.)
 - Make sure HIP works.
+- Get rid of the JumpsHolder
