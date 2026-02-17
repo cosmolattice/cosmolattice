@@ -34,29 +34,14 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t) const { return -Imag(mR); }
 
     template <typename... IDX>
-      requires requires(R mR, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(0_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
-    {
-      return mR.ComplexFieldGet(0_c, idx...);
-    }
-    template <typename... IDX>
-      requires requires(R mR, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(1_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
-    {
-      return -mR.ComplexFieldGet(1_c, idx...);
-    }
-
-    template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
+      auto child = DoEval::eval(mR, idx...);
+      device::array<std::remove_reference_t<decltype(child[0])>, 2> result;
+      result[0] = child[0];
+      result[1] = -child[1];
+      return result;
     }
 
     std::string toString() const { return GetString::get(mR) + "^*"; }

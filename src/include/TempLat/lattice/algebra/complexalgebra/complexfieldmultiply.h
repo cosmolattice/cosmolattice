@@ -38,38 +38,29 @@ namespace TempLat
     auto ComplexFieldGet(Tag<1> t) const { return Real(mR) * Imag(mT) + Imag(mR) * Real(mT); }
 
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        ComplexFieldGetter::get(mR, 0_c, idx...);
-        ComplexFieldGetter::get(mT, 0_c, idx...);
-        ComplexFieldGetter::get(mR, 1_c, idx...);
-        ComplexFieldGetter::get(mT, 1_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
-    {
-      return ComplexFieldGetter::get(mR, 0_c, idx...) * ComplexFieldGetter::get(mT, 0_c, idx...) -
-             ComplexFieldGetter::get(mR, 1_c, idx...) * ComplexFieldGetter::get(mT, 1_c, idx...);
-    }
-    template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        ComplexFieldGetter::get(mR, 0_c, idx...);
-        ComplexFieldGetter::get(mT, 0_c, idx...);
-        ComplexFieldGetter::get(mR, 1_c, idx...);
-        ComplexFieldGetter::get(mT, 1_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
-    {
-      return ComplexFieldGetter::get(mR, 0_c, idx...) * ComplexFieldGetter::get(mT, 1_c, idx...) +
-             ComplexFieldGetter::get(mR, 1_c, idx...) * ComplexFieldGetter::get(mT, 0_c, idx...);
-    }
-
-    template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
+      if constexpr (IsComplexType<R>) {
+        auto cR = DoEval::eval(mT, idx...);
+        device::array<decltype(Real(mR) * cR[0]), 2> result;
+        result[0] = Real(mR) * cR[0] - Imag(mR) * cR[1];
+        result[1] = Real(mR) * cR[1] + Imag(mR) * cR[0];
+        return result;
+      } else if constexpr (IsComplexType<T>) {
+        auto cL = DoEval::eval(mR, idx...);
+        device::array<decltype(cL[0] * Real(mT)), 2> result;
+        result[0] = cL[0] * Real(mT) - cL[1] * Imag(mT);
+        result[1] = cL[0] * Imag(mT) + cL[1] * Real(mT);
+        return result;
+      } else {
+        auto cL = DoEval::eval(mR, idx...);
+        auto cR = DoEval::eval(mT, idx...);
+        device::array<decltype(cL[0] * cR[0]), 2> result;
+        result[0] = cL[0] * cR[0] - cL[1] * cR[1];
+        result[1] = cL[0] * cR[1] + cL[1] * cR[0];
+        return result;
+      }
     }
 
     virtual std::string operatorString() const override { return "*"; }

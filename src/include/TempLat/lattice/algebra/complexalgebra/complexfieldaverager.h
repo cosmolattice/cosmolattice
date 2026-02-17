@@ -95,9 +95,9 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(mT, args...);
-              update.real() += mT.ComplexFieldGet(Tag<0>(), args...);
-              update.imag() += mT.ComplexFieldGet(Tag<1>(), args...);
+              auto result = DoEval::eval(mT, args...);
+              update.real() += result[0];
+              update.imag() += result[1];
             },
             idx);
       };
@@ -127,9 +127,9 @@ namespace TempLat
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners
 
-              DoEval::eval(mT, args...);
-              update.real() += mT.ComplexFieldGet(Tag<0>(), args...);
-              update.imag() += mT.ComplexFieldGet(Tag<1>(), args...);
+              auto result = DoEval::eval(mT, args...);
+              update.real() += result[0];
+              update.imag() += result[1];
             },
             idx);
       };

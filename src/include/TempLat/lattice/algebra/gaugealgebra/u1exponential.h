@@ -38,25 +38,14 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
-    {
-      // return mCacheRe;
-      return cos(GetEval::getEval(mR, idx...));
-    }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
-    {
-      // return mCacheIm;
-      return sin(GetEval::getEval(mR, idx...));
-    }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       DoEval::eval(mR, idx...);
+      auto val = GetValue::get(mR, idx...);
+      device::array<decltype(cos(val)), 2> result;
+      result[0] = cos(val);
+      result[1] = sin(val);
+      return result;
     }
 
     std::string toString() const { return "U1(" + GetString::get(mR) + ")"; }

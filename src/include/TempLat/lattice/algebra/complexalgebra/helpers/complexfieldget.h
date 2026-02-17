@@ -46,26 +46,6 @@ namespace TempLat
       return r.ComplexFieldGet(t);
     }
 
-    template <typename R, typename... IDX>
-      requires IsComplexType<R>
-    static auto get(R &&r, Tag<0> t, const IDX &...)
-    {
-      return Real(r);
-    }
-
-    template <typename R, typename... IDX>
-      requires IsComplexType<R>
-    static auto get(R &&r, Tag<1> t, const IDX &...)
-    {
-      return Imag(r);
-    }
-
-    template <typename R, int N, typename... IDX>
-      requires(!IsComplexType<R> && HasComplexFieldGet<R>)
-    static auto get(R &&r, Tag<N> t, const IDX &...idx)
-    {
-      return r.ComplexFieldGet(t, idx...);
-    }
   };
 } // namespace TempLat
 

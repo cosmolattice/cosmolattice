@@ -11,6 +11,7 @@
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -32,14 +33,11 @@ namespace TempLat
     static constexpr size_t NDim = GetNDim::get<R>();
 
     template <typename... IDX>
-      requires requires(R mR, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(0_c, idx...);
-        mR.ComplexFieldGet(1_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION complex<mRType> get(const IDX &...idx) const
     {
-      return complex<mRType>(mR.ComplexFieldGet(0_c, idx...), mR.ComplexFieldGet(1_c, idx...));
+      auto result = DoEval::eval(mR, idx...);
+      return complex<mRType>(result[0], result[1]);
     }
 
     template <typename... IDX> DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const { DoEval::eval(mR, idx...); }

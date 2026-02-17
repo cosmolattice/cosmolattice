@@ -68,16 +68,12 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      return mR.get(idx...);
-    }
-
-    template <typename... IDX>
-      requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
-    {
-      return mI.get(idx...);
+      device::array<T, 2> result;
+      result[0] = mR.get(idx...);
+      result[1] = mI.get(idx...);
+      return result;
     }
 
     ComplexFieldFourierView<NDim, T> inFourierSpace() { return {mR.inFourierSpace(), mI.inFourierSpace()}; }
@@ -99,9 +95,9 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(g, args...);
-              viewR(args...) = g.ComplexFieldGet(0_c, args...);
-              viewI(args...) = g.ComplexFieldGet(1_c, args...);
+              auto result = DoEval::eval(g, args...);
+              viewR(args...) = result[0];
+              viewI(args...) = result[1];
             },
             idx);
       };

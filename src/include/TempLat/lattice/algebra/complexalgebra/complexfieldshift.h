@@ -40,31 +40,18 @@ namespace TempLat
       return shift<N...>(mR.ComplexFieldGet(t));
     }
 
-    template <int M, typename... IDX>
-      requires requires(R mR, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(Tag<M>());
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
-    {
-      auto tup = device::tie(idx...);
-      constexpr_for<0, dim, 1>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
-      });
-      return device::apply([&](const auto &...shifted_idx) { return mR.ComplexFieldGet(t, shifted_idx...); }, tup);
-    }
-
-    template <int M, typename... IDX>
+    template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto tup = device::tie(idx...);
       constexpr_for<0, dim, 1>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, tup);
+      return device::apply([&](const auto &...shifted_idx) {
+        return DoEval::eval(mR, shifted_idx...);
+      }, tup);
     }
 
     std::string operatorString() const { return shiftString; }
@@ -92,20 +79,13 @@ namespace TempLat
       return shift<_N>(mR.ComplexFieldGet(t));
     }
 
-    template <int M, typename... IDX>
+    template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<M> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      return device::apply([&](const auto &...shifted_idx) { return mR.ComplexFieldGet(t, shifted_idx...); },
-                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
-    }
-
-    template <int M, typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
-    {
-      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                    tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
+      return device::apply(
+          [&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
+          tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     std::string toString() const { return GetString::get(mR) + "(->" + std::to_string(N) + ")"; }

@@ -48,26 +48,14 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto rr = DoEval::eval(mR, idx...);
       auto tt = DoEval::eval(mT, idx...);
-      return rr[0] * tt[0] + rr[1] * tt[1] + rr[2] * tt[2] + rr[3] * tt[3];
-    }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
-    {
-      auto rr = DoEval::eval(mR, idx...);
-      auto tt = DoEval::eval(mT, idx...);
-      return rr[0] * tt[1] - rr[1] * tt[0] + rr[2] * tt[3] - rr[3] * tt[2];
-    }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
-    {
+      device::array<decltype(rr[0] * tt[0]), 2> result;
+      result[0] = rr[0] * tt[0] + rr[1] * tt[1] + rr[2] * tt[2] + rr[3] * tt[3];
+      result[1] = rr[0] * tt[1] - rr[1] * tt[0] + rr[2] * tt[3] - rr[3] * tt[2];
+      return result;
     }
 
     virtual std::string operatorString() const override { return "·"; }
