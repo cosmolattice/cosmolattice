@@ -45,13 +45,11 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto tup = device::tie(idx...);
-      constexpr_for<0, dim, 1>([&](const auto _d) {
+      constexpr_for<0, dim>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      return device::apply([&](const auto &...shifted_idx) {
-        return DoEval::eval(mR, shifted_idx...);
-      }, tup);
+      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); }, tup);
     }
 
     std::string operatorString() const { return shiftString; }
@@ -83,9 +81,8 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      return device::apply(
-          [&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
-          tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
+      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
+                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     std::string toString() const { return GetString::get(mR) + "(->" + std::to_string(N) + ")"; }

@@ -93,7 +93,7 @@ namespace TempLat
         device::apply(
             [&](auto &&...args) {
               auto result = DoEval::eval(mT, args...);
-              constexpr_for<0, size, 1>([&](auto j) { update[j] += result[j]; });
+              constexpr_for<0, size>([&](auto j) { update[j] += result[j]; });
             },
             idx);
       };
@@ -123,7 +123,7 @@ namespace TempLat
                 return; // skip negative partners
 
               auto result = DoEval::eval(mT, args...);
-              constexpr_for<0, size, 1>([&](auto j) { update[j] += result[j]; });
+              constexpr_for<0, size>([&](auto j) { update[j] += result[j]; });
             },
             idx);
       };

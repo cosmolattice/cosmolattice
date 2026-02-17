@@ -41,6 +41,13 @@ namespace TempLat
         return conj(GetValue::get(mR, idx...));
       }
 
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return conj(DoEval::eval(mR, idx...));
+      }
+
       /** @brief Complex conjugation and copmlex differentiation aren't friends. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other) = delete;
     };

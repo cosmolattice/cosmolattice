@@ -13,6 +13,7 @@
 #include "TempLat/lattice/algebra/operators/squareroot.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/util/constexpr_for.h"
+#include "TempLat/util/tuple_tools.h"
 #include "TempLat/lattice/algebra/helpers/getvectorvalue.h"
 
 #include "TempLat/parallel/device.h"
@@ -50,17 +51,34 @@ namespace TempLat
       /* sorry, an if-statement inside a getter function: if T and S are the same thing, let's not call its getter twice
        * (it might be an expensive algebraic operation. */
       if ((void *)&mR == (void *)&mT) {
-        constexpr_for<0, mVectorSize, 1>([&](auto _j) {
+        constexpr_for<0, mVectorSize>([&](auto _j) {
           constexpr size_t j = decltype(_j)::value;
           result += pow<2>(GetVectorValue::vectorGet(mR, j, idx...));
         });
       } else {
-        constexpr_for<0, mVectorSize, 1>([&](auto _j) {
+        constexpr_for<0, mVectorSize>([&](auto _j) {
           constexpr size_t j = decltype(_j)::value;
           result += GetVectorValue::vectorGet(mR, j, idx...) * GetVectorValue::vectorGet(mT, j, idx...);
         });
       }
       return result;
+    }
+
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+    {
+      /* sorry, an if-statement inside a getter function: if T and S are the same thing, let's not call its getter twice
+       * (it might be an expensive algebraic operation. */
+      if ((void *)&mR == (void *)&mT) {
+        auto cache = DoEval::eval(mR, idx...);
+        return device::apply([&](const auto &...args) { return (pow<2>(args) + ...); }, cache);
+      } else {
+        auto cache1 = DoEval::eval(mR, idx...);
+        auto cache2 = DoEval::eval(mT, idx...);
+        return device::apply([&](const auto &...args) { return ((cache1[args] * cache2[args]) + ...); },
+                             make_tuple_sequence<mVectorSize>());
+      }
     }
 
     template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
@@ -98,13 +116,13 @@ namespace TempLat
 
   template <typename R> auto norm(const R &r) { return sqrt(norm2(r)); }
 
-  class VectorDotterTester
-  {
 #ifdef TEMPLATTEST
+  template <size_t NDim> class VectorDotterTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

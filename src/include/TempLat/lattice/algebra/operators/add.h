@@ -43,7 +43,14 @@ namespace TempLat
         }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-        return TempLat::GetValue::get(mT, idx...) + TempLat::GetValue::get(mR, idx...);
+        return GetValue::get(mT, idx...) + GetValue::get(mR, idx...);
+      }
+
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return DoEval::eval(mT, idx...) + DoEval::eval(mR, idx...);
       }
 
       virtual std::string operatorString() const override { return "+"; }

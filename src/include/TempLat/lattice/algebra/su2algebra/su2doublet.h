@@ -79,7 +79,7 @@ namespace TempLat
         device::apply(
             [&](auto &&...args) {
               auto result = DoEval::eval(r, args...);
-              constexpr_for<0, size, 1>([&](auto _i) {
+              constexpr_for<0, size>([&](auto _i) {
                 constexpr size_t i = decltype(_i)::value;
                 device::get<i>(views)(args...) = result[i];
               });

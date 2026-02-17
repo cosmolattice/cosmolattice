@@ -84,14 +84,6 @@ namespace TempLat
       return a.isEmpty() ? b : a;
     }
 
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
-    {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
-    }
-
     DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return HasDx<R> ? GetDx::getDx(mR) : (HasDx<T> ? GetDx::getDx(mT) : 1.); }
 

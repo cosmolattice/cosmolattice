@@ -40,8 +40,17 @@ namespace TempLat
         requires requires(IDX... idx) { GetValue::get(mR, idx...); }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-        auto a = GetValue::get(mR, idx...);
-        decltype(a) zero(0);
+        const auto a = GetValue::get(mR, idx...);
+        constexpr decltype(a) zero{};
+        return (a < zero) ? zero : sqrt(a);
+      }
+
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        const auto a = DoEval::eval(mR, idx...);
+        constexpr decltype(a) zero{};
         return (a < zero) ? zero : sqrt(a);
       }
 

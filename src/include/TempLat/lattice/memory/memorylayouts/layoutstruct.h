@@ -72,7 +72,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION void putSpatialLocationFromMemoryIndexInto(Container &target, const IDX... idx) const
     {
       const auto indices = device::tie(idx...);
-      constexpr_for<0, NDim, 1>([&](const auto _d) {
+      constexpr_for<0, NDim>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         auto map = getTransposed().getSpatialLocationFromMemoryIndex(device::get<d>(indices), d);
         target[map.atIndex] = map.withValue;
@@ -99,7 +99,7 @@ namespace TempLat
     {
       const auto positions = device::tie(pos...);
       bool owned = true;
-      constexpr_for<0, NDim, 1>([&](const auto _d) {
+      constexpr_for<0, NDim>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         auto map = getTransposed().getMemoryIndexFromSpatialLocation(device::get<d>(positions), d);
         target[map.atIndex] = map.withValue;

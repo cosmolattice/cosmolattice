@@ -7,3 +7,4 @@
 - Make sure HIP works.
 - Get rid of the JumpsHolder
 - Remove all explicit Kokkos:: and replace with device:: analogues.
+- I'm pretty sure confirmSpace is currently not working. 

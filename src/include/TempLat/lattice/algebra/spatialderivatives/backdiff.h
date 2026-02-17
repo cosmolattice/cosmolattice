@@ -60,16 +60,19 @@ namespace TempLat
     virtual std::string operatorString() const override { return "BackDiff"; }
 
     template <typename... IDX>
-      requires requires(R r, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        DoEval::eval(r, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      constexpr size_t d = static_cast<size_t>(dir) - 1;
-      DoEval::eval(mR, idx...);
-      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                    tuple_add_to_nth<d, -1>(device::tie(idx...)));
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        static_assert(dir > 0);
+        constexpr size_t d = static_cast<size_t>(dir) - 1;
+        auto result = DoEval::eval(mR, idx...);
+        device::apply([&](const auto &...shifted_idx) { result -= DoEval::eval(mR, shifted_idx...); },
+                      tuple_add_to_nth<d, -1>(device::tie(idx...)));
+        return result / dx;
+      }
     }
 
   private:

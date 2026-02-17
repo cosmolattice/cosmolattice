@@ -9,47 +9,82 @@
 
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
+#include "TempLat/util/log/saycomplete.h"
+#include "TempLat/util/ndloop.h"
 
-#include <iostream>
-
-template <size_t NDim_> inline void TempLat::SpatialCoordinate<NDim_>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::SpatialCoordinate<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  static constexpr size_t NDim = 2;
-  ptrdiff_t nGrid = 16, nGhost = 2;
+  const ptrdiff_t nGrid = 16, nGhost = 2;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
-  Field<NDim, double> phix("phix", toolBox);
-  Field<NDim, double> phiy("phiy", toolBox);
+  // Create fields for each spatial coordinate component
+  std::vector<Field<NDim, double>> phi_components;
+  phi_components.reserve(NDim);
+  for (size_t d = 0; d < NDim; ++d) {
+    phi_components.emplace_back("phi_" + std::to_string(d), toolBox);
+  }
 
   SpatialCoordinate<NDim> x(toolBox);
-  phix = getVectorComponent(x, 0);
-  phiy = getVectorComponent(x, 1);
 
-  auto phix_view = phix.getLocalNDHostView();
-  auto phiy_view = phiy.getLocalNDHostView();
+  // Assign spatial coordinate components to fields
+  constexpr_for<0, NDim>([&](auto d) { phi_components[d] = getVectorComponent(x, d); });
+
+  // Get host views for all component fields
+  std::vector<decltype(phi_components[0].getLocalNDHostView())> phi_views;
+  phi_views.reserve(NDim);
+  for (size_t d = 0; d < NDim; ++d) {
+    phi_views.push_back(phi_components[d].getLocalNDHostView());
+  }
 
   auto layout = toolBox->mLayouts.getConfigSpaceLayout();
 
   // Check that the spatial coordinate is correct
   bool correct = true;
-  for (ptrdiff_t i = 0; i < phix_view.extent(0); ++i) {
-    for (ptrdiff_t j = 0; j < phix_view.extent(1); ++j) {
-      const ptrdiff_t global_x = layout.getLocalStarts()[0] + i;
-      const ptrdiff_t global_y = layout.getLocalStarts()[1] + j;
 
-      const ptrdiff_t x_val = global_x > nGrid / 2 ? global_x - nGrid : global_x;
-      const ptrdiff_t y_val = global_y > nGrid / 2 ? global_y - nGrid : global_y;
+  NDLoop<NDim>(phi_views[0], [&](const auto &...indices) {
+    std::array<ptrdiff_t, NDim> local_idx = {static_cast<ptrdiff_t>(indices)...};
 
-      correct &= (phix_view(i, j) == x_val) && (x.vectorGet(0, nGhost + i, nGhost + j) == x_val);
-      correct &= (phiy_view(i, j) == y_val) && (x.vectorGet(1, nGhost + i, nGhost + j) == y_val);
+    // Build index array with ghost offset for memory layout functions and vectorGet
+    device::IdxArray<NDim> idx_with_ghosts = {(indices + nGhost)...};
 
-      if (!(phix_view(i, j) == x_val))
-        sayMPI << "Failed: phix.get(" << i << ", " << j << ") = " << phix_view(i, j) << ", expect " << x_val << "\n";
-      if (!(phiy_view(i, j) == y_val))
-        sayMPI << "Failed: phiy.get(" << i << ", " << j << ") = " << phiy_view(i, j) << ", expect " << y_val << "\n";
+    // Use layout to compute global spatial coordinates from memory indices (including ghost offset)
+    device::IdxArray<NDim> global_idx;
+    device::apply([&](auto... i) { layout.putSpatialLocationFromMemoryIndexInto(global_idx, i...); }, idx_with_ghosts);
+
+    bool this_correct = true;
+
+    for (size_t d = 0; d < NDim; ++d) {
+      const double expected_val = static_cast<double>(global_idx[d]);
+
+      this_correct &= (phi_views[d](indices...) == expected_val);
+      this_correct &= (device::apply([&](auto... i) { return x.vectorGet(d, i...); }, idx_with_ghosts) == expected_val);
     }
-  }
+
+    correct &= this_correct;
+
+    if (!this_correct) {
+      std::stringstream ss;
+      ss << "Error at local (";
+      for (size_t d = 0; d < NDim; ++d) {
+        ss << local_idx[d];
+        if (d < NDim - 1) ss << ", ";
+      }
+      ss << "), global (";
+      for (size_t d = 0; d < NDim; ++d) {
+        ss << global_idx[d];
+        if (d < NDim - 1) ss << ", ";
+      }
+      ss << "): ";
+      for (size_t d = 0; d < NDim; ++d) {
+        ss << "phi[" << d << "] = " << phi_views[d](indices...);
+        if (d < NDim - 1) ss << ", ";
+      }
+      ss << "\n";
+      sayMPI << ss.str();
+    }
+  });
+
   tdd.verify(correct);
 }
 

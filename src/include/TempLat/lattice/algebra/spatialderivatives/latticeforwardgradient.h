@@ -65,19 +65,23 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires requires(R r, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        DoEval::eval(r, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      constexpr_for<0, NDim, 1>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        auto other_point = device::IdxArray<NDim>{{idx...}};
-        other_point[d] += 1;
-        device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, other_point);
-      });
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        device::array<GetReturnType, NDim> result{};
+        constexpr_for<0, NDim>([&](const auto _i) {
+          constexpr int i = decltype(_i)::value;
+
+          result[i] = -DoEval::eval(mR, idx...);
+          device::apply([&](const auto &...shifted_idx) { result[i] += DoEval::eval(mR, shifted_idx...); },
+                        tuple_add_to_nth<i, 1>(device::tie(idx...)));
+          result[i] /= dx;
+        });
+        return result;
+      }
     }
 
     static constexpr size_t getVectorSize() { return NDim; }

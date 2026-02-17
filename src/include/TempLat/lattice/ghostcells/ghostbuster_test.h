@@ -351,7 +351,7 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
   }
 
   // quick N-dimensional test
-  constexpr_for<1, 5, 1>([&](auto N) {
+  constexpr_for<1, 5>([&](auto N) {
     constexpr size_t nd = decltype(N)::value;
     run_nd_test<nd>(tdd);
   });

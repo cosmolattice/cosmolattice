@@ -36,11 +36,15 @@ namespace TempLat
       requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION complex<mRType> get(const IDX &...idx) const
     {
-      auto result = DoEval::eval(mR, idx...);
+      const auto result = DoEval::eval(mR, idx...);
       return complex<mRType>(result[0], result[1]);
     }
 
-    template <typename... IDX> DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const { DoEval::eval(mR, idx...); }
+    template <typename... IDX> DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+    {
+      const auto result = DoEval::eval(mR, idx...);
+      return complex<mRType>(result[0], result[1]);
+    }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

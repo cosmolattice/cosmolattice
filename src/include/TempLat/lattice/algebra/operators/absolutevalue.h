@@ -46,6 +46,13 @@ namespace TempLat
         return abs(GetValue::get(mR, idx...));
       }
 
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return abs(DoEval::eval(mR, idx...));
+      }
+
       virtual std::string operatorString() const override { return "abs"; }
 
       /** @brief Passing on the automatic / symbolic derivatives. */

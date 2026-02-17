@@ -13,12 +13,12 @@ inline void TempLat::TupleToolsTester::Test(TempLat::TDDAssertion &tdd)
 {
   const auto test_tup = device::tuple(1, 2, 3, 4, 5, 6, 5, 8, 9, 10);
 
-  constexpr_for<0, 10, 1>([&](const auto _d) {
+  constexpr_for<0, 10>([&](const auto _d) {
     auto temp_res = device::tuple(1, 2, 3, 4, 5, 6, 5, 8, 9, 10);
     constexpr auto idx = decltype(_d)::value;
     // sayShort << "idx = " << idx << "\n";
     temp_res = TempLat::tuple_add_to_nth<idx, 11>(temp_res);
-    constexpr_for<0, 10, 1>([&](const auto _e) {
+    constexpr_for<0, 10>([&](const auto _e) {
       constexpr auto jdx = decltype(_e)::value;
       // sayShort << "jdx = " << jdx << "\n";
       if constexpr (jdx == idx) {
@@ -32,11 +32,11 @@ inline void TempLat::TupleToolsTester::Test(TempLat::TDDAssertion &tdd)
     });
   });
 
-  constexpr_for<0, 10, 1>([&](const auto _d) {
+  constexpr_for<0, 10>([&](const auto _d) {
     constexpr auto idx = decltype(_d)::value;
     // sayShort << "idx = " << idx << "\n";
     const auto temp_res = TempLat::tuple_add_to_nth<idx, 11>(test_tup);
-    constexpr_for<0, 10, 1>([&](const auto _e) {
+    constexpr_for<0, 10>([&](const auto _e) {
       constexpr auto jdx = decltype(_e)::value;
       // sayShort << "jdx = " << jdx << "\n";
       if constexpr (jdx == idx) {

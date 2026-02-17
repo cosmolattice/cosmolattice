@@ -45,6 +45,13 @@ namespace TempLat
         return GetValue::get(mR, idx...) / GetValue::get(mT, idx...);
       }
 
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return DoEval::eval(mR, idx...) / DoEval::eval(mT, idx...);
+      }
+
       virtual std::string operatorString() const override { return "/"; }
 
       /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
@@ -77,6 +84,18 @@ namespace TempLat
         const auto b = GetValue::get(mT, idx...);
 
         decltype(a / b) zero(0);
+
+        return AlmostEqual(a, zero) ? zero : a / b;
+      }
+
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        const auto a = DoEval::eval(mR, idx...);
+        const auto b = DoEval::eval(mT, idx...);
+
+        constexpr decltype(a / b) zero{};
 
         return AlmostEqual(a, zero) ? zero : a / b;
       }

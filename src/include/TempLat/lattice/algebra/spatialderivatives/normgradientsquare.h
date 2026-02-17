@@ -51,7 +51,7 @@ namespace TempLat
       else {
         const auto midval = GetValue::get(mR, idx...);
         FloatType result{};
-        constexpr_for<0, NDim, 1>([&](const auto _d) {
+        constexpr_for<0, NDim>([&](const auto _d) {
           constexpr size_t d = decltype(_d)::value;
           device::apply(
               [&](const auto &...shifted_idx) { result += pow<2>(GetValue::get(mR, shifted_idx...) - midval); },
@@ -66,18 +66,22 @@ namespace TempLat
     void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
     template <typename... IDX>
-      requires requires(R r, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        DoEval::eval(r, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx) const
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      constexpr_for<0, NDim, 1>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                      tuple_add_to_nth<d, 1>(device::tie(idx...)));
-      });
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        const auto midval = DoEval::eval(mR, idx...);
+        FloatType result{};
+        constexpr_for<0, NDim>([&](const auto _d) {
+          constexpr size_t d = decltype(_d)::value;
+          device::apply(
+              [&](const auto &...shifted_idx) { result += pow<2>(DoEval::eval(mR, shifted_idx...) - midval); },
+              tuple_add_to_nth<d, 1>(device::tie(idx...)));
+        });
+        return result / dx2;
+      }
     }
 
     template <typename S> DEVICE_FORCEINLINE_FUNCTION auto d(const S &other)

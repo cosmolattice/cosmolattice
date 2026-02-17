@@ -13,8 +13,6 @@
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
-#include "TempLat/lattice/algebra/operators/cosine.h"
-#include "TempLat/lattice/algebra/operators/multiply.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 
 namespace TempLat
@@ -42,6 +40,13 @@ namespace TempLat
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return sin(GetValue::get(mR, idx...));
+      }
+
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return sin(DoEval::eval(mR, idx...));
       }
 
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)

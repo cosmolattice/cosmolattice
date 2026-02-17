@@ -139,6 +139,13 @@ namespace TempLat
       return mView(idx...);
     }
 
+    template <typename... IDX>
+      requires IsVariadicNDIndex<NDim, IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+    {
+      return mView(idx...);
+    }
+
     virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getFourierSpaceJumps(); }
 
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const

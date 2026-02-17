@@ -22,30 +22,37 @@ namespace TempLat
    *
    * Unit test: ctest -R test-getvectorcomponent
    **/
-  template <typename R> class GetVectorComponentHelper
+  template <typename R, int N> class GetVectorComponentHelper
   {
   public:
     // Put public methods here. These should change very little over time.
-    GetVectorComponentHelper(const R &pR, ptrdiff_t pJ) : mR(pR), mJ(pJ) {}
+    GetVectorComponentHelper(const R &pR) : mR(pR) {}
 
     template <typename... JDX>
-      requires requires(std::decay_t<R> mR, ptrdiff_t mJ, JDX... idx) {
+      requires requires(std::decay_t<R> mR, JDX... idx) {
         requires IsVariadicIndex<JDX...>;
-        mR.vectorGet(mJ, idx...);
+        mR.vectorGet(N, idx...);
       }
     DEVICE_FORCEINLINE_FUNCTION auto get(const JDX &...jdx) const
     {
-      return mR.vectorGet(mJ, jdx...);
+      return mR.vectorGet(N, jdx...);
     }
 
-    void doWeNeedGhosts() const { GhostsHunter::apply(mR, mJ); }
+    template <typename... JDX>
+      requires IsVariadicIndex<JDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const JDX &...jdx) const
+    {
+      return DoEval::eval(mR, jdx...)[N];
+    }
+
+    void doWeNeedGhosts() const { GhostsHunter::apply(mR, N); }
 
     template <size_t NDim> void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
-      ConfirmSpace::apply(mR, mJ, newLayout, spaceType);
+      ConfirmSpace::apply(mR, N, newLayout, spaceType);
     }
 
-    ptrdiff_t confirmGhostsUpToDate() const { return ConfirmGhosts::apply(mR, mJ); }
+    ptrdiff_t confirmGhostsUpToDate() const { return ConfirmGhosts::apply(mR, N); }
 
     template <size_t NDim> inline JumpsHolder<NDim> getJumps() const
     { // Just take jumps from the first component
@@ -57,12 +64,11 @@ namespace TempLat
       return GetToolBox::get(mR);
     }
 
-    std::string toString() const { return mR.toString(mJ); }
+    std::string toString() const { return mR.toString(N); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     R mR;
-    const int mJ;
 
 #ifdef TEMPLATTEST
   public:
@@ -70,9 +76,9 @@ namespace TempLat
 #endif
   };
 
-  template <typename R> GetVectorComponentHelper<R> getVectorComponent(const R &pR, const ptrdiff_t i)
+  template <int N, typename R> GetVectorComponentHelper<R, N> getVectorComponent(const R &pR, Tag<N>)
   {
-    return GetVectorComponentHelper<R>(pR, i);
+    return GetVectorComponentHelper<R, N>(pR);
   }
 } // namespace TempLat
 
