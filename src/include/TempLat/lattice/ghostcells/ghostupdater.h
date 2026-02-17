@@ -62,7 +62,7 @@ namespace TempLat
 
     template <typename T> void update(MemoryBlock<NDim, T> &block)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       // There is no MPI splitting in one dimension. Also, when we have only a single node, there is no need to do MPI
       // communication.
       if (mExchange.getMPICartesianGroup().size() > 1 && NDim > 1) {
@@ -199,7 +199,7 @@ namespace TempLat
     template <typename T> void update_forDimension(MemoryBlock<NDim, T> &block, ptrdiff_t dimension)
     {
       auto *ptr = block.data();
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #ifndef IEXCH
       mExchange.exchangeUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                            /* base ptr is lower corner of all memory, including ghosts. */
@@ -310,6 +310,7 @@ namespace TempLat
             auto ftb_toSubView = device::apply(
                 [&](const auto &...args) { return device::memory::subview(View, args...); }, ftb_slicesTo);
 
+            // TODO: replace with device::memory::copyDeviceToDevice
             auto btf_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
             {
               device::apply([&](auto &&...args) { btf_toSubView(args...) = btf_fromSubView(args...); }, idx);

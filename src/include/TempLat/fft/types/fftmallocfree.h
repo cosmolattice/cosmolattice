@@ -9,7 +9,7 @@
 
 #include <type_traits>
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 // No need for PFFT at this level: use FFTW's allocation.
 // #ifndef NOPPFT
 // #include "pfft.h"
@@ -44,7 +44,7 @@ namespace TempLat
       return fftw_malloc(n);
     }
 
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     template <typename S = T>
       requires std::is_same_v<float, S>
     static void *malloc(size_t n)

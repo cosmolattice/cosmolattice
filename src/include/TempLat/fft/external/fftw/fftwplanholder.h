@@ -10,7 +10,7 @@
 #include <type_traits>
 
 #ifndef NOFFT
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include "fftw3-mpi.h"
 #endif
 #endif
@@ -34,7 +34,7 @@ namespace TempLat
   template <size_t NDim, typename T> class FFTWPlanHolder : public FFTPlanInterface<NDim, T>
   {
   public:
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     using plan = typename std::conditional_t<std::is_same_v<float, T>, fftwf_plan, fftw_plan>;
 #else
     using plan = fftw_plan;
@@ -71,7 +71,7 @@ namespace TempLat
       fftw_destroy_plan(somePlan);
     }
 
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     template <typename S = T>
       requires std::is_same_v<S, float>
     void destroy(plan somePlan)
@@ -88,7 +88,7 @@ namespace TempLat
       mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     template <typename S = T>
       requires std::is_same_v<S, float>
     void execute_r2c(plan somePlan, MemoryBlock<NDim, S> &mBlock)
@@ -111,7 +111,7 @@ namespace TempLat
       mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     template <typename S = T>
       requires std::is_same_v<S, float>
     void execute_c2r(plan somePlan, MemoryBlock<NDim, S> &mBlock)

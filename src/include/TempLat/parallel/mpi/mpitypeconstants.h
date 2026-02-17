@@ -9,7 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include <mpi.h>
 #else
 typedef int MPI_Comm;
@@ -38,7 +38,7 @@ namespace TempLat
    **/
 
   /** @brief or without having to define a dummy variable to pass on, how about some templates: */
-#ifndef NOMPI
+#ifdef HAVE_MPI
   template <typename T>
     requires std::is_same_v<char, T>
   constexpr MPI_Datatype MPITypeSelect()

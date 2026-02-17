@@ -10,13 +10,13 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include <mpi.h>
 #endif
 
 #ifndef NOFFT
-#ifndef NOMPI
-#ifndef NOPFFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PFFT
 #include "pfft.h"
 #endif
 #endif
@@ -37,13 +37,13 @@ namespace TempLat
     {
       if (mVerbose) {
       }; /* just for the compiler warnings */
-#ifndef NOMPI
-#ifndef NOPFFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PFFT
 #ifdef TEMPLATTEST
       if (mVerbose) sayShort << "Calling PFFT initializations.\n";
 #endif
       pfft_init();
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
       pfftf_init();
 #endif
 #endif
@@ -52,13 +52,13 @@ namespace TempLat
 
     ~PFFTGuard()
     {
-#ifndef NOMPI
-#ifndef NOPFFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PFFT
 #ifdef TEMPLATTEST
       if (mVerbose) sayShort << "Calling PFFT finalizations.\n";
 #endif
       pfft_cleanup();
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
       pfftf_cleanup();
 #endif
 #endif

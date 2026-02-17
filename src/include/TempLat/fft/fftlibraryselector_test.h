@@ -201,7 +201,7 @@ inline void TempLat::FFTLibrarySelector<_NDim>::TestBody(TempLat::TDDAssertion &
 
 template <size_t NDim> inline void TempLat::FFTLibrarySelector<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
   TestBody<float>(tdd);
 #endif
   TestBody<double>(tdd);

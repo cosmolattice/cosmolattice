@@ -10,7 +10,7 @@
 namespace
 {
   TempLat::TDDContainer<TempLat::MemoryBlock<3, double>> test;
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
   TempLat::TDDContainer<TempLat::MemoryBlock<3, float>> test2;
 #endif
 } // namespace

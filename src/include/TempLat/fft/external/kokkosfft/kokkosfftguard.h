@@ -10,12 +10,12 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include <mpi.h>
 #endif
 
 #ifndef NOFFT
-#ifdef KOKKOSFFT
+#ifdef HAVE_KOKKOSFFT
 #include <KokkosFFT.hpp>
 #endif
 #endif

@@ -5,7 +5,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#ifndef NOPFFT
+#ifdef HAVE_PFFT
 #include "TempLat/fft/external/pfft/pfftplanholder.h"
 namespace
 {

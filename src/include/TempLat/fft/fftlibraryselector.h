@@ -12,16 +12,16 @@
 
 #ifndef NOFFT
 
-#ifndef NOMPI
-#ifndef NOPFFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PFFT
 #include "TempLat/fft/external/pfft/pfftinterface.h"
 #endif
-#ifndef NOPARAFAFT
+#ifdef HAVE_PARAFAFT
 #include "TempLat/fft/external/parafaft/parafaftinterface.h"
 #endif
 #endif
 
-#ifdef KOKKOSFFT
+#ifdef HAVE_KOKKOSFFT
 #include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
 #endif
 
@@ -64,13 +64,13 @@ namespace TempLat
      */
 #ifndef NOFFT
     result.push_back(getFFTWSessionGuard(pVerbose));
-#ifndef NOMPI
+#ifdef HAVE_MPI
 
-#ifndef NOPFFT
+#ifdef HAVE_PFFT
     result.push_back(getPFFTSessionGuard(pVerbose));
 #endif
 
-#ifdef KOKKOSFFT
+#ifdef HAVE_KOKKOSFFT
     result.push_back(getKokkosFFTSessionGuard(pVerbose));
 #endif
 
@@ -97,19 +97,19 @@ namespace TempLat
       /* here we take the decisions, although the decision to split the group has been made already. */
       [[maybe_unused]] const ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
 
-#ifndef NOPFFT
+#ifdef HAVE_PFFT
       [[maybe_unused]] constexpr bool havePFFT = true;
 #else
       [[maybe_unused]] constexpr bool havePFFT = false;
 #endif
 
-#ifndef NOPARAFAFT
+#ifdef HAVE_PARAFAFT
       [[maybe_unused]] constexpr bool haveParafaft = true;
 #else
       [[maybe_unused]] constexpr bool haveParafaft = false;
 #endif
 
-#ifdef KOKKOSFFT
+#ifdef HAVE_KOKKOSFFT
       [[maybe_unused]] constexpr bool haveKOKKOSFFT = true;
 #else
       [[maybe_unused]] constexpr bool haveKOKKOSFFT = false;
@@ -117,27 +117,27 @@ namespace TempLat
 
       // Priority: Parafaft > PFFT > KokkosFFT > FFTW (when multi-dimensional split needed)
 // MPI case
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
       if constexpr (haveParafaft && (NDim >= 2)) {
         theLibrary = std::make_shared<ParafaftInterface<NDim>>();
         backend = "Parafaft";
       } else
 #endif
-#ifndef NOPFFT
+#ifdef HAVE_PFFT
           if (havePFFT && nDimSplit > 1) {
         theLibrary = std::make_shared<PFFTInterface<NDim>>();
         backend = "PFFT";
       } else
-#endif // NOPFFT
-#endif // NOMPI
+#endif // HAVE_PFFT
+#endif // HAVE_MPI
       {
-#ifdef KOKKOSFFT
+#ifdef HAVE_KOKKOSFFT
         if (haveKOKKOSFFT && (NDim <= 3) && (group.size() == 1)) {
           theLibrary = std::make_shared<KokkosFFTInterface<NDim>>();
-          backend = "KOKKOSFFT";
+          backend = "KokkosFFT";
         } else
-#endif // KOKKOSFFT
+#endif // HAVE_KOKKOSFFT
         {
           theLibrary = std::make_shared<FFTWInterface<NDim>>();
           backend = "FFTW";
@@ -157,11 +157,11 @@ namespace TempLat
     static ptrdiff_t getMaximumNumberOfDimensionsToDivide(ptrdiff_t nDimensions)
     {
       ptrdiff_t result = FFTWInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
-#ifndef NOMPI
-#ifndef NOPFFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PFFT
       result = PFFTInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #endif
-#ifndef NOPARAFAFT
+#ifdef HAVE_PARAFAFT
       result = ParafaftInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #endif
 #endif

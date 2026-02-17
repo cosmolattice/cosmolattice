@@ -32,7 +32,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     MPIAllReduce(MPI_Comm comm) : mComm(comm) {}
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
     /** @brief Makes a copy of your value, applies the reduction
      *  in-place on the copied value, returns the resulting value.
      */

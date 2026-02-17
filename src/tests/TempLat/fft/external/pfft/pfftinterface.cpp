@@ -6,7 +6,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/fft/external/pfft/pfftinterface.h"
 
-#ifndef NOPFFT
+#ifdef HAVE_PFFT
 namespace
 {
   TempLat::TDDContainer<TempLat::PFFTInterface> test;

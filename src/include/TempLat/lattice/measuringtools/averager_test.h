@@ -100,7 +100,7 @@ inline void TempLat::AveragerTester::Test(TempLat::TDDAssertion &tdd)
   myLambda(Tag<3>(), 32);
   myLambda(Tag<2>(), 64);
 
-#ifdef NOMPI
+#ifndef HAVE_MPI
   /** this one fails correctly under MPI: each process would do the full 1d rod. */
   myLambda(Tag<1>(), 12);
 #endif

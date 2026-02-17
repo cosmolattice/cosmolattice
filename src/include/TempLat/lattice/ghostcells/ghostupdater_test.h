@@ -27,14 +27,14 @@ namespace TempLat
       MPI_Datatype dType;
       datumMPITypeHolder()
       {
-#ifndef NOMPI
+#ifdef HAVE_MPI
         MPI_Type_contiguous(NDim, TempLat::MPITypeSelect<ptrdiff_t>(), &dType);
         MPI_Type_commit(&dType);
 #endif
       }
       ~datumMPITypeHolder()
       {
-#ifndef NOMPI
+#ifdef HAVE_MPI
         int didFinalize = 0;
         MPI_Finalized(&didFinalize);
         if (!didFinalize) MPI_Type_free(&dType);
@@ -212,7 +212,7 @@ template <size_t NDim> inline void TempLat::GhostUpdater<NDim>::Test(TempLat::TD
   // I just don't have the patience to do the 1D case, since it involves no MPI communication.
 
   int size = 1;
-#ifndef NOMPI
+#ifdef HAVE_MPI
   MPI_Comm_size(MPI_COMM_WORLD, &size);
 #endif
 

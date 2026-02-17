@@ -4,7 +4,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
-#ifdef KOKKOSFFT
+#ifdef HAVE_KOKKOSFFT
 
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanner.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanner_test.h"

@@ -55,7 +55,7 @@ namespace TempLat
 
     ~MPICommReference()
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       ptrdiff_t referenceCount = BookKeeper(mComm, false, true);
       if (mComm != MPI_COMM_WORLD && mComm != MPI_COMM_NULL && referenceCount < 1) {
 #ifdef TEMPLATTEST
@@ -140,7 +140,7 @@ namespace TempLat
     inline static int getSizeForComm(MPI_Comm comm)
     {
       int result = 1;
-#ifndef NOMPI
+#ifdef HAVE_MPI
       if (comm != MPI_COMM_NULL) {
         MPI_Comm_size(comm, &result);
       }
@@ -151,7 +151,7 @@ namespace TempLat
     inline static int getRankInComm(MPI_Comm comm)
     {
       int result = 0;
-#ifndef NOMPI
+#ifdef HAVE_MPI
       if (comm != MPI_COMM_NULL) MPI_Comm_rank(comm, &result);
 #endif
       return result;

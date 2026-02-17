@@ -98,7 +98,7 @@ namespace TempLat
     std::vector<int> fetchPosition(int ofRank)
     {
       std::vector<int> result(mDecomposition.size(), 0);
-#ifndef NOMPI
+#ifdef HAVE_MPI
       // sayMPI << this << "Getting coords: " << ofRank << ", " << result << " nd: " <<mNDimensions<< "\n";
       if (0 != MPI_Cart_coords(mCartesianGroup, ofRank, (int)result.size(), result.data())) {
         throw MPICartesianGroupException("Could not get result from MPI_Cart_coords.");
@@ -109,7 +109,7 @@ namespace TempLat
 
     void createGroups()
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       mCartesianGroup = createOneGroup(mBaseGroup, mNDimensions, true);
 
       /* next, keep only those leading dimensions whose splitting is larger than one, and keeping at least the first
@@ -129,7 +129,7 @@ namespace TempLat
     {
       MPI_Comm newComm;
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
       // sayMPI << this << "Cart create: " << nDim << " " << mDecomposition << " " << mPeriodic << " " << reorder <<
       // "\n";
       MPI_Cart_create(mBaseGroup, nDim, mDecomposition.data(), mPeriodic.data(), reorder, &newComm);

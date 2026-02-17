@@ -24,7 +24,7 @@ namespace TempLat
     MPICartesianNeighboursSingleDimension(MPICartesianGroup cartesianGroup, ptrdiff_t dimension)
         : mCartesianGroup(cartesianGroup), mDimension(dimension), mUpperNeighbourRank(0), mLowerNeighbourRank(0)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       const int displacement = 1;
       MPI_Cart_shift(mCartesianGroup.getComm(), mDimension, displacement, &mLowerNeighbourRank, &mUpperNeighbourRank);
 #endif

@@ -32,7 +32,7 @@ namespace TempLat
 
     MPIGuard(int argc, char **argv, bool verbose = false)
         : instanceProtectionKey(InstanceCounter(1)), mVerbose(verbose)
-#ifndef NOMPI
+#ifdef HAVE_MPI
           ,
           nodeLocalGroup(MPI_COMM_NULL)
 #endif
@@ -40,7 +40,7 @@ namespace TempLat
       if (this->mVerbose) {
       }; /* just for the compiler warnings */
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
       int rank = 0;
 
       if (mVerbose) sayShort << "Calling MPI_Init.\n";
@@ -91,7 +91,7 @@ namespace TempLat
 
     ~MPIGuard()
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       int trueIfFinalized;
       MPI_Finalized(&trueIfFinalized);
       if (!trueIfFinalized) {
@@ -113,7 +113,7 @@ namespace TempLat
     /** @brief A sub-group of all the processes, which is local on the same node. This can be used to compute the best
      number of threads per process. By default we are greedy: use all the cpu power on a node. Set arguments upon launch
      to avoid that. (Not implemented yet.) */
-#ifndef NOMPI
+#ifdef HAVE_MPI
     MPI_Comm nodeLocalGroup;
 
 #endif

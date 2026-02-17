@@ -5,7 +5,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
 
 #include "TempLat/lattice/IO/HDF5/fileloaderhdf5.h"
 #include "TempLat/lattice/IO/HDF5/fileloaderhdf5_test.h"

@@ -12,7 +12,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
 #include "TempLat/lattice/IO/HDF5/filesaverhdf5.h"
 #include "TempLat/lattice/IO/HDF5/fileloaderhdf5.h"
 #else
@@ -67,7 +67,7 @@ namespace TempLat
       loader.load(r);
     }
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
     FileSaverHDF5 saver;
     FileLoaderHDF5 loader;
 #else

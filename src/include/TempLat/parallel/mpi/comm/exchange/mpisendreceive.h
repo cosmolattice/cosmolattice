@@ -69,7 +69,7 @@ namespace TempLat
     /* these should work with built in types */
     template <typename T> void send(T *value, int toRank, int tag, int size = 1)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       int result = 0;
       result = MPI_Send(value, size, MPITypeSelect<T>(), toRank, tag, mpiComm);
       if (0 != result) {
@@ -80,7 +80,7 @@ namespace TempLat
 
     template <typename T> void receive(T *value, int fromRank, int tag, int size = 1)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       int result = 0;
       MPI_Status status;
       status.MPI_ERROR = 0;

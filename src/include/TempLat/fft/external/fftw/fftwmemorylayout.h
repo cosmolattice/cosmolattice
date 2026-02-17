@@ -10,7 +10,7 @@
 #include <algorithm>
 
 #ifndef NOFFT
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include "fftw3-mpi.h"
 #endif
 #endif
@@ -57,7 +57,7 @@ namespace TempLat
 
       ptrdiff_t fftwRequiredMemory = 0;
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
       if (NDim > 1) {
         std::vector<ptrdiff_t> globalLayout(NDim);
         for (size_t i = 0; i < NDim; ++i)

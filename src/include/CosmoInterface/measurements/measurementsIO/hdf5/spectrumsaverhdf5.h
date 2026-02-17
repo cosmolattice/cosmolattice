@@ -6,7 +6,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
-#ifdef HDF5
+#ifdef HAVE_HDF5
 #include "TempLat/util/prettytostring.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "CosmoInterface/runparameters.h"

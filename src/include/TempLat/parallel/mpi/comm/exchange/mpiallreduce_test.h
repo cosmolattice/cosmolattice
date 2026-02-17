@@ -10,7 +10,7 @@
 inline void TempLat::MPIAllReduce::Test(TempLat::TDDAssertion &tdd)
 {
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 
   MPIAllReduce me(MPI_COMM_WORLD);
 

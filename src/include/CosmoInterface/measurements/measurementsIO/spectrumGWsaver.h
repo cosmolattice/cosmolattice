@@ -51,7 +51,7 @@ namespace TempLat
 
     bool useHDF5;
     std::shared_ptr<SpectrumGWSaverStd<T>> saverStd;
-#ifdef HDF5
+#ifdef HAVE_HDF5
     std::shared_ptr<SpectrumSaverHDF5<T>> saverHDF5;
 #endif
   };
