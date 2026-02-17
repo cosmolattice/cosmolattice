@@ -53,6 +53,15 @@ namespace TempLat
     using export_device_namespace::IdxArray;
 
     // ------------------------------------------------
+    // Atomics
+    // ------------------------------------------------
+
+    using export_device_namespace::atomic_add;
+    using export_device_namespace::atomic_inc;
+    using export_device_namespace::atomic_max;
+    using export_device_namespace::atomic_min;
+
+    // ------------------------------------------------
     // Arithmetic defaults
     // ------------------------------------------------
 
@@ -77,6 +86,7 @@ namespace TempLat
     using export_device_namespace::min;
     using export_device_namespace::pow;
     using export_device_namespace::real;
+    using export_device_namespace::round;
     using export_device_namespace::sin;
     using export_device_namespace::sinh;
     using export_device_namespace::sqrt;

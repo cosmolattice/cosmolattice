@@ -8,8 +8,8 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2026
 
 #ifndef NOFFT
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
 #include <parafaft_r2c.hpp>
 #endif
 #endif
@@ -55,8 +55,8 @@ namespace TempLat
   public:
     using Complex = std::complex<double>;
 
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
     /**
      * @brief Constructor - takes ownership of the parafaft object.
      *
@@ -93,8 +93,8 @@ namespace TempLat
     virtual void r2c(MemoryBlock<NDim, T> &mBlock) override { execute_r2c(mBlock); }
 
   private:
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
     // Keep group alive for MPI communicator lifetime
     MPICartesianGroup mGroup;
 
@@ -109,8 +109,8 @@ namespace TempLat
       requires std::is_same<S, double>::value
     void execute_r2c(MemoryBlock<NDim, S> &mBlock)
     {
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
       // Parafaft's forward_in_place accepts padded buffers directly
       // Buffer layout: [N0_local][N1_local][2*(N/2+1)] - matches CosmoLattice
       mParafaft->forward_in_place(mBlock.data());
@@ -123,8 +123,8 @@ namespace TempLat
       requires std::is_same<S, double>::value
     void execute_c2r(MemoryBlock<NDim, S> &mBlock)
     {
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
       // Parafaft's backward_in_place accepts padded buffers directly
       // Buffer layout: [N0_local][N1_local][2*(N/2+1)] - matches CosmoLattice
       mParafaft->backward_in_place(mBlock.data());
@@ -133,7 +133,7 @@ namespace TempLat
     }
 
     // Float precision - not supported
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     template <typename S = T>
     typename std::enable_if<std::is_same<S, float>::value, void>::type execute_r2c(MemoryBlock<S> &mBlock)
     {

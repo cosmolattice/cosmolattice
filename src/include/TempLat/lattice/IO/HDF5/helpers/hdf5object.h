@@ -6,7 +6,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
-#ifdef HDF5
+#ifdef HAVE_HDF5
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5attribute.h"

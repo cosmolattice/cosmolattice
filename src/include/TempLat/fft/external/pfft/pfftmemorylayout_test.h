@@ -86,7 +86,7 @@ inline void TempLat::PFFTMemoryLayout::Test(TempLat::TDDAssertion &tdd)
                computeExpectation(mGroup4, {128, 128, 128, 128}));
     tdd.verify(mem.computeLocalSizes(mGroup4, {128, 128, 128, 128, 128}) ==
                computeExpectation(mGroup4, {128, 128, 128, 128, 128}));
-#ifndef NOMPI
+#ifdef HAVE_MPI
     if (mGroup4.size() > 3) {
       tdd.verify(Throws<PFFTMemoryLayoutException>([&]() { mem.computeLocalSizes(mGroup4, {256, 256}); }));
     }

@@ -9,7 +9,7 @@ include(./src/cmake/doxygen.cmake)
 # Set up the device
 include(./src/cmake/device/device.cmake)
 
-find_package(FFTW)
+find_package(FFTW REQUIRED)
 
 # Ensure the FFTW library directory is in the linker search path.
 # This is needed because KokkosFFT may propagate -lfftw3 as a bare flag
@@ -23,30 +23,24 @@ endif()
 set(THREADS_PREFER_PTHREAD ON)
 find_package(Threads REQUIRED)
 
-if(NOT MPI)
-	#set(CMAKE_CXX_COMPILER ${CXX_COMPILER})
-else()
+if(MPI)
 	find_package(MPI COMPONENTS C CXX REQUIRED)
-	# set(CMAKE_CXX_COMPILER ${MPI_CXX_COMPILER})
 	include_directories(${MPI_CXX_INCLUDE_DIRS})
+	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_MPI")
 endif()
 
 # Fourier transformation things
 if(PFFT AND  MPI)
 	find_package(PFFT REQUIRED)
-	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${PFFT_INCLUDES}")
-elseif (NOT MPI)
-	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DNOMPI -DNOPFFT")
-elseif (NOT PFFT AND  MPI)
-	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DNOPFFT")
+	include_directories(${PFFT_INCLUDES})
+	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_PFFT")
 endif()
 
 # Parafaft configuration
 if(PARAFAFT AND MPI)
 	# Parafaft is header-only, just need include path
 	include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/parafaft.cmake)
-elseif(NOT PARAFAFT)
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOPARAFAFT")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_PARAFAFT")
 endif()
 
 if(HDF5)
@@ -55,23 +49,20 @@ if(HDF5)
 	endif()
 	find_package(HDF5 REQUIRED)
 	include(./src/cmake/libs/hdf5.cmake)
-	#set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${HDF5_INCLUDE_DIRS} -DHDF5")
-	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHDF5")
+	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HDF5")
 	include_directories(${HDF5_INCLUDE_DIRS})
 endif()
-
-
-# if(HDF5) if(MPI) set(HDF5_PREFER_PARALLEL ON) endif() find_package(HDF5
-# REQUIRED) # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${HDF5_INCLUDE_DIRS}
-# -DHDF5") set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHDF5")
-# include_directories(${HDF5_INCLUDE_DIRS}) endif()
 
 if(TESTING)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -DTEMPLATTEST")
 endif()
 
-if(NOT FLOATFFT)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOFFTFLOAT")
+if(FLOATFFT)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_FFTFLOAT")
+endif()
+
+if(NOT DEFINED FFTW_LIB AND NOT DEFINED KOKKOSFFT AND NOT DEFINED PFFT AND NOT DEFINED PARAFAFT)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOFFT")
 endif()
 
 # set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FFTW_INCLUDES}" )

@@ -1,6 +1,5 @@
 # ##############################################################################
-# Build Kokkos-FFT! This will happen very manually - this way we have the
-# greatest control over what is happening.
+# Get Kokkos-FFT
 # ##############################################################################
 
 message(STATUS "---------- Getting KokkosFFT ----------")
@@ -15,7 +14,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(KokkosFFT)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DKOKKOSFFT")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_KOKKOSFFT")
 set(KOKKOSFFT ON)
 
 message(STATUS "---------- Getting KokkosFFT DONE ----------\n")

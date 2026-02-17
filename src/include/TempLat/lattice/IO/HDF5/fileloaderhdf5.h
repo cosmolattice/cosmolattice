@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
 
 #include <cstring>
 #include "TempLat/util/tdd/tdd.h"
@@ -153,7 +153,7 @@ namespace TempLat
 
       // Read with independent I/O
       auto plist = H5Pcreate(H5P_DATASET_XFER);
-#ifndef NOMPI
+#ifdef HAVE_MPI
       H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
 #endif
       H5Dread(dataset, memtype, memspace, filespace, plist, buffer.data());
@@ -191,7 +191,7 @@ namespace TempLat
 
       // Read with independent I/O
       auto plist = H5Pcreate(H5P_DATASET_XFER);
-#ifndef NOMPI
+#ifdef HAVE_MPI
       H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
 #endif
       H5Dread(dataset, H5T_NATIVE_DOUBLE, memspace, filespace, plist, &value);

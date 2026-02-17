@@ -5,7 +5,7 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
 #include "CosmoInterface/measurements/measurementsIO/hdf5/spectrumsaverhdf5.h"
 #include "CosmoInterface/measurements/measurementsIO/hdf5/spectrumsaverhdf5_test.h"
 

@@ -19,7 +19,7 @@ namespace TempLat
     {
       // ===== FOREACH =====
       // 1. foreach: device_kokkos::array
-      template <size_t NDim, typename Functor, typename I>
+      template <size_t NDim, typename Functor, typename I = device_kokkos::Idx>
         requires requires(Functor functor) { functor(device_kokkos::IdxArray<NDim>{}); }
       void foreach (const std::string &name, const device_kokkos::array<I, NDim> &starts,
                     const device_kokkos::array<I, NDim> &stops, const Functor &functor)
@@ -38,7 +38,7 @@ namespace TempLat
 
       // ===== REDUCE =====
       // 1. reduce: device_kokkos::array -> value
-      template <size_t NDim, typename Functor, typename I, typename T>
+      template <size_t NDim, typename Functor, typename T, typename I = device_kokkos::Idx>
         requires requires(Functor functor, T &update) { functor(device_kokkos::IdxArray<NDim>{}, update); }
       void reduce(const std::string &name, const device_kokkos::array<I, NDim> &starts,
                   const device_kokkos::array<I, NDim> &stops, const Functor &functor, T &result)
@@ -55,7 +55,7 @@ namespace TempLat
                                 device_kokkos::KokkosNDLambdaWrapperReduction<NDim, Functor>(functor), result);
       }
       // 4. reduce: device_kokkos::array -> View or Reduction
-      template <size_t NDim, typename Functor, typename I, typename View>
+      template <size_t NDim, typename Functor, typename View, typename I = device_kokkos::Idx>
         requires requires(Functor functor, typename View::value_type &update) {
           functor(device_kokkos::IdxArray<NDim>{}, update);
         }

@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #ifndef NOFFT
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #ifndef NOPPFT
 #include "pfft.h"
 #endif
@@ -29,7 +29,7 @@ namespace TempLat
   template <size_t NDim, typename T> class PFFTPlanHolder : public FFTPlanInterface<NDim, T>
   {
   public:
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     using plan = typename std::conditional_t<std::is_same_v<float, T>, pfftf_plan, pfft_plan>;
 #else
     using plan = pfft_plan;
@@ -66,7 +66,7 @@ namespace TempLat
       pfft_destroy_plan(somePlan);
     }
 
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     template <typename S = T>
       requires std::is_same_v<S, float>
     void destroy(plan somePlan)
@@ -83,7 +83,7 @@ namespace TempLat
       mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     template <typename S = T>
       requires std::is_same_v<S, float>
     void execute_r2c(plan somePlan, MemoryBlock<NDim, S> &mBlock)
@@ -103,7 +103,7 @@ namespace TempLat
       mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
     template <typename S = T>
       requires std::is_same_v<S, float>
     void execute_c2r(plan somePlan, MemoryBlock<NDim, S> &mBlock)

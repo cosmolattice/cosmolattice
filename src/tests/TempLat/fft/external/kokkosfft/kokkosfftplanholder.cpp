@@ -5,7 +5,7 @@
 
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
-#ifdef KOKKOSFFT
+#ifdef HAVE_KOKKOSFFT
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanholder.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanholder_test.h"
 namespace

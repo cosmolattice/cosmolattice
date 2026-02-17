@@ -16,7 +16,7 @@
 #include <random>
 #include <iomanip>
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include <mpi.h> //This is to make getSeed MPI safe.
 #endif
 
@@ -127,7 +127,7 @@ namespace TempLat
       if (tmp == "0") {
         std::random_device r;
         unsigned int res = r();
-#ifndef NOMPI
+#ifdef HAVE_MPI
         MPI_Bcast(&res, 1, MPI_INT, 0, MPI_COMM_WORLD);
 #endif
         tmp = std::to_string(res);

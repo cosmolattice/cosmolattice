@@ -1,4 +1,4 @@
-#if !defined(TempLat_FFT_EXTERNAL_PARAFAFT_PARAFAFTINTERFACE_H) && !defined(NOPARAFAFT)
+#if !defined(TempLat_FFT_EXTERNAL_PARAFAFT_PARAFAFTINTERFACE_H) && defined(HAVE_PARAFAFT)
 #define TempLat_FFT_EXTERNAL_PARAFAFT_PARAFAFTINTERFACE_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .

@@ -36,6 +36,14 @@ The above commands just represent a very brief guide for the installation and ex
 For further information, see  Appendix A of the <a href=https://arxiv.org/pdf/2102.01031.pdf target="_blank" rel="noopener noreferrer" >user-manual</a>.
 All options of CosmoLattice, as well as how to activate them and how to install the optional external libraries are explained at length there.
 
+### Offline compilation (Kokkos)
+
+To compile an application to be run on a different architecture, you can directly pass the target architecture to Kokkos. For a list of supported architectures, see [the Kokkos documentation](https://kokkos.org/kokkos-core-wiki/get-started/configuration-guide.html#gpu-architectures). For example, for an RTX 4070, you would pass 
+```bash
+cmake -DMODEL=lphi4 -DKokkos_ARCH_ADA89 ../
+```
+If no architecture is specified, Kokkos will attempt to detect the architecture of the machine. However, as compilation for GPU can take up to an hour, it is recommended on a cluster to queue the compilation separately on a node without a GPU, which requires offline compilation as described here.
+
 ### Credits
 
 CosmoLattice is freely available to anyone who wants to use or modify it. However, whenever 

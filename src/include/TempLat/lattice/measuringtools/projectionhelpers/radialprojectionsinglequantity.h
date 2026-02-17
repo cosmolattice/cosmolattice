@@ -41,11 +41,11 @@ namespace TempLat
       mMaxsDevice = DeviceView("RadialProjectionSingleQuantity::mMaxsDevice", size);
       Kokkos::deep_copy(mMaxsDevice, -std::numeric_limits<T>::max());
 
-      mAverages = Kokkos::create_mirror_view(mAveragesDevice);
-      mVariances = Kokkos::create_mirror_view(mVariancesDevice);
-      mMins = Kokkos::create_mirror_view(mMinsDevice);
+      mAverages = device::memory::createMirrorView(mAveragesDevice);
+      mVariances = device::memory::createMirrorView(mVariancesDevice);
+      mMins = device::memory::createMirrorView(mMinsDevice);
       Kokkos::deep_copy(mMins, std::numeric_limits<T>::max());
-      mMaxs = Kokkos::create_mirror_view(mMaxsDevice);
+      mMaxs = device::memory::createMirrorView(mMaxsDevice);
       Kokkos::deep_copy(mMaxs, -std::numeric_limits<T>::max());
     }
 
@@ -56,10 +56,10 @@ namespace TempLat
     void add_device(ptrdiff_t i, const T &value, const T &weight) const
     {
       checkBounds(i);
-      Kokkos::atomic_add(&mAveragesDevice(i), weight * value);
-      Kokkos::atomic_add(&mVariancesDevice(i), weight * value * value);
-      Kokkos::atomic_min(&mMinsDevice(i), value);
-      Kokkos::atomic_max(&mMaxsDevice(i), value);
+      device::atomic_add(&mAveragesDevice(i), weight * value);
+      device::atomic_add(&mVariancesDevice(i), weight * value * value);
+      device::atomic_min(&mMinsDevice(i), value);
+      device::atomic_max(&mMaxsDevice(i), value);
     }
 
     void clear()

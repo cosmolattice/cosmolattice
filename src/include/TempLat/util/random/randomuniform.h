@@ -14,6 +14,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/hash/keccakhash.h"
 #include "TempLat/parallel/device.h"
+#include "TempLat/parallel/device_memory.h"
 
 #include <Random123/philox.h>
 

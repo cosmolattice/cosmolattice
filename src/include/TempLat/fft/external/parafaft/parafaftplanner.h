@@ -8,8 +8,8 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2026
 
 #ifndef NOFFT
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
 #include <parafaft_r2c.hpp>
 #endif
 #endif
@@ -59,7 +59,7 @@ namespace TempLat
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
                                                                           const FFTLayoutStruct<NDim> &layout) override
     {
-#ifdef NOFFTFLOAT
+#ifndef HAVE_FFTFLOAT
       throw ParafaftCompiledWithoutSinglePrecisionSupport("CosmoLattice compiled without float FFT support.");
 #else
       throw ParafaftCompiledWithoutSinglePrecisionSupport("Parafaft does not support single precision FFTs.");
@@ -76,8 +76,8 @@ namespace TempLat
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>>
     getPlans_double(const MPICartesianGroup &group, const FFTLayoutStruct<NDim> &layout) override
     {
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
       // Get global sizes
       auto globalSizes = layout.configurationSpace.getGlobalSizes();
 
@@ -96,7 +96,7 @@ namespace TempLat
 
       return std::make_shared<ParafaftPlanHolder<NDim, double>>(group, parafaftObj);
 #else
-      throw ParafaftPlannerException("Parafaft is disabled (NOPARAFAFT defined).");
+      throw ParafaftPlannerException("Parafaft is disabled (HAVE_PARAFAFT not defined).");
       return std::shared_ptr<FFTPlanInterface<NDim, double>>();
 #endif
 #else

@@ -91,7 +91,7 @@ namespace TempLat
 
     /** @brief Inverse of putSpatialLocationFromMemoryIndexInto: from spatial
      *  coordinate to memory indices, in memory-layout order (that is,
-     *  transposed, ready to be applied to `JumpsHolder::getJumpsInMemoryOrder()`.
+     *  transposed.
      */
     template <typename Container, typename... IDX>
       requires IsVariadicNDIndex<NDim, IDX...>

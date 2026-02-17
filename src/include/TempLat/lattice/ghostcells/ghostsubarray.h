@@ -33,12 +33,12 @@ namespace TempLat
      */
     GhostSubarray(JumpsHolder<NDim> jumpsHolder, ptrdiff_t dimension, ptrdiff_t depth, MPI_Datatype atomType)
         : mJumpsHolder(jumpsHolder),
-#ifndef NOMPI
+#ifdef HAVE_MPI
           mDimension(dimension), mDepth(depth), mAtomType(atomType),
 #endif
           mSubarrayMPIDataType(std::make_shared<MPI_Datatype>())
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       ptrdiff_t nDimensions = jumpsHolder.getSizesInMemory().size();
 
       /* size of our bare owned memory */
@@ -63,7 +63,7 @@ namespace TempLat
 
     ~GhostSubarray()
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       if (mSubarrayMPIDataType.use_count() < 2) {
         MPI_Type_free(mSubarrayMPIDataType.get());
       }
@@ -75,7 +75,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     JumpsHolder<NDim> mJumpsHolder;
-#ifndef NOMPI
+#ifdef HAVE_MPI
     ptrdiff_t mDimension;
     ptrdiff_t mDepth;
     MPI_Datatype mAtomType;

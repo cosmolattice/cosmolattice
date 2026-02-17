@@ -10,7 +10,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include <mpi.h>
 #endif
 
@@ -33,8 +33,8 @@ namespace TempLat
     {
       if (mVerbose) {
       }; /* just for the compiler warnings */
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
 #ifdef TEMPLATTEST
       if (mVerbose) sayShort << "Parafaft guard constructed (header-only, no initialization needed).\n";
 #endif
@@ -44,8 +44,8 @@ namespace TempLat
 
     ~ParafaftGuard()
     {
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
 #ifdef TEMPLATTEST
       if (mVerbose) sayShort << "Parafaft guard destructed (no cleanup needed).\n";
 #endif

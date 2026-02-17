@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
 
 #include <cstring>
 #include "TempLat/util/prettytostring.h"
@@ -240,7 +240,7 @@ namespace TempLat
 
       // Write with independent I/O (each rank writes its own element)
       auto plist = H5Pcreate(H5P_DATASET_XFER);
-#ifndef NOMPI
+#ifdef HAVE_MPI
       H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
 #endif
       H5Dwrite(dataset, memtype, memspace, filespace, plist, buffer.data());
@@ -278,7 +278,7 @@ namespace TempLat
 
       // Write with independent I/O
       auto plist = H5Pcreate(H5P_DATASET_XFER);
-#ifndef NOMPI
+#ifdef HAVE_MPI
       H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
 #endif
       H5Dwrite(dataset, H5T_NATIVE_DOUBLE, memspace, filespace, plist, &value);
@@ -392,6 +392,6 @@ namespace TempLat
 
 } // namespace TempLat
 
-#endif // HDF5
+#endif // HAVE_HDF5
 
 #endif

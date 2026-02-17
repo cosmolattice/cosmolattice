@@ -9,7 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
 
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5dataset.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5group.h"
@@ -33,7 +33,7 @@ namespace TempLat
 
     void create(std::string fn, FileMode flag = Overwrite)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       hid_t plist_id = H5Pcreate(H5P_FILE_ACCESS);
       H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
       if (flag == Overwrite) file_id = H5Fcreate(fn.c_str(), H5F_ACC_TRUNC, H5P_DEFAULT, plist_id);
@@ -47,7 +47,7 @@ namespace TempLat
 
     void open(std::string fn, FileMode flag = ReadWrite)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       hid_t plist_id = H5Pcreate(H5P_FILE_ACCESS);
       H5Pset_fapl_mpio(plist_id, MPI_COMM_WORLD, MPI_INFO_NULL);
       if (flag == ReadOnly) file_id = H5Fopen(fn.c_str(), H5F_ACC_RDONLY, plist_id);

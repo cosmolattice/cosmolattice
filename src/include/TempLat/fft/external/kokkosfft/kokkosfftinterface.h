@@ -1,4 +1,4 @@
-#if !defined(TempLat_FFT_EXTERNAL_KOKKOSFFT_KOKKOSFFTINTERFACE_H) && defined(KOKKOSFFT)
+#if !defined(TempLat_FFT_EXTERNAL_KOKKOSFFT_KOKKOSFFTINTERFACE_H) && defined(HAVE_KOKKOSFFT)
 #define TEMPLAT_FFT_EXTERNAL_KOKKOSFFT_KOKKOSFFTINTERFACE_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .

@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2026
 
-#ifndef NOPARAFAFT
+#ifdef HAVE_PARAFAFT
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/fftlayoutstruct.h"
@@ -55,6 +55,6 @@ namespace TempLat
   };
 } // namespace TempLat
 
-#endif // NOPARAFAFT
+#endif // HAVE_PARAFAFT
 
 #endif

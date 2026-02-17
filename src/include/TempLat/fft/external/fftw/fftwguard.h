@@ -7,12 +7,12 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include <mpi.h>
 #endif
 
 #ifndef NOFFT
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include "fftw3-mpi.h"
 #endif
 #endif
@@ -43,25 +43,25 @@ namespace TempLat
 #ifndef NOFFT
       if (mVerbose) sayShort << "Calling FFTW local initializations.\n";
       fftw_init_threads();
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
       fftwf_init_threads();
 #endif
       /* set the default: */
 
       if (mVerbose) sayShort << "Calling FFTW thread initializations.\n";
       fftw_plan_with_nthreads(ThreadSettings::getMaxThreadCount());
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
       fftwf_plan_with_nthreads(ThreadSettings::getMaxThreadCount());
 #endif
 
-#ifndef NOMPI
-#ifdef NOPFFT
+#ifdef HAVE_MPI
+#ifndef HAVE_PFFT
 
       if (mVerbose) sayShort << "Calling FFTW MPI initializations.\n";
 
       /* this also suffices for pfft, but we keep both lines in case in the future pfft decides to need its own init. */
       fftw_mpi_init();
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
       fftwf_mpi_init();
 #endif
 
@@ -77,22 +77,22 @@ namespace TempLat
 
       if (mVerbose) sayShort << "Calling FFTW thread finalizations.\n";
       fftw_cleanup_threads();
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
       fftwf_cleanup_threads();
 #endif
 
       if (mVerbose) sayShort << "Calling FFTW local finalizations.\n";
       fftw_cleanup();
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
       fftwf_cleanup();
 #endif
 
-#ifndef NOMPI
-#ifdef NOPFFT
+#ifdef HAVE_MPI
+#ifndef HAVE_PFFT
       /* this also suffices for pfft, but we keep both lines in case in the future pfft decides to need its own init. */
       if (mVerbose) sayShort << "Calling FFTW MPI finalizations.\n";
       fftw_mpi_cleanup();
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
       fftwf_mpi_cleanup();
 #endif
 

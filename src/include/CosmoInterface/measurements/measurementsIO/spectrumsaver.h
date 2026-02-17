@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include "CosmoInterface/measurements/measurementsIO/std/spectrumsaverstd.h"
-#ifdef HDF5
+#ifdef HAVE_HDF5
 #include "CosmoInterface/measurements/measurementsIO/hdf5/spectrumsaverhdf5.h"
 #endif
 
@@ -30,7 +30,7 @@ namespace TempLat
     {
       if (not dontCreate) {
         if (useHDF5) {
-#ifdef HDF5
+#ifdef HAVE_HDF5
           saverHDF5 = std::make_shared<SpectrumSaverHDF5<T>>(fm, fn, amIRoot, appendMode, rPar);
 #else
           throw(UseHDF5ButNotCompiled(
@@ -48,7 +48,7 @@ namespace TempLat
         : useHDF5(fm.getUseHDF5Spectra())
     {
       if (useHDF5) {
-#ifdef HDF5
+#ifdef HAVE_HDF5
         saverHDF5 = std::make_shared<SpectrumSaverHDF5<T>>(fm, fld, amIRoot, appendMode, rPar);
 #else
         throw(
@@ -62,7 +62,7 @@ namespace TempLat
     template <template <typename> class... Spectra> void save(T &t, Spectra<T>... spectra)
     {
       if (useHDF5) {
-#ifdef HDF5
+#ifdef HAVE_HDF5
         saverHDF5->save(
             std::vector<std::shared_ptr<RadialProjectionResult<T>>>{
                 std::make_shared<RadialProjectionResult<T>>(spectra)...},
@@ -90,7 +90,7 @@ namespace TempLat
 
     bool useHDF5;
     std::shared_ptr<SpectrumSaverStd<T>> saverStd;
-#ifdef HDF5
+#ifdef HAVE_HDF5
     std::shared_ptr<SpectrumSaverHDF5<T>> saverHDF5;
 #endif
   };

@@ -9,7 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
 #include <hdf5.h>
 
 namespace TempLat

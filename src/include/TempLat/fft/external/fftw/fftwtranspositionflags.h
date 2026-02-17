@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #ifndef NOFFT
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include "fftw3-mpi.h"
 #endif
 #endif
@@ -20,7 +20,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #define FFTWTRANSPOSITIONFLAGS_TRANSPOSED_IN FFTW_MPI_TRANSPOSED_IN
 #define FFTWTRANSPOSITIONFLAGS_TRANSPOSED_OUT FFTW_MPI_TRANSPOSED_OUT
 #else

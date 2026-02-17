@@ -54,7 +54,7 @@ namespace TempLat
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
                                                                           const FFTLayoutStruct<NDim> &layout)
     {
-#ifdef NOFFTFLOAT
+#ifndef HAVE_FFTFLOAT
       throw FFTWCompiledWithoutSinglePrecisionSupport();
       return std::shared_ptr<FFTPlanInterface<NDim, float>>();
 #else
@@ -66,36 +66,36 @@ namespace TempLat
       std::vector<ptrdiff_t> globalSizes_PTRDIFF(layout.configurationSpace.getGlobalSizes().begin(),
                                                  layout.configurationSpace.getGlobalSizes().end());
       auto c2r =
-#ifndef NOMPI
+#ifdef HAVE_MPI
           fftwf_mpi_plan_dft_c2r(
 #else
           fftwf_plan_dft_c2r(
 #endif
               layout.getNDimensions(),
-#ifndef NOMPI
+#ifdef HAVE_MPI
               globalSizes_PTRDIFF.data(),
 #else
               globalSizes_INT.data(),
 #endif
               (fftwf_complex *)(float *)temp, (float *)temp,
-#ifndef NOMPI
+#ifdef HAVE_MPI
               group.getBaseComm(),
 #endif
               patienceFlag | trFlags.c2r());
       auto r2c =
-#ifndef NOMPI
+#ifdef HAVE_MPI
           fftwf_mpi_plan_dft_r2c(
 #else
           fftwf_plan_dft_r2c(
 #endif
               layout.getNDimensions(),
-#ifndef NOMPI
+#ifdef HAVE_MPI
               globalSizes_PTRDIFF.data(),
 #else
               globalSizes_INT.data(),
 #endif
               (float *)temp, (fftwf_complex *)(float *)temp,
-#ifndef NOMPI
+#ifdef HAVE_MPI
               group.getBaseComm(),
 #endif
               patienceFlag | trFlags.r2c());
@@ -121,37 +121,37 @@ namespace TempLat
                                                  layout.configurationSpace.getGlobalSizes().end());
 
       auto c2r =
-#ifndef NOMPI
+#ifdef HAVE_MPI
           fftw_mpi_plan_dft_c2r(
 #else
           fftw_plan_dft_c2r(
 #endif
               layout.getNDimensions(),
-#ifndef NOMPI
+#ifdef HAVE_MPI
               globalSizes_PTRDIFF.data(),
 #else
               globalSizes_INT.data(),
 #endif
               (fftw_complex *)temp.data(), (double *)temp.data(),
-#ifndef NOMPI
+#ifdef HAVE_MPI
               group.getBaseComm(),
 #endif
               patienceFlag | trFlags.c2r());
 
       auto r2c =
-#ifndef NOMPI
+#ifdef HAVE_MPI
           fftw_mpi_plan_dft_r2c(
 #else
           fftw_plan_dft_r2c(
 #endif
               layout.getNDimensions(),
-#ifndef NOMPI
+#ifdef HAVE_MPI
               globalSizes_PTRDIFF.data(),
 #else
               globalSizes_INT.data(),
 #endif
               (double *)temp, (fftw_complex *)(double *)temp,
-#ifndef NOMPI
+#ifdef HAVE_MPI
               group.getBaseComm(),
 #endif
               patienceFlag | trFlags.r2c());

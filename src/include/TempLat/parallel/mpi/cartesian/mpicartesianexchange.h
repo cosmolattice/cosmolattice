@@ -31,7 +31,7 @@ namespace TempLat
 
     void exchangeUp(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive, int sendCount = 1)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       MPI_Status stat;
       MPI_Sendrecv(ptrSend, sendCount, dataType, mNeighbours.getUpperNeighbour(dimension), MPITags::dataShiftGhostCells,
                    ptrReceive, sendCount, dataType, mNeighbours.getLowerNeighbour(dimension),
@@ -41,7 +41,7 @@ namespace TempLat
 
     void exchangeDown(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive, int sendCount = 1)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       MPI_Status stat;
       MPI_Sendrecv(ptrSend, sendCount, dataType, mNeighbours.getLowerNeighbour(dimension), MPITags::dataShiftGhostCells,
                    ptrReceive, sendCount, dataType, mNeighbours.getUpperNeighbour(dimension),
@@ -51,7 +51,7 @@ namespace TempLat
 
     void IsendUp(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       // MPI_Status stat;
       static constexpr int sendCount = 1;
       MPI_Isend(ptrSend, sendCount, dataType, mNeighbours.getUpperNeighbour(dimension), MPITags::dataShiftGhostCells,
@@ -60,7 +60,7 @@ namespace TempLat
     }
     void IrecvUp(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       // MPI_Status stat;
       static constexpr int sendCount = 1;
       MPI_Irecv(ptrReceive, sendCount, dataType, mNeighbours.getLowerNeighbour(dimension), MPITags::dataShiftGhostCells,
@@ -69,7 +69,7 @@ namespace TempLat
     }
     void IsendDown(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       // MPI_Status stat;
       static constexpr int sendCount = 1;
       MPI_Isend(ptrSend, sendCount, dataType, mNeighbours.getLowerNeighbour(dimension), MPITags::dataShiftGhostCells,
@@ -78,7 +78,7 @@ namespace TempLat
     }
     void IrecvDown(MPI_Datatype dataType, ptrdiff_t dimension, void *ptrSend, void *ptrReceive)
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       // MPI_Status stat;
       static constexpr int sendCount = 1;
       MPI_Irecv(ptrReceive, sendCount, dataType, mNeighbours.getUpperNeighbour(dimension), MPITags::dataShiftGhostCells,
@@ -87,7 +87,7 @@ namespace TempLat
     }
     void waitall()
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       MPI_Status stat;
       MPI_Waitall(4, mRequests.data(), &stat);
 #endif
@@ -99,7 +99,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICartesianGroup mGroup;
     MPICartesianNeighbours mNeighbours;
-#ifndef NOMPI
+#ifdef HAVE_MPI
     std::array<MPI_Request, 4> mRequests;
 #endif
 

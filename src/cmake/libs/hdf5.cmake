@@ -32,6 +32,5 @@ if(HDF5)
     )
   endif()
 
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHDF5")
   include_directories(${HDF5_INCLUDE_DIRS})
 endif()

@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #ifndef NOFFT
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #ifndef NOPPFT
 #include "pfft.h"
 #endif

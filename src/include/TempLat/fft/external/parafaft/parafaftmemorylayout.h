@@ -8,8 +8,8 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2026
 
 #ifndef NOFFT
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
 #include <parafaft_r2c.hpp>
 #endif
 #endif
@@ -71,8 +71,8 @@ namespace TempLat
 
       ptrdiff_t parafaftRequiredMemory = 0;
 
-#ifndef NOMPI
-#ifndef NOPARAFAFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PARAFAFT
       // Create temporary parafaft object to query sizes
       int globalShape[NDim];
       for (size_t i = 0; i < NDim; ++i)

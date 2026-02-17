@@ -61,7 +61,7 @@ namespace TempLat
     virtual std::shared_ptr<FFTPlanInterface<NDim, float>> getPlans_float(const MPICartesianGroup &group,
                                                                           const FFTLayoutStruct<NDim> &layout)
     {
-#ifdef NOFFTFLOAT
+#ifndef HAVE_FFTFLOAT
       throw PFFTCompiledWithoutSinglePrecisionSupport();
       return std::shared_ptr<FFTPlanInterface<NDim, float>>();
 #else

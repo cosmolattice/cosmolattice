@@ -4,8 +4,8 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-#ifndef NOMPI
-#ifndef NOPFFT
+#ifdef HAVE_MPI
+#ifdef HAVE_PFFT
 
 #include "TempLat/fft/external/pfft/pffttranspositionflags.h"
 

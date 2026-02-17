@@ -19,7 +19,7 @@
 #include "TempLat/util/log/log.h"
 #include "TempLat/util/log/saycomplete.h"
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
 #include <mpi.h>
 #endif
 
@@ -50,7 +50,7 @@ namespace TempLat
       //                ".\n";
       for (auto &&it : theList()) {
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
         int rank;
         MPI_Comm_rank(MPI_COMM_WORLD, &rank);
         const bool verbose = rank == 0;
@@ -59,19 +59,19 @@ namespace TempLat
 #endif
         if (verbose) sayShort << "Starting tests for [" << std::get<1>(it) << "]\n";
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
         MPI_Barrier(MPI_COMM_WORLD);
 #endif
 
         std::get<2>(it) = std::get<0>(it)->Test();
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
         MPI_Barrier(MPI_COMM_WORLD);
 #endif
 
         if (verbose) sayShort << "Finished tests for [" << std::get<1>(it) << "]\n\n\n";
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
         MPI_Barrier(MPI_COMM_WORLD);
 #endif
       }
@@ -95,7 +95,7 @@ namespace TempLat
     static constexpr size_t lineSize = 64;
     static constexpr size_t nameSize = 48;
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
     static ptrdiff_t summarize_MPI()
     {
       int rank, size;
@@ -172,7 +172,7 @@ namespace TempLat
 
     static ptrdiff_t summarize()
     {
-#ifndef NOMPI
+#ifdef HAVE_MPI
       return summarize_MPI();
 #endif
 

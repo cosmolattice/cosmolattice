@@ -14,7 +14,7 @@ namespace
   TempLat::TDDContainer<TempLat::FourierView<3, double>> test3;
   TempLat::TDDContainer<TempLat::FourierView<4, double>> test4;
 
-#ifndef NOFFTFLOAT
+#ifdef HAVE_FFTFLOAT
   TempLat::TDDContainer<TempLat::FourierView<1, float>> test1f;
   TempLat::TDDContainer<TempLat::FourierView<2, float>> test2f;
   TempLat::TDDContainer<TempLat::FourierView<3, float>> test3f;

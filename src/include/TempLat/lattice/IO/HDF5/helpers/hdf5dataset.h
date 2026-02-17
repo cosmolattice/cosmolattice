@@ -9,7 +9,7 @@
 
 #include "TempLat/util/tdd/tdd.h"
 
-#ifdef HDF5
+#ifdef HAVE_HDF5
 
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5type.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5object.h"
@@ -50,7 +50,7 @@ namespace TempLat
     template <typename T> void write(std::vector<T> data)
     {
       HDF5Type<T> type;
-#ifndef NOMPI
+#ifdef HAVE_MPI
       hid_t plist_id = H5Pcreate(H5P_DATASET_XFER);
       // H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_COLLECTIVE);
       H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
@@ -89,7 +89,7 @@ namespace TempLat
 
       H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offsets.data(), strides.data(), subdims.data(), blocks.data());
       HDF5Type<T> type;
-#ifndef NOMPI
+#ifdef HAVE_MPI
       hid_t plist_id = H5Pcreate(H5P_DATASET_XFER);
       // H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_COLLECTIVE);
       H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
@@ -127,7 +127,7 @@ namespace TempLat
                                       blocks.data());
       HDF5Type<T> type;
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
       hid_t plist_id = H5Pcreate(H5P_DATASET_XFER);
       // H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_COLLECTIVE);
       auto err3 = H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
@@ -173,7 +173,7 @@ namespace TempLat
       H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offsets.data(), strides.data(), subdims.data(), blocks.data());
       HDF5Type<T> type;
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
       hid_t plist_id = H5Pcreate(H5P_DATASET_XFER);
       // H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_COLLECTIVE);
       H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
@@ -209,7 +209,7 @@ namespace TempLat
       H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offsets.data(), strides.data(), subdims.data(), blocks.data());
       HDF5Type<T> type;
 
-#ifndef NOMPI
+#ifdef HAVE_MPI
       hid_t plist_id = H5Pcreate(H5P_DATASET_XFER);
       // H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_COLLECTIVE);
       H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
