@@ -5,13 +5,21 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
+
+#include "TempLat/lattice/algebra/constants/zerotype.h"
+#include "TempLat/lattice/algebra/constants/onetype.h"
+#include "TempLat/lattice/algebra/constants/halftype.h"
 
 inline void TempLat::HasEvalTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct myTest {
     DEVICE_FORCEINLINE_FUNCTION
-    void eval(ptrdiff_t i) { m = 76; }
+    double eval(ptrdiff_t i)
+    {
+      m = 76;
+      return m;
+    }
     double m;
   };
   struct myTest2 {
@@ -27,6 +35,15 @@ inline void TempLat::HasEvalTester::Test(TempLat::TDDAssertion &tdd)
   tdd.verify(HasEval<myTest2, int> == false);
   tdd.verify(HasEval<myTest3, ptrdiff_t, ptrdiff_t, ptrdiff_t> == true);
   tdd.verify(HasEval<double> == false);
+
+  tdd.verify(TypeHasStaticValue<myTest> == false);
+  tdd.verify(TypeHasStaticValue<ZeroType> == true);
+  tdd.verify(TypeHasStaticValue<OneType> == true);
+  tdd.verify(TypeHasStaticValue<HalfType> == true);
+
+  tdd.verify(TypeEvalsItself<double> == true);
+  tdd.verify(TypeEvalsItself<complex<double>> == true);
+  tdd.verify(TypeEvalsItself<ZeroType> == false);
 }
 
 #endif

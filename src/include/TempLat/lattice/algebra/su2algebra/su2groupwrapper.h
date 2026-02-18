@@ -51,28 +51,14 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      return cache_0;
-    }
-    template <int N, typename... IDX>
-      requires(IsVariadicIndex<IDX...> && N > 0)
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
-    {
-      return GetValue::get(device::get<N - 1>(device::tie(mA, mB, mC)), idx...);
-    }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
-    {
-      DoEval::eval(mA, idx...);
-      DoEval::eval(mB, idx...);
-      DoEval::eval(mC, idx...);
-
-      // We only cache the 0th element, as the others are directly given by the wrapped objects.
-      cache_0 = sqrt(1.0 - pow<2>(GetValue::get(mA, idx...)) - pow<2>(GetValue::get(mB, idx...)) -
-                     pow<2>(GetValue::get(mC, idx...)));
+      device::array<SV, 4> result;
+      result[1] = DoEval::eval(mA, idx...);
+      result[2] = DoEval::eval(mB, idx...);
+      result[3] = DoEval::eval(mC, idx...);
+      result[0] = sqrt(SV(1) - pow<2>(result[1]) - pow<2>(result[2]) - pow<2>(result[3]));
+      return result;
     }
 
     template <int N> auto operator()(Tag<N> t) { return SU2Get(t); }
@@ -101,8 +87,6 @@ namespace TempLat
     A mA;
     B mB;
     C mC;
-
-    SV cache_0;
   };
 
   template <class A, class B, class C> auto SU2GroupWrap(A &&pA, B &&pB, C &&pC)

@@ -36,35 +36,17 @@ namespace TempLat
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
-    template <typename... IDX> struct RightIndices {
-      static constexpr bool value = requires(R r, T t, IDX... idx) {
-        r.SU2Get(0_c, idx...);
-        r.SU2Get(1_c, idx...);
-        r.SU2Get(2_c, idx...);
-        r.SU2Get(3_c, idx...);
-      };
-    };
-
-    template <typename... IDX>
-      requires RightIndices<IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION device::array<SV, 4> SU2Get(const IDX &...idx) const
-    {
-      return {SU2Get(0_c, idx...), SU2Get(1_c, idx...), SU2Get(2_c, idx...), SU2Get(3_c, idx...)};
-    }
-
-    template <int M, typename... IDX>
-      requires RightIndices<IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
-    {
-      return mR.SU2Get(t, idx...) - mT.SU2Get(t, idx...);
-    }
-
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
+      auto cL = DoEval::eval(mR, idx...);
+      const auto cR = DoEval::eval(mT, idx...);
+      cL[0] -= cR[0];
+      cL[1] -= cR[1];
+      cL[2] -= cR[2];
+      cL[3] -= cR[3];
+      return cL;
     }
 
     virtual std::string operatorString() const override { return "-"; }

@@ -41,12 +41,19 @@ namespace TempLat
 
       template <typename... IDX>
         requires requires(IDX... idx) {
-          GetValue::get(mT, idx...);
           GetValue::get(mR, idx...);
+          GetValue::get(mT, idx...);
         }
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
-        return GetValue::get(mT, idx...) * GetValue::get(mR, idx...);
+        return GetValue::get(mR, idx...) * GetValue::get(mT, idx...);
+      }
+
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return DoEval::eval(mR, idx...) * DoEval::eval(mT, idx...);
       }
 
       virtual std::string operatorString() const override { return "*"; }

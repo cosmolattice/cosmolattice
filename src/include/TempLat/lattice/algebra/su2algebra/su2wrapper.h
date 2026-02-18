@@ -44,13 +44,6 @@ namespace TempLat
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return device::get<N>(data); }
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
-    template <int N, typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
-    {
-      return GetValue::get(device::get<N>(data), idx...);
-    }
-
     std::string toString() const
     {
       return "SU2(" + GetString::get(device::get<0>(data)) + "," + GetString::get(device::get<1>(data)) + "," +
@@ -59,12 +52,14 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(device::get<0>(data), idx...);
-      DoEval::eval(device::get<1>(data), idx...);
-      DoEval::eval(device::get<2>(data), idx...);
-      DoEval::eval(device::get<3>(data), idx...);
+      device::array<SV, 4> result;
+      result[0] = DoEval::eval(device::get<0>(data), idx...);
+      result[1] = DoEval::eval(device::get<1>(data), idx...);
+      result[2] = DoEval::eval(device::get<2>(data), idx...);
+      result[3] = DoEval::eval(device::get<3>(data), idx...);
+      return result;
     }
 
     void preGet()

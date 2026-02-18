@@ -47,31 +47,13 @@ namespace TempLat
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return ComplexFieldGet(t); }
 
     template <typename... IDX>
-      requires requires(R mR, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        GetValue::get(mR, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
-    {
-      return GetValue::get(mR, idx...);
-    }
-
-    template <typename... IDX>
-      requires requires(T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        GetValue::get(mT, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
-    {
-      return GetValue::get(mT, idx...);
-    }
-
-    template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
+      device::array<decltype(DoEval::eval(mR, idx...)), 2> result;
+      result[0] = DoEval::eval(mR, idx...);
+      result[1] = DoEval::eval(mT, idx...);
+      return result;
     }
 
     void preGet()

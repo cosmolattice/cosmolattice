@@ -40,23 +40,29 @@ namespace TempLat
 
     constexpr static size_t getVectorSize() { return NDim; }
 
-    template <typename IDX1, typename... IDX>
+    template <typename... IDX>
       requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX1 component, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::IdxArray<NDim> result;
       mLayout.putSpatialLocationFromMemoryIndexInto(result, idx...);
-      return result[component];
+      return result;
     }
 
     template <int N>
       requires(N > 0)
-    auto operator()(Tag<N> t)
+    auto vectorGet(Tag<N> t) const
     {
-      return getVectorComponent(*this, N - 1);
+      return getVectorComponent(*this, Tag<N - 1>());
     }
 
-    auto operator[](const ptrdiff_t &i) { return getVectorComponent(*this, i); }
+    template <int N>
+      requires(N > 0)
+    auto operator()(Tag<N> t) const
+    {
+      return vectorGet(t);
+    }
+
     auto norm2() const { return dot(*this, *this); }
     auto norm() const { return sqrt(dot(*this, *this)); }
 

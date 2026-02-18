@@ -55,11 +55,10 @@ namespace TempLat
       vType localResult{};
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
-        std::decay_t<decltype(mT)> __t = mT;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(__t, args...);
-              update = device::max(__t.get(args...), update);
+              DoEval::eval(mT, args...);
+              update = device::max(mT.get(args...), update);
             },
             idx);
       };

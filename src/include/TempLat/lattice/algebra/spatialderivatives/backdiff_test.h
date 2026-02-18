@@ -32,7 +32,7 @@ template <size_t NDim> inline void TempLat::BackDiffTester<NDim>::Test(TempLat::
     constexpr size_t d = static_cast<size_t>(dir) - 1;
 
     Field<NDim, double> sc("SC_" + std::to_string(d), toolBox);
-    sc = getVectorComponent(x, d);
+    sc = x(dirTag);
     sc.updateGhosts();
 
     Field<NDim, double> bdsc("bdSC_" + std::to_string(d), toolBox);
@@ -65,25 +65,27 @@ template <size_t NDim> inline void TempLat::BackDiffTester<NDim>::Test(TempLat::
         device::IdxArray<NDim> global_idx;
         layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
 
-        sayMPI << "BackDiff mismatch in dir " << d << " at global (";
+        std::stringstream ss;
+        ss << "BackDiff mismatch in dir " << d << " at global (";
         for (size_t i = 0; i < NDim; ++i) {
-          sayMPI << global_idx[i];
-          if (i < NDim - 1) sayMPI << ", ";
+          ss << global_idx[i];
+          if (i < NDim - 1) ss << ", ";
         }
-        sayMPI << "): expect = " << expect << ", bdSC = " << val_bdsc << "\n";
+        ss << "): expect = " << expect << ", bdSC = " << val_bdsc << "\n";
+        sayMPI << ss.str();
       }
     });
     tdd.verify(OK);
   };
 
   // Test all directions using constexpr_for
-  constexpr_for<1, NDim + 1, 1>([&](auto _dir) { testDir(Tag<decltype(_dir)::value>{}); });
+  constexpr_for<1, NDim + 1>([&](auto _dir) { testDir(Tag<decltype(_dir)::value>{}); });
 
   // Test 2: BackDiff of quadratic function sc^2
   // For f(x) = x^2, backward difference is (x^2 - (x-1)^2) = 2x - 1
   {
     Field<NDim, double> sc("SC_sq", toolBox);
-    sc = getVectorComponent(x, 0);
+    sc = x(1_c);
     sc.updateGhosts();
 
     Field<NDim, double> sc_sq("SC_sq_field", toolBox);
@@ -117,12 +119,14 @@ template <size_t NDim> inline void TempLat::BackDiffTester<NDim>::Test(TempLat::
         device::IdxArray<NDim> global_idx;
         layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
 
-        sayMPI << "BackDiff sq mismatch at global (";
+        std::stringstream ss;
+        ss << "BackDiff sq mismatch at global (";
         for (size_t i = 0; i < NDim; ++i) {
-          sayMPI << global_idx[i];
-          if (i < NDim - 1) sayMPI << ", ";
+          ss << global_idx[i];
+          if (i < NDim - 1) ss << ", ";
         }
-        sayMPI << "): expect = " << expect << ", bdSC_sq = " << val_bdsc_sq << "\n";
+        ss << "): expect = " << expect << ", bdSC_sq = " << val_bdsc_sq << "\n";
+        sayMPI << ss.str();
       }
     });
     tdd.verify(OK);
@@ -131,11 +135,11 @@ template <size_t NDim> inline void TempLat::BackDiffTester<NDim>::Test(TempLat::
   // Test 3: BackDiff of product of coordinates (if NDim >= 2)
   if constexpr (NDim >= 2) {
     Field<NDim, double> sc1("SC1_prod", toolBox);
-    sc1 = getVectorComponent(x, 0);
+    sc1 = x(1_c);
     sc1.updateGhosts();
 
     Field<NDim, double> sc2("SC2_prod", toolBox);
-    sc2 = getVectorComponent(x, 1);
+    sc2 = x(2_c);
     sc2.updateGhosts();
 
     Field<NDim, double> sc_prod("SC_prod_field", toolBox);
@@ -170,12 +174,14 @@ template <size_t NDim> inline void TempLat::BackDiffTester<NDim>::Test(TempLat::
         device::IdxArray<NDim> global_idx;
         layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
 
-        sayMPI << "BackDiff prod dir1 mismatch at global (";
+        std::stringstream ss;
+        ss << "BackDiff prod dir1 mismatch at global (";
         for (size_t i = 0; i < NDim; ++i) {
-          sayMPI << global_idx[i];
-          if (i < NDim - 1) sayMPI << ", ";
+          ss << global_idx[i];
+          if (i < NDim - 1) ss << ", ";
         }
-        sayMPI << "): expect = " << expect << ", bd = " << val_bd << "\n";
+        ss << "): expect = " << expect << ", bd = " << val_bd << "\n";
+        sayMPI << ss.str();
       }
     });
     tdd.verify(OK);

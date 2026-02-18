@@ -27,7 +27,7 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
   // Laplacian is computed as: sum_dir (f[i+e_dir] - 2*f[i] + f[i-e_dir])
   {
     Field<NDim, double> sc1("SC1", toolBox);
-    sc1 = getVectorComponent(coord, 0);
+    sc1 = coord(1_c);
     sc1.updateGhosts();
 
     Field<NDim, double> result_field("result1", toolBox);
@@ -60,12 +60,15 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
         OK = false;
         device::IdxArray<NDim> global_idx;
         layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
-        sayMPI << "Test1 fail at global (";
+
+        std::stringstream ss;
+        ss << "Test1 fail at global (";
         for (size_t d = 0; d < NDim; ++d) {
-          sayMPI << global_idx[d];
-          if (d < NDim - 1) sayMPI << ", ";
+          ss << global_idx[d];
+          if (d < NDim - 1) ss << ", ";
         }
-        sayMPI << "): got " << result_val << ", expected " << expected << "\n";
+        ss << "): got " << result_val << ", expected " << expected << "\n";
+        sayMPI << ss.str();
       }
     });
     tdd.verify(OK);
@@ -74,7 +77,7 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
   // Test 2: Laplacian of sc1^2 (quadratic in x[0])
   {
     Field<NDim, double> sc1("SC1_sq", toolBox);
-    sc1 = getVectorComponent(coord, 0);
+    sc1 = coord(1_c);
     sc1.updateGhosts();
 
     Field<NDim, double> sc1_sq("SC1_sq_field", toolBox);
@@ -110,12 +113,15 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
         OK = false;
         device::IdxArray<NDim> global_idx;
         layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
-        sayMPI << "Test2 fail at global (";
+
+        std::stringstream ss;
+        ss << "Test2 fail at global (";
         for (size_t d = 0; d < NDim; ++d) {
-          sayMPI << global_idx[d];
-          if (d < NDim - 1) sayMPI << ", ";
+          ss << global_idx[d];
+          if (d < NDim - 1) ss << ", ";
         }
-        sayMPI << "): got " << result_val << ", expected " << expected << "\n";
+        ss << "): got " << result_val << ", expected " << expected << "\n";
+        sayMPI << ss.str();
       }
     });
     tdd.verify(OK);
@@ -124,11 +130,11 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
   // Test 3: Laplacian of sc1 * sc2 (if NDim >= 2)
   if constexpr (NDim >= 2) {
     Field<NDim, double> sc1("SC1_prod", toolBox);
-    sc1 = getVectorComponent(coord, 0);
+    sc1 = coord(1_c);
     sc1.updateGhosts();
 
     Field<NDim, double> sc2("SC2_prod", toolBox);
-    sc2 = getVectorComponent(coord, 1);
+    sc2 = coord(2_c);
     sc2.updateGhosts();
 
     Field<NDim, double> sc1_sc2("SC1_SC2_field", toolBox);
@@ -164,12 +170,15 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
         OK = false;
         device::IdxArray<NDim> global_idx;
         layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
-        sayMPI << "Test3 fail at global (";
+
+        std::stringstream ss;
+        ss << "Test3 fail at global (";
         for (size_t d = 0; d < NDim; ++d) {
-          sayMPI << global_idx[d];
-          if (d < NDim - 1) sayMPI << ", ";
+          ss << global_idx[d];
+          if (d < NDim - 1) ss << ", ";
         }
-        sayMPI << "): got " << result_val << ", expected " << expected << "\n";
+        ss << "): got " << result_val << ", expected " << expected << "\n";
+        sayMPI << ss.str();
       }
     });
     tdd.verify(OK);
@@ -178,10 +187,10 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
   // Test 4: Laplacian of (sc1 + sc2)^2 (if NDim >= 2)
   if constexpr (NDim >= 2) {
     Field<NDim, double> sc1("SC1_sum", toolBox);
-    sc1 = getVectorComponent(coord, 0);
+    sc1 = coord(1_c);
 
     Field<NDim, double> sc2("SC2_sum", toolBox);
-    sc2 = getVectorComponent(coord, 1);
+    sc2 = coord(2_c);
 
     Field<NDim, double> sc_sum_sq("SC_sum_sq_field", toolBox);
     sc_sum_sq = pow<2>(sc1 + sc2);
@@ -216,12 +225,15 @@ template <size_t NDim> inline void TempLat::LatticeLaplacianTester<NDim>::Test(T
         OK = false;
         device::IdxArray<NDim> global_idx;
         layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
-        sayMPI << "Test4 fail at global (";
+
+        std::stringstream ss;
+        ss << "Test4 fail at global (";
         for (size_t d = 0; d < NDim; ++d) {
-          sayMPI << global_idx[d];
-          if (d < NDim - 1) sayMPI << ", ";
+          ss << global_idx[d];
+          if (d < NDim - 1) ss << ", ";
         }
-        sayMPI << "): got " << result_val << ", expected " << expected << "\n";
+        ss << "): got " << result_val << ", expected " << expected << "\n";
+        sayMPI << ss.str();
       }
     });
     tdd.verify(OK);

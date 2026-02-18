@@ -55,8 +55,7 @@ namespace TempLat
         stop_iteration[d] = start_iteration[d] + localSizes[d];
       }
 
-      localResult =
-          Kokkos::View<vType *, Kokkos::DefaultExecutionSpace>("localResult", stop_iteration[0] - start_iteration[0]);
+      localResult = device::memory::NDView<1, vType>("localResult", stop_iteration[0] - start_iteration[0]);
     }
 
     std::vector<vType> compute()
@@ -93,11 +92,10 @@ namespace TempLat
       for (size_t cur_lidx = nGhosts; cur_lidx < result.size() + nGhosts; ++cur_lidx) {
         auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim - 1> &idx, vType &update)
         {
-          std::decay_t<T> __t = mT;
           device::apply(
               [&](auto &&...args) {
-                DoEval::eval(__t, args..., cur_lidx);
-                update += __t.get(args..., cur_lidx);
+                DoEval::eval(mT, args..., cur_lidx);
+                update += mT.get(args..., cur_lidx);
               },
               idx);
         };
@@ -124,7 +122,7 @@ namespace TempLat
     device::array<device::Idx, NDim - 1> start_iteration{};
     device::array<device::Idx, NDim - 1> stop_iteration{};
 
-    Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> localResult;
+    device::memory::NDView<1, vType> localResult;
 
     size_t nGhosts;
   };

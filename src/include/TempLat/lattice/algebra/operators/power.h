@@ -50,6 +50,13 @@ namespace TempLat
         return pow(GetValue::get(mR, idx...), GetValue::get(mT, idx...));
       }
 
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return pow(DoEval::eval(mR, idx...), DoEval::eval(mT, idx...));
+      }
+
       virtual std::string operatorString() const override { return "^"; }
 
       /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
@@ -73,6 +80,13 @@ namespace TempLat
       DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
       {
         return powr<N>(GetValue::get(mR, idx...));
+      }
+
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return powr<N>(DoEval::eval(mR, idx...));
       }
 
       std::string toString() const { return "(" + GetString::get(mR) + ")^" + std::to_string(2); }

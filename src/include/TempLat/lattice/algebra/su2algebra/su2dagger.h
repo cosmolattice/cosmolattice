@@ -12,6 +12,7 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2unaryoperator.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 
 namespace TempLat
 {
@@ -35,10 +36,12 @@ namespace TempLat
       requires(N >= 1 && N <= 3)
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const
     {
-      return -mR.SU2Get(Tag<N>());
+      if constexpr (N == 0) {
+        return mR.SU2Get(Tag<N>());
+      } else {
+        return -mR.SU2Get(Tag<N>());
+      }
     }
-
-    template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
     template <int N>
       requires(N >= 0 && N <= 3)
@@ -47,14 +50,15 @@ namespace TempLat
       return SU2Get(t);
     }
 
-    template <int N, typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2Get(Tag<N>(), idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      if constexpr (N == 0)
-        return mR.SU2Get(Tag<0>(), idx...);
-      else
-        return -mR.SU2Get(Tag<N>(), idx...);
+      auto c = DoEval::eval(mR, idx...);
+      c[1] = -c[1];
+      c[2] = -c[2];
+      c[3] = -c[3];
+      return c;
     }
 
     std::string toString() const { return GetString::get(mR) + "^\u2020"; }

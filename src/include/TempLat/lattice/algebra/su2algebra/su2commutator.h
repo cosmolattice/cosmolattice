@@ -49,38 +49,23 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<3> t) const { return 2 * (mR.SU2Get(2_c) * mT.SU2Get(1_c) - mR.SU2Get(1_c) * mT.SU2Get(2_c)); }
 
-    template <int N, typename... IDX> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
-    {
-      if constexpr (N == 0) {
-        return ZeroType();
-      } else
-        return cache[N - 1];
-    }
-
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
-
-      device::array<SV, 3> cL;
-      device::array<SV, 3> cR;
-
-      constexpr_for<1, 4, 1>([&](auto j) {
-        cL[j - 1] = mR.SU2Get(j, idx...);
-        cR[j - 1] = mT.SU2Get(j, idx...);
-      });
-
-      cache[0] = 2 * (cL[3 - 1] * cR[2 - 1] - cL[2 - 1] * cR[3 - 1]);
-      cache[1] = 2 * (cL[1 - 1] * cR[3 - 1] - cL[3 - 1] * cR[1 - 1]);
-      cache[2] = 2 * (cL[2 - 1] * cR[1 - 1] - cL[1 - 1] * cR[2 - 1]);
+      auto cL = DoEval::eval(mR, idx...);
+      auto cR = DoEval::eval(mT, idx...);
+      device::array<SV, 4> result;
+      result[0] = SV(0);
+      result[1] = 2 * (cL[3] * cR[2] - cL[2] * cR[3]);
+      result[2] = 2 * (cL[1] * cR[3] - cL[3] * cR[1]);
+      result[3] = 2 * (cL[2] * cR[1] - cL[1] * cR[2]);
+      return result;
     }
 
     virtual std::string operatorString() const override { return "commutator"; }
 
   private:
-    device::array<SV, 3> cache;
   };
 
   template <typename R, typename T>

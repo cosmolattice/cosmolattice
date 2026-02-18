@@ -32,7 +32,7 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     SU2DoubletDagger(const R &pR) : SU2DoubletUnaryOperator<R>(pR) {}
 
-    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t)
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t) const
     {
       if constexpr (M % 2 == 0)
         return mR.SU2DoubletGet(t);
@@ -42,35 +42,19 @@ namespace TempLat
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<N> t) const { return SU2DoubletGet(t); }
 
-    template <int M, typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<M> t, const IDX &...idx) const
-    {
-      if constexpr (M % 2 == 0)
-        return mR.SU2DoubletGet(t, idx...);
-      else
-        return -mR.SU2DoubletGet(t, idx...);
-    }
-
-    template <int M, typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2DoubletGet(Tag<M>(), idx...); }
-    device::array<SV, 4> SU2DoubletGet(const IDX &...idx)
-    {
-      return {SU2DoubletGet(0_c, idx...), SU2DoubletGet(1_c, idx...), SU2DoubletGet(2_c, idx...),
-              SU2DoubletGet(3_c, idx...)};
-    }
-
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
+      auto child = DoEval::eval(mR, idx...);
+      // child[0] = child[0];
+      child[1] = -child[1];
+      // child[2] = child[2];
+      child[3] = -child[3];
+      return child;
     }
 
     virtual std::string toString() const override { return GetString::get(mR) + "^\u2020"; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
   template <class R>

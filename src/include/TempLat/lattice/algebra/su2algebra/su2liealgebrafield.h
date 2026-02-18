@@ -40,14 +40,16 @@ namespace TempLat
     template <int M> DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<M> t) const { return fs[M - 1]; }
     DEVICE_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return ZeroType(); }
 
-    template <int N, typename... IDX>
-      requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      if constexpr (N > 0)
-        return fs[N - 1].get(idx...);
-      else
-        return ZeroType();
+      device::array<T, 4> result;
+      result[0] = T(0);
+      result[1] = fs[0].get(idx...);
+      result[2] = fs[1].get(idx...);
+      result[3] = fs[2].get(idx...);
+      return result;
     }
 
     template <typename R> void operator=(R &&r) { SU2FieldBase<NDim, T>::operator=(r); }

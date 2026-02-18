@@ -10,7 +10,6 @@
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/measuringtools/averager.h"
 #include "TempLat/util/getcpptypename.h"
-#include "TempLat/lattice/algebra/coordinates/coordinatevector.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticeforwardgradient.h"
 
 inline void TempLat::GradientComponentTest::Test(TempLat::TDDAssertion &tdd)

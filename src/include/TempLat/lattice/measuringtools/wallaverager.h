@@ -73,6 +73,7 @@ namespace TempLat
 
     void computeConfigurationSpace()
     {
+      // TODO : THIS IS STILL CL1.0
       ptrdiff_t i = 0;
       auto &it = mT.getToolBox()->itX();
 
@@ -86,7 +87,7 @@ namespace TempLat
         DoEval::eval(mT, i);
 
         for (ptrdiff_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) {
-          mWorkspace[t][coord[t]] += GetEval::getEval(mT, i); // Average over the orthogonal directions.
+          mWorkspace[t][coord[t]] += DoEval::eval(mT, i); // Average over the orthogonal directions.
         }
       }
     }

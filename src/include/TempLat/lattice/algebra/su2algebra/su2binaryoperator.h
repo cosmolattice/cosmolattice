@@ -76,14 +76,6 @@ namespace TempLat
         return nullptr;
     }
 
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
-    {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
-    }
-
     void preGet()
     {
       PreGet::apply(mR);

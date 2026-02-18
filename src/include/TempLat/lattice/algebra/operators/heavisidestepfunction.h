@@ -30,7 +30,14 @@ namespace TempLat
       requires requires(IDX... idx) { GetValue::get(mR, idx...); }
     DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
     {
-      return (GetValue::get(mR, idx...) >= 0 ? 1. : 0);
+      return (GetValue::get(mR, idx...) >= 0 ? 1 : 0);
+    }
+
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+    {
+      return (DoEval::eval(mR, idx...) >= 0 ? 1 : 0);
     }
 
     /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */

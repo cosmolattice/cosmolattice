@@ -66,13 +66,6 @@ namespace TempLat
       ConfirmSpace::apply(mR, newLayout, spaceType);
     }
 
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
-    {
-      DoEval::eval(mR, idx...);
-    }
-
     template <size_t NDim> JumpsHolder<NDim> getJumps() const { return GetJumps::apply<NDim>(mR); }
 
     /** For measurement objects. */

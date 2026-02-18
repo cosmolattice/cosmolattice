@@ -77,20 +77,6 @@ namespace TempLat
       return fs[M - 1];
     }
 
-    template <typename... IDX>
-      requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t, const IDX &...idx) const
-    {
-      return cache[0];
-    }
-
-    template <int M, typename... IDX>
-      requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
-    {
-      return cache[M];
-    }
-
     template <typename R> void operator=(R &&r)
     {
       fs[0].onBeforeAssignment(r.SU2Get(1_c));
@@ -105,14 +91,12 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        std::decay_t<R> __r = r;
-
         device::apply(
             [&](const auto &...args) {
-              DoEval::eval(__r, args...);
-              view1(args...) = __r.SU2Get(1_c, args...);
-              view2(args...) = __r.SU2Get(2_c, args...);
-              view3(args...) = __r.SU2Get(3_c, args...);
+              auto result = DoEval::eval(r, args...);
+              view1(args...) = result[1];
+              view2(args...) = result[2];
+              view3(args...) = result[3];
             },
             idx);
       };
@@ -144,12 +128,14 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      cache[1] = fs[0].get(idx...);
-      cache[2] = fs[1].get(idx...);
-      cache[3] = fs[2].get(idx...);
-      cache[0] = sqrt(T(1) - pow<2>(cache[1]) - pow<2>(cache[2]) - pow<2>(cache[3]));
+      device::array<T, 4> result;
+      result[1] = fs[0].get(idx...);
+      result[2] = fs[1].get(idx...);
+      result[3] = fs[2].get(idx...);
+      result[0] = sqrt(T(1) - pow<2>(result[1]) - pow<2>(result[2]) - pow<2>(result[3]));
+      return result;
     }
 
     using Getter = SU2Getter;
@@ -162,8 +148,6 @@ namespace TempLat
     device::array<Field<NDim, T>, 3> fs;
     const device::memory::host_string mName;
     LayoutStruct<NDim> mLayout;
-
-    device::array<T, 4> cache;
 
 #ifdef TEMPLATTEST
   public:

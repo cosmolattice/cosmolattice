@@ -7,14 +7,14 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-inline void TempLat::HasVectorGetMethodTester::Test(TempLat::TDDAssertion &tdd)
+namespace TempLat
 {
   struct dummy {
     char a;
   };
 
   struct MyTestOne {
-    dummy vectorGet(const ptrdiff_t &i, const ptrdiff_t &j)
+    dummy vectorGet(Tag<1> t)
     {
       std::cerr << "Hell yeah.\n";
       return dummy();
@@ -26,13 +26,16 @@ inline void TempLat::HasVectorGetMethodTester::Test(TempLat::TDDAssertion &tdd)
   };
 
   struct MyTestThree {
-    dummy vectorGet(const ptrdiff_t &i, const ptrdiff_t &j, const ptrdiff_t &k)
+    template <int N> dummy vectorGet(Tag<N> t)
     {
       std::cerr << "Hell yeah.\n";
       return dummy();
     }
   };
+} // namespace TempLat
 
+inline void TempLat::HasVectorGetMethodTester::Test(TempLat::TDDAssertion &tdd)
+{
   tdd.verify(HasVectorGetMethod<MyTestOne> == true);
   tdd.verify(HasVectorGetMethod<MyTestTwo> == false);
   tdd.verify(HasVectorGetMethod<MyTestThree> == true);
