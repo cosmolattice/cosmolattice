@@ -17,13 +17,9 @@ namespace TempLat
   MakeException(MPIGuardInstantiationException);
 
   /** @brief A class which guards intialization and finalization of pure MPI.
-   * Only used by MPIGuard, which manually calls its destructor, but which also holds the FFTW and PFFT guards.
+   * Only used by SessionGuard, which manually calls its destructor, but which also holds the FFTW and other guards.
    *
-   * No public methods. What?!?? Yes. We made MPIGuard a friend,
-   * so it has access to private methods, and hence is the only thing
-   * in the world which can construct and hold an instance of FFTWGuard.
-   *
-   * Unit test: ctest -R test-mpiguardactualmpi
+   * Unit test: ctest -R test-mpiguard
    **/
   class MPIGuard
   {

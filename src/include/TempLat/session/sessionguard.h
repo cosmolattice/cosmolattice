@@ -17,9 +17,8 @@ namespace TempLat
 {
   MakeException(SessionGuardInstantiationException);
 
-  /** @brief A class which holds all the guards: fftw, pfft and mpi.
-   * Only one instance per process is allowed. Throws an exception if
-   * that condition is violated.
+  /** @brief A class which holds all the guards: fftw, other fft libraries and mpi.
+   * Only one instance per process is allowed. Throws an exception if that condition is violated.
    *
    * Unit test: ctest -R test-sessionguard
    **/
