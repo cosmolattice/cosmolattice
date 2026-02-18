@@ -8,6 +8,13 @@ set(MODELS_PATH ./src/models/) # path to the cosmolattice models. If for some
 
 message(${CMAKE_MODULE_PATH})
 
+if(NOT DEFINED CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE
+      Release
+      CACHE STRING "Build type")
+  message(STATUS "No build type specified, defaulting to Release.")
+endif()
+
 project(CosmoLattice C CXX)
 
 set(CMAKE_CXX_STANDARD 20) # This is likely to evolve in future releases.
@@ -25,10 +32,18 @@ set(MPI
 set(DEVICE_PROVIDER
     Kokkos
     CACHE
-    STRING
-      "Set to the device provider to use for shared memory and/or GPU parallelization (default = Kokkos)")
-set(PARAFAFT OFF CACHE BOOL "Set to ON to build with PARAFAFT (default = OFF)")
-set(KOKKOSFFT ON CACHE BOOL "Enable KokkosFFT support (default = ON), acts as a fallback for non-MPI GPU builds")
+      STRING
+      "Set to the device provider to use for shared memory and/or GPU parallelization (default = Kokkos)"
+)
+set(PARAFAFT
+    OFF
+    CACHE BOOL "Set to ON to build with PARAFAFT (default = OFF)")
+set(KOKKOSFFT
+    ON
+    CACHE
+      BOOL
+      "Enable KokkosFFT support (default = ON), acts as a fallback for non-MPI GPU builds"
+)
 
 set(HDF5
     OFF
@@ -69,11 +84,14 @@ set(MYHDF5_PATH
     "insert/here"
     CACHE STRING "HDF5 guess path")
 
-#if you have parafaft elsewhere, help cmake by adding the path below.
+# if you have parafaft elsewhere, help cmake by adding the path below.
 
-set(MYPARAFAFT_PATH "" CACHE STRING "path to PARAFAFT installation directory")
+set(MYPARAFAFT_PATH
+    ""
+    CACHE STRING "path to PARAFAFT installation directory")
 
-# if for some reason you have other exotic installations the cmake can't find, just repeat the above procedure below.
+# if for some reason you have other exotic installations the cmake can't find,
+# just repeat the above procedure below.
 
 # ...
 
@@ -81,16 +99,18 @@ set(MYPARAFAFT_PATH "" CACHE STRING "path to PARAFAFT installation directory")
 # add to CMAKE_PREFIX_PATH upon calling cmake will be remembered, so don't
 # hesitate to continue using it.
 
-set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}" )
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}")
 # Also set FFTW_ROOT so KokkosFFT's FindFFTW.cmake uses the local path
 if(NOT MYFFTW3_PATH STREQUAL "insert/here")
-  set(FFTW_ROOT "${MYFFTW3_PATH}" CACHE PATH "FFTW root for KokkosFFT" FORCE)
+  set(FFTW_ROOT
+      "${MYFFTW3_PATH}"
+      CACHE PATH "FFTW root for KokkosFFT" FORCE)
 endif()
-# Note: MYPARAFAFT_PATH is handled separately in configure.cmake (header-only library)
+# Note: MYPARAFAFT_PATH is handled separately in configure.cmake (header-only
+# library)
 
-
-
-###########The CMake shenanigans are hidden in this file. You can check it out if interested ############################
+# ##########The CMake shenanigans are hidden in this file. You can check it out
+# if interested ############################
 include(src/cmake/configure.cmake)
 # ##############################################################################
 
@@ -112,12 +132,15 @@ set(DEFAULT_MODEL lphi4)
 set(MODEL
     ${DEFAULT_MODEL}
     CACHE STRING "Model that is compiled.")
-message(STATUS "---------- The model which is going to be compiled is: ${MODEL} ----------")
+message(
+  STATUS
+    "---------- The model which is going to be compiled is: ${MODEL} ----------"
+)
 set(MODEL_LABEL ${MODEL}) # Allows to customise the name below if wanted.
 
 # Next few lines are to see if a file name Model.cmake exists at the same place
-# as the model. If so, we load it, which allows you to customize the cmake behaviour
-# depending on the model
+# as the model. If so, we load it, which allows you to customize the cmake
+# behaviour depending on the model
 
 find_file(MODELS_CMAKE ${MODEL}.cmake ${MODELS_PATH})
 if(NOT MODELS_CMAKE)
@@ -129,7 +152,7 @@ endif()
 message("")
 
 set(CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS}  -DMODELTYPE=${MODEL} -DMODELINCLUDE=models/${MODEL}.h -DMODELLABEL=${MODEL_LABEL}"
+    "${CMAKE_CXX_FLAGS} -DMODELTYPE=${MODEL} -DMODELINCLUDE=models/${MODEL}.h -DMODELLABEL=${MODEL_LABEL}"
 )
 
 # ##############################################################################
@@ -137,63 +160,77 @@ set(CMAKE_CXX_FLAGS
 # Compiler options. We let them here so they are easy to access. You can move it
 # in cmake/configure.cmake if you prefer.
 
-set(G++OPT
-    Ofast
-    CACHE
-      STRING
-      "Set optimisation level of g++. Can choose between Ofast, O3, O2, O1, G (debug flag) (default = Ofast)."
-)
-set(G++SSE
+if(DEFINED G++OPT)
+  message(
+    FATAL_ERROR
+      "G++OPT is deprecated. Please use CMAKE_BUILD_TYPE=Release or Debug instead, and set NATIVE, SSE, and AVX as needed."
+  )
+endif()
+if(DEFINED G++AVX)
+  message(
+    FATAL_ERROR
+      "G++AVX is deprecated. Please use CMAKE_BUILD_TYPE=Release or Debug instead, and set NATIVE, SSE, and AVX as needed."
+  )
+endif()
+if(DEFINED G++SSE)
+  message(
+    FATAL_ERROR
+      "G++SSE is deprecated. Please use CMAKE_BUILD_TYPE=Release or Debug instead, and set NATIVE, SSE, and AVX as needed."
+  )
+endif()
+
+set(NATIVE
+    (NOT APPLE)
+    CACHE STRING "Set whether to use -march=native.")
+set(SSE
     OFF
     CACHE
       BOOL
-      "Set the sse instruction flags of g++. Default is OFF, but most likely you want to set is to ON."
+      "Set the sse instruction flag for the compiler. Default is OFF, but most likely you want to set is to ON."
 )
-set(G++AVX
+set(AVX
     OFF
     CACHE
       STRING
       "Set the avx instruction flags during compilation. Can choose between OFF, mavx, mavx2, mavx512f (default = OFF). If you want something else, feel free to change the CMakeLists."
 )
 
-if(${G++OPT} STREQUAL "G")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -fconcepts-diagnostics-depth=8")
-elseif(${G++OPT} STREQUAL "O1")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 ")
-elseif(${G++OPT} STREQUAL "O2")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 ")
-elseif(${G++OPT} STREQUAL "O3")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 ")
-elseif(${G++OPT} STREQUAL "Ofast")
-  # We disable the warnings about NaN checking in Ofast, if you use fast-math,
-  # you should be aware of what you do.
-  set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -O3 -ffast-math")
-  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nan-infinity-disabled")
-  endif()
-else()
-  message(FATAL_ERROR "G++OPT=${G++OPT} is not a valid option.")
+# First, fix the release flags. O3 is default in CMake Release mode.
+if(NATIVE)
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
 endif()
-if(${G++SSE})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse -msse2 -msse3 -msse4")
-endif()
-if(${G++AVX} STREQUAL mavx)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
-elseif(${G++AVX} STREQUAL mavx2)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx2")
-elseif(${G++AVX} STREQUAL mavx512f)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx -mavx2 -mavx512f")
-elseif(NOT ${G++AVX} STREQUAL OFF)
-  message(FATAL_ERROR "G++AVX=${G++AVX} is not a valid option.")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -ffast-math")
+
+# Disable the warnings about NaN checking, if using fast-math,
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  set(CMAKE_CXX_FLAGS_RELEASE
+      "${CMAKE_CXX_FLAGS_RELEASE} -Wno-nan-infinity-disabled")
 endif()
 
-# You can target your computer architecture by changing the arch here.
-if(NOT ${G++OPT} STREQUAL "G")
-  # Example: set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native ")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+# Add debug flags: -g for debugging symbols, -fsanitize=address for address
+# sanitizer, and -fconcepts-diagnostics-depth=8 for better error messages with
+# concepts.
+set(CMAKE_CXX_FLAGS_DEBUG
+    "${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=address -fconcepts-diagnostics-depth=8"
+)
+
+if(${SSE})
+  set(CMAKE_CXX_FLAGS_RELEASE
+      "${CMAKE_CXX_FLAGS_RELEASE} -msse -msse2 -msse3 -msse4")
 endif()
 
+if(${AVX} STREQUAL mavx)
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -mavx")
+elseif(${AVX} STREQUAL mavx2)
+  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -mavx -mavx2")
+elseif(${AVX} STREQUAL mavx512f)
+  set(CMAKE_CXX_FLAGS_RELEASE
+      "${CMAKE_CXX_FLAGS_RELEASE} -mavx -mavx2 -mavx512f")
+elseif(NOT ${AVX} STREQUAL OFF)
+  message(FATAL_ERROR "AVX=${AVX} is not a valid option.")
+endif()
+
+# Make sure GCC can handle huge amounts of constexpr computations.
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   set(CMAKE_CXX_FLAGS
       "${CMAKE_CXX_FLAGS} -fconstexpr-loop-limit=2621440 -fconstexpr-ops-limit=335544320"
@@ -206,8 +243,17 @@ if(MPI)
   message(STATUS "MPI CXX compiler: ${MPI_CXX_COMPILER}")
 endif()
 message(STATUS "CXX compiler: ${CMAKE_CXX_COMPILER}")
-message(STATUS
-  "The compiler will be called with the following flags:\n  ${CMAKE_CXX_FLAGS}")
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  message(
+    STATUS
+      "Build type is Release. The compiler will be called with the following flags:\n  ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_RELEASE}"
+  )
+else()
+  message(
+    STATUS
+      "Build type is Debug. The compiler will be called with the following flags:\n  ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_DEBUG}"
+  )
+endif()
 
 # ##############################################################################
 # _____                     _        _     _ | ____|_  _____  ___ _   _| |_ __
