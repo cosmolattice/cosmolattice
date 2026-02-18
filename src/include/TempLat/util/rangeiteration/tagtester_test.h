@@ -50,15 +50,15 @@ inline void TempLat::TagTester::Test(TempLat::TDDAssertion &tdd)
   [[maybe_unused]] auto tt2 = 2_c;
   [[maybe_unused]] auto tt3 = 2_c;
 
-  tdd.verify(static_if<(Tag<30>() < Tag<40>())>(0, 1) == 0);
-  tdd.verify(static_if<(tt2 < tt1)>(0, 1) == 1);
+  tdd.verify(IfElse((Tag<30>() < Tag<40>()), 0, 1) == 0);
+  tdd.verify(IfElse((tt2 < tt1), 0, 1) == 1);
 
-  tdd.verify(static_if<(IsMore(tt2, tt1))>(0, 1) == 0);
-  tdd.verify(static_if<(IsLess(tt2, tt1))>(0, 1) == 1);
-  tdd.verify(static_if<(IsLess(tt2, tt3))>(0, 1) == 1);
-  tdd.verify(static_if<(IsMore(tt2, tt3))>(0, 1) == 1);
-  tdd.verify(static_if<(IsLessOrEqual(tt2, tt3))>(0, 1) == 0);
-  tdd.verify(static_if<(IsMoreOrEqual(tt2, tt3))>(0, 1) == 0);
+  tdd.verify(IfElse((IsMore(tt2, tt1)), 0, 1) == 0);
+  tdd.verify(IfElse((IsLess(tt2, tt1)), 0, 1) == 1);
+  tdd.verify(IfElse((IsLess(tt2, tt3)), 0, 1) == 1);
+  tdd.verify(IfElse((IsMore(tt2, tt3)), 0, 1) == 1);
+  tdd.verify(IfElse((IsLessOrEqual(tt2, tt3)), 0, 1) == 0);
+  tdd.verify(IfElse((IsMoreOrEqual(tt2, tt3)), 0, 1) == 0);
 
   auto res = Total(j, 1, 3, Total(i, 1, 5, If((IsLess(j, i)), 1)));
 
