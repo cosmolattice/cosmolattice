@@ -41,6 +41,18 @@ if(CUDA)
 endif()
 
 if(NOT CUDA AND HIP)
+  # There is a problem with Kokkos + HIP, where HIP's cmake sets offload-arch
+  # and Kokkos does the same, which leads to a conflict. We purge the info set
+  # by HIP's cmake here.
+  if(HIP)
+    set(GPU_BUILD_TARGETS
+        ""
+        CACHE STRING "" FORCE)
+    set(GPU_TARGETS
+        ""
+        CACHE STRING "" FORCE)
+  endif()
+
   # Let's see if we have a HIP compiler
   check_language(HIP)
   if(CMAKE_HIP_COMPILER)
