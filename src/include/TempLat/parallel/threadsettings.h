@@ -81,12 +81,15 @@ namespace TempLat
     void pSetMPIThreadsNotOK() { mUserAllowedThreadsPerProcess = 1; }
 
     ptrdiff_t pGetMaxThreadCount() { return mHardwareAllowedThreadsPerProcess; }
+  };
 
 #ifdef TEMPLATTEST
+  class ThreadSettingsTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

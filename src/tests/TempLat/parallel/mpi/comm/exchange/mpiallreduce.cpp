@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPIAllReduce> test;
+  TempLat::TDDContainer<TempLat::MPIAllReduceTester> test;
 }

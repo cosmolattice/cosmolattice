@@ -101,6 +101,14 @@ namespace TempLat
 #endif
     }
 
+    /** @brief Get the current instance count. Used by tests to check if an instance is already active.
+     *  This is a test helper - production code should not rely on this.
+     */
+    static inline int GetInstanceCount()
+    {
+      return InstanceCounter(0);
+    }
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     int instanceProtectionKey;
@@ -124,12 +132,15 @@ namespace TempLat
                                              counter);
       return counter;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class MPIGuardTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

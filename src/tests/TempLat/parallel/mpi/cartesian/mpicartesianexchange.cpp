@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPICartesianExchange> test;
+  TempLat::TDDContainer<TempLat::MPICartesianExchangeTester> test;
 }

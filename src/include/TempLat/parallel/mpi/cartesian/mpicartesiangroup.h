@@ -182,12 +182,15 @@ namespace TempLat
         }
       }
     }
+  };
 
 #ifdef TEMPLATTEST
+  class MPICartesianGroupTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

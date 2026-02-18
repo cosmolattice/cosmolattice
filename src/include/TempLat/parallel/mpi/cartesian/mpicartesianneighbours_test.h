@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MPICartesianNeighbours::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MPICartesianNeighboursTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   /* sorry, wouldn't know what cross checks to do for this thing.

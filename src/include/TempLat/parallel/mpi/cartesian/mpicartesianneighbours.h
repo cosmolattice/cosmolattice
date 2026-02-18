@@ -52,12 +52,15 @@ namespace TempLat
     MPICartesianGroup mCartesianGroup;
     ptrdiff_t mNDimensions;
     std::vector<MPICartesianNeighboursSingleDimension> allNeighbours;
+  };
 
 #ifdef TEMPLATTEST
+  class MPICartesianNeighboursTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

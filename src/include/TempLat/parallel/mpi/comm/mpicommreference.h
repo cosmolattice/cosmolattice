@@ -156,12 +156,15 @@ namespace TempLat
 #endif
       return result;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class MPICommReferenceTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

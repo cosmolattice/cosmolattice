@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MPISendReceive::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MPISendReceiveTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   std::vector<int> testVec{{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}};

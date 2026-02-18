@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MPIAllReduce::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MPIAllReduceTester::Test(TempLat::TDDAssertion &tdd)
 {
 
 #ifdef HAVE_MPI

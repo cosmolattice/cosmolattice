@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPICommReference> test;
+  TempLat::TDDContainer<TempLat::MPICommReferenceTester> test;
 }

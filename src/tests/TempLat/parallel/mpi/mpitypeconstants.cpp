@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPITypeConstants> test;
+  TempLat::TDDContainer<TempLat::MPITypeConstantsTester> test;
 }

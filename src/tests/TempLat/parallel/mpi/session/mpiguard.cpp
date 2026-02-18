@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPIGuard> test;
+  TempLat::TDDContainer<TempLat::MPIGuardTester> test;
 }
