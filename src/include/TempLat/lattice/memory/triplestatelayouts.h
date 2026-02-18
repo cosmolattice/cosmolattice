@@ -115,12 +115,16 @@ namespace TempLat
 
       return std::max(mMemUsedFFTBothSpaces, mMemUsedConfigGhostSpace);
     }
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct TripleStateLayoutsTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

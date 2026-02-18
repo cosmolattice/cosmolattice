@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <typename T> inline void TempLat::RadialProjectionSingleQuantity<T>::Test(TempLat::TDDAssertion &tdd)
+template <typename T> inline void TempLat::RadialProjectionSingleQuantityTester<T>::Test(TempLat::TDDAssertion &tdd)
 {
 
   say << "See fcn/lattice/measuringtoolsIO/projectionhelpers/radialprojectionresult_test.h\n";

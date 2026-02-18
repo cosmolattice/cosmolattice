@@ -205,12 +205,15 @@ namespace TempLat
         mSizesInMemory[i] = mLocal.getLocalSizes()[getSizeIndex];
       }
     }
+  };
 
 #ifdef TEMPLATTEST
+  class CoordinateMappingTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

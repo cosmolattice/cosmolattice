@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetNDim> test;
+  TempLat::TDDContainer<TempLat::GetNDimTester> test;
 }

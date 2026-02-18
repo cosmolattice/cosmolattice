@@ -78,6 +78,14 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
+
+#ifdef TEMPLATTEST
+  class VerbosityLevelsTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

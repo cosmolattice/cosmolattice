@@ -57,12 +57,16 @@ namespace TempLat
     std::vector<T> vs; // spectrum or whatever is binned
     std::vector<T> ms; // multiplicities, to check
     T kir;
+  };
 
 #ifdef TEMPLATTEST
+template<typename T>
+  struct KBinsTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

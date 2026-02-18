@@ -65,17 +65,21 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     R mR;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <int N, typename R> GetVectorComponentHelper<N, R> getVectorComponent(const R &pR, Tag<N>)
   {
     return GetVectorComponentHelper<N, R>(pR);
   }
+
+#ifdef TEMPLATTEST
+template<int N, typename R>
+  struct GetVectorComponentHelperTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::HasStaticGetterDummy> test;
+  TempLat::TDDContainer<TempLat::HasStaticGetterDummyTester> test;
 }

@@ -10,7 +10,7 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FileSaverHDF5> test;
+  TempLat::TDDContainer<TempLat::FileSaverHDF5Tester> test;
 }
 
 #endif

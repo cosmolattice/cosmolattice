@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetNGrid> test;
+  TempLat::TDDContainer<TempLat::GetNGridTester> test;
 }

@@ -8,7 +8,7 @@
 
 // File info: Main contributor(s):  Adrien Florio, Year: 2025
 
-inline void TempLat::PauliVectorsAlgebra::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::PauliVectorsAlgebraTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
 

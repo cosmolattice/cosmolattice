@@ -285,12 +285,16 @@ namespace TempLat
       if (ptr1 != ptr2)
         throw MemoryManagerAccessOutOfBounds("pointer casting from double to complex failed:", ptr1, "!=", ptr2);
     }
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim, typename T>
+  struct MemoryManagerTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

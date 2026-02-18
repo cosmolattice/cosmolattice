@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien,  Year: 2019
 
-template <typename T> inline void TempLat::KBins<T>::Test(TempLat::TDDAssertion &tdd)
+template <typename T> inline void TempLat::KBinsTester<T>::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   // tdd.verify( false );

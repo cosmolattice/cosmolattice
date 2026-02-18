@@ -70,12 +70,16 @@ namespace TempLat
     mutable SpaceStateType mFixedSingleSpaceType;
     mutable SpaceStateType mCurrentSpaceType;
     mutable LayoutStruct<NDim> mCurrentLayout;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct DimensionCountRecorderTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

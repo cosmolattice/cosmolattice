@@ -38,13 +38,16 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     GetVectorSize() {}
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class GetVectorSizeTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

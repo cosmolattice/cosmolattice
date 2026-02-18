@@ -9,7 +9,7 @@
 
 #include "TempLat/util/almostequal.h"
 
-template <typename T> inline void TempLat::RadialProjectionSingleDatum<T>::Test(TempLat::TDDAssertion &tdd)
+template <typename T> inline void TempLat::RadialProjectionSingleDatumTester<T>::Test(TempLat::TDDAssertion &tdd)
 {
 
   RadialProjectionSingleDatum<T> a(2, 3, 0, 4, 1.25);

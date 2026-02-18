@@ -55,6 +55,14 @@ namespace TempLat
   public:
     static inline void Test(TDDAssertion &tdd);
   };
+
+#ifdef TEMPLATTEST
+  class GetNGridTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

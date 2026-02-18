@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetToolBox> test;
+  TempLat::TDDContainer<TempLat::GetToolBoxTester> test;
 }

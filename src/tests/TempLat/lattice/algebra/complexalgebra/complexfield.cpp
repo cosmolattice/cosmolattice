@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ComplexField<3, double>> test;
+  TempLat::TDDContainer<TempLat::ComplexFieldTester<3, double>> test;
 }

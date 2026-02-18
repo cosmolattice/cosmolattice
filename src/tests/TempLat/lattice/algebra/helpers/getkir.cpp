@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetKIR> test;
+  TempLat::TDDContainer<TempLat::GetKIRTester> test;
 }

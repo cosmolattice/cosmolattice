@@ -12,7 +12,7 @@
 #include "TempLat/util/log/saycomplete.h"
 #include "TempLat/util/ndloop.h"
 
-template <size_t NDim> inline void TempLat::SpatialCoordinate<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::SpatialCoordinateTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   const ptrdiff_t nGrid = 16, nGhost = 2;
 

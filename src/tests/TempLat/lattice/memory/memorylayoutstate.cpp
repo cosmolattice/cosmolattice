@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MemoryLayoutState> test;
+  TempLat::TDDContainer<TempLat::MemoryLayoutStateTester> test;
 }

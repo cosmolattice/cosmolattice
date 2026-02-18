@@ -8,5 +8,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::PauliVectorsAlgebra> test;
+  TempLat::TDDContainer<TempLat::PauliVectorsAlgebraTester> test;
 }

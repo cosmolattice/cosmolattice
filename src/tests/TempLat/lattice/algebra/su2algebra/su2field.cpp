@@ -9,8 +9,8 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::SU2FieldBase<1, double>> test5;
-  TempLat::TDDContainer<TempLat::SU2FieldBase<2, double>> test6;
-  TempLat::TDDContainer<TempLat::SU2FieldBase<3, double>> test7;
-  TempLat::TDDContainer<TempLat::SU2FieldBase<4, double>> test8;
+  TempLat::TDDContainer<TempLat::SU2FieldBaseTester<1, double>> test5;
+  TempLat::TDDContainer<TempLat::SU2FieldBaseTester<2, double>> test6;
+  TempLat::TDDContainer<TempLat::SU2FieldBaseTester<3, double>> test7;
+  TempLat::TDDContainer<TempLat::SU2FieldBaseTester<4, double>> test8;
 } // namespace

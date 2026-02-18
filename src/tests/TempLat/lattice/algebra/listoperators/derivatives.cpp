@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Derivatives> test;
+  TempLat::TDDContainer<TempLat::DerivativesTester> test;
 }

@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-inline void TempLat::GetVectorSize::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::GetVectorSizeTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   struct dummy {

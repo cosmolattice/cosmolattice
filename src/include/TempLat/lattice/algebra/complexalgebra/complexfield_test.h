@@ -11,7 +11,7 @@
 #include "TempLat/lattice/algebra/complexalgebra/complexalgebra.h"
 #include "TempLat/util/ndloop.h"
 
-template <size_t NDim, typename T> inline void TempLat::ComplexField<NDim, T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::ComplexFieldTester<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   ptrdiff_t nGrid = 16, nGhost = 2;
 

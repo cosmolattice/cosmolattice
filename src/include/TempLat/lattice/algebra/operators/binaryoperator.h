@@ -116,12 +116,16 @@ namespace TempLat
   protected:
     R mR;
     T mT;
+  };
 
 #ifdef TEMPLATTEST
+template<typename R, typename T>
+  struct BinaryOperatorTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -97,13 +97,17 @@ namespace TempLat
 
     R mR;
     T mT;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+template<typename R, typename T>
+  struct ComplexFieldBinaryOperatorTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

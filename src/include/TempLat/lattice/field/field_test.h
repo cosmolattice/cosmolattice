@@ -14,7 +14,7 @@
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
 #include "TempLat/lattice/algebra/coordinates/spatialcoordinate.h"
 
-template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::FieldTester<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   const ptrdiff_t nGrid = 32, nGhost = 2;
 

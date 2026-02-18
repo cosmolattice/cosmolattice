@@ -6,7 +6,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-template <size_t NDim> inline void TempLat::TranspositionMap<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::TranspositionMapTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(Throws<TranspositionMapOutOfBounds>([]() {

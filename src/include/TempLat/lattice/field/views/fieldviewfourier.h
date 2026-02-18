@@ -226,12 +226,16 @@ namespace TempLat
 
     device::IdxArray<NDim> memorySizes;
     device::array<device::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t _NDim, typename T>
+  struct FourierViewTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -46,6 +46,14 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
+
+#ifdef TEMPLATTEST
+  class GetToolBoxTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

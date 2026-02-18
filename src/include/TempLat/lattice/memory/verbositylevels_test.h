@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::VerbosityLevels::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::VerbosityLevelsTester::Test(TempLat::TDDAssertion &tdd)
 {
   VerbosityLevels verbosity;
 

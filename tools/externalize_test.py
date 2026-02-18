@@ -25,29 +25,43 @@ class ClassDescriptor:
     registration_cpp: str  # Path to src/tests/.../foo.cpp
     use_struct: bool = False  # Use 'struct' instead of 'class' for templated types
     namespace: str = "TempLat"
+    template_params: str = ""  # Template parameters if class is templated, e.g. "size_t NDim, typename T"
+
+
+def extract_template_params(header_content: str, class_name: str) -> str:
+    """
+    Extract template parameters from a class definition.
+    Returns the template parameter list as a string, e.g., "size_t NDim, typename T"
+    Returns empty string if class is not templated.
+    """
+    # Match: template<...> class ClassName or template<...> struct ClassName
+    pattern = rf'template\s*<([^>]+)>\s*(?:class|struct)\s+{re.escape(class_name)}\b'
+    match = re.search(pattern, header_content)
+    if match:
+        return match.group(1).strip()
+    return ""
 
 
 def transform_header(content: str, class_name: str, tester_name: str,
-                     use_struct: bool = False, namespace: str = "TempLat") -> str:
+                     use_struct: bool = False, namespace: str = "TempLat",
+                     template_params: str = "") -> str:
     """
     Transform header file:
     1. Remove embedded #ifdef TEMPLATTEST block from class body
     2. Add TesterClass before namespace closing brace
+
+    For templated classes, TesterClass inherits template parameters from production class.
     """
 
     # Step 1: Remove embedded block from inside the class
-    # Pattern: \n#ifdef TEMPLATTEST\n  public:\n    static inline void Test(TDDAssertion &tdd);\n#endif\n
-    # Allow for whitespace/indentation variations
     embedded_pattern = (
         r'\n\s*#ifdef TEMPLATTEST\s*\n\s*public:\s*\n\s*'
         r'static inline void Test\(TDDAssertion &tdd\);\s*\n\s*#endif\s*\n'
     )
     content = re.sub(embedded_pattern, '\n', content, count=1)
 
-    # Also handle alternative pattern where public: is already present
-    # Try simpler pattern if above didn't work
+    # Also handle alternative pattern
     if '#ifdef TEMPLATTEST' in content:
-        # More flexible: match any #ifdef TEMPLATTEST ... static inline void Test ... #endif inside the class
         simple_pattern = (
             r'#ifdef TEMPLATTEST\s*\n\s*public:\s*\n\s*'
             r'static inline void Test\(TDDAssertion &tdd\);\s*\n\s*#endif'
@@ -55,26 +69,24 @@ def transform_header(content: str, class_name: str, tester_name: str,
         content = re.sub(simple_pattern, '', content, count=1)
 
     # Step 2: Add TesterClass before namespace closing
-    # Find the line with "} // namespace <namespace>"
     namespace_close = f'}} // namespace {namespace}'
 
     if namespace_close in content:
         tester_class_type = 'struct' if use_struct else 'class'
-        tester_block = (
-            f'\n#ifdef TEMPLATTEST\n'
-            f'  {tester_class_type} {tester_name}\n'
-            f'  {{\n'
-            f'  public:\n'
-            f'    static inline void Test(TDDAssertion &tdd);\n'
-            f'  }};\n'
-            f'#endif\n'
-        )
-        content = content.replace(namespace_close, tester_block + namespace_close)
-    else:
-        # Fallback: look for just closing brace and comment
-        fallback_pattern = f'}} // namespace'
-        if fallback_pattern in content:
-            tester_class_type = 'struct' if use_struct else 'class'
+
+        # Build TesterClass declaration
+        if template_params:
+            tester_block = (
+                f'\n#ifdef TEMPLATTEST\n'
+                f'template<{template_params}>\n'
+                f'  {tester_class_type} {tester_name}\n'
+                f'  {{\n'
+                f'  public:\n'
+                f'    static inline void Test(TDDAssertion &tdd);\n'
+                f'  }};\n'
+                f'#endif\n'
+            )
+        else:
             tester_block = (
                 f'\n#ifdef TEMPLATTEST\n'
                 f'  {tester_class_type} {tester_name}\n'
@@ -84,20 +96,83 @@ def transform_header(content: str, class_name: str, tester_name: str,
                 f'  }};\n'
                 f'#endif\n'
             )
+
+        content = content.replace(namespace_close, tester_block + namespace_close)
+    else:
+        # Fallback: look for just closing brace and comment
+        fallback_pattern = f'}} // namespace'
+        if fallback_pattern in content:
+            tester_class_type = 'struct' if use_struct else 'class'
+
+            if template_params:
+                tester_block = (
+                    f'\n#ifdef TEMPLATTEST\n'
+                    f'template<{template_params}>\n'
+                    f'  {tester_class_type} {tester_name}\n'
+                    f'  {{\n'
+                    f'  public:\n'
+                    f'    static inline void Test(TDDAssertion &tdd);\n'
+                    f'  }};\n'
+                    f'#endif\n'
+                )
+            else:
+                tester_block = (
+                    f'\n#ifdef TEMPLATTEST\n'
+                    f'  {tester_class_type} {tester_name}\n'
+                    f'  {{\n'
+                    f'  public:\n'
+                    f'    static inline void Test(TDDAssertion &tdd);\n'
+                    f'  }};\n'
+                    f'#endif\n'
+                )
+
             content = content.replace(fallback_pattern, tester_block + fallback_pattern)
 
     return content
 
 
 def transform_test_header(content: str, class_name: str, tester_name: str,
-                          namespace: str = "TempLat") -> str:
+                          namespace: str = "TempLat", use_struct: bool = False,
+                          template_params: str = "") -> str:
     """
     Transform test header file:
     Change function qualifier from Foo::Test to FooTester::Test
+    Handles both non-templated and templated classes.
+
+    For non-templated: "inline void NS::Foo::Test" -> "inline void NS::FooTester::Test"
+    For templated: "template<...> inline void NS::Foo<...>::Test" -> "template<...> inline void NS::FooTester<...>::Test"
     """
+    # First try: simple non-templated case
     old_qualifier = f'{namespace}::{class_name}::Test('
     new_qualifier = f'{namespace}::{tester_name}::Test('
-    content = content.replace(old_qualifier, new_qualifier, 1)
+    if old_qualifier in content:
+        content = content.replace(old_qualifier, new_qualifier, 1)
+        return content
+
+    # Second try: templated case - keep template parameters, just change class and instantiation
+    if template_params:
+        # Pattern: "template <SAME_PARAMS> inline void NS::ClassName<SAME_PARAMS>::Test"
+        # Replace with: "template <SAME_PARAMS> inline void NS::TesterName<SAME_PARAMS>::Test"
+        # We need to preserve the actual template parameters in the specialization
+
+        # Extract the template parameters from the test method to find what to replace
+        # Pattern: template<...> inline void NS::ClassName<...>::Test
+        templated_pattern = (
+            r'(template\s*<[^>]*>)\s+inline\s+void\s+' +
+            re.escape(f'{namespace}::{class_name}') +
+            r'(<[^>]*>::Test\s*\()'
+        )
+        # Replacement: keep template declaration, change class name and specialization
+        # We'll use a function to do the replacement properly
+        def replace_templated(match):
+            template_decl = match.group(1)  # e.g., "template<size_t NDim, typename T>"
+            rest = match.group(2)  # e.g., "<size_t NDim, typename T>::Test("
+            return f'{template_decl} inline void {namespace}::{tester_name}{rest}'
+
+        new_content = re.sub(templated_pattern, replace_templated, content, count=1)
+        if new_content != content:
+            return new_content
+
     return content
 
 
@@ -106,10 +181,31 @@ def transform_registration_cpp(content: str, class_name: str, tester_name: str,
     """
     Transform registration .cpp file:
     Change TDDContainer<Foo> to TDDContainer<FooTester>
+    Also handles templated classes: TDDContainer<Foo<...>> to TDDContainer<FooTester<...>>
+
+    For templated classes with template specialization, preserve the template arguments.
     """
+    # First try: simple non-templated case
     old_container = f'TDDContainer<{namespace}::{class_name}>'
     new_container = f'TDDContainer<{namespace}::{tester_name}>'
-    content = content.replace(old_container, new_container, 1)
+    if old_container in content:
+        content = content.replace(old_container, new_container, 1)
+        return content
+
+    # Second try: templated case with template specialization
+    # Pattern: TDDContainer<NS::ClassName<ARGS>>
+    # Replace with: TDDContainer<NS::TesterName<ARGS>>
+    templated_pattern = (
+        r'TDDContainer<' +
+        re.escape(f'{namespace}::{class_name}') +
+        r'<([^>]*)>>'
+    )
+    replacement = f'TDDContainer<{namespace}::{tester_name}<\\1>>'
+
+    new_content = re.sub(templated_pattern, replacement, content)
+    if new_content != content:
+        return new_content
+
     return content
 
 
@@ -117,6 +213,8 @@ def apply_transformation(descriptor: ClassDescriptor, dry_run: bool = False) -> 
     """
     Apply transformation to all three files for a given class descriptor.
     Returns a dict with status for each file.
+
+    Auto-detects template parameters if not provided.
     """
     results = {
         'class': descriptor.class_name,
@@ -125,6 +223,17 @@ def apply_transformation(descriptor: ClassDescriptor, dry_run: bool = False) -> 
         'registration_cpp': None,
         'errors': []
     }
+
+    # Auto-detect template parameters if not provided
+    template_params = descriptor.template_params
+    if not template_params:
+        try:
+            header_path = Path(descriptor.header)
+            if header_path.exists():
+                header_content = header_path.read_text()
+                template_params = extract_template_params(header_content, descriptor.class_name)
+        except Exception:
+            pass
 
     # Transform header
     try:
@@ -135,7 +244,7 @@ def apply_transformation(descriptor: ClassDescriptor, dry_run: bool = False) -> 
             content = header_path.read_text()
             new_content = transform_header(
                 content, descriptor.class_name, descriptor.tester_name,
-                descriptor.use_struct, descriptor.namespace
+                descriptor.use_struct, descriptor.namespace, template_params
             )
             if content != new_content:
                 results['header'] = 'transformed'
@@ -155,7 +264,7 @@ def apply_transformation(descriptor: ClassDescriptor, dry_run: bool = False) -> 
             content = test_header_path.read_text()
             new_content = transform_test_header(
                 content, descriptor.class_name, descriptor.tester_name,
-                descriptor.namespace
+                descriptor.namespace, descriptor.use_struct, template_params
             )
             if content != new_content:
                 results['test_header'] = 'transformed'

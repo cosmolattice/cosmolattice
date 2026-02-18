@@ -10,7 +10,7 @@
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/field/field.h"
 
-inline void TempLat::GetNDim::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::GetNDimTester::Test(TempLat::TDDAssertion &tdd)
 {
   tdd.verify(GetNDim::get<Field<1, double>>() == 1);
   tdd.verify(GetNDim::get<Field<2, double>>() == 2);

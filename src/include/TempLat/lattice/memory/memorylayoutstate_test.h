@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MemoryLayoutState::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MemoryLayoutStateTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   MemoryLayoutState mState;

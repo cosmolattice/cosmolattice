@@ -14,7 +14,7 @@
 #include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 
-template <int N, typename T> inline void TempLat::GetVectorComponentHelper<N, T>::Test(TempLat::TDDAssertion &tdd)
+template <int N, typename T> inline void TempLat::GetVectorComponentHelperTester<N, T>::Test(TempLat::TDDAssertion &tdd)
 {
   // TODO but this is much.
   auto toolBox = MemoryToolBox<3>::makeShared(32, 1);

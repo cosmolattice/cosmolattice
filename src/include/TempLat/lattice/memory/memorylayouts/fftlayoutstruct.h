@@ -94,12 +94,16 @@ namespace TempLat
     device::Idx mExternalMemoryRequirement;
 
     IntrinsicScales mScales;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct FFTLayoutStructTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -243,11 +243,6 @@ namespace TempLat
       // mBinBounds.clear();
       return *this;
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename T>
@@ -284,6 +279,15 @@ namespace TempLat
     auto func = [&](auto x) { return scale; };
     return func * obj;
   }
+
+#ifdef TEMPLATTEST
+template<typename T = double>
+  struct RadialProjectionResultTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

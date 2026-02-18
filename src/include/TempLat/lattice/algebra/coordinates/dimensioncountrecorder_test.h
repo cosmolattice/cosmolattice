@@ -6,7 +6,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-template <size_t NDim> inline void TempLat::DimensionCountRecorder<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::DimensionCountRecorderTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   {
     DimensionCountRecorder<2> cn(SpaceStateType::Fourier);

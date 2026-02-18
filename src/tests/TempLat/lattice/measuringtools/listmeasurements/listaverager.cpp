@@ -9,5 +9,5 @@
 
 namespace
 {
-  // TempLat::TDDContainer<TempLat::ListAverager<>> test;
+  // TempLat::TDDContainer<TempLat::ListAveragerTester<>> test;
 }

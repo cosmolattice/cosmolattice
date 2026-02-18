@@ -11,7 +11,7 @@
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/halftype.h"
 
-inline void TempLat::DoEval::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::DoEvalTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct myTest {
     DEVICE_FORCEINLINE_FUNCTION

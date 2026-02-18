@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetVectorComponentHelper<1, double>> test;
+  TempLat::TDDContainer<TempLat::GetVectorComponentHelperTester<1, double>> test;
 }

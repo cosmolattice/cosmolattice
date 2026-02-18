@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim, typename T> inline void TempLat::MemoryManager<NDim, T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::MemoryManagerTester<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   auto toolBox = MemoryToolBox<NDim>::makeShared(192, 2);
 

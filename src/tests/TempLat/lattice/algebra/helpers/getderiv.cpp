@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetDeriv> test;
+  TempLat::TDDContainer<TempLat::GetDerivTester> test;
 }

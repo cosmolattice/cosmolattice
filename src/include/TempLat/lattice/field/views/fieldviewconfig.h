@@ -192,12 +192,16 @@ namespace TempLat
     device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
 
     bool mDisableFFTBlocking;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t _NDim, typename T>
+  struct ConfigViewTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

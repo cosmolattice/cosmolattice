@@ -380,13 +380,16 @@ namespace TempLat
 
     HDF5File mFile;
     HDF5Dataset mDataset;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class FileSaverHDF5Tester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif // HAVE_HDF5

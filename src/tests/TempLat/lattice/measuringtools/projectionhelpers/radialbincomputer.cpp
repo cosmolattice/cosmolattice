@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::RadialBinComputer> test;
+  TempLat::TDDContainer<TempLat::RadialBinComputerTester> test;
 }

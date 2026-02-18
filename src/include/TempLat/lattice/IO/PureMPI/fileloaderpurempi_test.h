@@ -8,7 +8,7 @@
 
 // File info: Main contributor(s): ,  Year: YEAR
 
-template <size_t NDim> inline void TempLat::FileLoaderPureMPI<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::FileLoaderPureMPITester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(true);

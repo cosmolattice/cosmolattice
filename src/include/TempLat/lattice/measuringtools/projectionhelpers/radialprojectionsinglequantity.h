@@ -132,12 +132,16 @@ namespace TempLat
 #endif
 #endif
     }
+  };
 
 #ifdef TEMPLATTEST
+template<typename T>
+  struct RadialProjectionSingleQuantityTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

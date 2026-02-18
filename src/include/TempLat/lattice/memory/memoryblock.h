@@ -201,12 +201,16 @@ namespace TempLat
 #endif
 #endif
     }
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim, typename T>
+  struct MemoryBlockTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

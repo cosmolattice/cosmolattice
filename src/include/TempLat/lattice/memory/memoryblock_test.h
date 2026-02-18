@@ -10,7 +10,7 @@
 #include "TempLat/util/almostequal.h"
 #include "TempLat/parallel/device_iteration.h"
 
-template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::MemoryBlockTester<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   // Basic raw access
   {
@@ -30,13 +30,13 @@ template <size_t NDim, typename T> inline void TempLat::MemoryBlock<NDim, T>::Te
   if constexpr (NDim == 3) {
     MemoryBlock<NDim, T> test(16 * 16 * 16);
 
-    auto view = test.getNDView<T>(device::IdxArray<3>{{16, 16, 16}});
+    auto view = test.template getNDView<T>(device::IdxArray<3>{{16, 16, 16}});
 
     device::iteration::foreach<3>(
         "it2", {0, 0, 0}, {16, 16, 16},
         DEVICE_LAMBDA(const device::IdxArray<3> i) { view(i[0], i[1], i[2]) = i[0] * 256 + i[1] * 16 + i[2]; });
 
-    auto host_view = test.getNDHostView<T>(device::IdxArray<3>{{16, 16, 16}});
+    auto host_view = test.template getNDHostView<T>(device::IdxArray<3>{{16, 16, 16}});
 
     bool all_true = true;
     for (size_t i = 0; i < 16; ++i) {

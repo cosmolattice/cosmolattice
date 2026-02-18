@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::GetString::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::GetStringTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   tdd.verify(std::is_same<std::string, decltype(GetString::get(complex<double>(1, 1)))>::value);

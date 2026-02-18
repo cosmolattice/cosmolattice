@@ -181,12 +181,16 @@ namespace TempLat
     device::IdxArray<NDim> mNGrid;
     HermitianPartnersMode mode;
     device::IdxArray<NDim> mSignConversionMidpoint;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct HermitianPartnersTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -188,12 +188,16 @@ namespace TempLat
     const LayoutStructLocal<NDim> &getLocal() const { return getTransposed().getLocal(); }
     DEVICE_FORCEINLINE_FUNCTION
     const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct LayoutStructTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -11,7 +11,7 @@
 #include "TempLat/util/powr.h"
 #include "TempLat/parallel/device_iteration.h"
 
-template <typename T> inline void TempLat::RadialProjectionResult<T>::Test(TempLat::TDDAssertion &tdd)
+template <typename T> inline void TempLat::RadialProjectionResultTester<T>::Test(TempLat::TDDAssertion &tdd)
 {
   RadialProjectionResult one(10), two(12), three(10);
 

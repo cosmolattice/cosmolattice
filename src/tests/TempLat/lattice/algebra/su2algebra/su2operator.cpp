@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::SU2Operator> test;
+  TempLat::TDDContainer<TempLat::SU2OperatorTester> test;
 }

@@ -90,12 +90,16 @@ namespace TempLat
 
   protected:
     R mR;
+  };
 
 #ifdef TEMPLATTEST
+template<typename R>
+  struct UnaryOperatorTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

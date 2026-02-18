@@ -7,8 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-template <typename vType, bool isComplex>
-inline void TempLat::AveragerHelper<vType, isComplex>::Test(TempLat::TDDAssertion &tdd)
+template <typename vType, bool isComplex> inline void TempLat::AveragerHelperTester<vType, isComplex>::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   // tdd.verify( false ); Tested in averager.

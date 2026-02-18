@@ -278,13 +278,16 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     HDF5File mFile;
     HDF5Dataset mDataset;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class FileLoaderHDF5Tester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

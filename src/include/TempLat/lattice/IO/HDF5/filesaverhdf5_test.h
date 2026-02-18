@@ -11,7 +11,7 @@
 
 #include <filesystem>
 
-inline void TempLat::FileSaverHDF5::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FileSaverHDF5Tester::Test(TempLat::TDDAssertion &tdd)
 {
   FileSaverHDF5 fs;
 

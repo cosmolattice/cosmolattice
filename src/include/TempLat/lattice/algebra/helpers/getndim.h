@@ -61,6 +61,14 @@ namespace TempLat
   concept HasNDim = requires {
     { GetNDim::get<T>() } -> std::convertible_to<size_t>;
   };
+
+#ifdef TEMPLATTEST
+  class GetNDimTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

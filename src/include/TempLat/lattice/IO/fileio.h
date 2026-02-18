@@ -74,12 +74,16 @@ namespace TempLat
     FileSaverPureMPI<NDim> saver;
     FileLoaderPureMPI<NDim> loader;
 #endif
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim = 3>
+  struct FileIOTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

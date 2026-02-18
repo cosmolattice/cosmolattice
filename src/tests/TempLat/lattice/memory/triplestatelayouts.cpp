@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::TripleStateLayouts<3>> test;
+  TempLat::TDDContainer<TempLat::TripleStateLayoutsTester<3>> test;
 }

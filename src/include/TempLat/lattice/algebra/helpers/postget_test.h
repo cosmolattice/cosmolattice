@@ -21,7 +21,7 @@ public:
 };
 bool WithPostGet::called = false; // Initialize static member variable
 
-inline void TempLat::PostGet::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::PostGetTester::Test(TempLat::TDDAssertion &tdd)
 {
   NoPostGet noPostGet;
   WithPostGet withPostGet;

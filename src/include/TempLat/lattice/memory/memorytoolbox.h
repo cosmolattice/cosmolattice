@@ -249,12 +249,16 @@ namespace TempLat
     GhostUpdater<NDim> mGhostUpdater;
 
     VerbosityLevels verbosity;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t _NDim>
+  struct MemoryToolBoxTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #include "TempLat/lattice/memory/memorymanager.h"

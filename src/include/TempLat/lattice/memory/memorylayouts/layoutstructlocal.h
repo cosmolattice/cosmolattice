@@ -124,12 +124,16 @@ namespace TempLat
     device::IdxArray<NDim> mLocalStarts;
     device::array<device::IdxArray<2>, NDim> mPadding;
     device::Idx mNGhosts;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t _NDim>
+  struct LayoutStructLocalTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetString> test;
+  TempLat::TDDContainer<TempLat::GetStringTester> test;
 }

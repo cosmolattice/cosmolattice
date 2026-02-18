@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ListUnaryOperator<double>> test;
+  TempLat::TDDContainer<TempLat::ListUnaryOperatorTester<double>> test;
 }

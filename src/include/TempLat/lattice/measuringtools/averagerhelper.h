@@ -78,12 +78,16 @@ namespace TempLat
 
       return value / normRe;
     }
+  };
 
 #ifdef TEMPLATTEST
+template<typename vType, bool isComplexValued>
+  struct AveragerHelperTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

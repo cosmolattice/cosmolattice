@@ -9,15 +9,15 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FourierView<1, double>> test1;
-  TempLat::TDDContainer<TempLat::FourierView<2, double>> test2;
-  TempLat::TDDContainer<TempLat::FourierView<3, double>> test3;
-  TempLat::TDDContainer<TempLat::FourierView<4, double>> test4;
+  TempLat::TDDContainer<TempLat::FourierViewTester<1, double>> test1;
+  TempLat::TDDContainer<TempLat::FourierViewTester<2, double>> test2;
+  TempLat::TDDContainer<TempLat::FourierViewTester<3, double>> test3;
+  TempLat::TDDContainer<TempLat::FourierViewTester<4, double>> test4;
 
 #ifdef HAVE_FFTFLOAT
-  TempLat::TDDContainer<TempLat::FourierView<1, float>> test1f;
-  TempLat::TDDContainer<TempLat::FourierView<2, float>> test2f;
-  TempLat::TDDContainer<TempLat::FourierView<3, float>> test3f;
-  TempLat::TDDContainer<TempLat::FourierView<4, float>> test4f;
+  TempLat::TDDContainer<TempLat::FourierViewTester<1, float>> test1f;
+  TempLat::TDDContainer<TempLat::FourierViewTester<2, float>> test2f;
+  TempLat::TDDContainer<TempLat::FourierViewTester<3, float>> test3f;
+  TempLat::TDDContainer<TempLat::FourierViewTester<4, float>> test4f;
 #endif
 } // namespace

@@ -6,7 +6,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-template <size_t NDim> inline void TempLat::HermitianPartners<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::HermitianPartnersTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   HermitianPartners<4> hp({16, 16, 16, 16});
   /* simply test the default implementation */

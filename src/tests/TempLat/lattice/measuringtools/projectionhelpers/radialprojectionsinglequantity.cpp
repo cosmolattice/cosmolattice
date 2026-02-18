@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::RadialProjectionSingleQuantity<double>> test;
+  TempLat::TDDContainer<TempLat::RadialProjectionSingleQuantityTester<double>> test;
 }
