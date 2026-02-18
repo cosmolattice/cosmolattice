@@ -112,6 +112,14 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
   };
 #endif
+
+#ifdef TEMPLATTEST
+  class PowerSpectrumMeasurerTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

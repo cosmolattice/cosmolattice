@@ -53,12 +53,15 @@ namespace TempLat
         //  only contributions from the kinetic energies and the potential.
       }
     }
+  };
 
 #ifdef TEMPLATTEST
+  struct ScaleFactorInitializerTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

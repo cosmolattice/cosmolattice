@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GaugeDerivatives> test;
+  TempLat::TDDContainer<TempLat::GaugeDerivativesTester> test;
 }

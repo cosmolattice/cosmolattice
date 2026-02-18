@@ -57,12 +57,15 @@ namespace TempLat
     {
       return {"t", "<|E|>", "<|B|>", "<|E|^2>", "<|B|^2>", "rms(|E|)", "rms(|B|)"};
     }
+  };
 
 #ifdef TEMPLATTEST
+  struct MeansMeasurerTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

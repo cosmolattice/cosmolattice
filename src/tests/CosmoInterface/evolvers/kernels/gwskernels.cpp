@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GWsKernels> test;
+  TempLat::TDDContainer<TempLat::GWsKernelsTester> test;
 }

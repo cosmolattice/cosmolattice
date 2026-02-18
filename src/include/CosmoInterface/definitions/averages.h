@@ -115,13 +115,16 @@ namespace TempLat
         model.SU2DblGrad2AvI = Averages::grad2SU2Doublet(model);
       }
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class AveragesTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

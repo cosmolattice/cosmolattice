@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-inline void TempLat::MatterCurrents::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MatterCurrentsTester::Test(TempLat::TDDAssertion &tdd)
 {
   // auto SU2Part = model.gQ_SU2DblSU2(a, Tag<N>()) * MakeSU2(b, Real(model.fldSU2Doublet(a)));
 

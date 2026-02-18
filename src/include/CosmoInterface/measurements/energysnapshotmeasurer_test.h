@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-template <typename Model> inline void TempLat::EnergySnapshotsMeasurer<Model>::Test(TempLat::TDDAssertion &tdd)
+template <typename Model> inline void TempLat::EnergySnapshotsMeasurerTester<Model>::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(true);

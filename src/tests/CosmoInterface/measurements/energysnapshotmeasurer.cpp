@@ -10,5 +10,5 @@
 
 namespace
 {
-  // TempLat::TDDContainer<TempLat::EnergySnapshotsMeasurer> test;
+  // TempLat::TDDContainer<TempLat::EnergySnapshotsMeasurerTester> test;
 }

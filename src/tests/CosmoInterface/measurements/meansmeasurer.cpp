@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MeansMeasurer> test;
+  TempLat::TDDContainer<TempLat::MeansMeasurerTester> test;
 }

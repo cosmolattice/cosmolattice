@@ -34,13 +34,16 @@ namespace TempLat
       // Returns a vector, whose 0 component is the relative degree of conservation.
       return make_templatvector((LHS - RHS) / (LHS + RHS), LHS, RHS);
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class HubbleConstraintTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

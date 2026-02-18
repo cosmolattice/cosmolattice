@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::SU2Initializer> test;
+  TempLat::TDDContainer<TempLat::SU2InitializerTester> test;
 }

@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::HubbleConstraint> test;
+  TempLat::TDDContainer<TempLat::HubbleConstraintTester> test;
 }

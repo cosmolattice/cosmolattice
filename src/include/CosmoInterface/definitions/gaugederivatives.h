@@ -149,13 +149,16 @@ namespace TempLat
     {
       return MakeVector(i, 1, Model::NDim, SU2sForSU2DoubletCovDerivs(model, t, i));
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class GaugeDerivativesTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

@@ -15,7 +15,7 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/util/tdd/tdd.h"
 
-inline void TempLat::SU2Initializer::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::SU2InitializerTester::Test(TempLat::TDDAssertion &tdd)
 {
   static constexpr size_t NDim = 3;
   static constexpr ptrdiff_t nGrid = 4, nGhost = 0;

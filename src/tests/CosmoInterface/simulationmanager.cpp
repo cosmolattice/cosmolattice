@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::SimulationManager<3>> test;
+  TempLat::TDDContainer<TempLat::SimulationManagerTester<3>> test;
 }
