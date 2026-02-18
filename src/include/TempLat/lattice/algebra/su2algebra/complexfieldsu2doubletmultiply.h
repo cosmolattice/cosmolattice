@@ -13,6 +13,7 @@
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldmultiply.h"
 
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
+#include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator.h"
 #include "TempLat/parallel/device.h"
@@ -88,7 +89,7 @@ namespace TempLat
 
   template <typename R, typename T>
     requires((std::is_arithmetic_v<std::decay_t<R>> || HasEvalMethod<R>) && HasSU2DoubletGet<T> &&
-             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>>)
+             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>> && !HasSU2Get<R> && !HasSU2DoubletGet<R>)
   auto operator*(const R &r, const T &t)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(r, ZeroType()), t);
@@ -96,7 +97,7 @@ namespace TempLat
 
   template <typename R, typename T>
     requires((std::is_arithmetic_v<std::decay_t<R>> || HasEvalMethod<R>) && HasSU2DoubletGet<T> &&
-             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>>)
+             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>> && !HasSU2Get<R> && !HasSU2DoubletGet<R>)
   auto operator*(const T &t, const R &r)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(r, ZeroType()), t);
@@ -104,7 +105,7 @@ namespace TempLat
 
   template <typename R, typename T>
     requires((std::is_arithmetic_v<std::decay_t<R>> || HasEvalMethod<R>) && HasSU2DoubletGet<T> &&
-             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>>)
+             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>> && !HasSU2Get<R> && !HasSU2DoubletGet<R>)
   auto operator/(const T &t, const R &r)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(1_c / r, ZeroType()), t);
