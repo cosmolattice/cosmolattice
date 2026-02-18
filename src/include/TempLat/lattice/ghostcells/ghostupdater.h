@@ -17,8 +17,6 @@
 #include "TempLat/parallel/device_iteration.h"
 #include "TempLat/parallel/device_memory.h"
 
-// #define IEXCH
-
 namespace TempLat
 {
   MakeException(GhostUpdaterException);
@@ -199,7 +197,6 @@ namespace TempLat
     {
       auto *ptr = block.data();
 #ifdef HAVE_MPI
-#ifndef IEXCH
       mExchange.exchangeUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                            /* base ptr is lower corner of all memory, including ghosts. */
                            /* send:
@@ -213,28 +210,6 @@ namespace TempLat
       mExchange.exchangeDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                              ptr + mGhostDepth * mLayout.stride(dimension),
                              ptr + (mGhostDepth + mLayout.getSizesInMemory()[dimension]) * mLayout.stride(dimension));
-#else
-      mExchange.IrecvUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-                        /* base ptr is lower corner of all memory, including ghosts. */
-                        /* send:
-                         Don't jump to origin, but jump along the edge of dimension
-                         to the point where we still have mGhostDepth until the end of
-                         our *owned* memory (before the mGhostDepth hyper slices start) */
-                        ptr + (mLayout.getSizesInMemory()[dimension]) * mLayout.stride(dimension),
-                        /* receive: in origin, including ghosts. */
-                        ptr);
-      /* pointers: the same as above, but shifted by ghostDepth and ordering swapped. Yes. */
-      mExchange.IrecvDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-                          ptr + mGhostDepth * mLayout.stride(dimension),
-                          ptr + (mGhostDepth + mLayout.getSizesInMemory()[dimension]) * mLayout.stride(dimension));
-      /*Same as above*/
-      mExchange.IsendUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-                        ptr + (mLayout.getSizesInMemory()[dimension]) * mLayout.stride(dimension), ptr);
-      mExchange.IsendDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-                          ptr + mGhostDepth * mLayout.stride(dimension),
-                          ptr + (mGhostDepth + mLayout.getSizesInMemory()[dimension]) * mLayout.stride(dimension));
-      mExchange.waitall();
-#endif
 #endif
     }
 
