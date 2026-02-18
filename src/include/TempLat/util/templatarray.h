@@ -35,7 +35,7 @@ namespace TempLat
         mVec[i] = vec[i];
     }
 
-    // TODO: What?
+    // TODO: Hm, is this really the right way?
     template <typename S> void operator=(S &&vec) { ForLoop(i, 0, N - 1, mVec[i] = GetValue::get(vec.getComp(i), 0)); }
 
     std::array<T, N> &asArr() { return mVec; }

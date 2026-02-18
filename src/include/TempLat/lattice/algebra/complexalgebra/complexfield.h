@@ -80,7 +80,6 @@ namespace TempLat
 
     template <typename R> void operator=(R &&g)
     {
-      // TODO: Some of these things are obscuring things. Do we need ComplexFieldGetter? I don't think so.
       const auto &gR = ComplexFieldGetter::get(g, 0_c);
       const auto &gI = ComplexFieldGetter::get(g, 1_c);
 

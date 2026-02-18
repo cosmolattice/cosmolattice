@@ -16,7 +16,6 @@
 
 namespace TempLat
 {
-
   /** @brief A class which get real and imaginary part.
    *
    *
@@ -45,7 +44,6 @@ namespace TempLat
     {
       return r.ComplexFieldGet(t);
     }
-
   };
 } // namespace TempLat
 
