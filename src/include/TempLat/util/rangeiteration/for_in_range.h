@@ -10,7 +10,6 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/foreach.h"
 #include "TempLat/util/rangeiteration/taglist.h"
-#include "TempLat/util/staticif.h"
 
 namespace TempLat
 {

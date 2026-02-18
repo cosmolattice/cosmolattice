@@ -12,7 +12,6 @@
 #include "TempLat/lattice/algebra/listoperators/listoperators.h"
 #include "TempLat/lattice/algebra/su2algebra/su2algebra.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
-#include "TempLat/util/staticif.h"
 #include "TempLat/lattice/measuringtools/averager.h"
 #include "TempLat/lattice/algebra/gaugealgebra/u1exponential.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldshift.h"

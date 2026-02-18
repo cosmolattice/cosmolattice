@@ -11,7 +11,6 @@
 #include "TempLat/util/rangeiteration/tag.h"
 #include "TempLat/util/tuple_size.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/staticif.h"
 
 // NOTE: unfolding of binary operators is part of c++17, could change that in future version.
 

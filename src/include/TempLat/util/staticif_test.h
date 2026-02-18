@@ -7,10 +7,17 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/lattice/algebra/constants/zerotype.h"
+
 inline void TempLat::StaticIfTester::Test(TempLat::TDDAssertion &tdd)
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(static_if<true>(true, false));
+  // IfElse: true branch
+  tdd.verify(IfElse(true, true, false));
+  // IfElse: false branch
+  tdd.verify(!IfElse(false, true, false));
+  // IfElse: different types
+  tdd.verify(IfElse(true, 42, 0) == 42);
+  tdd.verify(IfElse(false, 42, 0) == 0);
 }
 
 #endif
