@@ -9,10 +9,7 @@
 
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
-#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/preget.h"
@@ -110,16 +107,6 @@ namespace TempLat
       ConfirmSpace::apply(g, mToolBox->mLayouts.getFourierSpaceLayout(), SpaceStateType::Fourier);
       GhostsHunter::apply(g);
       mManager->flagHostMirrorOutdated();
-    }
-
-    template <typename... IDX>
-      requires requires {
-        requires(NDim == sizeof...(IDX));
-        requires(std::is_integral_v<std::decay_t<IDX>> && ...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
-    {
-      return mView(idx...);
     }
 
     template <typename... IDX>

@@ -16,6 +16,7 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator.h"
 #include "TempLat/parallel/device.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 
 namespace TempLat
 {
@@ -43,7 +44,11 @@ namespace TempLat
     auto SU2DoubletGet(Tag<3> t) const { return Imag(mR * Complexify(mT.SU2DoubletGet(2_c), mT.SU2DoubletGet(3_c))); }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+        DoEval::eval(t, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto cmplx = DoEval::eval(mR, idx...);   // complex child — now returns array<T, 2>
@@ -82,21 +87,24 @@ namespace TempLat
   }
 
   template <typename R, typename T>
-    requires((std::is_arithmetic_v<std::decay_t<R>> || HasGetMethod<R>) && HasSU2DoubletGet<T>)
+    requires((std::is_arithmetic_v<std::decay_t<R>> || HasEvalMethod<R>) && HasSU2DoubletGet<T> &&
+             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>>)
   auto operator*(const R &r, const T &t)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(r, ZeroType()), t);
   }
 
   template <typename R, typename T>
-    requires((std::is_arithmetic_v<std::decay_t<R>> || HasGetMethod<R>) && HasSU2DoubletGet<T>)
+    requires((std::is_arithmetic_v<std::decay_t<R>> || HasEvalMethod<R>) && HasSU2DoubletGet<T> &&
+             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>>)
   auto operator*(const T &t, const R &r)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(r, ZeroType()), t);
   }
 
   template <typename R, typename T>
-    requires((std::is_arithmetic_v<std::decay_t<R>> || HasGetMethod<R>) && HasSU2DoubletGet<T>)
+    requires((std::is_arithmetic_v<std::decay_t<R>> || HasEvalMethod<R>) && HasSU2DoubletGet<T> &&
+             !HasComplexFieldGet<R> && !IsComplexType<std::decay_t<R>>)
   auto operator/(const T &t, const R &r)
   {
     return ComplexFieldSU2DoubletMultiplication(Complexify(1_c / r, ZeroType()), t);

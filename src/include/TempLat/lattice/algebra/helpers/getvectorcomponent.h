@@ -32,16 +32,6 @@ namespace TempLat
         requires IsVariadicIndex<JDX...>;
         DoEval::eval(mR, idx...);
       }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const JDX &...jdx) const
-    {
-      return DoEval::eval(mR, jdx...)[N];
-    }
-
-    template <typename... JDX>
-      requires requires(std::decay_t<R> mR, JDX... idx) {
-        requires IsVariadicIndex<JDX...>;
-        DoEval::eval(mR, idx...);
-      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const JDX &...jdx) const
     {
       return DoEval::eval(mR, jdx...)[N];

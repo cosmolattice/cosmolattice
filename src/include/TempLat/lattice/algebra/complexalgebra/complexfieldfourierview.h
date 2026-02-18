@@ -58,9 +58,9 @@ namespace TempLat
       requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      device::array<decltype(mR.get(idx...)), 2> result;
-      result[0] = mR.get(idx...);
-      result[1] = mI.get(idx...);
+      device::array<decltype(mR.eval(idx...)), 2> result;
+      result[0] = mR.eval(idx...);
+      result[1] = mI.eval(idx...);
       return result;
     }
 

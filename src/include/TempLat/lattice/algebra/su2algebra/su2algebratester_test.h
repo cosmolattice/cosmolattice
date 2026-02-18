@@ -29,19 +29,19 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
 
   auto test1 = i_sigma(1_c) * i_sigma(3_c) * i_sigma(1_c) * i_sigma(3_c);
 
-  tdd.verify(test1.SU2Get(0_c).get(0) == -1);
-  tdd.verify(test1.SU2Get(1_c).get(0) == 0);
-  tdd.verify(test1.SU2Get(2_c).get(0) == 0);
-  tdd.verify(test1.SU2Get(3_c).get(0) == 0);
+  tdd.verify(test1.SU2Get(0_c).eval(0) == -1);
+  tdd.verify(test1.SU2Get(1_c).eval(0) == 0);
+  tdd.verify(test1.SU2Get(2_c).eval(0) == 0);
+  tdd.verify(test1.SU2Get(3_c).eval(0) == 0);
 
   auto test2 = i_sigma(1_c) * i_sigma(3_c);
 
-  tdd.verify(test2.SU2Get(0_c).get(0) == 0);
-  tdd.verify(test2.SU2Get(1_c).get(0) == 0);
-  tdd.verify(test2.SU2Get(2_c).get(0) == 1);
-  tdd.verify(test2.SU2Get(3_c).get(0) == 0);
+  tdd.verify(test2.SU2Get(0_c).eval(0) == 0);
+  tdd.verify(test2.SU2Get(1_c).eval(0) == 0);
+  tdd.verify(test2.SU2Get(2_c).eval(0) == 1);
+  tdd.verify(test2.SU2Get(3_c).eval(0) == 0);
 
-  tdd.verify(dagger(i_sigma(3_c)).SU2Get(3_c).get(0) == -1);
+  tdd.verify(dagger(i_sigma(3_c)).SU2Get(3_c).eval(0) == -1);
 
   struct MySU2Doublet {
     MySU2Doublet(double i, double j, double k, double l) : arr{{i, j, k, l}} {}
@@ -65,15 +65,15 @@ inline void TempLat::SU2AlgebraTester::Test(TempLat::TDDAssertion &tdd)
   };
 
   auto test3 = scalar_prod(MySU2Doublet(2, 0, 1, 1), dagger(i_sigma(1_c)) * MySU2Doublet(1, 1, 1, -1));
-  tdd.verify(Real(test3).get(0) == -2);
-  tdd.verify(Imag(test3).get(0) == -4);
+  tdd.verify(Real(test3).eval(0) == -2);
+  tdd.verify(Imag(test3).eval(0) == -4);
   tdd.verify(HasComplexFieldGet<decltype(test3)> == true);
 
   auto test4 = test3 * MySU2Doublet(1, 1, 1, 1);
-  tdd.verify(test4.SU2DoubletGet(0_c).get(0) == 2);
-  tdd.verify(test4.SU2DoubletGet(1_c).get(0) == -6);
-  tdd.verify(test4.SU2DoubletGet(2_c).get(0) == 2);
-  tdd.verify(test4.SU2DoubletGet(3_c).get(0) == -6);
+  tdd.verify(test4.SU2DoubletGet(0_c).eval(0) == 2);
+  tdd.verify(test4.SU2DoubletGet(1_c).eval(0) == -6);
+  tdd.verify(test4.SU2DoubletGet(2_c).eval(0) == 2);
+  tdd.verify(test4.SU2DoubletGet(3_c).eval(0) == -6);
 
   auto toolBox = MemoryToolBox<3>::makeShared(32, 1);
 

@@ -19,13 +19,16 @@ inline void TempLat::SqrtTester::Test(TempLat::TDDAssertion &tdd)
     DEVICE_FORCEINLINE_FUNCTION
     auto get(const double &i) const { return i; }
 
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(const double &i) const { return i; }
+
   private:
     [[maybe_unused]] double a;
   };
 
   myClass a(4);
   // myClass b(4);
-  say << sqrt(a).get(4) << "\n";
+  say << sqrt(a).eval(4) << "\n";
   /*
     tdd.verify( AlmostEqual(sqrt(a).get(4), 2)  );
 

@@ -14,6 +14,8 @@ namespace TempLat
     template <int RETURNVALUE> struct DiracTesterTemplate {
       DEVICE_FORCEINLINE_FUNCTION
       double get(ptrdiff_t i) const { return RETURNVALUE * std::numeric_limits<double>::epsilon(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      double eval(ptrdiff_t i) const { return RETURNVALUE * std::numeric_limits<double>::epsilon(); }
     };
   } // namespace TestScratch
 } // namespace TempLat
@@ -29,11 +31,11 @@ inline void TempLat::DiracDeltaFunctionTester::Test(TempLat::TDDAssertion &tdd)
   /* not weird. We use -ffast-math. https://stackoverflow.com/a/22931368/2295722 */
 
   //    tdd.verify( ! std::isfinite( DiracDelta(zero).get(pIterCoords) ) );
-  tdd.verify(DiracDelta(zero).get(0) > std::numeric_limits<double>::max() / 1.1);
+  tdd.verify(DiracDelta(zero).eval(0) > std::numeric_limits<double>::max() / 1.1);
 
-  tdd.verify(DiracDelta(positive).get(0) == 0);
+  tdd.verify(DiracDelta(positive).eval(0) == 0);
 
-  tdd.verify(DiracDelta(negative).get(0) == 0);
+  tdd.verify(DiracDelta(negative).eval(0) == 0);
 
   //  tdd.verify( std::is_same<PositiveInfinityType, decltype(DiracDelta(ZeroType()))>::value );
 

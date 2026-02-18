@@ -35,8 +35,7 @@ inline void TempLat::SU2Initializer::Test(TempLat::TDDAssertion &tdd)
       for (device::Idx j = 0; j < fftSizes[1]; ++j) {
         for (device::Idx k = 0; k < fftSizes[2]; ++k) {
           see_at = {i, j, k};
-          device::apply([&](const auto &...idx) { DoEval::eval(obj, idx...); }, see_at);
-          device::apply([&](const auto &...idx) { std::cout << std::setw(5) << obj.get(idx...); }, see_at);
+          device::apply([&](const auto &...idx) { std::cout << std::setw(5) << DoEval::eval(obj, idx...); }, see_at);
           if (k == fftSizes[2] - 1)
             std::cout << std::endl;
           else

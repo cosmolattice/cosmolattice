@@ -28,6 +28,7 @@ inline void TempLat::ConditionalBinaryGetterTester::Test(TempLat::TDDAssertion &
     MyClass(int b) : a(b) {}
 
     auto get(ptrdiff_t i) { return a; }
+    auto eval(ptrdiff_t i) { return a; }
 
   private:
     int a;
@@ -49,12 +50,13 @@ inline void TempLat::ConditionalBinaryGetterTester::Test(TempLat::TDDAssertion &
     MyClass2(int b) : a(b) {}
 
     auto get(ptrdiff_t i, ptrdiff_t j, ptrdiff_t k) const { return a; }
+    auto eval(ptrdiff_t i, ptrdiff_t j, ptrdiff_t k) const { return a; }
 
   private:
     int a;
   };
 
-  sqrt(MyClass2(1)).get(1, 2, 3); // should compile
+  sqrt(MyClass2(1)).eval(1, 2, 3); // should compile
 
   using A = TempLat::Operators::Multiplication<
       TempLat::Operators::Cosine<TempLat::Operators::Multiplication<double, TempLat::Field<3UL, double>>>,

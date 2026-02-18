@@ -27,6 +27,13 @@ namespace TempLat
       return 0.5;
     }
 
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION static constexpr double eval(const IDX &...)
+    {
+      return 0.5;
+    }
+
     /** @brief Need a static instance of halftype, for constructing `Power(T& a, HalfType& ht);` */
     static DEVICE_FORCEINLINE_FUNCTION HalfType &getStatic()
     {

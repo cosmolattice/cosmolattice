@@ -23,7 +23,7 @@ inline void TempLat::U1ExponentialTester::Test(TempLat::TDDAssertion &tdd)
 
   Field<NDim, T> psi("psi", toolBox);
   SpatialCoordinate x(toolBox);
-  psi = getVectorComponent(x, 0);
+  psi = getVectorComponent(x, Tag<0>{});
   psi.updateGhosts();
 
   auto U1 = complexPhase(psi);

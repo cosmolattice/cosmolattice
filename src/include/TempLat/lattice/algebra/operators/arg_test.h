@@ -13,6 +13,8 @@ inline void TempLat::ArgTester::Test(TempLat::TDDAssertion &tdd)
   struct MyStructR {
     DEVICE_FORCEINLINE_FUNCTION
     double get(int i) const { return (double)i / 4.0; }
+    DEVICE_FORCEINLINE_FUNCTION
+    double eval(int i) const { return (double)i / 4.0; }
   };
 
   struct MyStructC {
@@ -25,9 +27,9 @@ inline void TempLat::ArgTester::Test(TempLat::TDDAssertion &tdd)
   auto t1 = MyStructC();
   auto argu = arg(t1.ComplexFieldGet(0_c), t1.ComplexFieldGet(1_c));
 
-  tdd.verify(AlmostEqual(argu.get(0), 0));
-  tdd.verify(AlmostEqual(argu.get(1), 0.7853981633974483));
-  tdd.verify(AlmostEqual(argu.get(-1), 3.926990816987241));
+  tdd.verify(AlmostEqual(argu.eval(0), 0));
+  tdd.verify(AlmostEqual(argu.eval(1), 0.7853981633974483));
+  tdd.verify(AlmostEqual(argu.eval(-1), 3.926990816987241));
 }
 
 #endif

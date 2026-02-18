@@ -15,6 +15,7 @@ inline void TempLat::ConditionalUnaryGetterTester::Test(TempLat::TDDAssertion &t
     MyClass(int b) : a(b) {}
 
     auto get(ptrdiff_t i) { return a; }
+    auto eval(ptrdiff_t i) { return a; }
 
   private:
     int a;

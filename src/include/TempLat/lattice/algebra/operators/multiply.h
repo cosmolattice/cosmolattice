@@ -9,7 +9,7 @@
 
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
-#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/isarithmetic.h"
@@ -40,17 +40,11 @@ namespace TempLat
       Multiplication(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
       template <typename... IDX>
-        requires requires(IDX... idx) {
-          GetValue::get(mR, idx...);
-          GetValue::get(mT, idx...);
+        requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+          DoEval::eval(t, idx...);
         }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        return GetValue::get(mR, idx...) * GetValue::get(mT, idx...);
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         return DoEval::eval(mR, idx...) * DoEval::eval(mT, idx...);
@@ -73,10 +67,13 @@ namespace TempLat
       MultiplicationN(const R &pR) : UnaryOperator<R>(pR) {}
 
       template <typename... IDX>
-        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
+        requires requires(std::decay_t<R> r, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+        }
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
-        return N * GetValue::get(mR, idx...);
+        return N * DoEval::eval(mR, idx...);
       }
 
       virtual std::string operatorString() const override { return std::to_string(N) + "*"; }
@@ -95,14 +92,14 @@ namespace TempLat
   }
 
   template <typename R, int N>
-    requires(HasGetMethod<R> && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
+    requires(HasEvalMethod<R> && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
   DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, Tag<N> n)
   {
     return Operators::MultiplicationN<R, N>(r);
   }
 
   template <typename R, int N>
-    requires(HasGetMethod<R> && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
+    requires(HasEvalMethod<R> && !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>))
   DEVICE_FORCEINLINE_FUNCTION auto operator*(Tag<N> n, const R &r)
   {
     return Operators::MultiplicationN<R, N>(r);

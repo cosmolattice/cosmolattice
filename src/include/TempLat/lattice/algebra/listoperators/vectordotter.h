@@ -39,31 +39,12 @@ namespace TempLat
 
     static_assert(R::getVectorSize() == T::getVectorSize(), "VectorDotter: R and T must have the same vector size.");
 
-    /** @brief Getter for two instances: return type automatically determined by the type which we get by multiplying
-     * one element of T with one element of S. */
     template <typename... IDX>
-      requires requires(std::decay_t<R> mR, std::decay_t<T> mT, IDX... idx) {
+      requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
         requires IsVariadicIndex<IDX...>;
-        DoEval::eval(mR, idx...);
-        DoEval::eval(mT, idx...);
+        DoEval::eval(r, idx...);
+        DoEval::eval(t, idx...);
       }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-    {
-      /* sorry, an if-statement inside a getter function: if T and S are the same thing, let's not call its getter twice
-       * (it might be an expensive algebraic operation. */
-      if ((void *)&mR == (void *)&mT) {
-        auto cache = DoEval::eval(mR, idx...);
-        return device::apply([&](const auto &...args) { return (pow<2>(args) + ...); }, cache);
-      } else {
-        auto cache1 = DoEval::eval(mR, idx...);
-        auto cache2 = DoEval::eval(mT, idx...);
-        return device::apply([&](const auto &...args) { return ((cache1[args] * cache2[args]) + ...); },
-                             make_tuple_sequence<mVectorSize>());
-      }
-    }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       /* sorry, an if-statement inside a getter function: if T and S are the same thing, let's not call its getter twice

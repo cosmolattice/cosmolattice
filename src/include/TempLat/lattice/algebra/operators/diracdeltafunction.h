@@ -28,20 +28,11 @@ namespace TempLat
       DEVICE_FUNCTION
       DiracDeltaFunction(const R &a) : UnaryOperator<R>(a) {}
 
-      /** @brief Getter for two instances. */
       template <typename... IDX>
-        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        using mType = typename GetGetReturnType<R>::type;
-        mType objValue = GetValue::get(mR, idx...);
-        const bool isZero = objValue == mType{};
-        // TODO (Franz): What is actually the intended behaviour here?
-        return isZero ? std::numeric_limits<mType>::max() : mType{};
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
+        requires requires(std::decay_t<R> r, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+        }
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         using mType = typename GetGetReturnType<R>::type;

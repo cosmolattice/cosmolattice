@@ -43,7 +43,10 @@ namespace TempLat
     template <int N> DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<N> t) const { return SU2DoubletGet(t); }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto child = DoEval::eval(mR, idx...);

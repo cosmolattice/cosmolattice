@@ -34,19 +34,10 @@ namespace TempLat
     ExpressionShifter(const R &pR) : UnaryOperator<R>(pR) {}
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-    {
-      auto tup = device::tie(idx...);
-      constexpr_for<0, dim>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
-      });
-      return device::apply([&](const auto &...shifted_idx) { return GetValue::get(mR, shifted_idx...); }, tup);
-    }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto tup = device::tie(idx...);
@@ -82,17 +73,6 @@ namespace TempLat
 
     DEVICE_FUNCTION
     ExpressionShifterByOne(const R &pR) : UnaryOperator<R>(pR) {}
-
-    template <typename... IDX>
-      requires requires(R r, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        GetValue::get(mR, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-    {
-      return device::apply([&](const auto &...shifted_idx) { return GetValue::get(mR, shifted_idx...); },
-                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
-    }
 
     template <typename... IDX>
       requires requires(R r, IDX... idx) {

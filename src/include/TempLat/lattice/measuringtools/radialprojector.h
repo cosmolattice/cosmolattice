@@ -18,7 +18,6 @@
 #include "TempLat/lattice/algebra/operators/squareroot.h"
 
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
@@ -132,8 +131,7 @@ namespace TempLat
         // Add the bin contribution to the workspace.
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(mInstance, args...);
-              baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, 1.);
+              baseWorkSpace.add_device(bin, DoEval::eval(mInstance, args...), r, 1.);
             },
             idx);
       };

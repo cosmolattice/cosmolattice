@@ -38,7 +38,10 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto tup = device::tie(idx...);
@@ -71,7 +74,10 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },

@@ -31,6 +31,13 @@ namespace TempLat
     {
       return 0;
     }
+
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION static constexpr ptrdiff_t eval(const IDX &...)
+    {
+      return 0;
+    }
     template <int N> constexpr auto operator()(const Tag<N> t) const { return ZeroType(); }
     static constexpr bool ISCONSTANT = true;
     static constexpr int value = 0;

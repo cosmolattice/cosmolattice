@@ -10,7 +10,6 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
@@ -85,8 +84,7 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(mT, args...);
-              update += mT.get(args...);
+              update += DoEval::eval(mT, args...);
             },
             idx);
       };
@@ -110,8 +108,7 @@ namespace TempLat
               if (mLayout.getHermitianPartners().qualify(global_coord) == HermitianRedundancy::negativePartner)
                 return; // skip negative partners
 
-              DoEval::eval(mT, args...);
-              update += mT.get(args...);
+              update += DoEval::eval(mT, args...);
             },
             idx);
       };

@@ -15,6 +15,7 @@ public:
   myClass(int b) : a(b) {}
 
   template <std::integral... IDX> DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...i) const { return a; }
+  template <std::integral... IDX> DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...i) const { return a; }
 
 private:
   double a;
@@ -24,8 +25,8 @@ inline void TempLat::UnaryMinusTester::Test(TempLat::TDDAssertion &tdd)
 {
   myClass a(4);
   // myClass b(4);
-  tdd.verify(AlmostEqual((-a).get(0), -4));
-  tdd.verify(AlmostEqual((-HalfType()).get(0, 0, 0), -0.5));
+  tdd.verify(AlmostEqual((-a).eval(0), -4));
+  tdd.verify(AlmostEqual((-HalfType()).eval(0, 0, 0), -0.5));
 }
 
 #endif

@@ -87,7 +87,7 @@ inline void TempLat::ComplexFieldShiftTester::Test(TempLat::TDDAssertion &tdd)
   using T1 = TempLat::GetVectorComponentHelper<TempLat::WaveNumber<3>>;
   using RES1 = TempLat::ComplexFieldAsFourier<TempLat::ScalarComplexFieldMultiply<T1, T2>>;
 
-  tdd.verify(HasGetMethod<RES1>);
+  tdd.verify(HasEvalMethod<RES1>);
 }
 
 #endif

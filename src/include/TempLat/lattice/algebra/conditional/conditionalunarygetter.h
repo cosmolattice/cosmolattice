@@ -8,7 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 
 namespace TempLat
 {
@@ -19,7 +19,7 @@ namespace TempLat
    * Unit test: ctest -R test-conditionalunarygetter
    **/
   template <typename T>
-  concept ConditionalUnaryGetter = HasGetMethod<T>;
+  concept ConditionalUnaryGetter = HasEvalMethod<T>;
 
   struct ConditionalUnaryGetterTester {
     static void Test(TempLat::TDDAssertion &);

@@ -9,7 +9,6 @@
 
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldunaryoperator.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
@@ -37,7 +36,10 @@ namespace TempLat
     auto ComplexFieldGet(Tag<1> t) const { return sin(mR); }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       const auto val = DoEval::eval(mR, idx...);

@@ -20,6 +20,8 @@ inline void TempLat::ExponentialTester::Test(TempLat::TDDAssertion &tdd)
 
     DEVICE_FORCEINLINE_FUNCTION
     auto get(const double &i) const { return a; }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(const double &i) const { return a; }
 
   private:
     double a;
@@ -27,8 +29,8 @@ inline void TempLat::ExponentialTester::Test(TempLat::TDDAssertion &tdd)
 
   myClass a(3);
   // myClass b(4);
-  say << exp(a).get(0) << "\n";
-  tdd.verify(AlmostEqual(exp(a).get(0), std::exp(3)));
+  say << exp(a).eval(0) << "\n";
+  tdd.verify(AlmostEqual(exp(a).eval(0), std::exp(3)));
   //    say << exp(a / b).d(a) << "\n";
   //    say << exp(a / b).d(b) << "\n";
   //

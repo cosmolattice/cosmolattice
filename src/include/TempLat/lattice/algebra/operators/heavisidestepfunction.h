@@ -27,14 +27,10 @@ namespace TempLat
     HeavisideStepFunction(const R &pR) : UnaryOperator<R>(pR) {}
 
     template <typename... IDX>
-      requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-    {
-      return (GetValue::get(mR, idx...) >= 0 ? 1 : 0);
-    }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       return (DoEval::eval(mR, idx...) >= 0 ? 1 : 0);

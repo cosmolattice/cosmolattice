@@ -9,8 +9,6 @@
 
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
@@ -110,16 +108,6 @@ namespace TempLat
     template <typename R> void operator+=(R &&g) { this->operator=(*this + g); }
 
     void operator=(const ConfigView<NDim, T> &other) { this->assign(other); }
-
-    template <typename... IDX>
-      requires requires {
-        requires(NDim == sizeof...(IDX));
-        requires(std::is_integral_v<std::decay_t<IDX>> && ...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION T get(IDX &&...idx) const
-    {
-      return mView(idx...);
-    }
 
     template <typename... IDX>
       requires requires {

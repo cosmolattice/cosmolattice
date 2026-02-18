@@ -42,17 +42,12 @@ namespace TempLat
       DEVICE_FUNCTION
       Arg() : BinaryOperator<R, T>(R(), T()) {}
 
-      /** @brief Getter for two instances. */
       template <typename... IDX>
-        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        auto res = atan2(GetValue::get(mR, idx...), GetValue::get(mT, idx...));
-        return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
+        requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+          DoEval::eval(t, idx...);
+        }
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         const auto res = atan2(DoEval::eval(mR, idx...), DoEval::eval(mT, idx...));

@@ -13,12 +13,14 @@ inline void TempLat::ComplexConjugateTester::Test(TempLat::TDDAssertion &tdd)
   struct myStruct {
     DEVICE_FORCEINLINE_FUNCTION
     complex<double> get(ptrdiff_t i) const { return complex<double>(1, -1); }
+    DEVICE_FORCEINLINE_FUNCTION
+    complex<double> eval(ptrdiff_t i) const { return complex<double>(1, -1); }
   };
 
   /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(myStruct().get(0) == complex<double>(1, -1));
+  tdd.verify(myStruct().eval(0) == complex<double>(1, -1));
 
-  tdd.verify(conj(myStruct()).get(0) == complex<double>(1, 1));
+  tdd.verify(conj(myStruct()).eval(0) == complex<double>(1, 1));
 
   /* test: this should not compile. Passed. */
   //    struct myFailStruct {

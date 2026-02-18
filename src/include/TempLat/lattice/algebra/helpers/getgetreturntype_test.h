@@ -11,12 +11,12 @@ template <typename T> inline void TempLat::GetGetReturnTypeTester::Test(T &tdd)
 {
   struct tmp {
     DEVICE_FORCEINLINE_FUNCTION
-    double get(const ptrdiff_t &) const { return 0.; }
+    double eval(const ptrdiff_t &) const { return 0.; }
   };
 
   struct tmp2 {
     DEVICE_FORCEINLINE_FUNCTION
-    complex<double> get(const ptrdiff_t &) const { return complex<double>(0., 0.); }
+    complex<double> eval(const ptrdiff_t &) const { return complex<double>(0., 0.); }
   };
 
   //  /* Default is to fail: to remind yourself to implement something here. */

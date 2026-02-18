@@ -26,6 +26,16 @@ namespace TempLat
       return ii[0] * pow(16, 3) + ii[1] * pow(16, 2) + ii[2] * 16 + ii[3];
     }
 
+    template <typename... IDX>
+      requires IsVariadicNDIndex<NDim, IDX...>
+    DEVICE_FORCEINLINE_FUNCTION double eval(const IDX &...idx) const
+    {
+      device::IdxArray<NDim> ii;
+      mLayout.putSpatialLocationFromMemoryIndexInto0N(ii, idx...);
+
+      return ii[0] * pow(16, 3) + ii[1] * pow(16, 2) + ii[2] * 16 + ii[3];
+    }
+
     double expectedAnswer(int l)
     {
       return (0.5 * (15) * 16 * (pow(16, 2) + 16 + 1)) + l; // sum_0^N-1 = (N-1)N/2

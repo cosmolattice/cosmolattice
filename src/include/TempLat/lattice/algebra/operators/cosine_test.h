@@ -17,6 +17,8 @@ inline void TempLat::CosineTester::Test(TempLat::TDDAssertion &tdd)
 
     DEVICE_FORCEINLINE_FUNCTION
     auto get(const double &i) const { return a; }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(const double &i) const { return a; }
 
   private:
     double a;
@@ -24,8 +26,8 @@ inline void TempLat::CosineTester::Test(TempLat::TDDAssertion &tdd)
 
   myClass a(3);
   // myClass b(4);
-  say << cos(a).get(0) << "\n";
-  tdd.verify(AlmostEqual(cos(a).get(0), std::cos(3.)));
+  say << cos(a).eval(0) << "\n";
+  tdd.verify(AlmostEqual(cos(a).eval(0), std::cos(3.)));
 }
 
 #endif

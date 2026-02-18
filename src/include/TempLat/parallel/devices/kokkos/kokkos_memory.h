@@ -8,8 +8,6 @@
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
 
 #include "TempLat/parallel/devices/kokkos/kokkos.h"
 #include "TempLat/parallel/devices/kokkos/kokkos_internal.h"

@@ -26,6 +26,13 @@ namespace TempLat
     {
       return 1;
     }
+
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION static constexpr double eval(const IDX &...)
+    {
+      return 1;
+    }
     static constexpr bool ISCONSTANT = true;
 
     static constexpr int value = 1;

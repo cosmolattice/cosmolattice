@@ -53,10 +53,10 @@ inline void TempLat::HDF5Tester::Test(TempLat::TDDAssertion &tdd)
     for (ptrdiff_t i = 0; i < localView.extent(0); ++i)
       for (ptrdiff_t j = 0; j < localView.extent(1); ++j)
         for (ptrdiff_t k = 0; k < localView.extent(2); ++k) {
-          all_correct &= (AlmostEqual(localView(i, j, k), 42.0 + local_idx.get(i + nGhost, j + nGhost, k + nGhost)));
-          if (!AlmostEqual(localView(i, j, k), 42.0 + local_idx.get(i + nGhost, j + nGhost, k + nGhost))) {
+          all_correct &= (AlmostEqual(localView(i, j, k), 42.0 + local_idx.eval(i + nGhost, j + nGhost, k + nGhost)));
+          if (!AlmostEqual(localView(i, j, k), 42.0 + local_idx.eval(i + nGhost, j + nGhost, k + nGhost))) {
             std::cout << "Error at " << i << " " << j << " " << k << " got " << localView(i, j, k) << " expected "
-                      << 42.0 + local_idx.get(i + nGhost, j + nGhost, k + nGhost) << std::endl;
+                      << 42.0 + local_idx.eval(i + nGhost, j + nGhost, k + nGhost) << std::endl;
           }
         }
     tdd.verify(all_correct);

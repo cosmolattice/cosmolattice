@@ -48,7 +48,7 @@ int main(int argc, char **argv)
         device::iteration::fence();
       });
       measurer.measure("plaquette get", [&]() {
-        dummy = plaq(U1, 1_c, 2_c).SU2Get(0_c).get(2, 3, 4);
+        dummy = plaq(U1, 1_c, 2_c).SU2Get(0_c).eval(2, 3, 4);
         device::iteration::fence();
       });
       measurer.measure("plaquette assign", [&]() {

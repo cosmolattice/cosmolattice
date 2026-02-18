@@ -17,6 +17,7 @@
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 #include "TempLat/util/tuple_tools.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 
 #include "TempLat/parallel/device.h"
 
@@ -42,29 +43,10 @@ namespace TempLat
     void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
     template <typename... IDX>
-      requires requires(IDX... idx) {
+      requires requires(std::decay_t<R> r, IDX... idx) {
         requires IsVariadicNDIndex<NDim, IDX...>;
-        GetValue::get(mR, idx...);
+        DoEval::eval(r, idx...);
       }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-    {
-      if constexpr (UnaryOperator<R>::getNDim() == 0)
-        return ZeroType();
-      else {
-        auto result = (-2 * NDim * GetValue::get(mR, idx...));
-        constexpr_for<0, NDim>([&](const auto _d) {
-          constexpr size_t d = decltype(_d)::value;
-          device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                        tuple_add_to_nth<d, 1>(device::tie(idx...)));
-          device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                        tuple_add_to_nth<d, -1>(device::tie(idx...)));
-        });
-        return result / dx2;
-      }
-    }
-
-    template <typename... IDX>
-      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)
@@ -104,14 +86,14 @@ namespace TempLat
 #endif
 
   template <int NDim, typename R>
-    requires HasGetMethod<R>
+    requires HasEvalMethod<R>
   DEVICE_FORCEINLINE_FUNCTION auto LatLapl(R pR)
   {
     return LatticeLaplacian<NDim, R>(pR);
   }
 
   template <int NDim, typename R>
-    requires(!HasGetMethod<R>)
+    requires(!HasEvalMethod<R>)
   DEVICE_FORCEINLINE_FUNCTION auto LatLapl(R pR)
   {
     return ZeroType();

@@ -50,7 +50,10 @@ namespace TempLat
     template <int N> DEVICE_FORCEINLINE_FUNCTION const Field<NDim, T> &SU2DoubletGet(Tag<N> t) const { return fs[t]; }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(Field<NDim, T> f, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(f, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::array<T, 4> result;

@@ -10,7 +10,6 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletoperator.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
@@ -43,7 +42,13 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<A> a, std::decay_t<B> b, std::decay_t<C> c, std::decay_t<D> d, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(a, idx...);
+        DoEval::eval(b, idx...);
+        DoEval::eval(c, idx...);
+        DoEval::eval(d, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::array<decltype(DoEval::eval(device::get<0>(mData), idx...)), 4> result;

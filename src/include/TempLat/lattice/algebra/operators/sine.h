@@ -36,14 +36,10 @@ namespace TempLat
       Sine(const T &a) : UnaryOperator<T>(a) {}
 
       template <typename... IDX>
-        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        return sin(GetValue::get(mR, idx...));
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
+        requires requires(std::decay_t<T> t, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(t, idx...);
+        }
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         return sin(DoEval::eval(mR, idx...));

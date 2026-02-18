@@ -33,14 +33,11 @@ namespace TempLat
     static constexpr size_t NDim = GetNDim::get<R>();
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION complex<mRType> get(const IDX &...idx) const
-    {
-      const auto result = DoEval::eval(mR, idx...);
-      return complex<mRType>(result[0], result[1]);
-    }
-
-    template <typename... IDX> DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       const auto result = DoEval::eval(mR, idx...);
       return complex<mRType>(result[0], result[1]);

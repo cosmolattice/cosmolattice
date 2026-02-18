@@ -355,8 +355,7 @@ namespace TempLat
           {
             device::apply(
                 [&](const auto &...idx) {
-                  DoEval::eval(r, idx..., i);
-                  device_buf(i - memoryPos[dim]) = GetValue::get(r, idx..., i);
+                  device_buf(i - memoryPos[dim]) = DoEval::eval(r, idx..., i);
                 },
                 subMemoryPos);
           };

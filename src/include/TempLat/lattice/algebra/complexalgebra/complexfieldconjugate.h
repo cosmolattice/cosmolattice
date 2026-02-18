@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/real.h"
 #include "TempLat/lattice/algebra/complexalgebra/imag.h"
@@ -34,7 +33,10 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t) const { return -Imag(mR); }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       const auto child = DoEval::eval(mR, idx...);

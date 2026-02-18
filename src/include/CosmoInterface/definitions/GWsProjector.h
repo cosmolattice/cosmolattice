@@ -21,7 +21,7 @@
 #include "TempLat/lattice/algebra/gaugealgebra/fieldstrength.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/util/rangeiteration/sum_in_range.h"
@@ -86,15 +86,15 @@ namespace TempLat
       auto P32 = conj(P23);
       auto P33 = Pr(model, it, 3_c, 3_c);
 
-      auto u11 = GetValue::get(model.pi_GWtensor(1_c, 1_c).inFourierSpace(), it());
-      auto u12 = GetValue::get(model.pi_GWtensor(1_c, 2_c).inFourierSpace(), it());
-      auto u13 = GetValue::get(model.pi_GWtensor(1_c, 3_c).inFourierSpace(), it());
+      auto u11 = DoEval::eval(model.pi_GWtensor(1_c, 1_c).inFourierSpace(), it());
+      auto u12 = DoEval::eval(model.pi_GWtensor(1_c, 2_c).inFourierSpace(), it());
+      auto u13 = DoEval::eval(model.pi_GWtensor(1_c, 3_c).inFourierSpace(), it());
       auto u21 = u12;
-      auto u22 = GetValue::get(model.pi_GWtensor(2_c, 2_c).inFourierSpace(), it());
-      auto u23 = GetValue::get(model.pi_GWtensor(2_c, 3_c).inFourierSpace(), it());
+      auto u22 = DoEval::eval(model.pi_GWtensor(2_c, 2_c).inFourierSpace(), it());
+      auto u23 = DoEval::eval(model.pi_GWtensor(2_c, 3_c).inFourierSpace(), it());
       auto u31 = u13;
       auto u32 = u23;
-      auto u33 = GetValue::get(model.pi_GWtensor(3_c, 3_c).inFourierSpace(), it());
+      auto u33 = DoEval::eval(model.pi_GWtensor(3_c, 3_c).inFourierSpace(), it());
 
       auto Pu11 = P11 * u11 + P12 * u21 + P13 * u31;
       auto Pu12 = P11 * u12 + P12 * u22 + P13 * u32;
@@ -136,15 +136,15 @@ namespace TempLat
       auto P32 = conj(P23);
       auto P33 = Pr(model, it, 3_c, 3_c);
 
-      auto u11 = GetEval::getEval(model.pi_GWtensor(1_c, 1_c).inFourierSpace(), it());
-      auto u12 = GetEval::getEval(model.pi_GWtensor(1_c, 2_c).inFourierSpace(), it());
-      auto u13 = GetEval::getEval(model.pi_GWtensor(1_c, 3_c).inFourierSpace(), it());
+      auto u11 = DoEval::eval(model.pi_GWtensor(1_c, 1_c).inFourierSpace(), it());
+      auto u12 = DoEval::eval(model.pi_GWtensor(1_c, 2_c).inFourierSpace(), it());
+      auto u13 = DoEval::eval(model.pi_GWtensor(1_c, 3_c).inFourierSpace(), it());
       auto u21 = u12;
-      auto u22 = GetEval::getEval(model.pi_GWtensor(2_c, 2_c).inFourierSpace(), it());
-      auto u23 = GetEval::getEval(model.pi_GWtensor(2_c, 3_c).inFourierSpace(), it());
+      auto u22 = DoEval::eval(model.pi_GWtensor(2_c, 2_c).inFourierSpace(), it());
+      auto u23 = DoEval::eval(model.pi_GWtensor(2_c, 3_c).inFourierSpace(), it());
       auto u31 = u13;
       auto u32 = u23;
-      auto u33 = GetEval::getEval(model.pi_GWtensor(3_c, 3_c).inFourierSpace(), it());
+      auto u33 = DoEval::eval(model.pi_GWtensor(3_c, 3_c).inFourierSpace(), it());
 
       auto Pu11 = P11 * u11 + P12 * u21 + P13 * u31;
       auto Pu12 = P11 * u12 + P12 * u22 + P13 * u32;

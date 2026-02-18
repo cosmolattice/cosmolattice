@@ -41,14 +41,17 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return ZeroType(); }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(Field<NDim, T> f, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(f, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::array<T, 4> result;
       result[0] = T(0);
-      result[1] = fs[0].get(idx...);
-      result[2] = fs[1].get(idx...);
-      result[3] = fs[2].get(idx...);
+      result[1] = fs[0].eval(idx...);
+      result[2] = fs[1].eval(idx...);
+      result[3] = fs[2].eval(idx...);
       return result;
     }
 

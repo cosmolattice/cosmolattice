@@ -10,7 +10,6 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
@@ -57,8 +56,7 @@ namespace TempLat
       {
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(mT, args...);
-              update = device::max(mT.get(args...), update);
+              update = device::max(DoEval::eval(mT, args...), update);
             },
             idx);
       };

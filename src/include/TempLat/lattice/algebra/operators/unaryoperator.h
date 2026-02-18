@@ -9,7 +9,6 @@
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"

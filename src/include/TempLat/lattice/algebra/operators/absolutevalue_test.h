@@ -12,13 +12,17 @@ inline void TempLat::AbsoluteValueTester::Test(TempLat::TDDAssertion &tdd)
   struct tmpStruct {
     DEVICE_FORCEINLINE_FUNCTION
     ptrdiff_t get(ptrdiff_t) const { return -1; }
+    DEVICE_FORCEINLINE_FUNCTION
+    ptrdiff_t eval(ptrdiff_t) const { return -1; }
   };
   struct tmpStruct2 {
     DEVICE_FORCEINLINE_FUNCTION
     complex<double> get(ptrdiff_t) const { return complex<double>(1, 1); }
+    DEVICE_FORCEINLINE_FUNCTION
+    complex<double> eval(ptrdiff_t) const { return complex<double>(1, 1); }
   };
-  tdd.verify(abs(tmpStruct()).get(0) == 1);
-  tdd.verify(abs(tmpStruct2()).get(0) == std::sqrt(2));
+  tdd.verify(abs(tmpStruct()).eval(0) == 1);
+  tdd.verify(abs(tmpStruct2()).eval(0) == std::sqrt(2));
 }
 
 #endif

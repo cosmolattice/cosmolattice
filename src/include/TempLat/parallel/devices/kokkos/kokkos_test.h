@@ -40,7 +40,7 @@ namespace TempLat
     Kokkos::parallel_for(
         Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>((size_t)0, big_number), DEVICE_LAMBDA(size_t i) {
           auto op = OP(transf(i), magic_number);
-          a(i) = op.get(0);
+          a(i) = op.eval(0);
         });
 
     auto host_view = Kokkos::create_mirror_view(a);
@@ -48,7 +48,7 @@ namespace TempLat
 
     bool all_correct = true;
     for (size_t i = 0; i < big_number; ++i) {
-      const NT expect = OP(transf(i), magic_number).get(0);
+      const NT expect = OP(transf(i), magic_number).eval(0);
       const bool i_correct =
           TempLat::AlmostEqual(host_view[i], expect, std::sqrt(std::numeric_limits<CT>::epsilon()) * add_epsilon);
       all_correct &= i_correct;
@@ -78,7 +78,7 @@ namespace TempLat
     Kokkos::parallel_for(
         Kokkos::RangePolicy<Kokkos::DefaultExecutionSpace>(0, big_number), DEVICE_LAMBDA(int i) {
           auto op = Operators::Addition(OP(transf(i)), magic_number);
-          a(i) = op.get(0);
+          a(i) = op.eval(0);
         });
 
     auto host_view = Kokkos::create_mirror_view(a);
@@ -86,7 +86,7 @@ namespace TempLat
 
     bool all_correct = true;
     for (size_t i = 0; i < big_number; ++i) {
-      const NT expect = Operators::Addition(OP(transf(i)), magic_number).get(0);
+      const NT expect = Operators::Addition(OP(transf(i)), magic_number).eval(0);
       const bool i_correct =
           TempLat::AlmostEqual(host_view[i], expect, std::sqrt(std::numeric_limits<CT>::epsilon()) * add_epsilon);
       all_correct &= i_correct;
@@ -110,7 +110,7 @@ template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
     Field<2, double> rField("rField", toolBox);
     for (size_t i = 0; i < 8; ++i) {
       for (size_t j = 0; j < 8; ++j) {
-        device_kokkos::memory::setAtOnePoint(rField, device_kokkos::array<ptrdiff_t, 2>{i, j}, i + j);
+        device_kokkos::memory::setAtOnePoint(rField, device_kokkos::IdxArray<2>{(int64_t)i, (int64_t)j}, i + j);
       }
     }
     {
@@ -128,7 +128,7 @@ template <typename TDDA> inline void TempLat::KokkosTest::Test(TDDA &tdd)
       for (size_t i = 0; i < 8; ++i) {
         for (size_t j = 0; j < 8; ++j) {
           all_correct &=
-              device_kokkos::memory::getAtOnePoint(rField, device_kokkos::array<ptrdiff_t, 2>{i, j}) == i + j;
+              device_kokkos::memory::getAtOnePoint(rField, device_kokkos::IdxArray<2>{(int64_t)i, (int64_t)j}) == i + j;
         }
       }
       tdd.verify(all_correct);

@@ -11,7 +11,6 @@
 #include "TempLat/lattice/field/field.h"
 
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 

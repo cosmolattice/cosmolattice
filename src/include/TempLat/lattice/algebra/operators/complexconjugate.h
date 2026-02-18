@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
+#include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
 #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
@@ -33,16 +34,11 @@ namespace TempLat
       DEVICE_FUNCTION
       ComplexConjugate(const R &a) : UnaryOperator<R>(a) {}
 
-      /** @brief Getter for two instances. */
       template <typename... IDX>
-        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        return conj(GetValue::get(mR, idx...));
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
+        requires requires(std::decay_t<R> r, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+        }
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         return conj(DoEval::eval(mR, idx...));
@@ -53,9 +49,10 @@ namespace TempLat
     };
   } // namespace Operators
 
-  /** @brief Exposing our newly define multiplication operation to the world. */
+  /** @brief Exposing our newly define multiplication operation to the world.
+   *  Excluded for complex field types (HasComplexFieldGet) which have their own conj overload. */
   template <typename T>
-    requires ConditionalUnaryGetter<T>
+    requires (ConditionalUnaryGetter<T> && !HasComplexFieldGet<T>)
   DEVICE_FORCEINLINE_FUNCTION auto conj(const T &a)
   {
     return Operators::ComplexConjugate<T>(a);

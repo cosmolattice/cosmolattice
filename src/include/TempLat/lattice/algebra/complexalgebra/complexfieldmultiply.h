@@ -38,7 +38,11 @@ namespace TempLat
     auto ComplexFieldGet(Tag<1> t) const { return Real(mR) * Imag(mT) + Imag(mR) * Real(mT); }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+        DoEval::eval(t, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       if constexpr (IsComplexType<R>) {

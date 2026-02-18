@@ -38,16 +38,11 @@ namespace TempLat
       DEVICE_FUNCTION
       Exponential(const T &a) : UnaryOperator<T>(a) {}
 
-      /** @brief Getter for two instances. */
       template <typename... IDX>
-        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        return exp(GetValue::get(mR, idx...));
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
+        requires requires(std::decay_t<T> t, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(t, idx...);
+        }
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         return exp(DoEval::eval(mR, idx...));

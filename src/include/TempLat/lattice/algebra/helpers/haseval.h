@@ -40,6 +40,15 @@ namespace TempLat
   template <typename U>
   concept TypeHasStaticValue = requires { std::is_arithmetic_v<decltype(std::decay_t<U>::value)>; };
 
+  template <class T>
+  concept HasEvalMethod = HasEval<T, size_t>
+                       || HasEval<T, size_t, size_t>
+                       || HasEval<T, size_t, size_t, size_t>
+                       || HasEval<T, size_t, size_t, size_t, size_t>
+                       || HasEval<T, size_t, size_t, size_t, size_t, size_t>
+                       || HasEval<T, size_t, size_t, size_t, size_t, size_t, size_t>
+                       || HasEval<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t>;
+
 #ifdef TEMPLATTEST
   struct HasEvalTester {
   public:

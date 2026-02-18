@@ -12,11 +12,10 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
-#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 
@@ -95,8 +94,7 @@ namespace TempLat
         {
           device::apply(
               [&](auto &&...args) {
-                DoEval::eval(mT, args..., cur_lidx);
-                update += mT.get(args..., cur_lidx);
+                update += DoEval::eval(mT, args..., cur_lidx);
               },
               idx);
         };
@@ -129,7 +127,7 @@ namespace TempLat
   };
 
   template <typename T>
-    requires HasGetMethod<T>
+    requires HasEvalMethod<T>
   auto spatialAverage(T instance, SpaceStateType spaceType = SpaceStateType::Configuration)
   {
     return SpatialAverager<T>(instance, spaceType).compute();

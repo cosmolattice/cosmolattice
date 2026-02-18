@@ -18,6 +18,8 @@ inline void TempLat::LogTester::Test(TempLat::TDDAssertion &tdd)
 
     DEVICE_FORCEINLINE_FUNCTION
     auto get(const double &i) const { return a; }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(const double &i) const { return a; }
 
   private:
     double a;
@@ -25,7 +27,7 @@ inline void TempLat::LogTester::Test(TempLat::TDDAssertion &tdd)
 
   myClass a(3);
 
-  tdd.verify(log(a).get(0) == std::log(3));
+  tdd.verify(log(a).eval(0) == std::log(3));
   //  std::cerr << log(a).d(a).toString() << "\n";
 
   /* Default is to fail: to remind yourself to implement something here. */

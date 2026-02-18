@@ -11,7 +11,6 @@
 #include "real.h"
 #include "imag.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldoperator.h"
-#include "TempLat/lattice/algebra/helpers/geteval.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 
@@ -47,7 +46,11 @@ namespace TempLat
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return ComplexFieldGet(t); }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+        DoEval::eval(t, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::array<decltype(DoEval::eval(mR, idx...)), 2> result;

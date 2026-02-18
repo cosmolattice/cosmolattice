@@ -23,8 +23,8 @@ template <size_t NDim, typename T> inline void TempLat::ComplexField<NDim, T>::T
   {
     ComplexField<NDim, T> original("original", toolBox);
     SpatialCoordinate x(toolBox);
-    original.ComplexFieldGet(Tag<0>()) = getVectorComponent(x, 0);
-    original.ComplexFieldGet(Tag<1>()) = getVectorComponent(x, 1);
+    original.ComplexFieldGet(Tag<0>()) = getVectorComponent(x, Tag<0>());
+    original.ComplexFieldGet(Tag<1>()) = getVectorComponent(x, Tag<1>());
     original.updateGhosts();
 
     ComplexField<NDim, T> copy("copy", toolBox);
@@ -59,7 +59,7 @@ template <size_t NDim, typename T> inline void TempLat::ComplexField<NDim, T>::T
     ComplexField<NDim, T> phi("phi", toolBox);
     ComplexField<NDim, T> chi("chi", toolBox);
 
-    auto field_tester = [&](ComplexField<NDim, T> &f, const auto &op, complex<double> expected) {
+    auto field_tester = [&](ComplexField<NDim, T> &f, auto op, complex<double> expected) {
       f = op;
       auto viewRe = f.ComplexFieldGet(0_c).getLocalNDHostView();
       auto viewIm = f.ComplexFieldGet(1_c).getLocalNDHostView();

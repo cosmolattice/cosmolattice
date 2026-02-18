@@ -16,6 +16,7 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
+#include "TempLat/lattice/algebra/helpers/doeval.h"
 
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 
@@ -72,7 +73,7 @@ namespace TempLat
 
       for (it.begin(); it.end(); ++it) {
         i = it();
-        for_in_range<0, size>([&](auto j) { mWorkspace[j] += GetValue::get(GetComponent::get(list, j), i); });
+        for_in_range<0, size>([&](auto j) { mWorkspace[j] += DoEval::eval(GetComponent::get(list, j), i); });
       }
       return mWorkspace;
     }
@@ -89,7 +90,7 @@ namespace TempLat
       for (it.begin(); it.end(); ++it) {
         if (toolBox->mLayouts.getFourierSpaceLayout().getHermitianPartners()->qualify(it.getVec()) !=
             HermitianRedundancy::negativePartner) {
-          for_in_range<0, size>([&](auto j) { mWorkspace[j] += GetValue::get(GetComponent::get(list, j), it()); });
+          for_in_range<0, size>([&](auto j) { mWorkspace[j] += DoEval::eval(GetComponent::get(list, j), it()); });
         }
       }
       return mWorkspace;

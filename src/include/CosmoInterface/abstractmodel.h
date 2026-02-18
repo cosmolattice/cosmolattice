@@ -18,8 +18,6 @@
 #include "CosmoInterface/couplingsmanager.h"
 #include "CosmoInterface/definitions/potential.h"
 
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
-
 #include "TempLat/parameters/parameterparser.h"
 #include "CosmoInterface/runparameters.h"
 

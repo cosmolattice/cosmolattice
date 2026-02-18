@@ -18,6 +18,8 @@ inline void TempLat::SineTester::Test(TempLat::TDDAssertion &tdd)
 
     DEVICE_FORCEINLINE_FUNCTION
     auto get(const double &i) const { return a; }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(const double &i) const { return a; }
 
   private:
     double a;
@@ -25,7 +27,7 @@ inline void TempLat::SineTester::Test(TempLat::TDDAssertion &tdd)
 
   myClass a(3);
   // myClass b(4);
-  tdd.verify(AlmostEqual(sin(a).get(0), std::sin(3.)));
+  tdd.verify(AlmostEqual(sin(a).eval(0), std::sin(3.)));
 }
 
 #endif

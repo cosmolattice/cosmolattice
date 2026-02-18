@@ -12,7 +12,6 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/util/containsspace.h"

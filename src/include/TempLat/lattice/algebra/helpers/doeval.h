@@ -43,6 +43,28 @@ namespace TempLat
       return obj;
     }
 
+    template <typename U>
+    static constexpr auto eval_example(U &&obj) {
+      if constexpr (HasEval<U, int>)
+        return eval(obj, int{});
+      else if constexpr (HasEval<U, int, int>)
+        return eval(obj, int{}, int{});
+      else if constexpr (HasEval<U, int, int, int>)
+        return eval(obj, int{}, int{}, int{});
+      else if constexpr (HasEval<U, int, int, int, int>)
+        return eval(obj, int{}, int{}, int{}, int{});
+      else if constexpr (HasEval<U, int, int, int, int, int>)
+        return eval(obj, int{}, int{}, int{}, int{}, int{});
+      else if constexpr (HasEval<U, int, int, int, int, int, int>)
+        return eval(obj, int{}, int{}, int{}, int{}, int{}, int{});
+      else if constexpr (HasEval<U, int, int, int, int, int, int, int>)
+        return eval(obj, int{}, int{}, int{}, int{}, int{}, int{}, int{});
+      else if constexpr (TypeHasStaticValue<U>)
+        return std::decay_t<U>::value;
+      else
+        return obj;
+    }
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     DoEval() = delete;

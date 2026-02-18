@@ -50,7 +50,12 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<A> a, std::decay_t<B> b, std::decay_t<C> c, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(a, idx...);
+        DoEval::eval(b, idx...);
+        DoEval::eval(c, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::array<SV, 4> result;

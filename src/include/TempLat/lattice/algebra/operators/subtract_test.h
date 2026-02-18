@@ -18,6 +18,9 @@ inline void TempLat::SubtractTester::Test(TempLat::TDDAssertion &tdd)
     DEVICE_FORCEINLINE_FUNCTION
     auto get(ptrdiff_t i) const { return a; }
 
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(ptrdiff_t i) const { return a; }
+
   private:
     int a;
   };
@@ -26,13 +29,13 @@ inline void TempLat::SubtractTester::Test(TempLat::TDDAssertion &tdd)
   myClass b(4);
 
   //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
-  //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
-  tdd.verify(HasGetMethod<Operators::Subtraction<myClass, myClass>> == true);
-  tdd.verify((a - b).get(0) == -1);
+  //    say << HasEvalMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
+  tdd.verify(HasEvalMethod<Operators::Subtraction<myClass, myClass>> == true);
+  tdd.verify((a - b).eval(0) == -1);
   int c = 3, d = 4;
-  tdd.verify(HasGetMethod<decltype(c - d)> == false);
+  tdd.verify(HasEvalMethod<decltype(c - d)> == false);
 
-  tdd.verify((Tag<3>() - b).get(0) == -1);
+  tdd.verify((Tag<3>() - b).eval(0) == -1);
 
   // pointless, but shuts up the compiler about unused variables:
   c = c + d;

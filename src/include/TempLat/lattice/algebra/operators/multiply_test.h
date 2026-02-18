@@ -18,6 +18,9 @@ inline void TempLat::MultiplyTester::Test(TempLat::TDDAssertion &tdd)
     DEVICE_FORCEINLINE_FUNCTION
     auto get(ptrdiff_t i) const { return a; }
 
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(ptrdiff_t i) const { return a; }
+
   private:
     int a;
   };
@@ -26,12 +29,12 @@ inline void TempLat::MultiplyTester::Test(TempLat::TDDAssertion &tdd)
   myClass b(2);
 
   //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
-  //    say << HasGetMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
-  tdd.verify(HasGetMethod<Operators::Multiplication<myClass, myClass>> == true);
-  tdd.verify((b * c).get(0) == 6);
+  //    say << HasEvalMethod<Operators::Add<GetterGetOffset, GetterGetOffset>>::value << "\n";
+  tdd.verify(HasEvalMethod<Operators::Multiplication<myClass, myClass>> == true);
+  tdd.verify((b * c).eval(0) == 6);
 
   int e = 3, f = 4;
-  tdd.verify(HasGetMethod<decltype(e * f)> == false);
+  tdd.verify(HasEvalMethod<decltype(e * f)> == false);
 
   // pointless, but shuts up the compiler about unused variables:
   e = e + f;

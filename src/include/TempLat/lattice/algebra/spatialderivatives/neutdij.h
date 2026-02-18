@@ -17,6 +17,7 @@
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 #include "TempLat/util/tuple_tools.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 
 namespace TempLat
 {
@@ -38,31 +39,13 @@ namespace TempLat
 
     void doWeNeedGhosts() const { mR.confirmGhostsUpToDate(); }
 
-    template <typename... IDX>
-      requires requires(IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        GetValue::get(mR, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-    {
-      if constexpr (UnaryOperator<R>::getNDim() == 0)
-        return ZeroType();
-      else {
-        static_assert(dir > 0);
-        constexpr size_t d = static_cast<size_t>(dir) - 1;
-        FloatType result{};
-        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                      tuple_add_to_nth<d, 1>(device::tie(idx...)));
-        device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
-                      tuple_add_to_nth<d, -1>(device::tie(idx...)));
-        return result / (2 * dx);
-      }
-    }
-
     virtual std::string operatorString() const override { return "NeutDij"; }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)
@@ -93,14 +76,14 @@ namespace TempLat
 #endif
 
   template <class R, int N>
-    requires HasGetMethod<R>
+    requires HasEvalMethod<R>
   DEVICE_FORCEINLINE_FUNCTION auto neutDij(R pR, Tag<N> t)
   {
     return NeutDij<N, R>(pR);
   }
 
   template <int NDim, typename R>
-    requires(!HasGetMethod<R>)
+    requires(!HasEvalMethod<R>)
   DEVICE_FORCEINLINE_FUNCTION auto neutDij(R pR)
   {
     return ZeroType();

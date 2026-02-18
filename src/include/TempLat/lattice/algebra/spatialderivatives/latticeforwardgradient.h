@@ -47,7 +47,10 @@ namespace TempLat
     LatticeForwardGradient(const R &pR) : UnaryOperator<R>(pR), dx(GetDx::getDx(mR)) {}
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       if constexpr (UnaryOperator<R>::getNDim() == 0)

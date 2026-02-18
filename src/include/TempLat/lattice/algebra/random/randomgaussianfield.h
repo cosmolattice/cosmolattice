@@ -104,37 +104,6 @@ namespace TempLat
 
     template <typename... IDX>
       requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION complex<T> get(const IDX &...idx) const
-    {
-      device::IdxArray<NDim> global_coord;
-      mLayout.putSpatialLocationFromMemoryIndexInto(global_coord, idx...);
-
-      device::IdxArray<NDim> hermitianPartner;
-      auto hermitianType = DimensionCountRecorder<NDim>::getCurrentLayout().getHermitianPartners().putHermitianPartner(
-          global_coord, hermitianPartner);
-
-      // We do not need coordinates actually, but rather (positive!) global indices.
-      for (size_t d = 0; d < NDim; ++d) {
-        if (global_coord[d] < 0) global_coord[d] += mGlobalSizes[d];
-        if (hermitianPartner[d] < 0) hermitianPartner[d] += mGlobalSizes[d];
-      }
-
-      if (hermitianType == HermitianRedundancy::none) {
-        const auto [r, c] = gidx_to_idx2(global_coord);
-        const auto val = to_complex(prng.getPair(r, c, generation, Real, Unitary));
-        return val;
-      } else {
-        const auto [r, c] = gidx_to_idx2(hermitianPartner);
-        const auto val = to_complex(prng.getPair(r, c, generation, Real, Unitary));
-        return (hermitianType == HermitianRedundancy::positivePartner)   ? val
-               : (hermitianType == HermitianRedundancy::negativePartner) ? device::conj(val)
-               : (hermitianType == HermitianRedundancy::realValued)      ? complex<T>(device::real(val))
-                                                                         : complex<T>(0.0, 0.0);
-      }
-    }
-
-    template <typename... IDX>
-      requires IsVariadicNDIndex<NDim, IDX...>
     DEVICE_FORCEINLINE_FUNCTION complex<T> eval(const IDX &...idx) const
     {
       device::IdxArray<NDim> global_coord;

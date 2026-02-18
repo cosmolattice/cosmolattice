@@ -9,9 +9,8 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
-#include "TempLat/lattice/algebra/helpers/hasgetmethod.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
-#include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include <type_traits>
@@ -41,7 +40,11 @@ namespace TempLat
     auto ComplexFieldGet(Tag<1> t) const { return mR * Imag(mT); }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+        DoEval::eval(t, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       const auto cmplx = DoEval::eval(mT, idx...);
@@ -56,7 +59,7 @@ namespace TempLat
   };
 
   template <typename T>
-  concept IsScalarType = (std::is_arithmetic_v<T> || HasGetMethod<T>) && !HasComplexFieldGet<T>;
+  concept IsScalarType = (std::is_arithmetic_v<T> || HasEvalMethod<T>) && !HasComplexFieldGet<T>;
 
   template <typename R, typename T>
     requires(IsScalarType<R> && HasComplexFieldGet<T>)

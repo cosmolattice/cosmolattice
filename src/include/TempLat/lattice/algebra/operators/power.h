@@ -41,17 +41,11 @@ namespace TempLat
       Power(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
       template <typename... IDX>
-        requires requires(IDX... idx) {
-          GetValue::get(mR, idx...);
-          GetValue::get(mT, idx...);
+        requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+          DoEval::eval(t, idx...);
         }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        return pow(GetValue::get(mR, idx...), GetValue::get(mT, idx...));
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         return pow(DoEval::eval(mR, idx...), DoEval::eval(mT, idx...));
@@ -76,14 +70,10 @@ namespace TempLat
       PowerN(const R &pR) : UnaryOperator<R>(pR) {}
 
       template <typename... IDX>
-        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        return powr<N>(GetValue::get(mR, idx...));
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
+        requires requires(std::decay_t<R> r, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+        }
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         return powr<N>(DoEval::eval(mR, idx...));
@@ -121,7 +111,7 @@ namespace TempLat
 
   // enable if is just so that we can overload to consitently write pow<3>(4)  for std::pow(4,3);
   template <ptrdiff_t N, typename R>
-    requires(HasGetMethod<R> && N != 1 && N != 0)
+    requires(HasEvalMethod<R> && N != 1 && N != 0)
   DEVICE_FORCEINLINE_FUNCTION auto pow(const R &r)
   {
     return Operators::PowerN<N, R>(r);
@@ -130,7 +120,7 @@ namespace TempLat
   // overload so that we can sonsitently write pow<3>(4)  for std::pow(4,3);
   template <ptrdiff_t N, typename R>
     requires requires(R r) {
-      requires !HasGetMethod<R>;
+      requires !HasEvalMethod<R>;
       requires N != 0;
       requires N != 1;
       requires !(IsTempLatGettable<0, R> || IsSTDGettable<0, R>);

@@ -36,17 +36,11 @@ namespace TempLat
       Division(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
       template <typename... IDX>
-        requires requires(IDX... idx) {
-          GetValue::get(mR, idx...);
-          GetValue::get(mT, idx...);
+        requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+          DoEval::eval(t, idx...);
         }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        return GetValue::get(mR, idx...) / GetValue::get(mT, idx...);
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         return DoEval::eval(mR, idx...) / DoEval::eval(mT, idx...);
@@ -74,22 +68,11 @@ namespace TempLat
       SafeDivision(const R &pR, const T &pT) : BinaryOperator<R, T>(pR, pT) {}
 
       template <typename... IDX>
-        requires requires(IDX... idx) {
-          GetValue::get(mR, idx...);
-          GetValue::get(mT, idx...);
+        requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+          DoEval::eval(t, idx...);
         }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        const auto a = GetValue::get(mR, idx...);
-        const auto b = GetValue::get(mT, idx...);
-
-        decltype(a / b) zero(0);
-
-        return AlmostEqual(a, zero) ? zero : a / b;
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         const auto a = DoEval::eval(mR, idx...);

@@ -64,7 +64,7 @@ inline void TempLat::SU2CommutatorTester::Test(TempLat::TDDAssertion &tdd)
       for (size_t j = 0; j < f1view.extent(1); ++j)
         for (size_t k = 0; k < f1view.extent(2); ++k) {
           // offset by 1 because of the ghosts.
-          const float mult = omega.norm2().get(i + 1, j + 1, k + 1);
+          const float mult = omega.norm2().eval(i + 1, j + 1, k + 1);
 
           all_true = all_true && (f1view(i, j, k) == 2.5f * mult);
           all_true = all_true && (f2view(i, j, k) == -3.f * mult);

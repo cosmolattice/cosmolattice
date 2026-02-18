@@ -15,6 +15,7 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
 #include "TempLat/parallel/device.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 
 namespace TempLat
 {
@@ -46,7 +47,11 @@ namespace TempLat
     }
 
     template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
+      requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
+        requires IsVariadicIndex<IDX...>;
+        DoEval::eval(r, idx...);
+        DoEval::eval(t, idx...);
+      }
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto su2 = DoEval::eval(mT, idx...);
@@ -70,7 +75,7 @@ namespace TempLat
 #endif
 
   template <typename R, typename T>
-    requires(HasGetMethod<R> && HasSU2Get<T>)
+    requires(HasEvalMethod<R> && HasSU2Get<T> && !HasSU2Get<R>)
   auto operator*(const R &r, const T &t)
   {
     return ScalarSU2Multiplication{r, t};

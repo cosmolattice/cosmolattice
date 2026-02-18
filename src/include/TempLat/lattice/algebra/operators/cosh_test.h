@@ -18,6 +18,8 @@ inline void TempLat::CoshTester::Test(TempLat::TDDAssertion &tdd)
 
     DEVICE_FORCEINLINE_FUNCTION
     auto get(const double &i) const { return a; }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(const double &i) const { return a; }
 
   private:
     double a;
@@ -25,8 +27,8 @@ inline void TempLat::CoshTester::Test(TempLat::TDDAssertion &tdd)
 
   myClass a(3);
   // myClass b(4);
-  say << cosh(a).get(0) << "\n";
-  tdd.verify(AlmostEqual(cosh(a).get(0), std::cosh(3.)));
+  say << cosh(a).eval(0) << "\n";
+  tdd.verify(AlmostEqual(cosh(a).eval(0), std::cosh(3.)));
 }
 
 #endif

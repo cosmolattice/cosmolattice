@@ -96,9 +96,11 @@ namespace TempLat
  *  by default enabled in C++ standard library.
  */
 template <typename T, typename S>
-typename std::enable_if<std::is_same<T, decltype((T)std::declval<S>())>::value && !HasGetMethod<S>::value,
-                        complex<T>>::type
-operator*(complex<T> a, S b)
+  requires(std::is_same<T, decltype((T)std::declval<S>())>::value
+           && !(requires(std::decay_t<S> s, std::size_t i) { s.eval(i); }
+               || requires(std::decay_t<S> s, std::size_t i, std::size_t j) { s.eval(i, j); }
+               || requires(std::decay_t<S> s, std::size_t i, std::size_t j, std::size_t k) { s.eval(i, j, k); }))
+complex<T> operator*(complex<T> a, S b)
 {
   return a * (T)b;
 }
@@ -107,10 +109,11 @@ operator*(complex<T> a, S b)
  *  by default enabled in C++ standard library.
  */
 template <typename T, typename S>
-DEVICE_FORCEINLINE_FUNCTION
-    typename std::enable_if<std::is_same<T, decltype((T)std::declval<S>())>::value && !HasGetMethod<S>::value,
-                            complex<T>>::type
-    operator*(S b, complex<T> a)
+  requires(std::is_same<T, decltype((T)std::declval<S>())>::value
+           && !(requires(std::decay_t<S> s, std::size_t i) { s.eval(i); }
+               || requires(std::decay_t<S> s, std::size_t i, std::size_t j) { s.eval(i, j); }
+               || requires(std::decay_t<S> s, std::size_t i, std::size_t j, std::size_t k) { s.eval(i, j, k); }))
+DEVICE_FORCEINLINE_FUNCTION complex<T> operator*(S b, complex<T> a)
 {
   return a * (T)b;
 }

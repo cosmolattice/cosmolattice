@@ -18,6 +18,8 @@ inline void TempLat::SinhTester::Test(TempLat::TDDAssertion &tdd)
 
     DEVICE_FORCEINLINE_FUNCTION
     auto get(const double &i) const { return a; }
+    DEVICE_FORCEINLINE_FUNCTION
+    auto eval(const double &i) const { return a; }
 
   private:
     double a;
@@ -25,8 +27,8 @@ inline void TempLat::SinhTester::Test(TempLat::TDDAssertion &tdd)
 
   myClass a(3);
   // myClass b(4);
-  say << sinh(a).get(0) << "\n";
-  tdd.verify(AlmostEqual(sinh(a).get(0), std::sinh(3.)));
+  say << sinh(a).eval(0) << "\n";
+  tdd.verify(AlmostEqual(sinh(a).eval(0), std::sinh(3.)));
 }
 
 #endif

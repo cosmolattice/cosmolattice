@@ -32,21 +32,11 @@ namespace TempLat
       DEVICE_FUNCTION
       SafeSqrt(const R &pR) : UnaryOperator<R>(pR) {}
 
-      /**
-       * @brief Check  if numerator if roughly zero, don't do the division.
-       *  Useful for spectrum fluctuation, when normalising with a cutoff
-       **/
       template <typename... IDX>
-        requires requires(IDX... idx) { GetValue::get(mR, idx...); }
-      DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...idx) const
-      {
-        const auto a = GetValue::get(mR, idx...);
-        constexpr decltype(a) zero{};
-        return (a < zero) ? zero : sqrt(a);
-      }
-
-      template <typename... IDX>
-        requires IsVariadicIndex<IDX...>
+        requires requires(std::decay_t<R> r, IDX... idx) {
+          requires IsVariadicIndex<IDX...>;
+          DoEval::eval(r, idx...);
+        }
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
         const auto a = DoEval::eval(mR, idx...);
