@@ -51,6 +51,14 @@ namespace TempLat
         return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
       }
 
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        const auto res = atan2(DoEval::eval(mR, idx...), DoEval::eval(mT, idx...));
+        return AlmostEqual(res, 0) ? 0 : ((res > 0) ? res : res + 2 * Constants::pi<double>);
+      }
+
       /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> void d(const U &other) = delete;
 

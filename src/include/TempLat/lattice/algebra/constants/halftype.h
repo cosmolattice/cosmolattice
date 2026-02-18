@@ -35,8 +35,7 @@ namespace TempLat
     }
 
     static constexpr bool ISCONSTANT = true;
-
-    // operator double() const { return 0.5; }
+    static constexpr float value = 0.5f;
   };
 } // namespace TempLat
 

@@ -61,6 +61,7 @@ namespace TempLat
 
     arrVType computeConfigurationSpace()
     {
+      // TODO: THIS IS STILL CL1.0
       ptrdiff_t i = 0;
       auto &it = GetComponent::get(mT, Tag<0>()).getToolBox()->itX();
       arrVType mWorkspace{};

@@ -50,17 +50,19 @@ template <size_t NDim> inline void TempLat::NormGradientSquareTester<NDim>::Test
       device::IdxArray<NDim> global_idx;
       layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
 
-      sayMPI << "Mismatch at local (";
+      std::stringstream ss;
+      ss << "Mismatch at local (";
       for (device::Idx d = 0; d < NDim; ++d) {
-        sayMPI << local_idx[d];
-        if (d < (device::Idx)NDim - 1) sayMPI << ", ";
+        ss << local_idx[d];
+        if (d < (device::Idx)NDim - 1) ss << ", ";
       }
-      sayMPI << "), global (";
+      ss << "), global (";
       for (device::Idx d = 0; d < NDim; ++d) {
-        sayMPI << global_idx[d];
-        if (d < (device::Idx)NDim - 1) sayMPI << ", ";
+        ss << global_idx[d];
+        if (d < (device::Idx)NDim - 1) ss << ", ";
       }
-      sayMPI << "): LatForwardGradNorm2 = " << val_LatForwardGradNorm2 << ", normGradSq = " << val_normGradSq << "\n";
+      ss << "): LatForwardGradNorm2 = " << val_LatForwardGradNorm2 << ", normGradSq = " << val_normGradSq << "\n";
+      sayMPI << ss.str();
     }
   });
 

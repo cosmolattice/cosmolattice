@@ -10,11 +10,13 @@
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/algebra/listoperators/vectordotter.h"
 #include "TempLat/lattice/algebra/coordinates/spatialcoordinate.h"
+#include "TempLat/util/ndloop.h"
+#include "TempLat/util/constexpr_for.h"
 
-inline void TempLat::VectorDotterTester::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::VectorDotterTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
+  // Test 1: verify dot(x, x) using DoEval::eval
   {
-    static constexpr size_t NDim = 2;
     const ptrdiff_t nGrid = 32, nGhost = 2;
 
     auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
@@ -25,47 +27,27 @@ inline void TempLat::VectorDotterTester::Test(TempLat::TDDAssertion &tdd)
 
     fieldX = dot(x, x);
 
-    std::cout << "dot operation: " << dot(x, x).toString() << std::endl;
-
     const auto fieldX_view = fieldX.getLocalNDHostView();
 
     bool correct = true;
-    for (ptrdiff_t i = 0; i < fieldX_view.extent(0); ++i) {
-      for (ptrdiff_t j = 0; j < fieldX_view.extent(1); ++j) {
-        const ptrdiff_t x_val = x.vectorGet(0, nGhost + i, nGhost + j);
-        const ptrdiff_t y_val = x.vectorGet(1, nGhost + i, nGhost + j);
-        correct &= (fieldX_view(i, j) == x_val * x_val + y_val * y_val);
-        if (!(fieldX_view(i, j) == x_val * x_val + y_val * y_val)) {
-          std::cout << "Mismatch at (" << i << ", " << j << "): fieldX_view = " << fieldX_view(i, j)
-                    << ", expected = " << (x_val * x_val + y_val * y_val) << std::endl;
-        }
+    NDLoop<NDim>(fieldX_view, [&](const auto... idx) {
+      const device::IdxArray<NDim> localIdx{idx...};
+      device::IdxArray<NDim> ghostIdx;
+      for (size_t d = 0; d < NDim; ++d)
+        ghostIdx[d] = nGhost + localIdx[d];
+
+      const auto expected = device::apply([&](const auto &...gi) { return DoEval::eval(x, gi...); }, ghostIdx);
+
+      double expectedDot = 0;
+      for (size_t d = 0; d < NDim; ++d)
+        expectedDot += static_cast<double>(expected[d]) * static_cast<double>(expected[d]);
+
+      correct &= (fieldX_view(idx...) == expectedDot);
+      if (!(fieldX_view(idx...) == expectedDot)) {
+        std::cout << "Mismatch at " << localIdx << ": fieldX_view = " << fieldX_view(idx...)
+                  << ", expected = " << expectedDot << std::endl;
       }
-    }
-
-    tdd.verify(correct);
-  }
-  {
-    static constexpr size_t NDim = 2;
-    const ptrdiff_t nGrid = 32, nGhost = 1;
-
-    auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
-
-    SpatialCoordinate<NDim> x(toolBox);
-
-    Field<NDim, double> fieldX("fieldX", toolBox);
-
-    fieldX = dot(x, x);
-
-    const auto fieldX_view = fieldX.getLocalNDHostView();
-
-    bool correct = true;
-    for (ptrdiff_t i = 0; i < fieldX_view.extent(0); ++i) {
-      for (ptrdiff_t j = 0; j < fieldX_view.extent(1); ++j) {
-        const ptrdiff_t x_val = x.vectorGet(0, nGhost + i, nGhost + j);
-        const ptrdiff_t y_val = x.vectorGet(1, nGhost + i, nGhost + j);
-        correct &= (fieldX_view(i, j) == x_val * x_val + y_val * y_val);
-      }
-    }
+    });
 
     tdd.verify(correct);
   }

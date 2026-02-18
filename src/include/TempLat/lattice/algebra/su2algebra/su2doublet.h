@@ -10,6 +10,7 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
+#include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
@@ -48,11 +49,16 @@ namespace TempLat
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION const Field<NDim, T> &SU2DoubletGet(Tag<N> t) const { return fs[t]; }
 
-    template <int N, typename... IDX>
-      requires requires(Field<NDim, T> f, IDX... idx) { f.get(idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2DoubletGet(Tag<N> t, const IDX &...idx) const
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      return fs[t].get(idx...);
+      device::array<T, 4> result;
+      result[0] = DoEval::eval(fs[0], idx...);
+      result[1] = DoEval::eval(fs[1], idx...);
+      result[2] = DoEval::eval(fs[2], idx...);
+      result[3] = DoEval::eval(fs[3], idx...);
+      return result;
     }
 
     template <int M> DEVICE_FORCEINLINE_FUNCTION auto &operator()(Tag<M> t) { return fs[t]; }
@@ -70,13 +76,12 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        std::decay_t<R> __r = r;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(__r, args...);
-              constexpr_for<0, size, 1>([&](auto _i) {
+              auto result = DoEval::eval(r, args...);
+              constexpr_for<0, size>([&](auto _i) {
                 constexpr size_t i = decltype(_i)::value;
-                device::get<i>(views)(args...) = __r.SU2DoubletGet(_i, args...);
+                device::get<i>(views)(args...) = result[i];
               });
             },
             idx);

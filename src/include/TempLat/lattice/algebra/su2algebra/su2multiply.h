@@ -67,48 +67,20 @@ namespace TempLat
              mR.SU2Get(1_c) * mT.SU2Get(2_c);
     }
 
-    template <typename... IDX> struct RequiredIndices {
-      static constexpr bool value = requires(R r, T t, IDX... idx) {
-        r.SU2Get(0_c, idx...);
-        r.SU2Get(1_c, idx...);
-        r.SU2Get(2_c, idx...);
-        r.SU2Get(3_c, idx...);
-        t.SU2Get(0_c, idx...);
-        t.SU2Get(1_c, idx...);
-        t.SU2Get(2_c, idx...);
-        t.SU2Get(3_c, idx...);
-      };
-    };
-
-    template <int N, typename... IDX>
-      requires RequiredIndices<IDX...>::value
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
-    {
-      return cache[N];
-    }
-
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
-
-      device::array<SV, 4> cL;
-      device::array<SV, 4> cR;
-
-      constexpr_for<0, 4, 1>([&](auto j) {
-        cL[j] = mR.SU2Get(j, idx...);
-        cR[j] = mT.SU2Get(j, idx...);
-      });
-
-      PauliVectorsAlgebra::multiply_inplace(cache, cL, cR);
+      const auto cL = DoEval::eval(mR, idx...);
+      const auto cR = DoEval::eval(mT, idx...);
+      device::array<SV, 4> result;
+      PauliVectorsAlgebra::multiply_inplace(result, cL, cR);
+      return result;
     }
 
     virtual std::string operatorString() const override { return "."; }
 
   private:
-    device::array<SV, 4> cache;
   };
 
   template <typename R, typename T>

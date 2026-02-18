@@ -129,13 +129,11 @@ namespace TempLat
         // Map the radius to a bin
         const ptrdiff_t bin = binComputer(r);
 
-        std::decay_t<T> __t = mInstance;
-
         // Add the bin contribution to the workspace.
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(__t, args...);
-              baseWorkSpace.add_device(bin, GetValue::get(__t, args...), r, 1.);
+              DoEval::eval(mInstance, args...);
+              baseWorkSpace.add_device(bin, GetValue::get(mInstance, args...), r, 1.);
             },
             idx);
       };
@@ -185,15 +183,9 @@ namespace TempLat
           // don't over-weight the real-valued entries: only one float value, only half the weight.
           floatType weight = quality == HermitianRedundancy::realValued ? 0.5 : 1;
 
-          std::decay_t<T> __t = mInstance;
-
           // Add the bin contribution to the workspace.
           device::apply(
-              [&](auto &&...args) {
-                DoEval::eval(__t, args...);
-                baseWorkSpace.add_device(bin, GetValue::get(__t, args...), r, weight);
-              },
-              idx);
+              [&](auto &&...args) { baseWorkSpace.add_device(bin, DoEval::eval(mInstance, args...), r, weight); }, idx);
         }
       };
       device::iteration::foreach ("RadialProjectorFourier", mLayout, functor);

@@ -15,10 +15,10 @@ inline void TempLat::GetVectorSize::Test(TempLat::TDDAssertion &tdd)
   };
 
   struct MyTestOne {
-    double vectorGet(const ptrdiff_t &i, const ptrdiff_t &j)
+    double vectorGet(Tag<1> t)
     {
       std::cerr << "Hell yeah.\n";
-      return i + j;
+      return 420;
     }
     ptrdiff_t getVectorSize() { return 42; }
   };

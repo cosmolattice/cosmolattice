@@ -16,11 +16,11 @@ namespace TempLat
   /**
    * @brief A compile-time for loop, which calls the lambda f of signature void(integer) for each index.
    */
-  template <auto Start, auto End, auto Inc, class F> DEVICE_FORCEINLINE_FUNCTION constexpr void constexpr_for(F &&f)
+  template <auto Start, auto End, class F> DEVICE_FORCEINLINE_FUNCTION constexpr void constexpr_for(F &&f)
   {
     if constexpr (Start < End) {
       f(Tag<Start>{});
-      constexpr_for<Start + Inc, End, Inc>(f);
+      constexpr_for<Start + 1, End>(f);
     }
   }
 } // namespace TempLat

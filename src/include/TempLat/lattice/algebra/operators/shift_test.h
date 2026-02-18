@@ -36,9 +36,9 @@ template <size_t NDim> inline void TempLat::ExpressionShifterTester<NDim>::Test(
   }
   // ExpressionShifterByOne
   {
-    constexpr_for<0, NDim, 1>([&](auto _i) {
+    constexpr_for<0, NDim>([&](auto _i) {
       constexpr size_t i = decltype(_i)::value;
-      constexpr_for<0, NDim, 1>([&](auto _j) {
+      constexpr_for<0, NDim>([&](auto _j) {
         constexpr size_t j = decltype(_j)::value;
         Field<NDim, double> result("result", toolBox);
         result = shift(phi_components[i], _j + Tag<1>()) - phi_components[i];

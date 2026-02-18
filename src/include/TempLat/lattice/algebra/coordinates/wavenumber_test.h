@@ -32,9 +32,7 @@ template <size_t NDim> inline void TempLat::WaveNumber<NDim>::Test(TempLat::TDDA
   WaveNumber<NDim> k(toolBox);
 
   // Assign wavenumber components to fields
-  for (size_t d = 0; d < NDim; ++d) {
-    phi_components[d].inFourierSpace() = getVectorComponent(k, d);
-  }
+  constexpr_for<0, NDim>([&](auto d) { phi_components[d].inFourierSpace() = getVectorComponent(k, d); });
   phinorm.inFourierSpace() = k.norm();
   phinorm2.inFourierSpace() = k.norm2();
 
@@ -54,7 +52,7 @@ template <size_t NDim> inline void TempLat::WaveNumber<NDim>::Test(TempLat::TDDA
   bool correct = true;
 
   NDLoop<NDim>(phinorm_view, [&](const auto &...indices) {
-    std::array<ptrdiff_t, NDim> local_idx = {static_cast<ptrdiff_t>(indices)...};
+    device::IdxArray<NDim> local_idx{indices...};
 
     // Use layout to compute global spatial coordinates from local memory indices
     // This correctly handles transposition in MPI distributed FFTs
@@ -82,79 +80,28 @@ template <size_t NDim> inline void TempLat::WaveNumber<NDim>::Test(TempLat::TDDA
     correct &= this_correct;
 
     if (!this_correct) {
-      sayMPI << "Error at local (";
+      std::stringstream ss;
+      ss << "Error at local (";
       for (size_t d = 0; d < NDim; ++d) {
-        sayMPI << local_idx[d];
-        if (d < NDim - 1) sayMPI << ", ";
+        ss << local_idx[d];
+        if (d < NDim - 1) ss << ", ";
       }
-      sayMPI << "), global (";
+      ss << "), global (";
       for (size_t d = 0; d < NDim; ++d) {
-        sayMPI << global_idx[d];
-        if (d < NDim - 1) sayMPI << ", ";
+        ss << global_idx[d];
+        if (d < NDim - 1) ss << ", ";
       }
-      sayMPI << "): ";
+      ss << "): ";
       for (size_t d = 0; d < NDim; ++d) {
-        sayMPI << "phi[" << d << "] = " << phi_views[d](indices...);
-        if (d < NDim - 1) sayMPI << ", ";
+        ss << "phi[" << d << "] = " << phi_views[d](indices...);
+        if (d < NDim - 1) ss << ", ";
       }
-      sayMPI << ", phinorm = " << phinorm_view(indices...) << ", phinorm2 = " << phinorm2_view(indices...) << "\n";
+      ss << ", phinorm = " << phinorm_view(indices...) << ", phinorm2 = " << phinorm2_view(indices...) << "\n";
+      sayMPI << ss.str();
     }
   });
 
   tdd.verify(correct);
-
-  // WaveNumber cn;
-  //
-  ///* should not be happy with configuration space. */
-  // tdd.verify( Throws<DimensionCountRecorder_CoordinateSpaceException>(
-  //        [&]() {
-  //            cn.getNorm().confirmSpace(LayoutStruct(1), SpaceStateType::Configuration);
-  //        }
-  //) );
-
-  ///* should be happy with fourier space. */
-  // tdd.verify( DoesNotThrow<DimensionCountRecorder_CoordinateSpaceException>(
-  //        [&]() {
-  //            cn.getNorm().confirmSpace(LayoutStruct(1), SpaceStateType::Fourier);
-  //        }
-  //) );
-
-  /*  constexpr size_t NDim = 2;
-    ptrdiff_t nGrid = 8, nGhost = 2;
-
-    auto toolbox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
-
-    Field<NDim, double> field("field", toolbox);
-
-    WaveNumber k(toolbox);
-    field.inFourierSpace() = k.norm2(); // * RandomGaussianField<NDim, T>("Hoi", toolBox);
-
-    auto field_view = field.getLocalNDHostView();
-
-    for (size_t i = 0; i < nGrid; ++i) {
-      for (size_t j = 0; j < nGrid; ++j) {
-        const ptrdiff_t x_val = i > nGrid / 2 ? i - nGrid : i;
-        const ptrdiff_t y_val = j > nGrid / 2 ? j - nGrid : j;
-
-        tdd.verify(k.get(i, j, 0) == x_val);
-        tdd.verify(k.get(i, j, 1) == y_val);
-
-        if (!(k.get(i, j, 1) == y_val))
-          say << "k.get(" << i << ", " << j << ", 1) = " << k.get(i, j, 1) << " != " << y_val;
-      }
-    }
-
-    // auto kn = k.norm2() * pow<2>(0.685);
-    //  auto knkn = kn * kn;
-    //  say << knkn.get(1, 2, 3);
-    //  auto kn1 = k.norm() * pow<2>(0.685);
-    //   say<<knkn.get(45);
-    //  auto kn1kn1 = kn1 * kn1;
-    //  say<<kn1.get(45);
-    //  say<<kn1kn1.get(45);
-
-    tdd.verify(true); // Test in power spectrum.
-  */
 }
 
 #endif

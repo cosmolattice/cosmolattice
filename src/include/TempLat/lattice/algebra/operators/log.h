@@ -45,6 +45,13 @@ namespace TempLat
         return log(GetValue::get(mR, idx...));
       }
 
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        return log(DoEval::eval(mR, idx...));
+      }
+
       /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {

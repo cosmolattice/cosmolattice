@@ -52,7 +52,7 @@ namespace TempLat
         return ZeroType();
       else {
         auto result = (-2 * NDim * GetValue::get(mR, idx...));
-        constexpr_for<0, NDim, 1>([&](const auto _d) {
+        constexpr_for<0, NDim>([&](const auto _d) {
           constexpr size_t d = decltype(_d)::value;
           device::apply([&](const auto &...shifted_idx) { result += GetValue::get(mR, shifted_idx...); },
                         tuple_add_to_nth<d, 1>(device::tie(idx...)));
@@ -63,22 +63,26 @@ namespace TempLat
       }
     }
 
-    virtual std::string operatorString() const override { return "Laplacian"; }
-
     template <typename... IDX>
-      requires requires(R r, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        DoEval::eval(r, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+      requires IsVariadicNDIndex<NDim, IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      constexpr_for<0, NDim, 1>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                      tuple_add_to_nth<d, 1>(device::tie(idx...)));
-      });
+      if constexpr (UnaryOperator<R>::getNDim() == 0)
+        return ZeroType();
+      else {
+        auto result = (-2 * NDim * DoEval::eval(mR, idx...));
+        constexpr_for<0, NDim>([&](const auto _d) {
+          constexpr size_t d = decltype(_d)::value;
+          device::apply([&](const auto &...shifted_idx) { result += DoEval::eval(mR, shifted_idx...); },
+                        tuple_add_to_nth<d, 1>(device::tie(idx...)));
+          device::apply([&](const auto &...shifted_idx) { result += DoEval::eval(mR, shifted_idx...); },
+                        tuple_add_to_nth<d, -1>(device::tie(idx...)));
+        });
+        return result / dx2;
+      }
     }
+
+    virtual std::string operatorString() const override { return "Laplacian"; }
 
     /** @brief Symbolic derivatives. */
     template <typename S> DEVICE_FORCEINLINE_FUNCTION auto d(const S &other)

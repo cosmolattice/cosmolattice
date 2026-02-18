@@ -41,32 +41,15 @@ namespace TempLat
     auto ComplexFieldGet(Tag<1> t) const { return Imag(mR) + Imag(mT); }
 
     template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(0_c, idx...);
-        mT.ComplexFieldGet(0_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
-    {
-      return mR.ComplexFieldGet(0_c, idx...) + mT.ComplexFieldGet(0_c, idx...);
-    }
-    template <typename... IDX>
-      requires requires(R mR, T mT, IDX... idx) {
-        requires IsVariadicIndex<IDX...>;
-        mR.ComplexFieldGet(1_c, idx...);
-        mT.ComplexFieldGet(1_c, idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
-    {
-      return mR.ComplexFieldGet(1_c, idx...) + mT.ComplexFieldGet(1_c, idx...);
-    }
-
-    template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      DoEval::eval(mR, idx...);
-      DoEval::eval(mT, idx...);
+      auto cL = DoEval::eval(mR, idx...);
+      auto cR = DoEval::eval(mT, idx...);
+      device::array<decltype(cL[0] + cR[0]), 2> result;
+      result[0] = cL[0] + cR[0];
+      result[1] = cL[1] + cR[1];
+      return result;
     }
 
     virtual std::string operatorString() const override { return "+"; }

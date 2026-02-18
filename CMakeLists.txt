@@ -175,7 +175,7 @@ set(G++AVX
 )
 
 if(${G++OPT} STREQUAL "G")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address  ")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fsanitize=address -fconcepts-diagnostics-depth=8")
 elseif(${G++OPT} STREQUAL "O1")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O1 ")
 elseif(${G++OPT} STREQUAL "O2")

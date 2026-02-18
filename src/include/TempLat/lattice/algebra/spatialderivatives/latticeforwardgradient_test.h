@@ -24,13 +24,16 @@ template <size_t NDim> inline void TempLat::LatticeForwardGradientTester<NDim>::
   auto layout = toolBox->mLayouts.getConfigSpaceLayout();
 
   // Test forward gradient in each dimension
-  for (size_t dir = 0; dir < NDim; ++dir) {
+  constexpr_for<1, NDim + 1>([&](auto dirTag) {
+    constexpr int dir = decltype(dirTag)::value;
+    constexpr size_t d = static_cast<size_t>(dir) - 1;
+
     Field<NDim, double> sc("SC_" + std::to_string(dir), toolBox);
-    sc = getVectorComponent(x, dir);
+    sc = x(dirTag);
     sc.updateGhosts();
 
     Field<NDim, double> fgsc("fgSC_" + std::to_string(dir), toolBox);
-    fgsc = getVectorComponent(LatForwardGrad<NDim>(sc), dir);
+    fgsc = getVectorComponent(LatForwardGrad<NDim>(sc), dirTag - Tag<1>{});
 
     bool OK = true;
     auto sc_view = sc.getFullNDHostView();
@@ -43,7 +46,7 @@ template <size_t NDim> inline void TempLat::LatticeForwardGradientTester<NDim>::
       // Build index arrays for accessing full view (with ghosts)
       device::IdxArray<NDim> idx_base = {(indices + nGhost)...};
       device::IdxArray<NDim> idx_next = idx_base;
-      idx_next[dir] += 1;
+      idx_next[d] += 1;
 
       // Get values
       double val_current = device::apply([&](auto... i) { return sc_view(i...); }, idx_base);
@@ -59,16 +62,18 @@ template <size_t NDim> inline void TempLat::LatticeForwardGradientTester<NDim>::
         device::IdxArray<NDim> global_idx;
         layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
 
-        sayMPI << "Mismatch in dir " << dir << " at global (";
-        for (size_t d = 0; d < NDim; ++d) {
-          sayMPI << global_idx[d];
-          if (d < NDim - 1) sayMPI << ", ";
+        std::stringstream ss;
+        ss << "Mismatch in dir " << dir << " at global (";
+        for (size_t i = 0; i < NDim; ++i) {
+          ss << global_idx[i];
+          if (i < NDim - 1) ss << ", ";
         }
-        sayMPI << "): expect = " << expect << ", fgSC = " << val_fgsc << "\n";
+        ss << "): expect = " << expect << ", fgSC = " << val_fgsc << "\n";
+        sayMPI << ss.str();
       }
     });
     tdd.verify(OK);
-  }
+  });
 }
 
 #endif

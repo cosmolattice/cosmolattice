@@ -23,13 +23,10 @@ inline void TempLat::SU2DoubletDaggerTester::Test(TempLat::TDDAssertion &tdd)
     int SU2DoubletGet(Tag<3> t) const { return arr[3]; }
 
     DEVICE_FORCEINLINE_FUNCTION
-    int SU2DoubletGet(Tag<0> t, ptrdiff_t i) const { return arr[0]; }
-    DEVICE_FORCEINLINE_FUNCTION
-    int SU2DoubletGet(Tag<1> t, ptrdiff_t i) const { return arr[1]; }
-    DEVICE_FORCEINLINE_FUNCTION
-    int SU2DoubletGet(Tag<2> t, ptrdiff_t i) const { return arr[2]; }
-    DEVICE_FORCEINLINE_FUNCTION
-    int SU2DoubletGet(Tag<3> t, ptrdiff_t i) const { return arr[3]; }
+    device::array<int, 4> eval(ptrdiff_t) const
+    {
+      return {int(arr[0]), int(arr[1]), int(arr[2]), int(arr[3])};
+    }
 
     std::string toString() const { return "test"; }
 
@@ -45,10 +42,11 @@ inline void TempLat::SU2DoubletDaggerTester::Test(TempLat::TDDAssertion &tdd)
   tdd.verify(dag.SU2DoubletGet(2_c) == 3);
   tdd.verify(dag.SU2DoubletGet(3_c) == -4);
 
-  tdd.verify(dag.SU2DoubletGet(0_c, 22) == 1);
-  tdd.verify(dag.SU2DoubletGet(1_c, 22) == -2);
-  tdd.verify(dag.SU2DoubletGet(2_c, 22) == 3);
-  tdd.verify(dag.SU2DoubletGet(3_c, 22) == -4);
+  auto result = dag.eval(ptrdiff_t(22));
+  tdd.verify(result[0] == 1);
+  tdd.verify(result[1] == -2);
+  tdd.verify(result[2] == 3);
+  tdd.verify(result[3] == -4);
 }
 
 #endif

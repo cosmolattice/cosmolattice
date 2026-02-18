@@ -35,9 +35,19 @@ namespace TempLat
       {
         using mType = typename GetGetReturnType<R>::type;
         mType objValue = GetValue::get(mR, idx...);
-        const bool isZero = objValue == mType(0);
+        const bool isZero = objValue == mType{};
         // TODO (Franz): What is actually the intended behaviour here?
-        return isZero ? std::numeric_limits<mType>::max() : mType(0);
+        return isZero ? std::numeric_limits<mType>::max() : mType{};
+      }
+
+      template <typename... IDX>
+        requires IsVariadicIndex<IDX...>
+      DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+      {
+        using mType = typename GetGetReturnType<R>::type;
+        const mType objValue = DoEval::eval(mR, idx...);
+        const bool isZero = objValue == mType{};
+        return isZero ? std::numeric_limits<mType>::max() : mType{};
       }
 
       /** @brief Does anyone need derivatives of the delta function? If so, go ahead and figure it out. */

@@ -34,28 +34,16 @@ namespace TempLat
 
     template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N...>(mR.SU2Get(t)); }
 
-    template <int M, typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2Get(Tag<M>(), idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
-    {
-      auto tup = device::tie(idx...);
-      constexpr_for<0, dim, 1>([&](const auto _d) {
-        constexpr size_t d = decltype(_d)::value;
-        tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
-      });
-      return device::apply([&](const auto &...shifted_idx) { return mR.SU2Get(t, shifted_idx...); }, tup);
-    }
-
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       auto tup = device::tie(idx...);
-      constexpr_for<0, dim, 1>([&](const auto _d) {
+      constexpr_for<0, dim>([&](const auto _d) {
         constexpr size_t d = decltype(_d)::value;
         tup = tuple_add_to_nth<d, device::get<d>(shifts)>(tup);
       });
-      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); }, tup);
+      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); }, tup);
     }
 
     virtual std::string operatorString() const override { return shift<N...>(mR.SU2Get(0_c)).getString({N...}); }
@@ -74,22 +62,14 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     SU2ShifterByOne(const R &pR) : SU2UnaryOperator<R>(pR) {}
 
-    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<N>(mR.SU2Get(t)); }
-
-    template <int M, typename... IDX>
-      requires requires(R r, IDX... idx) { r.SU2Get(Tag<M>(), idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t, const IDX &...idx) const
-    {
-      return device::apply([&](const auto &...shifted_idx) { return mR.SU2Get(t, shifted_idx...); },
-                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
-    }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<M> t) const { return shift<_N>(mR.SU2Get(t)); }
 
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION void eval(const IDX &...idx)
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      device::apply([&](const auto &...shifted_idx) { DoEval::eval(mR, shifted_idx...); },
-                    tuple_add_to_nth<N - 1, 1>(device::tie(idx...)));
+      return device::apply([&](const auto &...shifted_idx) { return DoEval::eval(mR, shifted_idx...); },
+                           tuple_add_to_nth<N - 1, dir>(device::tie(idx...)));
     }
 
     std::string toString() const { return GetString::get(mR) + "_(->" + std::to_string(N) + ")"; }

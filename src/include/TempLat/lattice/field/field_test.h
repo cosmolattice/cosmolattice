@@ -31,7 +31,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
   {
     Field<NDim, T> original("original", toolBox);
     SpatialCoordinate x(toolBox);
-    original = getVectorComponent(x, 0);
+    original = x(1_c);
     original.updateGhosts();
 
     Field<NDim, T> copy("copy", toolBox);
@@ -84,7 +84,7 @@ template <size_t NDim, typename T> inline void TempLat::Field<NDim, T>::Test(Tem
     Field<NDim, T> chi("chi", toolBox);
     WaveNumber k(toolBox);
 
-    auto field_tester = [&](Field<NDim, T> &f, const auto &op, double expected) {
+    auto field_tester = [&](Field<NDim, T> &f, auto &&op, double expected) {
       f = op;
 
       auto view = f.getLocalNDHostView();

@@ -67,6 +67,7 @@ namespace TempLat
       mRawView = mManager->getRawView();
     }
 
+    // TODO: Remove
 #ifdef DEVICE_REGION
     DEVICE_FUNCTION
     ConfigView(const ConfigView &other)
@@ -91,13 +92,7 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        std::decay_t<decltype(g)> __g = g;
-        device::apply(
-            [&](auto &&...args) {
-              DoEval::eval(__g, args...);
-              mView(args...) = GetValue::get(__g, args...);
-            },
-            idx);
+        device::apply([&](auto &&...args) { mView(args...) = DoEval::eval(g, args...); }, idx);
       };
       device::iteration::foreach ("ConfigViewAssign", mLayout, functor);
 
@@ -114,10 +109,7 @@ namespace TempLat
 
     template <typename R> void operator+=(R &&g) { this->operator=(*this + g); }
 
-    void operator=(const ConfigView<NDim, T> &other)
-    { // overwrite the default = operator.
-      this->assign(other);
-    }
+    void operator=(const ConfigView<NDim, T> &other) { this->assign(other); }
 
     template <typename... IDX>
       requires requires {
@@ -170,6 +162,13 @@ namespace TempLat
      *  and then FFT'ed to fourier space.
      */
     void setDisableFFTBlocking() { mDisableFFTBlocking = true; }
+
+    template <typename... IDX>
+      requires IsVariadicNDIndex<NDim, IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
+    {
+      return mView(idx...);
+    }
 
     template <typename R> void onBeforeAssignment(R &&g)
     {

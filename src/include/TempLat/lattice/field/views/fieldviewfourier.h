@@ -52,9 +52,7 @@ namespace TempLat
 
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
-    template <typename R>
-      requires HasGetMethod<R>
-    void assign(R &&g)
+    template <typename R> void assign(R &&g)
     {
       const auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
       onBeforeAssignment(g);
@@ -63,13 +61,7 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        std::decay_t<decltype(g)> __g = g;
-        device::apply(
-            [&](auto &&...args) {
-              DoEval::eval(__g, args...);
-              mView(args...) = GetValue::get(__g, args...);
-            },
-            idx);
+        device::apply([&](auto &&...args) { mView(args...) = DoEval::eval(g, args...); }, idx);
       };
       device::iteration::foreach ("FourierViewAssign", layout, functor);
 
@@ -90,11 +82,10 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        std::decay_t<decltype(g)> __g = g;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(__g, args...);
-              mView(args...) = complex<T>(__g.ComplexFieldGet(0_c, args...), __g.ComplexFieldGet(1_c, args...));
+              const auto result = DoEval::eval(g, args...);
+              mView(args...) = complex<T>(result[0], result[1]);
             },
             idx);
       };
@@ -137,6 +128,13 @@ namespace TempLat
         requires(std::is_integral_v<std::decay_t<IDX>> && ...);
       }
     DEVICE_FORCEINLINE_FUNCTION complex<T> &getSet(const IDX &...idx) const
+    {
+      return mView(idx...);
+    }
+
+    template <typename... IDX>
+      requires IsVariadicNDIndex<NDim, IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       return mView(idx...);
     }

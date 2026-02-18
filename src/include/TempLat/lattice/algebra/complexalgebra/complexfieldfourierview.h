@@ -55,23 +55,13 @@ namespace TempLat
     const auto &operator()(Tag<1> t) const { return mI; }
 
     template <typename... IDX>
-      requires requires(FourierView<NDim, T> mR, IDX... idx) {
-        requires IsVariadicNDIndex<NDim, IDX...>;
-        mR.get(idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<0> t, const IDX &...idx) const
+      requires IsVariadicNDIndex<NDim, IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      return mR.get(idx...);
-    }
-
-    template <typename... IDX>
-      requires requires(FourierView<NDim, T> mI, IDX... idx) {
-        requires IsVariadicNDIndex<NDim, IDX...>;
-        mI.get(idx...);
-      }
-    DEVICE_FORCEINLINE_FUNCTION auto ComplexFieldGet(Tag<1> t, const IDX &...idx) const
-    {
-      return mI.get(idx...);
+      device::array<decltype(mR.get(idx...)), 2> result;
+      result[0] = mR.get(idx...);
+      result[1] = mI.get(idx...);
+      return result;
     }
 
     template <typename R> void operator=(R &&g)
@@ -89,12 +79,11 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
-        std::decay_t<R> __g = g;
         device::apply(
             [&](auto &&...args) {
-              DoEval::eval(__g, args...);
-              viewR(args...) = __g.ComplexFieldGet(0_c, args...);
-              viewI(args...) = __g.ComplexFieldGet(1_c, args...);
+              auto result = DoEval::eval(g, args...);
+              viewR(args...) = result[0];
+              viewI(args...) = result[1];
             },
             idx);
       };

@@ -70,7 +70,7 @@ namespace TempLat
         Kokkos::parallel_reduce(
             "Get a point", Kokkos::RangePolicy(0, 1),
             DEVICE_LAMBDA(const unsigned int, T &update) {
-              device_kokkos::apply([&](const auto... idx) { update = GetEval::getEval(obj, idx...); }, pos);
+              device_kokkos::apply([&](const auto... idx) { update = DoEval::eval(obj, idx...); }, pos);
             },
             ret);
         return ret;

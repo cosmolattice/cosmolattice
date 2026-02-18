@@ -354,13 +354,8 @@ namespace TempLat
           auto functor = DEVICE_CLASS_LAMBDA(device::IdxArray<1> idx)
           {
             device::Idx i = idx[0];
-            std::decay_t<decltype(r)> __r = r;
-            device::apply(
-                [&](const auto &...idx) {
-                  DoEval::eval(__r, idx..., i);
-                  device_buf(i - memoryPos[dim]) = GetValue::get(__r, idx..., i);
-                },
-                subMemoryPos);
+            device::apply([&](const auto &...idx) { device_buf(i - memoryPos[dim]) = DoEval::eval(r, idx..., i); },
+                          subMemoryPos);
           };
           device::iteration::foreach ("SaveDimBufferFilling", {memoryPos[dim]}, {memoryPos[dim] + subdims[dim]},
                                       functor);

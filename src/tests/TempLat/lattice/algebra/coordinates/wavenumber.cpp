@@ -1,14 +1,15 @@
-
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
+
 #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 #include "TempLat/lattice/algebra/coordinates/wavenumber_test.h"
 
 namespace
 {
+  TempLat::TDDContainer<TempLat::WaveNumber<1>> test1;
   TempLat::TDDContainer<TempLat::WaveNumber<2>> test2;
   TempLat::TDDContainer<TempLat::WaveNumber<3>> test3;
   TempLat::TDDContainer<TempLat::WaveNumber<4>> test4;

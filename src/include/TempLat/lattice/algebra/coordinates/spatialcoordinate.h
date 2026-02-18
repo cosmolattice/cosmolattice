@@ -9,7 +9,6 @@
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
-#include "TempLat/lattice/algebra/coordinates/coordinatevector.h"
 #include "TempLat/lattice/algebra/helpers/getvectorcomponent.h"
 
 namespace TempLat
@@ -20,7 +19,7 @@ namespace TempLat
    *
    * Unit test: ctest -R test-spatialcoordinate
    **/
-  template <size_t NDim> class SpatialCoordinate : public CoordinateVector<NDim>
+  template <size_t NDim> class SpatialCoordinate
   {
   public:
     // Put public methods here. These should change very little over time.
@@ -32,19 +31,21 @@ namespace TempLat
 
     static constexpr ptrdiff_t getVectorSize() { return NDim; }
 
-    template <typename IDX1, typename... IDX>
+    template <typename... IDX>
       requires IsVariadicNDIndex<NDim, IDX...>
-    DEVICE_FORCEINLINE_FUNCTION auto vectorGet(const IDX1 component, const IDX &...idx) const
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::IdxArray<NDim> result;
       mLayout.putSpatialLocationFromMemoryIndexInto(result, idx...);
-      return result[component];
+      return result;
     }
 
-    virtual JumpsHolder<NDim> getJumps() const override { return mToolBox->mLayouts.getConfigSpaceJumps(); }
+    virtual JumpsHolder<NDim> getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
 
-    virtual void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout,
-                              const SpaceStateType &spaceType) const override
+    void doWeNeedGhosts(ptrdiff_t i) const {}
+    template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const { return 1; }
+
+    virtual void confirmSpace(ptrdiff_t i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       switch (spaceType) {
       case SpaceStateType::Fourier:
@@ -57,10 +58,21 @@ namespace TempLat
       }
     }
 
-    inline auto getToolBox() const
-    { // just take toolbox from first component
-      return mToolBox;
+    template <int N>
+      requires(N > 0)
+    auto vectorGet(Tag<N> t) const
+    {
+      return getVectorComponent(*this, Tag<N - 1>());
     }
+
+    template <int N>
+      requires(N > 0)
+    auto operator()(Tag<N> t) const
+    {
+      return vectorGet(t);
+    }
+
+    inline auto getToolBox() const { return mToolBox; }
 
     static std::string toString(ptrdiff_t j) { return "x_" + std::to_string(j); }
     static std::string toString() { return "x"; }
@@ -75,7 +87,6 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
-
 } // namespace TempLat
 
 #endif

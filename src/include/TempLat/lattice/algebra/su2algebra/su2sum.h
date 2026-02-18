@@ -36,11 +36,17 @@ namespace TempLat
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return mT.SU2Get(t) + mR.SU2Get(t); }
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }
 
-    template <int N, typename... IDX>
-      requires requires(R r, T t, IDX... idx) { r.SU2Get(Tag<N>(), idx...); }
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t, const IDX &...idx) const
+    template <typename... IDX>
+      requires IsVariadicIndex<IDX...>
+    DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
-      return mT.SU2Get(t, idx...) + mR.SU2Get(t, idx...);
+      auto cL = DoEval::eval(mR, idx...);
+      const auto cR = DoEval::eval(mT, idx...);
+      cL[0] += cR[0];
+      cL[1] += cR[1];
+      cL[2] += cR[2];
+      cL[3] += cR[3];
+      return cL;
     }
 
     virtual std::string operatorString() const override { return "+"; }

@@ -9,5 +9,9 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::VectorDotterTester> test;
-}
+  TempLat::TDDContainer<TempLat::VectorDotterTester<1>> test1;
+  TempLat::TDDContainer<TempLat::VectorDotterTester<2>> test2;
+  TempLat::TDDContainer<TempLat::VectorDotterTester<3>> test3;
+  TempLat::TDDContainer<TempLat::VectorDotterTester<4>> test4;
+  TempLat::TDDContainer<TempLat::VectorDotterTester<5>> test5;
+} // namespace

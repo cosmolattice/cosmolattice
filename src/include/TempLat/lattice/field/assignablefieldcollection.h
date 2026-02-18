@@ -32,6 +32,8 @@ namespace TempLat
   template <class Q, class... Args> class AssignableCollectionBase
   {
   public:
+    static constexpr size_t size = sizeof...(Args);
+
     AssignableCollectionBase(Args... args)
         : // This constructor is used to create composite structure such as SU(N) matrices, from fields.
           fs(std::make_tuple(args...))
@@ -47,7 +49,7 @@ namespace TempLat
       requires(!std::is_same_v<R, AssignableCollectionBase<Args...>>)
     void operator=(R &&r)
     {
-      using nakedR = typename std::remove_cv<typename std::remove_reference<R>::type>::type;
+      using nakedR = std::decay_t<R>;
       for_in_range<0, size>([&](auto j) { std::get<j>(fs) = nakedR::Getter::get(r, j); });
     }
 
@@ -57,13 +59,8 @@ namespace TempLat
       return std::get<M - Q::SHIFTIND>(fs);
     }
 
-    static constexpr size_t size = tuple_size<std::tuple<Args...>>::value;
-
   protected:
     std::tuple<Args...> fs;
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
   template <class Q> // Specialise to empty field collection, that does nothing. Useful to define general models for
