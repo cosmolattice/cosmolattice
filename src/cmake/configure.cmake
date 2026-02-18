@@ -3,9 +3,6 @@ include(./src/cmake/add_cosmolattice_exec.cmake)
 include_directories(src/include/)
 include_directories(SYSTEM external/include/)
 
-# Set up documentation
-include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/doxygen.cmake)
-
 # Set up the device
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/device/device.cmake)
 
