@@ -4,20 +4,12 @@ include_directories(src/include/)
 include_directories(SYSTEM external/include/)
 
 # Set up documentation
-include(./src/cmake/doxygen.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/doxygen.cmake)
 
 # Set up the device
-include(./src/cmake/device/device.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/device/device.cmake)
 
-find_package(FFTW REQUIRED)
-
-# Ensure the FFTW library directory is in the linker search path. This is needed
-# because KokkosFFT may propagate -lfftw3 as a bare flag (without a full path),
-# so the linker needs to know where to find it.
-if(FFTW_LIB)
-  get_filename_component(FFTW_LIB_DIR "${FFTW_LIB}" DIRECTORY)
-  link_directories(${FFTW_LIB_DIR})
-endif()
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/libs/fftw.cmake)
 
 # Need pthread to compile the non-mpi version
 set(THREADS_PREFER_PTHREAD ON)
@@ -35,18 +27,13 @@ endif()
 # Parafaft configuration
 if(PARAFAFT AND MPI)
   # Parafaft is header-only, just need include path
-  include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/parafaft.cmake)
+  include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/libs/parafaft.cmake)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_PARAFAFT")
 endif()
 
 if(HDF5)
-  if(MPI)
-    set(HDF5_PREFER_PARALLEL ON)
-  endif()
-  find_package(HDF5 REQUIRED)
   include(./src/cmake/libs/hdf5.cmake)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_HDF5")
-  include_directories(${HDF5_INCLUDE_DIRS})
 endif()
 
 if(TESTING)
@@ -62,6 +49,3 @@ if(NOT DEFINED FFTW_LIB
    AND NOT DEFINED PARAFAFT)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOFFT")
 endif()
-
-# set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${FFTW_INCLUDES}" )
-include_directories(${FFTW_INCLUDES})
