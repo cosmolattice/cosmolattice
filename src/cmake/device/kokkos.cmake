@@ -41,4 +41,16 @@ FetchContent_MakeAvailable(Kokkos)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_KOKKOS")
 
+# There is a problem with Kokkos + HIP, where HIP's cmake sets offload-arch and
+# Kokkos does the same, which leads to a conflict. We purge the info set by
+# HIP's cmake here.
+if(HIP)
+  set(GPU_BUILD_TARGETS
+      ""
+      CACHE STRING "" FORCE)
+  set(GPU_TARGETS
+      ""
+      CACHE STRING "" FORCE)
+endif()
+
 message(STATUS "---------- Getting Kokkos DONE ----------\n")
