@@ -220,13 +220,13 @@ namespace TempLat
 
       const auto mLayout = toolBox->mLayouts.getConfigSpaceLayout();
 
-      if (dim == toolBox->mNDimensions - 1) // Last dimension, saved as a full rod.
+      if ((size_t)dim == toolBox->NDim - 1) // Last dimension, saved as a full rod.
       {
         // look at index 0 in the last dimension. The next nGrid[last dimension] points are stored continuously.
         coords.emplace_back(0);
 
         // for hdf5, tell it we want to store a sub array of size (1,1,1...,nGrid[last dimension]).
-        std::vector<hsize_t> subdims(toolBox->mNDimensions, 1);
+        std::vector<hsize_t> subdims(toolBox->NDim, 1);
         subdims.back() = toolBox->mNGridPointsVec[dim];
 
         // at position (i,j,k,...,0) in the global lattice file.
