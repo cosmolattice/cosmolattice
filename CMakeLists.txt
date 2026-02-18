@@ -132,6 +132,7 @@ set(DEFAULT_MODEL lphi4)
 set(MODEL
     ${DEFAULT_MODEL}
     CACHE STRING "Model that is compiled.")
+message("")
 message(
   STATUS
     "---------- The model which is going to be compiled is: ${MODEL} ----------"
