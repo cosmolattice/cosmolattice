@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-inline void TempLat::IsInContainer::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::IsInContainerTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(check(1, std::vector<int>{1, 2, 3, 4}));

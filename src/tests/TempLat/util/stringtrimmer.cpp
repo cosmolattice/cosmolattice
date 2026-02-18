@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::StringTrimmer> test;
+  TempLat::TDDContainer<TempLat::StringTrimmerTester> test;
 }

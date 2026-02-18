@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Factorize> test;
+  TempLat::TDDContainer<TempLat::FactorizeTester> test;
 }

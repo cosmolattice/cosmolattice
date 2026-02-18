@@ -24,12 +24,16 @@ namespace TempLat
     template <typename T> static inline std::string get(const T &instance) { return get<T>(); }
 
     template <typename T> static inline std::string get() { return Demangle::demangle(typeid(T).name()); }
+  };
 
 #ifdef TEMPLATTEST
+  class GetCPPTypeNameTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

@@ -56,12 +56,15 @@ namespace TempLat
     const char *theWhat;
     std::string theStringWhat;
     const std::string strtrace;
+  };
 
 #ifdef TEMPLATTEST
+  class ExceptionTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #define MakeException(name)                                                                                            \

@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ParenthesisStripper> test;
+  TempLat::TDDContainer<TempLat::ParenthesisStripperTester> test;
 }

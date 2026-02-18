@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Endianness> test;
+  TempLat::TDDContainer<TempLat::EndiannessTester> test;
 }

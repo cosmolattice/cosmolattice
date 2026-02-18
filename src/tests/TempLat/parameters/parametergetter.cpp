@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ParameterGetter<double>> test;
+  TempLat::TDDContainer<TempLat::ParameterGetterTester> test;
 }

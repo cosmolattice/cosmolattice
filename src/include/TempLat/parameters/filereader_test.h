@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-inline void TempLat::FileReader::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FileReaderTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   bool UncommentAndPutTheCorrectFilePathForTheTest = true;

@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::RandomGaussian> test;
+  TempLat::TDDContainer<TempLat::RandomGaussianTester> test;
 }

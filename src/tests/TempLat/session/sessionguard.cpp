@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::SessionGuard> test;
+  TempLat::TDDContainer<TempLat::SessionGuardTester> test;
 }

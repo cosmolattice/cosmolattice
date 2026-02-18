@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ParameterParser> test;
+  TempLat::TDDContainer<TempLat::ParameterParserTester> test;
 }

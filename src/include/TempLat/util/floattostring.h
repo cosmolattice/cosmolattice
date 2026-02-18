@@ -109,12 +109,16 @@ namespace TempLat
         }
       }
     }
+  };
 
 #ifdef TEMPLATTEST
+  class FloatToStringTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

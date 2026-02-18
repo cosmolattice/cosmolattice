@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::KeccakHashBareClass::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::KeccakHashBareClassTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   KeccakHashBareClass khbc;

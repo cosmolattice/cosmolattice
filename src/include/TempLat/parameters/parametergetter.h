@@ -39,12 +39,15 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::string mName;
     T mInstance;
+  };
 
 #ifdef TEMPLATTEST
+  struct ParameterGetterTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

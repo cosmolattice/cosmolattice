@@ -32,6 +32,9 @@ namespace TempLat
     {
     }
 
+    // Getter for testing purposes only. Allows tests to check the current instance counter.
+    static inline int GetInstanceCounter() { return InstanceCounter(); }
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     int instanceProtectionKey;
@@ -49,12 +52,15 @@ namespace TempLat
                                                  counter);
       return counter;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class SessionGuardTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -9,7 +9,7 @@
 
 #include "TempLat/util/almostequal.h"
 
-template <typename T> inline void TempLat::ParameterGetter<T>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::ParameterGetterTester::Test(TempLat::TDDAssertion &tdd)
 {
   double d = 9.876;
 

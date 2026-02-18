@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetCPPTypeName> test;
+  TempLat::TDDContainer<TempLat::GetCPPTypeNameTester> test;
 }

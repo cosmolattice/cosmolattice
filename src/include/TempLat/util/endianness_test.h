@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::Endianness::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::EndiannessTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   Endianness endian;

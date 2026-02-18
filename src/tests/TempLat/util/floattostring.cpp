@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FloatToString> test;
+  TempLat::TDDContainer<TempLat::FloatToStringTester> test;
 }

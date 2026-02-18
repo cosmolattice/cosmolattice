@@ -9,7 +9,7 @@
 
 MakeException(TestException);
 
-inline void TempLat::Exception::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::ExceptionTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   tdd.verify(Throws<TestException>([] { throw TestException("Hoi!"); }));

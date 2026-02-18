@@ -10,7 +10,7 @@
 #include "TempLat/util/namedtmpfile.h"
 #include "TempLat/util/log/log.h"
 
-inline void TempLat::FileToJSON::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FileToJSONTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   NamedTmpFile ntf;

@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Stacktrace> test;
+  TempLat::TDDContainer<TempLat::StacktraceTester> test;
 }

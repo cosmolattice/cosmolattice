@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ConditionalSayShort> test;
+  TempLat::TDDContainer<TempLat::ConditionalSayShortTester> test;
 }

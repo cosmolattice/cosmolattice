@@ -87,12 +87,15 @@ namespace TempLat
 
       return {{boxMullerR * device::cos(boxMullerTheta), boxMullerR * device::sin(boxMullerTheta)}};
     }
+  };
 
 #ifdef TEMPLATTEST
+  class RandomGaussianTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

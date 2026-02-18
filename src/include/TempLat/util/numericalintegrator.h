@@ -30,14 +30,18 @@ namespace TempLat
       }
       return res;
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename T> T integrate(const std::vector<T> &vec, T dt) { return NumericalIntegrator::integrate(vec, dt); }
+
+#ifdef TEMPLATTEST
+  class NumericalIntegratorTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
+
 } // namespace TempLat
 
 #endif

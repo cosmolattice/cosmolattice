@@ -137,12 +137,15 @@ namespace TempLat
         workspace.FIPS202_SHA3_256(data.data(), data.size(), hash.data());
       }
     }
+  };
 
 #ifdef TEMPLATTEST
+  class KeccakHashBareClassTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

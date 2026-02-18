@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-inline void TempLat::PrettyToString::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::PrettyToStringTester::Test(TempLat::TDDAssertion &tdd)
 {
   say << get(1.0);
   say << get(1.000001);

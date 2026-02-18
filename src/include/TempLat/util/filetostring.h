@@ -59,12 +59,16 @@ namespace TempLat
       t.read(&buffer[0], size);
       payload = buffer;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class FileToStringTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

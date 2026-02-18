@@ -43,12 +43,15 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     /** @brief Constructor is private: no need to instantiate, just call the static compute. */
     KeccakHash() {}
+  };
 
 #ifdef TEMPLATTEST
+  class KeccakHashTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

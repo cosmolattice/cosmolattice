@@ -84,12 +84,16 @@ namespace TempLat
       }
       return result;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class FactorizeTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

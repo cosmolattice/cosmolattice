@@ -9,7 +9,7 @@
 
 #include "TempLat/util/almostequal.h"
 
-inline void TempLat::ParameterParser::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::ParameterParserTester::Test(TempLat::TDDAssertion &tdd)
 {
   /*Uncomment and put the correct file path*/
   bool UncommentAndPutTheCorrectFilePathForTheTest = true;

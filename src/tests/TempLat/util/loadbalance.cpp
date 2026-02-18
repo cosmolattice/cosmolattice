@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::LoadBalance> test;
+  TempLat::TDDContainer<TempLat::LoadBalanceTester> test;
 }

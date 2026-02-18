@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::ContainsSpace::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::ContainsSpaceTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   tdd.verify(ContainsSpace::test("This has a space") == true);

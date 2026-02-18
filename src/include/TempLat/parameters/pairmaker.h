@@ -56,12 +56,15 @@ namespace TempLat
       while (str.size() > 0 && str[0] == ' ')
         str.erase(0, 1);
     }
+  };
 
 #ifdef TEMPLATTEST
+  class PairMakerTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

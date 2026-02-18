@@ -59,12 +59,15 @@ namespace TempLat
     std::ofstream stream;
     std::string fname;
     std::ios_base::openmode mMode;
+  };
 
 #ifdef TEMPLATTEST
+  struct ConditionalFileStreamTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

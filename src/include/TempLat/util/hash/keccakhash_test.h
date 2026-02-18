@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::KeccakHash::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::KeccakHashTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   auto &&compare = [&tdd](auto &&a, auto &&b) {

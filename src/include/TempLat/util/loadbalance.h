@@ -34,12 +34,16 @@ namespace TempLat
       }
       return res;
     }
+  };
+
 
 #ifdef TEMPLATTEST
+  class LoadBalanceTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
 

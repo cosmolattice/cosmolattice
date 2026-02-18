@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::KeccakHashBareClass> test;
+  TempLat::TDDContainer<TempLat::KeccakHashBareClassTester> test;
 }

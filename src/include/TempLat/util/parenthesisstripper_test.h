@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-inline void TempLat::ParenthesisStripper::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::ParenthesisStripperTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   std::string tmp("(a*2)");

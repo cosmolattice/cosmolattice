@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::IsInContainer> test;
+  TempLat::TDDContainer<TempLat::IsInContainerTester> test;
 }

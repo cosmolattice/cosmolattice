@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::PoorMansProfile> test;
+  TempLat::TDDContainer<TempLat::PoorMansProfileTester> test;
 }
