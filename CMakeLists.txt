@@ -15,7 +15,7 @@ if(NOT DEFINED CMAKE_BUILD_TYPE)
   message(STATUS "No build type specified, defaulting to Release.")
 endif()
 
-project(CosmoLattice C CXX)
+project(CosmoLattice CXX)
 
 set(CMAKE_CXX_STANDARD 20) # This is likely to evolve in future releases.
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

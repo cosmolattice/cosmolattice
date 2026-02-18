@@ -44,6 +44,16 @@ cmake -DMODEL=lphi4 -DKokkos_ARCH_ADA89 ../
 ```
 If no architecture is specified, Kokkos will attempt to detect the architecture of the machine. However, as compilation for GPU can take up to an hour, it is recommended on a cluster to queue the compilation separately on a node without a GPU, which requires offline compilation as described here.
 
+### Choosing the device
+
+#### HIP
+
+To compile for AMD GPUs using HIP, you can enable the HIP backend by setting
+```bash
+cmake -DMODEL=lphi4 -DHIP=ON -DKokkos_ARCH_AMD_GFX942_APU=ON ..
+```
+Note that specifying the architecture is mandatory for HIP, as automatic detection is currently faulty.
+
 ### Credits
 
 CosmoLattice is freely available to anyone who wants to use or modify it. However, whenever 
