@@ -71,7 +71,6 @@ namespace TempLat
         configSizes[i] = layout.configurationSpace.getLocalSizes()[i];
         fourierSizes[i] = layout.fourierSpace.getLocalSizes()[i];
       }
-      configSizes[NDim - 1] -= 2;
 
       complex<T> *dummy_f = nullptr;
       auto fourier_view = device::apply(

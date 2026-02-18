@@ -15,9 +15,11 @@ namespace TempLat
 {
   MakeException(GetToolBoxException);
 
-  /** @brief A class which gets jumps from all classes, also those that do not have jumps.
+  /** @brief A Helper class which returns the toolbox of an object, if it has one, and throws an exception if it
+   * doesn't. This is useful for measurement objects, which may or may not have a toolbox, but we want to be able to
+   * call getToolBox() on them without having to check if they have one first.
    *
-   * Unit test: ctest -R test-getjumps
+   * Unit test: ctest -R test-gettoolbox
    **/
   class GetToolBox
   {

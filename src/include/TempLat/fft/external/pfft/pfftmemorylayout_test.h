@@ -19,7 +19,7 @@ inline void TempLat::PFFTMemoryLayout::Test(TempLat::TDDAssertion &tdd)
 
   auto &&computeExpectation = [&](const MPICartesianGroup &mGroup, const std::vector<ptrdiff_t> &nGrid) {
     ptrdiff_t nDim = nGrid.size();
-    FFTLayoutStruct expected(nGrid, false, true);
+    FFTLayoutStruct expected(nGrid);
 
     std::vector<ptrdiff_t> confLocalSizes(nGrid);
     std::vector<ptrdiff_t> confLocalStarts(nDim, 0);

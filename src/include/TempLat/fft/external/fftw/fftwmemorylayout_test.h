@@ -19,7 +19,7 @@ template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(Tem
     constexpr size_t nDim = decltype(tag)::value;
     FFTWInterface<nDim> mem;
 
-    FFTLayoutStruct<nDim> expected(nGrid, true, false, false);
+    FFTLayoutStruct<nDim> expected(nGrid);
     device::IdxArray<nDim> confLocalSizes(nGrid);
     device::IdxArray<nDim> confLocalStarts{};
     device::IdxArray<nDim> fourLocalSizes(nGrid);

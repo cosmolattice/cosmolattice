@@ -6,6 +6,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+
 template <size_t NDim> inline void TempLat::GhostSubarrayMap<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* sorry, wouldn't know what cross checks to do for this thing.

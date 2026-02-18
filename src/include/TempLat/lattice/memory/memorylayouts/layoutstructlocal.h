@@ -29,7 +29,7 @@ namespace TempLat
     static constexpr size_t NDim = _NDim;
 
     LayoutStructLocal(const device::IdxArray<NDim> &initNGrid, const ptrdiff_t nGhosts)
-        : mGlobal(initNGrid), mLocalStarts{}, mNGhosts(nGhosts)
+        : mGlobal(initNGrid), mLocalStarts{}, mPadding{}, mNGhosts(nGhosts)
     {
       for (size_t i = 0; i < NDim; ++i)
         mLocalSizes[i] = initNGrid[i];
@@ -46,6 +46,20 @@ namespace TempLat
         mLocalSizes[i] = input[i];
     }
     void setNGhosts(ptrdiff_t nGhosts) { mNGhosts = nGhosts; }
+    device::Idx getNGhosts() const { return mNGhosts; }
+
+    void setPadding(const device::array<device::IdxArray<2>, NDim> &padding)
+    {
+      for (size_t i = 0; i < NDim; ++i) {
+        mPadding[i][0] = padding[i][0];
+        mPadding[i][1] = padding[i][1];
+        if (mNGhosts != 0) {
+          if (mPadding[i][0] != mNGhosts || mPadding[i][1] != mNGhosts)
+            throw LayoutStructLocalSizeException("Padding and number of ghost cells must be the same.");
+        }
+      }
+    }
+    const device::array<device::IdxArray<2>, NDim> &getPadding() const { return mPadding; }
 
     DEVICE_FORCEINLINE_FUNCTION
     device::IdxArray<NDim> &getLocalSizes() { return mLocalSizes; }
@@ -99,7 +113,8 @@ namespace TempLat
     {
       ostream << ls.mGlobal << "\n"
               << "  LocalSizes: " << ls.mLocalSizes << "\n"
-              << "  LocalStarts: " << ls.mLocalStarts << "\n";
+              << "  LocalStarts: " << ls.mLocalStarts << "\n"
+              << "  Padding: " << ls.mPadding << "\n";
       return ostream;
     }
 
@@ -107,8 +122,8 @@ namespace TempLat
     LayoutStructGlobal<NDim> mGlobal;
     device::IdxArray<NDim> mLocalSizes;
     device::IdxArray<NDim> mLocalStarts;
-
-    ptrdiff_t mNGhosts;
+    device::array<device::IdxArray<2>, NDim> mPadding;
+    device::Idx mNGhosts;
 
 #ifdef TEMPLATTEST
   public:

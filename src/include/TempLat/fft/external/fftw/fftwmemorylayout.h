@@ -42,20 +42,21 @@ namespace TempLat
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, device::IdxArray<NDim> nGridPoints,
                                                     bool forbidTransposition = false)
     {
-      FFTLayoutStruct<NDim> result(nGridPoints, true, false, false);
-      /* default: everything is local. */
+      FFTLayoutStruct<NDim> result(nGridPoints);
 
       device::IdxArray<NDim> confLocalSizes(nGridPoints);
       device::IdxArray<NDim> confLocalStarts{};
       device::IdxArray<NDim> fourLocalSizes(nGridPoints);
       device::IdxArray<NDim> fourLocalStarts{};
       device::IdxArray<NDim> fourTransposition{};
+      device::array<device::IdxArray<2>, NDim> confPadding{};
       std::iota(fourTransposition.begin(), fourTransposition.end(), 0);
 
-      fourLocalSizes.back() = fourLocalSizes.back() / 2 + 1;
-      confLocalSizes.back() = 2 * fourLocalSizes.back();
+      fourLocalSizes[NDim - 1] = fourLocalSizes.back() / 2 + 1;
+      // That's the padding for r2c/cr2, making place for that additional complex value
+      confPadding[NDim - 1][1] = 2;
 
-      ptrdiff_t fftwRequiredMemory = 0;
+      device::Idx fftwRequiredMemory = 0;
 
 #ifdef HAVE_MPI
       if (NDim > 1) {
@@ -90,13 +91,14 @@ namespace TempLat
 
       result.configurationSpace.setLocalSizes(confLocalSizes);
       result.configurationSpace.setLocalStarts(confLocalStarts);
+      result.configurationSpace.setPadding(confPadding);
+
       result.fourierSpace.setLocalSizes(fourLocalSizes);
       result.fourierSpace.setLocalStarts(fourLocalStarts);
       result.fourierSpace.setTranspositionMap_memoryToGlobalSpace(fourTransposition);
 
-      result.addExternalMemoryRequest(2 *
-                                      fftwRequiredMemory); /* fftwRequiredMemory is in unit of complex numbers,
-                                                              addExternalMemoryRequest expects units of real numbers. */
+      // fftwRequiredMemory is in unit of complex numbers, addExternalMemoryRequest expects units of real numbers.
+      result.addExternalMemoryRequest(2 * fftwRequiredMemory);
 
       result.fourierSpace.setHermitianPartners(
           FFTWHermitianPartners<NDim>::create(result.configurationSpace.getGlobalSizes()));

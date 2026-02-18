@@ -54,7 +54,7 @@ namespace TempLat
                                         "split, is larger than / equal to the number of dimensions in the lattice:",
                                         group.getNumberOfDividedDimensions(), " >= ", NDim);
 
-      FFTLayoutStruct<NDim> result(nGrid, false, true, false);
+      FFTLayoutStruct<NDim> result(nGrid);
       /* default: everything is local. */
       device::IdxArray<NDim> globalLayout(nGrid);
 

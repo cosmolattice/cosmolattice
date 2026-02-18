@@ -91,7 +91,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     FFTLibrarySelector(MPICartesianGroup group, const device::IdxArray<NDim> &nGridPoints,
                        bool forbidTransposition = false)
-        : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints, true, false, false), madePlansFloat(false),
+        : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints), madePlansFloat(false),
           madePlansDouble(false), verbose(false)
     {
       /* here we take the decisions, although the decision to split the group has been made already. */

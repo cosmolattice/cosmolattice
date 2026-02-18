@@ -63,8 +63,10 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
       memSize2 *= (nGrid[i] + nGhostTo[i][0] + nGhostTo[i][1]);
     }
 
-    JumpsHolder<NDim> jumperFrom(layout, nGhostFrom);
-    JumpsHolder<NDim> jumperTo(layout, nGhostTo);
+    LayoutStruct<NDim> layoutFrom(layout);
+    layoutFrom.setPadding(nGhostFrom);
+    LayoutStruct<NDim> layoutTo(layout);
+    layoutTo.setPadding(nGhostTo);
 
     MemoryBlock<NDim, Testing::datum> memory(std::max(memSize1, memSize2));
 
@@ -101,7 +103,7 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
     }
 
     // Perform ghost transformation
-    GhostBuster<NDim> ghostBuster(jumperFrom, jumperTo);
+    GhostBuster<NDim> ghostBuster(layoutFrom, layoutTo);
     ghostBuster(memory);
 
     // Verify the transformation
@@ -115,9 +117,9 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
                                                                              size_t dim) {
       if (dim == NDim) {
         // Base case: check this coordinate
-        ptrdiff_t pos = jumperTo.toOrigin();
+        ptrdiff_t pos = layoutTo.getOrigin();
         for (size_t i = 0; i < NDim; ++i) {
-          pos += jumperTo.getJumpsInMemoryOrder()[i] * coords[i];
+          pos += layoutTo.stride(i) * coords[i];
         }
 
         const Testing::datum &dat = memory_view[pos];
@@ -140,12 +142,12 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
   };
 
   // Test transformation from layout 1 to layout 2
-  bool test1 = testGhostTransformation(nGhost1, nGhost2);
-  tdd.verify(test1);
+  bool nd_test1 = testGhostTransformation(nGhost1, nGhost2);
+  tdd.verify(nd_test1);
 
   // Test transformation from layout 2 to layout 1 (reverse)
-  bool test2 = testGhostTransformation(nGhost2, nGhost1);
-  tdd.verify(test2);
+  bool nd_test2 = testGhostTransformation(nGhost2, nGhost1);
+  tdd.verify(nd_test2);
 
   // Test with uniform ghost layout
   device::array<device::array<ptrdiff_t, 2u>, NDim> nGhostUniform{};
@@ -154,11 +156,11 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
     nGhostUniform[i][1] = 1;
   }
 
-  bool test3 = testGhostTransformation(nGhost1, nGhostUniform);
-  tdd.verify(test3);
+  bool nd_test3 = testGhostTransformation(nGhost1, nGhostUniform);
+  tdd.verify(nd_test3);
 
-  bool test4 = testGhostTransformation(nGhostUniform, nGhost2);
-  tdd.verify(test4);
+  bool nd_test4 = testGhostTransformation(nGhostUniform, nGhost2);
+  tdd.verify(nd_test4);
 }
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
@@ -179,8 +181,10 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
       ptrdiff_t memSize2 = (nGrid[0] + nGhostB[0][0] + nGhostB[0][1]) * (nGrid[1] + nGhostB[1][0] + nGhostB[1][1]) *
                            (nGrid[2] + nGhostB[2][0] + nGhostB[2][1]);
 
-      JumpsHolder<3> jumperFrom(layout, nGhost);
-      JumpsHolder<3> jumperTo(layout, nGhostB);
+      LayoutStruct<3> layoutFrom(layout);
+      layoutFrom.setPadding(nGhost);
+      LayoutStruct<3> layoutTo(layout);
+      layoutTo.setPadding(nGhostB);
 
       MemoryBlock<3, Testing::datum> memory(std::max(memSize1, memSize2));
 
@@ -259,11 +263,11 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
         else
           print_it(nGhostB, "Memory at x=1 BEFORE GhostBuster back:\n");
 
-        GhostBuster<3> egon(x == 0 ? jumperFrom : jumperTo, x == 0 ? jumperTo : jumperFrom);
+        GhostBuster<3> egon(x == 0 ? layoutFrom : layoutTo, x == 0 ? layoutTo : layoutFrom);
 
         egon(memory);
 
-        JumpsHolder<3> jumper(x == 0 ? jumperTo : jumperFrom);
+        LayoutStruct<3> curLayout(x == 0 ? layoutTo : layoutFrom);
 
         if (x == 0)
           print_it(nGhostB, "Memory at x=0 AFTER GhostBuster:\n");
@@ -273,15 +277,13 @@ template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDD
         memory.flagHostMirrorOutdated();
         auto memory_view = memory.getRawHostView();
 
-        // verify the setup, not controlled,
-        // assuming jumps are correct (tested elsewhere),
-        // verify that the GhostBuster did not damage the memory,
-        // and put stuff in their new correct place.
+        // verify the setup, assuming strides are correct (tested elsewhere),
+        // verify that the GhostBuster did not damage the memory, and put stuff in their new correct place.
         for (ptrdiff_t i = 0; i < nGrid[0]; ++i) {
           for (ptrdiff_t j = 0; j < nGrid[1]; ++j) {
             for (ptrdiff_t k = 0; k < nGrid[2]; ++k) {
-              ptrdiff_t pos = jumper.toOrigin() + jumper.getJumpsInMemoryOrder()[0] * i +
-                              jumper.getJumpsInMemoryOrder()[1] * j + jumper.getJumpsInMemoryOrder()[2] * k;
+              ptrdiff_t pos =
+                  curLayout.getOrigin() + curLayout.stride(0) * i + curLayout.stride(1) * j + curLayout.stride(2) * k;
               const Testing::datum &dat = memory_view[pos];
               const bool thisPosRight = dat.x == i && dat.y == j && dat.z == k;
               SingleDeviceAllRight[x] = SingleDeviceAllRight[x] && thisPosRight;

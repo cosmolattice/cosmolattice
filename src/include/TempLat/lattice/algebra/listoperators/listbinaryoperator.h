@@ -17,7 +17,6 @@
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/getvectorsize.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
@@ -55,15 +54,6 @@ namespace TempLat
     template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const
     {
       return ConfirmGhosts::apply(mR, i) + ConfirmGhosts::apply(mT, i);
-    }
-
-    inline auto getJumps()
-    { // Don't need indexing for get jumps.
-      auto a = GetJumps::apply(mR);
-      auto b = GetJumps::apply(mT);
-      if (a != b && !(a.isEmpty() || b.isEmpty()))
-        throw DifferentJumpsHolderException("Two different memory layouts in binary operator" /*, toString()*/);
-      return a.isEmpty() ? b : a;
     }
 
     /** @brief Override this method in your derived class, to have an easy implementation of your toString method. */

@@ -16,7 +16,6 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getvalue.h"
 #include "TempLat/lattice/algebra/helpers/getvectorsize.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
@@ -43,11 +42,6 @@ namespace TempLat
     void confirmSpace(Tag<N> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
-    }
-
-    inline auto getJumps() const
-    { // Don't need indexing for get jumps.
-      return GetJumps::apply(mR);
     }
 
     /** For measurement objects. */

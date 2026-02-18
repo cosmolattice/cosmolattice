@@ -9,7 +9,6 @@
 
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
@@ -100,11 +99,6 @@ namespace TempLat
     }
 
     template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const { return ConfirmGhosts::apply(mR, i); }
-
-    inline JumpsHolder<NDim> getJumps() const
-    { // Don't need indexing for get jumps.
-      return GetJumps::apply(mR);
-    }
 
     /** For measurement objects. */
     inline device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return GetToolBox::get(mR); }

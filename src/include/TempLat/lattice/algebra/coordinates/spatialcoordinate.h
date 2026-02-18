@@ -40,8 +40,6 @@ namespace TempLat
       return result;
     }
 
-    virtual JumpsHolder<NDim> getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
-
     void doWeNeedGhosts(ptrdiff_t i) const {}
     template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const { return 1; }
 

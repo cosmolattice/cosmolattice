@@ -37,15 +37,12 @@ namespace TempLat
      * @param nGhosts The number of ghost cells in each dimension.
      * @return requires
      */
-    LayoutStruct(const device::IdxArray<NDim> &initNGrid, const ptrdiff_t nGhosts)
-        : mTransposed(initNGrid, nGhosts), mHermitianPartners(initNGrid), mNGhosts(nGhosts)
+    LayoutStruct(const device::IdxArray<NDim> &initNGrid, const device::Idx nGhosts)
+        : mTransposed(initNGrid, nGhosts), mHermitianPartners(initNGrid)
     {
     }
 
-    LayoutStruct()
-        : mTransposed(device::IdxArray<NDim>{{1}}, 0), mHermitianPartners(device::IdxArray<NDim>{{1}}), mNGhosts(0)
-    {
-    }
+    LayoutStruct() : mTransposed(device::IdxArray<NDim>{{1}}, 0), mHermitianPartners(device::IdxArray<NDim>{{1}}) {}
 
     /** @brief An almost constructor: return a new instance which has a default global FFT layout */
     static LayoutStruct<NDim> createGlobalFFTLayout(const device::IdxArray<NDim> &initNGrid)
@@ -118,13 +115,12 @@ namespace TempLat
       getTransposed().setLocalSizes(input);
     }
 
-    void setNGhosts(ptrdiff_t nGhosts)
-    {
-      mNGhosts = nGhosts;
-      getTransposed().setNGhosts(nGhosts);
-    }
+    void setNGhosts(const device::Idx &nGhosts) { getTransposed().setNGhosts(nGhosts); }
 
-    ptrdiff_t getNGhosts() const { return mNGhosts; }
+    void setPadding(const device::array<device::IdxArray<2>, NDim> &padding) { getLocal().setPadding(padding); }
+    device::array<device::IdxArray<2>, NDim> getPadding() const { return getTransposed().getPadding(); }
+
+    device::Idx getNGhosts() const { return getLocal().getNGhosts(); }
 
     device::IdxArray<NDim> &getLocalSizes() { return getLocal().getLocalSizes(); }
     DEVICE_FORCEINLINE_FUNCTION
@@ -146,6 +142,10 @@ namespace TempLat
     {
       return getTransposed().getTranspositionMap_memoryToGlobalSpace();
     }
+
+    device::Idx getOrigin() const { return getTransposed().getOrigin(); }
+
+    device::Idx stride(size_t dim) const { return getTransposed().stride(dim); }
 
     void setHermitianPartners(HermitianPartners<NDim> &&newInstance) { mHermitianPartners = std::move(newInstance); }
 
@@ -174,7 +174,6 @@ namespace TempLat
     /** @brief signed wavenumber and coordinate x = index > n/2 ? index - n : index. Need to provide this n/2 for each
      * dimensions. */
     HermitianPartners<NDim> mHermitianPartners;
-    ptrdiff_t mNGhosts;
 
     DEVICE_FORCEINLINE_FUNCTION
     LayoutStructLocalTransposed<NDim> &getTransposed() { return mTransposed; }

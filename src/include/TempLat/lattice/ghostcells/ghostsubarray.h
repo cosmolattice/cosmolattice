@@ -10,7 +10,7 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
-#include "TempLat/lattice/memory/jumpsholder.h"
+#include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 
 namespace TempLat
 {
@@ -24,25 +24,24 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
+
     /** @brief Constructor
-     *  \param jumpsHolder The layout of the memory.
-     *  \param dimension The dimension in which to create the array.
-     *  \param depth The number of ghost steps at either side of the array.
-     *  \param atomType the MPI_Datatype corresponding to the elements which are laid out in the layout of the
-     * jumpsHolder.
+     *  @param layout The layout of the memory.
+     *  @param dimension The dimension in which to create the array.
+     *  @param depth The number of ghost steps at either side of the array.
+     *  @param atomType the MPI_Datatype corresponding to the elements which are laid out in the layout.
      */
-    GhostSubarray(JumpsHolder<NDim> jumpsHolder, ptrdiff_t dimension, ptrdiff_t depth, MPI_Datatype atomType)
-        : mJumpsHolder(jumpsHolder),
+    GhostSubarray(LayoutStruct<NDim> layout, device::Idx dimension, device::Idx depth, MPI_Datatype atomType)
+        : mLayout(layout),
 #ifdef HAVE_MPI
           mDimension(dimension), mDepth(depth), mAtomType(atomType),
 #endif
           mSubarrayMPIDataType(std::make_shared<MPI_Datatype>())
     {
 #ifdef HAVE_MPI
-      ptrdiff_t nDimensions = jumpsHolder.getSizesInMemory().size();
 
       /* size of our bare owned memory */
-      std::vector<int> ownedSizes(jumpsHolder.getSizesInMemory().begin(), jumpsHolder.getSizesInMemory().end());
+      std::vector<int> ownedSizes(mLayout.getSizesInMemory().begin(), mLayout.getSizesInMemory().end());
 
       /* size of our bare owned memory + ghost depth */
       for (auto &&it : ownedSizes)
@@ -53,9 +52,9 @@ namespace TempLat
       /* change full volume to a slice */
       subarraySizes[mDimension] = mDepth;
 
-      std::vector<int> starts(nDimensions, 0);
-      MPI_Type_create_subarray(nDimensions, ownedSizes.data(), subarraySizes.data(), starts.data(), MPI_ORDER_C,
-                               mAtomType, mSubarrayMPIDataType.get());
+      std::vector<int> starts(NDim, 0);
+      MPI_Type_create_subarray(NDim, ownedSizes.data(), subarraySizes.data(), starts.data(), MPI_ORDER_C, mAtomType,
+                               mSubarrayMPIDataType.get());
 
       MPI_Type_commit(mSubarrayMPIDataType.get());
 #endif
@@ -74,10 +73,10 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    JumpsHolder<NDim> mJumpsHolder;
+    LayoutStruct<NDim> mLayout;
 #ifdef HAVE_MPI
-    ptrdiff_t mDimension;
-    ptrdiff_t mDepth;
+    device::Idx mDimension;
+    device::Idx mDepth;
     MPI_Datatype mAtomType;
 #endif
     std::shared_ptr<MPI_Datatype> mSubarrayMPIDataType;

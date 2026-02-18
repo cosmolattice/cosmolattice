@@ -11,7 +11,6 @@
 
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/latticeparameters.h"
-#include "TempLat/lattice/memory/jumpsholder.h"
 #include "TempLat/lattice/memory/memorylayoutstate.h"
 #include "TempLat/lattice/memory/memorymanager.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"

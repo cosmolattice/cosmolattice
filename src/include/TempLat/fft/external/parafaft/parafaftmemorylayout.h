@@ -52,14 +52,9 @@ namespace TempLat
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, device::IdxArray<NDim> nGridPoints,
                                                     bool forbidTransposition = false) override
     {
-      // if constexpr (NDim != 3) {
-      //   throw ParafaftMemoryLayoutException("Parafaft integration currently only supports 3D. Got ", NDim,
-      //                                       " dimensions.");
-      // }
-
       // Create FFTLayoutStruct - use FFTW mode for r2c padding compatibility
       // (parafaft uses same padding convention as FFTW)
-      FFTLayoutStruct<NDim> result(nGridPoints, true, false, false);
+      FFTLayoutStruct<NDim> result(nGridPoints);
 
       // Initialize arrays for local layout
       device::IdxArray<NDim> confLocalSizes{};
@@ -67,9 +62,10 @@ namespace TempLat
       device::IdxArray<NDim> fourLocalSizes{};
       device::IdxArray<NDim> fourLocalStarts{};
       device::IdxArray<NDim> fourTransposition{};
+      device::array<device::IdxArray<2>, NDim> confPadding{};
       std::iota(fourTransposition.begin(), fourTransposition.end(), 0);
 
-      ptrdiff_t parafaftRequiredMemory = 0;
+      device::Idx parafaftRequiredMemory = 0;
 
 #ifdef HAVE_MPI
 #ifdef HAVE_PARAFAFT
@@ -103,10 +99,7 @@ namespace TempLat
         confLocalStarts[i] = realStart[i];
       }
 
-      // Apply r2c padding to configuration space (last dimension)
-      // FFTW convention: real data is padded to 2*(N/2+1)
-      ptrdiff_t fourierLastDim = nGridPoints[NDim - 1] / 2 + 1;
-      confLocalSizes[NDim - 1] = 2 * fourierLastDim;
+      confPadding[NDim - 1][1] = 2;
 
       // Query complex (Fourier) space layout
       int complexShape[NDim], complexStart[NDim];
@@ -118,17 +111,8 @@ namespace TempLat
         fourLocalStarts[i] = complexStart[i];
       }
 
-      // Compute memory requirement
-      // Parafaft needs max of real size and complex size
-      ptrdiff_t realSize = 1;
-      for (size_t i = 0; i < NDim; ++i)
-        realSize *= confLocalSizes[i];
-
-      ptrdiff_t complexSize = 2; // Complex = 2 reals
-      for (size_t i = 0; i < NDim; ++i)
-        complexSize *= fourLocalSizes[i];
-
-      parafaftRequiredMemory = std::max(realSize, complexSize);
+      // Memory requirement
+      parafaftRequiredMemory = temp.get_required_output_size();
 #else
       // Non-parafaft fallback (shouldn't happen)
       for (size_t i = 0; i < NDim; ++i) {
@@ -136,7 +120,8 @@ namespace TempLat
         fourLocalSizes[i] = nGridPoints[i];
       }
       fourLocalSizes[NDim - 1] = nGridPoints[NDim - 1] / 2 + 1;
-      confLocalSizes[NDim - 1] = 2 * fourLocalSizes[NDim - 1];
+      // That's the padding for r2c/cr2, just like in FFTW.
+      confPadding[NDim - 1][1] = 2;
 #endif
 #else
       // Non-MPI fallback (shouldn't happen since parafaft requires MPI)
@@ -145,17 +130,20 @@ namespace TempLat
         fourLocalSizes[i] = nGridPoints[i];
       }
       fourLocalSizes[NDim - 1] = nGridPoints[NDim - 1] / 2 + 1;
-      confLocalSizes[NDim - 1] = 2 * fourLocalSizes[NDim - 1];
+      // That's the padding for r2c/cr2, just like in FFTW.
+      confPadding[NDim - 1][1] = 2;
 #endif
 
       // Populate result
       result.configurationSpace.setLocalSizes(confLocalSizes);
       result.configurationSpace.setLocalStarts(confLocalStarts);
+      result.configurationSpace.setPadding(confPadding);
+
       result.fourierSpace.setLocalSizes(fourLocalSizes);
       result.fourierSpace.setLocalStarts(fourLocalStarts);
       result.fourierSpace.setTranspositionMap_memoryToGlobalSpace(fourTransposition);
 
-      // Add memory requirement (already in real units)
+      // Add memory requirement (already in real (double) units)
       result.addExternalMemoryRequest(parafaftRequiredMemory);
 
       // Set Hermitian partners (same as FFTW/PFFT)

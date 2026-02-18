@@ -10,7 +10,6 @@
 #include <string>
 
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/lattice/memory/jumpsholder.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
@@ -42,20 +41,6 @@ namespace TempLat
      */
     // virtual
     // ptrdiff_t confirmGhostsUpToDate(FieldShiftedViewDetection detector) = 0;
-
-    /** @brief In order to take spatial derivatives, the GetterShifted needs to know the jumps.
-     *  This way the user has the most minimal need-to-know interface for spatial derivatives.
-     *  Also, this is the perfect moment for verifying that all elements in
-     *  the tree are of the same layout (or a constant).
-     */
-    virtual inline JumpsHolder<NDim> getConfigSpaceJumps() = 0;
-
-    /** @brief In order to take spatial derivatives, the GetterShifted needs to know the jumps.
-     *  This way the user has the most minimal need-to-know interface for spatial derivatives.
-     *  Also, this is the perfect moment for verifying that all elements in
-     *  the tree are of the same layout (or a constant).
-     */
-    virtual inline JumpsHolder<NDim> getFourierSpaceJumps() = 0;
 
     /** For measurement objects. */
     virtual inline device::memory::host_ptr<MemoryToolBox<3>> getToolBox() = 0;

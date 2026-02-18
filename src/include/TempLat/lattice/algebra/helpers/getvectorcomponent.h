@@ -12,7 +12,6 @@
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
 
 namespace TempLat
 {
@@ -55,11 +54,6 @@ namespace TempLat
     }
 
     ptrdiff_t confirmGhostsUpToDate() const { return ConfirmGhosts::apply(mR, N); }
-
-    template <size_t NDim> inline JumpsHolder<NDim> getJumps() const
-    { // Just take jumps from the first component
-      return GetJumps::apply(mR);
-    }
 
     inline auto getToolBox() const
     { // just take toolbox from first component

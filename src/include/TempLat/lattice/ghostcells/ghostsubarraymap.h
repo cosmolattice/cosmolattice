@@ -13,7 +13,7 @@
 namespace TempLat
 {
   /** @brief A class which keeps track of all subarray types for a given
-   *  layout, which in turn is described by the JumpsHolder. The map is
+   *  layout, which in turn is described by the LayoutStruct. The map is
    *  for datatypes and dimensions. getSubArray<T>(dimension) is the
    *  only necessary public method.
    *
@@ -23,17 +23,14 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    GhostSubarrayMap(JumpsHolder<NDim> jumpsHolder, ptrdiff_t ghostDepth)
-        : mJumpsHolder(jumpsHolder), mGhostDepth(ghostDepth)
-    {
-    }
+    GhostSubarrayMap(LayoutStruct<NDim> layout, device::Idx ghostDepth) : mLayout(layout), mGhostDepth(ghostDepth) {}
 
     template <typename T> GhostSubarray<NDim> getSubArray(ptrdiff_t dimension) { return pGetSubArray<T>(dimension); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    JumpsHolder<NDim> mJumpsHolder;
-    ptrdiff_t mGhostDepth;
+    LayoutStruct<NDim> mLayout;
+    device::Idx mGhostDepth;
     std::map<MPI_Datatype, std::vector<GhostSubarray<NDim>>> mSubArrays;
 
     template <typename T> GhostSubarray<NDim> pGetSubArray(ptrdiff_t dimension)
@@ -42,7 +39,7 @@ namespace TempLat
       if (mSubArrays.count(dataType) < 1) {
         std::vector<GhostSubarray<NDim>> arraySet;
         for (size_t idimension = 0; idimension < NDim; ++idimension) {
-          arraySet.emplace_back(mJumpsHolder, idimension, mGhostDepth, dataType);
+          arraySet.emplace_back(mLayout, idimension, mGhostDepth, dataType);
         }
         mSubArrays[dataType] = arraySet;
       }

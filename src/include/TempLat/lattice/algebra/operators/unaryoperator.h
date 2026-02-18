@@ -23,7 +23,6 @@
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
@@ -65,8 +64,6 @@ namespace TempLat
     {
       ConfirmSpace::apply(mR, newLayout, spaceType);
     }
-
-    template <size_t NDim> JumpsHolder<NDim> getJumps() const { return GetJumps::apply<NDim>(mR); }
 
     /** For measurement objects. */
     auto getToolBox() const { return GetToolBox::get(mR); }

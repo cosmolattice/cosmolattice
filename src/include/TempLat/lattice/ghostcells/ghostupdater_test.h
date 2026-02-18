@@ -116,7 +116,7 @@ namespace TempLat
       MPICartesianGroup mGroup(FFTMPIDomainSplit<nd>::makeMPIGroup(nd));
       FFTLibrarySelector<nd> fftlib(mGroup, toolBox->mNGridPointsVec);
       TripleStateLayouts fullLayout(fftlib.getLayout(), nGhost);
-      GhostUpdater<nd> ghostUpdater(mGroup, fullLayout.getConfigSpaceJumps());
+      GhostUpdater<nd> ghostUpdater(mGroup, fullLayout.getConfigSpaceLayout());
 
       const auto localSizes = fullLayout.getConfigSpaceLayout().getLocalSizes();
       device::IdxArray<nd> fullLocalSizes{};
