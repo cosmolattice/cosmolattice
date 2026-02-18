@@ -55,12 +55,15 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     /** @brief private constructor: no one should instantiate this thing. */
     FFTMallocFree() {}
+  };
 
 #ifdef TEMPLATTEST
+  class FFTMallocFreeTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

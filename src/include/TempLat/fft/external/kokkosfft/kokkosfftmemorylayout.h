@@ -67,12 +67,15 @@ namespace TempLat
 
       return result;
     };
+  };
 
 #ifdef TEMPLATTEST
+  struct KokkosFFTMemoryLayoutTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -12,25 +12,25 @@
 #include "TempLat/util/almostequal.h"
 #include "TempLat/lattice/memory/memoryblock.h"
 
-template <size_t NDim> inline void TempLat::FFTNormalization<NDim>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FFTNormalizationTester::Test(TempLat::TDDAssertion &tdd)
 {
-  device::IdxArray<NDim> nGrid;
-  for (size_t i = 0; i < NDim; ++i)
+  device::IdxArray<3> nGrid;
+  for (size_t i = 0; i < 3; ++i)
     nGrid[i] = 256;
 
-  const double baseNorm = std::pow(nGrid[0], NDim);
+  const double baseNorm = std::pow(nGrid[0], 3);
 
-  auto split = FFTMPIDomainSplit<NDim>::makeDomainDecomposition(MPICommReference().size(), NDim);
-  FFTLibrarySelector<NDim> ffter(MPICartesianGroup(NDim, split), nGrid);
+  auto split = FFTMPIDomainSplit<3>::makeDomainDecomposition(MPICommReference().size(), 3);
+  FFTLibrarySelector<3> ffter(MPICartesianGroup(3, split), nGrid);
 
   FFTLayoutStruct layout = ffter.getLayout();
   auto iScales = layout.getIntrinsicScales();
 
-  FFTNormalization<NDim> normalizer(layout);
+  FFTNormalization<3> normalizer(layout);
 
   const ptrdiff_t iEnd = layout.getMinimalMemorySize();
 
-  MemoryBlock<NDim, double> mem(iEnd);
+  MemoryBlock<3, double> mem(iEnd);
   auto host_mem_view = mem.getRawHostView();
   auto mem_view = mem.getRawView();
 
@@ -84,3 +84,4 @@ template <size_t NDim> inline void TempLat::FFTNormalization<NDim>::Test(TempLat
 }
 
 #endif
+

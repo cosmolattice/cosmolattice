@@ -10,10 +10,10 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTWHermitianPartners<1>> test1;
-  TempLat::TDDContainer<TempLat::FFTWHermitianPartners<2>> test2;
-  TempLat::TDDContainer<TempLat::FFTWHermitianPartners<3>> test3;
-  TempLat::TDDContainer<TempLat::FFTWHermitianPartners<4>> test4;
-  TempLat::TDDContainer<TempLat::FFTWHermitianPartners<5>> test5;
-  TempLat::TDDContainer<TempLat::FFTWHermitianPartners<6>> test6;
+  TempLat::TDDContainer<TempLat::FFTWHermitianPartnersTester> test1;
+  TempLat::TDDContainer<TempLat::FFTWHermitianPartnersTester> test2;
+  TempLat::TDDContainer<TempLat::FFTWHermitianPartnersTester> test3;
+  TempLat::TDDContainer<TempLat::FFTWHermitianPartnersTester> test4;
+  TempLat::TDDContainer<TempLat::FFTWHermitianPartnersTester> test5;
+  TempLat::TDDContainer<TempLat::FFTWHermitianPartnersTester> test6;
 } // namespace

@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTWGuard> test;
+  TempLat::TDDContainer<TempLat::FFTWGuardTester> test;
 }

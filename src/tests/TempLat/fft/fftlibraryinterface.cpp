@@ -5,7 +5,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/fft/fftlibraryinterface.h"
+#include "TempLat/fft/fftlibraryinterface_test.h"
 
-// namespace {
-//     TempLat::TDDContainer<TempLat::FFTLibraryInterface> test;
-// }
+namespace {
+  TempLat::TDDContainer<TempLat::FFTSessionGuardTester> test;
+}

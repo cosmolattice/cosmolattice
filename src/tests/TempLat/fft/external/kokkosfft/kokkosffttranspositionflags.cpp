@@ -12,7 +12,7 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::KokkosFFTTranspositionFlags<3>> test;
+  TempLat::TDDContainer<TempLat::KokkosFFTTranspositionFlagsTester> test;
 }
 
 #endif

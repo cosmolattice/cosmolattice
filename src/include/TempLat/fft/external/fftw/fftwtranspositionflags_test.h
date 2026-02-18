@@ -7,9 +7,10 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::FFTWTranspositionFlags<NDim>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FFTWTranspositionFlagsTester::Test(TempLat::TDDAssertion &tdd)
 {
   tdd.verify(true);
 }
 
 #endif
+

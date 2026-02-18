@@ -73,12 +73,15 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     unsigned int mFlagC2R;
     unsigned int mFlagR2C;
+  };
 
 #ifdef TEMPLATTEST
+  class FFTWTranspositionFlagsTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #undef FFTWTRANSPOSITIONFLAGS_TRANSPOSED_IN

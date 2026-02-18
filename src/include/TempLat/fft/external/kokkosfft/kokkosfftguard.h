@@ -45,17 +45,20 @@ namespace TempLat
     KokkosFFTGuard(const KokkosFFTGuard &other) = delete;
     KokkosFFTGuard &operator=(const KokkosFFTGuard &other) = delete;
     KokkosFFTGuard &operator=(KokkosFFTGuard &&other) = delete;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   inline std::shared_ptr<FFTSessionGuard> getKokkosFFTSessionGuard(bool pVerbose = true)
   {
     return std::make_shared<KokkosFFTGuard>(pVerbose);
   }
+
+#ifdef TEMPLATTEST
+  class KokkosFFTGuardTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

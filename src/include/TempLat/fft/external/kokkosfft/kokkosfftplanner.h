@@ -98,12 +98,15 @@ namespace TempLat
 
       return std::make_shared<KokkosFFTPlanHolder<NDim, T>>(group, plans);
     }
+  };
 
 #ifdef TEMPLATTEST
+  struct KokkosFFTPlannerTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -103,17 +103,20 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     bool mVerbose;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   inline std::shared_ptr<FFTSessionGuard> getFFTWSessionGuard(bool pVerbose = true)
   {
     return std::make_shared<FFTWGuard>(pVerbose);
   }
+
+#ifdef TEMPLATTEST
+  class FFTWGuardTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

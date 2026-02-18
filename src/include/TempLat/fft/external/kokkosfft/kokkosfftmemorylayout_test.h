@@ -10,10 +10,11 @@
 #include "TempLat/parallel/mpi/comm/mpidomainsplit.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
 
-template <size_t NDim> inline void TempLat::KokkosFFTMemoryLayout<NDim>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::KokkosFFTMemoryLayoutTester::Test(TempLat::TDDAssertion &tdd)
 {
   // ...
   tdd.verify(true);
 }
 
 #endif
+

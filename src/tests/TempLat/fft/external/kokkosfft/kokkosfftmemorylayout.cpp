@@ -12,7 +12,7 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::KokkosFFTMemoryLayout<3>> test;
+  TempLat::TDDContainer<TempLat::KokkosFFTMemoryLayoutTester> test;
 }
 
 #endif

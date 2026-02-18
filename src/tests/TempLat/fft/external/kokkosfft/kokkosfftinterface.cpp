@@ -11,6 +11,6 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::KokkosFFTInterface<3>> test;
+  TempLat::TDDContainer<TempLat::KokkosFFTInterfaceTester> test;
 }
 #endif

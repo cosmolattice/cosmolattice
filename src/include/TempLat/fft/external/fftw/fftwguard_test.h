@@ -14,7 +14,7 @@
 //
 //}
 
-inline void TempLat::FFTWGuard::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FFTWGuardTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* ONLY when single unit, imperatively, because
    * the internals can only be called once per process.

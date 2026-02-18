@@ -94,3 +94,4 @@ template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(Tem
 }
 
 #endif
+

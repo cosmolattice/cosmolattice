@@ -90,12 +90,15 @@ namespace TempLat
      */
     virtual std::shared_ptr<FFTPlanInterface<NDim, double>> getPlans_double(const MPICartesianGroup &group,
                                                                             const FFTLayoutStruct<NDim> &layout) = 0;
+  };
 
 #ifdef TEMPLATTEST
+  class FFTSessionGuardTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

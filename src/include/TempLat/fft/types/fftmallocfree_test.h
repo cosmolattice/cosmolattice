@@ -16,3 +16,4 @@ template <typename T> inline void TempLat::FFTMallocFree<T>::Test(TempLat::TDDAs
 }
 
 #endif
+
