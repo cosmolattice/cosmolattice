@@ -13,6 +13,8 @@
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
+#include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
+#include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include <type_traits>
 
 namespace TempLat
@@ -62,21 +64,21 @@ namespace TempLat
   concept IsScalarType = (std::is_arithmetic_v<T> || HasEvalMethod<T>) && !HasComplexFieldGet<T>;
 
   template <typename R, typename T>
-    requires(IsScalarType<R> && HasComplexFieldGet<T>)
+    requires(IsScalarType<R> && HasComplexFieldGet<T> && !HasSU2Get<T> && !HasSU2DoubletGet<T>)
   DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<R, T>(r, t);
   }
 
   template <typename R, typename T>
-    requires(HasComplexFieldGet<R> && IsScalarType<T>)
+    requires(HasComplexFieldGet<R> && IsScalarType<T> && !HasSU2Get<R> && !HasSU2DoubletGet<R>)
   DEVICE_FORCEINLINE_FUNCTION auto operator*(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply<T, R>(t, r);
   }
 
   template <typename R, typename T>
-    requires(HasComplexFieldGet<R> && IsScalarType<T>)
+    requires(HasComplexFieldGet<R> && IsScalarType<T> && !HasSU2Get<R> && !HasSU2DoubletGet<R>)
   DEVICE_FORCEINLINE_FUNCTION auto operator/(const R &r, const T &t)
   {
     return ScalarComplexFieldMultiply(1_c / t, r);
