@@ -85,11 +85,25 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    MPICommReference mBaseGroup;      /* the parent group */
-    MPICommReference mCartesianGroup; /* split up in the number of dimensions that were passed in the constructor */
-    MPICommReference mCartesianGroup_onlyDividedDimensions; /* split up only in those dimensions whose splitting > 1.
-                                                               Necessary for pfft for example. */
-    ptrdiff_t mNDimensions;
+
+    /**
+     * @brief The BaseGroup is the MPI_Comm that is given to MPICartesianGroup in the constructor, and from which we
+     * create the Cartesian groups.
+     *
+     */
+    MPICommReference mBaseGroup;
+    /**
+     * @brief The CartesianGroup is the MPI_Comm that is created from the BaseGroup, and is split up in the number of
+     * dimensions that were passed in the constructor.
+     */
+    MPICommReference mCartesianGroup;
+    /**
+     * @brief The CartesianGroup_onlyDividedDimensions is the MPI_Comm that is created from the CartesianGroup, and is
+     * split up only in those dimensions whose splitting > 1.
+     */
+    MPICommReference mCartesianGroup_onlyDividedDimensions;
+
+    const ptrdiff_t mNDimensions;
     std::vector<int> mDecomposition;
     std::vector<int> mPeriodic;
     ptrdiff_t mNumDividedDimensions;

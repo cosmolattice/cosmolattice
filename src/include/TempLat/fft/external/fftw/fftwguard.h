@@ -55,20 +55,17 @@ namespace TempLat
 #endif
 
 #ifdef HAVE_MPI
-#ifndef HAVE_PFFT
 
       if (mVerbose) sayShort << "Calling FFTW MPI initializations.\n";
 
-      /* this also suffices for pfft, but we keep both lines in case in the future pfft decides to need its own init. */
       fftw_mpi_init();
 #ifdef HAVE_FFTFLOAT
       fftwf_mpi_init();
 #endif
 
-#endif
-#endif
+#endif // HAVE_MPI
 
-#endif
+#endif // NOFFT
     }
 
     ~FFTWGuard()
@@ -88,18 +85,14 @@ namespace TempLat
 #endif
 
 #ifdef HAVE_MPI
-#ifndef HAVE_PFFT
-      /* this also suffices for pfft, but we keep both lines in case in the future pfft decides to need its own init. */
       if (mVerbose) sayShort << "Calling FFTW MPI finalizations.\n";
       fftw_mpi_cleanup();
 #ifdef HAVE_FFTFLOAT
       fftwf_mpi_cleanup();
 #endif
+#endif // HAVE_MPI
 
-#endif
-#endif
-
-#endif
+#endif // NOFFT
     }
 
     /* delete the copy constructor and copy assignment */

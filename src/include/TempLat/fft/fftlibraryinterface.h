@@ -54,20 +54,19 @@ namespace TempLat
     virtual ~FFTLibraryInterface() {}
 
     /** @brief Return the number of dimensions over which the MPI processes can be distributed, given a problem of
-     * dimension nDimensions. FFTW can only divide in 1 dimension: the leading dimension. PFFT can divide an N
+     * dimension nDimensions. FFTW can only divide in 1 dimension: the leading dimension. ParaFaFT can divide an N
      * dimensional setup over the leading N - 1 dimensions.
      *
-     *  The calling function needs to know, because the user may switch between layouts after compilation.
+     * The calling function needs to know, because the user may switch between layouts after compilation.
      */
     virtual ptrdiff_t getMaximumNumberOfDimensionsToDivide(ptrdiff_t nDimensions) = 0;
 
-    /** @brief The lattice objects expect an *unnormalized* FFT, such as FFTW and PFFT give:
-     *  applying once forward and then backward, should return the input values multiplied by
+    /** @brief The lattice objects expect an *unnormalized* FFT, such as the one FFTW gives:
+     *  applying once forward and then backward should return the input values multiplied by
      *  nGridPoints^nDimensions, i.e. the total number of values in the problem.
      *  If your library does not respect that, return the factor by which we must multiply the output
      *  values to obtain the unnormalized FFT. Return default IntrinsicScales (exact (double) 1)
-     *  in order not to waste time,
-     *  if your library does like FFTW and PFFT.
+     *  in order not to waste time, if your library does it like FFTW.
      */
     virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nGridPoints) = 0;
 

@@ -146,7 +146,7 @@ namespace TempLat
       // Add memory requirement (already in real (double) units)
       result.addExternalMemoryRequest(parafaftRequiredMemory);
 
-      // Set Hermitian partners (same as FFTW/PFFT)
+      // Set Hermitian partners (same as FFTW)
       result.fourierSpace.setHermitianPartners(
           FFTWHermitianPartners<NDim>::create(result.configurationSpace.getGlobalSizes()));
 

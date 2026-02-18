@@ -16,7 +16,7 @@ namespace TempLat
   /** @brief Top-level interface for parafaft FFT backend.
    *
    * Parafaft uses pencil decomposition to parallelize FFTs across D-1 dimensions.
-   * For 3D, this means 2D parallelization (same as PFFT), but using MPI_Alltoallw
+   * For 3D, this means 2D parallelization, but using MPI_Alltoallw
    * instead of local transposes.
    *
    * Inheritance hierarchy:
@@ -44,7 +44,7 @@ namespace TempLat
     /**
      * @brief Returns intrinsic rescaling factors.
      *
-     * Parafaft (via FFTW) produces unnormalized FFTs, same as FFTW/PFFT.
+     * Parafaft (via FFTW) produces unnormalized FFTs, same as FFTW.
      * Returns default IntrinsicScales (1.0, 1.0).
      */
     virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nGridPoints) override

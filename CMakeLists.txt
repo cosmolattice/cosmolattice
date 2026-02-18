@@ -27,9 +27,6 @@ set(DEVICE_PROVIDER
     CACHE
     STRING
       "Set to the device provider to use for shared memory and/or GPU parallelization (default = Kokkos)")
-set(PFFT
-    OFF
-    CACHE BOOL "Set to ON to build with PFFT (default = OFF)")
 set(PARAFAFT OFF CACHE BOOL "Set to ON to build with PARAFAFT (default = OFF)")
 set(KOKKOSFFT ON CACHE BOOL "Enable KokkosFFT support (default = ON), acts as a fallback for non-MPI GPU builds")
 
@@ -59,21 +56,6 @@ set(FLOATFFT OFF)
 include(src/cmake/auto_install_paths.cmake)
 
 # ##############################################################################
-# ____       _   _       _          ____  _____ _____ _____ |  _ \ __ _| |_| |__
-# | |_ ___   |  _ \|  ___|  ___|_   _|  _ | |_) / _` | __| '_ \  | __/ _ \  |
-# |_) | |_  | |_    | |   (_) |  __/ (_| | |_| | | | | || (_) | |  __/|  _| | _|
-# | |    _ |_|   \__,_|\__|_| |_|  \__\___/  |_|   |_|   |_|     |_|   (_)
-#
-# ie. the folder which contains as subfolder the bin and include of PFFT.
-# Example:  set(MYPPFT_PATH "/home/user/pfft/" CACHE STRING "PFFT guess path"),
-# assuming that the library files are in /home/user/pfft/bin/  and t he include
-# file in /home/user/pfft/include/
-
-set(MYPFFT_PATH
-    "insert/here"
-    CACHE STRING "PFFT guess path")
-
-# ##############################################################################
 
 # if you have an exotic FFTW3, you can also help cmake by adding the path below.
 
@@ -99,7 +81,7 @@ set(MYPARAFAFT_PATH "" CACHE STRING "path to PARAFAFT installation directory")
 # add to CMAKE_PREFIX_PATH upon calling cmake will be remembered, so don't
 # hesitate to continue using it.
 
-set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYPFFT_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}" )
+set(CMAKE_PREFIX_PATH "${CMAKE_PREFIX_PATH};${MYHDF5_PATH};${MYFFTW3_PATH}" )
 # Also set FFTW_ROOT so KokkosFFT's FindFFTW.cmake uses the local path
 if(NOT MYFFTW3_PATH STREQUAL "insert/here")
   set(FFTW_ROOT "${MYFFTW3_PATH}" CACHE PATH "FFTW root for KokkosFFT" FORCE)

@@ -29,13 +29,6 @@ if(MPI)
 	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_MPI")
 endif()
 
-# Fourier transformation things
-if(PFFT AND  MPI)
-	find_package(PFFT REQUIRED)
-	include_directories(${PFFT_INCLUDES})
-	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_PFFT")
-endif()
-
 # Parafaft configuration
 if(PARAFAFT AND MPI)
 	# Parafaft is header-only, just need include path
@@ -61,7 +54,7 @@ if(FLOATFFT)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_FFTFLOAT")
 endif()
 
-if(NOT DEFINED FFTW_LIB AND NOT DEFINED KOKKOSFFT AND NOT DEFINED PFFT AND NOT DEFINED PARAFAFT)
+if(NOT DEFINED FFTW_LIB AND NOT DEFINED KOKKOSFFT AND NOT DEFINED PARAFAFT)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNOFFT")
 endif()
 

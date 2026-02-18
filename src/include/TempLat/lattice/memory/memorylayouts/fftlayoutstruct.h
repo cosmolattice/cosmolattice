@@ -74,8 +74,7 @@ namespace TempLat
 
     friend bool operator==(const FFTLayoutStruct &a, const FFTLayoutStruct &b)
     {
-      return a.configurationSpace == b.configurationSpace && a.fourierSpace == b.fourierSpace &&
-             a.mIsPFFT == b.mIsPFFT && a.mIsFFTW == b.mIsFFTW;
+      return a.configurationSpace == b.configurationSpace && a.fourierSpace == b.fourierSpace;
     }
 
     friend std::ostream &operator<<(std::ostream &ostream, const FFTLayoutStruct &ls)
@@ -93,10 +92,6 @@ namespace TempLat
   private:
     device::IdxArray<NDim> mNGridPoints;
     device::Idx mExternalMemoryRequirement;
-
-    bool mIsFFTW;
-    bool mIsPFFT;
-    bool mIsKOKKOSFFT;
 
     IntrinsicScales mScales;
 
