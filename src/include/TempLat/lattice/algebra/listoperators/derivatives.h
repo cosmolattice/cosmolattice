@@ -28,11 +28,6 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename T, typename R> auto derivatives(T &&expr, R &others)
@@ -43,6 +38,14 @@ namespace TempLat
       return GetDeriv::get(expr, phi);
     });
   }
+
+#ifdef TEMPLATTEST
+  class DerivativesTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

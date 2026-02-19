@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::DoEval> test;
+  TempLat::TDDContainer<TempLat::DoEvalTester> test;
 }

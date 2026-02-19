@@ -115,6 +115,15 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
 #endif
   };
+
+#ifdef TEMPLATTEST
+template<typename T>
+  struct RadialProjectionSingleDatumTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

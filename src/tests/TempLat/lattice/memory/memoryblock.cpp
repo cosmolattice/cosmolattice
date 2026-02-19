@@ -9,8 +9,8 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MemoryBlock<3, double>> test;
+  TempLat::TDDContainer<TempLat::MemoryBlockTester<3, double>> test;
 #ifdef HAVE_FFTFLOAT
-  TempLat::TDDContainer<TempLat::MemoryBlock<3, float>> test2;
+  TempLat::TDDContainer<TempLat::MemoryBlockTester<3, float>> test2;
 #endif
 } // namespace

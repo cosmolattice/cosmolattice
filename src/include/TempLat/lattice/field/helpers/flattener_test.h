@@ -8,7 +8,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-inline void TempLat::Flattener::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FlattenerTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   struct myTuple {

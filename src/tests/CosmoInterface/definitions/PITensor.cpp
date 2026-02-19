@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::PITensorTest> test;
+  TempLat::TDDContainer<TempLat::PITensorTestTester> test;
 }

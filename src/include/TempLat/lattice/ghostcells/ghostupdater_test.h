@@ -116,7 +116,7 @@ namespace TempLat
       MPICartesianGroup mGroup(FFTMPIDomainSplit<nd>::makeMPIGroup(nd));
       FFTLibrarySelector<nd> fftlib(mGroup, toolBox->mNGridPointsVec);
       TripleStateLayouts fullLayout(fftlib.getLayout(), nGhost);
-      GhostUpdater<nd> ghostUpdater(mGroup, fullLayout.getConfigSpaceJumps());
+      GhostUpdater<nd> ghostUpdater(mGroup, fullLayout.getConfigSpaceLayout());
 
       const auto localSizes = fullLayout.getConfigSpaceLayout().getLocalSizes();
       device::IdxArray<nd> fullLocalSizes{};
@@ -206,7 +206,7 @@ namespace TempLat
   } // namespace TestScratch
 } // namespace TempLat
 
-template <size_t NDim> inline void TempLat::GhostUpdater<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::GhostUpdaterTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   static_assert(NDim > 1, "GhostUpdater test only makes sense in 2 or more dimensions.");
   // I just don't have the patience to do the 1D case, since it involves no MPI communication.

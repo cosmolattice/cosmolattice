@@ -46,11 +46,15 @@ namespace TempLat
     bool mCurrentlyStale;
     bool mCurrentlyUpToDate;
 
+  };
+
 #ifdef TEMPLATTEST
+  class GhostStateKeeperTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

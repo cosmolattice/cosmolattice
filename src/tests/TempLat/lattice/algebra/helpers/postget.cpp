@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::PostGet> test;
+  TempLat::TDDContainer<TempLat::PostGetTester> test;
 }

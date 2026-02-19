@@ -8,5 +8,5 @@
 #include "TempLat/lattice/algebra/operators/binaryoperator_test.h"
 
 // namespace {
-//     TempLat::TDDContainer<TempLat::BinaryOperator> test;
+//     TempLat::TDDContainer<TempLat::BinaryOperatorTester> test;
 // }

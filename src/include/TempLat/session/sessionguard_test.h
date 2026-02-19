@@ -7,10 +7,10 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::SessionGuard::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::SessionGuardTester::Test(TempLat::TDDAssertion &tdd)
 {
 
-  if (SessionGuard::InstanceCounter() < 1) {
+  if (SessionGuard::GetInstanceCounter() < 1) {
     SessionGuard guard(0, NULL, true);
   } else {
     /* there is an instance of MPIGuard in the calling main, which is a good thing. Then we can test if the multiple

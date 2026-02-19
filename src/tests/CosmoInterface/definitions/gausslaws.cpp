@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GaussLaws> test;
+  TempLat::TDDContainer<TempLat::GaussLawsTester> test;
 }

@@ -265,12 +265,15 @@ namespace TempLat
       MultipleParameterGetter<S> ret;
       return ret;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class ParameterParserTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

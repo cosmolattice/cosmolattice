@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::GetCPPTypeName::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::GetCPPTypeNameTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(GetCPPTypeName::get(std::vector<ptrdiff_t>()).find("std::") != std::string::npos);

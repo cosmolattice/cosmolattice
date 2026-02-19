@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPIDebuggerHanger> test;
+  TempLat::TDDContainer<TempLat::MPIDebuggerHangerTester> test;
 }

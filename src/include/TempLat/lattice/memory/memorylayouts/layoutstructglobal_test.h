@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::LayoutStructGlobal<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::LayoutStructGlobalTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* test the operator== */
   LayoutStructGlobal<3> a({0, 0, 0});

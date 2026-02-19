@@ -12,7 +12,6 @@
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
 
 namespace TempLat
 {
@@ -46,11 +45,6 @@ namespace TempLat
 
     ptrdiff_t confirmGhostsUpToDate() const { return ConfirmGhosts::apply(mR, N); }
 
-    template <size_t NDim> inline JumpsHolder<NDim> getJumps() const
-    { // Just take jumps from the first component
-      return GetJumps::apply(mR);
-    }
-
     inline auto getToolBox() const
     { // just take toolbox from first component
       return GetToolBox::get(mR);
@@ -61,17 +55,21 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     R mR;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <int N, typename R> GetVectorComponentHelper<N, R> getVectorComponent(const R &pR, Tag<N>)
   {
     return GetVectorComponentHelper<N, R>(pR);
   }
+
+#ifdef TEMPLATTEST
+template<int N, typename R>
+  struct GetVectorComponentHelperTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

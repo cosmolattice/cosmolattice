@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::GetVectorSize> test;
+  TempLat::TDDContainer<TempLat::GetVectorSizeTester> test;
 }

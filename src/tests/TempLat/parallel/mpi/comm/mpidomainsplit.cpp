@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPIDomainSplit> test;
+  TempLat::TDDContainer<TempLat::MPIDomainSplitTester> test;
 }

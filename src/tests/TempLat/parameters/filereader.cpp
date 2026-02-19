@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FileReader> test;
+  TempLat::TDDContainer<TempLat::FileReaderTester> test;
 }

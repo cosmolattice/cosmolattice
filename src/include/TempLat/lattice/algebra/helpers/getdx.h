@@ -34,12 +34,15 @@ namespace TempLat
     {
       return 1.f;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class GetDxTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

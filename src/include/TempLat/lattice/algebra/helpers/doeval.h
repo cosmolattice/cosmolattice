@@ -68,12 +68,15 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     DoEval() = delete;
+  };
 
 #ifdef TEMPLATTEST
+  class DoEvalTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

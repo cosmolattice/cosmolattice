@@ -7,6 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MPITypeConstants::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
+inline void TempLat::MPITypeConstantsTester::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
 
 #endif

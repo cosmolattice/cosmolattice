@@ -7,15 +7,9 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-#include "TempLat/lattice/algebra/su2algebra/su2wrapper.h"
-#include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
-#include "TempLat/lattice/algebra/gaugealgebra/u1exponential.h"
-#include "TempLat/lattice/field/views/fieldviewfourier.h"
-#include "TempLat/lattice/field/collections/vectorfield.h"
-#include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/util/tdd/tdd.h"
 
-inline void TempLat::SU2Initializer::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::SU2InitializerTester::Test(TempLat::TDDAssertion &tdd)
 {
   static constexpr size_t NDim = 3;
   static constexpr ptrdiff_t nGrid = 4, nGhost = 0;

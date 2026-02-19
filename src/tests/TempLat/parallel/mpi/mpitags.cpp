@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPITagsJustCompile> test;
+  TempLat::TDDContainer<TempLat::MPITagsJustCompileTester> test;
 }

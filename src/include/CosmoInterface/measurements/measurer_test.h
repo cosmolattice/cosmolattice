@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
-// inline void TempLat::Measurer::Test(TempLat::TDDAssertion& tdd) {
+// inline void TempLat::MeasurerTester::Test(TempLat::TDDAssertion& tdd) {
 //
 //     /* Default is to fail: to remind yourself to implement something here. */
 //     tdd.verify( false );

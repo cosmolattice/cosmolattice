@@ -5,12 +5,16 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include <algorithm>
+#include <cstddef>
 #include <vector>
 
-inline void TempLat::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
+#include "TempLat/parallel/device_iteration.h"
+#include "TempLat/parallel/device_memory.h"
+
+inline void TempLat::RandomGaussianTester::Test(TempLat::TDDAssertion &tdd)
 {
   constexpr size_t N = 1e8;
   RandomGaussian prng("Hello CosmoLattice world!");
@@ -20,11 +24,11 @@ inline void TempLat::RandomGaussian::Test(TempLat::TDDAssertion &tdd)
 
   double x = 0;
 
-  Kokkos::View<size_t[2 * measure_center]> measure("measure");
-  Kokkos::parallel_reduce(
-      "RandomGaussian_test", N,
-      DEVICE_LAMBDA(int i, double &sum) {
-        const double next = prng.get(i, i, 0);
+  device::memory::NDView<1, size_t> measure("measure", 2 * measure_center);
+  device::iteration::reduce<1>(
+      "RandomGaussian_test", {0}, {N},
+      DEVICE_LAMBDA(device::IdxArray<1> i, double &sum) {
+        const double next = prng.get(i[0], i[0], 0);
         sum += next;
         ptrdiff_t index = measure_center + std::round(next * measure_center / 3); /* 5 ? yes, 5 i_sigma happens. */
         index = std::max(ptrdiff_t(0), std::min(2 * measure_center - 1, index));

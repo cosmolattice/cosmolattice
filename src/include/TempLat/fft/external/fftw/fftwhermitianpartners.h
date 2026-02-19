@@ -40,12 +40,15 @@ namespace TempLat
     }
 
     FFTWHermitianPartners() = delete;
+  };
 
 #ifdef TEMPLATTEST
+  class FFTWHermitianPartnersTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

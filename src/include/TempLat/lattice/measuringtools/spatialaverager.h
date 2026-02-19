@@ -54,8 +54,7 @@ namespace TempLat
         stop_iteration[d] = start_iteration[d] + localSizes[d];
       }
 
-      localResult =
-          Kokkos::View<vType *, Kokkos::DefaultExecutionSpace>("localResult", stop_iteration[0] - start_iteration[0]);
+      localResult = device::memory::NDView<1, vType>("localResult", stop_iteration[0] - start_iteration[0]);
     }
 
     std::vector<vType> compute()
@@ -121,7 +120,7 @@ namespace TempLat
     device::array<device::Idx, NDim - 1> start_iteration{};
     device::array<device::Idx, NDim - 1> stop_iteration{};
 
-    Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> localResult;
+    device::memory::NDView<1, vType> localResult;
 
     size_t nGhosts;
   };

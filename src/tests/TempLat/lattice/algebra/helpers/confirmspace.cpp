@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ConfirmSpace> test;
+  TempLat::TDDContainer<TempLat::ConfirmSpaceTester> test;
 }

@@ -40,8 +40,6 @@ namespace TempLat
       return result;
     }
 
-    virtual JumpsHolder<NDim> getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
-
     void doWeNeedGhosts(ptrdiff_t i) const {}
     template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const { return 1; }
 
@@ -81,12 +79,16 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
     LayoutStruct<NDim> mLayout;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct SpatialCoordinateTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

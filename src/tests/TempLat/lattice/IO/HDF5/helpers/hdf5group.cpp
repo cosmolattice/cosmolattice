@@ -11,7 +11,7 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::HDF5Group> test;
+  TempLat::TDDContainer<TempLat::HDF5GroupTester> test;
 }
 
 #endif

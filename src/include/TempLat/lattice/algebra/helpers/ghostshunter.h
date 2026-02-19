@@ -63,12 +63,15 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     GhostsHunter() {}
+  };
 
 #ifdef TEMPLATTEST
+  class GhostsHunterTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

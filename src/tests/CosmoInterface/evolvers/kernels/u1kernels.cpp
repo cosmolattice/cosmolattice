@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::U1Kernels> test;
+  TempLat::TDDContainer<TempLat::U1KernelsTester> test;
 }

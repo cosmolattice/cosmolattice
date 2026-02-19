@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
@@ -74,15 +73,6 @@ namespace TempLat
 
     ptrdiff_t confirmGhostsUpToDate() const { return ConfirmGhosts::apply(mR) + ConfirmGhosts::apply(mT); }
 
-    template <size_t NDim> DEVICE_FORCEINLINE_FUNCTION JumpsHolder<NDim> getJumps() const
-    {
-      auto a = GetJumps::apply<NDim>(mR);
-      auto b = GetJumps::apply<NDim>(mT);
-      if (a != b && !(a.isEmpty() || b.isEmpty()))
-        throw DifferentJumpsHolderException("Two different memory layouts in binary operator" /*, toString()*/);
-      return a.isEmpty() ? b : a;
-    }
-
     DEVICE_FORCEINLINE_FUNCTION
     auto getDx() const { return HasDx<R> ? GetDx::getDx(mR) : (HasDx<T> ? GetDx::getDx(mT) : 1.); }
 
@@ -125,12 +115,16 @@ namespace TempLat
   protected:
     R mR;
     T mT;
+  };
 
 #ifdef TEMPLATTEST
+template<typename R, typename T>
+  struct BinaryOperatorTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

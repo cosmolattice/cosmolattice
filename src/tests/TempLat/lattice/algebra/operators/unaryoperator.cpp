@@ -8,5 +8,5 @@
 #include "TempLat/lattice/algebra/operators/unaryoperator_test.h"
 
 // namespace {
-//     TempLat::TDDContainer<TempLat::UnaryOperator> test;
+//     TempLat::TDDContainer<TempLat::UnaryOperatorTester> test;
 // }

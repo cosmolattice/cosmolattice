@@ -21,7 +21,7 @@ public:
 };
 bool WithPreGet::called = false; // Initialize static member variable
 
-inline void TempLat::PreGet::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::PreGetTester::Test(TempLat::TDDAssertion &tdd)
 {
   NoPreGet noPreGet;
   WithPreGet withPreGet;

@@ -41,14 +41,6 @@ namespace TempLat
     {
     }
 
-#ifdef DEVICE_REGION
-    DEVICE_FUNCTION
-    Field(const Field &other) : ConfigView<NDim, T>(other), mFourierView(*this) {}
-
-    DEVICE_FUNCTION
-    ~Field() {}
-#endif
-
     template <typename R> void operator=(R &&g) { ConfigView<NDim, T>::operator=(g); }
 
     void operator=(const Field<NDim, T> &other) { operator=(OneType() * other); }
@@ -80,12 +72,16 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     FourierView<NDim, T> mFourierView;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t _NDim, typename T>
+  struct FieldTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

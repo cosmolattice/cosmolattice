@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::HermitianValueAccounting::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::HermitianValueAccountingTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   bool allTestsAreInRandomFieldAndVerifyHermitianLayout = true;

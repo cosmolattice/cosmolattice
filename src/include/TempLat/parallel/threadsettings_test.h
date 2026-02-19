@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::ThreadSettings::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::ThreadSettingsTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   ptrdiff_t initialThreadCount = ThreadSettings::getMaxThreadCount();

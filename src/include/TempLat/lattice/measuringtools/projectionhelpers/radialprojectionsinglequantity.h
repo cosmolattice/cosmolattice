@@ -37,16 +37,14 @@ namespace TempLat
       mAveragesDevice = DeviceView("RadialProjectionSingleQuantity::mAveragesDevice", size);
       mVariancesDevice = DeviceView("RadialProjectionSingleQuantity::mVariancesDevice", size);
       mMinsDevice = DeviceView("RadialProjectionSingleQuantity::mMinsDevice", size);
-      Kokkos::deep_copy(mMinsDevice, std::numeric_limits<T>::max());
       mMaxsDevice = DeviceView("RadialProjectionSingleQuantity::mMaxsDevice", size);
-      Kokkos::deep_copy(mMaxsDevice, -std::numeric_limits<T>::max());
 
       mAverages = device::memory::createMirrorView(mAveragesDevice);
       mVariances = device::memory::createMirrorView(mVariancesDevice);
       mMins = device::memory::createMirrorView(mMinsDevice);
-      Kokkos::deep_copy(mMins, std::numeric_limits<T>::max());
       mMaxs = device::memory::createMirrorView(mMaxsDevice);
-      Kokkos::deep_copy(mMaxs, -std::numeric_limits<T>::max());
+
+      clear();
     }
 
     size_t size() const { return mAverages.size(); }
@@ -64,27 +62,27 @@ namespace TempLat
 
     void clear()
     {
-      Kokkos::deep_copy(mAverages, 0);
-      Kokkos::deep_copy(mVariances, 0);
-      Kokkos::deep_copy(mMins, std::numeric_limits<T>::max());
-      Kokkos::deep_copy(mMaxs, -std::numeric_limits<T>::max());
+      device::memory::fill(mAverages, 0);
+      device::memory::fill(mVariances, 0);
+      device::memory::fill(mMins, std::numeric_limits<T>::max());
+      device::memory::fill(mMaxs, -std::numeric_limits<T>::max());
       push();
     }
 
     void pull()
     {
-      Kokkos::deep_copy(mAverages, mAveragesDevice);
-      Kokkos::deep_copy(mVariances, mVariancesDevice);
-      Kokkos::deep_copy(mMins, mMinsDevice);
-      Kokkos::deep_copy(mMaxs, mMaxsDevice);
+      device::memory::copyDeviceToHost(mAveragesDevice, mAverages.data());
+      device::memory::copyDeviceToHost(mVariancesDevice, mVariances.data());
+      device::memory::copyDeviceToHost(mMinsDevice, mMins.data());
+      device::memory::copyDeviceToHost(mMaxsDevice, mMaxs.data());
     }
 
     void push()
     {
-      Kokkos::deep_copy(mAveragesDevice, mAverages);
-      Kokkos::deep_copy(mVariancesDevice, mVariances);
-      Kokkos::deep_copy(mMinsDevice, mMins);
-      Kokkos::deep_copy(mMaxsDevice, mMaxs);
+      device::memory::copyHostToDevice(mAverages.data(), mAveragesDevice);
+      device::memory::copyHostToDevice(mVariances.data(), mVariancesDevice);
+      device::memory::copyHostToDevice(mMins.data(), mMinsDevice);
+      device::memory::copyHostToDevice(mMaxs.data(), mMaxsDevice);
     }
 
     /** @brief This is why we keep stuff in vectors, sum up all the results from all processes in an easy way: vectors
@@ -134,12 +132,16 @@ namespace TempLat
 #endif
 #endif
     }
+  };
 
 #ifdef TEMPLATTEST
+template<typename T>
+  struct RadialProjectionSingleQuantityTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

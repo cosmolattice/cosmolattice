@@ -9,6 +9,6 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::DimensionCountRecorder<2>> test1;
-  TempLat::TDDContainer<TempLat::DimensionCountRecorder<3>> test2;
+  TempLat::TDDContainer<TempLat::DimensionCountRecorderTester<2>> test1;
+  TempLat::TDDContainer<TempLat::DimensionCountRecorderTester<3>> test2;
 } // namespace

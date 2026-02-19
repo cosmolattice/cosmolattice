@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::ConditionalStream::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::ConditionalStreamTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   std::stringstream str1, str2;

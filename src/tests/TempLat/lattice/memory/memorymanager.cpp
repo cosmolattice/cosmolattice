@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MemoryManager<3, double>> test;
+  TempLat::TDDContainer<TempLat::MemoryManagerTester<3, double>> test;
 }

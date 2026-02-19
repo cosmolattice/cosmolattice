@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::PairMaker> test;
+  TempLat::TDDContainer<TempLat::PairMakerTester> test;
 }

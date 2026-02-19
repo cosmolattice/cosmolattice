@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-inline void TempLat::MPIDebuggerHanger::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MPIDebuggerHangerTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
 

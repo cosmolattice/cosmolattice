@@ -7,9 +7,11 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-inline void TempLat::device_kokkos::DeviceGuard::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::DeviceGuardTester::Test(TempLat::TDDAssertion &tdd)
 {
-  if (DeviceGuard::InstanceCounter() < 1) {
+  using device_kokkos::DeviceGuard;
+  using device_kokkos::KokkosDeviceGuardInstantiationException;
+  if (DeviceGuard::GetInstanceCount() < 1) {
     DeviceGuard guard(0, NULL, true);
   } else {
     /* there is an instance of DeviceGuard in the calling main, which is a good thing. Then we can test if the multiple

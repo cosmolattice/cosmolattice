@@ -7,10 +7,10 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MPIGuard::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MPIGuardTester::Test(TempLat::TDDAssertion &tdd)
 {
 
-  if (MPIGuard::InstanceCounter() < 1) {
+  if (MPIGuard::GetInstanceCount() < 1) {
     MPIGuard guard(0, NULL, true);
   } else {
     /* there is an instance of MPIGuard in the calling main, which is a good thing. Then we can test if the multiple

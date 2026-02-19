@@ -98,12 +98,16 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     device::IdxArray<NDim> mGlobalSizes;
     device::IdxArray<NDim> mSignConversionMidpoint;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t _NDim>
+  struct LayoutStructGlobalTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

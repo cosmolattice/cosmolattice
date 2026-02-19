@@ -204,14 +204,14 @@ namespace TempLat
     {
       mValues.pull();
       mBinBounds.pull();
-      Kokkos::deep_copy(mMultiplicities, mMultiplicitiesDevice);
+      device::memory::copyDeviceToHost(mMultiplicitiesDevice, mMultiplicities.data());
     }
 
     void push()
     {
       mValues.push();
       mBinBounds.push();
-      Kokkos::deep_copy(mMultiplicitiesDevice, mMultiplicities);
+      device::memory::copyHostToDevice(mMultiplicities.data(), mMultiplicitiesDevice);
     }
 
     /** @brief RadialProjector calls this as the last step, does the transposition of the result vecotrs into one vector
@@ -243,11 +243,6 @@ namespace TempLat
       // mBinBounds.clear();
       return *this;
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename T>
@@ -284,6 +279,15 @@ namespace TempLat
     auto func = [&](auto x) { return scale; };
     return func * obj;
   }
+
+#ifdef TEMPLATTEST
+template<typename T = double>
+  struct RadialProjectionResultTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

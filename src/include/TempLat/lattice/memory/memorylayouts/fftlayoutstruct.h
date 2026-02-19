@@ -13,8 +13,6 @@
 
 namespace TempLat
 {
-  MakeException(FFTLayoutStructException);
-
   /** @brief The result holder for getIntrinsicRescaleToGetUnnormalizedFFT:
    *  two labeled double values.
    */
@@ -27,7 +25,7 @@ namespace TempLat
   };
 
   /** @brief A struct which holds two memory layouts, which are unseparable:
-   * - the pre-FFT layout in configuration space, no padding or ghosting.
+   * - the pre-FFT layout in configuration space, with padding but no ghosting.
    * - the Fourier space (complex values!) layout.
    *
    *
@@ -36,45 +34,31 @@ namespace TempLat
   template <size_t NDim> class FFTLayoutStruct
   {
   public:
-    FFTLayoutStruct(const device::IdxArray<NDim> &nGridPoints, bool isFFTW_, bool isPFFT_, bool isKOKKOSFFT_,
-                    IntrinsicScales scales = IntrinsicScales())
+    FFTLayoutStruct(const device::IdxArray<NDim> &nGridPoints, IntrinsicScales scales = IntrinsicScales())
         : configurationSpace(nGridPoints, 0), fourierSpace(LayoutStruct<NDim>::createGlobalFFTLayout(nGridPoints)),
-          mNGridPoints(nGridPoints), mExternalMemoryRequirement(0), mIsFFTW(isFFTW_), mIsPFFT(isPFFT_),
-          mIsKOKKOSFFT(isKOKKOSFFT_), mScales(scales)
+          mNGridPoints(nGridPoints), mExternalMemoryRequirement(0), mScales(scales)
     {
-      if ((int)mIsFFTW + (int)mIsPFFT + (int)mIsKOKKOSFFT != 1)
-        throw FFTLayoutStructException("Must be either FFTW, PFFT or KOKKOSFFT!");
-
-      /* for FFTW, we manually need to set the size of the last dimension to the r2c setup: 2 * (N/2 + 1). */
-      auto configLocalSizes = fourierSpace.getLocalSizes();
-      configLocalSizes[NDim - 1] *= 2;
-      configurationSpace.setLocalSizes(configLocalSizes);
-      /* but not for configurationSpace.globalSizes: keep the logical layout */
     }
 
-    /* yes, public members! That's why its name is "struct". */
+    // yes, public members! That's why its name is "struct".
     LayoutStruct<NDim> configurationSpace;
     LayoutStruct<NDim> fourierSpace;
 
-    /* no, these aren't public members. Just getter methods. */
-    constexpr ptrdiff_t getNDimensions() const { return NDim; }
+    // no, these aren't public members. Just getter methods.
+    static constexpr size_t getNDimensions() { return NDim; }
     const device::IdxArray<NDim> &getNGridPoints() const { return mNGridPoints; }
-    const bool &isFFTW() const { return mIsFFTW; }
-    const bool &isPFFT() const { return mIsPFFT; }
-    const bool &isKOKKOSFFT() const { return mIsKOKKOSFFT; }
 
     /** @brief Compute on the fly, as our members may be modified by others. That's why OOP... */
-    ptrdiff_t getMinimalMemorySize() const
+    device::Idx getMinimalMemorySize() const
     {
-      ptrdiff_t resultC = 2; /* complex... */
+      device::Idx resultC = 2; // complex
       for (auto &&it : fourierSpace.getLocalSizes())
         resultC *= it;
 
-      ptrdiff_t resultR = 1; /* real... */
+      device::Idx resultR = 1; // real
       for (auto &&it : configurationSpace.getLocalSizes())
         resultR *= it;
-      // say << "Returning memory size: " << std::max(mExternalMemoryRequirement, std::max(resultR, resultC)) << " from
-      // (external)" << mExternalMemoryRequirement << ", (config)" << resultR << ", (fourier)" << resultC << "\n";
+
       return std::max(mExternalMemoryRequirement, std::max(resultR, resultC));
     }
 
@@ -83,15 +67,14 @@ namespace TempLat
      *  This is specifically the case for non-transposed FFTW in/outputs:
      *  needs some extra space for the final transposition into normal layout.
      */
-    void addExternalMemoryRequest(ptrdiff_t requirement)
+    void addExternalMemoryRequest(device::Idx requirement)
     {
       mExternalMemoryRequirement = std::max(mExternalMemoryRequirement, requirement);
     }
 
     friend bool operator==(const FFTLayoutStruct &a, const FFTLayoutStruct &b)
     {
-      return a.configurationSpace == b.configurationSpace && a.fourierSpace == b.fourierSpace &&
-             a.mIsPFFT == b.mIsPFFT && a.mIsFFTW == b.mIsFFTW;
+      return a.configurationSpace == b.configurationSpace && a.fourierSpace == b.fourierSpace;
     }
 
     friend std::ostream &operator<<(std::ostream &ostream, const FFTLayoutStruct &ls)
@@ -108,19 +91,19 @@ namespace TempLat
 
   private:
     device::IdxArray<NDim> mNGridPoints;
-    ptrdiff_t mExternalMemoryRequirement;
-
-    bool mIsFFTW;
-    bool mIsPFFT;
-    bool mIsKOKKOSFFT;
+    device::Idx mExternalMemoryRequirement;
 
     IntrinsicScales mScales;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct FFTLayoutStructTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

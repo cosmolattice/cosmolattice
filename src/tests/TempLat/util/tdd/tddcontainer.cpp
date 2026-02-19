@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::TDDContainer<TempLat::TDDContainerDummy>> test;
+  TempLat::TDDContainer<TempLat::TDDContainerTester<TempLat::TDDContainerDummy>> test;
 }

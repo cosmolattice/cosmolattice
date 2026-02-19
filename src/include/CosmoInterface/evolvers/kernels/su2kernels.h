@@ -52,12 +52,15 @@ namespace TempLat
       // Returns kernel for the SU(2) gauge fields' EOM:
       return -normGrad * (GradSU2 - GradSU2Back) - normSU2Source * SU2Source;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class SU2KernelsTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

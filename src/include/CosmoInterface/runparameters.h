@@ -204,15 +204,19 @@ namespace TempLat
 
       return ret;
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename R> auto createParams(int argc, char *argv[]) { return std::make_shared<R>(argc, argv); }
 
+
+#ifdef TEMPLATTEST
+template<typename T = double>
+  struct RunParametersTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

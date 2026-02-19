@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
-template <typename R> inline void TempLat::RunParameters<R>::Test(TempLat::TDDAssertion &tdd)
+template <typename R> inline void TempLat::RunParametersTester<R>::Test(TempLat::TDDAssertion &tdd)
 {
 
   //    /* Default is to fail: to remind yourself to implement something here. */

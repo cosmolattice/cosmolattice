@@ -38,12 +38,15 @@ namespace TempLat
     {
       return 1;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class GetKIRTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

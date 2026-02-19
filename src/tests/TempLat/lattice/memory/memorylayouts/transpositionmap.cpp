@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::TranspositionMap<3>> test;
+  TempLat::TDDContainer<TempLat::TranspositionMapTester<3>> test;
 }

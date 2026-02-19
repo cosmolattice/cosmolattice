@@ -7,10 +7,11 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::FFTWInterface<NDim>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FFTWInterfaceTester::Test(TempLat::TDDAssertion &tdd)
 {
   FFTWInterface someInterface;
   tdd.verify(true);
 }
 
 #endif
+

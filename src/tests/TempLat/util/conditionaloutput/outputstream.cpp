@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::OutputStream<int>> test;
+  TempLat::TDDContainer<TempLat::OutputStreamTester> test;
 }

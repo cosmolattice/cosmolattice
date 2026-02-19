@@ -11,7 +11,6 @@
 
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/latticeparameters.h"
-#include "TempLat/lattice/memory/jumpsholder.h"
 #include "TempLat/lattice/memory/memorylayoutstate.h"
 #include "TempLat/lattice/memory/memorymanager.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -40,16 +39,6 @@ namespace TempLat
         : mToolBox(toolBox), mManager(mToolBox, name), latPar(pLatPar)
     {
     }
-
-#ifdef DEVICE_REGION
-    DEVICE_FUNCTION
-    AbstractField(const AbstractField &other) : mToolBox(other.mToolBox), mManager(other.mManager), latPar(other.latPar)
-    {
-    }
-
-    DEVICE_FUNCTION
-    ~AbstractField() {}
-#endif
 
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {

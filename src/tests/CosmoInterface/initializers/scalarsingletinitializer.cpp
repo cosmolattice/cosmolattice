@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ScalarSingletInitializer> test;
+  TempLat::TDDContainer<TempLat::ScalarSingletInitializerTester> test;
 }

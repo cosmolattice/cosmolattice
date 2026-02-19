@@ -11,23 +11,20 @@
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 #include "TempLat/parallel/mpi/mpitags.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesianexchange.h"
-#include "TempLat/lattice/memory/jumpsholder.h"
 #include "TempLat/lattice/memory/memoryblock.h"
 #include "TempLat/lattice/ghostcells/ghostsubarraymap.h"
 
 #include "TempLat/parallel/device_iteration.h"
 #include "TempLat/parallel/device_memory.h"
 
-// #define IEXCH
-
 namespace TempLat
 {
   MakeException(GhostUpdaterException);
 
   /** @brief A class which updates the ghost cells in our total memory block.
-   * By having the JumpsHolder, this class knows what is the ghostDepth.
+   * By having the LayoutStruct, this class knows what is the ghostDepth.
    *
-   * Has one public method, update<T>(T* ptr), which, based on JumpsHolder,
+   * Has one public method, update<T>(T* ptr), which, based on LayoutStruct,
    * uses the associated subarrays and performs the exchange up and down
    * in all dimensions, through calls to MPICartesianExchange with the
    * appriate datatypes for the subarrays.
@@ -39,11 +36,11 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    GhostUpdater(MPICartesianExchange exchange, JumpsHolder<NDim> jumpsHolder)
-        : mExchange(exchange), mJumpsHolder(jumpsHolder), mGhostDepth(mJumpsHolder.getPadding()[0][0]),
-          mGhostSubarrayMap(mJumpsHolder, mGhostDepth)
+    GhostUpdater(MPICartesianExchange exchange, LayoutStruct<NDim> layout)
+        : mExchange(exchange), mLayout(layout), mGhostDepth(mLayout.getNGhosts()),
+          mGhostSubarrayMap(mLayout, mGhostDepth)
     {
-      auto full_sizes = mJumpsHolder.getSizesInMemory();
+      auto full_sizes = mLayout.getSizesInMemory();
       for (size_t i = 0; i < NDim; ++i) {
         if (mGhostDepth > full_sizes[i]) {
           throw GhostUpdaterException("Ghost depth is larger than local size in dimension " + std::to_string(i) + ":",
@@ -52,7 +49,7 @@ namespace TempLat
       }
       /* verify that */
       bool allSame = true;
-      for (auto &&it : mJumpsHolder.getPadding()) {
+      for (auto &&it : mLayout.getPadding()) {
         allSame = allSame && mGhostDepth == it[0] && mGhostDepth == it[1];
       }
       if (!allSame)
@@ -77,7 +74,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICartesianExchange mExchange;
-    JumpsHolder<NDim> mJumpsHolder;
+    LayoutStruct<NDim> mLayout;
     ptrdiff_t mGhostDepth;
     GhostSubarrayMap<NDim> mGhostSubarrayMap;
 
@@ -97,10 +94,10 @@ namespace TempLat
     template <typename T> void update_forDimension_device(MemoryBlock<NDim, T> &block, size_t dimension)
     {
       // We will copy slabs of thickness ghostDepth in the dimension 'dimension'.
-      device::IdxArray<NDim> full_sizes = mJumpsHolder.getSizesInMemory();
+      device::IdxArray<NDim> full_sizes = mLayout.getSizesInMemory();
       for (size_t i = 0; i < NDim; ++i)
         full_sizes[i] += 2 * mGhostDepth;
-      device::IdxArray<NDim> slab_sizes = mJumpsHolder.getSizesInMemory();
+      device::IdxArray<NDim> slab_sizes = mLayout.getSizesInMemory();
       for (size_t i = 0; i < NDim; ++i)
         slab_sizes[i] += 2 * mGhostDepth;
       slab_sizes[dimension] = mGhostDepth;
@@ -200,48 +197,19 @@ namespace TempLat
     {
       auto *ptr = block.data();
 #ifdef HAVE_MPI
-#ifndef IEXCH
       mExchange.exchangeUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
                            /* base ptr is lower corner of all memory, including ghosts. */
                            /* send:
                             Don't jump to origin, but jump along the edge of dimension
                             to the point where we still have mGhostDepth until the end of
                             our *owned* memory (before the mGhostDepth hyper slices start) */
-                           ptr + (mJumpsHolder.getSizesInMemory()[dimension]) *
-                                     mJumpsHolder.getJumpsInMemoryOrder()[dimension],
+                           ptr + (mLayout.getSizesInMemory()[dimension]) * mLayout.stride(dimension),
                            /* receive: in origin, including ghosts. */
                            ptr);
       /* pointers: the same as above, but shifted by ghostDepth and ordering swapped. Yes. */
       mExchange.exchangeDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-                             ptr + mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension],
-                             ptr + (mGhostDepth + mJumpsHolder.getSizesInMemory()[dimension]) *
-                                       mJumpsHolder.getJumpsInMemoryOrder()[dimension]);
-#else
-      mExchange.IrecvUp(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-                        /* base ptr is lower corner of all memory, including ghosts. */
-                        /* send:
-                         Don't jump to origin, but jump along the edge of dimension
-                         to the point where we still have mGhostDepth until the end of
-                         our *owned* memory (before the mGhostDepth hyper slices start) */
-                        ptr + (mJumpsHolder.getSizesInMemory()[dimension]) *
-                                  mJumpsHolder.getJumpsInMemoryOrder()[dimension],
-                        /* receive: in origin, including ghosts. */
-                        ptr);
-      /* pointers: the same as above, but shifted by ghostDepth and ordering swapped. Yes. */
-      mExchange.IrecvDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-                          ptr + mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension],
-                          ptr + (mGhostDepth + mJumpsHolder.getSizesInMemory()[dimension]) *
-                                    mJumpsHolder.getJumpsInMemoryOrder()[dimension]);
-      /*Same as above*/
-      mExchange.IsendUp(
-          mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-          ptr + (mJumpsHolder.getSizesInMemory()[dimension]) * mJumpsHolder.getJumpsInMemoryOrder()[dimension], ptr);
-      mExchange.IsendDown(mGhostSubarrayMap.template getSubArray<T>(dimension), dimension,
-                          ptr + mGhostDepth * mJumpsHolder.getJumpsInMemoryOrder()[dimension],
-                          ptr + (mGhostDepth + mJumpsHolder.getSizesInMemory()[dimension]) *
-                                    mJumpsHolder.getJumpsInMemoryOrder()[dimension]);
-      mExchange.waitall();
-#endif
+                             ptr + mGhostDepth * mLayout.stride(dimension),
+                             ptr + (mGhostDepth + mLayout.getSizesInMemory()[dimension]) * mLayout.stride(dimension));
 #endif
     }
 
@@ -249,15 +217,15 @@ namespace TempLat
     template <typename T> void pUpdate_NOMPI(MemoryBlock<NDim, T> &block, ptrdiff_t dimension = 0)
     {
       // Get View to the full data
-      const auto ghostDepth = mJumpsHolder.getPadding()[0][0];
+      const auto ghostDepth = mLayout.getPadding()[0][0];
       for (size_t i = 0; i < NDim; ++i)
-        if (ghostDepth != mJumpsHolder.getPadding()[i][0] || ghostDepth != mJumpsHolder.getPadding()[i][1]) {
+        if (ghostDepth != mLayout.getPadding()[i][0] || ghostDepth != mLayout.getPadding()[i][1]) {
           throw GhostUpdaterException(
               "Can only work with identical padding at start and end of each dimension, not this.");
         }
       device::IdxArray<NDim> sizes;
       for (size_t i = 0; i < NDim; ++i)
-        sizes[i] = mJumpsHolder.getSizesInMemory()[i];
+        sizes[i] = mLayout.getSizesInMemory()[i];
       device::IdxArray<NDim> full_sizes{};
       for (size_t i = 0; i < NDim; ++i)
         full_sizes[i] = ghostDepth + sizes[i] + ghostDepth;
@@ -318,11 +286,16 @@ namespace TempLat
       }
     }
 
+  };
+
 #ifdef TEMPLATTEST
+  template <size_t NDim>
+  struct GhostUpdaterTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

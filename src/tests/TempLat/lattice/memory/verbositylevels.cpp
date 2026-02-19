@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::VerbosityLevels> test;
+  TempLat::TDDContainer<TempLat::VerbosityLevelsTester> test;
 }

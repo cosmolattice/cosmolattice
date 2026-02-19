@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::LayoutStruct<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::LayoutStructTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   const ptrdiff_t nGhost = 0;
   /* test the operator== */

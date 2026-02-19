@@ -67,13 +67,16 @@ namespace TempLat
 
   protected:
     hid_t mId;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class HDF5ObjectTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

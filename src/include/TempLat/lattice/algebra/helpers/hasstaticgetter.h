@@ -26,6 +26,14 @@ namespace TempLat
     static inline void Test(TDDAssertion &tdd);
   };
 #endif
+
+#ifdef TEMPLATTEST
+  class HasStaticGetterDummyTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

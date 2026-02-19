@@ -10,7 +10,6 @@
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanholder_test.h"
 namespace
 {
-  TempLat::TDDContainer<TempLat::KokkosFFTPlanHolder<3, float>> test;
-  TempLat::TDDContainer<TempLat::KokkosFFTPlanHolder<3, double>> test2;
+  TempLat::TDDContainer<TempLat::KokkosFFTPlanHolderTester> test;
 } // namespace
 #endif

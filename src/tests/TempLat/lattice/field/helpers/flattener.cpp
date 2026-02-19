@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Flattener> test;
+  TempLat::TDDContainer<TempLat::FlattenerTester> test;
 }

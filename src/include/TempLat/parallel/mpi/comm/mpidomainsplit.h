@@ -105,12 +105,15 @@ namespace TempLat
                                       " > ", mNDimensionsToSplit);
       }
     }
+  };
 
 #ifdef TEMPLATTEST
+  class MPIDomainSplitTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

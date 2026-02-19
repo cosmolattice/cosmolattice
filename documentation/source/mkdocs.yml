@@ -84,3 +84,7 @@ nav:
       - "Variables": "CosmoLattice/variables.md"
       - "Macros": "CosmoLattice/macros.md"
       - "Files": "CosmoLattice/files.md"
+  - Technical Notes:
+      - "Power spectra": "tech_notes/Power spectra.md"
+      - "Gravitational Waves": "tech_notes/Gravitational waves.md"
+      - "Gravitational Waves from U(1) Gauge Theories": "tech_notes/Gravitational waves from U(1) gauge theories.md"

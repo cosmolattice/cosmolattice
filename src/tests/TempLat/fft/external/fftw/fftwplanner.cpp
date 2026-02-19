@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTWPlanner<3>> test;
+  TempLat::TDDContainer<TempLat::FFTWPlannerTester> test;
 }

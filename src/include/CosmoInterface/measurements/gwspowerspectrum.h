@@ -95,6 +95,14 @@ namespace TempLat
   };
 #endif
 
+
+#ifdef TEMPLATTEST
+  class GWsPowerSpectrumMeasurerTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

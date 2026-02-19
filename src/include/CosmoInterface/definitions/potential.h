@@ -97,12 +97,15 @@ namespace TempLat
       return MakeSU2Doublet(a, deriv2ComponentFromNorm(model.potDerivNormSU2Doublet(n),
                                                        model.potDeriv2NormSU2Doublet(n), model.fldSU2Doublet(n), a));
     }
+  };
 
 #ifdef TEMPLATTEST
+  struct PotentialTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

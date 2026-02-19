@@ -7,10 +7,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-// inline void TempLat::FFTLibraryInterface::Test(TempLat::TDDAssertion& tdd) {
-
-//    tdd.verify( true );
-
-//}
+inline void TempLat::FFTSessionGuardTester::Test(TempLat::TDDAssertion& tdd) {
+  tdd.verify(true);
+}
 
 #endif

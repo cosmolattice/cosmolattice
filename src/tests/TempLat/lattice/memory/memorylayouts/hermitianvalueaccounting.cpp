@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::HermitianValueAccounting> test;
+  TempLat::TDDContainer<TempLat::HermitianValueAccountingTester> test;
 }

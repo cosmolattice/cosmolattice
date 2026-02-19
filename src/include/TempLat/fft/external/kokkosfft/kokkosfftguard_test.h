@@ -10,7 +10,7 @@
 // Verified, test passed: this does not compile, just the way we like it.
 // inline void ThisShouldNotCompile() { TempLat::KokkosFFTGuard guard; }
 
-inline void TempLat::KokkosFFTGuard::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::KokkosFFTGuardTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* ONLY when single unit, imperatively, because
    * the internals can only be called once per process.

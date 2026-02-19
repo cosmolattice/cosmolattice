@@ -7,12 +7,13 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <typename T> inline void TempLat::FFTMallocFree<T>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FFTMallocFreeTester::Test(TempLat::TDDAssertion &tdd)
 {
-  FFTMallocFree<T> mf;
-  FFTMallocFree<T>::free(FFTMallocFree<T>::malloc(128));
+  FFTMallocFree<double> mf;
+  FFTMallocFree<double>::free(FFTMallocFree<double>::malloc(128));
 
   tdd.verify(true);
 }
 
 #endif
+

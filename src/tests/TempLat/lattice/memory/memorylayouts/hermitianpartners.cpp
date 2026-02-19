@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::HermitianPartners<4>> test;
+  TempLat::TDDContainer<TempLat::HermitianPartnersTester<4>> test;
 }

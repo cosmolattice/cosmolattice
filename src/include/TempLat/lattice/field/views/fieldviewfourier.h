@@ -39,14 +39,6 @@ namespace TempLat
     using AbstractField<NDim, T>::mManager;
     using AbstractField<NDim, T>::mToolBox;
 
-#ifdef DEVICE_REGION
-    DEVICE_FUNCTION
-    FourierView(const FourierView &other) : AbstractField<NDim, T>(other), mView(other.mView) {}
-
-    DEVICE_FUNCTION
-    ~FourierView() {}
-#endif
-
     template <typename R> void operator=(R &&g) { this->assign(std::forward<R>(g)); }
 
     template <typename R> void assign(R &&g)
@@ -126,8 +118,6 @@ namespace TempLat
       return mView(idx...);
     }
 
-    virtual const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getFourierSpaceJumps(); }
-
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       switch (spaceType) {
@@ -194,10 +184,8 @@ namespace TempLat
     template <size_t __NDim, typename S> friend class Field;
 
   private:
-    DEVICE_FUNCTION
     FourierView(const AbstractField<NDim, T> &f) : AbstractField<NDim, T>(f)
     {
-#ifndef DEVICE_REGION
       if (mToolBox == nullptr) return;
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
 
@@ -206,7 +194,6 @@ namespace TempLat
 
       mView = mManager->template getNDView<complex<T>>(memorySizes);
       mRawView = mManager->template getRawView<complex<T>>();
-#endif
     }
 
     device::memory::NDViewUnmanaged<NDim, complex<T>> mView;
@@ -215,12 +202,16 @@ namespace TempLat
 
     device::IdxArray<NDim> memorySizes;
     device::array<device::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t _NDim, typename T>
+  struct FourierViewTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

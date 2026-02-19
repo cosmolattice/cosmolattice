@@ -17,9 +17,8 @@ namespace TempLat
 {
   MakeException(SessionGuardInstantiationException);
 
-  /** @brief A class which holds all the guards: fftw, pfft and mpi.
-   * Only one instance per process is allowed. Throws an exception if
-   * that condition is violated.
+  /** @brief A class which holds all the guards: fftw, other fft libraries and mpi.
+   * Only one instance per process is allowed. Throws an exception if that condition is violated.
    *
    * Unit test: ctest -R test-sessionguard
    **/
@@ -32,6 +31,9 @@ namespace TempLat
           mFFTSessionGuards(getFFTSessionGuards(verbose))
     {
     }
+
+    // Getter for testing purposes only. Allows tests to check the current instance counter.
+    static inline int GetInstanceCounter() { return InstanceCounter(); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -50,12 +52,15 @@ namespace TempLat
                                                  counter);
       return counter;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class SessionGuardTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <typename T> inline void TempLat::RadialProjectionRebinner<T>::Test(TempLat::TDDAssertion &tdd)
+template <typename T> inline void TempLat::RadialProjectionRebinnerTester<T>::Test(TempLat::TDDAssertion &tdd)
 {
 
   say << "See fcn/lattice/measuringtoolsIO/radialprojection_test.h\n";

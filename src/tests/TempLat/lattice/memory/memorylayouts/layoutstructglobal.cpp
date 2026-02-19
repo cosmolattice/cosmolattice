@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::LayoutStructGlobal<3>> test;
+  TempLat::TDDContainer<TempLat::LayoutStructGlobalTester<3>> test;
 }

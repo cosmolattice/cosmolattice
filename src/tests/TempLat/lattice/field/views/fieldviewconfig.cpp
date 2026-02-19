@@ -9,12 +9,12 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ConfigView<1, double>> test1;
-  TempLat::TDDContainer<TempLat::ConfigView<2, double>> test2;
-  TempLat::TDDContainer<TempLat::ConfigView<3, double>> test3;
-  TempLat::TDDContainer<TempLat::ConfigView<4, double>> test4;
-  TempLat::TDDContainer<TempLat::ConfigView<1, float>> test1f;
-  TempLat::TDDContainer<TempLat::ConfigView<2, float>> test2f;
-  TempLat::TDDContainer<TempLat::ConfigView<3, float>> test3f;
-  TempLat::TDDContainer<TempLat::ConfigView<4, float>> test4f;
+  TempLat::TDDContainer<TempLat::ConfigViewTester<1, double>> test1;
+  TempLat::TDDContainer<TempLat::ConfigViewTester<2, double>> test2;
+  TempLat::TDDContainer<TempLat::ConfigViewTester<3, double>> test3;
+  TempLat::TDDContainer<TempLat::ConfigViewTester<4, double>> test4;
+  TempLat::TDDContainer<TempLat::ConfigViewTester<1, float>> test1f;
+  TempLat::TDDContainer<TempLat::ConfigViewTester<2, float>> test2f;
+  TempLat::TDDContainer<TempLat::ConfigViewTester<3, float>> test3f;
+  TempLat::TDDContainer<TempLat::ConfigViewTester<4, float>> test4f;
 } // namespace

@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ComplexFieldOperator> test;
+  TempLat::TDDContainer<TempLat::ComplexFieldOperatorTester> test;
 }

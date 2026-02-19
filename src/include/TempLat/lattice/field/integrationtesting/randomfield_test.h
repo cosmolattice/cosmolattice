@@ -95,7 +95,6 @@ inline void TempLat::IntegrationTesting::RandomField::Test(TempLat::TDDAssertion
   say << "Testing C2R -> R2C with a random gaussian. Actually more a test of HermitianPartners and FFTNormalization "
          "than anything else.\n";
 
-  // The example case where PFFT fails if we allow for transposed complex layouts.
   testHelper<3>(tdd, 4, 0, 0);
   ////    return;
   //    bool goOn = true;

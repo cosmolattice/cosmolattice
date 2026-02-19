@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::SU2DoubletKernels> test;
+  TempLat::TDDContainer<TempLat::SU2DoubletKernelsTester> test;
 }

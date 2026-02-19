@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::device_kokkos::DeviceGuard> test;
+  TempLat::TDDContainer<TempLat::DeviceGuardTester> test;
 }

@@ -31,13 +31,16 @@ namespace TempLat
       return (pow(model.aI, 1 + model.alpha) * LatLapl<Model::NDim>((*model.fldGWs)(n)) +
               pow(model.aI, 1 + model.alpha) * 2. * (PITensor::totalTensor(model, n)));
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class GWsKernelsTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Averages> test;
+  TempLat::TDDContainer<TempLat::AveragesTester> test;
 }

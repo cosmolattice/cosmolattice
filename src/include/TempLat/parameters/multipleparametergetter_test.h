@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-template <typename T> inline void TempLat::MultipleParameterGetter<T>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MultipleParameterGetterTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   MultipleParameterGetter<int> mp;

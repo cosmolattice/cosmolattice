@@ -45,12 +45,16 @@ namespace TempLat
       }
       return count;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class ParenthesisStripperTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

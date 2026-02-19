@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::StaticWarning::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::StaticWarningTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   // uncomment if you are actually testing this thing. Comment otherwise, because you would see a warning every time

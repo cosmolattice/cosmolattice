@@ -22,10 +22,8 @@
 
 namespace TempLat
 {
-
-  /** @brief
-   * KokkosFFT abstracts away all of the initialization and finalization of its dependencies. Therefore, this guard does
-   * nothing. It is only here for symmetry with FFTW and PFFT.
+  /** @brief KokkosFFT abstracts away all of the initialization and finalization of its dependencies. Therefore, this
+   * guard does nothing. It is only here for symmetry with FFTW.
    *
    * Unit test: ctest -R test-kokkosguard
    **/
@@ -47,17 +45,20 @@ namespace TempLat
     KokkosFFTGuard(const KokkosFFTGuard &other) = delete;
     KokkosFFTGuard &operator=(const KokkosFFTGuard &other) = delete;
     KokkosFFTGuard &operator=(KokkosFFTGuard &&other) = delete;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   inline std::shared_ptr<FFTSessionGuard> getKokkosFFTSessionGuard(bool pVerbose = true)
   {
     return std::make_shared<KokkosFFTGuard>(pVerbose);
   }
+
+#ifdef TEMPLATTEST
+  class KokkosFFTGuardTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

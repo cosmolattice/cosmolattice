@@ -40,12 +40,16 @@ namespace TempLat
       while (x.back() == '0')
         x.pop_back();
     }
+  };
 
 #ifdef TEMPLATTEST
+  class PrettyToStringTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

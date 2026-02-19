@@ -100,12 +100,15 @@ namespace TempLat
     ptrdiff_t mN;
     double mNorm;
     int mType;
+  };
 
 #ifdef TEMPLATTEST
+  struct FFTNormalizationTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

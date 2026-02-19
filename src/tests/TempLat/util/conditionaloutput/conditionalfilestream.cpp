@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ConditionalFileStream> test;
+  TempLat::TDDContainer<TempLat::ConditionalFileStreamTester> test;
 }

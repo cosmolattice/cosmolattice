@@ -48,13 +48,16 @@ namespace TempLat
       // Returns kernel for the U(1) gauge fields' EOM:
       return normGrad * (LaplU1(a) - GradU1(a)) - normU1Source * U1Source(a);
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class U1KernelsTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

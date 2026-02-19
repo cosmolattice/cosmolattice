@@ -11,7 +11,7 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::KokkosFFTPlanner<3>> test;
+  TempLat::TDDContainer<TempLat::KokkosFFTPlannerTester> test;
 }
 
 #endif

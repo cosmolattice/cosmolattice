@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Potential> test;
+  TempLat::TDDContainer<TempLat::PotentialTester> test;
 }

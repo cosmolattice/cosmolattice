@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTWMemoryLayout<3>> test;
+  TempLat::TDDContainer<TempLat::FFTWMemoryLayoutTester> test;
 }

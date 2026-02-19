@@ -7,5 +7,5 @@
 // #include "TempLat/lattice/IO/HDF5/helpers/hdf5dataset.h"
 
 // namespace {
-//     TempLat::TDDContainer<TempLat::HDF5Dataset> test;
+//     TempLat::TDDContainer<TempLat::HDF5DatasetTester> test;
 // }

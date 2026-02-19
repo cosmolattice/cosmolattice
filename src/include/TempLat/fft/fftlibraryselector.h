@@ -13,9 +13,6 @@
 #ifndef NOFFT
 
 #ifdef HAVE_MPI
-#ifdef HAVE_PFFT
-#include "TempLat/fft/external/pfft/pfftinterface.h"
-#endif
 #ifdef HAVE_PARAFAFT
 #include "TempLat/fft/external/parafaft/parafaftinterface.h"
 #endif
@@ -66,10 +63,6 @@ namespace TempLat
     result.push_back(getFFTWSessionGuard(pVerbose));
 #ifdef HAVE_MPI
 
-#ifdef HAVE_PFFT
-    result.push_back(getPFFTSessionGuard(pVerbose));
-#endif
-
 #ifdef HAVE_KOKKOSFFT
     result.push_back(getKokkosFFTSessionGuard(pVerbose));
 #endif
@@ -91,17 +84,11 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     FFTLibrarySelector(MPICartesianGroup group, const device::IdxArray<NDim> &nGridPoints,
                        bool forbidTransposition = false)
-        : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints, true, false, false), madePlansFloat(false),
+        : mGroup(group), mNGridPoints(nGridPoints), mLayout(mNGridPoints), madePlansFloat(false),
           madePlansDouble(false), verbose(false)
     {
       /* here we take the decisions, although the decision to split the group has been made already. */
       [[maybe_unused]] const ptrdiff_t nDimSplit = group.getNumberOfDividedDimensions();
-
-#ifdef HAVE_PFFT
-      [[maybe_unused]] constexpr bool havePFFT = true;
-#else
-      [[maybe_unused]] constexpr bool havePFFT = false;
-#endif
 
 #ifdef HAVE_PARAFAFT
       [[maybe_unused]] constexpr bool haveParafaft = true;
@@ -115,7 +102,7 @@ namespace TempLat
       [[maybe_unused]] constexpr bool haveKOKKOSFFT = false;
 #endif
 
-      // Priority: Parafaft > PFFT > KokkosFFT > FFTW (when multi-dimensional split needed)
+      // Priority: Parafaft > KokkosFFT > FFTW (when multi-dimensional split needed)
 // MPI case
 #ifdef HAVE_MPI
 #ifdef HAVE_PARAFAFT
@@ -124,12 +111,6 @@ namespace TempLat
         backend = "Parafaft";
       } else
 #endif
-#ifdef HAVE_PFFT
-          if (havePFFT && nDimSplit > 1) {
-        theLibrary = std::make_shared<PFFTInterface<NDim>>();
-        backend = "PFFT";
-      } else
-#endif // HAVE_PFFT
 #endif // HAVE_MPI
       {
 #ifdef HAVE_KOKKOSFFT
@@ -163,9 +144,6 @@ namespace TempLat
     {
       ptrdiff_t result = FFTWInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #ifdef HAVE_MPI
-#ifdef HAVE_PFFT
-      result = PFFTInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
-#endif
 #ifdef HAVE_PARAFAFT
       result = ParafaftInterface<NDim>().getMaximumNumberOfDimensionsToDivide(nDimensions);
 #endif

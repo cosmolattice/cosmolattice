@@ -30,12 +30,15 @@ namespace TempLat
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianSU2Doublet(model, n) -
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivSU2Doublet(model, n);
     }
+  };
 
 #ifdef TEMPLATTEST
+  class SU2DoubletKernelsTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTWInterface<3>> test;
+  TempLat::TDDContainer<TempLat::FFTWInterfaceTester> test;
 }

@@ -77,12 +77,16 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
     int day, month, year, second, minute, hour;
+  };
 
 #ifdef TEMPLATTEST
+  class CStyleTimeTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

@@ -145,11 +145,6 @@ namespace TempLat
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
 
     LayoutStruct<NDim> mLayout;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <size_t NDim, typename T> auto CField(Field<NDim, T> f1, Field<NDim, T> f2)
@@ -157,6 +152,15 @@ namespace TempLat
     return ComplexField<NDim, T>(f1, f2);
   }
 
+
+#ifdef TEMPLATTEST
+template<size_t _NDim, typename T>
+  struct ComplexFieldTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

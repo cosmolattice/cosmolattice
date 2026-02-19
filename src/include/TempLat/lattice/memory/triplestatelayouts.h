@@ -5,23 +5,23 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2026
 
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryselector.h"
-#include "TempLat/lattice/memory/jumpsholder.h"
+#include "TempLat/lattice/memory/memorylayouts/layoutstructlocal.h"
+#include "TempLat/lattice/memory/memorylayouts/layoutstructglobal.h"
+#include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 
 namespace TempLat
 {
-
-  /** @brief A class which understands three layouts of the memory for one MPI task in a global exact hypercube.
-   * - receives the pre-FFT configuration space layout (usually padded in the last dimension to hold 2 * (N / 2 + 1 )
-   *entries.
-   * - receives the Fourier space layout (some fraction of the global N x N x ... x (N / 2 + 1) )
+  /** @brief A class which keeps three layouts of the memory for one MPI task in a global exact hypercube.
+   * - the pre-FFT configuration space layout (usually padded in the last dimension to hold 2 * (N / 2 + 1) entries.
+   * - the Fourier space layout (some fraction of the global N x N x ... x (N / 2 + 1) entries)
    * - third layout: the configuration space layout *with* ghost cells, *without* FFT padding.
    *   That is: some fraction of the ( g + N + g ) x ( g + N + g ) x ( g + N + g ) x ...
    *
-   * But the class doesn't do anything. Just compute the layouts.
+   * But the class itself doesn't do anything. Just computes the layouts.
    *
    * Unit test: ctest -R test-triplestatelayouts
    **/
@@ -29,59 +29,44 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    TripleStateLayouts(FFTLayoutStruct<NDim> fftLayout, ptrdiff_t nGhostCells)
+    TripleStateLayouts(FFTLayoutStruct<NDim> fftLayout, device::Idx nGhostCells)
         : mFFTLayout(fftLayout), mConfigSpaceWithGhosts_layout(device::IdxArray<NDim>{}, nGhostCells),
           mNGridPoints(fftLayout.getNGridPoints()), mNGhostCells(nGhostCells)
     {
-      measureFFTPadding();
-
-      /** FFT's memory layouts are given to us. Construct jumps without padding. */
-      mJumps_fftFourierSpace =
-          JumpsHolder<NDim>(mFFTLayout.fourierSpace, {{}}, 1
-                            /*2 atom size: complex! Ah, no, actually moved to pointers to std::complex, which is the
-                               atom now. So back to atom size 1 std::complex, as opposed to 2 double/float. */
-          );
-
-      device::array<device::array<ptrdiff_t, 2u>, NDim> tmpPadding{};
       // FFT padding for in-place c2r r2c (see https://fftw.org/fftw3_doc/Multi_002dDimensional-DFTs-of-Real-Data.html)
       // The padding is already included in the memory size of the FFTConfigurationSpace layout.
 
-      /** FFT's memory layouts are given to us. Construct jumps without padding. */
-      mJumps_fftConfigSpace = JumpsHolder<NDim>(mFFTLayout.configurationSpace, tmpPadding);
+      std::cout << "FFTLayoutStruct:\n" << mFFTLayout << "\n\n";
 
-      /** Config space memory layouts are given to us. Construct jumps without FFT padding, with ghost cells. */
-      /* first copy all the values, including those to be modified */
+      // Config space memory layouts are given to us. We need to construct the padding due to ghost cells.
+      // First, copy all the values, including those to be modified, then we fix the local sizes and padding.
       mConfigSpaceWithGhosts_layout = mFFTLayout.configurationSpace;
+      device::array<device::IdxArray<2>, NDim> configPadding{};
       device::IdxArray<NDim> localConfigSize{};
       for (size_t i = 0; i < NDim; ++i) {
-        tmpPadding[i][0] = mNGhostCells;
-        tmpPadding[i][1] = mNGhostCells;
-        localConfigSize[i] = mFFTLayout.configurationSpace.getLocalSizes()[i] - mFFTConfigSpacePadding[i];
+        configPadding[i][0] = mNGhostCells;
+        configPadding[i][1] = mNGhostCells;
+        localConfigSize[i] = mFFTLayout.configurationSpace.getLocalSizes()[i];
       }
       mConfigSpaceWithGhosts_layout.setLocalSizes(localConfigSize);
       mConfigSpaceWithGhosts_layout.setNGhosts(mNGhostCells);
-
-      /* hard-coded exact hypercube: same size in all dimensions. */
-      mJumps_configSpace = JumpsHolder<NDim>(mConfigSpaceWithGhosts_layout, tmpPadding);
+      mConfigSpaceWithGhosts_layout.setPadding(configPadding);
 
       mNecessaryMemoryAllocation = computeMemSize();
     }
 
-    ptrdiff_t getNGhosts() const { return mNGhostCells; }
+    device::Idx getNGhosts() const { return mNGhostCells; }
 
     friend std::ostream &operator<<(std::ostream &ostream, const TripleStateLayouts &tsl)
     {
       ostream << "TripleStateLayouts:\n  nDimensions: " << NDim << "\n  nGridPoints: " << tsl.mNGridPoints
-              << "\n  nGhostCells: " << tsl.mNGhostCells << "\n  fftConfigSpacePadding: " << tsl.mFFTConfigSpacePadding
+              << "\n  nGhostCells: " << tsl.mNGhostCells
+              << "\n  fftConfigSpacePadding: " << tsl.getFFTConfigSpaceLayout().getPadding()
               << "\n  necessaryMemoryAllocation: " << tsl.mNecessaryMemoryAllocation
               << "\n  mMemUsedFFTBothSpaces: " << tsl.mMemUsedFFTBothSpaces
               << "\n  memUsedConfigGhostSpace: " << tsl.mMemUsedConfigGhostSpace << "\n\n"
               << tsl.mFFTLayout << "\nconfigurationSpace:\n"
-              << tsl.mConfigSpaceWithGhosts_layout << "\njumps:"
-              << "\n  fftConfigSpace:\n"
-              << tsl.mJumps_fftConfigSpace << "\n  fftFourierSpace:\n"
-              << tsl.mJumps_fftFourierSpace << "\n  configSpace:\n"
-              << tsl.mJumps_configSpace;
+              << tsl.mConfigSpaceWithGhosts_layout;
       return ostream;
     }
 
@@ -93,7 +78,11 @@ namespace TempLat
 
     const auto &getConfigSpaceSizes() const { return mConfigSpaceWithGhosts_layout.getLocalSizes(); }
 
-    const JumpsHolder<NDim> &getConfigSpaceJumps() const { return mJumps_configSpace; }
+    const auto &getFFTConfigSpaceLayout() const { return mFFTLayout.configurationSpace; }
+
+    const auto &getFFTConfigSpaceStarts() const { return mFFTLayout.configurationSpace.getLocalStarts(); }
+
+    const auto &getFFTConfigSpaceSizes() const { return mFFTLayout.configurationSpace.getLocalSizes(); }
 
     const auto &getFourierSpaceLayout() const { return mFFTLayout.fourierSpace; }
 
@@ -101,31 +90,22 @@ namespace TempLat
 
     const auto &getFourierSpaceSizes() const { return mFFTLayout.fourierSpace.getLocalSizes(); }
 
-    const JumpsHolder<NDim> &getFourierSpaceJumps() const { return mJumps_fftFourierSpace; }
-
-    const JumpsHolder<NDim> &getFFTConfigSpaceJumps() const { return mJumps_fftConfigSpace; }
-
-    const ptrdiff_t &getNecessaryMemoryAllocation() const { return mNecessaryMemoryAllocation; }
+    const device::Idx &getNecessaryMemoryAllocation() const { return mNecessaryMemoryAllocation; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    FFTLayoutStruct<NDim> mFFTLayout;
+
+    const FFTLayoutStruct<NDim> mFFTLayout;
     LayoutStruct<NDim> mConfigSpaceWithGhosts_layout;
-    /** @brief Using ptrdiff_t's even though these numbers are positive definite. We want to be safe in subtractions. */
-    device::IdxArray<NDim> mNGridPoints;
-    ptrdiff_t mNGhostCells;
-    ptrdiff_t mMemUsedFFTBothSpaces;
-    ptrdiff_t mMemUsedConfigGhostSpace;
-    ptrdiff_t mNecessaryMemoryAllocation;
 
-    /** @brief The padding needed in configuration space when being passed to perform an FFT to Fourier space. */
-    device::IdxArray<NDim> mFFTConfigSpacePadding;
+    // Using device::Idx's even though these numbers are positive definite. We want to be safe in subtractions.
+    const device::IdxArray<NDim> mNGridPoints;
+    const device::Idx mNGhostCells;
+    device::Idx mMemUsedFFTBothSpaces;
+    device::Idx mMemUsedConfigGhostSpace;
+    device::Idx mNecessaryMemoryAllocation;
 
-    JumpsHolder<NDim> mJumps_fftConfigSpace;
-    JumpsHolder<NDim> mJumps_fftFourierSpace;
-    JumpsHolder<NDim> mJumps_configSpace;
-
-    ptrdiff_t computeMemSize()
+    device::Idx computeMemSize()
     {
       mMemUsedFFTBothSpaces = mFFTLayout.getMinimalMemorySize();
 
@@ -135,19 +115,16 @@ namespace TempLat
 
       return std::max(mMemUsedFFTBothSpaces, mMemUsedConfigGhostSpace);
     }
-
-    void measureFFTPadding()
-    {
-      for (size_t i = 0; i < NDim; ++i)
-        mFFTConfigSpacePadding[i] =
-            std::max((device::Idx)0, mFFTLayout.configurationSpace.getLocalSizes()[i] - mNGridPoints[i]);
-    }
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct TripleStateLayoutsTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

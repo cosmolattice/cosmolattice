@@ -108,11 +108,6 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename T>
@@ -134,6 +129,15 @@ namespace TempLat
   {
     return make_list_from_array(ListAverager<T>(instance, spaceType).compute());
   }
+
+#ifdef TEMPLATTEST
+template<typename T>
+  struct ListAveragerTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

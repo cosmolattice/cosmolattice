@@ -15,7 +15,6 @@
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getvectorsize.h"
-#include "TempLat/lattice/algebra/helpers/getjumps.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
@@ -44,11 +43,6 @@ namespace TempLat
       ConfirmSpace::apply(mR, i, newLayout, spaceType);
     }
 
-    inline auto getJumps() const
-    { // Don't need indexing for get jumps.
-      return GetJumps::apply(mR);
-    }
-
     /** For measurement objects. */
     inline auto getToolBox() const { return GetToolBox::get(mR); }
 
@@ -71,12 +65,16 @@ namespace TempLat
 
   protected:
     R mR;
+  };
 
 #ifdef TEMPLATTEST
+template<typename R>
+  struct ListUnaryOperatorTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

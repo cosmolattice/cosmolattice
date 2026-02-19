@@ -102,12 +102,15 @@ namespace TempLat
 #ifdef HAVE_MPI
     std::array<MPI_Request, 4> mRequests;
 #endif
+  };
 
 #ifdef TEMPLATTEST
+  class MPICartesianExchangeTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

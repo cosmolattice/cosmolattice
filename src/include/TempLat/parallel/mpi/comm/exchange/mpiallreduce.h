@@ -185,12 +185,15 @@ namespace TempLat
         say << "Hello world.\n This function is never called.\n";
       }
     }
+  };
 
 #ifdef TEMPLATTEST
+  class MPIAllReduceTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

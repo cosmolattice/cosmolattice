@@ -7,9 +7,10 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-template <size_t NDim> inline void TempLat::KokkosFFTPlanner<NDim>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::KokkosFFTPlannerTester::Test(TempLat::TDDAssertion &tdd)
 {
   tdd.verify(true);
 }
 
 #endif
+

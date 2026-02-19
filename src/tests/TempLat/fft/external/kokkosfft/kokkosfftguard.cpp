@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::KokkosFFTGuard> test;
+  TempLat::TDDContainer<TempLat::KokkosFFTGuardTester> test;
 }

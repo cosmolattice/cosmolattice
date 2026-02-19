@@ -10,7 +10,7 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::HDF5Attribute> test;
+  TempLat::TDDContainer<TempLat::HDF5AttributeTester> test;
 }
 
 #endif

@@ -7,13 +7,13 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::FFTLayoutStruct<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::FFTLayoutStructTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   /* only test the operator== */
-  FFTLayoutStruct<3> a({100, 100, 100}, true, false, false);
-  FFTLayoutStruct<3> b({100, 100, 100}, true, false, false);
-  FFTLayoutStruct<3> c({100, 100}, true, false, false);
-  FFTLayoutStruct<3> d({100, 100, 100}, true, false, false);
+  FFTLayoutStruct<3> a({100, 100, 100});
+  FFTLayoutStruct<3> b({100, 100, 100});
+  FFTLayoutStruct<3> c({100, 100});
+  FFTLayoutStruct<3> d({100, 100, 100});
 
   auto newSizes = d.configurationSpace.getLocalSizes();
   newSizes[1] = 2;

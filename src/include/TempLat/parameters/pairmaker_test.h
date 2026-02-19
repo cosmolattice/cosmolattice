@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-inline void TempLat::PairMaker::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::PairMakerTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   std::string w1("mouahaha"), w2("shampoo");

@@ -302,7 +302,7 @@ namespace TempLat
 
       const auto mLayout = toolBox->mLayouts.getConfigSpaceLayout();
 
-      if (dim == toolBox->mNDimensions - 1) // Last dimension, saved as a full rod.
+      if ((size_t)dim == toolBox->NDim - 1) // Last dimension, saved as a full rod.
       {
         // look at index 0 in the last dimension. The next nGrid[last dimension] points are stored continuously.
         coords.emplace_back(0);
@@ -350,17 +350,18 @@ namespace TempLat
           mDataset.writeSlices(sdata, subdims, offsets);
         } else {
           // Otherwise, we use GetEval to get the data point by point.
-          Kokkos::View<vType *, Kokkos::DefaultExecutionSpace> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
-          auto functor = DEVICE_CLASS_LAMBDA(size_t i)
+          device::memory::NDView<1, vType> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
+          auto functor = DEVICE_CLASS_LAMBDA(device::IdxArray<1> jdx)
           {
+            device::Idx i = jdx[0];
             device::apply(
                 [&](const auto &...idx) {
                   device_buf(i - memoryPos[dim]) = DoEval::eval(r, idx..., i);
                 },
                 subMemoryPos);
           };
-          Kokkos::parallel_for("SaveDimBufferFilling",
-                               Kokkos::RangePolicy(memoryPos[dim], memoryPos[dim] + subdims[dim]), functor);
+          device::iteration::foreach<1>("SaveDimBufferFilling", {memoryPos[dim]},
+                                        {memoryPos[dim] + (device::Idx)subdims[dim]}, functor);
 
           // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
           std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
@@ -382,13 +383,16 @@ namespace TempLat
 
     HDF5File mFile;
     HDF5Dataset mDataset;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class FileSaverHDF5Tester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif // HAVE_HDF5

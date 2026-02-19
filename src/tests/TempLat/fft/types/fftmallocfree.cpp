@@ -9,8 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTMallocFree<double>> test;
-#ifdef HAVE_FFTFLOAT
-  TempLat::TDDContainer<TempLat::FFTMallocFree<float>> test2;
-#endif
+  TempLat::TDDContainer<TempLat::FFTMallocFreeTester> test;
 } // namespace

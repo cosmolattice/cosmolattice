@@ -52,12 +52,15 @@ namespace TempLat
     double mRange;
     ptrdiff_t mNBins;
     ptrdiff_t mHighestBin;
+  };
 
 #ifdef TEMPLATTEST
+  class RadialBinComputerTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

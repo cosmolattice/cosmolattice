@@ -9,9 +9,9 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::SpatialCoordinate<1>> test1;
-  TempLat::TDDContainer<TempLat::SpatialCoordinate<2>> test2;
-  TempLat::TDDContainer<TempLat::SpatialCoordinate<3>> test3;
-  TempLat::TDDContainer<TempLat::SpatialCoordinate<4>> test4;
-  TempLat::TDDContainer<TempLat::SpatialCoordinate<5>> test5;
+  TempLat::TDDContainer<TempLat::SpatialCoordinateTester<1>> test1;
+  TempLat::TDDContainer<TempLat::SpatialCoordinateTester<2>> test2;
+  TempLat::TDDContainer<TempLat::SpatialCoordinateTester<3>> test3;
+  TempLat::TDDContainer<TempLat::SpatialCoordinateTester<4>> test4;
+  TempLat::TDDContainer<TempLat::SpatialCoordinateTester<5>> test5;
 } // namespace

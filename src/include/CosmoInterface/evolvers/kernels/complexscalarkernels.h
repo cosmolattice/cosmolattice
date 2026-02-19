@@ -28,13 +28,16 @@ namespace TempLat
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianCS(model, n) -
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivCS(model, n);
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class ComplexScalarKernelsTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

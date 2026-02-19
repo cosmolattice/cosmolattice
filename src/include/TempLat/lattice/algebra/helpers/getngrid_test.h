@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-inline void TempLat::GetNGrid::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::GetNGridTester::Test(TempLat::TDDAssertion &tdd)
 {
   struct MyTestOne {
     MyTestOne() : mToolBox(MemoryToolBox<3>::makeShared(32, 1)) {}

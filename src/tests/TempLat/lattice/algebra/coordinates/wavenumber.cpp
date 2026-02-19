@@ -9,9 +9,9 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::WaveNumber<1>> test1;
-  TempLat::TDDContainer<TempLat::WaveNumber<2>> test2;
-  TempLat::TDDContainer<TempLat::WaveNumber<3>> test3;
-  TempLat::TDDContainer<TempLat::WaveNumber<4>> test4;
-  TempLat::TDDContainer<TempLat::WaveNumber<5>> test5;
+  TempLat::TDDContainer<TempLat::WaveNumberTester<1>> test1;
+  TempLat::TDDContainer<TempLat::WaveNumberTester<2>> test2;
+  TempLat::TDDContainer<TempLat::WaveNumberTester<3>> test3;
+  TempLat::TDDContainer<TempLat::WaveNumberTester<4>> test4;
+  TempLat::TDDContainer<TempLat::WaveNumberTester<5>> test5;
 } // namespace

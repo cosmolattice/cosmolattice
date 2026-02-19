@@ -19,8 +19,8 @@ namespace TempLat
 
   /** @brief
    *  transitionMap: a map of the dimensions, for transposition in memory. E.g. {0, 1, 2, 3} is untransposed 4d, {1, 0,
-   *2, 3} is FFTW transposed. In other words, the entries in transitionMap are in line with the entries in
-   *localStarts/-Sizes, and their value indicates the physical-space dimension of that entry.
+   * 2, 3} is FFTW transposed. In other words, the entries in transitionMap are in line with the entries in
+   * localStarts/-Sizes, and their value indicates the physical-space dimension of that entry.
    *
    * Also, this class manages the sizes in memory!
    *
@@ -73,8 +73,64 @@ namespace TempLat
       return mTranspositionMap_memoryToGlobalSpace;
     }
 
+    device::array<device::IdxArray<2>, NDim> getPadding() const
+    {
+      const auto &result = getLocal().getPadding();
+      // Needs transposition.
+      device::array<device::IdxArray<2>, NDim> transposedResult;
+      for (size_t i = 0; i < NDim; ++i) {
+        device::Idx getPaddingIndex = mTranspositionMap_memoryToGlobalSpace.getForward(i);
+        transposedResult[i][0] = result[getPaddingIndex][0];
+        transposedResult[i][1] = result[getPaddingIndex][1];
+      }
+      return transposedResult;
+    }
+
+    /**
+     * @brief Return the sizes in memory, i.e. with transposition applied. This does NOT include padding, but only fixes
+     * the transposition.
+     *
+     * @return const ref to device::IdxArray<NDim> with the sizes.
+     */
     DEVICE_FORCEINLINE_FUNCTION
     const device::IdxArray<NDim> &getSizesInMemory() const { return mSizesInMemory; }
+
+    /**
+     * @brief Get the actual memory index of the origin (WITH PADDING)
+     *
+     * @return device::Idx giving the (linear) memory index of the origin.
+     */
+    device::Idx getOrigin() const
+    {
+      const auto &sizes = getSizesInMemory();
+      const auto &padding = getPadding();
+      device::Idx origin = 0;
+      device::Idx stride = 1;
+      for (device::Idx i = NDim - 1; i >= 0; --i) {
+        origin += padding[i][0] * stride;
+        stride *= sizes[i] + padding[i][0] + padding[i][1];
+      }
+      return origin;
+    }
+
+    /**
+     * @brief Mostly needed for debugging purposes, gets the stride in memory for a shift of 1 in the given
+     * dimension, with transposition taken into account. The difference to the memorySizes or localSizes is that this
+     * takes the padding into account.
+     *
+     * @param dim the dimension for which to compute the stride.
+     * @return device::Idx stride in memory for the given dimension.
+     */
+    device::Idx stride(size_t dim) const
+    {
+      const auto &sizes = getSizesInMemory();
+      const auto &padding = getPadding();
+      device::Idx result = 1;
+      for (size_t i = dim + 1; i < NDim; ++i) {
+        result *= sizes[i] + padding[i][0] + padding[i][1];
+      }
+      return result;
+    }
 
     /** @brief A dictionary for return values for memory to coordinate mapping. */
     struct CoordinateMapping {
@@ -139,7 +195,7 @@ namespace TempLat
     LayoutStructLocal<NDim> mLocal;
     TranspositionMap<NDim> mTranspositionMap_memoryToGlobalSpace;
     device::IdxArray<NDim> mSizesInMemory;
-    ptrdiff_t mNGhosts;
+    device::Idx mNGhosts;
 
     void adaptMemorySizesFromTranspositionMap()
     {
@@ -149,12 +205,15 @@ namespace TempLat
         mSizesInMemory[i] = mLocal.getLocalSizes()[getSizeIndex];
       }
     }
+  };
 
 #ifdef TEMPLATTEST
+  class CoordinateMappingTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

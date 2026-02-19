@@ -78,12 +78,16 @@ namespace TempLat
 
     R mR;
     T mT;
+  };
 
 #ifdef TEMPLATTEST
+template<typename R, typename T>
+  struct SU2DoubletBinaryOperatorTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

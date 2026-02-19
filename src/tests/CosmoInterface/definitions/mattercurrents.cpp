@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MatterCurrents> test;
+  TempLat::TDDContainer<TempLat::MatterCurrentsTester> test;
 }

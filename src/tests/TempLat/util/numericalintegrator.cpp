@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::NumericalIntegrator> test;
+  TempLat::TDDContainer<TempLat::NumericalIntegratorTester> test;
 }

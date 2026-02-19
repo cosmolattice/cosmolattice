@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::RadialBinComputer::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::RadialBinComputerTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   RadialBinComputer pc(1, 3, 4);

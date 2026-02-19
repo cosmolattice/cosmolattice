@@ -29,12 +29,16 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct SU2DoubletOperatorTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

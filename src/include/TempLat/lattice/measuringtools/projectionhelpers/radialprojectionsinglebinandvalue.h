@@ -104,12 +104,16 @@ namespace TempLat
 
     RadialProjectionSingleDatum<T> mBinInformation;
     RadialProjectionSingleDatum<T> mValueInformation;
+  };
 
 #ifdef TEMPLATTEST
+template<typename T>
+  struct RadialProjectionSingleBinAndValueTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MPICartesianGroup::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MPICartesianGroupTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   auto world = MPICommReference();

@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/ghostcells/ghoststatekeeper.h"
 #include "TempLat/lattice/memory/memoryblock.h"
@@ -285,12 +285,16 @@ namespace TempLat
       if (ptr1 != ptr2)
         throw MemoryManagerAccessOutOfBounds("pointer casting from double to complex failed:", ptr1, "!=", ptr2);
     }
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim, typename T>
+  struct MemoryManagerTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

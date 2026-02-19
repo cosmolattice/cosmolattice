@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::AveragerHelper<double, false>> test;
+  TempLat::TDDContainer<TempLat::AveragerHelperTester<double, false>> test;
 }

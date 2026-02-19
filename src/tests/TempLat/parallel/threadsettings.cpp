@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::ThreadSettings> test;
+  TempLat::TDDContainer<TempLat::ThreadSettingsTester> test;
 }

@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::StaticWarning> test;
+  TempLat::TDDContainer<TempLat::StaticWarningTester> test;
 }

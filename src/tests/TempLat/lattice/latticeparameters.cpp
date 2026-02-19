@@ -8,5 +8,5 @@
 #include "TempLat/lattice/latticeparameters_test.h"
 
 // namespace {
-//     TempLat::TDDContainer<TempLat::LatticeParameters> test;
+//     TempLat::TDDContainer<TempLat::LatticeParametersTester> test;
 // }

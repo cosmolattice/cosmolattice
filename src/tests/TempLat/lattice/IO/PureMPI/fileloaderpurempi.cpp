@@ -8,5 +8,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FileLoaderPureMPI<3>> test;
+  TempLat::TDDContainer<TempLat::FileLoaderPureMPITester<3>> test;
 }

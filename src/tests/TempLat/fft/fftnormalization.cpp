@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTNormalization<3>> test;
+  TempLat::TDDContainer<TempLat::FFTNormalizationTester> test;
 }

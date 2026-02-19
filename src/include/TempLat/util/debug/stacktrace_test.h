@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::Stacktrace::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::StacktraceTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   if (TDDRegister::isSingleUnitTest()) {

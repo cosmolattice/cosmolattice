@@ -31,11 +31,16 @@ namespace TempLat
   // }
   class StaticWarning
   {
+  };
+
 #ifdef TEMPLATTEST
+  class StaticWarningTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

@@ -77,12 +77,16 @@ namespace TempLat
   protected:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     R mR;
+  };
 
 #ifdef TEMPLATTEST
+template<typename R>
+  struct SU2DoubletUnaryOperatorTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

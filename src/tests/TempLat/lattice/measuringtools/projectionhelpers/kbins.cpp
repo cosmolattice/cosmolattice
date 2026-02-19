@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::KBins<double>> test;
+  TempLat::TDDContainer<TempLat::KBinsTester<double>> test;
 }

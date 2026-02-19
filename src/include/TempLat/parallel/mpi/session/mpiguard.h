@@ -17,13 +17,9 @@ namespace TempLat
   MakeException(MPIGuardInstantiationException);
 
   /** @brief A class which guards intialization and finalization of pure MPI.
-   * Only used by MPIGuard, which manually calls its destructor, but which also holds the FFTW and PFFT guards.
+   * Only used by SessionGuard, which manually calls its destructor, but which also holds the FFTW and other guards.
    *
-   * No public methods. What?!?? Yes. We made MPIGuard a friend,
-   * so it has access to private methods, and hence is the only thing
-   * in the world which can construct and hold an instance of FFTWGuard.
-   *
-   * Unit test: ctest -R test-mpiguardactualmpi
+   * Unit test: ctest -R test-mpiguard
    **/
   class MPIGuard
   {
@@ -105,6 +101,14 @@ namespace TempLat
 #endif
     }
 
+    /** @brief Get the current instance count. Used by tests to check if an instance is already active.
+     *  This is a test helper - production code should not rely on this.
+     */
+    static inline int GetInstanceCount()
+    {
+      return InstanceCounter(0);
+    }
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     int instanceProtectionKey;
@@ -128,12 +132,15 @@ namespace TempLat
                                              counter);
       return counter;
     }
+  };
 
 #ifdef TEMPLATTEST
+  class MPIGuardTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

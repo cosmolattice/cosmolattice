@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MPIDomainSplit::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MPIDomainSplitTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   tdd.verify(DoesNotThrow<MPIDomainSplitException>([]() {

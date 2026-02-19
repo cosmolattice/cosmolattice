@@ -45,13 +45,16 @@ namespace TempLat
     // Put all member variables and private methods here. These may change arbitrarily.
 
     hid_t attr_id;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class HDF5AttributeTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

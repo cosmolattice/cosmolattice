@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::RadialProjectionSingleBinAndValue<double>> test;
+  TempLat::TDDContainer<TempLat::RadialProjectionSingleBinAndValueTester<double>> test;
 }

@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::MemoryToolBox<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::MemoryToolBoxTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   MemoryToolBox<NDim> mtb(256, 2);
 

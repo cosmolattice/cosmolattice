@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Exception> test;
+  TempLat::TDDContainer<TempLat::ExceptionTester> test;
 }

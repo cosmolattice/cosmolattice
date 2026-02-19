@@ -49,11 +49,6 @@ namespace TempLat
     {
     }
 
-#ifdef DEVICE_REGION
-    DEVICE_FUNCTION
-    SU2FieldBase(const SU2FieldBase &other) : fs{{other.fs[0], other.fs[1], other.fs[2]}}, mLayout(other.mLayout) {}
-#endif
-
     DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t) const
     {
       return sqrt(T(1) - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2]));
@@ -151,15 +146,19 @@ namespace TempLat
     device::array<Field<NDim, T>, 3> fs;
     const device::memory::host_string mName;
     LayoutStruct<NDim> mLayout;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <size_t NDim, typename T> using SU2Field = SU2FieldBase<NDim, T>;
   // TODO: What is the point of this aliasing?
+
+#ifdef TEMPLATTEST
+template<size_t _NDim, typename T>
+  struct SU2FieldBaseTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

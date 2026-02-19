@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MemoryToolBox<3>> test;
+  TempLat::TDDContainer<TempLat::MemoryToolBoxTester<3>> test;
 }

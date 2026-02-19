@@ -10,7 +10,6 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/timer.h"
-#include "TempLat/lattice/memory/jumpsholder.h"
 #include "TempLat/lattice/memory/memoryblock.h"
 
 #include "TempLat/parallel/device_iteration.h"
@@ -27,7 +26,7 @@ namespace TempLat
    * And the rest will be history.
    *
    * ```
-   *  GhostBuster egon(JumpsHolder from, JumpsHolder to);
+   *  GhostBuster egon(LayoutStruct<NDim> from, LayoutStruct<NDim> to);
    *  egon(ptr);
    * ```
    *
@@ -43,26 +42,17 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    GhostBuster(const JumpsHolder<NDim> &from, const JumpsHolder<NDim> &to, bool verbose = false)
-        : mFrom(from), mTo(to),
-          // mDirection is positive, if we contract (i.e. remove ghosts)
-          // and negative if we expand (i.e. add ghosts) the memory.
-          mDirection(mFrom.toOrigin() + mFrom.getJumpsInMemoryOrder()[0] - mTo.toOrigin() -
-                     mTo.getJumpsInMemoryOrder()[0])
+    GhostBuster(const LayoutStruct<NDim> &from, const LayoutStruct<NDim> &to, bool verbose = false)
+        : mFrom(from), mTo(to)
     {
-      // In-place ghostbusting only works if the motion
-      // is in the same direction for all dimensions.
+      // In-place ghostbusting only works if the motion is in the same direction for all dimensions.
+      // So, we're going to determine this in the following.
 
-      if (mFrom.getJumpsInMemoryOrder()[NDim - 1] != 1)
-        throw GhostBusterOrderException(
-            "GhostBuster only works for memory layouts with jumps of 1 in the last dimension, not with this:",
-            mFrom.getJumpsInMemoryOrder(), " to ", mTo.getJumpsInMemoryOrder());
+      const auto from_padding = mFrom.getPadding();
+      const auto to_padding = mTo.getPadding();
 
-      auto from_padding = mFrom.getPadding();
-      auto to_padding = mTo.getPadding();
-
-      size_t originTo = mTo.toOrigin();
-      size_t originFrom = mFrom.toOrigin();
+      const size_t originTo = mTo.getOrigin();
+      const size_t originFrom = mFrom.getOrigin();
 
       size_t slab0SizeTo = 1;
       size_t slab0SizeFrom = 1;
@@ -87,8 +77,8 @@ namespace TempLat
         ss << "GhostBuster only works for in-place reshuffling of memory, or "
            << "expanding/contracting in the same direction. "
            << "This is not the case for these layouts: "
-           << "\norigins  from: " << mFrom.toOrigin()         //
-           << "\n           to: " << mTo.toOrigin()           //
+           << "\norigins  from: " << mFrom.getOrigin()        //
+           << "\n           to: " << mTo.getOrigin()          //
            << "\nSlabSize from: " << slab0SizeFrom            //
            << "\n           to: " << slab0SizeTo              //
            << "\npadding  from: " << mFrom.getPadding()       //
@@ -126,8 +116,15 @@ namespace TempLat
 
   public:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    JumpsHolder<NDim> mFrom, mTo;
-    ptrdiff_t mDirection;
+
+    LayoutStruct<NDim> mFrom, mTo;
+
+    /**
+     * @brief mDirection is positive, if we contract (i.e. remove ghosts) and negative if we expand (i.e. add ghosts)
+     * the memory.
+     *
+     */
+    device::Idx mDirection;
 
     template <typename T> void bustTheGhosts(MemoryBlock<NDim, T> &block)
     {
@@ -219,51 +216,16 @@ namespace TempLat
       block.flagHostMirrorOutdated();
     }
 
-  private:
-    template <typename T> void bustTheGhosts_CPU(T *ptr, ptrdiff_t memSize)
-    {
-      recursor<T>(mFrom.getSizesInMemory().data(), ptr + mFrom.toOrigin(), mFrom.getJumpsInMemoryOrder().data(),
-                  ptr + mTo.toOrigin(), mTo.getJumpsInMemoryOrder().data(), 0, ptr + memSize);
-    }
-
-    template <typename T>
-    void recursor(const ptrdiff_t *layout, T *fromPtr, const ptrdiff_t *fromJumps, T *toPtr, const ptrdiff_t *toJumps,
-                  ptrdiff_t thisDim, T *endPtr)
-    {
-      if (thisDim < (ptrdiff_t)NDim - 1) {
-        ptrdiff_t iStart = mDirection < 0 ? (*layout) - 1 : 0;
-        ptrdiff_t iEnd = mDirection < 0 ? -1 : *layout;
-        ptrdiff_t di = mDirection < 0 ? -1 : 1;
-
-        for (ptrdiff_t i = iStart; mDirection * i < mDirection * iEnd; i += di) {
-          // say << "recursor dim " << thisDim << " i " << i << " jump: " << i * (*fromJumps) << "\n";
-          recursor<T>(layout + 1, fromPtr + i * (*fromJumps), fromJumps + 1, toPtr + i * (*toJumps), toJumps + 1,
-                      thisDim + 1, endPtr);
-        }
-      } else { /* move the rods */
-               /* who're you gonna call? */
-        // say << "forward - Moving " << *layout << " to " << toPtr << " end point " << (toPtr + *layout * sizeof(T))
-        //     << " from " << fromPtr << " end point " << (fromPtr + *layout * sizeof(T)) << " Correct? "
-        //     << (mDirection * (ptrdiff_t)toPtr <= mDirection * (ptrdiff_t)fromPtr ? "YES" : "NO") << "\n";
-#ifdef CHECKBOUNDS
-        if (mDirection * (ptrdiff_t)toPtr > mDirection * (ptrdiff_t)fromPtr)
-          throw GhostBusterOrderException("recursor: Overwriting valid memory in GhostBuster - the orders are wrong.",
-                                          toPtr, mDirection < 0 ? " < " : " > ", fromPtr);
-
-        if (toPtr + *layout > endPtr || fromPtr + *layout > endPtr) {
-          throw GhostBusterBoundsException("Detected memory access out of bounds. End pointer: ", endPtr,
-                                           ", but write at end", toPtr + *layout, "and read at end", fromPtr + *layout);
-        }
-#endif
-        std::memmove(toPtr, fromPtr, *layout * sizeof(T));
-      }
-    }
+  };
 
 #ifdef TEMPLATTEST
+  template <size_t NDim>
+  struct GhostBusterTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

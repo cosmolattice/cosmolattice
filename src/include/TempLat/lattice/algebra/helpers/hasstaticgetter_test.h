@@ -18,7 +18,7 @@ namespace TempLat
   };
 } // namespace TempLat
 
-inline void TempLat::HasStaticGetterDummy::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::HasStaticGetterDummyTester::Test(TempLat::TDDAssertion &tdd)
 {
   static_assert(HasStaticGetter<MyClass> == true);
 

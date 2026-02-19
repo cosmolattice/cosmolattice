@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::SU2DoubletOperator<3>> test;
+  TempLat::TDDContainer<TempLat::SU2DoubletOperatorTester<3>> test;
 }

@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::RadialProjectionRebinner<double>> test;
+  TempLat::TDDContainer<TempLat::RadialProjectionRebinnerTester<double>> test;
 }

@@ -5,7 +5,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
+// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include <iomanip>
 #include <sstream>
@@ -87,12 +87,15 @@ namespace TempLat
 
       return {{boxMullerR * device::cos(boxMullerTheta), boxMullerR * device::sin(boxMullerTheta)}};
     }
+  };
 
 #ifdef TEMPLATTEST
+  class RandomGaussianTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -52,12 +52,16 @@ namespace TempLat
   private:
     /** @brief Only one static method. No instantiation. */
     RadialProjectionRebinner() {}
+  };
 
 #ifdef TEMPLATTEST
+template<typename T>
+  struct RadialProjectionRebinnerTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

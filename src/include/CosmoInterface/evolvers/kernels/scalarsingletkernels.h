@@ -31,13 +31,16 @@ namespace TempLat
       return (pow(model.aI, 1 + model.alpha) * LatLapl<Model::NDim>(model.fldS(n)) -
               pow(model.aI, 3 + model.alpha) * Potential::derivS(model, n));
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class ScalarSingletKernelsTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::Factorize::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FactorizeTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   tdd.verify(DoesNotThrow<FactorizationFailed>([]() {

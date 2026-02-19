@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::FFTWPlanner<NDim>::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
+inline void TempLat::FFTWPlannerTester::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
 
 #endif
+

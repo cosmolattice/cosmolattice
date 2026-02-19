@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FileToJSON> test;
+  TempLat::TDDContainer<TempLat::FileToJSONTester> test;
 }

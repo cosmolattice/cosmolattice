@@ -89,11 +89,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     GetString() {}
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   /** @brief Enable simple operator<< for all objects with a toString method.
@@ -105,6 +100,14 @@ namespace TempLat
     ostream << obj.toString();
     return ostream;
   }
+
+#ifdef TEMPLATTEST
+  class GetStringTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

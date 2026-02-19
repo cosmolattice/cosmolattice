@@ -9,5 +9,5 @@
 
 namespace
 {
-  // TempLat::TDDContainer<TempLat::FileSaverPureMPI> test;
+  // TempLat::TDDContainer<TempLat::FileSaverPureMPITester> test;
 }

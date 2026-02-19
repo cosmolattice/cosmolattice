@@ -75,12 +75,15 @@ namespace TempLat
       stream << "Base address: " << StacktracePtrToFileAddress() << "\n";
       value = stream.str();
     }
+  };
 
 #ifdef TEMPLATTEST
+  class StacktraceTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -121,12 +121,15 @@ namespace TempLat
       mBlock.pushHostView(); // make sure the data is pushed to the device
     }
 #endif
+  };
 
 #ifdef TEMPLATTEST
+  struct FFTWPlanHolderTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

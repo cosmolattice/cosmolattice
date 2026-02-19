@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::CStyleTime> test;
+  TempLat::TDDContainer<TempLat::CStyleTimeTester> test;
 }

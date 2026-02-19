@@ -114,12 +114,15 @@ namespace TempLat
       mPlans.execute_c2r(fourier_view, config_view);
       device::iteration::fence();
     }
+  };
 
 #ifdef TEMPLATTEST
+  struct KokkosFFTPlanHolderTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

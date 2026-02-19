@@ -8,5 +8,5 @@
 #include "TempLat/lattice/IO/fileio_test.h"
 
 // namespace {
-//     TempLat::TDDContainer<TempLat::FileIO> test;
+//     TempLat::TDDContainer<TempLat::FileIOTester> test;
 // }

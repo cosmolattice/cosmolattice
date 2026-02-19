@@ -9,5 +9,5 @@
 #include "CosmoInterface/abstractmodel_test.h"
 
 // namespace {
-//     TempLat::TDDContainer<TempLat::AbstractModel> test;
+//     TempLat::TDDContainer<TempLat::AbstractModelTester> test;
 // }

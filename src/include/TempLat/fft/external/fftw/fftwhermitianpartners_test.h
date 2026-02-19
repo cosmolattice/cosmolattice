@@ -9,15 +9,16 @@
 
 #include "TempLat/lattice/memory/memorylayouts/hermitianpartners.h"
 
-template <size_t NDim> inline void TempLat::FFTWHermitianPartners<NDim>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FFTWHermitianPartnersTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
-  device::IdxArray<NDim> grid{};
+  device::IdxArray<1> grid{};
   for (auto &val : grid)
     val = 128;
-  HermitianPartners<NDim> hermitianPartners = FFTWHermitianPartners<NDim>::create(grid);
+  HermitianPartners<1> hermitianPartners = FFTWHermitianPartners<1>::create(grid);
 
   tdd.verify(hermitianPartners.getMode() == TempLat::HermitianPartnersMode::fftw);
 }
 
 #endif
+

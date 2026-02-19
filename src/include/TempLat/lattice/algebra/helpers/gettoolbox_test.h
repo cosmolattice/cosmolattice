@@ -10,7 +10,7 @@
 // #include "TempLat/lattice/field/field.h"
 // #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 
-inline void TempLat::GetToolBox::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::GetToolBoxTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   struct MyTestOne {

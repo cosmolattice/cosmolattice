@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTLayoutStruct<3>> test;
+  TempLat::TDDContainer<TempLat::FFTLayoutStructTester<3>> test;
 }

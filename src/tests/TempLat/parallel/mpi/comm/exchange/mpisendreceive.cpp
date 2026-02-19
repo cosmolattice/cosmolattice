@@ -9,5 +9,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::MPISendReceive> test;
+  TempLat::TDDContainer<TempLat::MPISendReceiveTester> test;
 }

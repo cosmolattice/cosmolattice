@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::Energies> test;
+  TempLat::TDDContainer<TempLat::EnergiesTester> test;
 }

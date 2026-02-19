@@ -10,7 +10,7 @@
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/util/ndloop.h"
 
-template <size_t NDim, typename T> inline void TempLat::FourierView<NDim, T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> inline void TempLat::FourierViewTester<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   const ptrdiff_t nGrid = 16, nGhost = 1;
 

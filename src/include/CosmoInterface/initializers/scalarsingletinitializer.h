@@ -49,13 +49,16 @@ namespace TempLat
         model.piS += model.piS0 / model.fStar / model.omegaStar;
       }
     }
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  struct ScalarSingletInitializerTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

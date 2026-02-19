@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::FloatToString::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FloatToStringTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(FloatToString::format(0.01) == std::string("0.01"));

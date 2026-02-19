@@ -83,13 +83,16 @@ namespace TempLat
   private:
     bool alreadyClosed;
     // Put all member variables and private methods here. These may change arbitrarily.
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
+
+#ifdef TEMPLATTEST
+  class HDF5GroupTester
+  {
+  public:
+    static inline void Test(TDDAssertion &tdd);
+  };
+#endif
 } // namespace TempLat
 
 #endif

@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::RunParameters<double>> test;
+  TempLat::TDDContainer<TempLat::RunParametersTester<double>> test;
 }

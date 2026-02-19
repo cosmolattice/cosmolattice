@@ -9,7 +9,7 @@
 
 #include "TempLat/util/namedtmpfile.h"
 
-inline void TempLat::FileToString::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FileToStringTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   NamedTmpFile ntf;

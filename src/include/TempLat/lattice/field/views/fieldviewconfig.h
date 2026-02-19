@@ -65,20 +65,6 @@ namespace TempLat
       mRawView = mManager->getRawView();
     }
 
-    // TODO: Remove
-#ifdef DEVICE_REGION
-    DEVICE_FUNCTION
-    ConfigView(const ConfigView &other)
-        : AbstractField<NDim, T>(other), mLayout(other.mLayout), mView(other.mView), mRawView(other.mRawView),
-          memorySizes(other.memorySizes), localSlicing(other.localSlicing),
-          mDisableFFTBlocking(other.mDisableFFTBlocking)
-    {
-    }
-
-    DEVICE_FUNCTION
-    ~ConfigView() {}
-#endif
-
     DEVICE_FORCEINLINE_FUNCTION
     auto getView() const { return mView; }
 
@@ -118,8 +104,6 @@ namespace TempLat
     {
       return mView(idx...);
     }
-
-    const JumpsHolder<NDim> &getJumps() const { return mToolBox->mLayouts.getConfigSpaceJumps(); }
 
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
@@ -182,12 +166,16 @@ namespace TempLat
     device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
 
     bool mDisableFFTBlocking;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t _NDim, typename T>
+  struct ConfigViewTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

@@ -47,12 +47,15 @@ namespace TempLat
     ptrdiff_t mDimension;
     int mUpperNeighbourRank;
     int mLowerNeighbourRank;
+  };
 
 #ifdef TEMPLATTEST
+  class MPICartesianNeighboursSingleDimensionTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

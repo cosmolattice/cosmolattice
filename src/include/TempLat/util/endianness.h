@@ -36,12 +36,16 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     bool mIsLittleEndian, mIsBigEndian;
+  };
 
 #ifdef TEMPLATTEST
+  class EndiannessTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
+
 } // namespace TempLat
 
 #endif

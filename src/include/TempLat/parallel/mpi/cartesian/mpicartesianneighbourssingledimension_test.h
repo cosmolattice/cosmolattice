@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::MPICartesianNeighboursSingleDimension::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::MPICartesianNeighboursSingleDimensionTester::Test(TempLat::TDDAssertion &tdd)
 {
 
   /* sorry, wouldn't know what cross checks to do for this thing.

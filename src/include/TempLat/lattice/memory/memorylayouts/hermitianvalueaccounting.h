@@ -42,12 +42,15 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     ptrdiff_t mRealCount;
     ptrdiff_t mImaginaryCount;
+  };
 
 #ifdef TEMPLATTEST
+  class HermitianValueAccountingTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

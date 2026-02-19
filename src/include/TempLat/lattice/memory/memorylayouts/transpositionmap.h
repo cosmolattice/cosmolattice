@@ -83,12 +83,16 @@ namespace TempLat
     /* From C to D means that entry at position 0 in C is at position mFromCtoD[0] in D. */
     device::IdxArray<NDim> mFromAtoB;
     device::IdxArray<NDim> mFromBtoA;
+  };
 
 #ifdef TEMPLATTEST
+template<size_t NDim>
+  struct TranspositionMapTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif
