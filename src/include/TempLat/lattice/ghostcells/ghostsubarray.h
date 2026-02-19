@@ -81,11 +81,16 @@ namespace TempLat
 #endif
     std::shared_ptr<MPI_Datatype> mSubarrayMPIDataType;
 
+  };
+
 #ifdef TEMPLATTEST
+  template <size_t NDim>
+  struct GhostSubarrayTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

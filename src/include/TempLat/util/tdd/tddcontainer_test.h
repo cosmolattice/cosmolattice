@@ -7,6 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <typename T> inline void TempLat::TDDContainer<T>::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
+template <typename T> inline void TempLat::TDDContainerTester<T>::Test(TempLat::TDDAssertion &tdd) { tdd.verify(true); }
 
 #endif

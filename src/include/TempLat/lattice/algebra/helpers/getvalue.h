@@ -79,11 +79,15 @@ namespace TempLat
 
     GetValue() = delete;
 
+  };
+
 #ifdef TEMPLATTEST
+  struct GetValueTester
+  {
   public:
     template <typename T> static inline void Test(T &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

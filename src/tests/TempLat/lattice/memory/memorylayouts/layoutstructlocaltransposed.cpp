@@ -10,5 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::LayoutStructLocalTransposed<3>> test;
+  TempLat::TDDContainer<TempLat::CoordinateMappingTester> test;
 }

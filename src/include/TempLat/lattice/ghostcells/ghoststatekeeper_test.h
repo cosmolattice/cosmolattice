@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-inline void TempLat::GhostStateKeeper::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::GhostStateKeeperTester::Test(TempLat::TDDAssertion &tdd)
 {
   GhostStateKeeper gsk;
   gsk.setUpToDate();

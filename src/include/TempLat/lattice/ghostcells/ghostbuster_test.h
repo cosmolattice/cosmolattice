@@ -164,7 +164,7 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
 }
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
-template <size_t NDim> inline void TempLat::GhostBuster<NDim>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim> inline void TempLat::GhostBusterTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
   // Test the ghostbuster on a single node.
   {

@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-template <size_t NDim> inline void TempLat::LayoutStructLocalTransposed<NDim>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::CoordinateMappingTester::Test(TempLat::TDDAssertion &tdd)
 {
   /* test the operator== */
   LayoutStructLocalTransposed<3> a({0, 0, 0}, 0);

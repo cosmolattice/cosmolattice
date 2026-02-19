@@ -115,11 +115,15 @@ namespace TempLat
       return Total(i, 1, Model::NDim, Total(b, 1, 3, pow<2>(model.piSU2(a)(i).SU2LieAlgebraGet(b))));
     }
 
+  };
+
 #ifdef TEMPLATTEST
+  class FieldFunctionalsTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 
 } // namespace TempLat
 

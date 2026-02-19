@@ -10,6 +10,5 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FFTWPlanHolder<3, float>> test;
-  TempLat::TDDContainer<TempLat::FFTWPlanHolder<3, double>> test2;
+  TempLat::TDDContainer<TempLat::FFTWPlanHolderTester> test;
 } // namespace

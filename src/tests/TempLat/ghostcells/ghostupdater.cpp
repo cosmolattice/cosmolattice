@@ -9,10 +9,10 @@
 
 namespace
 {
-  // TempLat::TDDContainer<TempLat::GhostUpdater<1>> test1;
-  TempLat::TDDContainer<TempLat::GhostUpdater<2>> test2;
-  TempLat::TDDContainer<TempLat::GhostUpdater<3>> test3;
-  TempLat::TDDContainer<TempLat::GhostUpdater<4>> test4;
-  TempLat::TDDContainer<TempLat::GhostUpdater<5>> test5;
-  TempLat::TDDContainer<TempLat::GhostUpdater<6>> test6;
+  // TempLat::TDDContainer<TempLat::GhostUpdaterTester<1>> test1;
+  TempLat::TDDContainer<TempLat::GhostUpdaterTester<2>> test2;
+  TempLat::TDDContainer<TempLat::GhostUpdaterTester<3>> test3;
+  TempLat::TDDContainer<TempLat::GhostUpdaterTester<4>> test4;
+  TempLat::TDDContainer<TempLat::GhostUpdaterTester<5>> test5;
+  TempLat::TDDContainer<TempLat::GhostUpdaterTester<6>> test6;
 } // namespace

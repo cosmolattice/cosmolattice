@@ -9,7 +9,7 @@
 
 #include "TempLat/fft/external/fftw/fftwinterface.h"
 
-template <size_t __NDim> inline void TempLat::FFTWMemoryLayout<__NDim>::Test(TempLat::TDDAssertion &tdd)
+inline void TempLat::FFTWMemoryLayoutTester::Test(TempLat::TDDAssertion &tdd)
 {
   MPICommReference world;
 

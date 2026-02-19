@@ -286,11 +286,16 @@ namespace TempLat
       }
     }
 
+  };
+
 #ifdef TEMPLATTEST
+  template <size_t NDim>
+  struct GhostUpdaterTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif

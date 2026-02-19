@@ -9,7 +9,7 @@
 
 #include "TempLat/util/rangeiteration/tagliteral.h"
 
-template <typename T> inline void TempLat::GetValue::Test(T &tdd)
+template <typename T> inline void TempLat::GetValueTester::Test(T &tdd)
 {
   tdd.verify(GetValue::get(Tag<1>(), 0, 1) == 1);
   tdd.verify(GetValue::get(Tag<1>()) == 1);

@@ -46,11 +46,16 @@ namespace TempLat
       return mSubArrays[dataType][dimension];
     }
 
+  };
+
 #ifdef TEMPLATTEST
+  template <size_t NDim>
+  struct GhostSubarrayMapTester
+  {
   public:
     static inline void Test(TDDAssertion &tdd);
-#endif
   };
+#endif
 } // namespace TempLat
 
 #endif
