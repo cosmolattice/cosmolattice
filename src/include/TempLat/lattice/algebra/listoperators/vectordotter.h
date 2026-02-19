@@ -36,7 +36,8 @@ namespace TempLat
     DEVICE_FUNCTION
     VectorDotter(const VectorDotter &other) : BinaryOperator<R, T>(other.mR, other.mT) {}
 
-    static_assert(R::getVectorSize() == T::getVectorSize(), "VectorDotter: R and T must have the same vector size.");
+    static_assert(std::decay_t<R>::getVectorSize() == std::decay_t<T>::getVectorSize(),
+                  "VectorDotter: R and T must have the same vector size.");
 
     template <typename... IDX>
       requires requires(std::decay_t<R> r, std::decay_t<T> t, IDX... idx) {
@@ -80,19 +81,19 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-    static constexpr size_t mVectorSize = R::getVectorSize();
+    static constexpr size_t mVectorSize = std::decay_t<R>::getVectorSize();
   };
 
-  template <typename R, typename T> VectorDotter<R, T> dot(R &r, T &t) { return VectorDotter<R, T>(r, t); }
+  template <typename R, typename T> VectorDotter<R, T> dot(R r, T t) { return VectorDotter<R, T>(r, t); }
 
   template <typename R>
     requires HasVectorGetMethod<R>
-  auto norm2(const R &r)
+  auto norm2(R r)
   {
     return VectorDotter<R, R>(r, r);
   }
 
-  template <typename R> auto norm(const R &r) { return sqrt(norm2(r)); }
+  template <typename R> auto norm(R r) { return sqrt(norm2(r)); }
 } // namespace TempLat
 
 #endif

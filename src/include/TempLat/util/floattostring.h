@@ -9,6 +9,8 @@
 
 #include "TempLat/util/stringtrimmer.h"
 
+#include <cstring>
+
 namespace TempLat
 {
   /** @brief A class which holds one static method (format) which returns

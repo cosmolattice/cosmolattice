@@ -15,6 +15,7 @@
 
 namespace TempLat
 {
+  MakeException(FileIOException);
 
   /** @brief A class which wraps HDF5 file saving and loading.
    *
@@ -32,36 +33,58 @@ namespace TempLat
       requires HasStaticGetter<typename std::decay_t<R>>
     void save(R &&r)
     {
+#ifdef HAVE_HDF5
       using nakedR = std::decay_t<R>;
       for_in_range<number_to_skip_as_tuple<nakedR>::value, nakedR::size>(
           [&](auto i) { save(nakedR::Getter::get(r, i)); });
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
     template <class R>
       requires(!HasStaticGetter<typename std::decay_t<R>>)
     void save(R &&r)
     {
+#ifdef HAVE_HDF5
       saver.save(r);
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
     template <class R>
       requires HasStaticGetter<typename std::decay_t<R>>
     void load(R &&r)
     {
+#ifdef HAVE_HDF5
       using nakedR = std::decay_t<R>;
       for_in_range<number_to_skip_as_tuple<nakedR>::value, nakedR::size>(
           [&](auto i) { load(nakedR::Getter::get(r, i)); });
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
     template <class R>
       requires(!HasStaticGetter<typename std::decay_t<R>>)
     void load(R &&r)
     {
+#ifdef HAVE_HDF5
       loader.load(r);
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
+#ifdef HAVE_HDF5
     FileSaverHDF5 saver;
     FileLoaderHDF5 loader;
+#endif
   };
 } // namespace TempLat
 

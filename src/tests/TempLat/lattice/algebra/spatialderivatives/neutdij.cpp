@@ -90,7 +90,7 @@ template <size_t NDim> inline void NeutDijTester<NDim>::Test(TDDAssertion &tdd)
   // For f(x) = x^2, neutral sum is ((x+1)^2 + (x-1)^2) / (2*dx) = (2x^2 + 2) / (2*dx) = (x^2 + 1) / dx
   {
     Field<NDim, double> sc("SC_sq", toolBox);
-    sc = getVectorComponent(x, 0);
+    sc = x(1_c);
     sc.updateGhosts();
 
     Field<NDim, double> sc_sq("SC_sq_field", toolBox);
@@ -142,11 +142,11 @@ template <size_t NDim> inline void NeutDijTester<NDim>::Test(TDDAssertion &tdd)
   // Test 3: NeutDij of product of coordinates (if NDim >= 2)
   if constexpr (NDim >= 2) {
     Field<NDim, double> sc1("SC1_prod", toolBox);
-    sc1 = getVectorComponent(x, 0);
+    sc1 = x(1_c);
     sc1.updateGhosts();
 
     Field<NDim, double> sc2("SC2_prod", toolBox);
-    sc2 = getVectorComponent(x, 1);
+    sc2 = x(2_c);
     sc2.updateGhosts();
 
     Field<NDim, double> sc_prod("SC_prod_field", toolBox);

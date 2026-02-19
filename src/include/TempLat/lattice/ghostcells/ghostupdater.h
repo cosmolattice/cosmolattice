@@ -186,7 +186,7 @@ namespace TempLat
         mExchange.exchangeDown(MPITypeSelect<T>(), dimension, sendSlab.data(), receiveSlab.data(), total_size);
 
         // Copy the data from the receive slab
-        device::memory::copyDeviceToDevice(sendSlab, receiveSubView);
+        device::memory::copyDeviceToDevice(receiveSlab, receiveSubView);
         device::iteration::fence();
       }
     }
@@ -284,7 +284,6 @@ namespace TempLat
         }
       }
     }
-
   };
 } // namespace TempLat
 

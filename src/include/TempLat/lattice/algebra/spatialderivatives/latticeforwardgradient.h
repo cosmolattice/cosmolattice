@@ -83,8 +83,8 @@ namespace TempLat
 
     static constexpr size_t getVectorSize() { return NDim; }
 
-    auto norm2() const { return dot(*this, *this); }
-    auto norm() const { return pow(this->norm2(), 0.5); }
+    auto norm2() { return dot(*this, *this); }
+    auto norm() { return pow(this->norm2(), 0.5); }
 
     std::string toString() const { return "Grad(" + GetString::get(mR) + ")"; }
 

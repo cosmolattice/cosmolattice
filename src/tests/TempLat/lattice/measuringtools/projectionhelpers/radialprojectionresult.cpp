@@ -28,6 +28,12 @@ template <typename T> inline void RadialProjectionResultTester<T>::Test(TDDAsser
   //   three.add(i, 2 * i, 2 * i);
   // }
 
+  int size, rank;
+#ifdef HAVE_MPI
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+#endif
+
   device::iteration::foreach<1>(
       "RadialProjectionResultTest", {0}, {10}, DEVICE_LAMBDA(const device::IdxArray<1> i) {
         three.add_device(i[0], 2 * i[0], 2 * i[0]);
@@ -43,13 +49,14 @@ template <typename T> inline void RadialProjectionResultTester<T>::Test(TDDAsser
           abs(powr<2>(2. * i) * 2. / 3. - powr<2>(2 * i + 0.5) / 3. - powr<2>(2 * i - 0.5) / 3.);
       allRight = allRight && AlmostEqual(three[i].getValue().average, 2 * i);
       allRight = allRight && AlmostEqual(three[i].getValue().sampleVariance, expectedVariance);
-      allRight = allRight && three[i].getValue().multiplicity == 3;
+      allRight = allRight && three[i].getValue().multiplicity == 3 * size;
       if (!allRight) {
         say << "Bin " << i << ": "
             << "Average: " << three[i].getValue().average << ", Sample Variance: " << three[i].getValue().sampleVariance
             << ", Multiplicity: " << three[i].getValue().multiplicity << "\n"
             << "Expected: "
-            << "Average: " << 2 * i << ", Sample Variance: " << expectedVariance << ", Multiplicity: " << 3 << "\n";
+            << "Average: " << 2 * i << ", Sample Variance: " << expectedVariance << ", Multiplicity: " << 3 * size
+            << "\n";
 
         break;
       }

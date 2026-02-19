@@ -210,15 +210,11 @@ endif()
 
 # Add debug flags: -g for debugging symbols, -fsanitize=address for address
 # sanitizer, and -fconcepts-diagnostics-depth=8 for better error messages with
-# concepts (GCC only; AppleClang does not support this flag).
-if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+# concepts.
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+if(NOT (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
   set(CMAKE_CXX_FLAGS_DEBUG
-      "${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=address"
-  )
-else()
-  set(CMAKE_CXX_FLAGS_DEBUG
-      "${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=address -fconcepts-diagnostics-depth=8"
-  )
+      "${CMAKE_CXX_FLAGS_DEBUG} -fconcepts-diagnostics-depth=8")
 endif()
 
 if(${SSE})
