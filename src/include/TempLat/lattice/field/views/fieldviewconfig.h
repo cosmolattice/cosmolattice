@@ -54,8 +54,8 @@ namespace TempLat
       const auto localSizes = mLayout.getLocalSizes();
       const size_t nGhosts = mLayout.getNGhosts();
 
+      memorySizes = mLayout.getSizesInMemory();
       for (size_t d = 0; d < NDim; ++d) {
-        memorySizes[d] = mLayout.getLocalSizes()[d];
         memorySizes[d] += nGhosts + nGhosts; // add padding to the local sizes
         localSlicing[d] = std::make_pair(nGhosts, nGhosts + localSizes[d]);
       }

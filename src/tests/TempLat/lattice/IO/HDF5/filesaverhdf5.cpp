@@ -10,49 +10,50 @@
 #include "TempLat/lattice/field/field.h"
 #include <filesystem>
 
-namespace TempLat {
-
-struct FileSaverHDF5Tester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void FileSaverHDF5Tester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  FileSaverHDF5 fs;
 
-  const ptrdiff_t nGrid = 16, nGhost = 1;
-  auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
+  struct FileSaverHDF5Tester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  Field<3, double> phi("phi", toolBox);
-  phi = 42.0;
-
-  fs.create("./FILE.h5");
-  fs.save(phi);
-  fs.save(0.45, "aDot");
-  fs.close();
-
-  // Check that the file was created and is not empty.
-  std::filesystem::path filePath("./FILE.h5");
-  tdd.verify(std::filesystem::exists(filePath));
-  tdd.verify(std::filesystem::file_size(filePath) > 0);
-
-  // Run h5dump on the file to check that it contains the expected datasets.
-  std::string h5dumpOutput;
+  void FileSaverHDF5Tester::Test(TDDAssertion &tdd)
   {
-    std::array<char, 128> buffer;
-    std::string command = "h5dump ./FILE.h5 2>&1";
-    std::shared_ptr<FILE> pipe(popen(command.c_str(), "r"), pclose);
+    FileSaverHDF5 fs;
 
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-      h5dumpOutput += buffer.data();
+    const ptrdiff_t nGrid = 16, nGhost = 1;
+    auto toolBox = MemoryToolBox<3>::makeShared(nGrid, nGhost);
+
+    Field<3, double> phi("phi", toolBox);
+    phi = 42.0;
+
+    fs.create("./FILE.h5");
+    fs.save(phi);
+    fs.save(0.45, "aDot");
+    fs.close();
+
+    // Check that the file was created and is not empty.
+    std::filesystem::path filePath("./FILE.h5");
+    tdd.verify(std::filesystem::exists(filePath));
+    tdd.verify(std::filesystem::file_size(filePath) > 0);
+
+    // Run h5dump on the file to check that it contains the expected datasets.
+    std::string h5dumpOutput;
+    {
+      std::array<char, 128> buffer;
+      std::string command = "h5dump ./FILE.h5 2>&1";
+      std::shared_ptr<FILE> pipe(popen(command.c_str(), "r"), pclose);
+
+      while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        h5dumpOutput += buffer.data();
+      }
     }
-  }
 
-  // Check that the output contains the expected dataset names.
-  tdd.verify(h5dumpOutput.find("phi") != std::string::npos);
-  tdd.verify(h5dumpOutput.find("aDot") != std::string::npos);
-  tdd.verify(h5dumpOutput.find("42") != std::string::npos);
-}
+    // Check that the output contains the expected dataset names.
+    tdd.verify(h5dumpOutput.find("phi") != std::string::npos);
+    tdd.verify(h5dumpOutput.find("aDot") != std::string::npos);
+    tdd.verify(h5dumpOutput.find("42") != std::string::npos);
+  }
 
 } // namespace TempLat
 

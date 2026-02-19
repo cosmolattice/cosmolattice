@@ -9,16 +9,15 @@
 
 #include <vector>
 #include <array>
-#include <complex>
 
 #include "TempLat/parallel/devices/kokkos/kokkos.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/log/saycomplete.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
-
   MakeException(MPIAllReduceException);
 
   /** @brief A class which calls MPI_Allreduce, meaning that all
@@ -131,7 +130,6 @@ namespace TempLat
       Allreduce(&realView, operation);
       return complex<T>(realView[0], realView[1]);
     }
-
 
 #else
     /** @brief Dummy's for the MPI-less compilation. */

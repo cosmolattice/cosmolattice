@@ -16,8 +16,6 @@ namespace TempLat
 {
   /** @brief Exponential map for U(1).
    *
-   * TODO: Caching seems unnecessary here, could be even harmful: need to check
-   *
    * Unit test: ctest -R test-u1wrapper
    **/
   template <typename R> class U1Exponential : public ComplexFieldUnaryOperator<R>
@@ -46,9 +44,6 @@ namespace TempLat
     }
 
     std::string toString() const { return "U1(" + GetString::get(mR) + ")"; }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
   template <typename R> auto complexPhase(R &&r) { return U1Exponential<R>(std::forward<R>(r)); }

@@ -74,7 +74,7 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICartesianExchange mExchange;
     LayoutStruct<NDim> mLayout;
-    ptrdiff_t mGhostDepth;
+    device::Idx mGhostDepth;
     GhostSubarrayMap<NDim> mGhostSubarrayMap;
 
     template <typename T> void pUpdate(MemoryBlock<NDim, T> &block)
@@ -111,19 +111,19 @@ namespace TempLat
           [&](const auto &...args) { return device::memory::NDView<NDim, T>("receiveSlab", args...); }, slab_sizes);
 
       // To get the right subviews of the full data, we need to create slices for each dimension
-      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> send_slices{};
-      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> receive_slices{};
+      device::array<std::pair<device::Idx, device::Idx>, NDim> send_slices{};
+      device::array<std::pair<device::Idx, device::Idx>, NDim> receive_slices{};
 
       // UP
       {
         for (size_t i = 0; i < NDim; ++i) {
           // we send the end of the dimension
-          send_slices[i] = (i == dimension) ? std::pair<ptrdiff_t, ptrdiff_t>(full_sizes[i] - 2 * mGhostDepth,
-                                                                              full_sizes[i] - mGhostDepth)
-                                            : std::pair<ptrdiff_t, ptrdiff_t>(0, slab_sizes[i]);
+          send_slices[i] = (i == dimension) ? std::pair<device::Idx, device::Idx>(full_sizes[i] - 2 * mGhostDepth,
+                                                                                  full_sizes[i] - mGhostDepth)
+                                            : std::pair<device::Idx, device::Idx>(0, slab_sizes[i]);
           // we receive at the origin of the dimension
-          receive_slices[i] = (i == dimension) ? std::pair<ptrdiff_t, ptrdiff_t>(0, mGhostDepth)
-                                               : std::pair<ptrdiff_t, ptrdiff_t>(0, slab_sizes[i]);
+          receive_slices[i] = (i == dimension) ? std::pair<device::Idx, device::Idx>(0, mGhostDepth)
+                                               : std::pair<device::Idx, device::Idx>(0, slab_sizes[i]);
         }
 
         // Get Subviews to the full data
@@ -135,26 +135,15 @@ namespace TempLat
             receive_slices);
 
         // Copy the data to the send slab
-        auto copy_to_slab_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
-        {
-          device::apply([&](auto &&...args) { sendSlab(args...) = sendSubView(args...); }, idx);
-        };
-        device::iteration::foreach ("copy_to_slab", {}, slab_sizes, copy_to_slab_functor);
-        // We must fence the operation, as we need the data to be in the slab before we call MPI.
+        device::memory::copyDeviceToDevice(sendSubView, sendSlab);
         device::iteration::fence();
 
         // Exchange the slabs
         MPI_Datatype dataType = MPITypeSelect<T>();
-
         mExchange.exchangeUp(dataType, dimension, sendSlab.data(), receiveSlab.data(), total_size);
 
         // Copy the data from the receive slab
-        auto copy_from_slab_functor = DEVICE_LAMBDA(const device::IdxArray<NDim> &idx)
-        {
-          device::apply([&](auto &&...args) { receiveSubView(args...) = receiveSlab(args...); }, idx);
-        };
-        device::iteration::foreach ("copy_from_slab", {}, slab_sizes, copy_from_slab_functor);
-        // We must fence the operation, as we need the data to be in the slab before we call MPI.
+        device::memory::copyDeviceToDevice(receiveSlab, receiveSubView);
         device::iteration::fence();
       }
 
@@ -162,12 +151,12 @@ namespace TempLat
       {
         for (size_t i = 0; i < NDim; ++i) {
           // we send the origin of the dimension
-          send_slices[i] = (i == dimension) ? std::pair<ptrdiff_t, ptrdiff_t>(mGhostDepth, 2 * mGhostDepth)
-                                            : std::pair<ptrdiff_t, ptrdiff_t>(0, slab_sizes[i]);
+          send_slices[i] = (i == dimension) ? std::pair<device::Idx, device::Idx>(mGhostDepth, 2 * mGhostDepth)
+                                            : std::pair<device::Idx, device::Idx>(0, slab_sizes[i]);
           // we receive at the end of the dimension
           receive_slices[i] = (i == dimension)
-                                  ? std::pair<ptrdiff_t, ptrdiff_t>(full_sizes[i] - mGhostDepth, full_sizes[i])
-                                  : std::pair<ptrdiff_t, ptrdiff_t>(0, slab_sizes[i]);
+                                  ? std::pair<device::Idx, device::Idx>(full_sizes[i] - mGhostDepth, full_sizes[i])
+                                  : std::pair<device::Idx, device::Idx>(0, slab_sizes[i]);
         }
 
         // Get Subviews to the full data
@@ -192,7 +181,7 @@ namespace TempLat
     }
 
   private:
-    template <typename T> void update_forDimension(MemoryBlock<NDim, T> &block, ptrdiff_t dimension)
+    template <typename T> void update_forDimension(MemoryBlock<NDim, T> &block, device::Idx dimension)
     {
       auto *ptr = block.data();
 #ifdef HAVE_MPI
@@ -213,7 +202,7 @@ namespace TempLat
     }
 
   public:
-    template <typename T> void pUpdate_NOMPI(MemoryBlock<NDim, T> &block, ptrdiff_t dimension = 0)
+    template <typename T> void pUpdate_NOMPI(MemoryBlock<NDim, T> &block, device::Idx dimension = 0)
     {
       // Get View to the full data
       const auto ghostDepth = mLayout.getPadding()[0][0];
@@ -233,10 +222,10 @@ namespace TempLat
       // Create subviews for the from and to views
       // We need to create slices for each dimension, taking into account the padding
       // and the layout of the views
-      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> btf_slicesFrom{};
-      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> btf_slicesTo{};
-      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> ftb_slicesFrom{};
-      device::array<std::pair<ptrdiff_t, ptrdiff_t>, NDim> ftb_slicesTo{};
+      device::array<std::pair<device::Idx, device::Idx>, NDim> btf_slicesFrom{};
+      device::array<std::pair<device::Idx, device::Idx>, NDim> btf_slicesTo{};
+      device::array<std::pair<device::Idx, device::Idx>, NDim> ftb_slicesFrom{};
+      device::array<std::pair<device::Idx, device::Idx>, NDim> ftb_slicesTo{};
 
       for (size_t dim = 0; dim < NDim; ++dim) {
         for (size_t depth = 1; depth <= (size_t)mGhostDepth; ++depth) {
@@ -253,20 +242,20 @@ namespace TempLat
             // so we copy a (NDim- 1)-dimensional slice. Include the padding, which leads to a copy of all corners, too!
             for (size_t i = 0; i < NDim; ++i) {
               btf_slicesFrom[i] = (i == dim)
-                                      ? std::make_pair<ptrdiff_t, ptrdiff_t>(ghostDepth + sizes[i] - depth,
-                                                                             ghostDepth + sizes[i] - depth + 1)
-                                      : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
-              btf_slicesTo[i] = (i == dim)
-                                    ? std::make_pair<ptrdiff_t, ptrdiff_t>(ghostDepth - depth, ghostDepth - depth + 1)
-                                    : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
+                                      ? std::make_pair<device::Idx, device::Idx>(ghostDepth + sizes[i] - depth,
+                                                                                 ghostDepth + sizes[i] - depth + 1)
+                                      : std::make_pair<device::Idx, device::Idx>(0, ghostDepth + sizes[i] + ghostDepth);
+              btf_slicesTo[i] =
+                  (i == dim) ? std::make_pair<device::Idx, device::Idx>(ghostDepth - depth, ghostDepth - depth + 1)
+                             : std::make_pair<device::Idx, device::Idx>(0, ghostDepth + sizes[i] + ghostDepth);
               ftb_slicesFrom[i] =
                   (i == dim)
-                      ? std::make_pair<ptrdiff_t, ptrdiff_t>(ghostDepth + (depth - 1), ghostDepth + (depth - 1) + 1)
-                      : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
+                      ? std::make_pair<device::Idx, device::Idx>(ghostDepth + (depth - 1), ghostDepth + (depth - 1) + 1)
+                      : std::make_pair<device::Idx, device::Idx>(0, ghostDepth + sizes[i] + ghostDepth);
               ftb_slicesTo[i] = (i == dim)
-                                    ? std::make_pair<ptrdiff_t, ptrdiff_t>(ghostDepth + sizes[i] + (depth - 1),
-                                                                           ghostDepth + sizes[i] + (depth - 1) + 1)
-                                    : std::make_pair<ptrdiff_t, ptrdiff_t>(0, ghostDepth + sizes[i] + ghostDepth);
+                                    ? std::make_pair<device::Idx, device::Idx>(ghostDepth + sizes[i] + (depth - 1),
+                                                                               ghostDepth + sizes[i] + (depth - 1) + 1)
+                                    : std::make_pair<device::Idx, device::Idx>(0, ghostDepth + sizes[i] + ghostDepth);
             }
             auto btf_fromSubView = device::apply(
                 [&](const auto &...args) { return device::memory::subview(View, args...); }, btf_slicesFrom);

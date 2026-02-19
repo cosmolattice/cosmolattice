@@ -34,8 +34,7 @@ namespace TempLat
         mVec[i] = vec[i];
     }
 
-    // TODO: Hm, is this really the right way?
-    template <typename S> void operator=(S &&vec) { ForLoop(i, 0, N - 1, mVec[i] = DoEval::eval(vec.getComp(i), 0)); }
+    template <typename S> void operator=(S &&vec) { ForLoop(i, 0, N - 1, mVec[i] = DoEval::eval(vec.getComp(i))); }
 
     std::array<T, N> &asArr() { return mVec; }
 
@@ -95,7 +94,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::array<T, N> mVec;
-
   };
 } // namespace TempLat
 

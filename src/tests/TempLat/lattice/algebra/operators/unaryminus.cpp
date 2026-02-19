@@ -8,31 +8,31 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/constants/halftype.h"
 
-namespace TempLat {
-
-struct UnaryMinusTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-class myClass
+namespace TempLat
 {
-public:
-  myClass(int b) : a(b) {}
 
-  template <std::integral... IDX> DEVICE_FORCEINLINE_FUNCTION auto get(const IDX &...i) const { return a; }
-  template <std::integral... IDX> DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...i) const { return a; }
+  struct UnaryMinusTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-private:
-  double a;
-};
+  class myClass
+  {
+  public:
+    myClass(int b) : a(b) {}
 
-void UnaryMinusTester::Test(TDDAssertion &tdd)
-{
-  myClass a(4);
-  // myClass b(4);
-  tdd.verify(AlmostEqual((-a).eval(0), -4));
-  tdd.verify(AlmostEqual((-HalfType()).eval(0, 0, 0), -0.5));
-}
+    template <std::integral... IDX> DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...i) const { return a; }
+
+  private:
+    double a;
+  };
+
+  void UnaryMinusTester::Test(TDDAssertion &tdd)
+  {
+    myClass a(4);
+    // myClass b(4);
+    tdd.verify(AlmostEqual((-a).eval(0), -4));
+    tdd.verify(AlmostEqual((-HalfType()).eval(0, 0, 0), -0.5));
+  }
 
 } // namespace TempLat
 

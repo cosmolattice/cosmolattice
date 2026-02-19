@@ -8,45 +8,43 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/almostequal.h"
 
-namespace TempLat {
-
-struct DivideTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void DivideTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  class myClass
-  {
-  public:
-    DEVICE_FUNCTION
-    myClass(int b) : a(b) {}
 
-    DEVICE_FORCEINLINE_FUNCTION
-    auto get(const double &i) const { return a; }
-
-    DEVICE_FORCEINLINE_FUNCTION
-    auto eval(ptrdiff_t i) const { return a; }
-
-  private:
-    double a;
+  struct DivideTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  myClass a(3);
-  myClass b(4);
+  void DivideTester::Test(TDDAssertion &tdd)
+  {
+    class myClass
+    {
+    public:
+      DEVICE_FUNCTION
+      myClass(int b) : a(b) {}
 
-  //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
-  //    say << HasEvalMethod<Operators::Add<GetterGetOffset, GetterGetOffset>> << "\n";
-  tdd.verify(HasEvalMethod<Operators::Division<myClass, myClass>> == true);
+      DEVICE_FORCEINLINE_FUNCTION
+      auto eval(ptrdiff_t i) const { return a; }
 
-  tdd.verify(AlmostEqual((a / b).eval(0), 0.75));
+    private:
+      double a;
+    };
 
-  int c = 3, d = 4;
-  tdd.verify(HasEvalMethod<decltype(c / d)> == false);
+    myClass a(3);
+    myClass b(4);
 
-  // pointless, but shuts up the compiler about unused variables:
-  c = c + d;
-}
+    //    say << mAdd.get(0, NULL) << " " << GetCPPTypeName::get(decltype(mAdd.get(0, NULL))) << "\n";
+    //    say << HasEvalMethod<Operators::Add<GetterGetOffset, GetterGetOffset>> << "\n";
+    tdd.verify(HasEvalMethod<Operators::Division<myClass, myClass>> == true);
+
+    tdd.verify(AlmostEqual((a / b).eval(0), 0.75));
+
+    int c = 3, d = 4;
+    tdd.verify(HasEvalMethod<decltype(c / d)> == false);
+
+    // pointless, but shuts up the compiler about unused variables:
+    c = c + d;
+  }
 
 } // namespace TempLat
 

@@ -7,47 +7,45 @@
 #include "TempLat/lattice/algebra/operators/squareroot.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct SqrtTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void SqrtTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  class myClass
-  {
-  public:
-    DEVICE_FUNCTION
-    myClass(int b) : a(b) {}
-
-    DEVICE_FORCEINLINE_FUNCTION
-    auto get(const double &i) const { return i; }
-
-    DEVICE_FORCEINLINE_FUNCTION
-    auto eval(const double &i) const { return i; }
-
-  private:
-    [[maybe_unused]] double a;
+  struct SqrtTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  myClass a(4);
-  // myClass b(4);
-  say << sqrt(a).eval(4) << "\n";
-  /*
-    tdd.verify( AlmostEqual(sqrt(a).get(4), 2)  );
+  void SqrtTester::Test(TDDAssertion &tdd)
+  {
+
+    class myClass
+    {
+    public:
+      DEVICE_FUNCTION
+      myClass(int b) : a(b) {}
+
+      DEVICE_FORCEINLINE_FUNCTION
+      auto eval(const double &i) const { return i; }
+
+    private:
+      [[maybe_unused]] double a;
+    };
+
+    myClass a(4);
+    // myClass b(4);
+    say << sqrt(a).eval(4) << "\n";
+    /*
+      tdd.verify( AlmostEqual(sqrt(a).get(4), 2)  );
 
 
 
-    say << safeSqrt(a).get(4) << "\n";
-    tdd.verify( AlmostEqual(safeSqrt(a).get(4),2)  );
+      say << safeSqrt(a).get(4) << "\n";
+      tdd.verify( AlmostEqual(safeSqrt(a).get(4),2)  );
 
 
-    say << safeSqrt(a).get(-1) << "\n";
-    tdd.verify( AlmostEqual(safeSqrt(a).get(-1),0)  );
-    */
-}
+      say << safeSqrt(a).get(-1) << "\n";
+      tdd.verify( AlmostEqual(safeSqrt(a).get(-1),0)  );
+      */
+  }
 
 } // namespace TempLat
 

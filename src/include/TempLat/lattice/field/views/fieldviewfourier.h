@@ -94,7 +94,6 @@ namespace TempLat
     {
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */
       mManager->confirmFourierSpace();
-
       ConfirmSpace::apply(g, mToolBox->mLayouts.getFourierSpaceLayout(), SpaceStateType::Fourier);
       GhostsHunter::apply(g);
       mManager->flagHostMirrorOutdated();
@@ -187,10 +186,7 @@ namespace TempLat
     {
       if (mToolBox == nullptr) return;
       auto layout = mToolBox->mLayouts.getFourierSpaceLayout();
-
-      for (size_t d = 0; d < NDim; ++d)
-        memorySizes[d] = layout.getLocalSizes()[d];
-
+      memorySizes = layout.getSizesInMemory();
       mView = mManager->template getNDView<complex<T>>(memorySizes);
       mRawView = mManager->template getRawView<complex<T>>();
     }

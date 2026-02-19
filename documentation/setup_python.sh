@@ -4,6 +4,16 @@ base_dir=$(pwd)/
 tmp_dir=${base_dir}/tmp/
 mkdir -p ${tmp_dir}
 
+pythonexec=""
+if command -v python3 &>/dev/null; then
+    pythonexec=$(command -v python3)
+elif command -v python &>/dev/null; then
+    pythonexec=$(command -v python)
+else
+    echo "Python is not installed. Please install Python3 and try again."
+    exit 1
+fi
+
 # if venv does not exist, create it
 cd ${tmp_dir}
 

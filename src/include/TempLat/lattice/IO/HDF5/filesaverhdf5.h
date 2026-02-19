@@ -348,19 +348,15 @@ namespace TempLat
           device::memory::copyDeviceToHost(subview, sdata.data());
           mDataset.writeSlices(sdata, subdims, offsets);
         } else {
-          // Otherwise, we use GetEval to get the data point by point.
+          // Otherwise, we get the data point by point.
           device::memory::NDView<1, vType> device_buf("buffer", toolBox->mNGridPointsVec[dim]);
           auto functor = DEVICE_CLASS_LAMBDA(device::IdxArray<1> jdx)
           {
             device::Idx i = jdx[0];
-            device::apply(
-                [&](const auto &...idx) {
-                  device_buf(i - memoryPos[dim]) = DoEval::eval(r, idx..., i);
-                },
-                subMemoryPos);
+            device::apply([&](const auto &...idx) { device_buf(i - memoryPos[dim]) = DoEval::eval(r, idx..., i); },
+                          subMemoryPos);
           };
-          device::iteration::foreach<1>("SaveDimBufferFilling", {memoryPos[dim]},
-                                        {(device::Idx)subdims[dim]}, functor);
+          device::iteration::foreach<1>("SaveDimBufferFilling", {memoryPos[dim]}, {(device::Idx)subdims[dim]}, functor);
 
           // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
           std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);

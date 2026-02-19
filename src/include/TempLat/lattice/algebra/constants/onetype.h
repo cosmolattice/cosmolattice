@@ -17,25 +17,14 @@ namespace TempLat
    * Unit test: ctest -R test-zerotype
    **/
   struct OneType {
-    //        operator ptrdiff_t() const { return 1; }
     static std::string toString() { return "(OneType)1"; }
     template <typename... IDX>
       requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION static constexpr double get(const IDX &...)
+    DEVICE_FORCEINLINE_FUNCTION static constexpr auto eval(const IDX &...i)
     {
       return 1;
     }
-
-    template <typename... IDX>
-      requires IsVariadicIndex<IDX...>
-    DEVICE_FORCEINLINE_FUNCTION static constexpr double eval(const IDX &...)
-    {
-      return 1;
-    }
-    static constexpr bool ISCONSTANT = true;
-
     static constexpr int value = 1;
-    // operator double() const { return 1; }
   };
 } // namespace TempLat
 

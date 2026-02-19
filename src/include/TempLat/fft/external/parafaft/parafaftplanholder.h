@@ -21,7 +21,7 @@
 #include "TempLat/lattice/memory/memoryblock.h"
 
 #include <memory>
-#include <complex>
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -52,7 +52,7 @@ namespace TempLat
   template <size_t NDim, typename T> class ParafaftPlanHolder : public FFTPlanInterface<NDim, T>
   {
   public:
-    using Complex = std::complex<double>;
+    using Complex = complex<T>;
 
 #ifdef HAVE_MPI
 #ifdef HAVE_PARAFAFT
@@ -145,7 +145,6 @@ namespace TempLat
       throw ParafaftCompiledWithoutSinglePrecisionSupport("Parafaft does not support single precision.");
     }
 #endif
-
   };
 } // namespace TempLat
 
