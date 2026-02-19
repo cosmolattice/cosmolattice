@@ -7,6 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
+#include "TempLat/parallel/device.h"
+
 namespace TempLat
 {
   /** @brief A concept to detect if the getKIR method is defined.

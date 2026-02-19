@@ -7,6 +7,9 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include <cstddef>
+#include <utility>
+
 namespace TempLat
 {
   /** @brief

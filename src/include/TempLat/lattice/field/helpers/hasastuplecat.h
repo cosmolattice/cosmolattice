@@ -7,6 +7,9 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include <type_traits>
+#include <utility>
+
 namespace TempLat
 {
   /** @brief A class which detects whether or not an object has the hasTuplCat method.

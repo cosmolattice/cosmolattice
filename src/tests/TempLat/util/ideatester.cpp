@@ -9,7 +9,7 @@
 #include <cstddef>
 #include <tuple>
 #include <utility>
-#include <bits/shared_ptr.h>
+#include <memory>
 #include "TempLat/util/rangeiteration/tagliteral.h"
 
 namespace TempLat {

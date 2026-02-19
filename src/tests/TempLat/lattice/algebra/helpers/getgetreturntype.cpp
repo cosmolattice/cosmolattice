@@ -13,7 +13,7 @@ struct GetGetReturnTypeTester {
   static void Test(TDDAssertion &tdd);
 };
 
-template <typename T> void GetGetReturnTypeTester::Test(T &tdd)
+void GetGetReturnTypeTester::Test(TDDAssertion &tdd)
 {
   struct tmp {
     DEVICE_FORCEINLINE_FUNCTION

@@ -7,6 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include <cstddef>
+
 namespace TempLat
 {
   /** @brief A class which compute the maximum at compile time.

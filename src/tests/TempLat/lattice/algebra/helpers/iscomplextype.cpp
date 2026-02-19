@@ -13,7 +13,7 @@ struct IsComplexTypeTester {
   static void Test(TDDAssertion &tdd);
 };
 
-template <typename T> void IsComplexTypeTester::Test(T &tdd)
+void IsComplexTypeTester::Test(TDDAssertion &tdd)
 {
   tdd.verify(IsComplexType<complex<float>>);
   tdd.verify(IsComplexType<complex<double>>);

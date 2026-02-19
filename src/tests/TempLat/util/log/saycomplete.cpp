@@ -13,7 +13,7 @@ struct SayCompleteTest {
   static void Test(TDDAssertion &tdd);
 };
 
-template <typename TestObjectUnknownHere> void SayCompleteTest::Test(TestObjectUnknownHere &tdd)
+void SayCompleteTest::Test(TDDAssertion &tdd)
 {
 
   say << "Stream log - first light.\n";

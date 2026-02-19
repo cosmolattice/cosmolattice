@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/exception.h"
+#include "TempLat/util/log/saycomplete.h"
 #include "TempLat/parallel/threadsettings.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 

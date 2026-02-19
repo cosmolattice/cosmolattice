@@ -33,8 +33,6 @@ template <size_t NDim> void KokkosIterationTester<NDim>::Test(TDDAssertion &tdd)
           power *= 2;
         base10_idx += idx[i] * power;
       }
-      Kokkos::printf("Indices: %lu, %lu, %lu, %lu -> Index in base 10: %lu\n", idx[0], idx[1], idx[2], idx[3],
-                     base10_idx);
       a(base10_idx) = NDim; // just to test that the lambda works
     };
 
