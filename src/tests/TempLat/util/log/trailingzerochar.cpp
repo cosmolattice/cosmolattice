@@ -6,6 +6,5 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/log/trailingzerochar.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/log/trailingzerochar_test.h"
 
 /* just compile */

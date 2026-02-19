@@ -114,14 +114,6 @@ namespace TempLat
   {
     return make_tuple_sequence_helper(std::make_integer_sequence<T, I>());
   }
-
-#ifdef TEMPLATTEST
-  class TupleToolsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -8,8 +8,7 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <cctype>
-
-#include "TempLat/util/tdd/tdd.h"
+#include <string>
 
 namespace TempLat
 {
@@ -35,14 +34,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     ContainsSpace() {}
   };
-
-#ifdef TEMPLATTEST
-  class ContainsSpaceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -40,7 +40,7 @@ template <size_t NDim> void run_nd_test(TempLat::TDDAssertion &tdd)
   for (size_t i = 0; i < NDim; ++i) {
     globalSizes[i] = 16; // Global size larger than local
   }
-  LayoutStruct<NDim> layout(globalSizes, 1);
+  LayoutStruct<NDim> layout(globalSizes, 0);
   layout.setLocalSizes(nGrid);
 
   // Define two different ghost layouts to test transformation between them
@@ -171,7 +171,7 @@ template <size_t NDim> inline void TempLat::GhostBusterTester<NDim>::Test(TempLa
     // arbitrary irregular sizing. If you want to see debug prints of what happens, set them to <= 4
     device::IdxArray<3> nGrid{{256, 64, 128}};
 
-    LayoutStruct<3> layout({62, 62, 62}, 1);
+    LayoutStruct<3> layout({62, 62, 62}, 0);
     layout.setLocalSizes(nGrid);
 
     auto &&myLittleLambda = [&](auto nGhost, auto nGhostB) {

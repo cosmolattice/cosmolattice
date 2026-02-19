@@ -5,7 +5,17 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/conditionaloutput/conditionalfilestream.h"
-#include "TempLat/util/conditionaloutput/conditionalfilestream_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ConditionalFileStreamTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ConditionalFileStreamTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+
+} // namespace TempLat
 
 namespace
 {

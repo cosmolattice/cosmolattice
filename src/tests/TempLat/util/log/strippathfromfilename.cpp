@@ -6,7 +6,18 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/log/strippathfromfilename.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/log/strippathfromfilename_test.h"
+#include <string>
+
+namespace TempLat {
+
+template <typename TestObjectUnknownHere>
+void StripPathFromFileNameTester::Test(TestObjectUnknownHere &tdd)
+{
+
+  tdd.verify(StripPathFromFileName("/path/to/hypothetical/file") == std::string("file"));
+}
+
+} // namespace TempLat
 
 namespace
 {

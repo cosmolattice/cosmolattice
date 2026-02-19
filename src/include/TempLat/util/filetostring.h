@@ -9,8 +9,6 @@
 
 #include <fstream>
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -60,14 +58,6 @@ namespace TempLat
       payload = buffer;
     }
   };
-
-#ifdef TEMPLATTEST
-  class FileToStringTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

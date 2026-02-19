@@ -7,7 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <tuple>
+#include <utility>
 
 namespace TempLat
 {
@@ -55,14 +56,6 @@ namespace TempLat
   {
     return flatten_tuple(std::forward<T>(t), std::make_index_sequence<std::tuple_size<std::decay_t<T>>{}>{});
   }
-
-#ifdef TEMPLATTEST
-  class FlattenTupleTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

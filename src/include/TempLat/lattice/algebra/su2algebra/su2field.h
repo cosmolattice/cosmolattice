@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2get.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
@@ -150,15 +149,6 @@ namespace TempLat
 
   template <size_t NDim, typename T> using SU2Field = SU2FieldBase<NDim, T>;
   // TODO: What is the point of this aliasing?
-
-#ifdef TEMPLATTEST
-template<size_t _NDim, typename T>
-  struct SU2FieldBaseTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

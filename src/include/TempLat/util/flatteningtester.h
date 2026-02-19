@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/iscomposite.h"
 #include "TempLat/util/flattentuple.h"
 #include "TempLat/util/tuplemaker.h"
@@ -16,25 +15,6 @@
 
 namespace TempLat
 {
-#ifdef TEMPLATTEST
-  /** @brief A class which tests the tuple flattener.
-   *
-   *
-   * Unit test: ctest -R test-flatteningtester
-   **/
-  class FlatteningTester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    FlatteningTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

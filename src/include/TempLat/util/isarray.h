@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
 #include "TempLat/parallel/device.h"
-#include "TempLat/util/tdd/tdd.h"
 #include <type_traits>
 
 namespace TempLat
@@ -21,12 +20,6 @@ namespace TempLat
   concept IsNDArray = std::is_same_v<device::array<typename T::value_type, NDim>, T> ||
                       std::is_same_v<std::array<typename T::value_type, NDim>, T> ||
                       std::is_same_v<Kokkos::Array<typename T::value_type, NDim>, T>;
-
-#ifdef TEMPLATTEST
-  struct IsNDArrayTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

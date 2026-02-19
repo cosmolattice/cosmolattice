@@ -85,9 +85,8 @@ namespace TempLat
 
   struct TagLiteralTester {
 
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
+  public:
+    static void Test(TDDAssertion &tdd);
   };
 
 } // namespace TempLat

@@ -5,7 +5,23 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/exception.h"
-#include "TempLat/util/exception_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ExceptionTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+MakeException(TestException);
+
+void ExceptionTester::Test(TDDAssertion &tdd)
+{
+
+  tdd.verify(Throws<TestException>([] { throw TestException("Hoi!"); }));
+}
+
+} // namespace TempLat
 
 namespace
 {

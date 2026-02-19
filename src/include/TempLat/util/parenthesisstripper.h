@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 
 namespace TempLat
@@ -46,14 +45,6 @@ namespace TempLat
       return count;
     }
   };
-
-#ifdef TEMPLATTEST
-  class ParenthesisStripperTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

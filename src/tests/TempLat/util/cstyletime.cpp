@@ -5,7 +5,25 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/util/cstyletime.h"
-#include "TempLat/util/cstyletime_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct CStyleTimeTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void CStyleTimeTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  CStyleTime mtime;
+  mtime.now();
+  say << mtime.date();
+  say << mtime.time();
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

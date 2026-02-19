@@ -9,8 +9,6 @@
 
 #include <sstream>
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   /** @brief  Because of MPI, we often only want to stream if we are root, etc. To simplify the notation,
@@ -42,14 +40,6 @@ namespace TempLat
     std::ostream &stream;
     bool enabled;
   };
-
-#ifdef TEMPLATTEST
-  struct ConditionalStreamTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

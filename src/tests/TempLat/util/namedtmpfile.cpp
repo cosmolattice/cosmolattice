@@ -5,7 +5,25 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/namedtmpfile.h"
-#include "TempLat/util/namedtmpfile_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+void NamedTmpFile::Test(TDDAssertion &tdd)
+{
+
+  NamedTmpFile ntf;
+
+  tdd.verify(ntf.outfile.tellp() == 0);
+
+  ntf << "Hoi!";
+
+  tdd.verify(ntf.outfile.tellp() != 0);
+  tdd.verify(ntf.remove() == 0);
+  tdd.verify(ntf.remove() != 0);
+}
+
+} // namespace TempLat
 
 namespace
 {

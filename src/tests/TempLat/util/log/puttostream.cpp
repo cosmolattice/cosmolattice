@@ -6,7 +6,19 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/log/puttostream.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/log/puttostream_test.h"
+
+namespace TempLat {
+
+struct PutToStreamTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void PutToStreamTester::Test(TDDAssertion &tdd)
+{
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

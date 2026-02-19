@@ -20,8 +20,6 @@
 
 #include <cstring>
 
-#include "TempLat/util/tdd/tdd.h"
-
 #define INSIDE_TempLat_UTIL_HASH_LIBKECCAK_TWOENDIANS_H
 
 namespace TempLat

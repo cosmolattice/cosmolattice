@@ -14,10 +14,8 @@ namespace TempLat
 
   class StaticIfTester
   {
-#ifdef TEMPLATTEST
   public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
+    static void Test(TDDAssertion &tdd);
   };
 
 #define IfElse(condition, ifExpr, elseExpr)                                                                              \

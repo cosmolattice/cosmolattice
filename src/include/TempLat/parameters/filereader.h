@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include <fstream>
 #include "TempLat/util/exception.h"
 #include "TempLat/util/stringtrimmer.h"
@@ -47,14 +46,6 @@ namespace TempLat
 
     std::vector<std::string> vec;
   };
-
-#ifdef TEMPLATTEST
-  class FileReaderTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

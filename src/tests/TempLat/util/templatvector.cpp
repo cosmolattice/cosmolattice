@@ -5,7 +5,25 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/util/templatvector.h"
-#include "TempLat/util/templatvector_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+template <typename T, int N> inline void TempLatVector<T, N>::Test(TDDAssertion &tdd)
+{
+
+  TempLatVector<int> vec(1, 2, 3);
+
+  tdd.verify(vec.getComp(1_c) == 2);
+
+  std::vector<int> sVec(3, 6);
+
+  vec = sVec;
+
+  tdd.verify(vec[2] == 6);
+}
+
+} // namespace TempLat
 
 namespace
 {

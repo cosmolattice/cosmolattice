@@ -9,7 +9,6 @@
 
 #include <fstream>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/conditionaloutput/conditionalstream.h"
 
@@ -60,14 +59,6 @@ namespace TempLat
     std::string fname;
     std::ios_base::openmode mMode;
   };
-
-#ifdef TEMPLATTEST
-  struct ConditionalFileStreamTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

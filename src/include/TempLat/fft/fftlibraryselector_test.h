@@ -17,22 +17,17 @@
 namespace TempLat
 {
   template <size_t NDim, typename T>
-  DEVICE_FUNCTION T coordinateToValue(const device::IdxArray<NDim> vPosctv, const LayoutStruct<NDim> &currentLayout,
-                                      bool fourierSpace)
+  DEVICE_FUNCTION T coordinateToValue(device::IdxArray<NDim> complexMemCoordinate,
+                                      const LayoutStruct<NDim> &currentLayout, bool fourierSpace)
   {
-    device::IdxArray<NDim> complexMemCoordinate{};
-    for (size_t i = 0; i < NDim; ++i)
-      complexMemCoordinate[i] = vPosctv[i];
-    device::IdxArray<NDim> spaceCoordinate{};
-
     const auto nGrid = currentLayout.getGlobalSizes();
 
     // now, in this routine we walk the memory lineary, not caring about complex stuff. Hence vPosctv[2] /= 2;
 
     bool isImaginaryPart = complexMemCoordinate[NDim - 1] % 2;
-
     if (fourierSpace) complexMemCoordinate[NDim - 1] /= 2;
 
+    device::IdxArray<NDim> spaceCoordinate{};
     device::apply(
         [&](const auto &...idx) { currentLayout.putSpatialLocationFromMemoryIndexInto(spaceCoordinate, idx...); },
         complexMemCoordinate);
@@ -108,6 +103,7 @@ namespace TempLat
     const auto configLayout = fftLayout.configurationSpace;
 
     auto localSizes = configLayout.getLocalSizes();
+    localSizes[NDim - 1] += 2; // account for the padding in the r2c/cr2 case
     auto mem_view = mem.getNDView(localSizes);
     // Fill the memory with known values.
     device::iteration::foreach (

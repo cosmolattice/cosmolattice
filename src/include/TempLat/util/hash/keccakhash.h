@@ -15,7 +15,6 @@
  * are the same, such that the physics you simulate is identical
  * across platforms. */
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/hash/keccakhashbareclass.h"
 
 namespace TempLat
@@ -44,14 +43,6 @@ namespace TempLat
     /** @brief Constructor is private: no need to instantiate, just call the static compute. */
     KeccakHash() {}
   };
-
-#ifdef TEMPLATTEST
-  class KeccakHashTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -38,14 +38,6 @@ namespace TempLat
     else
       return powr<n / 2>(x) * powr<n / 2>(x) * x;
   }
-
-#ifdef TEMPLATTEST
-  class PowrTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

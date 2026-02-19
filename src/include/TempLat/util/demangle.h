@@ -59,10 +59,7 @@ namespace TempLat
 
 #endif
 
-#ifdef TEMPLATTEST
-  public:
-    template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
-#endif
+    template <typename TestObjectUnknownHere> static void Test(TestObjectUnknownHere &tdd);
   };
 } // namespace TempLat
 

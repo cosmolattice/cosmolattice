@@ -5,7 +5,18 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/util/rangeiteration/for_in_range.h"
-#include "TempLat/util/rangeiteration/for_in_range_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+void for_in_range_Tester::Test(TDDAssertion &tdd)
+{
+  int c = 1;
+  for_in_range<1, 4>([&](auto i) { tdd.verify(i == c++); });
+  ForLoop(i, 0, 0, say << (int)i);
+}
+
+} // namespace TempLat
 
 namespace
 {

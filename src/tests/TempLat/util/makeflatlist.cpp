@@ -5,7 +5,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/util/makeflatlist.h"
-#include "TempLat/util/makeflatlist_test.h"
 
 namespace
 {

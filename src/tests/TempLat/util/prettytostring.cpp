@@ -5,7 +5,24 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/util/prettytostring.h"
-#include "TempLat/util/prettytostring_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct PrettyToStringTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void PrettyToStringTester::Test(TDDAssertion &tdd)
+{
+  say << get(1.0);
+  say << get(1.000001);
+  say << get(1.000002);
+  say << get(1.000002003);
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

@@ -11,7 +11,6 @@
 #include "TempLat/parallel/device_guard.h"
 #include "TempLat/parallel/mpi/session/mpiguard.h"
 #include "TempLat/util/exception.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -53,14 +52,6 @@ namespace TempLat
       return counter;
     }
   };
-
-#ifdef TEMPLATTEST
-  class SessionGuardTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

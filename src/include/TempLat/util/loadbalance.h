@@ -7,8 +7,9 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include <cinttypes>
+#include <cstddef>
+#include <vector>
 
 namespace TempLat
 {
@@ -35,15 +36,6 @@ namespace TempLat
       return res;
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class LoadBalanceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

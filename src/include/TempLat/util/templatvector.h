@@ -81,10 +81,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::vector<T> mVec;
 
-#ifdef TEMPLATTEST
   public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
+    static void Test(TDDAssertion &tdd);
   };
 
   template <typename... Args> auto make_templatvector(Args... args)

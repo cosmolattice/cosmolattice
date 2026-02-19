@@ -6,7 +6,18 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/log/logmutex.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/log/logmutex_test.h"
+
+namespace TempLat {
+
+template <typename TestObjectUnknownHere> void LogMutex::Test(TestObjectUnknownHere &tdd)
+{
+
+  auto guard = LogMutex::guard();
+
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {
