@@ -7,12 +7,6 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-#include "TempLat/lattice/algebra/su2algebra/su2wrapper.h"
-#include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
-#include "TempLat/lattice/algebra/gaugealgebra/u1exponential.h"
-#include "TempLat/lattice/field/views/fieldviewfourier.h"
-#include "TempLat/lattice/field/collections/vectorfield.h"
-#include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/util/tdd/tdd.h"
 
 inline void TempLat::SU2InitializerTester::Test(TempLat::TDDAssertion &tdd)

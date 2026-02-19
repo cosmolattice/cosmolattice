@@ -40,16 +40,6 @@ namespace TempLat
     {
     }
 
-#ifdef DEVICE_REGION
-    DEVICE_FUNCTION
-    AbstractField(const AbstractField &other) : mToolBox(other.mToolBox), mManager(other.mManager), latPar(other.latPar)
-    {
-    }
-
-    DEVICE_FUNCTION
-    ~AbstractField() {}
-#endif
-
     inline void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &spaceType) const
     {
       switch (spaceType) {

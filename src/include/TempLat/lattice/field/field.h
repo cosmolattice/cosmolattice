@@ -41,14 +41,6 @@ namespace TempLat
     {
     }
 
-#ifdef DEVICE_REGION
-    DEVICE_FUNCTION
-    Field(const Field &other) : ConfigView<NDim, T>(other), mFourierView(*this) {}
-
-    DEVICE_FUNCTION
-    ~Field() {}
-#endif
-
     template <typename R> void operator=(R &&g) { ConfigView<NDim, T>::operator=(g); }
 
     void operator=(const Field<NDim, T> &other) { operator=(OneType() * other); }

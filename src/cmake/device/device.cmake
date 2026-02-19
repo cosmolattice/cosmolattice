@@ -16,7 +16,8 @@ if(NOT CUDA
    AND NOT OpenMP
    AND NOT Threads
    AND NOT Serial)
-  message(STATUS "---------- No device specified, trying to auto-detect ----------")
+  message(
+    STATUS "---------- No device specified, trying to auto-detect ----------")
   set(CUDA ON)
   set(HIP ON)
   set(OpenMP ON)
@@ -40,6 +41,18 @@ if(CUDA)
 endif()
 
 if(NOT CUDA AND HIP)
+  # There is a problem with Kokkos + HIP, where HIP's cmake sets offload-arch
+  # and Kokkos does the same, which leads to a conflict. We purge the info set
+  # by HIP's cmake here.
+  if(HIP)
+    set(GPU_BUILD_TARGETS
+        ""
+        CACHE STRING "" FORCE)
+    set(GPU_TARGETS
+        ""
+        CACHE STRING "" FORCE)
+  endif()
+
   # Let's see if we have a HIP compiler
   check_language(HIP)
   if(CMAKE_HIP_COMPILER)
@@ -49,12 +62,20 @@ if(NOT CUDA AND HIP)
     set(Threads OFF)
     set(Serial OFF)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_HIP")
+    # For HIP, we also need to specify the platform (amd or nvidia). Kokkos only
+    # supports amd as an option here, though.
+    set(HIP_PLATFORM
+        "amd"
+        CACHE STRING "Set the HIP platform (amd or nvidia)")
+
   else()
     set(HIP OFF)
   endif()
 endif()
 
-if(NOT CUDA AND NOT HIP AND OpenMP)
+if(NOT CUDA
+   AND NOT HIP
+   AND OpenMP)
   check_language(OpenMP)
   find_package(OpenMP QUIET)
   if(OpenMP_CXX_FOUND)
@@ -67,7 +88,10 @@ if(NOT CUDA AND NOT HIP AND OpenMP)
   endif()
 endif()
 
-if(NOT CUDA AND NOT HIP AND NOT OpenMP AND SERIAL)
+if(NOT CUDA
+   AND NOT HIP
+   AND NOT OpenMP
+   AND SERIAL)
   set(Serial ON)
   set(CUDA OFF)
   set(HIP OFF)
@@ -76,7 +100,11 @@ if(NOT CUDA AND NOT HIP AND NOT OpenMP AND SERIAL)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_CPU")
 endif()
 
-if(NOT CUDA AND NOT HIP AND NOT OpenMP AND NOT Serial AND Threads)
+if(NOT CUDA
+   AND NOT HIP
+   AND NOT OpenMP
+   AND NOT Serial
+   AND Threads)
   set(CUDA OFF)
   set(HIP OFF)
   set(OpenMP OFF)
@@ -85,8 +113,15 @@ if(NOT CUDA AND NOT HIP AND NOT OpenMP AND NOT Serial AND Threads)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDEVICE_CPU")
 endif()
 
-if(NOT CUDA AND NOT HIP AND NOT OpenMP AND NOT Threads AND NOT Serial)
-  message(FATAL_ERROR "No valid device configuration found. Please specify at least one of CUDA, HIP, OpenMP, Threads or Serial.")
+if(NOT CUDA
+   AND NOT HIP
+   AND NOT OpenMP
+   AND NOT Threads
+   AND NOT Serial)
+  message(
+    FATAL_ERROR
+      "No valid device configuration found. Please specify at least one of CUDA, HIP, OpenMP, Threads or Serial."
+  )
 endif()
 
 message(
