@@ -43,7 +43,7 @@ template <size_t NDim> inline void TempLat::SpatialCoordinateTester<NDim>::Test(
   bool correct = true;
 
   NDLoop<NDim>(phi_views[0], [&](const auto &...indices) {
-    std::array<ptrdiff_t, NDim> local_idx = {static_cast<ptrdiff_t>(indices)...};
+    device::IdxArray<NDim> local_idx = {static_cast<device::Idx>(indices)...};
 
     // Build index array with ghost offset for memory layout functions and vectorGet
     device::IdxArray<NDim> idx_with_ghosts = {(indices + nGhost)...};
@@ -58,7 +58,8 @@ template <size_t NDim> inline void TempLat::SpatialCoordinateTester<NDim>::Test(
       const double expected_val = static_cast<double>(global_idx[d]);
 
       this_correct &= (phi_views[d](indices...) == expected_val);
-      this_correct &= (device::apply([&](auto... i) { return x.vectorGet(d, i...); }, idx_with_ghosts) == expected_val);
+      this_correct &=
+          (device::apply([&](auto... i) { return DoEval::eval(x, i...)[d]; }, idx_with_ghosts) == expected_val);
     }
 
     correct &= this_correct;

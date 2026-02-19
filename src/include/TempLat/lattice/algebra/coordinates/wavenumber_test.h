@@ -15,7 +15,7 @@
 
 template <size_t NDim> inline void TempLat::WaveNumberTester<NDim>::Test(TempLat::TDDAssertion &tdd)
 {
-  const ptrdiff_t nGrid = 16, nGhost = 0;
+  const ptrdiff_t nGrid = 32, nGhost = 0;
 
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
@@ -31,10 +31,18 @@ template <size_t NDim> inline void TempLat::WaveNumberTester<NDim>::Test(TempLat
 
   WaveNumber<NDim> k(toolBox);
 
+  std::cout << "Testing wavenumber coordinates in Fourier space..." << std::endl;
+
   // Assign wavenumber components to fields
-  constexpr_for<0, NDim>([&](auto d) { phi_components[d].inFourierSpace() = getVectorComponent(k, d); });
+  constexpr_for<0, NDim>([&](auto d) {
+    std::cout "Preparing to assign phi_" << d << " in Fourier space to wavenumber component " << d << std::endl;
+    phi_components[d].inFourierSpace() = getVectorComponent(k, d);
+    std::cout << "Assigned phi_" << d << " in Fourier space to wavenumber component " << d << std::endl;
+  });
   phinorm.inFourierSpace() = k.norm();
   phinorm2.inFourierSpace() = k.norm2();
+
+  std::cout << "Did thing 1 " << std::endl;
 
   // Get host views for all component fields
   std::vector<decltype(phi_components[0].inFourierSpace().getLocalNDHostView())> phi_views;
@@ -45,6 +53,8 @@ template <size_t NDim> inline void TempLat::WaveNumberTester<NDim>::Test(TempLat
   auto phinorm_view = phinorm.inFourierSpace().getLocalNDHostView();
   auto phinorm2_view = phinorm2.inFourierSpace().getLocalNDHostView();
 
+  std::cout << "Did thing 2 " << std::endl;
+
   // Get Fourier space layout for MPI support (handles transposition)
   auto layout = toolBox->mLayouts.getFourierSpaceLayout();
 
@@ -53,6 +63,8 @@ template <size_t NDim> inline void TempLat::WaveNumberTester<NDim>::Test(TempLat
 
   NDLoop<NDim>(phinorm_view, [&](const auto &...indices) {
     device::IdxArray<NDim> local_idx{indices...};
+
+    std::cout << "TESTING FOR NDIM = " << NDim << " at local index (" << std::endl;
 
     // Use layout to compute global spatial coordinates from local memory indices
     // This correctly handles transposition in MPI distributed FFTs
