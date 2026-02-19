@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/algebra/algebra.h"
+#include "TempLat/lattice/measuringtools/radialprojector.h"
 #include "CosmoInterface/runparameters.h"
 
 namespace TempLat
