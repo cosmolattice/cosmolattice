@@ -45,14 +45,20 @@ namespace TempLat
     // In restart mode, we start by loading the former parameters in the paameter parser.
     void getParams(ParameterParser &parser)
     {
+#ifdef HAVE_HDF5
       fIO.loader.open(restart);
       fIO.loader.load(parser);
       fIO.loader.close();
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
     // Function which loads from file all the field variables when running in restart mode.
     template <typename T, class Model> void loadSim(Model &model, T &t0)
     {
+#ifdef HAVE_HDF5
       fIO.loader.open(restart);
 
       ForLoop(i, 0, Model::Ns - 1, fIO.load(model.fldS(i)); fIO.load(model.piS(i)););
@@ -77,6 +83,10 @@ namespace TempLat
       fIO.loader.load(model.aDotSIM, "aDotSIM");
       fIO.loader.load(t0, "tSave");
       fIO.loader.close();
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
 
       Averages::setAllAverages(model);
     }
@@ -84,6 +94,7 @@ namespace TempLat
     // Function which saves all field variables to disk when asked.
     template <typename T, class Model> void saveSim(ParameterParser &parser, Model &model, T time, std::string tag = "")
     {
+#ifdef HAVE_HDF5
       fIO.saver.create(tag);
       ForLoop(i, 0, Model::Ns - 1, fIO.save(model.fldS(i)); fIO.save(model.piS(i)););
 
@@ -110,6 +121,10 @@ namespace TempLat
 
       fIO.saver.save(parser);
       fIO.saver.close();
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
     // Function which performs the automatic backup of the simulation.
@@ -182,11 +197,8 @@ namespace TempLat
     std::unique_ptr<ConditionalFileStream> info;
   };
 
-
 #ifdef TEMPLATTEST
-template<size_t NDim>
-  struct SimulationManagerTester
-  {
+  template <size_t NDim> struct SimulationManagerTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };

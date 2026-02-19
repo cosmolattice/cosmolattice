@@ -42,6 +42,7 @@ namespace TempLat
       saveSU2Mag = IsInContainer::check("E_B_G", toSave);          // magnetic energy of the SU(2) gauge sector
       savePot = IsInContainer::check("E_V", toSave);               // potential energy
 
+#ifdef HAVE_HDF5
       if (saveScalarK) {
         nameScalarK = mRoot + "kinetic_energy_snapshot_scalar.h5"; // name of the file
         fIO.saver.create(nameScalarK);
@@ -106,11 +107,16 @@ namespace TempLat
         fIO.saver.create(namePot);
         fIO.saver.close();
       }
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
     // This saves the energy snapshots at the corresponding HDF5 files
     template <typename T> void measure(Model &model, T t)
     {
+#ifdef HAVE_HDF5
       if (saveScalarK) { // kinetic energy of the scalar singlets
         ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalarK); fIO.saver.save(
             t, Energies::kineticS(model, FieldFunctionals::pi2S(model, i)), "E_S_K_" + std::to_string(i));
@@ -168,6 +174,10 @@ namespace TempLat
         fIO.saver.save(t, Potential::potential(model), "E_V");
         fIO.saver.close();
       }
+#else
+      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+                            "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
   private:
@@ -191,9 +201,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-template<typename Model>
-  struct EnergySnapshotsMeasurerTester
-  {
+  template <typename Model> struct EnergySnapshotsMeasurerTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };
