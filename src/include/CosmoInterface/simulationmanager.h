@@ -50,8 +50,9 @@ namespace TempLat
       fIO.loader.load(parser);
       fIO.loader.close();
 #else
-      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
-                            "you have it installed and that you compiled CosmoLattice with it."));
+      throw(
+          FileIOException("You tried to load parameters from a file, but the HDF5 library is not available. Make sure "
+                          "you have it installed and that you compiled CosmoLattice with it."));
 #endif
     }
 
@@ -83,12 +84,13 @@ namespace TempLat
       fIO.loader.load(model.aDotSIM, "aDotSIM");
       fIO.loader.load(t0, "tSave");
       fIO.loader.close();
-#else
-      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
-                            "you have it installed and that you compiled CosmoLattice with it."));
-#endif
 
       Averages::setAllAverages(model);
+#else
+      throw(FileIOException(
+          "You tried to load a simulation from a file, but the HDF5 library is not available. Make sure "
+          "you have it installed and that you compiled CosmoLattice with it."));
+#endif
     }
 
     // Function which saves all field variables to disk when asked.
@@ -122,8 +124,9 @@ namespace TempLat
       fIO.saver.save(parser);
       fIO.saver.close();
 #else
-      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
-                            "you have it installed and that you compiled CosmoLattice with it."));
+      throw(
+          FileIOException("You tried to save a simulation to a file, but the HDF5 library is not available. Make sure "
+                          "you have it installed and that you compiled CosmoLattice with it."));
 #endif
     }
 
