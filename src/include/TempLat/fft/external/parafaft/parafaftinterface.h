@@ -50,7 +50,6 @@ namespace TempLat
     {
       return IntrinsicScales();
     }
-
   };
 } // namespace TempLat
 

@@ -9,61 +9,61 @@
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/util/ndloop.h"
 
-namespace TempLat {
-
-template<size_t NDim, typename T>
-struct FourierViewTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <size_t NDim, typename T> inline void FourierViewTester<NDim, T>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  const ptrdiff_t nGrid = 16, nGhost = 1;
 
-  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
-  toolBox->setVerbose();
+  template <size_t NDim, typename T> struct FourierViewTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  Field<NDim, T> a("a", toolBox);
-  Field<NDim, T> x("x", toolBox);
+  template <size_t NDim, typename T> inline void FourierViewTester<NDim, T>::Test(TDDAssertion &tdd)
+  {
+    const ptrdiff_t nGrid = 16, nGhost = 1;
 
-  constexpr T value = 100. * nGrid * NDim * nGhost;
+    auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
+    toolBox->setVerbose();
 
-  a.inFourierSpace() = value;
-  x.inFourierSpace() = value;
+    Field<NDim, T> a("a", toolBox);
+    Field<NDim, T> x("x", toolBox);
 
-  // get host views
-  auto a_host = a.inFourierSpace().getLocalNDHostView();
-  auto x_host = x.inFourierSpace().getLocalNDHostView();
+    constexpr T value = 100. * nGrid * NDim * nGhost;
 
-  bool same = true;
-  NDLoop<NDim>(a_host, [&](const auto &...idx) { same = same && AlmostEqual(a_host(idx...), x_host(idx...)); });
-  tdd.verify(same);
+    a.inFourierSpace() = value;
+    x.inFourierSpace() = value;
 
-  /*ptrdiff_t nGrid = 256, nGhost = 2;
+    // get host views
+    auto a_host = a.inFourierSpace().getLocalNDHostView();
+    auto x_host = x.inFourierSpace().getLocalNDHostView();
 
-  auto toolBox = MemoryToolBox::makeShared(3, nGrid, nGhost);
+    bool same = true;
+    NDLoop<NDim>(a_host, [&](const auto &...idx) { same = same && AlmostEqual(a_host(idx...), x_host(idx...)); });
+    tdd.verify(same);
 
-  toolBox->setVerbose();
+    /*ptrdiff_t nGrid = 256, nGhost = 2;
 
-  FieldChainFinal<T> phiBase("phi", toolBox);
-  FieldViewFourier<T> phi(phiBase);*/
+    auto toolBox = MemoryToolBox::makeShared(3, nGrid, nGhost);
 
-  /*std::atomic<bool> lastDimPositiveDefinite(true);
+    toolBox->setVerbose();
 
-  WaveNumber k;
+    FieldChainFinal<T> phiBase("phi", toolBox);
+    FieldViewFourier<T> phi(phiBase);*/
 
-  phi.iterate( [&](IterationCoordinates &pIterCoords) {
-      bool localSuccess = pIterCoords[2] >= 0;*/
-  /* atomically put the new value in place, but if we had success, it is important
-    that we don't overwrite another thread's failure. */
-  /*bool expected = true;
-  lastDimPositiveDefinite.compare_exchange_weak(expected, localSuccess);
-  //        say << offset << " localSuccess: " << localSuccess << " pIterCoords[2]: " << pIterCoords[2] << "\n";
-  return localSuccess;
-  });
+    /*std::atomic<bool> lastDimPositiveDefinite(true);
 
-  tdd.verify(lastDimPositiveDefinite == true);*/
-}
+    WaveNumber k;
+
+    phi.iterate( [&](IterationCoordinates &pIterCoords) {
+        bool localSuccess = pIterCoords[2] >= 0;*/
+    /* atomically put the new value in place, but if we had success, it is important
+      that we don't overwrite another thread's failure. */
+    /*bool expected = true;
+    lastDimPositiveDefinite.compare_exchange_weak(expected, localSuccess);
+    //        say << offset << " localSuccess: " << localSuccess << " pIterCoords[2]: " << pIterCoords[2] << "\n";
+    return localSuccess;
+    });
+
+    tdd.verify(lastDimPositiveDefinite == true);*/
+  }
 
 } // namespace TempLat
 

@@ -7,37 +7,41 @@
 #include "TempLat/lattice/algebra/helpers/hasspaceconfirmationmethods.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HasSpaceConfirmationMethodsTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HasSpaceConfirmationMethodsTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  static constexpr size_t NDim = 3;
 
-  struct MyTestOne {
-    void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &sType) { std::cerr << "Hell yeah.\n"; }
+  struct HasSpaceConfirmationMethodsTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  struct MyTestTwo {
-    void notConfirmConfigSpace() { std::cerr << "Hell no.\n"; }
-  };
+  void HasSpaceConfirmationMethodsTester::Test(TDDAssertion &tdd)
+  {
+    static constexpr size_t NDim = 3;
 
-  struct MyTestThree {
-    void confirmSpace(Tag<3> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &sType)
-    {
-      std::cerr << "Hell yeah.\n";
-    }
-  };
+    struct MyTestOne {
+      void confirmSpace(const LayoutStruct<NDim> &newLayout, const SpaceStateType &sType)
+      {
+        std::cerr << "Hell yeah.\n";
+      }
+    };
 
-  tdd.verify(HasSpaceConfirmationMethods<MyTestOne, NDim> == true);
-  tdd.verify(HasSpaceConfirmationMethods<MyTestTwo, NDim> == false);
-  tdd.verify(HasSpaceConfirmationMethods<int, NDim> == false);
-  tdd.verify(HasSpaceConfirmationMethodsIndexed<3, MyTestOne, NDim> == false);
-  tdd.verify(HasSpaceConfirmationMethodsIndexed<3, MyTestThree, NDim> == true);
-}
+    struct MyTestTwo {
+      void notConfirmConfigSpace() { std::cerr << "Hell no.\n"; }
+    };
+
+    struct MyTestThree {
+      void confirmSpace(Tag<3> i, const LayoutStruct<NDim> &newLayout, const SpaceStateType &sType)
+      {
+        std::cerr << "Hell yeah.\n";
+      }
+    };
+
+    tdd.verify(HasSpaceConfirmationMethods<MyTestOne, NDim> == true);
+    tdd.verify(HasSpaceConfirmationMethods<MyTestTwo, NDim> == false);
+    tdd.verify(HasSpaceConfirmationMethods<int, NDim> == false);
+    tdd.verify(HasSpaceConfirmationMethodsIndexed<3, MyTestOne, NDim> == false);
+    tdd.verify(HasSpaceConfirmationMethodsIndexed<3, MyTestThree, NDim> == true);
+  }
 
 } // namespace TempLat
 

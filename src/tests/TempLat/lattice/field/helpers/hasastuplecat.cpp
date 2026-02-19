@@ -7,25 +7,26 @@
 #include "TempLat/lattice/field/helpers/hasastuplecat.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HasAsTupleCatTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HasAsTupleCatTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  struct myTuple {
-    myTuple() : tup(std::make_tuple(1, std::make_tuple(34, 0.965))) {}
-
-    auto asTupleCat() { return std::tuple_cat(tup); };
-    std::tuple<int, std::tuple<int, double>> tup;
+  struct HasAsTupleCatTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(HasAsTupleCat<myTuple>::value == true);
-}
+  void HasAsTupleCatTester::Test(TDDAssertion &tdd)
+  {
+
+    struct myTuple {
+      myTuple() : tup(std::make_tuple(1, std::make_tuple(34, 0.965))) {}
+
+      auto asTupleCat() { return std::tuple_cat(tup); };
+      std::tuple<int, std::tuple<int, double>> tup;
+    };
+
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(HasAsTupleCat<myTuple>::value == true);
+  }
 
 } // namespace TempLat
 

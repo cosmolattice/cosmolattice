@@ -6,17 +6,18 @@
 #include "TempLat/lattice/algebra/listoperators/listlaplacian.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ListLaplacianTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ListLaplacianTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct ListLaplacianTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void ListLaplacianTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

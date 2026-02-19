@@ -7,32 +7,33 @@
 #include "TempLat/lattice/algebra/helpers/hasstringmethod.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HasStringMethodTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HasStringMethodTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  struct MyTestOne {
-    void toString() { std::cerr << "Hell yeah.\n"; }
+
+  struct HasStringMethodTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  struct MyTestTwo {
-    void notToString() { std::cerr << "Hell no.\n"; }
-  };
+  void HasStringMethodTester::Test(TDDAssertion &tdd)
+  {
+    struct MyTestOne {
+      void toString() { std::cerr << "Hell yeah.\n"; }
+    };
 
-  struct MyTestThree {
-    void toString(Tag<3> i) { std::cerr << "Hell yes.\n"; }
-  };
+    struct MyTestTwo {
+      void notToString() { std::cerr << "Hell no.\n"; }
+    };
 
-  tdd.verify(HasStringMethod<MyTestOne> == true);
-  tdd.verify(HasStringMethod<MyTestTwo> == false);
-  tdd.verify(HasStringMethod<int> == false);
-  tdd.verify(HasStringMethodIndexed<3, MyTestOne> == false);
-  tdd.verify(HasStringMethodIndexed<3, MyTestThree> == true);
-}
+    struct MyTestThree {
+      void toString(Tag<3> i) { std::cerr << "Hell yes.\n"; }
+    };
+
+    tdd.verify(HasStringMethod<MyTestOne> == true);
+    tdd.verify(HasStringMethod<MyTestTwo> == false);
+    tdd.verify(HasStringMethod<int> == false);
+    tdd.verify(HasStringMethodIndexed<3, MyTestOne> == false);
+    tdd.verify(HasStringMethodIndexed<3, MyTestThree> == true);
+  }
 
 } // namespace TempLat
 

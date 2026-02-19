@@ -7,26 +7,27 @@
 #include "TempLat/util/hash/keccakhash.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct KeccakHashTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void KeccakHashTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  auto &&compare = [&tdd](auto &&a, auto &&b) {
-    std::string computed = KeccakHash::compute(a);
-    std::string manual = b;
-
-    tdd.verify(computed == manual);
+  struct KeccakHashTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  compare("", "a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a");
-  compare("Hallo!0", "9fd74e50fd3c8efa609e61a31ecc40db8fc2cf857c92fb1951fd05ffc05ba231");
-  compare("Hallo!1", "72a2a9d73afef64b3a0be1499d824fef86fb8f60de0713df09c5e02023fdb05c");
-}
+  void KeccakHashTester::Test(TDDAssertion &tdd)
+  {
+
+    auto &&compare = [&tdd](auto &&a, auto &&b) {
+      std::string computed = KeccakHash::compute(a);
+      std::string manual = b;
+
+      tdd.verify(computed == manual);
+    };
+
+    compare("", "a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a");
+    compare("Hallo!0", "9fd74e50fd3c8efa609e61a31ecc40db8fc2cf857c92fb1951fd05ffc05ba231");
+    compare("Hallo!1", "72a2a9d73afef64b3a0be1499d824fef86fb8f60de0713df09c5e02023fdb05c");
+  }
 
 } // namespace TempLat
 

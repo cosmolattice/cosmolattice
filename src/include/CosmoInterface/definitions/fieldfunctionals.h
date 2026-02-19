@@ -114,7 +114,6 @@ namespace TempLat
     {
       return Total(i, 1, Model::NDim, Total(b, 1, 3, pow<2>(model.piSU2(a)(i).SU2LieAlgebraGet(b))));
     }
-
   };
 
 } // namespace TempLat

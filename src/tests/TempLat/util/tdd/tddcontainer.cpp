@@ -7,16 +7,14 @@
 #include "TempLat/util/tdd/tddcontainer.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template<class TESTME>
-struct TDDContainerTester
+namespace TempLat
 {
-  static void Test(TDDAssertion &tdd);
-};
 
-template <typename T>
-void TDDContainerTester<T>::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  template <class TESTME> struct TDDContainerTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <typename T> void TDDContainerTester<T>::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

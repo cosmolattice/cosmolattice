@@ -8,31 +8,32 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/namedtmpfile.h"
 
-namespace TempLat {
-
-struct FileToStringTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void FileToStringTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  NamedTmpFile ntf;
+  struct FileToStringTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  std::string payload = "Hello world!";
+  void FileToStringTester::Test(TDDAssertion &tdd)
+  {
 
-  ntf << payload;
+    NamedTmpFile ntf;
 
-  ntf.close();
+    std::string payload = "Hello world!";
 
-  FileToString fts(ntf.getName());
+    ntf << payload;
 
-  std::string ftsRead = fts;
+    ntf.close();
 
-  tdd.verify(ftsRead == payload);
+    FileToString fts(ntf.getName());
 
-  tdd.verify(ntf.remove() == 0);
-}
+    std::string ftsRead = fts;
+
+    tdd.verify(ftsRead == payload);
+
+    tdd.verify(ntf.remove() == 0);
+  }
 
 } // namespace TempLat
 

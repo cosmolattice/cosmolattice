@@ -10,15 +10,35 @@
 namespace TempLat
 {
 
-#define IfElse(condition, ifExpr, elseExpr)                                                                              \
-  [&]() { if constexpr (condition) { return ifExpr; } else { return elseExpr; } }()
-#define If(condition, ifExpr)                                                                                            \
-  [&]() { if constexpr (condition) { return ifExpr; } else { return ZeroType(); } }()
+#define IfElse(condition, ifExpr, elseExpr)                                                                            \
+  [&]() {                                                                                                              \
+    if constexpr (condition) {                                                                                         \
+      return ifExpr;                                                                                                   \
+    } else {                                                                                                           \
+      return elseExpr;                                                                                                 \
+    }                                                                                                                  \
+  }()
+#define If(condition, ifExpr)                                                                                          \
+  [&]() {                                                                                                              \
+    if constexpr (condition) {                                                                                         \
+      return ifExpr;                                                                                                   \
+    } else {                                                                                                           \
+      return ZeroType();                                                                                               \
+    }                                                                                                                  \
+  }()
 
-#define IfElseStatement(condition, ifExpr, elseExpr)                                                                     \
-  [&]() { if constexpr (condition) { ifExpr; } else { elseExpr; } }()
-#define IfStatement(condition, ifExpr)                                                                                   \
-  if constexpr (condition) { ifExpr; }
+#define IfElseStatement(condition, ifExpr, elseExpr)                                                                   \
+  [&]() {                                                                                                              \
+    if constexpr (condition) {                                                                                         \
+      ifExpr;                                                                                                          \
+    } else {                                                                                                           \
+      elseExpr;                                                                                                        \
+    }                                                                                                                  \
+  }()
+#define IfStatement(condition, ifExpr)                                                                                 \
+  if constexpr (condition) {                                                                                           \
+    ifExpr;                                                                                                            \
+  }
 } // namespace TempLat
 
 #endif

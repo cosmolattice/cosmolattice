@@ -7,25 +7,26 @@
 #include "TempLat/util/namedtmpfile.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct NamedTmpFileTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void NamedTmpFileTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  NamedTmpFile ntf;
+  struct NamedTmpFileTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  tdd.verify(ntf.outfile.tellp() == 0);
+  void NamedTmpFileTester::Test(TDDAssertion &tdd)
+  {
 
-  ntf << "Hoi!";
+    NamedTmpFile ntf;
 
-  tdd.verify(ntf.outfile.tellp() != 0);
-  tdd.verify(ntf.remove() == 0);
-  tdd.verify(ntf.remove() != 0);
-}
+    tdd.verify(ntf.outfile.tellp() == 0);
+
+    ntf << "Hoi!";
+
+    tdd.verify(ntf.outfile.tellp() != 0);
+    tdd.verify(ntf.remove() == 0);
+    tdd.verify(ntf.remove() != 0);
+  }
 
 } // namespace TempLat
 

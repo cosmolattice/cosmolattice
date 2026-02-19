@@ -7,29 +7,30 @@
 #include "TempLat/util/factorize.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct FactorizeTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void FactorizeTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  tdd.verify(DoesNotThrow<FactorizationFailed>([]() {
-    Factorize fac(13);
-    Factorize fac1(4);
-    Factorize fac2(6);
-    Factorize fac3(12);
-    Factorize fac4(148);
-    if (TDDRegister::isSingleUnitTest()) {
-      Factorize fac5(1481451232);
-      Factorize fac6(1481444);
-      Factorize fac7(1482155);
-    }
-  }));
-  //    std::cerr << fac4 << "\n";
-}
+  struct FactorizeTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void FactorizeTester::Test(TDDAssertion &tdd)
+  {
+
+    tdd.verify(DoesNotThrow<FactorizationFailed>([]() {
+      Factorize fac(13);
+      Factorize fac1(4);
+      Factorize fac2(6);
+      Factorize fac3(12);
+      Factorize fac4(148);
+      if (TDDRegister::isSingleUnitTest()) {
+        Factorize fac5(1481451232);
+        Factorize fac6(1481444);
+        Factorize fac7(1482155);
+      }
+    }));
+    //    std::cerr << fac4 << "\n";
+  }
 
 } // namespace TempLat
 

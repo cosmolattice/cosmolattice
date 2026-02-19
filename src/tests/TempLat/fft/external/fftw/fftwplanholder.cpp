@@ -8,14 +8,12 @@
 #include "TempLat/fft/external/fftw/fftwplanholder.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct FFTWPlanHolderTester {
-  static void Test(TDDAssertion &tdd)
-  {
-    tdd.verify(true);
-  }
-};
+  struct FFTWPlanHolderTester {
+    static void Test(TDDAssertion &tdd) { tdd.verify(true); }
+  };
 
 } // namespace TempLat
 

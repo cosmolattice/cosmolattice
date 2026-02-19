@@ -7,17 +7,18 @@
 #include "TempLat/lattice/algebra/su2algebra/su2operator.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct SU2OperatorTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void SU2OperatorTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct SU2OperatorTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void SU2OperatorTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

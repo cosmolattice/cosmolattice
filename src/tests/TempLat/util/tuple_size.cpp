@@ -6,13 +6,14 @@
 #include "TempLat/util/tuple_size.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct tuple_sizeTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct tuple_sizeTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void tuple_sizeTester::Test(TDDAssertion &tdd) {}
+  void tuple_sizeTester::Test(TDDAssertion &tdd) {}
 
 } // namespace TempLat
 

@@ -79,7 +79,6 @@ namespace TempLat
     MPI_Datatype mAtomType;
 #endif
     std::shared_ptr<MPI_Datatype> mSubarrayMPIDataType;
-
   };
 
 } // namespace TempLat

@@ -11,14 +11,13 @@
 //     TempLat::TDDContainer<TempLat::UnaryOperatorTester> test;
 // }
 
+namespace TempLat
+{
 
-namespace TempLat {
+  template <typename T> struct UnaryOperatorTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-template<typename T>
-struct UnaryOperatorTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <typename T> inline void UnaryOperatorTester<T>::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  template <typename T> inline void UnaryOperatorTester<T>::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat

@@ -8,18 +8,19 @@
 #include "CosmoInterface/measurements/measurer.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct MeasurerTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct MeasurerTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-// void MeasurerTester::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     tdd.verify( false );
-//
-// }
+  // void MeasurerTester::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat
 

@@ -11,17 +11,17 @@
 //     TempLat::TDDContainer<TempLat::BinaryOperatorTester> test;
 // }
 
+namespace TempLat
+{
 
-namespace TempLat {
+  struct BinaryOperatorTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-struct BinaryOperatorTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-// void BinaryOperatorTester::Test(TDDAssertion& tdd) {
-//
-//     tdd.verify( true );
-//
-// }
+  // void BinaryOperatorTester::Test(TDDAssertion& tdd) {
+  //
+  //     tdd.verify( true );
+  //
+  // }
 
 } // namespace TempLat

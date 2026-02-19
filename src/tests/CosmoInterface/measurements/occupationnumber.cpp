@@ -8,17 +8,18 @@
 #include "CosmoInterface/measurements/occupationnumber.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct OccupationNumberTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void OccupationNumberTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct OccupationNumberTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void OccupationNumberTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

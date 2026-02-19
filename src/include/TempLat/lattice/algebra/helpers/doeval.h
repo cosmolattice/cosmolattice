@@ -42,8 +42,8 @@ namespace TempLat
       return obj;
     }
 
-    template <typename U>
-    static constexpr auto eval_example(U &&obj) {
+    template <typename U> static constexpr auto eval_example(U &&obj)
+    {
       if constexpr (HasEval<U, int>)
         return eval(obj, int{});
       else if constexpr (HasEval<U, int, int>)

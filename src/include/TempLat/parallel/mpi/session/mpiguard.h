@@ -104,10 +104,7 @@ namespace TempLat
     /** @brief Get the current instance count. Used by tests to check if an instance is already active.
      *  This is a test helper - production code should not rely on this.
      */
-    static inline int GetInstanceCount()
-    {
-      return InstanceCounter(0);
-    }
+    static inline int GetInstanceCount() { return InstanceCounter(0); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

@@ -46,7 +46,6 @@ namespace TempLat
   private:
     unsigned int mFlagC2R;
     unsigned int mFlagR2C;
-
   };
 } // namespace TempLat
 

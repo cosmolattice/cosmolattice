@@ -8,89 +8,89 @@
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocal.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template <size_t NDim> struct LayoutStructLocalTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <size_t NDim>
-void LayoutStructLocalTester<NDim>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* test the operator== */
-  LayoutStructLocal<3> a({0, 0, 0}, 0);
-  LayoutStructLocal<3> b({0, 0, 0}, 0);
-  LayoutStructLocal<2> c({0, 0}, 0);
-  LayoutStructLocal<3> d({0, 0, 0}, 0);
 
-  d.getLocalSizes()[1] = 2;
+  template <size_t NDim> struct LayoutStructLocalTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  tdd.verify(!(a == c));
-  tdd.verify((a == b));
-  tdd.verify(!(a == d));
+  template <size_t NDim> void LayoutStructLocalTester<NDim>::Test(TDDAssertion &tdd)
+  {
+    /* test the operator== */
+    LayoutStructLocal<3> a({0, 0, 0}, 0);
+    LayoutStructLocal<3> b({0, 0, 0}, 0);
+    LayoutStructLocal<2> c({0, 0}, 0);
+    LayoutStructLocal<3> d({0, 0, 0}, 0);
 
-  a = LayoutStructLocal<3>({16, 16, 16}, 0);
+    d.getLocalSizes()[1] = 2;
 
-  device::IdxArray<3> newLocalStarts{{7, 8, 9}};
-  a.setLocalStarts(newLocalStarts);
+    tdd.verify(!(a == c));
+    tdd.verify((a == b));
+    tdd.verify(!(a == d));
 
-  std::vector<ptrdiff_t> memVec(3), posVec(3), memVec2(3);
+    a = LayoutStructLocal<3>({16, 16, 16}, 0);
 
-  memVec[0] = 1;
-  memVec[1] = 2;
-  memVec[2] = 6;
+    device::IdxArray<3> newLocalStarts{{7, 8, 9}};
+    a.setLocalStarts(newLocalStarts);
 
-  for (ptrdiff_t i = 0; i < 3; ++i)
-    posVec[i] = a.memoryIndexToSpatialCoordinate(memVec[i], i);
+    std::vector<ptrdiff_t> memVec(3), posVec(3), memVec2(3);
 
-  say << "memVec " << memVec << " -> posVec " << posVec << "\n";
+    memVec[0] = 1;
+    memVec[1] = 2;
+    memVec[2] = 6;
 
-  tdd.verify(posVec[0] == 8);
+    for (ptrdiff_t i = 0; i < 3; ++i)
+      posVec[i] = a.memoryIndexToSpatialCoordinate(memVec[i], i);
 
-  tdd.verify(posVec[1] == -6);
+    say << "memVec " << memVec << " -> posVec " << posVec << "\n";
 
-  tdd.verify(posVec[2] == -1);
+    tdd.verify(posVec[0] == 8);
 
-  for (ptrdiff_t i = 0; i < 3; ++i)
-    memVec2[i] = a.spatialCoordinateToMemoryIndex(posVec[i], i);
+    tdd.verify(posVec[1] == -6);
 
-  say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
-  say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
+    tdd.verify(posVec[2] == -1);
 
-  tdd.verify(memVec[0] == memVec2[0]);
-  tdd.verify(memVec[1] == memVec2[1]);
-  tdd.verify(memVec[2] == memVec2[2]);
+    for (ptrdiff_t i = 0; i < 3; ++i)
+      memVec2[i] = a.spatialCoordinateToMemoryIndex(posVec[i], i);
 
-  a = LayoutStructLocal<3>({12, 16, 18}, 0);
+    say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
+    say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
 
-  newLocalStarts = device::IdxArray<3>{{7, 8, 9}};
-  a.setLocalStarts(newLocalStarts);
+    tdd.verify(memVec[0] == memVec2[0]);
+    tdd.verify(memVec[1] == memVec2[1]);
+    tdd.verify(memVec[2] == memVec2[2]);
 
-  memVec[0] = 1;
-  memVec[1] = 2;
-  memVec[2] = 6;
+    a = LayoutStructLocal<3>({12, 16, 18}, 0);
 
-  for (ptrdiff_t i = 0; i < 3; ++i)
-    posVec[i] = a.memoryIndexToSpatialCoordinate(memVec[i], i);
+    newLocalStarts = device::IdxArray<3>{{7, 8, 9}};
+    a.setLocalStarts(newLocalStarts);
 
-  say << "memVec " << memVec << " -> posVec " << posVec << "\n";
+    memVec[0] = 1;
+    memVec[1] = 2;
+    memVec[2] = 6;
 
-  tdd.verify(posVec[0] == -4);
+    for (ptrdiff_t i = 0; i < 3; ++i)
+      posVec[i] = a.memoryIndexToSpatialCoordinate(memVec[i], i);
 
-  tdd.verify(posVec[1] == -6);
+    say << "memVec " << memVec << " -> posVec " << posVec << "\n";
 
-  tdd.verify(posVec[2] == -3);
+    tdd.verify(posVec[0] == -4);
 
-  for (ptrdiff_t i = 0; i < 3; ++i)
-    memVec2[i] = a.spatialCoordinateToMemoryIndex(posVec[i], i);
+    tdd.verify(posVec[1] == -6);
 
-  say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
-  say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
+    tdd.verify(posVec[2] == -3);
 
-  tdd.verify(memVec[0] == memVec2[0]);
-  tdd.verify(memVec[1] == memVec2[1]);
-  tdd.verify(memVec[2] == memVec2[2]);
-}
+    for (ptrdiff_t i = 0; i < 3; ++i)
+      memVec2[i] = a.spatialCoordinateToMemoryIndex(posVec[i], i);
+
+    say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
+    say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
+
+    tdd.verify(memVec[0] == memVec2[0]);
+    tdd.verify(memVec[1] == memVec2[1]);
+    tdd.verify(memVec[2] == memVec2[2]);
+  }
 
 } // namespace TempLat
 

@@ -7,34 +7,35 @@
 #include "TempLat/util/assignabletuple.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct AssignableTupleTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void AssignableTupleTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
 
-  auto test = make_list(4, 5, 6);
+  struct AssignableTupleTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  auto change = make_list(1, 2, 3);
+  void AssignableTupleTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
 
-  test = change;
+    auto test = make_list(4, 5, 6);
 
-  tdd.verify(test(0_c) == 1);
-  tdd.verify(test(1_c) == 2);
-  tdd.verify(test(2_c) == 3);
+    auto change = make_list(1, 2, 3);
 
-  std::array<int, 3> arr{3, 4, 5};
+    test = change;
 
-  auto res = make_list_from_array(arr);
+    tdd.verify(test(0_c) == 1);
+    tdd.verify(test(1_c) == 2);
+    tdd.verify(test(2_c) == 3);
 
-  tdd.verify(res(0_c) == 3);
-  tdd.verify(res(1_c) == 4);
-  tdd.verify(res(2_c) == 5);
-}
+    std::array<int, 3> arr{3, 4, 5};
+
+    auto res = make_list_from_array(arr);
+
+    tdd.verify(res(0_c) == 3);
+    tdd.verify(res(1_c) == 4);
+    tdd.verify(res(2_c) == 5);
+  }
 
 } // namespace TempLat
 

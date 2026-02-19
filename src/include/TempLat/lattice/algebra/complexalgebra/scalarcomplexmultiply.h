@@ -60,7 +60,8 @@ namespace TempLat
   };
 
   template <typename T>
-  concept IsScalarType = (std::is_arithmetic_v<T> || HasEvalMethod<T>) && !HasComplexFieldGet<T> && !HasSU2Get<T> && !HasSU2DoubletGet<T>;
+  concept IsScalarType =
+      (std::is_arithmetic_v<T> || HasEvalMethod<T>) && !HasComplexFieldGet<T> && !HasSU2Get<T> && !HasSU2DoubletGet<T>;
 
   template <typename R, typename T>
     requires(IsScalarType<R> && HasComplexFieldGet<T> && !HasSU2Get<T> && !HasSU2DoubletGet<T>)

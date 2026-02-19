@@ -9,11 +9,12 @@
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/util/almostequal.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct AveragerTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct AveragerTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
   struct myWorkspace {
     myWorkspace() : value(0.) {}
@@ -73,40 +74,40 @@ struct AveragerTester {
     LayoutStruct<NDim> mLayout;
   };
 
-void AveragerTester::Test(TDDAssertion &tdd)
-{
-  myTmpStruct<3> myInstance;
+  void AveragerTester::Test(TDDAssertion &tdd)
+  {
+    myTmpStruct<3> myInstance;
 
-  auto aget = getAverager(myInstance);
-  say << "result of " << aget << ": " << aget.compute() << "\n";
+    auto aget = getAverager(myInstance);
+    say << "result of " << aget << ": " << aget.compute() << "\n";
 
-  tdd.verify(AlmostEqual(aget.compute(), 3));
+    tdd.verify(AlmostEqual(aget.compute(), 3));
 
-  auto myLambda = [&](auto dim, ptrdiff_t ngr_) {
-    constexpr size_t NDim = decltype(dim)::value;
-    myTmpStructComplex<NDim> myInstanceCp(ngr_);
+    auto myLambda = [&](auto dim, ptrdiff_t ngr_) {
+      constexpr size_t NDim = decltype(dim)::value;
+      myTmpStructComplex<NDim> myInstanceCp(ngr_);
 
-    auto agetCp = getAverager(myInstanceCp);
+      auto agetCp = getAverager(myInstanceCp);
 
-    auto result = agetCp.compute();
+      auto result = agetCp.compute();
 
-    say << result << " vs hypothetical " << complex<double>(1., NDim) << "\n";
+      say << result << " vs hypothetical " << complex<double>(1., NDim) << "\n";
 
-    tdd.verify(AlmostEqual(result, complex<double>(1., NDim)));
-    if (!AlmostEqual(result, complex<double>(1., NDim))) {
-      std::cout << " got " << result << ", expected " << complex<double>(1., NDim) << std::endl;
-    }
-  };
+      tdd.verify(AlmostEqual(result, complex<double>(1., NDim)));
+      if (!AlmostEqual(result, complex<double>(1., NDim))) {
+        std::cout << " got " << result << ", expected " << complex<double>(1., NDim) << std::endl;
+      }
+    };
 
-  myLambda(Tag<4>(), 16);
-  myLambda(Tag<3>(), 32);
-  myLambda(Tag<2>(), 64);
+    myLambda(Tag<4>(), 16);
+    myLambda(Tag<3>(), 32);
+    myLambda(Tag<2>(), 64);
 
 #ifndef HAVE_MPI
-  /** this one fails correctly under MPI: each process would do the full 1d rod. */
-  myLambda(Tag<1>(), 12);
+    /** this one fails correctly under MPI: each process would do the full 1d rod. */
+    myLambda(Tag<1>(), 12);
 #endif
-}
+  }
 
 } // namespace TempLat
 

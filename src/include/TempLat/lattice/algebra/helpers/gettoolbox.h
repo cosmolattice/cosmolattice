@@ -40,7 +40,6 @@ namespace TempLat
       throw GetToolBoxException("Object does not have a toolbox: " + GetString::get(obj));
       return std::nullptr_t();
     }
-
   };
 } // namespace TempLat
 

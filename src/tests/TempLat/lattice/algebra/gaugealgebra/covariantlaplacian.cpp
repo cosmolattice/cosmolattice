@@ -7,17 +7,18 @@
 #include "TempLat/lattice/algebra/gaugealgebra/covariantlaplacian.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct CovariantLaplacianTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void CovariantLaplacianTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct CovariantLaplacianTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void CovariantLaplacianTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

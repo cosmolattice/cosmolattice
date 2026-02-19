@@ -7,14 +7,12 @@
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct FFTMPIDomainSplitTester {
-  static void Test(TDDAssertion &tdd)
-  {
-    tdd.verify(true);
-  }
-};
+  struct FFTMPIDomainSplitTester {
+    static void Test(TDDAssertion &tdd) { tdd.verify(true); }
+  };
 
 } // namespace TempLat
 

@@ -7,31 +7,32 @@
 #include "TempLat/parallel/threadsettings.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ThreadSettingsTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ThreadSettingsTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  ptrdiff_t initialThreadCount = ThreadSettings::getMaxThreadCount();
+  struct ThreadSettingsTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  ptrdiff_t initialMPISize = ThreadSettings::getMPILocalSize();
+  void ThreadSettingsTester::Test(TDDAssertion &tdd)
+  {
 
-  ThreadSettings::setMPILocalSize(initialMPISize * 2);
+    ptrdiff_t initialThreadCount = ThreadSettings::getMaxThreadCount();
 
-  ptrdiff_t newThreadCount = ThreadSettings::getMaxThreadCount();
+    ptrdiff_t initialMPISize = ThreadSettings::getMPILocalSize();
 
-  ptrdiff_t manuallyComputedThreadCount = std::max((ptrdiff_t)1, initialThreadCount / 2);
+    ThreadSettings::setMPILocalSize(initialMPISize * 2);
 
-  tdd.verify(manuallyComputedThreadCount == newThreadCount);
+    ptrdiff_t newThreadCount = ThreadSettings::getMaxThreadCount();
 
-  ThreadSettings::setMPILocalSize(initialMPISize);
+    ptrdiff_t manuallyComputedThreadCount = std::max((ptrdiff_t)1, initialThreadCount / 2);
 
-  say << ThreadSettings::getInstance();
-}
+    tdd.verify(manuallyComputedThreadCount == newThreadCount);
+
+    ThreadSettings::setMPILocalSize(initialMPISize);
+
+    say << ThreadSettings::getInstance();
+  }
 
 } // namespace TempLat
 

@@ -12,15 +12,16 @@
 #include "TempLat/parallel/mpi/comm/mpidomainsplit.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftinterface.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct KokkosFFTMemoryLayoutTester {
-  static void Test(TDDAssertion &tdd)
-  {
-    // ...
-    tdd.verify(true);
-  }
-};
+  struct KokkosFFTMemoryLayoutTester {
+    static void Test(TDDAssertion &tdd)
+    {
+      // ...
+      tdd.verify(true);
+    }
+  };
 
 } // namespace TempLat
 

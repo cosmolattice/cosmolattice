@@ -8,17 +8,18 @@
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5object.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HDF5ObjectTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HDF5ObjectTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct HDF5ObjectTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void HDF5ObjectTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

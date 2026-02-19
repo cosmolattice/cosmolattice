@@ -93,11 +93,7 @@ namespace TempLat
     {
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
-        device::apply(
-            [&](auto &&...args) {
-              update += DoEval::eval(mT, args...);
-            },
-            idx);
+        device::apply([&](auto &&...args) { update += DoEval::eval(mT, args...); }, idx);
       };
 
       for (size_t t = 0; t < NDim; ++t) {
@@ -123,8 +119,7 @@ namespace TempLat
         if (curLocalSize == mMaxLocalSize) {
           device::memory::copyDeviceToHost(mDeviceResult, localResults.data());
         } else {
-          auto sliceView = device::memory::subview(mDeviceResult,
-                               std::pair<size_t, size_t>(0, curLocalSize));
+          auto sliceView = device::memory::subview(mDeviceResult, std::pair<size_t, size_t>(0, curLocalSize));
           device::memory::copyDeviceToHost(sliceView, localResults.data());
         }
 

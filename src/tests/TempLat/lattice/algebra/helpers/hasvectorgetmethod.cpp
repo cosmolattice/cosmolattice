@@ -7,43 +7,44 @@
 #include "TempLat/lattice/algebra/helpers/hasvectorgetmethod.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct dummy {
-  char a;
-};
-
-struct MyTestOne {
-  dummy vectorGet(Tag<1> t)
-  {
-    std::cerr << "Hell yeah.\n";
-    return dummy();
-  }
-};
-
-struct MyTestTwo {
-  void noGet() { std::cerr << "Hell no.\n"; }
-};
-
-struct MyTestThree {
-  template <int N> dummy vectorGet(Tag<N> t)
-  {
-    std::cerr << "Hell yeah.\n";
-    return dummy();
-  }
-};
-
-struct HasVectorGetMethodTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HasVectorGetMethodTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  tdd.verify(HasVectorGetMethod<MyTestOne> == true);
-  tdd.verify(HasVectorGetMethod<MyTestTwo> == false);
-  tdd.verify(HasVectorGetMethod<MyTestThree> == true);
-  tdd.verify(HasVectorGetMethod<int> == false);
-}
+
+  struct dummy {
+    char a;
+  };
+
+  struct MyTestOne {
+    dummy vectorGet(Tag<1> t)
+    {
+      std::cerr << "Hell yeah.\n";
+      return dummy();
+    }
+  };
+
+  struct MyTestTwo {
+    void noGet() { std::cerr << "Hell no.\n"; }
+  };
+
+  struct MyTestThree {
+    template <int N> dummy vectorGet(Tag<N> t)
+    {
+      std::cerr << "Hell yeah.\n";
+      return dummy();
+    }
+  };
+
+  struct HasVectorGetMethodTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void HasVectorGetMethodTester::Test(TDDAssertion &tdd)
+  {
+    tdd.verify(HasVectorGetMethod<MyTestOne> == true);
+    tdd.verify(HasVectorGetMethod<MyTestTwo> == false);
+    tdd.verify(HasVectorGetMethod<MyTestThree> == true);
+    tdd.verify(HasVectorGetMethod<int> == false);
+  }
 
 } // namespace TempLat
 

@@ -8,18 +8,18 @@
 #include "TempLat/lattice/algebra/su2algebra/su2doubletoperator.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template<size_t NDim>
-struct SU2DoubletOperatorTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <size_t NDim> inline void SU2DoubletOperatorTester<NDim>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  template <size_t NDim> struct SU2DoubletOperatorTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <size_t NDim> inline void SU2DoubletOperatorTester<NDim>::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

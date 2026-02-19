@@ -7,25 +7,26 @@
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct IsTempLatGettableTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void IsTempLatGettableTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  struct myDummyStruct {
-    int getComp(Tag<0> t) { return 24; }
+
+  struct IsTempLatGettableTester {
+    static void Test(TDDAssertion &tdd);
   };
-  struct myDummyStruct2 {
-    int get(int t) { return 24; }
-  };
-  tdd.verify(IsTempLatGettable<0, std::tuple<int, int>> == false);
-  tdd.verify(IsTempLatGettable<0, myDummyStruct> == true);
-  tdd.verify(IsTempLatGettable<0, myDummyStruct2> == false);
-}
+
+  void IsTempLatGettableTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    struct myDummyStruct {
+      int getComp(Tag<0> t) { return 24; }
+    };
+    struct myDummyStruct2 {
+      int get(int t) { return 24; }
+    };
+    tdd.verify(IsTempLatGettable<0, std::tuple<int, int>> == false);
+    tdd.verify(IsTempLatGettable<0, myDummyStruct> == true);
+    tdd.verify(IsTempLatGettable<0, myDummyStruct2> == false);
+  }
 
 } // namespace TempLat
 

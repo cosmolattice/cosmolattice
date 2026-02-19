@@ -9,34 +9,37 @@
 #include "TempLat/util/namedtmpfile.h"
 #include "TempLat/util/log/log.h"
 
-namespace TempLat {
-
-struct FileToJSONTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void FileToJSONTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  NamedTmpFile ntf;
+  struct FileToJSONTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  ntf << "{\"physics\" : {\"q\" : 1e5, \"g2\" : 4e-5, \"startNorm\" : 1e-10, \"fStar\" : 0.1, \"phi\" : { "
-         "\"randomSeed\" : \"Helllooooo!!!\"}, \"chi\" : { \"randomSeed\" : \"Hello to you too. Entropy perturbations, "
-         "aye?\"} }, \"integrator\" : { \"tEnd\" : 200, \"dt\" : 0.0002, \"outputFrequency\" : 1, "
-         "\"conformalPowerAlpha\" : 3, \"scaleFactor_initial\" : 1 }, \"output\" : { \"path\" : \"../demoOutput\" } }";
+  void FileToJSONTester::Test(TDDAssertion &tdd)
+  {
 
-  std::string fName = ntf.getName();
+    NamedTmpFile ntf;
 
-  ntf.close();
+    ntf << "{\"physics\" : {\"q\" : 1e5, \"g2\" : 4e-5, \"startNorm\" : 1e-10, \"fStar\" : 0.1, \"phi\" : { "
+           "\"randomSeed\" : \"Helllooooo!!!\"}, \"chi\" : { \"randomSeed\" : \"Hello to you too. Entropy "
+           "perturbations, "
+           "aye?\"} }, \"integrator\" : { \"tEnd\" : 200, \"dt\" : 0.0002, \"outputFrequency\" : 1, "
+           "\"conformalPowerAlpha\" : 3, \"scaleFactor_initial\" : 1 }, \"output\" : { \"path\" : \"../demoOutput\" } "
+           "}";
 
-  FileToJSON ftj(fName);
+    std::string fName = ntf.getName();
 
-  // say << ftj;
+    ntf.close();
 
-  ntf.remove();
+    FileToJSON ftj(fName);
 
-  tdd.verify(ftj.size() != 0);
-}
+    // say << ftj;
+
+    ntf.remove();
+
+    tdd.verify(ftj.size() != 0);
+  }
 
 } // namespace TempLat
 

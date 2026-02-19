@@ -7,20 +7,21 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct TagLiteralTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void TagLiteralTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  auto myLambda = [](Tag<9> t) { return 9; };
-  ;
-  tdd.verify(9 == myLambda(9_c));
-  // myLambda(9); does not compile as it should.
-}
+
+  struct TagLiteralTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void TagLiteralTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    auto myLambda = [](Tag<9> t) { return 9; };
+    ;
+    tdd.verify(9 == myLambda(9_c));
+    // myLambda(9); does not compile as it should.
+  }
 
 } // namespace TempLat
 

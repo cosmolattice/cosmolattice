@@ -7,19 +7,20 @@
 #include "TempLat/util/log/saycomplete.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct SayCompleteTest {
-  static void Test(TDDAssertion &tdd);
-};
-
-void SayCompleteTest::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  say << "Stream log - first light.\n";
-  sayShort << "Shorter stream log - first light.\n";
-  tdd.verify(true);
-}
+  struct SayCompleteTest {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void SayCompleteTest::Test(TDDAssertion &tdd)
+  {
+
+    say << "Stream log - first light.\n";
+    sayShort << "Shorter stream log - first light.\n";
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

@@ -81,11 +81,7 @@ namespace TempLat
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
-        device::apply(
-            [&](auto &&...args) {
-              update += DoEval::eval(mT, args...);
-            },
-            idx);
+        device::apply([&](auto &&...args) { update += DoEval::eval(mT, args...); }, idx);
       };
       device::iteration::reduce("Averager", mLayout, functor, localResult);
 

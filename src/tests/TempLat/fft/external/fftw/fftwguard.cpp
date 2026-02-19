@@ -8,23 +8,24 @@
 #include "TempLat/fft/external/fftw/fftwguard.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct FFTWGuardTester {
-  static void Test(TDDAssertion &tdd)
-  {
-    /* ONLY when single unit, imperatively, because
-     * the internals can only be called once per process.
-     * If we are not the only test, chances are that the actual
-     * mpiguard has an instance of us.
-     */
-    if (TDDRegister::isSingleUnitTest()) {
-      FFTWGuard guard;
+  struct FFTWGuardTester {
+    static void Test(TDDAssertion &tdd)
+    {
+      /* ONLY when single unit, imperatively, because
+       * the internals can only be called once per process.
+       * If we are not the only test, chances are that the actual
+       * mpiguard has an instance of us.
+       */
+      if (TDDRegister::isSingleUnitTest()) {
+        FFTWGuard guard;
+      }
+
+      tdd.verify(true);
     }
-
-    tdd.verify(true);
-  }
-};
+  };
 
 } // namespace TempLat
 

@@ -50,7 +50,6 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-
   };
 } // namespace TempLat
 

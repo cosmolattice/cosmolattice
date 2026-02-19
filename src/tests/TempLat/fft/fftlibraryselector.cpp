@@ -154,8 +154,7 @@ namespace TempLat
   };
 
   struct FFTLibrarySelectorTester {
-    template <typename T>
-    static void TestBody(TDDAssertion &tdd)
+    template <typename T> static void TestBody(TDDAssertion &tdd)
     {
       /* int main already calls the mpi guard, which calls the FFT session guards. So this should be the second time. */
       tdd.verify(Throws<FFTLibraryDoubleInitializationException>([]() { getFFTSessionGuards(); }));

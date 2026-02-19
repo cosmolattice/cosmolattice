@@ -11,52 +11,52 @@
 #include "TempLat/util/ndloop.h"
 #include "TempLat/util/constexpr_for.h"
 
-namespace TempLat {
-
-template<size_t NDim>
-struct VectorDotterTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <size_t NDim> inline void VectorDotterTester<NDim>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  // Test 1: verify dot(x, x) using DoEval::eval
+
+  template <size_t NDim> struct VectorDotterTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <size_t NDim> inline void VectorDotterTester<NDim>::Test(TDDAssertion &tdd)
   {
-    const ptrdiff_t nGrid = 32, nGhost = 2;
+    // Test 1: verify dot(x, x) using DoEval::eval
+    {
+      const ptrdiff_t nGrid = 32, nGhost = 2;
 
-    auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
+      auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
-    SpatialCoordinate<NDim> x(toolBox);
+      SpatialCoordinate<NDim> x(toolBox);
 
-    Field<NDim, double> fieldX("fieldX", toolBox);
+      Field<NDim, double> fieldX("fieldX", toolBox);
 
-    fieldX = dot(x, x);
+      fieldX = dot(x, x);
 
-    const auto fieldX_view = fieldX.getLocalNDHostView();
+      const auto fieldX_view = fieldX.getLocalNDHostView();
 
-    bool correct = true;
-    NDLoop<NDim>(fieldX_view, [&](const auto... idx) {
-      const device::IdxArray<NDim> localIdx{idx...};
-      device::IdxArray<NDim> ghostIdx;
-      for (size_t d = 0; d < NDim; ++d)
-        ghostIdx[d] = nGhost + localIdx[d];
+      bool correct = true;
+      NDLoop<NDim>(fieldX_view, [&](const auto... idx) {
+        const device::IdxArray<NDim> localIdx{idx...};
+        device::IdxArray<NDim> ghostIdx;
+        for (size_t d = 0; d < NDim; ++d)
+          ghostIdx[d] = nGhost + localIdx[d];
 
-      const auto expected = device::apply([&](const auto &...gi) { return DoEval::eval(x, gi...); }, ghostIdx);
+        const auto expected = device::apply([&](const auto &...gi) { return DoEval::eval(x, gi...); }, ghostIdx);
 
-      double expectedDot = 0;
-      for (size_t d = 0; d < NDim; ++d)
-        expectedDot += static_cast<double>(expected[d]) * static_cast<double>(expected[d]);
+        double expectedDot = 0;
+        for (size_t d = 0; d < NDim; ++d)
+          expectedDot += static_cast<double>(expected[d]) * static_cast<double>(expected[d]);
 
-      correct &= (fieldX_view(idx...) == expectedDot);
-      if (!(fieldX_view(idx...) == expectedDot)) {
-        std::cout << "Mismatch at " << localIdx << ": fieldX_view = " << fieldX_view(idx...)
-                  << ", expected = " << expectedDot << std::endl;
-      }
-    });
+        correct &= (fieldX_view(idx...) == expectedDot);
+        if (!(fieldX_view(idx...) == expectedDot)) {
+          std::cout << "Mismatch at " << localIdx << ": fieldX_view = " << fieldX_view(idx...)
+                    << ", expected = " << expectedDot << std::endl;
+        }
+      });
 
-    tdd.verify(correct);
+      tdd.verify(correct);
+    }
   }
-}
 
 } // namespace TempLat
 

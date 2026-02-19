@@ -6,26 +6,27 @@
 #include "TempLat/lattice/algebra/complexalgebra/scalarcomplexmultiply.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ScalarComplexFieldMultiplyTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ScalarComplexFieldMultiplyTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  struct MyStruct {
-    DEVICE_FORCEINLINE_FUNCTION
-    int ComplexFieldGet(Tag<0> t) const { return 1; }
-    DEVICE_FORCEINLINE_FUNCTION
-    int ComplexFieldGet(Tag<1> t) const { return 2; }
+
+  struct ScalarComplexFieldMultiplyTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  auto test = MyStruct() * 2;
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(test.ComplexFieldGet(0_c) == 2);
-  tdd.verify(test.ComplexFieldGet(1_c) == 4);
-}
+  void ScalarComplexFieldMultiplyTester::Test(TDDAssertion &tdd)
+  {
+    struct MyStruct {
+      DEVICE_FORCEINLINE_FUNCTION
+      int ComplexFieldGet(Tag<0> t) const { return 1; }
+      DEVICE_FORCEINLINE_FUNCTION
+      int ComplexFieldGet(Tag<1> t) const { return 2; }
+    };
+
+    auto test = MyStruct() * 2;
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(test.ComplexFieldGet(0_c) == 2);
+    tdd.verify(test.ComplexFieldGet(1_c) == 4);
+  }
 
 } // namespace TempLat
 

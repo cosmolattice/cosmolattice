@@ -9,21 +9,22 @@
 #include "TempLat/util/foreach.h"
 #include "TempLat/util/almostequal.h"
 
-namespace TempLat {
-
-struct ListExponentialTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ListExponentialTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  auto t1 = std::make_tuple(-1., -2., -3., -4.);
 
-  auto t3 = exp(t1);
-  double tmp = -1;
+  struct ListExponentialTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  for_each(t3, [&](auto x) { tdd.verify(AlmostEqual(x, std::exp(tmp--))); });
-}
+  void ListExponentialTester::Test(TDDAssertion &tdd)
+  {
+    auto t1 = std::make_tuple(-1., -2., -3., -4.);
+
+    auto t3 = exp(t1);
+    double tmp = -1;
+
+    for_each(t3, [&](auto x) { tdd.verify(AlmostEqual(x, std::exp(tmp--))); });
+  }
 
 } // namespace TempLat
 

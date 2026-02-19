@@ -7,25 +7,26 @@
 #include "TempLat/util/conditionaloutput/conditionalstream.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ConditionalStreamTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ConditionalStreamTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  std::stringstream str1, str2;
-  ConditionalStream one(str1, true);
-  ConditionalStream two(str2, false);
+  struct ConditionalStreamTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  one << "Hoi!";
-  two << "Doei!";
+  void ConditionalStreamTester::Test(TDDAssertion &tdd)
+  {
 
-  tdd.verify(str1.str().length() > 0);
-  tdd.verify(str2.str().length() == 0);
-}
+    std::stringstream str1, str2;
+    ConditionalStream one(str1, true);
+    ConditionalStream two(str2, false);
+
+    one << "Hoi!";
+    two << "Doei!";
+
+    tdd.verify(str1.str().length() > 0);
+    tdd.verify(str2.str().length() == 0);
+  }
 
 } // namespace TempLat
 

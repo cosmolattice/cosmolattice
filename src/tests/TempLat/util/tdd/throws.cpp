@@ -7,18 +7,17 @@
 #include "TempLat/util/tdd/throws.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ThrowsTester
+namespace TempLat
 {
-  template <typename TestObjectUnknownHere> static void Test(TestObjectUnknownHere &tdd);
-};
 
-template <typename TestObjectUnknownHere>
-void ThrowsTester::Test(TestObjectUnknownHere &tdd)
-{
-  tdd.verify(Throws<std::runtime_error>([]() { throw std::runtime_error("Test throw: should work."); }));
-}
+  struct ThrowsTester {
+    template <typename TestObjectUnknownHere> static void Test(TestObjectUnknownHere &tdd);
+  };
+
+  template <typename TestObjectUnknownHere> void ThrowsTester::Test(TestObjectUnknownHere &tdd)
+  {
+    tdd.verify(Throws<std::runtime_error>([]() { throw std::runtime_error("Test throw: should work."); }));
+  }
 
 } // namespace TempLat
 

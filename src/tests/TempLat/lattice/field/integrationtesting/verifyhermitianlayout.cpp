@@ -9,7 +9,8 @@
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/algebra/coordinates/spatialcoordinate.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
   template <size_t nDim> void testHelper(TDDAssertion &tdd, ptrdiff_t nGrid, ptrdiff_t nGhost)
   {
@@ -108,20 +109,20 @@ namespace TempLat {
     tdd.verify(true);
   }
 
-struct VerifyHermitianLayout {
-  static void Test(TDDAssertion &tdd);
-};
+  struct VerifyHermitianLayout {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void VerifyHermitianLayout::Test(TDDAssertion &tdd)
-{
-  for (ptrdiff_t inGhost = 0; inGhost < 2; ++inGhost) {
-    for (ptrdiff_t inGrid = 4; inGrid < 5; ++inGrid) {
-      testHelper<2>(tdd, std::pow(2, inGrid), inGhost);
-      testHelper<3>(tdd, std::pow(2, inGrid), inGhost);
-      testHelper<4>(tdd, std::pow(2, inGrid), inGhost);
+  void VerifyHermitianLayout::Test(TDDAssertion &tdd)
+  {
+    for (ptrdiff_t inGhost = 0; inGhost < 2; ++inGhost) {
+      for (ptrdiff_t inGrid = 4; inGrid < 5; ++inGrid) {
+        testHelper<2>(tdd, std::pow(2, inGrid), inGhost);
+        testHelper<3>(tdd, std::pow(2, inGrid), inGhost);
+        testHelper<4>(tdd, std::pow(2, inGrid), inGhost);
+      }
     }
   }
-}
 
 } // namespace TempLat
 

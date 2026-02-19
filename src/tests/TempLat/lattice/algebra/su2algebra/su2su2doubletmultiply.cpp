@@ -7,17 +7,18 @@
 #include "TempLat/lattice/algebra/su2algebra/su2su2doubletmultiply.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct SU2SU2DoubletMultiplyTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void SU2SU2DoubletMultiplyTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct SU2SU2DoubletMultiplyTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void SU2SU2DoubletMultiplyTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

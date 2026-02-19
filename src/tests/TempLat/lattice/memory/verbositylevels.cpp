@@ -7,24 +7,25 @@
 #include "TempLat/lattice/memory/verbositylevels.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct VerbosityLevelsTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void VerbosityLevelsTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  VerbosityLevels verbosity;
 
-  verbosity.setAllOff();
+  struct VerbosityLevelsTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  tdd.verify(!verbosity.fieldAssignment);
+  void VerbosityLevelsTester::Test(TDDAssertion &tdd)
+  {
+    VerbosityLevels verbosity;
 
-  verbosity.setAllOn();
+    verbosity.setAllOff();
 
-  tdd.verify(verbosity.fieldAssignment);
-}
+    tdd.verify(!verbosity.fieldAssignment);
+
+    verbosity.setAllOn();
+
+    tdd.verify(verbosity.fieldAssignment);
+  }
 
 } // namespace TempLat
 

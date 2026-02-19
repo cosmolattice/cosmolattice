@@ -9,22 +9,23 @@
 #include "TempLat/util/foreach.h"
 #include "TempLat/util/almostequal.h"
 
-namespace TempLat {
-
-struct ListUnaryMinusTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ListUnaryMinusTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  auto t1 = std::make_tuple(-1., -2., -3., -4.);
+  struct ListUnaryMinusTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  auto t3 = -t1;
-  double tmp = 1;
+  void ListUnaryMinusTester::Test(TDDAssertion &tdd)
+  {
 
-  for_each(t3, [&](auto x) { tdd.verify(x == tmp++); });
-}
+    auto t1 = std::make_tuple(-1., -2., -3., -4.);
+
+    auto t3 = -t1;
+    double tmp = 1;
+
+    for_each(t3, [&](auto x) { tdd.verify(x == tmp++); });
+  }
 
 } // namespace TempLat
 

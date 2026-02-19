@@ -10,12 +10,13 @@
 
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct Algebra {
-  static void Test(TDDAssertion &tdd);
-};
+  struct Algebra {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void Algebra::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  void Algebra::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat

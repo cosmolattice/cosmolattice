@@ -7,13 +7,14 @@
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct MPITypeConstantsTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct MPITypeConstantsTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void MPITypeConstantsTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  void MPITypeConstantsTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

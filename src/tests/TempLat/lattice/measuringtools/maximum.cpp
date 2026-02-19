@@ -9,11 +9,12 @@
 #include "TempLat/parallel/device.h"
 #include "TempLat/util/almostequal.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct MaximumTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct MaximumTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
   struct myTmpStruct {
     static constexpr size_t NDim = 3;
@@ -34,14 +35,14 @@ struct MaximumTester {
     LayoutStruct<NDim> mLayout;
   };
 
-void MaximumTester::Test(TDDAssertion &tdd)
-{
-  myTmpStruct myInstance;
+  void MaximumTester::Test(TDDAssertion &tdd)
+  {
+    myTmpStruct myInstance;
 
-  auto aget = max(myInstance);
-  say << "result of max : " << aget << "\n";
-  tdd.verify(aget == 15);
-}
+    auto aget = max(myInstance);
+    say << "result of max : " << aget << "\n";
+    tdd.verify(aget == 15);
+  }
 
 } // namespace TempLat
 

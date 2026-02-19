@@ -8,36 +8,37 @@
 #include "TempLat/lattice/algebra/su2algebra/su2liealgebrafield.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct SU2LieAlgebraFieldTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void SU2LieAlgebraFieldTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  static constexpr size_t NDim = 3;
 
-  auto toolBox = MemoryToolBox<NDim>::makeShared(32, 1);
+  struct SU2LieAlgebraFieldTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  Field<NDim, double> f1("myField1", toolBox);
-  Field<NDim, double> f2("myField2", toolBox);
-  Field<NDim, double> f3("myField3", toolBox);
+  void SU2LieAlgebraFieldTester::Test(TDDAssertion &tdd)
+  {
+    static constexpr size_t NDim = 3;
 
-  auto res = SU2Field<NDim, double>(f1, f2, f3);
+    auto toolBox = MemoryToolBox<NDim>::makeShared(32, 1);
 
-  tdd.verify(res.SU2Get(2_c).toString() == "myField2(x)");
+    Field<NDim, double> f1("myField1", toolBox);
+    Field<NDim, double> f2("myField2", toolBox);
+    Field<NDim, double> f3("myField3", toolBox);
 
-  res(3_c) = 24;
+    auto res = SU2Field<NDim, double>(f1, f2, f3);
 
-  auto ff3 = res(3_c);
+    tdd.verify(res.SU2Get(2_c).toString() == "myField2(x)");
 
-  auto ff3_view = ff3.getLocalNDHostView();
-  tdd.verify(ff3_view(0, 0, 0) == 24);
+    res(3_c) = 24;
 
-  SU2Field<NDim, double> mySU2("pimpin", toolBox, LatticeParameters<double>());
-  tdd.verify(mySU2(3_c).toString() == "pimpin_3(x)");
-}
+    auto ff3 = res(3_c);
+
+    auto ff3_view = ff3.getLocalNDHostView();
+    tdd.verify(ff3_view(0, 0, 0) == 24);
+
+    SU2Field<NDim, double> mySU2("pimpin", toolBox, LatticeParameters<double>());
+    tdd.verify(mySU2(3_c).toString() == "pimpin_3(x)");
+  }
 
 } // namespace TempLat
 

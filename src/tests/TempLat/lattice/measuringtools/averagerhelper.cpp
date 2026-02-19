@@ -7,18 +7,18 @@
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template<typename vType, bool isComplex>
-struct AveragerHelperTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <typename vType, bool isComplex> inline void AveragerHelperTester<vType, isComplex>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  // tdd.verify( false ); Tested in averager.
-}
+
+  template <typename vType, bool isComplex> struct AveragerHelperTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <typename vType, bool isComplex> inline void AveragerHelperTester<vType, isComplex>::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    // tdd.verify( false ); Tested in averager.
+  }
 
 } // namespace TempLat
 

@@ -7,13 +7,14 @@
 #include "TempLat/parallel/mpi/comm/mpicommreference.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct MPICommReferenceTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct MPICommReferenceTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void MPICommReferenceTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  void MPICommReferenceTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

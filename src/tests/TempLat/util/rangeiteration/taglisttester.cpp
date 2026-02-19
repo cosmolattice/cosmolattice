@@ -8,29 +8,30 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 
-namespace TempLat {
-
-// Okay to define something globally here as not included anywhere
-
-template <int N> int get(Tag<N> t) { return N; }
-
-struct TagListTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <int N> int get() { return N; }
-
-void TagListTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  int c = 1;
-  for_in_range<1, 25>([&](auto i) { tdd.verify(get(i) == c++); });
-  c = 1;
-  for_in_range<1, 25>([&](auto i) {
-    tdd.verify(get<3 * i>() == 3 * c);
-    c++;
-  });
-}
+  // Okay to define something globally here as not included anywhere
+
+  template <int N> int get(Tag<N> t) { return N; }
+
+  struct TagListTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <int N> int get() { return N; }
+
+  void TagListTester::Test(TDDAssertion &tdd)
+  {
+
+    int c = 1;
+    for_in_range<1, 25>([&](auto i) { tdd.verify(get(i) == c++); });
+    c = 1;
+    for_in_range<1, 25>([&](auto i) {
+      tdd.verify(get<3 * i>() == 3 * c);
+      c++;
+    });
+  }
 
 } // namespace TempLat
 

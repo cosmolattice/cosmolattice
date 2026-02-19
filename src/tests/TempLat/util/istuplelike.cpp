@@ -8,23 +8,24 @@
 #include "TempLat/util/tdd/tdd.h"
 #include <array>
 
-namespace TempLat {
-
-struct IsTupleLikeTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void IsTupleLikeTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  struct IAmNotATupleAintI {
+  struct IsTupleLikeTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(IsTupleLike<std::array<double, 4>>::value == true);
-  tdd.verify(IsTupleLike<IAmNotATupleAintI>::value == false);
-  tdd.verify(IsTupleLike<int>::value == false);
-}
+  void IsTupleLikeTester::Test(TDDAssertion &tdd)
+  {
+
+    struct IAmNotATupleAintI {
+    };
+
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(IsTupleLike<std::array<double, 4>>::value == true);
+    tdd.verify(IsTupleLike<IAmNotATupleAintI>::value == false);
+    tdd.verify(IsTupleLike<int>::value == false);
+  }
 
 } // namespace TempLat
 

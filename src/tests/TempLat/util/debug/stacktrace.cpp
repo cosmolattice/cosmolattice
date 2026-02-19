@@ -7,19 +7,20 @@
 #include "TempLat/util/debug/stacktrace.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct StacktraceTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void StacktraceTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  if (TDDRegister::isSingleUnitTest()) {
-    std::cerr << "Stacktrace: " << Stacktrace() << "\n";
+  struct StacktraceTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void StacktraceTester::Test(TDDAssertion &tdd)
+  {
+
+    if (TDDRegister::isSingleUnitTest()) {
+      std::cerr << "Stacktrace: " << Stacktrace() << "\n";
+    }
   }
-}
 
 } // namespace TempLat
 

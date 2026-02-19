@@ -7,14 +7,15 @@
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-// void ComplexFieldGet::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     tdd.verify( false );
-//
-// }
+  // void ComplexFieldGet::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat
 

@@ -7,36 +7,37 @@
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct PreGetTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-class NoPreGet
+namespace TempLat
 {
-public:
-  NoPreGet() = default;
-};
 
-class WithPreGet
-{
-public:
-  void preGet() { called = true; }
-  static bool called;
-};
-bool WithPreGet::called = false; // Initialize static member variable
+  struct PreGetTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void PreGetTester::Test(TDDAssertion &tdd)
-{
-  NoPreGet noPreGet;
-  WithPreGet withPreGet;
+  class NoPreGet
+  {
+  public:
+    NoPreGet() = default;
+  };
 
-  PreGet::apply(noPreGet);   // should compile
-  PreGet::apply(withPreGet); // should compile
+  class WithPreGet
+  {
+  public:
+    void preGet() { called = true; }
+    static bool called;
+  };
+  bool WithPreGet::called = false; // Initialize static member variable
 
-  tdd.verify(WithPreGet::called == true); // should be true, since we called preGet
-}
+  void PreGetTester::Test(TDDAssertion &tdd)
+  {
+    NoPreGet noPreGet;
+    WithPreGet withPreGet;
+
+    PreGet::apply(noPreGet);   // should compile
+    PreGet::apply(withPreGet); // should compile
+
+    tdd.verify(WithPreGet::called == true); // should be true, since we called preGet
+  }
 
 } // namespace TempLat
 

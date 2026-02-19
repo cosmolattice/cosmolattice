@@ -8,29 +8,30 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/su2field.h"
 
-namespace TempLat {
-
-struct SU2AveragerTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void SU2AveragerTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  auto toolbox = MemoryToolBox<3>::makeShared(16, 1);
 
-  SU2Field<3, double> A("A", toolbox);
+  struct SU2AveragerTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  A(1_c) = 0.2;
-  A(2_c) = 0.3;
-  A(3_c) = 0.4;
+  void SU2AveragerTester::Test(TDDAssertion &tdd)
+  {
+    auto toolbox = MemoryToolBox<3>::makeShared(16, 1);
 
-  auto average = su2average(A);
+    SU2Field<3, double> A("A", toolbox);
 
-  tdd.verify(AlmostEqual(average.getComp(0_c), sqrt(1.0 - 0.2 * 0.2 - 0.3 * 0.3 - 0.4 * 0.4)));
-  tdd.verify(AlmostEqual(average.getComp(1_c), 0.2));
-  tdd.verify(AlmostEqual(average.getComp(2_c), 0.3));
-  tdd.verify(AlmostEqual(average.getComp(3_c), 0.4));
-}
+    A(1_c) = 0.2;
+    A(2_c) = 0.3;
+    A(3_c) = 0.4;
+
+    auto average = su2average(A);
+
+    tdd.verify(AlmostEqual(average.getComp(0_c), sqrt(1.0 - 0.2 * 0.2 - 0.3 * 0.3 - 0.4 * 0.4)));
+    tdd.verify(AlmostEqual(average.getComp(1_c), 0.2));
+    tdd.verify(AlmostEqual(average.getComp(2_c), 0.3));
+    tdd.verify(AlmostEqual(average.getComp(3_c), 0.4));
+  }
 
 } // namespace TempLat
 

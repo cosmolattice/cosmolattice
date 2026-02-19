@@ -7,13 +7,14 @@
 #include "TempLat/util/conditionaloutput/conditionalfilestream.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct ConditionalFileStreamTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct ConditionalFileStreamTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void ConditionalFileStreamTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  void ConditionalFileStreamTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

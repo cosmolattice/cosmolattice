@@ -11,69 +11,69 @@
 #include "TempLat/lattice/algebra/random/randomgaussianfield.h"
 #include "TempLat/util/ndloop.h"
 
-namespace TempLat {
-
-template<size_t NDim>
-struct NormGradientSquareTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <size_t NDim> inline void NormGradientSquareTester<NDim>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  const device::Idx nGrid = 8, nGhost = 2;
 
-  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
+  template <size_t NDim> struct NormGradientSquareTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  /* create the random field once, keep in memory. Trade off between RAM use and redundant computations. */
-  Field<NDim, double> gaussian("gaussian", toolBox);
-  gaussian.inFourierSpace() = 1 * RandomGaussianField<NDim, double>("hoi", toolBox);
-  gaussian += 0;
+  template <size_t NDim> inline void NormGradientSquareTester<NDim>::Test(TDDAssertion &tdd)
+  {
+    const device::Idx nGrid = 8, nGhost = 2;
 
-  Field<NDim, double> normGradSq("normGradSq", toolBox);
-  normGradSq = Grad2<NDim>(gaussian);
-  Field<NDim, double> LatForwardGradNorm2("LatForwardGradNorm2", toolBox);
-  LatForwardGradNorm2 = LatForwardGrad<NDim>(gaussian).norm2();
+    auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
-  bool allGood = true;
+    /* create the random field once, keep in memory. Trade off between RAM use and redundant computations. */
+    Field<NDim, double> gaussian("gaussian", toolBox);
+    gaussian.inFourierSpace() = 1 * RandomGaussianField<NDim, double>("hoi", toolBox);
+    gaussian += 0;
 
-  // Check element-wise equality between LatForwardGradNorm2 and normGradSq
-  auto normGradSq_view = normGradSq.getLocalNDHostView();
-  auto LatForwardGradNorm2_view = LatForwardGradNorm2.getLocalNDHostView();
+    Field<NDim, double> normGradSq("normGradSq", toolBox);
+    normGradSq = Grad2<NDim>(gaussian);
+    Field<NDim, double> LatForwardGradNorm2("LatForwardGradNorm2", toolBox);
+    LatForwardGradNorm2 = LatForwardGrad<NDim>(gaussian).norm2();
 
-  // Get layout for computing global coordinates (for error reporting)
-  auto layout = toolBox->mLayouts.getConfigSpaceLayout();
+    bool allGood = true;
 
-  NDLoop<NDim>(normGradSq_view, [&](const auto &...indices) {
-    device::IdxArray<NDim> local_idx = {indices...};
+    // Check element-wise equality between LatForwardGradNorm2 and normGradSq
+    auto normGradSq_view = normGradSq.getLocalNDHostView();
+    auto LatForwardGradNorm2_view = LatForwardGradNorm2.getLocalNDHostView();
 
-    const double val_normGradSq = normGradSq_view(indices...);
-    const double val_LatForwardGradNorm2 = LatForwardGradNorm2_view(indices...);
+    // Get layout for computing global coordinates (for error reporting)
+    auto layout = toolBox->mLayouts.getConfigSpaceLayout();
 
-    if (std::abs(val_LatForwardGradNorm2 - val_normGradSq) > 1e-14) {
-      allGood = false;
+    NDLoop<NDim>(normGradSq_view, [&](const auto &...indices) {
+      device::IdxArray<NDim> local_idx = {indices...};
 
-      // Compute global coordinates for error message
-      device::IdxArray<NDim> global_idx;
-      layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
+      const double val_normGradSq = normGradSq_view(indices...);
+      const double val_LatForwardGradNorm2 = LatForwardGradNorm2_view(indices...);
 
-      std::stringstream ss;
-      ss << "Mismatch at local (";
-      for (device::Idx d = 0; d < NDim; ++d) {
-        ss << local_idx[d];
-        if (d < (device::Idx)NDim - 1) ss << ", ";
+      if (std::abs(val_LatForwardGradNorm2 - val_normGradSq) > 1e-14) {
+        allGood = false;
+
+        // Compute global coordinates for error message
+        device::IdxArray<NDim> global_idx;
+        layout.putSpatialLocationFromMemoryIndexInto(global_idx, indices...);
+
+        std::stringstream ss;
+        ss << "Mismatch at local (";
+        for (device::Idx d = 0; d < NDim; ++d) {
+          ss << local_idx[d];
+          if (d < (device::Idx)NDim - 1) ss << ", ";
+        }
+        ss << "), global (";
+        for (device::Idx d = 0; d < NDim; ++d) {
+          ss << global_idx[d];
+          if (d < (device::Idx)NDim - 1) ss << ", ";
+        }
+        ss << "): LatForwardGradNorm2 = " << val_LatForwardGradNorm2 << ", normGradSq = " << val_normGradSq << "\n";
+        sayMPI << ss.str();
       }
-      ss << "), global (";
-      for (device::Idx d = 0; d < NDim; ++d) {
-        ss << global_idx[d];
-        if (d < (device::Idx)NDim - 1) ss << ", ";
-      }
-      ss << "): LatForwardGradNorm2 = " << val_LatForwardGradNorm2 << ", normGradSq = " << val_normGradSq << "\n";
-      sayMPI << ss.str();
-    }
-  });
+    });
 
-  tdd.verify(allGood);
-}
+    tdd.verify(allGood);
+  }
 
 } // namespace TempLat
 

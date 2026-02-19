@@ -10,42 +10,43 @@
 #include "TempLat/lattice/algebra/complexalgebra/complexalgebra.h"
 #include "TempLat/lattice/algebra/coordinates/wavenumber.h"
 
-namespace TempLat {
-
-struct ComplexFieldTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ComplexFieldTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  constexpr size_t NDim = 3;
-  constexpr int nGrid = 32;
-  constexpr int nGhost = 0;
 
-  auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
+  struct ComplexFieldTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  WaveNumber k(toolBox);
+  void ComplexFieldTester::Test(TDDAssertion &tdd)
+  {
+    constexpr size_t NDim = 3;
+    constexpr int nGrid = 32;
+    constexpr int nGhost = 0;
 
-  ComplexField<NDim, double> phi("phi", toolBox);
-  ComplexField<NDim, double> xi("xi", toolBox);
+    auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
-  tdd.verify(phi.inFourierSpace()(0_c).isFourierSpace());
-  tdd.verify(phi.inFourierSpace()(1_c).isFourierSpace());
+    WaveNumber k(toolBox);
 
-  auto test = k(1_c) * phi.inFourierSpace();
+    ComplexField<NDim, double> phi("phi", toolBox);
+    ComplexField<NDim, double> xi("xi", toolBox);
 
-  say << test;
+    tdd.verify(phi.inFourierSpace()(0_c).isFourierSpace());
+    tdd.verify(phi.inFourierSpace()(1_c).isFourierSpace());
 
-  xi.inFourierSpace() = k(1_c) * phi.inFourierSpace();
-  xi.inFourierSpace() = xi.inFourierSpace() * phi.inFourierSpace();
+    auto test = k(1_c) * phi.inFourierSpace();
 
-  tdd.verify(xi.inFourierSpace()(0_c).isFourierSpace());
-  tdd.verify(xi.inFourierSpace()(1_c).isFourierSpace());
+    say << test;
 
-  xi = phi;
-  tdd.verify(xi(0_c).isConfigSpace());
-  tdd.verify(xi(1_c).isConfigSpace());
-}
+    xi.inFourierSpace() = k(1_c) * phi.inFourierSpace();
+    xi.inFourierSpace() = xi.inFourierSpace() * phi.inFourierSpace();
+
+    tdd.verify(xi.inFourierSpace()(0_c).isFourierSpace());
+    tdd.verify(xi.inFourierSpace()(1_c).isFourierSpace());
+
+    xi = phi;
+    tdd.verify(xi(0_c).isConfigSpace());
+    tdd.verify(xi(1_c).isConfigSpace());
+  }
 
 } // namespace TempLat
 

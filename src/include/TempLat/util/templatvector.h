@@ -79,7 +79,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::vector<T> mVec;
-
   };
 
   template <typename... Args> auto make_templatvector(Args... args)

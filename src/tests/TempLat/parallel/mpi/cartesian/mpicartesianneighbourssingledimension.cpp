@@ -7,19 +7,20 @@
 #include "TempLat/parallel/mpi/cartesian/mpicartesianneighbourssingledimension.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct MPICartesianNeighboursSingleDimensionTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void MPICartesianNeighboursSingleDimensionTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  /* sorry, wouldn't know what cross checks to do for this thing.
-     Problems will show up in the integral test in ghostupdater. */
-  //    tdd.verify( true );
-}
+  struct MPICartesianNeighboursSingleDimensionTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void MPICartesianNeighboursSingleDimensionTester::Test(TDDAssertion &tdd)
+  {
+
+    /* sorry, wouldn't know what cross checks to do for this thing.
+       Problems will show up in the integral test in ghostupdater. */
+    //    tdd.verify( true );
+  }
 
 } // namespace TempLat
 

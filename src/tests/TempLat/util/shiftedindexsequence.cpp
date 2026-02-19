@@ -7,22 +7,23 @@
 #include "TempLat/util/shiftedindexsequence.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ShiftedIndexSequenceTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <size_t... I> auto myConvertToTuple(std::index_sequence<I...> seq) { return std::make_tuple(I...); }
-
-void ShiftedIndexSequenceTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  auto test = myConvertToTuple(shifted_index_sequence<12>(std::make_index_sequence<3>{}));
 
-  tdd.verify(std::get<0>(test) == 12);
-  tdd.verify(std::get<1>(test) == 13);
-  tdd.verify(std::get<2>(test) == 14);
-}
+  struct ShiftedIndexSequenceTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <size_t... I> auto myConvertToTuple(std::index_sequence<I...> seq) { return std::make_tuple(I...); }
+
+  void ShiftedIndexSequenceTester::Test(TDDAssertion &tdd)
+  {
+    auto test = myConvertToTuple(shifted_index_sequence<12>(std::make_index_sequence<3>{}));
+
+    tdd.verify(std::get<0>(test) == 12);
+    tdd.verify(std::get<1>(test) == 13);
+    tdd.verify(std::get<2>(test) == 14);
+  }
 
 } // namespace TempLat
 

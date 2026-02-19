@@ -7,23 +7,24 @@
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct MPICartesianGroupTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void MPICartesianGroupTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  auto world = MPICommReference();
+  struct MPICartesianGroupTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  MPICartesianGroup mcg(world, 3, {{1, 1, 1}});
+  void MPICartesianGroupTester::Test(TDDAssertion &tdd)
+  {
 
-  MPICartesianGroup mcg2(world, 1, {{2, 2, 2}});
+    auto world = MPICommReference();
 
-  tdd.verify(true);
-}
+    MPICartesianGroup mcg(world, 3, {{1, 1, 1}});
+
+    MPICartesianGroup mcg2(world, 1, {{2, 2, 2}});
+
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

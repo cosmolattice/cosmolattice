@@ -7,17 +7,18 @@
 #include "TempLat/lattice/algebra/listoperators/listshift.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ListShifterTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ListShifterTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct ListShifterTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void ListShifterTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

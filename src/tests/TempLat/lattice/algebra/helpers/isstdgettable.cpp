@@ -7,22 +7,23 @@
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct IsSTDGettableTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void IsSTDGettableTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  struct myDummyStruct {
 
-    int get(Tag<0> t) { return 24; }
+  struct IsSTDGettableTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  tdd.verify(IsSTDGettable<0, std::tuple<int, int>> == true);
-  tdd.verify(IsSTDGettable<0, myDummyStruct> == false);
-}
+  void IsSTDGettableTester::Test(TDDAssertion &tdd)
+  {
+    struct myDummyStruct {
+
+      int get(Tag<0> t) { return 24; }
+    };
+
+    tdd.verify(IsSTDGettable<0, std::tuple<int, int>> == true);
+    tdd.verify(IsSTDGettable<0, myDummyStruct> == false);
+  }
 
 } // namespace TempLat
 

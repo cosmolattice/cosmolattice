@@ -7,18 +7,19 @@
 #include "TempLat/lattice/field/collections/helpers/id.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct Id {
-  static void Test(TDDAssertion &tdd);
-};
+  struct Id {
+    static void Test(TDDAssertion &tdd);
+  };
 
-// void Id::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     tdd.verify( false );
-//
-// }
+  // void Id::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat
 

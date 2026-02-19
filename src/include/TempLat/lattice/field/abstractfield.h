@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/latticeparameters.h"
 #include "TempLat/lattice/memory/memorylayoutstate.h"

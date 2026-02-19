@@ -8,13 +8,14 @@
 #include "TempLat/util/powr.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct PowrTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct PowrTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void PowrTester::Test(TDDAssertion &tdd)
+  void PowrTester::Test(TDDAssertion &tdd)
   {
     tdd.verify(powr<2>(3) == 9);
     tdd.verify(powr<3>(2) == 8);

@@ -9,14 +9,12 @@
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanholder.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct KokkosFFTPlanHolderTester {
-  static void Test(TDDAssertion &tdd)
-  {
-    tdd.verify(true);
-  }
-};
+  struct KokkosFFTPlanHolderTester {
+    static void Test(TDDAssertion &tdd) { tdd.verify(true); }
+  };
 
 } // namespace TempLat
 

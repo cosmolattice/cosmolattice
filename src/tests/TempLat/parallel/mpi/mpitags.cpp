@@ -7,13 +7,14 @@
 #include "TempLat/parallel/mpi/mpitags.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct MPITagsJustCompileTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct MPITagsJustCompileTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void MPITagsJustCompileTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  void MPITagsJustCompileTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

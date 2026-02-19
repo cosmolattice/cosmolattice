@@ -13,12 +13,12 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/util/almostequal.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct KokkosTest {
-  template <typename TDDA> static void Test(TDDA &tdd);
-};
-
+  struct KokkosTest {
+    template <typename TDDA> static void Test(TDDA &tdd);
+  };
 
   template <typename NT> struct ctype {
     using value = NT;
@@ -105,126 +105,126 @@ struct KokkosTest {
     tdd.verify(all_correct);
   }
 
-template <typename TDDA> void KokkosTest::Test(TDDA &tdd)
-{
-  // ---- test singleset ----
+  template <typename TDDA> void KokkosTest::Test(TDDA &tdd)
   {
-    auto toolBox = MemoryToolBox<2>::makeShared(8, 0);
-    Field<2, double> rField("rField", toolBox);
-    const auto layout = toolBox->mLayouts.getConfigSpaceLayout();
-    for (size_t i = 0; i < layout.getLocalSizes()[0]; ++i) {
-      for (size_t j = 0; j < layout.getLocalSizes()[1]; ++j) {
-        device_kokkos::memory::setAtOnePoint(rField, device_kokkos::IdxArray<2>{(int64_t)i, (int64_t)j}, i + j);
-      }
-    }
+    // ---- test singleset ----
     {
-      auto host_view = rField.getLocalNDHostView();
-      bool all_correct = true;
+      auto toolBox = MemoryToolBox<2>::makeShared(8, 0);
+      Field<2, double> rField("rField", toolBox);
+      const auto layout = toolBox->mLayouts.getConfigSpaceLayout();
       for (size_t i = 0; i < layout.getLocalSizes()[0]; ++i) {
         for (size_t j = 0; j < layout.getLocalSizes()[1]; ++j) {
-          all_correct &= host_view(i, j) == i + j;
+          device_kokkos::memory::setAtOnePoint(rField, device_kokkos::IdxArray<2>{(int64_t)i, (int64_t)j}, i + j);
         }
       }
-      tdd.verify(all_correct);
-    }
-    {
-      bool all_correct = true;
-      for (size_t i = 0; i < layout.getLocalSizes()[0]; ++i) {
-        for (size_t j = 0; j < layout.getLocalSizes()[1]; ++j) {
-          all_correct &=
-              device_kokkos::memory::getAtOnePoint(rField, device_kokkos::IdxArray<2>{(int64_t)i, (int64_t)j}) == i + j;
+      {
+        auto host_view = rField.getLocalNDHostView();
+        bool all_correct = true;
+        for (size_t i = 0; i < layout.getLocalSizes()[0]; ++i) {
+          for (size_t j = 0; j < layout.getLocalSizes()[1]; ++j) {
+            all_correct &= host_view(i, j) == i + j;
+          }
         }
+        tdd.verify(all_correct);
       }
-      tdd.verify(all_correct);
+      {
+        bool all_correct = true;
+        for (size_t i = 0; i < layout.getLocalSizes()[0]; ++i) {
+          for (size_t j = 0; j < layout.getLocalSizes()[1]; ++j) {
+            all_correct &= device_kokkos::memory::getAtOnePoint(
+                               rField, device_kokkos::IdxArray<2>{(int64_t)i, (int64_t)j}) == i + j;
+          }
+        }
+        tdd.verify(all_correct);
+      }
     }
+
+    // ---- test double ----
+    // binary operators
+    test_binary_operator<Operators::Multiplication>(tdd);
+    test_binary_operator<Operators::Addition>(tdd);
+    test_binary_operator<Operators::Division>(tdd);
+    test_binary_operator<Operators::Power>(tdd);
+    test_binary_operator<Operators::Subtraction>(tdd);
+    // unary operators
+    test_unary_operator<Operators::AbsoluteValue>(tdd);
+    test_unary_operator<Operators::Cosh>(tdd);
+    test_unary_operator<Operators::ASinh>(tdd);
+    test_unary_operator<Operators::Cosine>(tdd);
+    test_unary_operator<Operators::DiracDeltaFunction>(tdd);
+    test_unary_operator<Operators::Exponential>(tdd);
+    test_unary_operator<HeavisideStepFunction>(tdd);
+    test_unary_operator<Operators::Log>(tdd);
+    test_unary_operator<Operators::Sine>(tdd);
+    test_unary_operator<Operators::Sinh>(tdd);
+    test_unary_operator<Operators::SafeSqrt>(tdd);
+    test_unary_operator<Operators::Tanh>(tdd);
+    test_unary_operator<Operators::UnaryMinus>(tdd);
+
+    // ---- test complex ----
+    test_unary_operator<Operators::ComplexConjugate, complex<double>>(tdd);
+    test_unary_operator<Operators::AbsoluteValue, complex<double>>(tdd);
+    test_binary_operator<Operators::Multiplication, complex<double>>(tdd);
+    test_binary_operator<Operators::Addition, complex<double>>(tdd);
+    test_binary_operator<Operators::Division, complex<double>>(tdd);
+    test_binary_operator<Operators::Power, complex<double>>(tdd);
+    test_binary_operator<Operators::Subtraction, complex<double>>(tdd);
+    test_unary_operator<Operators::AbsoluteValue, complex<double>>(tdd);
+    test_unary_operator<Operators::ASinh, complex<double>>(tdd);
+    test_unary_operator<Operators::Cosh, complex<double>>(tdd);
+    test_unary_operator<Operators::Cosine, complex<double>>(tdd);
+    test_unary_operator<Operators::DiracDeltaFunction, complex<double>>(tdd);
+    test_unary_operator<Operators::Exponential, complex<double>>(tdd);
+    test_unary_operator<Operators::Log, complex<double>>(tdd);
+    test_unary_operator<Operators::Sine, complex<double>>(tdd);
+    test_unary_operator<Operators::Sinh, complex<double>>(tdd);
+    test_unary_operator<Operators::SafeSqrt, complex<double>>(tdd);
+    test_unary_operator<Operators::Tanh, complex<double>>(tdd);
+    test_unary_operator<Operators::UnaryMinus, complex<double>>(tdd);
+
+    // ---- test float ----
+    // binary operators
+    test_binary_operator<Operators::Multiplication, float>(tdd, 1e+1);
+    test_binary_operator<Operators::Addition, float>(tdd, 1e+1);
+    test_binary_operator<Operators::Division, float>(tdd, 1e+1);
+    test_binary_operator<Operators::Power, float>(tdd, 1e+1);
+    test_binary_operator<Operators::Subtraction, float>(tdd, 5e+1);
+    // unary operators
+    test_unary_operator<Operators::AbsoluteValue, float>(tdd, 1e+1);
+    test_unary_operator<Operators::ASinh, float>(tdd, 1e+1);
+    test_unary_operator<Operators::Cosh, float>(tdd, 1e+1);
+    test_unary_operator<Operators::Cosine, float>(tdd, 1e+3);
+    test_unary_operator<Operators::DiracDeltaFunction, float>(tdd, 1e+1);
+    test_unary_operator<Operators::Exponential, float>(tdd, 1e+1);
+    test_unary_operator<HeavisideStepFunction, float>(tdd, 1e+1);
+    test_unary_operator<Operators::Log, float>(tdd, 1e+3);
+    test_unary_operator<Operators::Sine, float>(tdd, 1e+1);
+    test_unary_operator<Operators::Sinh, float>(tdd, 1e+1);
+    test_unary_operator<Operators::SafeSqrt, float>(tdd, 1e+1);
+    test_unary_operator<Operators::Tanh, float>(tdd, 1e+1);
+    test_unary_operator<Operators::UnaryMinus, float>(tdd, 1e+1);
+
+    // ---- test complex ----
+    test_unary_operator<Operators::ComplexConjugate, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::AbsoluteValue, complex<float>>(tdd, 1e+2);
+    test_binary_operator<Operators::Multiplication, complex<float>>(tdd, 1e+2);
+    test_binary_operator<Operators::Addition, complex<float>>(tdd, 1e+2);
+    test_binary_operator<Operators::Division, complex<float>>(tdd, 1e+2);
+    test_binary_operator<Operators::Power, complex<float>>(tdd, 1e+3);
+    test_binary_operator<Operators::Subtraction, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::AbsoluteValue, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::ASinh, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::Cosh, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::Cosine, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::DiracDeltaFunction, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::Exponential, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::Log, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::Sine, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::Sinh, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::SafeSqrt, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::Tanh, complex<float>>(tdd, 1e+2);
+    test_unary_operator<Operators::UnaryMinus, complex<float>>(tdd, 1e+2);
   }
-
-  // ---- test double ----
-  // binary operators
-  test_binary_operator<Operators::Multiplication>(tdd);
-  test_binary_operator<Operators::Addition>(tdd);
-  test_binary_operator<Operators::Division>(tdd);
-  test_binary_operator<Operators::Power>(tdd);
-  test_binary_operator<Operators::Subtraction>(tdd);
-  // unary operators
-  test_unary_operator<Operators::AbsoluteValue>(tdd);
-  test_unary_operator<Operators::Cosh>(tdd);
-  test_unary_operator<Operators::ASinh>(tdd);
-  test_unary_operator<Operators::Cosine>(tdd);
-  test_unary_operator<Operators::DiracDeltaFunction>(tdd);
-  test_unary_operator<Operators::Exponential>(tdd);
-  test_unary_operator<HeavisideStepFunction>(tdd);
-  test_unary_operator<Operators::Log>(tdd);
-  test_unary_operator<Operators::Sine>(tdd);
-  test_unary_operator<Operators::Sinh>(tdd);
-  test_unary_operator<Operators::SafeSqrt>(tdd);
-  test_unary_operator<Operators::Tanh>(tdd);
-  test_unary_operator<Operators::UnaryMinus>(tdd);
-
-  // ---- test complex ----
-  test_unary_operator<Operators::ComplexConjugate, complex<double>>(tdd);
-  test_unary_operator<Operators::AbsoluteValue, complex<double>>(tdd);
-  test_binary_operator<Operators::Multiplication, complex<double>>(tdd);
-  test_binary_operator<Operators::Addition, complex<double>>(tdd);
-  test_binary_operator<Operators::Division, complex<double>>(tdd);
-  test_binary_operator<Operators::Power, complex<double>>(tdd);
-  test_binary_operator<Operators::Subtraction, complex<double>>(tdd);
-  test_unary_operator<Operators::AbsoluteValue, complex<double>>(tdd);
-  test_unary_operator<Operators::ASinh, complex<double>>(tdd);
-  test_unary_operator<Operators::Cosh, complex<double>>(tdd);
-  test_unary_operator<Operators::Cosine, complex<double>>(tdd);
-  test_unary_operator<Operators::DiracDeltaFunction, complex<double>>(tdd);
-  test_unary_operator<Operators::Exponential, complex<double>>(tdd);
-  test_unary_operator<Operators::Log, complex<double>>(tdd);
-  test_unary_operator<Operators::Sine, complex<double>>(tdd);
-  test_unary_operator<Operators::Sinh, complex<double>>(tdd);
-  test_unary_operator<Operators::SafeSqrt, complex<double>>(tdd);
-  test_unary_operator<Operators::Tanh, complex<double>>(tdd);
-  test_unary_operator<Operators::UnaryMinus, complex<double>>(tdd);
-
-  // ---- test float ----
-  // binary operators
-  test_binary_operator<Operators::Multiplication, float>(tdd, 1e+1);
-  test_binary_operator<Operators::Addition, float>(tdd, 1e+1);
-  test_binary_operator<Operators::Division, float>(tdd, 1e+1);
-  test_binary_operator<Operators::Power, float>(tdd, 1e+1);
-  test_binary_operator<Operators::Subtraction, float>(tdd, 5e+1);
-  // unary operators
-  test_unary_operator<Operators::AbsoluteValue, float>(tdd, 1e+1);
-  test_unary_operator<Operators::ASinh, float>(tdd, 1e+1);
-  test_unary_operator<Operators::Cosh, float>(tdd, 1e+1);
-  test_unary_operator<Operators::Cosine, float>(tdd, 1e+3);
-  test_unary_operator<Operators::DiracDeltaFunction, float>(tdd, 1e+1);
-  test_unary_operator<Operators::Exponential, float>(tdd, 1e+1);
-  test_unary_operator<HeavisideStepFunction, float>(tdd, 1e+1);
-  test_unary_operator<Operators::Log, float>(tdd, 1e+3);
-  test_unary_operator<Operators::Sine, float>(tdd, 1e+1);
-  test_unary_operator<Operators::Sinh, float>(tdd, 1e+1);
-  test_unary_operator<Operators::SafeSqrt, float>(tdd, 1e+1);
-  test_unary_operator<Operators::Tanh, float>(tdd, 1e+1);
-  test_unary_operator<Operators::UnaryMinus, float>(tdd, 1e+1);
-
-  // ---- test complex ----
-  test_unary_operator<Operators::ComplexConjugate, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::AbsoluteValue, complex<float>>(tdd, 1e+2);
-  test_binary_operator<Operators::Multiplication, complex<float>>(tdd, 1e+2);
-  test_binary_operator<Operators::Addition, complex<float>>(tdd, 1e+2);
-  test_binary_operator<Operators::Division, complex<float>>(tdd, 1e+2);
-  test_binary_operator<Operators::Power, complex<float>>(tdd, 1e+3);
-  test_binary_operator<Operators::Subtraction, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::AbsoluteValue, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::ASinh, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::Cosh, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::Cosine, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::DiracDeltaFunction, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::Exponential, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::Log, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::Sine, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::Sinh, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::SafeSqrt, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::Tanh, complex<float>>(tdd, 1e+2);
-  test_unary_operator<Operators::UnaryMinus, complex<float>>(tdd, 1e+2);
-}
 
 } // namespace TempLat
 

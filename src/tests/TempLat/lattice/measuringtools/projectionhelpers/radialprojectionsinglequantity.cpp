@@ -7,19 +7,19 @@
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template<typename T>
-struct RadialProjectionSingleQuantityTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <typename T> inline void RadialProjectionSingleQuantityTester<T>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  say << "See fcn/lattice/measuringtoolsIO/projectionhelpers/radialprojectionresult_test.h\n";
-  tdd.verify(true);
-}
+  template <typename T> struct RadialProjectionSingleQuantityTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <typename T> inline void RadialProjectionSingleQuantityTester<T>::Test(TDDAssertion &tdd)
+  {
+
+    say << "See fcn/lattice/measuringtoolsIO/projectionhelpers/radialprojectionresult_test.h\n";
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

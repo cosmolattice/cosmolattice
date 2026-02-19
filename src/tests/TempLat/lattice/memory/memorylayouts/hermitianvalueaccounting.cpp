@@ -7,18 +7,19 @@
 #include "TempLat/lattice/memory/memorylayouts/hermitianvalueaccounting.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HermitianValueAccountingTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HermitianValueAccountingTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  bool allTestsAreInRandomFieldAndVerifyHermitianLayout = true;
-  tdd.verify(allTestsAreInRandomFieldAndVerifyHermitianLayout);
-}
+
+  struct HermitianValueAccountingTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void HermitianValueAccountingTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    bool allTestsAreInRandomFieldAndVerifyHermitianLayout = true;
+    tdd.verify(allTestsAreInRandomFieldAndVerifyHermitianLayout);
+  }
 
 } // namespace TempLat
 

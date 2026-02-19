@@ -7,14 +7,15 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2get.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-// void SU2Get::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     //tdd.verify( false );
-//
-// }
+  // void SU2Get::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     //tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat
 

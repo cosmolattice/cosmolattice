@@ -8,17 +8,18 @@
 #include "TempLat/util/tdd/tdd.h"
 #include <string>
 
-namespace TempLat {
-
-struct StripPathFromFileNameTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void StripPathFromFileNameTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  tdd.verify(StripPathFromFileName("/path/to/hypothetical/file") == std::string("file"));
-}
+  struct StripPathFromFileNameTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void StripPathFromFileNameTester::Test(TDDAssertion &tdd)
+  {
+
+    tdd.verify(StripPathFromFileName("/path/to/hypothetical/file") == std::string("file"));
+  }
 
 } // namespace TempLat
 

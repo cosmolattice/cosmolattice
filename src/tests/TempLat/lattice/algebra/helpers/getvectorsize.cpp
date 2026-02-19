@@ -7,33 +7,34 @@
 #include "TempLat/lattice/algebra/helpers/getvectorsize.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct GetVectorSizeTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void GetVectorSizeTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  struct dummy {
-    char a;
+
+  struct GetVectorSizeTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  struct MyTestOne {
-    double vectorGet(Tag<1> t)
-    {
-      std::cerr << "Hell yeah.\n";
-      return 420;
-    }
-    ptrdiff_t getVectorSize() { return 42; }
-  };
+  void GetVectorSizeTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    struct dummy {
+      char a;
+    };
 
-  MyTestOne t1;
+    struct MyTestOne {
+      double vectorGet(Tag<1> t)
+      {
+        std::cerr << "Hell yeah.\n";
+        return 420;
+      }
+      ptrdiff_t getVectorSize() { return 42; }
+    };
 
-  tdd.verify(GetVectorSize::getVectorSize(t1) == 42);
-  tdd.verify(GetVectorSize::getVectorSize(42) == 1);
-}
+    MyTestOne t1;
+
+    tdd.verify(GetVectorSize::getVectorSize(t1) == 42);
+    tdd.verify(GetVectorSize::getVectorSize(42) == 1);
+  }
 
 } // namespace TempLat
 

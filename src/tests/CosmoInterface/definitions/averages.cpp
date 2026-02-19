@@ -8,17 +8,18 @@
 #include "CosmoInterface/definitions/averages.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct AveragesTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void AveragesTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct AveragesTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void AveragesTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

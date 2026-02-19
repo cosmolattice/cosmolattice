@@ -11,18 +11,18 @@
 //     TempLat::TDDContainer<TempLat::LatticeParametersTester> test;
 // }
 
+namespace TempLat
+{
 
-namespace TempLat {
+  struct LatticeParametersTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-struct LatticeParametersTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-// void LatticeParametersTester::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     tdd.verify( false );
-//
-// }
+  // void LatticeParametersTester::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat

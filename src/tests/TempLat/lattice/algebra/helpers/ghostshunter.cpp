@@ -7,17 +7,18 @@
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct GhostsHunterTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void GhostsHunterTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  // tdd.verify( false );
-}
+
+  struct GhostsHunterTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void GhostsHunterTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    // tdd.verify( false );
+  }
 
 } // namespace TempLat
 

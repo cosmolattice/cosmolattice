@@ -8,15 +8,16 @@
 #include "TempLat/fft/external/fftw/fftwinterface.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct FFTWInterfaceTester {
-  static void Test(TDDAssertion &tdd)
-  {
-    FFTWInterface<3> someInterface;
-    tdd.verify(true);
-  }
-};
+  struct FFTWInterfaceTester {
+    static void Test(TDDAssertion &tdd)
+    {
+      FFTWInterface<3> someInterface;
+      tdd.verify(true);
+    }
+  };
 
 } // namespace TempLat
 

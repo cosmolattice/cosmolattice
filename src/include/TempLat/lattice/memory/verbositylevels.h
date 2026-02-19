@@ -71,7 +71,6 @@ namespace TempLat
     }
 
     void setToDefault() { *this = VerbosityLevels(); }
-
   };
 
 } // namespace TempLat

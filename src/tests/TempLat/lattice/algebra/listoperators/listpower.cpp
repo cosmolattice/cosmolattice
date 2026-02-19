@@ -9,29 +9,30 @@
 #include "TempLat/util/foreach.h"
 #include "TempLat/util/almostequal.h"
 
-namespace TempLat {
-
-struct ListPowerTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ListPowerTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  auto t1 = std::make_tuple(1.0, 2.0, 3.0, 4.0);
-  auto t2 = std::make_tuple(5.0, 6.0, 7.0, 8.0);
 
-  auto t3 = pow(t1, t2);
+  struct ListPowerTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  double tmp1 = 1.0;
-  double tmp2 = 5.0;
+  void ListPowerTester::Test(TDDAssertion &tdd)
+  {
+    auto t1 = std::make_tuple(1.0, 2.0, 3.0, 4.0);
+    auto t2 = std::make_tuple(5.0, 6.0, 7.0, 8.0);
 
-  for_each(t3, [&](auto x) { tdd.verify(AlmostEqual(x, std::pow(tmp1++, tmp2++))); });
-  auto t4 = pow(t1, 9.0);
-  auto t5 = pow<9>(t1);
-  say << GetComponent::get(t4, Tag<1>());
-  tdd.verify(AlmostEqual(GetComponent::get(t4, Tag<1>()), std::pow(2.0, 9.0)));
-  tdd.verify(AlmostEqual(GetComponent::get(t5, Tag<2>()), std::pow(3.0, 9.0)));
-}
+    auto t3 = pow(t1, t2);
+
+    double tmp1 = 1.0;
+    double tmp2 = 5.0;
+
+    for_each(t3, [&](auto x) { tdd.verify(AlmostEqual(x, std::pow(tmp1++, tmp2++))); });
+    auto t4 = pow(t1, 9.0);
+    auto t5 = pow<9>(t1);
+    say << GetComponent::get(t4, Tag<1>());
+    tdd.verify(AlmostEqual(GetComponent::get(t4, Tag<1>()), std::pow(2.0, 9.0)));
+    tdd.verify(AlmostEqual(GetComponent::get(t5, Tag<2>()), std::pow(3.0, 9.0)));
+  }
 
 } // namespace TempLat
 

@@ -7,36 +7,37 @@
 #include "TempLat/lattice/algebra/helpers/postget.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct PostGetTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-class NoPostGet
+namespace TempLat
 {
-public:
-  NoPostGet() = default;
-};
 
-class WithPostGet
-{
-public:
-  void postGet() { called = true; }
-  static bool called;
-};
-bool WithPostGet::called = false; // Initialize static member variable
+  struct PostGetTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void PostGetTester::Test(TDDAssertion &tdd)
-{
-  NoPostGet noPostGet;
-  WithPostGet withPostGet;
+  class NoPostGet
+  {
+  public:
+    NoPostGet() = default;
+  };
 
-  PostGet::apply(noPostGet);   // should compile
-  PostGet::apply(withPostGet); // should compile
+  class WithPostGet
+  {
+  public:
+    void postGet() { called = true; }
+    static bool called;
+  };
+  bool WithPostGet::called = false; // Initialize static member variable
 
-  tdd.verify(WithPostGet::called == true); // should be true, since we called postGet
-}
+  void PostGetTester::Test(TDDAssertion &tdd)
+  {
+    NoPostGet noPostGet;
+    WithPostGet withPostGet;
+
+    PostGet::apply(noPostGet);   // should compile
+    PostGet::apply(withPostGet); // should compile
+
+    tdd.verify(WithPostGet::called == true); // should be true, since we called postGet
+  }
 
 } // namespace TempLat
 

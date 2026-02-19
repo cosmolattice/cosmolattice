@@ -53,11 +53,7 @@ namespace TempLat
       vType localResult{};
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
       {
-        device::apply(
-            [&](auto &&...args) {
-              update = device::max(DoEval::eval(mT, args...), update);
-            },
-            idx);
+        device::apply([&](auto &&...args) { update = device::max(DoEval::eval(mT, args...), update); }, idx);
       };
       device::iteration::reduce("Averager", mToolBox->mLayouts.getConfigSpaceLayout(), functor,
                                 device::iteration::Max<vType>(localResult));

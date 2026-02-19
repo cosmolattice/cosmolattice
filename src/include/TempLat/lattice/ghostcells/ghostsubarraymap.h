@@ -44,7 +44,6 @@ namespace TempLat
       }
       return mSubArrays[dataType][dimension];
     }
-
   };
 
 } // namespace TempLat

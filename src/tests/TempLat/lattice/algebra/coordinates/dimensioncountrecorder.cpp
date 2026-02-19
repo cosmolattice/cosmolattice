@@ -7,26 +7,26 @@
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template<size_t NDim>
-struct DimensionCountRecorderTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <size_t NDim> inline void DimensionCountRecorderTester<NDim>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
+
+  template <size_t NDim> struct DimensionCountRecorderTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <size_t NDim> inline void DimensionCountRecorderTester<NDim>::Test(TDDAssertion &tdd)
   {
-    DimensionCountRecorder<2> cn(SpaceStateType::Fourier);
-    cn.confirmSpace(LayoutStruct<2>({1, 1}, 1), SpaceStateType::Fourier);
-    tdd.verify(cn.getNDimensions() == 2);
+    {
+      DimensionCountRecorder<2> cn(SpaceStateType::Fourier);
+      cn.confirmSpace(LayoutStruct<2>({1, 1}, 1), SpaceStateType::Fourier);
+      tdd.verify(cn.getNDimensions() == 2);
+    }
+    {
+      DimensionCountRecorder<8> cn(SpaceStateType::Fourier);
+      cn.confirmSpace(LayoutStruct<8>({1, 1, 1, 1, 1, 1, 1, 1}, 1), SpaceStateType::Fourier);
+      tdd.verify(cn.getNDimensions() == 8);
+    }
   }
-  {
-    DimensionCountRecorder<8> cn(SpaceStateType::Fourier);
-    cn.confirmSpace(LayoutStruct<8>({1, 1, 1, 1, 1, 1, 1, 1}, 1), SpaceStateType::Fourier);
-    tdd.verify(cn.getNDimensions() == 8);
-  }
-}
 
 } // namespace TempLat
 

@@ -8,14 +8,15 @@
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-// void FilesManager::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     tdd.verify( false );
-//
-// }
+  // void FilesManager::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat
 

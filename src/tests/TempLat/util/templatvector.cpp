@@ -7,25 +7,26 @@
 #include "TempLat/util/templatvector.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct TempLatVectorTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void TempLatVectorTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  TempLatVector<int> vec(1, 2, 3);
+  struct TempLatVectorTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  tdd.verify(vec.getComp(1_c) == 2);
+  void TempLatVectorTester::Test(TDDAssertion &tdd)
+  {
 
-  std::vector<int> sVec(3, 6);
+    TempLatVector<int> vec(1, 2, 3);
 
-  vec = sVec;
+    tdd.verify(vec.getComp(1_c) == 2);
 
-  tdd.verify(vec[2] == 6);
-}
+    std::vector<int> sVec(3, 6);
+
+    vec = sVec;
+
+    tdd.verify(vec[2] == 6);
+  }
 
 } // namespace TempLat
 

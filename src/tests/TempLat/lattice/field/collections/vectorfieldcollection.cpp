@@ -7,17 +7,18 @@
 #include "TempLat/lattice/field/collections/vectorfieldcollection.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct VectorFieldCollectionTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void VectorFieldCollectionTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct VectorFieldCollectionTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void VectorFieldCollectionTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

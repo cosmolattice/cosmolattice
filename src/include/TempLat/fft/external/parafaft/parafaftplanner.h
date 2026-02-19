@@ -103,7 +103,6 @@ namespace TempLat
       return std::shared_ptr<FFTPlanInterface<NDim, double>>();
 #endif
     }
-
   };
 } // namespace TempLat
 

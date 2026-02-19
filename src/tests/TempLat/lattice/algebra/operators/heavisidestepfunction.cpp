@@ -7,35 +7,36 @@
 #include "TempLat/lattice/algebra/operators/heavisidestepfunction.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HeavisideStepFunctionTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-namespace TestScratch
+namespace TempLat
 {
-  template <int RETURNVALUE> struct HeavisideTesterTemplate {
-    DEVICE_FORCEINLINE_FUNCTION
-    double get(ptrdiff_t i) const { return RETURNVALUE * std::numeric_limits<double>::epsilon(); }
-    DEVICE_FORCEINLINE_FUNCTION
-    double eval(ptrdiff_t i) const { return RETURNVALUE * std::numeric_limits<double>::epsilon(); }
+
+  struct HeavisideStepFunctionTester {
+    static void Test(TDDAssertion &tdd);
   };
-} // namespace TestScratch
 
-void HeavisideStepFunctionTester::Test(TDDAssertion &tdd)
-{
-  using namespace TestScratch;
-  HeavisideTesterTemplate<1> positive;
-  HeavisideTesterTemplate<0> zero;
-  HeavisideTesterTemplate<-1> negative;
+  namespace TestScratch
+  {
+    template <int RETURNVALUE> struct HeavisideTesterTemplate {
+      DEVICE_FORCEINLINE_FUNCTION
+      double get(ptrdiff_t i) const { return RETURNVALUE * std::numeric_limits<double>::epsilon(); }
+      DEVICE_FORCEINLINE_FUNCTION
+      double eval(ptrdiff_t i) const { return RETURNVALUE * std::numeric_limits<double>::epsilon(); }
+    };
+  } // namespace TestScratch
 
-  tdd.verify(heaviside(zero).eval(0) == 1);
+  void HeavisideStepFunctionTester::Test(TDDAssertion &tdd)
+  {
+    using namespace TestScratch;
+    HeavisideTesterTemplate<1> positive;
+    HeavisideTesterTemplate<0> zero;
+    HeavisideTesterTemplate<-1> negative;
 
-  tdd.verify(heaviside(positive).eval(0) == 1);
+    tdd.verify(heaviside(zero).eval(0) == 1);
 
-  tdd.verify(heaviside(negative).eval(0) == 0);
-}
+    tdd.verify(heaviside(positive).eval(0) == 1);
+
+    tdd.verify(heaviside(negative).eval(0) == 0);
+  }
 
 } // namespace TempLat
 

@@ -11,57 +11,58 @@
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticeforwardgradient.h"
 
-namespace TempLat {
-
-struct GradientComponentTest {
-  static void Test(TDDAssertion &tdd);
-};
-
-void GradientComponentTest::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /*
- static constexpr ptrdiff_t nDim = 4;
- const ptrdiff_t nGrid = 16, nGhost = 1;
- bool test;
 
- auto toolBox = MemoryToolBox::makeShared(nDim, nGrid, nGhost);
+  struct GradientComponentTest {
+    static void Test(TDDAssertion &tdd);
+  };
 
- //        toolBox->setVerbose();
+  void GradientComponentTest::Test(TDDAssertion &tdd)
+  {
+    /*
+   static constexpr ptrdiff_t nDim = 4;
+   const ptrdiff_t nGrid = 16, nGhost = 1;
+   bool test;
 
- Field<double> phi("phi", toolBox);
+   auto toolBox = MemoryToolBox::makeShared(nDim, nGrid, nGhost);
 
- //  SingleCoordinate sc(1, SpaceStateType::Configuration);
- SpatialCoordinate x(toolBox);
+   //        toolBox->setVerbose();
 
- toolBox->setVerbose();
+   Field<double> phi("phi", toolBox);
 
- phi = getVectorComponent(x, 1);
+   //  SingleCoordinate sc(1, SpaceStateType::Configuration);
+   SpatialCoordinate x(toolBox);
 
- auto gradPhi = LatForwardGrad<4>(phi);
+   toolBox->setVerbose();
 
- Field<double> checkPhi("checkPhi", toolBox);
- checkPhi = gradPhi.norm();
+   phi = getVectorComponent(x, 1);
 
- say << "phi: " << phi(test, 0, 0, 0, 0) << ", " << phi(test, 0, -1, 0, 0) << ", " << phi(test, 8, -1, 0, 0) << ", "
-     << phi(test, -7, -1, 0, 0) << "\n";
+   auto gradPhi = LatForwardGrad<4>(phi);
 
- say << average(abs(gradPhi[0]));
+   Field<double> checkPhi("checkPhi", toolBox);
+   checkPhi = gradPhi.norm();
 
- tdd.verify(AlmostEqual(average(abs(gradPhi[0])), 0));
+   say << "phi: " << phi(test, 0, 0, 0, 0) << ", " << phi(test, 0, -1, 0, 0) << ", " << phi(test, 8, -1, 0, 0) << ", "
+       << phi(test, -7, -1, 0, 0) << "\n";
 
- //    say << "average(gradPhi[1]).compute(): " << average(abs(gradPhi[1])).compute() << "\n";
+   say << average(abs(gradPhi[0]));
 
- // need to take absolute value, because phi is set to truly periodic coordinate values,
- // which includes jumps from N/2 to -N/2. This means that the average of the plain gradient is exactly zero. The
- // average of the absolute value must be larger than 1, smaller than 2.
- auto aresult = average(abs(gradPhi[1]));
- say << "Would be between 1 and 2: " << aresult << "\n";
- tdd.verify(aresult > 1 && aresult < 2);
+   tdd.verify(AlmostEqual(average(abs(gradPhi[0])), 0));
 
- tdd.verify(AlmostEqual(average(gradPhi[1]), 0));
-*/
-  tdd.verify(true);
-}
+   //    say << "average(gradPhi[1]).compute(): " << average(abs(gradPhi[1])).compute() << "\n";
+
+   // need to take absolute value, because phi is set to truly periodic coordinate values,
+   // which includes jumps from N/2 to -N/2. This means that the average of the plain gradient is exactly zero. The
+   // average of the absolute value must be larger than 1, smaller than 2.
+   auto aresult = average(abs(gradPhi[1]));
+   say << "Would be between 1 and 2: " << aresult << "\n";
+   tdd.verify(aresult > 1 && aresult < 2);
+
+   tdd.verify(AlmostEqual(average(gradPhi[1]), 0));
+  */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

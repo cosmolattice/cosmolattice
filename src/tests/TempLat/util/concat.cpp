@@ -11,14 +11,14 @@
 //     TempLat::TDDContainer<TempLat::Concat> test;
 // }
 
+namespace TempLat
+{
 
-namespace TempLat {
-
-// void Concat::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     tdd.verify( false );
-//
-// }
+  // void Concat::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat

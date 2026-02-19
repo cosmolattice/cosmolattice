@@ -7,7 +7,8 @@
 #include "TempLat/lattice/field/integrationtesting/finitediffvsfft.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
   template <ptrdiff_t nDim>
   void myLittleLambda(TDDAssertion &tdd, ptrdiff_t nGrid, ptrdiff_t nGhost, double prec = 1e-10)
@@ -82,18 +83,18 @@ namespace TempLat {
     tdd.verify(true);
   }
 
-struct FiniteDiffVSFFT {
-  static void Test(TDDAssertion &tdd);
-};
+  struct FiniteDiffVSFFT {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void FiniteDiffVSFFT::Test(TDDAssertion &tdd)
-{
+  void FiniteDiffVSFFT::Test(TDDAssertion &tdd)
+  {
 
-  myLittleLambda<3>(tdd, 32, 1); // Template the number of dims for gradients
-  // myLittleLambda<5>(tdd, 32, 1, 1e-6); // Can do 5D field theory, fun! Lose a bit of precision here, mostly becuse
-  // you get small numbers and huge volume.
-  //  Commented cause requires a lot of RAM.
-}
+    myLittleLambda<3>(tdd, 32, 1); // Template the number of dims for gradients
+    // myLittleLambda<5>(tdd, 32, 1, 1e-6); // Can do 5D field theory, fun! Lose a bit of precision here, mostly becuse
+    // you get small numbers and huge volume.
+    //  Commented cause requires a lot of RAM.
+  }
 
 } // namespace TempLat
 

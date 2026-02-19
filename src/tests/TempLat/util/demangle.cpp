@@ -7,12 +7,10 @@
 #include "TempLat/util/demangle.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template <typename TestObjectUnknownHere> void Demangle::Test(TestObjectUnknownHere &tdd)
+namespace TempLat
 {
-  tdd.verify(true);
-}
+
+  template <typename TestObjectUnknownHere> void Demangle::Test(TestObjectUnknownHere &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

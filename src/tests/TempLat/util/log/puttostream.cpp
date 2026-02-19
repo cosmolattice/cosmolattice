@@ -7,16 +7,14 @@
 #include "TempLat/util/log/puttostream.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct PutToStreamTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void PutToStreamTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  tdd.verify(true);
-}
+
+  struct PutToStreamTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void PutToStreamTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

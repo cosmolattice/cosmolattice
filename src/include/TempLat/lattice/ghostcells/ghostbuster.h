@@ -214,7 +214,6 @@ namespace TempLat
       // We need the fence only at the very end, as consecutive kernel launches happen in order.
       block.flagHostMirrorOutdated();
     }
-
   };
 } // namespace TempLat
 

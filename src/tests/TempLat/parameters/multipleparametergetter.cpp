@@ -7,26 +7,27 @@
 #include "TempLat/parameters/multipleparametergetter.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct MultipleParameterGetterTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void MultipleParameterGetterTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  MultipleParameterGetter<int> mp;
-  mp.push_back(ParameterGetter<int>(23, ""));
-  mp.push_back(ParameterGetter<int>(45, ""));
 
-  std::cout << "hi" << mp << std::endl;
+  struct MultipleParameterGetterTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  std::vector<int> test(mp);
+  void MultipleParameterGetterTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    MultipleParameterGetter<int> mp;
+    mp.push_back(ParameterGetter<int>(23, ""));
+    mp.push_back(ParameterGetter<int>(45, ""));
 
-  tdd.verify(test[0] == 23);
-  tdd.verify(test[1] == 45);
-}
+    std::cout << "hi" << mp << std::endl;
+
+    std::vector<int> test(mp);
+
+    tdd.verify(test[0] == 23);
+    tdd.verify(test[1] == 45);
+  }
 
 } // namespace TempLat
 

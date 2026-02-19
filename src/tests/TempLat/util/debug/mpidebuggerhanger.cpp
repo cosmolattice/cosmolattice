@@ -7,20 +7,21 @@
 #include "TempLat/util/debug/mpidebuggerhanger.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct MPIDebuggerHangerTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void MPIDebuggerHangerTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
 
-  // hang();
+  struct MPIDebuggerHangerTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  tdd.verify(true);
-}
+  void MPIDebuggerHangerTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+
+    // hang();
+
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

@@ -7,17 +7,18 @@
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct MakeListTagTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void MakeListTagTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct MakeListTagTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void MakeListTagTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

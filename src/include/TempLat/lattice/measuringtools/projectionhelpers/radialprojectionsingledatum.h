@@ -109,7 +109,6 @@ namespace TempLat
                                             std::min(a.minVal, b.minVal), std::max(a.maxVal, b.maxVal),
                                             a.multiplicity + b.multiplicity);
     }
-
   };
 } // namespace TempLat
 

@@ -7,26 +7,27 @@
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HasSU2DoubletGetTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HasSU2DoubletGetTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  struct MyStruct {
-    DEVICE_FORCEINLINE_FUNCTION
-    double SU2DoubletGet(Tag<0> t) const { return 87; };
-  };
-  struct MyStruct2 {
-    DEVICE_FORCEINLINE_FUNCTION
-    double SU2Get(Tag<0> t) const { return 87; };
+
+  struct HasSU2DoubletGetTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  tdd.verify(HasSU2DoubletGet<MyStruct> == true);
-  tdd.verify(HasSU2DoubletGet<MyStruct2> == false);
-}
+  void HasSU2DoubletGetTester::Test(TDDAssertion &tdd)
+  {
+    struct MyStruct {
+      DEVICE_FORCEINLINE_FUNCTION
+      double SU2DoubletGet(Tag<0> t) const { return 87; };
+    };
+    struct MyStruct2 {
+      DEVICE_FORCEINLINE_FUNCTION
+      double SU2Get(Tag<0> t) const { return 87; };
+    };
+
+    tdd.verify(HasSU2DoubletGet<MyStruct> == true);
+    tdd.verify(HasSU2DoubletGet<MyStruct2> == false);
+  }
 
 } // namespace TempLat
 

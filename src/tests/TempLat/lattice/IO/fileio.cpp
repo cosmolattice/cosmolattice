@@ -11,18 +11,18 @@
 //     TempLat::TDDContainer<TempLat::FileIOTester> test;
 // }
 
+namespace TempLat
+{
 
-namespace TempLat {
+  struct FileIOTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-struct FileIOTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-// void FileIOTester::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     tdd.verify( false );
-//
-// }
+  // void FileIOTester::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat

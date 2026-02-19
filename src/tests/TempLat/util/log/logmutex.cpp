@@ -7,15 +7,16 @@
 #include "TempLat/util/log/logmutex.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template <typename TestObjectUnknownHere> void LogMutex::Test(TestObjectUnknownHere &tdd)
+namespace TempLat
 {
 
-  auto guard = LogMutex::guard();
+  template <typename TestObjectUnknownHere> void LogMutex::Test(TestObjectUnknownHere &tdd)
+  {
 
-  tdd.verify(true);
-}
+    auto guard = LogMutex::guard();
+
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

@@ -214,7 +214,6 @@ namespace TempLat
     bool verbose;
 
     std::string backend;
-
   };
 } // namespace TempLat
 

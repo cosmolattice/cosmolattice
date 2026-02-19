@@ -7,60 +7,60 @@
 #include "TempLat/lattice/memory/memorymanager.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template <size_t NDim, typename T> struct MemoryManagerTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <size_t NDim, typename T>
-void MemoryManagerTester<NDim, T>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  auto toolBox = MemoryToolBox<NDim>::makeShared(192, 2);
 
-  toolBox->mFFTLibrary.setVerbose();
+  template <size_t NDim, typename T> struct MemoryManagerTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  MemoryManager<NDim, T> mManager(toolBox);
+  template <size_t NDim, typename T> void MemoryManagerTester<NDim, T>::Test(TDDAssertion &tdd)
+  {
+    auto toolBox = MemoryToolBox<NDim>::makeShared(192, 2);
 
-  if (TDDRegister::isSingleUnitTest()) {
-    std::cerr << mManager << "\n\n";
+    toolBox->mFFTLibrary.setVerbose();
 
-    toolBox->setVerbose();
+    MemoryManager<NDim, T> mManager(toolBox);
+
+    if (TDDRegister::isSingleUnitTest()) {
+      std::cerr << mManager << "\n\n";
+
+      toolBox->setVerbose();
+    }
+
+    /* first allocation */
+    tdd.verify(mManager.confirmConfigSpace() > 0);
+
+    /* fft necessary */
+    tdd.verify(mManager.confirmFourierSpace() > 0);
+
+    /* fft not necessary */
+    tdd.verify(mManager.confirmFourierSpace() == 0);
+
+    /* fft necessary */
+    tdd.verify(mManager.confirmConfigSpace() > 0);
+
+    /* fft not necessary */
+    tdd.verify(mManager.confirmConfigSpace() == 0);
+
+    /* ghost update necessary */
+    tdd.verify(mManager.confirmGhostsUpToDate() > 0);
+
+    /* ghost update not necessary */
+    tdd.verify(mManager.confirmGhostsUpToDate() == 0);
+
+    /* fft not necessary */
+    tdd.verify(mManager.confirmConfigSpace() == 0);
+
+    /* ghost update not necessary */
+    tdd.verify(mManager.confirmGhostsUpToDate() == 0);
+
+    /* fft necessary */
+    tdd.verify(mManager.confirmFourierSpace() > 0);
+
+    /* fft && ghost update necessary */
+    tdd.verify(mManager.confirmGhostsUpToDate() > 0);
   }
-
-  /* first allocation */
-  tdd.verify(mManager.confirmConfigSpace() > 0);
-
-  /* fft necessary */
-  tdd.verify(mManager.confirmFourierSpace() > 0);
-
-  /* fft not necessary */
-  tdd.verify(mManager.confirmFourierSpace() == 0);
-
-  /* fft necessary */
-  tdd.verify(mManager.confirmConfigSpace() > 0);
-
-  /* fft not necessary */
-  tdd.verify(mManager.confirmConfigSpace() == 0);
-
-  /* ghost update necessary */
-  tdd.verify(mManager.confirmGhostsUpToDate() > 0);
-
-  /* ghost update not necessary */
-  tdd.verify(mManager.confirmGhostsUpToDate() == 0);
-
-  /* fft not necessary */
-  tdd.verify(mManager.confirmConfigSpace() == 0);
-
-  /* ghost update not necessary */
-  tdd.verify(mManager.confirmGhostsUpToDate() == 0);
-
-  /* fft necessary */
-  tdd.verify(mManager.confirmFourierSpace() > 0);
-
-  /* fft && ghost update necessary */
-  tdd.verify(mManager.confirmGhostsUpToDate() > 0);
-}
 
 } // namespace TempLat
 

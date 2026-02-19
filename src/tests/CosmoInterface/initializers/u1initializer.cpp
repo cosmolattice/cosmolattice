@@ -8,18 +8,19 @@
 #include "CosmoInterface/initializers/u1initializer.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct U1InitializerTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void U1InitializerTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+  struct U1InitializerTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void U1InitializerTester::Test(TDDAssertion &tdd)
+  {
+
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

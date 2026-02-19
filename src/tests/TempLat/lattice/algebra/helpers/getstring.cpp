@@ -7,21 +7,22 @@
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct GetStringTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void GetStringTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  tdd.verify(std::is_same<std::string, decltype(GetString::get(complex<double>(1, 1)))>::value);
+  struct GetStringTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  tdd.verify(std::is_same<std::string, decltype(GetString::get((double)1))>::value);
+  void GetStringTester::Test(TDDAssertion &tdd)
+  {
 
-  // tdd.verify( std::is_same<std::string, decltype(GetString::get(complex<double>(1, 1),2))>::value );
-}
+    tdd.verify(std::is_same<std::string, decltype(GetString::get(complex<double>(1, 1)))>::value);
+
+    tdd.verify(std::is_same<std::string, decltype(GetString::get((double)1))>::value);
+
+    // tdd.verify( std::is_same<std::string, decltype(GetString::get(complex<double>(1, 1),2))>::value );
+  }
 
 } // namespace TempLat
 

@@ -7,20 +7,21 @@
 #include "TempLat/lattice/algebra/listoperators/total.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct TotalTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void TotalTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  auto test = std::make_tuple(1, 2, 3, 4);
 
-  tdd.verify(total(test) == 10);
-  tdd.verify(total(test, [](auto x) { return 2 * x; }) == 20);
-}
+  struct TotalTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void TotalTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    auto test = std::make_tuple(1, 2, 3, 4);
+
+    tdd.verify(total(test) == 10);
+    tdd.verify(total(test, [](auto x) { return 2 * x; }) == 20);
+  }
 
 } // namespace TempLat
 

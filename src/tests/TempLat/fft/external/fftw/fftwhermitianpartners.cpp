@@ -9,20 +9,21 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianpartners.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct FFTWHermitianPartnersTester {
-  static void Test(TDDAssertion &tdd)
-  {
-    /* Default is to fail: to remind yourself to implement something here. */
-    device::IdxArray<1> grid{};
-    for (auto &val : grid)
-      val = 128;
-    HermitianPartners<1> hermitianPartners = FFTWHermitianPartners<1>::create(grid);
+  struct FFTWHermitianPartnersTester {
+    static void Test(TDDAssertion &tdd)
+    {
+      /* Default is to fail: to remind yourself to implement something here. */
+      device::IdxArray<1> grid{};
+      for (auto &val : grid)
+        val = 128;
+      HermitianPartners<1> hermitianPartners = FFTWHermitianPartners<1>::create(grid);
 
-    tdd.verify(hermitianPartners.getMode() == TempLat::HermitianPartnersMode::fftw);
-  }
-};
+      tdd.verify(hermitianPartners.getMode() == TempLat::HermitianPartnersMode::fftw);
+    }
+  };
 
 } // namespace TempLat
 

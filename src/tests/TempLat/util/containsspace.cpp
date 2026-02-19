@@ -7,18 +7,19 @@
 #include "TempLat/util/containsspace.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ContainsSpaceTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ContainsSpaceTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  tdd.verify(ContainsSpace::test("This has a space") == true);
-  tdd.verify(ContainsSpace::test("Thishasnospace") == false);
-}
+  struct ContainsSpaceTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void ContainsSpaceTester::Test(TDDAssertion &tdd)
+  {
+
+    tdd.verify(ContainsSpace::test("This has a space") == true);
+    tdd.verify(ContainsSpace::test("Thishasnospace") == false);
+  }
 
 } // namespace TempLat
 

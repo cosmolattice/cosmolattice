@@ -7,18 +7,19 @@
 #include "TempLat/lattice/algebra/helpers/hastoolbox.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HasToolBoxTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HasToolBoxTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  bool checkGetToolBox = true;
-  tdd.verify(checkGetToolBox);
-}
+
+  struct HasToolBoxTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void HasToolBoxTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    bool checkGetToolBox = true;
+    tdd.verify(checkGetToolBox);
+  }
 
 } // namespace TempLat
 

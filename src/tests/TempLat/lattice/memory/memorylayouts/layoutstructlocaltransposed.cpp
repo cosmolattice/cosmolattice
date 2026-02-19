@@ -8,123 +8,124 @@
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocaltransposed.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct CoordinateMappingTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void CoordinateMappingTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* test the operator== */
-  LayoutStructLocalTransposed<3> a({0, 0, 0}, 0);
-  LayoutStructLocalTransposed<3> b({0, 0, 0}, 0);
-  LayoutStructLocalTransposed<2> c({0, 0}, 0);
-  LayoutStructLocalTransposed<3> d({0, 0, 0}, 0);
 
-  d.getLocal().getLocalSizes()[1] = 2;
+  struct CoordinateMappingTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  tdd.verify(!(a == c));
-  tdd.verify((a == b));
-  tdd.verify(!(a == d));
+  void CoordinateMappingTester::Test(TDDAssertion &tdd)
+  {
+    /* test the operator== */
+    LayoutStructLocalTransposed<3> a({0, 0, 0}, 0);
+    LayoutStructLocalTransposed<3> b({0, 0, 0}, 0);
+    LayoutStructLocalTransposed<2> c({0, 0}, 0);
+    LayoutStructLocalTransposed<3> d({0, 0, 0}, 0);
 
-  /* */
-  a = LayoutStructLocalTransposed<3>({16, 16, 16}, 0);
+    d.getLocal().getLocalSizes()[1] = 2;
 
-  device::IdxArray<3> newLocalStarts{{7, 8, 9}};
-  a.getLocal().setLocalStarts(newLocalStarts);
+    tdd.verify(!(a == c));
+    tdd.verify((a == b));
+    tdd.verify(!(a == d));
 
-  /* test that these propagate correctly */
-  tdd.verify(a.getLocal().getLocalSizes()[0] == a.getSizesInMemory()[0]);
-  tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[1]);
-  tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[2]);
+    /* */
+    a = LayoutStructLocalTransposed<3>({16, 16, 16}, 0);
 
-  a.setTranspositionMap_memoryToGlobalSpace({{2, 0, 1}});
-  /* test that these propagate correctly */
-  tdd.verify(a.getLocal().getLocalSizes()[0] == a.getSizesInMemory()[1]);
-  tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[2]);
-  tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[0]);
+    device::IdxArray<3> newLocalStarts{{7, 8, 9}};
+    a.getLocal().setLocalStarts(newLocalStarts);
 
-  device::IdxArray<3> memVec{}, posVec{}, memVec2{};
+    /* test that these propagate correctly */
+    tdd.verify(a.getLocal().getLocalSizes()[0] == a.getSizesInMemory()[0]);
+    tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[1]);
+    tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[2]);
 
-  memVec[0] = 1;
-  memVec[1] = 2;
-  memVec[2] = 3;
+    a.setTranspositionMap_memoryToGlobalSpace({{2, 0, 1}});
+    /* test that these propagate correctly */
+    tdd.verify(a.getLocal().getLocalSizes()[0] == a.getSizesInMemory()[1]);
+    tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[2]);
+    tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[0]);
 
-  for (ptrdiff_t i = 0; i < 3; ++i) {
-    auto map = a.getSpatialLocationFromMemoryIndex(memVec[i], i);
-    posVec[map.atIndex] = map.withValue;
+    device::IdxArray<3> memVec{}, posVec{}, memVec2{};
+
+    memVec[0] = 1;
+    memVec[1] = 2;
+    memVec[2] = 3;
+
+    for (ptrdiff_t i = 0; i < 3; ++i) {
+      auto map = a.getSpatialLocationFromMemoryIndex(memVec[i], i);
+      posVec[map.atIndex] = map.withValue;
+    }
+
+    say << "memVec " << memVec << " -> posVec " << posVec << "\n";
+
+    /* mem pos 2 at mem dim 1 -> global dim 0 -> global pos 2 + 7 = 9 -> 9 - 16 = -7 */
+    tdd.verify(posVec[0] == -7);
+
+    /* mem pos 3 at mem dim 2 -> global dim 1 -> global pos 3 + 8 = 11 -> 11 - 16 = -5 */
+    tdd.verify(posVec[1] == -5);
+
+    /* mem pos 1 at mem dim 0 -> global dim 2 -> global pos 1 + 9 = 10 -> 10 - 16 = -6 */
+    tdd.verify(posVec[2] == -6);
+
+    for (ptrdiff_t i = 0; i < 3; ++i) {
+      auto map = a.getMemoryIndexFromSpatialLocation(posVec[i], i);
+      memVec2[map.atIndex] = map.withValue;
+    }
+    say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
+    say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
+
+    tdd.verify(memVec[0] == memVec2[0]);
+    tdd.verify(memVec[1] == memVec2[1]);
+    tdd.verify(memVec[2] == memVec2[2]);
+
+    a = LayoutStructLocalTransposed<3>({12, 16, 18}, 0);
+
+    newLocalStarts = device::IdxArray<3>{{7, 8, 9}};
+    a.getLocal().setLocalStarts(newLocalStarts);
+
+    /* test that these propagate correctly */
+    tdd.verify(a.getLocal().getLocalSizes()[0] == a.getSizesInMemory()[0]);
+    tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[1]);
+    tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[2]);
+
+    a.setTranspositionMap_memoryToGlobalSpace({{2, 0, 1}});
+    /* test that these propagate correctly */
+    tdd.verify(a.getLocal().getLocalSizes()[0] == a.getSizesInMemory()[1]);
+    tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[2]);
+    tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[0]);
+
+    memVec[0] = 1;
+    memVec[1] = 2;
+    memVec[2] = 3;
+
+    for (ptrdiff_t i = 0; i < 3; ++i) {
+      auto map = a.getSpatialLocationFromMemoryIndex(memVec[i], i);
+      posVec[map.atIndex] = map.withValue;
+    }
+
+    say << "memVec " << memVec << " -> posVec " << posVec << "\n";
+
+    /* mem pos 2 at mem dim 1 -> global dim 0 -> global pos 2 + 7 = 9 -> 9 - 12 = -3 */
+    tdd.verify(posVec[0] == -3);
+
+    /* mem pos 3 at mem dim 2 -> global dim 1 -> global pos 3 + 8 = 11 -> 11 - 16 = -5 */
+    tdd.verify(posVec[1] == -5);
+
+    /* mem pos 1 at mem dim 0 -> global dim 2 -> global pos 1 + 9 = 10 -> 10 - 18 = -8 */
+    tdd.verify(posVec[2] == -8);
+
+    for (ptrdiff_t i = 0; i < 3; ++i) {
+      auto map = a.getMemoryIndexFromSpatialLocation(posVec[i], i);
+      memVec2[map.atIndex] = map.withValue;
+    }
+    say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
+    say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
+
+    tdd.verify(memVec[0] == memVec2[0]);
+    tdd.verify(memVec[1] == memVec2[1]);
+    tdd.verify(memVec[2] == memVec2[2]);
   }
-
-  say << "memVec " << memVec << " -> posVec " << posVec << "\n";
-
-  /* mem pos 2 at mem dim 1 -> global dim 0 -> global pos 2 + 7 = 9 -> 9 - 16 = -7 */
-  tdd.verify(posVec[0] == -7);
-
-  /* mem pos 3 at mem dim 2 -> global dim 1 -> global pos 3 + 8 = 11 -> 11 - 16 = -5 */
-  tdd.verify(posVec[1] == -5);
-
-  /* mem pos 1 at mem dim 0 -> global dim 2 -> global pos 1 + 9 = 10 -> 10 - 16 = -6 */
-  tdd.verify(posVec[2] == -6);
-
-  for (ptrdiff_t i = 0; i < 3; ++i) {
-    auto map = a.getMemoryIndexFromSpatialLocation(posVec[i], i);
-    memVec2[map.atIndex] = map.withValue;
-  }
-  say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
-  say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
-
-  tdd.verify(memVec[0] == memVec2[0]);
-  tdd.verify(memVec[1] == memVec2[1]);
-  tdd.verify(memVec[2] == memVec2[2]);
-
-  a = LayoutStructLocalTransposed<3>({12, 16, 18}, 0);
-
-  newLocalStarts = device::IdxArray<3>{{7, 8, 9}};
-  a.getLocal().setLocalStarts(newLocalStarts);
-
-  /* test that these propagate correctly */
-  tdd.verify(a.getLocal().getLocalSizes()[0] == a.getSizesInMemory()[0]);
-  tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[1]);
-  tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[2]);
-
-  a.setTranspositionMap_memoryToGlobalSpace({{2, 0, 1}});
-  /* test that these propagate correctly */
-  tdd.verify(a.getLocal().getLocalSizes()[0] == a.getSizesInMemory()[1]);
-  tdd.verify(a.getLocal().getLocalSizes()[1] == a.getSizesInMemory()[2]);
-  tdd.verify(a.getLocal().getLocalSizes()[2] == a.getSizesInMemory()[0]);
-
-  memVec[0] = 1;
-  memVec[1] = 2;
-  memVec[2] = 3;
-
-  for (ptrdiff_t i = 0; i < 3; ++i) {
-    auto map = a.getSpatialLocationFromMemoryIndex(memVec[i], i);
-    posVec[map.atIndex] = map.withValue;
-  }
-
-  say << "memVec " << memVec << " -> posVec " << posVec << "\n";
-
-  /* mem pos 2 at mem dim 1 -> global dim 0 -> global pos 2 + 7 = 9 -> 9 - 12 = -3 */
-  tdd.verify(posVec[0] == -3);
-
-  /* mem pos 3 at mem dim 2 -> global dim 1 -> global pos 3 + 8 = 11 -> 11 - 16 = -5 */
-  tdd.verify(posVec[1] == -5);
-
-  /* mem pos 1 at mem dim 0 -> global dim 2 -> global pos 1 + 9 = 10 -> 10 - 18 = -8 */
-  tdd.verify(posVec[2] == -8);
-
-  for (ptrdiff_t i = 0; i < 3; ++i) {
-    auto map = a.getMemoryIndexFromSpatialLocation(posVec[i], i);
-    memVec2[map.atIndex] = map.withValue;
-  }
-  say << "posVec " << posVec << " -> memVec2 " << memVec2 << "\n";
-  say << "memVec " << memVec << " -> memVec2 " << memVec2 << "\n";
-
-  tdd.verify(memVec[0] == memVec2[0]);
-  tdd.verify(memVec[1] == memVec2[1]);
-  tdd.verify(memVec[2] == memVec2[2]);
-}
 
 } // namespace TempLat
 

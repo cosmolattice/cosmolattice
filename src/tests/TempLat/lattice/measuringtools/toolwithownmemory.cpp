@@ -7,34 +7,35 @@
 #include "TempLat/lattice/measuringtools/toolwithownmemory.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ToolWithOwnMemoryTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ToolWithOwnMemoryTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  auto toolBox = MemoryToolBox<2>::makeShared(16, 1);
+  struct ToolWithOwnMemoryTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  /*typedef double T;
+  void ToolWithOwnMemoryTester::Test(TDDAssertion &tdd)
+  {
 
-  Field<T> testField("test", toolBox);
+    auto toolBox = MemoryToolBox<2>::makeShared(16, 1);
 
-  ToolWithOwnMemory<Field<T>> tester(testField);
+    /*typedef double T;
 
-  auto workSpace = tester.getFieldForMeasurement("");
+    Field<T> testField("test", toolBox);
 
-  tdd.verify( tester.persistentField.get() == nullptr );
+    ToolWithOwnMemory<Field<T>> tester(testField);
 
-  tester.setPersistentMemory();
+    auto workSpace = tester.getFieldForMeasurement("");
 
-  auto workSpace2 = tester.getFieldForMeasurement("");
+    tdd.verify( tester.persistentField.get() == nullptr );
 
-  tdd.verify( tester.persistentField.get() != nullptr && workSpace2.getMemoryManager() ==
-  tester.persistentField->getMemoryManager() );*/
-}
+    tester.setPersistentMemory();
+
+    auto workSpace2 = tester.getFieldForMeasurement("");
+
+    tdd.verify( tester.persistentField.get() != nullptr && workSpace2.getMemoryManager() ==
+    tester.persistentField->getMemoryManager() );*/
+  }
 
 } // namespace TempLat
 

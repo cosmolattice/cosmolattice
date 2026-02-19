@@ -7,25 +7,26 @@
 #include "TempLat/util/debug/poormansprofile.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct PoorMansProfileTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void PoorMansProfileTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  if (TDDRegister::isSingleUnitTest()) {
+  struct PoorMansProfileTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-    auto &&f1 = []() { PoorMansProfile::TrackMe(); };
-    auto &&f2 = []() { PoorMansProfile::TrackMe(); };
-    for (int i = 0; i < 100; ++i) {
-      f1();
-      if (i % 3 == 0) f2();
+  void PoorMansProfileTester::Test(TDDAssertion &tdd)
+  {
+
+    if (TDDRegister::isSingleUnitTest()) {
+
+      auto &&f1 = []() { PoorMansProfile::TrackMe(); };
+      auto &&f2 = []() { PoorMansProfile::TrackMe(); };
+      for (int i = 0; i < 100; ++i) {
+        f1();
+        if (i % 3 == 0) f2();
+      }
     }
   }
-}
 
 } // namespace TempLat
 

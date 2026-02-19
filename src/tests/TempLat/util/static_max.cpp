@@ -7,19 +7,20 @@
 #include "TempLat/util/static_max.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct static_max_Tester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void static_max_Tester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(static_max<2, 3>::value == 3);
-  tdd.verify(static_max<3, 2>::value == 3);
-  tdd.verify(static_max<3, 3>::value == 3);
-}
+
+  struct static_max_Tester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void static_max_Tester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(static_max<2, 3>::value == 3);
+    tdd.verify(static_max<3, 2>::value == 3);
+    tdd.verify(static_max<3, 3>::value == 3);
+  }
 
 } // namespace TempLat
 

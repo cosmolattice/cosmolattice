@@ -7,18 +7,19 @@
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct GetCPPTypeNameTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void GetCPPTypeNameTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(GetCPPTypeName::get(std::vector<ptrdiff_t>()).find("std::") != std::string::npos);
-  tdd.verify(GetCPPTypeName::get(std::vector<ptrdiff_t>()).find("::vector") != std::string::npos);
-}
+
+  struct GetCPPTypeNameTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void GetCPPTypeNameTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(GetCPPTypeName::get(std::vector<ptrdiff_t>()).find("std::") != std::string::npos);
+    tdd.verify(GetCPPTypeName::get(std::vector<ptrdiff_t>()).find("::vector") != std::string::npos);
+  }
 
 } // namespace TempLat
 

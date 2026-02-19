@@ -7,36 +7,37 @@
 #include "TempLat/lattice/algebra/helpers/hasderivmethod.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HasDerivMethodTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-namespace DummyTest
+namespace TempLat
 {
-  struct dummy {
-    char a;
-  };
-  struct MyTestOne {
-    template <typename U> auto d(const U &i)
-    {
-      std::cerr << "Hell yeah.\n";
-      return dummy();
-    }
-  };
-}; // namespace DummyTest
 
-void HasDerivMethodTester::Test(TDDAssertion &tdd)
-{
-  struct MyTestTwo {
-    void noD() { std::cerr << "Hell no.\n"; }
+  struct HasDerivMethodTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  tdd.verify(HasDerivMethod<DummyTest::MyTestOne> == true);
-  tdd.verify(HasDerivMethod<MyTestTwo> == false);
-  tdd.verify(HasDerivMethod<int> == false);
-}
+  namespace DummyTest
+  {
+    struct dummy {
+      char a;
+    };
+    struct MyTestOne {
+      template <typename U> auto d(const U &i)
+      {
+        std::cerr << "Hell yeah.\n";
+        return dummy();
+      }
+    };
+  }; // namespace DummyTest
+
+  void HasDerivMethodTester::Test(TDDAssertion &tdd)
+  {
+    struct MyTestTwo {
+      void noD() { std::cerr << "Hell no.\n"; }
+    };
+
+    tdd.verify(HasDerivMethod<DummyTest::MyTestOne> == true);
+    tdd.verify(HasDerivMethod<MyTestTwo> == false);
+    tdd.verify(HasDerivMethod<int> == false);
+  }
 
 } // namespace TempLat
 

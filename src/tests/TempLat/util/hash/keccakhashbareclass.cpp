@@ -7,20 +7,21 @@
 #include "TempLat/util/hash/keccakhashbareclass.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct KeccakHashBareClassTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void KeccakHashBareClassTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  KeccakHashBareClass khbc;
-  khbc.compute("Anything.");
-  /* check that we cannot compute twice on the same object. */
-  tdd.verify(Throws<KeccakHashBareClassReuseException>([&]() { khbc.compute("Anything."); }));
-}
+  struct KeccakHashBareClassTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void KeccakHashBareClassTester::Test(TDDAssertion &tdd)
+  {
+
+    KeccakHashBareClass khbc;
+    khbc.compute("Anything.");
+    /* check that we cannot compute twice on the same object. */
+    tdd.verify(Throws<KeccakHashBareClassReuseException>([&]() { khbc.compute("Anything."); }));
+  }
 
 } // namespace TempLat
 

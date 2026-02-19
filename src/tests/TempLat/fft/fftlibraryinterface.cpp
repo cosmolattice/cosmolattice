@@ -7,17 +7,16 @@
 #include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct FFTSessionGuardTester {
-  static void Test(TDDAssertion &tdd)
-  {
-    tdd.verify(true);
-  }
-};
+  struct FFTSessionGuardTester {
+    static void Test(TDDAssertion &tdd) { tdd.verify(true); }
+  };
 
 } // namespace TempLat
 
-namespace {
+namespace
+{
   TempLat::TDDContainer<TempLat::FFTSessionGuardTester> test;
 }

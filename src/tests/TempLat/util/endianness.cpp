@@ -7,19 +7,20 @@
 #include "TempLat/util/endianness.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct EndiannessTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void EndiannessTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  Endianness endian;
-  tdd.verify(endian.isLittle());
-  tdd.verify(!endian.isBig());
-}
+  struct EndiannessTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void EndiannessTester::Test(TDDAssertion &tdd)
+  {
+
+    Endianness endian;
+    tdd.verify(endian.isLittle());
+    tdd.verify(!endian.isBig());
+  }
 
 } // namespace TempLat
 

@@ -59,7 +59,6 @@ namespace TempLat
 
   private:
     bool mVerbose;
-
   };
 } // namespace TempLat
 

@@ -7,19 +7,20 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ExceptionTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-MakeException(TestException);
-
-void ExceptionTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  tdd.verify(Throws<TestException>([] { throw TestException("Hoi!"); }));
-}
+  struct ExceptionTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  MakeException(TestException);
+
+  void ExceptionTester::Test(TDDAssertion &tdd)
+  {
+
+    tdd.verify(Throws<TestException>([] { throw TestException("Hoi!"); }));
+  }
 
 } // namespace TempLat
 

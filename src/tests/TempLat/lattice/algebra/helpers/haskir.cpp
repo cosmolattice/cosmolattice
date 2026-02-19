@@ -7,24 +7,25 @@
 #include "TempLat/lattice/algebra/helpers/haskir.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct HasKIRTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void HasKIRTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  struct myTest {
-    double getKIR() { return 76; }
-  };
-  struct myTest2 {
-    double getdkkhdiu() { return 777; }
+
+  struct HasKIRTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  tdd.verify(HasKIR<myTest> == true);
-  tdd.verify(HasKIR<myTest2> == false);
-}
+  void HasKIRTester::Test(TDDAssertion &tdd)
+  {
+    struct myTest {
+      double getKIR() { return 76; }
+    };
+    struct myTest2 {
+      double getdkkhdiu() { return 777; }
+    };
+
+    tdd.verify(HasKIR<myTest> == true);
+    tdd.verify(HasKIR<myTest2> == false);
+  }
 
 } // namespace TempLat
 

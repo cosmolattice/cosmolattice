@@ -8,17 +8,18 @@
 #include "CosmoInterface/initializers/scalefactorinitializer.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct ScaleFactorInitializerTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ScaleFactorInitializerTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct ScaleFactorInitializerTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void ScaleFactorInitializerTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

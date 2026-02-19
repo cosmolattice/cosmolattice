@@ -7,13 +7,14 @@
 #include "TempLat/lattice/algebra/su2algebra/su2doubletshift.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct SU2DoubletShiftTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct SU2DoubletShiftTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void SU2DoubletShiftTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  void SU2DoubletShiftTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

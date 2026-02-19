@@ -7,24 +7,25 @@
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialbincomputer.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct RadialBinComputerTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void RadialBinComputerTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
 
-  RadialBinComputer pc(1, 3, 4);
+  struct RadialBinComputerTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(pc(1.1) == 0);
-  tdd.verify(pc(0) == 0);
+  void RadialBinComputerTester::Test(TDDAssertion &tdd)
+  {
 
-  tdd.verify(pc(2.1) == 2);
-  tdd.verify(pc(5) == 3);
-}
+    RadialBinComputer pc(1, 3, 4);
+
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(pc(1.1) == 0);
+    tdd.verify(pc(0) == 0);
+
+    tdd.verify(pc(2.1) == 2);
+    tdd.verify(pc(5) == 3);
+  }
 
 } // namespace TempLat
 

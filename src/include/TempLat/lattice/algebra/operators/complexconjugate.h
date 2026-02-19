@@ -51,7 +51,7 @@ namespace TempLat
   /** @brief Exposing our newly define multiplication operation to the world.
    *  Excluded for complex field types (HasComplexFieldGet) which have their own conj overload. */
   template <typename T>
-    requires (ConditionalUnaryGetter<T> && !HasComplexFieldGet<T>)
+    requires(ConditionalUnaryGetter<T> && !HasComplexFieldGet<T>)
   DEVICE_FORCEINLINE_FUNCTION auto conj(const T &a)
   {
     return Operators::ComplexConjugate<T>(a);

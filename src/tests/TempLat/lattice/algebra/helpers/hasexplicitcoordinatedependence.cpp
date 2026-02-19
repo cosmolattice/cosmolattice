@@ -7,33 +7,34 @@
 #include "TempLat/lattice/algebra/helpers/hasexplicitcoordinatedependence.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-namespace TestScratch
+namespace TempLat
 {
-  struct DummyWithCoordinateDependence {
-    static constexpr bool EXPLICITCOORDINATEDEPENDENCE = true;
+
+  namespace TestScratch
+  {
+    struct DummyWithCoordinateDependence {
+      static constexpr bool EXPLICITCOORDINATEDEPENDENCE = true;
+    };
+    struct DummyWithoutCoordinateDependence {
+    };
+    struct SecondDummyWithoutCoordinateDependence {
+      static constexpr bool EXPLICITCOORDINATEDEPENDENCE = false;
+    };
+  } // namespace TestScratch
+
+  struct HasExplicitCoordinateDependenceTester {
+    static void Test(TDDAssertion &tdd);
   };
-  struct DummyWithoutCoordinateDependence {
-  };
-  struct SecondDummyWithoutCoordinateDependence {
-    static constexpr bool EXPLICITCOORDINATEDEPENDENCE = false;
-  };
-} // namespace TestScratch
 
-struct HasExplicitCoordinateDependenceTester {
-  static void Test(TDDAssertion &tdd);
-};
+  void HasExplicitCoordinateDependenceTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(HasExplicitCoordinateDependence<TestScratch::DummyWithCoordinateDependence>::value);
 
-void HasExplicitCoordinateDependenceTester::Test(TDDAssertion &tdd)
-{
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(HasExplicitCoordinateDependence<TestScratch::DummyWithCoordinateDependence>::value);
+    tdd.verify(!HasExplicitCoordinateDependence<TestScratch::DummyWithoutCoordinateDependence>::value);
 
-  tdd.verify(!HasExplicitCoordinateDependence<TestScratch::DummyWithoutCoordinateDependence>::value);
-
-  tdd.verify(!HasExplicitCoordinateDependence<TestScratch::SecondDummyWithoutCoordinateDependence>::value);
-}
+    tdd.verify(!HasExplicitCoordinateDependence<TestScratch::SecondDummyWithoutCoordinateDependence>::value);
+  }
 
 } // namespace TempLat
 

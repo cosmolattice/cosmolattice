@@ -7,29 +7,30 @@
 #include "TempLat/lattice/algebra/listoperators/binaryfold.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct BinaryFoldTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void BinaryFoldTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
 
-  auto t1 = std::make_tuple(1, 2, 3, 4);
+  struct BinaryFoldTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  auto res = binary_fold([](auto x, auto y) { return x + y; }, t1, [](auto &x) { return x; }, 0);
+  void BinaryFoldTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
 
-  tdd.verify(res == 10);
+    auto t1 = std::make_tuple(1, 2, 3, 4);
 
-  res = binary_fold([](auto x, auto y) { return x * y; }, t1, [](auto &x) { return x; }, 1);
-  tdd.verify(res == 24);
+    auto res = binary_fold([](auto x, auto y) { return x + y; }, t1, [](auto &x) { return x; }, 0);
 
-  res = binary_fold([](auto x, auto y) { return x + y; }, t1, [](auto &x) { return 2 * x; }, 0);
+    tdd.verify(res == 10);
 
-  tdd.verify(res == 20);
-}
+    res = binary_fold([](auto x, auto y) { return x * y; }, t1, [](auto &x) { return x; }, 1);
+    tdd.verify(res == 24);
+
+    res = binary_fold([](auto x, auto y) { return x + y; }, t1, [](auto &x) { return 2 * x; }, 0);
+
+    tdd.verify(res == 20);
+  }
 
 } // namespace TempLat
 

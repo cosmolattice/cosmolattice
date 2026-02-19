@@ -151,7 +151,6 @@ namespace TempLat
 
       return result;
     }
-
   };
 } // namespace TempLat
 

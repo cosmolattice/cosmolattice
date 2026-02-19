@@ -8,22 +8,23 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 
-namespace TempLat {
-
-struct StaticIfTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void StaticIfTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  // IfElse: true branch
-  tdd.verify(IfElse(true, true, false));
-  // IfElse: false branch
-  tdd.verify(!IfElse(false, true, false));
-  // IfElse: different types
-  tdd.verify(IfElse(true, 42, 0) == 42);
-  tdd.verify(IfElse(false, 42, 0) == 0);
-}
+
+  struct StaticIfTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void StaticIfTester::Test(TDDAssertion &tdd)
+  {
+    // IfElse: true branch
+    tdd.verify(IfElse(true, true, false));
+    // IfElse: false branch
+    tdd.verify(!IfElse(false, true, false));
+    // IfElse: different types
+    tdd.verify(IfElse(true, 42, 0) == 42);
+    tdd.verify(IfElse(false, 42, 0) == 0);
+  }
 
 } // namespace TempLat
 

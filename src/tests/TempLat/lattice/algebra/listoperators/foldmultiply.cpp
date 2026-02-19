@@ -7,17 +7,18 @@
 #include "TempLat/lattice/algebra/listoperators/foldmultiply.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct FoldMultiplyTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void FoldMultiplyTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct FoldMultiplyTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void FoldMultiplyTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

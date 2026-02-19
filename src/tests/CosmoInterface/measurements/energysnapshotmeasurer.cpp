@@ -8,18 +8,18 @@
 #include "CosmoInterface/measurements/energysnapshotmeasurer.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-template<typename Model>
-struct EnergySnapshotsMeasurerTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-template <typename Model> inline void EnergySnapshotsMeasurerTester<Model>::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  template <typename Model> struct EnergySnapshotsMeasurerTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  template <typename Model> inline void EnergySnapshotsMeasurerTester<Model>::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

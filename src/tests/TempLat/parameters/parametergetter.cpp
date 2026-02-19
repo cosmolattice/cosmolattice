@@ -8,36 +8,37 @@
 #include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/almostequal.h"
 
-namespace TempLat {
-
-struct ParameterGetterTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void ParameterGetterTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  double d = 9.876;
 
-  ParameterGetter<double> pgd(d, "");
+  struct ParameterGetterTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-  ParameterGetter<int> pgi(d, "xr");
+  void ParameterGetterTester::Test(TDDAssertion &tdd)
+  {
+    double d = 9.876;
 
-  std::string str = "9.876";
+    ParameterGetter<double> pgd(d, "");
 
-  ParameterGetter<std::string> pgs(str, "str");
+    ParameterGetter<int> pgi(d, "xr");
 
-  std::string strbis = pgs;
+    std::string str = "9.876";
 
-  say << pgs;
+    ParameterGetter<std::string> pgs(str, "str");
 
-  /* Default is to fail: to remind yourself to implement something here. */
+    std::string strbis = pgs;
 
-  tdd.verify(AlmostEqual(d, pgd()));
+    say << pgs;
 
-  tdd.verify((int)d == pgi());
+    /* Default is to fail: to remind yourself to implement something here. */
 
-  tdd.verify(str == pgs());
-}
+    tdd.verify(AlmostEqual(d, pgd()));
+
+    tdd.verify((int)d == pgi());
+
+    tdd.verify(str == pgs());
+  }
 
 } // namespace TempLat
 

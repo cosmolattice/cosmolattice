@@ -45,7 +45,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     bool mCurrentlyStale;
     bool mCurrentlyUpToDate;
-
   };
 
 } // namespace TempLat

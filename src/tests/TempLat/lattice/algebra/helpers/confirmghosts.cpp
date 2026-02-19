@@ -7,13 +7,14 @@
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-struct ConfirmGhostsTester {
-  static void Test(TDDAssertion &tdd);
-};
+  struct ConfirmGhostsTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-void ConfirmGhostsTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+  void ConfirmGhostsTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
 
 } // namespace TempLat
 

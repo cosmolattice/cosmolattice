@@ -8,17 +8,18 @@
 #include "CosmoInterface/evolvers/velocityverlet.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct VelocityVerletTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void VelocityVerletTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  tdd.verify(true);
-}
+
+  struct VelocityVerletTester {
+    static void Test(TDDAssertion &tdd);
+  };
+
+  void VelocityVerletTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    tdd.verify(true);
+  }
 
 } // namespace TempLat
 

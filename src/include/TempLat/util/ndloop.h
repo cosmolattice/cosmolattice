@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-
 #include <array>
 #include <utility>
 

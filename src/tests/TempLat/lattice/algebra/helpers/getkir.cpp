@@ -7,44 +7,45 @@
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct GetKIRTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void GetKIRTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  /* Default is to fail: to remind yourself to implement something here. */
-  struct myTest {
-    DEVICE_FORCEINLINE_FUNCTION
-    double getKIR() { return 0.42; }
-  };
-  struct myTest1 {
-    DEVICE_FORCEINLINE_FUNCTION
-    double getKIR() { return 0.42; }
 
-    DEVICE_FORCEINLINE_FUNCTION
-    double get(ptrdiff_t i) { return 76; }
+  struct GetKIRTester {
+    static void Test(TDDAssertion &tdd);
   };
 
-  struct myTest2 {
-    DEVICE_FORCEINLINE_FUNCTION
-    double getIR() { return 0.42; }
+  void GetKIRTester::Test(TDDAssertion &tdd)
+  {
+    /* Default is to fail: to remind yourself to implement something here. */
+    struct myTest {
+      DEVICE_FORCEINLINE_FUNCTION
+      double getKIR() { return 0.42; }
+    };
+    struct myTest1 {
+      DEVICE_FORCEINLINE_FUNCTION
+      double getKIR() { return 0.42; }
 
-    DEVICE_FORCEINLINE_FUNCTION
-    double get(ptrdiff_t i) { return 76; }
-  };
+      DEVICE_FORCEINLINE_FUNCTION
+      double get(ptrdiff_t i) { return 76; }
+    };
 
-  myTest1 t1;
-  myTest2 t2;
+    struct myTest2 {
+      DEVICE_FORCEINLINE_FUNCTION
+      double getIR() { return 0.42; }
 
-  // myTest t;
-  // tdd.verify(GetKIR::getKIR(t1) == 0.42); //does not compile as we don't have get method and is needed for automatic
-  // type deducing.
-  tdd.verify(GetKIR::getKIR(t1) == 0.42);
-  tdd.verify(GetKIR::getKIR(t2) == 1);
-}
+      DEVICE_FORCEINLINE_FUNCTION
+      double get(ptrdiff_t i) { return 76; }
+    };
+
+    myTest1 t1;
+    myTest2 t2;
+
+    // myTest t;
+    // tdd.verify(GetKIR::getKIR(t1) == 0.42); //does not compile as we don't have get method and is needed for
+    // automatic type deducing.
+    tdd.verify(GetKIR::getKIR(t1) == 0.42);
+    tdd.verify(GetKIR::getKIR(t2) == 1);
+  }
 
 } // namespace TempLat
 

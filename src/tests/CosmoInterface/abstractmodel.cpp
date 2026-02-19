@@ -12,18 +12,18 @@
 //     TempLat::TDDContainer<TempLat::AbstractModelTester> test;
 // }
 
+namespace TempLat
+{
 
-namespace TempLat {
+  struct AbstractModelTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
-struct AbstractModelTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-// void AbstractModelTester::Test(TDDAssertion& tdd) {
-//
-//     /* Default is to fail: to remind yourself to implement something here. */
-//     tdd.verify( false );
-//
-// }
+  // void AbstractModelTester::Test(TDDAssertion& tdd) {
+  //
+  //     /* Default is to fail: to remind yourself to implement something here. */
+  //     tdd.verify( false );
+  //
+  // }
 
 } // namespace TempLat
