@@ -28,7 +28,7 @@ namespace TempLat
   public:
     static constexpr size_t NDim = _NDim;
 
-    LayoutStructLocal(const device::IdxArray<NDim> &initNGrid, const ptrdiff_t nGhosts)
+    LayoutStructLocal(const device::IdxArray<NDim> &initNGrid, const device::Idx nGhosts)
         : mGlobal(initNGrid), mLocalStarts{}, mPadding{}, mNGhosts(nGhosts)
     {
       for (size_t i = 0; i < NDim; ++i)
@@ -45,7 +45,7 @@ namespace TempLat
       for (size_t i = 0; i < NDim; ++i)
         mLocalSizes[i] = input[i];
     }
-    void setNGhosts(ptrdiff_t nGhosts) { mNGhosts = nGhosts; }
+    void setNGhosts(device::Idx nGhosts) { mNGhosts = nGhosts; }
     device::Idx getNGhosts() const { return mNGhosts; }
 
     void setPadding(const device::array<device::IdxArray<2>, NDim> &padding)
@@ -81,14 +81,14 @@ namespace TempLat
      *  Don't mix up the arguments! Does not do transposition, so input pre-transposed dimension!
      */
     DEVICE_FORCEINLINE_FUNCTION
-    ptrdiff_t memoryIndexToSpatialCoordinate(ptrdiff_t index, ptrdiff_t dimension) const
+    device::Idx memoryIndexToSpatialCoordinate(device::Idx index, device::Idx dimension) const
     {
       return mGlobal.memoryIndexToSpatialCoordinate(index + mLocalStarts[dimension] - mNGhosts, dimension);
     }
 
     /** @brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
     DEVICE_FORCEINLINE_FUNCTION
-    ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
+    device::Idx spatialCoordinateToMemoryIndex(device::Idx position, device::Idx dimension) const
     {
       return mGlobal.spatialCoordinateToMemoryIndex(position, dimension) - mLocalStarts[dimension] + mNGhosts;
     }
@@ -127,9 +127,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-template<size_t _NDim>
-  struct LayoutStructLocalTester
-  {
+  template <size_t _NDim> struct LayoutStructLocalTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };

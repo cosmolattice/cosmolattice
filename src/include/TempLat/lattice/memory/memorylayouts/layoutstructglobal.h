@@ -56,15 +56,15 @@ namespace TempLat
      *  Don't mix up the arguments! Does not do transposition, so input pre-transposed dimension!
      */
     DEVICE_FORCEINLINE_FUNCTION
-    ptrdiff_t memoryIndexToSpatialCoordinate(ptrdiff_t index, ptrdiff_t dimension) const
+    device::Idx memoryIndexToSpatialCoordinate(device::Idx index, device::Idx dimension) const
     {
-      const ptrdiff_t &tSize = mSignConversionMidpoint[dimension];
+      const device::Idx &tSize = mSignConversionMidpoint[dimension];
       return index > tSize ? index - mGlobalSizes[dimension] : index;
     }
 
     /** @brief Inverse of memoryIndexToSpatialCoordinate: get memory from position. */
     DEVICE_FORCEINLINE_FUNCTION
-    ptrdiff_t spatialCoordinateToMemoryIndex(ptrdiff_t position, ptrdiff_t dimension) const
+    device::Idx spatialCoordinateToMemoryIndex(device::Idx position, device::Idx dimension) const
     {
       return (position >= 0 ? position : position + mGlobalSizes[dimension]);
     }
@@ -101,9 +101,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-template<size_t _NDim>
-  struct LayoutStructGlobalTester
-  {
+  template <size_t _NDim> struct LayoutStructGlobalTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };

@@ -32,7 +32,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     static constexpr size_t NDim = _NDim;
 
-    LayoutStructLocalTransposed(const device::IdxArray<NDim> &initNGrid, const ptrdiff_t nGhosts)
+    LayoutStructLocalTransposed(const device::IdxArray<NDim> &initNGrid, const device::Idx nGhosts)
         : mLocal(initNGrid, nGhosts), mNGhosts(nGhosts)
     {
       for (size_t i = 0; i < NDim; ++i)
@@ -56,7 +56,7 @@ namespace TempLat
       getLocal().setLocalSizes(input);
       adaptMemorySizesFromTranspositionMap();
     }
-    void setNGhosts(ptrdiff_t nGhosts)
+    void setNGhosts(device::Idx nGhosts)
     {
       mNGhosts = nGhosts;
       getLocal().setNGhosts(nGhosts);
@@ -134,14 +134,14 @@ namespace TempLat
 
     /** @brief A dictionary for return values for memory to coordinate mapping. */
     struct CoordinateMapping {
-      ptrdiff_t atIndex, withValue;
+      device::Idx atIndex, withValue;
       bool owned;
     };
 
     /** @brief With transposition, go from actual memory index in memoryDimension to spatial coordinate value at spatial
      * dimension. */
     DEVICE_FORCEINLINE_FUNCTION
-    CoordinateMapping getSpatialLocationFromMemoryIndex(ptrdiff_t index, ptrdiff_t memoryDimension) const
+    CoordinateMapping getSpatialLocationFromMemoryIndex(device::Idx index, device::Idx memoryDimension) const
     {
       CoordinateMapping result;
       result.atIndex = mTranspositionMap_memoryToGlobalSpace.getForward(memoryDimension);
@@ -155,7 +155,7 @@ namespace TempLat
     /** @brief With transposition, go from spatial coordinate value at spatial dimension to actual memory index in
      * memoryDimension. */
     DEVICE_FORCEINLINE_FUNCTION
-    CoordinateMapping getMemoryIndexFromSpatialLocation(ptrdiff_t position, ptrdiff_t spatialDimension) const
+    CoordinateMapping getMemoryIndexFromSpatialLocation(device::Idx position, device::Idx spatialDimension) const
     {
       CoordinateMapping result;
       result.atIndex = mTranspositionMap_memoryToGlobalSpace.getInverse(spatialDimension);
@@ -199,9 +199,9 @@ namespace TempLat
 
     void adaptMemorySizesFromTranspositionMap()
     {
-      for (ptrdiff_t i = 0, iEnd = std::min(mSizesInMemory.size(), mTranspositionMap_memoryToGlobalSpace.size());
+      for (device::Idx i = 0, iEnd = std::min(mSizesInMemory.size(), mTranspositionMap_memoryToGlobalSpace.size());
            i < iEnd; ++i) {
-        ptrdiff_t getSizeIndex = mTranspositionMap_memoryToGlobalSpace.getForward(i);
+        device::Idx getSizeIndex = mTranspositionMap_memoryToGlobalSpace.getForward(i);
         mSizesInMemory[i] = mLocal.getLocalSizes()[getSizeIndex];
       }
     }

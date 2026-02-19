@@ -34,9 +34,9 @@ namespace TempLat
     static constexpr size_t size() { return NDim; }
 
     DEVICE_FORCEINLINE_FUNCTION
-    ptrdiff_t getForward(ptrdiff_t index) const { return mFromAtoB[index]; }
+    device::Idx getForward(device::Idx index) const { return mFromAtoB[index]; }
     DEVICE_FORCEINLINE_FUNCTION
-    ptrdiff_t getInverse(ptrdiff_t index) const { return mFromBtoA[index]; }
+    device::Idx getInverse(device::Idx index) const { return mFromBtoA[index]; }
 
     /** @brief Provide your forward mapping, which will be the new output of getForward. */
     void setMap(const device::IdxArray<NDim> &input)
@@ -44,7 +44,7 @@ namespace TempLat
       for (size_t i = 0; i < NDim; ++i)
         mFromAtoB[i] = input[i];
 
-      for (ptrdiff_t i = 0, iEnd = mFromAtoB.size(); i < iEnd; ++i) {
+      for (device::Idx i = 0, iEnd = mFromAtoB.size(); i < iEnd; ++i) {
         if (mFromAtoB[i] < 0 || mFromAtoB[i] > iEnd - 1)
           throw TranspositionMapOutOfBounds("Your map has entries that go beyond the size of the map:", input);
         mFromBtoA[mFromAtoB[i]] = i;
@@ -55,7 +55,7 @@ namespace TempLat
     bool isUntransposed() const
     {
       bool untransposed = true;
-      for (ptrdiff_t i = 0, iEnd = mFromAtoB.size(); i < iEnd; ++i) {
+      for (device::Idx i = 0, iEnd = mFromAtoB.size(); i < iEnd; ++i) {
         untransposed = untransposed && mFromAtoB[i] == i && mFromBtoA[i] == i;
       }
       return untransposed;
@@ -67,7 +67,7 @@ namespace TempLat
     friend bool operator==(const TranspositionMap &a, const TranspositionMap &b)
     {
       bool equal = a.size() == b.size();
-      for (ptrdiff_t i = 0, iEnd = a.size(); i < iEnd && equal; ++i) {
+      for (device::Idx i = 0, iEnd = a.size(); i < iEnd && equal; ++i) {
         equal = equal && a.getForward(i) == b.getForward(i) && a.getInverse(i) == b.getInverse(i);
       }
       return equal;
@@ -86,9 +86,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-template<size_t NDim>
-  struct TranspositionMapTester
-  {
+  template <size_t NDim> struct TranspositionMapTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };

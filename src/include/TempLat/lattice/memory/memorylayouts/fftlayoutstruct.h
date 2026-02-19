@@ -19,12 +19,15 @@ namespace TempLat
   struct IntrinsicScales {
     IntrinsicScales() : c2r(1), r2c(1) {}
     IntrinsicScales(double _c2r, double _r2c) : c2r(_c2r), r2c(_r2c) {}
+    /** @brief Value to rescale with after a c2r FFT */
     double c2r;
+    /** @brief Value to rescale with after a r2c FFT */
     double r2c;
+    /** @brief Whether the scales are default (1,1), i.e. as in FFTW */
     bool isDefault() { return c2r == 1 && r2c == 1; }
   };
 
-  /** @brief A struct which holds two memory layouts, which are unseparable:
+  /** @brief A struct which holds two memory layouts, which are inseparable:
    * - the pre-FFT layout in configuration space, with padding but no ghosting.
    * - the Fourier space (complex values!) layout.
    *
@@ -97,9 +100,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-template<size_t NDim>
-  struct FFTLayoutStructTester
-  {
+  template <size_t NDim> struct FFTLayoutStructTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };

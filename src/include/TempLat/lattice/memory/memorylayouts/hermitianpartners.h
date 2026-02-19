@@ -113,16 +113,14 @@ namespace TempLat
     HermitianValueAccounting getNumberOfIndependentValues() const
     {
       if (mode == HermitianPartnersMode::fftw) {
-        /* How do we get here? Well, hermitian redundant layout in FFTW is put in
-         * N x N x ... x N/2+1 complex values -> naively 1 real and 1 imaginary for each.
-         * Half of the entries in the last dim's [N/2] are redundant,
-         * as are half of the entries in the last dim's [0].
-         * N x N x ... x 2 are the last dim's [N/2] and [0].
-         * Moreover, out of the independent half, all values whose coordinate consists
-         * of only 0's and N/2's are real-valued, so they don't go into the imaginary count.
+        /* How do we get here? With the  layout in FFTW  we have N x N x ... x N/2+1 complex values -> i.e. naively 1
+         * real and 1 imaginary value for each. However, half of the entries in the last dim's [N/2] are redundant, as
+         * are half of the entries in the last dim's [0], i.e. together N x N x ... x 2 entries. Moreover,
+         * out of the independent half, all values whose coordinate consists of only 0's and N/2's are real-valued, so
+         * they don't go into the imaginary count.
          */
 
-        ptrdiff_t nGridVertices = 1;
+        device::Idx nGridVertices = 1;
 
         /* mNGrid always has the shape of the real-valued input problem,
          * not the resulting r2c complex layout.
@@ -130,20 +128,20 @@ namespace TempLat
         for (const auto &it : mNGrid)
           nGridVertices *= it;
 
-        ptrdiff_t nComplexVerticesAfterR2C = nGridVertices / mNGrid[NDim - 1] * (mNGrid[NDim - 1] / 2 + 1);
+        device::Idx nComplexVerticesAfterR2C = nGridVertices / mNGrid[NDim - 1] * (mNGrid[NDim - 1] / 2 + 1);
 
-        ptrdiff_t hermitianSymmetricEntries = nGridVertices / mNGrid[NDim - 1];
+        device::Idx hermitianSymmetricEntries = nGridVertices / mNGrid[NDim - 1];
 
-        ptrdiff_t imaginary = nComplexVerticesAfterR2C - hermitianSymmetricEntries - powr<NDim - 1>(2);
+        device::Idx imaginary = nComplexVerticesAfterR2C - hermitianSymmetricEntries - powr<NDim - 1>(2);
 
         /* 2^ND-1 is the number of real-valued entries, at {{ 0, 0, N/2, N/2, ...}}. */
-        ptrdiff_t real = imaginary + powr<NDim>(2);
+        device::Idx real = imaginary + powr<NDim>(2);
 
         return HermitianValueAccounting(real, imaginary);
       } else // if (mode == HermitianPartnersMode::none)
       {
-        ptrdiff_t vol = 1;
-        for (ptrdiff_t x : mNGrid)
+        device::Idx vol = 1;
+        for (device::Idx x : mNGrid)
           vol *= x;
         return HermitianValueAccounting(vol, 0);
       }
@@ -184,9 +182,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-template<size_t NDim>
-  struct HermitianPartnersTester
-  {
+  template <size_t NDim> struct HermitianPartnersTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };
