@@ -45,7 +45,7 @@ namespace TempLat
     {
       Kokkos::Array<uint64_t, NDim> start_iteration;
       Kokkos::Array<uint64_t, NDim> stop_iteration;
-      const auto localSizes = layout.getLocalSizes();
+      const auto localSizes = layout.getSizesInMemory();
       const size_t nGhosts = layout.getNGhosts();
 
       // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
