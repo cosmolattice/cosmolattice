@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
 
 namespace TempLat
@@ -30,15 +29,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
-
-#ifdef TEMPLATTEST
-template<size_t NDim>
-  struct SU2DoubletOperatorTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

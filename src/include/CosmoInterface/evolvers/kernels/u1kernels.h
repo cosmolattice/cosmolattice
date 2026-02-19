@@ -11,7 +11,6 @@
 #include "TempLat/lattice/algebra/spatialderivatives/backdiff.h"
 #include "TempLat/lattice/algebra/spatialderivatives/forwdiff.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -49,15 +48,6 @@ namespace TempLat
       return normGrad * (LaplU1(a) - GradU1(a)) - normU1Source * U1Source(a);
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class U1KernelsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

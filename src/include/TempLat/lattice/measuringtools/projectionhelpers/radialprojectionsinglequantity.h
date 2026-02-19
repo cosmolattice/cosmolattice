@@ -10,7 +10,6 @@
 #include <limits>
 #include <algorithm>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsingledatum.h"
 #include "TempLat/parallel/mpi/comm/mpicommreference.h"
@@ -133,15 +132,6 @@ namespace TempLat
 #endif
     }
   };
-
-#ifdef TEMPLATTEST
-template<typename T>
-  struct RadialProjectionSingleQuantityTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

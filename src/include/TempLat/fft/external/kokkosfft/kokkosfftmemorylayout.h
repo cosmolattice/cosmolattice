@@ -14,7 +14,6 @@
 #endif
 #endif
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanner.h"
 #include "TempLat/fft/external/fftw/fftwhermitianpartners.h"
 
@@ -69,13 +68,6 @@ namespace TempLat
     };
   };
 
-#ifdef TEMPLATTEST
-  struct KokkosFFTMemoryLayoutTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

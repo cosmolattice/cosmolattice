@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -74,18 +72,8 @@ namespace TempLat
 
     void setToDefault() { *this = VerbosityLevels(); }
 
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
-#ifdef TEMPLATTEST
-  class VerbosityLevelsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

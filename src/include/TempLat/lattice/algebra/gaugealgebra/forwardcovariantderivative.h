@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/assignabletuple.h"
 #include "TempLat/lattice/algebra/listoperators/foldmultiply.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
@@ -19,13 +18,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-forwardcovariantderivative
    **/
-  class ForwardCovariantDerivativeTester
-  {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
   /*
       template<size_t dim, class... Args>
       auto ForwardCovariantDerivative(Args... args)

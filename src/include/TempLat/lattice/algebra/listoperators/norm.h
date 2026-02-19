@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/squareroot.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/lattice/algebra/listoperators/total.h"

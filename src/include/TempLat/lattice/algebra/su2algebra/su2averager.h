@@ -9,12 +9,10 @@
 
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/make_tuple_tag.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/assignabletuple.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/util/getcpptypename.h"
@@ -143,12 +141,6 @@ namespace TempLat
 
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
   };
-
-#ifdef TEMPLATTEST
-  struct SU2AveragerTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
   template <typename T>
     requires HasSU2Get<T>

@@ -29,15 +29,6 @@ namespace TempLat
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivCS(model, n);
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class ComplexScalarKernelsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

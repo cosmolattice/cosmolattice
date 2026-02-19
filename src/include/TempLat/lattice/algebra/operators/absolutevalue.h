@@ -13,7 +13,6 @@
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/operators/heavisidestepfunction.h"
@@ -66,13 +65,6 @@ namespace TempLat
   {
     return Operators::AbsoluteValue<T>(a);
   }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct AbsoluteValueTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

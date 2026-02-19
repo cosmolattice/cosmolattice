@@ -116,15 +116,6 @@ namespace TempLat
       }
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class AveragesTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

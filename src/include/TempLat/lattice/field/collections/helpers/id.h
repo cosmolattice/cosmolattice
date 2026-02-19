@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   /** @brief A class which returns the own type of its template parameter.

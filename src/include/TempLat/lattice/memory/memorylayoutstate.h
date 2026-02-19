@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <ostream>
 
 namespace TempLat
 {
@@ -70,13 +70,6 @@ namespace TempLat
     }
   };
 
-#ifdef TEMPLATTEST
-  class MemoryLayoutStateTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

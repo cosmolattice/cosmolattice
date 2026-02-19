@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/su2algebra/su2shift.h"
 #include "TempLat/lattice/algebra/su2algebra/su2dagger.h"
 #include "TempLat/lattice/algebra/su2algebra/su2multiply.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -28,12 +27,6 @@ namespace TempLat
     //  stack!
     return (Us(mu) * shift(Us(nu), mu)) * (dagger(shift(Us(mu), nu)) * dagger(Us(nu)));
   }
-
-#ifdef TEMPLATTEST
-  struct PlaquetteTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

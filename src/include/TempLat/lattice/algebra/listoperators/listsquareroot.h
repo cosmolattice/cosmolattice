@@ -7,23 +7,10 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "listpower.h"
 
 namespace TempLat
 {
-
-  /** @brief A class which implements the square root over lists.
-   *
-   * Unit test: ctest -R test-listsquareroot
-   **/
-  class ListSquareRootTester
-  {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
   template <typename R>
     requires(IsSTDGettable<0, R> || IsTempLatGettable<0, R>)

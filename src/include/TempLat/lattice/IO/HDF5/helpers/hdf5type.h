@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
-
 #ifdef HAVE_HDF5
 #include <hdf5.h>
 
@@ -83,12 +81,6 @@ namespace TempLat
     void close() { H5Tclose(type); }
     hid_t type;
   };
-
-#ifdef TEMPLATTEST
-  struct HDF5TypeTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

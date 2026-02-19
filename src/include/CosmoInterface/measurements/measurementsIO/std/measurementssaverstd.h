@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/conditionaloutput/outputstream.h"
 #include <sstream>
 #include <iomanip>
@@ -84,12 +83,6 @@ namespace TempLat
 
     bool headerSaved;
   };
-
-#ifdef TEMPLATTEST
-  struct MeasurementsSaverStdTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

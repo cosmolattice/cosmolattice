@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Jorge Baeza-Ballesteros, Adrien Florio, Nicolás Layza,  Year: 2022
 
-#include "TempLat/util/tdd/tdd.h"
 #include "CosmoInterface/definitions/potential.h"
 #include "CosmoInterface/definitions/PITensor.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
@@ -32,15 +31,6 @@ namespace TempLat
               pow(model.aI, 1 + model.alpha) * 2. * (PITensor::totalTensor(model, n)));
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class GWsKernelsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

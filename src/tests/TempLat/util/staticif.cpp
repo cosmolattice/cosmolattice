@@ -10,6 +10,10 @@
 
 namespace TempLat {
 
+struct StaticIfTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void StaticIfTester::Test(TDDAssertion &tdd)
 {
   // IfElse: true branch

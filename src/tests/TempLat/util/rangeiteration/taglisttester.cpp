@@ -14,6 +14,10 @@ namespace TempLat {
 
 template <int N> int get(Tag<N> t) { return N; }
 
+struct TagListTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 template <int N> int get() { return N; }
 
 void TagListTester::Test(TDDAssertion &tdd)

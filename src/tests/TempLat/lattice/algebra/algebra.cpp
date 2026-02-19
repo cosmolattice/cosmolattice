@@ -7,3 +7,15 @@
 // #include "TempLat/lattice/algebra/algebra.h"
 
 /** \file algebra.h is a collection header, no class, no test. */
+
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct Algebra {
+  static void Test(TDDAssertion &tdd);
+};
+
+void Algebra::Test(TDDAssertion &tdd) { tdd.verify(true); }
+
+} // namespace TempLat

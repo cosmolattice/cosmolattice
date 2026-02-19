@@ -6,7 +6,21 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/initializers/scalefactorinitializer.h"
-#include "CosmoInterface/initializers/scalefactorinitializer_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ScaleFactorInitializerTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ScaleFactorInitializerTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

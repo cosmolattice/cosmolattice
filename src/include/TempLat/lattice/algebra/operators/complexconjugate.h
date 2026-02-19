@@ -11,7 +11,6 @@
 #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -57,13 +56,6 @@ namespace TempLat
   {
     return Operators::ComplexConjugate<T>(a);
   }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct ComplexConjugateTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

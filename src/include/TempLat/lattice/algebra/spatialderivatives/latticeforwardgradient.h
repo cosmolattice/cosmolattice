@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
@@ -115,14 +114,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     const FloatType dx;
   };
-
-#ifdef TEMPLATTEST
-  template <size_t NDim> class LatticeForwardGradientTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
   template <int nDimensions, typename R>
   DEVICE_FORCEINLINE_FUNCTION LatticeForwardGradient<nDimensions, R> LatForwardGrad(R pR)

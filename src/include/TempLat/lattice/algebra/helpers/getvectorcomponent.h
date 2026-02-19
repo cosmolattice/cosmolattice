@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
@@ -61,15 +60,6 @@ namespace TempLat
   {
     return GetVectorComponentHelper<N, R>(pR);
   }
-
-#ifdef TEMPLATTEST
-template<int N, typename R>
-  struct GetVectorComponentHelperTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

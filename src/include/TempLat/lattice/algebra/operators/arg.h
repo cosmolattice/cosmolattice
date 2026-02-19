@@ -15,7 +15,6 @@
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/constants.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
-#include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
@@ -67,12 +66,6 @@ namespace TempLat
   {
     return Operators::Arg<R, T>{r, t};
   }
-
-#ifdef TEMPLATTEST
-  struct ArgTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

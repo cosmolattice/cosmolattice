@@ -10,7 +10,6 @@
 #include "TempLat/lattice/memory/memorylayouts/hermitianpartners.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocaltransposed.h"
 #include "TempLat/util/exception.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/isarray.h"
 #include "TempLat/util/constexpr_for.h"
 
@@ -190,14 +189,6 @@ namespace TempLat
     const LayoutStructGlobal<NDim> &getGlobal() const { return getLocal().getGlobal(); }
   };
 
-#ifdef TEMPLATTEST
-template<size_t NDim>
-  struct LayoutStructTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

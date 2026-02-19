@@ -91,14 +91,6 @@ namespace TempLat
     TempLatVector<MeasurementsSaver<T>> gauss;
     TempLatVector<SpectrumSaver<T>> spectra;
   };
-
-#ifdef TEMPLATTEST
-  class U1MeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

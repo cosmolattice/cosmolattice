@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
@@ -54,14 +53,6 @@ namespace TempLat
 
     PostGet() = delete;
   };
-
-#ifdef TEMPLATTEST
-  class PostGetTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

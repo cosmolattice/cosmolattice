@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/external/parafaft/parafaftmemorylayout.h"
 #include "TempLat/fft/external/parafaft/parafaftguard.h"
 
@@ -52,10 +51,6 @@ namespace TempLat
       return IntrinsicScales();
     }
 
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <iomanip>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
 
 namespace TempLat
@@ -111,19 +110,7 @@ namespace TempLat
                                             a.multiplicity + b.multiplicity);
     }
 
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-#ifdef TEMPLATTEST
-template<typename T>
-  struct RadialProjectionSingleDatumTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

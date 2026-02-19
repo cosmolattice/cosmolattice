@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <cstddef>
 
 namespace TempLat
 {
@@ -18,11 +18,6 @@ namespace TempLat
    **/
   template <size_t N, size_t M> struct static_max {
     static const size_t value = N < M ? M : N;
-  };
-
-  struct static_max_Tester {
-  public:
-    static void Test(TDDAssertion &tdd);
   };
 } // namespace TempLat
 

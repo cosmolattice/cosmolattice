@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s):  Adrien Florio, Year: 2024
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/su2shift.h"
 
 namespace TempLat
@@ -18,11 +17,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-nonabelianclover
    **/
-  struct NonAbelianCloverTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-
   template <int Mu, int Nu, typename R> auto nonabelianclover(const R &Us, Tag<Mu> mu, Tag<Nu> nu)
   {
 
@@ -57,7 +51,5 @@ namespace TempLat
   template <typename R> auto B4NA(const R &Us, Tag<3>) { return nonabelianclover(Us, Tag<1>(), Tag<2>()); }
 
 } // namespace TempLat
-
-#include "TempLat/lattice/algebra/gaugealgebra/nonabelianclover_test.h"
 
 #endif

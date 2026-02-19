@@ -9,7 +9,6 @@
 
 #include <type_traits>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
@@ -26,13 +25,6 @@ namespace TempLat
 
   template <class T>
   concept HasDoWeNeedGhostsMethodIndexedDyn = requires(std::decay_t<T> t, ptrdiff_t idx) { t.doWeNeedGhosts(idx); };
-
-  struct HasDoWeNeedGhostsTester {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
 } // namespace TempLat
 

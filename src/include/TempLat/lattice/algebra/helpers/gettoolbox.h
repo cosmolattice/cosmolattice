@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hastoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 
@@ -42,18 +41,7 @@ namespace TempLat
       return std::nullptr_t();
     }
 
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
-
-#ifdef TEMPLATTEST
-  class GetToolBoxTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

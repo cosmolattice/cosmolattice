@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include <initializer_list>
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
@@ -81,8 +80,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::vector<T> mVec;
 
-  public:
-    static void Test(TDDAssertion &tdd);
   };
 
   template <typename... Args> auto make_templatvector(Args... args)

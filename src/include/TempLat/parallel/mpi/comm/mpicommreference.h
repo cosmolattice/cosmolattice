@@ -10,7 +10,6 @@
 #include <map>
 
 #include "TempLat/util/exception.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 #include "TempLat/parallel/mpi/comm/exchange/mpiallreduce.h"
 
@@ -58,7 +57,7 @@ namespace TempLat
 #ifdef HAVE_MPI
       ptrdiff_t referenceCount = BookKeeper(mComm, false, true);
       if (mComm != MPI_COMM_WORLD && mComm != MPI_COMM_NULL && referenceCount < 1) {
-#ifdef TEMPLATTEST
+#ifdef CHECKBOUNDS
         sayMPI << "Freeing mpi comm: " << mComm << " with reference count " << referenceCount << "\n";
 #endif
         MPI_Comm_free(&mComm);
@@ -157,14 +156,6 @@ namespace TempLat
       return result;
     }
   };
-
-#ifdef TEMPLATTEST
-  class MPICommReferenceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

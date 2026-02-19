@@ -5,7 +5,9 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/su2algebra/su2doubletdotter.h"
-#include "TempLat/lattice/algebra/su2algebra/su2doubletdotter_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+// namespace TempLat { // no active test registered for SU2DoubletDotter
 
 namespace
 {

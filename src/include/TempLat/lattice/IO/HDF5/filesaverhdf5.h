@@ -14,7 +14,6 @@
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
@@ -361,7 +360,7 @@ namespace TempLat
                 subMemoryPos);
           };
           device::iteration::foreach<1>("SaveDimBufferFilling", {memoryPos[dim]},
-                                        {memoryPos[dim] + (device::Idx)subdims[dim]}, functor);
+                                        {(device::Idx)subdims[dim]}, functor);
 
           // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
           std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
@@ -384,15 +383,6 @@ namespace TempLat
     HDF5File mFile;
     HDF5Dataset mDataset;
   };
-
-
-#ifdef TEMPLATTEST
-  class FileSaverHDF5Tester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif // HAVE_HDF5

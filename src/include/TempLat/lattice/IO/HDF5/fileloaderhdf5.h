@@ -10,7 +10,6 @@
 #ifdef HAVE_HDF5
 
 #include <cstring>
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5file.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -279,15 +278,6 @@ namespace TempLat
     HDF5File mFile;
     HDF5Dataset mDataset;
   };
-
-
-#ifdef TEMPLATTEST
-  class FileLoaderHDF5Tester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

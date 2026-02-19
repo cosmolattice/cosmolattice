@@ -5,7 +5,21 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/gaugealgebra/plaquette.h"
-#include "TempLat/lattice/algebra/gaugealgebra/plaquette_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct PlaquetteTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void PlaquetteTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/isarray.h"
 
 namespace TempLat
@@ -100,12 +99,6 @@ namespace TempLat
     device::IdxArray<NDim> mSignConversionMidpoint;
   };
 
-#ifdef TEMPLATTEST
-  template <size_t _NDim> struct LayoutStructGlobalTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

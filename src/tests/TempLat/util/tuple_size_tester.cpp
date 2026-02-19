@@ -14,6 +14,10 @@ struct testtuple {
   static const size_t size = 42;
 };
 
+struct tuple_size_Tester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void tuple_size_Tester::Test(TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */

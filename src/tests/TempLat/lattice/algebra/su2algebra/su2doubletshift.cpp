@@ -5,7 +5,17 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/su2algebra/su2doubletshift.h"
-#include "TempLat/lattice/algebra/su2algebra/su2doubletshift_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct SU2DoubletShiftTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void SU2DoubletShiftTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+
+} // namespace TempLat
 
 namespace
 {

@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/operators/power.h"
-#include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/constants/halftype.h"
 
@@ -72,13 +71,6 @@ namespace TempLat
   /** @brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType sqrt(OneType a) { return a; }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct SqrtTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

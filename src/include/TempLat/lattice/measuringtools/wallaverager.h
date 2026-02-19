@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
@@ -172,12 +171,6 @@ namespace TempLat
 
   auto wallAverager(ZeroType a) { return 0; }
 
-  struct WallAveragerTester {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -17,13 +17,6 @@ namespace TempLat
    **/
   template <class T>
   concept HasKIR = requires(std::decay_t<T> t) { t.getKIR(); };
-
-  struct HasKIRTester {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
 } // namespace TempLat
 

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
@@ -32,12 +31,6 @@ namespace TempLat
   {
     return t.real();
   }
-
-#ifdef TEMPLATTEST
-  struct RealTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

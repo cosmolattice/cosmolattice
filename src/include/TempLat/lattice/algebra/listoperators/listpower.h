@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/util/static_max.h"
 #include "TempLat/util/tuple_size.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "listbinaryoperator.h"
 #include "listunaryoperator.h"
 #include "TempLat/lattice/algebra/conditional/conditionallistbinarygetter.h"
@@ -38,13 +37,6 @@ namespace TempLat
       GhostsHunter::apply(mT, i);
     }
     static constexpr size_t size = std::max(tuple_size<R>::value, tuple_size<T>::value);
-  };
-
-  /** @brief A mini struct for instiating the test case. */
-  struct ListPowerTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename R, typename T>

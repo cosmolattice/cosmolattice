@@ -10,8 +10,11 @@
 
 namespace TempLat {
 
-template <typename TestObjectUnknownHere>
-void StripPathFromFileNameTester::Test(TestObjectUnknownHere &tdd)
+struct StripPathFromFileNameTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void StripPathFromFileNameTester::Test(TDDAssertion &tdd)
 {
 
   tdd.verify(StripPathFromFileName("/path/to/hypothetical/file") == std::string("file"));

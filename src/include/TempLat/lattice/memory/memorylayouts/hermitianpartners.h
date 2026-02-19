@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/hash/keccakhashbareclass.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/powr.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianredundancy.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianvalueaccounting.h"
@@ -181,12 +180,6 @@ namespace TempLat
     device::IdxArray<NDim> mSignConversionMidpoint;
   };
 
-#ifdef TEMPLATTEST
-  template <size_t NDim> struct HermitianPartnersTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

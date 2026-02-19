@@ -118,12 +118,6 @@ namespace TempLat
     std::string baseSeed;
   };
 
-#ifdef TEMPLATTEST
-  struct FluctuationsGeneratorTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

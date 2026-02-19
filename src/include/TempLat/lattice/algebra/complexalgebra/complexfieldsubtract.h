@@ -9,7 +9,6 @@
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "real.h"
 #include "imag.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
@@ -78,13 +77,6 @@ namespace TempLat
   {
     return ComplexFieldSubtraction{r, Complexify(t, ZeroType())};
   }
-
-#ifdef TEMPLATTEST
-  struct ComplexFieldSubtractTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

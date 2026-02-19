@@ -166,16 +166,6 @@ namespace TempLat
     // CheckTT TestTransTrace;
     GWsPowerSpectrumMeasurer GWsPSMeasurer;
   };
-
-
-#ifdef TEMPLATTEST
-template<typename Model, typename T = double>
-  struct MeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

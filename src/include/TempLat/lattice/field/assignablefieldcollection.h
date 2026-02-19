@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/util/shiftedindexsequence.h"
 #include "TempLat/util/foreach.h"
@@ -159,14 +158,6 @@ namespace TempLat
 
   template <class Q, size_t NDim, typename T, CANONICALTYPE ISMOMENTUM, int N, int SHIFT>
   using Collection = typename CollectionSelector<Q, NDim, T, ISMOMENTUM, N, SHIFT, N == 0>::type;
-
-  class AssignableFieldCollectionTester
-  {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

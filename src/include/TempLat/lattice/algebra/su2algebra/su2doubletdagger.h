@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s):  Adrien Florio, Franz R. Sattler, Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletunaryoperator.h"
@@ -66,12 +65,6 @@ namespace TempLat
   {
     return SU2DoubletDagger<R>(r);
   };
-
-#ifdef TEMPLATTEST
-  struct SU2DoubletDaggerTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

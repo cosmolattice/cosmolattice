@@ -12,7 +12,6 @@
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -67,13 +66,6 @@ namespace TempLat
   {
     return a;
   }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instantiating the test case. */
-  struct UnaryMinusTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

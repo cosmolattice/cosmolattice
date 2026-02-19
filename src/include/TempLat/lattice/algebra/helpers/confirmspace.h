@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasspaceconfirmationmethods.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
@@ -81,14 +80,6 @@ namespace TempLat
 
     ConfirmSpace() = delete;
   };
-
-#ifdef TEMPLATTEST
-  class ConfirmSpaceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

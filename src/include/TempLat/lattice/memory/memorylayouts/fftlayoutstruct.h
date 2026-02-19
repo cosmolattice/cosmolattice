@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 
@@ -99,12 +98,15 @@ namespace TempLat
     IntrinsicScales mScales;
   };
 
+<<<<<<< HEAD
 #ifdef TEMPLATTEST
   template <size_t NDim> struct FFTLayoutStructTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };
 #endif
+=======
+>>>>>>> 063bbb7dbc3f3c871b5b40bd5025db7a6c4ccf4d
 } // namespace TempLat
 
 #endif

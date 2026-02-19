@@ -9,7 +9,7 @@
 #include <cstddef>
 #include <tuple>
 #include <utility>
-#include <bits/shared_ptr.h>
+#include <memory>
 #include "TempLat/util/rangeiteration/tagliteral.h"
 
 namespace TempLat {
@@ -21,6 +21,10 @@ struct Mother {
 
 struct Daughter : public Mother {
   static constexpr int a = 5;
+};
+
+struct IdeaTester {
+  static void Test(TDDAssertion &tdd);
 };
 
 void IdeaTester::Test(TDDAssertion &tdd)

@@ -9,6 +9,10 @@
 
 namespace TempLat {
 
+struct static_max_Tester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void static_max_Tester::Test(TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */

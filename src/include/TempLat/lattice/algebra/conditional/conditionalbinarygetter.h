@@ -13,8 +13,6 @@
 #include "TempLat/lattice/algebra/helpers/haseval.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
 #include "TempLat/lattice/algebra/helpers/hasvectorgetmethod.h"
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   template <typename S, typename T>
@@ -25,10 +23,6 @@ namespace TempLat
     requires !HasSU2DoubletGet<S> && !HasSU2DoubletGet<T>;
     requires !HasVectorGetMethod<S>;
     requires !HasVectorGetMethod<T> && !HasStaticGetter<S> && !HasStaticGetter<T>;
-  };
-
-  struct ConditionalBinaryGetterTester {
-    static void Test(TempLat::TDDAssertion &);
   };
 } // namespace TempLat
 

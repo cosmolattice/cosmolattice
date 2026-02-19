@@ -196,14 +196,6 @@ namespace TempLat
     int PRJType;
   };
 
-#ifdef TEMPLATTEST
-  class CheckTTTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

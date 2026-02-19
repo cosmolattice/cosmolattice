@@ -49,15 +49,6 @@ namespace TempLat
   {
   };
 
-
-#ifdef TEMPLATTEST
-template<class TESTME>
-  class TDDContainerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

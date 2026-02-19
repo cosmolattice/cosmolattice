@@ -13,7 +13,6 @@
 #include "TempLat/lattice/algebra/conditional/conditionalbinarygetter.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -83,13 +82,6 @@ namespace TempLat
   {
     return b;
   }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct AddTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

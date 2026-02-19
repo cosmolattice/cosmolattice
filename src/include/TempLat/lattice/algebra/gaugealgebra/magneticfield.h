@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/lattice/algebra/gaugealgebra/fieldstrength.h"

@@ -11,7 +11,6 @@
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "CosmoInterface/runparameters.h"
 #include "TempLat/lattice/field/field.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5file.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
 
@@ -161,14 +160,6 @@ namespace TempLat
     int deltaKBin;
     T nGrid, kIR;
   };
-
-#ifdef TEMPLATTEST
-  class SpectrumSaverHDF5Tester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

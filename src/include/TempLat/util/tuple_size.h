@@ -7,7 +7,9 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <cstddef>
+#include <tuple>
+#include <type_traits>
 
 namespace TempLat
 {
@@ -30,19 +32,6 @@ namespace TempLat
 
   template <typename Tuple> struct tuple_size<Tuple, std::void_t<decltype(Tuple::size)>> {
     static const size_t value = Tuple::size;
-  };
-
-  class tuple_sizeTester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    tuple_sizeTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-    static void Test(TDDAssertion &tdd);
   };
 } // namespace TempLat
 

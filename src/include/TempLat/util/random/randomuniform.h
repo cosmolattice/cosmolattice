@@ -11,7 +11,6 @@
 #include <random>
 #include <sstream>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/hash/keccakhash.h"
 #include "TempLat/parallel/device.h"
 #include "TempLat/parallel/device_memory.h"
@@ -106,11 +105,6 @@ namespace TempLat
     device::memory::host_string mStringSeed;
     KeccakHash::ResultType mHashSeed;
     INT2 mSeed;
-  };
-
-  struct RandomUniformTester {
-  public:
-    static void Test(TDDAssertion &tdd);
   };
 } // namespace TempLat
 

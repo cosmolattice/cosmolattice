@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/parallel/device.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
@@ -151,16 +150,6 @@ namespace TempLat
   {
     return ComplexField<NDim, T>(f1, f2);
   }
-
-
-#ifdef TEMPLATTEST
-template<size_t _NDim, typename T>
-  struct ComplexFieldTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

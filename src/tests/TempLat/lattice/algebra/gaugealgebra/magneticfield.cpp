@@ -5,7 +5,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/algebra/gaugealgebra/magneticfield.h"
-#include "TempLat/lattice/algebra/gaugealgebra/magneticfield_test.h"
 
 namespace
 {

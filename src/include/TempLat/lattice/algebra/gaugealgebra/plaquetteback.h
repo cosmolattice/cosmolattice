@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/algebra/su2algebra/su2dagger.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/gaugealgebra/plaquette.h"
 #include "TempLat/lattice/algebra/listoperators/listshift.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -20,11 +19,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-plaquetteback
    **/
-  struct PlaquetteBackTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
   template <int Mu, int Nu, typename R> auto plaqBack(const R &Us, Tag<Mu> mu, Tag<Nu> nu)
   {

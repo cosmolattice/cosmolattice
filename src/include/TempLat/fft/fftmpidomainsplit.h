@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
 
@@ -48,13 +47,6 @@ namespace TempLat
     FFTMPIDomainSplit() {}
   };
 
-#ifdef TEMPLATTEST
-  class FFTMPIDomainSplitTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

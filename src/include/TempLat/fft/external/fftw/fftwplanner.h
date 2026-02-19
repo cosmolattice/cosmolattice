@@ -7,12 +7,10 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/fft/external/fftw/fftwplanholder.h"
 #include "TempLat/fft/external/fftw/fftwtranspositionflags.h"
 #include "TempLat/lattice/memory/memoryblock.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -166,13 +164,6 @@ namespace TempLat
     unsigned int patienceFlag;
   };
 
-#ifdef TEMPLATTEST
-  struct FFTWPlannerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

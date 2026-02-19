@@ -9,7 +9,8 @@
 
 #ifdef HAVE_HDF5
 
-#include "TempLat/util/tdd/tdd.h"
+#include <string>
+#include <utility>
 #include <hdf5.h>
 
 namespace TempLat
@@ -46,15 +47,6 @@ namespace TempLat
 
     hid_t attr_id;
   };
-
-
-#ifdef TEMPLATTEST
-  class HDF5AttributeTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

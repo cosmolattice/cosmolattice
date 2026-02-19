@@ -110,13 +110,6 @@ namespace TempLat
     return std::make_shared<FFTWGuard>(pVerbose);
   }
 
-#ifdef TEMPLATTEST
-  class FFTWGuardTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

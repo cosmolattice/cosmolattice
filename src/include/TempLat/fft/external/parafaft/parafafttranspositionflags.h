@@ -9,7 +9,6 @@
 
 #ifdef HAVE_PARAFAFT
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/fftlayoutstruct.h"
 
 namespace TempLat
@@ -48,10 +47,6 @@ namespace TempLat
     unsigned int mFlagC2R;
     unsigned int mFlagR2C;
 
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

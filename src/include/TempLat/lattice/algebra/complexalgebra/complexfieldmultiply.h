@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "real.h"
 #include "imag.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
@@ -97,13 +96,6 @@ namespace TempLat
   {
     return pow<2>(r.ComplexFieldGet(0_c)) + pow<2>(r.ComplexFieldGet(1_c));
   }
-
-#ifdef TEMPLATTEST
-  struct ComplexFieldMultiplyTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

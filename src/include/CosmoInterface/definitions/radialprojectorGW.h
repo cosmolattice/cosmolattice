@@ -9,7 +9,6 @@
 
 #include <algorithm>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialbincomputer.h"
@@ -149,11 +148,6 @@ namespace TempLat
     return RadialProjectorGW<Model, T>(model, useBinCentralValues, PRJType, PSType, PSVersion);
   }
 
-#ifdef TEMPLATTEST
-  struct RadialProjectorGWTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

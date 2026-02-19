@@ -13,7 +13,6 @@
 #include <cstring>
 #include <type_traits>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/floattostring.h"
 #include "TempLat/lattice/algebra/helpers/hasstringmethod.h"
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
@@ -100,14 +99,6 @@ namespace TempLat
     ostream << obj.toString();
     return ostream;
   }
-
-#ifdef TEMPLATTEST
-  class GetStringTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

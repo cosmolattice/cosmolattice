@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #ifdef HAVE_HDF5
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5object.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5type.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5dataset.h"
@@ -84,15 +83,6 @@ namespace TempLat
     bool alreadyClosed;
     // Put all member variables and private methods here. These may change arbitrarily.
   };
-
-
-#ifdef TEMPLATTEST
-  class HDF5GroupTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

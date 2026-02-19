@@ -4,7 +4,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/constants/onetype.h"
-#include "TempLat/lattice/algebra/constants/onetype_test.h"
 
 namespace
 {

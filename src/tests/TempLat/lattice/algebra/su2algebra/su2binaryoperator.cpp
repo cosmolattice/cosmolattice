@@ -5,7 +5,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
-#include "TempLat/lattice/algebra/su2algebra/su2binaryoperator_test.h"
 
 namespace
 {

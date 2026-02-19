@@ -95,12 +95,6 @@ namespace TempLat
 #endif
   };
 
-#ifdef TEMPLATTEST
-  struct SpectrumSaverTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

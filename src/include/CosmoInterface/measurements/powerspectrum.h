@@ -106,21 +106,6 @@ namespace TempLat
     int PSVersion;
   };
 
-#ifdef TEMPLATTEST
-  class PowerSpectrumTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
-#ifdef TEMPLATTEST
-  class PowerSpectrumMeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

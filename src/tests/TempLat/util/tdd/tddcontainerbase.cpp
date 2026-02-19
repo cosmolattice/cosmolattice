@@ -1,4 +1,3 @@
-
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
@@ -6,7 +5,16 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/tdd/tddcontainerbase.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/tdd/tddcontainerbase_test.h"
+
+namespace TempLat {
+
+template <typename TestObjectUnknownHere>
+void TDDContainerBase::Test(TestObjectUnknownHere &tdd)
+{
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

@@ -46,14 +46,6 @@ namespace TempLat
     MeasurementsSaver<T> scaleOut;
   };
 
-#ifdef TEMPLATTEST
-  class ScaleFactorMeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

@@ -11,8 +11,6 @@
 
 #include "TempLat/lattice/memory/memoryblock.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -92,13 +90,6 @@ namespace TempLat
                                                                             const FFTLayoutStruct<NDim> &layout) = 0;
   };
 
-#ifdef TEMPLATTEST
-  class FFTSessionGuardTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

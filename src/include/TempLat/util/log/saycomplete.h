@@ -50,15 +50,6 @@ namespace TempLat
                         std::string(StripPathFromFileName(__FILE__)))                                                  \
                            .c_str(),                                                                                   \
                        __LINE__)
-
-  /** @brief A class which just does the test.
-   * Unit test: ctest -R test-saycomplete
-   */
-  class SayCompleteTest
-  {
-  public:
-    template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
-  };
 } // namespace TempLat
 
 #endif

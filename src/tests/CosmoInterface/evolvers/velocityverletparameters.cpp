@@ -6,7 +6,6 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/evolvers/velocityverletparameters.h"
-#include "CosmoInterface/evolvers/velocityverletparameters_test.h"
 
 namespace
 {

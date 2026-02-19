@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletoperator.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
@@ -80,12 +79,6 @@ namespace TempLat
   template <typename F> auto SU2DoubletWrap(F &&f) { return SU2DoubletWrap(f(0_c), f(1_c), f(2_c), f(3_c)); }
 
 #define MakeSU2Doublet(a, expr) SU2DoubletWrap([&](auto a) { return expr; })
-
-#ifdef TEMPLATTEST
-  struct SU2DoubletWrapperTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -8,7 +8,8 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #ifdef HAVE_HDF5
 
-#include "TempLat/util/tdd/tdd.h"
+#include <string>
+#include <vector>
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5attribute.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5type.h"
 
@@ -68,15 +69,6 @@ namespace TempLat
   protected:
     hid_t mId;
   };
-
-
-#ifdef TEMPLATTEST
-  class HDF5ObjectTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

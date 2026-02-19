@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/shift.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldunaryoperator.h"
@@ -114,12 +113,6 @@ namespace TempLat
   {
     return ComplexFieldShifterByOne<R, N>(pR);
   }
-
-#ifdef TEMPLATTEST
-  struct ComplexFieldShiftTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

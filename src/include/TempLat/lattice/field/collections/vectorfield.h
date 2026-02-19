@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/field/collections/fieldcollection.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {

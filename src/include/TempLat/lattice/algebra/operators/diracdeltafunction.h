@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
-#include "TempLat/util/tdd/tdd.h"
 // #include "TempLat/lattice/algebra/constants/positiveinfinitytype.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 
@@ -56,12 +55,5 @@ namespace TempLat
   {
     return Operators::DiracDeltaFunction<T>(a);
   }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct DiracDeltaFunctionTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 #endif

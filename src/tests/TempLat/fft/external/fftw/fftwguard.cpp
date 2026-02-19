@@ -6,7 +6,27 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/fft/external/fftw/fftwguard.h"
-#include "TempLat/fft/external/fftw/fftwguard_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct FFTWGuardTester {
+  static void Test(TDDAssertion &tdd)
+  {
+    /* ONLY when single unit, imperatively, because
+     * the internals can only be called once per process.
+     * If we are not the only test, chances are that the actual
+     * mpiguard has an instance of us.
+     */
+    if (TDDRegister::isSingleUnitTest()) {
+      FFTWGuard guard;
+    }
+
+    tdd.verify(true);
+  }
+};
+
+} // namespace TempLat
 
 namespace
 {

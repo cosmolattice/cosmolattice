@@ -12,6 +12,10 @@
 
 namespace TempLat {
 
+struct RandomUniformTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void RandomUniformTester::Test(TDDAssertion &tdd)
 {
   {

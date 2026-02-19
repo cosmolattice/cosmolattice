@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 #include "TempLat/parallel/mpi/mpitags.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesianexchange.h"
@@ -286,13 +285,6 @@ namespace TempLat
       }
     }
   };
-
-#ifdef TEMPLATTEST
-  template <size_t NDim> struct GhostUpdaterTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

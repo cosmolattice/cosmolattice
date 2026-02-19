@@ -5,7 +5,21 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/algebra/listoperators/listsquareroot.h"
-#include "TempLat/lattice/algebra/listoperators/listsquareroot_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ListSquareRootTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ListSquareRootTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

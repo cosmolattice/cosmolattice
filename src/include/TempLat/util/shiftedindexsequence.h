@@ -7,7 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <cstddef>
+#include <utility>
 
 namespace TempLat
 {
@@ -21,12 +22,6 @@ namespace TempLat
   {
     return std::index_sequence<(I + SHIFT)...>{};
   }
-
-  class ShiftedIndexSequenceTester
-  {
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 } // namespace TempLat
 
 #endif

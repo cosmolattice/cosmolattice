@@ -32,10 +32,6 @@ namespace TempLat
     return true ? result : throw std::runtime_error(unresolved_char_symbol);
   }
 
-  struct StripPathFromFileNameTester {
-    template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
-  };
-
 } // namespace TempLat
 
 #endif

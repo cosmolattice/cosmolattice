@@ -6,7 +6,6 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include "CosmoInterface/measurements/measurementsIO/measurementssaver.h"
-#include "CosmoInterface/measurements/measurementsIO/measurementssaver_test.h"
 
 namespace
 {

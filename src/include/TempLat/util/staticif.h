@@ -7,16 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
-
-  class StaticIfTester
-  {
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 
 #define IfElse(condition, ifExpr, elseExpr)                                                                              \
   [&]() { if constexpr (condition) { return ifExpr; } else { return elseExpr; } }()

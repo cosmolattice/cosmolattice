@@ -10,8 +10,6 @@
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/tuplemaker.h"
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/lattice/IO/HDF5/filesaverhdf5.h"
 #include "TempLat/lattice/IO/HDF5/fileloaderhdf5.h"
 
@@ -88,13 +86,6 @@ namespace TempLat
     FileLoaderHDF5 loader;
 #endif
   };
-
-#ifdef TEMPLATTEST
-  template <size_t NDim = 3> struct FileIOTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

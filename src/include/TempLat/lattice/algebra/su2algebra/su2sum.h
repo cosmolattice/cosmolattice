@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
@@ -62,12 +61,6 @@ namespace TempLat
   {
     return SU2Addition{r, t};
   }
-
-#ifdef TEMPLATTEST
-  struct SU2SumTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

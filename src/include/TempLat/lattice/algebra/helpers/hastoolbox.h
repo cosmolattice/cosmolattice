@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 
 namespace TempLat
@@ -18,13 +17,6 @@ namespace TempLat
    **/
   template <class T>
   concept HasToolBox = requires(std::decay_t<T> t) { t.getToolBox(); };
-
-  /** @brief a mini tester class... */
-  struct HasToolBoxTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

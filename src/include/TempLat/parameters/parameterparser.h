@@ -12,6 +12,7 @@
 #include "TempLat/parameters/stringconverter.h"
 #include "TempLat/parameters/filereader.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
+#include "TempLat/util/log/log.h"
 #include <random>
 #include <iomanip>
 

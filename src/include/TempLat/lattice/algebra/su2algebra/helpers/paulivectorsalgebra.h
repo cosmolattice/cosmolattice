@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s):  Adrien Florio, Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/parallel/device.h"
 
 namespace TempLat
@@ -39,15 +37,6 @@ namespace TempLat
       res[3] = cL[0] * cR[3] + cL[3] * cR[0] + cL[2] * cR[1] - cL[1] * cR[2];
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class PauliVectorsAlgebraTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

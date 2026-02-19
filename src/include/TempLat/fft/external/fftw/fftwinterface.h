@@ -9,7 +9,6 @@
 
 #include "TempLat/fft/external/fftw/fftwguard.h"
 #include "TempLat/fft/external/fftw/fftwmemorylayout.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -40,13 +39,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-#ifdef TEMPLATTEST
-  struct FFTWInterfaceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

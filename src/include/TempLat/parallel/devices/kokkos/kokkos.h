@@ -160,15 +160,6 @@ namespace TempLat
 
     template <typename T> using complex = Kokkos::complex<T>;
   } // namespace device_kokkos
-
-#ifdef TEMPLATTEST
-  class KokkosTest
-  {
-  public:
-    KokkosTest() {}
-    template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #include "TempLat/parallel/devices/kokkos/kokkos_internal.h"

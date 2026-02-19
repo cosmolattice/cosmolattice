@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   /* we are going to abuse __LINE__ as an looper like value, simply so we get unique values for all tags. */
@@ -34,14 +32,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
-
-#ifdef TEMPLATTEST
-  class MPITagsJustCompileTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

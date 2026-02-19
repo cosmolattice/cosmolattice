@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/operators/add.h"
 #include "listadd.h"
@@ -46,14 +45,6 @@ namespace TempLat
         std::forward<Tuple>(tup), [](auto x) { return x; },
         std::make_integer_sequence<int, tuple_size<std::decay_t<Tuple>>::value>());
   }
-
-#ifdef TEMPLATTEST
-  class TotalTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

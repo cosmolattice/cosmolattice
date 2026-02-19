@@ -9,7 +9,6 @@
 
 #include "TempLat/lattice/memory/memorylayouts/fftlayoutstruct.h"
 #include "TempLat/util/almostequal.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memoryblock.h"
 
 #include "TempLat/parallel/device_iteration.h"
@@ -102,13 +101,6 @@ namespace TempLat
     int mType;
   };
 
-#ifdef TEMPLATTEST
-  struct FFTNormalizationTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

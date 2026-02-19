@@ -70,12 +70,6 @@ namespace TempLat
 
     FluctuationsGenerator<T> fg;
   };
-
-#ifdef TEMPLATTEST
-  struct ModelInitializerTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

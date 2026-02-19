@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 base_dir=$(pwd)/
 tmp_dir=${base_dir}/tmp/
 build_dir=${base_dir}/website/

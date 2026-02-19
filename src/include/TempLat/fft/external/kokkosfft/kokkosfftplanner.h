@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
 #include "TempLat/parallel/device_memory.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftplanholder.h"
@@ -100,13 +99,6 @@ namespace TempLat
     }
   };
 
-#ifdef TEMPLATTEST
-  struct KokkosFFTPlannerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/util/latinindiceslist.h"
 #include "TempLat/lattice/field/collections/helpers/id.h"
@@ -74,12 +73,6 @@ namespace TempLat
 
   private:
     std::vector<Arg> fs;
-  };
-
-  struct FieldCollectionTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

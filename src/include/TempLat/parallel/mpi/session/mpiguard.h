@@ -7,8 +7,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
+#include "TempLat/util/log/saycomplete.h"
 #include "TempLat/parallel/threadsettings.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 
@@ -133,14 +133,6 @@ namespace TempLat
       return counter;
     }
   };
-
-#ifdef TEMPLATTEST
-  class MPIGuardTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

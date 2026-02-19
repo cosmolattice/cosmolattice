@@ -7,28 +7,12 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   /** @brief A class which tests some features of the complex fields.
    *
    * Unit test: ctest -R test-complexfieldtester
    **/
-  class ComplexFieldTester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    ComplexFieldTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
 } // namespace TempLat
 

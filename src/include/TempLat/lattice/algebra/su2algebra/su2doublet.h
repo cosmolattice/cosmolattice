@@ -11,7 +11,6 @@
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
@@ -125,12 +124,6 @@ namespace TempLat
   };
 
   template <size_t NDim, typename T> using SU2Doublet = SU2DoubletBase<NDim, T>;
-
-#ifdef TEMPLATTEST
-  struct SU2DoubletTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

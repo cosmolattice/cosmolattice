@@ -13,13 +13,6 @@ namespace TempLat
 {
   template <typename T>
   concept IsComplexType = std::is_same_v<std::decay_t<T>, complex<typename std::decay_t<T>::value_type>>;
-
-  /** @brief a mini tester class... */
-  struct IsComplexTypeTester {
-#ifdef TEMPLATTEST
-    template <typename T> static inline void Test(T &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

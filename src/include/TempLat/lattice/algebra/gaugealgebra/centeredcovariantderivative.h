@@ -7,9 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/assignabletuple.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/listoperators/foldmultiply.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"

@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
@@ -76,14 +74,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     const FloatType dx2;
   };
-
-#ifdef TEMPLATTEST
-  template <size_t NDim> class LatticeLaplacianTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
   template <int NDim, typename R>
     requires HasEvalMethod<R>

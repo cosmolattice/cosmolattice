@@ -9,7 +9,6 @@
 
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldunaryoperator.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
 
@@ -50,13 +49,6 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-  };
-
-  struct U1ExponentialTester {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename R> auto complexPhase(R &&r) { return U1Exponential<R>(std::forward<R>(r)); }

@@ -11,8 +11,9 @@
 #include <array>
 #include <complex>
 
-#include "TempLat/util/tdd/tdd.h"
+#include "TempLat/parallel/devices/kokkos/kokkos.h"
 #include "TempLat/util/exception.h"
+#include "TempLat/util/log/saycomplete.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 
 namespace TempLat
@@ -131,6 +132,7 @@ namespace TempLat
       return complex<T>(realView[0], realView[1]);
     }
 
+
 #else
     /** @brief Dummy's for the MPI-less compilation. */
     template <typename T> const T &Allreduce(const T &whatever, MPI_Op operation, ptrdiff_t size = 1, int *error = NULL)
@@ -186,14 +188,6 @@ namespace TempLat
       }
     }
   };
-
-#ifdef TEMPLATTEST
-  class MPIAllReduceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

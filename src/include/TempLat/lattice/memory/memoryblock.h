@@ -10,8 +10,6 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/util/log/log.h"
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/parallel/device_memory.h"
 
 namespace TempLat
@@ -202,12 +200,6 @@ namespace TempLat
     }
   };
 
-#ifdef TEMPLATTEST
-  template <size_t NDim, typename T> struct MemoryBlockTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

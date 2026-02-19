@@ -6,7 +6,21 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/evolvers/kernels/su2doubletkernels.h"
-#include "CosmoInterface/evolvers/kernels/su2doubletkernels_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct SU2DoubletKernelsTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void SU2DoubletKernelsTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

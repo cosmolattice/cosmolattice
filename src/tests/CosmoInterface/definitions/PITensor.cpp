@@ -6,7 +6,21 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/definitions/PITensor.h"
-#include "CosmoInterface/definitions/PITensor_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct PITensorTestTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void PITensorTestTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

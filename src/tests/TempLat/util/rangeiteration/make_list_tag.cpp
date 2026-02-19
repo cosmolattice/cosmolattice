@@ -9,6 +9,10 @@
 
 namespace TempLat {
 
+struct MakeListTagTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void MakeListTagTester::Test(TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */

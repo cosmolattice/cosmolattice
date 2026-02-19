@@ -273,14 +273,6 @@ namespace TempLat
     FixedBackgroundExpansion<T> aBackground;
   };
 
-#ifdef TEMPLATTEST
-  class LeapFrogTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

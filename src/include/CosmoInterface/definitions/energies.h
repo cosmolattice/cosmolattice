@@ -168,15 +168,6 @@ namespace TempLat
               model.potAvI); // we also include the potential energy to the sum
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class EnergiesTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -17,18 +15,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-ideatester
    **/
-  class IdeaTester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    IdeaTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 
 } // namespace TempLat
 

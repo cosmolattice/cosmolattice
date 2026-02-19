@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/timer.h"
 #include "TempLat/lattice/memory/memoryblock.h"
@@ -217,15 +216,6 @@ namespace TempLat
     }
 
   };
-
-#ifdef TEMPLATTEST
-  template <size_t NDim>
-  struct GhostBusterTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

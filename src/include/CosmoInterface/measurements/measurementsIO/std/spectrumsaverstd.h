@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/conditionaloutput/outputstream.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -121,12 +120,6 @@ namespace TempLat
     T nGrid, kIR;
     bool printHeader;
   };
-
-#ifdef TEMPLATTEST
-  struct SpectrumSaverStdTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

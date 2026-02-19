@@ -9,6 +9,10 @@
 
 namespace TempLat {
 
+struct TagLiteralTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void TagLiteralTester::Test(TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */

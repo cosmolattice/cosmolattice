@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/util/containsspace.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
@@ -90,15 +89,6 @@ namespace TempLat
   protected:
     R mR;
   };
-
-#ifdef TEMPLATTEST
-template<typename R>
-  struct UnaryOperatorTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -8,8 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/fft/fftmpidomainsplit.h"
 #include "TempLat/fft/fftnormalization.h"
@@ -174,7 +172,7 @@ namespace TempLat
           mGhostUpdater(group, mLayouts.getConfigSpaceLayout())
     {
       checkParallelConsistency();
-#ifndef TEMPLATTEST
+#ifndef CHECKBOUNDS
       unsetVerbose();
 #endif
     }
@@ -251,14 +249,6 @@ namespace TempLat
     VerbosityLevels verbosity;
   };
 
-#ifdef TEMPLATTEST
-template<size_t _NDim>
-  struct MemoryToolBoxTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #include "TempLat/lattice/memory/memorymanager.h"

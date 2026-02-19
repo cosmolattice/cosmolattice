@@ -9,7 +9,6 @@
 
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {

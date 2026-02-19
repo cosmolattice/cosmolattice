@@ -5,4 +5,3 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/algebra/gaugealgebra/centeredcovariantderivativeo4.h"
-#include "TempLat/lattice/algebra/gaugealgebra/centeredcovariantderivativeo4_test.h"

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryselector.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocal.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructglobal.h"
@@ -115,12 +114,6 @@ namespace TempLat
     }
   };
 
-#ifdef TEMPLATTEST
-  template <size_t NDim> struct TripleStateLayoutsTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif
