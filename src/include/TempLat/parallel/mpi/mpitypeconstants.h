@@ -7,7 +7,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <type_traits>
+#include <concepts>
 
 #ifdef HAVE_MPI
 #include <mpi.h>
@@ -163,14 +164,6 @@ namespace TempLat
   class MPITypeConstants
   {
   };
-
-#ifdef TEMPLATTEST
-  class MPITypeConstantsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

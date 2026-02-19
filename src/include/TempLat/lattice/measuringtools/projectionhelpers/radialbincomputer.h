@@ -9,8 +9,6 @@
 
 #include <algorithm>
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/parallel/device.h"
 
 namespace TempLat
@@ -53,14 +51,6 @@ namespace TempLat
     ptrdiff_t mNBins;
     ptrdiff_t mHighestBin;
   };
-
-#ifdef TEMPLATTEST
-  class RadialBinComputerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

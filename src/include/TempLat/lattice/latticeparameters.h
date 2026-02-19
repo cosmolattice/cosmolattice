@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/constants.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/util/almostequal.h"
@@ -48,15 +47,6 @@ namespace TempLat
     T dx, lSide, kIR;
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
-
-#ifdef TEMPLATTEST
-template<typename T>
-  struct LatticeParametersTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

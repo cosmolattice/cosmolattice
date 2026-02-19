@@ -15,7 +15,6 @@
 #include "TempLat/lattice/algebra/su2algebra/su2multiply.h"
 #include "TempLat/lattice/algebra/gaugealgebra/fieldstrength.h"
 #include "TempLat/lattice/algebra/gaugealgebra/plaquette.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/lattice/algebra/spatialderivatives/normgradientsquare.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
@@ -89,12 +88,6 @@ namespace TempLat
       return fieldStrength(f, 1_c, 2_c);
     }
   };
-
-#ifdef TEMPLATTEST
-  struct PITensorTestTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

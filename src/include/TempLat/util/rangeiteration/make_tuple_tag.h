@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
@@ -33,19 +32,6 @@ namespace TempLat
   }
 
 #define MakeTupleFromTag(i, start, end, expr) make_tuple_tag<start, end + 1>([&](auto i) { return expr; })
-
-  class make_tuple_tagTester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    make_tuple_tagTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 
 } // namespace TempLat
 

@@ -4,7 +4,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/constants/halftype.h"
-#include "TempLat/lattice/algebra/constants/halftype_test.h"
 
 namespace
 {

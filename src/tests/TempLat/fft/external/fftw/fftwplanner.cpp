@@ -6,7 +6,18 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/fft/external/fftw/fftwplanner.h"
-#include "TempLat/fft/external/fftw/fftwplanner_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct FFTWPlannerTester {
+  static void Test(TDDAssertion &tdd)
+  {
+    tdd.verify(true);
+  }
+};
+
+} // namespace TempLat
 
 namespace
 {

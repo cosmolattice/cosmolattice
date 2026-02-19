@@ -8,6 +8,10 @@
 
 namespace TempLat {
 
+struct tuple_sizeTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void tuple_sizeTester::Test(TDDAssertion &tdd) {}
 
 } // namespace TempLat

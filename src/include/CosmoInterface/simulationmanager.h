@@ -181,16 +181,6 @@ namespace TempLat
     // Info file.
     std::unique_ptr<ConditionalFileStream> info;
   };
-
-
-#ifdef TEMPLATTEST
-template<size_t NDim>
-  struct SimulationManagerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

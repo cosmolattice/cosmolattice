@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/helpers/getkir.h"
@@ -72,14 +71,6 @@ namespace TempLat
     R mR;
   };
 
-#ifdef TEMPLATTEST
-template<typename R>
-  struct ComplexFieldUnaryOperatorTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

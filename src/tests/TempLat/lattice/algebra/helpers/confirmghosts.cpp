@@ -5,7 +5,17 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/algebra/helpers/confirmghosts.h"
-#include "TempLat/lattice/algebra/helpers/confirmghosts_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ConfirmGhostsTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ConfirmGhostsTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+
+} // namespace TempLat
 
 namespace
 {

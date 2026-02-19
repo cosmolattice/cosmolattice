@@ -11,7 +11,7 @@ if [[ ! -d "${tmp_dir}/.venv" ]]; then
     echo "---------------------------------------------------------------------"
     echo "         Building virtual environment..."
     echo "---------------------------------------------------------------------"
-    python -m venv ${tmp_dir}/.venv
+    python3 -m venv ${tmp_dir}/.venv
     source ${tmp_dir}/.venv/bin/activate
     pip install -q --upgrade pip
     pip install -q regex

@@ -83,14 +83,6 @@ namespace TempLat
     const EvolverType type;
   };
 
-#ifdef TEMPLATTEST
-  class EvolverTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

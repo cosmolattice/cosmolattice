@@ -5,7 +5,22 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/algebra/helpers/hastoolbox.h"
-#include "TempLat/lattice/algebra/helpers/hastoolbox_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct HasToolBoxTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void HasToolBoxTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  bool checkGetToolBox = true;
+  tdd.verify(checkGetToolBox);
+}
+
+} // namespace TempLat
 
 namespace
 {

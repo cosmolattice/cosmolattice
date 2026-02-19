@@ -9,7 +9,11 @@
 
 namespace TempLat {
 
-void NamedTmpFile::Test(TDDAssertion &tdd)
+struct NamedTmpFileTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void NamedTmpFileTester::Test(TDDAssertion &tdd)
 {
 
   NamedTmpFile ntf;
@@ -27,5 +31,5 @@ void NamedTmpFile::Test(TDDAssertion &tdd)
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::NamedTmpFile> test;
+  TempLat::TDDContainer<TempLat::NamedTmpFileTester> test;
 }

@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -17,18 +15,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-tuple_size_tester
    **/
-  class tuple_size_Tester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    tuple_size_Tester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 
 } // namespace TempLat
 

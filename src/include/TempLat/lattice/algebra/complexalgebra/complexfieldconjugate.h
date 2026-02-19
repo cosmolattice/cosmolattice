@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/real.h"
 #include "TempLat/lattice/algebra/complexalgebra/imag.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldunaryoperator.h"
@@ -75,12 +74,6 @@ namespace TempLat
   ZeroType conj(ZeroType t) { return t; };
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType dagger(ZeroType t) { return t; };
-
-#ifdef TEMPLATTEST
-  struct ComplexFieldConjugateTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

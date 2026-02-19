@@ -14,7 +14,6 @@
 #include "TempLat/lattice/algebra/operators/exponential.h"
 #include "TempLat/lattice/algebra/operators/multiply.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -61,13 +60,6 @@ namespace TempLat
   {
     return Operators::ASinh<T>(a);
   }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct ASinhTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -6,7 +6,21 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/evolvers/evolvertype.h"
-#include "CosmoInterface/evolvers/evolvertype_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct EvolverTypeTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void EvolverTypeTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

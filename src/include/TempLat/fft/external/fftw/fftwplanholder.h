@@ -19,7 +19,6 @@
 #include "fftw3.h"
 #endif
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
 
@@ -123,13 +122,6 @@ namespace TempLat
 #endif
   };
 
-#ifdef TEMPLATTEST
-  struct FFTWPlanHolderTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

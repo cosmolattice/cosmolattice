@@ -68,15 +68,6 @@ namespace TempLat
                                 avRHS); // Returns a vector, whose 0 component is the relative degree of conservation.
     }
   };
-
-
-#ifdef TEMPLATTEST
-  struct GaussLawsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

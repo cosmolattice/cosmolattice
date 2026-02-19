@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2operator.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
@@ -98,12 +97,6 @@ namespace TempLat
   template <typename F> auto SU2Wrap(const F &f) { return SU2Wrap(f(0_c), f(1_c), f(2_c), f(3_c)); }
 
 #define MakeSU2(a, expr) SU2Wrap([&](auto a) { return expr; })
-
-#ifdef TEMPLATTEST
-  struct SU2WrapperTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

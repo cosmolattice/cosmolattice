@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasdx.h"
 #include "TempLat/parallel/device.h"
 namespace TempLat
@@ -35,14 +34,6 @@ namespace TempLat
       return 1.f;
     }
   };
-
-#ifdef TEMPLATTEST
-  class GetDxTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

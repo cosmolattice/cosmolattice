@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/util/static_max.h"
 #include "TempLat/util/tuple_size.h"
@@ -59,13 +58,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     R mR;
-  };
-
-  /** @brief A mini struct for instiating the test case. */
-  struct ListShifterTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename R, int... N>

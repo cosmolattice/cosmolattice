@@ -9,6 +9,10 @@
 
 namespace TempLat {
 
+struct SayCompleteTest {
+  static void Test(TDDAssertion &tdd);
+};
+
 template <typename TestObjectUnknownHere> void SayCompleteTest::Test(TestObjectUnknownHere &tdd)
 {
 

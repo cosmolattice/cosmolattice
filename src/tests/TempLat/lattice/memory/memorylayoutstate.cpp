@@ -5,7 +5,35 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/memory/memorylayoutstate.h"
-#include "TempLat/lattice/memory/memorylayoutstate_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct MemoryLayoutStateTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void MemoryLayoutStateTester::Test(TDDAssertion &tdd)
+{
+
+  MemoryLayoutState mState;
+
+  tdd.verify(mState.isConfigSpace() && mState.isFFTConfigSpace() && mState.isFourierSpace());
+
+  mState.setToConfigSpace();
+
+  tdd.verify(mState.isConfigSpace() && !mState.isFFTConfigSpace() && !mState.isFourierSpace());
+
+  mState.setToFFTConfigSpace();
+
+  tdd.verify(!mState.isConfigSpace() && mState.isFFTConfigSpace() && !mState.isFourierSpace());
+
+  mState.setToFourierSpace();
+
+  tdd.verify(!mState.isConfigSpace() && !mState.isFFTConfigSpace() && mState.isFourierSpace());
+}
+
+} // namespace TempLat
 
 namespace
 {

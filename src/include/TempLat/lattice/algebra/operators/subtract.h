@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/constants/halftype.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/unaryminus.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/isarithmetic.h"
 
 namespace TempLat
@@ -87,13 +86,6 @@ namespace TempLat
 
   /** @brief Specialize for possible OneType OneType input */
   inline auto operator-(OneType a, OneType b) { return ZeroType(); }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct SubtractTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

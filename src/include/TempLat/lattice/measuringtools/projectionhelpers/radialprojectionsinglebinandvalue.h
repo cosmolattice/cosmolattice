@@ -9,7 +9,6 @@
 
 #include <sstream>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsingledatum.h"
 
 namespace TempLat
@@ -105,15 +104,6 @@ namespace TempLat
     RadialProjectionSingleDatum<T> mBinInformation;
     RadialProjectionSingleDatum<T> mValueInformation;
   };
-
-#ifdef TEMPLATTEST
-template<typename T>
-  struct RadialProjectionSingleBinAndValueTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

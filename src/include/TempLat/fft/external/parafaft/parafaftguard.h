@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 
 #ifdef HAVE_MPI
@@ -35,7 +34,7 @@ namespace TempLat
       }; /* just for the compiler warnings */
 #ifdef HAVE_MPI
 #ifdef HAVE_PARAFAFT
-#ifdef TEMPLATTEST
+#ifdef CHECKBOUNDS
       if (mVerbose) sayShort << "Parafaft guard constructed (header-only, no initialization needed).\n";
 #endif
 #endif
@@ -46,7 +45,7 @@ namespace TempLat
     {
 #ifdef HAVE_MPI
 #ifdef HAVE_PARAFAFT
-#ifdef TEMPLATTEST
+#ifdef CHECKBOUNDS
       if (mVerbose) sayShort << "Parafaft guard destructed (no cleanup needed).\n";
 #endif
 #endif
@@ -61,10 +60,6 @@ namespace TempLat
   private:
     bool mVerbose;
 
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

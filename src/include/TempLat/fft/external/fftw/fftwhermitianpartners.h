@@ -10,7 +10,6 @@
 #include <memory>
 
 #include "TempLat/util/exception.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianredundancy.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianpartners.h"
 
@@ -42,13 +41,6 @@ namespace TempLat
     FFTWHermitianPartners() = delete;
   };
 
-#ifdef TEMPLATTEST
-  class FFTWHermitianPartnersTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

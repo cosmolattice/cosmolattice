@@ -9,7 +9,11 @@
 
 namespace TempLat {
 
-template <typename T, int N> inline void TempLatVector<T, N>::Test(TDDAssertion &tdd)
+struct TempLatVectorTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void TempLatVectorTester::Test(TDDAssertion &tdd)
 {
 
   TempLatVector<int> vec(1, 2, 3);
@@ -27,5 +31,5 @@ template <typename T, int N> inline void TempLatVector<T, N>::Test(TDDAssertion 
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::TempLatVector<double, 0>> test;
+  TempLat::TDDContainer<TempLat::TempLatVectorTester> test;
 }

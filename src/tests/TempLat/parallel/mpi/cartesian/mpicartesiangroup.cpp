@@ -5,7 +5,27 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
-#include "TempLat/parallel/mpi/cartesian/mpicartesiangroup_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct MPICartesianGroupTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void MPICartesianGroupTester::Test(TDDAssertion &tdd)
+{
+
+  auto world = MPICommReference();
+
+  MPICartesianGroup mcg(world, 3, {{1, 1, 1}});
+
+  MPICartesianGroup mcg2(world, 1, {{2, 2, 2}});
+
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

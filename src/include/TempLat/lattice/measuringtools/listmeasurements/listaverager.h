@@ -9,7 +9,6 @@
 
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/make_tuple_tag.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/util/getcpptypename.h"
@@ -129,15 +128,6 @@ namespace TempLat
   {
     return make_list_from_array(ListAverager<T>(instance, spaceType).compute());
   }
-
-#ifdef TEMPLATTEST
-template<typename T>
-  struct ListAveragerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

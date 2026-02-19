@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexfieldget.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/parallel/device.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/views/fieldviewfourier.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -112,14 +111,6 @@ namespace TempLat
 
     LayoutStruct<NDim> mLayout;
   };
-
-#ifdef TEMPLATTEST
-  class ComplexFieldFourierViewTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,21 @@
 
 #ifdef HAVE_HDF5
 #include "CosmoInterface/measurements/measurementsIO/hdf5/spectrumsaverhdf5.h"
-#include "CosmoInterface/measurements/measurementsIO/hdf5/spectrumsaverhdf5_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct SpectrumSaverHDF5Tester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void SpectrumSaverHDF5Tester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

@@ -13,6 +13,10 @@
 
 namespace TempLat {
 
+struct TagTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void TagTester::Test(TDDAssertion &tdd)
 {
   Tag<45> t1;

@@ -6,7 +6,16 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/tdd/tddassertion.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/tdd/tddassertion_test.h"
+
+namespace TempLat {
+
+template <typename TestObjectUnknownHere>
+void TDDAssertion::Test(TestObjectUnknownHere &tdd)
+{
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

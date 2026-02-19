@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/field/collections/vectorfield.h"
 
 namespace TempLat
@@ -51,12 +50,6 @@ namespace TempLat
 
   private:
     std::vector<VectorField<Arg, T, NDim, flatAssign>> fs;
-  };
-
-  struct VectorFieldCollectionTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

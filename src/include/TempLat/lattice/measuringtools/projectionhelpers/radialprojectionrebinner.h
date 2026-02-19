@@ -9,7 +9,6 @@
 
 #include <vector>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialbincomputer.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglebinandvalue.h"
 
@@ -53,15 +52,6 @@ namespace TempLat
     /** @brief Only one static method. No instantiation. */
     RadialProjectionRebinner() {}
   };
-
-#ifdef TEMPLATTEST
-template<typename T>
-  struct RadialProjectionRebinnerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

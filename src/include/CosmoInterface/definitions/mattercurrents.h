@@ -124,14 +124,6 @@ namespace TempLat
       return MakeVector(i, 1, Model::NDim, SU2Current(model, t, i));
     }
   };
-
-#ifdef TEMPLATTEST
-  class MatterCurrentsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/lattice/algebra/su2algebra/su2binaryoperator.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -65,12 +64,6 @@ namespace TempLat
   {
     return SU2Subtraction{r, t};
   }
-
-#ifdef TEMPLATTEST
-  struct SU2SubtractTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

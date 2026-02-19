@@ -39,23 +39,6 @@ namespace TempLat
     return result;
   }
 
-  /** @brief A class which tests TempLat::Throws
-   *
-   *
-   * Unit test: ctest -R test-throws
-   */
-  class ThrowsTester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    ThrowsTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-    template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
-  };
 } // namespace TempLat
 
 #endif

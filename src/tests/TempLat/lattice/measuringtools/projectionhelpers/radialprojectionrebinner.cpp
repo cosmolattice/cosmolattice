@@ -5,7 +5,23 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionrebinner.h"
-#include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionrebinner_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+template<typename T>
+struct RadialProjectionRebinnerTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+template <typename T> inline void RadialProjectionRebinnerTester<T>::Test(TDDAssertion &tdd)
+{
+
+  say << "See fcn/lattice/measuringtoolsIO/radialprojection_test.h\n";
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

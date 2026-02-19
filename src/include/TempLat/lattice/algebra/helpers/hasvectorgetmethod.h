@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
@@ -17,13 +16,6 @@ namespace TempLat
    **/
   template <class U>
   concept HasVectorGetMethod = requires(std::decay_t<U> u) { u.vectorGet(Tag<1>()); };
-
-  struct HasVectorGetMethodTester {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

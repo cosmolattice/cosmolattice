@@ -13,7 +13,6 @@
 #endif
 #endif
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
 
@@ -116,13 +115,6 @@ namespace TempLat
     }
   };
 
-#ifdef TEMPLATTEST
-  struct KokkosFFTPlanHolderTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

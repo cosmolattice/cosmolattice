@@ -122,14 +122,6 @@ namespace TempLat
     return stream;
   };
 
-#ifdef TEMPLATTEST
-  class DeviceTester
-  {
-  public:
-    template <typename _TDDAssertion> static inline void Test(_TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 // Including this here, as we need that anywhere basically, where Kokkos is explicitly used.

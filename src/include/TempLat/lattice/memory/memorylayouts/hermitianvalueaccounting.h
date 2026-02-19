@@ -7,7 +7,9 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <cstddef>
+#include <ostream>
+#include "TempLat/parallel/device.h"
 
 namespace TempLat
 {
@@ -44,13 +46,6 @@ namespace TempLat
     ptrdiff_t mImaginaryCount;
   };
 
-#ifdef TEMPLATTEST
-  class HermitianValueAccountingTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

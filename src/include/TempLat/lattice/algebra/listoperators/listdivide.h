@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/util/static_max.h"
 #include "TempLat/util/tuple_size.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "listbinaryoperator.h"
 #include "TempLat/lattice/algebra/conditional/conditionallistbinarygetter.h"
 #include "TempLat/lattice/algebra/operators/divide.h"
@@ -35,13 +34,6 @@ namespace TempLat
       GhostsHunter::apply(mT, i);
     }
     static const size_t size = static_max<tuple_size<R>::value, tuple_size<T>::value>::value;
-  };
-
-  /** @brief A mini struct for instiating the test case. */
-  struct ListDivisionTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename R, typename T>

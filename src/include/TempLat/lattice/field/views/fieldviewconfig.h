@@ -12,7 +12,6 @@
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
-#include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
@@ -167,15 +166,6 @@ namespace TempLat
 
     bool mDisableFFTBlocking;
   };
-
-#ifdef TEMPLATTEST
-template<size_t _NDim, typename T>
-  struct ConfigViewTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

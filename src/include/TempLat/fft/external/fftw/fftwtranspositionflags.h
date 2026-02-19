@@ -17,7 +17,6 @@
 #include "fftw3.h"
 #endif
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 
 #ifdef HAVE_MPI
@@ -75,13 +74,6 @@ namespace TempLat
     unsigned int mFlagR2C;
   };
 
-#ifdef TEMPLATTEST
-  class FFTWTranspositionFlagsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #undef FFTWTRANSPOSITIONFLAGS_TRANSPOSED_IN

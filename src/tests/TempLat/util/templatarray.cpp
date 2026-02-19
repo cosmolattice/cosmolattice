@@ -9,7 +9,11 @@
 
 namespace TempLat {
 
-template <class T, int N, int M> inline void TempLatArray<T, N, M>::Test(TDDAssertion &tdd)
+struct TempLatArrayTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void TempLatArrayTester::Test(TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */
   tdd.verify(true);
@@ -19,5 +23,5 @@ template <class T, int N, int M> inline void TempLatArray<T, N, M>::Test(TDDAsse
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::TempLatArray<double, 5, 0>> test;
+  TempLat::TDDContainer<TempLat::TempLatArrayTester> test;
 }

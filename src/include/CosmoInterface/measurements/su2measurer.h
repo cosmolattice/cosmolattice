@@ -91,14 +91,6 @@ namespace TempLat
 
     EvolverType eType;
   };
-
-#ifdef TEMPLATTEST
-  class SU2MeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

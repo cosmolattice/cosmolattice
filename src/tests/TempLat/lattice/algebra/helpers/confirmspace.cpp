@@ -5,7 +5,17 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
-#include "TempLat/lattice/algebra/helpers/confirmspace_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ConfirmSpaceTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ConfirmSpaceTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+
+} // namespace TempLat
 
 namespace
 {

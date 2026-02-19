@@ -80,14 +80,6 @@ namespace TempLat
     const int PSType;
   };
 
-#ifdef TEMPLATTEST
-  class GWsMeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

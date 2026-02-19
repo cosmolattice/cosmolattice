@@ -12,8 +12,6 @@
 #include "CosmoInterface/definitions/potential.h"
 #include "TempLat/lattice/algebra/gaugealgebra/plaquetteback.h"
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   /** @brief A class that computes the kernel for the SU2 gauge fields.
@@ -53,14 +51,6 @@ namespace TempLat
       return -normGrad * (GradSU2 - GradSU2Back) - normSU2Source * SU2Source;
     }
   };
-
-#ifdef TEMPLATTEST
-  class SU2KernelsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -5,7 +5,22 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/memory/memorylayouts/hermitianvalueaccounting.h"
-#include "TempLat/lattice/memory/memorylayouts/hermitianvalueaccounting_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct HermitianValueAccountingTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void HermitianValueAccountingTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  bool allTestsAreInRandomFieldAndVerifyHermitianLayout = true;
+  tdd.verify(allTestsAreInRandomFieldAndVerifyHermitianLayout);
+}
+
+} // namespace TempLat
 
 namespace
 {

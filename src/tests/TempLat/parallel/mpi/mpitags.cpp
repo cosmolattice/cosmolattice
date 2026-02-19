@@ -5,7 +5,17 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/parallel/mpi/mpitags.h"
-#include "TempLat/parallel/mpi/mpitags_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct MPITagsJustCompileTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void MPITagsJustCompileTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+
+} // namespace TempLat
 
 namespace
 {

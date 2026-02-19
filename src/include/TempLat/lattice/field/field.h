@@ -13,7 +13,6 @@
 #include "TempLat/lattice/field/views/fieldviewconfig.h"
 #include "TempLat/lattice/field/views/fieldviewfourier.h"
 #include "TempLat/parallel/device.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -73,15 +72,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     FourierView<NDim, T> mFourierView;
   };
-
-#ifdef TEMPLATTEST
-template<size_t _NDim, typename T>
-  struct FieldTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

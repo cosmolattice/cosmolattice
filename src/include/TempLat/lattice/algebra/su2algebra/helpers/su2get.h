@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien,  Year: 2019
 
 #include "TempLat/parallel/device.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat

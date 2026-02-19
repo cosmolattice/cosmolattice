@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
 #include "TempLat/lattice/algebra/helpers/haseval.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldbinaryoperator.h"
@@ -83,12 +82,6 @@ namespace TempLat
   {
     return ScalarComplexFieldMultiply(1_c / t, r);
   }
-
-#ifdef TEMPLATTEST
-  struct ScalarComplexFieldMultiplyTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

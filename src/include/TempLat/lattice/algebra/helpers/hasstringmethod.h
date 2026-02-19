@@ -9,7 +9,6 @@
 
 #include <type_traits>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
@@ -29,13 +28,6 @@ namespace TempLat
 
   template <int N, class T>
   concept HasNoStringMethodIndexed = !HasStringMethodIndexed<N, T>;
-
-  /** @brief a mini tester class... */
-  struct HasStringMethodTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

@@ -11,8 +11,8 @@
 #include <array>
 #include <complex>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
+#include "TempLat/util/log/saycomplete.h"
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
 
 namespace TempLat
@@ -124,11 +124,11 @@ namespace TempLat
     /** @brief Treat complex values as array of size 2.
      */
     template <typename T>
-    complex<T> Allreduce(complex<T> value, MPI_Op operation, ptrdiff_t size = 2, int *error = NULL)
+    std::complex<T> Allreduce(std::complex<T> value, MPI_Op operation, ptrdiff_t size = 2, int *error = NULL)
     {
       std::array<double, 2u> realView{{value.real(), value.imag()}};
       Allreduce(&realView, operation);
-      return complex<T>(realView[0], realView[1]);
+      return std::complex<T>(realView[0], realView[1]);
     }
 
 #else
@@ -186,14 +186,6 @@ namespace TempLat
       }
     }
   };
-
-#ifdef TEMPLATTEST
-  class MPIAllReduceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -5,7 +5,21 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/field/collections/fieldcollection.h"
-#include "TempLat/lattice/field/collections/fieldcollection_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct FieldCollectionTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void FieldCollectionTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

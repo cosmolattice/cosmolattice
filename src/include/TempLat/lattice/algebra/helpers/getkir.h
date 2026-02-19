@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/lattice/algebra/helpers/haskir.h"
 
 namespace TempLat
@@ -39,14 +37,6 @@ namespace TempLat
       return 1;
     }
   };
-
-#ifdef TEMPLATTEST
-  class GetKIRTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

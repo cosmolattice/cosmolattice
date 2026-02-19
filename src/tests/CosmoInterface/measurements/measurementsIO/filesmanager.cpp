@@ -6,7 +6,18 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
-#include "CosmoInterface/measurements/measurementsIO/filesmanager_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+// void FilesManager::Test(TDDAssertion& tdd) {
+//
+//     /* Default is to fail: to remind yourself to implement something here. */
+//     tdd.verify( false );
+//
+// }
+
+} // namespace TempLat
 
 namespace
 {

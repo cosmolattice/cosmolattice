@@ -7,9 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
@@ -101,11 +98,6 @@ namespace TempLat
   protected:
     R mR;
     T mT;
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

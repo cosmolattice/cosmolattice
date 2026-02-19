@@ -117,14 +117,6 @@ namespace TempLat
 
   };
 
-#ifdef TEMPLATTEST
-  class FieldFunctionalsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

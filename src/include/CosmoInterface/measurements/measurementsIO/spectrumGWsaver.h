@@ -56,11 +56,6 @@ namespace TempLat
 #endif
   };
 
-#ifdef TEMPLATTEST
-  struct SpectrumGWSaverTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -35,15 +35,6 @@ namespace TempLat
       return make_templatvector((LHS - RHS) / (LHS + RHS), LHS, RHS);
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class HubbleConstraintTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

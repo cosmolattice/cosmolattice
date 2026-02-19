@@ -15,7 +15,6 @@
 #endif
 #endif
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/external/parafaft/parafaftplanner.h"
 #include "TempLat/fft/external/fftw/fftwhermitianpartners.h"
 #include "TempLat/lattice/memory/memorylayouts/fftlayoutstruct.h"
@@ -153,11 +152,6 @@ namespace TempLat
       return result;
     }
 
-  private:
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

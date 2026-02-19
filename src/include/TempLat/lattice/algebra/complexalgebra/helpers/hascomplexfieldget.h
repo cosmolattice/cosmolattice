@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
@@ -19,12 +18,6 @@ namespace TempLat
    **/
   template <class T>
   concept HasComplexFieldGet = requires(T t, Tag<0> tag) { t.ComplexFieldGet(tag); };
-
-  struct HasComplexFieldGetTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

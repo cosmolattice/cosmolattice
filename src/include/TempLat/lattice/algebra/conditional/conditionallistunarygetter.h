@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 
@@ -19,10 +18,6 @@ namespace TempLat
    **/
   template <typename S>
   concept ConditionalListUnaryGetter = IsSTDGettable<0, S> || IsTempLatGettable<0, S>;
-
-  struct ConditionalListUnaryGetterTester {
-    static void Test(TempLat::TDDAssertion &);
-  };
 } // namespace TempLat
 
 #endif

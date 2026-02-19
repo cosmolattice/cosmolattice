@@ -9,7 +9,6 @@
 
 #include <string>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/helpers/gettoolbox.h"

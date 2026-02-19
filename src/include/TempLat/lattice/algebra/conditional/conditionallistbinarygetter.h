@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 
@@ -21,10 +20,6 @@ namespace TempLat
   template <typename S, typename T>
   concept ConditionalListBinaryGetter =
       (IsSTDGettable<0, S> || IsSTDGettable<0, T> || IsTempLatGettable<0, S> || IsTempLatGettable<0, T>);
-
-  struct ConditionalListBinaryGetterTester {
-    static void Test(TempLat::TDDAssertion &);
-  };
 } // namespace TempLat
 
 #endif

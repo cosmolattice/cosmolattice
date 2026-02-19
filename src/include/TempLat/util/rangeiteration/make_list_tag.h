@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/assignabletuple.h"
 
 namespace TempLat
@@ -59,11 +58,6 @@ namespace TempLat
     else
       return std::tuple<>();
   }
-
-  struct MakeListTagTester {
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 
 #define MakeArray(i, beg, end, expr)                                                                                   \
   make_list_tag<beg, end + 1>([&](auto i) {                                                                            \

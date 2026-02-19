@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/lattice/algebra/operators/squareroot.h"
@@ -94,14 +93,6 @@ namespace TempLat
   }
 
   template <typename R> auto norm(const R &r) { return sqrt(norm2(r)); }
-
-#ifdef TEMPLATTEST
-  template <size_t NDim> class VectorDotterTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

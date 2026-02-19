@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstruct.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
 #include "TempLat/util/rangeiteration/tag.h"
@@ -41,13 +40,6 @@ namespace TempLat
       requires(ptrdiff_t idx, std::decay_t<T> t, LayoutStruct<NDim> layout, SpaceStateType spaceType) {
         t(idx).confirmSpace(layout, spaceType);
       };
-
-  /** @brief a mini tester class... */
-  struct HasSpaceConfirmationMethodsTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

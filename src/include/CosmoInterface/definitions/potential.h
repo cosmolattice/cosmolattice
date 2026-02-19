@@ -98,14 +98,6 @@ namespace TempLat
                                                        model.potDeriv2NormSU2Doublet(n), model.fldSU2Doublet(n), a));
     }
   };
-
-#ifdef TEMPLATTEST
-  struct PotentialTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -5,4 +5,3 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/algebra/spacestateinterface.h"
-#include "TempLat/lattice/algebra/spacestateinterface_test.h"

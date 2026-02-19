@@ -11,7 +11,6 @@
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/operators/diracdeltafunction.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
@@ -59,12 +58,6 @@ namespace TempLat
   /** @brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType heaviside(OneType a) { return OneType(); }
-
-#ifdef TEMPLATTEST
-  struct HeavisideStepFunctionTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

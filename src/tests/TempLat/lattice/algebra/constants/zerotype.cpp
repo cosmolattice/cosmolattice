@@ -5,7 +5,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/constants/zerotype.h"
-#include "TempLat/lattice/algebra/constants/zerotype_test.h"
 
 namespace
 {

@@ -10,6 +10,10 @@
 
 namespace TempLat {
 
+struct StripPathFromFileNameTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 template <typename TestObjectUnknownHere>
 void StripPathFromFileNameTester::Test(TestObjectUnknownHere &tdd)
 {

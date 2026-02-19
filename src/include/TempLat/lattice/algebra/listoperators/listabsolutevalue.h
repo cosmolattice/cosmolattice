@@ -10,7 +10,6 @@
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/util/static_max.h"
 #include "TempLat/util/tuple_size.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "listunaryoperator.h"
 #include "TempLat/lattice/algebra/conditional/conditionallistunarygetter.h"
 #include "TempLat/lattice/algebra/operators/absolutevalue.h"
@@ -35,13 +34,6 @@ namespace TempLat
     template <int N> void doWeNeedGhosts(Tag<N> i) { GhostsHunter::apply(mR, i); }
 
     static constexpr size_t size = tuple_size<R>::value;
-  };
-
-  /** @brief A mini struct for instiating the test case. */
-  struct ListAbsoluteValueTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename R>

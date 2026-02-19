@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexwrapper.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfieldmultiply.h"
@@ -66,12 +65,6 @@ namespace TempLat
 
     virtual std::string operatorString() const override { return "*"; }
   };
-
-#ifdef TEMPLATTEST
-  struct ComplexFieldSU2DoubletMultiplyTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
   template <typename R, typename T>
     requires((HasComplexFieldGet<R> || IsComplexType<R>) && HasSU2DoubletGet<T>)

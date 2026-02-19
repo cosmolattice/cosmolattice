@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "CosmoInterface/definitions/potential.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
 
@@ -32,15 +31,6 @@ namespace TempLat
               pow(model.aI, 3 + model.alpha) * Potential::derivS(model, n));
     }
   };
-
-
-#ifdef TEMPLATTEST
-  class ScalarSingletKernelsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

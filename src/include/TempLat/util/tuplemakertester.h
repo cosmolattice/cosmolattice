@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   /** @brief A class which tests the tuple makker class.
@@ -16,18 +14,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-tuplemakertester
    **/
-  class TupleMakerTester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    TupleMakerTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 } // namespace TempLat
 
 #endif

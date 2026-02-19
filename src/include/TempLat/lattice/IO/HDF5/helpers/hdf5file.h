@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
-
 #ifdef HAVE_HDF5
 
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5dataset.h"
@@ -106,15 +104,6 @@ namespace TempLat
 
     hid_t file_id;
   };
-
-
-#ifdef TEMPLATTEST
-  class HDF5FileTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

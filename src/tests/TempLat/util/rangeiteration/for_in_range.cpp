@@ -9,6 +9,10 @@
 
 namespace TempLat {
 
+struct for_in_range_Tester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void for_in_range_Tester::Test(TDDAssertion &tdd)
 {
   int c = 1;

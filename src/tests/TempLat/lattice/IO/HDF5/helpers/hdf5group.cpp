@@ -7,7 +7,21 @@
 
 #ifdef HAVE_HDF5
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5group.h"
-#include "TempLat/lattice/IO/HDF5/helpers/hdf5group_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct HDF5GroupTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void HDF5GroupTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

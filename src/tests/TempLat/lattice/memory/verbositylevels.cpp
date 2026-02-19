@@ -5,7 +5,28 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/memory/verbositylevels.h"
-#include "TempLat/lattice/memory/verbositylevels_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct VerbosityLevelsTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void VerbosityLevelsTester::Test(TDDAssertion &tdd)
+{
+  VerbosityLevels verbosity;
+
+  verbosity.setAllOff();
+
+  tdd.verify(!verbosity.fieldAssignment);
+
+  verbosity.setAllOn();
+
+  tdd.verify(verbosity.fieldAssignment);
+}
+
+} // namespace TempLat
 
 namespace
 {

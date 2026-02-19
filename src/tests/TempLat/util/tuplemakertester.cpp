@@ -14,6 +14,10 @@
 
 namespace TempLat {
 
+struct TupleMakerTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void TupleMakerTester::Test(TDDAssertion &tdd)
 {
 

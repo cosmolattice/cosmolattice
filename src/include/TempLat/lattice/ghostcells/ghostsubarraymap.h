@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/ghostcells/ghostsubarray.h"
 
 namespace TempLat
@@ -48,14 +47,6 @@ namespace TempLat
 
   };
 
-#ifdef TEMPLATTEST
-  template <size_t NDim>
-  struct GhostSubarrayMapTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

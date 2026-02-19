@@ -9,8 +9,6 @@
 
 #include <type_traits>
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   /** @brief Enables adapting
@@ -48,12 +46,6 @@ namespace TempLat
   struct HasExplicitCoordinateDependence<T<S1, S2>, std::void_t<>> {
     static constexpr bool value =
         HasExplicitCoordinateDependence<S1>::value || HasExplicitCoordinateDependence<S2>::value;
-  };
-
-  struct HasExplicitCoordinateDependenceTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
 } // namespace TempLat

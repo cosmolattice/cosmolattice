@@ -54,14 +54,6 @@ namespace TempLat
       }
     }
   };
-
-#ifdef TEMPLATTEST
-  struct ScaleFactorInitializerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -9,6 +9,10 @@
 
 namespace TempLat {
 
+struct ShiftedIndexSequenceTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 template <size_t... I> auto myConvertToTuple(std::index_sequence<I...> seq) { return std::make_tuple(I...); }
 
 void ShiftedIndexSequenceTester::Test(TDDAssertion &tdd)

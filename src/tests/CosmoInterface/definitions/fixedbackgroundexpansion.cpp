@@ -6,7 +6,21 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2021
 
 #include "CosmoInterface/definitions/fixedbackgroundexpansion.h"
-#include "CosmoInterface/definitions/fixedbackgroundexpansion_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct FixedBackgroundExpansionTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void FixedBackgroundExpansionTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

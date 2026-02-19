@@ -1,16 +1,20 @@
-#ifndef COSMOINTERFACE_COMPLEXFIELDALGEBRA_HELPERS_REAL_TEST_H
-#define COSMOINTERFACE_COMPLEXFIELDALGEBRA_HELPERS_REAL_TEST_H
-
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
-
+// File info: Main contributor(s): Adrien Florio,  Year: 2019
+#include "TempLat/lattice/algebra/complexalgebra/real.h"
+#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
 #include "TempLat/util/ndloop.h"
 
-inline void TempLat::RealTester::Test(TempLat::TDDAssertion &tdd)
+namespace TempLat {
+
+struct RealTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void RealTester::Test(TDDAssertion &tdd)
 {
   struct MyStruct {
     DEVICE_FORCEINLINE_FUNCTION
@@ -74,4 +78,9 @@ inline void TempLat::RealTester::Test(TempLat::TDDAssertion &tdd)
   }
 }
 
-#endif
+} // namespace TempLat
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::RealTester> test;
+}

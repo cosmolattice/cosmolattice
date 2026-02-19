@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
@@ -97,8 +96,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::array<T, N> mVec;
 
-  public:
-    static void Test(TDDAssertion &tdd);
   };
 } // namespace TempLat
 

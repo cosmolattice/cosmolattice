@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasderivmethod.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 
@@ -39,14 +38,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     GetDeriv() {}
   };
-
-#ifdef TEMPLATTEST
-  class GetDerivTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

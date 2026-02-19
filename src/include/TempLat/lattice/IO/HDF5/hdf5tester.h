@@ -9,8 +9,6 @@
 
 #ifdef HAVE_HDF5
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -19,20 +17,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-hdf5tester
    **/
-  class HDF5Tester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    HDF5Tester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

@@ -5,4 +5,3 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator.h"
-#include "TempLat/lattice/algebra/su2algebra/su2doubletbinaryoperator_test.h"

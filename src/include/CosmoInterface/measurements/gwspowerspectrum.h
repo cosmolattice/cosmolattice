@@ -87,22 +87,6 @@ namespace TempLat
     int PRJType;
   };
 
-#ifdef TEMPLATTEST
-  class GWsPowerSpectrumTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
-
-#ifdef TEMPLATTEST
-  class GWsPowerSpectrumMeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/parallel/devices/kokkos/kokkos.h"
 
@@ -68,14 +67,6 @@ namespace TempLat
       static int GetInstanceCount() { return InstanceCounter(); }
     };
   } // namespace device_kokkos
-
-#ifdef TEMPLATTEST
-  class DeviceGuardTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

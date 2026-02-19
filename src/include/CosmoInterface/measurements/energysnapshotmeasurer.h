@@ -189,15 +189,6 @@ namespace TempLat
     std::string nameSU2Mag, nameSU2El;
     std::string namePot;
   };
-
-#ifdef TEMPLATTEST
-template<typename Model>
-  struct EnergySnapshotsMeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

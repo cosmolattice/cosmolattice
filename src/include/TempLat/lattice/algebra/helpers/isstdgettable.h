@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 #include "TempLat/parallel/device.h"
 
@@ -19,13 +18,6 @@ namespace TempLat
    **/
   template <int N, class T>
   concept IsSTDGettable = requires(T t) { std::get<N>(t); };
-
-  struct IsSTDGettableTester {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

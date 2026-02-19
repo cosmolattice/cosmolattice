@@ -9,7 +9,6 @@
 
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/util/exception.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 #include "TempLat/lattice/algebra/listoperators/vectordotter.h"
@@ -88,15 +87,6 @@ namespace TempLat
   };
 
   template <size_t NDim> using FourierSite = WaveNumber<NDim>;
-
-#ifdef TEMPLATTEST
-  template <size_t NDim>
-  struct WaveNumberTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -11,7 +11,6 @@
 #include <cstddef>
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialbincomputer.h"
@@ -226,11 +225,6 @@ namespace TempLat
     return projectRadially(instance, SpaceStateType::Fourier, GetToolBox::get(instance), useBinCentralValues);
   }
 
-  struct RadialProjectorTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/make_tuple_tag.h"
 #include "TempLat/util/iscomposite.h"
 #include "TempLat/lattice/algebra/helpers/hasstaticgetter.h"
@@ -63,13 +62,6 @@ namespace TempLat
   {
     return std::make_tuple(std::forward<R>(r));
   }
-
-  class TupleMakerNotTester
-  {
-
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 } // namespace TempLat
 
 #endif

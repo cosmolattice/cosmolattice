@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesiangroup.h"
 #include "TempLat/parallel/mpi/cartesian/mpicartesianneighbourssingledimension.h"
 
@@ -53,14 +52,6 @@ namespace TempLat
     ptrdiff_t mNDimensions;
     std::vector<MPICartesianNeighboursSingleDimension> allNeighbours;
   };
-
-#ifdef TEMPLATTEST
-  class MPICartesianNeighboursTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

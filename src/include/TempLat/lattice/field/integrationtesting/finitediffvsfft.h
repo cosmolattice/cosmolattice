@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/cosmolattice.h"
 
 namespace TempLat
@@ -18,13 +17,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-finitediffvsfft
    **/
-  class FiniteDiffVSFFT
-  {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 } // namespace TempLat
 
 #endif

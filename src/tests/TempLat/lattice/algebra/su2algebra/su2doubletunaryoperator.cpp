@@ -5,4 +5,3 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/algebra/su2algebra/su2doubletunaryoperator.h"
-#include "TempLat/lattice/algebra/su2algebra/su2doubletunaryoperator_test.h"

@@ -9,7 +9,6 @@
 
 // #include <typeinfo>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/conditionaloutput/outputstream.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
@@ -129,11 +128,6 @@ namespace TempLat
     const int PSVersion;
   };
 
-#ifdef TEMPLATTEST
-  struct SpectrumGWSaverStdTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

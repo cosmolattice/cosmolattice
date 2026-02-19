@@ -397,18 +397,6 @@ namespace TempLat
       ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, device::memory::setAtOnePoint(fldSU2Doublet(j)(i), pos0, 0.);));
     }
   };
-
-
-#ifdef TEMPLATTEST
-template<class R, size_t NPOTTERMS, size_t NS, size_t NC, size_t NU1FLDS, size_t NSU2DOUBLET, size_t NSU2FLDS,
-            typename CSU1COUPLINGS, typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS,
-            typename T = double, int NDIM = 3>
-  struct AbstractModelTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

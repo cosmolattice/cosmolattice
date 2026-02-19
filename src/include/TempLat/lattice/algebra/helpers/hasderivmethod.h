@@ -7,7 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio, originally by  Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <type_traits>
+#include <cstddef>
 
 namespace TempLat
 {
@@ -18,11 +19,6 @@ namespace TempLat
   concept HasDerivMethod = requires(std::decay_t<T> t, ptrdiff_t idx) { t.d(idx); };
 
   /** @brief a mini tester class... */
-#ifdef TEMPLATTEST
-  struct HasDerivMethodTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

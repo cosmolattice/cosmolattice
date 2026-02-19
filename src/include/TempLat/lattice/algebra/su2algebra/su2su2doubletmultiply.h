@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
@@ -91,12 +90,6 @@ namespace TempLat
   {
     return SU2SU2DoubletMultiplication<R, T>(r, t);
   }
-
-#ifdef TEMPLATTEST
-  struct SU2SU2DoubletMultiplyTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

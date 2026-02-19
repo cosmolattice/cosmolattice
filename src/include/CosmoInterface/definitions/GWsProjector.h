@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Jorge Baeza-Ballesteros, Adrien Florio, Nicolás Layza,  Year: 2022
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/util/constants.h"
 #include "TempLat/lattice/algebra/algebra.h"
 #include "TempLat/lattice/algebra/helpers/getngrid.h"
@@ -176,14 +174,6 @@ namespace TempLat
   private:
     int mType;
   };
-
-#ifdef TEMPLATTEST
-  class GWsProjectorTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

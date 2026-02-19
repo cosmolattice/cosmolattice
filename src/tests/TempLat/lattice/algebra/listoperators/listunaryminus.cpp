@@ -5,7 +5,28 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/listoperators/listunaryminus.h"
-#include "TempLat/lattice/algebra/listoperators/listunaryminus_test.h"
+#include "TempLat/util/tdd/tdd.h"
+#include "TempLat/util/foreach.h"
+#include "TempLat/util/almostequal.h"
+
+namespace TempLat {
+
+struct ListUnaryMinusTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ListUnaryMinusTester::Test(TDDAssertion &tdd)
+{
+
+  auto t1 = std::make_tuple(-1., -2., -3., -4.);
+
+  auto t3 = -t1;
+  double tmp = 1;
+
+  for_each(t3, [&](auto x) { tdd.verify(x == tmp++); });
+}
+
+} // namespace TempLat
 
 namespace
 {

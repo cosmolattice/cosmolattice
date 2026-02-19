@@ -15,7 +15,6 @@
 #endif
 #endif
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/fft/external/parafaft/parafaftplanholder.h"
@@ -105,11 +104,6 @@ namespace TempLat
 #endif
     }
 
-  private:
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

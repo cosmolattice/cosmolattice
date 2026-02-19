@@ -9,6 +9,10 @@
 
 namespace TempLat {
 
+struct StringConverterTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void StringConverterTester::Test(TDDAssertion &tdd)
 {
   /* Default is to fail: to remind yourself to implement something here. */

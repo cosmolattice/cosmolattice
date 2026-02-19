@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 
@@ -42,12 +40,6 @@ namespace TempLat
     {
       return obj;
     }
-  };
-
-  struct GetComponentTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

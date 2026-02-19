@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/device.h"
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
 
@@ -48,13 +47,6 @@ namespace TempLat
                        || HasEval<T, size_t, size_t, size_t, size_t, size_t>
                        || HasEval<T, size_t, size_t, size_t, size_t, size_t, size_t>
                        || HasEval<T, size_t, size_t, size_t, size_t, size_t, size_t, size_t>;
-
-#ifdef TEMPLATTEST
-  struct HasEvalTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -11,7 +11,6 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/field/abstractfield.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/preget.h"
 #include "TempLat/lattice/algebra/helpers/postget.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
@@ -203,15 +202,6 @@ namespace TempLat
     device::IdxArray<NDim> memorySizes;
     device::array<device::pair<ptrdiff_t, ptrdiff_t>, NDim> localSlicing;
   };
-
-#ifdef TEMPLATTEST
-template<size_t _NDim, typename T>
-  struct FourierViewTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

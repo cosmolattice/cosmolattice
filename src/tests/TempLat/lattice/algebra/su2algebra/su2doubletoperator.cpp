@@ -6,7 +6,22 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/algebra/su2algebra/su2doubletoperator.h"
-#include "TempLat/lattice/algebra/su2algebra/su2doubletoperator_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+template<size_t NDim>
+struct SU2DoubletOperatorTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+template <size_t NDim> inline void SU2DoubletOperatorTester<NDim>::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

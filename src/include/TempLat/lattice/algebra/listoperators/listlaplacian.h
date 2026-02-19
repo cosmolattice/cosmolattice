@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/util/static_max.h"
 #include "TempLat/util/tuple_size.h"
@@ -36,13 +35,6 @@ namespace TempLat
     template <int N> void doWeNeedGhosts(Tag<N> i) { GetComponent::get(mR, i).confirmGhostsUpToDate(); }
 
     static const size_t size = tuple_size<R>::value;
-  };
-
-  /** @brief A mini struct for instiating the test case. */
-  struct ListLaplacianTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <class T> using LapList3D = ListLaplacian<3, T>;

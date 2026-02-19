@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/tdd/tddassertion.h"
 #include "TempLat/util/log/puttostream.h"
 
 #include <ostream>
@@ -82,14 +80,6 @@ namespace TempLat
     };
   } // namespace std_device
 
-#ifdef TEMPLATTEST
-  class STDTest
-  {
-  public:
-    STDTest() {}
-    template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
-  };
-#endif
 } // namespace TempLat
 
 /** @brief This one is not related to our algebra, but somehow not

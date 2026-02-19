@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocal.h"
 #include "TempLat/lattice/memory/memorylayouts/transpositionmap.h"
@@ -207,13 +206,6 @@ namespace TempLat
     }
   };
 
-#ifdef TEMPLATTEST
-  class CoordinateMappingTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

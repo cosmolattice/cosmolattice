@@ -10,9 +10,7 @@
 // MATHEMATICS OF  COMPUTATION VOLUME 51,  NUMBER 184 OCTOBER 1988, PAGES 699-706 Generation of Finite Difference
 // Formulas on Arbitrarily Spaced Grids By  Bengt Fornberg
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/assignabletuple.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/listoperators/foldmultiply.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/lattice/algebra/helpers/getdx.h"

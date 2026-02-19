@@ -16,7 +16,6 @@
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/powr.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -146,13 +145,6 @@ namespace TempLat
   {
     return a;
   }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct PowerTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

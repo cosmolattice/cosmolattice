@@ -173,14 +173,6 @@ namespace TempLat
       }
     } // namespace memory
   } // namespace device_kokkos
-
-#ifdef TEMPLATTEST
-  class KokkosMemoryTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -10,7 +10,6 @@
 
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/util/tuple_size.h"
 #include "TempLat/util/tuple_tools.h"
@@ -116,12 +115,6 @@ namespace TempLat
 
   template <int N> ZeroType shift(ZeroType) { return ZeroType(); }
   template <int N> ZeroType shift(ZeroType, Tag<N>) { return ZeroType(); }
-
-#ifdef TEMPLATTEST
-  template <size_t NDim> struct ExpressionShifterTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

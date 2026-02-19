@@ -7,15 +7,12 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2doubletget.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/make_tuple_tag.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/assignabletuple.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/util/getcpptypename.h"
@@ -155,14 +152,6 @@ namespace TempLat
   {
     return make_list_from_array(SU2DoubletAverager<T>(instance, spaceType).compute());
   }
-
-#ifdef TEMPLATTEST
-  class SU2DoubletAveragerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

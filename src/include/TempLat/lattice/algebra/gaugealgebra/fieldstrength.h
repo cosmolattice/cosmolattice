@@ -9,7 +9,6 @@
 
 #include "TempLat/util/rangeiteration/tag.h"
 #include "TempLat/lattice/algebra/spatialderivatives/forwdiff.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -18,13 +17,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-fieldstrength
    **/
-  class FieldStrengthTester
-  {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
   template <typename R, int Mu, int Nu> auto fieldStrength(R A, Tag<Mu> mu, Tag<Nu> nu)
   {

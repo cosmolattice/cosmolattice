@@ -5,4 +5,3 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/lattice/algebra/listoperators/norm.h"
-#include "TempLat/lattice/algebra/listoperators/norm_test.h"

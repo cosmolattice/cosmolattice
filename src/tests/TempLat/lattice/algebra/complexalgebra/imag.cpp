@@ -1,16 +1,20 @@
-#ifndef COSMOINTERFACE_COMPLEXFIELDALGEBRA_HELPERS_IMAG_TEST_H
-#define COSMOINTERFACE_COMPLEXFIELDALGEBRA_HELPERS_IMAG_TEST_H
-
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
-
+// File info: Main contributor(s): Adrien Florio,  Year: 2019
+#include "TempLat/lattice/algebra/complexalgebra/imag.h"
+#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
 #include "TempLat/util/ndloop.h"
 
-inline void TempLat::ImagTester::Test(TempLat::TDDAssertion &tdd)
+namespace TempLat {
+
+struct ImagTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ImagTester::Test(TDDAssertion &tdd)
 {
   struct MyStruct {
     DEVICE_FORCEINLINE_FUNCTION
@@ -75,4 +79,9 @@ inline void TempLat::ImagTester::Test(TempLat::TDDAssertion &tdd)
   }
 }
 
-#endif
+} // namespace TempLat
+
+namespace
+{
+  TempLat::TDDContainer<TempLat::ImagTester> test;
+}

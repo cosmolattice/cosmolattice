@@ -5,7 +5,23 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity.h"
-#include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionsinglequantity_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+template<typename T>
+struct RadialProjectionSingleQuantityTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+template <typename T> inline void RadialProjectionSingleQuantityTester<T>::Test(TDDAssertion &tdd)
+{
+
+  say << "See fcn/lattice/measuringtoolsIO/projectionhelpers/radialprojectionresult_test.h\n";
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

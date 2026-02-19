@@ -9,8 +9,6 @@
 
 #include "TempLat/parallel/devices/kokkos/kokkos.h"
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   namespace device_kokkos
@@ -86,14 +84,6 @@ namespace TempLat
       inline void fence() { Kokkos::fence(); }
     } // namespace iteration
   } // namespace device_kokkos
-
-#ifdef TEMPLATTEST
-  template <size_t NDim> class KokkosIterationTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

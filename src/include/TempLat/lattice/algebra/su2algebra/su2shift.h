@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/shift.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 #include "TempLat/lattice/algebra/su2algebra/su2operator.h"
@@ -105,12 +104,6 @@ namespace TempLat
   template <class R> auto sh1(const R &pR) { return pR; }
 
   template <int I, int... J, class R> auto sh1(const R &pR) { return shift<I>(sh1<J...>(pR)); }
-
-#ifdef TEMPLATTEST
-  struct SU2ShiftTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

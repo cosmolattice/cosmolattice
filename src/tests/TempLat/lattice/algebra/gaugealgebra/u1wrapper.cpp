@@ -5,9 +5,3 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/gaugealgebra/u1exponential.h"
-#include "TempLat/lattice/algebra/gaugealgebra/u1exponential_test.h"
-
-namespace
-{
-  TempLat::TDDContainer<TempLat::U1ExponentialTester> test;
-}

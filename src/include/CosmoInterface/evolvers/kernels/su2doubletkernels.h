@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
 #include "CosmoInterface/definitions/potential.h"
 #include "CosmoInterface/definitions/gaugederivatives.h"
 
@@ -31,14 +30,6 @@ namespace TempLat
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivSU2Doublet(model, n);
     }
   };
-
-#ifdef TEMPLATTEST
-  class SU2DoubletKernelsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

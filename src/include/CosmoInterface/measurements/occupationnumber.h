@@ -59,22 +59,6 @@ namespace TempLat
     ptrdiff_t nbins;
   };
 
-#ifdef TEMPLATTEST
-  class OccupationNumberTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
-
-#ifdef TEMPLATTEST
-  class OccupationNumberMeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

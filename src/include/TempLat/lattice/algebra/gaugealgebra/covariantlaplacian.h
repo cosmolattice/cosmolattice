@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/assignabletuple.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/listoperators/foldmultiply.h"
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 
@@ -19,13 +18,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-covariantlaplacian
    **/
-  class CovariantLaplacianTester
-  {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
   /*
       //Bug, mysterious seg fault for SU2. Workaround: take only three args, U1s, SU2s and phi and write multiplication
   explicitly. Some forwarding problem? template<size_t dim, class... Args> auto CovariantLaplacian(Args... args)
@@ -34,7 +26,6 @@ namespace TempLat
           auto list = make_list(args...);
 
           auto scalar = list.getComp(Tag<size-1>());
-
 
   //        constexpr size_t dim = decltype(list.getComp(0_c))::size;//get the spatial dimension from tone of the gauge
   vector.
@@ -45,7 +36,6 @@ namespace TempLat
   x){return x;},shift(scalar,i))
                                ));
 
-
           say << CovPlus;
 
           auto CovMinus = total(MakeArray(i,1,dim,
@@ -54,8 +44,6 @@ namespace TempLat
                                ));
 
           say << CovMinus;
-
-
 
           auto central =  (2.0 * dim) * scalar;
 

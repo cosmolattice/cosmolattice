@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parameters/multipleparametergetter.h"
 
 namespace TempLat
@@ -32,12 +31,6 @@ namespace TempLat
         arr.push_back(ParameterGetter<T>(tmp, name));
       }
     }
-  };
-
-  class StringConverterTester
-  {
-  public:
-    static void Test(TDDAssertion &tdd);
   };
 } // namespace TempLat
 

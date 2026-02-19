@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/containsspace.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2doubletget.h"
@@ -79,14 +78,6 @@ namespace TempLat
     R mR;
   };
 
-#ifdef TEMPLATTEST
-template<typename R>
-  struct SU2DoubletUnaryOperatorTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

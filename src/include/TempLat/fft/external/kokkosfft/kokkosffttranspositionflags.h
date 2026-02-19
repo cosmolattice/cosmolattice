@@ -13,7 +13,6 @@
 #endif
 #endif
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/fftlibraryinterface.h"
 
 namespace TempLat
@@ -61,13 +60,6 @@ namespace TempLat
     unsigned int mFlagR2C;
   };
 
-#ifdef TEMPLATTEST
-  class KokkosFFTTranspositionFlagsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

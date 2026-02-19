@@ -9,7 +9,6 @@
 
 #include <type_traits>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/iscomplextype.h"
 
@@ -23,12 +22,6 @@ namespace TempLat
   template <typename T> struct GetGetReturnType {
     using type = std::decay_t<decltype(TempLat::DoEval::eval_example(std::declval<std::decay_t<T>>()))>;
     static constexpr bool isComplex = IsComplexType<type>;
-  };
-
-  struct GetGetReturnTypeTester {
-#ifdef TEMPLATTEST
-    template <typename T> static inline void Test(T &tdd);
-#endif
   };
 } // namespace TempLat
 

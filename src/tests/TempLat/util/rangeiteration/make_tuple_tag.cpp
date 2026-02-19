@@ -10,6 +10,10 @@
 
 namespace TempLat {
 
+struct make_tuple_tagTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void make_tuple_tagTester::Test(TDDAssertion &tdd)
 {
   auto test = make_tuple_tag<10>([](auto i) { return 2 * i; });

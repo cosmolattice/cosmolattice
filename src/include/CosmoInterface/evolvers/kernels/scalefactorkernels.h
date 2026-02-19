@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/definitions/energies.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/operators/operators.h"
 
 namespace TempLat
@@ -110,14 +109,6 @@ namespace TempLat
               (model.alpha - 1) * (EelU1 + EmagU1 + EelSU2 + EmagSU2) + (model.alpha + 1) * model.potAvSI);
     }
   };
-
-#ifdef TEMPLATTEST
-  class ScaleFactorKernelsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -16,7 +16,6 @@
 #include "TempLat/lattice/algebra/operators/binaryoperator.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
 #include "TempLat/util/getcpptypename.h"
-#include "TempLat/util/tdd/tdd.h"
 
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
@@ -138,13 +137,6 @@ namespace TempLat
   /** @brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
   OneType operator*(OneType a, OneType b) { return a; }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instiating the test case. */
-  struct MultiplyTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

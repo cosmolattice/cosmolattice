@@ -13,7 +13,6 @@
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/operators/divide.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -69,13 +68,6 @@ namespace TempLat
   /** @brief Specialize for possible zero output! */
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType log(OneType a) { return ZeroType(); }
-
-#ifdef TEMPLATTEST
-  /** @brief A mini struct for instantiating the test case. */
-  struct LogTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

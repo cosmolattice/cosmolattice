@@ -155,14 +155,6 @@ namespace TempLat
     MeasurementsSaver<T> energyCons;
   };
 
-#ifdef TEMPLATTEST
-  class EnergiesMeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

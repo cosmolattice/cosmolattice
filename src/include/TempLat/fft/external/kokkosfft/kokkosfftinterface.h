@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftmemorylayout.h"
 #include "TempLat/fft/external/kokkosfft/kokkosfftguard.h"
 
@@ -39,13 +38,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
   };
 
-#ifdef TEMPLATTEST
-  struct KokkosFFTInterfaceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

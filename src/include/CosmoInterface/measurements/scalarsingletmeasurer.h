@@ -83,14 +83,6 @@ namespace TempLat
     const int PSType;
   };
 
-#ifdef TEMPLATTEST
-  class ScalarSingletMeasurerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
 } // namespace TempLat
 
 #endif

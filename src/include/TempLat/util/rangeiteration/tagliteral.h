@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: Library.
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
@@ -82,12 +81,6 @@ namespace TempLat
   { // Adapted from boost::hana as well, but not as such.
     return Tag<parse<sizeof...(c)>({c...})>{};
   }
-
-  struct TagLiteralTester {
-
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 
 } // namespace TempLat
 

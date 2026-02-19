@@ -5,7 +5,22 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/lattice/algebra/su2algebra/su2generators.h"
-#include "TempLat/lattice/algebra/su2algebra/su2generators_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct SU2Generators {
+  static void Test(TDDAssertion &tdd);
+};
+
+// void SU2Generators::Test(TDDAssertion& tdd) {
+//
+//     /* Default is to fail: to remind yourself to implement something here. */
+//     tdd.verify( false );
+//
+// }
+
+} // namespace TempLat
 
 namespace
 {

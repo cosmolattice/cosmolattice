@@ -10,23 +10,11 @@
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/util/rangeiteration/tag.h"
 #include "TempLat/util/tuple_size.h"
-#include "TempLat/util/tdd/tdd.h"
 
 // NOTE: unfolding of binary operators is part of c++17, could change that in future version.
 
 namespace TempLat
 {
-  /** @brief A class which applies statically a binary operation to a list.
-   *
-   *
-   * Unit test: ctest -R test-binaryfold
-   **/
-  struct BinaryFoldTester {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
   template <class BinaryOp, class Tuple, typename Function, typename Unity>
   constexpr auto binary_fold_impl(BinaryOp &&op, Tuple &&tup, Function &&func, Unity &&unit, Tag<-1> tg)

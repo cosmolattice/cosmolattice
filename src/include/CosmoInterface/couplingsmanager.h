@@ -114,14 +114,6 @@ namespace TempLat
   private:
     static constexpr std::array<bool, 1> doesCouples = {false};
   };
-
-#ifdef TEMPLATTEST
-  class CouplingsManagerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

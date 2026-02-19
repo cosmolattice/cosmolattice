@@ -166,14 +166,6 @@ namespace TempLat
           ););
     }
   };
-
-#ifdef TEMPLATTEST
-  struct SU2InitializerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

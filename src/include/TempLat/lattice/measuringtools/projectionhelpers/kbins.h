@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
 
 namespace TempLat
@@ -58,15 +57,6 @@ namespace TempLat
     std::vector<T> ms; // multiplicities, to check
     T kir;
   };
-
-#ifdef TEMPLATTEST
-template<typename T>
-  struct KBinsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

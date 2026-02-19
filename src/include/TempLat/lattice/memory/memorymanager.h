@@ -12,8 +12,6 @@
 #include "TempLat/lattice/memory/memorylayoutstate.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/parallel/device_memory.h"
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
   MakeException(MemoryManagerAccessOutOfBounds);
@@ -287,14 +285,6 @@ namespace TempLat
     }
   };
 
-#ifdef TEMPLATTEST
-template<size_t NDim, typename T>
-  struct MemoryManagerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

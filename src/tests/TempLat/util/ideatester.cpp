@@ -23,6 +23,10 @@ struct Daughter : public Mother {
   static constexpr int a = 5;
 };
 
+struct IdeaTester {
+  static void Test(TDDAssertion &tdd);
+};
+
 void IdeaTester::Test(TDDAssertion &tdd)
 {
 

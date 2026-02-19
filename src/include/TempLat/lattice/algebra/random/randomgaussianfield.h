@@ -10,8 +10,6 @@
 #include "TempLat/lattice/algebra/coordinates/dimensioncountrecorder.h"
 #include "TempLat/util/constexpr_for.h"
 #include "TempLat/util/random/randomgaussian.h"
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/parallel/device.h"
 
 #include <tuple>
@@ -144,14 +142,6 @@ namespace TempLat
     LayoutStruct<NDim> mLayout;
     RNGInteger generation;
     device::IdxArray<NDim> mGlobalSizes;
-  };
-
-  class RandomGaussianFieldTester
-  {
-#ifdef TEMPLATTEST
-  public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <size_t NDim, typename T> using RandomGaussianField = RandomGaussianFieldHelper<NDim, T, false, false>;

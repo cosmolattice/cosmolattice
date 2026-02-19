@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 // #include "TempLat/lattice/field/fieldshiftedviewdetection.h"
@@ -31,13 +30,6 @@ namespace TempLat
 
   template <class T>
   concept HasGhostMethodDirectElement = requires(std::decay_t<T> t, ptrdiff_t i) { t(i).confirmGhostsUpToDate(); };
-
-  /** @brief a mini tester class... */
-  struct HasGhostMethodTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
 
 } // namespace TempLat
 

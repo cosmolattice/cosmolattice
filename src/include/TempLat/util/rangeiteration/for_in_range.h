@@ -7,17 +7,11 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/foreach.h"
 #include "TempLat/util/rangeiteration/taglist.h"
 
 namespace TempLat
 {
-  class for_in_range_Tester
-  {
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 
   template <int i, int j> struct ForRangeHelper {
 

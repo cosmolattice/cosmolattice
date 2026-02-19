@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
 namespace TempLat
@@ -20,20 +19,6 @@ namespace TempLat
   template <typename T>
   concept HasStaticGetter = requires(T t, Tag<0> tag) { T::Getter::get(t, tag); };
 
-#ifdef TEMPLATTEST
-  struct HasStaticGetterDummy {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
-
-#ifdef TEMPLATTEST
-  class HasStaticGetterDummyTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

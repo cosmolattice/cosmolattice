@@ -13,7 +13,6 @@
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/haseval.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/complexgetgetreturntype.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 
 namespace TempLat
@@ -52,12 +51,6 @@ namespace TempLat
   {
     return ComplexFieldAsFourier<R>(std::forward<R>(r));
   }
-
-#ifdef TEMPLATTEST
-  struct AsFourierTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Satter,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/helpers/hasghostmethod.h"
 
 namespace TempLat
@@ -81,14 +80,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     ConfirmGhosts() {}
   };
-
-#ifdef TEMPLATTEST
-  class ConfirmGhostsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

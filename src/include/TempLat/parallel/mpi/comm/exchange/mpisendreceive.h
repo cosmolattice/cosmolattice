@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/parallel/mpi/comm/mpicommreference.h"
 
@@ -95,14 +94,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     MPICommReference mpiComm;
   };
-
-#ifdef TEMPLATTEST
-  class MPISendReceiveTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

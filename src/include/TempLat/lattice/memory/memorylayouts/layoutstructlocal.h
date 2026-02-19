@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructglobal.h"
 #include "TempLat/util/isarray.h"
@@ -126,14 +125,6 @@ namespace TempLat
     device::Idx mNGhosts;
   };
 
-#ifdef TEMPLATTEST
-template<size_t _NDim>
-  struct LayoutStructLocalTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

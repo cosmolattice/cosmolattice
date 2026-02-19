@@ -5,7 +5,17 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/parallel/mpi/mpitypeconstants.h"
-#include "TempLat/parallel/mpi/mpitypeconstants_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct MPITypeConstantsTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void MPITypeConstantsTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+
+} // namespace TempLat
 
 namespace
 {

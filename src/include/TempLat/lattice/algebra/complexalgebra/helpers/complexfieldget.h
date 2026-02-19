@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): AdrienFlorio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tag.h"
 #include "TempLat/lattice/algebra/complexalgebra/helpers/hascomplexfieldget.h"
 #include "TempLat/lattice/algebra/complexalgebra/real.h"

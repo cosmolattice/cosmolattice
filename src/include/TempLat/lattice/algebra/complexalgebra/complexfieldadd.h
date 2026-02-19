@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/complexalgebra/real.h"
 #include "TempLat/lattice/algebra/complexalgebra/imag.h"
 #include "TempLat/lattice/algebra/operators/add.h"
@@ -82,13 +81,6 @@ namespace TempLat
   {
     return ComplexFieldAddition<R, ComplexFieldWrapper<T, ZeroType>>{r, Complexify(t, ZeroType())};
   }
-
-#ifdef TEMPLATTEST
-  struct ComplexFieldAddTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

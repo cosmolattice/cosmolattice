@@ -10,8 +10,6 @@
 #include <thread>
 #include <algorithm>
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -82,14 +80,6 @@ namespace TempLat
 
     ptrdiff_t pGetMaxThreadCount() { return mHardwareAllowedThreadsPerProcess; }
   };
-
-#ifdef TEMPLATTEST
-  class ThreadSettingsTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

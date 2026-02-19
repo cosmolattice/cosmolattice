@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/taglist.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
@@ -19,18 +18,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-taglisttester
    **/
-  class TagListTester
-  {
-  public:
-    // Put public methods here. These should change very little over time.
-    TagListTester() {}
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-
-  public:
-    static void Test(TDDAssertion &tdd);
-  };
 
 } // namespace TempLat
 

@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2025
 
 #include "TempLat/lattice/algebra/helpers/isvariadicindex.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "TempLat/lattice/algebra/su2algebra/su2operator.h"
@@ -100,12 +99,6 @@ namespace TempLat
   }
 
   template <class R> auto toSU2(R r) { return SU2GroupWrap(r.SU2Get(1_c), r.SU2Get(2_c), r.SU2Get(3_c)); }
-
-#ifdef TEMPLATTEST
-  struct SU2GroupWrapperTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

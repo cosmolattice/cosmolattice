@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include "TempLat/lattice/algebra/helpers/isstdgettable.h"
 #include "TempLat/lattice/algebra/helpers/istemplatgettable.h"
 
@@ -52,23 +50,12 @@ namespace TempLat
       return 0;
     }
 
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 
   template <typename T>
   concept HasNDim = requires {
     { GetNDim::get<T>() } -> std::convertible_to<size_t>;
   };
-
-#ifdef TEMPLATTEST
-  class GetNDimTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

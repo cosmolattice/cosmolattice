@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/fft/external/fftw/fftwinterface.h"
 
 #ifndef NOFFT
@@ -216,12 +215,6 @@ namespace TempLat
 
     std::string backend;
 
-  public:
-    template <typename T> static inline void TestBody(TDDAssertion &tdd);
-
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
   };
 } // namespace TempLat
 

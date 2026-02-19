@@ -5,4 +5,3 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/lattice/memory/memorylayouts/hermitianredundancy.h"
-#include "TempLat/lattice/memory/memorylayouts/hermitianredundancy_test.h"

@@ -14,7 +14,6 @@
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
 #include "TempLat/lattice/algebra/spacestateinterface.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getfloattype.h"
@@ -384,15 +383,6 @@ namespace TempLat
     HDF5File mFile;
     HDF5Dataset mDataset;
   };
-
-
-#ifdef TEMPLATTEST
-  class FileSaverHDF5Tester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif // HAVE_HDF5
