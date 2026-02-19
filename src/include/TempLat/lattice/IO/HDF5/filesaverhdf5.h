@@ -360,7 +360,7 @@ namespace TempLat
                 subMemoryPos);
           };
           device::iteration::foreach<1>("SaveDimBufferFilling", {memoryPos[dim]},
-                                        {memoryPos[dim] + (device::Idx)subdims[dim]}, functor);
+                                        {(device::Idx)subdims[dim]}, functor);
 
           // Finally, we can copy this subview to host and write it to the selected hyperslab in the dataset.
           std::vector<vType> sdata(toolBox->mNGridPointsVec[dim]);
