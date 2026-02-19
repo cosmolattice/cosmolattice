@@ -30,6 +30,7 @@ namespace TempLat
       // This checks which energies are specified in the string "toSave" (passed as a parameter), and creates the
       // corresponding h5 files to save the snapshots.
 
+#ifdef HAVE_HDF5
       saveScalarK = IsInContainer::check("E_S_K", toSave);         // kinetic energy of the scalar singlets
       saveScalarG = IsInContainer::check("E_S_G", toSave);         // gradient energy of the scalar singlets
       saveComplexScalarK = IsInContainer::check("E_CS_K", toSave); // kinetic energy of the complex scalars
@@ -42,7 +43,6 @@ namespace TempLat
       saveSU2Mag = IsInContainer::check("E_B_G", toSave);          // magnetic energy of the SU(2) gauge sector
       savePot = IsInContainer::check("E_V", toSave);               // potential energy
 
-#ifdef HAVE_HDF5
       if (saveScalarK) {
         nameScalarK = mRoot + "kinetic_energy_snapshot_scalar.h5"; // name of the file
         fIO.saver.create(nameScalarK);
@@ -107,9 +107,6 @@ namespace TempLat
         fIO.saver.create(namePot);
         fIO.saver.close();
       }
-#else
-      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
-                            "you have it installed and that you compiled CosmoLattice with it."));
 #endif
     }
 
@@ -175,8 +172,11 @@ namespace TempLat
         fIO.saver.close();
       }
 #else
-      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
-                            "you have it installed and that you compiled CosmoLattice with it."));
+      if (saveScalarK || saveScalarG || saveComplexScalarK || saveComplexScalarG || saveSU2DoubletK ||
+          saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot)
+        throw(FileIOException(
+            "You tried to save an energy snapshot to a file, but the HDF5 library is not available. Make sure "
+            "you have it installed and that you compiled CosmoLattice with it."));
 #endif
     }
 

@@ -66,7 +66,7 @@ namespace TempLat
       for_in_range<number_to_skip_as_tuple<nakedR>::value, nakedR::size>(
           [&](auto i) { load(nakedR::Getter::get(r, i)); });
 #else
-      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+      throw(FileIOException("You tried to load an object from a file, but the HDF5 library is not available. Make sure "
                             "you have it installed and that you compiled CosmoLattice with it."));
 #endif
     }
@@ -78,7 +78,7 @@ namespace TempLat
 #ifdef HAVE_HDF5
       loader.load(r);
 #else
-      throw(FileIOException("You tried to save an object to a file, but the HDF5 library is not available. Make sure "
+      throw(FileIOException("You tried to load an object from a file, but the HDF5 library is not available. Make sure "
                             "you have it installed and that you compiled CosmoLattice with it."));
 #endif
     }
