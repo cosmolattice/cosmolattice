@@ -13,7 +13,7 @@ template <size_t NDim, typename T> inline void TempLat::MemoryManagerTester<NDim
 
   toolBox->mFFTLibrary.setVerbose();
 
-  MemoryManager mManager(toolBox);
+  MemoryManager<NDim, T> mManager(toolBox);
 
   if (TDDRegister::isSingleUnitTest()) {
     std::cerr << mManager << "\n\n";

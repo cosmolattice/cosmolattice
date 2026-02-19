@@ -22,7 +22,7 @@ inline void TempLat::CoordinateMappingTester::Test(TempLat::TDDAssertion &tdd)
   tdd.verify(!(a == d));
 
   /* */
-  a = LayoutStructLocalTransposed({16, 16, 16}, 0);
+  a = LayoutStructLocalTransposed<3>({16, 16, 16}, 0);
 
   device::IdxArray<3> newLocalStarts{{7, 8, 9}};
   a.getLocal().setLocalStarts(newLocalStarts);
@@ -71,7 +71,7 @@ inline void TempLat::CoordinateMappingTester::Test(TempLat::TDDAssertion &tdd)
   tdd.verify(memVec[1] == memVec2[1]);
   tdd.verify(memVec[2] == memVec2[2]);
 
-  a = LayoutStructLocalTransposed({12, 16, 18}, 0);
+  a = LayoutStructLocalTransposed<3>({12, 16, 18}, 0);
 
   newLocalStarts = device::IdxArray<3>{{7, 8, 9}};
   a.getLocal().setLocalStarts(newLocalStarts);

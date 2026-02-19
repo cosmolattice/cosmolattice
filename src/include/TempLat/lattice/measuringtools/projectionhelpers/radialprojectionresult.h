@@ -176,42 +176,12 @@ namespace TempLat
     template <typename S>
     friend RadialProjectionResult<S> operator+(const RadialProjectionResult<S> &a, const RadialProjectionResult<S> &b);
 
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
-    bool finalizedOnce;
-    ptrdiff_t mNBins;
-    RadialProjectionSingleQuantity<T> mValues, mBinBounds;
-    std::vector<T> centralBinBounds; // Naive central values of the bin. Does not need to be set.
-
-    using DeviceView = device::memory::NDView<1, floatType>;
-    using HostMirror = typename DeviceView::host_mirror_type;
-
-    HostMirror mMultiplicities;
-    DeviceView mMultiplicitiesDevice;
-
-    bool mUseBinCentralValues;
-    bool mIsInFourier;
-
     DEVICE_FORCEINLINE_FUNCTION
     void add_device(ptrdiff_t i, const T &value, const T &position, const T &weight = (T)1) const
     {
       mValues.add_device(i, value, weight);
       mBinBounds.add_device(i, position, weight);
       device::atomic_add(&mMultiplicitiesDevice(i), weight);
-    }
-
-    void pull()
-    {
-      mValues.pull();
-      mBinBounds.pull();
-      device::memory::copyDeviceToHost(mMultiplicitiesDevice, mMultiplicities.data());
-    }
-
-    void push()
-    {
-      mValues.push();
-      mBinBounds.push();
-      device::memory::copyHostToDevice(mMultiplicities.data(), mMultiplicitiesDevice);
     }
 
     /** @brief RadialProjector calls this as the last step, does the transposition of the result vecotrs into one vector
@@ -242,6 +212,36 @@ namespace TempLat
       // mValues.clear();
       // mBinBounds.clear();
       return *this;
+    }
+
+  private:
+    /* Put all member variables and private methods here. These may change arbitrarily. */
+    bool finalizedOnce;
+    ptrdiff_t mNBins;
+    RadialProjectionSingleQuantity<T> mValues, mBinBounds;
+    std::vector<T> centralBinBounds; // Naive central values of the bin. Does not need to be set.
+
+    using DeviceView = device::memory::NDView<1, floatType>;
+    using HostMirror = typename DeviceView::host_mirror_type;
+
+    HostMirror mMultiplicities;
+    DeviceView mMultiplicitiesDevice;
+
+    bool mUseBinCentralValues;
+    bool mIsInFourier;
+
+    void pull()
+    {
+      mValues.pull();
+      mBinBounds.pull();
+      device::memory::copyDeviceToHost(mMultiplicitiesDevice, mMultiplicities.data());
+    }
+
+    void push()
+    {
+      mValues.push();
+      mBinBounds.push();
+      device::memory::copyHostToDevice(mMultiplicities.data(), mMultiplicitiesDevice);
     }
   };
 
@@ -281,9 +281,7 @@ namespace TempLat
   }
 
 #ifdef TEMPLATTEST
-template<typename T = double>
-  struct RadialProjectionResultTester
-  {
+  template <typename T = double> struct RadialProjectionResultTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };

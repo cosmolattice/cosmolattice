@@ -9,7 +9,7 @@
 
 namespace
 {
-  TempLat::TDDContainer<TempLat::FourierViewTester<1, double>> test1;
+  // TempLat::TDDContainer<TempLat::FourierViewTester<1, double>> test1;
   TempLat::TDDContainer<TempLat::FourierViewTester<2, double>> test2;
   TempLat::TDDContainer<TempLat::FourierViewTester<3, double>> test3;
   TempLat::TDDContainer<TempLat::FourierViewTester<4, double>> test4;

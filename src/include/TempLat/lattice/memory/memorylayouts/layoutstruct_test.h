@@ -23,7 +23,7 @@ template <size_t NDim> inline void TempLat::LayoutStructTester<NDim>::Test(TempL
   tdd.verify(!(a == d));
 
   /* test the transposition */
-  a = LayoutStruct({16, 16, 16}, nGhost); // reset
+  a = LayoutStruct<3>({16, 16, 16}, nGhost); // reset
   device::IdxArray<3> newLocalSizes{{4, 5, 6}};
   a.setLocalSizes(newLocalSizes);
 

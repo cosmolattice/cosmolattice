@@ -24,7 +24,7 @@ inline void TempLat::GetToolBoxTester::Test(TempLat::TDDAssertion &tdd)
   };
   MyTestTwo two;
 
-  tdd.verify(GetToolBox::get(one)->mNDimensions == 3);
+  tdd.verify(GetToolBox::get(one)->NDim == 3);
   tdd.verify(std::same_as<std::decay_t<decltype(GetToolBox::get(two))>, std::nullptr_t>);
   tdd.verify(Throws<GetToolBoxException>([&]() { GetToolBox::get(two); }));
 

@@ -13,7 +13,7 @@
 
 inline void TempLat::SU2CommutatorTester::Test(TempLat::TDDAssertion &tdd)
 {
-  auto toolBox = MemoryToolBox<3>::makeShared(2, 1);
+  auto toolBox = MemoryToolBox<3>::makeShared(8, 1);
   SU2Field<3, float> su2_1("testSU2_1", toolBox);
   SU2Field<3, float> su2_2("testSU2_2", toolBox);
   SU2Field<3, float> result("resultSU2", toolBox);

@@ -21,7 +21,7 @@ template <size_t NDim> inline void TempLat::LayoutStructGlobalTester<NDim>::Test
   tdd.verify((a == b));
   tdd.verify(!(a == d));
 
-  a = LayoutStructGlobal({10, 10, 10});
+  a = LayoutStructGlobal<3>({10, 10, 10});
 
   device::IdxArray<3> memVec{}, posVec{}, memVec2{};
 
@@ -50,7 +50,7 @@ template <size_t NDim> inline void TempLat::LayoutStructGlobalTester<NDim>::Test
   tdd.verify(memVec[1] == memVec2[1]);
   tdd.verify(memVec[2] == memVec2[2]);
 
-  a = LayoutStructGlobal({10, 14, 18});
+  a = LayoutStructGlobal<3>({10, 14, 18});
 
   memVec[0] = 1;
   memVec[1] = 12;

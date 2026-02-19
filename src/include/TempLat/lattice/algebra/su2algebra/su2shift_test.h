@@ -24,9 +24,9 @@ inline void TempLat::SU2ShiftTester::Test(TempLat::TDDAssertion &tdd)
   // Create an SU2Field and set each component to a spatial coordinate direction.
   // Component 1 -> x_0, Component 2 -> x_1, Component 3 -> x_2
   SU2Field<NDim, double> su2("su2", toolBox, LatticeParameters<double>());
-  su2(1_c) = getVectorComponent(x, 0);
-  su2(2_c) = getVectorComponent(x, 1);
-  su2(3_c) = getVectorComponent(x, 2);
+  su2(1_c) = x(1_c);
+  su2(2_c) = x(2_c);
+  su2(3_c) = x(3_c);
 
   // Test SU2ShifterByOne: shift the SU2 field along each spatial direction
   // and verify that each component is shifted correctly.

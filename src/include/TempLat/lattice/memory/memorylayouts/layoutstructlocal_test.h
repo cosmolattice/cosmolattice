@@ -21,7 +21,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTester<NDim>::Test(
   tdd.verify((a == b));
   tdd.verify(!(a == d));
 
-  a = LayoutStructLocal({16, 16, 16}, 0);
+  a = LayoutStructLocal<3>({16, 16, 16}, 0);
 
   device::IdxArray<3> newLocalStarts{{7, 8, 9}};
   a.setLocalStarts(newLocalStarts);
@@ -53,7 +53,7 @@ template <size_t NDim> inline void TempLat::LayoutStructLocalTester<NDim>::Test(
   tdd.verify(memVec[1] == memVec2[1]);
   tdd.verify(memVec[2] == memVec2[2]);
 
-  a = LayoutStructLocal({12, 16, 18}, 0);
+  a = LayoutStructLocal<3>({12, 16, 18}, 0);
 
   newLocalStarts = device::IdxArray<3>{{7, 8, 9}};
   a.setLocalStarts(newLocalStarts);
