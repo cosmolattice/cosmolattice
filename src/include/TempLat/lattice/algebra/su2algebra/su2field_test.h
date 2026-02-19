@@ -9,7 +9,7 @@
 
 #include "TempLat/util/ndloop.h"
 
-template <size_t NDim, typename T> void TempLat::SU2FieldBase<NDim, T>::Test(TempLat::TDDAssertion &tdd)
+template <size_t NDim, typename T> void TempLat::SU2FieldBaseTester<NDim, T>::Test(TempLat::TDDAssertion &tdd)
 {
   const device::Idx nGrid = 8, nGhost = 1;
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
