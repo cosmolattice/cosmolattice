@@ -85,16 +85,16 @@ namespace TempLat
     static constexpr size_t mVectorSize = std::decay_t<R>::getVectorSize();
   };
 
-  template <typename R, typename T> VectorDotter<R, T> dot(R &&r, T &&t) { return VectorDotter<R, T>(r, t); }
+  template <typename R, typename T> VectorDotter<R, T> dot(R r, T t) { return VectorDotter<R, T>(r, t); }
 
   template <typename R>
     requires HasVectorGetMethod<R>
-  auto norm2(R &&r)
+  auto norm2(R r)
   {
     return VectorDotter<R, R>(r, r);
   }
 
-  template <typename R> auto norm(R &&r) { return sqrt(norm2(r)); }
+  template <typename R> auto norm(R r) { return sqrt(norm2(r)); }
 
 #ifdef TEMPLATTEST
   template <size_t NDim> class VectorDotterTester
