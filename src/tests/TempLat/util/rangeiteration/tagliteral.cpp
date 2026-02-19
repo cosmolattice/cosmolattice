@@ -5,7 +5,20 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/util/rangeiteration/tagliteral.h"
-#include "TempLat/util/rangeiteration/tagliteral_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+void TagLiteralTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  auto myLambda = [](Tag<9> t) { return 9; };
+  ;
+  tdd.verify(9 == myLambda(9_c));
+  // myLambda(9); does not compile as it should.
+}
+
+} // namespace TempLat
 
 namespace
 {

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/log/log.h"
 
 namespace TempLat
@@ -35,14 +34,6 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     bool enabled;
   };
-
-#ifdef TEMPLATTEST
-  struct ConditionalSayShortTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

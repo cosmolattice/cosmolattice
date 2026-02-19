@@ -5,7 +5,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/util/stringify.h"
-#include "TempLat/util/stringify_test.h"
 
 // namespace {
 //     TempLat::TDDContainer<TempLat::Stringify> test;

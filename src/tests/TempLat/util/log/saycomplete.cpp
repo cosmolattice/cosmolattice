@@ -6,7 +6,18 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/log/saycomplete.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/log/saycomplete_test.h"
+
+namespace TempLat {
+
+template <typename TestObjectUnknownHere> void SayCompleteTest::Test(TestObjectUnknownHere &tdd)
+{
+
+  say << "Stream log - first light.\n";
+  sayShort << "Shorter stream log - first light.\n";
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

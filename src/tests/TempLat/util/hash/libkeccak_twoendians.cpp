@@ -7,7 +7,6 @@
 /* tested: verified that commenting this define raises the desired error. */
 #define INSIDE_TempLat_UTIL_HASH_KECCAKHASHBARECLASS_H
 #include "TempLat/util/hash/libkeccak_twoendians.h"
-#include "TempLat/util/hash/libkeccak_twoendians_test.h"
 #undef INSIDE_TempLat_UTIL_HASH_KECCAKHASHBARECLASS_H
 
 /* just compile */

@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -18,12 +16,6 @@ namespace TempLat
    * Unit test: ctest -R test-function
    **/
 #define Function(x, expr) [&](auto x) { return expr; }
-
-#ifdef TEMPLATTEST
-  struct FunctionTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

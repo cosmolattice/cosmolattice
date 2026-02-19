@@ -9,7 +9,6 @@
 
 #include <limits> /** to get epsilons for various types */
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/device.h"
 
 namespace TempLat
@@ -55,14 +54,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-almostequal
    */
-
-#ifdef TEMPLATTEST
-  class AlmostEqualTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

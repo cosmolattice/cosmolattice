@@ -5,4 +5,3 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/debug/stacktraceptrtofileaddr.h"
-#include "TempLat/util/debug/stacktraceptrtofileaddr_test.h"

@@ -5,7 +5,21 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/util/function.h"
-#include "TempLat/util/function_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct FunctionTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void FunctionTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(Function(x, 2 * x)(2) == 4);
+}
+
+} // namespace TempLat
 
 namespace
 {

@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/tuple_size.h"
 #include "TempLat/util/rangeiteration/tag.h"
 
@@ -29,12 +28,6 @@ namespace TempLat
   template <typename R>
   using IsComposite = IsCompositeHelper<R, tuple_size<decltype(std::remove_reference<R>::type::Getter::get(
                                                std::declval<R &>(), std::declval<Tag<0>>()))>::value>;
-
-#ifdef TEMPLATTEST
-  struct IsCompositeTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

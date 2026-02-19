@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include <ostream>
 
 namespace TempLat
@@ -57,14 +56,6 @@ namespace TempLat
         str.erase(0, 1);
     }
   };
-
-#ifdef TEMPLATTEST
-  class PairMakerTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

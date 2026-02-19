@@ -5,7 +5,24 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 #include "TempLat/util/debug/mpidebuggerhanger.h"
-#include "TempLat/util/debug/mpidebuggerhanger_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct MPIDebuggerHangerTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void MPIDebuggerHangerTester::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+
+  // hang();
+
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

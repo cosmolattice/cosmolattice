@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
+#include <vector>
 
 namespace TempLat
 {
@@ -33,14 +33,6 @@ namespace TempLat
   };
 
   template <typename T> T integrate(const std::vector<T> &vec, T dt) { return NumericalIntegrator::integrate(vec, dt); }
-
-#ifdef TEMPLATTEST
-  class NumericalIntegratorTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

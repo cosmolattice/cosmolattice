@@ -5,7 +5,17 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/conditionaloutput/conditionalsayshort.h"
-#include "TempLat/util/conditionaloutput/conditionalsayshort_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ConditionalSayShortTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ConditionalSayShortTester::Test(TDDAssertion &tdd) { tdd.verify(true); }
+
+} // namespace TempLat
 
 namespace
 {

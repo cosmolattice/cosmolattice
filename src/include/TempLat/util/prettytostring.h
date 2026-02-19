@@ -7,7 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/util/tdd/tdd.h"
+#include <sstream>
+#include <string>
 
 namespace TempLat
 {
@@ -41,14 +42,6 @@ namespace TempLat
         x.pop_back();
     }
   };
-
-#ifdef TEMPLATTEST
-  class PrettyToStringTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

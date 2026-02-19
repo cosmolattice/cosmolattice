@@ -5,7 +5,29 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/parameters/filereader.h"
-#include "TempLat/parameters/filereader_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct FileReaderTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void FileReaderTester::Test(TDDAssertion &tdd)
+{
+
+  bool UncommentAndPutTheCorrectFilePathForTheTest = true;
+  tdd.verify(UncommentAndPutTheCorrectFilePathForTheTest);
+  // FileReader fr;
+  // fr("../../src/tests/fcn/parameters/test_filereader.txt");
+  // for(size_t i = 0; i < fr.size(); ++i ) say << fr[i];
+  // /* Default is to fail: to remind yourself to implement something here. */
+  // tdd.verify( fr[0] == "aaa = huhu" );
+  // tdd.verify( fr[1] == "bbb=pou" );
+  // tdd.verify( fr[2] == "ccc= lop p o" );
+}
+
+} // namespace TempLat
 
 namespace
 {

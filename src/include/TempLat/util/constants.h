@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parallel/device.h"
 
 namespace TempLat

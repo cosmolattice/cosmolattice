@@ -97,10 +97,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::array<T, N> mVec;
 
-#ifdef TEMPLATTEST
   public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
+    static void Test(TDDAssertion &tdd);
   };
 } // namespace TempLat
 

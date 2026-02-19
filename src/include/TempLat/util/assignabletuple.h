@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/util/rangeiteration/for_in_range.h"
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/helpers/getcomponent.h"
 #include "TempLat/util/concat.h"
@@ -42,12 +41,6 @@ namespace TempLat
     using Getter = GetComponent;
     static constexpr int SHIFTIND = Shift;
   };
-
-#ifdef TEMPLATTEST
-  struct AssignableTupleTester {
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
   template <class... Args> auto make_list(Args... args) { return AssignableTuple<0, Args...>(args...); }
   template <class... Args> auto make_vector(Args... args) { return AssignableTuple<1, Args...>(args...); }

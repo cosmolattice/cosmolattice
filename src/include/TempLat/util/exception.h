@@ -7,8 +7,13 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
+#include <exception>
+#include <iostream>
+#include <sstream>
+#include <string>
+
 #include "TempLat/util/log/colors.h"
+#include "TempLat/util/log/puttostream.h"
 #include "TempLat/util/debug/stacktrace.h"
 
 namespace TempLat
@@ -57,14 +62,6 @@ namespace TempLat
     std::string theStringWhat;
     const std::string strtrace;
   };
-
-#ifdef TEMPLATTEST
-  class ExceptionTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #define MakeException(name)                                                                                            \

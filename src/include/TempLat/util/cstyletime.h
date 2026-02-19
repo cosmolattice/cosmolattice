@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include <chrono>
 #if !defined(__cpp_lib_chrono) || __cpp_lib_chrono < 201907L
 #include <ctime>
@@ -78,14 +77,6 @@ namespace TempLat
 
     int day, month, year, second, minute, hour;
   };
-
-#ifdef TEMPLATTEST
-  class CStyleTimeTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

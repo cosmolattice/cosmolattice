@@ -24,10 +24,8 @@ namespace TempLat
 
   class ShiftedIndexSequenceTester
   {
-#ifdef TEMPLATTEST
   public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
+    static void Test(TDDAssertion &tdd);
   };
 } // namespace TempLat
 

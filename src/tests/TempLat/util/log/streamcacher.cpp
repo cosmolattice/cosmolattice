@@ -6,7 +6,15 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/log/streamcacher.h"
 #include "TempLat/util/tdd/tdd.h"
-#include "TempLat/util/log/streamcacher_test.h"
+
+namespace TempLat {
+
+template <typename TestObjectUnknownHere> void StreamCacher::Test(TestObjectUnknownHere &tdd)
+{
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

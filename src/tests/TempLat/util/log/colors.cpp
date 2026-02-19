@@ -5,6 +5,5 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/log/colors.h"
-#include "TempLat/util/log/colors_test.h"
 
 /* just compile. */

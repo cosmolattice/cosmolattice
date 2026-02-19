@@ -5,7 +5,29 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/conditionaloutput/conditionalstream.h"
-#include "TempLat/util/conditionaloutput/conditionalstream_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ConditionalStreamTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ConditionalStreamTester::Test(TDDAssertion &tdd)
+{
+
+  std::stringstream str1, str2;
+  ConditionalStream one(str1, true);
+  ConditionalStream two(str2, false);
+
+  one << "Hoi!";
+  two << "Doei!";
+
+  tdd.verify(str1.str().length() > 0);
+  tdd.verify(str2.str().length() == 0);
+}
+
+} // namespace TempLat
 
 namespace
 {

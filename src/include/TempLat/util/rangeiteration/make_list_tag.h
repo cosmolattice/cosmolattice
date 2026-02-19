@@ -61,9 +61,8 @@ namespace TempLat
   }
 
   struct MakeListTagTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
+  public:
+    static void Test(TDDAssertion &tdd);
   };
 
 #define MakeArray(i, beg, end, expr)                                                                                   \

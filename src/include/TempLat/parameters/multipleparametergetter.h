@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/parameters/parametergetter.h"
 #include "TempLat/util/rangeiteration/tag.h"
 #include <sstream>
@@ -77,14 +76,6 @@ namespace TempLat
 
     std::vector<ParameterGetter<T>> params;
   };
-
-#ifdef TEMPLATTEST
-  struct MultipleParameterGetterTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

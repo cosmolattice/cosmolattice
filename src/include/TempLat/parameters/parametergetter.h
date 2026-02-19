@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include <ostream>
 
 namespace TempLat
@@ -40,14 +39,6 @@ namespace TempLat
     std::string mName;
     T mInstance;
   };
-
-#ifdef TEMPLATTEST
-  struct ParameterGetterTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

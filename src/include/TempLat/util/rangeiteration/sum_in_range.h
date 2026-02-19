@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio, Franz R. Sattler,  Year: 2026
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
 #include "TempLat/lattice/algebra/operators/add.h"
 
@@ -29,14 +28,6 @@ namespace TempLat
   {
     return sum_in_range_impl<begin>(std::forward<F>(func), std::make_integer_sequence<int, end - begin>());
   }
-
-#ifdef TEMPLATTEST
-  class sum_in_range_Tester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 #define Total(i, beg, end, expr) sum_in_range<beg, end + 1>([&](auto i) { return expr; })
 } // namespace TempLat

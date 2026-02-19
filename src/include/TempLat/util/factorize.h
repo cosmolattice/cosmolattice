@@ -8,8 +8,9 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include <algorithm>
+#include <cstddef>
+#include <vector>
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 
 namespace TempLat
@@ -85,14 +86,6 @@ namespace TempLat
       return result;
     }
   };
-
-#ifdef TEMPLATTEST
-  class FactorizeTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

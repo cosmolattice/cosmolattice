@@ -15,10 +15,8 @@ namespace TempLat
 {
   class for_in_range_Tester
   {
-#ifdef TEMPLATTEST
   public:
-    static inline void Test(TDDAssertion &tdd);
-#endif
+    static void Test(TDDAssertion &tdd);
   };
 
   template <int i, int j> struct ForRangeHelper {

@@ -7,8 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
-
 namespace TempLat
 {
 
@@ -32,14 +30,6 @@ namespace TempLat
   class StaticWarning
   {
   };
-
-#ifdef TEMPLATTEST
-  class StaticWarningTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

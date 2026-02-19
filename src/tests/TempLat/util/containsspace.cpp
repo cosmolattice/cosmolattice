@@ -5,7 +5,22 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 #include "TempLat/util/containsspace.h"
-#include "TempLat/util/containsspace_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct ContainsSpaceTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void ContainsSpaceTester::Test(TDDAssertion &tdd)
+{
+
+  tdd.verify(ContainsSpace::test("This has a space") == true);
+  tdd.verify(ContainsSpace::test("Thishasnospace") == false);
+}
+
+} // namespace TempLat
 
 namespace
 {

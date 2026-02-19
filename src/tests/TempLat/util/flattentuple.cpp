@@ -5,7 +5,27 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/util/flattentuple.h"
-#include "TempLat/util/flattentuple_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+struct FlattenTupleTester {
+  static void Test(TDDAssertion &tdd);
+};
+
+void FlattenTupleTester::Test(TDDAssertion &tdd)
+{
+  auto tup = std::make_tuple(std::make_tuple(1, 2), std::make_tuple(3, std::make_tuple(4, "what")));
+  auto res = flatten_tuple(tup);
+
+  tdd.verify(std::get<0>(res) == 1);
+  tdd.verify(std::get<1>(res) == 2);
+  tdd.verify(std::get<2>(res) == 3);
+  tdd.verify(std::get<3>(res) == 4);
+  tdd.verify(std::string(std::get<4>(res)) == "what");
+}
+
+} // namespace TempLat
 
 namespace
 {

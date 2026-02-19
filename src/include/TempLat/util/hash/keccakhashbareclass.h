@@ -13,7 +13,6 @@
  *        once in a little-endian namespace.
  */
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/exception.h"
 
 #define INSIDE_TempLat_UTIL_HASH_KECCAKHASHBARECLASS_H
@@ -138,14 +137,6 @@ namespace TempLat
       }
     }
   };
-
-#ifdef TEMPLATTEST
-  class KeccakHashBareClassTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

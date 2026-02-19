@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/debug/stacktraceplainptrs.h"
 #include "TempLat/util/debug/stacktraceptrtofileaddr.h"
 #include "TempLat/util/debug/cdemangle.h"
@@ -76,14 +75,6 @@ namespace TempLat
       value = stream.str();
     }
   };
-
-#ifdef TEMPLATTEST
-  class StacktraceTester
-  {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

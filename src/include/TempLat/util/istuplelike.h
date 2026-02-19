@@ -7,8 +7,8 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include <tuple>
 #include <type_traits>
-#include "TempLat/util/tdd/tdd.h"
 
 namespace TempLat
 {
@@ -22,13 +22,6 @@ namespace TempLat
 
   template <class T> struct IsTupleLike<T, std::void_t<typename std::tuple_size<T>::type>> : std::true_type {
   };
-
-#ifdef TEMPLATTEST
-  struct IsTupleLikeTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

@@ -5,7 +5,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/util/constants.h"
-#include "TempLat/util/constants_test.h"
 
 namespace
 {

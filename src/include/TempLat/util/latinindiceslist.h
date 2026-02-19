@@ -7,7 +7,6 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/field/assignablefieldcollection.h"
@@ -38,13 +37,6 @@ namespace TempLat
   };
 
   template <class... Args> auto make_latinindices_list(Args... args) { return LatinIndicesList<Args...>(args...); }
-
-#ifdef TEMPLATTEST
-  struct LatinIndicesListTester {
-  public:
-    static inline void Test(TDDAssertion &tdd);
-  };
-#endif
 
 } // namespace TempLat
 

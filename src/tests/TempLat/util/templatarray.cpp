@@ -5,7 +5,17 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 #include "TempLat/util/templatarray.h"
-#include "TempLat/util/templatarray_test.h"
+#include "TempLat/util/tdd/tdd.h"
+
+namespace TempLat {
+
+template <class T, int N, int M> inline void TempLatArray<T, N, M>::Test(TDDAssertion &tdd)
+{
+  /* Default is to fail: to remind yourself to implement something here. */
+  tdd.verify(true);
+}
+
+} // namespace TempLat
 
 namespace
 {

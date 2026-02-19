@@ -60,18 +60,6 @@ namespace TempLat
     stream << " }}";
     return stream;
   }
-
-#ifdef TEMPLATTEST
-  /** @brief A class which tests PutToStream.
-   *
-   * Unit test: ctest -R test-puttostream
-   */
-  class PutToStreamTester
-  {
-  public:
-    template <typename TestObjectUnknownHere> static inline void Test(TestObjectUnknownHere &tdd);
-  };
-#endif
 } // namespace TempLat
 
 #endif

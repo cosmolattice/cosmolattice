@@ -3,8 +3,6 @@
 /* File created by Wessel Valkenburg, 2019 */
 /* Released under the MIT license, see LICENSE.md. */
 
-#include "TempLat/util/tdd/tdd.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <execinfo.h>
