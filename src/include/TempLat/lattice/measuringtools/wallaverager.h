@@ -8,13 +8,16 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2025
 
 #include "TempLat/util/tdd/tdd.h"
-
-#include "TempLat/util/tdd/tdd.h"
 #include "TempLat/util/getcpptypename.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
+#include "TempLat/lattice/algebra/helpers/haseval.h"
 #include "TempLat/lattice/measuringtools/averagerhelper.h"
+
+#include "TempLat/parallel/device_memory.h"
+#include "TempLat/parallel/device_iteration.h"
 
 namespace TempLat
 {
@@ -28,65 +31,108 @@ namespace TempLat
   {
   public:
     using vType = typename GetGetReturnType<T>::type;
+    static constexpr bool isComplexValued = GetGetReturnType<T>::isComplex;
+    static constexpr size_t NDim = GetNDim::get<T>();
 
-    // Put public methods here. These should change very little over time.
-    WallAverager(const T &pT, SpaceStateType spaceType) : mT(pT), mSpaceType(spaceType)
-    {
-      for (ptrdiff_t i = 0; i < mT.getToolBox()->mNDimensions; ++i) {
-        mWorkspace.emplace_back(std::vector<vType>(mT.getToolBox()->mNGridPointsVec[i], 0));
+    WallAverager(const T &pT, SpaceStateType spaceType)
+      requires requires {
+        { pT.getToolBox() } -> std::same_as<device::memory::host_ptr<MemoryToolBox<NDim>>>;
       }
-    }
+        : mT(pT), mSpaceType(spaceType)
+    {
+      if (mSpaceType != SpaceStateType::Configuration)
+        throw AveragerWrongSpace("Wall averager works only in configuration space.");
 
-    operator vType() { return compute(); }
+      mToolBox = mT.getToolBox();
+      if (mToolBox == nullptr) throw std::runtime_error("WallAverager: ToolBox is null.");
+
+      const auto layout = mToolBox->mLayouts.getConfigSpaceLayout();
+      const auto localSizes = layout.getLocalSizes();
+      mLocalStarts = layout.getLocalStarts();
+      nGhosts = layout.getNGhosts();
+
+      // starts = absolute start positions; stops = counts (sizes)
+      // getLocalKokkosPolicy computes: kokkos_stop[d] = starts[d] + stops[d]
+      for (size_t d = 0; d < NDim; ++d) {
+        mStartIteration[d] = nGhosts;
+        mStopIteration[d] = localSizes[d];
+        mLocalSizes[d] = localSizes[d];
+      }
+
+      // Allocate device result buffer (sized for max local dimension)
+      size_t maxLocalSize = 0;
+      for (size_t d = 0; d < NDim; ++d)
+        maxLocalSize = device::max(maxLocalSize, static_cast<size_t>(localSizes[d]));
+      mMaxLocalSize = maxLocalSize;
+      mDeviceResult = device::memory::NDView<1, vType>("wallResult", maxLocalSize);
+
+      // Host workspace: NDim vectors, each of global size N[t]
+      for (size_t t = 0; t < NDim; ++t)
+        mWorkspace[t].assign(mToolBox->mNGridPointsVec[t], vType{});
+    }
 
     void compute()
     {
-      if (mSpaceType == SpaceStateType::Fourier)
-        throw AveragerWrongSpace("Wall averager works only in configuration space.");
-
+      AveragerHelper<vType, isComplexValued>::onBeforeAverageConfiguration(mT, mSpaceType);
       computeConfigurationSpace();
 
-      // mT.getToolBox()->mGroup.getBaseComm().Allreduce(mWorkspace.data(), MPI_SUM); // Perform the reduction. All
-      // processes have a N*d array (in the isotropic case). it is allreduced here.
-      for (ptrdiff_t i = 0; i < mT.getToolBox()->mNDimensions; ++i) {
-        mT.getToolBox()->mGroup.getBaseComm().Allreduce(
-            &mWorkspace[i], MPI_SUM); // Perform the reduction. All processes have a N*d array (in the isotropic case).
-                                      // it is allreduced here.
-      }
+      // MPI Allreduce per dimension (vector overload, in-place)
+      for (size_t t = 0; t < NDim; ++t)
+        mToolBox->mGroup.getBaseComm().Allreduce(&mWorkspace[t], MPI_SUM);
 
-      std::vector<ptrdiff_t> codim(
-          mT.getToolBox()->mNDimensions,
-          1); // For each dimension, compute the size of the space that is average over (N^(d-1) for isotropic lattices)
-      for (ptrdiff_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) {
-        for (ptrdiff_t j = 0; j < mT.getToolBox()->mNDimensions; ++j) {
-          if (j != t) codim[t] *= mT.getToolBox()->mNGridPointsVec[j];
-        }
-      }
-
-      for (ptrdiff_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) { // Normalize the average
-        for (ptrdiff_t j = 0; j < mT.getToolBox()->mNGridPointsVec[t]; ++j) {
-          mWorkspace[t][j] /= codim[t];
-        }
+      // Normalize by codimension
+      for (size_t t = 0; t < NDim; ++t) {
+        vType codim = 1;
+        for (size_t j = 0; j < NDim; ++j)
+          if (j != t) codim *= mToolBox->mNGridPointsVec[j];
+        for (auto &val : mWorkspace[t])
+          val /= codim;
       }
     }
 
     void computeConfigurationSpace()
     {
-      // TODO : THIS IS STILL CL1.0
-      ptrdiff_t i = 0;
-      auto &it = mT.getToolBox()->itX();
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx, vType &update)
+      {
+        device::apply(
+            [&](auto &&...args) {
+              update += DoEval::eval(mT, args...);
+            },
+            idx);
+      };
 
-      // std::vector<size_t> coord (mT.getToolBox()->mNDimensions, 0);
+      for (size_t t = 0; t < NDim; ++t) {
+        // Zero the host workspace for this dimension
+        std::fill(mWorkspace[t].begin(), mWorkspace[t].end(), vType{});
 
-      AveragerHelper<vType, false>::onBeforeAverageConfiguration(mT, mSpaceType);
+        for (size_t local_j = 0; local_j < static_cast<size_t>(mLocalSizes[t]); ++local_j) {
+          // Restrict dimension t to a single slice
+          // starts = absolute positions, stops = counts
+          auto cur_start = mStartIteration;
+          auto cur_stop = mStopIteration;
+          cur_start[t] = nGhosts + local_j;
+          cur_stop[t] = 1; // count of 1 along dimension t
 
-      for (it.begin(); it.end(); ++it) {
-        i = it();
-        auto coord = mT.getToolBox()->getCoordConfiguration0N(i);
-        DoEval::eval(mT, i);
+          // Reduce this hyperplane into a single element of the device buffer
+          device::iteration::reduce("WallAverager", cur_start, cur_stop, functor,
+                                    device::memory::subview(mDeviceResult, local_j));
+        }
 
-        for (ptrdiff_t t = 0; t < mT.getToolBox()->mNDimensions; ++t) {
-          mWorkspace[t][coord[t]] += DoEval::eval(mT, i); // Average over the orthogonal directions.
+        // Copy device results to host via appropriately-sized subview
+        size_t curLocalSize = static_cast<size_t>(mLocalSizes[t]);
+        std::vector<vType> localResults(curLocalSize, vType{});
+        if (curLocalSize == mMaxLocalSize) {
+          device::memory::copyDeviceToHost(mDeviceResult, localResults.data());
+        } else {
+          auto sliceView = device::memory::subview(mDeviceResult,
+                               std::pair<size_t, size_t>(0, curLocalSize));
+          device::memory::copyDeviceToHost(sliceView, localResults.data());
+        }
+
+        // Map local indices to global workspace positions
+        for (size_t local_j = 0; local_j < curLocalSize; ++local_j) {
+          size_t global_j = mLocalStarts[t] + local_j;
+          mWorkspace[t][global_j] = localResults[local_j];
         }
       }
     }
@@ -99,13 +145,27 @@ namespace TempLat
     auto getWall(size_t dim) const { return mWorkspace[dim]; }
 
   private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
     T mT;
     SpaceStateType mSpaceType;
-    std::vector<std::vector<vType>> mWorkspace;
+
+    device::memory::host_ptr<MemoryToolBox<NDim>> mToolBox;
+
+    device::array<device::Idx, NDim> mStartIteration{};
+    device::array<device::Idx, NDim> mStopIteration{};
+    device::IdxArray<NDim> mLocalSizes{};
+    device::IdxArray<NDim> mLocalStarts{};
+
+    device::memory::NDView<1, vType> mDeviceResult;
+    size_t mMaxLocalSize;
+
+    std::array<std::vector<vType>, NDim> mWorkspace;
+
+    size_t nGhosts;
   };
 
-  template <typename T> auto wallAverager(T instance, SpaceStateType spaceType = SpaceStateType::Configuration)
+  template <typename T>
+    requires HasEvalMethod<T>
+  auto wallAverager(T instance, SpaceStateType spaceType = SpaceStateType::Configuration)
   {
     return WallAverager<T>(instance, spaceType);
   }
