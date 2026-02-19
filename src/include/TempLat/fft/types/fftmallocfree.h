@@ -19,7 +19,6 @@
 
 namespace TempLat
 {
-
   /** @brief A class which selects the appropriate malloc and free functions for the lattice memory. Templated for
    *double and float. Preprocessor flags for FFTW or FFTW_MPI. If you want another memory alignment, just change
    *it here globally. We can't be bothered to implement the templating for the various allocators that the libraries all
@@ -28,7 +27,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-fftmallocfree
    **/
-
   template <typename T> class FFTMallocFree
   {
   public:

@@ -25,15 +25,14 @@ inline void TempLat::FFTWMemoryLayoutTester::Test(TempLat::TDDAssertion &tdd)
     device::IdxArray<nDim> fourLocalSizes(nGrid);
     device::IdxArray<nDim> fourLocalStarts{};
     device::IdxArray<nDim> fourTransposition{};
+    device::array<device::IdxArray<2>, nDim> confPadding{};
     for (size_t i = 0; i < nDim; ++i)
       fourTransposition[i] = i;
 
     fourLocalSizes[nDim - 1] = fourLocalSizes[nDim - 1] / 2 + 1;
-    confLocalSizes[nDim - 1] = 2 * fourLocalSizes[nDim - 1];
+    confPadding[nDim - 1][1] = 2;
 
     expected.fourierSpace = LayoutStruct<nDim>::createGlobalFFTLayout(nGrid);
-
-    confLocalSizes[nDim - 1] = 2 * expected.fourierSpace.getLocalSizes()[nDim - 1];
 
     if (nDim > 1) {
       confLocalStarts[0] = (nGrid[0] * (ptrdiff_t)world.rank()) / (ptrdiff_t)world.size();
@@ -53,6 +52,7 @@ inline void TempLat::FFTWMemoryLayoutTester::Test(TempLat::TDDAssertion &tdd)
     expected.fourierSpace.setTranspositionMap_memoryToGlobalSpace(fourTransposition);
     expected.configurationSpace.setLocalSizes(confLocalSizes);
     expected.configurationSpace.setLocalStarts(confLocalStarts);
+    expected.configurationSpace.setPadding(confPadding);
 
     return expected;
   };
@@ -94,4 +94,3 @@ inline void TempLat::FFTWMemoryLayoutTester::Test(TempLat::TDDAssertion &tdd)
 }
 
 #endif
-

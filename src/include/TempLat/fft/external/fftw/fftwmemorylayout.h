@@ -89,6 +89,8 @@ namespace TempLat
       }
 #endif
 
+      confLocalSizes.back() = nGridPoints.back();
+
       result.configurationSpace.setLocalSizes(confLocalSizes);
       result.configurationSpace.setLocalStarts(confLocalStarts);
       result.configurationSpace.setPadding(confPadding);
@@ -111,8 +113,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-  struct FFTWMemoryLayoutTester
-  {
+  struct FFTWMemoryLayoutTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };
