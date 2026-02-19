@@ -94,23 +94,17 @@ namespace TempLat
     return false;
   }
 
-  // Unfortunately, the above expressions do not work with nested lambda (like ForLoop(ForLoop(If())) ).
-  // Workaround: use these macros.
-
-  // #define IsLess(i, j) (decltype(i)::value < decltype(j)::value)
-  // #define IsLessOrEqual(i, j) (decltype(i)::value <= decltype(j)::value)
-  // #define IsMoreOrEqual(i, j) (decltype(i)::value >= decltype(j)::value)
-  // #define IsEqual(i, j) (std::is_same<decltype(i), decltype(j)>::value)
-  // #define IsMore(i, j) (decltype(i)::value > decltype(j)::value)
-
-  // C++20 Replacement for the above macros, to avoid macro usage which is messy.
+  template <int N> std::ostream &operator<<(std::ostream &os, const Tag<N> &t)
+  {
+    os << t.toString();
+    return os;
+  }
 
   consteval bool IsMore(auto i, auto j) { return decltype(i)::value > decltype(j)::value; }
   consteval bool IsLess(auto i, auto j) { return decltype(i)::value < decltype(j)::value; }
   consteval bool IsLessOrEqual(auto i, auto j) { return decltype(i)::value <= decltype(j)::value; }
   consteval bool IsMoreOrEqual(auto i, auto j) { return decltype(i)::value >= decltype(j)::value; }
   consteval bool IsEqual(auto i, auto j) { return std::is_same_v<decltype(i), decltype(j)>; }
-
 } // namespace TempLat
 
 #endif
