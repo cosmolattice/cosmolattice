@@ -9,8 +9,6 @@
 
 /** \file A header collector for measurement related headers. */
 #include "TempLat/lattice/measuringtools/averager.h"
-#include "TempLat/lattice/measuringtools/spatialaverager.h"
-#include "TempLat/lattice/measuringtools/twopointcorrelator.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/kbins.h"
 
 #endif

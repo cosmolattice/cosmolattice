@@ -12,18 +12,13 @@
 
 #include "TempLat/util/tdd/tdd.h"
 
-#ifdef HAVE_HDF5
 #include "TempLat/lattice/IO/HDF5/filesaverhdf5.h"
 #include "TempLat/lattice/IO/HDF5/fileloaderhdf5.h"
-#else
-#include "TempLat/lattice/IO/PureMPI/fileloaderpurempi.h"
-#include "TempLat/lattice/IO/PureMPI/filesaverpurempi.h"
-#endif
 
 namespace TempLat
 {
 
-  /** @brief A class which make the choice between pure mpi or highfive saving happen.
+  /** @brief A class which wraps HDF5 file saving and loading.
    *
    *
    *
@@ -67,13 +62,8 @@ namespace TempLat
       loader.load(r);
     }
 
-#ifdef HAVE_HDF5
     FileSaverHDF5 saver;
     FileLoaderHDF5 loader;
-#else
-    FileSaverPureMPI<NDim> saver;
-    FileLoaderPureMPI<NDim> loader;
-#endif
   };
 
 #ifdef TEMPLATTEST
