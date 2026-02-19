@@ -13,7 +13,13 @@
 
 #include "TempLat/parallel/devices/kokkos/kokkos_iteration.h"
 
+#elif DEVICE_STD
+
+#include "TempLat/parallel/devices/std/std_iteration.h"
+
 #else
+
+static_assert(false, "No device iteration backend selected.");
 
 #endif
 

@@ -16,13 +16,17 @@ namespace TempLat
   namespace export_device_namespace = device_kokkos;
 } // namespace TempLat
 
-#else
+#elif DEVICE_STD
 
 #include "TempLat/parallel/std/std.h"
 namespace TempLat
 {
   namespace export_device_namespace = std_device;
 } // namespace TempLat
+
+#else
+
+static_assert(false, "Unknown device type. Please define DEVICE_KOKKOS or DEVICE_STD.");
 
 #endif
 

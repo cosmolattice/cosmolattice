@@ -7,15 +7,19 @@
 
 // File info: Main contributor(s): Franz R. Sattler, Year: 2025
 
+#include "TempLat/parallel/device.h"
+
 #ifdef DEVICE_KOKKOS
 
 #include "TempLat/parallel/devices/kokkos/session/kokkos_guard.h"
-namespace TempLat
-{
-  namespace export_device_namespace = device_kokkos;
-} // namespace TempLat
+
+#elif DEVICE_STD
+
+#include "TempLat/parallel/devices/std/std_guard.h"
 
 #else
+
+static_assert(false, "Unknown device type.");
 
 #endif
 
