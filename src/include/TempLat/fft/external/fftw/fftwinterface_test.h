@@ -9,9 +9,8 @@
 
 inline void TempLat::FFTWInterfaceTester::Test(TempLat::TDDAssertion &tdd)
 {
-  FFTWInterface someInterface;
+  FFTWInterface<3> someInterface;
   tdd.verify(true);
 }
 
 #endif
-

@@ -25,9 +25,9 @@ inline void TempLat::HDF5Tester::Test(TempLat::TDDAssertion &tdd)
 
   Field<3, double> phi("phi", toolBox);
   SpatialCoordinate<3> coords(toolBox);
-  auto x = TempLat::getVectorComponent(coords, 0);
-  auto y = TempLat::getVectorComponent(coords, 1);
-  auto z = TempLat::getVectorComponent(coords, 2);
+  auto x = coords(1_c);
+  auto y = coords(2_c);
+  auto z = coords(3_c);
   auto local_idx = x * nGrid * nGrid + y * nGrid + z;
   phi = local_idx + 42.0;
 

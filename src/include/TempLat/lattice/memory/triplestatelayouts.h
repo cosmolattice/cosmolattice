@@ -36,8 +36,6 @@ namespace TempLat
       // FFT padding for in-place c2r r2c (see https://fftw.org/fftw3_doc/Multi_002dDimensional-DFTs-of-Real-Data.html)
       // The padding is already included in the memory size of the FFTConfigurationSpace layout.
 
-      std::cout << "FFTLayoutStruct:\n" << mFFTLayout << "\n\n";
-
       // Config space memory layouts are given to us. We need to construct the padding due to ghost cells.
       // First, copy all the values, including those to be modified, then we fix the local sizes and padding.
       mConfigSpaceWithGhosts_layout = mFFTLayout.configurationSpace;
@@ -118,9 +116,7 @@ namespace TempLat
   };
 
 #ifdef TEMPLATTEST
-template<size_t NDim>
-  struct TripleStateLayoutsTester
-  {
+  template <size_t NDim> struct TripleStateLayoutsTester {
   public:
     static inline void Test(TDDAssertion &tdd);
   };
