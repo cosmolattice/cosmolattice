@@ -7,21 +7,20 @@
 #include "TempLat/util/prettytostring.h"
 #include "TempLat/util/tdd/tdd.h"
 
-namespace TempLat {
-
-struct PrettyToStringTester {
-  static void Test(TDDAssertion &tdd);
-};
-
-void PrettyToStringTester::Test(TDDAssertion &tdd)
+namespace TempLat
 {
-  say << get(1.0);
-  say << get(1.000001);
-  say << get(1.000002);
-  say << get(1.000002003);
-  tdd.verify(true);
-}
+  struct PrettyToStringTester {
+    static void Test(TDDAssertion &tdd);
+  };
 
+  void PrettyToStringTester::Test(TDDAssertion &tdd)
+  {
+    say << PrettyToString::get(1.0);
+    say << PrettyToString::get(1.000001);
+    say << PrettyToString::get(1.000002);
+    say << PrettyToString::get(1.000002003);
+    tdd.verify(true);
+  }
 } // namespace TempLat
 
 namespace
