@@ -12,7 +12,6 @@
 #include "TempLat/util/rangeiteration/make_list_tag.h"
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "TempLat/lattice/algebra/helpers/doeval.h"
-#include "TempLat/lattice/algebra/operators/squareroot.h"
 
 #include "TempLat/parallel/device.h"
 
@@ -32,62 +31,51 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     static constexpr size_t NDim = _NDim;
 
-    SU2FieldBase(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3)
-        : fs{{f1, f2, f3}}, mName("NoName"), mLayout(fs[0].getToolBox()->mLayouts.getConfigSpaceLayout())
+    SU2FieldBase(Field<NDim, T> f0, Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3)
+        : fs{{f0, f1, f2, f3}}, mName("NoName"), mLayout(fs[0].getToolBox()->mLayouts.getConfigSpaceLayout())
     {
     }
 
     SU2FieldBase(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                  LatticeParameters<T> pLatPar = LatticeParameters<T>())
         : fs{{
+              Field<NDim, T>(name + "_0", toolBox, pLatPar), //
               Field<NDim, T>(name + "_1", toolBox, pLatPar), //
               Field<NDim, T>(name + "_2", toolBox, pLatPar), //
               Field<NDim, T>(name + "_3", toolBox, pLatPar)  //
           }},
           mName(name), mLayout(toolBox->mLayouts.getConfigSpaceLayout())
     {
+      fs[0] = T(1);
+      fs[0].updateGhosts();
     }
 
-    DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<0> t) const
-    {
-      return sqrt(T(1) - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2]));
-    }
-    template <int N> DEVICE_FORCEINLINE_FUNCTION const auto &SU2Get(Tag<N> t) const { return fs[N - 1]; }
+    template <int N> DEVICE_FORCEINLINE_FUNCTION const auto &SU2Get(Tag<N> t) const { return fs[N]; }
 
-    DEVICE_FORCEINLINE_FUNCTION
-    auto operator()(Tag<0> t) const { return sqrt(T(1) - pow<2>(fs[0]) - pow<2>(fs[1]) - pow<2>(fs[2])); }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION auto &operator()(Tag<M> t) { return fs[M]; }
 
-    template <int M>
-      requires(M > 0)
-    DEVICE_FORCEINLINE_FUNCTION auto &operator()(Tag<M> t)
-    {
-      return fs[M - 1];
-    }
-
-    template <int M>
-      requires(M > 0)
-    DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<M> t) const
-    {
-      return fs[M - 1];
-    }
+    template <int M> DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<M> t) const { return fs[M]; }
 
     template <typename R> void operator=(R &&r)
     {
-      fs[0].onBeforeAssignment(r.SU2Get(1_c));
-      fs[1].onBeforeAssignment(r.SU2Get(2_c));
-      fs[2].onBeforeAssignment(r.SU2Get(3_c));
+      fs[0].onBeforeAssignment(r.SU2Get(0_c));
+      fs[1].onBeforeAssignment(r.SU2Get(1_c));
+      fs[2].onBeforeAssignment(r.SU2Get(2_c));
+      fs[3].onBeforeAssignment(r.SU2Get(3_c));
 
       PreGet::apply(r);
 
-      const auto view1 = fs[0].getView();
-      const auto view2 = fs[1].getView();
-      const auto view3 = fs[2].getView();
+      const auto view0 = fs[0].getView();
+      const auto view1 = fs[1].getView();
+      const auto view2 = fs[2].getView();
+      const auto view3 = fs[3].getView();
 
       auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
       {
         device::apply(
             [&](const auto &...args) {
               auto result = DoEval::eval(r, args...);
+              view0(args...) = result[0];
               view1(args...) = result[1];
               view2(args...) = result[2];
               view3(args...) = result[3];
@@ -101,6 +89,32 @@ namespace TempLat
       fs[0].setGhostsAreStale();
       fs[1].setGhostsAreStale();
       fs[2].setGhostsAreStale();
+      fs[3].setGhostsAreStale();
+    }
+
+    // Recompute c0 from c1,c2,c3 to enforce SU(2) unitarity constraint.
+    void unitarize()
+    {
+      const auto view1 = fs[1].getView();
+      const auto view2 = fs[2].getView();
+      const auto view3 = fs[3].getView();
+      const auto view0 = fs[0].getView();
+
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
+      {
+        device::apply(
+            [&](const auto &...args) {
+              T c1 = view1(args...);
+              T c2 = view2(args...);
+              T c3 = view3(args...);
+              view0(args...) = sqrt(T(1) - c1 * c1 - c2 * c2 - c3 * c3);
+            },
+            idx);
+      };
+      device::iteration::foreach ("SU2Unitarize", mLayout, functor);
+
+      fs[0].setGhostsAreStale();
+      fs[0].updateGhosts();
     }
 
     std::string toString() const { return *mName; }
@@ -118,6 +132,7 @@ namespace TempLat
       fs[0].updateGhosts();
       fs[1].updateGhosts();
       fs[2].updateGhosts();
+      fs[3].updateGhosts();
     }
 
     template <typename... IDX>
@@ -128,10 +143,10 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
     {
       device::array<T, 4> result;
-      result[1] = fs[0].eval(idx...);
-      result[2] = fs[1].eval(idx...);
-      result[3] = fs[2].eval(idx...);
-      result[0] = sqrt(T(1) - pow<2>(result[1]) - pow<2>(result[2]) - pow<2>(result[3]));
+      result[0] = fs[0].eval(idx...);
+      result[1] = fs[1].eval(idx...);
+      result[2] = fs[2].eval(idx...);
+      result[3] = fs[3].eval(idx...);
       return result;
     }
 
@@ -139,16 +154,15 @@ namespace TempLat
 
     static constexpr size_t SHIFTIND = 0;
     static constexpr size_t size = 4;
-    static constexpr size_t numberToSkipAsTuple = 1;
+    static constexpr size_t numberToSkipAsTuple = 0;
 
   protected:
-    device::array<Field<NDim, T>, 3> fs;
+    device::array<Field<NDim, T>, 4> fs;
     const device::memory::host_string mName;
     LayoutStruct<NDim> mLayout;
   };
 
   template <size_t NDim, typename T> using SU2Field = SU2FieldBase<NDim, T>;
-  // TODO: What is the point of this aliasing?
 } // namespace TempLat
 
 #endif

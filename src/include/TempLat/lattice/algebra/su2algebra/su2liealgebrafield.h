@@ -17,18 +17,25 @@ namespace TempLat
    *
    * Unit test: ctest -R test-su2liealgebrafield
    **/
-  template <size_t NDim, typename T> class SU2LieAlgebraField : public SU2FieldBase<NDim, T>
+  template <size_t _NDim, typename T> class SU2LieAlgebraField
   {
   public:
     // Put public methods here. These should change very little over time.
+    static constexpr size_t NDim = _NDim;
 
-    using SU2FieldBase<NDim, T>::fs;
-
-    SU2LieAlgebraField(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3) : SU2FieldBase<NDim, T>(f1, f2, f3) {}
+    SU2LieAlgebraField(Field<NDim, T> f1, Field<NDim, T> f2, Field<NDim, T> f3)
+        : fs{{f1, f2, f3}}, mName("NoName"), mLayout(fs[0].getToolBox()->mLayouts.getConfigSpaceLayout())
+    {
+    }
 
     SU2LieAlgebraField(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                        LatticeParameters<T> pLatPar)
-        : SU2FieldBase<NDim, T>(name, toolBox, pLatPar)
+        : fs{{
+              Field<NDim, T>(name + "_1", toolBox, pLatPar), //
+              Field<NDim, T>(name + "_2", toolBox, pLatPar), //
+              Field<NDim, T>(name + "_3", toolBox, pLatPar)  //
+          }},
+          mName(name), mLayout(toolBox->mLayouts.getConfigSpaceLayout())
     {
     }
 
@@ -36,9 +43,42 @@ namespace TempLat
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2LieAlgebraGet(Tag<N> t) const { return 2 * SU2Get(t); }
 
+    DEVICE_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return ZeroType(); }
+
     template <int M> auto &operator()(Tag<M> t) { return fs[M - 1]; }
     template <int M> DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<M> t) const { return fs[M - 1]; }
-    DEVICE_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return ZeroType(); }
+
+    template <typename R> void operator=(R &&r)
+    {
+      fs[0].onBeforeAssignment(r.SU2Get(1_c));
+      fs[1].onBeforeAssignment(r.SU2Get(2_c));
+      fs[2].onBeforeAssignment(r.SU2Get(3_c));
+
+      PreGet::apply(r);
+
+      const auto view1 = fs[0].getView();
+      const auto view2 = fs[1].getView();
+      const auto view3 = fs[2].getView();
+
+      auto functor = DEVICE_CLASS_LAMBDA(const device::IdxArray<NDim> &idx)
+      {
+        device::apply(
+            [&](const auto &...args) {
+              auto result = DoEval::eval(r, args...);
+              view1(args...) = result[1];
+              view2(args...) = result[2];
+              view3(args...) = result[3];
+            },
+            idx);
+      };
+      device::iteration::foreach ("SU2AlgebraConfigViewAssign", mLayout, functor);
+
+      PostGet::apply(r);
+
+      fs[0].setGhostsAreStale();
+      fs[1].setGhostsAreStale();
+      fs[2].setGhostsAreStale();
+    }
 
     template <typename... IDX>
       requires requires(Field<NDim, T> f, IDX... idx) {
@@ -55,19 +95,32 @@ namespace TempLat
       return result;
     }
 
-    template <typename R> void operator=(R &&r) { SU2FieldBase<NDim, T>::operator=(r); }
-
-    std::string toString() const { return SU2FieldBase<NDim, T>::toString(); }
+    std::string toString() const { return *mName; }
 
     DEVICE_FORCEINLINE_FUNCTION
-    auto getDx() const { return SU2FieldBase<NDim, T>::getDx(); }
+    auto getDx() const { return GetDx::getDx(fs[0]); }
 
     DEVICE_FORCEINLINE_FUNCTION
-    auto getKIR() const { return SU2FieldBase<NDim, T>::getKIR(); }
+    auto getKIR() const { return GetKIR::getKIR(fs[0]); }
+
+    inline auto getToolBox() { return GetToolBox::get(fs[0]); }
+
+    inline void updateGhosts()
+    {
+      fs[0].updateGhosts();
+      fs[1].updateGhosts();
+      fs[2].updateGhosts();
+    }
 
     using Getter = SU2Getter;
+    static constexpr size_t SHIFTIND = 0;
     static constexpr size_t size = 4;
     static constexpr size_t numberToSkipAsTuple = 1;
+
+  private:
+    device::array<Field<NDim, T>, 3> fs;
+    const device::memory::host_string mName;
+    LayoutStruct<NDim> mLayout;
   };
 } // namespace TempLat
 

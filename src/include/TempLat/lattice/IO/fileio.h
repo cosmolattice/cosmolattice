@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include "TempLat/util/exception.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/util/tuplemaker.h"
 

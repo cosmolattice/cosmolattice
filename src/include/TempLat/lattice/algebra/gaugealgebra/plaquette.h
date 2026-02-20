@@ -18,7 +18,7 @@ namespace TempLat
    *
    * Unit test: ctest -R test-plaquette
    **/
-  template <int Mu, int Nu, typename R> auto plaq(const R &Us, Tag<Mu> mu, Tag<Nu> nu)
+  template <int Mu, int Nu, typename R> auto plaq(R Us, Tag<Mu> mu, Tag<Nu> nu)
   {
     // Now one has to be careful how to compute chain of matrix multiplication. Better to group them in smaller
     // matrices, write (A*B)*(C*D) instead of

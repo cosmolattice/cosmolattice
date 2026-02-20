@@ -21,11 +21,12 @@ namespace TempLat
 
     auto toolBox = MemoryToolBox<NDim>::makeShared(32, 1);
 
+    Field<NDim, double> f0("myField0", toolBox);
     Field<NDim, double> f1("myField1", toolBox);
     Field<NDim, double> f2("myField2", toolBox);
     Field<NDim, double> f3("myField3", toolBox);
 
-    auto res = SU2Field<NDim, double>(f1, f2, f3);
+    auto res = SU2Field<NDim, double>(f0, f1, f2, f3);
 
     tdd.verify(res.SU2Get(2_c).toString() == "myField2(x)");
 

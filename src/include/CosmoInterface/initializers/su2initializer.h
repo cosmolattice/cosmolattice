@@ -76,7 +76,9 @@ namespace TempLat
                         ););
 
                 // We set the amplitude of the gauge links to unity (gauge fields to 0).
-                ForLoop(i, 1, Model::NDim, ForLoop(a, 1, 3, model.fldSU2(n)(i)(a) = 0;);););
+                ForLoop(i, 1, Model::NDim, ForLoop(a, 1, 3, model.fldSU2(n)(i)(a) = 0;););
+                // Recompute c0 = sqrt(1 - 0 - 0 - 0) = 1 for all gauge links.
+                ForLoop(i, 1, Model::NDim, model.fldSU2(n)(i).unitarize();););
       }
     }
 

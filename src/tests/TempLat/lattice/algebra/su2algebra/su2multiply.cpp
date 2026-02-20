@@ -30,10 +30,12 @@ namespace TempLat
     su2_1(1_c) = 0.1;
     su2_1(2_c) = 0.2;
     su2_1(3_c) = 0.3;
+    su2_1.unitarize();
 
     su2_2(1_c) = 0.4;
     su2_2(2_c) = 0.5;
     su2_2(3_c) = 0.6;
+    su2_2.unitarize();
 
     result = su2_1 * su2_2;
 

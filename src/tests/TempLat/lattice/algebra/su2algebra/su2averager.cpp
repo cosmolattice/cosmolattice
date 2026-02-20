@@ -24,6 +24,7 @@ namespace TempLat
     A(1_c) = 0.2;
     A(2_c) = 0.3;
     A(3_c) = 0.4;
+    A.unitarize();
 
     auto average = su2average(A);
 

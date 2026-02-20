@@ -20,11 +20,12 @@ namespace TempLat
     const device::Idx nGrid = 8, nGhost = 1;
     auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
 
+    Field<NDim, T> f0("myField0", toolBox);
     Field<NDim, T> f1("myField1", toolBox);
     Field<NDim, T> f2("myField2", toolBox);
     Field<NDim, T> f3("myField3", toolBox);
 
-    auto res = SU2Field<NDim, T>(f1, f2, f3);
+    auto res = SU2Field<NDim, T>(f0, f1, f2, f3);
 
     tdd.verify(res.SU2Get(2_c).toString() == "myField2(x)");
 
@@ -43,6 +44,16 @@ namespace TempLat
 
     SU2Field<NDim, double> mySU2("allNew", toolBox, LatticeParameters<double>());
     tdd.verify(mySU2(3_c).toString() == "allNew_3(x)");
+    tdd.verify(mySU2(0_c).toString() == "allNew_0(x)");
+
+    // Verify c0 is initialized to 1 in named constructor
+    {
+      auto c0 = mySU2(0_c);
+      auto c0_view = c0.getLocalNDHostView();
+      bool all_one = true;
+      NDLoop<NDim>(c0_view, [&](const auto... idx) { all_one &= (c0_view(idx...) == T(1)); });
+      tdd.verify(all_one);
+    }
 
     mySU2 = res;
     const auto &fr3 = mySU2(3_c);
@@ -59,6 +70,24 @@ namespace TempLat
         }
       });
       tdd.verify(all_true);
+    }
+
+    // Test unitarize: set c1=0.5, c2=0.5, c3=0.5, then unitarize should give c0 = sqrt(1 - 0.75) = 0.5
+    {
+      SU2Field<NDim, double> uField("uTest", toolBox, LatticeParameters<double>());
+      uField(1_c) = 0.5;
+      uField(2_c) = 0.5;
+      uField(3_c) = 0.5;
+      uField.unitarize();
+
+      auto c0 = uField(0_c);
+      auto c0_view = c0.getLocalNDHostView();
+      bool all_close = true;
+      double expected = sqrt(1.0 - 0.75);
+      NDLoop<NDim>(c0_view, [&](const auto... idx) {
+        all_close &= (std::abs(c0_view(idx...) - expected) < 1e-14);
+      });
+      tdd.verify(all_close);
     }
   }
 
