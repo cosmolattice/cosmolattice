@@ -22,6 +22,10 @@ This is a technical note about the dynamics of gravitational waves (GWs) in a la
 
 ## Contents
 
+- [CosmoLattice Technical Note II: Gravitational Waves](#cosmolattice-technical-note-ii-gravitational-waves)
+  - [Authors](#authors)
+  - [Abstract](#abstract)
+  - [Contents](#contents)
   - [1 Gravitational Waves in the Continuum](#1-gravitational-waves-in-the-continuum)
   - [2 Gravitational Waves in the Lattice](#2-gravitational-waves-in-the-lattice)
   - [3 Gravitational Waves in CosmoLattice](#3-gravitational-waves-in-cosmolattice)
@@ -177,7 +181,7 @@ In a discretized space-time, the GW fields evolve according to a discretized ver
 \rho_{GW}(t) = \frac{m_p^2}{4N^3}\sum_{\mathbf{n}} \dot{h}_{ij}(\mathbf{n},t)\dot{h}_{ij}(\mathbf{n},t) = \frac{m_p^2}{4}\frac{1}{N^6}\sum_{\tilde{\mathbf{n}}} \dot{h}_{ij}(\tilde{\mathbf{n}},t)\dot{h}^*_{ij}(\tilde{\mathbf{n}},t) = \frac{m_p^2}{4}\frac{1}{N^6}\sum_l\sum_{\tilde{\mathbf{n}}\in R(l)} \dot{h}_{ij}(\tilde{\mathbf{n}},t)\dot{h}^*_{ij}(\tilde{\mathbf{n}},t)\, , \tag{20}
 ```
 
-where in the second line we have applied the DFT on the two $`h`$-fields, and used $`\sum_{\mathbf{n}} e^{i k_{IR}\delta x\, \mathbf{n}(\tilde{\mathbf{n}}-\tilde{\mathbf{n}}')} = N^3 \delta_{\tilde{\mathbf{n}}\tilde{\mathbf{n}}'}`$. In the last line we have split the summation over spherical bins. In general, an arbitrary binning $`R(l) \equiv [l, l + \Delta\tilde{n})`$ with $`l = 1, 2, \ldots`$ labelling the bins, does not have bins of equal width, and can be simply specified through an $`l`$-dependent width $`\Delta\tilde{n}(l)`$. The multiplicity $`\#_l`$ of a given bin is the number of modes that fit inside the spherical shell defined by such bin. As explained in [@Figueroa_TN1], the construction of the power spectrum depends on the different ways of counting the multiplicity of modes within each bin. For now we follow the approach from Ref. [@Figueroa_2011] and approximate the number of points in a given bin $`R(|\tilde{\mathbf{n}}|)`$ as $`\#_{|\tilde{\mathbf{n}}|} \approx 4\pi|\tilde{\mathbf{n}}|^2`$. This corresponds to a canonical binning with regular width $`\Delta k = k_{IR}`$ around the radius $`k(|\tilde{\mathbf{n}}|) = k_{IR}|\tilde{\mathbf{n}}|`$, i.e. $`R(|\tilde{\mathbf{n}}|) \equiv [|\tilde{\mathbf{n}}| - 1/2, |\tilde{\mathbf{n}}| + 1/2)`$. Using this we then obtain
+where in the second line we have applied the DFT on the two $`h`$-fields, and used $`\sum_{\mathbf{n}} e^{i k_{IR}\delta x\, \mathbf{n}(\tilde{\mathbf{n}}-\tilde{\mathbf{n}}')} = N^3 \delta_{\tilde{\mathbf{n}}\tilde{\mathbf{n}}'}`$. In the last line we have split the summation over spherical bins. In general, an arbitrary binning $`R(l) \equiv [l, l + \Delta\tilde{n})`$ with $`l = 1, 2, \ldots`$ labelling the bins, does not have bins of equal width, and can be simply specified through an $`l`$-dependent width $`\Delta\tilde{n}(l)`$. The multiplicity $`\#_l`$ of a given bin is the number of modes that fit inside the spherical shell defined by such bin. As explained in [Technical Note I](../tech_notes/Power%20spectra.md), the construction of the power spectrum depends on the different ways of counting the multiplicity of modes within each bin. For now we follow the approach from Ref. [@Figueroa_2011] and approximate the number of points in a given bin $`R(|\tilde{\mathbf{n}}|)`$ as $`\#_{|\tilde{\mathbf{n}}|} \approx 4\pi|\tilde{\mathbf{n}}|^2`$. This corresponds to a canonical binning with regular width $`\Delta k = k_{IR}`$ around the radius $`k(|\tilde{\mathbf{n}}|) = k_{IR}|\tilde{\mathbf{n}}|`$, i.e. $`R(|\tilde{\mathbf{n}}|) \equiv [|\tilde{\mathbf{n}}| - 1/2, |\tilde{\mathbf{n}}| + 1/2)`$. Using this we then obtain
 
 ```math
 \rho_{GW}(t) = \frac{m_p^2}{4N^6}\sum_{|\tilde{\mathbf{n}}|} 4\pi|\tilde{\mathbf{n}}|^2 \langle\dot{h}_{ij}(\tilde{\mathbf{n}},t)\dot{h}^*_{ij}(\tilde{\mathbf{n}},t)\rangle_{R(|\tilde{\mathbf{n}}|)} = \sum_{|\tilde{\mathbf{n}}|} \left\{\frac{m_p^2 \delta x^6}{8\pi^2 L^3} k^3(|\tilde{\mathbf{n}}|) \langle\dot{h}_{ij}(\tilde{\mathbf{n}},t)\dot{h}^*_{ij}(\tilde{\mathbf{n}},t)\rangle_{R(|\tilde{\mathbf{n}}|)}\right\} \Delta\log k\, , \tag{21}
@@ -189,7 +193,7 @@ where $`\langle...\rangle_{R(|\tilde{\mathbf{n}}|)}`$ denotes average over the s
 \frac{d\rho_{GW}}{d\log k}(|\tilde{\mathbf{n}}|) = \frac{m_p^2 k(|\tilde{\mathbf{n}}|)^3}{8\pi^2 L^3}\left\langle\left[\delta x^3\, \dot{h}_{ij}(|\tilde{\mathbf{n}}|,t)\right]\left[\delta x^3\, \dot{h}_{ij}(|\tilde{\mathbf{n}}|,t)\right]^*\right\rangle_{R(|\tilde{\mathbf{n}}|)}\, . \tag{22}
 ```
 
-As mentioned before other prescriptions for the binning can be made. We discuss the different possibilities later on in Sec. 3.2 and 3.3, and more in detail in Ref. [@Figueroa_TN1].
+As mentioned before other prescriptions for the binning can be made. We discuss the different possibilities later on in Sec. 3.2 and 3.3, and more in detail in [Technical Note I](../tech_notes/Power%20spectra.md).
 
 In order to obtain the GW power spectrum we need the Fourier transform of $`\dot{h}_{ij}(\mathbf{n},t)`$ at each time we want to compute it. The procedure we follow is the one outlined at the end of Section 1: we evolve the field $`u_{ij}(\mathbf{n},t)`$ according to Eq. (15), and relate them to $`h_{ij}(\mathbf{n},t)`$ at any time through
 
@@ -318,7 +322,7 @@ Eqs. (40) can then be solved using finite difference methods, see Ref. [@Figuero
 \dot{h}_{ij} = \frac{\omega_*}{a^3}\Lambda^L_{ij,kl}\pi_{u,kl} = \frac{\omega_*}{a^3}\left(\frac{f_*}{m_p}\right)^2\Lambda^L_{ij,kl}\pi_{\tilde{u},kl}\, . \tag{41}
 ```
 
-There are several different ways in which the power spectrum may be calculated, depending on how the number of points per bin $`\#_l`$ is estimated and on the assignment of a momentum $`k`$ to each bin. Different possibilities are discussed in detail in Ref. [@Figueroa_TN1]. Here we summarize how each one of them is applied to compute the GW energy density power spectrum. In the following subsections we enumerate all the different types and versions implemented in CosmoLattice to compute the GW energy density power spectrum.
+There are several different ways in which the power spectrum may be calculated, depending on how the number of points per bin $`\#_l`$ is estimated and on the assignment of a momentum $`k`$ to each bin. Different possibilities are discussed in detail in [Technical Note I](../tech_notes/Power%20spectra.md). Here we summarize how each one of them is applied to compute the GW energy density power spectrum. In the following subsections we enumerate all the different types and versions implemented in CosmoLattice to compute the GW energy density power spectrum.
 
 ### 3.2 GW Power Spectrum: Type I
 
@@ -484,7 +488,7 @@ The output related to GW production is presented in the following generated file
 \kappa,\quad \Omega_{GW}(k,t),\quad \#_l\, . \tag{56}
 ```
 
-  Extra columns are printed for different choices of the `spectraVerbosity`, see [@Figueroa_TN1] for a complete explanation on the spectra output.
+  Extra columns are printed for different choices of the `spectraVerbosity`, see [Technical Note I](../tech_notes/Power%20spectra.md) for a complete explanation on the spectra output.
 
 - **`energy_gws.txt`**: This file contains the total energy density in GWs, computed from numerically integrating the PS as in Eq. (21). It prints:
 
@@ -503,7 +507,7 @@ The model $`\lambda\phi^4`$ excites a series of peaks in the GW energy density p
 f_* = \phi_*, \quad \omega_* = \sqrt{\lambda}\phi_*, \quad \text{and} \quad \alpha = 1\, , \tag{58}
 ```
 
-where $`\phi_*`$ is the initial amplitude of the field. We performed several simulations with the same initial conditions for all the different types and versions of the power spectrum, and all three variants of the GW projectors. Each spectrum is measured up to time $`\tilde{\eta} = 2000`$ every $`\Delta\tilde{\eta} = 25`$ time units. In the top panels of Fig. 1 we show the difference in the spectra depending on the type of power spectrum, with fixed GW projector type and PS version. As expected, Type I captures better the UV tail of spectra, as it takes into account the exact multiplicity of modes in the outer shells of the binning, in contrast to the approximated multiplicity of Type II. For a complete explanation of the difference between power spectrum types see [@Figueroa_TN1]. In the bottom panels, we show the difference in the spectra depending on the GW projector for a fixed PS type and version. The spectra are almost identical besides small differences in the UV tails. This agrees with the results of Ref. [@Figueroa_2011]. Finally, we checked the transversality and tracelessness conditions of the $`h_{ij}(\mathbf{n},t)`$ in the lattice. For this we compute the average of the following dimensionless ratios:
+where $`\phi_*`$ is the initial amplitude of the field. We performed several simulations with the same initial conditions for all the different types and versions of the power spectrum, and all three variants of the GW projectors. Each spectrum is measured up to time $`\tilde{\eta} = 2000`$ every $`\Delta\tilde{\eta} = 25`$ time units. In the top panels of Fig. 1 we show the difference in the spectra depending on the type of power spectrum, with fixed GW projector type and PS version. As expected, Type I captures better the UV tail of spectra, as it takes into account the exact multiplicity of modes in the outer shells of the binning, in contrast to the approximated multiplicity of Type II. For a complete explanation of the difference between power spectrum types see [Technical Note I](../tech_notes/Power%20spectra.md). In the bottom panels, we show the difference in the spectra depending on the GW projector for a fixed PS type and version. The spectra are almost identical besides small differences in the UV tails. This agrees with the results of Ref. [@Figueroa_2011]. Finally, we checked the transversality and tracelessness conditions of the $`h_{ij}(\mathbf{n},t)`$ in the lattice. For this we compute the average of the following dimensionless ratios:
 
 ```math
 \delta(t) \equiv \frac{\langle\nabla^L_i h_{ij}(\mathbf{n},t)\rangle}{\langle D^L_i h_{ij}(\mathbf{n},t)\rangle}\, , \tag{59}

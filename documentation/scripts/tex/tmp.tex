@@ -1,6 +1,33 @@
-\setcounter{figure}{2}\begin{figure}
-\centering
-\includegraphics{speed_up}
-\caption{Speed up factor in parallelized simulations as a number of cores, as test on the \texttt{Gacrux} cluster from the EPFL HPC center SCITAS, Switzerland.}
-\label{fig:speedup}
-\end{figure}
+\setcounter{table}{6}\begin{longtable}{|r|l|}
+\hline
+{\bf folder name(s)} & {\bf brief description of each folder}\\\hline
+&   \\\hline  &   \\
+{\tt dependencies} & scripts to install external libraries \\
+{\tt docs} & documentation files\\
+{\tt src} & source code (contains {\tt cmake, models, tests, include})\\   &   \\\hline
+&    \\
+{\tt cmake} & files for compilation\\
+{\tt models} & model files\\
+{\tt tests} & files for testing purposes\\
+{\tt include} & libraries for lattice operations ({\tt TempLat}) and field dynamics ({\tt CosmoInterface})\\
+&   \\\hline
+&   \\
+
+{\tt TempLat} & library for lattice operations \tiny{(contains {\tt fft, lattice, parallel, parameters, session, util})}\\
+{\tt CosmoInterface} & library for field dynamics \tiny{(contains {\tt definitions, evolvers, initializers, measurements})}
+\\
+&   \\\hline
+&   \\
+{\tt fft} & library to handle Fourier transformations\\
+{\tt lattice} & library for basic lattice definitions and field operations\\
+{\tt parallel} & library for parallelization routines\\
+{\tt parameters} & library for parsing parameters from the command-line/files.\\
+{\tt session} & library for taking care of initialization and destruction of external libraries \\
+{\tt util} & library for basic useful operations \\
+&   \\\hline
+&   \\
+{\tt definitions} & library for basic field definitions (EOM terms, energy terms, etc)\\
+{\tt evolvers} & library for evolution algorithms\\
+{\tt initializers} & library for initialization algorithms\\
+{\tt measurements} & library for observables (energy densities, field spectra, etc)\\  &   \\\hline
+\end{longtable}

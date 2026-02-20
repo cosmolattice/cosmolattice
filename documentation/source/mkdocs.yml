@@ -1,4 +1,5 @@
 site_name: CosmoLattice Manual
+repo_url: https://github.com/cosmolattice/cosmolattice
 
 theme:
   name: material
@@ -6,12 +7,16 @@ theme:
     - content.code.copy
     - content.code.select
     - navigation.tabs
+    - navigation.path
+    - navigation.indexes
+    - toc.integrate
   logo: assets/CL_Icon.png
   favicon: assets/CL_Icon.png
   palette:
     primary: white
     accent: light blue
   icon:
+    repo: fontawesome/brands/git-alt
     admonition:
       note: fontawesome/solid/note-sticky
       abstract: fontawesome/solid/book
@@ -25,7 +30,6 @@ theme:
       bug: fontawesome/solid/robot
       example: fontawesome/solid/flask
       quote: fontawesome/solid/quote-left
-extra_css: [extra.css]
 
 plugins:
   - bibtex:
@@ -37,10 +41,15 @@ plugins:
           full-doc: True # if you want to generate full documentation
           doxy-cfg: # standard doxygen configuration (key: value)
             FILE_PATTERNS: "*.cpp *.h" # specify file patterns to filter out
+            STRIP_FROM_PATH: ../../
             RECURSIVE: True # recursive search in source directories
-            EXCLUDE_PATTERNS: "*/*_test.h */*/*_test.h */*/*/*_test.h */*/*/*/*_test.h  */*/*/*/*/*_test.h */*_tester.h */*/*_tester.h */*/*/*_tester.h */*/*/*/*_tester.h  */*/*/*/*/*_tester.h"
+      full-doc: True # if you want to generate full documentation
   - search
   - autorefs
+  - offline
+  - gen-files:
+      scripts:
+        - exclusions.py
 
 markdown_extensions:
   - attr_list
@@ -52,11 +61,28 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
-  - markdown_katex:
-      no_inline_svg: True
-      insert_fonts_css: True
+  #- markdown_katex:
+  #    no_inline_svg: True
+  #    insert_fonts_css: True
   - admonition
   - pymdownx.details
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: math
+          class: arithmatex
+          format:
+            !!python/object/apply:pymdownx.arithmatex.arithmatex_fenced_format {
+              kwds: { mode: generic },
+            }
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+
+extra_css:
+  - extra.css
 
 use_directory_urls: false # (optional) for better links without .html extension
 
@@ -88,3 +114,21 @@ nav:
       - "Power spectra": "tech_notes/Power spectra.md"
       - "Gravitational Waves": "tech_notes/Gravitational waves.md"
       - "Gravitational Waves from U(1) Gauge Theories": "tech_notes/Gravitational waves from U(1) gauge theories.md"
+  - Manual:
+      - "About This Manual": "Manual/About This Manual.md"
+      - "Quick installation and execution": "Manual/Quick installation and execution.md"
+      - "Conventions and Notation": "Manual/Conventions and Notation.md"
+      - "Overview": "Manual/Overview.md"
+      - "Introduction to CosmoLattice": "Manual/Introduction to CosmoLattice.md"
+      - "Brief review on lattice techniques": "Manual/Brief review on lattice techniques.md"
+      - "My first model of (singlet) scalar fields": "Manual/My first model of (singlet) scalar fields.md"
+      - "My first model of gauge fields": "Manual/My first model of gauge fields.md"
+      - "What CosmoLattice does in detail": "Manual/What CosmoLattice does in detail.md"
+      - "Useful features: parallel support, backing up and others": "Manual/Useful features: parallel support, backing up and others.md"
+      - "Acknowledgments": "Manual/Acknowledgments.md"
+      - "Installation": "Manual/Installation.md"
+      - "Appendix: Parameters": "Manual/Appendix: Parameters.md"
+      - "Appendix: Generic Model variables": "Manual/Appendix: Generic Model variables.md"
+      - "Appendix: CMake Flags": "Manual/Appendix: CMake Flags.md"
+      - "List of Implemented Functions": "Manual/List of Implemented Functions.md"
+      - "Under the Hood: Expression Templates and CosmoLattice": "Manual/Under the Hood: Expression Templates and CosmoLattice.md"

@@ -21,7 +21,7 @@
 
 This is a technical note about the dynamics of gravitational waves (GWs) sourced by U(1) charged complex scalars and Abelian gauge fields in a lattice. All new features are implemented in the (updated) GW module that forms part of CosmoLattice v1.2, which is publicly available in [http://www.cosmolattice.net](http://www.cosmolattice.net). We recommend the reader to check out as well other technical notes available there.
 
-**Important Note:** If the reader is not familiar with the concept of gravitational waves in a lattice, we recommend them to read first our Technical Note II [@BaezaBallesteros_TN2], for a more detailed introduction of the relevant concepts.
+**Important Note:** If the reader is not familiar with the concept of gravitational waves in a lattice, we recommend them to read first our [`Technical Note II`](../tech_notes/Gravitational%20waves.md), for a more detailed introduction of the relevant concepts.
 
 ---
 
@@ -131,7 +131,7 @@ and $`\tilde{D}_i = \tilde{\nabla}_i - ig_A Q_A \tilde{A}_i`$. In CosmoLattice, 
 h_{ij}(\mathbf{k},t) = \Lambda_{ij,kl}(\hat{k})u_{kl}(\mathbf{k},t) = \left(\frac{f_*}{m_p}\right)^2 \Lambda_{ij,kl}^L(\hat{k})\tilde{u}_{kl}(\mathbf{k},t)\,, \tag{15}
 ```
 
-and their conjugate momentum as $`(\pi_{\tilde{u}})_{ij} = a^{3-\alpha}\tilde{u}'_{ij}`$. The lattice definition of $`\Lambda^L_{ij,kl}`$ depends on the particular choice of the lattice momenta, see Ref. [@BaezaBallesteros_TN2] for a detailed discussion. This allows to rewrite Eq. (5) as a system of first order differential equations
+and their conjugate momentum as $`(\pi_{\tilde{u}})_{ij} = a^{3-\alpha}\tilde{u}'_{ij}`$. The lattice definition of $`\Lambda^L_{ij,kl}`$ depends on the particular choice of the lattice momenta, see [`Technical Note II`](../tech_notes/Gravitational%20waves.md) for a detailed discussion. This allows to rewrite Eq. (5) as a system of first order differential equations
 
 ```math
 \begin{cases}
@@ -140,13 +140,13 @@ and their conjugate momentum as $`(\pi_{\tilde{u}})_{ij} = a^{3-\alpha}\tilde{u}
 \end{cases} \tag{16}
 ```
 
-which can be solved using finite difference methods, see Ref. [@Figueroa_2021_cpc] for a description of the available algorithms in CosmoLattice. The gravitational wave energy density power spectrum normalized by the critical energy can then be computed in different ways, see Ref. [@BaezaBallesteros_TN2; @Figueroa_TN1] for a discussion of the options available in CosmoLattice. By default, the Type I - Version 1 power spectrum is computed, in which the exact multiplicity of modes per bin, $`\#_l`$, is counted and all modes are assigned the central $`k`$ value for the bin,
+which can be solved using finite difference methods, see Ref. [@Figueroa_2021_cpc] for a description of the available algorithms in CosmoLattice. The gravitational wave energy density power spectrum normalized by the critical energy can then be computed in different ways, see [Technical Note I](../tech_notes/Power%20spectra.md) and [Technical Note II](../tech_notes/Gravitational%20waves.md) for a discussion of the options available in CosmoLattice. By default, the Type I - Version 1 power spectrum is computed, in which the exact multiplicity of modes per bin, $`\#_l`$, is counted and all modes are assigned the central $`k`$ value for the bin,
 
 ```math
 \Omega_{GW}(\tilde{\mathbf{n}}, t) = \frac{1}{\rho_c}\frac{m_p^2\, k^{(l)}\,\delta x}{8\pi N^5}\#_l\left\langle\left[\dot{h}_{ij}(\tilde{\mathbf{n}},t)\right]\left[\dot{h}_{ij}(\tilde{\mathbf{n}},t)\right]^*\right\rangle_{R^{(l)}}\,, \tag{17}
 ```
 
-where the different variables are defined in Ref. [@BaezaBallesteros_TN2]. In program variables this is expressed as
+where the different variables are defined in [`Technical Note II`](../tech_notes/Gravitational%20waves.md). In program variables this is expressed as
 
 ```math
 \Omega_{GW}(\tilde{\mathbf{n}}, t) = \frac{1}{\tilde{\rho}_c}\frac{\kappa^{(l)}}{8\pi a^{2\alpha}}\frac{\delta\tilde{x}}{N^5}\left(\frac{f_*}{m_p}\right)^2\#_l\, a^{-2(3-\alpha)}\left\langle\left[\Lambda_{ij,kl}(\tilde{\mathbf{n}})(\pi_{\tilde{u}})_{kl}(\tilde{\mathbf{n}},t)\right]\left[\Lambda_{ij,mn}(\tilde{\mathbf{n}})(\pi_{\tilde{u}})_{mn}(\tilde{\mathbf{n}},t)\right]^*\right\rangle_{R^{(l)}}\,. \tag{18}

@@ -3,3 +3,4 @@
 - There are problems with 1D fourier transforms in `test-normgradientsquare`
 - There are problems with 2D fourier transforms in `test-latticelaplacian`
 - There should be something in place to make sure that running 1D sims with MPI throws.
+- Big parts of the code examples are now slightly broken, as we have changed quite a lot. Needs manual fixing.
