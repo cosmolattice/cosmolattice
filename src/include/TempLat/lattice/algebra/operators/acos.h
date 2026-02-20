@@ -1,41 +1,42 @@
-#ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_EXPONENTIAL_H
-#define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_EXPONENTIAL_H
+#ifndef TEMPLAT_LATTICE_ALGEBRA_OPERATORS_ACOS_H
+#define TEMPLAT_LATTICE_ALGEBRA_OPERATORS_ACOS_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg, Franz R. Sattler,  Year: 2025
+// File info: Main contributor(s): Adrien Florio,  Year: 2024
 
 #include "TempLat/lattice/algebra/conditional/conditionalunarygetter.h"
 #include "TempLat/lattice/algebra/constants/onetype.h"
 #include "TempLat/lattice/algebra/constants/zerotype.h"
-#include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/operators/multiply.h"
+#include "TempLat/lattice/algebra/operators/squareroot.h"
+#include "TempLat/lattice/algebra/operators/power.h"
+#include "TempLat/lattice/algebra/operators/divide.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
-#include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
+
+#include "TempLat/lattice/algebra/helpers/getderiv.h"
 
 namespace TempLat
 {
-  /** @brief Enable use of this operator without prefixing std:: or TempLat::. The compiler can distinguish between
-   * them. */
-  using device::exp;
+  using device::acos;
 
   /** @brief Extra namespace, as names such as Add and Subtract are too generic. */
   namespace Operators
   {
-    /** @brief A class which exponentiates an expression.
+    /** @brief A class which applies arccosine.
      *
-     * Unit test: ctest -R test-exponential
+     * Unit test: ctest -R test-acos
      **/
-    template <typename T> class Exponential : public UnaryOperator<T>
+    template <typename T> class ACos : public UnaryOperator<T>
     {
     public:
       // Put public methods here. These should change very little over time.
       using UnaryOperator<T>::mR;
 
       DEVICE_FUNCTION
-      Exponential(const T &a) : UnaryOperator<T>(a) {}
+      ACos(const T &a) : UnaryOperator<T>(a) {}
 
       template <typename... IDX>
         requires requires(std::decay_t<T> t, IDX... idx) {
@@ -44,30 +45,30 @@ namespace TempLat
         }
       DEVICE_FORCEINLINE_FUNCTION auto eval(const IDX &...idx) const
       {
-        return exp(DoEval::eval(mR, idx...));
+        return acos(DoEval::eval(mR, idx...));
       }
 
       /** @brief And passing on the automatic / symbolic derivatives. Having fun here, this is awesome. */
       template <typename U> DEVICE_FORCEINLINE_FUNCTION auto d(const U &other)
       {
-        return GetDeriv::get(mR, other) * *this;
+        return -GetDeriv::get(mR, other) * (1.0 / sqrt(1 - pow<2>(mR)));
       }
 
-      virtual std::string operatorString() const override { return "exp"; }
+      virtual std::string operatorString() const override { return "acos"; }
     };
   } // namespace Operators
 
-  /** @brief Exposing our newly define exp operation to the world. */
+  /** @brief Exposing our newly define acos operation to the world. */
   template <typename T>
-    requires(ConditionalUnaryGetter<T> && !HasSU2Get<T>)
-  DEVICE_FORCEINLINE_FUNCTION auto exp(T a)
+    requires ConditionalUnaryGetter<T>
+  DEVICE_FORCEINLINE_FUNCTION auto acos(T a)
   {
-    return Operators::Exponential<T>(a);
+    return Operators::ACos<T>(a);
   }
 
-  /** @brief Specialize for possible zero input! */
+  /** @brief Specialize for possible unit input! acos(1) = 0. */
   DEVICE_FORCEINLINE_FUNCTION
-  OneType exp(ZeroType a) { return OneType(); }
+  ZeroType acos(OneType a) { return ZeroType(); }
 } // namespace TempLat
 
 #endif

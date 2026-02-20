@@ -24,3 +24,5 @@
 #include "TempLat/lattice/algebra/su2algebra/su2trace.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doubletwrapper.h"
 #include "TempLat/lattice/algebra/su2algebra/su2commutator.h"
+#include "TempLat/lattice/algebra/su2algebra/su2expmap.h"
+#include "TempLat/lattice/algebra/su2algebra/su2expmapinv.h"

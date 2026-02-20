@@ -35,6 +35,14 @@ namespace TempLat
     tdd.verify(AlmostEqual(c[1], 3.681));
     tdd.verify(AlmostEqual(c[2], 8.404));
     tdd.verify(AlmostEqual(c[3], -3.16));
+
+    device::array<double, 3> D = {1, 2, 3};
+    device::array<double, 4> e;
+    PauliVectorsAlgebra::expmap_inplace(e, D);
+    tdd.verify(AlmostEqual(e[0], -0.82529906208));
+    tdd.verify(AlmostEqual(e[1], -0.15092132722));
+    tdd.verify(AlmostEqual(e[2], -0.30184265444));
+    tdd.verify(AlmostEqual(e[3], -0.45276398166));
   }
 
 } // namespace TempLat
