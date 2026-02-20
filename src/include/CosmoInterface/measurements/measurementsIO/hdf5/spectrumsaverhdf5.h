@@ -12,10 +12,13 @@
 #include "CosmoInterface/runparameters.h"
 #include "TempLat/lattice/field/field.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5file.h"
+#include "TempLat/lattice/IO/HDF5/helpers/hdf5timeseries.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
 
 namespace TempLat
 {
+  MakeException(NotImplementedInHDF5);
+
   /** @brief A class which save the spectrum (or any RadialProjectionResults) in a hdf5 format.
    *
    *
@@ -24,141 +27,162 @@ namespace TempLat
   template <typename T> class SpectrumSaverHDF5
   {
   public:
-    // Put public methods here. These should change very little over time.
-
     template <size_t NDim>
-    SpectrumSaverHDF5(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool append, const RunParameters<T> &rPar)
-        : filename(fm.getWorkingDir() + "spectra_" + fn + ".h5"), verbosity(rPar.spectraVerbosity),
-          nBins(rPar.nBinsSpectra), deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR)
+    SpectrumSaverHDF5(FilesManager<NDim> &fm, const std::string &fn, bool pAmIRoot, bool append,
+                      const RunParameters<T> &rPar)
+        : filename(fm.getHDF5SpectraFn()), verbosity(rPar.spectraVerbosity), nBins(rPar.nBinsSpectra),
+          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName(fn),
+          amIRoot(pAmIRoot), nMeas(fm.getNInfreqMeas()), flushCount(0), flushFreq(fm.getFlushFreq())
     {
-      HDF5File f;
-      if (!append) {
-        f.create(filename);
-        f.close();
-      }
     }
 
     template <size_t NDim>
-    SpectrumSaverHDF5(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool amIRoot, bool append,
+    SpectrumSaverHDF5(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
-        : filename(fm.getWorkingDir() + "spectra_" + fld.toString().erase(fld.toString().find("(", 3)) + ".h5"),
-          verbosity(rPar.spectraVerbosity), nBins(rPar.nBinsSpectra), deltaKBin(rPar.deltaKBin), nGrid(rPar.N),
-          kIR(rPar.kIR)
+        : SpectrumSaverHDF5(fm, fm.getCurredName(fld, false, "spectra"), pAmIRoot, append, rPar)
     {
-      HDF5File f;
-      if (!append) {
-        f.create(filename);
-        f.close();
-      }
     }
 
     virtual ~SpectrumSaverHDF5() {}
 
-    void save(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
+    void save(bool lastMeas, std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
+    {
+      if (uninitialized) initialize(arr);
+
+      push_spectra(arr, t);
+      if (lastMeas or flushCount % flushFreq == 0) {
+        HDF5File file;
+        file.open(filename, ReadWrite);
+        auto group = file.getGroup(grpName);
+        flush_spectra(group);
+        group.close();
+        file.close();
+        flushCount = 0;
+      } else {
+        flushCount += 1;
+      }
+    }
+
+  private:
+    void flush_single_spectra(std::shared_ptr<HDF5TimeSeries<T>> ptr, std::string name, HDF5Group &group)
+    {
+      ptr->reopen(group.reopenDataset(name));
+      ptr->flush(amIRoot);
+      ptr->close();
+    }
+
+    void initialize(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr)
+    {
+      size_t klength = arr.back()->size();
+      HDF5File file;
+      file.open(filename, ReadWrite);
+      auto group = file.createGroup(grpName);
+      std::vector<hsize_t> dims{0, klength};
+      std::vector<hsize_t> chunks{64, klength};
+
+      multData =
+          std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>("momMultiplicity", dims, chunks));
+      multData->extend(nMeas);
+      multData->close();
+
+      if (verbosity != 0) {
+        binAvData =
+            std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>("monBinAverage", dims, chunks));
+        binAvData->extend(nMeas);
+        binAvData->close();
+      }
+      if (verbosity != 1) {
+        binCtrData = std::make_shared<HDF5TimeSeries<T>>(
+            group.template createTimeSeries<T>("momBinCentralValues", dims, chunks));
+        binCtrData->extend(nMeas);
+        binCtrData->close();
+      }
+
+      for (size_t i = 0; i < arr.size(); ++i) {
+        valueAvData.emplace_back(std::make_shared<HDF5TimeSeries<T>>(
+            group.template createTimeSeries<T>("spectAverage_" + std::to_string(i), dims, chunks)));
+        valueAvData.back()->extend(nMeas);
+        valueAvData.back()->close();
+      }
+
+      if (verbosity == 2) {
+        throw(NotImplementedInHDF5("Verbosity 2 is for the spectrum is not supported currently in hdf5. Easy to fix if "
+                                   "you need it and want to have it work."));
+      }
+
+      uninitialized = false;
+      group.close();
+      file.close();
+    }
+
+    void flush_spectra(HDF5Group &group)
+    {
+      flush_single_spectra(multData, "momMultiplicity", group);
+
+      if (verbosity != 0) {
+        flush_single_spectra(binAvData, "monBinAverage", group);
+      }
+      if (verbosity != 1) {
+        flush_single_spectra(binCtrData, "momBinCentralValues", group);
+      }
+
+      for (size_t i = 0; i < valueAvData.size(); ++i) {
+        flush_single_spectra(valueAvData[i], "spectAverage_" + std::to_string(i), group);
+      }
+    }
+
+    void push_spectra(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
     {
       if (nBins > -1) {
         for (size_t i = 0; i < arr.size(); ++i) {
-          //  arr[i]->rebin(nBins , std::floor(pow(3, 0.5) / 2.0 * nGrid));  // The second argument is the total length
-          //  of the grid in k . The bin size in computed as this divided by nBins. This choice corresponds to bin of
-          //  size kIR for the default choice.
           arr[i]->rescaleBins(kIR);
         }
       }
 
-      std::vector<T> valAv;
       std::vector<T> mult;
-
-      HDF5File file;
-      file.open(filename, ReadWrite);
-
-      HDF5Group group = file.createOrOpenGroup(PrettyToString::get(t, 10));
-
       for (auto &&it : (*arr[0])) {
-        mult.emplace_back(it.getValue().multiplicity *
-                          2); // *2 is to print an integer multiplicity, against original design
+        mult.emplace_back(it.getValue().multiplicity * 2);
       }
-      HDF5Dataset multData = group.createDataset<T>("momMultiplicity", std::vector<hsize_t>(1, mult.size()));
-      multData.write(mult);
-      multData.close();
+      multData->push(mult);
 
       if (verbosity != 0) {
         std::vector<T> binAv;
         for (auto &&it : (*arr[0])) {
           binAv.emplace_back(it.getBin().average);
         }
-        HDF5Dataset binAvData = group.createDataset<T>("momBinAverage", std::vector<hsize_t>(1, binAv.size()));
-        binAvData.write(binAv);
-        binAvData.close();
+        binAvData->push(binAv);
       }
-
       if (verbosity != 1) {
-        HDF5Dataset binAvData = group.createDataset<T>("momBinCentralValues",
-                                                       std::vector<hsize_t>(1, arr[0]->getCentralBinBounds().size()));
-        binAvData.write(arr[0]->getCentralBinBounds());
-        binAvData.close();
+        binCtrData->push(arr[0]->getCentralBinBounds());
       }
 
+      std::vector<T> valAv;
       for (size_t i = 0; i < arr.size(); ++i) {
         valAv.clear();
         for (auto &&it : (*arr[i])) {
           valAv.emplace_back(it.getValue().average);
         }
-
-        HDF5Dataset valueAvData =
-            group.createDataset<T>("spectAverage_" + std::to_string(i), std::vector<hsize_t>(1, valAv.size()));
-        valueAvData.write(valAv);
-        valueAvData.close();
+        valueAvData[i]->push(valAv);
       }
-
-      if (verbosity == 2) {
-        std::vector<T> binMinVal;
-        std::vector<T> valMinVal;
-        std::vector<T> binMaxVal;
-        std::vector<T> valMaxVal;
-        std::vector<T> binSampleVar;
-        std::vector<T> valSampleVar;
-        for (auto &&it : (*arr[0])) {
-          binMinVal.emplace_back(it.getBin().minVal);
-          valMinVal.emplace_back(it.getValue().minVal);
-          binMaxVal.emplace_back(it.getBin().maxVal);
-          valMaxVal.emplace_back(it.getValue().maxVal);
-          binSampleVar.emplace_back(it.getBin().sampleVariance);
-          valSampleVar.emplace_back(it.getValue().sampleVariance);
-        }
-        HDF5Dataset binMinValData = group.createDataset<T>("momBinMin", std::vector<hsize_t>(1, binMinVal.size()));
-        binMinValData.write(binMinVal);
-        HDF5Dataset valMinValData = group.createDataset<T>("spectMin", std::vector<hsize_t>(1, valMinVal.size()));
-        valMinValData.write(valMinVal);
-        HDF5Dataset binMaxValData = group.createDataset<T>("momBinMax", std::vector<hsize_t>(1, binMaxVal.size()));
-        binMaxValData.write(binMaxVal);
-        HDF5Dataset valMaxValData = group.createDataset<T>("spectMax", std::vector<hsize_t>(1, valMaxVal.size()));
-        valMaxValData.write(valMaxVal);
-        HDF5Dataset binSampleVarianceData =
-            group.createDataset<T>("momBinVariance", std::vector<hsize_t>(1, binSampleVar.size()));
-        binSampleVarianceData.write(binSampleVar);
-        HDF5Dataset valSampleVarianceData =
-            group.createDataset<T>("spectVariance", std::vector<hsize_t>(1, valSampleVar.size()));
-        valSampleVarianceData.write(valSampleVar);
-
-        binMinValData.close();
-        valMinValData.close();
-        binMaxValData.close();
-        valMaxValData.close();
-        binSampleVarianceData.close();
-        valSampleVarianceData.close();
-      }
-      group.close();
-      file.close();
     }
-
-  private:
-    /* Put all member variables and private methods here. These may change arbitrarily. */
 
     std::string filename;
     int verbosity;
     int nBins;
     int deltaKBin;
     T nGrid, kIR;
+
+    bool uninitialized;
+    std::string grpName;
+    bool amIRoot;
+    ptrdiff_t nMeas;
+    size_t flushCount;
+    size_t flushFreq;
+
+    std::shared_ptr<HDF5TimeSeries<T>> multData;
+    std::shared_ptr<HDF5TimeSeries<T>> binAvData;
+    std::shared_ptr<HDF5TimeSeries<T>> binCtrData;
+    std::vector<std::shared_ptr<HDF5TimeSeries<T>>> valueAvData;
   };
 
 } // namespace TempLat

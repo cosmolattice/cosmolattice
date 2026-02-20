@@ -13,6 +13,7 @@
 #include <stdexcept>
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5type.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5object.h"
+#include "TempLat/util/stdatomictype.h"
 
 namespace TempLat
 {
@@ -67,7 +68,7 @@ namespace TempLat
         c.size();
         c[0];
       }
-    void writeSlices(std::vector<T> data, const C &_subdims, const C &_offsets)
+    void writeSlices(std::vector<T> data, const C &_subdims, const C &_offsets, bool doIWrite = true)
     {
       if (_subdims.size() != _offsets.size())
         throw std::runtime_error("In HDF5Dataset::writeSlices, subdims and offsets must have the same size");
@@ -87,13 +88,18 @@ namespace TempLat
       auto memspace_id = H5Screate_simple(mNDimensions, subdims.data(), NULL);
       auto dataspace_id = H5Dget_space(mId);
 
-      H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offsets.data(), strides.data(), subdims.data(), blocks.data());
-      HDF5Type<T> type;
+      if (doIWrite) {
+        H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offsets.data(), strides.data(), subdims.data(), blocks.data());
+      } else {
+        H5Sselect_none(dataspace_id);
+      }
+      HDF5Type<typename std_atomic_type<T>::type> type;
 #ifdef HAVE_MPI
       hid_t plist_id = H5Pcreate(H5P_DATASET_XFER);
       // H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_COLLECTIVE);
       H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
-      H5Dwrite(mId, type.type, memspace_id, dataspace_id, plist_id, data.data());
+      if (doIWrite)
+        H5Dwrite(mId, type.type, memspace_id, dataspace_id, plist_id, data.data());
       H5Pclose(plist_id);
 #else
       H5Dwrite(mId, type.type, memspace_id, dataspace_id, H5P_DEFAULT, data.data());
@@ -131,12 +137,12 @@ namespace TempLat
       hid_t plist_id = H5Pcreate(H5P_DATASET_XFER);
       // H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_COLLECTIVE);
       auto err3 = H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
-      auto err2 = H5Dwrite(mId, type.type, memspace_id, dataspace_id, plist_id, data);
+      auto err2 = H5Dwrite(mId, type.type, memspace_id, dataspace_id, plist_id, &data);
       H5Pclose(plist_id);
       H5Eclose_stack(err3);
 
 #else
-      auto err2 = H5Dwrite(mId, type.type, memspace_id, dataspace_id, H5P_DEFAULT, data);
+      auto err2 = H5Dwrite(mId, type.type, memspace_id, dataspace_id, H5P_DEFAULT, &data);
 #endif
 
       H5Sclose(dataspace_id);
@@ -221,6 +227,24 @@ namespace TempLat
       H5Sclose(dataspace_id);
       H5Sclose(memspace_id);
       type.close();
+    }
+
+    std::vector<hsize_t> getSizes()
+    {
+      hid_t space_id = H5Dget_space(mId);
+      int ndims = H5Sget_simple_extent_ndims(space_id);
+      std::vector<hsize_t> dims(ndims);
+      H5Sget_simple_extent_dims(space_id, dims.data(), NULL);
+      H5Sclose(space_id);
+      return dims;
+    }
+
+    void reopen(hid_t pId)
+    {
+      if (alreadyClosed) {
+        mId = pId;
+        alreadyClosed = false;
+      }
     }
 
   private:

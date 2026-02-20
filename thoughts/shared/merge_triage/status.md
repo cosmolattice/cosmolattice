@@ -9,7 +9,7 @@
 | 3 | SU(2) 4-component storage | **done** | [theme_3.md](theme_3.md) | [plan](../plans/2026-02-20-merge-theme-3-su2-4component.md) | `1dd14f6d` | unitarize(), 4-component SU2Field storage |
 | 4 | SU(2) exp map & algebra | **done** | [theme_4.md](theme_4.md) | [plan](../plans/2026-02-20-merge-theme-4-su2-expmap.md) | `320ee096` | exp/expinv, acos operator, symbols, expmap_inplace |
 | 5 | RK2N evolver | **done** | [theme_5.md](theme_5.md) | [plan](../plans/2026-02-20-merge-theme-5-rk2n-evolver.md) | `a07982f9` | fieldsnumbering, kernelstypes, rk2nstorageparameters, rk2nstorage, extrafields, kernel EoM dispatch, evolver RK2N |
-| 6 | HDF5 overhaul | pending | - | - | - | Independent |
+| 6 | HDF5 overhaul | **done** | [theme_6.md](theme_6.md) | [plan](../plans/2026-02-20-merge-theme-6-hdf5-overhaul.md) | `dbfd4a97` | hdf5timeseries, buffered spectra, measurementssaverhdf5, RNG binary, filesmanager rework |
 | 7 | Measurement refactoring | pending | - | - | - | Depends on 6 |
 | 8 | U(1) Axion coupling | pending | - | - | - | Depends on 5, 6, 7 |
 | 9 | Test infrastructure | pending | - | - | - | Last |

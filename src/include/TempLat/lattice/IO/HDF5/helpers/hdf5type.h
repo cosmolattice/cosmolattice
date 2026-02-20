@@ -50,6 +50,18 @@ namespace TempLat
     hid_t type;
   };
 
+  template <> struct HDF5Type<int> {
+    HDF5Type() { type = H5T_NATIVE_INT; }
+    void close() {}
+    hid_t type;
+  };
+
+  template <> struct HDF5Type<int *> {
+    HDF5Type() { type = H5T_NATIVE_INT; }
+    void close() {}
+    hid_t type;
+  };
+
   template <> struct HDF5Type<const char *> {
     HDF5Type()
     {

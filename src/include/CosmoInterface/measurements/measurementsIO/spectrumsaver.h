@@ -59,11 +59,12 @@ namespace TempLat
       }
     }
 
-    template <template <typename> class... Spectra> void save(T &t, Spectra<T>... spectra)
+    template <template <typename> class... Spectra> void save(bool lastMeas, T &t, Spectra<T>... spectra)
     {
       if (useHDF5) {
 #ifdef HAVE_HDF5
         saverHDF5->save(
+            lastMeas,
             std::vector<std::shared_ptr<RadialProjectionResult<T>>>{
                 std::make_shared<RadialProjectionResult<T>>(spectra)...},
             t);
@@ -78,12 +79,10 @@ namespace TempLat
             t);
     }
 
-    /*template< template<typename> class... Spectra, class Model>
-        void saveEnergy(T& t, Spectra<T>... spectra, Model& model){
-
-          saverStd->saveEnergy(std::vector<std::shared_ptr<RadialProjectionResult<T>>>
-       {std::make_shared<RadialProjectionResult<T>>(spectra)...}, t, model);
-        }*/
+    template <template <typename> class... Spectra> void save(T &t, Spectra<T>... spectra)
+    {
+      save(false, t, spectra...);
+    }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

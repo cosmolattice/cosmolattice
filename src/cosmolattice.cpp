@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
   // is specified by the user in the input parameter file, and here is passed through
   // runParams. Model is passed as well to have access to normalisations.
 
-  Measurer<ModelType, double> measurer(model, runParams);
+  Measurer<ModelType, double> measurer(model, runParams, parser);
   // Creates an object of the class responsible for performing and outputting all the required
   // measurements (averages, energies, spectra...).
 

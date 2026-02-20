@@ -10,6 +10,9 @@
 #ifdef HAVE_HDF5
 
 #include <cstring>
+#include <iomanip>
+#include <sstream>
+#include <vector>
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5file.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
@@ -199,6 +202,70 @@ namespace TempLat
       H5Sclose(memspace);
       H5Sclose(filespace);
       H5Dclose(dataset);
+    }
+
+    /**
+     * @brief Load RNG state from binary uint64_t array and reconstruct text string
+     * @param textState Output: reconstructed text state for loadState()
+     * @param name Dataset name
+     * @param mpiRank This rank's index
+     */
+    void loadRNGStateBinary(std::string &textState, const std::string &name, int mpiRank)
+    {
+      std::string fullName = "/" + name;
+      auto dataset = H5Dopen2(mFile.getHandle(), fullName.c_str(), H5P_DEFAULT);
+      auto filespace = H5Dget_space(dataset);
+
+      hsize_t dims[2];
+      H5Sget_simple_extent_dims(filespace, dims, nullptr);
+      size_t stateSize = dims[1];
+
+      hsize_t start[2] = {static_cast<hsize_t>(mpiRank), 0};
+      hsize_t count[2] = {1, stateSize};
+      H5Sselect_hyperslab(filespace, H5S_SELECT_SET, start, nullptr, count, nullptr);
+
+      hsize_t memDims[1] = {stateSize};
+      auto memspace = H5Screate_simple(1, memDims, nullptr);
+      std::vector<uint64_t> binaryState(stateSize);
+
+      auto plist = H5Pcreate(H5P_DATASET_XFER);
+#ifdef HAVE_MPI
+      H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
+#endif
+      H5Dread(dataset, H5T_NATIVE_UINT64, memspace, filespace, plist, binaryState.data());
+
+      H5Pclose(plist);
+      H5Sclose(memspace);
+      H5Dclose(dataset);
+      H5Sclose(filespace);
+
+      std::ostringstream oss;
+
+      if (stateSize == 313) {
+        for (size_t i = 0; i < stateSize; ++i) {
+          if (i > 0) oss << " ";
+          oss << binaryState[i];
+        }
+      } else if (stateSize == 316) {
+        for (size_t i = 0; i < 313; ++i) {
+          if (i > 0) oss << " ";
+          oss << binaryState[i];
+        }
+        oss << "\n";
+        oss << binaryState[313] << " " << binaryState[314] << " ";
+        if (binaryState[314]) {
+          double cachedValue;
+          std::memcpy(&cachedValue, &binaryState[315], sizeof(double));
+          oss << std::setprecision(17) << cachedValue;
+        }
+      } else {
+        for (size_t i = 0; i < stateSize; ++i) {
+          if (i > 0) oss << " ";
+          oss << binaryState[i];
+        }
+      }
+
+      textState = oss.str();
     }
 
     template <typename R> void load(R r)

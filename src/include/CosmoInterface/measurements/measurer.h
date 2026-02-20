@@ -36,10 +36,12 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    Measurer(Model &model, const RunParameters<T> &par)
-        : filesManager(SimulationManager<Model::NDim>::base_filename(par, model), model.getToolBox(), false,
-                       par.hdf5Spectra,
-                       par.printHeaders),            // File manager controlling output format and layout, see class.
+    Measurer(Model &model, const RunParameters<T> &par, ParameterParser &parser)
+        : filesManager(parser, SimulationManager<Model::NDim>::base_filename(par, model), model.getToolBox(),
+                       par.hdf5Averages, par.hdf5Spectra, par.printHeaders, "",
+                       par.getFlushFreq(),
+                       static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutFreq)),
+                       static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutInfreq))),
           outputFreq(par.tOutFreq / par.dt),         // Number of steps between frequent output
           infreqOutputFreq(par.tOutInfreq / par.dt), // Number of steps between infrequent output
           rareOutputFreq(par.tOutRareFreq / par.dt), // Number of steps between rare output
