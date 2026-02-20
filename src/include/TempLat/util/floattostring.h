@@ -9,6 +9,7 @@
 
 #include "TempLat/util/stringtrimmer.h"
 
+#include <cmath>
 #include <cstring>
 
 namespace TempLat
@@ -38,6 +39,33 @@ namespace TempLat
           snprintf(buffer, 128, "%.2f", value);
         else
           snprintf(buffer, 128, "%.1f", value);
+        stripTrailingZeros(buffer, buffer + 128, '\0');
+      }
+      return StringTrimmer::trimmed(buffer);
+    }
+
+    template <typename T>
+    static inline typename std::enable_if<std::is_floating_point<T>::value, std::string>::type
+    format_more(T value, int ndig)
+    {
+      char buffer[128];
+      std::memset(buffer, 0, 128);
+      std::string fmat = "%11." + std::to_string(ndig) + "e";
+      if ((std::abs(value) > 1e3 || std::abs(value) < 1e-2) && std::abs(value) != 0) {
+        snprintf(buffer, 128, fmat.c_str(), value);
+        stripTrailingZeros(buffer, findThe_E(buffer), '*');
+        squashChars(buffer, '*');
+      } else {
+        if (std::abs(value) < 1e-1) {
+          fmat = "%." + std::to_string(ndig) + "f";
+          snprintf(buffer, 128, fmat.c_str(), value);
+        } else if (std::abs(value) < 1) {
+          fmat = "%." + std::to_string(ndig - 1) + "f";
+          snprintf(buffer, 128, fmat.c_str(), value);
+        } else {
+          fmat = "%." + std::to_string(ndig - 2) + "f";
+          snprintf(buffer, 128, fmat.c_str(), value);
+        }
         stripTrailingZeros(buffer, buffer + 128, '\0');
       }
       return StringTrimmer::trimmed(buffer);
