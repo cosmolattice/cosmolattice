@@ -343,7 +343,7 @@ We see here that the only parameter that our class takes is a boolean, which spe
       synced = false;
 ```
 
-As explained in detail in Ref. [@Figueroa_2020rrl] and outlined on the comments on lines \codeline[V2]{45-46}, the Leapfrog algorithm consists of two parts. First, we need to evolve the conjugate momenta by computing ''kicks", and then we evolve the field variables by means of the ''drifts", using the previously updated momenta. This also reflects itself in the code. The kick function are first called between line `58` and `63`, and then the drift functions are called between line `73` and `81`. In order to evolve the scale factor, we store the averages of the momenta squared after the kicks, and the averages of the fields squared after the drifts, as can be seen on lines `66` and `83`. We note a small subtlety, which manifests itself in line `56`: In order to perform the measurements, we synchronize the momenta to live at integer time steps. After a synchronization, conjugate momenta only need the to be evolved by half a time step, immediately after the call to a measurement. This is what happens when the weight variable is set to $`0.5`$. The file follows with:
+As explained in detail in Ref. [@Figueroa_2020rrl] and outlined on the comments on lines \codeline[V2]{45-46}, the Leapfrog algorithm consists of two parts. First, we need to evolve the conjugate momenta by computing ''kicks", and then we evolve the field variables by means of the ''drifts", using the previously updated momenta. This also reflects itself in the code. The kick function are first called between line `58` and `63`, and then the drift functions are called between line `73` and `81`. In order to evolve the scale factor, we store the averages of the momenta squared after the kicks, and the averages of the fields squared after the drifts, as can be seen on lines `66` and `83`. We note a small subtlety, which manifests itself in line `56`: In order to perform the measurements, we synchronize the momenta to live at integer time steps. After a synchronization, conjugate momenta only need the to be evolved by half a time step, immediately after the call to a measurement. This is what happens when the weight variable is set to $0.5$. The file follows with:
 ```cpp
 
     // Function used to synchronize the momentum to the field, by evolving them
@@ -616,13 +616,13 @@ As we can see, the `class ComplexScalarKernels` is extremely simple, and its sol
 ```
 Let us start with the `GaugeDerivatives` class from `definitions`. We see that this class has no internal variable, but it is just used to regroup some functions under one hood. In particular, it holds the functions capable of computing the covariant derivatives and covariant Laplacians of the matter/gauge content of the users' models (for conciseness, we show here only the covariant Laplacians). They rely on the functions `U1sForCSCovDerivs`, `U1sForSU2DoubletCovDerivs` and `SU2sForSU2DoubletCovDerivs`, which compute the appropriate combinations of link variables, that depend on which matter fields couple to which gauge field.
 
-This is a good time to emphasize one of the advantages of having implemented  a 'functional' interface through expression templates in CosmoLattice. The expressions computed by these Laplacian functions (as well as most of the other functions in `definitions`) are really abstract expressions (formulae), in the sense that they are left to be evaluated. Calling e.g. `covLaplacianCS` does not lead to any actual computation, it simply creates an abstract expression which can be evaluated later on. In particular, it gives the opportunity to perform some ''analytical" simplifications to the expressions at compilation. For example, a redundant multiplication of the type ''$`1 \cdot \phi`$" with $`\phi`$ some field, can be detected at compilation time and replaced by $`\phi`$ only. This mechanism is used for instance in the `U1sForCSCovDerivs` function.
+This is a good time to emphasize one of the advantages of having implemented  a 'functional' interface through expression templates in CosmoLattice. The expressions computed by these Laplacian functions (as well as most of the other functions in `definitions`) are really abstract expressions (formulae), in the sense that they are left to be evaluated. Calling e.g. `covLaplacianCS` does not lead to any actual computation, it simply creates an abstract expression which can be evaluated later on. In particular, it gives the opportunity to perform some ''analytical" simplifications to the expressions at compilation. For example, a redundant multiplication of the type ''$1 \cdot \phi$" with $\phi$ some field, can be detected at compilation time and replaced by $\phi$ only. This mechanism is used for instance in the `U1sForCSCovDerivs` function.
 
 Following in the same file,
 
 \insertcppcode{src/include
 /CosmoInterface/definitions/gaugederivatives.h}{80}{92}{code_files/gaugederivatives.h}
-We encounter the function `fold_multiply` in line `87`, which takes vectorial objects as an argument, and returns the multiplication of all the elements inside the object. In this case we use it on an array, created on line `88` by the macro `MakeArray`, which contains either the link `U1Links(model.fldU1(a),i)` or ''$`1`$", depending on whether the matter field $`N`$ couples to the $`a^{th}`$ $`U(1)`$ gauge field. The constant $`1`$ is represented by the object `OneType` on line `91`, which is then automatically discarded by the compiler in multiplications. For more information about how this works, we refer the reader to Appendix [Under the Hood: Expression Templates and CosmoLattice](Under the Hood: Expression Templates and CosmoLattice.md).
+We encounter the function `fold_multiply` in line `87`, which takes vectorial objects as an argument, and returns the multiplication of all the elements inside the object. In this case we use it on an array, created on line `88` by the macro `MakeArray`, which contains either the link `U1Links(model.fldU1(a),i)` or ''$1$", depending on whether the matter field $N$ couples to the $a^{th}$ $U(1)$ gauge field. The constant $1$ is represented by the object `OneType` on line `91`, which is then automatically discarded by the compiler in multiplications. For more information about how this works, we refer the reader to Appendix [Under the Hood: Expression Templates and CosmoLattice](Under the Hood: Expression Templates and CosmoLattice.md).
 
 The rest of the `GaugeDerivatives` class contains similar functions to compute the other covariant derivatives, as well as functions which implement gradients. As they are all implemented in a very similar fashion, we let the reader explore the code by themselves.
 
@@ -637,7 +637,7 @@ All the other functions in `definitions` are implemented in a similar fashion. R
 -  `src/include/CosmoInterface/definitions/gausslaws.h`: Defines the expressions to compute the Gauss laws in the Abelian and non-Abelian sectors.
 -  `src/include/CosmoInterface/definitions/hubblelaws.h`: Defines the expressions of the Hubble constraint.
 -  `src/include/CosmoInterface/definitions/mattercurrents.h`: Defines the expressions of the matter currents for the equations of motion. It is implemented in the same spirit as the `GaugeDerivatives`, and it is able to compute the current for generic matter content.
--  `src/include/CosmoInterface/definitions/potential.h`: Computes the potential from the `potentialTerms` defined in the user's model. Also computes, for the complex scalar fields and the $`SU(2)`$ doublets, the potential derivative with respect to the field's component in terms of the potential derivative with respect the norm.
+-  `src/include/CosmoInterface/definitions/potential.h`: Computes the potential from the `potentialTerms` defined in the user's model. Also computes, for the complex scalar fields and the $SU(2)$ doublets, the potential derivative with respect to the field's component in terms of the potential derivative with respect the norm.
 
 These functional forms from `definitions` are used all throughout `CosmoInterface`.
 
@@ -820,7 +820,7 @@ The most important function here is `getNormedFluctuations`, defined between lin
 To facilitate the initialization, it also provides functions to directly compute the amplitudes as described in Eqs. \eqref{eq:fpr_influct}-\eqref{eq:fpr_influct2}.
 The function `gaussianFluctuations` initializes fluctuations of only one given field, while `conjugateGaussianFluctuations` sets the fluctuations of a field and its conjugate momentum. As we will see shortly in the rest of the initializers, this class exists because Gaussian fluctuations enter in some way or another in the initialization of all the different type of matter fields.
 
-The next initializer we want to present is the one for the $`SU(2)`$ sector:
+The next initializer we want to present is the one for the $SU(2)$ sector:
 ```cpp
     // INITIALIZATION: SU(2) GAUGE FIELDS
     // --> Note: aDot has to be initialized before calling this function.
@@ -967,7 +967,7 @@ We see that the  `initializeSU2Doublet` is in charge of first imposing the rando
 
 What is implemented in the function `addFluctuationsSU2DoubletFromPhases` simply corresponds to the procedure given in Eqs ([*77*][eq_fpr_influct3])-([*80*][InConstr_2]). The independent amplitudes are created first, and then these are used to construct the dependent ones afterwards. All of this is then used to initialize the fluctuations of the fields and momenta.
 
-Once the $`SU(2)`$ sector is initialized, the last part which needs to be initialized is the $`U(1)`$ sector. This is taken care of by the `U1Initializer`. It works in a similar was a the `SU2Initializer`, so we let the interested reader to go directly to explore the code located at: `src/include/CosmoInterface/initializers/u1initializer.h`.
+Once the $SU(2)$ sector is initialized, the last part which needs to be initialized is the $U(1)$ sector. This is taken care of by the `U1Initializer`. It works in a similar was a the `SU2Initializer`, so we let the interested reader to go directly to explore the code located at: `src/include/CosmoInterface/initializers/u1initializer.h`.
 
 ### Measurers { #subsec_Measurers }
 
@@ -1144,7 +1144,7 @@ After the averages are measured, we move on to the power spectra.
 
 This is taken care of by the `measureSpectra` function of the `ScalarSingletMeasurer`. There, for each field, we compute its power spectrum as defined in Eq. ([*24*][eq_discretePS]), we compute the power spectrum of its associated velocity and the occupation number, defined in Eq. ([*44*][eq_OccuppationNum]). They are all saved in the same file. As noted in the comment, in the current implementation, it is better to perform the scale factor re-scaling of the momentum outside the `powerSpectrum` function. Indeed, when called on a `Field`, the function does not allocate extra memory to perform the Fourier transform. It does do that for any argument which is not purely a `Field`, as it would be that case had we called for instance `powerSpectrum(piS(i) * pow(model.aI,model.alpha - 3))`.
 
-Let us move briefly to the `SU2Measurer`, to highlight some features not used in the `ScalarSingletMeasurer`. First, at initialization, we do not create files for individual quantities. We will store the averages of the norms of the  fields. As such, the `MeasurementsSaver` are created with customs name. In the case of the $`SU(2)`$ sector, we are also interested in checking the conservation of Gauss' law and as a result create another file to store them. The spectra are computed also only for the norms.
+Let us move briefly to the `SU2Measurer`, to highlight some features not used in the `ScalarSingletMeasurer`. First, at initialization, we do not create files for individual quantities. We will store the averages of the norms of the  fields. As such, the `MeasurementsSaver` are created with customs name. In the case of the $SU(2)$ sector, we are also interested in checking the conservation of Gauss' law and as a result create another file to store them. The spectra are computed also only for the norms.
 ```cpp
     SU2Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
     {
@@ -1316,5 +1316,5 @@ Its use is also straightforward and based on a single `save` function.
     {
       if (useHDF5) {
 ```
-It takes as arguments a time $`t`$, and an arbitrary number of spectra. It then forwards them to the correct implementation (standard or `HDF5`) and save them to a file. The $`\dots`$ syntax is the modern way of `C++` to create functions for an arbitrary number of arguments. To learn about the actual implementation, we invite the interested reader explore the files in the `std` and `hdf5` sub-folders.
+It takes as arguments a time $t$, and an arbitrary number of spectra. It then forwards them to the correct implementation (standard or `HDF5`) and save them to a file. The $\dots$ syntax is the modern way of `C++` to create functions for an arbitrary number of arguments. To learn about the actual implementation, we invite the interested reader explore the files in the `std` and `hdf5` sub-folders.
 

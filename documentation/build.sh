@@ -28,7 +28,7 @@ echo "         Building the bibliography file from LaTeX sources..."
 echo "---------------------------------------------------------------------"
 
 # source bib
-cp ${base_dir}/source/refs.bib refs.bib
+# cp ${base_dir}/source/refs.bib refs.bib
 
 # append the generated nav.yml and bibliography from converted latex
 # manual
@@ -38,8 +38,6 @@ cp ${base_dir}/source/refs.bib refs.bib
 
 # convert the bibliography to bib file
 # bash ${base_dir}/scripts/convertbiblio ${tmp_dir}/manual/Bibliography.tex >>refs.bib
-
-cp ${base_dir}/source/extra.css ./docs/
 
 echo "---------------------------------------------------------------------"
 echo "         Building the manual with MkDocs..."

@@ -4,7 +4,7 @@ An appropriate version of FFTW needs to be installed in order to handle the code
 Optionally, if one wants to print two- or three-dimensional snapshots of a simulation, or simply to stop/restart a run at a certain time, the HDF5 library also needs to be installed. 
 Also optionally, the simulations can be parallelized in more than one spatial dimension, to speed up jobs of long duration or to run massive simulations. This requires the library PFFT (parallel Fast Fourier transforms) [@Pi13] to be installed. For further details on the installation and use of the code and the libraries, please see Appendix [Installation](Installation.md).
 
-**Requirements:** `CMake` v3.0 (or above), `fftw3`, `g++` v$`5.0`$ (or above) or `clang++` v$`3.4`$ (or above). For parallel use: `MPI`. *Optional*: `HDF5` and `PFFT`.
+**Requirements:** `CMake` v3.0 (or above), `fftw3`, `g++` v$5.0$ (or above) or `clang++` v$3.4$ (or above). For parallel use: `MPI`. *Optional*: `HDF5` and `PFFT`.
 
 **Download:** You can download CosmoLattice from [ http://www.cosmolattice.net](http://www.cosmolattice.net) , or alternatively use `git clone` as indicated below.
 

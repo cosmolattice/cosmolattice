@@ -54,13 +54,14 @@ plugins:
 markdown_extensions:
   - attr_list
   - footnotes
+  - md_in_html
+  - pymdownx.blocks.caption
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
-  - pymdownx.superfences
   #- markdown_katex:
   #    no_inline_svg: True
   #    insert_fonts_css: True
