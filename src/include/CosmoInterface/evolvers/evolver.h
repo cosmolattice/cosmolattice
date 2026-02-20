@@ -9,6 +9,7 @@
 
 #include "CosmoInterface/evolvers/leapfrog.h"
 #include "CosmoInterface/evolvers/velocityverlet.h"
+#include "CosmoInterface/evolvers/rk2nstorage.h"
 
 #include "TempLat/util/exception.h"
 
@@ -28,23 +29,28 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     using T = typename Model::FloatType;
 
-    Evolver(Model &model, RunParameters<T> &rPar) : type(rPar.eType)
+    Evolver(Model &model, RunParameters<T> &rPar, ExtraFields<Model> extraFlds)
+        : type(rPar.eType),
+          lf(type == LF ? std::make_shared<LeapFrog<T>>(model, rPar) : nullptr),
+          vv(VelocityVerletParameters<T>::isVerlet(type) ? std::make_shared<VelocityVerlet<T>>(model, rPar) : nullptr),
+          rk2n(RK2NStorageParameters<T>::isRK2n(type) ? std::make_shared<RK2NStorage<Model>>(model, rPar) : nullptr)
     {
-      if (type == LF) {
-        lf = std::make_shared<LeapFrog<T>>(model, rPar);
-      } else {
-        if (!(VelocityVerletParameters<T>::isVerlet(type)))
-          throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
-                                        "which dispatch between different evolvers. Abort."));
-        else
-          vv = std::make_shared<VelocityVerlet<T>>(model, rPar);
+      // RK2N needs extra memory, allocated in the fields
+      if (RK2NStorageParameters<T>::isRK2n(type)) {
+        rk2n->setDelta(extraFlds);
       }
+
+      if (lf == nullptr && vv == nullptr && (rk2n == nullptr || !RK2NStorageParameters<T>::isRK2n(type)))
+        throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
+                                      "which dispatch between different evolvers. Abort."));
     }
 
     inline void evolve(Model &model, T tMinust0) const
     {
       if (type == LF) {
         lf->evolve(model, tMinust0);
+      } else if (RK2NStorageParameters<T>::isRK2n(type)) {
+        rk2n->evolve(model, tMinust0, EoMKernels);
       } else {
         if (!(VelocityVerletParameters<T>::isVerlet(type)))
           throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
@@ -62,6 +68,8 @@ namespace TempLat
     {
       if (type == LF) {
         lf->sync(model, tMinust0);
+      } else if (RK2NStorageParameters<T>::isRK2n(type)) {
+        rk2n->sync(model, tMinust0);
       } else { // The default evolvers have fields and momenta living at integer times, so no need to sync. for
                // measurements.
         if (!(VelocityVerletParameters<T>::isVerlet(type)))
@@ -74,13 +82,37 @@ namespace TempLat
       }
     }
 
+    // To activate and deactivate fields. Can be useful if more than a kernel is defined, or maybe to deactivate GW.
+    template <int N> void deactivate(Tag<N> t)
+    {
+      if (RK2NStorageParameters<T>::isRK2n(type)) {
+        rk2n->deactivate(t);
+      } else {
+        throw(EvolverTypeNotInEvolver("The activate/desactivate function is implemented only for the RK2N evolvers. "
+                                      "Go implement it in the others if you need it."));
+      }
+    }
+
+    template <int N> void activate(Tag<N> t)
+    {
+      if (RK2NStorageParameters<T>::isRK2n(type)) {
+        rk2n->activate(t);
+      } else {
+        throw(EvolverTypeNotInEvolver("The activate/desactivate function is implemented only for the RK2N evolvers. "
+                                      "Go implement it in the others if you need it."));
+      }
+    }
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
+    const EvolverType type;
+
     std::shared_ptr<LeapFrog<T>> lf;
     std::shared_ptr<VelocityVerlet<T>> vv;
+    std::shared_ptr<RK2NStorage<Model>> rk2n;
 
-    const EvolverType type;
+    KernelsTypes::EoM<T> EoMKernels;
   };
 
 } // namespace TempLat

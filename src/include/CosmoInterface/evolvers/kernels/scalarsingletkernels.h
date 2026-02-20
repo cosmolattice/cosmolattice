@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/definitions/potential.h"
+#include "CosmoInterface/evolvers/kernels/kernelstypes.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
 
 namespace TempLat
@@ -24,11 +25,25 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     ScalarSingletKernels() = delete;
 
-    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    // Equations of motion:
+    template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
     {
       // Returns kernel for scalar singlets (formed by laplacian and potential derivative):
       return (pow(model.aI, 1 + model.alpha) * LatLapl<Model::NDim>(model.fldS(n)) -
               pow(model.aI, 3 + model.alpha) * Potential::derivS(model, n));
+    }
+
+    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    {
+      // Returns momentum for scalar singlets:
+      return pow(model.aI, model.alpha - 3) * model.piS(n);
+    }
+
+    // Default function returns EoM kernels, for backward compatibility.
+    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    {
+      using T = typename Model::FloatType;
+      return ScalarSingletKernels::get(model, n, KernelsTypes::EoM<T>());
     }
   };
 } // namespace TempLat

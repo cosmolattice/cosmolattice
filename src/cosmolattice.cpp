@@ -71,6 +71,12 @@ int main(int argc, char *argv[])
   // Actual creation of your model. The parser is required to provide
   // the model dependent parameters.
 
+  ExtraFields<ModelType> extraFlds;
+  extraFlds.allocateExtraMemory(model, runParams, "extra_mem");
+  // An object that holds extra fields, if and only needed by the specific simulation.
+  // We store it here so that the same extra fields can be used by different classes
+  // if need be (for instance, initialization and evolution).
+
   if (iAmRoot) say << "Model name: " << model.name;
   // Printing the model name from the root processor.
   // You can check in this way, in the console output,
@@ -105,7 +111,7 @@ int main(int argc, char *argv[])
   // We communicate t0 to the model, in case it needs it internally.
   model.t0 = runParams.t0;
 
-  Evolver<ModelType> evolver(model, runParams);
+  Evolver<ModelType> evolver(model, runParams, extraFlds);
   // Here an algorithm -- evolver -- to solve the field EoM is chosen. The type of evolver
   // is specified by the user in the input parameter file, and here is passed through
   // runParams. Model is passed as well to have access to normalisations.

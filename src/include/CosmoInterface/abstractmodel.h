@@ -17,6 +17,7 @@
 #include "TempLat/util/templatarray.h"
 #include "CosmoInterface/couplingsmanager.h"
 #include "CosmoInterface/definitions/potential.h"
+#include "CosmoInterface/fieldsnumbering.h"
 
 #include "TempLat/parameters/parameterparser.h"
 #include "CosmoInterface/runparameters.h"
@@ -89,6 +90,18 @@ namespace TempLat
     static constexpr size_t NGWs = 6;
     static constexpr T MPl = Constants::reducedMPlanck<T>; // Reduced Planck mass, MPl=2.435*10^18 GeV
 
+    // Field numbering for generic iteration (used by RK2N evolver)
+    static constexpr size_t getNFields(FieldsNumbering::fldS) { return Ns; }
+    static constexpr size_t getNFields(FieldsNumbering::piS) { return Ns; }
+    static constexpr size_t getNFields(FieldsNumbering::fldCS) { return NCs; }
+    static constexpr size_t getNFields(FieldsNumbering::piCS) { return NCs; }
+    static constexpr size_t getNFields(FieldsNumbering::fldSU2Doublet) { return NSU2Doublet; }
+    static constexpr size_t getNFields(FieldsNumbering::piSU2Doublet) { return NSU2Doublet; }
+    static constexpr size_t getNFields(FieldsNumbering::fldU1) { return NU1; }
+    static constexpr size_t getNFields(FieldsNumbering::piU1) { return NU1; }
+    static constexpr size_t getNFields(FieldsNumbering::fldSU2) { return NSU2; }
+    static constexpr size_t getNFields(FieldsNumbering::piSU2) { return NSU2; }
+
     // Coupling managers between complex scalar/SU2 doublets and gauge fields
     using CsU1Couplings = CSU1COUPLINGS;
     using SU2DoubletU1Couplings = SU2DOUBLETU1COUPLINGS;
@@ -107,22 +120,32 @@ namespace TempLat
               // fields and U(1) non-compact gauge fields), but not with the rest.
     FieldCollection<Field<NDim, T>, T, Ns, true> piS;
     // Does not make a huge difference anyhow, so in case of doubt put nothing or false (equivalent).
+    FieldCollection<Field<NDim, T>, T, Ns, true> getField(FieldsNumbering::fldS) { return fldS; }
+    FieldCollection<Field<NDim, T>, T, Ns, true> getField(FieldsNumbering::piS) { return piS; }
 
     // --> Complex scalars
     FieldCollection<ComplexField<NDim, T>, T, NCs> fldCS;
     FieldCollection<ComplexField<NDim, T>, T, NCs> piCS;
+    FieldCollection<ComplexField<NDim, T>, T, NCs> getField(FieldsNumbering::fldCS) { return fldCS; }
+    FieldCollection<ComplexField<NDim, T>, T, NCs> getField(FieldsNumbering::piCS) { return piCS; }
 
     // --> SU2 doublets
     FieldCollection<SU2Doublet<NDim, T>, T, NSU2Doublet> fldSU2Doublet;
     FieldCollection<SU2Doublet<NDim, T>, T, NSU2Doublet> piSU2Doublet;
+    FieldCollection<SU2Doublet<NDim, T>, T, NSU2Doublet> getField(FieldsNumbering::fldSU2Doublet) { return fldSU2Doublet; }
+    FieldCollection<SU2Doublet<NDim, T>, T, NSU2Doublet> getField(FieldsNumbering::piSU2Doublet) { return piSU2Doublet; }
 
     // --> U(1) gauge fields
     VectorFieldCollection<Field<NDim, T>, T, NDIM, NU1> fldU1;
     VectorFieldCollection<Field<NDim, T>, T, NDIM, NU1> piU1;
+    VectorFieldCollection<Field<NDim, T>, T, NDIM, NU1> getField(FieldsNumbering::fldU1) { return fldU1; }
+    VectorFieldCollection<Field<NDim, T>, T, NDIM, NU1> getField(FieldsNumbering::piU1) { return piU1; }
 
     // --> SU(2) gauge fields
     VectorFieldCollection<SU2Field<NDim, T>, T, NDIM, NSU2> fldSU2;
     VectorFieldCollection<SU2LieAlgebraField<NDim, T>, T, NDim, NSU2> piSU2;
+    VectorFieldCollection<SU2Field<NDim, T>, T, NDIM, NSU2> getField(FieldsNumbering::fldSU2) { return fldSU2; }
+    VectorFieldCollection<SU2LieAlgebraField<NDim, T>, T, NDim, NSU2> getField(FieldsNumbering::piSU2) { return piSU2; }
 
     // Variables that store the scale factor and energies during the evolution.
     // Suffixes indicate at which time they are evaluated:
