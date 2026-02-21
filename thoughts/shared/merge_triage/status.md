@@ -10,6 +10,6 @@
 | 4 | SU(2) exp map & algebra | **done** | [theme_4.md](theme_4.md) | [plan](../plans/2026-02-20-merge-theme-4-su2-expmap.md) | `320ee096` | exp/expinv, acos operator, symbols, expmap_inplace |
 | 5 | RK2N evolver | **done** | [theme_5.md](theme_5.md) | [plan](../plans/2026-02-20-merge-theme-5-rk2n-evolver.md) | `a07982f9` | fieldsnumbering, kernelstypes, rk2nstorageparameters, rk2nstorage, extrafields, kernel EoM dispatch, evolver RK2N |
 | 6 | HDF5 overhaul | **done** | [theme_6.md](theme_6.md) | [plan](../plans/2026-02-20-merge-theme-6-hdf5-overhaul.md) | `dbfd4a97` | hdf5timeseries, buffered spectra, measurementssaverhdf5, RNG binary, filesmanager rework |
-| 7 | Measurement refactoring | pending | - | - | - | Depends on 6 |
-| 8 | U(1) Axion coupling | pending | - | - | - | Depends on 5, 6, 7 |
+| 7 | Measurement refactoring | **done** | [theme_7.md](theme_7.md) | [plan](../plans/2026-02-21-merge-theme-7-measurement-refactoring.md) | `e2bb3de2` | AbstractMeasurer base, lastMeas propagation, U1 forwDiff curl |
+| 8 | U(1) Axion coupling | **done** | [theme_8.md](theme_8.md) | [plan](../plans/2026-02-21-merge-theme-8-u1-axion-coupling.md) | `77e5c54f` | axion E.B coupling, plane-wave ICs, topological charges measurer |
 | 9 | Test infrastructure | pending | - | - | - | Last |

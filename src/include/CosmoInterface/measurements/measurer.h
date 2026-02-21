@@ -20,6 +20,7 @@
 #include "CosmoInterface/measurements/energiesmeasurer.h"
 #include "CosmoInterface/measurements/scalefactormeasurer.h"
 #include "CosmoInterface/measurements/energysnapshotmeasurer.h"
+#include "CosmoInterface/measurements/topologicalchargesmeasurer.h"
 
 #include "CosmoInterface/evolvers/evolver.h"
 #include "CosmoInterface/simulationmanager.h"
@@ -58,6 +59,7 @@ namespace TempLat
           su2Measurer(model, filesManager, par, par.appendMode),           // Measurer for SU(2) gauge fields
           energiesMeasurer(model, filesManager, par, par.appendMode),      // Measurer of energies and scale factor
           scaleFactorMeasurer(model, filesManager, par, par.appendMode),   // Measurer of energies and scale factor
+          topologicalChargesMeasurer(model, filesManager, par, par.appendMode),
           energySnapshotsMeasurer(model, filesManager,
                                   par.energySnapshotMeas), // Measurer of energy and field snapshots
           spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"},
@@ -96,6 +98,8 @@ namespace TempLat
         // Energy contributions and conservation check
         scaleFactorMeasurer.measure(model, t);
         // Scale factor and derivatives
+        topologicalChargesMeasurer.measure(model, t);
+        // Topological charges
         // gwsMeasurer.measureStandard(model,t, TestTransTrace);
         // Transversality and tracelessness test of GWs
 
@@ -173,6 +177,7 @@ namespace TempLat
     SU2Measurer<T> su2Measurer;
     EnergiesMeasurer<T> energiesMeasurer;
     ScaleFactorMeasurer<T> scaleFactorMeasurer;
+    TopologicalChargesMeasurer<T> topologicalChargesMeasurer;
     EnergySnapshotsMeasurer<Model> energySnapshotsMeasurer;
 
     MeasurementsSaver<T> spectraTime;

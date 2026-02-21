@@ -18,9 +18,13 @@
 #include "CosmoInterface/definitions/mattercurrents.h"
 #include "CosmoInterface/definitions/averages.h"
 #include "CosmoInterface/definitions/potential.h"
+#include "CosmoInterface/initializers/initialconditionstype.h"
+#include "CosmoInterface/extrafields.h"
+#include "CosmoInterface/fieldsnumbering.h"
 
 namespace TempLat
 {
+  MakeException(U1ICNotImplemented);
   /** @brief A class that initializes the U(1) gauge sector (both Abelian gauge fields and complex scalars)
    *
    **/
@@ -33,7 +37,16 @@ namespace TempLat
     // INITIALIZATION: U(1) GAUGE FIELDS
     // --> Note: aDot has to be initialized before calling this function.
 
-    template <class Model, typename T> static void initializeU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff)
+    template <class Model, typename T>
+    static void initializeU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff, ExtraFields<Model> extraFlds)
+    {
+      if (model.getU1IC() == InitialConditionsType::RandomWithMatter) initializeRandomWithMatterU1(model, fg, kCutOff);
+      else if (model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) initializePlaneWavesZeroBU1(model, fg, kCutOff, extraFlds);
+      else throw(U1ICNotImplemented("The initial condition provided for U1 is not implemented."));
+    }
+
+    template <class Model, typename T>
+    static void initializeRandomWithMatterU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff)
     {
       // 1. We set the homogeneous components and fluctuations for the complex scalar fields.
       initializeCScalar(model, fg.getBaseSeed(), fg, kCutOff);
@@ -70,6 +83,19 @@ namespace TempLat
                     model.fldU1(a)(i) = 0; // we set the amplitude of the gauge fields exactly to zero.
             ););
       }
+    }
+
+    template <class Model, typename T>
+    static void initializePlaneWavesZeroBU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff, ExtraFields<Model> extraFlds)
+    {
+      ForLoop(n, 0, Model::NU1 - 1,
+        fg.planeWaves(model, model.fldU1(n), model.piU1(n), extraFlds.fldForPlaneWavesU1(), extraFlds.piForPlaneWavesU1(), model.aDotI, kCutOff);
+        model.fldU1(n) = model.getFluctuationRatio(FieldsNumbering::fldU1()) * model.fldU1(n);
+        model.piU1(n) = model.getFluctuationRatio(FieldsNumbering::piU1()) * model.piU1(n);
+        ForLoop(i, 1, Model::NDim,
+          model.fldU1(n)(i) = 0;
+        );
+      );
     }
 
   private:

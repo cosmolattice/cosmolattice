@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     ModelInitializer<double> initializer(model, runParams.lSide, runParams.baseSeed);
     // 1) We create the class responsible for the initialization
 
-    initializer.initialize(model, runParams);
+    initializer.initialize(model, runParams, extraFlds);
     // 2) We initialize the model.
 
     t = runParams.t0;

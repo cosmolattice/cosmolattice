@@ -12,6 +12,7 @@
 #include "TempLat/lattice/algebra/spatialderivatives/backdiff.h"
 #include "TempLat/lattice/algebra/spatialderivatives/forwdiff.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
+#include "CosmoInterface/definitions/axioncouplings.h"
 
 namespace TempLat
 {
@@ -41,11 +42,14 @@ namespace TempLat
       auto GradU1 =
           MakeVector(i, 1, Model::NDim, Total(j, 1, Model::NDim, backDiff(forwDiff(model.fldU1(a)(j), i), j)));
 
+      auto AxionScalarSource = AxionCouplings::U1AxionCoupling(model, a);
+      auto normU1AxionScalarSource = (model.fStar / Model::MPl);
+
       auto normU1Source = pow(model.aI, 1 + model.alpha); // Rescaling for U1Source
       auto normGrad = pow(model.aI, -1 + model.alpha);    // Rescaling for GradU1 and LaplU1
 
       // Returns kernel for the U(1) gauge fields' EOM:
-      return normGrad * (LaplU1 - GradU1) - normU1Source * U1Source;
+      return normGrad * (LaplU1 - GradU1) - normU1Source * U1Source + normU1AxionScalarSource * AxionScalarSource;
     }
 
     template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> a, KernelsTypes::EoM<T>)

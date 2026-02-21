@@ -10,6 +10,7 @@
 #include "CosmoInterface/fieldsnumbering.h"
 #include "CosmoInterface/evolvers/rk2nstorageparameters.h"
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/initializers/initialconditionstype.h"
 
 namespace TempLat {
 
@@ -81,6 +82,10 @@ namespace TempLat {
         {
             if (RK2NStorageParameters<T>::isRK2n(runPars.eType))
                 allFlds1 = std::make_shared<FieldsAsInModel<Model>>(model, runPars, tag);
+            else if (model.getU1IC() == InitialConditionsType::PlaneWaves || model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) {
+                fldU1IC = std::make_shared<VectorField<Field<Model::NDim, T>, T, Model::NDim>>("U1ICfldU1", model.getToolBox(), runPars.getLatParams());
+                piU1IC = std::make_shared<VectorField<Field<Model::NDim, T>, T, Model::NDim>>("U1ICpiU1", model.getToolBox(), runPars.getLatParams());
+            }
         }
 
         std::shared_ptr<FieldsAsInModel<Model>> getAllFlds1()
@@ -88,9 +93,29 @@ namespace TempLat {
             return allFlds1;
         }
 
+        auto fldForPlaneWavesU1() {
+            if (allFlds1 != nullptr) return allFlds1->fldU1(0_c);
+            else if (fldU1IC != nullptr) return *fldU1IC;
+            else {
+                throw(ExtraMemoryNotAllocated("Extra memory required by fldForPlaneWaves is not allocated, will crash."));
+                return *fldU1IC;
+            };
+        }
+
+        auto piForPlaneWavesU1() {
+            if (allFlds1 != nullptr) return allFlds1->piU1(0_c);
+            else if (piU1IC != nullptr) return *piU1IC;
+            else {
+                throw(ExtraMemoryNotAllocated("Extra memory required by fldForPlaneWaves is not allocated, will crash."));
+                return *piU1IC;
+            };
+        }
+
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
         std::shared_ptr<FieldsAsInModel<Model>> allFlds1;
+        std::shared_ptr<VectorField<Field<Model::NDim, T>, T, Model::NDim>> fldU1IC;
+        std::shared_ptr<VectorField<Field<Model::NDim, T>, T, Model::NDim>> piU1IC;
 
     };
 

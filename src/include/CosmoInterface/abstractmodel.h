@@ -21,6 +21,7 @@
 
 #include "TempLat/parameters/parameterparser.h"
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/initializers/initialconditionstype.h"
 
 namespace TempLat
 {
@@ -49,6 +50,7 @@ namespace TempLat
     typedef CouplingsManager<NCScalars, NU1Flds> CsU1Couplings;             // couplings U(1) gauge-complex scalar
     typedef CouplingsManager<NSU2Doublet, NU1Flds> SU2DoubletU1Couplings;   // couplings U(1) gauge-SU2 doublet
     typedef CouplingsManager<NSU2Doublet, NSU2Flds> SU2DoubletSU2Couplings; // couplings SU(2) gauge-SU2 doublet
+    typedef CouplingsManager<NScalars, NU1Flds> ScalarU1AxionCouplings;     // couplings U(1) gauge-scalar axion
   };
 
   // In order to make some of the expression template mechanism works, the number of fields needs to be known
@@ -61,8 +63,8 @@ namespace TempLat
 #define MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, _FloatType)                                          \
   _ModelName, _ModelParsType::NPotTerms, _ModelParsType::NScalars, _ModelParsType::NCScalars, _ModelParsType::NU1Flds, \
       _ModelParsType::NSU2Doublet, _ModelParsType::NSU2Flds, typename _ModelParsType::CsU1Couplings,                   \
-      typename _ModelParsType::SU2DoubletU1Couplings, typename _ModelParsType::SU2DoubletSU2Couplings, _FloatType,     \
-      _ModelParsType::NDim
+      typename _ModelParsType::SU2DoubletU1Couplings, typename _ModelParsType::SU2DoubletSU2Couplings,                 \
+      typename _ModelParsType::ScalarU1AxionCouplings, _FloatType, _ModelParsType::NDim
 #define MakeModelFloatType(_ModelName, _ModelParsType, _FloatType)                                                     \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, _FloatType)>
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
@@ -74,7 +76,7 @@ namespace TempLat
    **/
   template <class R, size_t NPOTTERMS, size_t NS, size_t NC, size_t NU1FLDS, size_t NSU2DOUBLET, size_t NSU2FLDS,
             typename CSU1COUPLINGS, typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS,
-            typename T = double, int NDIM = 3>
+            typename SCALARU1AXIONCOUPLINGS, typename T = double, int NDIM = 3>
   class AbstractModel
   {
   public:
@@ -106,6 +108,7 @@ namespace TempLat
     using CsU1Couplings = CSU1COUPLINGS;
     using SU2DoubletU1Couplings = SU2DOUBLETU1COUPLINGS;
     using SU2DoubletSU2Couplings = SU2DOUBLETSU2COUPLINGS;
+    using ScalarU1AxionCouplings = SCALARU1AXIONCOUPLINGS;
     using FloatType = T;
 
     // Objects containing the fields and their momenta:
@@ -198,11 +201,14 @@ namespace TempLat
     CsU1Couplings gQ_CsU1;
     SU2DoubletU1Couplings gQ_SU2DblU1;
     SU2DoubletSU2Couplings gQ_SU2DblSU2;
+    ScalarU1AxionCouplings alphaLambda_SU1;
 
     // Effective masses, used for setting the initial fluctuations of the scalar fields
     TempLatArray<T, Ns> masses2S;                                               // scalar singlet
     TempLatArray<ComplexFieldWrapper<T, T>, NCs> masses2CS;                     // complex scalar
     TempLatArray<SU2DoubletWrapper<T, T, T, T>, NSU2Doublet> masses2SU2Doublet; // SU2 doublet
+
+    T InverseAxionLambda;
 
     T alpha, fStar, omegaStar; // Rescalings for program variable definitions: (alpha,f_*,w_*)
 
@@ -258,6 +264,10 @@ namespace TempLat
       gQ_CsU1.setEffectiveCharges(CSU1Charges, gU1s);
       gQ_SU2DblU1.setEffectiveCharges(SU2DoubletU1Charges, gU1s);
       gQ_SU2DblSU2.setEffectiveCharges(SU2DoubletSU2Charges, gSU2s);
+
+      auto gAxionU1 = parser.get<double, NU1>("gAxionU1", 1.0);
+      auto AxionU1Charges = parser.get<double, ScalarU1AxionCouplings::howManyCouples()>("alphaLambda_AxionU1", 1);
+      alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);
     }
 
     // The functions below are to be redefined in the models. We define them here to be able to compile anyhow, even if
@@ -344,6 +354,16 @@ namespace TempLat
         throw(EmptyModel("The model seems empty, cannot return a field. Abort."));
         return fldS(0_c);
       }
+    }
+
+    template<int N>
+    auto getFluctuationRatio(Tag<N>) {
+      return OneType();
+    }
+
+    InitialConditionsType::U1 getU1IC() {
+      if (NCs > 0) return InitialConditionsType::RandomWithMatter;
+      else return InitialConditionsType::PlaneWavesZeroB;
     }
 
     // The "MemoryToolBox" is a shared variable between most instances of the program. It contains many useful
