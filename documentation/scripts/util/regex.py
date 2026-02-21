@@ -98,7 +98,7 @@ shortcut_replacements = {
     r"\\lqn\{(.+?)\}": r"\\lefteqn{\1}",
     r"\\lb([^r])": r"\\left\\lbrace\1",
     r"\\rb([^r])": r"\\right\\rbrace\1",
-    r"\\rh": r"{\\rm rh}",
+    # r"\\rh ": r"{\\rm rh}",
     #
     r"\\piSc": r"\\tilde\\pi_\\phi",
     r"\\piSinglpar": r"\\left(\\tilde\\pi_\\varphi\\right)",

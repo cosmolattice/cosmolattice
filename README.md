@@ -14,7 +14,7 @@
 
 *Minimal requirements:* 
 - `CMake` version 3.10 or above
-- `g++` version 8 or above
+- `clang`, `g++` or another compiler with support for C++20
 - `fftw3`
 
 ```bash

@@ -1,6 +1,60 @@
-\setcounter{figure}{2}\begin{figure}
-\centering
-\includegraphics{speed_up}
-\caption{Speed up factor in parallelized simulations as a number of cores, as test on the \texttt{Gacrux} cluster from the EPFL HPC center SCITAS, Switzerland.}
-\label{fig:speedup}
+\begin{figure}
+  \centering
+  \begin{tikzpicture}
+
+  \draw (0,0) -- (7,0);
+  \foreach \x in{0,...,7}
+  {
+      \node at (\x ,0){$\times$};
+      \node at (\x ,0.4){$\phi_\x$};
+  }
+  \draw[dashed](3.5,-1)--(3.5,1);
+
+  \draw [decorate,decoration={brace,mirror,amplitude=10pt},xshift=0cm,yshift=-0.pt]
+(0,0) -- (3.5,0) node [black,midway,yshift=-0.6cm]
+{\footnotesize $\Lambda_1$};
+\draw [decorate,decoration={brace,mirror,amplitude=10pt},xshift=0cm,yshift=-0.pt]
+(3.5,0) -- (7,0) node [black,midway,yshift=-0.6cm]
+{\footnotesize $\Lambda_2$};
+\draw [decorate,decoration={brace,amplitude=10pt},xshift=0cm,yshift=-0.pt]
+(0,0.75) -- (7,0.75) node [black,midway,yshift=0.7cm]
+{\footnotesize $\Lambda$};
+
+\node at (3.5,-1.5){\small Boundary};
+
+
+\draw[->, color=gray] (-0.3,-0.2) to[out=200,in=160] (-0.3,-4.8);
+\node[color=gray] at (-0.6,-2.15){\small Add};
+\node[color=gray] at (-0.6,-2.65){\small ghost cells};
+
+\draw (0,-5) -- (3,-5);
+\draw[dotted] (3,-5) -- (4,-5);
+\draw (4,-4.5) -- (7,-4.5);
+\draw[dotted] (3,-4.5) -- (4,-4.5);
+\foreach \x in{0,...,3}
+{
+    \node at (\x ,-5){$\times$};
+    \node at (\x ,-5.4){$\phi_\x$};
+}
+\node[color=gray] at (4 ,-5){$\times$};
+\node[color=gray] at (4 ,-5.4){$\phi_4$};
+\draw [decorate,decoration={brace,mirror,amplitude=10pt},xshift=0cm,yshift=-0.pt]
+(0,-5.7) -- (4,-5.7) node [black,midway,yshift=-0.6cm]
+{\footnotesize $\Lambda_1$};
+
+\draw [decorate,decoration={brace,amplitude=10pt},xshift=0cm,yshift=-0.pt]
+(3,-3.8) -- (7,-3.8) node [black,midway,yshift=0.6cm]
+{\footnotesize $\Lambda_2$};
+\foreach \x in{4,...,7}
+{
+    \node at (\x ,-4.5){$\times$};
+    \node at (\x ,-4.){$\phi_{\x}$};
+}
+\node[color=gray] at (3 ,-4.5){$\times$};
+\node[color=gray] at (3 ,-4.){$\phi_{3}$};
+\draw[dashed](3.5,-6)--(3.5,-4);
+
+  \end{tikzpicture}
+  \caption{Parallelization of a one-dimensionnal lattice (line). The physical lattice $\Lambda$ is split into two sublattices $\Lambda_1$ and $\Lambda_2$. In order to be able to consistently solve systems of equations involving derivatives, the sublattices need to know about the value of the fields just over the boundary. This is achieved by introducing ``ghost cells" to store this information. Every time a boundary value is modified, the two lattices need to ``exchange their boundary"; $\Lambda_1$ communicates the new value of $\phi_3$ to $\Lambda_2$ while $\Lambda_2$ communicates the new value of $\phi_4$ to $\Lambda_1$. Were we to consider periodic boundary conditions, we would also need ghost-cells and boundary exchange around sites $0$ and $7$.}
+  \label{fig:1d}
 \end{figure}

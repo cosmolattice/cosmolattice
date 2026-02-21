@@ -30,6 +30,7 @@ if [[ ! -d "${tmp_dir}/.venv" ]]; then
     pip install -q mkdocs-autorefs
     pip install -q mkdocs-bibtex
     pip install -q mkdoxy
+    pip install -q mkdocs-gen-files
 else
     source ${tmp_dir}/.venv/bin/activate
 fi

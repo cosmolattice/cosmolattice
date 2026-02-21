@@ -1,0 +1,4 @@
+We are very grateful to J. Baeza, J. Cline, C. Cosme, D. Croon, N. Loayza, K. Marschall and J. S. Roux for having helped us to test CosmoLattice in its developing phase. We also thank J. Penedones for providing us with some computer time on the EPFL Fidis and Garcrux clusters.  DGF (ORCID 0000-0002-4005-8915) is supported by a
+Ram\'on y Cajal contract with Ref. RYC-2017-23493,
+and by the grant “SOM: Sabor y Origen de la Materia” under no. FPA2017-85985-P. A.F. (0000-0002-7276-4515) is supported by the U.S.  Department  of  Energy,  Office  of  Science,  Office  of  Nuclear  Physics,  grants  Nos.DE-FG-02-08ER4145. F.T. is supported by the Research Fund for Junior Researchers of Basel University (project number 4598519) and by the Swiss National Science Foundation (grant number 200020/175502).
+
