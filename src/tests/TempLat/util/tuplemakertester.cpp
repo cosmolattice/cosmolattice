@@ -28,8 +28,8 @@ namespace TempLat
     auto t1 = flatten_tuple(make_tuple_from(fldSU2));
 
     tdd.verify(tuple_size<decltype(flatten_tuple(t1))>::value ==
-               18); // 2* 3 * 3, 2=# flds, 3 cause vector, 3 cause 3 su2 (skip the constraint).
-    tdd.verify((std::get<10>(t1)).toString() == "SU2Fld_1_1_2(x)");
+               24); // 2 * 3 * 4, 2=# flds, 3 cause vector, 4 cause 4 su2 components.
+    tdd.verify((std::get<10>(t1)).toString() == "SU2Fld_0_3_2(x)");
   }
 
 } // namespace TempLat

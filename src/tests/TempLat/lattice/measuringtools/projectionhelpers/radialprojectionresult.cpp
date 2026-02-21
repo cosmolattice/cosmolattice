@@ -28,7 +28,7 @@ namespace TempLat
     //   three.add(i, 2 * i, 2 * i);
     // }
 
-    int size, rank;
+    int size = 1, rank = 0;
 #ifdef HAVE_MPI
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
