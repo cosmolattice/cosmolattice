@@ -10,7 +10,9 @@
 #include "TempLat/util/conditionaloutput/outputstream.h"
 #include <sstream>
 #include "CosmoInterface/measurements/measurementsIO/std/measurementssaverstd.h"
+#ifdef HAVE_HDF5
 #include "CosmoInterface/measurements/measurementsIO/hdf5/measurementssaverhdf5.h"
+#endif
 
 namespace TempLat
 {
@@ -29,8 +31,14 @@ namespace TempLat
       if (!dontCreate) {
         if (!useHDF5)
           ms = std::make_shared<MeasurementsSaverStd<T>>(fm, fn, amIRoot, appendMode, headers);
-        else
+        else {
+#ifdef HAVE_HDF5
           ms5 = std::make_shared<MeasurementsSaverHDF5<T>>(fm, fn, amIRoot, appendMode, headers);
+#else
+          throw(UseHDF5ButNotCompiled(
+              "Call to use HDF5 for the measurementsIO output, but compiled without HDF5 option."));
+#endif
+        }
         IExist = true;
       } else
         IExist = false;
@@ -44,8 +52,14 @@ namespace TempLat
       if (!dontCreate) {
         if (!useHDF5)
           ms = std::make_shared<MeasurementsSaverStd<T>>(fm, fld, amIRoot, appendMode, headers);
-        else
+        else {
+#ifdef HAVE_HDF5
           ms5 = std::make_shared<MeasurementsSaverHDF5<T>>(fm, fld, amIRoot, appendMode, headers);
+#else
+          throw(UseHDF5ButNotCompiled(
+              "Call to use HDF5 for the measurementsIO output, but compiled without HDF5 option."));
+#endif
+        }
         IExist = true;
       } else
         IExist = false;
@@ -56,8 +70,11 @@ namespace TempLat
       if (IExist) {
         if (!useHDF5)
           ms->addAverage(r);
-        else
+        else {
+#ifdef HAVE_HDF5
           ms5->addAverage(r);
+#endif
+        }
       }
     }
 
@@ -66,14 +83,19 @@ namespace TempLat
       if (IExist) {
         if (!useHDF5)
           ms->save();
-        else
+        else {
+#ifdef HAVE_HDF5
           ms5->save(lastMeas);
+#endif
+        }
       }
     }
 
   private:
     std::shared_ptr<MeasurementsSaverStd<T>> ms;
+#ifdef HAVE_HDF5
     std::shared_ptr<MeasurementsSaverHDF5<T>> ms5;
+#endif
     bool IExist;
     bool printHeaders;
     bool useHDF5;

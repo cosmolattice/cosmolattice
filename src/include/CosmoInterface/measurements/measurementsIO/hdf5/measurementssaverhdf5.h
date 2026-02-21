@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio, Year: 2025
 
+#ifdef HAVE_HDF5
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "TempLat/lattice/IO/HDF5/helpers/hdf5timeseries.h"
 
@@ -88,4 +89,5 @@ namespace TempLat
 
 } // namespace TempLat
 
+#endif // HAVE_HDF5
 #endif
