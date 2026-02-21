@@ -13,6 +13,7 @@
 #include "TempLat/util/templatvector.h"
 #include "CosmoInterface/measurements/powerspectrum.h"
 #include "TempLat/util/rangeiteration/sum_in_range.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
 
 namespace TempLat
 {
@@ -20,9 +21,10 @@ namespace TempLat
    *
    *
    **/
-  template <typename T> class SU2DoubletMeasurer
+  template <typename T> class SU2DoubletMeasurer : public AbstractMeasurer
   {
   public:
+    using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <class Model>
     SU2DoubletMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
@@ -61,12 +63,12 @@ namespace TempLat
               ForLoop(k, 0, 3,
                       MeansMeasurer::measure(standardCompOut(i)(k), sqrt(2) * model.fldSU2Doublet(i)(k),
                                              sqrt(2) * model.piSU2Doublet(i)(k) * pow(model.aI, model.alpha - 3), t);
-                      standardCompOut(i)(k).save();
+                      standardCompOut(i)(k).save(lastMeas);
 
               );
               MeansMeasurer::measure(standardNormOut(i), norm(model.fldSU2Doublet(i)),
                                      norm(model.piSU2Doublet(i)) * pow(model.aI, model.alpha - 3), t);
-              standardNormOut(i).save(););
+              standardNormOut(i).save(lastMeas););
     }
 
     // We measure the power spectrum of the norm and its time-derivative as the sum of its components.
@@ -74,7 +76,7 @@ namespace TempLat
     {
       ForLoop(i, 0, Model::NSU2Doublet - 1,
               spectraNormOutFld(i).save(
-                  t, Total(j, 0, 3, PSMeasurer.powerSpectrum(model.fldSU2Doublet(i)(j))),
+                  lastMeas, t, Total(j, 0, 3, PSMeasurer.powerSpectrum(model.fldSU2Doublet(i)(j))),
                   Total(j, 0, 3,
                         pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piSU2Doublet(i)(j)))););
     }

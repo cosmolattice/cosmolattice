@@ -13,6 +13,7 @@
 #include "CosmoInterface/runparameters.h"
 #include "CosmoInterface/measurements/powerspectrum.h"
 #include "TempLat/util/templatvector.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
 
 namespace TempLat
 {
@@ -20,9 +21,10 @@ namespace TempLat
    *
    *
    **/
-  template <typename T> class ComplexScalarMeasurer
+  template <typename T> class ComplexScalarMeasurer : public AbstractMeasurer
   {
   public:
+    using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
     ComplexScalarMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par,
@@ -60,13 +62,13 @@ namespace TempLat
       ForLoop(i, 0, Model::NCs - 1,
               MeansMeasurer::measure(standardReOut(i), sqrt(2) * model.fldCS(i)(0_c),
                                      sqrt(2) * model.piCS(i)(0_c) * pow(model.aI, model.alpha - 3), t);
-              standardReOut(i).save();
+              standardReOut(i).save(lastMeas);
               MeansMeasurer::measure(standardImOut(i), sqrt(2) * model.fldCS(i)(1_c),
                                      sqrt(2) * model.piCS(i)(1_c) * pow(model.aI, model.alpha - 3), t);
-              standardImOut(i).save(); //
+              standardImOut(i).save(lastMeas); //
               MeansMeasurer::measure(standardNormOut(i), norm(model.fldCS(i)),
                                      norm(model.piCS(i) * pow(model.aI, model.alpha - 3)), t);
-              standardNormOut(i).save(););
+              standardNormOut(i).save(lastMeas););
     }
 
     // The following function measures the power spectrum of the norm and its time-derivative as the sum of their
@@ -75,7 +77,7 @@ namespace TempLat
     {
       ForLoop(i, 0, Model::NCs - 1,
               spectraNormOut(i).save(
-                  t, (PSMeasurer.powerSpectrum(model.fldCS(i)(0_c)) + PSMeasurer.powerSpectrum(model.fldCS(i)(1_c))),
+                  lastMeas, t, (PSMeasurer.powerSpectrum(model.fldCS(i)(0_c)) + PSMeasurer.powerSpectrum(model.fldCS(i)(1_c))),
                   pow(model.aI, 2 * model.alpha - 6) *
                       (PSMeasurer.powerSpectrum(model.piCS(i)(0_c)) + PSMeasurer.powerSpectrum(model.piCS(i)(1_c)))););
     }

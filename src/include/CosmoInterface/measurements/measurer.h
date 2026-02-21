@@ -64,7 +64,9 @@ namespace TempLat
                       filesManager.getUseHDF5()), // Output file that indicates at which times spectra are computed
           PSMeasurer(par),
           // TestTransTrace(par),
-          GWsPSMeasurer(par)
+          GWsPSMeasurer(par),
+          nLast(par.tMax / par.dt),
+          lastMeas(false)
     {
     }
 
@@ -136,8 +138,18 @@ namespace TempLat
         model.getToolBox()->unsetVerbose();
     }
 
-    bool areWeMeasuring(int n) const
+    bool areWeMeasuring(int n)
     {
+      if (n % outputFreq == 0 and (n == nLast or n + outputFreq >= nLast)) {
+        lastMeas = true;
+        scalarSingletMeasurer.setLastMeas(true);
+        complexScalarMeasurer.setLastMeas(true);
+        su2DoubletMeasurer.setLastMeas(true);
+        u1Measurer.setLastMeas(true);
+        su2Measurer.setLastMeas(true);
+        energiesMeasurer.setLastMeas(true);
+        scaleFactorMeasurer.setLastMeas(true);
+      }
       return (n % outputFreq == 0 || n % infreqOutputFreq == 0 || n % rareOutputFreq == 0);
     }
 
@@ -167,6 +179,9 @@ namespace TempLat
     PowerSpectrumMeasurer PSMeasurer;
     // CheckTT TestTransTrace;
     GWsPowerSpectrumMeasurer GWsPSMeasurer;
+
+    ptrdiff_t nLast;
+    bool lastMeas;
   };
 } // namespace TempLat
 
