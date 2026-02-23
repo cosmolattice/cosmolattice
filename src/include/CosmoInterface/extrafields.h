@@ -10,6 +10,7 @@
 #include "CosmoInterface/fieldsnumbering.h"
 #include "CosmoInterface/evolvers/rk2nstorageparameters.h"
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/initializers/initialconditionstype.h"
 #include "TempLat/lattice/field/collections/fieldcollection.h"
 #include "TempLat/lattice/field/collections/vectorfieldcollection.h"
 #include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
