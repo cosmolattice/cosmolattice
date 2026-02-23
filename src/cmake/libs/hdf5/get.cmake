@@ -75,4 +75,14 @@ endif()
 
 set(CMAKE_PREFIX_PATH "${HDF5_DIR};${CMAKE_PREFIX_PATH}")
 
+set(HDF5_INCLUDE_DIRS
+    "${HDF5_DIR}/include"
+    CACHE INTERNAL "")
+set(HDF5_LIBRARIES
+    "${HDF5_DIR}/lib/libhdf5.a"
+    CACHE INTERNAL "")
+set(HDF5_C_INCLUDE_DIR
+    "${HDF5_DIR}/include"
+    CACHE INTERNAL "")
+
 message(STATUS "---------- Getting HDF5 DONE ----------\n")
