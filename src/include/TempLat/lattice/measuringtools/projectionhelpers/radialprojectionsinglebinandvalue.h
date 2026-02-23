@@ -65,7 +65,7 @@ namespace TempLat
     {
       return "# " + mBinInformation.getHeader(shift, "bin", false, verbosity);
     }
-    std::string getHeaderValue(int verbosity = 0, int withMultiplicities = true, int shift = 0) const
+    std::string getHeaderValue(int verbosity = 0, int withMultiplicities = 1, int shift = 0) const
     {
       return mValueInformation.getHeader(shift, "values", withMultiplicities, verbosity);
     }

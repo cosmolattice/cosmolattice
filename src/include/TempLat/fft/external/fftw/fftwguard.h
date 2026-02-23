@@ -49,9 +49,9 @@ namespace TempLat
       /* set the default: */
 
       if (mVerbose) sayShort << "Calling FFTW thread initializations.\n";
-      fftw_plan_with_nthreads(ThreadSettings::getMaxThreadCount());
+      fftw_plan_with_nthreads(static_cast<int>(ThreadSettings::getMaxThreadCount()));
 #ifdef HAVE_FFTFLOAT
-      fftwf_plan_with_nthreads(ThreadSettings::getMaxThreadCount());
+      fftwf_plan_with_nthreads(static_cast<int>(ThreadSettings::getMaxThreadCount()));
 #endif
 
 #ifdef HAVE_MPI

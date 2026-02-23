@@ -84,7 +84,7 @@ namespace TempLat
           unitary ? 1 : (r0 == 0 ? std::numeric_limits<double>::max() : device::sqrt(-2 * device::log(r0)));
       const double boxMullerTheta = real ? 0 : cTwoPi * r1;
 
-      return {{boxMullerR * device::cos(boxMullerTheta), boxMullerR * device::sin(boxMullerTheta)}};
+      return device::array<double, 2u>{boxMullerR * device::cos(boxMullerTheta), boxMullerR * device::sin(boxMullerTheta)};
     }
   };
 } // namespace TempLat

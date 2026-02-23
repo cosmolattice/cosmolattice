@@ -30,14 +30,14 @@ namespace TempLat
     DEVICE_FUNCTION
     ptrdiff_t operator()(double value) const
     {
-      ptrdiff_t bin = device::round(mNBins * (value - mMinVal) / mRange);
+      ptrdiff_t bin = static_cast<ptrdiff_t>(device::round(static_cast<double>(mNBins) * (value - mMinVal) / mRange));
       return device::min(mHighestBin, device::max(ptrdiff_t(0), bin));
     }
 
     template <typename T> void setCentralBinBounds(std::vector<T> &res)
     {
       res = std::vector<T>(mNBins);
-      T steps = mRange / mNBins;
+      T steps = mRange / static_cast<double>(mNBins);
       for (ptrdiff_t i = 0; i < mNBins; ++i) {
         res[i] = mMinVal + i * steps;
       }
