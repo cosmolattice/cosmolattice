@@ -16,7 +16,7 @@ namespace TempLat
    finding source code locations. Need to convert that to file addresses, using this offset. */
   inline ptrdiff_t SetStacktracePtrToFileAddress()
   {
-#if defined(__APPLE__)
+#ifdef __APPLE__
     /* get the address of this function. */
     std::array<void *, 128> addrlist;
     int len;

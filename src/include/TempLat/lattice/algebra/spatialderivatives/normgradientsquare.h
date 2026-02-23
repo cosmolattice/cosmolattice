@@ -16,8 +16,6 @@
 
 #include "TempLat/parallel/device.h"
 
-#include "TempLat/util/tuple_tools.h"
-
 namespace TempLat
 {
   /** @brief A class which computes the gradient square norm.

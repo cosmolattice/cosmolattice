@@ -9,7 +9,6 @@
 #include "TempLat/lattice/algebra/listoperators/listmultiply.h"
 #include "TempLat/lattice/algebra/listoperators/listpower.h"
 #include "TempLat/lattice/algebra/listoperators/listshift.h"
-#include "TempLat/lattice/algebra/listoperators/listsquareroot.h"
 #include "TempLat/lattice/algebra/listoperators/listsubtract.h"
 #include "TempLat/lattice/algebra/listoperators/listunaryminus.h"
 #include "TempLat/lattice/algebra/listoperators/norm.h"

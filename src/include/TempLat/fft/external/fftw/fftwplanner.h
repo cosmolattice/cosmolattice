@@ -7,6 +7,8 @@
 
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
+#include <algorithm>
+
 #include "TempLat/fft/fftlibraryinterface.h"
 #include "TempLat/fft/external/fftw/fftwplanholder.h"
 #include "TempLat/fft/external/fftw/fftwtranspositionflags.h"
@@ -29,7 +31,7 @@ namespace TempLat
 
     virtual void setPlannerPatience(int level)
     {
-      if (level > 3) level = 3;
+      level = std::min(level, 3);
       switch (level) {
       case 3:
         patienceFlag = FFTW_EXHAUSTIVE;

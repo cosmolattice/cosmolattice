@@ -37,7 +37,7 @@
 
 #ifdef TempLatPOSIXDETECTED
 #include <unistd.h>
-#if defined(__APPLE__)
+#ifdef __APPLE__
 #include <dlfcn.h>
 #include <mach-o/dyld.h>
 #endif
