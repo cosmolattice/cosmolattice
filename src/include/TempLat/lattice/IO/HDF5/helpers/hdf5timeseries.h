@@ -28,7 +28,7 @@ namespace TempLat
 
     HDF5TimeSeries(const hid_t &id) : HDF5Dataset(id), count(0), curOffset(0) {}
 
-    HDF5TimeSeries(hid_t &&id) : HDF5Dataset(id), count(0), curOffset(0) {}
+    HDF5TimeSeries(hid_t &&id) : HDF5Dataset(std::move(id)), count(0), curOffset(0) {}
 
     void push(const T &elem)
     {

@@ -25,10 +25,10 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    TempLatVector() {}
+    TempLatVector() = default;
 
     TempLatVector(const std::vector<T> &vec) : mVec(vec) {}
-    TempLatVector(std::vector<T> &&vec) : mVec(vec) {}
+    TempLatVector(std::vector<T> &&vec) : mVec(std::move(vec)) {}
 
     template <typename... Args>
     TempLatVector(Args... args)
@@ -68,9 +68,9 @@ namespace TempLat
 
     void push_back(const T &val) { mVec.push_back(val); }
 
-    void push_back(T &&val) { mVec.push_back(std::forward<T>(val)); }
+    void push_back(T &&val) { mVec.push_back(std::move(val)); }
 
-    auto emplace_back(T &&val) { return mVec.emplace_back(std::forward<T>(val)); }
+    auto emplace_back(T &&val) { return mVec.emplace_back(std::move(val)); }
 
     auto &back() { return mVec.back(); }
 

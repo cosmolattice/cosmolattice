@@ -34,11 +34,8 @@ namespace TempLat
 
     HDF5Dataset(const hid_t &id) : HDF5Object(id), alreadyClosed(false) {}
 
-    HDF5Dataset(hid_t &&id) : HDF5Object(id), alreadyClosed(false) {}
-    ~HDF5Dataset()
-    {
-      //  this->close();
-    }
+    HDF5Dataset(hid_t &&id) : HDF5Object(std::move(id)), alreadyClosed(false) {}
+    ~HDF5Dataset() = default;
 
     void close()
     {

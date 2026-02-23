@@ -49,11 +49,11 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    HDF5Group() {}
+    HDF5Group() = default;
 
     HDF5Group(const hid_t &id) : HDF5Object(id), alreadyClosed(false) {}
 
-    HDF5Group(hid_t &&id) : HDF5Object(id), alreadyClosed(false) {}
+    HDF5Group(hid_t &&id) : HDF5Object(std::move(id)), alreadyClosed(false) {}
 
     ~HDF5Group() { this->close(); }
 

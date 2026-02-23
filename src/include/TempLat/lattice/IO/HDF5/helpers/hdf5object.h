@@ -26,11 +26,11 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    HDF5Object() {}
+    HDF5Object() = default;
 
     HDF5Object(const hid_t &id) : mId(id) {}
 
-    HDF5Object(hid_t &&id) : mId(id) {}
+    HDF5Object(hid_t &&id) : mId(std::move(id)) {}
 
     operator hid_t &() { return mId; }
 

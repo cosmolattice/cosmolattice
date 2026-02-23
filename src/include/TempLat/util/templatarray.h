@@ -23,10 +23,10 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    TempLatArray() {}
+    TempLatArray() = default;
 
     TempLatArray(const std::array<T, N> &vec) : mVec(vec) {}
-    TempLatArray(std::array<T, N> &&vec) : mVec(vec) {}
+    TempLatArray(std::array<T, N> &&vec) : mVec(std::move(vec)) {}
 
     void operator=(const std::vector<T> &vec)
     {

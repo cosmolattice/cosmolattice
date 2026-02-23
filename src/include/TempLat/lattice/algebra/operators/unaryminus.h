@@ -64,7 +64,7 @@ namespace TempLat
   /** @brief Specialize for double minus signs. */
   template <typename T> DEVICE_FORCEINLINE_FUNCTION auto operator-(Operators::UnaryMinus<Operators::UnaryMinus<T>> &&a)
   {
-    return a;
+    return std::move(a);
   }
 } // namespace TempLat
 

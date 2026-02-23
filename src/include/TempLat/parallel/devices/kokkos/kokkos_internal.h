@@ -244,7 +244,7 @@ namespace TempLat
       DEVICE_FORCEINLINE_FUNCTION auto makeArray(device_kokkos::tuple<Args...> &&tuple) const
       {
         return device_kokkos::apply(
-            [](const auto &...args) { return device_kokkos::IdxArray<NDim>{{static_cast<Idx>(args)...}}; }, tuple);
+            [](const auto &...args) { return device_kokkos::IdxArray<NDim>{{static_cast<Idx>(args)...}}; }, std::move(tuple));
       }
     };
   } // namespace device_kokkos
