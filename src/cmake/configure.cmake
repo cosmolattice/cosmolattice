@@ -3,11 +3,12 @@ include(./src/cmake/add_cosmolattice_exec.cmake)
 include_directories(src/include/)
 include_directories(SYSTEM external/include/)
 
+# fftw needs to be included before KokkosFFT, since KokkosFFT may use the FFTW
+# include path to determine whether FFTW is available
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/libs/fftw.cmake)
+
 # Set up the device
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/device/device.cmake)
-
-include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/libs/fftw.cmake)
-# include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/libs/getfftw.cmake)
 
 # Need pthread to compile the non-mpi version
 set(THREADS_PREFER_PTHREAD ON)
