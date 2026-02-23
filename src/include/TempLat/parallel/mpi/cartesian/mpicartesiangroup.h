@@ -61,7 +61,7 @@ namespace TempLat
 
     int getRank() { return mCartesianGroup.getRank(); }
 
-    ptrdiff_t getNDimensions() { return mNDimensions; }
+    ptrdiff_t getNDimensions() const { return mNDimensions; }
 
     /** @brief Returns the position of the current process in the cartesian grid. Values are relative
      *         to the rank layout, nothing else. */
@@ -73,7 +73,7 @@ namespace TempLat
     /** @brief Only for testing purposes: get the decomposition of this group to verify whatever. */
     const std::vector<int> &getDecomposition() const { return mDecomposition; }
 
-    const auto size() const { return mBaseGroup.size(); }
+    auto size() const { return mBaseGroup.size(); }
 
     friend std::ostream &operator<<(std::ostream &ostream, MPICartesianGroup mGr)
     {

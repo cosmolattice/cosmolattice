@@ -64,7 +64,7 @@ namespace TempLat
         apply(mBlock, (T)(scale * mNorm * intrinsicScale));
         break;
       case cFourierType:
-        if (!AlmostEqual(intrinsicScale, 1)) apply(mBlock, (T)(intrinsicScale));
+        if (!AlmostEqual(intrinsicScale, 1)) apply(mBlock, intrinsicScale);
       default:
         break;
       }
@@ -79,7 +79,7 @@ namespace TempLat
         apply(mBlock, (T)(scale * mNorm * intrinsicScale));
         break;
       case cConfigType:
-        if (!AlmostEqual(intrinsicScale, 1)) apply(mBlock, (T)(intrinsicScale));
+        if (!AlmostEqual(intrinsicScale, 1)) apply(mBlock, intrinsicScale);
       default:
         break;
       }

@@ -133,7 +133,7 @@ namespace TempLat
 
     std::string toString() const { return "Random gaussian field with seed: \"" + prng.getSeedString() + "\""; }
 
-    const auto getCurrentSeed() const { return prng.getSeed(); }
+    auto getCurrentSeed() const { return prng.getSeed(); }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

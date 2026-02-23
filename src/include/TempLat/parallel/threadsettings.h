@@ -74,11 +74,11 @@ namespace TempLat
       if (mHardwareAllowedThreadsPerProcess < 1) mHardwareAllowedThreadsPerProcess = 1;
     }
 
-    ptrdiff_t pGetMPILocalSize() { return mMPILocalSize; }
+    ptrdiff_t pGetMPILocalSize() const { return mMPILocalSize; }
 
     void pSetMPIThreadsNotOK() { mUserAllowedThreadsPerProcess = 1; }
 
-    ptrdiff_t pGetMaxThreadCount() { return mHardwareAllowedThreadsPerProcess; }
+    ptrdiff_t pGetMaxThreadCount() const { return mHardwareAllowedThreadsPerProcess; }
   };
 } // namespace TempLat
 

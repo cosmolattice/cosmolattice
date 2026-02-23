@@ -132,18 +132,18 @@ namespace TempLat
     //  Second derivatives of the program potential with respect fields
     /////////
 
-    auto potDeriv2(Tag<0>) // 2nd derivative with respect complex scalar norm
+    auto potDeriv2(Tag<0>) const // 2nd derivative with respect complex scalar norm
     {
       return m2;
     }
 
-    auto getFluctuationRatio(FieldsNumbering::piS) { return fluctuationRatio; }
+    auto getFluctuationRatio(FieldsNumbering::piS) const { return fluctuationRatio; }
 
-    auto getFluctuationRatio(FieldsNumbering::fldS) { return fluctuationRatio; }
+    auto getFluctuationRatio(FieldsNumbering::fldS) const { return fluctuationRatio; }
 
-    auto getFluctuationRatio(FieldsNumbering::fldU1) { return fluctuationRatio; }
+    auto getFluctuationRatio(FieldsNumbering::fldU1) const { return fluctuationRatio; }
 
-    auto getFluctuationRatio(FieldsNumbering::piU1) { return fluctuationRatio; }
+    auto getFluctuationRatio(FieldsNumbering::piU1) const { return fluctuationRatio; }
   };
 } // namespace TempLat
 

@@ -31,8 +31,8 @@ namespace TempLat
 
     RandomGaussian(const std::string &seed) : mRandomUniform(seed) {}
 
-    const auto getSeed() const { return mRandomUniform.getSeed(); }
-    const auto getSeedString() const { return mRandomUniform.getSeedString(); }
+    auto getSeed() const { return mRandomUniform.getSeed(); }
+    auto getSeedString() const { return mRandomUniform.getSeedString(); }
 
     DEVICE_FORCEINLINE_FUNCTION
     auto getPair(INT2 r, INT2 c, INT2 g, bool real = false, bool unitary = false) const

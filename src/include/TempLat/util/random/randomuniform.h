@@ -64,7 +64,7 @@ namespace TempLat
       mSeed = static_cast<INT2>((uint64_t)mHashSeed);
     }
 
-    const auto getSeed() const { return mSeed; }
+    auto getSeed() const { return mSeed; }
 
     const std::string &getSeedString() const { return *mStringSeed; }
 

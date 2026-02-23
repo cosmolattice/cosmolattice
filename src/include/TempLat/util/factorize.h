@@ -35,10 +35,10 @@ namespace TempLat
     size_t size() const { return factors.size(); }
 
     /** iterate */
-    const auto begin() const { return factors.begin(); }
+    auto begin() const { return factors.begin(); }
 
     /** iterate */
-    const auto end() const { return factors.end(); }
+    auto end() const { return factors.end(); }
 
     /** We are sorted already, but let's just give the caller peace of mind. */
     void sort(bool reverse = false)

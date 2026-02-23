@@ -23,7 +23,7 @@ namespace TempLat
     /** @brief Value to rescale with after a r2c FFT */
     double r2c;
     /** @brief Whether the scales are default (1,1), i.e. as in FFTW */
-    bool isDefault() { return c2r == 1 && r2c == 1; }
+    bool isDefault() const { return c2r == 1 && r2c == 1; }
   };
 
   /** @brief A struct which holds two memory layouts, which are inseparable:
