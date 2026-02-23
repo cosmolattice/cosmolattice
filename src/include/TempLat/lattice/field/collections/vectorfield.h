@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
 #include "TempLat/lattice/field/collections/fieldcollection.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 
 namespace TempLat
 {
@@ -17,8 +18,8 @@ namespace TempLat
    *
    * Unit test: ctest -R test-vectorfield3d
    **/
-  template <class Arg, class T, int N, bool flatAssign = false>
-  using VectorField = FieldCollection<Arg, T, N, flatAssign, 1>;
+  template <class Arg, bool flatAssign = false>
+  using VectorField = FieldCollection<Arg, GetNDim::get<Arg>(), flatAssign, 1>;
 } // namespace TempLat
 
 #endif

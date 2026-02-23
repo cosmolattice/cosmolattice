@@ -40,11 +40,11 @@ namespace TempLat
     static constexpr double alpha = 1.;
     static constexpr double dx = 1.;
 
-    FieldCollection<ComplexField<NDim, T>, T, NCs> fldCS;
-    FieldCollection<ComplexField<NDim, T>, T, NCs> piCS;
+    FieldCollection<ComplexField<NDim, T>, NCs> fldCS;
+    FieldCollection<ComplexField<NDim, T>, NCs> piCS;
 
-    VectorFieldCollection<Field<NDim, T>, T, NDim, NU1> fldU1;
-    VectorFieldCollection<Field<NDim, T>, T, NDim, NU1> piU1;
+    VectorFieldCollection<Field<NDim, T>, NU1> fldU1;
+    VectorFieldCollection<Field<NDim, T>, NU1> piU1;
 
     auto potDerivNormCS(Tag<0>) const { return ZeroType() * norm(fldCS(0_c)); }
   };

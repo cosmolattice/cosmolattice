@@ -11,7 +11,6 @@
 #include "TempLat/util/powr.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianredundancy.h"
 #include "TempLat/lattice/memory/memorylayouts/hermitianvalueaccounting.h"
-#include "TempLat/util/isarray.h"
 
 #include "TempLat/parallel/device.h"
 

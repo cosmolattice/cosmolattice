@@ -10,7 +10,6 @@
 #include "TempLat/lattice/memory/memorylayouts/hermitianpartners.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructlocaltransposed.h"
 #include "TempLat/util/exception.h"
-#include "TempLat/util/isarray.h"
 #include "TempLat/util/constexpr_for.h"
 
 #include "TempLat/parallel/device.h"
@@ -107,12 +106,7 @@ namespace TempLat
     DEVICE_FORCEINLINE_FUNCTION
     const device::IdxArray<NDim> &getGlobalSizes() const { return getGlobal().getGlobalSizes(); }
 
-    template <typename C>
-      requires IsNDArray<C, NDim>
-    void setLocalSizes(const C &input)
-    {
-      getTransposed().setLocalSizes(input);
-    }
+    void setLocalSizes(const device::IdxArray<NDim> &input) { getTransposed().setLocalSizes(input); }
 
     void setNGhosts(const device::Idx &nGhosts) { getTransposed().setNGhosts(nGhosts); }
 
