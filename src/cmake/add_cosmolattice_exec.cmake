@@ -1,6 +1,8 @@
 # Function to compile any main which use CosmoLattice.
 function(add_cosmolattice execName path ofile)
   add_executable(${execName} ${path} ${ofile})
+  # TempLat (header-only, provides include paths)
+  target_link_libraries(${execName} PUBLIC TempLat::TempLat)
   if(MPI)
     target_link_libraries(${execName} PUBLIC ${MPI_CXX_LIBRARIES})
   endif()

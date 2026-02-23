@@ -6,8 +6,16 @@ set(NPROCESSES
     4
     CACHE STRING "Number of MPI processes used for testing (default = 4)")
 
-# Glob all test sources (excluding tddmain.cpp)
-file(GLOB_RECURSE test_sources "${CMAKE_SOURCE_DIR}/src/tests/*/*.cpp")
+# Get the path to the fetched TempLat source
+FetchContent_GetProperties(TempLat SOURCE_DIR templat_SOURCE_DIR)
+set(TDDMAIN "${templat_SOURCE_DIR}/tests/tddmain.cpp")
+
+# Discover test sources from TWO locations:
+#   1. TempLat tests — from the fetched templat source
+#   2. CosmoInterface tests — from the in-tree src/tests/
+file(GLOB_RECURSE templat_test_sources "${templat_SOURCE_DIR}/tests/TempLat/*.cpp")
+file(GLOB_RECURSE cosmointerface_test_sources "${CMAKE_SOURCE_DIR}/src/tests/CosmoInterface/*.cpp")
+set(test_sources ${templat_test_sources} ${cosmointerface_test_sources})
 
 foreach(fn ${test_sources})
   get_filename_component(f_name ${fn} NAME)
@@ -22,15 +30,19 @@ foreach(fn ${test_sources})
   set(target_name "test-${test_name}")
 
   # Build the test executable using cosmolattice infrastructure
-  add_cosmolattice(${target_name} ${CMAKE_SOURCE_DIR}/src/tests/tddmain.cpp "")
+  add_cosmolattice(${target_name} ${TDDMAIN} "")
   target_sources(${target_name} PRIVATE ${fn})
   target_compile_definitions(${target_name} PUBLIC CHECKBOUNDS)
 
-  # Extract folder path relative to tests directory for test labeling
-  string(REPLACE "${CMAKE_SOURCE_DIR}/src/tests/" "" relative_path "${fn}")
-  get_filename_component(folder_path "${relative_path}" DIRECTORY)
-  # Convert folder path to label format (e.g., TempLat/fft -> TempLat;fft)
-  string(REPLACE "/" ";" folder_labels "${folder_path}")
+  # Labels: derive from folder path relative to the tests/ directory in each source
+  # For TempLat tests:  .../templat/tests/TempLat/fft/foo.cpp → TempLat;fft
+  # For CosmoInterface: .../src/tests/CosmoInterface/foo.cpp   → CosmoInterface
+  if(fn MATCHES ".*/tests/(.+)/[^/]+\\.cpp$")
+    set(relative_dir "${CMAKE_MATCH_1}")
+    string(REPLACE "/" ";" folder_labels "${relative_dir}")
+  else()
+    set(folder_labels "")
+  endif()
 
   # Register test with CTest
   if(MPI)
@@ -47,6 +59,6 @@ foreach(fn ${test_sources})
   endif()
 
   # Add labels for filtering tests by folder
-  # This allows running tests like: ctest -L TempLat or ctest -L "fft"
+  # This allows running tests like: ctest -L TempLat or ctest -L CosmoInterface
   set_tests_properties(${target_name} PROPERTIES LABELS "${folder_labels}")
 endforeach()

@@ -1,5 +1,8 @@
 include(./src/cmake/add_cosmolattice_exec.cmake)
 
+# Fetch TempLat as external dependency
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/libs/templat.cmake)
+
 include_directories(src/include/)
 include_directories(SYSTEM external/include/)
 
