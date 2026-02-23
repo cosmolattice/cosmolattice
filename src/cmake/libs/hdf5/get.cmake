@@ -31,7 +31,7 @@ endif()
 
 if(MPI)
   set(HDF5_CONFIGFLAGS_MPI
-      "--enable-mpi"
+      "--enable-parallel"
       CACHE STRING "")
 endif()
 
