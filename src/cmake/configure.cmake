@@ -7,6 +7,7 @@ include_directories(SYSTEM external/include/)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/device/device.cmake)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/libs/fftw.cmake)
+# include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/libs/getfftw.cmake)
 
 # Need pthread to compile the non-mpi version
 set(THREADS_PREFER_PTHREAD ON)
