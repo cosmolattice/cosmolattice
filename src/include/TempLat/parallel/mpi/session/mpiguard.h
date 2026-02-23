@@ -61,7 +61,7 @@ namespace TempLat
       if (mVerbose) sayShort << "MPI Initialized.\n";
 
       /* what is the number of threads we can anyway use on this hardware? */
-      MPI_Info empty = (MPI_Info)NULL;
+      auto empty = (MPI_Info)nullptr;
       MPI_Info_create(&empty);
       MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED, 0, empty, &nodeLocalGroup);
       MPI_Info_free(&empty);

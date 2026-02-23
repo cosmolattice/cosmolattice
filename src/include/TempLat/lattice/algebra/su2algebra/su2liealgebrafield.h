@@ -43,7 +43,7 @@ namespace TempLat
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2LieAlgebraGet(Tag<N> t) const { return 2 * SU2Get(t); }
 
-    DEVICE_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return ZeroType(); }
+    DEVICE_FORCEINLINE_FUNCTION ZeroType operator()(Tag<0> t) const { return {}; }
 
     template <int M> auto &operator()(Tag<M> t) { return fs[M - 1]; }
     template <int M> DEVICE_FORCEINLINE_FUNCTION const auto &operator()(Tag<M> t) const { return fs[M - 1]; }

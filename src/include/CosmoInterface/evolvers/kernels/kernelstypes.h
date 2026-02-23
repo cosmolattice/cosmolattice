@@ -10,7 +10,7 @@
 #include "TempLat/lattice/algebra/su2algebra/su2algebra.h"
 #include "TempLat/lattice/field/collections/vectorfieldcollection.h"
 
-namespace TempLat {
+namespace TempLat::KernelsTypes {
 
 
     /** \brief A mechanism to define different kernels for the same solver.
@@ -18,8 +18,6 @@ namespace TempLat {
      *
      *
      **/
-
-    namespace KernelsTypes {
         template<typename T> class EoM{
         public:
             template<class Model>
@@ -36,10 +34,6 @@ namespace TempLat {
         {
             model.dt = dt;
         }
-    }
-
-
-
-} /* TempLat */
+} // namespace TempLat::KernelsTypes
 
 #endif

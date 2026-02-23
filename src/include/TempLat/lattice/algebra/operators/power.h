@@ -96,9 +96,9 @@ namespace TempLat
     return Operators::Power<R, T>(r, t);
   }
 
-  template <ptrdiff_t N> DEVICE_FORCEINLINE_FUNCTION ZeroType pow(ZeroType) { return ZeroType(); }
+  template <ptrdiff_t N> DEVICE_FORCEINLINE_FUNCTION ZeroType pow(ZeroType) { return {}; }
 
-  template <typename T> DEVICE_FORCEINLINE_FUNCTION OneType pow(const T &a, ZeroType b) { return OneType(); }
+  template <typename T> DEVICE_FORCEINLINE_FUNCTION OneType pow(const T &a, ZeroType b) { return {}; }
 
   /** @brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>

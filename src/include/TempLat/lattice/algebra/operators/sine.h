@@ -62,7 +62,7 @@ namespace TempLat
 
   /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
-  ZeroType sin(ZeroType a) { return ZeroType(); }
+  ZeroType sin(ZeroType a) { return {}; }
 } // namespace TempLat
 
 #endif

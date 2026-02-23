@@ -18,7 +18,7 @@ namespace TempLat
     size_t funcnamesize = 4096;
     char *funcname = (char *)malloc(funcnamesize);
 
-    char *begin_name = 0, *begin_offset = 0, *end_offset = 0;
+    char *begin_name = nullptr, *begin_offset = nullptr, *end_offset = nullptr;
 
 #ifdef __APPLE__
     // OSX style stack trace

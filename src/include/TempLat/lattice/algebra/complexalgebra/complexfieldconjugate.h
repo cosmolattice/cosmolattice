@@ -66,9 +66,9 @@ namespace TempLat
   }
 
   DEVICE_FORCEINLINE_FUNCTION
-  OneType dagger(OneType) { return OneType(); }
+  OneType dagger(OneType) { return {}; }
   DEVICE_FORCEINLINE_FUNCTION
-  OneType conj(OneType) { return OneType(); }
+  OneType conj(OneType) { return {}; }
 
   DEVICE_FORCEINLINE_FUNCTION
   ZeroType conj(ZeroType t) { return t; };

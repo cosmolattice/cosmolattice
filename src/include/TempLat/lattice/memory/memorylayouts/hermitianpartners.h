@@ -136,13 +136,13 @@ namespace TempLat
         /* 2^ND-1 is the number of real-valued entries, at {{ 0, 0, N/2, N/2, ...}}. */
         device::Idx real = imaginary + powr<NDim>(2);
 
-        return HermitianValueAccounting(real, imaginary);
+        return {real, imaginary};
       } else // if (mode == HermitianPartnersMode::none)
       {
         device::Idx vol = 1;
         for (device::Idx x : mNGrid)
           vol *= x;
-        return HermitianValueAccounting(vol, 0);
+        return {vol, 0};
       }
     }
 

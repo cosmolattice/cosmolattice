@@ -67,7 +67,7 @@ namespace TempLat
 
   /** @brief Specialize for possible zero output! */
   DEVICE_FORCEINLINE_FUNCTION
-  ZeroType log(OneType a) { return ZeroType(); }
+  ZeroType log(OneType a) { return {}; }
 } // namespace TempLat
 
 #endif

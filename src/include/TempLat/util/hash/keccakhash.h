@@ -29,7 +29,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    typedef KeccakHashBareClass ResultType;
+    using ResultType = KeccakHashBareClass;
 
     template <typename T> static ResultType compute(const T &input)
     {
@@ -41,7 +41,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     /** @brief Constructor is private: no need to instantiate, just call the static compute. */
-    KeccakHash() {}
+    KeccakHash() = default;
   };
 } // namespace TempLat
 

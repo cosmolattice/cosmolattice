@@ -67,7 +67,7 @@ namespace TempLat
 
   /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
-  OneType exp(ZeroType a) { return OneType(); }
+  OneType exp(ZeroType a) { return {}; }
 } // namespace TempLat
 
 #endif

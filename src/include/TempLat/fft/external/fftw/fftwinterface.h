@@ -33,7 +33,7 @@ namespace TempLat
 
     virtual ptrdiff_t getMaximumNumberOfDimensionsToDivide(ptrdiff_t nDimensions) { return 1; };
 
-    virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nGridPoints) { return IntrinsicScales(); }
+    virtual IntrinsicScales getIntrinsicRescaleToGetUnnormalizedFFT(ptrdiff_t nGridPoints) { return {}; }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

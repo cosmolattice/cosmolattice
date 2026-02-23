@@ -68,7 +68,7 @@ namespace TempLat
 
   /** @brief Specialize for possible unit input! acos(1) = 0. */
   DEVICE_FORCEINLINE_FUNCTION
-  ZeroType acos(OneType a) { return ZeroType(); }
+  ZeroType acos(OneType a) { return {}; }
 } // namespace TempLat
 
 #endif

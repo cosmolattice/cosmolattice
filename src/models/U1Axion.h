@@ -32,8 +32,7 @@ namespace TempLat
     // scalars/SU2 doublets
     //  --> If a type of interaction is not present, comment the corresponding line
 
-    typedef TempLat::CouplingsManager<NScalars, NU1Flds, true>
-        ScalarU1AxionCouplings; // activates axion coupling U(1)-scalar
+    using ScalarU1AxionCouplings = TempLat::CouplingsManager<NScalars, NU1Flds, true>; // activates axion coupling U(1)-scalar
 
     // typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings; // activates coupling
     // U(1)-doublet

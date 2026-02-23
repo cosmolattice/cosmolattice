@@ -10,10 +10,8 @@
 #include "TempLat/util/exception.h"
 #include "TempLat/parallel/devices/kokkos/kokkos.h"
 
-namespace TempLat
+namespace TempLat::device_kokkos
 {
-  namespace device_kokkos
-  {
     MakeException(KokkosDeviceGuardInstantiationException);
 
     /**
@@ -66,7 +64,6 @@ namespace TempLat
     public:
       static int GetInstanceCount() { return InstanceCounter(); }
     };
-  } // namespace device_kokkos
-} // namespace TempLat
+} // namespace TempLat::device_kokkos
 
 #endif

@@ -38,7 +38,7 @@ namespace TempLat
       }
     }
 
-    ~KokkosFFTGuard() {}
+    ~KokkosFFTGuard() override = default;
 
     /* delete the copy constructor and copy assignment */
     KokkosFFTGuard(const KokkosFFTGuard &other) = delete;

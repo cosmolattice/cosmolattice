@@ -47,10 +47,10 @@ namespace TempLat
 
     // Coupling managers, they deal with the possible couplings between the gauge fields and complex scalars/SU2
     // doublets
-    typedef CouplingsManager<NCScalars, NU1Flds> CsU1Couplings;             // couplings U(1) gauge-complex scalar
-    typedef CouplingsManager<NSU2Doublet, NU1Flds> SU2DoubletU1Couplings;   // couplings U(1) gauge-SU2 doublet
-    typedef CouplingsManager<NSU2Doublet, NSU2Flds> SU2DoubletSU2Couplings; // couplings SU(2) gauge-SU2 doublet
-    typedef CouplingsManager<NScalars, NU1Flds> ScalarU1AxionCouplings;     // couplings U(1) gauge-scalar axion
+    using CsU1Couplings = CouplingsManager<NCScalars, NU1Flds>;             // couplings U(1) gauge-complex scalar
+    using SU2DoubletU1Couplings = CouplingsManager<NSU2Doublet, NU1Flds>;   // couplings U(1) gauge-SU2 doublet
+    using SU2DoubletSU2Couplings = CouplingsManager<NSU2Doublet, NSU2Flds>; // couplings SU(2) gauge-SU2 doublet
+    using ScalarU1AxionCouplings = CouplingsManager<NScalars, NU1Flds>;     // couplings U(1) gauge-scalar axion
   };
 
   // In order to make some of the expression template mechanism works, the number of fields needs to be known

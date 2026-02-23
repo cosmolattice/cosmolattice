@@ -15,12 +15,8 @@
 #include <Kokkos_Core.hpp>
 #include <sstream>
 
-namespace TempLat
+namespace TempLat::device_kokkos::memory
 {
-  namespace device_kokkos
-  {
-    namespace memory
-    {
       template <size_t NDim, typename T, typename Exec = DefaultExecutionSpace, typename Layout = DefaultLayout>
       using NDView = Kokkos::View<typename GetKokkosNDStarType<NDim, T>::type, // Get the star syntax for
                                                                                // dimensionality recursively with
@@ -171,8 +167,6 @@ namespace TempLat
           copyDeviceToDevice(device_temp, dest);
         }
       }
-    } // namespace memory
-  } // namespace device_kokkos
-} // namespace TempLat
+} // namespace TempLat::device_kokkos::memory
 
 #endif

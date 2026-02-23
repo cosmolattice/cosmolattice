@@ -7,6 +7,7 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2019
 
+#include <numbers>
 #include "TempLat/parallel/device.h"
 
 namespace TempLat
@@ -22,8 +23,7 @@ namespace TempLat
   {
 
     template <typename T = double>
-    constexpr T pi = T(
-        3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679821480865132823066470938446095505822317253594081284811174502841027019385211055596446229489549303820);
+    constexpr T pi = std::numbers::pi_v<T>;
 
     // constexpr static T reducedMPlanck = 2.435363e18; //GEV2, PDG value.
     template <typename T = double> constexpr T reducedMPlanck = T(2.435e18); // Agreement between PDG and CODATA

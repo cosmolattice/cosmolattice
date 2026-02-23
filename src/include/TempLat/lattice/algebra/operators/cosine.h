@@ -66,7 +66,7 @@ namespace TempLat
 
   /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
-  OneType cos(ZeroType a) { return OneType(); }
+  OneType cos(ZeroType a) { return {}; }
 } // namespace TempLat
 
 #endif

@@ -41,12 +41,8 @@ static_assert(false, "No DEVICE_CLASS_LAMBDA defined.");
 
 #include <atomic>
 
-namespace TempLat
+namespace TempLat::device::memory
 {
-  namespace device
-  {
-    namespace memory
-    {
       using export_device_namespace::memory::NDView;
       using export_device_namespace::memory::NDViewUnmanaged;
       using export_device_namespace::memory::NDViewUnmanagedHost;
@@ -198,8 +194,6 @@ namespace TempLat
       };
 
       using host_string = host_ptr<std::string>;
-    } // namespace memory
-  } // namespace device
-} // namespace TempLat
+} // namespace TempLat::device::memory
 
 #endif

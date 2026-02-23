@@ -68,7 +68,7 @@ namespace TempLat
 #endif // NOFFT
     }
 
-    ~FFTWGuard()
+    ~FFTWGuard() override
     {
 #ifndef NOFFT
 

@@ -52,10 +52,8 @@
 #define DEVICE_LAMBDA KOKKOS_LAMBDA
 #define DEVICE_CLASS_LAMBDA KOKKOS_CLASS_LAMBDA
 
-namespace TempLat
+namespace TempLat::device_kokkos
 {
-  namespace device_kokkos
-  {
     // What's going on here: on GPU, it is beneficial to reverse the memory access pattern, for coalesced access.
     // However, we do not want to impose this on the level of the memory layouts. In particular, this would
     // require additional transpositions when going to Fourier space, which is not what we want. So we do the
@@ -159,8 +157,7 @@ namespace TempLat
     using Kokkos::tanh;
 
     template <typename T> using complex = Kokkos::complex<T>;
-  } // namespace device_kokkos
-} // namespace TempLat
+} // namespace TempLat::device_kokkos
 
 #include "TempLat/parallel/devices/kokkos/kokkos_internal.h"
 

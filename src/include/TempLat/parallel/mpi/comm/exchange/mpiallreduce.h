@@ -38,7 +38,7 @@ namespace TempLat
      */
     template <typename T>
       requires requires { MPITypeSelect<T>(); }
-    T Allreduce(const T &value, MPI_Op operation, ptrdiff_t size = 1, int *error = NULL)
+    T Allreduce(const T &value, MPI_Op operation, ptrdiff_t size = 1, int *error = nullptr)
     {
       T copyValue = value;
       int myerror = MPI_SUCCESS != MPI_Allreduce(MPI_IN_PLACE, &copyValue, size, MPITypeSelect<T>(), operation, mComm);
@@ -54,7 +54,7 @@ namespace TempLat
      *  place, you loose your original array.
      */
     template <typename T>
-    std::vector<T> &Allreduce(std::vector<T> *value, MPI_Op operation, ptrdiff_t size = 0, int *error = NULL)
+    std::vector<T> &Allreduce(std::vector<T> *value, MPI_Op operation, ptrdiff_t size = 0, int *error = nullptr)
     {
       int myerror = MPI_SUCCESS !=
                     MPI_Allreduce(MPI_IN_PLACE, value->data(), value->size(), MPITypeSelect<T>(), operation, mComm);
@@ -76,7 +76,7 @@ namespace TempLat
         view.data();
         MPITypeSelect<typename View::value_type>();
       }
-    View Allreduce(View value, MPI_Op operation, ptrdiff_t size = 0, int *error = NULL)
+    View Allreduce(View value, MPI_Op operation, ptrdiff_t size = 0, int *error = nullptr)
     {
       using T = typename View::value_type;
       int myerror =
@@ -94,7 +94,7 @@ namespace TempLat
      */
     template <typename T, size_t N>
     std::vector<std::array<T, N>> &Allreduce(std::vector<std::array<T, N>> *value, MPI_Op operation, ptrdiff_t size = N,
-                                             int *error = NULL)
+                                             int *error = nullptr)
     {
       int myerror = MPI_SUCCESS !=
                     MPI_Allreduce(MPI_IN_PLACE, value->data(), value->size() * N, MPITypeSelect<T>(), operation, mComm);
@@ -110,7 +110,7 @@ namespace TempLat
      *  place, you loose your original array.
      */
     template <typename T, size_t N>
-    std::array<T, N> &Allreduce(std::array<T, N> *value, MPI_Op operation, ptrdiff_t size = N, int *error = NULL)
+    std::array<T, N> &Allreduce(std::array<T, N> *value, MPI_Op operation, ptrdiff_t size = N, int *error = nullptr)
     {
       int myerror = MPI_SUCCESS != MPI_Allreduce(MPI_IN_PLACE, value->data(), N, MPITypeSelect<T>(), operation, mComm);
       if (error) {
@@ -124,7 +124,7 @@ namespace TempLat
     /** @brief Treat complex values as array of size 2.
      */
     template <typename T>
-    complex<T> Allreduce(complex<T> value, MPI_Op operation, ptrdiff_t size = 2, int *error = NULL)
+    complex<T> Allreduce(complex<T> value, MPI_Op operation, ptrdiff_t size = 2, int *error = nullptr)
     {
       std::array<double, 2u> realView{{value.real(), value.imag()}};
       Allreduce(&realView, operation);
@@ -133,35 +133,35 @@ namespace TempLat
 
 #else
     /** @brief Dummy's for the MPI-less compilation. */
-    template <typename T> const T &Allreduce(const T &whatever, MPI_Op operation, ptrdiff_t size = 1, int *error = NULL)
+    template <typename T> const T &Allreduce(const T &whatever, MPI_Op operation, ptrdiff_t size = 1, int *error = nullptr)
     {
       return whatever;
     }
 
     /** @brief Dummy's for the MPI-less compilation. */
-    template <typename T> T &Allreduce(T *whatever, MPI_Op operation, int *error = NULL) { return *whatever; }
+    template <typename T> T &Allreduce(T *whatever, MPI_Op operation, int *error = nullptr) { return *whatever; }
 #endif
-    template <typename T> T computeAllSum(const T &value, size_t size = 1, int *error = NULL)
+    template <typename T> T computeAllSum(const T &value, size_t size = 1, int *error = nullptr)
     {
       return Allreduce(value, MPI_SUM, size, error);
     }
 
-    template <typename T> T computeAllOr(const T &value, size_t size = 1, int *error = NULL)
+    template <typename T> T computeAllOr(const T &value, size_t size = 1, int *error = nullptr)
     {
       return Allreduce(value, MPI_LOR, size, error);
     }
 
-    template <typename T> T computeAllAnd(const T &value, size_t size = 1, int *error = NULL)
+    template <typename T> T computeAllAnd(const T &value, size_t size = 1, int *error = nullptr)
     {
       return Allreduce(value, MPI_LAND, size, error);
     }
 
-    template <typename T> T computeAllMin(const T &value, size_t size = 1, int *error = NULL)
+    template <typename T> T computeAllMin(const T &value, size_t size = 1, int *error = nullptr)
     {
       return Allreduce(value, MPI_MIN, size, error);
     }
 
-    template <typename T> T computeAllMax(const T &value, size_t size = 1, int *error = NULL)
+    template <typename T> T computeAllMax(const T &value, size_t size = 1, int *error = nullptr)
     {
       return Allreduce(value, MPI_MAX, size, error);
     }

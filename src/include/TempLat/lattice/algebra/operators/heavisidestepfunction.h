@@ -53,11 +53,11 @@ namespace TempLat
 
   /** @brief Specialize for possible zero input! */
   DEVICE_FORCEINLINE_FUNCTION
-  OneType heaviside(ZeroType a) { return OneType(); }
+  OneType heaviside(ZeroType a) { return {}; }
 
   /** @brief Specialize for possible unit input! */
   DEVICE_FORCEINLINE_FUNCTION
-  OneType heaviside(OneType a) { return OneType(); }
+  OneType heaviside(OneType a) { return {}; }
 } // namespace TempLat
 
 #endif

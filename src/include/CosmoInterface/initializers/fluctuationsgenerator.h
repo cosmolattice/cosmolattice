@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/helpers/getngrid.h"
 #include "TempLat/lattice/algebra/complexalgebra/asfourier.h"
 #include "TempLat/lattice/algebra/constants/symbols.h"
+#include <numbers>
 
 namespace TempLat
 {
@@ -121,7 +122,7 @@ namespace TempLat
       auto keffm = MakeVector(i, 1, Model::NDim, 1_c - expIK(i));
       auto keffm2 = Total(i, 1, Model::NDim, norm2(keffm(i)));
 
-      auto e_basis = make_templatvector(0.25, 0.25, sqrt(2.0)/4.0);
+      auto e_basis = make_templatvector(0.25, 0.25, std::numbers::sqrt2/4.0);
       auto edotk = Total(i, 1, 3, e_basis(i) * keffm(i));
 
       auto lambda1 = MakeVector(i, 1, 3, e_basis(i) - edotk * (1.0 / keffm2) * conj(keffm(i)));

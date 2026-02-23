@@ -13,9 +13,7 @@
 
 
 
-namespace TempLat {
-
-    namespace Kernels{
+namespace TempLat::Kernels {
 
 
 
@@ -84,7 +82,6 @@ namespace TempLat {
         {
             return SU2Kernels::get(model, n, kt);
         }
-    }
-}
+} // namespace TempLat::Kernels
 
 #endif

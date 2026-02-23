@@ -22,10 +22,8 @@
 
 #define INSIDE_TempLat_UTIL_HASH_LIBKECCAK_TWOENDIANS_H
 
-namespace TempLat
+namespace TempLat::KECCAK
 {
-  namespace KECCAK
-  {
     /* prepended CLAT_ in order to avoid conflicts with preprocessor definitions. */
     namespace CLAT_LITTLE_ENDIAN
     {
@@ -57,8 +55,7 @@ namespace TempLat
 #undef REINSTATEENDIANAGAIN
 #endif
     } // namespace CLAT_BIG_ENDIAN
-  } // namespace KECCAK
-} // namespace TempLat
+} // namespace TempLat::KECCAK
 
 #undef INSIDE_TempLat_UTIL_HASH_LIBKECCAK_TWOENDIANS_H
 

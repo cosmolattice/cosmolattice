@@ -23,7 +23,7 @@ namespace TempLat
                           LatticeParameters<T> pLatPar = LatticeParameters<T>()) //:
     {
       if constexpr (N > 0)
-        for (size_t i = 0; i < N; ++i) {
+        for (int i = 0; i < N; ++i) {
           fs.push_back(VectorField<Arg, T, NDim, flatAssign>(name + "_" + std::to_string(i), toolBox, pLatPar));
         }
     }

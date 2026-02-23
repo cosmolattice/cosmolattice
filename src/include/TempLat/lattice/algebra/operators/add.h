@@ -66,7 +66,7 @@ namespace TempLat
 
   /** @brief Specialize for possible half input! */
   DEVICE_FORCEINLINE_FUNCTION
-  OneType operator+(const HalfType a, const HalfType b) { return OneType(); }
+  OneType operator+(const HalfType a, const HalfType b) { return {}; }
 
   /** @brief Specialize for possible zero input! Need to disable one of these for two ZeroTypes as input. */
   template <typename T>

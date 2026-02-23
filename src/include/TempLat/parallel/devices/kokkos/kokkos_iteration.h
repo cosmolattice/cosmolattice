@@ -9,12 +9,8 @@
 
 #include "TempLat/parallel/devices/kokkos/kokkos.h"
 
-namespace TempLat
+namespace TempLat::device_kokkos::iteration
 {
-  namespace device_kokkos
-  {
-    namespace iteration
-    {
       // ===== FOREACH =====
       // 1. foreach: device_kokkos::array
       template <size_t NDim, typename Functor, typename I = device_kokkos::Idx>
@@ -82,8 +78,6 @@ namespace TempLat
 
       // ===== FENCE =====
       inline void fence() { Kokkos::fence(); }
-    } // namespace iteration
-  } // namespace device_kokkos
-} // namespace TempLat
+} // namespace TempLat::device_kokkos::iteration
 
 #endif
