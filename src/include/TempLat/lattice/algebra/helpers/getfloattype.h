@@ -16,11 +16,19 @@ namespace TempLat
    * Unit test: ctest -R test-getfloattype
    **/
   template <typename T> struct GetFloatType {
-    using type = T;
   };
 
-  template <typename S> struct GetFloatType<complex<S>> {
-    using type = S;
+  template <typename F>
+    requires std::is_arithmetic_v<F>
+  struct GetFloatType<F> {
+    using type = F;
+  };
+  template <typename F> struct GetFloatType<complex<F>> {
+    using type = F;
+  };
+
+  template <typename T, size_t N> struct GetFloatType<device::array<T, N>> {
+    using type = typename GetFloatType<T>::type;
   };
 } // namespace TempLat
 

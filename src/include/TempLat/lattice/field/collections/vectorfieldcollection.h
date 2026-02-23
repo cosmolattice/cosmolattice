@@ -7,6 +7,9 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
+#include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
+#include "TempLat/lattice/algebra/helpers/getfloattype.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/lattice/field/collections/vectorfield.h"
 
 namespace TempLat
@@ -16,15 +19,19 @@ namespace TempLat
    *
    * Unit test: ctest -R test-vectorfieldcollection
    **/
-  template <class Arg, class T, int NDim, int N, int SHIFTIND = 0, bool flatAssign = false> class VectorFieldCollection
+  template <class Arg, int N, int SHIFTIND = 0, bool flatAssign = false> class VectorFieldCollection
   {
   public:
+    static constexpr size_t NDim = GetNDim::get<Arg>();
+    using RT = GetGetReturnType<Arg>::type;
+    using T = typename GetFloatType<RT>::type;
+
     VectorFieldCollection(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                           LatticeParameters<T> pLatPar = LatticeParameters<T>()) //:
     {
       if constexpr (N > 0)
         for (size_t i = 0; i < N; ++i) {
-          fs.push_back(VectorField<Arg, T, NDim, flatAssign>(name + "_" + std::to_string(i), toolBox, pLatPar));
+          fs.push_back(VectorField<Arg, flatAssign>(name + "_" + std::to_string(i), toolBox, pLatPar));
         }
     }
 
@@ -49,7 +56,7 @@ namespace TempLat
     static constexpr size_t size = N;
 
   private:
-    std::vector<VectorField<Arg, T, NDim, flatAssign>> fs;
+    std::vector<VectorField<Arg, flatAssign>> fs;
   };
 } // namespace TempLat
 

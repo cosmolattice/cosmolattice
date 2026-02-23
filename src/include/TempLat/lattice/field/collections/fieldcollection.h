@@ -7,11 +7,12 @@
 
 // File info: Main contributor(s): Adrien Florio,  Year: 2020
 
-#include "TempLat/lattice/field/abstractfield.h"
 #include "TempLat/util/latinindiceslist.h"
-#include "TempLat/lattice/field/collections/helpers/id.h"
-#include "TempLat/lattice/algebra/helpers/getndim.h"
 #include "TempLat/util/rangeiteration/tagliteral.h"
+#include "TempLat/lattice/algebra/helpers/getgetreturntype.h"
+#include "TempLat/lattice/algebra/helpers/getfloattype.h"
+#include "TempLat/lattice/algebra/helpers/getndim.h"
+
 #include <string>
 
 namespace TempLat
@@ -22,10 +23,12 @@ namespace TempLat
    *
    * Unit test: ctest -R test-fieldcollection
    **/
-  template <class Arg, class T, int N, bool flatAssign = false, int SHIFTIND = 0> class FieldCollection
+  template <class Arg, int N, bool flatAssign = false, int SHIFTIND = 0> class FieldCollection
   {
   public:
     static constexpr size_t NDim = GetNDim::get<Arg>();
+    using RT = GetGetReturnType<Arg>::type;
+    using T = typename GetFloatType<RT>::type;
 
     FieldCollection(std::string name, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox,
                     LatticeParameters<T> pLatPar = LatticeParameters<T>())
@@ -60,7 +63,7 @@ namespace TempLat
 
     template <typename R> void operator+=(R &&r) { (*this) = (*this) + r; }
 
-    void operator=(const FieldCollection<Arg, T, N, flatAssign, SHIFTIND> &other)
+    void operator=(const FieldCollection<Arg, N, flatAssign, SHIFTIND> &other)
     { // overwrite the default = operator.
       for (size_t i = 0; i < fs.size(); ++i)
         fs[i] = other.fs[i];
