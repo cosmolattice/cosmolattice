@@ -9,7 +9,6 @@
 
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorylayouts/layoutstructglobal.h"
-#include "TempLat/util/isarray.h"
 
 namespace TempLat
 {

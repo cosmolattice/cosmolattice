@@ -8,7 +8,6 @@
 // File info: Main contributor(s): Wessel Valkenburg,  Year: 2019
 
 #include "TempLat/util/exception.h"
-#include "TempLat/util/isarray.h"
 
 namespace TempLat
 {

@@ -23,9 +23,6 @@ namespace TempLat
    *
    * Unit test: ctest -R test-hdf5dataset
    **/
-
-  // using HDF5Dataset = hid_t;
-
   class HDF5Dataset : public HDF5Object
   {
   public:
@@ -89,7 +86,8 @@ namespace TempLat
       auto dataspace_id = H5Dget_space(mId);
 
       if (doIWrite) {
-        H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offsets.data(), strides.data(), subdims.data(), blocks.data());
+        H5Sselect_hyperslab(dataspace_id, H5S_SELECT_SET, offsets.data(), strides.data(), subdims.data(),
+                            blocks.data());
       } else {
         H5Sselect_none(dataspace_id);
       }
@@ -98,8 +96,7 @@ namespace TempLat
       hid_t plist_id = H5Pcreate(H5P_DATASET_XFER);
       // H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_COLLECTIVE);
       H5Pset_dxpl_mpio(plist_id, H5FD_MPIO_INDEPENDENT);
-      if (doIWrite)
-        H5Dwrite(mId, type.type, memspace_id, dataspace_id, plist_id, data.data());
+      if (doIWrite) H5Dwrite(mId, type.type, memspace_id, dataspace_id, plist_id, data.data());
       H5Pclose(plist_id);
 #else
       H5Dwrite(mId, type.type, memspace_id, dataspace_id, H5P_DEFAULT, data.data());
