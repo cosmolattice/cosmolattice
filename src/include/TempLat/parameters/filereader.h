@@ -38,7 +38,7 @@ namespace TempLat
           if (tmp != "" && tmp[0] != comment) vec.push_back(tmp);
         }
       } else
-        throw(FileReaderProblemInputFile("There was a problem opening the input file. Abort."));
+        throw(FileReaderProblemInputFile("There was a problem opening the input file at " + str + ". Abort."));
     }
 
   private:
