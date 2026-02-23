@@ -35,9 +35,7 @@ namespace TempLat {
     class AxionCouplings {
     public:
         /* Put public methods here. These should change very little over time. */
-        AxionCouplings() {
-
-        }
+        AxionCouplings() = default;
 
          ////// Scalar AXION Source (used in the kernels of the EOM) //////
 

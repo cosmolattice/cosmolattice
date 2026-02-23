@@ -24,7 +24,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    LogMutex() {}
+    LogMutex() = default;
 
     static void lock()
     {

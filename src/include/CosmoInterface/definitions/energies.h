@@ -23,7 +23,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    Energies() {}
+    Energies() = default;
 
     // The following functions compute the different volume-averaged contributions to the energy density.
     // The required field functionals are computed in fieldfunctionals.h, and then passed to these functions (via the

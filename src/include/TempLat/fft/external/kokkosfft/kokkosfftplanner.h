@@ -28,7 +28,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    KokkosFFTPlanner() {}
+    KokkosFFTPlanner() = default;
 
     virtual void setPlannerPatience(int level) {}
 

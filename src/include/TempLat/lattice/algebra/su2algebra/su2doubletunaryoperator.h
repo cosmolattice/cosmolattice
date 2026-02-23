@@ -31,7 +31,7 @@ namespace TempLat
     SU2DoubletUnaryOperator(const R &pR) : mR(pR) {}
 
     DEVICE_FUNCTION
-    SU2DoubletUnaryOperator(const SU2DoubletUnaryOperator &other) : mR(other.mR) {}
+    SU2DoubletUnaryOperator(const SU2DoubletUnaryOperator &) = default;
 
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
 

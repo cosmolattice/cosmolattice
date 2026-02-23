@@ -21,7 +21,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    HubbleConstraint() {}
+    HubbleConstraint() = default;
 
     // This function computes the degree of conservation of the 1st Friedmann equation (H^2 \propto \rho).
     template <class Model> static auto get(Model &model)

@@ -68,7 +68,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    AssignableCollectionBase() {}
+    AssignableCollectionBase() = default;
     template <int N> int operator()(Tag<N> t) { return 0; }
     template <int N> int getComp(Tag<N> t) { return 0; }
     template <typename R> void operator=(R &&g) {}

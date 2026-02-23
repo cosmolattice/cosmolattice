@@ -22,7 +22,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    MultipleParameterGetter() {}
+    MultipleParameterGetter() = default;
 
     void push_back(const ParameterGetter<T> &p) { params.push_back(p); }
     void clear() { params.clear(); }

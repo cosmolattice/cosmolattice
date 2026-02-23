@@ -40,7 +40,7 @@ namespace TempLat
   {
   public:
     /* Put public methods here. These should change very little over time. */
-    FileSaverHDF5() {}
+    FileSaverHDF5() = default;
 
     void open(std::string fn) { mFile.open(fn); }
 

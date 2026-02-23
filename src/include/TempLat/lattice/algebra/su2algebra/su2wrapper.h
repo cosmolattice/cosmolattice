@@ -11,7 +11,6 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/lattice/algebra/su2algebra/su2operator.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
-#include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 
 #include "TempLat/lattice/algebra/helpers/doeval.h"
@@ -33,12 +32,12 @@ namespace TempLat
     using SV = typename GetGetReturnType<A>::type;
 
     // Put public methods here. These should change very little over time.
-    SU2Wrapper() {}
+    SU2Wrapper() = default;
 
     SU2Wrapper(const A &pA, const B &pB, const C &pC, const D &pD) : data(pA, pB, pC, pD) {}
 
     DEVICE_FUNCTION
-    SU2Wrapper(const SU2Wrapper &other) : data(other.data) {}
+    SU2Wrapper(const SU2Wrapper &) = default;
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto SU2Get(Tag<N> t) const { return device::get<N>(data); }
     template <int N> DEVICE_FORCEINLINE_FUNCTION auto operator()(Tag<N> t) const { return SU2Get(t); }

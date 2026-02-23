@@ -12,7 +12,6 @@
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "TempLat/lattice/algebra/su2algebra/su2operator.h"
 #include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
-#include "TempLat/lattice/algebra/su2algebra/helpers/su2getgetreturntype.h"
 #include "TempLat/lattice/algebra/helpers/getstring.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 
@@ -36,7 +35,7 @@ namespace TempLat
     SU2GroupWrapper(const A &pA, const B &pB, const C &pC) : mA(pA), mB(pB), mC(pC) {}
 
     DEVICE_FUNCTION
-    SU2GroupWrapper(const SU2GroupWrapper &other) : mA(other.mA), mB(other.mB), mC(other.mC) {}
+    SU2GroupWrapper(const SU2GroupWrapper &) = default;
 
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const { return sqrt(1.0 - pow<2>(mA) - pow<2>(mB) - pow<2>(mC)); }

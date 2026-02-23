@@ -28,7 +28,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    FileIO() {}
+    FileIO() = default;
 
     template <class R>
       requires HasStaticGetter<typename std::decay_t<R>>

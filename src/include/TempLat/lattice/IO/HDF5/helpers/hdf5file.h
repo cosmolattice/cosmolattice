@@ -27,7 +27,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    HDF5File() {}
+    HDF5File() = default;
 
     void create(std::string fn, FileMode flag = Overwrite)
     {

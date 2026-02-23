@@ -20,7 +20,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    MatterCurrents() {}
+    MatterCurrents() = default;
 
     ////// U(1) CHARGE DENSITY (used in the Gauss constraint) //////
 

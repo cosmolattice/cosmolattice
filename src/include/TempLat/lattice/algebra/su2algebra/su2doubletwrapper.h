@@ -28,12 +28,12 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    SU2DoubletWrapper() {}
+    SU2DoubletWrapper() = default;
 
     SU2DoubletWrapper(const A &pA, const B &pB, const C &pC, const D &pD) : mData(pA, pB, pC, pD) {}
 
     DEVICE_FUNCTION
-    SU2DoubletWrapper(const SU2DoubletWrapper &other) : mData(other.mData) {}
+    SU2DoubletWrapper(const SU2DoubletWrapper &) = default;
 
     template <int N> DEVICE_FORCEINLINE_FUNCTION const auto &SU2DoubletGet(Tag<N> t) const
     {

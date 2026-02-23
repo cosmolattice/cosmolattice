@@ -70,7 +70,7 @@ namespace TempLat
 
     KokkosFFTPlanHolder(MPICartesianGroup group, const Plans &plans) : mGroup(group), mPlans(plans) {}
 
-    virtual ~KokkosFFTPlanHolder() {}
+    virtual ~KokkosFFTPlanHolder() = default;
 
     virtual void c2r(MemoryBlock<NDim, T> &mBlock) { execute_c2r(mBlock); };
     virtual void r2c(MemoryBlock<NDim, T> &mBlock) { execute_r2c(mBlock); };

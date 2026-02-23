@@ -23,7 +23,7 @@ namespace TempLat
   public:
     /** @brief Default-construct binInformation and valueInformation: zeros (and equivalent), useful for summing up
      * multiple entries. */
-    RadialProjectionSingleBinAndValue() {}
+    RadialProjectionSingleBinAndValue() = default;
 
     RadialProjectionSingleBinAndValue(RadialProjectionSingleDatum<T> binInformation,
                                       RadialProjectionSingleDatum<T> valueInformation)

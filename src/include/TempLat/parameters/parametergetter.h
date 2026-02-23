@@ -22,7 +22,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
     ParameterGetter(T instance, std::string name) : mName(name), mInstance(instance) {}
-    ParameterGetter(const ParameterGetter<T> &other) : mName(other.mName), mInstance(other.mInstance) {}
+    ParameterGetter(const ParameterGetter &) = default;
     const T &operator()() { return this->mInstance; }
 
     operator T() { return mInstance; }

@@ -35,7 +35,7 @@ namespace TempLat
     }
 
     DEVICE_FUNCTION
-    WaveNumber(const WaveNumber &other) : mLayout(other.mLayout) {}
+    WaveNumber(const WaveNumber &) = default;
 
     constexpr static size_t getVectorSize() { return NDim; }
 

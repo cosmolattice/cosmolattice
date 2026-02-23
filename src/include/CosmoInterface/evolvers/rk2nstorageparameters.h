@@ -21,9 +21,7 @@ namespace TempLat {
     class RK2NStorageParameters {
     public:
         /* Put public methods here. These should change very little over time. */
-        RK2NStorageParameters() {
-
-        }
+        RK2NStorageParameters() = default;
 
 
         static std::vector<T> getAs(EvolverType eType){

@@ -32,7 +32,7 @@ namespace TempLat
     static constexpr bool KOKKOSFFTWITHTRANSPOSITION() { return false; }
 
     // Put public methods here. These should change very little over time.
-    KokkosFFTMemoryLayout() {}
+    KokkosFFTMemoryLayout() = default;
 
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, device::IdxArray<NDim> nGrid,
                                                     bool forbidTransposition = !KOKKOSFFTWITHTRANSPOSITION())

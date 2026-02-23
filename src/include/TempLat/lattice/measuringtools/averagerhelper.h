@@ -26,7 +26,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    AveragerHelper() {}
+    AveragerHelper() = default;
     template <typename T> static void onBeforeAverageFourier(T &&pT, SpaceStateType pSpaceType)
     {
       /* likewise, make sure we are in configuration space (here the FFT may be fired!). */

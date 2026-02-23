@@ -43,10 +43,10 @@ namespace TempLat
     UnaryOperator(const R &pR) : mR(pR) {}
 
     DEVICE_FUNCTION
-    UnaryOperator(const UnaryOperator &other) : mR(other.mR) {}
+    UnaryOperator(const UnaryOperator &) = default;
 
     DEVICE_FUNCTION
-    ~UnaryOperator() {}
+    ~UnaryOperator() = default;
 
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
 

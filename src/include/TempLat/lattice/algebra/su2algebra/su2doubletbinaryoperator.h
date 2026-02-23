@@ -30,7 +30,7 @@ namespace TempLat
     SU2DoubletBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     DEVICE_FUNCTION
-    SU2DoubletBinaryOperator(const SU2DoubletBinaryOperator &other) : mR(other.mR), mT(other.mT) {}
+    SU2DoubletBinaryOperator(const SU2DoubletBinaryOperator &) = default;
 
     static constexpr size_t size = 4;
     using Getter = SU2DoubletGetter;

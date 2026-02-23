@@ -37,7 +37,7 @@ namespace TempLat
     SU2Commutator(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
     DEVICE_FUNCTION
-    SU2Commutator(const SU2Commutator &other) : SU2BinaryOperator<R, T>(other.mR, other.mT) {}
+    SU2Commutator(const SU2Commutator &) = default;
 
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const { return ZeroType(); }

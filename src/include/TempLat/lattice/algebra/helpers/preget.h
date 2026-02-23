@@ -48,10 +48,10 @@ namespace TempLat
       // do nothing
     }
 
+    PreGet() = delete;
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-
-    PreGet() = delete;
   };
 } // namespace TempLat
 

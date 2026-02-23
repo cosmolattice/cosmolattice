@@ -34,7 +34,7 @@ namespace TempLat
     VectorDotter(R &a, T &b) : BinaryOperator<R, T>(a, b) {}
 
     DEVICE_FUNCTION
-    VectorDotter(const VectorDotter &other) : BinaryOperator<R, T>(other.mR, other.mT) {}
+    VectorDotter(const VectorDotter &) = default;
 
     static_assert(std::decay_t<R>::getVectorSize() == std::decay_t<T>::getVectorSize(),
                   "VectorDotter: R and T must have the same vector size.");

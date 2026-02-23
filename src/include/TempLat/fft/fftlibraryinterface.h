@@ -21,7 +21,7 @@ namespace TempLat
   class FFTSessionGuard
   {
   public:
-    virtual ~FFTSessionGuard() {};
+    virtual ~FFTSessionGuard() = default;
   };
 
   /** @brief Yes, for once a nested class. The interface for your to-be-implemented FFT plan, but forward and
@@ -34,7 +34,7 @@ namespace TempLat
   {
   public:
     /* virtual desctructor can not be abstract: https://stackoverflow.com/a/13444839/2295722 */
-    virtual ~FFTPlanInterface() {};
+    virtual ~FFTPlanInterface() = default;
     virtual void c2r(MemoryBlock<NDim, T> &mBlock) = 0;
     virtual void r2c(MemoryBlock<NDim, T> &mBlock) = 0;
   };
@@ -48,8 +48,8 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    FFTLibraryInterface() {}
-    virtual ~FFTLibraryInterface() {}
+    FFTLibraryInterface() = default;
+    virtual ~FFTLibraryInterface() = default;
 
     /** @brief Return the number of dimensions over which the MPI processes can be distributed, given a problem of
      * dimension nDimensions. FFTW can only divide in 1 dimension: the leading dimension. ParaFaFT can divide an N

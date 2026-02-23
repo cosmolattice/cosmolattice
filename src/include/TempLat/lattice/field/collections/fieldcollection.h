@@ -35,6 +35,11 @@ namespace TempLat
       }
     }
 
+    FieldCollection(const FieldCollection &) = default;
+    FieldCollection(FieldCollection &&) noexcept = default;
+    FieldCollection &operator=(FieldCollection &&) noexcept = default;
+    ~FieldCollection() = default;
+
     template <int M>
       requires(M >= SHIFTIND && M < N + SHIFTIND)
     auto operator()(Tag<M> t) const

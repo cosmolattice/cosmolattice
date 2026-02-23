@@ -20,7 +20,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
     DEVICE_FUNCTION
-    SU2DoubletOperator() {}
+    SU2DoubletOperator() = default;
     static constexpr size_t size = 4;
     using Getter = SU2DoubletGetter;
 

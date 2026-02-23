@@ -29,13 +29,13 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
 
     DEVICE_FUNCTION
-    ComplexFieldWrapper() {}
+    ComplexFieldWrapper() = default;
 
     DEVICE_FUNCTION
     ComplexFieldWrapper(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     DEVICE_FUNCTION
-    ComplexFieldWrapper(const ComplexFieldWrapper &other) : mR(other.mR), mT(other.mT) {}
+    ComplexFieldWrapper(const ComplexFieldWrapper &) = default;
 
     DEVICE_FORCEINLINE_FUNCTION
     auto ComplexFieldGet(Tag<0> t) const { return mR; }

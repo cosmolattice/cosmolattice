@@ -36,7 +36,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    FFTWMemoryLayout() {}
+    FFTWMemoryLayout() = default;
 
     virtual FFTLayoutStruct<NDim> computeLocalSizes(MPICartesianGroup group, device::IdxArray<NDim> nGridPoints,
                                                     bool forbidTransposition = false)

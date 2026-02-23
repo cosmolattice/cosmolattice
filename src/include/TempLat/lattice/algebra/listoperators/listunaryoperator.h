@@ -30,7 +30,7 @@ namespace TempLat
     ListUnaryOperator(const R &pR) : mR(pR) {}
 
     DEVICE_FUNCTION
-    ListUnaryOperator(const ListUnaryOperator &other) : mR(other.mR) {}
+    ListUnaryOperator(const ListUnaryOperator &) = default;
 
     template <int N> ptrdiff_t confirmGhostsUpToDate(Tag<N> i) const { return ConfirmGhosts::apply(mR, i); }
 

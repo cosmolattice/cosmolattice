@@ -33,7 +33,7 @@ namespace TempLat
     ComplexFieldUnaryOperator(const R &pR) : mR(pR) {}
 
     DEVICE_FUNCTION
-    ComplexFieldUnaryOperator(const ComplexFieldUnaryOperator &other) : mR(other.mR) {}
+    ComplexFieldUnaryOperator(const ComplexFieldUnaryOperator &) = default;
 
     static consteval size_t getNDim() { return GetNDim::get<R>(); }
 

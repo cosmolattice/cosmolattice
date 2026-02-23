@@ -39,7 +39,7 @@ namespace TempLat
     SU2Multiplication(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
     DEVICE_FUNCTION
-    SU2Multiplication(const SU2Multiplication &other) : SU2BinaryOperator<R, T>(other.mR, other.mT) {}
+    SU2Multiplication(const SU2Multiplication &) = default;
 
     DEVICE_FORCEINLINE_FUNCTION
     auto SU2Get(Tag<0> t) const

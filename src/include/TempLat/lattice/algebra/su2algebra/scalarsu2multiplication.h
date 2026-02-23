@@ -34,7 +34,7 @@ namespace TempLat
     ScalarSU2Multiplication(const R &pR, const T &pT) : SU2BinaryOperator<R, T>(pR, pT) {}
 
     DEVICE_FUNCTION
-    ScalarSU2Multiplication(const ScalarSU2Multiplication &other) : SU2BinaryOperator<R, T>(other.mR, other.mT) {}
+    ScalarSU2Multiplication(const ScalarSU2Multiplication &) = default;
 
     using SV = typename SU2GetGetReturnType<T>::type;
 

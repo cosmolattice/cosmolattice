@@ -74,9 +74,7 @@ namespace TempLat {
         using T = typename Model::FloatType;
 
         /* Put public methods here. These should change very little over time. */
-        ExtraFields() {
-
-        }
+        ExtraFields() = default;
 
         void allocateExtraMemory(Model& model, RunParameters<T> runPars, std::string tag)
         {

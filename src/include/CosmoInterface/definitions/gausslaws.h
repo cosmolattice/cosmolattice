@@ -26,7 +26,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    GaussLaws() {}
+    GaussLaws() = default;
 
     template <class Model, int N>
 

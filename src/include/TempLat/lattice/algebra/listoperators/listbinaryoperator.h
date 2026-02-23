@@ -36,7 +36,7 @@ namespace TempLat
     ListBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     DEVICE_FUNCTION
-    ListBinaryOperator(const ListBinaryOperator &other) : mR(other.mR), mT(other.mT) {}
+    ListBinaryOperator(const ListBinaryOperator &) = default;
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 

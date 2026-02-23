@@ -27,7 +27,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    MPITagsJustCompile() {}
+    MPITagsJustCompile() = default;
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

@@ -24,7 +24,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    FileReader() {}
+    FileReader() = default;
     const std::string &operator[](int i) const { return vec[i]; }
     size_t size() const { return vec.size(); }
     void operator()(const std::string &str, char comment = '#')

@@ -23,9 +23,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    CStyleTime()
-    { // available in c++ since c++20
-    }
+    CStyleTime() = default;
 
     void now()
     {

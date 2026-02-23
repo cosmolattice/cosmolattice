@@ -22,7 +22,7 @@ namespace TempLat
     static constexpr int value = N;
     constexpr operator int() const { return N; }
 
-    consteval Tag() {}
+    consteval Tag() = default;
 
     static std::string toString() { return "Tag<" + std::to_string(N) + ">"; }
   };

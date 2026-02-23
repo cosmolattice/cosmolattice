@@ -34,7 +34,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
-    FileLoaderHDF5() {}
+    FileLoaderHDF5() = default;
 
     void open(std::string fn) { mFile.open(fn); }
     void close() { mFile.close(); }

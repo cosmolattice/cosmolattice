@@ -75,10 +75,10 @@ namespace TempLat
     {
     }
 
+    ConfirmSpace() = delete;
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
-
-    ConfirmSpace() = delete;
   };
 } // namespace TempLat
 

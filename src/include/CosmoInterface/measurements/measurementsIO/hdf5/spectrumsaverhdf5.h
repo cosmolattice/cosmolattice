@@ -43,7 +43,7 @@ namespace TempLat
     {
     }
 
-    virtual ~SpectrumSaverHDF5() {}
+    virtual ~SpectrumSaverHDF5() = default;
 
     void save(bool lastMeas, std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
     {

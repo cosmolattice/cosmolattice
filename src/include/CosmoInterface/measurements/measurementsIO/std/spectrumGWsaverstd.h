@@ -38,7 +38,7 @@ namespace TempLat
     {
     }
 
-    virtual ~SpectrumGWSaverStd() {}
+    virtual ~SpectrumGWSaverStd() = default;
 
     template <size_t NDim>
     SpectrumGWSaverStd(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool amIRoot, bool append,

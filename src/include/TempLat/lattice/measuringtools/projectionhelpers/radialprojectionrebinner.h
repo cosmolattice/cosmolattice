@@ -50,7 +50,7 @@ namespace TempLat
 
   private:
     /** @brief Only one static method. No instantiation. */
-    RadialProjectionRebinner() {}
+    RadialProjectionRebinner() = default;
   };
 } // namespace TempLat
 

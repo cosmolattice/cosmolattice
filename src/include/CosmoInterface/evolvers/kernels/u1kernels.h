@@ -25,7 +25,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    U1Kernels() {}
+    U1Kernels() = default;
 
     // Equations of motion:
     template <class Model, int N, class T> static auto get(Model &model, Tag<N> a, KernelsTypes::EoM<T>)

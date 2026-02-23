@@ -34,7 +34,7 @@ namespace TempLat
     {
     }
 
-    virtual ~SpectrumSaverStd() {}
+    virtual ~SpectrumSaverStd() = default;
 
     template <size_t NDim>
     SpectrumSaverStd(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool amIRoot, bool append,

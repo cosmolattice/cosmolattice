@@ -21,7 +21,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    ScaleFactorKernels() {}
+    ScaleFactorKernels() = default;
 
     template <class Model> static auto get(Model &model)
     {

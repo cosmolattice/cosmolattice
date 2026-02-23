@@ -24,7 +24,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    HDF5Attribute() {}
+    HDF5Attribute() = default;
 
     HDF5Attribute(const hid_t &id) : attr_id(id) {}
 

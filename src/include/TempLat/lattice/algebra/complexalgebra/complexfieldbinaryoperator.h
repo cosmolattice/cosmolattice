@@ -34,7 +34,7 @@ namespace TempLat
     ComplexFieldBinaryOperator(const R &pR, const T &pT) : mR(pR), mT(pT) {}
 
     DEVICE_FUNCTION
-    ComplexFieldBinaryOperator(const ComplexFieldBinaryOperator &other) : mR(other.mR), mT(other.mT) {}
+    ComplexFieldBinaryOperator(const ComplexFieldBinaryOperator &) = default;
 
     static consteval size_t getNDim() { return std::max(GetNDim::get<R>(), GetNDim::get<T>()); }
 

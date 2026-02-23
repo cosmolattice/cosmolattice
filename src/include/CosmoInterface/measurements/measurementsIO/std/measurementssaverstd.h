@@ -55,7 +55,7 @@ namespace TempLat
         headerSaved = true;
     }
 
-    virtual ~MeasurementsSaverStd() {}
+    virtual ~MeasurementsSaverStd() = default;
 
     void addAverage(const T &r) { (*stream) << std::setprecision(15) << "    " << r; }
 
