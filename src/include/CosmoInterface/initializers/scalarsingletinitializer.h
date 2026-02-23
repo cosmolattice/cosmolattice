@@ -9,6 +9,7 @@
 
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "CosmoInterface/initializers/fluctuationsgenerator.h"
+#include "CosmoInterface/fieldsnumbering.h"
 
 namespace TempLat
 {
@@ -40,6 +41,9 @@ namespace TempLat
         ForLoop(i, 0, Model::Ns - 1,
                 fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI,
                                                  kCutOff););
+
+        model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS;
+        model.piS = model.getFluctuationRatio(FieldsNumbering::piS()) * model.piS;
 
         // We set the initial homogeneous components of the fields and derivatives.
         // model.fldCS0(i) and model.piCS0(i) are introduced in physical

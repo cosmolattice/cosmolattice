@@ -17,6 +17,9 @@
 #include "TempLat/lattice/memory/memorytoolbox.h"
 #include "CosmoInterface/measurements/powerspectrum.h"
 #include "CosmoInterface/definitions/gausslaws.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
+#include "TempLat/lattice/algebra/spatialderivatives/forwdiff.h"
+#include "TempLat/util/rangeiteration/tagliteral.h"
 
 namespace TempLat
 {
@@ -24,9 +27,10 @@ namespace TempLat
    *
    *
    **/
-  template <typename T> class U1Measurer
+  template <typename T> class U1Measurer : public AbstractMeasurer
   {
   public:
+    using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
     U1Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
@@ -59,7 +63,7 @@ namespace TempLat
       ForLoop(i, 0, Model::NU1 - 1,
               MeansMeasurer::measure(standardNormOut(i), norm(model.piU1(i) * pow(model.aI, model.alpha - 1)),
                                      norm(magneticField(model.fldU1(i))), t);
-              standardNormOut(i).save();
+              standardNormOut(i).save(lastMeas);
 
               gauss(i).addAverage(t); // adds time to the Gauss law file
               auto gaussU1Arr =
@@ -68,20 +72,21 @@ namespace TempLat
               gauss(i).addAverage(gaussU1Arr(0)); // var(LHS - RHS)_over_var(LHS + RHS),
               gauss(i).addAverage(gaussU1Arr(1)); // var(LHS),
               gauss(i).addAverage(gaussU1Arr(2)); // and var(RHS)
-              gauss(i).save(););
+              gauss(i).save(lastMeas););
     }
 
     // This measures the electric and magnetic spectra and adds them to the files.
     template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
-      ForLoop(k, 0, Model::NU1 - 1, // Iterates over all gauge fields
-              auto magSpecU1 =
-                  Total(i, 1, Model::NDim, // Sums over x, y, z spatial directions
-                        Function(ntilde, pow<2>(ntilde * model.kIR)) * PSMeasurer.powerSpectrum(model.fldU1(k)(i)));
+      ForLoop(k, 0, Model::NU1 - 1,
+              const auto &A = model.fldU1(k);
+              const auto B1 = forwDiff(A(2_c), 3_c) - forwDiff(A(3_c), 2_c);
+              const auto B2 = forwDiff(A(3_c), 1_c) - forwDiff(A(1_c), 3_c);
+              const auto B3 = forwDiff(A(1_c), 2_c) - forwDiff(A(2_c), 1_c);
+              auto magSpecU1 = PSMeasurer.powerSpectrum(B1) + PSMeasurer.powerSpectrum(B2) + PSMeasurer.powerSpectrum(B3);
               auto elSpecU1 = Total(i, 1, Model::NDim,
                                     pow(model.aI, 2 * model.alpha - 2) * PSMeasurer.powerSpectrum(model.piU1(k)(i)));
-
-              spectra(k).save(t, elSpecU1, magSpecU1););
+              spectra(k).save(lastMeas, t, elSpecU1, magSpecU1););
     }
 
   private:

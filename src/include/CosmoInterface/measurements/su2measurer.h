@@ -11,20 +11,21 @@
 #include "CosmoInterface/measurements/measurementsIO/spectrumsaver.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "TempLat/util/templatvector.h"
-#include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "CosmoInterface/definitions/gausslaws.h"
 #include "CosmoInterface/definitions/fieldfunctionals.h"
 #include "CosmoInterface/measurements/powerspectrum.h"
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
 
 namespace TempLat
 {
   /** @brief A class which contains standard measurements for the SU2 gauge fields.
    *
    **/
-  template <typename T> class SU2Measurer
+  template <typename T> class SU2Measurer : public AbstractMeasurer
   {
   public:
+    using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
     SU2Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
@@ -57,7 +58,7 @@ namespace TempLat
     {
       ForLoop(i, 0, Model::NSU2 - 1, auto B = sqrt(FieldFunctionals::B2SU2(model, i));
               auto E = pow(model.aI, 1 * model.alpha - 1) * sqrt(FieldFunctionals::pi2SU2(model, i));
-              MeansMeasurer::measure(standardNormOut(i), E, B, t); standardNormOut(i).save();
+              MeansMeasurer::measure(standardNormOut(i), E, B, t); standardNormOut(i).save(lastMeas);
               gauss(i).addAverage(t); // adds time to the Gauss law file
               auto gaussArr = GaussLaws::checkSU2(model, i);
               // the function returns a 3-component vector with information
@@ -66,7 +67,7 @@ namespace TempLat
               gauss(i).addAverage(gaussArr(0)); // var(LHS - RHS)_over_var(LHS + RHS),
               gauss(i).addAverage(gaussArr(1)); // var(LHS)
               gauss(i).addAverage(gaussArr(2)); // and var(RHS)
-              gauss(i).save(););
+              gauss(i).save(lastMeas););
     }
 
     // This measures the electric and magnetic spectra and adds them to the files.
@@ -78,7 +79,7 @@ namespace TempLat
               auto ESU2 = pow(model.aI, model.alpha - 1) * safeSqrt(FieldFunctionals::pi2SU2(model, k));
               auto magSpecSU2 = PSMeasurer.powerSpectrum(BSU2); auto elSpecSU2 = PSMeasurer.powerSpectrum(ESU2);
 
-              spectra(k).save(t, elSpecSU2, magSpecSU2););
+              spectra(k).save(lastMeas, t, elSpecSU2, magSpecSU2););
     }
 
   private:

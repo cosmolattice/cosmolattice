@@ -58,6 +58,8 @@ namespace TempLat
           spectraVerbosity(par.get<int>("spectraVerbosity", 0)), // Verbosity of spectra files
           deltaKBin(par.get<double>("deltaKBin", 1)),            // Bin width of the spectra
           nBinsSpectra(floor(sqrt(3.0) / 2.0 * N / deltaKBin)),  // Number of bins in spectra
+          hdf5Averages(par.get<bool>("hdf5Averages", false)),
+          hdf5FlushFreq(par.get<ptrdiff_t>("hdf5FlushFreq", 10)),
           hdf5Spectra(par.get<bool>(
               "hdf5Spectra", false)), // If true, spectra are printed in HDF5 format. If false, printed in txt format.
           eType(par.get<EvolverType>("evolver", LF, Important)), // Type of evolution algorithm
@@ -133,6 +135,8 @@ namespace TempLat
 
     void setDoWeRestart(bool pDoWeRestart) { doWeRestart = pDoWeRestart; }
 
+    ptrdiff_t getFlushFreq() const { return hdf5FlushFreq; }
+
   public:
     const int N;
     T kUV;
@@ -164,6 +168,8 @@ namespace TempLat
     const double deltaKBin;
     const int nBinsSpectra;
 
+    const bool hdf5Averages;
+    const ptrdiff_t hdf5FlushFreq;
     const bool hdf5Spectra;
 
     const EvolverType eType;

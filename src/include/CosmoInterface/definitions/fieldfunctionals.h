@@ -17,6 +17,9 @@
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/lattice/algebra/spatialderivatives/normgradientsquare.h"
+#include "TempLat/lattice/algebra/axionalgebra/electricfield2.h"
+#include "TempLat/lattice/algebra/axionalgebra/magneticfield4.h"
+#include "TempLat/lattice/algebra/gaugealgebra/magneticfield.h"
 
 namespace TempLat
 {
@@ -98,7 +101,25 @@ namespace TempLat
       return Total(i, 1, Model::NDim, pow<2>(model.piU1(a)(i)));
     }
 
+    template <class Model, int N>
+    static inline auto EBU1(Model &model, Tag<N> n)
+    {
+      return Total(i, 1, Model::NDim,
+                   electricField2(model.piU1(n), i) * magneticField4(magneticField(model.fldU1(n), i), i));
+    }
+
     // --> SU2 gauge sector:
+
+    template <class Model, int N, int DIR> static auto get_SU2_electric(Model &model, Tag<N> n, Tag<DIR> i)
+    {
+      auto El = model.piSU2(n)(i);
+      return (El);
+    }
+
+    template <class Model, int N> static auto get_SU2_electric(Model &model, Tag<N> n)
+    {
+      return MakeVector(i, 1, Model::NDim, get_SU2_electric(model, n, i));
+    }
 
     template <class Model, int A> static inline auto B2SU2(Model &model, Tag<A> a)
     {
@@ -112,7 +133,8 @@ namespace TempLat
     template <class Model, int A> // <pi^2>
     static inline auto pi2SU2(Model &model, Tag<A> a)
     {
-      return Total(i, 1, Model::NDim, Total(b, 1, 3, pow<2>(model.piSU2(a)(i).SU2LieAlgebraGet(b))));
+      auto El = get_SU2_electric(model, a);
+      return Total(i, 1, Model::NDim, Total(b, 1, 3, 4 * pow<2>(El(i)(b))));
     }
   };
 

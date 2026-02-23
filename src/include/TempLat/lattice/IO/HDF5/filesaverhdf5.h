@@ -10,6 +10,8 @@
 #ifdef HAVE_HDF5
 
 #include <cstring>
+#include <sstream>
+#include <vector>
 #include "TempLat/util/prettytostring.h"
 #include "TempLat/lattice/algebra/helpers/ghostshunter.h"
 #include "TempLat/lattice/algebra/helpers/confirmspace.h"
@@ -287,6 +289,71 @@ namespace TempLat
       H5Dclose(dataset);
       H5Sclose(filespace);
     }
+
+    /**
+     * @brief Save RNG state as binary uint64_t array (compact storage)
+     * @param textState String from RandomUniform::saveState() or RandomGaussian::saveState()
+     * @param name Dataset name
+     * @param mpiRank This rank's index
+     * @param nRanks Total number of MPI ranks
+     */
+    void saveRNGStateBinary(const std::string &textState, const std::string &name, int mpiRank, int nRanks)
+    {
+      std::vector<uint64_t> binaryState;
+      std::istringstream iss(textState);
+
+      uint64_t val;
+      std::string line;
+      std::getline(iss, line);
+      std::istringstream lineStream(line);
+      while (lineStream >> val) {
+        binaryState.push_back(val);
+      }
+
+      if (std::getline(iss, line) && !line.empty()) {
+        std::istringstream gaussianStream(line);
+        uint64_t gaussianCounter, hasCache;
+        gaussianStream >> gaussianCounter >> hasCache;
+        binaryState.push_back(gaussianCounter);
+        binaryState.push_back(hasCache);
+
+        if (hasCache) {
+          double cachedValue;
+          gaussianStream >> cachedValue;
+          uint64_t cachedBits;
+          std::memcpy(&cachedBits, &cachedValue, sizeof(double));
+          binaryState.push_back(cachedBits);
+        } else {
+          binaryState.push_back(0);
+        }
+      }
+
+      std::string fullName = "/" + name;
+      hsize_t dims[2] = {static_cast<hsize_t>(nRanks), static_cast<hsize_t>(binaryState.size())};
+      auto filespace = H5Screate_simple(2, dims, nullptr);
+      auto dataset =
+          H5Dcreate2(mFile.getHandle(), fullName.c_str(), H5T_NATIVE_UINT64, filespace, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
+
+      hsize_t start[2] = {static_cast<hsize_t>(mpiRank), 0};
+      hsize_t count[2] = {1, static_cast<hsize_t>(binaryState.size())};
+      H5Sselect_hyperslab(filespace, H5S_SELECT_SET, start, nullptr, count, nullptr);
+
+      hsize_t memDims[1] = {static_cast<hsize_t>(binaryState.size())};
+      auto memspace = H5Screate_simple(1, memDims, nullptr);
+
+      auto plist = H5Pcreate(H5P_DATASET_XFER);
+#ifdef HAVE_MPI
+      H5Pset_dxpl_mpio(plist, H5FD_MPIO_INDEPENDENT);
+#endif
+      H5Dwrite(dataset, H5T_NATIVE_UINT64, memspace, filespace, plist, binaryState.data());
+
+      H5Pclose(plist);
+      H5Sclose(memspace);
+      H5Dclose(dataset);
+      H5Sclose(filespace);
+    }
+
+    HDF5Group createOrOpenGroup(const std::string &name) { return mFile.createOrOpenGroup(name); }
 
     // To save our fields, we use the fact that the last dimension is not parallelised.
     // We iterate over the first N-1 dimensions, and for each of these we save the whole

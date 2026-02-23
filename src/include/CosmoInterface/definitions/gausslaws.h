@@ -8,11 +8,13 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "TempLat/lattice/algebra/operators/power.h"
-#include "TempLat/lattice/algebra/su2algebra/su2generators.h"
-#include "TempLat/lattice/algebra/su2algebra/su2wrapper.h"
 #include "TempLat/util/rangeiteration/sum_in_range.h"
 #include "TempLat/util/templatvector.h"
 #include "CosmoInterface/definitions/mattercurrents.h"
+#include "TempLat/lattice/algebra/spatialderivatives/backdiff.h"
+#include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
+#include "TempLat/lattice/algebra/axionalgebra/magneticfield4.h"
+#include "CosmoInterface/definitions/axioncouplings.h"
 
 namespace TempLat
 {
@@ -31,30 +33,32 @@ namespace TempLat
     // Checks Gauss constraint for the U(1) gauge sector:
     static inline auto checkU1(Model &model, Tag<N> n)
     {
-      auto RHS = -model.dx * MatterCurrents::U1ChargeDensity(model, n); // right hand side (source term)
-      auto LHS = Total(i, 1, Model::NDim, model.piU1(n)(i) - shift(model.piU1(n)(i), -i)) / model.dx; // left hand side
+      auto RHSaxion = AxionCouplings::ScalarAxionGaussLaw(model, n);
+      auto RHS = -model.dx * MatterCurrents::U1ChargeDensity(model, n);
+      auto LHS = Total(i, 1, Model::NDim, model.piU1(n)(i) - shift(model.piU1(n)(i), -i)) / model.dx;
+      auto LHS1 = (model.piU1(n)(1_c) - shift(model.piU1(n)(1_c), -1_c)) / model.dx;
+      auto LHS2 = (model.piU1(n)(2_c) - shift(model.piU1(n)(2_c), -2_c)) / model.dx;
+      auto LHS3 = (model.piU1(n)(3_c) - shift(model.piU1(n)(3_c), -3_c)) / model.dx;
 
-      auto diff = LHS - RHS;
-      auto sum = LHS + RHS;
+      auto diff = LHS - (RHS + RHSaxion);
+      auto sum = pow<2>(LHS1) + pow<2>(LHS2) + pow<2>(LHS3) + pow<2>(RHS + RHSaxion);
 
       auto avDiff = average(sqrt(pow<2>(diff)));
       auto avSum = average(sqrt(pow<2>(sum)));
-
-      auto avRHS = average(sqrt(pow<2>(RHS)));
+      auto avRHS = average(sqrt(pow<2>(RHS + RHSaxion)));
       auto avLHS = average(sqrt(pow<2>(LHS)));
 
-      return make_templatvector(avDiff / avSum, avLHS,
-                                avRHS); // Returns a vector, whose 0 component is the relative degree of conservation.
+      return make_templatvector(static_cast<double>(avDiff / avSum), static_cast<double>(avLHS), static_cast<double>(avRHS));
     }
 
     // Checks Gauss constraint for the SU(2) gauge sector:
     template <class Model, int N> static inline auto checkSU2(Model &model, Tag<N> n)
     {
-      auto RHS = (-1.0) * MatterCurrents::SU2ChargeDensity(model, n); // right hand side (source term)
+      auto RHS = -model.dx * MatterCurrents::SU2ChargeDensity(model, n); // right hand side (source term)
       auto LHS = Total(i, 1, Model::NDim,
-                       (1.0 / model.dx) * (model.piSU2(n)(i) -
-                                           shift(dagger(model.fldSU2(n)(i)) * model.piSU2(n)(i) * model.fldSU2(n)(i),
-                                                 -i))); // left hand side
+                       (model.piSU2(n)(i) -
+                        shift(dagger(model.fldSU2(n)(i)) * model.piSU2(n)(i) * model.fldSU2(n)(i),
+                              -i))); // left hand side
 
       auto diff = LHS - RHS;
       auto sum = LHS + RHS;

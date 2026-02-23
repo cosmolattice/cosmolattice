@@ -20,6 +20,7 @@
 #include "CosmoInterface/measurements/energiesmeasurer.h"
 #include "CosmoInterface/measurements/scalefactormeasurer.h"
 #include "CosmoInterface/measurements/energysnapshotmeasurer.h"
+#include "CosmoInterface/measurements/topologicalchargesmeasurer.h"
 
 #include "CosmoInterface/evolvers/evolver.h"
 #include "CosmoInterface/simulationmanager.h"
@@ -36,10 +37,12 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    Measurer(Model &model, const RunParameters<T> &par)
-        : filesManager(SimulationManager<Model::NDim>::base_filename(par, model), model.getToolBox(), false,
-                       par.hdf5Spectra,
-                       par.printHeaders),            // File manager controlling output format and layout, see class.
+    Measurer(Model &model, const RunParameters<T> &par, ParameterParser &parser)
+        : filesManager(parser, SimulationManager<Model::NDim>::base_filename(par, model), model.getToolBox(),
+                       par.hdf5Averages, par.hdf5Spectra, par.printHeaders, "",
+                       par.getFlushFreq(),
+                       static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutFreq)),
+                       static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutInfreq))),
           outputFreq(par.tOutFreq / par.dt),         // Number of steps between frequent output
           infreqOutputFreq(par.tOutInfreq / par.dt), // Number of steps between infrequent output
           rareOutputFreq(par.tOutRareFreq / par.dt), // Number of steps between rare output
@@ -56,13 +59,16 @@ namespace TempLat
           su2Measurer(model, filesManager, par, par.appendMode),           // Measurer for SU(2) gauge fields
           energiesMeasurer(model, filesManager, par, par.appendMode),      // Measurer of energies and scale factor
           scaleFactorMeasurer(model, filesManager, par, par.appendMode),   // Measurer of energies and scale factor
+          topologicalChargesMeasurer(model, filesManager, par, par.appendMode),
           energySnapshotsMeasurer(model, filesManager,
                                   par.energySnapshotMeas), // Measurer of energy and field snapshots
           spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"},
                       filesManager.getUseHDF5()), // Output file that indicates at which times spectra are computed
           PSMeasurer(par),
           // TestTransTrace(par),
-          GWsPSMeasurer(par)
+          GWsPSMeasurer(par),
+          nLast(par.tMax / par.dt),
+          lastMeas(false)
     {
     }
 
@@ -92,6 +98,8 @@ namespace TempLat
         // Energy contributions and conservation check
         scaleFactorMeasurer.measure(model, t);
         // Scale factor and derivatives
+        topologicalChargesMeasurer.measure(model, t);
+        // Topological charges
         // gwsMeasurer.measureStandard(model,t, TestTransTrace);
         // Transversality and tracelessness test of GWs
 
@@ -134,8 +142,18 @@ namespace TempLat
         model.getToolBox()->unsetVerbose();
     }
 
-    bool areWeMeasuring(int n) const
+    bool areWeMeasuring(int n)
     {
+      if (n % outputFreq == 0 and (n == nLast or n + outputFreq >= nLast)) {
+        lastMeas = true;
+        scalarSingletMeasurer.setLastMeas(true);
+        complexScalarMeasurer.setLastMeas(true);
+        su2DoubletMeasurer.setLastMeas(true);
+        u1Measurer.setLastMeas(true);
+        su2Measurer.setLastMeas(true);
+        energiesMeasurer.setLastMeas(true);
+        scaleFactorMeasurer.setLastMeas(true);
+      }
       return (n % outputFreq == 0 || n % infreqOutputFreq == 0 || n % rareOutputFreq == 0);
     }
 
@@ -159,12 +177,16 @@ namespace TempLat
     SU2Measurer<T> su2Measurer;
     EnergiesMeasurer<T> energiesMeasurer;
     ScaleFactorMeasurer<T> scaleFactorMeasurer;
+    TopologicalChargesMeasurer<T> topologicalChargesMeasurer;
     EnergySnapshotsMeasurer<Model> energySnapshotsMeasurer;
 
     MeasurementsSaver<T> spectraTime;
     PowerSpectrumMeasurer PSMeasurer;
     // CheckTT TestTransTrace;
     GWsPowerSpectrumMeasurer GWsPSMeasurer;
+
+    ptrdiff_t nLast;
+    bool lastMeas;
   };
 } // namespace TempLat
 

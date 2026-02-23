@@ -9,6 +9,7 @@
 
 #include "CosmoInterface/definitions/potential.h"
 #include "CosmoInterface/definitions/gaugederivatives.h"
+#include "CosmoInterface/evolvers/kernels/kernelstypes.h"
 
 namespace TempLat
 {
@@ -22,11 +23,25 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     ComplexScalarKernels() = delete;
 
-    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    // Equations of motion:
+    template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
     {
       // Returns kernel for complex scalars (formed by the covariant laplacian and potential derivative terms):
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianCS(model, n) -
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivCS(model, n);
+    }
+
+    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    {
+      // Returns momentum for complex scalars:
+      return pow(model.aI, model.alpha - 3) * model.piCS(n);
+    }
+
+    // Default function returns EoM kernels, for backward compatibility.
+    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    {
+      using T = typename Model::FloatType;
+      return ComplexScalarKernels::get(model, n, KernelsTypes::EoM<T>());
     }
   };
 } // namespace TempLat

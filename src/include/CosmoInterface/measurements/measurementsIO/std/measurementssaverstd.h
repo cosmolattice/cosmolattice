@@ -46,9 +46,7 @@ namespace TempLat
         : mMode(!appendMode ? std::ios_base::out : std::ios_base::app), stream(std::make_shared<std::stringstream>()),
           headerStream(std::make_shared<std::stringstream>()), headerSaved(false)
     {
-      std::string name = fld.toString();
-      name = name.erase(name.find("(", 3));
-      name = fm.getWorkingDir() + "average_" + name;
+      auto name = fm.getCurredName(fld, true);
       outputAv = std::make_shared<OutputStream<T>>(name + ".txt", amIRoot, mMode);
       if (!appendMode && fm.getPrintHeaders())
         for (auto &str : headers)

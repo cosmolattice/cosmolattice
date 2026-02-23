@@ -7,12 +7,11 @@
 
 // File info: Main contributor(s): Jorge Baeza-Ballesteros, Adrien Florio, Nicolás Layza,  Year: 2022
 
-#include "CosmoInterface/measurements/meansmeasurer.h"
-#include "CosmoInterface/measurements/measurementsIO/spectrumsaver.h"
 #include "CosmoInterface/measurements/measurementsIO/spectrumGWsaver.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "CosmoInterface/measurements/measurementsIO/measurementssaver.h"
 #include "TempLat/util/templatvector.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
 
 #include "CosmoInterface/definitions/GWsProjector.h"
 // #include "CosmoInterface/definitions/checkTT.h"
@@ -26,9 +25,10 @@ namespace TempLat
    *
    * Unit test: ctest -R test-gwsmeasurer
    **/
-  template <typename T> class GWsMeasurer
+  template <typename T> class GWsMeasurer : public AbstractMeasurer
   {
   public:
+    using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
     GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)

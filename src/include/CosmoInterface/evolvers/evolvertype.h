@@ -23,11 +23,12 @@ namespace TempLat
    * - VV10: velocity verlet, order 10
    * - VV6_2: alternative scheme for velocity verlet order 6 (see documentation)
    * - RK2: Runge-Kutta order 2
+   * - RK3_3: 3rd order 3 stages low storage Runge-Kutta
    * - RK3_4: 3rd order 4 stages low storage Runge-Kutta
-   * - RK3_4_A: 3rd order 4 stages adaptative low storage Runge-Kutta
+   * - RK4_5: 4th order 5 stages low storage Runge-Kutta
    *
    **/
-  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_4, RK3_4_A };
+  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_3, RK3_4, RK4_5 };
 
   std::istream &operator>>(std::istream &in, EvolverType &eType)
   {
@@ -49,10 +50,12 @@ namespace TempLat
       eType = VV6_2; // alternative scheme for VV6 (see documentation)
     else if (tmp == "RK2" || tmp == "7")
       eType = RK2; // RK2
-    else if (tmp == "RK3_4" || tmp == "8")
+    else if (tmp == "RK3_3" || tmp == "8")
+      eType = RK3_3; // 3rd order 3 stages low storage RK
+    else if (tmp == "RK3_4" || tmp == "9")
       eType = RK3_4; // 3rd order 4 stages low storage RK
-    else if (tmp == "RK3_4_A" || tmp == "9")
-      eType = RK3_4_A; // 3rd order 4 stages adaptative low storage RK
+    else if (tmp == "RK4_5" || tmp == "10")
+      eType = RK4_5; // 4th order 5 stages low storage RK
     else if (tmp.empty()) {
     } // Otherwise crash for optional parameters.
     else
@@ -78,10 +81,12 @@ namespace TempLat
       return "VV6_2";
     else if (eType == RK2)
       return "RK2";
+    else if (eType == RK3_3)
+      return "RK3_3";
     else if (eType == RK3_4)
       return "RK3_4";
-    else if (eType == RK3_4_A)
-      return "RK3_4_A";
+    else if (eType == RK4_5)
+      return "RK4_5";
     else
       return "";
   }

@@ -8,9 +8,11 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/definitions/mattercurrents.h"
+#include "CosmoInterface/evolvers/kernels/kernelstypes.h"
 #include "TempLat/lattice/algebra/spatialderivatives/backdiff.h"
 #include "TempLat/lattice/algebra/spatialderivatives/forwdiff.h"
 #include "TempLat/lattice/algebra/spatialderivatives/latticelaplacian.h"
+#include "CosmoInterface/definitions/axioncouplings.h"
 
 namespace TempLat
 {
@@ -25,27 +27,41 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     U1Kernels() {}
 
-    template <class Model, int N> static auto get(Model &model, Tag<N> a)
+    // Equations of motion:
+    template <class Model, int N, class T> static auto get(Model &model, Tag<N> a, KernelsTypes::EoM<T>)
     {
       // Computes different terms in the U(1) gauge kernels:
 
       // --> U(1) gauge current
-      auto U1Source = MakeArray(n, 0, Model::NU1 - 1, MatterCurrents::U1Current(model, n));
+      auto U1Source = MatterCurrents::U1Current(model, a);
 
       // --> lapl(A_i)
-      auto LaplU1 =
-          MakeArray(n, 0, Model::NU1 - 1, MakeVector(i, 1, Model::NDim, LatLapl<Model::NDim>(model.fldU1(n)(i))););
+      auto LaplU1 = MakeVector(i, 1, Model::NDim, LatLapl<Model::NDim>(model.fldU1(a)(i)));
 
       // --> \partial_i \partial_j A_i
-      auto GradU1 = MakeArray(
-          n, 0, Model::NU1 - 1,
-          MakeVector(i, 1, Model::NDim, Total(j, 1, Model::NDim, backDiff(forwDiff(model.fldU1(n)(j), i), j))););
+      auto GradU1 =
+          MakeVector(i, 1, Model::NDim, Total(j, 1, Model::NDim, backDiff(forwDiff(model.fldU1(a)(j), i), j)));
+
+      auto AxionScalarSource = AxionCouplings::U1AxionCoupling(model, a);
+      auto normU1AxionScalarSource = (model.fStar / Model::MPl);
 
       auto normU1Source = pow(model.aI, 1 + model.alpha); // Rescaling for U1Source
       auto normGrad = pow(model.aI, -1 + model.alpha);    // Rescaling for GradU1 and LaplU1
 
       // Returns kernel for the U(1) gauge fields' EOM:
-      return normGrad * (LaplU1(a) - GradU1(a)) - normU1Source * U1Source(a);
+      return normGrad * (LaplU1 - GradU1) - normU1Source * U1Source + normU1AxionScalarSource * AxionScalarSource;
+    }
+
+    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> a, KernelsTypes::EoM<T>)
+    {
+      // Computes U(1) momentum:
+      return pow(model.aI, model.alpha - 1) * model.piU1(a);
+    }
+
+    // Default function returns EoM kernels, for backward compatibility.
+    template <class Model, int N> static auto get(Model &model, Tag<N> a)
+    {
+      return U1Kernels::get(model, a, KernelsTypes::EoM<typename Model::FloatType>());
     }
   };
 } // namespace TempLat

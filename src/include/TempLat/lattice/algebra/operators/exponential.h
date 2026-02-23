@@ -13,6 +13,7 @@
 #include "TempLat/lattice/algebra/helpers/getderiv.h"
 #include "TempLat/lattice/algebra/operators/multiply.h"
 #include "TempLat/lattice/algebra/operators/unaryoperator.h"
+#include "TempLat/lattice/algebra/su2algebra/helpers/hassu2get.h"
 
 namespace TempLat
 {
@@ -58,7 +59,7 @@ namespace TempLat
 
   /** @brief Exposing our newly define exp operation to the world. */
   template <typename T>
-    requires ConditionalUnaryGetter<T>
+    requires(ConditionalUnaryGetter<T> && !HasSU2Get<T>)
   DEVICE_FORCEINLINE_FUNCTION auto exp(T a)
   {
     return Operators::Exponential<T>(a);

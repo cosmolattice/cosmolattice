@@ -11,22 +11,20 @@
 #include "CosmoInterface/measurements/meansmeasurer.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "TempLat/util/templatvector.h"
-#include "TempLat/util/rangeiteration/sum_in_range.h"
-#include "TempLat/util/rangeiteration/tagliteral.h"
-#include "TempLat/lattice/algebra/helpers/getngrid.h"
 #include "CosmoInterface/definitions/energies.h"
 #include "CosmoInterface/definitions/hubbleconstraint.h"
-#include "CosmoInterface/definitions/gaugederivatives.h"
 #include "CosmoInterface/definitions/fieldfunctionals.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
 
 namespace TempLat
 {
   /** @brief A class which contains measurements of energies and scale factor.
    *
    **/
-  template <typename T> class EnergiesMeasurer
+  template <typename T> class EnergiesMeasurer : public AbstractMeasurer
   {
   public:
+    using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
     EnergiesMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
@@ -87,7 +85,7 @@ namespace TempLat
               Etot += potTerm;);
 
       energies.addAverage(Etot);
-      energies.save();
+      energies.save(lastMeas);
 
       if (!fixedBackground) { // Energy cannot be checked if expansion is fixed
 
@@ -105,7 +103,7 @@ namespace TempLat
           energyCons.addAverage(abs(1.0 - Etot / Etot0));
         }
 
-        energyCons.save();
+        energyCons.save(lastMeas);
       }
     }
 

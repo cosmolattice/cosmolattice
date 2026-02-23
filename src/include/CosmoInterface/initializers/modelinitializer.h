@@ -37,7 +37,7 @@ namespace TempLat
      * @param model The model to initialize.
      * @param rPar The run parameters, which determine the initial conditions for the fields and scale factor.
      */
-    template <class Model> void initialize(Model &model, RunParameters<T> &rPar)
+    template <class Model> void initialize(Model &model, RunParameters<T> &rPar, ExtraFields<Model> extraFields)
     {
       // Initialize scale factor:
       if (rPar.expansion) ScaleFactorInitializer::initializeScaleFactor(model, rPar);
@@ -53,8 +53,8 @@ namespace TempLat
       if constexpr (Model::NSU2Doublet > 0) SU2Initializer::initializeSU2(model, fg, rPar.kCutoff);
 
       // Initialize the U1 gauge fields and complex scalars:
-      if constexpr (Model::NCs > 0 || (Model::NSU2Doublet > 0 && Model::NU1 > 0))
-        U1Initializer::initializeU1(model, fg, rPar.kCutoff);
+      if constexpr (Model::NCs > 0 || Model::NU1 > 0)
+        U1Initializer::initializeU1(model, fg, rPar.kCutoff, extraFields);
 
       Averages::setAllAverages(model);
       if (rPar.expansion) {

@@ -71,6 +71,12 @@ int main(int argc, char *argv[])
   // Actual creation of your model. The parser is required to provide
   // the model dependent parameters.
 
+  ExtraFields<ModelType> extraFlds;
+  extraFlds.allocateExtraMemory(model, runParams, "extra_mem");
+  // An object that holds extra fields, if and only needed by the specific simulation.
+  // We store it here so that the same extra fields can be used by different classes
+  // if need be (for instance, initialization and evolution).
+
   if (iAmRoot) say << "Model name: " << model.name;
   // Printing the model name from the root processor.
   // You can check in this way, in the console output,
@@ -85,7 +91,7 @@ int main(int argc, char *argv[])
     ModelInitializer<double> initializer(model, runParams.lSide, runParams.baseSeed);
     // 1) We create the class responsible for the initialization
 
-    initializer.initialize(model, runParams);
+    initializer.initialize(model, runParams, extraFlds);
     // 2) We initialize the model.
 
     t = runParams.t0;
@@ -105,12 +111,12 @@ int main(int argc, char *argv[])
   // We communicate t0 to the model, in case it needs it internally.
   model.t0 = runParams.t0;
 
-  Evolver<ModelType> evolver(model, runParams);
+  Evolver<ModelType> evolver(model, runParams, extraFlds);
   // Here an algorithm -- evolver -- to solve the field EoM is chosen. The type of evolver
   // is specified by the user in the input parameter file, and here is passed through
   // runParams. Model is passed as well to have access to normalisations.
 
-  Measurer<ModelType, double> measurer(model, runParams);
+  Measurer<ModelType, double> measurer(model, runParams, parser);
   // Creates an object of the class responsible for performing and outputting all the required
   // measurements (averages, energies, spectra...).
 

@@ -10,6 +10,7 @@
 #include "CosmoInterface/runparameters.h"
 #include "CosmoInterface/initializers/modelinitializer.h"
 #include "CosmoInterface/simulationmanager.h"
+#include "CosmoInterface/extrafields.h"
 
 #include "CosmoInterface/evolvers/leapfrog.h"
 #include "CosmoInterface/evolvers/velocityverlet.h"

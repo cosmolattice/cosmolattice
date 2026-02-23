@@ -13,15 +13,17 @@
 #include "TempLat/util/templatvector.h"
 #include "CosmoInterface/measurements/powerspectrum.h"
 #include "CosmoInterface/measurements/occupationnumber.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
 
 namespace TempLat
 {
   /** @brief A class which contains standard measurements for scalar singlets.
    *
    **/
-  template <typename T> class ScalarSingletMeasurer
+  template <typename T> class ScalarSingletMeasurer : public AbstractMeasurer
   {
   public:
+    using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
     ScalarSingletMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par,
@@ -51,7 +53,7 @@ namespace TempLat
     {
       ForLoop(i, 0, Model::Ns - 1,
               MeansMeasurer::measure(standardOut(i), model.fldS(i), model.piS(i) * pow(model.aI, model.alpha - 3), t);
-              standardOut(i).save(););
+              standardOut(i).save(lastMeas););
     }
 
     // The following function measures the spectra of the norm and its time-derivative.
@@ -62,11 +64,11 @@ namespace TempLat
       ForLoop(
           i, 0, Model::Ns - 1,
           if (flagON) {
-            spectraOut(i).save(t, PSMeasurer.powerSpectrum(model.fldS(i)),
+            spectraOut(i).save(lastMeas, t, PSMeasurer.powerSpectrum(model.fldS(i)),
                                pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i)),
                                ONMeasurer.occupationNumber(model, i));
           } else {
-            spectraOut(i).save(t, PSMeasurer.powerSpectrum(model.fldS(i)),
+            spectraOut(i).save(lastMeas, t, PSMeasurer.powerSpectrum(model.fldS(i)),
                                pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i)));
           });
     }

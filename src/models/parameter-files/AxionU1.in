@@ -1,0 +1,36 @@
+#Output
+outputfile = ./
+
+#Evolution
+expansion = true
+evolver = RK2
+
+#Lattice
+N = 32
+dt = 0.01
+kIR = .6
+
+#Times
+tOutputFreq = 0.05
+tOutputInfreq = 5
+tOutputRareFreq = 10
+tMax = 100
+
+
+#Spectra options
+withGWs = false # for the current axion-U(1) model not implemented
+
+#IC
+kCutOff = 6
+initial_amplitudes = 3.39928e18  # homogeneous amplitudes in GeV
+initial_momenta = -3.0714e31     # homogeneous amplitudes in GeV2
+
+#Axion U1 coupling
+alphaLambda_AxionU1 = 13
+
+#Model Parameters
+Mass = 1.5e13    # mass of the axion in GeV
+
+
+
+

@@ -10,6 +10,7 @@
 #include "CosmoInterface/runparameters.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "CosmoInterface/measurements/measurementsIO/measurementssaver.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
 
 namespace TempLat
 {
@@ -17,9 +18,10 @@ namespace TempLat
    *
    *
    **/
-  template <typename T> class ScaleFactorMeasurer
+  template <typename T> class ScaleFactorMeasurer : public AbstractMeasurer
   {
   public:
+    using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
     ScaleFactorMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
@@ -37,7 +39,7 @@ namespace TempLat
         scaleOut.addAverage(model.aDotI);            // First time-derivative of the scale factor
         scaleOut.addAverage(model.aDotI / model.aI); // Hubble parameter
       }
-      scaleOut.save();
+      scaleOut.save(lastMeas);
     }
 
   private:

@@ -9,6 +9,7 @@
 
 #include "CosmoInterface/definitions/potential.h"
 #include "CosmoInterface/definitions/gaugederivatives.h"
+#include "CosmoInterface/evolvers/kernels/kernelstypes.h"
 
 namespace TempLat
 {
@@ -23,11 +24,25 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     SU2DoubletKernels() = delete;
 
-    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    // Equations of motion:
+    template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
     {
       // Returns kernel for SU2 doublets (formed by covariant laplacian and potential derivative):
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianSU2Doublet(model, n) -
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivSU2Doublet(model, n);
+    }
+
+    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    {
+      // Returns momentum for SU2 doublets:
+      return pow(model.aI, model.alpha - 3) * model.piSU2Doublet(n);
+    }
+
+    // Default function returns EoM kernels, for backward compatibility.
+    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    {
+      using T = typename Model::FloatType;
+      return SU2DoubletKernels::get(model, n, KernelsTypes::EoM<T>());
     }
   };
 } // namespace TempLat

@@ -9,13 +9,19 @@
 
 #include "TempLat/util/exception.h"
 #include "TempLat/lattice/memory/memorytoolbox.h"
+#include "TempLat/lattice/field/field.h"
+#include "TempLat/lattice/IO/HDF5/helpers/hdf5group.h"
+#include "TempLat/lattice/IO/HDF5/helpers/hdf5file.h"
+#ifdef HAVE_HDF5
+#include "TempLat/lattice/IO/HDF5/filesaverhdf5.h"
+#endif
 
 namespace TempLat
 {
   MakeException(UseHDF5ButNotCompiled);
 
   /** @brief Interface to switch between hdf5 and std output for measurements. This class hides the polymorphism under
-   * the hood. It is mostly useful for the averages, which are not implemented in hdf5 yet.
+   * the hood.
    *
    *
    * Unit test: ctest -R test-filesmanager
@@ -23,28 +29,30 @@ namespace TempLat
   template <size_t NDim> class FilesManager
   {
   public:
-    /**
-     * @brief Construct a files manager that handles the output of measurements.
-     *
-     * @param fn Directory name where to store the files.
-     * @param toolbox a pointer to the memory toolbox.
-     * @param pUseHDF5  whether to use HDF5 for output.
-     * @param pUseHDF5Spectra whether to use HDF5 for spectra output.
-     * @param pPrintHeaders whether to print headers.
-     * @param pTag a tag to identify the output files.
-     */
-    FilesManager(std::string fn, device::memory::host_ptr<MemoryToolBox<NDim>> toolbox, bool pUseHDF5,
-                 bool pUseHDF5Spectra, bool pPrintHeaders, std::string pTag = "")
-        : mToolbox(toolbox), mUseHDF5Spectra(pUseHDF5Spectra), mPrintHeaders(pPrintHeaders), workingDir(fn), tag(pTag)
+    FilesManager(ParameterParser &parser, std::string fn, device::memory::host_ptr<MemoryToolBox<NDim>> toolbox,
+                 bool pUseHDF5, bool pUseHDF5Spectra, bool pPrintHeaders, std::string pTag = "",
+                 ptrdiff_t pFlushFreq = 1, ptrdiff_t pNMeas = 0, ptrdiff_t pNMeasInfreq = 0)
+        : mToolbox(toolbox), mUseHDF5(pUseHDF5), mUseHDF5Spectra(pUseHDF5Spectra), mPrintHeaders(pPrintHeaders),
+          workingDir(fn), tag(pTag), flushFreq(pFlushFreq), nMeas(pNMeas), nMeasInfreq(pNMeasInfreq)
     {
+#ifdef HAVE_HDF5
+      if (mUseHDF5) {
+        FileSaverHDF5 fs;
+        fs.create(getHDF5Fn(), Exclusive);
+        fs.save_attr(parser);
+        fs.close();
+      }
+      if (mUseHDF5Spectra) {
+        FileSaverHDF5 fs;
+        fs.create(getHDF5SpectraFn(), Exclusive);
+        fs.close();
+      }
+#endif
     }
 
     void flush() {}
 
-    bool getUseHDF5() const
-    {
-      return false; // Averages in hdf5 not implemented.
-    }
+    bool getUseHDF5() const { return mUseHDF5; }
     bool getUseHDF5Spectra() const { return mUseHDF5Spectra; }
     bool getPrintHeaders() const { return mPrintHeaders; }
 
@@ -52,13 +60,31 @@ namespace TempLat
 
     std::string getWorkingDir() const { return workingDir; }
     std::string getTag() const { return tag; }
+    std::string getHDF5Fn() const { return getWorkingDir() + getTag() + "average.h5"; }
+    std::string getHDF5SpectraFn() const { return getWorkingDir() + getTag() + "spectra.h5"; }
+
+    template <typename T>
+    std::string getCurredName(const Field<NDim, T> &fld, bool withDir, std::string nametag = "average")
+    {
+      std::string name = fld.toString();
+      name = name.erase(name.find("(", 3));
+      name = withDir ? getWorkingDir() + nametag + "_" + name : nametag + "_" + name;
+      return name;
+    }
+
+    auto getFlushFreq() const { return flushFreq; }
+    auto getNMeas() const { return nMeas; }
+    auto getNInfreqMeas() const { return nMeasInfreq; }
 
   private:
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolbox;
-    bool mUseHDF5Spectra;
+    bool mUseHDF5, mUseHDF5Spectra;
     bool mPrintHeaders;
     std::string workingDir;
     std::string tag;
+    ptrdiff_t flushFreq;
+    ptrdiff_t nMeas;
+    ptrdiff_t nMeasInfreq;
   };
 
 } // namespace TempLat

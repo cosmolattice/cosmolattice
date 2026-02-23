@@ -11,6 +11,7 @@
 #include "CosmoInterface/definitions/mattercurrents.h"
 #include "CosmoInterface/definitions/potential.h"
 #include "TempLat/lattice/algebra/gaugealgebra/plaquetteback.h"
+#include "CosmoInterface/evolvers/kernels/kernelstypes.h"
 
 namespace TempLat
 {
@@ -25,7 +26,8 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     SU2Kernels() = delete;
 
-    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    // Equations of motion:
+    template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> kt)
     {
       // Computes different terms in the SU(2) gauge kernels:
 
@@ -49,6 +51,20 @@ namespace TempLat
 
       // Returns kernel for the SU(2) gauge fields' EOM:
       return -normGrad * (GradSU2 - GradSU2Back) - normSU2Source * SU2Source;
+    }
+
+    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> kt)
+    {
+      // Returns ''momentum'' for the SU(2) gauge fields' EOM (a bit different because evolving the links). Also note
+      // that our algebra variables are antihermitean, so we are really saving i E.
+      return pow(model.aI, model.alpha - 1) * model.gQ_SU2DblSU2(0_c, n) * model.dx * model.piSU2(n);
+    }
+
+    // Default function returns EoM kernels, for backward compatibility.
+    template <class Model, int N> static auto get(Model &model, Tag<N> a)
+    {
+      using T = typename Model::FloatType;
+      return SU2Kernels::get(model, a, KernelsTypes::EoM<T>());
     }
   };
 } // namespace TempLat
