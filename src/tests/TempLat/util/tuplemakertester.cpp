@@ -23,7 +23,7 @@ namespace TempLat
   {
 
     auto toolBox = MemoryToolBox<3>::makeShared(32, 1);
-    VectorFieldCollection<SU2Field<3, double>, double, 3, 2> fldSU2("SU2Fld", toolBox, LatticeParameters<double>());
+    VectorFieldCollection<SU2Field<3, double>, 3, 2> fldSU2("SU2Fld", toolBox, LatticeParameters<double>());
 
     auto t1 = flatten_tuple(make_tuple_from(fldSU2));
 
