@@ -41,7 +41,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/include/)
 set(MODELS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/models/)
 
 #########################################################################################################################
-#__  __           _      _    _____      _           _   _
+# __  __           _      _    _____      _           _   _
 #|  \/  |         | |    | |  / ____|    | |         | | (_)              _
 #| \  / | ___   __| | ___| | | (___   ___| | ___  ___| |_ _  ___  _ __   (_)
 #| |\/| |/ _ \ / _` |/ _ \ |  \___ \ / _ \ |/ _ \/ __| __| |/ _ \| '_ \
@@ -60,7 +60,7 @@ set(MODEL
 message("")
 message(
   STATUS
-    "${Green}---------- The model which is going to be compiled is: ${MODEL} ----------${ColorReset}"
+    "${BoldGreen}---------- The model which is going to be compiled is: ${MODEL} ----------${ColorReset}"
 )
 
 # This allows to customise the name of the output executable
