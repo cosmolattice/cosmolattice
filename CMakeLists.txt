@@ -34,7 +34,6 @@ FetchContent_MakeAvailable(TempLat)
 # ##############################################################################
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/title.cmake)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/include/)
 
 # Set the path to the cosmolattice models. If for some reasons you want to
 # change that, do it there.
@@ -85,4 +84,7 @@ target_compile_definitions(${MODEL_LABEL}
                            PRIVATE MODELINCLUDE=models/${MODEL}.h)
 target_compile_definitions(${MODEL_LABEL} PRIVATE MODELLABEL=${MODEL_LABEL})
 # link against TempLat
-target_link_libraries(${MODEL_LABEL} PUBLIC TempLat::TempLat)
+target_link_libraries(${MODEL_LABEL} PRIVATE TempLat::TempLat)
+# and include CosmoInterface
+target_include_directories(${MODEL_LABEL}
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/include/)
