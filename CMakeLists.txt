@@ -28,7 +28,6 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/cosmolattice/templat.git
   GIT_TAG main)
 FetchContent_MakeAvailable(TempLat)
-templat_define_options()
 
 # ##############################################################################
 # Now, configure CosmoLattice
