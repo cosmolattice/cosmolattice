@@ -33,33 +33,33 @@ FetchContent_MakeAvailable(TempLat)
 # Now, configure CosmoLattice
 # ##############################################################################
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/src/cmake/title.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/title.cmake)
 
 # Set the path to the cosmolattice models. If for some reasons you want to
 # change that, do it there.
-set(MODELS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/src/models/)
+set(MODELS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/models/)
 
-#########################################################################################################################
-# __  __           _      _    _____      _           _   _
-#|  \/  |         | |    | |  / ____|    | |         | | (_)              _
-#| \  / | ___   __| | ___| | | (___   ___| | ___  ___| |_ _  ___  _ __   (_)
-#| |\/| |/ _ \ / _` |/ _ \ |  \___ \ / _ \ |/ _ \/ __| __| |/ _ \| '_ \
-#| |  | | (_) | (_| |  __/ |  ____) |  __/ |  __/ (__| |_| | (_) | | | |  _
-#|_|  |_|\___/ \__,_|\___|_| |_____/ \___|_|\___|\___|\__|_|\___/|_| |_| (_)
+# ##############################################################################
+# __  __           _      _    _____      _           _   _ |  \/  |         | |
+# | |  / ____|    | |         | | (_)              _ | \  / | ___   __| | ___| |
+# | (___   ___| | ___  ___| |_ _  ___  _ __   (_) | |\/| |/ _ \ / _` |/ _ \ |
+# \___ \ / _ \ |/ _ \/ __| __| |/ _ \| '_ \ | |  | | (_) | (_| |  __/ |  ____) |
+# __/ |  __/ (__| |_| | (_) | | | |  _ |_|  |_|\___/ \__,_|\___|_| |_____/
+# \___|_|\___|\___|\__|_|\___/|_| |_| (_)
 #
-# You can change the model that is compiled by default by changing the default value of DEFAULT_MODEL below
-# You can also just pass the model name to cmake as -DMODEL=MyModel when you call cmake.
-#########################################################################################################################
+# You can change the model that is compiled by default by changing the default
+# value of DEFAULT_MODEL below You can also just pass the model name to cmake as
+# -DMODEL=MyModel when you call cmake.
+# ##############################################################################
 
 set(DEFAULT_MODEL lphi4)
 set(MODEL
     ${DEFAULT_MODEL}
     CACHE STRING "Model that is compiled.")
 
-message("")
 message(
   STATUS
-    "${BoldGreen}---------- The model which is going to be compiled is: ${MODEL} ----------${ColorReset}"
+    "${BoldGreen}-------------------- The model which is going to be compiled is: ${MODEL} --------------------${ColorReset}"
 )
 
 # This allows to customise the name of the output executable
@@ -67,16 +67,15 @@ set(MODEL_LABEL ${MODEL})
 
 # Additional cmake configuration, model-specific.
 find_file(MODELS_CMAKE ${MODEL}.cmake ${MODELS_PATH})
-if(NOT MODELS_CMAKE)
-  message(STATUS "(With no special options)")
-else()
+if(MODELS_CMAKE)
+
   include(${MODELS_CMAKE})
 endif()
 
 message("")
 
 # Add the executable
-add_executable(${MODEL_LABEL} src/cosmolattice.cpp)
+add_executable(${MODEL_LABEL} source/cosmolattice.cpp)
 add_custom_target(cosmolattice DEPENDS ${MODEL_LABEL})
 # and tell the compiler which model to choose
 target_compile_definitions(${MODEL_LABEL} PRIVATE MODELTYPE=${MODEL})
@@ -86,5 +85,6 @@ target_compile_definitions(${MODEL_LABEL} PRIVATE MODELLABEL=${MODEL_LABEL})
 # link against TempLat
 target_link_libraries(${MODEL_LABEL} PRIVATE TempLat::TempLat)
 # and include CosmoInterface
-target_include_directories(${MODEL_LABEL}
-                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/include/)
+target_include_directories(
+  ${MODEL_LABEL} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/
+                         ${CMAKE_CURRENT_SOURCE_DIR}/)
