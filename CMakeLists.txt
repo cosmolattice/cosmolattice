@@ -1,3 +1,27 @@
+# ##############################################################################
+# CMake configuration for CosmoLattice
+#
+# Common options:
+# - MODEL: the model to compile. Default: lphi4
+# - COSMOINTERFACE_TESTS: whether to compile the tests. Default: OFF
+#
+# Options passed to TempLat:
+# - PARAFAFT: compile TempLat with ParaFaft support for parallel FFTs. Default: OFF
+# - MPI: compile TempLat with MPI support. Default: OFF
+# - HDF5: compile TempLat with HDF5 support. Default: OFF
+# - TEMPLAT_TESTS: enable TempLat's tests. Default: OFF
+# - DEVICE_PROVIDER: switches the backend for parallelization. Default: Kokkos
+#     - CUDA: compile with CUDA support for GPU parallelization. Default: OFF
+#     - HIP: compile with HIP support for GPU parallelization. Default: OFF
+#     - OpenMP: compile with OpenMP support for CPU parallelization. Default: OFF
+#     - Threads: compile with C++ threads support for CPU parallelization. Default: OFF
+#     - Serial: compile without parallelization. Default: OFF
+#   By default, TempLat will try to auto-detect the system's capabilities and choose the backend.
+# - NATIVE: pass --march=native to the compiler for better performance. Default: ON on non-Darwin systems, OFF on Darwin (macOS)
+# - KOKKOSFFT: compile TempLat with KokkosFFT support for single-node GPU FFTs. Default: ON when CUDA or HIP support is enabled, OFF otherwise
+#
+# ##############################################################################
+
 cmake_minimum_required(VERSION 3.16)
 
 # Set the default build type to Release.
@@ -40,12 +64,12 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/title.cmake)
 set(MODELS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/models/)
 
 # ##############################################################################
-# __  __           _      _    _____      _           _   _ |  \/  |         | |
-# | |  / ____|    | |         | | (_)              _ | \  / | ___   __| | ___| |
-# | (___   ___| | ___  ___| |_ _  ___  _ __   (_) | |\/| |/ _ \ / _` |/ _ \ |
-# \___ \ / _ \ |/ _ \/ __| __| |/ _ \| '_ \ | |  | | (_) | (_| |  __/ |  ____) |
-# __/ |  __/ (__| |_| | (_) | | | |  _ |_|  |_|\___/ \__,_|\___|_| |_____/
-# \___|_|\___|\___|\__|_|\___/|_| |_| (_)
+#  __  __           _      _    _____      _           _   _
+# |  \/  |         | |    | |  / ____|    | |         | | (_)              _
+# | \  / | ___   __| | ___| | | (___   ___| | ___  ___| |_ _  ___  _ __   (_)
+# | |\/| |/ _ \ / _` |/ _ \ |  \___ \ / _ \ |/ _ \/ __| __| |/ _ \| '_ \
+# | |  | | (_) | (_| |  __/ |  ____) |  __/ |  __/ (__| |_| | (_) | | | |  _
+# |_|  |_|\___/ \__,_|\___|_| |_____/ \___|_|\___|\___|\__|_|\___/|_| |_| (_)
 #
 # You can change the model that is compiled by default by changing the default
 # value of DEFAULT_MODEL below You can also just pass the model name to cmake as
@@ -74,6 +98,21 @@ endif()
 
 message("")
 
+# ##############################################################################
+#  _____                     _        _     _
+# | ____|_  _____  ___ _   _| |_ __ _| |__ | | ___  ___   _
+# |  _| \ \/ / _ \/ __| | | | __/ _` | '_ \| |/ _ \/ __| (_)
+# | |___ >  <  __/ (__| |_| | || (_| | |_) | |  __/\__ \  _
+# |_____/_/\_\___|\___|\__,_|\__\__,_|_.__/|_|\___||___/ (_)
+#
+# Here, we add the executable for the configured model. We also need to tell the
+# compiler which model to compile, which is done by defining the precompiler
+# variable MODELTYPE. We also define MODELINCLUDE, which is the path to the .h
+# file of the model, and MODELLABEL, which is the name of the executable.
+# Finally, we link against TempLat and include CosmoInterface, which is the
+# heart of CosmoLattice.
+# ##############################################################################
+
 # Add the executable
 add_executable(${MODEL_LABEL} source/cosmolattice.cpp)
 add_custom_target(cosmolattice DEPENDS ${MODEL_LABEL})
@@ -88,3 +127,21 @@ target_link_libraries(${MODEL_LABEL} PRIVATE TempLat::TempLat)
 target_include_directories(
   ${MODEL_LABEL} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include/
                          ${CMAKE_CURRENT_SOURCE_DIR}/)
+
+# ##############################################################################
+#  _______        _   _               
+# |__   __|      | | (_)            _ 
+#    | | ___  ___| |_ _ _ __   __ _(_)
+#    | |/ _ \/ __| __| | '_ \ / _` |  
+#    | |  __/\__ \ |_| | | | | (_| |_ 
+#    |_|\___||___/\__|_|_| |_|\__, (_)
+#                              __/ |  
+#                             |___/   
+# Tests (only for CosmoInterface) are off by default. To enable tests set
+# -DCOSMOINTERFACE_TESTS=ON when configuring with cmake.
+# ##############################################################################
+
+if(COSMOINTERFACE_TESTS)
+  enable_testing()
+  add_subdirectory(tests)
+endif()
