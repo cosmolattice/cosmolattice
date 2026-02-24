@@ -173,10 +173,24 @@ namespace TempLat
       }
 #else
       if (saveScalarK || saveScalarG || saveComplexScalarK || saveComplexScalarG || saveSU2DoubletK ||
-          saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot)
-        throw(FileIOException(
-            "You tried to save an energy snapshot to a file, but the HDF5 library is not available. Make sure "
-            "you have it installed and that you compiled CosmoLattice with it."));
+          saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot) {
+        std::stringstream ss;
+        if (saveScalarK) ss << "\n- Kinetic energy of the scalar singlets.";
+        if (saveScalarG) ss << "\n- Gradient energy of the scalar singlets.";
+        if (saveComplexScalarK) ss << "\n- Kinetic energy of the complex scalars.";
+        if (saveComplexScalarG) ss << "\n- Gradient energy of the complex scalars.";
+        if (saveSU2DoubletK) ss << "\n- Kinetic energy of the SU(2) doublets.";
+        if (saveSU2DoubletG) ss << "\n- Gradient energy of the SU(2) doublets.";
+        if (saveU1El) ss << "\n- Electric energy of the U(1) gauge sector.";
+        if (saveU1Mag) ss << "\n- Magnetic energy of the U(1) gauge sector.";
+        if (saveSU2El) ss << "\n- Electric energy of the SU(2  ) gauge sector.";
+        if (saveSU2Mag) ss << "\n- Magnetic energy of the SU(2) gauge sector.";
+        if (savePot) ss << "\n- Potential energy.";
+
+        throw(FileIOException("You tried to save an energy snapshot to a file, but the HDF5 library is not available. "
+                              "Make sure you have it installed and that you compiled CosmoLattice with it." +
+                              ss.str()));
+      }
 #endif
     }
 
@@ -185,12 +199,12 @@ namespace TempLat
     FileIO<Model::NDim> fIO;
     std::string mRoot;
 
-    bool saveScalarG, saveScalarK;
-    bool saveComplexScalarG, saveComplexScalarK;
-    bool saveSU2DoubletG, saveSU2DoubletK;
-    bool saveU1Mag, saveU1El;
-    bool saveSU2Mag, saveSU2El;
-    bool savePot;
+    bool saveScalarG = false, saveScalarK = false;
+    bool saveComplexScalarG = false, saveComplexScalarK = false;
+    bool saveSU2DoubletG = false, saveSU2DoubletK = false;
+    bool saveU1Mag = false, saveU1El = false;
+    bool saveSU2Mag = false, saveSU2El = false;
+    bool savePot = false;
 
     std::string nameScalarG, nameScalarK;
     std::string nameComplexScalarG, nameComplexScalarK;
