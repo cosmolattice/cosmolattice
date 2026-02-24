@@ -79,7 +79,7 @@ message("")
 
 # Add the executable
 add_executable(${MODEL_LABEL} src/cosmolattice.cpp)
-add_executable(cosmolattice ALIAS ${MODEL_LABEL})
+add_custom_target(cosmolattice DEPENDS ${MODEL_LABEL})
 # and tell the compiler which model to choose
 target_compile_definitions(${MODEL_LABEL} PRIVATE MODELTYPE=${MODEL})
 target_compile_definitions(${MODEL_LABEL}
