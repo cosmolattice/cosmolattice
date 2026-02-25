@@ -13,9 +13,8 @@
 ### Basic installation
 
 *Minimal requirements:* 
-- `CMake` version 3.10 or above
+- `CMake` version 3.16 or above
 - `clang`, `g++` or another compiler with support for C++20
-- `fftw3`
 
 ```bash
 git clone https://github.com/cosmolattice/cosmolattice.git
@@ -42,9 +41,9 @@ By default, CosmoLattice will attempt to detect what devices are available on a 
 In that case, it will first check for GPU support, checking first CUDA and then HIP. 
 On the CPU side, it will first check for OpenMP support and then for C++ threads. If none of these are available, it will fall back to a serial implementation.
 If you want to force the use of a specific device, you can do so by setting the appropriate flag when configuring the project with CMake.
-The available options are `-DCUDA=ON`, `HIP=ON`, `-DOpenMP=ON`, `-DThreads=ON` and `-DSerial=ON`. To force serial for example, you can do
-```bash 
-cmake -DMODEL=lphi4 -DSerial=ON ../
+The available options are `-DCUDA=ON`, `HIP=ON`, `-DOPENMP=ON`, `-DPTHREADS=ON` and `-DNOTHREADING=ON`. To force serial for example, you can do
+```bash
+cmake -DMODEL=lphi4 -DNOTHREADING=ON ../
 ```
 
 #### CUDA
@@ -58,9 +57,9 @@ Specifying the architecture is optional for CUDA, as Kokkos can usually detect i
 
 To compile for AMD GPUs using HIP, you can enable the HIP backend by setting
 ```bash
-cmake -DMODEL=lphi4 -DHIP=ON -DKokkos_ARCH_AMD_GFX942_APU=ON ..
+cmake -DMODEL=lphi4 -DHIP=ON ..
 ```
-Note that specifying the architecture is mandatory for HIP, as automatic detection is currently faulty.
+Specifying the architecture is optional for HIP, as Kokkos can usually detect it correctly. However, if you want to specify it manually, you can do so by passing the appropriate flag to Kokkos as described in the section [Offline compilation (Kokkos)](#offline-compilation-kokkos) below.
 
 ### Offline compilation (Kokkos)
 
@@ -83,22 +82,22 @@ cmake -DMODEL=lphi4 -DDEVICE_PROVIDER=std ../
 
 All custom CMake flags can be passed when configuring the project, e.g. `cmake -DMODEL=lphi4 -DMPI=ON -DHDF5=ON ../`.
 
-| Flag | Description | Default |
-|------|-------------|---------|
-| `MODEL` | The model to compile | `lphi4` |
-| `COSMOINTERFACE_TESTS` | Compile CosmoInterface tests | `OFF` |
-| `PARAFAFT` | ParaFaft support for parallel FFTs | `OFF` |
-| `MPI` | MPI support | `OFF` |
-| `HDF5` | HDF5 support | `OFF` |
-| `TEMPLAT_TESTS` | Enable TempLat's tests | `OFF` |
-| `DEVICE_PROVIDER` | Backend for parallelization | `Kokkos` |
-| `CUDA` | CUDA support for NVIDIA GPUs | `OFF` |
-| `HIP` | HIP support for AMD GPUs | `OFF` |
-| `OpenMP` | OpenMP CPU parallelization | `OFF` |
-| `Threads` | C++ threads CPU parallelization | `OFF` |
-| `Serial` | No parallelization | `OFF` |
-| `NATIVE` | Pass `--march=native` to compiler | `ON` (non-macOS), `OFF` (macOS) |
-| `KOKKOSFFT` | KokkosFFT for single-node GPU FFTs | `ON` when CUDA/HIP enabled, else `OFF` |
+| Flag                   | Description                        | Default                                |
+| ---------------------- | ---------------------------------- | -------------------------------------- |
+| `MODEL`                | The model to compile               | `lphi4`                                |
+| `COSMOINTERFACE_TESTS` | Compile CosmoInterface tests       | `OFF`                                  |
+| `PARAFAFT`             | ParaFaft support for parallel FFTs | `OFF`                                  |
+| `MPI`                  | MPI support                        | `OFF`                                  |
+| `HDF5`                 | HDF5 support                       | `OFF`                                  |
+| `TEMPLAT_TESTS`        | Enable TempLat's tests             | `OFF`                                  |
+| `DEVICE_PROVIDER`      | Backend for parallelization        | `Kokkos`                               |
+| `CUDA`                 | CUDA support for NVIDIA GPUs       | `OFF`                                  |
+| `HIP`                  | HIP support for AMD GPUs           | `OFF`                                  |
+| `OPENMP`               | OpenMP CPU parallelization         | `OFF`                                  |
+| `PTHREADS`             | C++ threads CPU parallelization    | `OFF`                                  |
+| `NOTHREADING`          | No parallelization                 | `OFF`                                  |
+| `NATIVE`               | Pass `--march=native` to compiler  | `ON` (non-macOS), `OFF` (macOS)        |
+| `KOKKOSFFT`            | KokkosFFT for single-node GPU FFTs | `ON` when CUDA/HIP enabled, else `OFF` |
 
 ### Credits
 
