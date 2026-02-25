@@ -37,12 +37,12 @@ All options of CosmoLattice, as well as how to activate them and how to install 
 ### Choosing the device
 
 By default, CosmoLattice will attempt to detect what devices are available on a given machine.
-In that case, it will first check for GPU support, checking first CUDA and then HIP. 
+In that case, it will first check for GPU support, checking first CUDA and then HIP.
 On the CPU side, it will first check for OpenMP support and then for C++ threads. If none of these are available, it will fall back to a serial implementation.
 If you want to force the use of a specific device, you can do so by setting the appropriate flag when configuring the project with CMake.
-The available options are `-DCUDA=ON`, `HIP=ON`, `-DOpenMP=ON`, `-DThreads=ON` and `-DSerial=ON`. To force serial for example, you can do
-```bash 
-cmake -DMODEL=lphi4 -DSerial=ON ../
+The available options are `-DCUDA=ON`, `-DHIP=ON`, `-DOPENMP=ON`, `-DPTHREADS=ON` and `-DNOTHREADING=ON`. To disable threading for example, you can do
+```bash
+cmake -DMODEL=lphi4 -DNOTHREADING=ON ../
 ```
 
 #### CUDA

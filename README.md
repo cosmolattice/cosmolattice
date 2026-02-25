@@ -79,6 +79,27 @@ If you encounter any issues with Kokkos, you can also use the (serial, CPU-only)
 cmake -DMODEL=lphi4 -DDEVICE_PROVIDER=std ../
 ```
 
+### CMake Configuration Options
+
+All custom CMake flags can be passed when configuring the project, e.g. `cmake -DMODEL=lphi4 -DMPI=ON -DHDF5=ON ../`.
+
+| Flag | Description | Default |
+|------|-------------|---------|
+| `MODEL` | The model to compile | `lphi4` |
+| `COSMOINTERFACE_TESTS` | Compile CosmoInterface tests | `OFF` |
+| `PARAFAFT` | ParaFaft support for parallel FFTs | `OFF` |
+| `MPI` | MPI support | `OFF` |
+| `HDF5` | HDF5 support | `OFF` |
+| `TEMPLAT_TESTS` | Enable TempLat's tests | `OFF` |
+| `DEVICE_PROVIDER` | Backend for parallelization | `Kokkos` |
+| `CUDA` | CUDA support for NVIDIA GPUs | `OFF` |
+| `HIP` | HIP support for AMD GPUs | `OFF` |
+| `OpenMP` | OpenMP CPU parallelization | `OFF` |
+| `Threads` | C++ threads CPU parallelization | `OFF` |
+| `Serial` | No parallelization | `OFF` |
+| `NATIVE` | Pass `--march=native` to compiler | `ON` (non-macOS), `OFF` (macOS) |
+| `KOKKOSFFT` | KokkosFFT for single-node GPU FFTs | `ON` when CUDA/HIP enabled, else `OFF` |
+
 ### Credits
 
 CosmoLattice is freely available to anyone who wants to use or modify it. However, whenever 
