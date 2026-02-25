@@ -52,7 +52,7 @@ namespace TempLat
     void save(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
     {
       if (printHeader) {
-        if (verbosity != 1) (*outputSpectrum) << "1: binCentralValue" << " ";
+        if (verbosity != 1) (*outputSpectrum) << "1:binCentralValue" << " ";
         if (verbosity != 0) (*outputSpectrum) << (*arr[0])[0].getHeaderBin(verbosity, verbosity == 1 ? 1 : 2) << " ";
         for (size_t i = 0; i < arr.size() - 1; ++i)
           (*outputSpectrum) << (*arr[i])[0].getHeaderValue(verbosity, false, verbosity == 2 ? 4 * (i + 1) + 2 : i + 2)
