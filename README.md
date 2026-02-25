@@ -47,7 +47,8 @@ cmake -DMODEL=lphi4 -DNOTHREADING=ON ../
 ```
 
 #### CUDA
-To compile for NVIDIA GPUs using CUDA, you can enable the CUDA backend by setting
+
+Using Nvidia GPUs requires that you have the CUDA toolkit, or the NVIDIA HPC SDK installed on your machine, or loaded as a module on your cluster. To compile for NVIDIA GPUs using CUDA, you can enable the CUDA backend by setting
 ```bash
 cmake -DMODEL=lphi4 -DCUDA=ON ../
 ```
@@ -55,10 +56,13 @@ Specifying the architecture is optional for CUDA, as Kokkos can usually detect i
 
 #### HIP
 
+Using AMD GPUs requires that you have the ROCm toolkit installed on your machine, or loaded as a module on your cluster.
 To compile for AMD GPUs using HIP, you can enable the HIP backend by setting
 ```bash
+export CXX=hipcc
 cmake -DMODEL=lphi4 -DHIP=ON ..
 ```
+Specifying the HIP compiler (`hipcc`) is necessary for the correct detection of the HIP toolkit.
 Specifying the architecture is optional for HIP, as Kokkos can usually detect it correctly. However, if you want to specify it manually, you can do so by passing the appropriate flag to Kokkos as described in the section [Offline compilation (Kokkos)](#offline-compilation-kokkos) below.
 
 ### Offline compilation (Kokkos)
@@ -69,14 +73,9 @@ cmake -DMODEL=lphi4 -DKokkos_ARCH_ADA89 ../
 ```
 If no architecture is specified, Kokkos will attempt to detect the architecture of the machine. However, as compilation for GPU can take up to an hour, it is recommended on a cluster to queue the compilation separately on a node without a GPU, which requires offline compilation as described here.
 
-
 ### Device Providers
 
-CosmoLattice fully abstracts away the management and dispatching to actual devices, which is handled by device providers. The default device provider is Kokkos, which supports a wide range of devices and architectures.
-If you encounter any issues with Kokkos, you can also use the (serial, CPU-only) std device provider, by setting
-```bash
-cmake -DMODEL=lphi4 -DDEVICE_PROVIDER=std ../
-```
+CosmoLattice fully abstracts away the management and dispatching to actual devices, which is handled by device providers. The default device provider is Kokkos, which supports a wide range of devices and architectures. Currently, only Kokkos is implemented as a device provider.
 
 ### CMake Configuration Options
 
