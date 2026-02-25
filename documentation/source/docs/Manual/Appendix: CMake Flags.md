@@ -1,16 +1,71 @@
-We collect here, the different flags the CosmoLattice CMake flags the user can pass to influence the compilation process.
+We collect here the different CMake flags the user can pass to influence the compilation process.
 
-| **Flag**     <div style="width:150px"> | **Explanation**                                                                                                                                                                                                                                                        |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-DMODEL`                              | Takes `modelname` as an argument, where `modelname` is the name of the model you want to compile.                                                                                                                                                                      |
-| `-DMPI`                                | Can be `ON` or `OFF`. It switches `MPI` parallelization on or off.                                                                                                                                                                                                     |
-| `-DPFFT`                               | Can be `ON` or `OFF`. It switches `PFFT` on or off.                                                                                                                                                                                                                    |
-| `-DHDF5`                               | Can be `ON` or `OFF`. It switches `HDF5` on or off.                                                                                                                                                                                                                    |
-| `-DMYPFFT_PATH`                        | Takes a string as argument. Can be used to provide the path to `PFFT` in case CMake cannot find it.                                                                                                                                                                    |
-| `-DMYFFTW3_PATH`                       | Takes a string as argument. Can be used to provide the path to `fftw3` in case CMake cannot find it.                                                                                                                                                                   |
-| `-DMYHDF5_PATH`                        | Takes a string as argument. Can be used to provide the path to `hdf5` in case CMake cannot find it.                                                                                                                                                                    |
-| `-DG++OPT`                             | Only useful if compiled with `g++`. Takes one of the following as argument: `G`, `O1` , `O2` , `O3` , `Ofast` and sets the optimisation level of `g++` correspondingly (default is `Ofast`).                                                                           |
-| `-DG++SSE`                             | Only useful if compiled with `g++`. Turns on the `SSE` instructions. Default is `OFF`, but if the code compiles and run on your platform when it is `ON`, this may speed up the code.                                                                                  |
-| `-DG++AVX`                             | Only useful if compiled with `g++`. Can be set to `OFF`, `mavx`, `mavx2`, `mavx512f` and turns on the `AVX` instructions up to the specified level. Default is `OFF`, but the more `AVX` instructions your platforms support, the better (this may speed up the code). |
-| `-DTESTING`                            | Can be `ON` or `OFF`. Enable the test modules, which can then be individually compiled.                                                                                                                                                                                |
+### Model selection
 
+| **Flag** | **Explanation** |
+| --- | --- |
+| `-DMODEL` | Takes `modelname` as an argument, where `modelname` is the name of the model you want to compile. |
+
+### Device backends
+
+By default, CosmoLattice will auto-detect available backends. GPU backends are checked first (CUDA, then HIP), then CPU backends (OpenMP, then pthreads). If nothing is found, it falls back to no threading. You can override auto-detection by explicitly setting one of the flags below.
+
+| **Flag** | **Explanation** |
+| --- | --- |
+| `-DCUDA` | `ON` or `OFF`. Enable NVIDIA CUDA GPU backend. Default: `OFF` (auto-detected). |
+| `-DHIP` | `ON` or `OFF`. Enable AMD HIP GPU backend. Default: `OFF` (auto-detected). |
+| `-DOPENMP` | `ON` or `OFF`. Enable OpenMP CPU backend. Default: `OFF` (auto-detected). |
+| `-DPTHREADS` | `ON` or `OFF`. Enable C++ threads (pthreads) CPU backend. Default: `OFF` (auto-detected). |
+| `-DNOTHREADING` | `ON` or `OFF`. Disable threading entirely (serial execution). Default: `OFF`. |
+| `-DDEVICE_PROVIDER` | Selects the device provider framework. Currently only `Kokkos` is supported. Default: `Kokkos`. |
+
+### Libraries and features
+
+| **Flag** | **Explanation** |
+| --- | --- |
+| `-DMPI` | `ON` or `OFF`. Enable MPI parallelization. Default: `OFF`. |
+| `-DHDF5` | `ON` or `OFF`. Enable HDF5 support for I/O (saving/loading simulations, 3D snapshots). Default: `OFF`. |
+| `-DPARAFAFT` | `ON` or `OFF`. Enable ParaFaFT for parallel FFTs (requires MPI). Replaces the old PFFT library. Default: `OFF`. |
+| `-DFLOAT` | `ON` or `OFF`. Enable single-precision (float) FFTW support. Automatically enabled when using KokkosFFT. Default: `OFF`. |
+| `-DKOKKOSFFT` | `ON` or `OFF`. Enable KokkosFFT for single-node GPU FFTs. Automatically set to `ON` when CUDA or HIP is enabled. Default: `OFF`. |
+
+### Auto-building dependencies
+
+| **Flag** | **Explanation** |
+| --- | --- |
+| `-DAUTOBUILD_FFTW` | `ON` or `OFF`. Automatically download and build FFTW from source if not found on the system. Default: `OFF`. |
+| `-DAUTOBUILD_HDF5` | `ON` or `OFF`. Automatically download and build HDF5 from source if not found on the system. Default: `OFF`. |
+
+### Compiler optimization flags
+
+| **Flag** | **Explanation** |
+| --- | --- |
+| `-DNATIVE` | `ON` or `OFF`. Pass `-march=native` to the compiler for architecture-specific optimizations. Default: `ON` on Linux, `OFF` on macOS. |
+| `-DSSE` | `ON` or `OFF`. Enable SSE instructions (`-msse -msse2 -msse3 -msse4`). Default: `OFF`. |
+| `-DAVX` | Can be set to `OFF`, `mavx`, `mavx2`, or `mavx512f`. Enables AVX instructions up to the specified level. Default: `OFF`. |
+
+### Testing
+
+| **Flag** | **Explanation** |
+| --- | --- |
+| `-DTEMPLAT_TESTS` | `ON` or `OFF`. Build the test suite. Default: `OFF`. |
+| `-DNPROCESSES` | Number of MPI processes to use when running tests. Default: `4`. |
+
+### Deprecated flags
+
+The following flags from CosmoLattice 1.0 are still accepted for backward compatibility, but will emit a warning. They will be removed in a future version.
+
+| **Old flag** | **Replacement** |
+| --- | --- |
+| `-DOpenMP` | `-DOPENMP` |
+| `-DThreads` | `-DPTHREADS` |
+| `-DSerial` | `-DNOTHREADING` |
+| `-DFloat` | `-DFLOAT` |
+| `-DPFFT` | Removed. Use `-DPARAFAFT=ON` instead. |
+| `-DMYPFFT_PATH` | Removed. Use `-DPARAFAFT=ON` instead. |
+| `-DMYFFTW3_PATH` | No longer needed. Use `-DAUTOBUILD_FFTW=ON` or set `CMAKE_PREFIX_PATH`. |
+| `-DMYHDF5_PATH` | No longer needed. Use `-DAUTOBUILD_HDF5=ON` or set `CMAKE_PREFIX_PATH`. |
+| `-DG++OPT` | Use `CMAKE_BUILD_TYPE=Release` or `Debug` instead. |
+| `-DG++SSE` | Use `-DSSE=ON` instead. |
+| `-DG++AVX` | Use `-DAVX=mavx2` (or `mavx`, `mavx512f`) instead. |
+| `-DTESTING` | Use `-DTEMPLAT_TESTS=ON` instead. |
