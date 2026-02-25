@@ -82,8 +82,7 @@ set(MODEL
     CACHE STRING "Model that is compiled.")
 
 message(
-  STATUS
-    "${BoldGreen}━━━━━━━━━━━━━━━━━━━━ The model which is going to be compiled is: ${MODEL} ━━━━━━━━━━━━━━━━━━━━${ColorReset}"
+    "${BoldGreen}━━━━━━━━━━━━━━━━━━━━━━ The model which is going to be compiled is: ${MODEL} ━━━━━━━━━━━━━━━━━━━━━${ColorReset}"
 )
 
 # This allows to customise the name of the output executable
