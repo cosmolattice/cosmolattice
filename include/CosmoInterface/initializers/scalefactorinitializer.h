@@ -7,7 +7,7 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
-#include "TempLat/cosmolattice.h"
+#include "CosmoInterface/common.h"
 #include "TempLat/util/rangeiteration/for_in_range.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "CosmoInterface/evolvers/evolvertype.h"

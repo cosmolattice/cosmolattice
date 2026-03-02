@@ -2,7 +2,8 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-#include "TempLat/util/stringify.h"
+#include "CosmoInterface/common.h"
+
 #include STRINGIFY(MODELINCLUDE)
 // YourModel.h was loaded during compilation through a variable called MODELINCLUDE in CMake,
 // see CMakeList.txt. Here STRINGIFY is just a macro that converts MODELINCLUDE into a string.
