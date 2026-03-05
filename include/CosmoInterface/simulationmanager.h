@@ -13,6 +13,7 @@
 #include "CosmoInterface/abstractmodel.h"
 #include "CosmoInterface/runparameters.h"
 #include "TempLat/util/conditionaloutput/conditionalfilestream.h"
+#include "TempLat/parallel/threadsettings.h"
 
 namespace TempLat
 {
@@ -156,10 +157,11 @@ namespace TempLat
         (*info) << "The simulation started on the " << mt.date(" ") << " around " << mt.approxTime("") << ".\n";
       else
         (*info) << "The simulation RE-started on the " << mt.date(" ") << " around " << mt.approxTime("") << ".\n";
-      (*info) << "It will be running on a grid of (";
+      (*info) << "It will be running on an MPI grid of (";
       for (size_t i = 0; i < dec.size() - 1; ++i)
         (*info) << dec[i] << ",";
-      (*info) << dec.back() << ") cores.";
+      (*info) << dec.back() << ") cores with " << ThreadSettings::getMaxThreadCount() << " threads per MPI task.\n";
+      (*info) << "Memory usage is estimated to be around " << estimateMemoryUsageString(model) << " per MPI task.\n";
       info->flush();
     }
 
@@ -173,12 +175,17 @@ namespace TempLat
 
       auto ss = ms / 1000;
       auto msDec = ms % 1000;
+      auto nthreads = nprocesses * ThreadSettings::getMaxThreadCount();
 
       char msBuf[6];
       snprintf(msBuf, 6, "%03lli", msDec);
       (*info) << "The timer indicates that it ran for " << ss << "." << msBuf << "s.\n";
-      (*info) << "As it ran on " << nprocesses << " cores, this corresponds to " << ms / 1000.0 / 3600.0 * nprocesses
+      (*info) << "As it ran on " << nthreads << " cores, this corresponds to " << ms / 1000.0 / 3600.0 * nthreads
               << " core hours.\n";
+
+#ifndef DEVICE_CPU
+      (*info) << "As it ran on GPUs, this corresponds to " << ms / 1000.0 / 3600.0 * nprocesses << " GPU hours.\n";
+#endif
     }
 
     template <typename T, class Model>
@@ -198,6 +205,47 @@ namespace TempLat
     bool boolRestart;
     // Info file.
     std::unique_ptr<ConditionalFileStream> info;
+
+    template <typename Model> std::string estimateMemoryUsageString(const Model &model) const
+    {
+      size_t totalBytes = 0;
+
+      // Scalar fields (phi and pi for each scalar field)
+      if constexpr (Model::Ns > 0) totalBytes += 2 * Model::Ns * model.fldS(0_c).getMemoryManager()->bytes();
+
+      // Complex scalar fields (phi and pi for each complex scalar field)
+      if constexpr (Model::NCs > 0)
+        totalBytes += 2 * Model::NCs * 2 * model.fldCS(0_c)(0_c).getMemoryManager()->bytes();
+
+      // U(1) gauge fields (Each component of the gauge field, and their conjugate momenta)
+      if constexpr (Model::NU1 > 0)
+        totalBytes += 2 * Model::NU1 * NDim * model.fldU1(0_c)(1_c).getMemoryManager()->bytes();
+
+      // SU(2) gauge fields (Each component of the gauge field, and their conjugate momenta)
+      if constexpr (Model::NSU2 > 0)
+        totalBytes += 2 * Model::NSU2 * NDim * 4 * model.fldSU2(0_c)(1_c)(1_c).getMemoryManager()->bytes();
+
+      // SU(2) doublet fields (phi and pi for each component of the doublet)
+      if constexpr (Model::NSU2Doublet > 0)
+        totalBytes += 2 * Model::NSU2Doublet * 4 * model.fldSU2Doublet(0_c)(0_c).getMemoryManager()->bytes();
+
+      // Gravitational waves (if present)
+      if (model.fldGWs != nullptr) {
+        totalBytes += 2 * Model::NGWs * 6 * (*model.fldGWs)(0_c).getMemoryManager()->bytes();
+      }
+
+      // Convert to human-readable format
+      const char *suffixes[] = {"B", "KB", "MB", "GB", "TB"};
+      size_t suffixIndex = 0;
+      double readableSize = static_cast<double>(totalBytes);
+      while (readableSize >= 1024.0 && suffixIndex < 4) {
+        readableSize /= 1024.0;
+        ++suffixIndex;
+      }
+      std::ostringstream oss;
+      oss << std::fixed << std::setprecision(2) << readableSize << " " << suffixes[suffixIndex];
+      return oss.str();
+    }
   };
 } // namespace TempLat
 

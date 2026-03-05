@@ -269,6 +269,10 @@ namespace TempLat
       alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);
     }
 
+    // AbstractModel should never be copied, so we delete the copy constructor and copy assignment operator.
+    AbstractModel(const AbstractModel &) = delete;
+    AbstractModel &operator=(const AbstractModel &) = delete;
+
     // The functions below are to be redefined in the models. We define them here to be able to compile anyhow, even if
     // they are not needed by a specific model.
     //  Note: A better alternative is to use if constexpr in the main, but this is c++17. Could also use macro but don't
@@ -339,15 +343,15 @@ namespace TempLat
     // Sometimes, it can be useful to get "any field" of the model. This function implements this in a generic way.
     Field<NDim, T> getOneField() const
     {
-      if (Ns > 0)
+      if constexpr (Ns > 0)
         return fldS(0_c);
-      else if (NCs > 0)
+      else if constexpr (NCs > 0)
         return fldCS(0_c)(0_c);
-      else if (NSU2Doublet > 0)
+      else if constexpr (NSU2Doublet > 0)
         return fldSU2Doublet(0_c)(0_c);
-      else if (NU1 > 0)
+      else if constexpr (NU1 > 0)
         return fldU1(0_c)(1_c);
-      else if (NSU2 > 0)
+      else if constexpr (NSU2 > 0)
         return fldSU2(0_c)(1_c)(1_c);
       else {
         throw(EmptyModel("The model seems empty, cannot return a field. Abort."));

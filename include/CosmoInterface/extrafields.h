@@ -89,15 +89,18 @@ namespace TempLat
 
     void allocateExtraMemory(Model &model, RunParameters<T> runPars, std::string tag)
     {
+      // TODO: This logic is wrong as it has been before, we should discuss this.
+
       if (RK2NStorageParameters<T>::isRK2n(runPars.eType))
         allFlds1 = std::make_shared<FieldsAsInModel<Model>>(model, runPars, tag);
-      else if (model.getU1IC() == InitialConditionsType::PlaneWaves ||
-               model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) {
-        fldU1IC = std::make_shared<VectorField<Field<Model::NDim, T>>>("U1ICfldU1", model.getToolBox(),
-                                                                       runPars.getLatParams());
-        piU1IC = std::make_shared<VectorField<Field<Model::NDim, T>>>("U1ICpiU1", model.getToolBox(),
-                                                                      runPars.getLatParams());
-      }
+      if constexpr (Model::NU1 > 0)
+        if (model.getU1IC() == InitialConditionsType::PlaneWaves ||
+            model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) {
+          fldU1IC = std::make_shared<VectorField<Field<Model::NDim, T>>>("U1ICfldU1", model.getToolBox(),
+                                                                         runPars.getLatParams());
+          piU1IC = std::make_shared<VectorField<Field<Model::NDim, T>>>("U1ICpiU1", model.getToolBox(),
+                                                                        runPars.getLatParams());
+        }
     }
 
     std::shared_ptr<FieldsAsInModel<Model>> getAllFlds1() { return allFlds1; }
