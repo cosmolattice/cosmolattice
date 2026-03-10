@@ -76,7 +76,7 @@ namespace TempLat {
 
             dt = KernelsTypes::getDt(model, kt);
 
-            kt.cache(model); //To be able to store some temporary info in the kernel type, not used so far
+            kt.cache(model, tMinust0); //To be able to store some temporary info in the kernel type
 
             for (size_t i = 0; i < As.size(); ++i) {  // loop over operations...
                 ForLoop(fld, 0, FieldsNumbering::maxNum,
@@ -106,7 +106,7 @@ namespace TempLat {
                 if(expansion){
                     Averages::setAllAverages(model);
                 }
-                kt.cache(model);
+                kt.cache(model, tMinust0);
             }
         }
 
@@ -129,12 +129,13 @@ namespace TempLat {
         void advanceScaleFactor(Model& model, size_t i){
             if(sfDefined) model.aI += Bs[i] * deltaA;
 
-            /*if(not Model::IsNonMinimallyCoupled) model.aDotI += Bs[i] * deltaADot;
-            else{
-              model.piAI += Bs[i] * deltaADot;
-              model.aDotI = model.piAI * pow(model.aI, model.alpha - 1);
-            }*/
-           if(sfDefined) model.aDotI += Bs[i] * deltaADot;
+            if constexpr (not Model::IsNonMinimallyCoupled) {
+                if(sfDefined) model.aDotI += Bs[i] * deltaADot;
+            }
+            else {
+                if(sfDefined) model.piAI += Bs[i] * deltaADot;
+                if(sfDefined) model.aDotI = model.piAI * pow(model.aI, model.alpha - 1);
+            }
         }
 
         // This function is called before doing the measurements. It is used only to set aDotI to its correct value in case

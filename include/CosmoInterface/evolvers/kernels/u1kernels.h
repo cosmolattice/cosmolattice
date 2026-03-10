@@ -28,27 +28,21 @@ namespace TempLat
     U1Kernels() = default;
 
     // Equations of motion:
-    template <class Model, int N, class T> static auto get(Model &model, Tag<N> a, KernelsTypes::EoM<T>)
+    template <class Model, int N, class T> static auto get(Model &model, Tag<N> a, KernelsTypes::EoM<T> eom)
     {
-      // Computes different terms in the U(1) gauge kernels:
+      auto tMinust0 = eom.tMinust0;
 
-      // --> U(1) gauge current
       auto U1Source = MatterCurrents::U1Current(model, a);
-
-      // --> lapl(A_i)
       auto LaplU1 = MakeVector(i, 1, Model::NDim, LatLapl<Model::NDim>(model.fldU1(a)(i)));
-
-      // --> \partial_i \partial_j A_i
       auto GradU1 =
           MakeVector(i, 1, Model::NDim, Total(j, 1, Model::NDim, backDiff(forwDiff(model.fldU1(a)(j), i), j)));
 
-      auto AxionScalarSource = AxionCouplings::U1AxionCoupling(model, a);
+      auto AxionScalarSource = AxionCouplings::U1AxionCoupling(model, a, tMinust0);
       auto normU1AxionScalarSource = (model.fStar / Model::MPl);
 
-      auto normU1Source = pow(model.aI, 1 + model.alpha); // Rescaling for U1Source
-      auto normGrad = pow(model.aI, -1 + model.alpha);    // Rescaling for GradU1 and LaplU1
+      auto normU1Source = pow(model.aI, 1 + model.alpha);
+      auto normGrad = pow(model.aI, -1 + model.alpha);
 
-      // Returns kernel for the U(1) gauge fields' EOM:
       return normGrad * (LaplU1 - GradU1) - normU1Source * U1Source + normU1AxionScalarSource * AxionScalarSource;
     }
 

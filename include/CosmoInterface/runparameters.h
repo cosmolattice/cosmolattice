@@ -55,6 +55,7 @@ namespace TempLat
           omegaEoS(fixedBackground ? par.get<T>("omegaEoS", 1.0 / 3.0)
                                    : 0.0),              // For fixed background expansion: equation of state
           H0(fixedBackground ? par.get<T>("H0") : 0.0), // For fixed background expansion: initial Hubble parameter
+          a0(par.get<T>("a0", 1.0)),                    // Initial scale factor (default 1.0)
           spectraVerbosity(par.get<int>("spectraVerbosity", 0)), // Verbosity of spectra files
           deltaKBin(par.get<double>("deltaKBin", 1)),            // Bin width of the spectra
           nBinsSpectra(floor(sqrt(3.0) / 2.0 * N / deltaKBin)),  // Number of bins in spectra
@@ -162,7 +163,7 @@ namespace TempLat
 
     const bool fixedBackground;
 
-    T omegaEoS, H0;
+    T omegaEoS, H0, a0;
 
     const int spectraVerbosity;
     const double deltaKBin;

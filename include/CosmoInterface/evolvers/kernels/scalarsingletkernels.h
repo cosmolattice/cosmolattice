@@ -29,10 +29,12 @@ namespace TempLat
     // Equations of motion:
     template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
     {
-      // Returns kernel for scalar singlets (formed by laplacian and potential derivative):
+      auto tMinust0 = eom.tMinust0;
+
       return (pow(model.aI, 1 + model.alpha) * LatLapl<Model::NDim>(model.fldS(n)) -
-              pow(model.aI, 3 + model.alpha) * Potential::derivS(model, n) +
-              AxionCouplings::ScalarAxionSource(model, n));
+              pow(model.aI, 3 + model.alpha) * (Potential::derivS(model, n)
+              + IfElse(Model::NonMinimalCouplings::couples(Tag<N>(), Tag<0>()), model.xis(n, 0_c) * model.fldS(n) * model.RI, ZeroType())) +
+              AxionCouplings::ScalarAxionSource(model, n, tMinust0));
     }
 
     template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)

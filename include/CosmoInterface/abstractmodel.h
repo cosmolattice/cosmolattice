@@ -51,6 +51,7 @@ namespace TempLat
     using SU2DoubletU1Couplings = CouplingsManager<NSU2Doublet, NU1Flds>;   // couplings U(1) gauge-SU2 doublet
     using SU2DoubletSU2Couplings = CouplingsManager<NSU2Doublet, NSU2Flds>; // couplings SU(2) gauge-SU2 doublet
     using ScalarU1AxionCouplings = CouplingsManager<NScalars, NU1Flds>;     // couplings U(1) gauge-scalar axion
+    using NonMinimalCouplings = CouplingsManager<NScalars, 1>;             // Non-minimal coupling to gravity of scalars.
   };
 
   // In order to make some of the expression template mechanism works, the number of fields needs to be known
@@ -64,7 +65,8 @@ namespace TempLat
   _ModelName, _ModelParsType::NPotTerms, _ModelParsType::NScalars, _ModelParsType::NCScalars, _ModelParsType::NU1Flds, \
       _ModelParsType::NSU2Doublet, _ModelParsType::NSU2Flds, typename _ModelParsType::CsU1Couplings,                   \
       typename _ModelParsType::SU2DoubletU1Couplings, typename _ModelParsType::SU2DoubletSU2Couplings,                 \
-      typename _ModelParsType::ScalarU1AxionCouplings, _FloatType, _ModelParsType::NDim
+      typename _ModelParsType::ScalarU1AxionCouplings, typename _ModelParsType::NonMinimalCouplings,                    \
+      _FloatType, _ModelParsType::NDim
 #define MakeModelFloatType(_ModelName, _ModelParsType, _FloatType)                                                     \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, _FloatType)>
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
@@ -76,7 +78,7 @@ namespace TempLat
    **/
   template <class R, size_t NPOTTERMS, size_t NS, size_t NC, size_t NU1FLDS, size_t NSU2DOUBLET, size_t NSU2FLDS,
             typename CSU1COUPLINGS, typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS,
-            typename SCALARU1AXIONCOUPLINGS, typename T = double, int NDIM = 3>
+            typename SCALARU1AXIONCOUPLINGS, typename NONMINCOUPLINGS, typename T = double, int NDIM = 3>
   class AbstractModel
   {
   public:
@@ -109,6 +111,8 @@ namespace TempLat
     using SU2DoubletU1Couplings = SU2DOUBLETU1COUPLINGS;
     using SU2DoubletSU2Couplings = SU2DOUBLETSU2COUPLINGS;
     using ScalarU1AxionCouplings = SCALARU1AXIONCOUPLINGS;
+    using NonMinimalCouplings = NONMINCOUPLINGS;
+    static constexpr bool IsNonMinimallyCoupled = NonMinimalCouplings::howManyCouples() > 0;
     using FloatType = T;
 
     // Objects containing the fields and their momenta:
@@ -174,6 +178,16 @@ namespace TempLat
     T SU2Mag2AvI, SU2Mag2AvSI;
     T SU2pi2AvSI, SU2pi2AvSIM, SU2pi2AvIM, SU2pi2AvI;
 
+    // --> Averages needed for the non-minimal coupling
+    T RI;
+    TempLatArray<T, Ns> fld2AvSI_i;
+    TempLatArray<T, Ns> grad2AvSI_i;
+    TempLatArray<T, Ns> pi2AvSI_i;
+    TempLatArray<T, Ns> fldPiAvSI;
+    TempLatArray<T, Ns> fldVpAvSI;
+
+    T piAI;
+
     // --> Averages potential
     T potAvI, potAvSI;
 
@@ -202,6 +216,7 @@ namespace TempLat
     SU2DoubletU1Couplings gQ_SU2DblU1;
     SU2DoubletSU2Couplings gQ_SU2DblSU2;
     ScalarU1AxionCouplings alphaLambda_SU1;
+    NonMinimalCouplings xis;
 
     // Effective masses, used for setting the initial fluctuations of the scalar fields
     TempLatArray<T, Ns> masses2S;                                               // scalar singlet
@@ -267,6 +282,9 @@ namespace TempLat
       auto gAxionU1 = parser.get<double, NU1>("gAxionU1", 1.0);
       auto AxionU1Charges = parser.get<double, ScalarU1AxionCouplings::howManyCouples()>("alphaLambda_AxionU1", 1);
       alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);
+
+      auto xiCouplings = parser.get<T, NonMinimalCouplings::howManyCouples()>("xis", 1);
+      xis.setEffectiveCharges(xiCouplings, {1});
     }
 
     // AbstractModel should never be copied, so we delete the copy constructor and copy assignment operator.

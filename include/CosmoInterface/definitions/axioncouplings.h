@@ -39,8 +39,9 @@ namespace TempLat {
 
          ////// Scalar AXION Source (used in the kernels of the EOM) //////
 
-        template<class Model, int N>
-        static auto ScalarAxionSource(Model& model, Tag<N> n) { //N is the Nth scalar field
+        // Primary signature with tMinust0
+        template<class Model, int N, typename TT>
+        static auto ScalarAxionSource(Model& model, Tag<N> n, TT tMinust0) {
 
           	return  Total(a,0,Model::NU1-1,
           					  IfElse(Model::ScalarU1AxionCouplings::couples(Tag<N>(),a),
@@ -49,10 +50,17 @@ namespace TempLat {
           					  ));
         }
 
+        // Backward-compatible wrapper
+        template<class Model, int N>
+        static auto ScalarAxionSource(Model& model, Tag<N> n) {
+          return ScalarAxionSource(model, n, 0.0);
+        }
+
 		 ////// U(1) AXION COUPLING (used in the kernels of the EOM) //////
 
-        template<class Model, int N, int I>
-        static auto U1AxionCoupling(Model& model, Tag<N> n, Tag<I> i) { //N is the Nth U1 abelian field, i is the spatial component.
+        // Primary signature with tMinust0
+        template<class Model, int N, int I, typename TT>
+        static auto U1AxionCoupling(Model& model, Tag<N> n, Tag<I> i, TT tMinust0) {
 
            auto AxionCoupl1 =  - 0.5 * Total(a,0,Model::Ns-1,
            							IfElse(Model::ScalarU1AxionCouplings::couples(a,Tag<N>()),
@@ -77,6 +85,12 @@ namespace TempLat {
             return (pow(model.aI, model.alpha - 3) * AxionCoupl1 + pow(model.aI, -1 + model.alpha) * AxionCoupl2);
         }
 
+        // Backward-compatible wrapper
+        template<class Model, int N, int I>
+        static auto U1AxionCoupling(Model& model, Tag<N> n, Tag<I> i) {
+            return U1AxionCoupling(model, n, i, 0.0);
+        }
+
 		////// Scalar Axion Source to Gauss Law //////
 
 		 template<class Model, int N>
@@ -91,10 +105,18 @@ namespace TempLat {
             				 	);
         }
 
-        template<class Model, int N>  // creates a 3-component vector containing the U(1) current
+        // Primary signature with tMinust0
+        template<class Model, int N, typename TT>
+        static auto U1AxionCoupling(Model& model, Tag<N> t, TT tMinust0)
+        {
+            return MakeVector(i,1,Model::NDim,U1AxionCoupling(model,t,i,tMinust0));
+        }
+
+        // Backward-compatible wrapper
+        template<class Model, int N>
         static auto U1AxionCoupling(Model& model, Tag<N> t)
         {
-            return MakeVector(i,1,Model::NDim,U1AxionCoupling(model,t,i));
+            return U1AxionCoupling(model, t, 0.0);
         }
 
 

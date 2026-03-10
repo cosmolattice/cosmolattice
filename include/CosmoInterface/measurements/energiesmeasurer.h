@@ -84,6 +84,16 @@ namespace TempLat
       ForLoop(i, 0, Model::NPotTerms - 1, potTerm = average(model.potentialTerms(i)); energies.addAverage(potTerm);
               Etot += potTerm;);
 
+      if constexpr (Model::IsNonMinimallyCoupled) {
+        auto rhoNMC1 = Energies::rhoNMCAv1(model);
+        auto rhoNMC2 = Energies::rhoNMCAv2(model);
+        auto rhoNMC = Energies::rhoNMCAv(model);
+        energies.addAverage(rhoNMC1);
+        energies.addAverage(rhoNMC2);
+        energies.addAverage(rhoNMC);
+        Etot += rhoNMC;
+      }
+
       energies.addAverage(Etot);
       energies.save(lastMeas);
 
@@ -122,6 +132,12 @@ namespace TempLat
               ret.emplace_back("E^grad_U1" + std::to_string(i)););
       ForLoop(i, 0, Model::NSU2 - 1, ret.emplace_back("E^kin_SU2"); ret.emplace_back("E^grad_SU2"););
       ForLoop(i, 0, Model::NPotTerms - 1, ret.emplace_back("Vpot_term_" + std::to_string(i)););
+
+      if constexpr (Model::IsNonMinimallyCoupled) {
+        ret.emplace_back("rhoNMC1");
+        ret.emplace_back("rhoNMC2");
+        ret.emplace_back("rhoNMC");
+      }
 
       ret.emplace_back("E_tot");
 

@@ -150,7 +150,32 @@ namespace TempLat
       return magneticSU2(model, model.SU2Mag2AvSI);
     }
 
-    template <class Model> static inline auto rho(Model &model) // Total energy density (sum of all contributions)
+    template <class Model> static inline auto rhoNMCAv1(Model &model)
+    {
+      auto rhoNMC1 = Total(i, 0, Model::Ns - 1,
+          IfElse(Model::NonMinimalCouplings::couples(i, 0_c),
+            3 * model.xis(i, 0_c) *
+             (pow(model.aI, -2 * model.alpha - 2) * pow(model.aDotI, 2) * model.fld2AvSI_i[i]),
+            0));
+      return rhoNMC1;
+    }
+
+    template <class Model> static inline auto rhoNMCAv2(Model &model)
+    {
+      auto rhoNMC2 = Total(i, 0, Model::Ns - 1,
+          IfElse(Model::NonMinimalCouplings::couples(i, 0_c),
+            3 * model.xis(i, 0_c) *
+             (2 * pow(model.aI, -model.alpha - 4) * model.aDotI * model.fldPiAvSI[i]),
+            0));
+      return rhoNMC2;
+    }
+
+    template <class Model> static inline auto rhoNMCAv(Model &model)
+    {
+      return rhoNMCAv1(model) + rhoNMCAv2(model);
+    }
+
+    template <class Model> static inline auto rhoMinimal(Model &model)
     {
       Averages::setAllAverages(model);
       auto Eks = (model.Ns > 0 ? kineticS(model) : 0);
@@ -165,7 +190,48 @@ namespace TempLat
       auto EmagSU2 = (model.NSU2 > 0 ? magneticSU2(model) : 0);
 
       return (Eks + Ekcs + EkSU2Dbl + Egs + Egcs + EgSU2Dbl + EelU1 + EmagU1 + EelSU2 + EmagSU2 +
-              model.potAvI); // we also include the potential energy to the sum
+              model.potAvI);
+    }
+
+    template <class Model> static inline auto pMinimal(Model &model)
+    {
+      Averages::setAllAverages(model);
+      auto Eks = (model.Ns > 0 ? kineticS(model) : 0);
+      auto Ekcs = (model.NCs > 0 ? kineticCS(model) : 0);
+      auto EkSU2Dbl = (model.NSU2Doublet > 0 ? kineticSU2Doublet(model) : 0);
+      auto Egs = (model.Ns > 0 ? gradientS(model) : 0);
+      auto Egcs = (model.NCs > 0 ? gradientCS(model) : 0);
+      auto EgSU2Dbl = (model.NSU2Doublet > 0 ? gradientSU2Doublet(model) : 0);
+      auto EelU1 = (model.NU1 > 0 ? electricU1(model) : 0);
+      auto EmagU1 = (model.NU1 > 0 ? magneticU1(model) : 0);
+      auto EelSU2 = (model.NSU2 > 0 ? electricSU2(model) : 0);
+      auto EmagSU2 = (model.NSU2 > 0 ? magneticSU2(model) : 0);
+
+      return (Eks + Ekcs + EkSU2Dbl - 1.0/3.0 * (Egs + Egcs + EgSU2Dbl) +
+              1.0/3.0 * (EelU1 + EmagU1 + EelSU2 + EmagSU2) - model.potAvI);
+    }
+
+    template <class Model> static inline auto rho(Model &model) // Total energy density (sum of all contributions)
+    {
+      Averages::setAllAverages(model);
+      auto Eks = (model.Ns > 0 ? kineticS(model) : 0);
+      auto Ekcs = (model.NCs > 0 ? kineticCS(model) : 0);
+      auto EkSU2Dbl = (model.NSU2Doublet > 0 ? kineticSU2Doublet(model) : 0);
+      auto Egs = (model.Ns > 0 ? gradientS(model) : 0);
+      auto Egcs = (model.NCs > 0 ? gradientCS(model) : 0);
+      auto EgSU2Dbl = (model.NSU2Doublet > 0 ? gradientSU2Doublet(model) : 0);
+      auto EelU1 = (model.NU1 > 0 ? electricU1(model) : 0);
+      auto EmagU1 = (model.NU1 > 0 ? magneticU1(model) : 0);
+      auto EelSU2 = (model.NSU2 > 0 ? electricSU2(model) : 0);
+      auto EmagSU2 = (model.NSU2 > 0 ? magneticSU2(model) : 0);
+
+      auto ENMC = [&]() {
+        if constexpr (Model::IsNonMinimallyCoupled) return rhoNMCAv(model);
+        else return ZeroType();
+      }();
+
+      return (Eks + Ekcs + EkSU2Dbl + Egs + Egcs + EgSU2Dbl + EelU1 + EmagU1 + EelSU2 + EmagSU2 +
+              ENMC + model.potAvI);
     }
   };
 } // namespace TempLat

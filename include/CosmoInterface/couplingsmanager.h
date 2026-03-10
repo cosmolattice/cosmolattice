@@ -72,7 +72,11 @@ namespace TempLat
     // matter field and the second refers to the gauge field.
     template <int nmat, int ng> double operator()(Tag<nmat>, Tag<ng>) const
     {
-      return effectiveCharges[nmat * NGauge + ng];
+      if constexpr (sizeof...(Bools) == 0 || NGauge == 0) {
+        return 0.0;
+      } else {
+        return effectiveCharges[nmat * NGauge + ng];
+      }
     }
 
     // We can also access only the gauge field coupling, in case needed.
@@ -82,7 +86,11 @@ namespace TempLat
     // couples or not.
     template <int nmat, int ng> static constexpr bool couples(Tag<nmat>, Tag<ng>)
     {
-      return doesCouples[nmat * NGauge + ng];
+      if constexpr (sizeof...(Bools) == 0 || NGauge == 0) {
+        return false;
+      } else {
+        return doesCouples[nmat * NGauge + ng];
+      }
     }
 
   private:

@@ -13,6 +13,7 @@
 #include "CosmoInterface/evolvers/evolvertype.h"
 #include "CosmoInterface/runparameters.h"
 #include "CosmoInterface/definitions/energies.h"
+#include "CosmoInterface/definitions/nonminimalcoupling.h"
 
 namespace TempLat
 {
@@ -47,7 +48,28 @@ namespace TempLat
         // Note: piS0(i), piCS0(i), piSU2Doublet0(i) are given in GeV^2,
         // so we divide by fStar*omegaStar to transform to program variables
 
-        model.aDotI = model.fStar / Model::MPl * sqrt((kin + model.pot0) / 3.0); // 1st Friedmann eqn
+        auto rhoMC = kin + model.pot0;
+
+        model.aI = rPar.a0;
+        model.aDotI = model.fStar / Model::MPl * sqrt(rhoMC / 3.0); // 1st Friedmann eqn
+
+        if constexpr (Model::IsNonMinimallyCoupled) {
+          auto A = 1.0 - Total(i, 0, Model::Ns - 1,
+              IfElse(Model::NonMinimalCouplings::couples(i, 0_c),
+                pow<2>(1.0 / Model::MPl) * model.xis(i, 0_c) * pow<2>(model.fldS0(i)), 0));
+          auto B = -2.0 * Total(i, 0, Model::Ns - 1,
+              IfElse(Model::NonMinimalCouplings::couples(i, 0_c),
+                pow<2>(1.0 / Model::MPl) / model.omegaStar * model.xis(i, 0_c) * model.fldS0(i) * model.piS0(i), 0));
+          auto C = -pow<2>(model.fStar / Model::MPl) / 3.0 * rhoMC;
+
+          auto Delta = pow<2>(B) - 4 * A * C;
+          auto H1 = (-B + sqrt(Delta)) / 2.0 / A;
+
+          model.aI = rPar.a0;
+          model.aDotI = H1;
+          model.piAI = model.aDotI;
+          model.RI = NonMinimalCoupling::R(model);
+        }
 
         // Note: Initially, the gradients are 0, so the scale factors receives
         //  only contributions from the kinetic energies and the potential.

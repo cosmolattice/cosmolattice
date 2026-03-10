@@ -114,6 +114,20 @@ namespace TempLat
         model.SU2DblPi2AvSI = model.SU2DblPi2AvI;
         model.SU2DblGrad2AvI = Averages::grad2SU2Doublet(model);
       }
+
+      if constexpr (Model::IsNonMinimallyCoupled) {
+        ForLoop(i, 0, Model::Ns - 1,
+          model.fld2AvSI_i(i) = average(pow<2>(model.fldS(i)));
+          model.grad2AvSI_i(i) = average(FieldFunctionals::grad2S(model, i));
+          model.pi2AvSI_i(i) = average(FieldFunctionals::pi2S(model, i));
+
+          model.grad2AvSI_i(i) = 0.5 * pow<-2>(model.aI) * model.grad2AvSI_i(i);
+          model.pi2AvSI_i(i) = 0.5 * pow<-6>(model.aI) * model.pi2AvSI_i(i);
+
+          model.fldPiAvSI(i) = average(model.fldS(i) * model.piS(i));
+          model.fldVpAvSI(i) = average(model.fldS(i) * Potential::derivS(model, i));
+        );
+      }
     }
   };
 } // namespace TempLat

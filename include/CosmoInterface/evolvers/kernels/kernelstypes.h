@@ -20,6 +20,13 @@ namespace TempLat::KernelsTypes {
      **/
         template<typename T> class EoM{
         public:
+            T tMinust0 = T(0);
+
+            template<class Model>
+            void cache(Model& model, T tIn) {
+                tMinust0 = tIn;
+            }
+
             template<class Model>
             void cache(Model & model) {}
         };

@@ -26,7 +26,10 @@ namespace TempLat
     template <typename Model>
     ScaleFactorMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
         : expansion(par.expansion),
-          scaleOut(filesManager, "scale_factor", model.getToolBox()->amIRoot(), append, {"t", "a", "aDot", "H"},
+          scaleOut(filesManager, "scale_factor", model.getToolBox()->amIRoot(), append,
+                   Model::IsNonMinimallyCoupled
+                     ? std::vector<std::string>{"t", "a", "aDot", "H", "R"}
+                     : std::vector<std::string>{"t", "a", "aDot", "H"},
                    !expansion) // Output file for scale factor and derivatives.
     {
     }
@@ -38,6 +41,7 @@ namespace TempLat
         scaleOut.addAverage(model.aI);               // Scale factor
         scaleOut.addAverage(model.aDotI);            // First time-derivative of the scale factor
         scaleOut.addAverage(model.aDotI / model.aI); // Hubble parameter
+        if constexpr (Model::IsNonMinimallyCoupled) scaleOut.addAverage(model.RI);
       }
       scaleOut.save(lastMeas);
     }

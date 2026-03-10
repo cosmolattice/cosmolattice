@@ -15,6 +15,7 @@
 #include "CosmoInterface/initializers/su2initializer.h"
 #include "CosmoInterface/definitions/averages.h"
 #include "CosmoInterface/definitions/hubbleconstraint.h"
+#include "CosmoInterface/definitions/nonminimalcoupling.h"
 
 namespace TempLat
 {
@@ -57,6 +58,7 @@ namespace TempLat
         U1Initializer::initializeU1(model, fg, rPar.kCutoff, extraFields);
 
       Averages::setAllAverages(model);
+      if constexpr (Model::IsNonMinimallyCoupled) model.RI = NonMinimalCoupling::R(model);
       if (rPar.expansion) {
         // For consistency, correct the scale factor time-derivative with the fluctuations.
         // Relevant only for higher order evolvers.
