@@ -30,7 +30,7 @@ namespace TempLat
     template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
     {
       // Returns kernel for scalar singlets (formed by laplacian and potential derivative):
-      return (pow(model.aI, 1 + model.alpha) * LatLapl<Model::NDim>(model.fldS(n)) -
+      return (pow(model.aI, 1 + model.alpha) * LatLapl(model.fldS(n)) -
               pow(model.aI, 3 + model.alpha) * Potential::derivS(model, n) +
               AxionCouplings::ScalarAxionSource(model, n));
     }
