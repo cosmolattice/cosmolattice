@@ -14,8 +14,8 @@ public:
     static constexpr size_t NSU2 = NSU2FLDS;
 
     // SU(2) gauge fields
-    VectorFieldCollection<SU2Field<NDIM, T>, NSU2FLDS> fldSU2;
-    VectorFieldCollection<SU2LieAlgebraField<NDIM, T>, NSU2FLDS> piSU2;
+    VectorFieldCollection<SU2Field<T, NDIM>, NSU2FLDS> fldSU2;
+    VectorFieldCollection<SU2LieAlgebraField<T, NDIM>, NSU2FLDS> piSU2;
 
     // Averages SU2
     T SU2Mag2AvI, SU2Mag2AvSI;

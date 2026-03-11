@@ -37,7 +37,7 @@ namespace TempLat
     }
 
     template <size_t NDim>
-    SpectrumSaverHDF5(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool pAmIRoot, bool append,
+    SpectrumSaverHDF5(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
         : SpectrumSaverHDF5(fm, fm.getCurredName(fld, false, "spectra"), pAmIRoot, append, rPar)
     {

@@ -27,8 +27,8 @@ public:
     using CsU1Couplings = CSU1COUPLINGS;
 
     // Complex scalar fields
-    FieldCollection<ComplexField<NDIM, T>, NC> fldCS;
-    FieldCollection<ComplexField<NDIM, T>, NC> piCS;
+    FieldCollection<ComplexField<T, NDIM>, NC> fldCS;
+    FieldCollection<ComplexField<T, NDIM>, NC> piCS;
 
     // Averages complex scalar
     T CSgrad2AvI, CSgrad2AvSI;

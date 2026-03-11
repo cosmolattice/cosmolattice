@@ -15,8 +15,8 @@ class GWBase {
 public:
     static constexpr size_t NGWs = 6;
 
-    std::unique_ptr<FieldCollection<Field<NDIM, T>, 6, true>> fldGWs;
-    std::unique_ptr<FieldCollection<Field<NDIM, T>, 6, true>> piGWs;
+    std::unique_ptr<FieldCollection<Field<T, NDIM>, 6, true>> fldGWs;
+    std::unique_ptr<FieldCollection<Field<T, NDIM>, 6, true>> piGWs;
 
     auto pi_GWtensor(Tag<1>, Tag<1>) { return (*piGWs)(0_c); }
     auto pi_GWtensor(Tag<1>, Tag<2>) { return (*piGWs)(1_c); }
@@ -43,10 +43,10 @@ protected:
            device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
            const LatticeParameters<T> &par)
         : fldGWs(parser.get<bool>("withGWs", false)
-                     ? std::make_unique<FieldCollection<Field<NDIM, T>, 6, true>>("fldGWs", toolBox, par)
+                     ? std::make_unique<FieldCollection<Field<T, NDIM>, 6, true>>("fldGWs", toolBox, par)
                      : nullptr),
           piGWs(parser.get<bool>("withGWs", false)
-                    ? std::make_unique<FieldCollection<Field<NDIM, T>, 6, true>>("piGWs", toolBox, par)
+                    ? std::make_unique<FieldCollection<Field<T, NDIM>, 6, true>>("piGWs", toolBox, par)
                     : nullptr) {}
 };
 

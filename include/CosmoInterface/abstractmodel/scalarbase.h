@@ -28,8 +28,8 @@ public:
     bool isInitialized;
 
     // Scalar singlet fields
-    FieldCollection<Field<NDIM, T>, NS, true> fldS;
-    FieldCollection<Field<NDIM, T>, NS, true> piS;
+    FieldCollection<Field<T, NDIM>, NS, true> fldS;
+    FieldCollection<Field<T, NDIM>, NS, true> piS;
 
     // Averages scalar
     T grad2AvI, grad2AvSI;

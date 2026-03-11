@@ -24,18 +24,18 @@ int main(int argc, char **argv)
 
   toolBox->unsetVerbose();
 
-  FieldCollection<SU2Field<NDim, T>, T, NDim> U1("SU2Field1", toolBox);
-  SU2Field<NDim, T> result("SU2Field2", toolBox);
+  FieldCollection<SU2Field<T, NDim>, T, NDim> U1("SU2Field1", toolBox);
+  SU2Field<T, NDim> result("SU2Field2", toolBox);
 
-  U1(0_c)(1_c).inFourierSpace() = RandomGaussianField<NDim, T>("H1", toolBox);
-  U1(0_c)(2_c).inFourierSpace() = RandomGaussianField<NDim, T>("H2", toolBox);
-  U1(0_c)(3_c).inFourierSpace() = RandomGaussianField<NDim, T>("H3", toolBox);
-  U1(1_c)(1_c).inFourierSpace() = RandomGaussianField<NDim, T>("H4", toolBox);
-  U1(1_c)(2_c).inFourierSpace() = RandomGaussianField<NDim, T>("H5", toolBox);
-  U1(1_c)(3_c).inFourierSpace() = RandomGaussianField<NDim, T>("H6", toolBox);
-  U1(2_c)(1_c).inFourierSpace() = RandomGaussianField<NDim, T>("H7", toolBox);
-  U1(2_c)(2_c).inFourierSpace() = RandomGaussianField<NDim, T>("H8", toolBox);
-  U1(2_c)(3_c).inFourierSpace() = RandomGaussianField<NDim, T>("H9", toolBox);
+  U1(0_c)(1_c).inFourierSpace() = RandomGaussianField<T, NDim>("H1", toolBox);
+  U1(0_c)(2_c).inFourierSpace() = RandomGaussianField<T, NDim>("H2", toolBox);
+  U1(0_c)(3_c).inFourierSpace() = RandomGaussianField<T, NDim>("H3", toolBox);
+  U1(1_c)(1_c).inFourierSpace() = RandomGaussianField<T, NDim>("H4", toolBox);
+  U1(1_c)(2_c).inFourierSpace() = RandomGaussianField<T, NDim>("H5", toolBox);
+  U1(1_c)(3_c).inFourierSpace() = RandomGaussianField<T, NDim>("H6", toolBox);
+  U1(2_c)(1_c).inFourierSpace() = RandomGaussianField<T, NDim>("H7", toolBox);
+  U1(2_c)(2_c).inFourierSpace() = RandomGaussianField<T, NDim>("H8", toolBox);
+  U1(2_c)(3_c).inFourierSpace() = RandomGaussianField<T, NDim>("H9", toolBox);
 
   device::iteration::fence();
 

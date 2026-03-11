@@ -15,8 +15,8 @@ public:
     static constexpr size_t NU1 = NU1FLDS;
 
     // U(1) gauge fields
-    VectorFieldCollection<Field<NDIM, T>, NU1FLDS> fldU1;
-    VectorFieldCollection<Field<NDIM, T>, NU1FLDS> piU1;
+    VectorFieldCollection<Field<T, NDIM>, NU1FLDS> fldU1;
+    VectorFieldCollection<Field<T, NDIM>, NU1FLDS> piU1;
 
     // Averages U1
     T U1Mag2AvI, U1Mag2AvSI;

@@ -29,8 +29,8 @@ public:
     using SU2DoubletSU2Couplings = SU2DOUBLETSU2COUPLINGS;
 
     // SU2 doublet fields
-    FieldCollection<SU2Doublet<NDIM, T>, NSU2DOUBLET> fldSU2Doublet;
-    FieldCollection<SU2Doublet<NDIM, T>, NSU2DOUBLET> piSU2Doublet;
+    FieldCollection<SU2Doublet<T, NDIM>, NSU2DOUBLET> fldSU2Doublet;
+    FieldCollection<SU2Doublet<T, NDIM>, NSU2DOUBLET> piSU2Doublet;
 
     // Averages SU2 doublet
     T SU2DblGrad2AvI, SU2DblGrad2AvSI;

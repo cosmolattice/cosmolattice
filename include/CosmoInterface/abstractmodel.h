@@ -163,7 +163,7 @@ namespace TempLat
     AbstractModel &operator=(const AbstractModel &) = delete;
 
     // Sometimes, it can be useful to get "any field" of the model. This function implements this in a generic way.
-    Field<NDIM, T> getOneField() const
+    Field<T, NDIM> getOneField() const
     {
       if constexpr (NS > 0)
         return this->fldS(0_c);

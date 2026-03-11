@@ -23,8 +23,8 @@ int main(int argc, char **argv)
 
   toolBox->unsetVerbose();
 
-  Field<NDim, T> phi("phi", toolBox);
-  Field<NDim, T> pi("pi", toolBox);
+  Field<T, NDim> phi("phi", toolBox);
+  Field<T, NDim> pi("pi", toolBox);
 
   phi.getMemoryManager()->confirmFourierSpace();
   pi.getMemoryManager()->confirmFourierSpace();
@@ -42,8 +42,8 @@ int main(int argc, char **argv)
     });
 
     measurer.measure("initialize field", [&]() {
-      phi.inFourierSpace() = RandomGaussianField<NDim, T>("Hoi", toolBox);
-      pi.inFourierSpace() = RandomGaussianField<NDim, T>("Hai", toolBox);
+      phi.inFourierSpace() = RandomGaussianField<T, NDim>("Hoi", toolBox);
+      pi.inFourierSpace() = RandomGaussianField<T, NDim>("Hai", toolBox);
     });
 
     measurer.measure("k->x fourier", [&]() {

@@ -41,7 +41,7 @@ namespace TempLat
     }
 
     template <size_t NDim>
-    MeasurementsSaverStd(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool amIRoot, bool appendMode,
+    MeasurementsSaverStd(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool amIRoot, bool appendMode,
                          const std::vector<std::string> &headers = {})
         : mMode(!appendMode ? std::ios_base::out : std::ios_base::app), stream(std::make_shared<std::stringstream>()),
           headerStream(std::make_shared<std::stringstream>()), headerSaved(false)

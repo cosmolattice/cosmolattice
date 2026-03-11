@@ -43,7 +43,7 @@ namespace TempLat
     }
 
     template <size_t NDim>
-    SpectrumSaver(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool amIRoot, bool appendMode,
+    SpectrumSaver(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool amIRoot, bool appendMode,
                   const RunParameters<T> &rPar, bool dontCreate = false)
         : useHDF5(fm.getUseHDF5Spectra())
     {
