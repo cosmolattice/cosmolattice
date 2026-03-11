@@ -33,7 +33,11 @@ namespace TempLat
       auto tMinust0 = eom.tMinust0;
 
       auto U1Source = MatterCurrents::U1Current(model, a);
-      auto LaplU1 = MakeVector(i, 1, Model::NDim, LatLapl<Model::NDim>(model.fldU1(a)(i)));
+
+      // --> lapl(A_i)
+      auto LaplU1 = MakeVector(i, 1, Model::NDim, LatLapl(model.fldU1(a)(i)));
+
+      // --> \partial_i \partial_j A_i
       auto GradU1 =
           MakeVector(i, 1, Model::NDim, Total(j, 1, Model::NDim, backDiff(forwDiff(model.fldU1(a)(j), i), j)));
 

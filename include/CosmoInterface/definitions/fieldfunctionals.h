@@ -46,7 +46,7 @@ namespace TempLat
     template <class Model, int I> // <Grad[f]^2>
     static inline auto grad2S(Model &model, Tag<I> i)
     {
-      return Grad2<Model::NDim>(model.fldS(i));
+      return Grad2(model.fldS(i));
     }
 
     template <class Model, int I> // <pi^2>
