@@ -24,8 +24,8 @@ int main(int argc, char **argv)
 
   toolBox->unsetVerbose();
 
-  Field<NDim, T> phi("phi", toolBox);
-  Field<NDim, T> pi("pi", toolBox);
+  Field<T, NDim> phi("phi", toolBox);
+  Field<T, NDim> pi("pi", toolBox);
 
   SpatialCoordinate x(toolBox);
 

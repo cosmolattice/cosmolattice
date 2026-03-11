@@ -37,7 +37,7 @@ namespace TempLat
     virtual ~SpectrumSaverStd() = default;
 
     template <size_t NDim>
-    SpectrumSaverStd(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool amIRoot, bool append,
+    SpectrumSaverStd(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool amIRoot, bool append,
                      const RunParameters<T> &rPar)
         : mMode(!append ? std::ios_base::out : std::ios_base::app), verbosity(rPar.spectraVerbosity),
           nBins(rPar.nBinsSpectra), deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR),

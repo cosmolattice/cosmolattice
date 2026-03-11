@@ -44,39 +44,39 @@ namespace TempLat
     {
     }
 
-    FieldCollection<Field<Model::NDim, T>, Model::Ns, true> fldS;
-    FieldCollection<Field<Model::NDim, T>, Model::Ns, true> piS;
-    FieldCollection<Field<Model::NDim, T>, Model::Ns, true> get(FieldsNumbering::fldS) { return fldS; }
-    FieldCollection<Field<Model::NDim, T>, Model::Ns, true> get(FieldsNumbering::piS) { return piS; }
+    FieldCollection<Field<T, Model::NDim>, Model::Ns, true> fldS;
+    FieldCollection<Field<T, Model::NDim>, Model::Ns, true> piS;
+    FieldCollection<Field<T, Model::NDim>, Model::Ns, true> get(FieldsNumbering::fldS) { return fldS; }
+    FieldCollection<Field<T, Model::NDim>, Model::Ns, true> get(FieldsNumbering::piS) { return piS; }
 
-    FieldCollection<ComplexField<Model::NDim, T>, Model::NCs> fldCS;
-    FieldCollection<ComplexField<Model::NDim, T>, Model::NCs> piCS;
-    FieldCollection<ComplexField<Model::NDim, T>, Model::NCs> get(FieldsNumbering::fldCS) { return fldCS; }
-    FieldCollection<ComplexField<Model::NDim, T>, Model::NCs> get(FieldsNumbering::piCS) { return piCS; }
+    FieldCollection<ComplexField<T, Model::NDim>, Model::NCs> fldCS;
+    FieldCollection<ComplexField<T, Model::NDim>, Model::NCs> piCS;
+    FieldCollection<ComplexField<T, Model::NDim>, Model::NCs> get(FieldsNumbering::fldCS) { return fldCS; }
+    FieldCollection<ComplexField<T, Model::NDim>, Model::NCs> get(FieldsNumbering::piCS) { return piCS; }
 
-    FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> fldSU2Doublet;
-    FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> piSU2Doublet;
-    FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> get(FieldsNumbering::fldSU2Doublet)
+    FieldCollection<SU2Doublet<T, Model::NDim>, Model::NSU2Doublet> fldSU2Doublet;
+    FieldCollection<SU2Doublet<T, Model::NDim>, Model::NSU2Doublet> piSU2Doublet;
+    FieldCollection<SU2Doublet<T, Model::NDim>, Model::NSU2Doublet> get(FieldsNumbering::fldSU2Doublet)
     {
       return fldSU2Doublet;
     }
-    FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> get(FieldsNumbering::piSU2Doublet)
+    FieldCollection<SU2Doublet<T, Model::NDim>, Model::NSU2Doublet> get(FieldsNumbering::piSU2Doublet)
     {
       return piSU2Doublet;
     }
 
-    VectorFieldCollection<Field<Model::NDim, T>, Model::NU1> fldU1;
-    VectorFieldCollection<Field<Model::NDim, T>, Model::NU1> piU1;
-    VectorFieldCollection<Field<Model::NDim, T>, Model::NU1> get(FieldsNumbering::fldU1) { return fldU1; }
-    VectorFieldCollection<Field<Model::NDim, T>, Model::NU1> get(FieldsNumbering::piU1) { return piU1; }
+    VectorFieldCollection<Field<T, Model::NDim>, Model::NU1> fldU1;
+    VectorFieldCollection<Field<T, Model::NDim>, Model::NU1> piU1;
+    VectorFieldCollection<Field<T, Model::NDim>, Model::NU1> get(FieldsNumbering::fldU1) { return fldU1; }
+    VectorFieldCollection<Field<T, Model::NDim>, Model::NU1> get(FieldsNumbering::piU1) { return piU1; }
 
-    VectorFieldCollection<SU2LieAlgebraField<Model::NDim, T>, Model::NSU2> fldSU2;
-    VectorFieldCollection<SU2LieAlgebraField<Model::NDim, T>, Model::NSU2> piSU2;
-    VectorFieldCollection<SU2LieAlgebraField<Model::NDim, T>, Model::NSU2> get(FieldsNumbering::fldSU2)
+    VectorFieldCollection<SU2LieAlgebraField<T, Model::NDim>, Model::NSU2> fldSU2;
+    VectorFieldCollection<SU2LieAlgebraField<T, Model::NDim>, Model::NSU2> piSU2;
+    VectorFieldCollection<SU2LieAlgebraField<T, Model::NDim>, Model::NSU2> get(FieldsNumbering::fldSU2)
     {
       return fldSU2;
     }
-    VectorFieldCollection<SU2LieAlgebraField<Model::NDim, T>, Model::NSU2> get(FieldsNumbering::piSU2) { return piSU2; }
+    VectorFieldCollection<SU2LieAlgebraField<T, Model::NDim>, Model::NSU2> get(FieldsNumbering::piSU2) { return piSU2; }
   };
 
   template <typename Model> class ExtraFields
@@ -96,9 +96,9 @@ namespace TempLat
       if constexpr (Model::NU1 > 0)
         if (model.getU1IC() == InitialConditionsType::PlaneWaves ||
             model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) {
-          fldU1IC = std::make_shared<VectorField<Field<Model::NDim, T>>>("U1ICfldU1", model.getToolBox(),
+          fldU1IC = std::make_shared<VectorField<Field<T, Model::NDim>>>("U1ICfldU1", model.getToolBox(),
                                                                          runPars.getLatParams());
-          piU1IC = std::make_shared<VectorField<Field<Model::NDim, T>>>("U1ICpiU1", model.getToolBox(),
+          piU1IC = std::make_shared<VectorField<Field<T, Model::NDim>>>("U1ICpiU1", model.getToolBox(),
                                                                         runPars.getLatParams());
         }
     }
@@ -132,8 +132,8 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::shared_ptr<FieldsAsInModel<Model>> allFlds1;
-    std::shared_ptr<VectorField<Field<Model::NDim, T>>> fldU1IC;
-    std::shared_ptr<VectorField<Field<Model::NDim, T>>> piU1IC;
+    std::shared_ptr<VectorField<Field<T, Model::NDim>>> fldU1IC;
+    std::shared_ptr<VectorField<Field<T, Model::NDim>>> piU1IC;
   };
 
 } // namespace TempLat
