@@ -46,37 +46,32 @@ namespace TempLat
 
     FieldCollection<Field<Model::NDim, T>, Model::Ns, true> fldS;
     FieldCollection<Field<Model::NDim, T>, Model::Ns, true> piS;
-    FieldCollection<Field<Model::NDim, T>, Model::Ns, true> get(FieldsNumbering::fldS) { return fldS; }
-    FieldCollection<Field<Model::NDim, T>, Model::Ns, true> get(FieldsNumbering::piS) { return piS; }
 
     FieldCollection<ComplexField<Model::NDim, T>, Model::NCs> fldCS;
     FieldCollection<ComplexField<Model::NDim, T>, Model::NCs> piCS;
-    FieldCollection<ComplexField<Model::NDim, T>, Model::NCs> get(FieldsNumbering::fldCS) { return fldCS; }
-    FieldCollection<ComplexField<Model::NDim, T>, Model::NCs> get(FieldsNumbering::piCS) { return piCS; }
 
     FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> fldSU2Doublet;
     FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> piSU2Doublet;
-    FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> get(FieldsNumbering::fldSU2Doublet)
-    {
-      return fldSU2Doublet;
-    }
-    FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> get(FieldsNumbering::piSU2Doublet)
-    {
-      return piSU2Doublet;
-    }
 
     VectorFieldCollection<Field<Model::NDim, T>, Model::NU1> fldU1;
     VectorFieldCollection<Field<Model::NDim, T>, Model::NU1> piU1;
-    VectorFieldCollection<Field<Model::NDim, T>, Model::NU1> get(FieldsNumbering::fldU1) { return fldU1; }
-    VectorFieldCollection<Field<Model::NDim, T>, Model::NU1> get(FieldsNumbering::piU1) { return piU1; }
 
     VectorFieldCollection<SU2LieAlgebraField<Model::NDim, T>, Model::NSU2> fldSU2;
     VectorFieldCollection<SU2LieAlgebraField<Model::NDim, T>, Model::NSU2> piSU2;
-    VectorFieldCollection<SU2LieAlgebraField<Model::NDim, T>, Model::NSU2> get(FieldsNumbering::fldSU2)
-    {
-      return fldSU2;
+
+    template <int N>
+    auto get(Tag<N>) {
+        if constexpr (N == FieldsNumbering::fldS::value) return fldS;
+        else if constexpr (N == FieldsNumbering::piS::value) return piS;
+        else if constexpr (N == FieldsNumbering::fldCS::value) return fldCS;
+        else if constexpr (N == FieldsNumbering::piCS::value) return piCS;
+        else if constexpr (N == FieldsNumbering::fldSU2Doublet::value) return fldSU2Doublet;
+        else if constexpr (N == FieldsNumbering::piSU2Doublet::value) return piSU2Doublet;
+        else if constexpr (N == FieldsNumbering::fldU1::value) return fldU1;
+        else if constexpr (N == FieldsNumbering::piU1::value) return piU1;
+        else if constexpr (N == FieldsNumbering::fldSU2::value) return fldSU2;
+        else if constexpr (N == FieldsNumbering::piSU2::value) return piSU2;
     }
-    VectorFieldCollection<SU2LieAlgebraField<Model::NDim, T>, Model::NSU2> get(FieldsNumbering::piSU2) { return piSU2; }
   };
 
   template <typename Model> class ExtraFields

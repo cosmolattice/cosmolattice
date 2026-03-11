@@ -7,6 +7,7 @@
 // File info: Main contributor(s): Adrien Florio  Year: 2024
 
 #include "TempLat/util/rangeiteration/tag.h"
+#include "TempLat/util/rangeiteration/for_in_range.h"
 
 namespace TempLat {
 
@@ -47,5 +48,21 @@ namespace TempLat {
 
 
 } /* TempLat */
+
+// Iterate over all field instances: calls expr with fld=Tag<K> and n=Tag<J>
+// for each active species K and each instance J in [0, getNFields-1].
+#define ForEachField(Model, fld, n, expr) \
+    ForLoop(fld, 0, TempLat::FieldsNumbering::maxNum, \
+        if constexpr (Model::getNFields(fld) > 0) { \
+            ForLoop(n, 0, Model::getNFields(fld) - 1, expr); \
+        } \
+    )
+
+// Iterate over active field species only: calls expr with fld=Tag<K>
+// for each species K with getNFields > 0.
+#define ForEachSpecies(Model, fld, expr) \
+    ForLoop(fld, 0, TempLat::FieldsNumbering::maxNum, \
+        if constexpr (Model::getNFields(fld) > 0) { expr; } \
+    )
 
 #endif

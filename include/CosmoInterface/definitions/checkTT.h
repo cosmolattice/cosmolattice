@@ -123,7 +123,7 @@ namespace TempLat
     template <class Model, int I, int J, typename Q = double> auto getProjectedFieldR(Model &model, Tag<I> i, Tag<J> j)
     {
       auto toolBox = model.getOneField().getToolBox();
-      Field<Q> AuxFld("AuxFld", toolBox);
+      Field<Model::NDim, Q> AuxFld("AuxFld", toolBox);
 
       AuxFld.inFourierSpace() = LambdaUR(model, i, j);
       AuxFld.inFourierSpace().setZeroMode(0);
@@ -134,7 +134,7 @@ namespace TempLat
     template <class Model, int I, int J, typename Q = double> auto getProjectedFieldC(Model &model, Tag<I> i, Tag<J> j)
     {
       auto toolBox = model.getOneField().getToolBox();
-      Field<Q> AuxFld("AuxFld", toolBox);
+      Field<Model::NDim, Q> AuxFld("AuxFld", toolBox);
 
       AuxFld.inFourierSpace() = LambdaUC(model, i, j);
       AuxFld.inFourierSpace().setZeroMode(0);

@@ -38,13 +38,9 @@ namespace TempLat {
         Bs(RK2NStorageParameters<T>::getBs(type)),
         expansion(runParams.expansion)
         {
-            ForLoop(fld, 0, FieldsNumbering::maxNum,
-                if(Model::getNFields(fld) > 0){
-                    ForLoop(n, 0, Model::getNFields(fld) - 1,
-                        isDefined[fld].emplace_back(true);
-                        isDeactivated[fld].emplace_back(false);
-                    );
-                }
+            ForEachField(Model, fld, n,
+                isDefined[fld].emplace_back(true);
+                isDeactivated[fld].emplace_back(false);
             );
         }
 
@@ -79,25 +75,17 @@ namespace TempLat {
             kt.cache(model, tMinust0); //To be able to store some temporary info in the kernel type
 
             for (size_t i = 0; i < As.size(); ++i) {  // loop over operations...
-                ForLoop(fld, 0, FieldsNumbering::maxNum,
-                    if(Model::getNFields(fld) > 0){
-                        ForLoop(n, 0, Model::getNFields(fld) - 1,
-                            if(!isDeactivated[fld][n]){
-                                isDefined[fld][n] = delta(i,Delta->get(fld)(n) , Kernels::get(fld, model, n, kt));
-                            }
-                        );
+                ForEachField(Model, fld, n,
+                    if(!isDeactivated[fld][n]){
+                        isDefined[fld][n] = delta(i, Delta->get(fld)(n), Kernels::get(fld, model, n, kt));
                     }
                 );
 
                 if(expansion) sfDefined = deltaScaleFactor(model, i, kt);
 
-                ForLoop(fld, 0, FieldsNumbering::maxNum,
-                    if(Model::getNFields(fld) > 0){
-                        ForLoop(n, 0, Model::getNFields(fld) - 1,
-                            if(!isDeactivated[fld][n] && isDefined[fld][n]){
-                                advance(i, fld, model, n);
-                            }
-                        );
+                ForEachField(Model, fld, n,
+                    if(!isDeactivated[fld][n] && isDefined[fld][n]){
+                        advance(i, fld, model, n);
                     }
                 );
 

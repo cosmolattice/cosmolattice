@@ -7,26 +7,28 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
-#include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
-#include "TempLat/lattice/algebra/su2algebra/su2algebra.h"
-#include "TempLat/lattice/field/collections/vectorfieldcollection.h"
+#include <array>
 #include "TempLat/lattice/algebra/gaugealgebra/forwardcovariantderivative.h"
 #include "TempLat/util/exception.h"
-#include "TempLat/util/rangeiteration/tag.h"
 #include "TempLat/util/templatvector.h"
-#include "TempLat/util/templatarray.h"
-#include "CosmoInterface/couplingsmanager.h"
-#include "CosmoInterface/definitions/potential.h"
-#include "CosmoInterface/fieldsnumbering.h"
-
 #include "TempLat/parameters/parameterparser.h"
-#include "CosmoInterface/runparameters.h"
-#include "CosmoInterface/initializers/initialconditionstype.h"
+
+#include "CosmoInterface/abstractmodel/scalarbase.h"
+#include "CosmoInterface/abstractmodel/complexscalarbase.h"
+#include "CosmoInterface/abstractmodel/su2doubletbase.h"
+#include "CosmoInterface/abstractmodel/scalaru1axionbase.h"
+#include "CosmoInterface/abstractmodel/nonminimalcouplingbase.h"
+#include "CosmoInterface/abstractmodel/scalefactorbase.h"
+#include "CosmoInterface/abstractmodel/modelparametersbase.h"
+#include "CosmoInterface/abstractmodel/gwbase.h"
+#include "CosmoInterface/abstractmodel/u1base.h"
+#include "CosmoInterface/abstractmodel/su2base.h"
+
+#include "CosmoInterface/definitions/potential.h"
 
 namespace TempLat
 {
   // Exceptions that kill the program when some conditions are met (used below)
-  MakeException(PotentialDerivativeNotDefined);
   MakeException(EmptyModel);
   MakeException(NotTested);
 
@@ -80,318 +82,112 @@ namespace TempLat
             typename CSU1COUPLINGS, typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS,
             typename SCALARU1AXIONCOUPLINGS, typename NONMINCOUPLINGS, typename T = double, int NDIM = 3>
   class AbstractModel
+      : public ScalarBase<NDIM, T, NS>,
+        public ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>,
+        public SU2DoubletSectorBase<NDIM, T, NSU2DOUBLET, SU2DOUBLETU1COUPLINGS, SU2DOUBLETSU2COUPLINGS>,
+        public ScalarU1AxionBase<T, SCALARU1AXIONCOUPLINGS>,
+        public NonMinimalCouplingBase<T, NS, NONMINCOUPLINGS>,
+        public ScaleFactorBase<T>,
+        public ModelParametersBase<T>,
+        public GWBase<NDIM, T>,
+        public U1Base<NDIM, T, NU1FLDS, NC>,
+        public SU2Base<NDIM, T, NSU2FLDS>
   {
   public:
-    // We store all the arguments passed as template arguments into class variable. That way they can easily be
-    // accessed throughout the program, by whichever class which inherits from AbstractModel.
-    static constexpr size_t Ns = NS;
-    static constexpr size_t NCs = NC;
+    // NPotTerms stays here — no natural sector base home without adding a template parameter
     static constexpr size_t NPotTerms = NPOTTERMS;
-    static constexpr size_t NSU2Doublet = NSU2DOUBLET;
-    static constexpr size_t NU1 = NU1FLDS;
-    static constexpr size_t NSU2 = NSU2FLDS;
-    static constexpr size_t NDim = NDIM;
-    static constexpr size_t NGWs = 6;
-    static constexpr T MPl = Constants::reducedMPlanck<T>; // Reduced Planck mass, MPl=2.435*10^18 GeV
 
-    // Field numbering for generic iteration (used by RK2N evolver)
-    static constexpr size_t getNFields(FieldsNumbering::fldS) { return Ns; }
-    static constexpr size_t getNFields(FieldsNumbering::piS) { return Ns; }
-    static constexpr size_t getNFields(FieldsNumbering::fldCS) { return NCs; }
-    static constexpr size_t getNFields(FieldsNumbering::piCS) { return NCs; }
-    static constexpr size_t getNFields(FieldsNumbering::fldSU2Doublet) { return NSU2Doublet; }
-    static constexpr size_t getNFields(FieldsNumbering::piSU2Doublet) { return NSU2Doublet; }
-    static constexpr size_t getNFields(FieldsNumbering::fldU1) { return NU1; }
-    static constexpr size_t getNFields(FieldsNumbering::piU1) { return NU1; }
-    static constexpr size_t getNFields(FieldsNumbering::fldSU2) { return NSU2; }
-    static constexpr size_t getNFields(FieldsNumbering::piSU2) { return NSU2; }
+    // --- Field iteration API (centralized) ---
 
-    // Coupling managers between complex scalar/SU2 doublets and gauge fields
-    using CsU1Couplings = CSU1COUPLINGS;
-    using SU2DoubletU1Couplings = SU2DOUBLETU1COUPLINGS;
-    using SU2DoubletSU2Couplings = SU2DOUBLETSU2COUPLINGS;
-    using ScalarU1AxionCouplings = SCALARU1AXIONCOUPLINGS;
-    using NonMinimalCouplings = NONMINCOUPLINGS;
-    static constexpr bool IsNonMinimallyCoupled = NonMinimalCouplings::howManyCouples() > 0;
-    using FloatType = T;
+    static constexpr std::array<size_t, FieldsNumbering::maxNum + 1> fieldCounts = {
+        NS, NS,                         // fldS (0), piS (1)
+        NC, NC,                         // fldCS (2), piCS (3)
+        NSU2DOUBLET, NSU2DOUBLET,       // fldSU2Doublet (4), piSU2Doublet (5)
+        NU1FLDS, NU1FLDS,              // fldU1 (6), piU1 (7)
+        NSU2FLDS, NSU2FLDS             // fldSU2 (8), piSU2 (9)
+    };
 
-    // Objects containing the fields and their momenta:
+    template <int N>
+    static constexpr size_t getNFields(Tag<N>) { return fieldCounts[N]; }
 
-    // Kernels RK
-
-    bool isInitialized;
-
-    // --> Scalar singlets
-    FieldCollection<Field<NDim, T>, Ns, true>
-        fldS; // The last parameter is to "vectorise" the assignement. Can use it with scalar algebra (meaning scalar
-              // fields and U(1) non-compact gauge fields), but not with the rest.
-    FieldCollection<Field<NDim, T>, Ns, true> piS;
-    // Does not make a huge difference anyhow, so in case of doubt put nothing or false (equivalent).
-    FieldCollection<Field<NDim, T>, Ns, true> getField(FieldsNumbering::fldS) { return fldS; }
-    FieldCollection<Field<NDim, T>, Ns, true> getField(FieldsNumbering::piS) { return piS; }
-
-    // --> Complex scalars
-    FieldCollection<ComplexField<NDim, T>, NCs> fldCS;
-    FieldCollection<ComplexField<NDim, T>, NCs> piCS;
-    FieldCollection<ComplexField<NDim, T>, NCs> getField(FieldsNumbering::fldCS) { return fldCS; }
-    FieldCollection<ComplexField<NDim, T>, NCs> getField(FieldsNumbering::piCS) { return piCS; }
-
-    // --> SU2 doublets
-    FieldCollection<SU2Doublet<NDim, T>, NSU2Doublet> fldSU2Doublet;
-    FieldCollection<SU2Doublet<NDim, T>, NSU2Doublet> piSU2Doublet;
-    FieldCollection<SU2Doublet<NDim, T>, NSU2Doublet> getField(FieldsNumbering::fldSU2Doublet) { return fldSU2Doublet; }
-    FieldCollection<SU2Doublet<NDim, T>, NSU2Doublet> getField(FieldsNumbering::piSU2Doublet) { return piSU2Doublet; }
-
-    // --> U(1) gauge fields
-    VectorFieldCollection<Field<NDim, T>, NU1> fldU1;
-    VectorFieldCollection<Field<NDim, T>, NU1> piU1;
-    VectorFieldCollection<Field<NDim, T>, NU1> getField(FieldsNumbering::fldU1) { return fldU1; }
-    VectorFieldCollection<Field<NDim, T>, NU1> getField(FieldsNumbering::piU1) { return piU1; }
-
-    // --> SU(2) gauge fields
-    VectorFieldCollection<SU2Field<NDim, T>, NSU2> fldSU2;
-    VectorFieldCollection<SU2LieAlgebraField<NDim, T>, NSU2> piSU2;
-    VectorFieldCollection<SU2Field<NDim, T>, NSU2> getField(FieldsNumbering::fldSU2) { return fldSU2; }
-    VectorFieldCollection<SU2LieAlgebraField<NDim, T>, NSU2> getField(FieldsNumbering::piSU2) { return piSU2; }
-
-    // Variables that store the scale factor and energies during the evolution.
-    // Suffixes indicate at which time they are evaluated:
-    // Semi Integer Minus (SIM) at t-dt/2, Integer at (t), Semi Integer at (t+dt/2)
-
-    // --> Averages scalar
-    T grad2AvI, grad2AvSI;
-    T pi2AvSI, pi2AvSIM, pi2AvIM, pi2AvI;
-
-    // --> Averages SU2Doublet
-    T CSgrad2AvI, CSgrad2AvSI;
-    T CSpi2AvSI, CSpi2AvSIM, CSpi2AvIM, CSpi2AvI;
-
-    // --> Averages CS
-    T SU2DblGrad2AvI, SU2DblGrad2AvSI;
-    T SU2DblPi2AvSI, SU2DblPi2AvSIM, SU2DblPi2AvIM, SU2DblPi2AvI;
-
-    // --> Averages U1
-    T U1Mag2AvI, U1Mag2AvSI;
-    T U1pi2AvSI, U1pi2AvSIM, U1pi2AvIM, U1pi2AvI;
-
-    // --> Averages SU2
-    T SU2Mag2AvI, SU2Mag2AvSI;
-    T SU2pi2AvSI, SU2pi2AvSIM, SU2pi2AvIM, SU2pi2AvI;
-
-    // --> Averages needed for the non-minimal coupling
-    T RI;
-    TempLatArray<T, Ns> fld2AvSI_i;
-    TempLatArray<T, Ns> grad2AvSI_i;
-    TempLatArray<T, Ns> pi2AvSI_i;
-    TempLatArray<T, Ns> fldPiAvSI;
-    TempLatArray<T, Ns> fldVpAvSI;
-
-    T piAI;
+    template <int N>
+    auto getField(Tag<N>) {
+        if constexpr (N == FieldsNumbering::fldS::value) return this->fldS;
+        else if constexpr (N == FieldsNumbering::piS::value) return this->piS;
+        else if constexpr (N == FieldsNumbering::fldCS::value) return this->fldCS;
+        else if constexpr (N == FieldsNumbering::piCS::value) return this->piCS;
+        else if constexpr (N == FieldsNumbering::fldSU2Doublet::value) return this->fldSU2Doublet;
+        else if constexpr (N == FieldsNumbering::piSU2Doublet::value) return this->piSU2Doublet;
+        else if constexpr (N == FieldsNumbering::fldU1::value) return this->fldU1;
+        else if constexpr (N == FieldsNumbering::piU1::value) return this->piU1;
+        else if constexpr (N == FieldsNumbering::fldSU2::value) return this->fldSU2;
+        else if constexpr (N == FieldsNumbering::piSU2::value) return this->piSU2;
+    }
 
     // --> Averages potential
     T potAvI, potAvSI;
 
-    // --> Scale factor (and time-derivative)
-    T aSI, aI, aIM;
-    T aDotSI, aDotSIM, aDotI, aDotIM;
-
-    // Initial Amplitudes (homogeneous modes)
-    TempLatArray<T, Ns> fldS0;                                               // scalar singlet
-    TempLatArray<ComplexFieldWrapper<T, T>, NCs> fldCS0;                     // complex scalar
-    TempLatArray<SU2DoubletWrapper<T, T, T, T>, NSU2Doublet> fldSU2Doublet0; // SU2 doublet
-
-    // Initial time-derivatives (homogeneous modes)
-    TempLatArray<T, Ns> piS0;                                               // scalar singlet
-    TempLatArray<ComplexFieldWrapper<T, T>, NCs> piCS0;                     // complex scalar
-    TempLatArray<SU2DoubletWrapper<T, T, T, T>, NSU2Doublet> piSU2Doublet0; // SU2 doublet
-    T b0;
-
     // Initial potential
     T pot0, pot0SI;
 
-    // Couplings and charges
-    // Charges manager. Say what couples to what and return in a user friendly way the appropriate charge
-    //  times coupling combination. Important for a general mechanism to couple arbitrary fields one to another.
-    CsU1Couplings gQ_CsU1;
-    SU2DoubletU1Couplings gQ_SU2DblU1;
-    SU2DoubletSU2Couplings gQ_SU2DblSU2;
-    ScalarU1AxionCouplings alphaLambda_SU1;
-    NonMinimalCouplings xis;
-
-    // Effective masses, used for setting the initial fluctuations of the scalar fields
-    TempLatArray<T, Ns> masses2S;                                               // scalar singlet
-    TempLatArray<ComplexFieldWrapper<T, T>, NCs> masses2CS;                     // complex scalar
-    TempLatArray<SU2DoubletWrapper<T, T, T, T>, NSU2Doublet> masses2SU2Doublet; // SU2 doublet
-
-    T InverseAxionLambda;
-
-    T alpha, fStar, omegaStar; // Rescalings for program variable definitions: (alpha,f_*,w_*)
-
-    T dx, kIR, dt; // Length element and time step
-
-    T t0, t;
-
-    // name of the model
-    std::string name;
-
-    // --> Graviational u fields
-    std::unique_ptr<FieldCollection<Field<NDim, T>, 6, true>> fldGWs;
-    std::unique_ptr<FieldCollection<Field<NDim, T>, 6, true>> piGWs;
-
     AbstractModel(ParameterParser &parser, const LatticeParameters<T> &par,
-                  device::memory::host_ptr<MemoryToolBox<NDim>> toolBox, T pDt, std::string pName = "")
-        : isInitialized(toolBox->template initializeFFT<T>()), fldS("scalar", toolBox, par),
-          piS("pi_scalar", toolBox, par), fldCS("cmplx_scalar", toolBox, par), piCS("pi_cmplx_scalar", toolBox, par),
-          fldSU2Doublet("SU2Doublet", toolBox, par), piSU2Doublet("pi_SU2Doublet", toolBox, par),
-          fldU1("U1", toolBox, par), piU1("pi_U1", toolBox, par), fldSU2("SU2Fld", toolBox, par),
-          piSU2("pi_SU2Fld", toolBox, par), aSI(1), aI(1), aIM(1), dx(par.getDx()), kIR(par.getKIR()), dt(pDt),
-          name(pName), fldGWs(parser.get<bool>("withGWs", false)
-                                  ? std::make_unique<FieldCollection<Field<NDim, T>, 6, true>>("fldGWs", toolBox, par)
-                                  : nullptr),
-          piGWs(parser.get<bool>("withGWs", false)
-                    ? std::make_unique<FieldCollection<Field<NDim, T>, 6, true>>("piGWs", toolBox, par)
-                    : nullptr)
+                  device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, T pDt, std::string pName = "")
+        : ScalarBase<NDIM, T, NS>(toolBox, par),
+          ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>(parser, toolBox, par),
+          SU2DoubletSectorBase<NDIM, T, NSU2DOUBLET, SU2DOUBLETU1COUPLINGS, SU2DOUBLETSU2COUPLINGS>(parser, toolBox, par),
+          ScalarU1AxionBase<T, SCALARU1AXIONCOUPLINGS>(parser),
+          NonMinimalCouplingBase<T, NS, NONMINCOUPLINGS>(parser),
+          ScaleFactorBase<T>(),
+          ModelParametersBase<T>(par, pDt, std::move(pName)),
+          GWBase<NDIM, T>(parser, toolBox, par),
+          U1Base<NDIM, T, NU1FLDS, NC>(toolBox, par),
+          SU2Base<NDIM, T, NSU2FLDS>(toolBox, par)
     {
       // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this
       // feature has yet not been tested)
-      if (NDim != 3 && fldGWs != nullptr)
+      if (NDIM != 3 && this->fldGWs != nullptr)
         throw(RunParametersInconsistent(
             "NDims must be equal to 3 to run GWs. If you want to run with NDim != 3, make sure withGWs = false."));
-      if (NU1 > 1)
+      if (NU1FLDS > 1)
         throw(NotTested("The physics interface has not been fully tested with NU1 > 1. Abort. If you want to go on "
                         "anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and "
                         "please report any problems."));
-      if (NSU2 > 1)
+      if (NSU2FLDS > 1)
         throw(NotTested("The physics interface has not been fully tested with NSU2 > 1. Abort. If you want to go on "
                         "anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and "
                         "please report any problems."));
-
-      // We read the gauge couplings and charges from the input file. They are all set to 1 unless otherwise specified.
-      auto gU1s = parser.get<double, NU1>("gU1s", 1.0);
-      auto gSU2s = parser.get<double, NSU2>("gSU2s", 1.0);
-      auto CSU1Charges = parser.get<double, CsU1Couplings::howManyCouples()>("CSU1_charges", 1);
-      auto SU2DoubletU1Charges = parser.get<double, SU2DoubletU1Couplings::howManyCouples()>("SU2DoubletU1_charges", 1);
-      auto SU2DoubletSU2Charges =
-          parser.get<double, SU2DoubletSU2Couplings::howManyCouples()>("SU2DoubletSU2_charges", 1);
-
-      // Gauge couplings and charges are set
-      gQ_CsU1.setEffectiveCharges(CSU1Charges, gU1s);
-      gQ_SU2DblU1.setEffectiveCharges(SU2DoubletU1Charges, gU1s);
-      gQ_SU2DblSU2.setEffectiveCharges(SU2DoubletSU2Charges, gSU2s);
-
-      auto gAxionU1 = parser.get<double, NU1>("gAxionU1", 1.0);
-      auto AxionU1Charges = parser.get<double, ScalarU1AxionCouplings::howManyCouples()>("alphaLambda_AxionU1", 1);
-      alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);
-
-      auto xiCouplings = parser.get<T, NonMinimalCouplings::howManyCouples()>("xis", 1);
-      xis.setEffectiveCharges(xiCouplings, {1});
     }
 
     // AbstractModel should never be copied, so we delete the copy constructor and copy assignment operator.
     AbstractModel(const AbstractModel &) = delete;
     AbstractModel &operator=(const AbstractModel &) = delete;
 
-    // The functions below are to be redefined in the models. We define them here to be able to compile anyhow, even if
-    // they are not needed by a specific model.
-    //  Note: A better alternative is to use if constexpr in the main, but this is c++17. Could also use macro but don't
-    //  like it.
-
-    template <int N> auto potDeriv(Tag<N> i)
-    {
-      throw(PotentialDerivativeNotDefined("You tried to call potDeriv N = " + std::to_string(N) +
-                                          ", which is not defined in your model. Abort."));
-      return ZeroType(); // the simulation aborts if the function is not defined in the model. The return ZeroType is to
-                         // have a return type.
-    }
-    template <int N> auto potDeriv2(Tag<N> i)
-    {
-      throw(PotentialDerivativeNotDefined("You tried to call potDeriv2 N = " + std::to_string(N) +
-                                          ", which is not defined in your model. Abort."));
-      return ZeroType(); // the simulation aborts if the function is not defined in the model
-    }
-
-    template <int N> auto potDerivNormCS(Tag<N> i)
-    {
-      throw(PotentialDerivativeNotDefined("You tried to call potDerivNormCS N = " + std::to_string(N) +
-                                          ", which is not defined in your model. Abort."));
-      return ZeroType(); // the simulation aborts if the function is not defined in the model
-    }
-
-    template <int N> auto potDeriv2NormCS(Tag<N> i)
-    {
-      throw(PotentialDerivativeNotDefined("You tried to call potDeriv2NormCS N = " + std::to_string(N) +
-                                          ", which is not defined in your model. Abort."));
-      return ZeroType(); // the simulation aborts if the function is not defined in the model
-    }
-
-    template <int N> auto potDerivNormSU2Doublet(Tag<N> i)
-    {
-      throw(PotentialDerivativeNotDefined("You tried to call potDerivNormSU2Doublet N = " + std::to_string(N) +
-                                          ", which is not defined in your model. Abort."));
-      return ZeroType(); // the simulation aborts if the function is not defined in the model
-    }
-
-    template <int N> auto potDeriv2NormSU2Doublet(Tag<N> i)
-    {
-      throw(PotentialDerivativeNotDefined("You tried to call potDeriv2NormSU2Doublet N = " + std::to_string(N) +
-                                          ", which is not defined in your model. Abort."));
-      return ZeroType(); // the simulation aborts if the function is not defined in the model
-    }
-
-    auto pi_GWtensor(Tag<1>, Tag<1>) { return (*piGWs)(0_c); }
-    auto pi_GWtensor(Tag<1>, Tag<2>) { return (*piGWs)(1_c); }
-    auto pi_GWtensor(Tag<1>, Tag<3>) { return (*piGWs)(2_c); }
-    auto pi_GWtensor(Tag<2>, Tag<1>) { return (*piGWs)(1_c); }
-    auto pi_GWtensor(Tag<2>, Tag<2>) { return (*piGWs)(3_c); }
-    auto pi_GWtensor(Tag<2>, Tag<3>) { return (*piGWs)(4_c); }
-    auto pi_GWtensor(Tag<3>, Tag<1>) { return (*piGWs)(2_c); }
-    auto pi_GWtensor(Tag<3>, Tag<2>) { return (*piGWs)(4_c); }
-    auto pi_GWtensor(Tag<3>, Tag<3>) { return (*piGWs)(5_c); }
-
-    auto GWtensor(Tag<1>, Tag<1>) { return (*fldGWs)(0_c); }
-    auto GWtensor(Tag<1>, Tag<2>) { return (*fldGWs)(1_c); }
-    auto GWtensor(Tag<1>, Tag<3>) { return (*fldGWs)(2_c); }
-    auto GWtensor(Tag<2>, Tag<1>) { return (*fldGWs)(1_c); }
-    auto GWtensor(Tag<2>, Tag<2>) { return (*fldGWs)(3_c); }
-    auto GWtensor(Tag<2>, Tag<3>) { return (*fldGWs)(4_c); }
-    auto GWtensor(Tag<3>, Tag<1>) { return (*fldGWs)(2_c); }
-    auto GWtensor(Tag<3>, Tag<2>) { return (*fldGWs)(4_c); }
-    auto GWtensor(Tag<3>, Tag<3>) { return (*fldGWs)(5_c); }
-
     // Sometimes, it can be useful to get "any field" of the model. This function implements this in a generic way.
-    Field<NDim, T> getOneField() const
+    Field<NDIM, T> getOneField() const
     {
-      if constexpr (Ns > 0)
-        return fldS(0_c);
-      else if constexpr (NCs > 0)
-        return fldCS(0_c)(0_c);
-      else if constexpr (NSU2Doublet > 0)
-        return fldSU2Doublet(0_c)(0_c);
-      else if constexpr (NU1 > 0)
-        return fldU1(0_c)(1_c);
-      else if constexpr (NSU2 > 0)
-        return fldSU2(0_c)(1_c)(1_c);
+      if constexpr (NS > 0)
+        return this->fldS(0_c);
+      else if constexpr (NC > 0)
+        return this->fldCS(0_c)(0_c);
+      else if constexpr (NSU2DOUBLET > 0)
+        return this->fldSU2Doublet(0_c)(0_c);
+      else if constexpr (NU1FLDS > 0)
+        return this->fldU1(0_c)(1_c);
+      else if constexpr (NSU2FLDS > 0)
+        return this->fldSU2(0_c)(1_c)(1_c);
       else {
         throw(EmptyModel("The model seems empty, cannot return a field. Abort."));
-        return fldS(0_c);
+        return this->fldS(0_c);
       }
     }
 
     template <int N> auto getFluctuationRatio(Tag<N>) { return OneType(); }
 
-    InitialConditionsType::U1 getU1IC()
-    {
-      if (NCs > 0)
-        return InitialConditionsType::RandomWithMatter;
-      else
-        return InitialConditionsType::PlaneWavesZeroB;
-    }
-
     // The "MemoryToolBox" is a shared variable between most instances of the program. It contains many useful
     // informations about
     // the intrinsic parameter of the library. Sometimes, some of the classes need the MemoryToolBox to be created. This
     // function the user to quickly get it from the model.
-    device::memory::host_ptr<MemoryToolBox<NDim>> getToolBox() const { return getOneField().getToolBox(); }
+    device::memory::host_ptr<MemoryToolBox<NDIM>> getToolBox() const { return getOneField().getToolBox(); }
 
     // set the initial value of the potential and the masses of the fields from the expression of the potential.
     void setInitialPotentialAndMassesFromPotential()
@@ -401,19 +197,19 @@ namespace TempLat
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with
       // "removeInitValue()"
 
-      device::IdxArray<NDim> pos0{{}};
+      device::IdxArray<NDIM> pos0{{}};
 
       pot0 = device::memory::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
 
       // Compute second derivatives of the potential, giving the mass square.
-      ForLoop(j, 0, Ns - 1,
-              masses2S(j) = device::memory::getAtOnePoint(Potential::deriv2S(static_cast<R &>(*this), j), pos0));
-      ForLoop(j, 0, NCs - 1,
-              masses2CS(j) = Complexify(
+      ForLoop(j, 0, NS - 1,
+              this->masses2S(j) = device::memory::getAtOnePoint(Potential::deriv2S(static_cast<R &>(*this), j), pos0));
+      ForLoop(j, 0, NC - 1,
+              this->masses2CS(j) = Complexify(
                   device::memory::getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(0_c), pos0),
                   device::memory::getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(1_c), pos0)););
-      ForLoop(j, 0, NSU2Doublet - 1,
-              masses2SU2Doublet(j) = MakeSU2Doublet(
+      ForLoop(j, 0, NSU2DOUBLET - 1,
+              this->masses2SU2Doublet(j) = MakeSU2Doublet(
                   a, device::memory::getAtOnePoint(Potential::deriv2SU2Doublet(static_cast<R &>(*this), j)(a), pos0)););
 
       // This removes the homogeneous component at one point added previously with "addInitValueOnePoint()"
@@ -429,7 +225,7 @@ namespace TempLat
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with
       // "removeInitValue()"
 
-      device::IdxArray<NDim> pos0{{}};
+      device::IdxArray<NDIM> pos0{{}};
 
       // Compute initial potential at t=0
       pot0 = device::memory::getAtOnePoint(Potential::potential(static_cast<R &>(*this)), pos0);
@@ -438,27 +234,25 @@ namespace TempLat
       this->removeInitValue();
     }
 
-    std::string extraInfoFn(int verbosity) { return verbosity > 0 ? name + "_" : ""; }
-
   private:
     // This sets the homogeneous components of the fields at a single point.
     void addInitValueOnePoint()
     {
-      device::IdxArray<NDim> pos0{{}};
-      ForLoop(j, 0, Ns - 1, device::memory::setAtOnePoint(fldS(j), pos0, fldS0[j] / fStar););
-      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(fldCS(j)(i), pos0, fldCS0(j)(i) / fStar);));
+      device::IdxArray<NDIM> pos0{{}};
+      ForLoop(j, 0, NS - 1, device::memory::setAtOnePoint(this->fldS(j), pos0, this->fldS0[j] / this->fStar););
+      ForLoop(j, 0, NC - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(this->fldCS(j)(i), pos0, this->fldCS0(j)(i) / this->fStar);));
       ForLoop(
-          j, 0, NSU2Doublet - 1,
-          ForLoop(i, 0, 3, device::memory::setAtOnePoint(fldSU2Doublet(j)(i), pos0, fldSU2Doublet0(j)(i) / fStar);));
+          j, 0, NSU2DOUBLET - 1,
+          ForLoop(i, 0, 3, device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0, this->fldSU2Doublet0(j)(i) / this->fStar);));
     }
 
     // This removes the homogeneous components of the fields at a single point.
     void removeInitValue()
     {
-      device::IdxArray<NDim> pos0{{}};
-      ForLoop(j, 0, Ns - 1, device::memory::setAtOnePoint(fldS(j), pos0, 0.););
-      ForLoop(j, 0, NCs - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(fldCS(j)(i), pos0, 0.);));
-      ForLoop(j, 0, NSU2Doublet - 1, ForLoop(i, 0, 3, device::memory::setAtOnePoint(fldSU2Doublet(j)(i), pos0, 0.);));
+      device::IdxArray<NDIM> pos0{{}};
+      ForLoop(j, 0, NS - 1, device::memory::setAtOnePoint(this->fldS(j), pos0, 0.););
+      ForLoop(j, 0, NC - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(this->fldCS(j)(i), pos0, 0.);));
+      ForLoop(j, 0, NSU2DOUBLET - 1, ForLoop(i, 0, 3, device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0, 0.);));
     }
   };
 } // namespace TempLat

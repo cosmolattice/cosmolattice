@@ -26,6 +26,8 @@ namespace TempLat
   template <int NMatter, int NGauge, bool... Bools> class CouplingsManager
   {
   public:
+    static constexpr int nGauge = NGauge;
+
     // Put public methods here. These should change very little over time.
     CouplingsManager() = default;
 
@@ -105,6 +107,8 @@ namespace TempLat
   template <> class CouplingsManager<0, 0>
   {
   public:
+    static constexpr int nGauge = 0;
+
     // Put public methods here. These should change very little over time.
     CouplingsManager() = default;
 
