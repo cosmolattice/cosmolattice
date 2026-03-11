@@ -176,10 +176,7 @@ namespace TempLat
      */
     template <class Model, int N, int DIR> static auto get_SU2_electric(Model &model, Tag<N> n, Tag<DIR> i)
     {
-
-      const auto El = model.piSU2(n)(i);
-
-      return El;
+      return model.piSU2(n)(i);
     }
 
     /**
@@ -221,7 +218,7 @@ namespace TempLat
     template <class Model, int A> // <pi^2>
     static inline auto pi2SU2(Model &model, Tag<A> a)
     {
-      const auto El = get_SU2_electric(model, a);
+      auto El = get_SU2_electric(model, a);
       return Total(i, 1, Model::NDim, Total(b, 1, 3, 4 * pow<2>(El(i)(b))));
     }
 
@@ -234,7 +231,7 @@ namespace TempLat
     template <class Model, int N> // <pi^2>
     static inline auto TrEBSU2(Model &model, Tag<N> n)
     {
-      const auto El = get_SU2_electric(model, n);
+      auto El = get_SU2_electric(model, n);
       // Once again, the 4 comes from the fact that usually E^a is defined with respect to sigma_a/2 in the algebra. (a)
       // returns the expansion with respect to sigma_a.
       return 4 * Total(i, 1, Model::NDim, Total(a, 1, 3, El(i)(a) * model.getCloverSU2()(n)(i)(a)));
