@@ -1,27 +1,27 @@
 #Output
-outputfile = ./
+outputfile = ./test/
 
 #Evolution
 expansion = true
 evolver = RK2
 
 #Lattice
-N = 32
+N = 64
 dt = 0.01
-kIR = .6
+kIR = 1
 
 #Times
 tOutputFreq = 0.05
 tOutputInfreq = 5
 tOutputRareFreq = 10
-tMax = 100
+tMax = 0.01
 
 
 #Spectra options
 withGWs = false # for the current axion-U(1) model not implemented
 
 #IC
-kCutOff = 6
+kCutOff = 1000
 initial_amplitudes = 3.39928e18  # homogeneous amplitudes in GeV
 initial_momenta = -3.0714e31     # homogeneous amplitudes in GeV2
 

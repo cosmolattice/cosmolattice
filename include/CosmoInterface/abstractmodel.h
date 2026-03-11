@@ -223,6 +223,9 @@ namespace TempLat
     std::unique_ptr<FieldCollection<Field<NDim, T>, 6, true>> fldGWs;
     std::unique_ptr<FieldCollection<Field<NDim, T>, 6, true>> piGWs;
 
+    // potential external initial spectra
+    std::array<std::string, Ns> extPS;
+
     AbstractModel(ParameterParser &parser, const LatticeParameters<T> &par,
                   device::memory::host_ptr<MemoryToolBox<NDim>> toolBox, T pDt, std::string pName = "")
         : isInitialized(toolBox->template initializeFFT<T>()), fldS("scalar", toolBox, par),
@@ -267,6 +270,8 @@ namespace TempLat
       auto gAxionU1 = parser.get<double, NU1>("gAxionU1", 1.0);
       auto AxionU1Charges = parser.get<double, ScalarU1AxionCouplings::howManyCouples()>("alphaLambda_AxionU1", 1);
       alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);
+
+      ForLoop(i, 0, Ns-1, {extPS[i] = parser.get<std::string>("ext_PS" + std::to_string(i), Constants::defaultString);});
     }
 
     // AbstractModel should never be copied, so we delete the copy constructor and copy assignment operator.
@@ -363,10 +368,9 @@ namespace TempLat
 
     InitialConditionsType::U1 getU1IC()
     {
-      if (NCs > 0)
-        return InitialConditionsType::RandomWithMatter;
-      else
-        return InitialConditionsType::PlaneWavesZeroB;
+      if (NCs > 0) return InitialConditionsType::RandomWithMatter;
+      else if ( Ns > 0 && ScalarU1AxionCouplings::howManyCouples() > 0) return InitialConditionsType::BunchDavisTransverseU1;
+      else  return InitialConditionsType::PlaneWavesZeroB;
     }
 
     // The "MemoryToolBox" is a shared variable between most instances of the program. It contains many useful

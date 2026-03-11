@@ -38,11 +38,23 @@ namespace TempLat
     // --> Note: aDot has to be initialized before calling this function.
 
     template <class Model, typename T>
-    static void initializeU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff, ExtraFields<Model> extraFlds)
+    static void initializeU1(Model &model, FluctuationsGenerator<T> &fg, ExternalPowerSpectrumInitializer<T>& extps, T kCutOff, ExtraFields<Model> extraFlds)
     {
       if (model.getU1IC() == InitialConditionsType::RandomWithMatter) initializeRandomWithMatterU1(model, fg, kCutOff);
       else if (model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) initializePlaneWavesZeroBU1(model, fg, kCutOff, extraFlds);
+      else if (model.getU1IC() == InitialConditionsType::BunchDavisTransverseU1) initializeBunchDavisTransverseU1(model,extps, kCutOff, extraFlds);
       else throw(U1ICNotImplemented("The initial condition provided for U1 is not implemented."));
+    }
+
+    template<class Model, typename T>
+    static void initializeBunchDavisTransverseU1(Model& model, ExternalPowerSpectrumInitializer<T>& extps, T kCutOff, ExtraFields<Model> extraFlds)
+        {
+
+          ForLoop(n, 0, Model::NU1-1,
+				    extps.BunchDavisTransverseU1(model, model.fldU1(n), model.piU1(n), extraFlds.fldForPlaneWavesU1(), extraFlds.piForPlaneWavesU1(), model.aDotI, kCutOff);
+				    model.fldU1(n) = model.getFluctuationRatio(FieldsNumbering::fldU1()) * model.fldU1(n);
+				    model.piU1(n) = model.getFluctuationRatio(FieldsNumbering::piU1()) * model.piU1(n);
+			    );
     }
 
     template <class Model, typename T>
