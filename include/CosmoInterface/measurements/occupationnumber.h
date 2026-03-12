@@ -36,7 +36,7 @@ namespace TempLat
       const auto N = GetNGrid::get(model); // Isotropic lattices only.
       const T kMaxBins = std::floor(pow(3, 0.5) / 2.0 * N) + 1;
 
-      Field<NDim, T> tmp("tmp", GetToolBox::get(model));
+      Field<T, NDim> tmp("tmp", GetToolBox::get(model));
 
       tmp = model.fldS(i);
       const auto part1 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);

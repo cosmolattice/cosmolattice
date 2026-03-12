@@ -27,7 +27,7 @@ namespace TempLat
 
     template <class Model, int N> static auto get(Model &model, Tag<N> n)
     {
-      return (pow(model.aI, 1 + model.alpha) * LatLapl<Model::NDim>((*model.fldGWs)(n)) +
+      return (pow(model.aI, 1 + model.alpha) * LatLapl((*model.fldGWs)(n)) +
               pow(model.aI, 1 + model.alpha) * 2. * (PITensor::totalTensor(model, n)));
     }
   };

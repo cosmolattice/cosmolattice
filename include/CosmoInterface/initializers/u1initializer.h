@@ -140,8 +140,8 @@ namespace TempLat
 
       auto toolBox = model.getToolBox();
 
-      using RRF = RandomRayleighField<Model::NDim, T>;
-      using RUF = RandomUniformUnitaryField<Model::NDim, T>;
+      using RRF = RandomRayleighField<T, Model::NDim>;
+      using RUF = RandomUniformUnitaryField<T, Model::NDim>;
 
       ForLoop(i, 0, Model::NCs - 1,
 

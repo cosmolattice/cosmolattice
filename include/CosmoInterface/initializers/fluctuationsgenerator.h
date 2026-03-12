@@ -36,7 +36,7 @@ namespace TempLat
     // This function computes the norm of the left-moving and right-moving waves:
     //  --> It's also used to initialize the complex scalars and SU2 doublets
     // (called from u1initializer.h and su2initializer.h).
-    template <class Model> auto getFluctuationsNorm(Model &model, Field<Model::NDim, T> f, T mass2, T kCutOff) const
+    template <class Model> auto getFluctuationsNorm(Model &model, Field<T, Model::NDim> f, T mass2, T kCutOff) const
     {
       FourierSite<Model::NDim> ntilde(f.getToolBox());
       // Fourier lattice site, see eq.(57) of arXiv:2006.15122v2
@@ -60,15 +60,15 @@ namespace TempLat
     // Returns the amplitude of the (left- or right-moving) waves,
     // which follows a Gaussian distribution:
     template <class Model>
-    auto getNormedFluctuations(Model &model, Field<Model::NDim, T> f, T mass2, std::string mySeed, T kCutOff) const
+    auto getNormedFluctuations(Model &model, Field<T, Model::NDim> f, T mass2, std::string mySeed, T kCutOff) const
     {
       auto fFluctuationNorm = getFluctuationsNorm(model, f, mass2, kCutOff); // norm
-      return fFluctuationNorm * RandomGaussianField<Model::NDim, T>(baseSeed + mySeed + f.toString(),
+      return fFluctuationNorm * RandomGaussianField<T, Model::NDim>(baseSeed + mySeed + f.toString(),
                                                                     f.getToolBox()); // baseSeed is given in input file
     }
 
     // Sums left-moving and right-moving waves, both following a Gaussian distribution
-    template <class Model> void gaussianFluctuations(Model &model, Field<Model::NDim, T> f, T mass2, T kCutOff) const
+    template <class Model> void gaussianFluctuations(Model &model, Field<T, Model::NDim> f, T mass2, T kCutOff) const
     {
       auto fLeft = getNormedFluctuations(model, f, mass2, "Random left", kCutOff);
       // left wave
@@ -84,7 +84,7 @@ namespace TempLat
 
     // This does the same as the previous function, but also sets fluctuations to the time-derivatives
     template <class Model>
-    void conjugateGaussianFluctuations(Model &model, Field<Model::NDim, T> f, Field<Model::NDim, T> p, T mass2, T aDot,
+    void conjugateGaussianFluctuations(Model &model, Field<T, Model::NDim> f, Field<T, Model::NDim> p, T mass2, T aDot,
                                        T kCutOff) const
     {
       auto fLeft = getNormedFluctuations(model, f, mass2, "Random left", kCutOff);

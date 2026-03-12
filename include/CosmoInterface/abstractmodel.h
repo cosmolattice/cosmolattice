@@ -118,37 +118,37 @@ namespace TempLat
     bool isInitialized;
 
     // --> Scalar singlets
-    FieldCollection<Field<NDim, T>, Ns, true>
+    FieldCollection<Field<T, NDim>, Ns, true>
         fldS; // The last parameter is to "vectorise" the assignement. Can use it with scalar algebra (meaning scalar
               // fields and U(1) non-compact gauge fields), but not with the rest.
-    FieldCollection<Field<NDim, T>, Ns, true> piS;
+    FieldCollection<Field<T, NDim>, Ns, true> piS;
     // Does not make a huge difference anyhow, so in case of doubt put nothing or false (equivalent).
-    FieldCollection<Field<NDim, T>, Ns, true> getField(FieldsNumbering::fldS) { return fldS; }
-    FieldCollection<Field<NDim, T>, Ns, true> getField(FieldsNumbering::piS) { return piS; }
+    FieldCollection<Field<T, NDim>, Ns, true> getField(FieldsNumbering::fldS) { return fldS; }
+    FieldCollection<Field<T, NDim>, Ns, true> getField(FieldsNumbering::piS) { return piS; }
 
     // --> Complex scalars
-    FieldCollection<ComplexField<NDim, T>, NCs> fldCS;
-    FieldCollection<ComplexField<NDim, T>, NCs> piCS;
-    FieldCollection<ComplexField<NDim, T>, NCs> getField(FieldsNumbering::fldCS) { return fldCS; }
-    FieldCollection<ComplexField<NDim, T>, NCs> getField(FieldsNumbering::piCS) { return piCS; }
+    FieldCollection<ComplexField<T, NDim>, NCs> fldCS;
+    FieldCollection<ComplexField<T, NDim>, NCs> piCS;
+    FieldCollection<ComplexField<T, NDim>, NCs> getField(FieldsNumbering::fldCS) { return fldCS; }
+    FieldCollection<ComplexField<T, NDim>, NCs> getField(FieldsNumbering::piCS) { return piCS; }
 
     // --> SU2 doublets
-    FieldCollection<SU2Doublet<NDim, T>, NSU2Doublet> fldSU2Doublet;
-    FieldCollection<SU2Doublet<NDim, T>, NSU2Doublet> piSU2Doublet;
-    FieldCollection<SU2Doublet<NDim, T>, NSU2Doublet> getField(FieldsNumbering::fldSU2Doublet) { return fldSU2Doublet; }
-    FieldCollection<SU2Doublet<NDim, T>, NSU2Doublet> getField(FieldsNumbering::piSU2Doublet) { return piSU2Doublet; }
+    FieldCollection<SU2Doublet<T, NDim>, NSU2Doublet> fldSU2Doublet;
+    FieldCollection<SU2Doublet<T, NDim>, NSU2Doublet> piSU2Doublet;
+    FieldCollection<SU2Doublet<T, NDim>, NSU2Doublet> getField(FieldsNumbering::fldSU2Doublet) { return fldSU2Doublet; }
+    FieldCollection<SU2Doublet<T, NDim>, NSU2Doublet> getField(FieldsNumbering::piSU2Doublet) { return piSU2Doublet; }
 
     // --> U(1) gauge fields
-    VectorFieldCollection<Field<NDim, T>, NU1> fldU1;
-    VectorFieldCollection<Field<NDim, T>, NU1> piU1;
-    VectorFieldCollection<Field<NDim, T>, NU1> getField(FieldsNumbering::fldU1) { return fldU1; }
-    VectorFieldCollection<Field<NDim, T>, NU1> getField(FieldsNumbering::piU1) { return piU1; }
+    VectorFieldCollection<Field<T, NDim>, NU1> fldU1;
+    VectorFieldCollection<Field<T, NDim>, NU1> piU1;
+    VectorFieldCollection<Field<T, NDim>, NU1> getField(FieldsNumbering::fldU1) { return fldU1; }
+    VectorFieldCollection<Field<T, NDim>, NU1> getField(FieldsNumbering::piU1) { return piU1; }
 
     // --> SU(2) gauge fields
-    VectorFieldCollection<SU2Field<NDim, T>, NSU2> fldSU2;
-    VectorFieldCollection<SU2LieAlgebraField<NDim, T>, NSU2> piSU2;
-    VectorFieldCollection<SU2Field<NDim, T>, NSU2> getField(FieldsNumbering::fldSU2) { return fldSU2; }
-    VectorFieldCollection<SU2LieAlgebraField<NDim, T>, NSU2> getField(FieldsNumbering::piSU2) { return piSU2; }
+    VectorFieldCollection<SU2Field<T, NDim>, NSU2> fldSU2;
+    VectorFieldCollection<SU2LieAlgebraField<T, NDim>, NSU2> piSU2;
+    VectorFieldCollection<SU2Field<T, NDim>, NSU2> getField(FieldsNumbering::fldSU2) { return fldSU2; }
+    VectorFieldCollection<SU2LieAlgebraField<T, NDim>, NSU2> getField(FieldsNumbering::piSU2) { return piSU2; }
 
     // Variables that store the scale factor and energies during the evolution.
     // Suffixes indicate at which time they are evaluated:
@@ -220,8 +220,8 @@ namespace TempLat
     std::string name;
 
     // --> Graviational u fields
-    std::unique_ptr<FieldCollection<Field<NDim, T>, 6, true>> fldGWs;
-    std::unique_ptr<FieldCollection<Field<NDim, T>, 6, true>> piGWs;
+    std::unique_ptr<FieldCollection<Field<T, NDim>, 6, true>> fldGWs;
+    std::unique_ptr<FieldCollection<Field<T, NDim>, 6, true>> piGWs;
 
     // potential external initial spectra
     std::array<std::string, Ns> extPS;
@@ -234,10 +234,10 @@ namespace TempLat
           fldU1("U1", toolBox, par), piU1("pi_U1", toolBox, par), fldSU2("SU2Fld", toolBox, par),
           piSU2("pi_SU2Fld", toolBox, par), aSI(1), aI(1), aIM(1), dx(par.getDx()), kIR(par.getKIR()), dt(pDt),
           name(pName), fldGWs(parser.get<bool>("withGWs", false)
-                                  ? std::make_unique<FieldCollection<Field<NDim, T>, 6, true>>("fldGWs", toolBox, par)
+                                  ? std::make_unique<FieldCollection<Field<T, NDim>, 6, true>>("fldGWs", toolBox, par)
                                   : nullptr),
           piGWs(parser.get<bool>("withGWs", false)
-                    ? std::make_unique<FieldCollection<Field<NDim, T>, 6, true>>("piGWs", toolBox, par)
+                    ? std::make_unique<FieldCollection<Field<T, NDim>, 6, true>>("piGWs", toolBox, par)
                     : nullptr)
     {
       // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this
@@ -346,7 +346,7 @@ namespace TempLat
     auto GWtensor(Tag<3>, Tag<3>) { return (*fldGWs)(5_c); }
 
     // Sometimes, it can be useful to get "any field" of the model. This function implements this in a generic way.
-    Field<NDim, T> getOneField() const
+    Field<T, NDim> getOneField() const
     {
       if constexpr (Ns > 0)
         return fldS(0_c);

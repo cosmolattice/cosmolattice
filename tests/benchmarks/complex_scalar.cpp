@@ -40,11 +40,11 @@ namespace TempLat
     static constexpr double alpha = 1.;
     static constexpr double dx = 1.;
 
-    FieldCollection<ComplexField<NDim, T>, NCs> fldCS;
-    FieldCollection<ComplexField<NDim, T>, NCs> piCS;
+    FieldCollection<ComplexField<T, NDim>, NCs> fldCS;
+    FieldCollection<ComplexField<T, NDim>, NCs> piCS;
 
-    VectorFieldCollection<Field<NDim, T>, NU1> fldU1;
-    VectorFieldCollection<Field<NDim, T>, NU1> piU1;
+    VectorFieldCollection<Field<T, NDim>, NU1> fldU1;
+    VectorFieldCollection<Field<T, NDim>, NU1> piU1;
 
     auto potDerivNormCS(Tag<0>) const { return ZeroType() * norm(fldCS(0_c)); }
   };
@@ -114,14 +114,14 @@ void run(auto toolBox, int manual)
   MeasurementsSaver<double> saver_phi_0(filesManager, model.fldCS(0_c)(0_c), true, false, MeansMeasurer::header());
   MeasurementsSaver<double> saver_phi_1(filesManager, model.fldCS(0_c)(1_c), true, false, MeansMeasurer::header());
 
-  model.fldCS(0_c)(0_c).inFourierSpace() = RandomGaussianField<NDim, T>("Hoi", toolBox);
+  model.fldCS(0_c)(0_c).inFourierSpace() = RandomGaussianField<T, NDim>("Hoi", toolBox);
   model.fldCS(0_c)(0_c).inFourierSpace().setZeroMode(complex<double>{0.0, 0.0});
-  model.fldCS(0_c)(1_c).inFourierSpace() = RandomGaussianField<NDim, T>("Hoi", toolBox);
+  model.fldCS(0_c)(1_c).inFourierSpace() = RandomGaussianField<T, NDim>("Hoi", toolBox);
   model.fldCS(0_c)(1_c).inFourierSpace().setZeroMode(complex<double>{0.0, 0.0});
 
-  model.piCS(0_c)(0_c).inFourierSpace() = RandomGaussianField<NDim, T>("Hai", toolBox);
+  model.piCS(0_c)(0_c).inFourierSpace() = RandomGaussianField<T, NDim>("Hai", toolBox);
   model.piCS(0_c)(0_c).inFourierSpace().setZeroMode(complex<double>{0.0, 0.0});
-  model.piCS(0_c)(1_c).inFourierSpace() = RandomGaussianField<NDim, T>("Hai", toolBox);
+  model.piCS(0_c)(1_c).inFourierSpace() = RandomGaussianField<T, NDim>("Hai", toolBox);
   model.piCS(0_c)(1_c).inFourierSpace().setZeroMode(complex<double>{0.0, 0.0});
   device::iteration::fence();
 
