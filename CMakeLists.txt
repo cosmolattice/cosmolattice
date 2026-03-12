@@ -19,6 +19,7 @@
 #   By default, TempLat will try to auto-detect the system's capabilities and choose the backend.
 # - NATIVE: pass --march=native to the compiler for better performance. Default: ON on non-Darwin systems, OFF on Darwin (macOS)
 # - KOKKOSFFT: compile TempLat with KokkosFFT support for single-node GPU FFTs. Default: ON when CUDA or HIP support is enabled, OFF otherwise
+# - TEMPLAT_BRANCH: the branch of TempLat to use. Default: main
 #
 # ##############################################################################
 
@@ -47,10 +48,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
 set(FETCHCONTENT_QUIET ON)
+set(TEMPLAT_BRANCH main CACHE STRING "Branch of TempLat to use")
 FetchContent_Declare(
   TempLat
   GIT_REPOSITORY https://github.com/cosmolattice/templat.git
-  GIT_TAG main)
+  GIT_TAG ${TEMPLAT_BRANCH})
 FetchContent_MakeAvailable(TempLat)
 
 # ##############################################################################
