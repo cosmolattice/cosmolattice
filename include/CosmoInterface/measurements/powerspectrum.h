@@ -41,7 +41,7 @@ namespace TempLat
     // --> The normalization factor ensures that it recovers the appropriate expression in the continuum limit.
     //     This is discussed in Sect. 3 of arXiv:2006.15122.
 
-    template <size_t NDim, typename T> auto powerSpectrum(Field<T, NDim> f, ptrdiff_t N, T kIR)
+    template <typename T, size_t NDim> auto powerSpectrum(Field<T, NDim> f, ptrdiff_t N, T kIR)
     {
       const ptrdiff_t N3 = pow<3>(N);
       const T dx = 2 * Constants::pi<T> / kIR / N; // lattice spacing

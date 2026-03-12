@@ -50,8 +50,8 @@ namespace TempLat
     FieldCollection<ComplexField<T, Model::NDim>, Model::NCs> fldCS;
     FieldCollection<ComplexField<T, Model::NDim>, Model::NCs> piCS;
 
-    FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> fldSU2Doublet;
-    FieldCollection<SU2Doublet<Model::NDim, T>, Model::NSU2Doublet> piSU2Doublet;
+    FieldCollection<SU2Doublet<T, Model::NDim>, Model::NSU2Doublet> fldSU2Doublet;
+    FieldCollection<SU2Doublet<T, Model::NDim>, Model::NSU2Doublet> piSU2Doublet;
 
     VectorFieldCollection<Field<T, Model::NDim>, Model::NU1> fldU1;
     VectorFieldCollection<Field<T, Model::NDim>, Model::NU1> piU1;

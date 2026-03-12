@@ -69,7 +69,7 @@ namespace TempLat
     static constexpr size_t N = Model<MODELNAME>::Ns;
     using Model<MODELNAME>::t;
 
-    Field<NDim, typename Model<MODELNAME>::FloatType> DriveProfile;
+    Field<typename Model<MODELNAME>::FloatType, NDim> DriveProfile;
 
     MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
               device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)

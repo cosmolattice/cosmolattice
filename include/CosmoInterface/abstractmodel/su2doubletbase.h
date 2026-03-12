@@ -18,19 +18,20 @@
 #include "TempLat/parameters/parameterparser.h"
 #include "CosmoInterface/runparameters.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-template <int NDIM, typename T, size_t NSU2DOUBLET,
-          typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS>
-class SU2DoubletSectorBase {
-public:
+  template <int NDIM, typename T, size_t NSU2DOUBLET, typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS>
+  class SU2DoubletSectorBase
+  {
+  public:
     static constexpr size_t NSU2Doublet = NSU2DOUBLET;
     using SU2DoubletU1Couplings = SU2DOUBLETU1COUPLINGS;
     using SU2DoubletSU2Couplings = SU2DOUBLETSU2COUPLINGS;
 
     // SU2 doublet fields
-    FieldCollection<SU2Doublet<NDIM, T>, NSU2DOUBLET> fldSU2Doublet;
-    FieldCollection<SU2Doublet<NDIM, T>, NSU2DOUBLET> piSU2Doublet;
+    FieldCollection<SU2Doublet<T, NDIM>, NSU2DOUBLET> fldSU2Doublet;
+    FieldCollection<SU2Doublet<T, NDIM>, NSU2DOUBLET> piSU2Doublet;
 
     // Averages SU2 doublet
     T SU2DblGrad2AvI, SU2DblGrad2AvSI;
@@ -52,32 +53,32 @@ public:
     // Potential stubs (to be overridden in derived models)
     template <int N> auto potDerivNormSU2Doublet(Tag<N>)
     {
-        throw(PotentialDerivativeNotDefined("You tried to call potDerivNormSU2Doublet N = " + std::to_string(N) +
-                                            ", which is not defined in your model. Abort."));
-        return ZeroType();
+      throw(PotentialDerivativeNotDefined("You tried to call potDerivNormSU2Doublet N = " + std::to_string(N) +
+                                          ", which is not defined in your model. Abort."));
+      return ZeroType();
     }
     template <int N> auto potDeriv2NormSU2Doublet(Tag<N>)
     {
-        throw(PotentialDerivativeNotDefined("You tried to call potDeriv2NormSU2Doublet N = " + std::to_string(N) +
-                                            ", which is not defined in your model. Abort."));
-        return ZeroType();
+      throw(PotentialDerivativeNotDefined("You tried to call potDeriv2NormSU2Doublet N = " + std::to_string(N) +
+                                          ", which is not defined in your model. Abort."));
+      return ZeroType();
     }
 
-protected:
-    SU2DoubletSectorBase(ParameterParser &parser,
-                         device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
+  protected:
+    SU2DoubletSectorBase(ParameterParser &parser, device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
                          const LatticeParameters<T> &par)
         : fldSU2Doublet("SU2Doublet", toolBox, par), piSU2Doublet("pi_SU2Doublet", toolBox, par)
     {
-        auto gU1s = parser.get<double, SU2DOUBLETU1COUPLINGS::nGauge>("gU1s", 1.0);
-        auto SU2DoubletU1Charges = parser.get<double, SU2DOUBLETU1COUPLINGS::howManyCouples()>("SU2DoubletU1_charges", 1);
-        gQ_SU2DblU1.setEffectiveCharges(SU2DoubletU1Charges, gU1s);
+      auto gU1s = parser.get<double, SU2DOUBLETU1COUPLINGS::nGauge>("gU1s", 1.0);
+      auto SU2DoubletU1Charges = parser.get<double, SU2DOUBLETU1COUPLINGS::howManyCouples()>("SU2DoubletU1_charges", 1);
+      gQ_SU2DblU1.setEffectiveCharges(SU2DoubletU1Charges, gU1s);
 
-        auto gSU2s = parser.get<double, SU2DOUBLETSU2COUPLINGS::nGauge>("gSU2s", 1.0);
-        auto SU2DoubletSU2Charges = parser.get<double, SU2DOUBLETSU2COUPLINGS::howManyCouples()>("SU2DoubletSU2_charges", 1);
-        gQ_SU2DblSU2.setEffectiveCharges(SU2DoubletSU2Charges, gSU2s);
+      auto gSU2s = parser.get<double, SU2DOUBLETSU2COUPLINGS::nGauge>("gSU2s", 1.0);
+      auto SU2DoubletSU2Charges =
+          parser.get<double, SU2DOUBLETSU2COUPLINGS::howManyCouples()>("SU2DoubletSU2_charges", 1);
+      gQ_SU2DblSU2.setEffectiveCharges(SU2DoubletSU2Charges, gSU2s);
     }
-};
+  };
 
 } // namespace TempLat
 
