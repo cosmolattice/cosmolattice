@@ -24,12 +24,12 @@ int main(int argc, char **argv)
   auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost, false);
   toolBox->unsetVerbose();
 
-  Field<NDim, T> phi("phi", toolBox);
-  Field<NDim, T> pi("pi", toolBox);
+  Field<T, NDim> phi("phi", toolBox);
+  Field<T, NDim> pi("pi", toolBox);
 
   Benchmark bench([&](Benchmark::Measurer &measurer) {
-    phi.inFourierSpace() = RandomGaussianField<NDim, T>("Rand", toolBox);
-    pi.inFourierSpace() = RandomGaussianField<NDim, T>("Rand2", toolBox);
+    phi.inFourierSpace() = RandomGaussianField<T, NDim>("Rand", toolBox);
+    pi.inFourierSpace() = RandomGaussianField<T, NDim>("Rand2", toolBox);
 
     for (size_t i = 0; i < nSteps; ++i) {
       pi.updateGhosts();

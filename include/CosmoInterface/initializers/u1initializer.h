@@ -40,9 +40,12 @@ namespace TempLat
     template <class Model, typename T>
     static void initializeU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff, ExtraFields<Model> extraFlds)
     {
-      if (model.getU1IC() == InitialConditionsType::RandomWithMatter) initializeRandomWithMatterU1(model, fg, kCutOff);
-      else if (model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) initializePlaneWavesZeroBU1(model, fg, kCutOff, extraFlds);
-      else throw(U1ICNotImplemented("The initial condition provided for U1 is not implemented."));
+      if (model.getU1IC() == InitialConditionsType::RandomWithMatter)
+        initializeRandomWithMatterU1(model, fg, kCutOff);
+      else if (model.getU1IC() == InitialConditionsType::PlaneWavesZeroB)
+        initializePlaneWavesZeroBU1(model, fg, kCutOff, extraFlds);
+      else
+        throw(U1ICNotImplemented("The initial condition provided for U1 is not implemented."));
     }
 
     template <class Model, typename T>
@@ -86,16 +89,15 @@ namespace TempLat
     }
 
     template <class Model, typename T>
-    static void initializePlaneWavesZeroBU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff, ExtraFields<Model> extraFlds)
+    static void initializePlaneWavesZeroBU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff,
+                                            ExtraFields<Model> extraFlds)
     {
       ForLoop(n, 0, Model::NU1 - 1,
-        fg.planeWaves(model, model.fldU1(n), model.piU1(n), extraFlds.fldForPlaneWavesU1(), extraFlds.piForPlaneWavesU1(), model.aDotI, kCutOff);
-        model.fldU1(n) = model.getFluctuationRatio(FieldsNumbering::fldU1()) * model.fldU1(n);
-        model.piU1(n) = model.getFluctuationRatio(FieldsNumbering::piU1()) * model.piU1(n);
-        ForLoop(i, 1, Model::NDim,
-          model.fldU1(n)(i) = 0;
-        );
-      );
+              fg.planeWaves(model, model.fldU1(n), model.piU1(n), extraFlds.fldForPlaneWavesU1(),
+                            extraFlds.piForPlaneWavesU1(), model.aDotI, kCutOff);
+              model.fldU1(n) = model.getFluctuationRatio(FieldsNumbering::fldU1()) * model.fldU1(n);
+              model.piU1(n) = model.getFluctuationRatio(FieldsNumbering::piU1()) * model.piU1(n);
+              ForLoop(i, 1, Model::NDim, model.fldU1(n)(i) = 0;););
     }
 
   private:
@@ -128,8 +130,8 @@ namespace TempLat
 
       auto toolBox = model.getToolBox();
 
-      using RRF = RandomRayleighField<Model::NDim, T>;
-      using RUF = RandomUniformUnitaryField<Model::NDim, T>;
+      using RRF = RandomRayleighField<T, Model::NDim>;
+      using RUF = RandomUniformUnitaryField<T, Model::NDim>;
 
       ForLoop(i, 0, Model::NCs - 1,
 

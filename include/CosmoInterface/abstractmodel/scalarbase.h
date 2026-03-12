@@ -16,11 +16,12 @@
 #include "CosmoInterface/fieldsnumbering.h"
 #include "CosmoInterface/runparameters.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-template <int NDIM, typename T, size_t NS>
-class ScalarBase {
-public:
+  template <int NDIM, typename T, size_t NS> class ScalarBase
+  {
+  public:
     static constexpr int NDim = NDIM;
     static constexpr size_t Ns = NS;
     using FloatType = T;
@@ -28,8 +29,8 @@ public:
     bool isInitialized;
 
     // Scalar singlet fields
-    FieldCollection<Field<NDIM, T>, NS, true> fldS;
-    FieldCollection<Field<NDIM, T>, NS, true> piS;
+    FieldCollection<Field<T, NDIM>, NS, true> fldS;
+    FieldCollection<Field<T, NDIM>, NS, true> piS;
 
     // Averages scalar
     T grad2AvI, grad2AvSI;
@@ -47,22 +48,24 @@ public:
     // Potential stubs (to be overridden in derived models)
     template <int N> auto potDeriv(Tag<N>)
     {
-        throw(PotentialDerivativeNotDefined("You tried to call potDeriv N = " + std::to_string(N) +
-                                            ", which is not defined in your model. Abort."));
-        return ZeroType();
+      throw(PotentialDerivativeNotDefined("You tried to call potDeriv N = " + std::to_string(N) +
+                                          ", which is not defined in your model. Abort."));
+      return ZeroType();
     }
     template <int N> auto potDeriv2(Tag<N>)
     {
-        throw(PotentialDerivativeNotDefined("You tried to call potDeriv2 N = " + std::to_string(N) +
-                                            ", which is not defined in your model. Abort."));
-        return ZeroType();
+      throw(PotentialDerivativeNotDefined("You tried to call potDeriv2 N = " + std::to_string(N) +
+                                          ", which is not defined in your model. Abort."));
+      return ZeroType();
     }
 
-protected:
+  protected:
     ScalarBase(device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, const LatticeParameters<T> &par)
-        : isInitialized(toolBox->template initializeFFT<T>()),
-          fldS("scalar", toolBox, par), piS("pi_scalar", toolBox, par) {}
-};
+        : isInitialized(toolBox->template initializeFFT<T>()), fldS("scalar", toolBox, par),
+          piS("pi_scalar", toolBox, par)
+    {
+    }
+  };
 
 } // namespace TempLat
 

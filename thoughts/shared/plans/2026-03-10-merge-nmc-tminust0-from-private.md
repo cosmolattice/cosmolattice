@@ -19,7 +19,7 @@ Port the Non-Minimal Coupling to gravity (NMC) feature and the `tMinust0` kernel
 - No `nonminimalcoupling.h`, `lphi4NonMinimal.h`, or `lphi4NonMinimal.in`
 
 ### Key GPU impl differences from private repo:
-- Field types are templated on `NDim`: `Field<NDim, T>` vs `Field` (private uses old `Field<T>` and passes it as template param)
+- Field types are templated on `NDim`: `Field<T, NDim>` vs `Field` (private uses old `Field<T>` and passes it as template param)
 - `MemoryToolBox` is templated: `MemoryToolBox<NDim>` with `device::memory::host_ptr<>` wrapper
 - `FilesManager` is templated: `FilesManager<Model::NDim>`
 - Uses `device::memory::getAtOnePoint()` / `device::memory::setAtOnePoint()` instead of `GetValue::get()` / `.getSet()`
@@ -845,30 +845,30 @@ q = 100
 ## Summary: All Files to Modify/Create
 
 ### New Files (3)
-| File | Source |
-|------|--------|
-| `include/CosmoInterface/definitions/nonminimalcoupling.h` | Adapted from private repo |
-| `models/lphi4NonMinimal.h` | Adapted from private repo |
-| `models/parameter-files/lphi4NonMinimal.in` | Direct copy from private repo |
+| File                                                      | Source                        |
+| --------------------------------------------------------- | ----------------------------- |
+| `include/CosmoInterface/definitions/nonminimalcoupling.h` | Adapted from private repo     |
+| `models/lphi4NonMinimal.h`                                | Adapted from private repo     |
+| `models/parameter-files/lphi4NonMinimal.in`               | Direct copy from private repo |
 
 ### Modified Files (15)
-| File | Phase | Changes |
-|------|-------|---------|
-| `include/CosmoInterface/couplingsmanager.h` | 1 | Add `sizeof...(Bools)==0` guards in `operator()` and `couples()` |
-| `include/CosmoInterface/evolvers/kernels/kernelstypes.h` | 1 | Add `tMinust0` member + `cache(model, tIn)` overload to `EoM<T>` |
-| `include/CosmoInterface/abstractmodel.h` | 1 | Add `NonMinimalCouplings` template param, NMC members, `xis` parsing |
-| `include/CosmoInterface/definitions/averages.h` | 2 | Add NMC per-field averages block |
-| `include/CosmoInterface/definitions/energies.h` | 2 | Add `rhoNMCAv1/2/Av`, `rhoMinimal`, `pMinimal`, modify `rho()` |
-| `include/CosmoInterface/evolvers/kernels/scalefactorkernels.h` | 2 | NMC branch in `get()` using `NonMinimalCoupling::R()` |
-| `include/CosmoInterface/definitions/axioncouplings.h` | 2 | Add `tMinust0` parameter to signatures (keep physics unchanged) |
-| `include/CosmoInterface/evolvers/kernels/scalarsingletkernels.h` | 2 | Add NMC source term + pass `tMinust0` |
-| `include/CosmoInterface/evolvers/kernels/u1kernels.h` | 2 | Extract and pass `tMinust0` |
-| `include/CosmoInterface/evolvers/rk2nstorage.h` | 2 | Pass `tMinust0` to `cache()`, activate NMC `advanceScaleFactor` |
-| `include/CosmoInterface/runparameters.h` | 3 | Add `a0` parameter |
-| `include/CosmoInterface/initializers/scalefactorinitializer.h` | 3 | NMC Hubble rate quadratic formula + `a0` |
-| `include/CosmoInterface/initializers/modelinitializer.h` | 3 | Compute `RI` before Hubble constraint |
-| `include/CosmoInterface/measurements/energiesmeasurer.h` | 3 | Add NMC energy columns |
-| `include/CosmoInterface/measurements/scalefactormeasurer.h` | 3 | Add `R` column |
+| File                                                             | Phase | Changes                                                              |
+| ---------------------------------------------------------------- | ----- | -------------------------------------------------------------------- |
+| `include/CosmoInterface/couplingsmanager.h`                      | 1     | Add `sizeof...(Bools)==0` guards in `operator()` and `couples()`     |
+| `include/CosmoInterface/evolvers/kernels/kernelstypes.h`         | 1     | Add `tMinust0` member + `cache(model, tIn)` overload to `EoM<T>`     |
+| `include/CosmoInterface/abstractmodel.h`                         | 1     | Add `NonMinimalCouplings` template param, NMC members, `xis` parsing |
+| `include/CosmoInterface/definitions/averages.h`                  | 2     | Add NMC per-field averages block                                     |
+| `include/CosmoInterface/definitions/energies.h`                  | 2     | Add `rhoNMCAv1/2/Av`, `rhoMinimal`, `pMinimal`, modify `rho()`       |
+| `include/CosmoInterface/evolvers/kernels/scalefactorkernels.h`   | 2     | NMC branch in `get()` using `NonMinimalCoupling::R()`                |
+| `include/CosmoInterface/definitions/axioncouplings.h`            | 2     | Add `tMinust0` parameter to signatures (keep physics unchanged)      |
+| `include/CosmoInterface/evolvers/kernels/scalarsingletkernels.h` | 2     | Add NMC source term + pass `tMinust0`                                |
+| `include/CosmoInterface/evolvers/kernels/u1kernels.h`            | 2     | Extract and pass `tMinust0`                                          |
+| `include/CosmoInterface/evolvers/rk2nstorage.h`                  | 2     | Pass `tMinust0` to `cache()`, activate NMC `advanceScaleFactor`      |
+| `include/CosmoInterface/runparameters.h`                         | 3     | Add `a0` parameter                                                   |
+| `include/CosmoInterface/initializers/scalefactorinitializer.h`   | 3     | NMC Hubble rate quadratic formula + `a0`                             |
+| `include/CosmoInterface/initializers/modelinitializer.h`         | 3     | Compute `RI` before Hubble constraint                                |
+| `include/CosmoInterface/measurements/energiesmeasurer.h`         | 3     | Add NMC energy columns                                               |
+| `include/CosmoInterface/measurements/scalefactormeasurer.h`      | 3     | Add `R` column                                                       |
 
 ### Files NOT modified (Group 2 exclusions)
 - `initialconditionstype.h` — No `BunchDavisTransverseU1` or `fldS` enum

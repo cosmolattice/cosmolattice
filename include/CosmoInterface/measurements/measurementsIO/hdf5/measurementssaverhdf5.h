@@ -42,7 +42,7 @@ namespace TempLat
     }
 
     template <size_t NDim>
-    MeasurementsSaverHDF5(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool pAmIRoot, bool appendMode,
+    MeasurementsSaverHDF5(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool pAmIRoot, bool appendMode,
                           const std::vector<std::string> &headers)
         : MeasurementsSaverHDF5(fm, fm.getCurredName(fld, false), pAmIRoot, appendMode, headers)
     {

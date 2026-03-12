@@ -36,7 +36,7 @@ namespace TempLat
     // This function computes the norm of the left-moving and right-moving waves:
     //  --> It's also used to initialize the complex scalars and SU2 doublets
     // (called from u1initializer.h and su2initializer.h).
-    template <class Model> auto getFluctuationsNorm(Model &model, Field<Model::NDim, T> f, T mass2, T kCutOff) const
+    template <class Model> auto getFluctuationsNorm(Model &model, Field<T, Model::NDim> f, T mass2, T kCutOff) const
     {
       FourierSite<Model::NDim> ntilde(f.getToolBox());
       // Fourier lattice site, see eq.(57) of arXiv:2006.15122v2
@@ -60,15 +60,15 @@ namespace TempLat
     // Returns the amplitude of the (left- or right-moving) waves,
     // which follows a Gaussian distribution:
     template <class Model>
-    auto getNormedFluctuations(Model &model, Field<Model::NDim, T> f, T mass2, std::string mySeed, T kCutOff) const
+    auto getNormedFluctuations(Model &model, Field<T, Model::NDim> f, T mass2, std::string mySeed, T kCutOff) const
     {
       auto fFluctuationNorm = getFluctuationsNorm(model, f, mass2, kCutOff); // norm
-      return fFluctuationNorm * RandomGaussianField<Model::NDim, T>(baseSeed + mySeed + f.toString(),
+      return fFluctuationNorm * RandomGaussianField<T, Model::NDim>(baseSeed + mySeed + f.toString(),
                                                                     f.getToolBox()); // baseSeed is given in input file
     }
 
     // Sums left-moving and right-moving waves, both following a Gaussian distribution
-    template <class Model> void gaussianFluctuations(Model &model, Field<Model::NDim, T> f, T mass2, T kCutOff) const
+    template <class Model> void gaussianFluctuations(Model &model, Field<T, Model::NDim> f, T mass2, T kCutOff) const
     {
       auto fLeft = getNormedFluctuations(model, f, mass2, "Random left", kCutOff);
       // left wave
@@ -84,7 +84,7 @@ namespace TempLat
 
     // This does the same as the previous function, but also sets fluctuations to the time-derivatives
     template <class Model>
-    void conjugateGaussianFluctuations(Model &model, Field<Model::NDim, T> f, Field<Model::NDim, T> p, T mass2, T aDot,
+    void conjugateGaussianFluctuations(Model &model, Field<T, Model::NDim> f, Field<T, Model::NDim> p, T mass2, T aDot,
                                        T kCutOff) const
     {
       auto fLeft = getNormedFluctuations(model, f, mass2, "Random left", kCutOff);
@@ -104,16 +104,12 @@ namespace TempLat
 
     std::string getBaseSeed() const { return baseSeed; }
 
-    template<class Model, class VF>
-    void planeWaves(Model& model, VF f, VF p, VF tmpF, VF tmpP, T aDot, T kCutOff) const
+    template <class Model, class VF>
+    void planeWaves(Model &model, VF f, VF p, VF tmpF, VF tmpP, T aDot, T kCutOff) const
     {
-      ForLoop(i, 1, Model::NDim-1,
-        ForLoop(a, 1, 3,
-          conjugateGaussianFluctuations(model, tmpF(i), tmpP(i), 0.0, aDot, kCutOff);
-          tmpF(i).inFourierSpace().setZeroMode(0);
-          tmpP(i).inFourierSpace().setZeroMode(0);
-        )
-      );
+      ForLoop(i, 1, Model::NDim - 1,
+              ForLoop(a, 1, 3, conjugateGaussianFluctuations(model, tmpF(i), tmpP(i), 0.0, aDot, kCutOff);
+                      tmpF(i).inFourierSpace().setZeroMode(0); tmpP(i).inFourierSpace().setZeroMode(0);));
 
       FourierSite<Model::NDim> ntilde(model.getToolBox());
       size_t N = GetNGrid::get(model);
@@ -122,27 +118,24 @@ namespace TempLat
       auto keffm = MakeVector(i, 1, Model::NDim, 1_c - expIK(i));
       auto keffm2 = Total(i, 1, Model::NDim, norm2(keffm(i)));
 
-      auto e_basis = make_templatvector(0.25, 0.25, std::numbers::sqrt2/4.0);
+      auto e_basis = make_templatvector(0.25, 0.25, std::numbers::sqrt2 / 4.0);
       auto edotk = Total(i, 1, 3, e_basis(i) * keffm(i));
 
       auto lambda1 = MakeVector(i, 1, 3, e_basis(i) - edotk * (1.0 / keffm2) * conj(keffm(i)));
       auto invNLambda1 = safeDivide(1.0, sqrt(Total(i, 1, Model::NDim, norm2(lambda1(i)))));
 
-      auto lambda2 = MakeVector(i, 1, 3,
-        Total(j, 1, 3,
-          Total(k, 1, 3,
-            Symbols::epsilon(i, j, k) * e_basis(j) * keffm(k)
-          )
-        )
-      );
+      auto lambda2 =
+          MakeVector(i, 1, 3, Total(j, 1, 3, Total(k, 1, 3, Symbols::epsilon(i, j, k) * e_basis(j) * keffm(k))));
       auto invNLambda2 = safeDivide(1.0, sqrt(Total(i, 1, Model::NDim, norm2(lambda2(i)))));
 
       ForLoop(i, 1, Model::NDim,
-        f(i).inFourierSpace() = model.fStar / model.omegaStar * (tmpF(1_c).inFourierSpace() * asFourier(invNLambda1 * lambda1(i)) + tmpF(2_c).inFourierSpace() * asFourier(invNLambda2 * lambda2(i)));
-        p(i).inFourierSpace() = model.fStar / model.omegaStar * (tmpP(1_c).inFourierSpace() * asFourier(invNLambda1 * lambda1(i)) + tmpP(2_c).inFourierSpace() * asFourier(invNLambda2 * lambda2(i)));
-        f(i).inFourierSpace().setZeroMode(0);
-        p(i).inFourierSpace().setZeroMode(0);
-      );
+              f(i).inFourierSpace() = model.fStar / model.omegaStar *
+                                      (tmpF(1_c).inFourierSpace() * asFourier(invNLambda1 * lambda1(i)) +
+                                       tmpF(2_c).inFourierSpace() * asFourier(invNLambda2 * lambda2(i)));
+              p(i).inFourierSpace() = model.fStar / model.omegaStar *
+                                      (tmpP(1_c).inFourierSpace() * asFourier(invNLambda1 * lambda1(i)) +
+                                       tmpP(2_c).inFourierSpace() * asFourier(invNLambda2 * lambda2(i)));
+              f(i).inFourierSpace().setZeroMode(0); p(i).inFourierSpace().setZeroMode(0););
     }
 
     // Returns initial frequency of the mode in program units (this assumes initial scale factor is 1)

@@ -64,7 +64,7 @@ namespace TempLat
     std::string getHDF5SpectraFn() const { return getWorkingDir() + getTag() + "spectra.h5"; }
 
     template <typename T>
-    std::string getCurredName(const Field<NDim, T> &fld, bool withDir, std::string nametag = "average")
+    std::string getCurredName(const Field<T, NDim> &fld, bool withDir, std::string nametag = "average")
     {
       std::string name = fld.toString();
       name = name.erase(name.find("(", 3));

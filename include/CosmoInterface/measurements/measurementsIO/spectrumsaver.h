@@ -43,7 +43,7 @@ namespace TempLat
     }
 
     template <size_t NDim>
-    SpectrumSaver(FilesManager<NDim> &fm, const Field<NDim, T> &fld, bool amIRoot, bool appendMode,
+    SpectrumSaver(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool amIRoot, bool appendMode,
                   const RunParameters<T> &rPar, bool dontCreate = false)
         : useHDF5(fm.getUseHDF5Spectra())
     {
@@ -63,11 +63,10 @@ namespace TempLat
     {
       if (useHDF5) {
 #ifdef HAVE_HDF5
-        saverHDF5->save(
-            lastMeas,
-            std::vector<std::shared_ptr<RadialProjectionResult<T>>>{
-                std::make_shared<RadialProjectionResult<T>>(spectra)...},
-            t);
+        saverHDF5->save(lastMeas,
+                        std::vector<std::shared_ptr<RadialProjectionResult<T>>>{
+                            std::make_shared<RadialProjectionResult<T>>(spectra)...},
+                        t);
 #else
         throw(
             UseHDF5ButNotCompiled("Call to use HDF5 for the measurementsIO output, but compiled without HDF5 option."));
