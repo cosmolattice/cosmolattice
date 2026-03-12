@@ -15,10 +15,10 @@
 #include "TempLat/lattice/algebra/helpers/getngrid.h"
 #include "TempLat/lattice/algebra/complexalgebra/asfourier.h"
 #include "TempLat/lattice/algebra/constants/symbols.h"
+#include "TempLat/lattice/algebra/adapter/momentuminterpolator.h"
 
-#include "CosmoInterface/definitions/multiplicity.h"
+#include "TempLat/lattice/algebra/coordinates/momentummultiplicity.h"
 #include "CosmoInterface/definitions/phaseBunchDavies.h"
-#include "CosmoInterface/definitions/interpolator.h"
 
 namespace TempLat
 {
@@ -33,7 +33,6 @@ namespace TempLat
    *  whose amplitudes follow a Gaussian random distribution with variance given by and external power spectrum
    * function.
    */
-
   template <typename T> class ExternalPowerSpectrumInitializer
   {
   public:
@@ -80,20 +79,14 @@ namespace TempLat
     }
 
     template <class Model, size_t NDim>
-    auto getInputFluctuationsNormTypeI(const InterpolatorFunction<NDim, T> &PSinterp, Model &model, Field<T, NDim> f,
+    auto getInputFluctuationsNormTypeI(const MomentumInterpolator<T, NDim> &PSinterp, Model &model, Field<T, NDim> f,
                                        T kCutOff) const
     {
-
-      if (NDim != 3)
-        throw(PSTypeINotSupportedForNDIMDifferentFrom3(
-            "Type I external power spectrum initialization currently implemented only for NDim = 3."));
-
       FourierSite<NDim> ntilde(f.getToolBox());
       auto k = ntilde.norm() * f.getKIR();
       auto Hcut = heaviside(kCutOff - k);
 
-      auto binP = getTypeIBinCounts(f);
-      auto invmult = MultiplicityHelper<T, NDim>(GetNGrid::get(f), binP);
+      auto invmult = MomentumMultiplicity<T, NDim>(f.getToolBox());
 
       return Hcut * (model.omegaStar / model.fStar) * (T(1) / pow(model.aI, T(1.5))) *
              pow(lSide / pow<2>(f.getDx()), T(1.5)) *
@@ -101,7 +94,7 @@ namespace TempLat
     }
 
     template <class Model, size_t NDim>
-    auto getInputFluctuationsNormTypeII(const InterpolatorFunction<NDim, T> &PSinterp, Model &model, Field<T, NDim> f,
+    auto getInputFluctuationsNormTypeII(const MomentumInterpolator<T, NDim> &PSinterp, Model &model, Field<T, NDim> f,
                                         T kCutOff) const
     {
       FourierSite<NDim> ntilde(f.getToolBox());
@@ -113,7 +106,7 @@ namespace TempLat
     }
 
     template <class Model, size_t NDim>
-    auto getInputFluctuationsTypeI(const InterpolatorFunction<NDim, T> &PSinterp, Model &model, Field<T, NDim> f,
+    auto getInputFluctuationsTypeI(const MomentumInterpolator<T, NDim> &PSinterp, Model &model, Field<T, NDim> f,
                                    const std::string &mySeed, T kCutOff) const
     {
       auto norm = getInputFluctuationsNormTypeI<Model, NDim>(PSinterp, model, f, kCutOff);
@@ -121,7 +114,7 @@ namespace TempLat
     }
 
     template <class Model, size_t NDim>
-    auto getInputFluctuationsTypeII(const InterpolatorFunction<NDim, T> &PSinterp, Model &model, Field<T, NDim> f,
+    auto getInputFluctuationsTypeII(const MomentumInterpolator<T, NDim> &PSinterp, Model &model, Field<T, NDim> f,
                                     const std::string &mySeed, T kCutOff) const
     {
       auto norm = getInputFluctuationsNormTypeII<Model, NDim>(PSinterp, model, f, kCutOff);
@@ -135,8 +128,8 @@ namespace TempLat
       std::vector<T> kIN, PSfld, PSmom;
       readSpectrumFile(model, str, kIN, PSfld, PSmom);
 
-      InterpolatorFunction<NDim, T> PSinterpFld(kIN, PSfld, f.getToolBox(), f.getKIR());
-      InterpolatorFunction<NDim, T> PSinterpMom(kIN, PSmom, f.getToolBox(), f.getKIR());
+      MomentumInterpolator<T, NDim> PSinterpFld(kIN, PSfld, f.getToolBox(), f.getKIR());
+      MomentumInterpolator<T, NDim> PSinterpMom(kIN, PSmom, f.getToolBox(), f.getKIR());
 
       if (PSType == 1) {
         auto fLeft = getInputFluctuationsTypeI<Model, NDim>(PSinterpFld, model, f, "Random left", kCutOff);
@@ -168,17 +161,11 @@ namespace TempLat
     template <class Model, size_t NDim>
     auto getInputFluctuationsNormTypeI(Model &model, Field<T, NDim> f, T kCutOff) const
     {
-
-      if (NDim != 3)
-        throw(PSTypeINotSupportedForNDIMDifferentFrom3(
-            "Type I external power spectrum initialization currently implemented only for NDim = 3."));
-
       FourierSite<NDim> ntilde(f.getToolBox());
       auto k = ntilde.norm() * f.getKIR();
       auto Hcut = heaviside(kCutOff - k);
 
-      auto binP = getTypeIBinCounts(f);
-      auto invmult = MultiplicityHelper<T, NDim>(GetNGrid::get(f), binP);
+      auto invmult = MomentumMultiplicity<T, NDim>(f.getToolBox());
 
       return Hcut * safeSqrt(T(4) * Constants::pi<T> * pow(ntilde.norm(), T(2)) * invmult) *
              (T(1) / pow(model.aI, T(1.5))) * pow(lSide / pow<2>(f.getDx()), T(1.5)) * sqrt(0.5);
@@ -270,43 +257,6 @@ namespace TempLat
 
     T lSide;
     std::string baseSeed;
-
-    template <size_t NDim> std::vector<int> getTypeIBinCounts(const Field<T, NDim> &f) const
-    {
-
-      const auto N = GetNGrid::get(f);
-      const auto Nh = N / 2;
-
-      std::vector<int> binP(static_cast<int>(std::sqrt(T(3)) * T(Nh)) + 1, 0);
-
-      std::vector<int> sq(Nh + 1);
-      for (int a = 0; a <= Nh; ++a)
-        sq[a] = a * a;
-
-      for (int i = 0; i <= Nh; ++i) {
-        const int i2 = sq[i];
-        const int iEdge = (i == 0 || i == Nh);
-
-        for (int j = 0; j <= Nh; ++j) {
-          const int j2 = sq[j];
-          const int jEdge = (j == 0 || j == Nh);
-
-          for (int k = 0; k <= Nh; ++k) {
-            if (i == 0 && j == 0 && k == 0) continue;
-
-            const int n2 = i2 + j2 + sq[k];
-            const int bin = static_cast<int>(std::sqrt(T(n2)) + T(0.5)) - 1;
-
-            const int kEdge = (k == 0 || k == Nh);
-            const int nEdge = iEdge + jEdge + kEdge;
-
-            binP[bin] += (8 >> nEdge);
-          }
-        }
-      }
-
-      return binP;
-    }
   };
 
   struct FluctuationsGeneratorTester {
