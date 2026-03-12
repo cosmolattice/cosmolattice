@@ -119,13 +119,14 @@ namespace TempLat
       auto keffm2 = Total(i, 1, Model::NDim, norm2(keffm(i)));
 
       auto e_basis = make_templatvector(0.25, 0.25, std::numbers::sqrt2 / 4.0);
-      auto edotk = Total(i, 1, 3, e_basis(i) * keffm(i));
 
-      auto lambda1 = MakeVector(i, 1, 3, e_basis(i) - edotk * (1.0 / keffm2) * conj(keffm(i)));
+      auto edotk = Total(i, 1, 3, e_basis(i - 1) * keffm(i));
+
+      auto lambda1 = MakeVector(i, 1, 3, e_basis(i - 1) - edotk * (1.0 / keffm2) * conj(keffm(i)));
       auto invNLambda1 = safeDivide(1.0, sqrt(Total(i, 1, Model::NDim, norm2(lambda1(i)))));
 
       auto lambda2 =
-          MakeVector(i, 1, 3, Total(j, 1, 3, Total(k, 1, 3, Symbols::epsilon(i, j, k) * e_basis(j) * keffm(k))));
+          MakeVector(i, 1, 3, Total(j, 1, 3, Total(k, 1, 3, Symbols::epsilon(i, j, k) * e_basis(j - 1) * keffm(k))));
       auto invNLambda2 = safeDivide(1.0, sqrt(Total(i, 1, Model::NDim, norm2(lambda2(i)))));
 
       ForLoop(i, 1, Model::NDim,
