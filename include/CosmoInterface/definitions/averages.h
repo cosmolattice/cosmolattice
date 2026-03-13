@@ -88,45 +88,43 @@ namespace TempLat
       model.potAvI = average(Potential::potential(model));
       model.potAvSI = average(Potential::potential(model));
 
-      if (model.Ns > 0) {
+      if constexpr (Model::Ns > 0) {
         model.pi2AvI = Averages::pi2S(model);
         model.pi2AvSI = model.pi2AvI;
         model.grad2AvI = Averages::grad2S(model);
       }
-      if (Model::NU1 > 0) {
+      if constexpr (Model::NU1 > 0) {
         model.U1pi2AvI = Averages::pi2U1(model);
         model.U1pi2AvSI = model.U1pi2AvI;
         model.U1Mag2AvI = Averages::B2U1(model);
       }
-      if (Model::NSU2 > 0) {
+      if constexpr (Model::NSU2 > 0) {
         model.SU2pi2AvI = Averages::pi2SU2(model);
         model.SU2pi2AvSI = model.SU2pi2AvI;
         model.SU2Mag2AvI = Averages::B2SU2(model);
       }
 
-      if (Model::NCs > 0) {
+      if constexpr (Model::NCs > 0) {
         model.CSpi2AvI = Averages::pi2CS(model);
         model.CSpi2AvSI = model.CSpi2AvI;
         model.CSgrad2AvI = Averages::grad2CS(model);
       }
-      if (Model::NSU2Doublet > 0) {
+      if constexpr (Model::NSU2Doublet > 0) {
         model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model);
         model.SU2DblPi2AvSI = model.SU2DblPi2AvI;
         model.SU2DblGrad2AvI = Averages::grad2SU2Doublet(model);
       }
 
       if constexpr (Model::IsNonMinimallyCoupled) {
-        ForLoop(i, 0, Model::Ns - 1,
-          model.fld2AvSI_i(i) = average(pow<2>(model.fldS(i)));
-          model.grad2AvSI_i(i) = average(FieldFunctionals::grad2S(model, i));
-          model.pi2AvSI_i(i) = average(FieldFunctionals::pi2S(model, i));
+        ForLoop(i, 0, Model::Ns - 1, model.fld2AvSI_i(i) = average(pow<2>(model.fldS(i)));
+                model.grad2AvSI_i(i) = average(FieldFunctionals::grad2S(model, i));
+                model.pi2AvSI_i(i) = average(FieldFunctionals::pi2S(model, i));
 
-          model.grad2AvSI_i(i) = 0.5 * pow<-2>(model.aI) * model.grad2AvSI_i(i);
-          model.pi2AvSI_i(i) = 0.5 * pow<-6>(model.aI) * model.pi2AvSI_i(i);
+                model.grad2AvSI_i(i) = 0.5 * pow<-2>(model.aI) * model.grad2AvSI_i(i);
+                model.pi2AvSI_i(i) = 0.5 * pow<-6>(model.aI) * model.pi2AvSI_i(i);
 
-          model.fldPiAvSI(i) = average(model.fldS(i) * model.piS(i));
-          model.fldVpAvSI(i) = average(model.fldS(i) * Potential::derivS(model, i));
-        );
+                model.fldPiAvSI(i) = average(model.fldS(i) * model.piS(i));
+                model.fldVpAvSI(i) = average(model.fldS(i) * Potential::derivS(model, i)););
       }
     }
   };

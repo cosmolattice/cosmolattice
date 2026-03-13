@@ -68,12 +68,12 @@ namespace TempLat
         // We start by computing the kicks (pi_0 --> pi_1/2):
         if (expansion && !fixedBackground) kickScaleFactorHalf(model, w); // only if self-consistent expansion
 
-        if (model.Ns > 0) kickScalar(model, w);
+        if constexpr (Model::Ns > 0) kickScalar(model, w);
         if (model.fldGWs != nullptr) kickGWs(model, w);
-        if (model.NCs > 0) kickCS(model, w);
-        if (model.NSU2Doublet > 0) kickSU2Doublet(model, w);
-        if (model.NU1 > 0) kickU1Vector(model, w);
-        if (model.NSU2 > 0) kickSU2Vector(model, w);
+        if constexpr (Model::NCs > 0) kickCS(model, w);
+        if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, w);
+        if constexpr (Model::NU1 > 0) kickU1Vector(model, w);
+        if constexpr (Model::NSU2 > 0) kickSU2Vector(model, w);
 
         if (expansion) {
           if (!fixedBackground) storeMomentaAverages(model);
@@ -82,23 +82,23 @@ namespace TempLat
           driftScaleFactor(model, tMinust0 + model.dt, w);
         }
 
-        if (model.Ns > 0) driftScalar(model, w);
+        if constexpr (Model::Ns > 0) driftScalar(model, w);
         if (model.fldGWs != nullptr) driftGWs(model, w);
-        if (model.NCs > 0) driftCS(model, w);
-        if (model.NSU2Doublet > 0) driftSU2Doublet(model, w);
-        if (model.NU1 > 0) driftU1Vector(model, w);
-        if (model.NSU2 > 0) driftSU2Vector(model, w);
+        if constexpr (Model::NCs > 0) driftCS(model, w);
+        if constexpr (Model::NSU2Doublet > 0) driftSU2Doublet(model, w);
+        if constexpr (Model::NU1 > 0) driftU1Vector(model, w);
+        if constexpr (Model::NSU2 > 0) driftSU2Vector(model, w);
 
         if (expansion && !fixedBackground) storeFieldsAverages(model);
 
         // Now we compute the second kick (pi_1/2 --> pi_1)
 
-        if (model.Ns > 0) kickScalar(model, w);
+        if constexpr (Model::Ns > 0) kickScalar(model, w);
         if (model.fldGWs != nullptr) kickGWs(model, w);
-        if (model.NCs > 0) kickCS(model, w);
-        if (model.NSU2Doublet > 0) kickSU2Doublet(model, w);
-        if (model.NU1 > 0) kickU1Vector(model, w);
-        if (model.NSU2 > 0) kickSU2Vector(model, w);
+        if constexpr (Model::NCs > 0) kickCS(model, w);
+        if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, w);
+        if constexpr (Model::NU1 > 0) kickU1Vector(model, w);
+        if constexpr (Model::NSU2 > 0) kickSU2Vector(model, w);
 
         if (expansion && !fixedBackground) {
           storeMomentaAverages(model);
@@ -233,20 +233,20 @@ namespace TempLat
 
     template <class Model> void storeMomentaAverages(Model &model)
     {
-      if (Model::Ns > 0) model.pi2AvI = Averages::pi2S(model);
-      if (Model::NCs > 0) model.CSpi2AvI = Averages::pi2CS(model);
-      if (Model::NSU2Doublet > 0) model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model);
-      if (Model::NU1 > 0) model.U1pi2AvI = Averages::pi2U1(model);
-      if (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model);
+      if constexpr (Model::Ns > 0) model.pi2AvI = Averages::pi2S(model);
+      if constexpr (Model::NCs > 0) model.CSpi2AvI = Averages::pi2CS(model);
+      if constexpr (Model::NSU2Doublet > 0) model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model);
+      if constexpr (Model::NU1 > 0) model.U1pi2AvI = Averages::pi2U1(model);
+      if constexpr (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model);
     }
 
     template <class Model> void storeFieldsAverages(Model &model)
     {
-      if (Model::Ns > 0) model.grad2AvI = Averages::grad2S(model);
-      if (model.NCs > 0) model.CSgrad2AvI = Averages::grad2CS(model);
-      if (model.NSU2Doublet > 0) model.SU2DblGrad2AvI = Averages::grad2SU2Doublet(model);
-      if (Model::NU1 > 0) model.U1Mag2AvI = Averages::B2U1(model);
-      if (Model::NSU2 > 0) model.SU2Mag2AvI = Averages::B2SU2(model);
+      if constexpr (Model::Ns > 0) model.grad2AvI = Averages::grad2S(model);
+      if constexpr (Model::NCs > 0) model.CSgrad2AvI = Averages::grad2CS(model);
+      if constexpr (Model::NSU2Doublet > 0) model.SU2DblGrad2AvI = Averages::grad2SU2Doublet(model);
+      if constexpr (Model::NU1 > 0) model.U1Mag2AvI = Averages::B2U1(model);
+      if constexpr (Model::NSU2 > 0) model.SU2Mag2AvI = Averages::B2SU2(model);
       model.potAvI = average(Potential::potential(model));
     }
 

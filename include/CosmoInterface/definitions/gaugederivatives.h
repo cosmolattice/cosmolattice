@@ -108,7 +108,7 @@ namespace TempLat
     static auto SU2sForSU2DoubletCovDerivs(Model &model, Tag<N> t,
                                            Tag<I> i) // N is the matter index and i is the spatial dimension
     {
-      if (Model::NSU2 > 0 && N > 0)
+      if constexpr (Model::NSU2 > 0 && N > 0)
         throw MoreThanOneDoublet("As implemented now, the equations are only consistent for one doublet in the "
                                  "presence of SU2 gauge fields (or several but the same charge). The reason is that "
                                  "one needs to correct for the charge inside the link, as in the U1 case. Abort.");

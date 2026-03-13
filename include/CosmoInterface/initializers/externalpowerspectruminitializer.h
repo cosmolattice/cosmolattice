@@ -226,9 +226,8 @@ namespace TempLat
               tmpP(k).inFourierSpace() = Total(
                   j, 1, Model::NDim, ((k == j ? T(1) : T(0)) - keffm(k) * keffm(j) / keffm2) * p(j).inFourierSpace()););
 
-      auto phaseA = BDPhasePi2A<T, Model::NDim>(model.getToolBox(), model.fldS(0_c).getKIR(), model.aDotI);
-
-      auto phaseE = BDPhasePi2E<T, Model::NDim>(model.getToolBox(), model.fldS(0_c).getKIR(), model.aDotI);
+      auto phaseA = BDPhasePi2A<T, Model::NDim>(model.getToolBox(), model.kIR, model.aDotI);
+      auto phaseE = BDPhasePi2E<T, Model::NDim>(model.getToolBox(), model.kIR, model.aDotI);
 
       /* Initialization of Gauge Field */
       // Sets the purely transverse initial vector field with its Bunch-Davis amplitude and appropiate phase

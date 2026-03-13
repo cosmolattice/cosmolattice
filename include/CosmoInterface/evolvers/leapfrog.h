@@ -54,12 +54,12 @@ namespace TempLat
       // a time step and we need to evolve them only by another half time step.
       T weight = synced ? 0.5 : 1.0;
 
-      if (model.Ns > 0) kickScalar(model, weight);
+      if constexpr (Model::Ns > 0) kickScalar(model, weight);
       if (model.fldGWs != nullptr) kickGWs(model, weight);
-      if (model.NCs > 0) kickCS(model, weight);
-      if (model.NSU2Doublet > 0) kickSU2Doublet(model, weight);
-      if (model.NU1 > 0) kickU1Vector(model, weight);
-      if (model.NSU2 > 0) kickSU2Vector(model, weight);
+      if constexpr (Model::NCs > 0) kickCS(model, weight);
+      if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, weight);
+      if constexpr (Model::NU1 > 0) kickU1Vector(model, weight);
+      if constexpr (Model::NSU2 > 0) kickSU2Vector(model, weight);
 
       if (expansion) {
         if (!fixedBackground) {
@@ -74,12 +74,12 @@ namespace TempLat
         driftScaleFactor(model, tMinust0 + model.dt);
       }
 
-      if (model.Ns > 0) driftScalar(model);
+      if constexpr (Model::Ns > 0) driftScalar(model);
       if (model.fldGWs != nullptr) driftGWs(model);
-      if (model.NCs > 0) driftCS(model);
-      if (model.NSU2Doublet > 0) driftSU2Doublet(model);
-      if (model.NU1 > 0) driftU1Vector(model);
-      if (model.NSU2 > 0) driftSU2Vector(model);
+      if constexpr (Model::NCs > 0) driftCS(model);
+      if constexpr (Model::NSU2Doublet > 0) driftSU2Doublet(model);
+      if constexpr (Model::NU1 > 0) driftU1Vector(model);
+      if constexpr (Model::NSU2 > 0) driftSU2Vector(model);
 
       if (expansion && !fixedBackground) storeFieldsAverages(model);
 
@@ -92,19 +92,19 @@ namespace TempLat
     template <class Model> void sync(Model &model, T tMinust0)
     {
       if (!synced) {
-        if (model.Ns > 0) kickScalar(model, 0.5);
+        if constexpr (Model::Ns > 0) kickScalar(model, 0.5);
         if (model.fldGWs != nullptr) kickGWs(model, 0.5);
-        if (model.NCs > 0) kickCS(model, 0.5);
-        if (model.NSU2Doublet > 0) kickSU2Doublet(model, 0.5);
-        if (model.NU1 > 0) kickU1Vector(model, 0.5);
-        if (model.NSU2 > 0) kickSU2Vector(model, 0.5);
+        if constexpr (Model::NCs > 0) kickCS(model, 0.5);
+        if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, 0.5);
+        if constexpr (Model::NU1 > 0) kickU1Vector(model, 0.5);
+        if constexpr (Model::NSU2 > 0) kickSU2Vector(model, 0.5);
 
         if (expansion) {
-          if (Model::Ns > 0) model.pi2AvI = Averages::pi2S(model);                         // at t
-          if (Model::NCs > 0) model.CSpi2AvI = Averages::pi2CS(model);                     // at t
-          if (Model::NSU2Doublet > 0) model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model); // at t
-          if (Model::NU1 > 0) model.U1pi2AvI = Averages::pi2U1(model);                     // at t
-          if (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model);                  // at t
+          if constexpr (Model::Ns > 0) model.pi2AvI = Averages::pi2S(model);                         // at t
+          if constexpr (Model::NCs > 0) model.CSpi2AvI = Averages::pi2CS(model);                     // at t
+          if constexpr (Model::NSU2Doublet > 0) model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model); // at t
+          if constexpr (Model::NU1 > 0) model.U1pi2AvI = Averages::pi2U1(model);                     // at t
+          if constexpr (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model);                  // at t
           if (!fixedBackground)
             model.aDotI = model.aDotSI + model.dt / 2.0 * ScaleFactorKernels::get(model);
           else
@@ -225,28 +225,28 @@ namespace TempLat
 
     template <class Model> void storeMomentaAverages(Model &model)
     {
-      if (Model::Ns > 0) {
+      if constexpr (Model::Ns > 0) {
         model.pi2AvSIM = model.pi2AvSI;                        // at t-dt/2
         model.pi2AvSI = Averages::pi2S(model);                 // at t+dt/2
         model.pi2AvI = 0.5 * (model.pi2AvSIM + model.pi2AvSI); // at t (average)
       }
 
-      if (Model::NCs > 0) {
+      if constexpr (Model::NCs > 0) {
         model.CSpi2AvSIM = model.CSpi2AvSI;                          // at t-dt/2
         model.CSpi2AvSI = Averages::pi2CS(model);                    // at t+dt/2
         model.CSpi2AvI = 0.5 * (model.CSpi2AvSIM + model.CSpi2AvSI); // at t (average)
       }
-      if (Model::NSU2Doublet > 0) {
+      if constexpr (Model::NSU2Doublet > 0) {
         model.SU2DblPi2AvSIM = model.SU2DblPi2AvSI;                              // at t-dt/2
         model.SU2DblPi2AvSI = Averages::pi2SU2Doublet(model);                    // at t+dt/2
         model.SU2DblPi2AvI = 0.5 * (model.SU2DblPi2AvSIM + model.SU2DblPi2AvSI); // at t (average)
       }
-      if (Model::NU1 > 0) {
+      if constexpr (Model::NU1 > 0) {
         model.U1pi2AvSIM = model.U1pi2AvSI;                          // at t-dt/2
         model.U1pi2AvSI = Averages::pi2U1(model);                    // at t+dt/2
         model.U1pi2AvI = 0.5 * (model.U1pi2AvSIM + model.U1pi2AvSI); // at t (average)
       }
-      if (Model::NSU2 > 0) {
+      if constexpr (Model::NSU2 > 0) {
         model.SU2pi2AvSIM = model.SU2pi2AvSI;                           // at t-dt/2
         model.SU2pi2AvSI = Averages::pi2SU2(model);                     // at t+dt/2
         model.SU2pi2AvI = 0.5 * (model.SU2pi2AvSIM + model.SU2pi2AvSI); // at t (average)
@@ -255,12 +255,12 @@ namespace TempLat
 
     template <class Model> void storeFieldsAverages(Model &model)
     {
-      if (Model::Ns > 0) model.grad2AvI = Averages::grad2S(model);                        // at t
-      if (model.NCs > 0) model.CSgrad2AvI = Averages::grad2CS(model);                     // at t
-      if (model.NSU2Doublet > 0) model.SU2DblGrad2AvI = Averages::grad2SU2Doublet(model); // at t
-      if (Model::NU1 > 0) model.U1Mag2AvI = Averages::B2U1(model);                        // at t
-      if (Model::NSU2 > 0) model.SU2Mag2AvI = Averages::B2SU2(model);                     // at t
-      model.potAvI = average(Potential::potential(model));                                // at t
+      if constexpr (Model::Ns > 0) model.grad2AvI = Averages::grad2S(model);                         // at t
+      if constexpr (Model::NCs > 0) model.CSgrad2AvI = Averages::grad2CS(model);                     // at t
+      if constexpr (Model::NSU2Doublet > 0) model.SU2DblGrad2AvI = Averages::grad2SU2Doublet(model); // at t
+      if constexpr (Model::NU1 > 0) model.U1Mag2AvI = Averages::B2U1(model);                         // at t
+      if constexpr (Model::NSU2 > 0) model.SU2Mag2AvI = Averages::B2SU2(model);                      // at t
+      model.potAvI = average(Potential::potential(model));                                           // at t
     }
 
   private:

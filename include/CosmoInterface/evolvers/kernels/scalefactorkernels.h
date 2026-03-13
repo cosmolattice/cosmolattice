@@ -41,23 +41,23 @@ namespace TempLat
         T EmagSU2 = 0;
         T EelSU2 = 0;
 
-        if (model.Ns > 0) {
+        if constexpr (Model::Ns > 0) {
           Eks = Energies::kineticS(model);
           Egs = Energies::gradientS(model);
         }
-        if (model.NCs > 0) {
+        if constexpr (Model::NCs > 0) {
           Ekcs = Energies::kineticCS(model);
           Egcs = Energies::gradientCS(model);
         }
-        if (model.NSU2Doublet > 0) {
+        if constexpr (Model::NSU2Doublet > 0) {
           EkSU2Dbl = Energies::kineticSU2Doublet(model);
           EgSU2Dbl = Energies::gradientSU2Doublet(model);
         }
-        if (model.NU1 > 0) {
+        if constexpr (Model::NU1 > 0) {
           EelU1 = Energies::electricU1(model);
           EmagU1 = Energies::magneticU1(model);
         }
-        if (model.NSU2 > 0) {
+        if constexpr (Model::NSU2 > 0) {
           EelSU2 = Energies::electricSU2(model);
           EmagSU2 = Energies::magneticSU2(model);
         }
@@ -87,23 +87,23 @@ namespace TempLat
       T EmagSU2 = 0;
       T EelSU2 = 0;
 
-      if (model.Ns > 0) {
+      if constexpr (Model::Ns > 0) {
         Eks = Energies::kineticSSI(model);  //  scalar singlet, kinetic energy
         Egs = Energies::gradientSSI(model); //  scalar singlet, gradient energy
       }
-      if (model.NCs > 0) {
+      if constexpr (Model::NCs > 0) {
         Ekcs = Energies::kineticCSSI(model);  // complex scalar, kinetic energy
         Egcs = Energies::gradientCSSI(model); // complex scalar, gradient energy
       }
-      if (model.NSU2Doublet > 0) {
+      if constexpr (Model::NSU2Doublet > 0) {
         EkSU2Dbl = Energies::kineticSU2DoubletSI(model);  // SU2 doublet, kinetic energy
         EgSU2Dbl = Energies::gradientSU2DoubletSI(model); // SU2 doublet, gradient energy
       }
-      if (model.NU1 > 0) {
+      if constexpr (Model::NU1 > 0) {
         EelU1 = Energies::electricU1SI(model);  // U1 gauge fields, electric energy
         EmagU1 = Energies::magneticU1SI(model); // U1 gauge fields, magnetic energy
       }
-      if (model.NSU2 > 0) {
+      if constexpr (Model::NSU2 > 0) {
         EelSU2 = Energies::electricSU2SI(model);  // SU2 gauge fields, electric energy
         EmagSU2 = Energies::magneticSU2SI(model); // SU2 gauge fields, magnetic energy
       }
