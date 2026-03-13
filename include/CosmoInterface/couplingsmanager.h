@@ -72,10 +72,10 @@ namespace TempLat
 
     // The operator () is used to access the effective charge g*Q. Its first argument specifies the matter number of the
     // matter field and the second refers to the gauge field.
-    template <int nmat, int ng> double operator()(Tag<nmat>, Tag<ng>) const
+    template <int nmat, int ng> auto operator()(Tag<nmat>, Tag<ng>) const
     {
       if constexpr (sizeof...(Bools) == 0 || NGauge == 0) {
-        return 0.0;
+        return ZeroType();
       } else {
         return effectiveCharges[nmat * NGauge + ng];
       }
@@ -117,9 +117,9 @@ namespace TempLat
     void setEffectiveCharges(const std::vector<double> &vec, std::vector<double> couplings) {}
 
     static constexpr size_t howManyCouples() { return 0; }
-    template <int nmat, int ng> double operator()(Tag<nmat>, Tag<ng>) const { return 0; }
+    template <int nmat, int ng> ZeroType operator()(Tag<nmat>, Tag<ng>) const { return {}; }
 
-    template <int ng> double coupling(Tag<ng>) const { return 0; }
+    template <int ng> ZeroType coupling(Tag<ng>) const { return {}; }
 
     template <int nmat, int ng> static constexpr bool couples(Tag<nmat>, Tag<ng>) { return false; }
 
