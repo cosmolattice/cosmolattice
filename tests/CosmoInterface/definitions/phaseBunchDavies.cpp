@@ -12,13 +12,11 @@
 namespace TempLat
 {
 
-  template <size_t NDim>
-  struct PhaseBunchDaviesTester {
+  template <size_t NDim> struct PhaseBunchDaviesTester {
     static void Test(TDDAssertion &tdd);
   };
 
-  template <size_t NDim>
-  void PhaseBunchDaviesTester<NDim>::Test(TDDAssertion &tdd)
+  template <size_t NDim> void PhaseBunchDaviesTester<NDim>::Test(TDDAssertion &tdd)
   {
     const ptrdiff_t nGrid = 32, nGhost = 2;
     auto toolBox = MemoryToolBox<NDim>::makeShared(nGrid, nGhost);
@@ -27,8 +25,8 @@ namespace TempLat
     const double aI = 1.0;
 
     // Test both gauge=true (BDPhasePi2A) and gauge=false (BDPhasePi2E)
-    BDPhasePi2A<NDim, double> phaseA(toolBox, kIR, aI);
-    BDPhasePi2E<NDim, double> phaseE(toolBox, kIR, aI);
+    BDPhasePi2A<double, NDim> phaseA(toolBox, kIR, aI);
+    BDPhasePi2E<double, NDim> phaseE(toolBox, kIR, aI);
 
     // Assign phases to fields — this exercises the variadic eval path
     Field<double, NDim> fieldA("fieldA", toolBox);
@@ -71,8 +69,7 @@ namespace TempLat
 
       bool different = false;
       for (ptrdiff_t i = 0; i < localFourier; ++i) {
-        if (!AlmostEqual(hostA(i), hostE(i), 1e-2))
-          different = true;
+        if (!AlmostEqual(hostA(i), hostE(i), 1e-2)) different = true;
       }
       tdd.verify(different, "BDPhasePi2A and BDPhasePi2E produce different phases");
     }
@@ -90,7 +87,7 @@ namespace TempLat
 
     // Verify determinism: creating the same phase twice gives identical results
     {
-      BDPhasePi2A<NDim, double> phaseA2(toolBox, kIR, aI);
+      BDPhasePi2A<double, NDim> phaseA2(toolBox, kIR, aI);
       Field<double, NDim> fieldA2("fieldA2", toolBox);
       fieldA2.inFourierSpace() = phaseA2;
 
@@ -116,4 +113,4 @@ namespace
 {
   TempLat::TDDContainer<TempLat::PhaseBunchDaviesTester<2>> test2d;
   TempLat::TDDContainer<TempLat::PhaseBunchDaviesTester<3>> test3d;
-}
+} // namespace

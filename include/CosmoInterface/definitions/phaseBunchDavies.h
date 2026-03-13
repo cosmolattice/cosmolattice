@@ -21,12 +21,12 @@
 namespace TempLat
 {
 
-  template <size_t NDim, typename T, bool gauge> class PhaseHelper : public DimensionCountRecorder<NDim>
+  template <typename T, size_t NDim, bool gauge> class BDPhaseHelper : public DimensionCountRecorder<NDim>
   {
   public:
     using ToolboxPtr = device::memory::host_ptr<MemoryToolBox<NDim>>;
 
-    PhaseHelper(ToolboxPtr pToolBox, T kIR, T aI)
+    BDPhaseHelper(ToolboxPtr pToolBox, T kIR, T aI)
         : DimensionCountRecorder<NDim>(SpaceStateType::Fourier), mLayout(pToolBox->mLayouts.getFourierSpaceLayout()),
           mkIR(kIR), maI(aI)
     {
@@ -71,22 +71,9 @@ namespace TempLat
     T maI;
   };
 
-  template <size_t NDim, typename T> using BDPhasePi2A = PhaseHelper<NDim, T, true>;
+  template <typename T, size_t NDim> using BDPhasePi2A = BDPhaseHelper<T, NDim, true>;
 
-  template <size_t NDim, typename T> using BDPhasePi2E = PhaseHelper<NDim, T, false>;
-
-  class PhaseTester
-  {
-  public:
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
+  template <typename T, size_t NDim> using BDPhasePi2E = BDPhaseHelper<T, NDim, false>;
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "TempLat/lattice/algebra/random/phase_test.h"
-#endif
 
 #endif
