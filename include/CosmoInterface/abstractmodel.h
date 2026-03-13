@@ -141,7 +141,7 @@ namespace TempLat
 
     AbstractModel(ParameterParser &parser, const LatticeParameters<T> &par,
                   device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, T pDt, std::string pName = "")
-        : ScalarBase<NDIM, T, NS>(toolBox, par), ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>(parser, toolBox, par),
+        : ScalarBase<NDIM, T, NS>(parser, toolBox, par), ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>(parser, toolBox, par),
           SU2DoubletSectorBase<NDIM, T, NSU2DOUBLET, SU2DOUBLETU1COUPLINGS, SU2DOUBLETSU2COUPLINGS>(parser, toolBox,
                                                                                                     par),
           ScalarU1AxionBase<T, SCALARU1AXIONCOUPLINGS>(parser), NonMinimalCouplingBase<T, NS, NONMINCOUPLINGS>(parser),
@@ -188,6 +188,13 @@ namespace TempLat
     }
 
     template <int N> auto getFluctuationRatio(Tag<N>) { return OneType(); }
+
+    InitialConditionsType::U1 getU1IC()
+    {
+      if (NC > 0) return InitialConditionsType::RandomWithMatter;
+      else if (NS > 0 && SCALARU1AXIONCOUPLINGS::howManyCouples() > 0) return InitialConditionsType::BunchDavisTransverseU1;
+      else return InitialConditionsType::PlaneWavesZeroB;
+    }
 
     // The "MemoryToolBox" is a shared variable between most instances of the program. It contains many useful
     // informations about

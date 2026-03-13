@@ -7,12 +7,15 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
+#include <array>
 #include <string>
 #include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
 #include "TempLat/lattice/field/collections/vectorfieldcollection.h"
 #include "TempLat/util/templatarray.h"
 #include "TempLat/util/rangeiteration/tag.h"
 #include "CosmoInterface/abstractmodel/exceptions.h"
+#include "TempLat/parameters/parameterparser.h"
+#include "TempLat/util/constants.h"
 #include "CosmoInterface/fieldsnumbering.h"
 #include "CosmoInterface/runparameters.h"
 
@@ -45,6 +48,9 @@ namespace TempLat
     // Effective masses
     TempLatArray<T, NS> masses2S;
 
+    // External initial power spectra
+    std::array<std::string, NS> extPS;
+
     // Potential stubs (to be overridden in derived models)
     template <int N> auto potDeriv(Tag<N>)
     {
@@ -64,6 +70,13 @@ namespace TempLat
         : isInitialized(toolBox->template initializeFFT<T>()), fldS("scalar", toolBox, par),
           piS("pi_scalar", toolBox, par)
     {
+    }
+
+    ScalarBase(ParameterParser &parser, device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, const LatticeParameters<T> &par)
+        : isInitialized(toolBox->template initializeFFT<T>()), fldS("scalar", toolBox, par),
+          piS("pi_scalar", toolBox, par)
+    {
+      ForLoop(i, 0, NS-1, {extPS[i] = parser.get<std::string>("ext_PS" + std::to_string(i), Constants::defaultString);});
     }
   };
 

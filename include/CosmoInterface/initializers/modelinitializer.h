@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/initializers/fluctuationsgenerator.h"
+#include "CosmoInterface/initializers/externalpowerspectruminitializer.h"
 #include "CosmoInterface/initializers/scalefactorinitializer.h"
 #include "CosmoInterface/initializers/scalarsingletinitializer.h"
 #include "CosmoInterface/initializers/gwsinitializer.h"
@@ -29,7 +30,10 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    template <class Model> ModelInitializer(Model &model, T pLSide, std::string pSeed) : fg(model, pLSide, pSeed) {}
+    template <class Model> ModelInitializer(Model &model, T pLSide, std::string pSeed) : 
+    fg(model, pLSide, pSeed),
+    extps(model, pLSide, pSeed)  
+    {}
 
     /**
      * @brief Initializes the model's fields and scale factor, according to the RunParameters and the model's field
@@ -44,7 +48,7 @@ namespace TempLat
       if (rPar.expansion) ScaleFactorInitializer::initializeScaleFactor(model, rPar);
 
       // Initialize scalar singlets:
-      if constexpr (Model::Ns > 0) ScalarSingletInitializer::initializeScalars(model, fg, rPar.kCutoff);
+      if constexpr (Model::Ns > 0) ScalarSingletInitializer::initializeScalars(model, fg, extps, rPar.kCutoff, rPar.powerSpectrumType);
 
       // Initialize GWs:
       if (model.fldGWs != nullptr) GWsInitializer::initializeGWs(model);
@@ -55,7 +59,7 @@ namespace TempLat
 
       // Initialize the U1 gauge fields and complex scalars:
       if constexpr (Model::NCs > 0 || Model::NU1 > 0)
-        U1Initializer::initializeU1(model, fg, rPar.kCutoff, extraFields);
+        U1Initializer::initializeU1(model, fg, extps, rPar.kCutoff, extraFields);
 
       Averages::setAllAverages(model);
       if constexpr (Model::IsNonMinimallyCoupled) model.RI = NonMinimalCoupling::R(model);
@@ -71,6 +75,8 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
     FluctuationsGenerator<T> fg;
+    ExternalPowerSpectrumInitializer<T> extps;
+
   };
 } // namespace TempLat
 

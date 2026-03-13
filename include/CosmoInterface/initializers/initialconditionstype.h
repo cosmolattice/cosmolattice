@@ -21,7 +21,7 @@ namespace TempLat {
     MakeException(NotAnICType);
 
     namespace  InitialConditionsType {
-        enum U1 {RandomWithMatter, PlaneWaves, PlaneWavesZeroB};
+        enum U1 {RandomWithMatter, PlaneWaves, PlaneWavesZeroB, BunchDavisTransverseU1};
 
     }
 
@@ -31,6 +31,7 @@ namespace TempLat {
         if(tmp=="RandomWithMatter"||tmp=="0") ICType=InitialConditionsType::RandomWithMatter;
         else if(tmp=="PlaneWaves"||tmp=="1") ICType=InitialConditionsType::PlaneWaves;
         else if(tmp=="PlaneWavesZeroB"||tmp=="2") ICType=InitialConditionsType::PlaneWavesZeroB;
+        else if(tmp=="BunchDavisTransverseU1"||tmp=="3") ICType=InitialConditionsType::BunchDavisTransverseU1;
         else if(tmp.empty()){}
         else throw(NotAnICType(tmp +" is not a valid initial condition for U(1), abort."));
         return in;
@@ -41,6 +42,7 @@ namespace TempLat {
         if(ICType == InitialConditionsType::RandomWithMatter) return "RandomWithMatter";
         else if(ICType == InitialConditionsType::PlaneWavesZeroB) return "PlaneWavesZeroB";
         else if(ICType == InitialConditionsType::PlaneWaves) return "PlaneWaves";
+        else if(ICType == InitialConditionsType::BunchDavisTransverseU1) return "BunchDavisTransverseU1";
         else return "";
     }
 
