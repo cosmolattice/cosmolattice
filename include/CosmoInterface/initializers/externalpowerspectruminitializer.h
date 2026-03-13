@@ -258,17 +258,6 @@ namespace TempLat
     T lSide;
     std::string baseSeed;
   };
-
-  struct FluctuationsGeneratorTester {
-#ifdef TEMPLATTEST
-    static inline void Test(TDDAssertion &tdd);
-#endif
-  };
-
 } // namespace TempLat
-
-#ifdef TEMPLATTEST
-#include "CosmoInterface/initializers/fluctuationsgenerator_test.h"
-#endif
 
 #endif
