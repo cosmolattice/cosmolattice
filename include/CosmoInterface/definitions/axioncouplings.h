@@ -29,7 +29,7 @@ namespace TempLat {
     /** \brief A class which computes the matter currents and charge densities of the gauge fields
      *
      *
-     * Unit test: make test-mattercurrents
+     * 
      **/
 
     class AxionCouplings {
@@ -43,11 +43,15 @@ namespace TempLat {
         template<class Model, int N, typename TT>
         static auto ScalarAxionSource(Model& model, Tag<N> n, TT tMinust0) {
 
-          	return  Total(a,0,Model::NU1-1,
-          					  IfElse(Model::ScalarU1AxionCouplings::couples(Tag<N>(),a),
-          							pow<2>(model.omegaStar)/(model.fStar * Model::MPl) * pow(model.aI,model.alpha - 1) * model.alphaLambda_SU1(n,a) * Total(i, 1, Model::NDim, electricField2(model.piU1(a), i) * magneticField4(magneticField(model.fldU1(a), i), i)),
-          					  ZeroType()
-          					  ));
+          	auto AxionCouplScalar =  Total(a,0,Model::NU1-1,
+                                        IfElse(Model::ScalarU1AxionCouplings::couples(Tag<N>(),a),
+                                                model.alphaLambda_SU1(n,a) * Total(i, 1, Model::NDim, electricField2(model.piU1(n), i) * magneticField4(magneticField(model.fldU1(n), i), i)),
+          					            ZeroType()
+                                        ));
+                
+            const double NonLinearSwitch = (tMinust0 > model.tNonLinearAxionU1) ? 1.0 : 0.0; 
+            
+            return AxionCouplScalar * NonLinearSwitch;
         }
 
         // Backward-compatible wrapper
@@ -80,9 +84,9 @@ namespace TempLat {
             				   		),
             				   		ZeroType()));
 
+            const double NonLinearSwitch = (tMinust0 > model.tNonLinearAxionU1) ? 1.0 : 0.0;
 
-
-            return (pow(model.aI, model.alpha - 3) * AxionCoupl1 + pow(model.aI, -1 + model.alpha) * AxionCoupl2);
+            return (pow(model.aI, model.alpha - 3) * AxionCoupl1 + pow(model.aI, -1 + model.alpha) * NonLinearSwitch * AxionCoupl2);
         }
 
         // Backward-compatible wrapper

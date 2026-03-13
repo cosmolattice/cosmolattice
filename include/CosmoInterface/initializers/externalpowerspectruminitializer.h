@@ -82,6 +82,9 @@ namespace TempLat
     auto getInputFluctuationsNormTypeI(const MomentumInterpolator<T, NDim> &PSinterp, Model &model, Field<T, NDim> f,
                                        T kCutOff) const
     {
+
+      if (NDim != 3) throw(PSTypeINotSupportedForNDIMDifferentFrom3("Initialization with PSType = 1 is only supported for NDim=3."));
+
       FourierSite<NDim> ntilde(f.getToolBox());
       auto k = ntilde.norm() * f.getKIR();
       auto Hcut = heaviside(kCutOff - k);
@@ -160,7 +163,10 @@ namespace TempLat
 
     template <class Model, size_t NDim>
     auto getInputFluctuationsNormTypeI(Model &model, Field<T, NDim> f, T kCutOff) const
-    {
+    { 
+
+      if (NDim != 3) throw(PSTypeINotSupportedForNDIMDifferentFrom3("Initialization with PSType = 1 is only supported for NDim=3."));
+
       FourierSite<NDim> ntilde(f.getToolBox());
       auto k = ntilde.norm() * f.getKIR();
       auto Hcut = heaviside(kCutOff - k);
