@@ -151,14 +151,15 @@ namespace TempLat
     {
       // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this
       // feature has yet not been tested)
-      if (NDIM != 3 && this->fldGWs != nullptr)
-        throw(RunParametersInconsistent(
-            "NDims must be equal to 3 to run GWs. If you want to run with NDim != 3, make sure withGWs = false."));
-      if (NU1FLDS > 1)
+      if constexpr (NDIM != 3)
+        if (this->fldGWs != nullptr)
+          throw(RunParametersInconsistent(
+              "NDims must be equal to 3 to run GWs. If you want to run with NDim != 3, make sure withGWs = false."));
+      if constexpr (NU1FLDS > 1)
         throw(NotTested("The physics interface has not been fully tested with NU1 > 1. Abort. If you want to go on "
                         "anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and "
                         "please report any problems."));
-      if (NSU2FLDS > 1)
+      if constexpr (NSU2FLDS > 1)
         throw(NotTested("The physics interface has not been fully tested with NSU2 > 1. Abort. If you want to go on "
                         "anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and "
                         "please report any problems."));
@@ -191,8 +192,8 @@ namespace TempLat
 
     InitialConditionsType::U1 getU1IC()
     {
-      if (NC > 0) return InitialConditionsType::RandomWithMatter;
-      else if (NS > 0 && SCALARU1AXIONCOUPLINGS::howManyCouples() > 0) return InitialConditionsType::BunchDavisTransverseU1;
+      if constexpr (NC > 0) return InitialConditionsType::RandomWithMatter;
+      else if constexpr (NS > 0 && SCALARU1AXIONCOUPLINGS::howManyCouples() > 0) return InitialConditionsType::BunchDavisTransverseU1;
       else return InitialConditionsType::PlaneWavesZeroB;
     }
 

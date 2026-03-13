@@ -71,7 +71,7 @@ namespace TempLat
       // exactly to 0 at all lattice points) This is done by imposing the Gauss constraint in momentum space, in which
       // the current (given by the complex scalars) sources the gauge fields.
 
-      if (model.NU1 > 0) {
+      if constexpr (Model::NU1 > 0) {
         FourierSite<Model::NDim> ntilde(model.getToolBox());
 
         size_t N = GetNGrid::get(model); // Reads N (number of points per dimension)

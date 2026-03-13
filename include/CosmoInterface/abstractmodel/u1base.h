@@ -25,7 +25,7 @@ namespace TempLat
 
     InitialConditionsType::U1 getU1IC()
     {
-      if (NC > 0)
+      if constexpr (NC > 0)
         return InitialConditionsType::RandomWithMatter;
       else
         return InitialConditionsType::PlaneWavesZeroB;
