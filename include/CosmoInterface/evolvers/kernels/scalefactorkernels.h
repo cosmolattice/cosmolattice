@@ -24,11 +24,14 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     ScaleFactorKernels() = default;
 
-    template <class Model> static auto get(Model &model)
+    template <class Model> static auto get(Model &model, KernelsTypes::EoM<typename Model::FloatType> eom)
     {
       using T = decltype(model.aI);
 
       if constexpr (not Model::IsNonMinimallyCoupled) {
+        
+        auto tMinust0 = eom.tMinust0;
+
         // The kernel of the scale factor is sourced by the different volume-averaged energy densities:
         T Eks = 0;
         T Egs = 0;
@@ -53,9 +56,10 @@ namespace TempLat
           EkSU2Dbl = Energies::kineticSU2Doublet(model);
           EgSU2Dbl = Energies::gradientSU2Doublet(model);
         }
-        if constexpr (Model::NU1 > 0) {
-          EelU1 = Energies::electricU1(model);
-          EmagU1 = Energies::magneticU1(model);
+        if constexpr (model.NU1 > 0) {
+          // For Axion U1: if system is evolved during linear regime Electric and Magnetic fields do not source the expansion. 
+          if(tMinust0 > model.tNonLinearAxionU1) EelU1 = Energies::electricU1(model);
+          if(tMinust0 > model.tNonLinearAxionU1) EmagU1 = Energies::magneticU1(model);
         }
         if constexpr (Model::NSU2 > 0) {
           EelSU2 = Energies::electricSU2(model);
@@ -113,6 +117,14 @@ namespace TempLat
              ((model.alpha - 2) * (Eks + Ekcs + EkSU2Dbl) + model.alpha * (Egs + Egcs + EgSU2Dbl) +
               (model.alpha - 1) * (EelU1 + EmagU1 + EelSU2 + EmagSU2) + (model.alpha + 1) * model.potAvSI);
     }
+
+    // Default function returns EoM kernels, for backward compatibility.
+    template <class Model> static auto get(Model &model)
+    {
+      using T = typename Model::FloatType;
+      return ScaleFactorKernels::get(model, KernelsTypes::EoM<T>());
+    }
+
   };
 } // namespace TempLat
 

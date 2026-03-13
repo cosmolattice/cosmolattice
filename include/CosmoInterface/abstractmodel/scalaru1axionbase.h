@@ -18,11 +18,13 @@ public:
     using ScalarU1AxionCouplings = SCALARU1AXIONCOUPLINGS;
 
     SCALARU1AXIONCOUPLINGS alphaLambda_SU1;
-    T InverseAxionLambda;
+    // Time to switch from linear to non-linear evolution for AxionU1 coupling
+    T tNonLinearAxionU1;
 
 protected:
     ScalarU1AxionBase(ParameterParser &parser)
-    {
+    {   
+		tNonLinearAxionU1 = parser.get<double>("tNonLinearAxionU1",-1.0);   
         auto gAxionU1 = parser.get<double, SCALARU1AXIONCOUPLINGS::nGauge>("gAxionU1", 1.0);
         auto AxionU1Charges = parser.get<double, SCALARU1AXIONCOUPLINGS::howManyCouples()>("alphaLambda_AxionU1", 1);
         alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);

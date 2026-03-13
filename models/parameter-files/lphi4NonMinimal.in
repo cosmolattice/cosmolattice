@@ -4,23 +4,28 @@ outputfile = ./
 #Evolution
 expansion = true
 evolver = RK2
-xis =10.0
+
+# Non-minimal coupliing to gravity 
+xis = 100.0
 
 #Lattice
-N = 32
+N = 128
 dt = 0.01
-kIR = 0.75
+kIR = 0.7
 
 #Times
 tOutputFreq = 0.1
 tOutputInfreq = 1
-tMax = 50
+tMax = 100
+
+#IC spectra
+ext_PS0 = none 
+ext_PS1 = none #Name of the file containing the external power spectrum measured in same units as omegaStar
 
 #IC
-baseSeed = 10
-kCutOff = 1.75
-initial_amplitudes = 7.42675e18 0
-initial_momenta = -6.2969e30 0
+initial_amplitudes = 5.6964e18 0
+initial_momenta = -4.86735e30 0
+
 
 #Model Parameters
 lambda = 9e-14

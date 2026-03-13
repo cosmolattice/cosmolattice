@@ -1,6 +1,6 @@
 #Output
-outputfile = ./test/
-print_headers = false
+outputfile = ./
+print_headers = true
 
 #Evolution
 expansion = true
@@ -14,21 +14,18 @@ kIR = .7
 #Times
 tOutputFreq = 1
 tOutputInfreq = 10
-tMax = 0.01
+tMax = 100
 
 
 #Spectra options
 PS_type = 1
 PS_version = 1
-ext_PS0 = none
-ext_PS1 = xi_50_Nafter_1_Nbefore_14_N256_M_5.dat
 
 #GWs
 GWprojectorType = 1
 withGWs=false
 
 #IC
-#kCutOff = 4
 initial_amplitudes = 5.6964e18 0  # homogeneous amplitudes in GeV
 initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
 

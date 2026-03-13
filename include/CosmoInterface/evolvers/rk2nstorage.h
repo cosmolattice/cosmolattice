@@ -99,12 +99,12 @@ namespace TempLat {
         }
 
 
-        bool deltaScaleFactor(Model& model, size_t i, KernelsTypes::EoM<T>){
+        bool deltaScaleFactor(Model& model, size_t i, KernelsTypes::EoM<T> kt){
               if (i == 0) {
-                  deltaADot = dt * ScaleFactorKernels::get(model);
+                  deltaADot = dt * ScaleFactorKernels::get(model, kt);
                  deltaA = dt * model.aDotI;
               } else {
-                  deltaADot = As[i] * deltaADot + dt * ScaleFactorKernels::get(model);
+                  deltaADot = As[i] * deltaADot + dt * ScaleFactorKernels::get(model, kt);
                   deltaA = As[i] * deltaA + dt * model.aDotI;
               }
               return true;

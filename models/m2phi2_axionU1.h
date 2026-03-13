@@ -34,8 +34,6 @@ namespace TempLat
 
 		typedef TempLat::CouplingsManager<NScalars, NU1Flds,true> ScalarU1AxionCouplings; // activates axion coupling U(1)-scalar
 
-	   	// typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings; // activates coupling U(1)-doublet
-    	//	typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds,true> SU2DoubletSU2Couplings; // activates coupling SU(2)-doublet
 	};
 
 	#define MODELNAME m2phi2_axionU1
@@ -77,7 +75,8 @@ template<class R>
         // --> Comment: Gauge couplings are specified in the parameters file (e.g. gU1s, gSU2s), and do not need to be defined here
 
 		mass = parser.get<double>("Mass");
-
+		
+		
         /////////
         // Rescaling for program variables
         /////////
