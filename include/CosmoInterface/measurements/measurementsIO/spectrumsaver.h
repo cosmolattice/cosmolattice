@@ -63,11 +63,10 @@ namespace TempLat
     {
       if (useHDF5) {
 #ifdef HAVE_HDF5
-        saverHDF5->save(
-            lastMeas,
-            std::vector<std::shared_ptr<RadialProjectionResult<T>>>{
-                std::make_shared<RadialProjectionResult<T>>(spectra)...},
-            t);
+        saverHDF5->save(lastMeas,
+                        std::vector<std::shared_ptr<RadialProjectionResult<T>>>{
+                            std::make_shared<RadialProjectionResult<T>>(spectra)...},
+                        t);
 #else
         throw(
             UseHDF5ButNotCompiled("Call to use HDF5 for the measurementsIO output, but compiled without HDF5 option."));

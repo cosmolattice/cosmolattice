@@ -18,11 +18,12 @@
 #include "TempLat/parameters/parameterparser.h"
 #include "CosmoInterface/runparameters.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-template <int NDIM, typename T, size_t NC, typename CSU1COUPLINGS>
-class ComplexScalarBase {
-public:
+  template <int NDIM, typename T, size_t NC, typename CSU1COUPLINGS> class ComplexScalarBase
+  {
+  public:
     static constexpr size_t NCs = NC;
     using CsU1Couplings = CSU1COUPLINGS;
 
@@ -49,28 +50,27 @@ public:
     // Potential stubs (to be overridden in derived models)
     template <int N> auto potDerivNormCS(Tag<N>)
     {
-        throw(PotentialDerivativeNotDefined("You tried to call potDerivNormCS N = " + std::to_string(N) +
-                                            ", which is not defined in your model. Abort."));
-        return ZeroType();
+      throw(PotentialDerivativeNotDefined("You tried to call potDerivNormCS N = " + std::to_string(N) +
+                                          ", which is not defined in your model. Abort."));
+      return ZeroType();
     }
     template <int N> auto potDeriv2NormCS(Tag<N>)
     {
-        throw(PotentialDerivativeNotDefined("You tried to call potDeriv2NormCS N = " + std::to_string(N) +
-                                            ", which is not defined in your model. Abort."));
-        return ZeroType();
+      throw(PotentialDerivativeNotDefined("You tried to call potDeriv2NormCS N = " + std::to_string(N) +
+                                          ", which is not defined in your model. Abort."));
+      return ZeroType();
     }
 
-protected:
-    ComplexScalarBase(ParameterParser &parser,
-                      device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
+  protected:
+    ComplexScalarBase(ParameterParser &parser, device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
                       const LatticeParameters<T> &par)
         : fldCS("cmplx_scalar", toolBox, par), piCS("pi_cmplx_scalar", toolBox, par)
     {
-        auto gU1s = parser.get<double, CSU1COUPLINGS::nGauge>("gU1s", 1.0);
-        auto CSU1Charges = parser.get<double, CSU1COUPLINGS::howManyCouples()>("CSU1_charges", 1);
-        gQ_CsU1.setEffectiveCharges(CSU1Charges, gU1s);
+      auto gU1s = parser.get<double, CSU1COUPLINGS::nGauge>("gU1s", 1.0);
+      auto CSU1Charges = parser.get<double, CSU1COUPLINGS::howManyCouples()>("CSU1_charges", 1);
+      gQ_CsU1.setEffectiveCharges(CSU1Charges, gU1s);
     }
-};
+  };
 
 } // namespace TempLat
 

@@ -31,8 +31,8 @@ namespace TempLat
     SpectrumSaverHDF5(FilesManager<NDim> &fm, const std::string &fn, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
         : filename(fm.getHDF5SpectraFn()), verbosity(rPar.spectraVerbosity), nBins(rPar.nBinsSpectra),
-          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName(fn),
-          amIRoot(pAmIRoot), nMeas(fm.getNInfreqMeas()), flushCount(0), flushFreq(fm.getFlushFreq())
+          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName(fn), amIRoot(pAmIRoot),
+          nMeas(fm.getNInfreqMeas()), flushCount(0), flushFreq(fm.getFlushFreq())
     {
     }
 

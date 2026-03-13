@@ -59,18 +59,28 @@ namespace TempLat
     VectorFieldCollection<SU2LieAlgebraField<T, Model::NDim>, Model::NSU2> fldSU2;
     VectorFieldCollection<SU2LieAlgebraField<T, Model::NDim>, Model::NSU2> piSU2;
 
-    template <int N>
-    auto get(Tag<N>) {
-        if constexpr (N == FieldsNumbering::fldS::value) return fldS;
-        else if constexpr (N == FieldsNumbering::piS::value) return piS;
-        else if constexpr (N == FieldsNumbering::fldCS::value) return fldCS;
-        else if constexpr (N == FieldsNumbering::piCS::value) return piCS;
-        else if constexpr (N == FieldsNumbering::fldSU2Doublet::value) return fldSU2Doublet;
-        else if constexpr (N == FieldsNumbering::piSU2Doublet::value) return piSU2Doublet;
-        else if constexpr (N == FieldsNumbering::fldU1::value) return fldU1;
-        else if constexpr (N == FieldsNumbering::piU1::value) return piU1;
-        else if constexpr (N == FieldsNumbering::fldSU2::value) return fldSU2;
-        else if constexpr (N == FieldsNumbering::piSU2::value) return piSU2;
+    template <int N> auto get(Tag<N>)
+    {
+      if constexpr (N == FieldsNumbering::fldS::value)
+        return fldS;
+      else if constexpr (N == FieldsNumbering::piS::value)
+        return piS;
+      else if constexpr (N == FieldsNumbering::fldCS::value)
+        return fldCS;
+      else if constexpr (N == FieldsNumbering::piCS::value)
+        return piCS;
+      else if constexpr (N == FieldsNumbering::fldSU2Doublet::value)
+        return fldSU2Doublet;
+      else if constexpr (N == FieldsNumbering::piSU2Doublet::value)
+        return piSU2Doublet;
+      else if constexpr (N == FieldsNumbering::fldU1::value)
+        return fldU1;
+      else if constexpr (N == FieldsNumbering::piU1::value)
+        return piU1;
+      else if constexpr (N == FieldsNumbering::fldSU2::value)
+        return fldSU2;
+      else if constexpr (N == FieldsNumbering::piSU2::value)
+        return piSU2;
     }
   };
 

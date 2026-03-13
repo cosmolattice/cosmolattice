@@ -53,7 +53,7 @@ namespace TempLat
     using SU2DoubletU1Couplings = CouplingsManager<NSU2Doublet, NU1Flds>;   // couplings U(1) gauge-SU2 doublet
     using SU2DoubletSU2Couplings = CouplingsManager<NSU2Doublet, NSU2Flds>; // couplings SU(2) gauge-SU2 doublet
     using ScalarU1AxionCouplings = CouplingsManager<NScalars, NU1Flds>;     // couplings U(1) gauge-scalar axion
-    using NonMinimalCouplings = CouplingsManager<NScalars, 1>;             // Non-minimal coupling to gravity of scalars.
+    using NonMinimalCouplings = CouplingsManager<NScalars, 1>; // Non-minimal coupling to gravity of scalars.
   };
 
   // In order to make some of the expression template mechanism works, the number of fields needs to be known
@@ -67,8 +67,8 @@ namespace TempLat
   _ModelName, _ModelParsType::NPotTerms, _ModelParsType::NScalars, _ModelParsType::NCScalars, _ModelParsType::NU1Flds, \
       _ModelParsType::NSU2Doublet, _ModelParsType::NSU2Flds, typename _ModelParsType::CsU1Couplings,                   \
       typename _ModelParsType::SU2DoubletU1Couplings, typename _ModelParsType::SU2DoubletSU2Couplings,                 \
-      typename _ModelParsType::ScalarU1AxionCouplings, typename _ModelParsType::NonMinimalCouplings,                    \
-      _FloatType, _ModelParsType::NDim
+      typename _ModelParsType::ScalarU1AxionCouplings, typename _ModelParsType::NonMinimalCouplings, _FloatType,       \
+      _ModelParsType::NDim
 #define MakeModelFloatType(_ModelName, _ModelParsType, _FloatType)                                                     \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, _FloatType)>
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
@@ -100,28 +100,37 @@ namespace TempLat
     // --- Field iteration API (centralized) ---
 
     static constexpr std::array<size_t, FieldsNumbering::maxNum + 1> fieldCounts = {
-        NS, NS,                         // fldS (0), piS (1)
-        NC, NC,                         // fldCS (2), piCS (3)
-        NSU2DOUBLET, NSU2DOUBLET,       // fldSU2Doublet (4), piSU2Doublet (5)
-        NU1FLDS, NU1FLDS,              // fldU1 (6), piU1 (7)
-        NSU2FLDS, NSU2FLDS             // fldSU2 (8), piSU2 (9)
+        NS,          NS,          // fldS (0), piS (1)
+        NC,          NC,          // fldCS (2), piCS (3)
+        NSU2DOUBLET, NSU2DOUBLET, // fldSU2Doublet (4), piSU2Doublet (5)
+        NU1FLDS,     NU1FLDS,     // fldU1 (6), piU1 (7)
+        NSU2FLDS,    NSU2FLDS     // fldSU2 (8), piSU2 (9)
     };
 
-    template <int N>
-    static constexpr size_t getNFields(Tag<N>) { return fieldCounts[N]; }
+    template <int N> static constexpr size_t getNFields(Tag<N>) { return fieldCounts[N]; }
 
-    template <int N>
-    auto getField(Tag<N>) {
-        if constexpr (N == FieldsNumbering::fldS::value) return this->fldS;
-        else if constexpr (N == FieldsNumbering::piS::value) return this->piS;
-        else if constexpr (N == FieldsNumbering::fldCS::value) return this->fldCS;
-        else if constexpr (N == FieldsNumbering::piCS::value) return this->piCS;
-        else if constexpr (N == FieldsNumbering::fldSU2Doublet::value) return this->fldSU2Doublet;
-        else if constexpr (N == FieldsNumbering::piSU2Doublet::value) return this->piSU2Doublet;
-        else if constexpr (N == FieldsNumbering::fldU1::value) return this->fldU1;
-        else if constexpr (N == FieldsNumbering::piU1::value) return this->piU1;
-        else if constexpr (N == FieldsNumbering::fldSU2::value) return this->fldSU2;
-        else if constexpr (N == FieldsNumbering::piSU2::value) return this->piSU2;
+    template <int N> auto getField(Tag<N>)
+    {
+      if constexpr (N == FieldsNumbering::fldS::value)
+        return this->fldS;
+      else if constexpr (N == FieldsNumbering::piS::value)
+        return this->piS;
+      else if constexpr (N == FieldsNumbering::fldCS::value)
+        return this->fldCS;
+      else if constexpr (N == FieldsNumbering::piCS::value)
+        return this->piCS;
+      else if constexpr (N == FieldsNumbering::fldSU2Doublet::value)
+        return this->fldSU2Doublet;
+      else if constexpr (N == FieldsNumbering::piSU2Doublet::value)
+        return this->piSU2Doublet;
+      else if constexpr (N == FieldsNumbering::fldU1::value)
+        return this->fldU1;
+      else if constexpr (N == FieldsNumbering::piU1::value)
+        return this->piU1;
+      else if constexpr (N == FieldsNumbering::fldSU2::value)
+        return this->fldSU2;
+      else if constexpr (N == FieldsNumbering::piSU2::value)
+        return this->piSU2;
     }
 
     // --> Averages potential
@@ -132,15 +141,12 @@ namespace TempLat
 
     AbstractModel(ParameterParser &parser, const LatticeParameters<T> &par,
                   device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, T pDt, std::string pName = "")
-        : ScalarBase<NDIM, T, NS>(toolBox, par),
-          ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>(parser, toolBox, par),
-          SU2DoubletSectorBase<NDIM, T, NSU2DOUBLET, SU2DOUBLETU1COUPLINGS, SU2DOUBLETSU2COUPLINGS>(parser, toolBox, par),
-          ScalarU1AxionBase<T, SCALARU1AXIONCOUPLINGS>(parser),
-          NonMinimalCouplingBase<T, NS, NONMINCOUPLINGS>(parser),
-          ScaleFactorBase<T>(),
-          ModelParametersBase<T>(par, pDt, std::move(pName)),
-          GWBase<NDIM, T>(parser, toolBox, par),
-          U1Base<NDIM, T, NU1FLDS, NC>(toolBox, par),
+        : ScalarBase<NDIM, T, NS>(toolBox, par), ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>(parser, toolBox, par),
+          SU2DoubletSectorBase<NDIM, T, NSU2DOUBLET, SU2DOUBLETU1COUPLINGS, SU2DOUBLETSU2COUPLINGS>(parser, toolBox,
+                                                                                                    par),
+          ScalarU1AxionBase<T, SCALARU1AXIONCOUPLINGS>(parser), NonMinimalCouplingBase<T, NS, NONMINCOUPLINGS>(parser),
+          ScaleFactorBase<T>(), ModelParametersBase<T>(par, pDt, std::move(pName)),
+          GWBase<NDIM, T>(parser, toolBox, par), U1Base<NDIM, T, NU1FLDS, NC>(toolBox, par),
           SU2Base<NDIM, T, NSU2FLDS>(toolBox, par)
     {
       // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this
@@ -240,10 +246,13 @@ namespace TempLat
     {
       device::IdxArray<NDIM> pos0{{}};
       ForLoop(j, 0, NS - 1, device::memory::setAtOnePoint(this->fldS(j), pos0, this->fldS0[j] / this->fStar););
-      ForLoop(j, 0, NC - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(this->fldCS(j)(i), pos0, this->fldCS0(j)(i) / this->fStar);));
       ForLoop(
-          j, 0, NSU2DOUBLET - 1,
-          ForLoop(i, 0, 3, device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0, this->fldSU2Doublet0(j)(i) / this->fStar);));
+          j, 0, NC - 1,
+          ForLoop(i, 0, 1, device::memory::setAtOnePoint(this->fldCS(j)(i), pos0, this->fldCS0(j)(i) / this->fStar);));
+      ForLoop(j, 0, NSU2DOUBLET - 1,
+              ForLoop(i, 0, 3,
+                      device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0,
+                                                    this->fldSU2Doublet0(j)(i) / this->fStar);));
     }
 
     // This removes the homogeneous components of the fields at a single point.
@@ -252,7 +261,8 @@ namespace TempLat
       device::IdxArray<NDIM> pos0{{}};
       ForLoop(j, 0, NS - 1, device::memory::setAtOnePoint(this->fldS(j), pos0, 0.););
       ForLoop(j, 0, NC - 1, ForLoop(i, 0, 1, device::memory::setAtOnePoint(this->fldCS(j)(i), pos0, 0.);));
-      ForLoop(j, 0, NSU2DOUBLET - 1, ForLoop(i, 0, 3, device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0, 0.);));
+      ForLoop(j, 0, NSU2DOUBLET - 1,
+              ForLoop(i, 0, 3, device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0, 0.);));
     }
   };
 } // namespace TempLat

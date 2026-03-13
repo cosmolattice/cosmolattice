@@ -61,10 +61,8 @@ namespace TempLat
     // fldS : The actual object which contains the scalar fields.
 
   public:
-    static constexpr size_t NDim = Model<MODELNAME>::NDim;
-
     MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
-              device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
+              auto toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
                            STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.

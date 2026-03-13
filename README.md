@@ -97,6 +97,7 @@ All custom CMake flags can be passed when configuring the project, e.g. `cmake -
 | `NOTHREADING`          | No parallelization                 | `OFF`                                  |
 | `NATIVE`               | Pass `--march=native` to compiler  | `ON` (non-macOS), `OFF` (macOS)        |
 | `KOKKOSFFT`            | KokkosFFT for single-node GPU FFTs | `ON` when CUDA/HIP enabled, else `OFF` |
+| `TEMPLAT_BRANCH`       | Used branch of TempLat (for devs)  | `main`                                 |
 
 ### Credits
 

@@ -7,11 +7,12 @@
 #include "CosmoInterface/initializers/initialconditionstype.h"
 #include "CosmoInterface/runparameters.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-template <int NDIM, typename T, size_t NU1FLDS, size_t NC>
-class U1Base {
-public:
+  template <int NDIM, typename T, size_t NU1FLDS, size_t NC> class U1Base
+  {
+  public:
     static constexpr size_t NU1 = NU1FLDS;
 
     // U(1) gauge fields
@@ -24,16 +25,18 @@ public:
 
     InitialConditionsType::U1 getU1IC()
     {
-        if (NC > 0)
-            return InitialConditionsType::RandomWithMatter;
-        else
-            return InitialConditionsType::PlaneWavesZeroB;
+      if (NC > 0)
+        return InitialConditionsType::RandomWithMatter;
+      else
+        return InitialConditionsType::PlaneWavesZeroB;
     }
 
-protected:
+  protected:
     U1Base(device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, const LatticeParameters<T> &par)
-        : fldU1("U1", toolBox, par), piU1("pi_U1", toolBox, par) {}
-};
+        : fldU1("U1", toolBox, par), piU1("pi_U1", toolBox, par)
+    {
+    }
+  };
 
 } // namespace TempLat
 

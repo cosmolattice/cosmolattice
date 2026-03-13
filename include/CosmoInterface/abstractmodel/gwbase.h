@@ -8,11 +8,12 @@
 #include "TempLat/parameters/parameterparser.h"
 #include "CosmoInterface/runparameters.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-template <int NDIM, typename T>
-class GWBase {
-public:
+  template <int NDIM, typename T> class GWBase
+  {
+  public:
     static constexpr size_t NGWs = 6;
 
     std::unique_ptr<FieldCollection<Field<T, NDIM>, 6, true>> fldGWs;
@@ -38,17 +39,18 @@ public:
     auto GWtensor(Tag<3>, Tag<2>) { return (*fldGWs)(4_c); }
     auto GWtensor(Tag<3>, Tag<3>) { return (*fldGWs)(5_c); }
 
-protected:
-    GWBase(ParameterParser &parser,
-           device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
+  protected:
+    GWBase(ParameterParser &parser, device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
            const LatticeParameters<T> &par)
         : fldGWs(parser.get<bool>("withGWs", false)
                      ? std::make_unique<FieldCollection<Field<T, NDIM>, 6, true>>("fldGWs", toolBox, par)
                      : nullptr),
           piGWs(parser.get<bool>("withGWs", false)
                     ? std::make_unique<FieldCollection<Field<T, NDIM>, 6, true>>("piGWs", toolBox, par)
-                    : nullptr) {}
-};
+                    : nullptr)
+    {
+    }
+  };
 
 } // namespace TempLat
 
