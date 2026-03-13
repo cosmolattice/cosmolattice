@@ -29,17 +29,34 @@ namespace TempLat
     static constexpr int nGauge = NGauge;
 
     // Put public methods here. These should change very little over time.
+
     CouplingsManager() = default;
 
-    // In addition to simply knowing what couples to what, we also store the gauge field coupling g and the effective
-    // charge g*Q (Q being the matter charge).
-    CouplingsManager(const std::vector<double> &charges, std::array<double, NGauge> couplings) : gs(couplings)
+    /**
+     * @brief In addition to simply knowing what couples to what, we also store the gauge field coupling g and the
+     * effective charge g*Q (Q being the matter charge).
+     *
+     * @param charges The charges Q, for each matter field that couples to at least one gauge field. The
+     * order of the charges should be the same as the order of the non-trivial doesCouples in the template parameters.
+     * @param couplings The gauge field couplings g, for each gauge field. The order of the couplings should be the same
+     * as the order of the gauge fields in the model.
+     */
+    CouplingsManager(const std::vector<double> &charges, const std::vector<double> &couplings) : gs(couplings)
     {
       setEffectiveCharges(charges, couplings);
     }
 
-    // This function stores the effective charges, but only between fields that actually are coupled.
-    void setEffectiveCharges(const std::vector<double> &charges, std::vector<double> couplings)
+    static constexpr bool active = true;
+
+    /**
+     * @brief Stores the effective charges, but only between fields that actually are coupled.
+     *
+     * @param charges The charges Q, for each matter field that couples to at least one gauge field. The
+     * order of the charges should be the same as the order of the non-trivial doesCouples in the template parameters.
+     * @param couplings The gauge field couplings g, for each gauge field. The order of the couplings should be the same
+     * as the order of the gauge fields in the model.
+     */
+    void setEffectiveCharges(const std::vector<double> &charges, const std::vector<double> &couplings)
     {
       if ((charges.size() != howManyCouples()) && (couplings.size() != 0))
         throw(NotEnoughChargesForThisCouplingsManager(
@@ -61,7 +78,10 @@ namespace TempLat
       }
     }
 
-    // This function, accessible at compile time, tells how many fields are coupled in this CouplingManager.
+    /**
+     * @brief This function, accessible at compile time, tells how many fields are coupled in this CouplingManager.
+     *
+     */
     static constexpr size_t howManyCouples()
     {
       size_t c = 0;
@@ -70,10 +90,18 @@ namespace TempLat
       return c;
     }
 
-    // The operator () is used to access the effective charge g*Q. Its first argument specifies the matter number of the
-    // matter field and the second refers to the gauge field.
+    /** @brief Access the effective charge g*Q for a specific matter and gauge field.
+     *
+     * @tparam nmat The matter field index.
+     * @tparam ng The gauge field index.
+     */
     template <int nmat, int ng> auto operator()(Tag<nmat>, Tag<ng>) const
     {
+      static_assert(nmat >= 0 && nmat < NMatter,
+                    "Error: trying to access the coupling of a matter field which is not present in this "
+                    "CouplingsManager. Abort.");
+      static_assert(ng >= 0 && ng < NGauge, "Error: trying to access the coupling of a gauge field which is not "
+                                            "present in this CouplingsManager. Abort.");
       if constexpr (sizeof...(Bools) == 0 || NGauge == 0) {
         return ZeroType();
       } else {
@@ -81,13 +109,32 @@ namespace TempLat
       }
     }
 
-    // We can also access only the gauge field coupling, in case needed.
-    template <int ng> double coupling(Tag<ng>) const { return gs[ng]; }
+    /**
+     * @brief Access the gauge field coupling g for a specific gauge field.
+     *
+     * @tparam ng The gauge field index.
+     */
+    template <int ng> double coupling(Tag<ng>) const
+    {
+      static_assert(ng >= 0 && ng < NGauge, "Error: trying to access the coupling of a gauge field which is not "
+                                            "present in this CouplingsManager. Abort.");
+      return gs[ng];
+    }
 
-    // Accessible at compile time function which tells whether or not a given matter field and a given gauge field
-    // couples or not.
+    /**
+     * @brief Accessible at compile time function which tells whether or not a given matter field and a given gauge
+     * field couples or not.
+     *
+     * @tparam nmat The matter field index.
+     * @tparam ng The gauge field index.
+     */
     template <int nmat, int ng> static constexpr bool couples(Tag<nmat>, Tag<ng>)
     {
+      static_assert(nmat >= 0 && nmat < NMatter,
+                    "Error: trying to access the coupling of a matter field which is not present in this "
+                    "CouplingsManager. Abort.");
+      static_assert(ng >= 0 && ng < NGauge, "Error: trying to access the coupling of a gauge field which is not "
+                                            "present in this CouplingsManager. Abort.");
       if constexpr (sizeof...(Bools) == 0 || NGauge == 0) {
         return false;
       } else {
@@ -96,15 +143,18 @@ namespace TempLat
     }
 
   private:
-    // Compile-time accessible booleans thich tells what couples to what.
-    static constexpr std::array<bool, sizeof...(Bools)> doesCouples = {Bools...};
-    std::array<double, sizeof...(Bools)> effectiveCharges;
-    std::array<double, sizeof...(Bools)> gs;
+    // Compile-time accessible booleans which tell what couples to what.
+    static constexpr std::array<bool, NGauge * NMatter> doesCouples = {Bools...};
+    std::array<double, NGauge * NMatter> effectiveCharges;
+    std::array<double, NGauge> gs;
   };
 
-  // Below is an empty class, which is needed to make the program compile when one or some of the coupling manager
-  // is not used.
-  template <> class CouplingsManager<0, 0>
+  /**
+   * @brief This class is a specialization of the CouplingsManager for the case where there are no gauge field
+   * couplings.
+   *
+   */
+  template <int NMatter, int NGauge> class CouplingsManager<NMatter, NGauge>
   {
   public:
     static constexpr int nGauge = 0;
@@ -113,6 +163,8 @@ namespace TempLat
     CouplingsManager() = default;
 
     CouplingsManager(const std::vector<double> &vec, std::array<double, 0> couplings) {}
+
+    static constexpr bool active = false;
 
     void setEffectiveCharges(const std::vector<double> &vec, std::vector<double> couplings) {}
 
