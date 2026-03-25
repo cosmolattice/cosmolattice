@@ -47,6 +47,8 @@ namespace TempLat
     // Number of dimensions (1,2,3). It can be changed in the model file.
     static constexpr size_t NDim = 3;
 
+    using NumberType = double;
+
     // Coupling managers, they deal with the possible couplings between the gauge fields and complex scalars/SU2
     // doublets
     using CsU1Couplings = CouplingsManager<NCScalars, NU1Flds>;             // couplings U(1) gauge-complex scalar
@@ -72,7 +74,7 @@ namespace TempLat
 #define MakeModelFloatType(_ModelName, _ModelParsType, _FloatType)                                                     \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, _FloatType)>
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
-  AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, double)>
+  AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, typename _ModelParsType::NumberType)>
 
   /** @brief A class which contains everything a model should have; models derive from here.
    * Mother of all the models. The arguments are passed as template parameters.
@@ -141,7 +143,8 @@ namespace TempLat
 
     AbstractModel(ParameterParser &parser, const LatticeParameters<T> &par,
                   device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, T pDt, std::string pName = "")
-        : ScalarBase<NDIM, T, NS>(parser, toolBox, par), ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>(parser, toolBox, par),
+        : ScalarBase<NDIM, T, NS>(parser, toolBox, par),
+          ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>(parser, toolBox, par),
           SU2DoubletSectorBase<NDIM, T, NSU2DOUBLET, SU2DOUBLETU1COUPLINGS, SU2DOUBLETSU2COUPLINGS>(parser, toolBox,
                                                                                                     par),
           ScalarU1AxionBase<T, SCALARU1AXIONCOUPLINGS>(parser), NonMinimalCouplingBase<T, NS, NONMINCOUPLINGS>(parser),
@@ -192,9 +195,12 @@ namespace TempLat
 
     InitialConditionsType::U1 getU1IC()
     {
-      if constexpr (NC > 0) return InitialConditionsType::RandomWithMatter;
-      else if constexpr (NS > 0 && SCALARU1AXIONCOUPLINGS::howManyCouples() > 0) return InitialConditionsType::BunchDavisTransverseU1;
-      else return InitialConditionsType::PlaneWavesZeroB;
+      if constexpr (NC > 0)
+        return InitialConditionsType::RandomWithMatter;
+      else if constexpr (NS > 0 && SCALARU1AXIONCOUPLINGS::howManyCouples() > 0)
+        return InitialConditionsType::BunchDavisTransverseU1;
+      else
+        return InitialConditionsType::PlaneWavesZeroB;
     }
 
     // The "MemoryToolBox" is a shared variable between most instances of the program. It contains many useful

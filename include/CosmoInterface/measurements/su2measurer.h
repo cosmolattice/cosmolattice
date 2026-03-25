@@ -71,7 +71,7 @@ namespace TempLat
     }
 
     // This measures the electric and magnetic spectra and adds them to the files.
-    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
+    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
     {
       ForLoop(k, 0, Model::NSU2 - 1,
 

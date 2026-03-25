@@ -12,6 +12,10 @@ using ModelType = TempLat::MODELTYPE;
 // We relabel the macro MODELTYPE (which contains the model you decided to study,
 // indicated to CMake when compiling), into a type ModelType.
 
+using FloatType = typename ModelType::FloatType;
+// We also define a convenient alias for the floating point type of the model, which is defined in the model itself.
+// This is useful to avoid having to write 'typename ModelType::FloatType
+
 // ------ COSMOLATTICE MAIN ------ //
 
 int main(int argc, char *argv[])
@@ -40,7 +44,7 @@ int main(int argc, char *argv[])
   if (manager.doWeRestart()) manager.getParams(parser);
   // If restart is set, the 'overridable' parameters are overridden here.
 
-  RunParameters<double> runParams(parser);
+  RunParameters<FloatType> runParams(parser);
   runParams.setDoWeRestart(manager.doWeRestart());
   // The RunParameters class holds all relevant (model independent)
   // parameters for a run: Num. of points lattice/side (N),
@@ -89,7 +93,7 @@ int main(int argc, char *argv[])
   if (not manager.doWeRestart()) // If this is a new simulation:
   {
 
-    ModelInitializer<double> initializer(model, runParams.lSide, runParams.baseSeed);
+    ModelInitializer<FloatType> initializer(model, runParams.lSide, runParams.baseSeed);
     // 1) We create the class responsible for the initialization
 
     initializer.initialize(model, runParams, extraFlds);
@@ -117,7 +121,7 @@ int main(int argc, char *argv[])
   // is specified by the user in the input parameter file, and here is passed through
   // runParams. Model is passed as well to have access to normalisations.
 
-  Measurer<ModelType, double> measurer(model, runParams, parser);
+  Measurer<ModelType, FloatType> measurer(model, runParams, parser);
   // Creates an object of the class responsible for performing and outputting all the required
   // measurements (averages, energies, spectra...).
 

@@ -23,10 +23,9 @@ namespace TempLat
    *
    *
    **/
-  class PowerSpectrumMeasurer
+  template <typename T> class PowerSpectrumMeasurer
   {
   public:
-    template <typename T>
     PowerSpectrumMeasurer(const RunParameters<T> &par)
         : nbins(par.nBinsSpectra), PSType(par.powerSpectrumType), PSVersion(par.powerSpectrumVersion)
     {
@@ -41,7 +40,7 @@ namespace TempLat
     // --> The normalization factor ensures that it recovers the appropriate expression in the continuum limit.
     //     This is discussed in Sect. 3 of arXiv:2006.15122.
 
-    template <typename T, size_t NDim> auto powerSpectrum(Field<T, NDim> f, ptrdiff_t N, T kIR)
+    template <size_t NDim> RadialProjectionResult<T> powerSpectrum(Field<T, NDim> f, ptrdiff_t N, T kIR)
     {
       const ptrdiff_t N3 = pow<3>(N);
       const T dx = 2 * Constants::pi<T> / kIR / N; // lattice spacing
@@ -54,13 +53,13 @@ namespace TempLat
                                                   // centralValues, and not the bins, when rescaling.
 
         if (PSType == 2) {
-          return Function(ntilde, pow<3>(kIR * ntilde * dx) / N3 / 2.0 / pow<2>(Constants::pi<T>)) * fk2;
+          return Function(ntilde, pow<3>(kIR * ntilde * dx) / N3 / T(2) / pow<2>(Constants::pi<T>)) * fk2;
         } else if (PSType == 1) {
           fk2.sumInsteadOfAverage();
-          return Function(ntilde, kIR * ntilde * dx / pow<5>(N) / 2.0 / Constants::pi<T>) * fk2;
+          return Function(ntilde, kIR * ntilde * dx / pow<5>(N) / T(2) / Constants::pi<T>) * fk2;
         } else if (PSType == 0) {
           fk2.sumInsteadOfAverage();
-          return Function(ntilde, dx / pow<5>(N) / 2.0 / Constants::pi<T>) * fk2;
+          return Function(ntilde, dx / pow<5>(N) / T(2) / Constants::pi<T>) * fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return fk2; // To remove moot warning.
@@ -72,16 +71,16 @@ namespace TempLat
 
           auto fk2 = projectRadiallyFourier(pow<3>(ntilde.norm()) * pow<2>(abs(f.inFourierSpace())), false)
                          .measure(nbins, kMaxBins);
-          return (pow<3>(kIR * dx) / N3 / 2.0 / pow<2>(Constants::pi<T>)) * fk2;
+          return (pow<3>(kIR * dx) / N3 / T(2) / pow<2>(Constants::pi<T>)) * fk2;
         } else if (PSType == 1) {
           auto fk2 =
               projectRadiallyFourier(ntilde.norm() * pow<2>(abs(f.inFourierSpace())), false).measure(nbins, kMaxBins);
           fk2.sumInsteadOfAverage();
-          return (kIR * dx / pow<5>(N) / 2.0 / Constants::pi<T>)*fk2;
+          return (kIR * dx / pow<5>(N) / T(2) / Constants::pi<T>)*fk2;
         } else if (PSType == 0) {
           auto fk2 = projectRadiallyFourier(pow<2>(abs(f.inFourierSpace())), false).measure(nbins, kMaxBins);
           fk2.sumInsteadOfAverage();
-          return (dx / pow<5>(N) / 2.0 / Constants::pi<T>)*fk2;
+          return (dx / pow<5>(N) / T(2) / Constants::pi<T>)*fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return projectRadiallyFourier(abs(f.inFourierSpace()), false)
@@ -90,7 +89,7 @@ namespace TempLat
       }
     }
 
-    template <typename R, typename T> auto powerSpectrum(R f, ptrdiff_t N, T kIR)
+    template <typename R> auto powerSpectrum(R f, ptrdiff_t N, T kIR)
     { // This function is for expression/composite operator, which need their own memory to perform the fourier
       // transform.
       static constexpr size_t NDim = GetNDim::get<R>();

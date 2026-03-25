@@ -25,10 +25,9 @@ namespace TempLat
    *
    *
    **/
-  class GWsPowerSpectrumMeasurer
+  template <typename T> class GWsPowerSpectrumMeasurer
   {
   public:
-    template <typename T>
     GWsPowerSpectrumMeasurer(const RunParameters<T> &par)
         : nbins(par.nBinsSpectra), PSType(par.powerSpectrumType), PSVersion(par.powerSpectrumVersion),
           PRJType(par.GWprojectorType)
@@ -40,7 +39,7 @@ namespace TempLat
       return this->gwspowerSpectrum(model, GetNGrid::get(model.getOneField()), model.getOneField().getKIR());
     }
 
-    template <class Model, typename T> auto gwspowerSpectrum(Model &model, ptrdiff_t N, T kIR)
+    template <class Model> RadialProjectionResult<T> gwspowerSpectrum(Model &model, ptrdiff_t N, T kIR)
     {
       ptrdiff_t N3 = pow<3>(N);
       T dx = 2 * Constants::pi<T> / kIR / N; // lattice spacing
@@ -49,6 +48,7 @@ namespace TempLat
 
       if (PSVersion != 3) {
         auto fk2 = projectRadiallyGW(model, PSVersion == 1, PRJType, PSType, PSVersion).measure(model, nbins, kMaxBins);
+        return fk2;
         if (PSType == 2) {
           return Function(ntilde, pow<3>(kIR * ntilde * dx) / N3 /
                                       (8 * pow<2>(Constants::pi<T>) * pow(model.aI, 2 * model.alpha)) *

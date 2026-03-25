@@ -10,6 +10,10 @@
 #include "TempLat/util/rangeiteration/tagliteral.h"
 #include "TempLat/util/exception.h"
 
+#include <array>
+#include <vector>
+#include <variant>
+
 namespace TempLat
 {
   MakeException(NotEnoughChargesForThisCouplingsManager);
@@ -41,12 +45,22 @@ namespace TempLat
      * @param couplings The gauge field couplings g, for each gauge field. The order of the couplings should be the same
      * as the order of the gauge fields in the model.
      */
-    CouplingsManager(const std::vector<double> &charges, const std::vector<double> &couplings) : gs(couplings)
+    template <typename T>
+    CouplingsManager(const std::vector<T> &charges, const std::vector<T> &couplings) : gs(couplings)
     {
       setEffectiveCharges(charges, couplings);
     }
 
     static constexpr bool active = true;
+
+    void setEffectiveCharges(const std::vector<double> &charges, const std::vector<double> &couplings)
+    {
+      _setEffectiveCharges(charges, couplings);
+    }
+    void setEffectiveCharges(const std::vector<float> &charges, const std::vector<float> &couplings)
+    {
+      _setEffectiveCharges(charges, couplings);
+    }
 
     /**
      * @brief Stores the effective charges, but only between fields that actually are coupled.
@@ -56,7 +70,7 @@ namespace TempLat
      * @param couplings The gauge field couplings g, for each gauge field. The order of the couplings should be the same
      * as the order of the gauge fields in the model.
      */
-    void setEffectiveCharges(const std::vector<double> &charges, const std::vector<double> &couplings)
+    template <typename T> void _setEffectiveCharges(const std::vector<T> &charges, const std::vector<T> &couplings)
     {
       if ((charges.size() != howManyCouples()) && (couplings.size() != 0))
         throw(NotEnoughChargesForThisCouplingsManager(
@@ -114,11 +128,14 @@ namespace TempLat
      *
      * @tparam ng The gauge field index.
      */
-    template <int ng> double coupling(Tag<ng>) const
+    template <int ng> auto coupling(Tag<ng>) const
     {
       static_assert(ng >= 0 && ng < NGauge, "Error: trying to access the coupling of a gauge field which is not "
                                             "present in this CouplingsManager. Abort.");
-      return gs[ng];
+      if constexpr (std::holds_alternative<double>(gs[ng]))
+        return std::get<double>(gs[ng]);
+      else
+        return std::get<float>(gs[ng]);
     }
 
     /**
@@ -145,8 +162,8 @@ namespace TempLat
   private:
     // Compile-time accessible booleans which tell what couples to what.
     static constexpr std::array<bool, NGauge * NMatter> doesCouples = {Bools...};
-    std::array<double, NGauge * NMatter> effectiveCharges;
-    std::array<double, NGauge> gs;
+    std::array<std::variant<double, float>, NGauge * NMatter> effectiveCharges;
+    std::array<std::variant<double, float>, NGauge> gs;
   };
 
   /**
@@ -162,11 +179,12 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     CouplingsManager() = default;
 
-    CouplingsManager(const std::vector<double> &vec, std::array<double, 0> couplings) {}
+    template <typename T> CouplingsManager(const std::vector<T> &vec, std::array<T, 0> couplings) {}
 
     static constexpr bool active = false;
 
-    void setEffectiveCharges(const std::vector<double> &vec, std::vector<double> couplings) {}
+    void setEffectiveCharges(const std::vector<float> &charges, const std::vector<float> &couplings) {}
+    void setEffectiveCharges(const std::vector<double> &charges, const std::vector<double> &couplings) {}
 
     static constexpr size_t howManyCouples() { return 0; }
     template <int nmat, int ng> ZeroType operator()(Tag<nmat>, Tag<ng>) const { return {}; }

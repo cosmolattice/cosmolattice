@@ -73,11 +73,12 @@ namespace TempLat
 
     // The following function measures the power spectrum of the norm and its time-derivative as the sum of their
     // components.
-    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
+    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
     {
       ForLoop(i, 0, Model::NCs - 1,
               spectraNormOut(i).save(
-                  lastMeas, t, (PSMeasurer.powerSpectrum(model.fldCS(i)(0_c)) + PSMeasurer.powerSpectrum(model.fldCS(i)(1_c))),
+                  lastMeas, t,
+                  (PSMeasurer.powerSpectrum(model.fldCS(i)(0_c)) + PSMeasurer.powerSpectrum(model.fldCS(i)(1_c))),
                   pow(model.aI, 2 * model.alpha - 6) *
                       (PSMeasurer.powerSpectrum(model.piCS(i)(0_c)) + PSMeasurer.powerSpectrum(model.piCS(i)(1_c)))););
     }

@@ -76,17 +76,17 @@ namespace TempLat
     }
 
     // This measures the electric and magnetic spectra and adds them to the files.
-    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
+    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
     {
-      ForLoop(k, 0, Model::NU1 - 1,
-              const auto &A = model.fldU1(k);
-              const auto B1 = forwDiff(A(2_c), 3_c) - forwDiff(A(3_c), 2_c);
-              const auto B2 = forwDiff(A(3_c), 1_c) - forwDiff(A(1_c), 3_c);
-              const auto B3 = forwDiff(A(1_c), 2_c) - forwDiff(A(2_c), 1_c);
-              auto magSpecU1 = PSMeasurer.powerSpectrum(B1) + PSMeasurer.powerSpectrum(B2) + PSMeasurer.powerSpectrum(B3);
-              auto elSpecU1 = Total(i, 1, Model::NDim,
-                                    pow(model.aI, 2 * model.alpha - 2) * PSMeasurer.powerSpectrum(model.piU1(k)(i)));
-              spectra(k).save(lastMeas, t, elSpecU1, magSpecU1););
+      ForLoop(
+          k, 0, Model::NU1 - 1, const auto &A = model.fldU1(k);
+          const auto B1 = forwDiff(A(2_c), 3_c) - forwDiff(A(3_c), 2_c);
+          const auto B2 = forwDiff(A(3_c), 1_c) - forwDiff(A(1_c), 3_c);
+          const auto B3 = forwDiff(A(1_c), 2_c) - forwDiff(A(2_c), 1_c);
+          auto magSpecU1 = PSMeasurer.powerSpectrum(B1) + PSMeasurer.powerSpectrum(B2) + PSMeasurer.powerSpectrum(B3);
+          auto elSpecU1 =
+              Total(i, 1, Model::NDim, pow(model.aI, 2 * model.alpha - 2) * PSMeasurer.powerSpectrum(model.piU1(k)(i)));
+          spectra(k).save(lastMeas, t, elSpecU1, magSpecU1););
     }
 
   private:

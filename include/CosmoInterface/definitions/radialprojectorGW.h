@@ -27,16 +27,13 @@
 // GW spectrum point by point, circumventing the expression templates for efficiency.
 namespace TempLat
 {
-  template <typename Model, typename T = double> class RadialProjectorGW
+  template <typename Model> class RadialProjectorGW
   {
   public:
     static constexpr size_t NDim = Model::NDim;
 
-    using vType = typename GetGetReturnType<T>::type;
-    using sType = typename GetFloatType<vType>::type;
-
-    static constexpr bool isComplexValued = GetGetReturnType<T>::isComplex;
-    using floatType = typename RadialProjectionResult<sType>::floatType;
+    using sType = typename Model::FloatType;
+    using floatType = sType;
     using resultType = RadialProjectionResult<sType>;
 
     RadialProjectorGW(Model &model, bool pUseCentralBinValues, int &PRJType, int &PSType, int &PSVersion)
@@ -141,11 +138,11 @@ namespace TempLat
     }
   };
 
-  template <class Model, typename T = double>
-  RadialProjectorGW<Model, T> projectRadiallyGW(Model &model, bool useBinCentralValues, int PRJType, int PSType,
-                                                int PSVersion)
+  template <class Model>
+  RadialProjectorGW<Model> projectRadiallyGW(Model &model, bool useBinCentralValues, int PRJType, int PSType,
+                                             int PSVersion)
   {
-    return RadialProjectorGW<Model, T>(model, useBinCentralValues, PRJType, PSType, PSVersion);
+    return RadialProjectorGW<Model>(model, useBinCentralValues, PRJType, PSType, PSVersion);
   }
 
 } // namespace TempLat

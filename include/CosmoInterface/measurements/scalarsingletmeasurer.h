@@ -59,7 +59,7 @@ namespace TempLat
     // The following function measures the spectra of the norm and its time-derivative.
     template <typename Model> // The occupation number is only measured if the user indicates it. The current version
                               // requires one additional field to measure it (JBB, Nov 2023).
-    void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
+    void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
     {
       ForLoop(
           i, 0, Model::Ns - 1,

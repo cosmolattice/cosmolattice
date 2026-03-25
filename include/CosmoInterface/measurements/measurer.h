@@ -39,8 +39,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     Measurer(Model &model, const RunParameters<T> &par, ParameterParser &parser)
         : filesManager(parser, SimulationManager<Model::NDim>::base_filename(par, model), model.getToolBox(),
-                       par.hdf5Averages, par.hdf5Spectra, par.printHeaders, "",
-                       par.getFlushFreq(),
+                       par.hdf5Averages, par.hdf5Spectra, par.printHeaders, "", par.getFlushFreq(),
                        static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutFreq)),
                        static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutInfreq))),
           outputFreq(par.tOutFreq / par.dt),         // Number of steps between frequent output
@@ -66,9 +65,7 @@ namespace TempLat
                       filesManager.getUseHDF5()), // Output file that indicates at which times spectra are computed
           PSMeasurer(par),
           // TestTransTrace(par),
-          GWsPSMeasurer(par),
-          nLast(par.tMax / par.dt),
-          lastMeas(false)
+          GWsPSMeasurer(par), nLast(par.tMax / par.dt), lastMeas(false)
     {
     }
 
@@ -181,9 +178,9 @@ namespace TempLat
     EnergySnapshotsMeasurer<Model> energySnapshotsMeasurer;
 
     MeasurementsSaver<T> spectraTime;
-    PowerSpectrumMeasurer PSMeasurer;
+    PowerSpectrumMeasurer<T> PSMeasurer;
     // CheckTT TestTransTrace;
-    GWsPowerSpectrumMeasurer GWsPSMeasurer;
+    GWsPowerSpectrumMeasurer<T> GWsPSMeasurer;
 
     ptrdiff_t nLast;
     bool lastMeas;

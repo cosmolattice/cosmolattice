@@ -52,7 +52,7 @@ namespace TempLat
     //     standardOut(0).save();
     // }
 
-    template <typename Model> void measureSpectra(Model &model, T t, GWsPowerSpectrumMeasurer &GWsPSMeasurer)
+    template <typename Model> void measureSpectra(Model &model, T t, GWsPowerSpectrumMeasurer<T> &GWsPSMeasurer)
     {
       if (model.fldGWs != nullptr) spectraOut(0).save(t, model, GWsPSMeasurer.gwspowerSpectrum(model));
     }

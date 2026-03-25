@@ -29,7 +29,7 @@ namespace TempLat
       using T = decltype(model.aI);
 
       if constexpr (not Model::IsNonMinimallyCoupled) {
-        
+
         auto tMinust0 = eom.tMinust0;
 
         // The kernel of the scale factor is sourced by the different volume-averaged energy densities:
@@ -56,10 +56,11 @@ namespace TempLat
           EkSU2Dbl = Energies::kineticSU2Doublet(model);
           EgSU2Dbl = Energies::gradientSU2Doublet(model);
         }
-        if constexpr (model.NU1 > 0) {
-          // For Axion U1: if system is evolved during linear regime Electric and Magnetic fields do not source the expansion. 
-          if(tMinust0 > model.tNonLinearAxionU1) EelU1 = Energies::electricU1(model);
-          if(tMinust0 > model.tNonLinearAxionU1) EmagU1 = Energies::magneticU1(model);
+        if constexpr (Model::NU1 > 0) {
+          // For Axion U1: if system is evolved during linear regime Electric and Magnetic fields do not source the
+          // expansion.
+          if (tMinust0 > model.tNonLinearAxionU1) EelU1 = Energies::electricU1(model);
+          if (tMinust0 > model.tNonLinearAxionU1) EmagU1 = Energies::magneticU1(model);
         }
         if constexpr (Model::NSU2 > 0) {
           EelSU2 = Energies::electricSU2(model);
@@ -124,7 +125,6 @@ namespace TempLat
       using T = typename Model::FloatType;
       return ScaleFactorKernels::get(model, KernelsTypes::EoM<T>());
     }
-
   };
 } // namespace TempLat
 
