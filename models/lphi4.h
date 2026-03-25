@@ -27,6 +27,8 @@ namespace TempLat
     // Our potential naturaly splits into two terms: the inflaton potential
     // and the interaction with the daughter field.
 
+    using NumberType = double;
+
     // All the numbers of fields are 0 by default, so we need only
     // to specify that we want two scalar fields.
     // See the model with gauge fields to have an example of how to turn
@@ -47,7 +49,7 @@ namespace TempLat
   {
     //...
   private:
-    double g, lambda, q;
+    FloatType g, lambda, q;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
 
@@ -61,7 +63,7 @@ namespace TempLat
     // fldS : The actual object which contains the scalar fields.
 
   public:
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
+    MODELNAME(ParameterParser &parser, RunParameters<FloatType> &runPar,
               auto toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
@@ -71,13 +73,13 @@ namespace TempLat
       // Independent parameters of the model (read from parameters file)
       /////////
 
-      lambda = parser.get<double>("lambda");
+      lambda = parser.get<FloatType>("lambda");
       //  We start by initializing our model paramteters. We read them from the
-      // input file/command line.  Effectively, by calling 'par.get<double>("lambda")'
+      // input file/command line.  Effectively, by calling 'par.get<FloatType>("lambda")'
       // we declare a new parameter which needs to be in the input data.  Its name is
-      // "lambda" and we specify it is a 'double'.
+      // "lambda" and we specify it is a 'FloatType'.
 
-      q = parser.get<double>("q");
+      q = parser.get<FloatType>("q");
       // In the same way, we declare an input parameter 'q'.
 
       g = sqrt(q * lambda);
@@ -88,13 +90,13 @@ namespace TempLat
       // (read from parameters file, or specified here if not)
       /////////
 
-      fldS0 = parser.get<double, 2>("initial_amplitudes");
-      piS0 = parser.get<double, 2>("initial_momenta", {0, 0});
+      fldS0 = parser.get<FloatType, 2>("initial_amplitudes");
+      piS0 = parser.get<FloatType, 2>("initial_momenta", {0, 0});
 
       // Then, we need to specify the initial homogeneous
       // value of our fields. We read them again from the input file. The int '2' means
       // that we actually expect two values and that we will get an array of
-      // double of size two.
+      // FloatType of size two.
       // Contrary to the "initial_amplitudes" parameter and the others above,
       //, the "initial_momenta" is an optional parameter. It can still be specified through
       //  command line or input file as initial_momenta=value1 value2 ... valueNs,

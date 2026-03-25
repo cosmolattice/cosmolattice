@@ -37,7 +37,7 @@ namespace TempLat
     template <class NormDeriv, class NormDeriv2, class Fld, int I>
     static inline auto deriv2ComponentFromNorm(NormDeriv nd, NormDeriv2 nd2, Fld fld, Tag<I> index)
     {
-      return 1.0 / norm2(fld) * nd2 * pow<2>(fld(index)) + nd / norm(fld) * (1 - pow<2>(fld(index)) / norm2(fld));
+      return OneType{} / norm2(fld) * nd2 * pow<2>(fld(index)) + nd / norm(fld) * (1 - pow<2>(fld(index)) / norm2(fld));
     }
 
   public:
