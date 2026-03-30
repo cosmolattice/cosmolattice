@@ -22,6 +22,9 @@
 #include "CosmoInterface/measurements/energysnapshotmeasurer.h"
 #include "CosmoInterface/measurements/topologicalchargesmeasurer.h"
 
+#include "CosmoInterface/measurements/powerspectrum.h"
+#include "CosmoInterface/measurements/powerspectrumgws.h"
+
 #include "CosmoInterface/evolvers/evolver.h"
 #include "CosmoInterface/simulationmanager.h"
 
@@ -64,8 +67,9 @@ namespace TempLat
           spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"},
                       filesManager.getUseHDF5()), // Output file that indicates at which times spectra are computed
           PSMeasurer(par),
+          GWPSMeasurer(par)
           // TestTransTrace(par),
-          GWsPSMeasurer(par), nLast(par.tMax / par.dt), lastMeas(false)
+          // GWsPSMeasurer(par), nLast(par.tMax / par.dt), lastMeas(false)
     {
     }
 
@@ -108,7 +112,7 @@ namespace TempLat
 
         scalarSingletMeasurer.measureSpectra(model, t, PSMeasurer);
         // Scalar singlet spectra
-        gwsMeasurer.measureSpectra(model, t, GWsPSMeasurer);
+        gwsMeasurer.measureSpectra(model, t, GWPSMeasurer);
         // GWs spectra
         complexScalarMeasurer.measureSpectra(model, t, PSMeasurer);
         // Complex scalar spectra
@@ -179,8 +183,7 @@ namespace TempLat
 
     MeasurementsSaver<T> spectraTime;
     PowerSpectrumMeasurer<T> PSMeasurer;
-    // CheckTT TestTransTrace;
-    GWsPowerSpectrumMeasurer<T> GWsPSMeasurer;
+    GWPowerSpectrumMeasurer<T> GWPSMeasurer;
 
     ptrdiff_t nLast;
     bool lastMeas;

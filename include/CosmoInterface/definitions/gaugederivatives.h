@@ -38,6 +38,12 @@ namespace TempLat
              Total(i, 1, Model::NDim, shift(model.fldS(n), i) + shift(model.fldS(n), -i) - 2 * model.fldS(n));
     }
 
+    template <class Model> static auto LaplacianGWs(Model &model)
+    {
+      return (1.0 / pow<2>(model.dx)) *
+      Total(i, 1, Model::NDim, shift(*model.fldGWs, i) + shift(*model.fldGWs, -i) - 2 * (*model.fldGWs));
+    }
+
     template <class Model, int N> static auto covLaplacianCS(Model &model, Tag<N> n)
     {
       auto covPlus = Total(i, 1, Model::NDim, U1sForCSCovDerivs(model, n, i) * shift(model.fldCS(n), i));

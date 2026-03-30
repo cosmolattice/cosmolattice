@@ -14,6 +14,7 @@
 #include "TempLat/lattice/algebra/gaugealgebra/forwardcovariantderivative.h"
 #include "TempLat/lattice/algebra/su2algebra/su2multiply.h"
 #include "TempLat/lattice/algebra/gaugealgebra/fieldstrength.h"
+#include "TempLat/lattice/algebra/matrix3x3algebra/symtracelesswrapper.h"
 #include "TempLat/lattice/algebra/gaugealgebra/plaquette.h"
 #include "TempLat/lattice/algebra/operators/power.h"
 #include "TempLat/lattice/algebra/spatialderivatives/normgradientsquare.h"
@@ -33,40 +34,40 @@ namespace TempLat
     PITensor() = delete;
 
   public:
-    template <class Model> static inline auto totalTensor(Model &model, Tag<0>) { return totalTensor(model, 1_c, 1_c); }
-    template <class Model> static inline auto totalTensor(Model &model, Tag<1>) { return totalTensor(model, 1_c, 2_c); }
-    template <class Model> static inline auto totalTensor(Model &model, Tag<2>) { return totalTensor(model, 1_c, 3_c); }
-    template <class Model> static inline auto totalTensor(Model &model, Tag<3>) { return totalTensor(model, 2_c, 2_c); }
-    template <class Model> static inline auto totalTensor(Model &model, Tag<4>) { return totalTensor(model, 2_c, 3_c); }
-    template <class Model> static inline auto totalTensor(Model &model, Tag<5>) { return totalTensor(model, 3_c, 3_c); }
+    template <class Model> static inline auto effectiveAnisotropicTensor(Model &model) { return ConstructSymTraceless(effectiveAnisotropicTensor(model, 1_c, 1_c),
+                                                                                                                      effectiveAnisotropicTensor(model, 1_c, 2_c),
+                                                                                                                      effectiveAnisotropicTensor(model, 1_c, 3_c),
+                                                                                                                      effectiveAnisotropicTensor(model, 2_c, 2_c),
+                                                                                                                      effectiveAnisotropicTensor(model, 2_c, 3_c),
+                                                                                                                      effectiveAnisotropicTensor(model, 3_c, 3_c)); }
 
   private:
-    template <class Model, int I, int J> static inline auto totalTensor(Model &model, Tag<I> i, Tag<J> j)
+    template <class Model, int I, int J> static inline auto effectiveAnisotropicTensor(Model &model, Tag<I> i, Tag<J> j)
     {
-      return scalarSinglet(model, i, j) + complexScalar(model, i, j) + electricU1(model, i, j) +
-             magneticU1(model, i, j);
+      return scalarSingletContribution(model, i, j) + complexScalarContribution(model, i, j) + electricU1Contribution(model, i, j) +
+             magneticU1Contribution(model, i, j);
     }
 
-    template <class Model, int I, int J> static inline auto scalarSinglet(Model &model, Tag<I> a, Tag<J> b)
+    template <class Model, int I, int J> static inline auto scalarSingletContribution(Model &model, Tag<I> a, Tag<J> b)
     {
       return Total(i, 0, Model::Ns - 1, forwDiff(model.fldS(i), a) * forwDiff(model.fldS(i), b));
     }
 
-    template <class Model, int I, int J> static inline auto complexScalar(Model &model, Tag<I> a, Tag<J> b)
+    template <class Model, int I, int J> static inline auto complexScalarContribution(Model &model, Tag<I> a, Tag<J> b)
     {
       return Total(i, 0, Model::NCs - 1,
                    2 * Real(GaugeDerivatives::forwardCovGradientCS(model, i, a) *
                             conj(GaugeDerivatives::forwardCovGradientCS(model, i, b))));
     }
 
-    template <class Model, int I, int J> static inline auto electricU1(const Model &model, Tag<I> i, Tag<J> j)
+    template <class Model, int I, int J> static inline auto electricU1Contribution(const Model &model, Tag<I> i, Tag<J> j)
     {
       return Total(a, 0, Model::NU1 - 1,
                    -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * model.piU1(a)(i) *
                        model.piU1(a)(j));
     }
 
-    template <class Model, int I, int J> static inline auto magneticU1(const Model &model, Tag<I> i, Tag<J> j)
+    template <class Model, int I, int J> static inline auto magneticU1Contribution(const Model &model, Tag<I> i, Tag<J> j)
     {
       return Total(a, 0, Model::NU1 - 1,
                    -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * magneticFieldU1(model.fldU1(a), i) *

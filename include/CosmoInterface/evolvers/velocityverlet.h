@@ -126,7 +126,7 @@ namespace TempLat
 
     template <class Model> void kickGWs(Model &model, T w)
     {
-      ForLoop(i, 0, Model::NGWs - 1, (*model.piGWs)(i) += (w * model.dt / 2) * GWsKernels::get(model, i););
+      (*model.piGWs) += (w * model.dt / 2) * GWsKernels::get(model);
     }
 
     // Evolves piCS(n)

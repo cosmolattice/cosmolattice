@@ -25,10 +25,10 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     GWsKernels() = delete;
 
-    template <class Model, int N> static auto get(Model &model, Tag<N> n)
+    template <class Model> static auto get(Model &model)
     {
-      return (pow(model.aI, 1 + model.alpha) * LatLapl((*model.fldGWs)(n)) +
-              pow(model.aI, 1 + model.alpha) * 2. * (PITensor::totalTensor(model, n)));
+      return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::LaplacianGWs(model) +
+             pow(model.aI, 1 + model.alpha) * 2. * (PITensor::effectiveAnisotropicTensor(model)); //TODO: Jorge: Needed to create the laplacian, as the LatLapl returns the evaluated object before multiplying, which is an array.
     }
   };
 } // namespace TempLat
