@@ -77,6 +77,8 @@ namespace TempLat
         throw(NotEnoughCouplingsForThisCouplingsManager(std::to_string(couplings.size()) +
                                                         " couplings were specified while " + std::to_string(NGauge) +
                                                         " gauge fields are present. Abort."));
+      // Set the gauge field couplings g and the effective charges g*Q for each matter-gauge coupling.
+      gs = couplings;
       if constexpr (NGauge > 0) {
         size_t count = 0;
         for (size_t i = 0; i < doesCouples.size(); ++i) {
