@@ -1,3 +1,46 @@
 .MathJax {
     font-size: 1.1em !important;
 }
+
+/* === emgithub CSS isolation === */
+
+/* Reset Material theme's pre>code styles inside emgithub containers */
+.emgithub pre > code {
+    background: none;
+    padding: 0;
+    font-size: inherit;
+    border-radius: 0;
+}
+
+.emgithub pre {
+    background: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure emgithub containers size correctly within Material's content area */
+.emgithub {
+    width: 100%;
+    margin: 1em 0;
+    overflow-x: auto;
+}
+
+/* Prevent hljs github theme from affecting Pygments-rendered blocks */
+.highlight pre > code,
+.md-typeset pre > code {
+    background: revert;
+}
+
+/* Ensure Pygments blocks are not re-highlighted by hljs */
+.highlight pre > code.hljs {
+    display: none;
+}
+
+.highlight pre > code[class*="language-"] {
+    all: revert;
+}
+
+/* Hide emgithub's "view raw" link (points to jsDelivr) — we inject our own via JS */
+.emgithub-file .file-meta a[href*="cdn.jsdelivr.net"] {
+    display: none;
+}
