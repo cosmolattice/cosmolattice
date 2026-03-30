@@ -1,0 +1,930 @@
+Starting server with Config HP="127.0.0.1:51582"|T="28800000"|R="false"|L="info"
+time="2026-03-30T15:52:42+02:00" level=info msg="Creating root@localhost superuser"
+time="2026-03-30T15:52:42+02:00" level=info msg="Server ready. Accepting connections."
+time="2026-03-30T15:52:42+02:00" level=warning msg="secure_file_priv is set to \"\", which is insecure."
+time="2026-03-30T15:52:42+02:00" level=warning msg="Any user with GRANT FILE privileges will be able to read any file which the sql-server process can read."
+time="2026-03-30T15:52:42+02:00" level=warning msg="Please consider restarting the server with secure_file_priv set to a safe (or non-existent) directory."
+time="2026-03-30T15:52:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=1
+time="2026-03-30T15:52:42+02:00" level=info msg=ConnectionClosed connectionID=1
+time="2026-03-30T15:52:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=2
+time="2026-03-30T15:52:42+02:00" level=info msg=ConnectionClosed connectionID=2
+time="2026-03-30T15:52:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=3
+time="2026-03-30T15:52:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=4
+time="2026-03-30T15:52:42+02:00" level=info msg=ConnectionClosed connectionID=3
+time="2026-03-30T15:52:42+02:00" level=warning msg="error running query" connectTime="2026-03-30 15:52:42.212186 +0200 CEST m=+0.251914210" connectionDb=cosmolattice_private connectionID=4 error="table not found: config" queryTime="2026-03-30 15:52:42.21315 +0200 CEST m=+0.252879126"
+time="2026-03-30T15:52:42+02:00" level=warning msg="error running query" connectTime="2026-03-30 15:52:42.212186 +0200 CEST m=+0.251914210" connectionDb=cosmolattice_private connectionID=4 error="table not found: config" queryTime="2026-03-30 15:52:42.214523 +0200 CEST m=+0.254252001"
+time="2026-03-30T15:52:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=5
+time="2026-03-30T15:52:42+02:00" level=warning msg="error running query" connectTime="2026-03-30 15:52:42.215738 +0200 CEST m=+0.255466710" connectionDb=cosmolattice_private connectionID=5 error="Duplicate key name 'idx_issues_issue_type'" queryTime="2026-03-30 15:52:42.321654 +0200 CEST m=+0.361382501"
+time="2026-03-30T15:52:42+02:00" level=warning msg="error running query" connectTime="2026-03-30 15:52:42.215738 +0200 CEST m=+0.255466710" connectionDb=cosmolattice_private connectionID=5 error="foreign key `fk_dep_depends_on` was not found on the table `dependencies`" queryTime="2026-03-30 15:52:42.321982 +0200 CEST m=+0.361710293"
+time="2026-03-30T15:52:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=6
+time="2026-03-30T15:52:42+02:00" level=info msg=ConnectionClosed connectionID=6
+time="2026-03-30T15:52:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=7
+time="2026-03-30T15:52:42+02:00" level=info msg=ConnectionClosed connectionID=7
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=5
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=4
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=8
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=8
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=9
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=10
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=9
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=10
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=11
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=11
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=12
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=13
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=12
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=13
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=14
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=14
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=15
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=16
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=15
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=16
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=17
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=17
+time="2026-03-30T15:52:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=18
+time="2026-03-30T15:52:59+02:00" level=info msg=ConnectionClosed connectionID=18
+time="2026-03-30T15:54:11+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=19
+time="2026-03-30T15:54:11+02:00" level=info msg=ConnectionClosed connectionID=19
+time="2026-03-30T15:54:11+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=20
+time="2026-03-30T15:54:11+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=21
+time="2026-03-30T15:54:11+02:00" level=info msg=ConnectionClosed connectionID=20
+time="2026-03-30T15:54:11+02:00" level=warning msg="error running query" connectTime="2026-03-30 15:54:11.681038 +0200 CEST m=+89.720779585" connectionDb=cosmolattice_private connectionID=21 error="nothing to commit" queryTime="2026-03-30 15:54:11.688336 +0200 CEST m=+89.728077501"
+time="2026-03-30T15:54:11+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=22
+time="2026-03-30T15:54:11+02:00" level=info msg=ConnectionClosed connectionID=22
+time="2026-03-30T15:54:12+02:00" level=info msg=ConnectionClosed connectionID=21
+time="2026-03-30T15:54:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=23
+time="2026-03-30T15:54:20+02:00" level=info msg=ConnectionClosed connectionID=23
+time="2026-03-30T15:54:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=24
+time="2026-03-30T15:54:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=25
+time="2026-03-30T15:54:20+02:00" level=info msg=ConnectionClosed connectionID=24
+time="2026-03-30T15:54:20+02:00" level=warning msg="error running query" connectTime="2026-03-30 15:54:20.612859 +0200 CEST m=+98.652601376" connectionDb=cosmolattice_private connectionID=25 error="nothing to commit" queryTime="2026-03-30 15:54:20.623557 +0200 CEST m=+98.663299751"
+time="2026-03-30T15:54:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=26
+time="2026-03-30T15:54:20+02:00" level=info msg=ConnectionClosed connectionID=26
+time="2026-03-30T15:54:20+02:00" level=info msg=ConnectionClosed connectionID=25
+time="2026-03-30T16:09:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=27
+time="2026-03-30T16:09:24+02:00" level=info msg=ConnectionClosed connectionID=27
+time="2026-03-30T16:09:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=28
+time="2026-03-30T16:09:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=29
+time="2026-03-30T16:09:24+02:00" level=info msg=ConnectionClosed connectionID=28
+time="2026-03-30T16:09:24+02:00" level=warning msg="error running query" connectTime="2026-03-30 16:09:24.223507 +0200 CEST m=+1002.263275335" connectionDb=cosmolattice_private connectionID=29 error="nothing to commit" queryTime="2026-03-30 16:09:24.230638 +0200 CEST m=+1002.270405751"
+time="2026-03-30T16:09:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=30
+time="2026-03-30T16:09:24+02:00" level=info msg=ConnectionClosed connectionID=30
+time="2026-03-30T16:09:24+02:00" level=info msg=ConnectionClosed connectionID=29
+time="2026-03-30T16:17:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=31
+time="2026-03-30T16:17:20+02:00" level=info msg=ConnectionClosed connectionID=31
+time="2026-03-30T16:17:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=32
+time="2026-03-30T16:17:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=33
+time="2026-03-30T16:17:20+02:00" level=info msg=ConnectionClosed connectionID=32
+time="2026-03-30T16:17:20+02:00" level=warning msg="error running query" connectTime="2026-03-30 16:17:20.608311 +0200 CEST m=+1478.648132085" connectionDb=cosmolattice_private connectionID=33 error="nothing to commit" queryTime="2026-03-30 16:17:20.615328 +0200 CEST m=+1478.655149460"
+time="2026-03-30T16:17:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=34
+time="2026-03-30T16:17:20+02:00" level=info msg=ConnectionClosed connectionID=34
+time="2026-03-30T16:17:20+02:00" level=info msg=ConnectionClosed connectionID=33
+time="2026-03-30T16:24:01+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=35
+time="2026-03-30T16:24:01+02:00" level=info msg=ConnectionClosed connectionID=35
+time="2026-03-30T16:24:01+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=36
+time="2026-03-30T16:24:01+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=37
+time="2026-03-30T16:24:01+02:00" level=info msg=ConnectionClosed connectionID=36
+time="2026-03-30T16:24:01+02:00" level=warning msg="error running query" connectTime="2026-03-30 16:24:01.635594 +0200 CEST m=+1879.675460210" connectionDb=cosmolattice_private connectionID=37 error="nothing to commit" queryTime="2026-03-30 16:24:01.641884 +0200 CEST m=+1879.681750585"
+time="2026-03-30T16:24:01+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=38
+time="2026-03-30T16:24:01+02:00" level=info msg=ConnectionClosed connectionID=38
+time="2026-03-30T16:24:01+02:00" level=info msg=ConnectionClosed connectionID=37
+time="2026-03-30T17:00:04+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=39
+time="2026-03-30T17:00:04+02:00" level=info msg=ConnectionClosed connectionID=39
+time="2026-03-30T17:00:04+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=40
+time="2026-03-30T17:00:04+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=41
+time="2026-03-30T17:00:04+02:00" level=info msg=ConnectionClosed connectionID=40
+time="2026-03-30T17:00:04+02:00" level=warning msg="error running query" connectTime="2026-03-30 17:00:04.327772 +0200 CEST m=+4042.367676501" connectionDb=cosmolattice_private connectionID=41 error="nothing to commit" queryTime="2026-03-30 17:00:04.338634 +0200 CEST m=+4042.378538793"
+time="2026-03-30T17:00:04+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=42
+time="2026-03-30T17:00:04+02:00" level=info msg=ConnectionClosed connectionID=42
+time="2026-03-30T17:00:04+02:00" level=info msg=ConnectionClosed connectionID=41
+time="2026-03-30T18:08:56+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=43
+time="2026-03-30T18:08:56+02:00" level=info msg=ConnectionClosed connectionID=43
+time="2026-03-30T18:08:56+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=44
+time="2026-03-30T18:08:56+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=45
+time="2026-03-30T18:08:56+02:00" level=info msg=ConnectionClosed connectionID=44
+time="2026-03-30T18:08:56+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:08:56.642024 +0200 CEST m=+8174.681062710" connectionDb=cosmolattice_private connectionID=45 error="nothing to commit" queryTime="2026-03-30 18:08:56.652194 +0200 CEST m=+8174.691232918"
+time="2026-03-30T18:08:57+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=46
+time="2026-03-30T18:08:57+02:00" level=info msg=ConnectionClosed connectionID=46
+time="2026-03-30T18:08:57+02:00" level=info msg=ConnectionClosed connectionID=45
+time="2026-03-30T18:09:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=47
+time="2026-03-30T18:09:07+02:00" level=info msg=ConnectionClosed connectionID=47
+time="2026-03-30T18:09:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=48
+time="2026-03-30T18:09:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=49
+time="2026-03-30T18:09:07+02:00" level=info msg=ConnectionClosed connectionID=48
+time="2026-03-30T18:09:07+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:09:07.406416 +0200 CEST m=+8185.445453001" connectionDb=cosmolattice_private connectionID=49 error="nothing to commit" queryTime="2026-03-30 18:09:07.415502 +0200 CEST m=+8185.454539626"
+time="2026-03-30T18:09:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=50
+time="2026-03-30T18:09:07+02:00" level=info msg=ConnectionClosed connectionID=50
+time="2026-03-30T18:09:07+02:00" level=info msg=ConnectionClosed connectionID=49
+time="2026-03-30T18:15:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=51
+time="2026-03-30T18:15:25+02:00" level=info msg=ConnectionClosed connectionID=51
+time="2026-03-30T18:15:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=52
+time="2026-03-30T18:15:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=53
+time="2026-03-30T18:15:25+02:00" level=info msg=ConnectionClosed connectionID=52
+time="2026-03-30T18:15:25+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:15:25.496407 +0200 CEST m=+8563.535624251" connectionDb=cosmolattice_private connectionID=53 error="nothing to commit" queryTime="2026-03-30 18:15:25.502845 +0200 CEST m=+8563.542062293"
+time="2026-03-30T18:15:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=54
+time="2026-03-30T18:15:25+02:00" level=info msg=ConnectionClosed connectionID=54
+time="2026-03-30T18:15:25+02:00" level=info msg=ConnectionClosed connectionID=53
+time="2026-03-30T18:16:03+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=55
+time="2026-03-30T18:16:03+02:00" level=info msg=ConnectionClosed connectionID=55
+time="2026-03-30T18:16:03+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=56
+time="2026-03-30T18:16:03+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=57
+time="2026-03-30T18:16:03+02:00" level=info msg=ConnectionClosed connectionID=56
+time="2026-03-30T18:16:03+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:16:03.986362 +0200 CEST m=+8602.025577668" connectionDb=cosmolattice_private connectionID=57 error="nothing to commit" queryTime="2026-03-30 18:16:03.993431 +0200 CEST m=+8602.032646293"
+time="2026-03-30T18:16:04+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=58
+time="2026-03-30T18:16:04+02:00" level=info msg=ConnectionClosed connectionID=58
+time="2026-03-30T18:16:04+02:00" level=info msg=ConnectionClosed connectionID=57
+time="2026-03-30T18:16:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=59
+time="2026-03-30T18:16:07+02:00" level=info msg=ConnectionClosed connectionID=59
+time="2026-03-30T18:16:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=60
+time="2026-03-30T18:16:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=61
+time="2026-03-30T18:16:07+02:00" level=info msg=ConnectionClosed connectionID=60
+time="2026-03-30T18:16:07+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:16:07.781801 +0200 CEST m=+8605.821016126" connectionDb=cosmolattice_private connectionID=61 error="nothing to commit" queryTime="2026-03-30 18:16:07.79038 +0200 CEST m=+8605.829595335"
+time="2026-03-30T18:16:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=62
+time="2026-03-30T18:16:08+02:00" level=info msg=ConnectionClosed connectionID=62
+time="2026-03-30T18:16:08+02:00" level=info msg=ConnectionClosed connectionID=61
+time="2026-03-30T18:21:19+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=63
+time="2026-03-30T18:21:19+02:00" level=info msg=ConnectionClosed connectionID=63
+time="2026-03-30T18:21:19+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=64
+time="2026-03-30T18:21:19+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=65
+time="2026-03-30T18:21:19+02:00" level=info msg=ConnectionClosed connectionID=64
+time="2026-03-30T18:21:19+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:21:19.767353 +0200 CEST m=+8917.806551835" connectionDb=cosmolattice_private connectionID=65 error="nothing to commit" queryTime="2026-03-30 18:21:19.77469 +0200 CEST m=+8917.813889251"
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=66
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=66
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=65
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=67
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=67
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=68
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=69
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=68
+time="2026-03-30T18:21:20+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:21:20.131629 +0200 CEST m=+8918.170827793" connectionDb=cosmolattice_private connectionID=69 error="nothing to commit" queryTime="2026-03-30 18:21:20.137986 +0200 CEST m=+8918.177185085"
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=70
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=70
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=69
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=71
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=71
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=72
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=73
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=72
+time="2026-03-30T18:21:20+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:21:20.461921 +0200 CEST m=+8918.501119626" connectionDb=cosmolattice_private connectionID=73 error="nothing to commit" queryTime="2026-03-30 18:21:20.469169 +0200 CEST m=+8918.508367668"
+time="2026-03-30T18:21:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=74
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=74
+time="2026-03-30T18:21:20+02:00" level=info msg=ConnectionClosed connectionID=73
+time="2026-03-30T18:27:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=75
+time="2026-03-30T18:27:38+02:00" level=info msg=ConnectionClosed connectionID=75
+time="2026-03-30T18:27:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=76
+time="2026-03-30T18:27:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=77
+time="2026-03-30T18:27:38+02:00" level=info msg=ConnectionClosed connectionID=76
+time="2026-03-30T18:27:38+02:00" level=info msg=ConnectionClosed connectionID=77
+time="2026-03-30T18:33:34+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=78
+time="2026-03-30T18:33:34+02:00" level=info msg=ConnectionClosed connectionID=78
+time="2026-03-30T18:33:34+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=79
+time="2026-03-30T18:33:34+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=80
+time="2026-03-30T18:33:34+02:00" level=info msg=ConnectionClosed connectionID=79
+time="2026-03-30T18:33:34+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:33:34.242253 +0200 CEST m=+9652.281413460" connectionDb=cosmolattice_private connectionID=80 error="nothing to commit" queryTime="2026-03-30 18:33:34.251065 +0200 CEST m=+9652.290225460"
+time="2026-03-30T18:33:34+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=81
+time="2026-03-30T18:33:34+02:00" level=info msg=ConnectionClosed connectionID=81
+time="2026-03-30T18:33:34+02:00" level=info msg=ConnectionClosed connectionID=80
+time="2026-03-30T18:33:34+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=82
+time="2026-03-30T18:33:34+02:00" level=info msg=ConnectionClosed connectionID=82
+time="2026-03-30T18:33:34+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=83
+time="2026-03-30T18:33:34+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=84
+time="2026-03-30T18:33:34+02:00" level=info msg=ConnectionClosed connectionID=83
+time="2026-03-30T18:33:34+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:33:34.683524 +0200 CEST m=+9652.722684335" connectionDb=cosmolattice_private connectionID=84 error="nothing to commit" queryTime="2026-03-30 18:33:34.690918 +0200 CEST m=+9652.730078085"
+time="2026-03-30T18:33:34+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=85
+time="2026-03-30T18:33:34+02:00" level=info msg=ConnectionClosed connectionID=85
+time="2026-03-30T18:33:34+02:00" level=info msg=ConnectionClosed connectionID=84
+time="2026-03-30T18:33:35+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=86
+time="2026-03-30T18:33:35+02:00" level=info msg=ConnectionClosed connectionID=86
+time="2026-03-30T18:33:35+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=87
+time="2026-03-30T18:33:35+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=88
+time="2026-03-30T18:33:35+02:00" level=info msg=ConnectionClosed connectionID=87
+time="2026-03-30T18:33:35+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:33:35.019502 +0200 CEST m=+9653.058662335" connectionDb=cosmolattice_private connectionID=88 error="nothing to commit" queryTime="2026-03-30 18:33:35.025 +0200 CEST m=+9653.064160793"
+time="2026-03-30T18:33:35+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=89
+time="2026-03-30T18:33:35+02:00" level=info msg=ConnectionClosed connectionID=89
+time="2026-03-30T18:33:35+02:00" level=info msg=ConnectionClosed connectionID=88
+time="2026-03-30T18:33:35+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=90
+time="2026-03-30T18:33:35+02:00" level=info msg=ConnectionClosed connectionID=90
+time="2026-03-30T18:33:35+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=91
+time="2026-03-30T18:33:35+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=92
+time="2026-03-30T18:33:35+02:00" level=info msg=ConnectionClosed connectionID=91
+time="2026-03-30T18:33:35+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:33:35.35074 +0200 CEST m=+9653.389900418" connectionDb=cosmolattice_private connectionID=92 error="nothing to commit" queryTime="2026-03-30 18:33:35.355895 +0200 CEST m=+9653.395055085"
+time="2026-03-30T18:33:35+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=93
+time="2026-03-30T18:33:35+02:00" level=info msg=ConnectionClosed connectionID=93
+time="2026-03-30T18:33:35+02:00" level=info msg=ConnectionClosed connectionID=92
+time="2026-03-30T18:34:13+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=94
+time="2026-03-30T18:34:13+02:00" level=info msg=ConnectionClosed connectionID=94
+time="2026-03-30T18:34:13+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=95
+time="2026-03-30T18:34:13+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=96
+time="2026-03-30T18:34:13+02:00" level=info msg=ConnectionClosed connectionID=95
+time="2026-03-30T18:34:13+02:00" level=info msg=ConnectionClosed connectionID=96
+time="2026-03-30T18:36:52+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=97
+time="2026-03-30T18:36:52+02:00" level=info msg=ConnectionClosed connectionID=97
+time="2026-03-30T18:36:52+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=98
+time="2026-03-30T18:36:52+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=99
+time="2026-03-30T18:36:52+02:00" level=info msg=ConnectionClosed connectionID=98
+time="2026-03-30T18:36:52+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:36:52.346956 +0200 CEST m=+9850.386106085" connectionDb=cosmolattice_private connectionID=99 error="nothing to commit" queryTime="2026-03-30 18:36:52.353488 +0200 CEST m=+9850.392638043"
+time="2026-03-30T18:36:52+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=100
+time="2026-03-30T18:36:52+02:00" level=info msg=ConnectionClosed connectionID=100
+time="2026-03-30T18:36:52+02:00" level=info msg=ConnectionClosed connectionID=99
+time="2026-03-30T18:37:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=101
+time="2026-03-30T18:37:07+02:00" level=info msg=ConnectionClosed connectionID=101
+time="2026-03-30T18:37:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=102
+time="2026-03-30T18:37:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=103
+time="2026-03-30T18:37:07+02:00" level=info msg=ConnectionClosed connectionID=102
+time="2026-03-30T18:37:07+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:37:07.971526 +0200 CEST m=+9866.010674626" connectionDb=cosmolattice_private connectionID=103 error="nothing to commit" queryTime="2026-03-30 18:37:07.979788 +0200 CEST m=+9866.018937418"
+time="2026-03-30T18:37:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=104
+time="2026-03-30T18:37:08+02:00" level=info msg=ConnectionClosed connectionID=104
+time="2026-03-30T18:37:08+02:00" level=info msg=ConnectionClosed connectionID=103
+time="2026-03-30T18:37:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=105
+time="2026-03-30T18:37:08+02:00" level=info msg=ConnectionClosed connectionID=105
+time="2026-03-30T18:37:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=106
+time="2026-03-30T18:37:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=107
+time="2026-03-30T18:37:08+02:00" level=info msg=ConnectionClosed connectionID=106
+time="2026-03-30T18:37:08+02:00" level=info msg=ConnectionClosed connectionID=107
+time="2026-03-30T18:51:52+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=108
+time="2026-03-30T18:51:52+02:00" level=info msg=ConnectionClosed connectionID=108
+time="2026-03-30T18:51:52+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=109
+time="2026-03-30T18:51:52+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=110
+time="2026-03-30T18:51:52+02:00" level=info msg=ConnectionClosed connectionID=109
+time="2026-03-30T18:51:52+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:51:52.445967 +0200 CEST m=+10750.484778835" connectionDb=cosmolattice_private connectionID=110 error="nothing to commit" queryTime="2026-03-30 18:51:52.452387 +0200 CEST m=+10750.491198376"
+time="2026-03-30T18:51:52+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=111
+time="2026-03-30T18:51:52+02:00" level=info msg=ConnectionClosed connectionID=111
+time="2026-03-30T18:51:53+02:00" level=info msg=ConnectionClosed connectionID=110
+time="2026-03-30T18:53:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=112
+time="2026-03-30T18:53:15+02:00" level=info msg=ConnectionClosed connectionID=112
+time="2026-03-30T18:53:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=113
+time="2026-03-30T18:53:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=114
+time="2026-03-30T18:53:15+02:00" level=info msg=ConnectionClosed connectionID=113
+time="2026-03-30T18:53:15+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:15.452832 +0200 CEST m=+10833.491632460" connectionDb=cosmolattice_private connectionID=114 error="nothing to commit" queryTime="2026-03-30 18:53:15.458322 +0200 CEST m=+10833.497122376"
+time="2026-03-30T18:53:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=115
+time="2026-03-30T18:53:15+02:00" level=info msg=ConnectionClosed connectionID=115
+time="2026-03-30T18:53:15+02:00" level=info msg=ConnectionClosed connectionID=114
+time="2026-03-30T18:53:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=116
+time="2026-03-30T18:53:16+02:00" level=info msg=ConnectionClosed connectionID=116
+time="2026-03-30T18:53:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=117
+time="2026-03-30T18:53:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=118
+time="2026-03-30T18:53:16+02:00" level=info msg=ConnectionClosed connectionID=117
+time="2026-03-30T18:53:16+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:16.402516 +0200 CEST m=+10834.441316085" connectionDb=cosmolattice_private connectionID=118 error="nothing to commit" queryTime="2026-03-30 18:53:16.409474 +0200 CEST m=+10834.448274501"
+time="2026-03-30T18:53:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=119
+time="2026-03-30T18:53:16+02:00" level=info msg=ConnectionClosed connectionID=119
+time="2026-03-30T18:53:16+02:00" level=info msg=ConnectionClosed connectionID=118
+time="2026-03-30T18:53:17+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=120
+time="2026-03-30T18:53:17+02:00" level=info msg=ConnectionClosed connectionID=120
+time="2026-03-30T18:53:17+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=121
+time="2026-03-30T18:53:17+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=122
+time="2026-03-30T18:53:17+02:00" level=info msg=ConnectionClosed connectionID=121
+time="2026-03-30T18:53:17+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:17.301842 +0200 CEST m=+10835.340642085" connectionDb=cosmolattice_private connectionID=122 error="nothing to commit" queryTime="2026-03-30 18:53:17.307711 +0200 CEST m=+10835.346511918"
+time="2026-03-30T18:53:17+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=123
+time="2026-03-30T18:53:17+02:00" level=info msg=ConnectionClosed connectionID=123
+time="2026-03-30T18:53:17+02:00" level=info msg=ConnectionClosed connectionID=122
+time="2026-03-30T18:53:18+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=124
+time="2026-03-30T18:53:18+02:00" level=info msg=ConnectionClosed connectionID=124
+time="2026-03-30T18:53:18+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=125
+time="2026-03-30T18:53:18+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=126
+time="2026-03-30T18:53:18+02:00" level=info msg=ConnectionClosed connectionID=125
+time="2026-03-30T18:53:18+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:18.275187 +0200 CEST m=+10836.313987001" connectionDb=cosmolattice_private connectionID=126 error="nothing to commit" queryTime="2026-03-30 18:53:18.281665 +0200 CEST m=+10836.320464918"
+time="2026-03-30T18:53:18+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=127
+time="2026-03-30T18:53:18+02:00" level=info msg=ConnectionClosed connectionID=127
+time="2026-03-30T18:53:18+02:00" level=info msg=ConnectionClosed connectionID=126
+time="2026-03-30T18:53:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=128
+time="2026-03-30T18:53:20+02:00" level=info msg=ConnectionClosed connectionID=128
+time="2026-03-30T18:53:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=129
+time="2026-03-30T18:53:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=130
+time="2026-03-30T18:53:20+02:00" level=info msg=ConnectionClosed connectionID=129
+time="2026-03-30T18:53:20+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:20.131614 +0200 CEST m=+10838.170414460" connectionDb=cosmolattice_private connectionID=130 error="nothing to commit" queryTime="2026-03-30 18:53:20.138365 +0200 CEST m=+10838.177164918"
+time="2026-03-30T18:53:20+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=131
+time="2026-03-30T18:53:20+02:00" level=info msg=ConnectionClosed connectionID=131
+time="2026-03-30T18:53:20+02:00" level=info msg=ConnectionClosed connectionID=130
+time="2026-03-30T18:53:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=132
+time="2026-03-30T18:53:21+02:00" level=info msg=ConnectionClosed connectionID=132
+time="2026-03-30T18:53:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=133
+time="2026-03-30T18:53:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=134
+time="2026-03-30T18:53:21+02:00" level=info msg=ConnectionClosed connectionID=133
+time="2026-03-30T18:53:21+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:21.139049 +0200 CEST m=+10839.177848543" connectionDb=cosmolattice_private connectionID=134 error="nothing to commit" queryTime="2026-03-30 18:53:21.145223 +0200 CEST m=+10839.184023168"
+time="2026-03-30T18:53:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=135
+time="2026-03-30T18:53:21+02:00" level=info msg=ConnectionClosed connectionID=135
+time="2026-03-30T18:53:21+02:00" level=info msg=ConnectionClosed connectionID=134
+time="2026-03-30T18:53:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=136
+time="2026-03-30T18:53:21+02:00" level=info msg=ConnectionClosed connectionID=136
+time="2026-03-30T18:53:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=137
+time="2026-03-30T18:53:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=138
+time="2026-03-30T18:53:21+02:00" level=info msg=ConnectionClosed connectionID=137
+time="2026-03-30T18:53:21+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:21.750069 +0200 CEST m=+10839.788869001" connectionDb=cosmolattice_private connectionID=138 error="nothing to commit" queryTime="2026-03-30 18:53:21.755429 +0200 CEST m=+10839.794228710"
+time="2026-03-30T18:53:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=139
+time="2026-03-30T18:53:21+02:00" level=info msg=ConnectionClosed connectionID=139
+time="2026-03-30T18:53:22+02:00" level=info msg=ConnectionClosed connectionID=138
+time="2026-03-30T18:53:22+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=140
+time="2026-03-30T18:53:22+02:00" level=info msg=ConnectionClosed connectionID=140
+time="2026-03-30T18:53:22+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=141
+time="2026-03-30T18:53:22+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=142
+time="2026-03-30T18:53:22+02:00" level=info msg=ConnectionClosed connectionID=141
+time="2026-03-30T18:53:22+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:22.630597 +0200 CEST m=+10840.669396918" connectionDb=cosmolattice_private connectionID=142 error="nothing to commit" queryTime="2026-03-30 18:53:22.636934 +0200 CEST m=+10840.675733251"
+time="2026-03-30T18:53:22+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=143
+time="2026-03-30T18:53:22+02:00" level=info msg=ConnectionClosed connectionID=143
+time="2026-03-30T18:53:23+02:00" level=info msg=ConnectionClosed connectionID=142
+time="2026-03-30T18:53:23+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=144
+time="2026-03-30T18:53:23+02:00" level=info msg=ConnectionClosed connectionID=144
+time="2026-03-30T18:53:23+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=145
+time="2026-03-30T18:53:23+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=146
+time="2026-03-30T18:53:23+02:00" level=info msg=ConnectionClosed connectionID=145
+time="2026-03-30T18:53:23+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:23.534419 +0200 CEST m=+10841.573218876" connectionDb=cosmolattice_private connectionID=146 error="nothing to commit" queryTime="2026-03-30 18:53:23.539814 +0200 CEST m=+10841.578613793"
+time="2026-03-30T18:53:23+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=147
+time="2026-03-30T18:53:23+02:00" level=info msg=ConnectionClosed connectionID=147
+time="2026-03-30T18:53:23+02:00" level=info msg=ConnectionClosed connectionID=146
+time="2026-03-30T18:53:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=148
+time="2026-03-30T18:53:24+02:00" level=info msg=ConnectionClosed connectionID=148
+time="2026-03-30T18:53:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=149
+time="2026-03-30T18:53:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=150
+time="2026-03-30T18:53:24+02:00" level=info msg=ConnectionClosed connectionID=149
+time="2026-03-30T18:53:24+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:24.423793 +0200 CEST m=+10842.462592960" connectionDb=cosmolattice_private connectionID=150 error="nothing to commit" queryTime="2026-03-30 18:53:24.430391 +0200 CEST m=+10842.469190293"
+time="2026-03-30T18:53:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=151
+time="2026-03-30T18:53:24+02:00" level=info msg=ConnectionClosed connectionID=151
+time="2026-03-30T18:53:24+02:00" level=info msg=ConnectionClosed connectionID=150
+time="2026-03-30T18:53:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=152
+time="2026-03-30T18:53:25+02:00" level=info msg=ConnectionClosed connectionID=152
+time="2026-03-30T18:53:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=153
+time="2026-03-30T18:53:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=154
+time="2026-03-30T18:53:25+02:00" level=info msg=ConnectionClosed connectionID=153
+time="2026-03-30T18:53:25+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:25.305604 +0200 CEST m=+10843.344403168" connectionDb=cosmolattice_private connectionID=154 error="nothing to commit" queryTime="2026-03-30 18:53:25.312936 +0200 CEST m=+10843.351735293"
+time="2026-03-30T18:53:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=155
+time="2026-03-30T18:53:25+02:00" level=info msg=ConnectionClosed connectionID=155
+time="2026-03-30T18:53:25+02:00" level=info msg=ConnectionClosed connectionID=154
+time="2026-03-30T18:53:26+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=156
+time="2026-03-30T18:53:26+02:00" level=info msg=ConnectionClosed connectionID=156
+time="2026-03-30T18:53:26+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=157
+time="2026-03-30T18:53:26+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=158
+time="2026-03-30T18:53:26+02:00" level=info msg=ConnectionClosed connectionID=157
+time="2026-03-30T18:53:26+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:26.142796 +0200 CEST m=+10844.181594835" connectionDb=cosmolattice_private connectionID=158 error="nothing to commit" queryTime="2026-03-30 18:53:26.149829 +0200 CEST m=+10844.188627835"
+time="2026-03-30T18:53:26+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=159
+time="2026-03-30T18:53:26+02:00" level=info msg=ConnectionClosed connectionID=159
+time="2026-03-30T18:53:26+02:00" level=info msg=ConnectionClosed connectionID=158
+time="2026-03-30T18:53:36+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=160
+time="2026-03-30T18:53:36+02:00" level=info msg=ConnectionClosed connectionID=160
+time="2026-03-30T18:53:36+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=161
+time="2026-03-30T18:53:36+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=162
+time="2026-03-30T18:53:36+02:00" level=info msg=ConnectionClosed connectionID=161
+time="2026-03-30T18:53:36+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:36.726752 +0200 CEST m=+10854.765549460" connectionDb=cosmolattice_private connectionID=162 error="nothing to commit" queryTime="2026-03-30 18:53:36.733042 +0200 CEST m=+10854.771839460"
+time="2026-03-30T18:53:36+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=163
+time="2026-03-30T18:53:36+02:00" level=info msg=ConnectionClosed connectionID=163
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=162
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=164
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=164
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=165
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=166
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=165
+time="2026-03-30T18:53:37+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:37.089765 +0200 CEST m=+10855.128562751" connectionDb=cosmolattice_private connectionID=166 error="nothing to commit" queryTime="2026-03-30 18:53:37.09623 +0200 CEST m=+10855.135027585"
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=167
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=167
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=166
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=168
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=168
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=169
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=170
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=169
+time="2026-03-30T18:53:37+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:37.456357 +0200 CEST m=+10855.495154835" connectionDb=cosmolattice_private connectionID=170 error="nothing to commit" queryTime="2026-03-30 18:53:37.462472 +0200 CEST m=+10855.501269710"
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=171
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=171
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=170
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=172
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=172
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=173
+time="2026-03-30T18:53:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=174
+time="2026-03-30T18:53:37+02:00" level=info msg=ConnectionClosed connectionID=173
+time="2026-03-30T18:53:37+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:37.81558 +0200 CEST m=+10855.854377293" connectionDb=cosmolattice_private connectionID=174 error="nothing to commit" queryTime="2026-03-30 18:53:37.821477 +0200 CEST m=+10855.860274460"
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=175
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=175
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=174
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=176
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=176
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=177
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=178
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=177
+time="2026-03-30T18:53:38+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:38.16592 +0200 CEST m=+10856.204717960" connectionDb=cosmolattice_private connectionID=178 error="nothing to commit" queryTime="2026-03-30 18:53:38.172163 +0200 CEST m=+10856.210960751"
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=179
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=179
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=178
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=180
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=180
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=181
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=182
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=181
+time="2026-03-30T18:53:38+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:38.519511 +0200 CEST m=+10856.558308501" connectionDb=cosmolattice_private connectionID=182 error="nothing to commit" queryTime="2026-03-30 18:53:38.526493 +0200 CEST m=+10856.565290751"
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=183
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=183
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=182
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=184
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=184
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=185
+time="2026-03-30T18:53:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=186
+time="2026-03-30T18:53:38+02:00" level=info msg=ConnectionClosed connectionID=185
+time="2026-03-30T18:53:38+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:38.865359 +0200 CEST m=+10856.904156501" connectionDb=cosmolattice_private connectionID=186 error="nothing to commit" queryTime="2026-03-30 18:53:38.871071 +0200 CEST m=+10856.909868335"
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=187
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=187
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=186
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=188
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=188
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=189
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=190
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=189
+time="2026-03-30T18:53:39+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:39.21625 +0200 CEST m=+10857.255047626" connectionDb=cosmolattice_private connectionID=190 error="nothing to commit" queryTime="2026-03-30 18:53:39.221914 +0200 CEST m=+10857.260711168"
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=191
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=191
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=190
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=192
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=192
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=193
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=194
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=193
+time="2026-03-30T18:53:39+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:39.567571 +0200 CEST m=+10857.606368626" connectionDb=cosmolattice_private connectionID=194 error="nothing to commit" queryTime="2026-03-30 18:53:39.57378 +0200 CEST m=+10857.612577543"
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=195
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=195
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=194
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=196
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=196
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=197
+time="2026-03-30T18:53:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=198
+time="2026-03-30T18:53:39+02:00" level=info msg=ConnectionClosed connectionID=197
+time="2026-03-30T18:53:39+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:39.923151 +0200 CEST m=+10857.961948085" connectionDb=cosmolattice_private connectionID=198 error="nothing to commit" queryTime="2026-03-30 18:53:39.928292 +0200 CEST m=+10857.967089710"
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=199
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=199
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=198
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=200
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=200
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=201
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=202
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=201
+time="2026-03-30T18:53:40+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:40.276559 +0200 CEST m=+10858.315356585" connectionDb=cosmolattice_private connectionID=202 error="nothing to commit" queryTime="2026-03-30 18:53:40.282418 +0200 CEST m=+10858.321215043"
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=203
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=203
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=202
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=204
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=204
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=205
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=206
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=205
+time="2026-03-30T18:53:40+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:40.633723 +0200 CEST m=+10858.672519918" connectionDb=cosmolattice_private connectionID=206 error="nothing to commit" queryTime="2026-03-30 18:53:40.63924 +0200 CEST m=+10858.678036918"
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=207
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=207
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=206
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=208
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=208
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=209
+time="2026-03-30T18:53:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=210
+time="2026-03-30T18:53:40+02:00" level=info msg=ConnectionClosed connectionID=209
+time="2026-03-30T18:53:41+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:40.995369 +0200 CEST m=+10859.034166543" connectionDb=cosmolattice_private connectionID=210 error="nothing to commit" queryTime="2026-03-30 18:53:41.002014 +0200 CEST m=+10859.040810960"
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=211
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=211
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=210
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=212
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=212
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=213
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=214
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=213
+time="2026-03-30T18:53:41+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:41.357234 +0200 CEST m=+10859.396031751" connectionDb=cosmolattice_private connectionID=214 error="nothing to commit" queryTime="2026-03-30 18:53:41.363895 +0200 CEST m=+10859.402691793"
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=215
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=215
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=214
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=216
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=216
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=217
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=218
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=217
+time="2026-03-30T18:53:41+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:41.71937 +0200 CEST m=+10859.758166751" connectionDb=cosmolattice_private connectionID=218 error="nothing to commit" queryTime="2026-03-30 18:53:41.725523 +0200 CEST m=+10859.764320293"
+time="2026-03-30T18:53:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=219
+time="2026-03-30T18:53:41+02:00" level=info msg=ConnectionClosed connectionID=219
+time="2026-03-30T18:53:42+02:00" level=info msg=ConnectionClosed connectionID=218
+time="2026-03-30T18:53:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=220
+time="2026-03-30T18:53:42+02:00" level=info msg=ConnectionClosed connectionID=220
+time="2026-03-30T18:53:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=221
+time="2026-03-30T18:53:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=222
+time="2026-03-30T18:53:42+02:00" level=info msg=ConnectionClosed connectionID=221
+time="2026-03-30T18:53:42+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:42.073931 +0200 CEST m=+10860.112727960" connectionDb=cosmolattice_private connectionID=222 error="nothing to commit" queryTime="2026-03-30 18:53:42.080103 +0200 CEST m=+10860.118900043"
+time="2026-03-30T18:53:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=223
+time="2026-03-30T18:53:42+02:00" level=info msg=ConnectionClosed connectionID=223
+time="2026-03-30T18:53:42+02:00" level=info msg=ConnectionClosed connectionID=222
+time="2026-03-30T18:53:46+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=224
+time="2026-03-30T18:53:46+02:00" level=info msg=ConnectionClosed connectionID=224
+time="2026-03-30T18:53:46+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=225
+time="2026-03-30T18:53:46+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=226
+time="2026-03-30T18:53:46+02:00" level=info msg=ConnectionClosed connectionID=225
+time="2026-03-30T18:53:46+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:53:46.301004 +0200 CEST m=+10864.339800960" connectionDb=cosmolattice_private connectionID=226 error="nothing to commit" queryTime="2026-03-30 18:53:46.308531 +0200 CEST m=+10864.347327126"
+time="2026-03-30T18:53:46+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=227
+time="2026-03-30T18:53:46+02:00" level=info msg=ConnectionClosed connectionID=227
+time="2026-03-30T18:53:46+02:00" level=info msg=ConnectionClosed connectionID=226
+time="2026-03-30T18:54:06+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=228
+time="2026-03-30T18:54:06+02:00" level=info msg=ConnectionClosed connectionID=228
+time="2026-03-30T18:54:06+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=229
+time="2026-03-30T18:54:06+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=230
+time="2026-03-30T18:54:06+02:00" level=info msg=ConnectionClosed connectionID=229
+time="2026-03-30T18:54:06+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:54:06.347905 +0200 CEST m=+10884.386698668" connectionDb=cosmolattice_private connectionID=230 error="nothing to commit" queryTime="2026-03-30 18:54:06.358095 +0200 CEST m=+10884.396889335"
+time="2026-03-30T18:54:06+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=231
+time="2026-03-30T18:54:06+02:00" level=info msg=ConnectionClosed connectionID=231
+time="2026-03-30T18:54:06+02:00" level=info msg=ConnectionClosed connectionID=230
+time="2026-03-30T18:54:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=232
+time="2026-03-30T18:54:41+02:00" level=info msg=ConnectionClosed connectionID=232
+time="2026-03-30T18:54:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=233
+time="2026-03-30T18:54:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=234
+time="2026-03-30T18:54:41+02:00" level=info msg=ConnectionClosed connectionID=233
+time="2026-03-30T18:54:41+02:00" level=warning msg="error running query" connectTime="2026-03-30 18:54:41.560037 +0200 CEST m=+10919.598826168" connectionDb=cosmolattice_private connectionID=234 error="nothing to commit" queryTime="2026-03-30 18:54:41.567387 +0200 CEST m=+10919.606176251"
+time="2026-03-30T18:54:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=235
+time="2026-03-30T18:54:41+02:00" level=info msg=ConnectionClosed connectionID=235
+time="2026-03-30T18:54:41+02:00" level=info msg=ConnectionClosed connectionID=234
+time="2026-03-30T18:54:51+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=236
+time="2026-03-30T18:54:51+02:00" level=info msg=ConnectionClosed connectionID=236
+time="2026-03-30T18:54:51+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=237
+time="2026-03-30T18:54:51+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=238
+time="2026-03-30T18:54:51+02:00" level=info msg=ConnectionClosed connectionID=237
+time="2026-03-30T18:54:51+02:00" level=info msg=ConnectionClosed connectionID=238
+time="2026-03-30T18:55:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=239
+time="2026-03-30T18:55:07+02:00" level=info msg=ConnectionClosed connectionID=239
+time="2026-03-30T18:55:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=240
+time="2026-03-30T18:55:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=241
+time="2026-03-30T18:55:07+02:00" level=info msg=ConnectionClosed connectionID=240
+time="2026-03-30T18:55:07+02:00" level=info msg=ConnectionClosed connectionID=241
+time="2026-03-30T18:55:09+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=242
+time="2026-03-30T18:55:09+02:00" level=info msg=ConnectionClosed connectionID=242
+time="2026-03-30T18:55:09+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=243
+time="2026-03-30T18:55:09+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=244
+time="2026-03-30T18:55:09+02:00" level=info msg=ConnectionClosed connectionID=243
+time="2026-03-30T18:55:09+02:00" level=info msg=ConnectionClosed connectionID=244
+time="2026-03-30T18:55:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=245
+time="2026-03-30T18:55:16+02:00" level=info msg=ConnectionClosed connectionID=245
+time="2026-03-30T18:55:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=246
+time="2026-03-30T18:55:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=247
+time="2026-03-30T18:55:16+02:00" level=info msg=ConnectionClosed connectionID=246
+time="2026-03-30T18:55:16+02:00" level=info msg=ConnectionClosed connectionID=247
+time="2026-03-30T18:59:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=248
+time="2026-03-30T18:59:42+02:00" level=info msg=ConnectionClosed connectionID=248
+time="2026-03-30T18:59:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=249
+time="2026-03-30T18:59:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=250
+time="2026-03-30T18:59:42+02:00" level=info msg=ConnectionClosed connectionID=249
+time="2026-03-30T18:59:48+02:00" level=info msg=ConnectionClosed connectionID=250
+time="2026-03-30T19:00:54+02:00" level=info msg="Server closing listener. No longer accepting connections."
+time="2026-03-30T19:00:54+02:00" level=info msg="stats stopped: context canceled"
+panic: goroutine 1 [running]:
+	runtime/debug.Stack()
+		runtime/debug/stack.go:26 +0x64
+	github.com/dolthub/dolt/go/libraries/utils/errors.Fatalf(0x14000ea6780?, {0x106b1a08a, 0x27}, {0x14000b475e0, 0x1, 0x1048451b4?})
+		github.com/dolthub/dolt/go/libraries/utils/errors/panic.go:39 +0x3c
+	github.com/dolthub/dolt/go/store/nbs.(*NomsBlockStore).Close(0x140007fb800)
+		github.com/dolthub/dolt/go/store/nbs/store.go:1692 +0xc8
+	github.com/dolthub/dolt/go/store/nbs.(*GenerationalNBS).Close(0x14000c50270)
+		github.com/dolthub/dolt/go/store/nbs/generational_chunk_store.go:343 +0x38
+	github.com/dolthub/dolt/go/store/types.(*ValueStore).Close(...)
+		github.com/dolthub/dolt/go/store/types/value_store.go:797
+	github.com/dolthub/dolt/go/store/datas.(*database).Close(0x14000b476f0?)
+		github.com/dolthub/dolt/go/store/datas/database_common.go:199 +0x28
+	github.com/dolthub/dolt/go/libraries/doltcore/dbfactory.CloseAllLocalDatabases()
+		github.com/dolthub/dolt/go/libraries/doltcore/dbfactory/file.go:96 +0x120
+	main.runMain()
+		github.com/dolthub/dolt/go/cmd/dolt/dolt.go:576 +0x2798
+	main.main()
+		github.com/dolthub/dolt/go/cmd/dolt/dolt.go:225 +0x3c
+	
+	
+	fatal error: read /Users/aflorio/cosmolattice_private/.beads/dolt/cosmolattice_private/.dolt/noms/manifest: operation timed out: fatal error closing table persister
+
+goroutine 22433 [running]:
+github.com/dolthub/dolt/go/libraries/utils/errors.Fatalf.func1()
+	github.com/dolthub/dolt/go/libraries/utils/errors/panic.go:42 +0x74
+created by github.com/dolthub/dolt/go/libraries/utils/errors.Fatalf in goroutine 1
+	github.com/dolthub/dolt/go/libraries/utils/errors/panic.go:41 +0x178
+Starting server with Config HP="127.0.0.1:49379"|T="28800000"|R="false"|L="info"
+Starting server with Config HP="127.0.0.1:49409"|T="28800000"|R="false"|L="info"
+Starting server with Config HP="127.0.0.1:49437"|T="28800000"|R="false"|L="info"
+read /Users/aflorio/cosmolattice_private/.beads/dolt/cosmolattice_private/.dolt/noms/manifest: operation canceled
+Starting server with Config HP="127.0.0.1:49470"|T="28800000"|R="false"|L="info"
+Starting server with Config HP="127.0.0.1:49500"|T="28800000"|R="false"|L="info"
+read /Users/aflorio/cosmolattice_private/.beads/dolt/cosmolattice_private/.dolt/noms/manifest: operation canceled
+Starting server with Config HP="127.0.0.1:49531"|T="28800000"|R="false"|L="info"
+Starting server with Config HP="127.0.0.1:49558"|T="28800000"|R="false"|L="info"
+Starting server with Config HP="127.0.0.1:49594"|T="28800000"|R="false"|L="info"
+Starting server with Config HP="127.0.0.1:49705"|T="28800000"|R="false"|L="info"
+time="2026-03-30T19:34:31+02:00" level=info msg="Server ready. Accepting connections."
+time="2026-03-30T19:34:31+02:00" level=warning msg="secure_file_priv is set to \"\", which is insecure."
+time="2026-03-30T19:34:31+02:00" level=warning msg="Any user with GRANT FILE privileges will be able to read any file which the sql-server process can read."
+time="2026-03-30T19:34:31+02:00" level=warning msg="Please consider restarting the server with secure_file_priv set to a safe (or non-existent) directory."
+time="2026-03-30T19:34:31+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=2
+time="2026-03-30T19:34:31+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=1
+time="2026-03-30T19:34:31+02:00" level=info msg=ConnectionClosed connectionID=1
+time="2026-03-30T19:34:31+02:00" level=info msg=ConnectionClosed connectionID=2
+time="2026-03-30T19:34:31+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=3
+time="2026-03-30T19:34:31+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=4
+time="2026-03-30T19:34:31+02:00" level=info msg=ConnectionClosed connectionID=3
+time="2026-03-30T19:34:31+02:00" level=info msg=ConnectionClosed connectionID=4
+time="2026-03-30T19:34:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=5
+time="2026-03-30T19:34:38+02:00" level=info msg=ConnectionClosed connectionID=5
+time="2026-03-30T19:34:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=6
+time="2026-03-30T19:34:38+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=7
+time="2026-03-30T19:34:38+02:00" level=info msg=ConnectionClosed connectionID=6
+time="2026-03-30T19:34:38+02:00" level=info msg=ConnectionClosed connectionID=7
+time="2026-03-30T19:34:58+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=8
+time="2026-03-30T19:34:58+02:00" level=info msg=ConnectionClosed connectionID=8
+time="2026-03-30T19:34:58+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=9
+time="2026-03-30T19:34:58+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=10
+time="2026-03-30T19:34:58+02:00" level=info msg=ConnectionClosed connectionID=9
+time="2026-03-30T19:34:58+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:34:58.574863 +0200 CEST m=+27.452174959" connectionDb=cosmolattice_private connectionID=10 error="nothing to commit" queryTime="2026-03-30 19:34:58.584542 +0200 CEST m=+27.461853917"
+time="2026-03-30T19:34:58+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=11
+time="2026-03-30T19:34:58+02:00" level=info msg=ConnectionClosed connectionID=11
+time="2026-03-30T19:34:58+02:00" level=info msg=ConnectionClosed connectionID=10
+time="2026-03-30T19:35:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=12
+time="2026-03-30T19:35:15+02:00" level=info msg=ConnectionClosed connectionID=12
+time="2026-03-30T19:35:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=13
+time="2026-03-30T19:35:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=14
+time="2026-03-30T19:35:15+02:00" level=info msg=ConnectionClosed connectionID=13
+time="2026-03-30T19:35:15+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:35:15.068819 +0200 CEST m=+43.946174709" connectionDb=cosmolattice_private connectionID=14 error="nothing to commit" queryTime="2026-03-30 19:35:15.075399 +0200 CEST m=+43.952754626"
+time="2026-03-30T19:35:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=15
+time="2026-03-30T19:35:15+02:00" level=info msg=ConnectionClosed connectionID=15
+time="2026-03-30T19:35:15+02:00" level=info msg=ConnectionClosed connectionID=14
+time="2026-03-30T19:35:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=16
+time="2026-03-30T19:35:15+02:00" level=info msg=ConnectionClosed connectionID=16
+time="2026-03-30T19:35:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=17
+time="2026-03-30T19:35:15+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=18
+time="2026-03-30T19:35:15+02:00" level=info msg=ConnectionClosed connectionID=17
+time="2026-03-30T19:35:15+02:00" level=info msg=ConnectionClosed connectionID=18
+time="2026-03-30T19:35:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=19
+time="2026-03-30T19:35:21+02:00" level=info msg=ConnectionClosed connectionID=19
+time="2026-03-30T19:35:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=20
+time="2026-03-30T19:35:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=21
+time="2026-03-30T19:35:21+02:00" level=info msg=ConnectionClosed connectionID=20
+time="2026-03-30T19:35:22+02:00" level=info msg=ConnectionClosed connectionID=21
+time="2026-03-30T19:35:29+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=22
+time="2026-03-30T19:35:29+02:00" level=info msg=ConnectionClosed connectionID=22
+time="2026-03-30T19:35:29+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=23
+time="2026-03-30T19:35:29+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=24
+time="2026-03-30T19:35:29+02:00" level=info msg=ConnectionClosed connectionID=23
+time="2026-03-30T19:35:29+02:00" level=info msg=ConnectionClosed connectionID=24
+time="2026-03-30T19:35:29+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=25
+time="2026-03-30T19:35:29+02:00" level=info msg=ConnectionClosed connectionID=25
+time="2026-03-30T19:35:29+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=26
+time="2026-03-30T19:35:29+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=27
+time="2026-03-30T19:35:29+02:00" level=info msg=ConnectionClosed connectionID=26
+time="2026-03-30T19:35:29+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:35:29.873936 +0200 CEST m=+58.751331334" connectionDb=cosmolattice_private connectionID=27 error="nothing to commit" queryTime="2026-03-30 19:35:29.879622 +0200 CEST m=+58.757017126"
+time="2026-03-30T19:35:30+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=28
+time="2026-03-30T19:35:30+02:00" level=info msg=ConnectionClosed connectionID=28
+time="2026-03-30T19:35:30+02:00" level=info msg=ConnectionClosed connectionID=27
+time="2026-03-30T19:37:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=29
+time="2026-03-30T19:37:21+02:00" level=info msg=ConnectionClosed connectionID=29
+time="2026-03-30T19:37:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=30
+time="2026-03-30T19:37:21+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=31
+time="2026-03-30T19:37:21+02:00" level=info msg=ConnectionClosed connectionID=30
+time="2026-03-30T19:37:21+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:37:21.898931 +0200 CEST m=+170.776624501" connectionDb=cosmolattice_private connectionID=31 error="nothing to commit" queryTime="2026-03-30 19:37:21.905058 +0200 CEST m=+170.782751334"
+time="2026-03-30T19:37:22+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=32
+time="2026-03-30T19:37:22+02:00" level=info msg=ConnectionClosed connectionID=32
+time="2026-03-30T19:37:22+02:00" level=info msg=ConnectionClosed connectionID=31
+time="2026-03-30T19:38:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=33
+time="2026-03-30T19:38:07+02:00" level=info msg=ConnectionClosed connectionID=33
+time="2026-03-30T19:38:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=34
+time="2026-03-30T19:38:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=35
+time="2026-03-30T19:38:07+02:00" level=info msg=ConnectionClosed connectionID=34
+time="2026-03-30T19:38:07+02:00" level=info msg=ConnectionClosed connectionID=35
+time="2026-03-30T19:38:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=36
+time="2026-03-30T19:38:07+02:00" level=info msg=ConnectionClosed connectionID=36
+time="2026-03-30T19:38:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=37
+time="2026-03-30T19:38:07+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=38
+time="2026-03-30T19:38:07+02:00" level=info msg=ConnectionClosed connectionID=37
+time="2026-03-30T19:38:07+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:38:07.988678 +0200 CEST m=+216.866494167" connectionDb=cosmolattice_private connectionID=38 error="nothing to commit" queryTime="2026-03-30 19:38:07.994887 +0200 CEST m=+216.872704001"
+time="2026-03-30T19:38:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=39
+time="2026-03-30T19:38:08+02:00" level=info msg=ConnectionClosed connectionID=39
+time="2026-03-30T19:38:08+02:00" level=info msg=ConnectionClosed connectionID=38
+time="2026-03-30T19:38:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=40
+time="2026-03-30T19:38:59+02:00" level=info msg=ConnectionClosed connectionID=40
+time="2026-03-30T19:38:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=41
+time="2026-03-30T19:38:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=42
+time="2026-03-30T19:38:59+02:00" level=info msg=ConnectionClosed connectionID=41
+time="2026-03-30T19:38:59+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:38:59.196083 +0200 CEST m=+268.074035834" connectionDb=cosmolattice_private connectionID=42 error="nothing to commit" queryTime="2026-03-30 19:38:59.203036 +0200 CEST m=+268.080989209"
+time="2026-03-30T19:38:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=43
+time="2026-03-30T19:38:59+02:00" level=info msg=ConnectionClosed connectionID=43
+time="2026-03-30T19:38:59+02:00" level=info msg=ConnectionClosed connectionID=42
+time="2026-03-30T19:48:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=44
+time="2026-03-30T19:48:37+02:00" level=info msg=ConnectionClosed connectionID=44
+time="2026-03-30T19:48:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=45
+time="2026-03-30T19:48:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=46
+time="2026-03-30T19:48:37+02:00" level=info msg=ConnectionClosed connectionID=45
+time="2026-03-30T19:48:37+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:48:37.365423 +0200 CEST m=+846.244917501" connectionDb=cosmolattice_private connectionID=46 error="nothing to commit" queryTime="2026-03-30 19:48:37.372707 +0200 CEST m=+846.252201667"
+time="2026-03-30T19:48:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=47
+time="2026-03-30T19:48:37+02:00" level=info msg=ConnectionClosed connectionID=47
+time="2026-03-30T19:48:37+02:00" level=info msg=ConnectionClosed connectionID=46
+time="2026-03-30T19:48:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=48
+time="2026-03-30T19:48:41+02:00" level=info msg=ConnectionClosed connectionID=48
+time="2026-03-30T19:48:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=49
+time="2026-03-30T19:48:41+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=50
+time="2026-03-30T19:48:41+02:00" level=info msg=ConnectionClosed connectionID=49
+time="2026-03-30T19:48:41+02:00" level=info msg=ConnectionClosed connectionID=50
+time="2026-03-30T19:49:48+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=51
+time="2026-03-30T19:49:48+02:00" level=info msg=ConnectionClosed connectionID=51
+time="2026-03-30T19:49:48+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=52
+time="2026-03-30T19:49:48+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=53
+time="2026-03-30T19:49:48+02:00" level=info msg=ConnectionClosed connectionID=52
+time="2026-03-30T19:49:48+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:49:48.343452 +0200 CEST m=+917.219255084" connectionDb=cosmolattice_private connectionID=53 error="nothing to commit" queryTime="2026-03-30 19:49:48.35206 +0200 CEST m=+917.227863584"
+time="2026-03-30T19:49:48+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=54
+time="2026-03-30T19:49:48+02:00" level=info msg=ConnectionClosed connectionID=54
+time="2026-03-30T19:49:48+02:00" level=info msg=ConnectionClosed connectionID=53
+time="2026-03-30T19:49:56+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=55
+time="2026-03-30T19:49:56+02:00" level=info msg=ConnectionClosed connectionID=55
+time="2026-03-30T19:49:56+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=56
+time="2026-03-30T19:49:56+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=57
+time="2026-03-30T19:49:56+02:00" level=info msg=ConnectionClosed connectionID=56
+time="2026-03-30T19:49:56+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:49:56.192353 +0200 CEST m=+925.068018751" connectionDb=cosmolattice_private connectionID=57 error="nothing to commit" queryTime="2026-03-30 19:49:56.201073 +0200 CEST m=+925.076739126"
+time="2026-03-30T19:49:56+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=58
+time="2026-03-30T19:49:56+02:00" level=info msg=ConnectionClosed connectionID=58
+time="2026-03-30T19:49:56+02:00" level=info msg=ConnectionClosed connectionID=57
+time="2026-03-30T19:49:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=59
+time="2026-03-30T19:49:59+02:00" level=info msg=ConnectionClosed connectionID=59
+time="2026-03-30T19:49:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=60
+time="2026-03-30T19:49:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=61
+time="2026-03-30T19:49:59+02:00" level=info msg=ConnectionClosed connectionID=60
+time="2026-03-30T19:49:59+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:49:59.707019 +0200 CEST m=+928.582644042" connectionDb=cosmolattice_private connectionID=61 error="nothing to commit" queryTime="2026-03-30 19:49:59.713809 +0200 CEST m=+928.589434501"
+time="2026-03-30T19:50:00+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=62
+time="2026-03-30T19:50:00+02:00" level=info msg=ConnectionClosed connectionID=62
+time="2026-03-30T19:50:00+02:00" level=info msg=ConnectionClosed connectionID=61
+time="2026-03-30T19:50:02+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=63
+time="2026-03-30T19:50:02+02:00" level=info msg=ConnectionClosed connectionID=63
+time="2026-03-30T19:50:02+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=64
+time="2026-03-30T19:50:02+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=65
+time="2026-03-30T19:50:02+02:00" level=info msg=ConnectionClosed connectionID=64
+time="2026-03-30T19:50:02+02:00" level=info msg=ConnectionClosed connectionID=65
+time="2026-03-30T19:50:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=66
+time="2026-03-30T19:50:08+02:00" level=info msg=ConnectionClosed connectionID=66
+time="2026-03-30T19:50:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=67
+time="2026-03-30T19:50:08+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=68
+time="2026-03-30T19:50:08+02:00" level=info msg=ConnectionClosed connectionID=67
+time="2026-03-30T19:50:08+02:00" level=info msg=ConnectionClosed connectionID=68
+time="2026-03-30T19:51:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=69
+time="2026-03-30T19:51:40+02:00" level=info msg=ConnectionClosed connectionID=69
+time="2026-03-30T19:51:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=70
+time="2026-03-30T19:51:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=71
+time="2026-03-30T19:51:40+02:00" level=info msg=ConnectionClosed connectionID=70
+time="2026-03-30T19:51:40+02:00" level=warning msg="error running query" connectTime="2026-03-30 19:51:40.332893 +0200 CEST m=+1029.208506292" connectionDb=cosmolattice_private connectionID=71 error="nothing to commit" queryTime="2026-03-30 19:51:40.343298 +0200 CEST m=+1029.218911709"
+time="2026-03-30T19:51:40+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=72
+time="2026-03-30T19:51:40+02:00" level=info msg=ConnectionClosed connectionID=72
+time="2026-03-30T19:51:40+02:00" level=info msg=ConnectionClosed connectionID=71
+time="2026-03-30T20:35:11+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=73
+time="2026-03-30T20:35:11+02:00" level=info msg=ConnectionClosed connectionID=73
+time="2026-03-30T20:35:11+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=74
+time="2026-03-30T20:35:11+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=75
+time="2026-03-30T20:35:11+02:00" level=info msg=ConnectionClosed connectionID=74
+time="2026-03-30T20:35:11+02:00" level=info msg=ConnectionClosed connectionID=75
+time="2026-03-30T20:35:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=76
+time="2026-03-30T20:35:16+02:00" level=info msg=ConnectionClosed connectionID=76
+time="2026-03-30T20:35:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=77
+time="2026-03-30T20:35:16+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=78
+time="2026-03-30T20:35:16+02:00" level=info msg=ConnectionClosed connectionID=77
+time="2026-03-30T20:35:16+02:00" level=info msg=ConnectionClosed connectionID=78
+time="2026-03-30T20:40:46+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=79
+time="2026-03-30T20:40:46+02:00" level=info msg=ConnectionClosed connectionID=79
+time="2026-03-30T20:40:46+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=80
+time="2026-03-30T20:40:46+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=81
+time="2026-03-30T20:40:46+02:00" level=info msg=ConnectionClosed connectionID=80
+time="2026-03-30T20:40:46+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:40:46.769804 +0200 CEST m=+2318.517316292" connectionDb=cosmolattice_private connectionID=81 error="nothing to commit" queryTime="2026-03-30 20:40:46.776767 +0200 CEST m=+2318.524279834"
+time="2026-03-30T20:40:47+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=82
+time="2026-03-30T20:40:47+02:00" level=info msg=ConnectionClosed connectionID=82
+time="2026-03-30T20:40:47+02:00" level=info msg=ConnectionClosed connectionID=81
+time="2026-03-30T20:41:03+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=83
+time="2026-03-30T20:41:03+02:00" level=info msg=ConnectionClosed connectionID=83
+time="2026-03-30T20:41:03+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=84
+time="2026-03-30T20:41:03+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=85
+time="2026-03-30T20:41:03+02:00" level=info msg=ConnectionClosed connectionID=84
+time="2026-03-30T20:41:03+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:41:03.85012 +0200 CEST m=+2335.597648376" connectionDb=cosmolattice_private connectionID=85 error="nothing to commit" queryTime="2026-03-30 20:41:03.857078 +0200 CEST m=+2335.604606917"
+time="2026-03-30T20:41:04+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=86
+time="2026-03-30T20:41:04+02:00" level=info msg=ConnectionClosed connectionID=86
+time="2026-03-30T20:41:04+02:00" level=info msg=ConnectionClosed connectionID=85
+time="2026-03-30T20:41:14+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=87
+time="2026-03-30T20:41:14+02:00" level=info msg=ConnectionClosed connectionID=87
+time="2026-03-30T20:41:14+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=88
+time="2026-03-30T20:41:14+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=89
+time="2026-03-30T20:41:14+02:00" level=info msg=ConnectionClosed connectionID=88
+time="2026-03-30T20:41:14+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:41:14.184471 +0200 CEST m=+2345.932009792" connectionDb=cosmolattice_private connectionID=89 error="nothing to commit" queryTime="2026-03-30 20:41:14.191723 +0200 CEST m=+2345.939261209"
+time="2026-03-30T20:41:14+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=90
+time="2026-03-30T20:41:14+02:00" level=info msg=ConnectionClosed connectionID=90
+time="2026-03-30T20:41:14+02:00" level=info msg=ConnectionClosed connectionID=89
+time="2026-03-30T20:41:14+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=91
+time="2026-03-30T20:41:14+02:00" level=info msg=ConnectionClosed connectionID=91
+time="2026-03-30T20:41:14+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=92
+time="2026-03-30T20:41:14+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=93
+time="2026-03-30T20:41:14+02:00" level=info msg=ConnectionClosed connectionID=92
+time="2026-03-30T20:41:14+02:00" level=info msg=ConnectionClosed connectionID=93
+time="2026-03-30T20:41:18+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=94
+time="2026-03-30T20:41:18+02:00" level=info msg=ConnectionClosed connectionID=94
+time="2026-03-30T20:41:18+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=95
+time="2026-03-30T20:41:18+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=96
+time="2026-03-30T20:41:18+02:00" level=info msg=ConnectionClosed connectionID=95
+time="2026-03-30T20:41:18+02:00" level=info msg=ConnectionClosed connectionID=96
+time="2026-03-30T20:41:22+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=97
+time="2026-03-30T20:41:22+02:00" level=info msg=ConnectionClosed connectionID=97
+time="2026-03-30T20:41:22+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=98
+time="2026-03-30T20:41:22+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=99
+time="2026-03-30T20:41:22+02:00" level=info msg=ConnectionClosed connectionID=98
+time="2026-03-30T20:41:22+02:00" level=info msg=ConnectionClosed connectionID=99
+time="2026-03-30T20:41:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=100
+time="2026-03-30T20:41:25+02:00" level=info msg=ConnectionClosed connectionID=100
+time="2026-03-30T20:41:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=101
+time="2026-03-30T20:41:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=102
+time="2026-03-30T20:41:25+02:00" level=info msg=ConnectionClosed connectionID=101
+time="2026-03-30T20:41:25+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:41:25.855771 +0200 CEST m=+2357.603321001" connectionDb=cosmolattice_private connectionID=102 error="nothing to commit" queryTime="2026-03-30 20:41:25.862803 +0200 CEST m=+2357.610352167"
+time="2026-03-30T20:41:26+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=103
+time="2026-03-30T20:41:26+02:00" level=info msg=ConnectionClosed connectionID=103
+time="2026-03-30T20:41:26+02:00" level=info msg=ConnectionClosed connectionID=102
+time="2026-03-30T20:42:27+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=104
+time="2026-03-30T20:42:27+02:00" level=info msg=ConnectionClosed connectionID=104
+time="2026-03-30T20:42:27+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=105
+time="2026-03-30T20:42:27+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=106
+time="2026-03-30T20:42:27+02:00" level=info msg=ConnectionClosed connectionID=105
+time="2026-03-30T20:42:27+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:42:27.896049 +0200 CEST m=+2419.643657001" connectionDb=cosmolattice_private connectionID=106 error="nothing to commit" queryTime="2026-03-30 20:42:27.903314 +0200 CEST m=+2419.650921834"
+time="2026-03-30T20:42:28+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=107
+time="2026-03-30T20:42:28+02:00" level=info msg=ConnectionClosed connectionID=107
+time="2026-03-30T20:42:28+02:00" level=info msg=ConnectionClosed connectionID=106
+time="2026-03-30T20:42:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=108
+time="2026-03-30T20:42:33+02:00" level=info msg=ConnectionClosed connectionID=108
+time="2026-03-30T20:42:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=109
+time="2026-03-30T20:42:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=110
+time="2026-03-30T20:42:33+02:00" level=info msg=ConnectionClosed connectionID=109
+time="2026-03-30T20:42:33+02:00" level=info msg=ConnectionClosed connectionID=110
+time="2026-03-30T20:42:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=111
+time="2026-03-30T20:42:33+02:00" level=info msg=ConnectionClosed connectionID=111
+time="2026-03-30T20:42:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=112
+time="2026-03-30T20:42:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=113
+time="2026-03-30T20:42:33+02:00" level=info msg=ConnectionClosed connectionID=112
+time="2026-03-30T20:42:33+02:00" level=info msg=ConnectionClosed connectionID=113
+time="2026-03-30T20:42:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=114
+time="2026-03-30T20:42:39+02:00" level=info msg=ConnectionClosed connectionID=114
+time="2026-03-30T20:42:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=115
+time="2026-03-30T20:42:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=116
+time="2026-03-30T20:42:39+02:00" level=info msg=ConnectionClosed connectionID=115
+time="2026-03-30T20:42:39+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:42:39.369393 +0200 CEST m=+2431.117011876" connectionDb=cosmolattice_private connectionID=116 error="nothing to commit" queryTime="2026-03-30 20:42:39.377097 +0200 CEST m=+2431.124716292"
+time="2026-03-30T20:42:39+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=117
+time="2026-03-30T20:42:39+02:00" level=info msg=ConnectionClosed connectionID=117
+time="2026-03-30T20:42:39+02:00" level=info msg=ConnectionClosed connectionID=116
+time="2026-03-30T20:42:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=118
+time="2026-03-30T20:42:42+02:00" level=info msg=ConnectionClosed connectionID=118
+time="2026-03-30T20:42:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=119
+time="2026-03-30T20:42:42+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=120
+time="2026-03-30T20:42:42+02:00" level=info msg=ConnectionClosed connectionID=119
+time="2026-03-30T20:42:42+02:00" level=info msg=ConnectionClosed connectionID=120
+time="2026-03-30T20:44:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=121
+time="2026-03-30T20:44:24+02:00" level=info msg=ConnectionClosed connectionID=121
+time="2026-03-30T20:44:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=122
+time="2026-03-30T20:44:24+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=123
+time="2026-03-30T20:44:24+02:00" level=info msg=ConnectionClosed connectionID=122
+time="2026-03-30T20:44:24+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:44:24.833661 +0200 CEST m=+2536.581380042" connectionDb=cosmolattice_private connectionID=123 error="nothing to commit" queryTime="2026-03-30 20:44:24.848453 +0200 CEST m=+2536.596172126"
+time="2026-03-30T20:44:25+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=124
+time="2026-03-30T20:44:25+02:00" level=info msg=ConnectionClosed connectionID=124
+time="2026-03-30T20:44:25+02:00" level=info msg=ConnectionClosed connectionID=123
+time="2026-03-30T20:44:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=125
+time="2026-03-30T20:44:33+02:00" level=info msg=ConnectionClosed connectionID=125
+time="2026-03-30T20:44:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=126
+time="2026-03-30T20:44:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=127
+time="2026-03-30T20:44:33+02:00" level=info msg=ConnectionClosed connectionID=126
+time="2026-03-30T20:44:33+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:44:33.223117 +0200 CEST m=+2544.970843667" connectionDb=cosmolattice_private connectionID=127 error="nothing to commit" queryTime="2026-03-30 20:44:33.229395 +0200 CEST m=+2544.977122126"
+time="2026-03-30T20:44:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=128
+time="2026-03-30T20:44:33+02:00" level=info msg=ConnectionClosed connectionID=128
+time="2026-03-30T20:44:33+02:00" level=info msg=ConnectionClosed connectionID=127
+time="2026-03-30T20:44:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=129
+time="2026-03-30T20:44:33+02:00" level=info msg=ConnectionClosed connectionID=129
+time="2026-03-30T20:44:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=130
+time="2026-03-30T20:44:33+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=131
+time="2026-03-30T20:44:33+02:00" level=info msg=ConnectionClosed connectionID=130
+time="2026-03-30T20:44:33+02:00" level=info msg=ConnectionClosed connectionID=131
+time="2026-03-30T20:44:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=132
+time="2026-03-30T20:44:37+02:00" level=info msg=ConnectionClosed connectionID=132
+time="2026-03-30T20:44:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=133
+time="2026-03-30T20:44:37+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=134
+time="2026-03-30T20:44:37+02:00" level=info msg=ConnectionClosed connectionID=133
+time="2026-03-30T20:44:37+02:00" level=info msg=ConnectionClosed connectionID=134
+time="2026-03-30T20:46:01+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=135
+time="2026-03-30T20:46:01+02:00" level=info msg=ConnectionClosed connectionID=135
+time="2026-03-30T20:46:01+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=136
+time="2026-03-30T20:46:01+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=137
+time="2026-03-30T20:46:01+02:00" level=info msg=ConnectionClosed connectionID=136
+time="2026-03-30T20:46:01+02:00" level=info msg=ConnectionClosed connectionID=137
+time="2026-03-30T20:46:02+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=138
+time="2026-03-30T20:46:02+02:00" level=info msg=ConnectionClosed connectionID=138
+time="2026-03-30T20:46:02+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=139
+time="2026-03-30T20:46:02+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=140
+time="2026-03-30T20:46:02+02:00" level=info msg=ConnectionClosed connectionID=139
+time="2026-03-30T20:46:02+02:00" level=warning msg="error running query" connectTime="2026-03-30 20:46:02.325907 +0200 CEST m=+2634.073717917" connectionDb=cosmolattice_private connectionID=140 error="nothing to commit" queryTime="2026-03-30 20:46:02.332274 +0200 CEST m=+2634.080084834"
+time="2026-03-30T20:46:02+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=141
+time="2026-03-30T20:46:02+02:00" level=info msg=ConnectionClosed connectionID=141
+time="2026-03-30T20:46:02+02:00" level=info msg=ConnectionClosed connectionID=140
+time="2026-03-30T20:46:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=142
+time="2026-03-30T20:46:59+02:00" level=info msg=ConnectionClosed connectionID=142
+time="2026-03-30T20:46:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=143
+time="2026-03-30T20:46:59+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=144
+time="2026-03-30T20:46:59+02:00" level=info msg=ConnectionClosed connectionID=143
+time="2026-03-30T20:46:59+02:00" level=info msg=ConnectionClosed connectionID=144
+time="2026-03-30T21:03:44+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=145
+time="2026-03-30T21:03:44+02:00" level=info msg=ConnectionClosed connectionID=145
+time="2026-03-30T21:03:44+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=146
+time="2026-03-30T21:03:44+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=147
+time="2026-03-30T21:03:44+02:00" level=info msg=ConnectionClosed connectionID=146
+time="2026-03-30T21:03:44+02:00" level=warning msg="error running query" connectTime="2026-03-30 21:03:44.808134 +0200 CEST m=+3696.557318584" connectionDb=cosmolattice_private connectionID=147 error="nothing to commit" queryTime="2026-03-30 21:03:44.816461 +0200 CEST m=+3696.565645001"
+time="2026-03-30T21:03:45+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=148
+time="2026-03-30T21:03:45+02:00" level=info msg=ConnectionClosed connectionID=148
+time="2026-03-30T21:03:45+02:00" level=info msg=ConnectionClosed connectionID=147
+time="2026-03-30T21:04:09+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=149
+time="2026-03-30T21:04:09+02:00" level=info msg=ConnectionClosed connectionID=149
+time="2026-03-30T21:04:09+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=150
+time="2026-03-30T21:04:09+02:00" level=info msg=NewConnection DisableClientMultiStatements=false connectionID=151
+time="2026-03-30T21:04:09+02:00" level=info msg=ConnectionClosed connectionID=150
+time="2026-03-30T21:04:09+02:00" level=info msg=ConnectionClosed connectionID=151

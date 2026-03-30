@@ -1,0 +1,7 @@
+{
+  "database": "dolt",
+  "backend": "dolt",
+  "dolt_mode": "server",
+  "dolt_database": "cosmolattice_private",
+  "project_id": "3ac93832-5daa-4260-a158-bae904137312"
+}
