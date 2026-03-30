@@ -28,9 +28,9 @@ namespace TempLat
   {
   public:
     GWPowerSpectrumMeasurer(const RunParameters<T> &par):
+    PSVersion(par.powerSpectrumVersion),
     nbins(par.nBinsSpectra),
     PSType(par.powerSpectrumType),
-    PSVersion(par.powerSpectrumVersion),
     PRJType(par.GWprojectorType)
     {
     }
@@ -112,10 +112,10 @@ namespace TempLat
       }
     }
 
+    int PSVersion;
   private:
     ptrdiff_t nbins;
     int PSType;
-    int PSVersion;
     int PRJType;
   };
 

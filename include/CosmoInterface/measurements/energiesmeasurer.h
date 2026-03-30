@@ -15,6 +15,7 @@
 #include "CosmoInterface/definitions/hubbleconstraint.h"
 #include "CosmoInterface/definitions/fieldfunctionals.h"
 #include "CosmoInterface/measurements/abstractmeasurer.h"
+#include "CosmoInterface/definitions/energies.h"
 
 namespace TempLat
 {

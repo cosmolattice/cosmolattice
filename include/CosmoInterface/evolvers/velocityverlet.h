@@ -68,8 +68,8 @@ namespace TempLat
         // We start by computing the kicks (pi_0 --> pi_1/2):
         if (expansion && !fixedBackground) kickScaleFactorHalf(model, w); // only if self-consistent expansion
 
-        if constexpr (Model::Ns > 0) kickScalar(model, w);
         if (model.fldGWs != nullptr) kickGWs(model, w);
+        if constexpr (Model::Ns > 0) kickScalar(model, w);
         if constexpr (Model::NCs > 0) kickCS(model, w);
         if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, w);
         if constexpr (Model::NU1 > 0) kickU1Vector(model, w);
@@ -94,11 +94,11 @@ namespace TempLat
         // Now we compute the second kick (pi_1/2 --> pi_1)
 
         if constexpr (Model::Ns > 0) kickScalar(model, w);
-        if (model.fldGWs != nullptr) kickGWs(model, w);
         if constexpr (Model::NCs > 0) kickCS(model, w);
         if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, w);
         if constexpr (Model::NU1 > 0) kickU1Vector(model, w);
         if constexpr (Model::NSU2 > 0) kickSU2Vector(model, w);
+        if (model.fldGWs != nullptr) kickGWs(model, w);
 
         if (expansion && !fixedBackground) {
           storeMomentaAverages(model);

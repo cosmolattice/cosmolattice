@@ -13,10 +13,6 @@
 #include "CosmoInterface/measurements/abstractmeasurer.h"
 #include "CosmoInterface/measurements/powerspectrumgws.h"
 
-
-
-
-
 namespace TempLat
 {
   /** @brief A class which contains standard measurements for the GWs sector.
@@ -30,23 +26,40 @@ namespace TempLat
     using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
-    GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
-    {
-      bool amIRoot = model.getToolBox()->amIRoot();
-      // We create a file containing the spectra
-      spectraOut.emplace_back(
-          SpectrumSaver<T>(filesManager, "gws", amIRoot, append, par, !model.fldGWs)); // File for spectra
-    }
+    GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append):
+    amIRoot(model.getToolBox()->amIRoot()),
+    energyOut(filesManager, "energies_gws", amIRoot, append, getGWEnergyHeaders(model)),
+    spectraOut(filesManager, "gws", amIRoot, append, par, !model.fldGWs)
+    { }
 
     template <typename Model> void measureSpectra(Model &model, T t, GWPowerSpectrumMeasurer<T> &GWPSMeasurer)
     {
-      if (model.fldGWs != nullptr) spectraOut(0).save(lastMeas, t, GWPSMeasurer.powerSpectrumGW(model));
+      if (model.fldGWs != nullptr) {
+        auto GWspectrum = GWPSMeasurer.powerSpectrumGW(model);
+        spectraOut.save(lastMeas, t, GWspectrum);
+        energyOut.addAverage(t);
+        energyOut.addAverage(GWspectrum.integrate(GWPSMeasurer.PSVersion == 1));
+        energyOut.addAverage(GWspectrum.integrate(GWPSMeasurer.PSVersion == 1) * Energies::rho(model));
+        energyOut.save(lastMeas);
+      }
     }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    TempLatVector<SpectrumSaver<T>> spectraOut;
+    template <typename Model> std::vector<std::string> getGWEnergyHeaders(Model &model) const
+    {
+      std::vector<std::string> ret;
+      ret.emplace_back("t");
+      ret.emplace_back("EGW / Ematter");
+      ret.emplace_back("EGW");
+
+      return ret;
+    }
+
+    bool amIRoot;
+    MeasurementsSaver<T> energyOut;
+    SpectrumSaver<T> spectraOut;
 
   };
 
