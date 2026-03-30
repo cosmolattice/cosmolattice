@@ -25,7 +25,7 @@ namespace TempLat
   {
   public:
     static constexpr size_t NCs = NC;
-    using CsU1Couplings = CSU1COUPLINGS;
+    using CsU1Couplings = typename CSU1COUPLINGS::template Container<T>;
 
     // Complex scalar fields
     FieldCollection<ComplexField<T, NDIM>, NC> fldCS;
@@ -45,7 +45,7 @@ namespace TempLat
     TempLatArray<ComplexFieldWrapper<T, T>, NC> masses2CS;
 
     // CS-U1 gauge coupling
-    CSU1COUPLINGS gQ_CsU1;
+    CsU1Couplings gQ_CsU1;
 
     // Potential stubs (to be overridden in derived models)
     template <int N> auto potDerivNormCS(Tag<N>)
@@ -66,8 +66,8 @@ namespace TempLat
                       const LatticeParameters<T> &par)
         : fldCS("cmplx_scalar", toolBox, par), piCS("pi_cmplx_scalar", toolBox, par)
     {
-      auto gU1s = parser.get<double, CSU1COUPLINGS::nGauge>("gU1s", 1.0);
-      auto CSU1Charges = parser.get<double, CSU1COUPLINGS::howManyCouples()>("CSU1_charges", 1);
+      auto gU1s = parser.get<double, CsU1Couplings::nGauge>("gU1s", 1.0);
+      auto CSU1Charges = parser.get<double, CsU1Couplings::howManyCouples()>("CSU1_charges", 1);
       gQ_CsU1.setEffectiveCharges(CSU1Charges, gU1s);
     }
   };

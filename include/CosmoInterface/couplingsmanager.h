@@ -12,7 +12,6 @@
 
 #include <array>
 #include <vector>
-#include <variant>
 
 namespace TempLat
 {
@@ -27,14 +26,12 @@ namespace TempLat
    *
    * Unit test: ctest -R test-couplingsmanager
    **/
-  template <int NMatter, int NGauge, bool... Bools> class CouplingsManager
+  template <typename FloatType, int NMatter, int NGauge, bool... Bools> class CouplingsManagerContainer
   {
   public:
     static constexpr int nGauge = NGauge;
 
-    // Put public methods here. These should change very little over time.
-
-    CouplingsManager() = default;
+    CouplingsManagerContainer() = default;
 
     /**
      * @brief In addition to simply knowing what couples to what, we also store the gauge field coupling g and the
@@ -46,7 +43,7 @@ namespace TempLat
      * as the order of the gauge fields in the model.
      */
     template <typename T>
-    CouplingsManager(const std::vector<T> &charges, const std::vector<T> &couplings) : gs(couplings)
+    CouplingsManagerContainer(const std::vector<T> &charges, const std::vector<T> &couplings) : gs(couplings)
     {
       setEffectiveCharges(charges, couplings);
     }
@@ -132,10 +129,7 @@ namespace TempLat
     {
       static_assert(ng >= 0 && ng < NGauge, "Error: trying to access the coupling of a gauge field which is not "
                                             "present in this CouplingsManager. Abort.");
-      if constexpr (std::holds_alternative<double>(gs[ng]))
-        return std::get<double>(gs[ng]);
-      else
-        return std::get<float>(gs[ng]);
+      return gs[ng];
     }
 
     /**
@@ -162,8 +156,14 @@ namespace TempLat
   private:
     // Compile-time accessible booleans which tell what couples to what.
     static constexpr std::array<bool, NGauge * NMatter> doesCouples = {Bools...};
-    std::array<std::variant<double, float>, NGauge * NMatter> effectiveCharges;
-    std::array<std::variant<double, float>, NGauge> gs;
+    std::array<FloatType, NGauge * NMatter> effectiveCharges;
+    std::array<FloatType, NGauge> gs;
+  };
+
+  template <int NMatter, int NGauge, bool... Bools> class CouplingsManager
+  {
+  public:
+    template <typename FloatType> using Container = CouplingsManagerContainer<FloatType, NMatter, NGauge, Bools...>;
   };
 
   /**
@@ -174,6 +174,8 @@ namespace TempLat
   template <int NMatter, int NGauge> class CouplingsManager<NMatter, NGauge>
   {
   public:
+    template <typename FloatType> using Container = CouplingsManager<NMatter, NGauge>;
+
     static constexpr int nGauge = 0;
 
     // Put public methods here. These should change very little over time.

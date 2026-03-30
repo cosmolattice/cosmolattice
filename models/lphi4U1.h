@@ -28,6 +28,8 @@ namespace TempLat
     static constexpr size_t NSU2Flds = 0;
     static constexpr size_t NPotTerms = 1;
 
+    using NumberType = double;
+
     // Coupling managers:  they deal with the different couplings between the gauge fields and complex scalars/SU2
     // doublets
     //  --> If a type of interaction is not present, comment the corresponding line
@@ -52,14 +54,14 @@ namespace TempLat
   // Declaration of our model. It inherits from the generic model defined above.
   {
   private:
-    double lambda;
+    FloatType lambda;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
 
   public:
     static constexpr size_t NDim = Model<MODELNAME>::NDim;
 
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
+    MODELNAME(ParameterParser &parser, RunParameters<FloatType> &runPar,
               device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
@@ -71,12 +73,12 @@ namespace TempLat
       /////////
 
       // COMPLEX SCALAR NORM: initial homogeneous amplitude and derivative
-      double normCmplx0 = parser.get<double>("cmplx_field_initial_norm");
-      double normPiCmplx0 = parser.get<double>("cmplx_momentum_initial_norm");
+      FloatType normCmplx0 = parser.get<FloatType>("cmplx_field_initial_norm");
+      FloatType normPiCmplx0 = parser.get<FloatType>("cmplx_momentum_initial_norm");
 
       // We distribute the norm equally between the two components using the "Complexify" function
-      fldCS0(0_c) = Complexify(normCmplx0 / sqrt(2.0), normCmplx0 / sqrt(2.0));
-      piCS0(0_c) = Complexify(normPiCmplx0 / sqrt(2.0), normPiCmplx0 / sqrt(2.0));
+      fldCS0(0_c) = Complexify(normCmplx0 / sqrt(FloatType(2)), normCmplx0 / sqrt(FloatType(2)));
+      piCS0(0_c) = Complexify(normPiCmplx0 / sqrt(FloatType(2)), normPiCmplx0 / sqrt(FloatType(2)));
 
       /////////
       // Parameters of the model (read from parameters file)
@@ -84,7 +86,7 @@ namespace TempLat
       // --> Comment: Gauge couplings are specified in the parameters file (e.g. gU1s, gSU2s), and do not need to be
       // defined here
 
-      lambda = parser.get<double>("lambda");
+      lambda = parser.get<FloatType>("lambda");
 
       /////////
       // Rescaling for program variables

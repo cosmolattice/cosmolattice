@@ -32,8 +32,9 @@ namespace TempLat
       auto tMinust0 = eom.tMinust0;
 
       return (pow(model.aI, 1 + model.alpha) * LatLapl(model.fldS(n)) -
-              pow(model.aI, 3 + model.alpha) * (Potential::derivS(model, n)
-              + IfElse(Model::NonMinimalCouplings::couples(Tag<N>(), Tag<0>()), model.xis(n, 0_c) * model.fldS(n) * model.RI, ZeroType())) +
+              pow(model.aI, 3 + model.alpha) *
+                  (Potential::derivS(model, n) + IfElse(Model::NonMinimalCouplings::couples(Tag<N>(), Tag<0>()),
+                                                        model.xis(n, 0_c) * model.fldS(n) * model.RI, ZeroType())) +
               AxionCouplings::ScalarAxionSource(model, n, tMinust0));
     }
 

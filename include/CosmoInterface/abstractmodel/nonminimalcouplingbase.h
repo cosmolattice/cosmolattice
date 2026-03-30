@@ -11,12 +11,13 @@
 #include "CosmoInterface/couplingsmanager.h"
 #include "TempLat/parameters/parameterparser.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-template <typename T, size_t NS, typename NONMINCOUPLINGS>
-class NonMinimalCouplingBase {
-public:
-    using NonMinimalCouplings = NONMINCOUPLINGS;
+  template <typename T, size_t NS, typename NONMINCOUPLINGS> class NonMinimalCouplingBase
+  {
+  public:
+    using NonMinimalCouplings = typename NONMINCOUPLINGS::template Container<T>;
     static constexpr bool IsNonMinimallyCoupled = NONMINCOUPLINGS::howManyCouples() > 0;
 
     NONMINCOUPLINGS xis;
@@ -31,13 +32,13 @@ public:
 
     T piAI;
 
-protected:
+  protected:
     NonMinimalCouplingBase(ParameterParser &parser)
     {
-        auto xiCouplings = parser.get<T, NONMINCOUPLINGS::howManyCouples()>("xis", 1);
-        xis.setEffectiveCharges(xiCouplings, {1});
+      auto xiCouplings = parser.get<T, NonMinimalCouplings::howManyCouples()>("xis", 1);
+      xis.setEffectiveCharges(xiCouplings, {1});
     }
-};
+  };
 
 } // namespace TempLat
 

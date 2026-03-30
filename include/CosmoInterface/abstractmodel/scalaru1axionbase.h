@@ -10,26 +10,26 @@
 #include "CosmoInterface/couplingsmanager.h"
 #include "TempLat/parameters/parameterparser.h"
 
-namespace TempLat {
+namespace TempLat
+{
+  template <typename T, typename SCALARU1AXIONCOUPLINGS> class ScalarU1AxionBase
+  {
+  public:
+    using ScalarU1AxionCouplings = typename SCALARU1AXIONCOUPLINGS::template Container<T>;
 
-template <typename T, typename SCALARU1AXIONCOUPLINGS>
-class ScalarU1AxionBase {
-public:
-    using ScalarU1AxionCouplings = SCALARU1AXIONCOUPLINGS;
-
-    SCALARU1AXIONCOUPLINGS alphaLambda_SU1;
+    ScalarU1AxionCouplings alphaLambda_SU1;
     // Time to switch from linear to non-linear evolution for AxionU1 coupling
     T tNonLinearAxionU1;
 
-protected:
+  protected:
     ScalarU1AxionBase(ParameterParser &parser)
-    {   
-		tNonLinearAxionU1 = parser.get<double>("tNonLinearAxionU1",-1.0);   
-        auto gAxionU1 = parser.get<double, SCALARU1AXIONCOUPLINGS::nGauge>("gAxionU1", 1.0);
-        auto AxionU1Charges = parser.get<double, SCALARU1AXIONCOUPLINGS::howManyCouples()>("alphaLambda_AxionU1", 1);
-        alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);
+    {
+      tNonLinearAxionU1 = parser.get<double>("tNonLinearAxionU1", -1.0);
+      auto gAxionU1 = parser.get<double, ScalarU1AxionCouplings::nGauge>("gAxionU1", 1.0);
+      auto AxionU1Charges = parser.get<double, ScalarU1AxionCouplings::howManyCouples()>("alphaLambda_AxionU1", 1);
+      alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);
     }
-};
+  };
 
 } // namespace TempLat
 

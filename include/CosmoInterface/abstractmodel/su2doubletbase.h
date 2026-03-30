@@ -26,8 +26,8 @@ namespace TempLat
   {
   public:
     static constexpr size_t NSU2Doublet = NSU2DOUBLET;
-    using SU2DoubletU1Couplings = SU2DOUBLETU1COUPLINGS;
-    using SU2DoubletSU2Couplings = SU2DOUBLETSU2COUPLINGS;
+    using SU2DoubletU1Couplings = typename SU2DOUBLETU1COUPLINGS::template Container<T>;
+    using SU2DoubletSU2Couplings = typename SU2DOUBLETSU2COUPLINGS::template Container<T>;
 
     // SU2 doublet fields
     FieldCollection<SU2Doublet<T, NDIM>, NSU2DOUBLET> fldSU2Doublet;
@@ -47,8 +47,8 @@ namespace TempLat
     TempLatArray<SU2DoubletWrapper<T, T, T, T>, NSU2DOUBLET> masses2SU2Doublet;
 
     // SU2Doublet-U1 and SU2Doublet-SU2 gauge couplings
-    SU2DOUBLETU1COUPLINGS gQ_SU2DblU1;
-    SU2DOUBLETSU2COUPLINGS gQ_SU2DblSU2;
+    SU2DoubletU1Couplings gQ_SU2DblU1;
+    SU2DoubletSU2Couplings gQ_SU2DblSU2;
 
     // Potential stubs (to be overridden in derived models)
     template <int N> auto potDerivNormSU2Doublet(Tag<N>)
@@ -69,13 +69,13 @@ namespace TempLat
                          const LatticeParameters<T> &par)
         : fldSU2Doublet("SU2Doublet", toolBox, par), piSU2Doublet("pi_SU2Doublet", toolBox, par)
     {
-      auto gU1s = parser.get<double, SU2DOUBLETU1COUPLINGS::nGauge>("gU1s", 1.0);
-      auto SU2DoubletU1Charges = parser.get<double, SU2DOUBLETU1COUPLINGS::howManyCouples()>("SU2DoubletU1_charges", 1);
+      auto gU1s = parser.get<double, SU2DoubletU1Couplings::nGauge>("gU1s", 1.0);
+      auto SU2DoubletU1Charges = parser.get<double, SU2DoubletU1Couplings::howManyCouples()>("SU2DoubletU1_charges", 1);
       gQ_SU2DblU1.setEffectiveCharges(SU2DoubletU1Charges, gU1s);
 
-      auto gSU2s = parser.get<double, SU2DOUBLETSU2COUPLINGS::nGauge>("gSU2s", 1.0);
+      auto gSU2s = parser.get<double, SU2DoubletSU2Couplings::nGauge>("gSU2s", 1.0);
       auto SU2DoubletSU2Charges =
-          parser.get<double, SU2DOUBLETSU2COUPLINGS::howManyCouples()>("SU2DoubletSU2_charges", 1);
+          parser.get<double, SU2DoubletSU2Couplings::howManyCouples()>("SU2DoubletSU2_charges", 1);
       gQ_SU2DblSU2.setEffectiveCharges(SU2DoubletSU2Charges, gSU2s);
     }
   };

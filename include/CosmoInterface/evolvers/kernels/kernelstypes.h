@@ -10,37 +10,26 @@
 #include "TempLat/lattice/algebra/su2algebra/su2algebra.h"
 #include "TempLat/lattice/field/collections/vectorfieldcollection.h"
 
-namespace TempLat::KernelsTypes {
+namespace TempLat::KernelsTypes
+{
+  /** \brief A mechanism to define different kernels for the same solver.
+   *
+   *
+   *
+   **/
+  template <typename T> class EoM
+  {
+  public:
+    T tMinust0 = T{};
 
+    template <class Model> void cache(Model &model, T tIn) { tMinust0 = tIn; }
 
-    /** \brief A mechanism to define different kernels for the same solver.
-     *
-     *
-     *
-     **/
-        template<typename T> class EoM{
-        public:
-            T tMinust0 = T(0);
+  private:
+    template <class Model> void cache(Model &model) {}
+  };
+  template <class Model, class T> auto getDt(Model &model, EoM<T> eom) { return model.dt; }
 
-            template<class Model>
-            void cache(Model& model, T tIn) {
-                tMinust0 = tIn;
-            }
-
-            template<class Model>
-            void cache(Model & model) {}
-        };
-        template<class Model, class T>
-        auto getDt(Model& model, EoM<T> eom)
-        {
-            return model.dt;
-        }
-
-        template<class Model, class T>
-        auto setDt(Model& model, EoM<T> eom, T dt)
-        {
-            model.dt = dt;
-        }
+  template <class Model, class T> auto setDt(Model &model, EoM<T> eom, T dt) { model.dt = dt; }
 } // namespace TempLat::KernelsTypes
 
 #endif
