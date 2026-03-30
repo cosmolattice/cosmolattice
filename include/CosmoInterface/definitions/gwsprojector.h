@@ -76,7 +76,7 @@ namespace TempLat
       device::array<S, 6> P;
       device::array<complex<S>, 9> Pu;
 
-      ForLoop(i, 0_c, 2_c, kL[i] = std::sin(this->kIR * static_cast<S>(k[i])););
+      ForLoop(i, 0_c, 2_c, kL[i] = sin(this->kIR * static_cast<S>(k[i])););
       kL2 = kL[0]*kL[0] + kL[1]*kL[1] + kL[2]*kL[2];
 
       P[0] = S(1) - kL[0] * kL[0] / kL2;
@@ -134,7 +134,7 @@ namespace TempLat
       device::array<complex<S>, 9> Pu;
       device::array<complex<S>, 9> Pus;
 
-      ForLoop(i, 0_c, 2_c, kL[i] = std::complex<S>(std::sin(this->kIR * static_cast<S>(k[i])), - S(1.) + std::cos(this->kIR * static_cast<S>(k[i]))););
+      ForLoop(i, 0_c, 2_c, kL[i] = complex<S>(sin(this->kIR * static_cast<S>(k[i])), - S(1.) + cos(this->kIR * static_cast<S>(k[i]))););
       kL2 = pow<2>(abs(kL[0])) + pow<2>(abs(kL[1])) + pow<2>(abs(kL[2]));
 
       P[0] = complex<S>(1., 0.) - conj(kL[0]) * kL[0] / kL2;
@@ -203,7 +203,7 @@ namespace TempLat
       device::array<complex<S>, 9> Pu;
       device::array<complex<S>, 9> Pus;
 
-      ForLoop(i, 0_c, 2_c, kL[i] = std::complex<S>(std::sin(this->kIR * static_cast<S>(k[i])),  S(1.) - std::cos(this->kIR * static_cast<S>(k[i]))););
+      ForLoop(i, 0_c, 2_c, kL[i] = complex<S>(sin(this->kIR * static_cast<S>(k[i])),  S(1.) - cos(this->kIR * static_cast<S>(k[i]))););
       kL2 = pow<2>(abs(kL[0])) + pow<2>(abs(kL[1])) + pow<2>(abs(kL[2]));
 
       P[0] = complex<S>(1., 0.) - conj(kL[0]) * kL[0] / kL2;
