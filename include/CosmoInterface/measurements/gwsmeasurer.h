@@ -11,7 +11,7 @@
 #include "CosmoInterface/measurements/measurementsIO/measurementssaver.h"
 #include "TempLat/util/templatvector.h"
 #include "CosmoInterface/measurements/abstractmeasurer.h"
-#include "CosmoInterface/measurements/powerspectrumgws.h"
+#include "CosmoInterface/measurements/powerspectrum.h"
 
 namespace TempLat
 {
@@ -29,17 +29,19 @@ namespace TempLat
     GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append):
     amIRoot(model.getToolBox()->amIRoot()),
     energyOut(filesManager, "energies_gws", amIRoot, append, getGWEnergyHeaders(model)),
-    spectraOut(filesManager, "gws", amIRoot, append, par, !model.fldGWs)
+    spectraOut(filesManager, "gws", amIRoot, append, par, !model.fldGWs),
+    PRJType(par.GWprojectorType)
     { }
 
-    template <typename Model> void measureSpectra(Model &model, T t, GWPowerSpectrumMeasurer<T> &GWPSMeasurer)
+    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
     {
       if (model.fldGWs != nullptr) {
-        auto GWspectrum = GWPSMeasurer.powerSpectrumGW(model);
+        auto GWspectrum = PSMeasurer.powerSpectrumGW(model, PRJType);
         spectraOut.save(lastMeas, t, GWspectrum);
         energyOut.addAverage(t);
-        energyOut.addAverage(GWspectrum.integrate(GWPSMeasurer.PSVersion == 1));
-        energyOut.addAverage(GWspectrum.integrate(GWPSMeasurer.PSVersion == 1) * Energies::rho(model));
+        auto fracEgws = GWspectrum.integrate(PRJType == 1);
+        energyOut.addAverage(fracEgws);
+        energyOut.addAverage(fracEgws * Energies::rho(model));
         energyOut.save(lastMeas);
       }
     }
@@ -60,6 +62,7 @@ namespace TempLat
     bool amIRoot;
     MeasurementsSaver<T> energyOut;
     SpectrumSaver<T> spectraOut;
+    size_t PRJType;
 
   };
 

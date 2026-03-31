@@ -14,10 +14,13 @@
 #include "TempLat/lattice/algebra/algebra.h"
 #include "TempLat/lattice/measuringtools/radialprojector.h"
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/definitions/energies.h"
+#include "CosmoInterface/definitions/gwsprojector.h"
 
 namespace TempLat
 {
   MakeException(WrongPSType);
+  MakeException(WrongPRJType);
 
   /** @brief A class which computes the power spectrum, with the appropriate rescaling to make it volume independent.
    *
@@ -35,14 +38,34 @@ namespace TempLat
 
     template <typename R> auto powerSpectrum(R f)
     {
-      return this->powerSpectrum(f, GetNGrid::get(f), GetKIR::getKIR(f));
+      return this->powerSpectrum(pow<2>(abs(f.inFourierSpace())), GetNGrid::get(f), GetKIR::getKIR(f), GetToolBox::get(f));
+    }
+
+    template <typename Model>
+    auto powerSpectrumGW(Model& model, size_t PRJType)
+    {
+      if (PRJType == 1)
+      {
+        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType1(model), GetNGrid::get(model), model.kIR, model.getToolBox());
+      }
+      else if (PRJType == 2)
+      {
+        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType2(model), GetNGrid::get(model), model.kIR, model.getToolBox());
+      }
+      else if (PRJType == 3)
+      {
+        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType3(model), GetNGrid::get(model), model.kIR, model.getToolBox());
+      }
+
+      throw(WrongPRJType("You tried to call an undefined GR Projector Type " + std::to_string(PRJType) + ", abort."));
+      return (*this).powerSpectrum(projectGWType1(model), GetNGrid::get(model), model.kIR, model.getToolBox());
     }
 
     // This function computes the power spectrum.
     // --> The normalization factor ensures that it recovers the appropriate expression in the continuum limit.
     //     This is discussed in Sect. 3 of arXiv:2006.15122.
 
-    template <size_t NDim> RadialProjectionResult<T> powerSpectrum(Field<T, NDim> f, ptrdiff_t N, T kIR)
+    template <typename PS, typename tBox> RadialProjectionResult<T> powerSpectrum(const PS& f, ptrdiff_t N, T kIR, tBox toolBox)
     {
       const ptrdiff_t N3 = pow<3>(N);
       const T dx = 2 * Constants::pi<T> / kIR / N; // lattice spacing
@@ -50,8 +73,8 @@ namespace TempLat
       const T kMaxBins = std::floor(sqrt(3.) / 2.0 * N) + 1;
 
       if (PSVersion != 3) {
-        auto fk2 = projectRadiallyFourier(pow<2>(abs(f.inFourierSpace())), PSVersion == 1)
-                       .measure(nbins, kMaxBins); // PSversion == true is a boolean. It tells the spectrum to use the
+        auto fk2 = projectRadially<3>(f, SpaceStateType::Fourier, toolBox, PSVersion == 1)
+                   .measure(nbins, kMaxBins); // PSversion == true is a boolean. It tells the spectrum to use the
                                                   // centralValues, and not the bins, when rescaling.
 
         if (PSType == 2) {
@@ -67,25 +90,25 @@ namespace TempLat
           return fk2; // To remove moot warning.
         }
       } else {
-        WaveNumber ntilde(f.getToolBox()); // WaveNumber is the same as FourierSite, except it does not require to know
+        WaveNumber ntilde(toolBox); // WaveNumber is the same as FourierSite, except it does not require to know
                                            // the dimension at compile time.
         if (PSType == 2) {
 
-          auto fk2 = projectRadiallyFourier(pow<3>(ntilde.norm()) * pow<2>(abs(f.inFourierSpace())), false)
+          auto fk2 = projectRadially<3>(pow<3>(ntilde.norm()) * f, SpaceStateType::Fourier, toolBox, false)
                          .measure(nbins, kMaxBins);
           return (pow<3>(kIR * dx) / N3 / T(2) / pow<2>(Constants::pi<T>)) * fk2;
         } else if (PSType == 1) {
           auto fk2 =
-              projectRadiallyFourier(ntilde.norm() * pow<2>(abs(f.inFourierSpace())), false).measure(nbins, kMaxBins);
+              projectRadially<3>(ntilde.norm() * f, SpaceStateType::Fourier, toolBox, false).measure(nbins, kMaxBins);
           fk2.sumInsteadOfAverage();
           return (kIR * dx / pow<5>(N) / T(2) / Constants::pi<T>) * fk2;
         } else if (PSType == 0) {
-          auto fk2 = projectRadiallyFourier(pow<2>(abs(f.inFourierSpace())), false).measure(nbins, kMaxBins);
+          auto fk2 = projectRadially<3>(f, SpaceStateType::Fourier, toolBox, false).measure(nbins, kMaxBins);
           fk2.sumInsteadOfAverage();
           return (dx / pow<5>(N) / T(2) / Constants::pi<T>) * fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
-          return projectRadiallyFourier(abs(f.inFourierSpace()), false)
+          return projectRadially<3>(f, SpaceStateType::Fourier, toolBox, false)
               .measure(nbins, kMaxBins); // To remove moot warning.
         }
       }
