@@ -29,7 +29,7 @@ namespace TempLat
     // This is where we decide whether the simulation is running in restart mode or not. We start by
     // reading the "load_file" argument. If the user provides one, then it means they want to restart the simulation.
     SimulationManager(ParameterParser &parser)
-        : restart(parser.get<std::string>("load_file", Constants::defaultString)())
+        : restart(parser.get<std::string>("load_file", parser.get<std::string>("load_dir", Constants::defaultString)())) //NOTE: Added compatibility with "load_dir", to make it consistent with the typo in the first manual. Still, the full name of the file that wants to be leaded is needed.
     {
       boolRestart = restart != Constants::defaultString;
 
@@ -149,7 +149,7 @@ namespace TempLat
     void createInfoFile(ParameterParser &par, const RunParameters<T> &runPar, Model &model, const std::vector<int> &dec,
                         bool amIRoot)
     {
-      info = std::make_unique<ConditionalFileStream>(base_filename(runPar, model, true) + ".infos", amIRoot);
+      info = std::make_unique<ConditionalFileStream>(base_filename(runPar, model, true, true) + ".infos", amIRoot);
       (*info) << "Parameters: \n" << par << "\n";
       CStyleTime mt;
       mt.now();
@@ -189,9 +189,9 @@ namespace TempLat
     }
 
     template <typename T, class Model>
-    static std::string base_filename(const RunParameters<T> &par, Model &model, bool removeLastChar = false)
+    static std::string base_filename(const RunParameters<T> &par, Model &model, bool removeLastChar = false, bool forceModelVerbosity = false)
     {
-      auto str = par.outFn + model.extraInfoFn(par.fnVerbosity) + par.extraInfoFn();
+      auto str = par.outFn + model.extraInfoFn(forceModelVerbosity ? 1 : par.fnVerbosity) + par.extraInfoFn();
       if (removeLastChar) str.pop_back();
       return str;
     }

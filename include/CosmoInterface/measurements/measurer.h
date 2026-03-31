@@ -52,6 +52,7 @@ namespace TempLat
           amIRoot(model.getToolBox()->amIRoot()),    // Boolean that returns true if in the root processor
           expansion(par.expansion), // Type of expansion (no expansion, fixed background, or self-consistent)
           eType(par.eType),         // Type of evolution algorithm (e.g. VV2, LF2...)
+          unbinnedSpectra(par.unbinnedSpectra),
           scalarSingletMeasurer(model, filesManager, par, par.appendMode), // Measurer for scalar fields
           gwsMeasurer(model, filesManager, par, par.appendMode),
           complexScalarMeasurer(model, filesManager, par, par.appendMode), // Measurer for complex scalars
@@ -61,11 +62,11 @@ namespace TempLat
           energiesMeasurer(model, filesManager, par, par.appendMode),      // Measurer of energies and scale factor
           scaleFactorMeasurer(model, filesManager, par, par.appendMode),   // Measurer of energies and scale factor
           topologicalChargesMeasurer(model, filesManager, par, par.appendMode),
-          energySnapshotsMeasurer(model, filesManager,
-                                  par.energySnapshotMeas), // Measurer of energy and field snapshots
+          energySnapshotsMeasurer(model, par, filesManager, par.energySnapshotMeas), // Measurer of energy and field snapshots
           spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"},
                       filesManager.getUseHDF5()), // Output file that indicates at which times spectra are computed
-          PSMeasurer(par)
+          PSMeasurer(par),
+          UPSMeasurer()
           // TestTransTrace(par),
           // GWsPSMeasurer(par), nLast(par.tMax / par.dt), lastMeas(false)
     {
@@ -108,18 +109,34 @@ namespace TempLat
       // Infrequent output (spectra):
       if (n % infreqOutputFreq == 0) {
 
-        scalarSingletMeasurer.measureSpectra(model, t, PSMeasurer);
-        // Scalar singlet spectra
-        gwsMeasurer.measureSpectra(model, t, PSMeasurer);
-        // GWs spectra
-        complexScalarMeasurer.measureSpectra(model, t, PSMeasurer);
-        // Complex scalar spectra
-        su2DoubletMeasurer.measureSpectra(model, t, PSMeasurer);
-        // SU(2) doublet spectra
-        u1Measurer.measureSpectra(model, t, PSMeasurer);
-        // Electric and magnetic spectra, U(1) gauge sector
-        su2Measurer.measureSpectra(model, t, PSMeasurer);
-        // Electric and magnetic spectra, SU(2) gauge sector
+        if (!unbinnedSpectra) {
+          scalarSingletMeasurer.measureSpectra(model,t, PSMeasurer);
+          // Scalar singlet spectra
+          gwsMeasurer.measureSpectra(model,t, PSMeasurer);
+          // GWs spectra
+          complexScalarMeasurer.measureSpectra(model,t, PSMeasurer);
+          // Complex scalar spectra
+          su2DoubletMeasurer.measureSpectra(model,t, PSMeasurer);
+          // SU(2) doublet spectra
+          u1Measurer.measureSpectra(model,t, PSMeasurer);
+          // Electric and magnetic spectra, U(1) gauge sector
+          su2Measurer.measureSpectra(model,t, PSMeasurer);
+          // Electric and magnetic spectra, SU(2) gauge sector
+        }
+        else {
+          scalarSingletMeasurer.measureSpectra(model,t, UPSMeasurer);
+          // Scalar singlet spectra
+          gwsMeasurer.measureSpectra(model,t, UPSMeasurer);
+          // GWs spectra
+          complexScalarMeasurer.measureSpectra(model,t, UPSMeasurer);
+          // Complex scalar spectra
+          su2DoubletMeasurer.measureSpectra(model,t, UPSMeasurer);
+          // SU(2) doublet spectra
+          u1Measurer.measureSpectra(model,t, UPSMeasurer);
+          // Electric and magnetic spectra, U(1) gauge sector
+          su2Measurer.measureSpectra(model,t, UPSMeasurer);
+          // Electric and magnetic spectra, SU(2) gauge sector
+        }
 
         if (!filesManager.getUseHDF5()) {
           spectraTime.addAverage(t);
@@ -167,6 +184,7 @@ namespace TempLat
 
     bool amIRoot, expansion;
     EvolverType eType;
+    bool unbinnedSpectra;
 
     ScalarSingletMeasurer<T> scalarSingletMeasurer;
     GWsMeasurer<T> gwsMeasurer;
@@ -180,7 +198,8 @@ namespace TempLat
     EnergySnapshotsMeasurer<Model> energySnapshotsMeasurer;
 
     MeasurementsSaver<T> spectraTime;
-    PowerSpectrumMeasurer<T> PSMeasurer;
+    PowerSpectrumMeasurer<T, Model::NDim> PSMeasurer;
+    UnbinnedPowerSpectrumMeasurer<T, Model::NDim> UPSMeasurer;
 
     ptrdiff_t nLast;
     bool lastMeas;

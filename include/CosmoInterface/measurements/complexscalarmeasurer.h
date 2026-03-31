@@ -12,6 +12,7 @@
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "CosmoInterface/runparameters.h"
 #include "CosmoInterface/measurements/powerspectrum.h"
+#include "CosmoInterface/measurements/unbinnedpowerspectrum.h"
 #include "TempLat/util/templatvector.h"
 #include "CosmoInterface/measurements/abstractmeasurer.h"
 
@@ -73,7 +74,7 @@ namespace TempLat
 
     // The following function measures the power spectrum of the norm and its time-derivative as the sum of their
     // components.
-    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
+    template <typename Model, typename PowerSpectrumMeasurer> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer& PSMeasurer)
     {
       ForLoop(i, 0, Model::NCs - 1,
               spectraNormOut(i).save(

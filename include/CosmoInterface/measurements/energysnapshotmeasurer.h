@@ -24,15 +24,17 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    EnergySnapshotsMeasurer(Model &model, FilesManager<Model::NDim> &fm, std::vector<std::string> toSave)
+    template<typename runParameters> EnergySnapshotsMeasurer(Model &model, runParameters& pars, FilesManager<Model::NDim> &fm, std::vector<std::string> toSave)
         : mRoot(fm.getTag() + fm.getWorkingDir())
     {
       // This checks which energies are specified in the string "toSave" (passed as a parameter), and creates the
       // corresponding h5 files to save the snapshots.
 
 #ifdef HAVE_HDF5
+      saveScalar = IsInContainer::check("S", toSave);              // value of the scalar singlets
       saveScalarK = IsInContainer::check("E_S_K", toSave);         // kinetic energy of the scalar singlets
       saveScalarG = IsInContainer::check("E_S_G", toSave);         // gradient energy of the scalar singlets
+      saveComplexScalar = IsInContainer::check("CS", toSave);      // modulus of the complex scalars
       saveComplexScalarK = IsInContainer::check("E_CS_K", toSave); // kinetic energy of the complex scalars
       saveComplexScalarG = IsInContainer::check("E_CS_G", toSave); // gradient energy of the complex scalars
       saveSU2DoubletK = IsInContainer::check("E_SU2D_K", toSave);  // kinetic energy of the SU(2) doublets
@@ -42,7 +44,15 @@ namespace TempLat
       saveSU2El = IsInContainer::check("E_B_K", toSave);           // electric energy of the SU(2) gauge sector
       saveSU2Mag = IsInContainer::check("E_B_G", toSave);          // magnetic energy of the SU(2) gauge sector
       savePot = IsInContainer::check("E_V", toSave);               // potential energy
+      saveETotal = IsInContainer::check("E", toSave);              // total energy energy
 
+      if(saveScalar || saveScalarK || saveScalarG || saveComplexScalar || saveComplexScalarK || saveComplexScalarG || saveSU2DoubletK || saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot || saveETotal ) fIO.setSaverLimits(pars.snapLower, pars.snapUpper, pars.snapStep);
+
+      if(saveScalar) {
+        nameScalar = mRoot + "snapshot_scalar_singlet.h5"; // name of the file
+        fIO.saver.create( nameScalar  );
+        fIO.saver.close();
+      }
       if (saveScalarK) {
         nameScalarK = mRoot + "kinetic_energy_snapshot_scalar.h5"; // name of the file
         fIO.saver.create(nameScalarK);
@@ -52,6 +62,11 @@ namespace TempLat
         nameScalarG = mRoot + "gradient_energy_snapshot_scalar.h5"; // name of the file
 
         fIO.saver.create(nameScalarG);
+        fIO.saver.close();
+      }
+      if(saveComplexScalar) {
+        nameComplexScalar = mRoot + "snapshot_complex_scalar.h5"; // name of the file
+        fIO.saver.create( nameComplexScalar );
         fIO.saver.close();
       }
       if (saveComplexScalarK) {
@@ -107,6 +122,11 @@ namespace TempLat
         fIO.saver.create(namePot);
         fIO.saver.close();
       }
+      if(saveETotal) {
+        nameETotal = mRoot + "total_energy_snapshot.h5"; // name of the file
+        fIO.saver.create( nameETotal );
+        fIO.saver.close();
+      }
 #endif
     }
 
@@ -114,6 +134,11 @@ namespace TempLat
     template <typename T> void measure(Model &model, T t)
     {
 #ifdef HAVE_HDF5
+      if(saveScalar) {   // kinetic energy of the scalar singlets
+        ForLoop(i, 0, Model::Ns -1, fIO.saver.open( nameScalar );
+                fIO.saver.save(t, model.fldS(i), "S_" + std::to_string(i));
+                fIO.saver.close(););
+      }
       if (saveScalarK) { // kinetic energy of the scalar singlets
         ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalarK); fIO.saver.save(
             t, Energies::kineticS(model, FieldFunctionals::pi2S(model, i)), "E_S_K_" + std::to_string(i));
@@ -122,6 +147,11 @@ namespace TempLat
       if (saveScalarG) { // gradient energy of the scalar singlets
         ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalarG); fIO.saver.save(
             t, Energies::gradientS(model, FieldFunctionals::grad2S(model, i)), "E_S_G_" + std::to_string(i));
+                fIO.saver.close(););
+      }
+      if(saveComplexScalar) {   // kinetic energy of the complex scalars
+        ForLoop(i, 0, Model::NCs -1, fIO.saver.open( nameComplexScalar );
+                fIO.saver.save(t, norm(model.fldCS(i)), "CS_" + std::to_string(i));
                 fIO.saver.close(););
       }
       if (saveComplexScalarK) { // kinetic energy of the complex scalars
@@ -171,12 +201,19 @@ namespace TempLat
         fIO.saver.save(t, Potential::potential(model), "E_V");
         fIO.saver.close();
       }
+      if(saveETotal) {
+        fIO.saver.open( nameETotal );
+        fIO.saver.save(t, Energies::totalEnergy(model), "E_Total");
+        fIO.saver.close();
+      }
 #else
       if (saveScalarK || saveScalarG || saveComplexScalarK || saveComplexScalarG || saveSU2DoubletK ||
           saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot) {
         std::stringstream ss;
+        if (saveScalar) ss << "\n- Value of the scalar singlets.";
         if (saveScalarK) ss << "\n- Kinetic energy of the scalar singlets.";
         if (saveScalarG) ss << "\n- Gradient energy of the scalar singlets.";
+        if (saveComplexScalar) ss << "\n- Magnitude of the complex scalars.";
         if (saveComplexScalarK) ss << "\n- Kinetic energy of the complex scalars.";
         if (saveComplexScalarG) ss << "\n- Gradient energy of the complex scalars.";
         if (saveSU2DoubletK) ss << "\n- Kinetic energy of the SU(2) doublets.";
@@ -186,6 +223,7 @@ namespace TempLat
         if (saveSU2El) ss << "\n- Electric energy of the SU(2  ) gauge sector.";
         if (saveSU2Mag) ss << "\n- Magnetic energy of the SU(2) gauge sector.";
         if (savePot) ss << "\n- Potential energy.";
+        if (saveETotal) ss << "\n- Total energy.";
 
         throw(FileIOException("You tried to save an energy snapshot to a file, but the HDF5 library is not available. "
                               "Make sure you have it installed and that you compiled CosmoLattice with it." +
@@ -199,19 +237,19 @@ namespace TempLat
     FileIO<Model::NDim> fIO;
     std::string mRoot;
 
-    bool saveScalarG = false, saveScalarK = false;
-    bool saveComplexScalarG = false, saveComplexScalarK = false;
+    bool saveScalar = false, saveScalarG = false, saveScalarK = false;
+    bool saveComplexScalar = false, saveComplexScalarG = false, saveComplexScalarK = false;
     bool saveSU2DoubletG = false, saveSU2DoubletK = false;
     bool saveU1Mag = false, saveU1El = false;
     bool saveSU2Mag = false, saveSU2El = false;
-    bool savePot = false;
+    bool savePot = false, saveETotal = false;
 
-    std::string nameScalarG, nameScalarK;
-    std::string nameComplexScalarG, nameComplexScalarK;
+    std::string nameScalar, nameScalarG, nameScalarK;
+    std::string nameComplexScalar, nameComplexScalarG, nameComplexScalarK;
     std::string nameSU2DoubletG, nameSU2DoubletK;
     std::string nameU1Mag, nameU1El;
     std::string nameSU2Mag, nameSU2El;
-    std::string namePot;
+    std::string namePot, nameETotal;
   };
 } // namespace TempLat
 

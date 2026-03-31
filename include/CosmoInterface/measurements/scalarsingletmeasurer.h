@@ -42,6 +42,12 @@ namespace TempLat
               // File for volume-averages
               spectraOut.emplace_back(SpectrumSaver<T>(filesManager, model.fldS(i), amIRoot, append, par));
               // File for spectra
+              if(flagON) {
+                ONOut.emplace_back(
+                  SpectrumSaver<T>(filesManager, "ON_scalar_" + std::to_string(i), amIRoot, append, par)
+                );
+                // File for occupation number
+              }
       );
     }
 
@@ -57,20 +63,17 @@ namespace TempLat
     }
 
     // The following function measures the spectra of the norm and its time-derivative.
-    template <typename Model> // The occupation number is only measured if the user indicates it. The current version
+    template <typename Model, typename PowerSpectrumMeasurer> // The occupation number is only measured if the user indicates it. The current version
                               // requires one additional field to measure it (JBB, Nov 2023).
-    void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
+    void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
-      ForLoop(
-          i, 0, Model::Ns - 1,
-          if (flagON) {
-            spectraOut(i).save(lastMeas, t, PSMeasurer.powerSpectrum(model.fldS(i)),
-                               pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i)),
-                               ONMeasurer.occupationNumber(model, i));
-          } else {
-            spectraOut(i).save(lastMeas, t, PSMeasurer.powerSpectrum(model.fldS(i)),
-                               pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i)));
-          });
+      ForLoop(i, 0, Model::Ns - 1,
+              spectraOut(i).save(lastMeas, t,
+                                 PSMeasurer.powerSpectrum(model.fldS(i)),
+                                 pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i))
+              );
+              if (flagON) ONOut(i).save(lastMeas, t, ONMeasurer.occupationNumber(model, i));
+      );
     }
 
   private:
@@ -78,6 +81,7 @@ namespace TempLat
 
     TempLatVector<MeasurementsSaver<T>> standardOut;
     TempLatVector<SpectrumSaver<T>> spectraOut;
+    TempLatVector<SpectrumSaver<T>> ONOut;
 
     OccupationNumberMeasurer ONMeasurer;
     bool flagON;

@@ -26,7 +26,7 @@ namespace TempLat
   class OccupationNumberMeasurer
   {
   public:
-    template <typename T> OccupationNumberMeasurer(const RunParameters<T> &par) : nbins(par.nBinsSpectra) {}
+    template <typename T> OccupationNumberMeasurer(const RunParameters<T> &par) : deltakBin(par.deltaKBin) {}
 
     template <class Model, int I> auto occupationNumber(Model &model, Tag<I> i)
     {
@@ -34,18 +34,18 @@ namespace TempLat
       using T = decltype(model.dx);
 
       const auto N = GetNGrid::get(model); // Isotropic lattices only.
-      const T kMaxBins = std::floor(pow(3, 0.5) / 2.0 * N) + 1;
+      const T kMax = pow(NDim, 0.5) / 2.0 * N;
 
       Field<T, NDim> tmp("tmp", GetToolBox::get(model));
 
       tmp = model.fldS(i);
-      const auto part1 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);
+      const auto part1 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(kMax);
 
       tmp = (pow(model.aI, model.alpha - 3) * model.piS(i)) + model.aDotI / model.aI * model.fldS(i);
-      const auto part2 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(nbins, kMaxBins);
+      const auto part2 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(kMax);
 
       const T normalisation =
-          pow<2>(model.aI) * pow<3>(model.dx) / pow<3>(N) / 2 * pow<2>(model.fStar / model.omegaStar);
+          pow<2>(model.aI) * pow<NDim>(model.dx / N) / 2 * pow<2>(model.fStar / model.omegaStar);
 
       const T m2 = average(model.potDeriv2(i));
 
@@ -56,7 +56,7 @@ namespace TempLat
     }
 
   private:
-    ptrdiff_t nbins;
+    double deltakBin;
   };
 
 } // namespace TempLat

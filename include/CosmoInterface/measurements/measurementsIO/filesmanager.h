@@ -31,7 +31,7 @@ namespace TempLat
   public:
     FilesManager(ParameterParser &parser, std::string fn, device::memory::host_ptr<MemoryToolBox<NDim>> toolbox,
                  bool pUseHDF5, bool pUseHDF5Spectra, bool pPrintHeaders, std::string pTag = "",
-                 ptrdiff_t pFlushFreq = 1, ptrdiff_t pNMeas = 0, ptrdiff_t pNMeasInfreq = 0)
+                 ptrdiff_t pFlushFreq = 1, ptrdiff_t pNMeas = 0, ptrdiff_t pNMeasInfreq = 0, bool isUnbinned = false)
         : mToolbox(toolbox), mUseHDF5(pUseHDF5), mUseHDF5Spectra(pUseHDF5Spectra), mPrintHeaders(pPrintHeaders),
           workingDir(fn), tag(pTag), flushFreq(pFlushFreq), nMeas(pNMeas), nMeasInfreq(pNMeasInfreq)
     {
@@ -44,7 +44,8 @@ namespace TempLat
       }
       if (mUseHDF5Spectra) {
         FileSaverHDF5 fs;
-        fs.create(getHDF5SpectraFn(), Exclusive);
+        if (!isUnbinned) fs.create(getHDF5SpectraFn(), Exclusive);
+        else fs.create(getHDF5UnbinnedSpectraFn(), Exclusive);
         fs.close();
       }
 #endif
@@ -62,6 +63,7 @@ namespace TempLat
     std::string getTag() const { return tag; }
     std::string getHDF5Fn() const { return getWorkingDir() + getTag() + "average.h5"; }
     std::string getHDF5SpectraFn() const { return getWorkingDir() + getTag() + "spectra.h5"; }
+    std::string getHDF5UnbinnedSpectraFn() const { return getWorkingDir() + getTag() + "unbinned_spectra.h5"; }
 
     template <typename T>
     std::string getCurredName(const Field<T, NDim> &fld, bool withDir, std::string nametag = "average")
@@ -78,7 +80,7 @@ namespace TempLat
 
   private:
     device::memory::host_ptr<MemoryToolBox<NDim>> mToolbox;
-    bool mUseHDF5, mUseHDF5Spectra;
+    bool mUseHDF5, mUseHDF5Spectra, mUseHDF5UnbinnedSpectra;
     bool mPrintHeaders;
     std::string workingDir;
     std::string tag;

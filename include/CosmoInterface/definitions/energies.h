@@ -233,6 +233,36 @@ namespace TempLat
       return (Eks + Ekcs + EkSU2Dbl + Egs + Egcs + EgSU2Dbl + EelU1 + EmagU1 + EelSU2 + EmagSU2 +
               ENMC + model.potAvI);
     }
+
+    template <class Model>
+    static inline auto totalEnergy(Model& model)  // Total energy density (sum of all contributions)
+    {
+      Field<typename Model::FloatType, Model::NDim> Etotal("tmp", GetToolBox::get(model));
+      Etotal = Potential::potential(model);
+      ForLoop(i, 0, Model::Ns -1,
+              Etotal += kineticS(model, FieldFunctionals::pi2S(model,i));
+              Etotal += gradientS(model, FieldFunctionals::grad2S(model,i));
+      );
+      ForLoop(i, 0, Model::NCs -1,
+              Etotal += kineticCS(model, FieldFunctionals::pi2CS(model,i));
+              Etotal += gradientCS(model, FieldFunctionals::grad2CS(model,i));
+      );
+      ForLoop(i, 0, Model::NSU2Doublet -1,
+              Etotal += kineticSU2Doublet(model, FieldFunctionals::pi2SU2Doublet(model,i));
+              Etotal += gradientSU2Doublet(model, FieldFunctionals::grad2SU2Doublet(model,i));
+      );
+      ForLoop(i, 0, Model::NU1 -1,
+              Etotal += electricU1(model, FieldFunctionals::pi2U1(model,i));
+              Etotal += magneticU1(model, FieldFunctionals::B2U1(model,i));
+      );
+      ForLoop(i, 0, Model::NSU2 -1,
+              Etotal += electricSU2(model, FieldFunctionals::pi2SU2(model,i));
+              Etotal += magneticSU2(model, FieldFunctionals::B2U1(model,i));
+      );
+
+      return Etotal;
+    }
+
   };
 } // namespace TempLat
 

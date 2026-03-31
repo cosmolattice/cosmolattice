@@ -26,11 +26,11 @@ namespace TempLat
    *
    *
    **/
-  template <typename T> class PowerSpectrumMeasurer
+  template <typename T, size_t NDim> class PowerSpectrumMeasurer
   {
   public:
     PowerSpectrumMeasurer(const RunParameters<T> &par):
-    nbins(par.nBinsSpectra),
+    deltakBin(par.deltaKBin),
     PSType(par.powerSpectrumType),
     PSVersion(par.powerSpectrumVersion)
     {
@@ -67,24 +67,25 @@ namespace TempLat
 
     template <typename PS, typename tBox> RadialProjectionResult<T> powerSpectrum(const PS& f, ptrdiff_t N, T kIR, tBox toolBox)
     {
-      const ptrdiff_t N3 = pow<3>(N);
       const T dx = 2 * Constants::pi<T> / kIR / N; // lattice spacing
-
-      const T kMaxBins = std::floor(sqrt(3.) / 2.0 * N) + 1;
+      const T kMax = pow(NDim, 0.5) / 2.0 * N;
 
       if (PSVersion != 3) {
-        auto fk2 = projectRadially<3>(f, SpaceStateType::Fourier, toolBox, PSVersion == 1)
-                   .measure(nbins, kMaxBins); // PSversion == true is a boolean. It tells the spectrum to use the
+        auto fk2 = projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox, PSVersion == 1)
+                   .measure(kMax, deltakBin); // PSversion == true is a boolean. It tells the spectrum to use the
                                                   // centralValues, and not the bins, when rescaling.
 
         if (PSType == 2) {
-          return Function(ntilde, pow<3>(kIR * ntilde * dx) / N3 / T(2) / pow<2>(Constants::pi<T>))  * fk2;
+          // NOTE: Simulations for NDim=1,2 are only implemented for PSType=2 spectra
+          if constexpr(NDim==1) return Function(ntilde, pow<NDim>(kIR * ntilde * dx / deltakBin / N ) / Constants::pi<T> ) * fk2;
+          else if constexpr(NDim==2) return Function(ntilde, pow<NDim>(kIR * ntilde * dx / deltakBin / N) / 2.0 / Constants::pi<T>  )* fk2 ;
+          else return Function(ntilde, pow<NDim>(kIR * ntilde * dx / deltakBin / N) / 2.0 / pow<2>(Constants::pi<T>) ) * fk2;
         } else if (PSType == 1) {
           fk2.sumInsteadOfAverage();
-          return Function(ntilde, kIR * ntilde * dx / pow<5>(N) / T(2) / Constants::pi<T>) * fk2;
+          return Function(ntilde, kIR * ntilde * dx / deltakBin / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
         } else if (PSType == 0) {
           fk2.sumInsteadOfAverage();
-          return Function(ntilde, dx / pow<5>(N) / T(2) / Constants::pi<T>) * fk2;
+          return Function(ntilde, dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return fk2; // To remove moot warning.
@@ -94,22 +95,24 @@ namespace TempLat
                                            // the dimension at compile time.
         if (PSType == 2) {
 
-          auto fk2 = projectRadially<3>(pow<3>(ntilde.norm()) * f, SpaceStateType::Fourier, toolBox, false)
-                         .measure(nbins, kMaxBins);
-          return (pow<3>(kIR * dx) / N3 / T(2) / pow<2>(Constants::pi<T>)) * fk2;
+          auto fk2 = projectRadially<3>(pow<NDim>(ntilde.norm()) * f, SpaceStateType::Fourier, toolBox, false)
+                         .measure(kMax, deltakBin);
+          if constexpr(NDim == 1) return (pow<NDim>(kIR * dx / N) / Constants::pi<T>) * fk2;
+          else if constexpr(NDim == 2)  return (pow<NDim>(kIR * dx / N) / 2.0 / Constants::pi<T>) * fk2;
+          else return (pow<NDim>(kIR * dx / N) / 2.0 / pow<2>(Constants::pi<T>)) * fk2;
         } else if (PSType == 1) {
           auto fk2 =
-              projectRadially<3>(ntilde.norm() * f, SpaceStateType::Fourier, toolBox, false).measure(nbins, kMaxBins);
+              projectRadially<NDim>(ntilde.norm() * f, SpaceStateType::Fourier, toolBox, false).measure(kMax, deltakBin);
           fk2.sumInsteadOfAverage();
-          return (kIR * dx / pow<5>(N) / T(2) / Constants::pi<T>) * fk2;
+          return (kIR * dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
         } else if (PSType == 0) {
-          auto fk2 = projectRadially<3>(f, SpaceStateType::Fourier, toolBox, false).measure(nbins, kMaxBins);
+          auto fk2 = projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox, false).measure(kMax, deltakBin);
           fk2.sumInsteadOfAverage();
-          return (dx / pow<5>(N) / T(2) / Constants::pi<T>) * fk2;
+          return (dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
-          return projectRadially<3>(f, SpaceStateType::Fourier, toolBox, false)
-              .measure(nbins, kMaxBins); // To remove moot warning.
+          return projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox, false)
+              .measure(kMax, deltakBin); // To remove moot warning.
         }
       }
     }
@@ -117,7 +120,6 @@ namespace TempLat
     template <typename R> auto powerSpectrum(R f, ptrdiff_t N, T kIR)
     { // This function is for expression/composite operator, which need their own memory to perform the fourier
       // transform.
-      static constexpr size_t NDim = GetNDim::get<R>();
       Field<T, NDim> tmp("tmp", GetToolBox::get(f));
       tmp = f;
 
@@ -125,7 +127,7 @@ namespace TempLat
     }
 
   private:
-    ptrdiff_t nbins;
+    T deltakBin;
     int PSType;
     int PSVersion;
   };

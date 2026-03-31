@@ -45,13 +45,19 @@ namespace TempLat
       auto omega = omega_k(k, mass2, f.toString());
       // mode frequency
 
-      auto Hcut = heaviside(kCutOff - k);
+      auto Hcut = heaviside(kCutOff - k) * pow(k,(3. - Model::NDim) / 2.);
       // function that sets to zero all modes over a certain cutoff
 
       // Returns the rms of the (real and imaginary) parts of the fluctuations
       // (see Sec. 7.1. of arXiv:2006.15122 for a derivation)
-      return Hcut * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5)) * pow(2 * omega, -0.5) /
-             sqrt(2);
+
+      if constexpr (Model::NDim == 1)
+        return Hcut * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()),.5)) * pow(2 * omega, -0.5) / sqrt(4.*Constants::pi<T>) ;
+      else if constexpr (Model::NDim == 2)
+          return Hcut * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(2 * omega, -0.5) / sqrt(2.*Constants::pi<T>) ;
+      else
+          return Hcut  * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5)) * pow(2 * omega, -0.5) / sqrt(2) ;
+
       // Here 1/sqrt{2omega_k} characterises rms of |phi_k|, but since |phi_k|^2 =
       //  Re(phi_k)^2 + Im(phi_k)^2, hence there is extra 1/sqrt{2} as this 'return' is
       //  in reality the rms of either Re(phi_k) or Im(phi_k).

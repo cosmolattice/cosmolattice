@@ -72,7 +72,7 @@ namespace TempLat
     }
 
     // We measure the power spectrum of the norm and its time-derivative as the sum of its components.
-    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
+    template <typename Model, typename PowerSpectrumMeasurer> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
       ForLoop(i, 0, Model::NSU2Doublet - 1,
               spectraNormOutFld(i).save(

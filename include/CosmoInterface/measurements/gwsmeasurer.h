@@ -12,6 +12,7 @@
 #include "TempLat/util/templatvector.h"
 #include "CosmoInterface/measurements/abstractmeasurer.h"
 #include "CosmoInterface/measurements/powerspectrum.h"
+#include "CosmoInterface/measurements/unbinnedpowerspectrum.h"
 
 namespace TempLat
 {
@@ -33,7 +34,7 @@ namespace TempLat
     PRJType(par.GWprojectorType)
     { }
 
-    template <typename Model> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer<T> &PSMeasurer)
+    template <typename Model, typename PowerSpectrumMeasurer> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
       if (model.fldGWs != nullptr) {
         auto GWspectrum = PSMeasurer.powerSpectrumGW(model, PRJType);

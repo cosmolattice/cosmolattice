@@ -6,6 +6,7 @@
    Released under the MIT license, see LICENSE.md. */
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
+//            Modified: Jorge Baeza-Ballesteros,  Year: 2026
 
 #include "TempLat/util/conditionaloutput/outputstream.h"
 #include "TempLat/lattice/measuringtools/projectionhelpers/radialprojectionresult.h"
@@ -64,22 +65,14 @@ namespace TempLat
         printHeader = false;
       }
 
-      auto mNBins = nBins;
-
-      if (nBins > -1) {
-        for (size_t i = 0; i < arr.size(); ++i) {
-          //  arr[i]->rebin(nBins , std::floor(pow(3, 0.5) / 2.0 * nGrid));  // The second argument is the total length
-          //  of the grid in k . The bin size in computed as this divided by nBins. This choice corresponds to bin of
-          //  size kIR for the default choice.
-          arr[i]->rescaleBins(kIR);
-        }
-      } else
-        mNBins = arr[0]->size();
+      for (size_t i = 0; i < arr.size(); ++i) {
+        arr[i]->rescaleBins(kIR);
+      }
 
       // Now we construct the file with the appropriate format.
 
       std::stringstream sstream;
-      for (int i = 0; i < mNBins; ++i) {
+      for (size_t i = 0; i < (*arr[0]).getNBins(); ++i) {
         sstream.str("");
 
         if (verbosity == 0) {
@@ -97,16 +90,9 @@ namespace TempLat
         if (arr.size() > 1) sstream << " " << (*arr.back())[i].getValueString(true, verbosity, true);
         (*outputSpectrum) << sstream.str() << "\n";
 
-        /*if(verbosity != 1) sstream  << (*arr[0])[i].toString(true, arr.size() <= 1, verbosity); //true: bin
-        information. arr.size() <= 1: multiplicity else sstream << (i+1) * deltaKBin *kIR << " " <<
-        (*arr[0])[i].toString(false, arr.size() <= 1,  verbosity); //for verbosity 1, show multiple of deltaKbin for bin
-        value, and only mean value for the spectrum. for (size_t j = 1; j < arr.size() - 1; ++j) { sstream << " " <<
-        (*arr[j])[i].toString(false, false, verbosity);
-        }
-        if(arr.size() > 1) sstream << " " << (*arr.back())[i].toString(false, true,verbosity);
-        (*outputSpectrum) << sstream.str()  << "\n";*/
       }
-      (*outputSpectrum) << "\n\n";
+      (*outputSpectrum)  << "\n";
+      outputSpectrum->flush();
     }
 
   private:
