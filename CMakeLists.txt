@@ -46,19 +46,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # Get TempLat, which is the main dependency of CosmoLattice.
 # ##############################################################################
 
-# include(FetchContent)
-# set(FETCHCONTENT_QUIET ON)
-# set(TEMPLAT_BRANCH gws CACHE STRING "Branch of TempLat to use")
-# FetchContent_Declare(
-#   TempLat
-#   GIT_REPOSITORY https://github.com/cosmolattice/templat.git
-#   GIT_TAG ${TEMPLAT_BRANCH})
-# FetchContent_MakeAvailable(TempLat)
+include(FetchContent)
+set(FETCHCONTENT_QUIET ON)
+set(TEMPLAT_BRANCH gws CACHE STRING "Branch of TempLat to use")
+FetchContent_Declare(
+  TempLat
+  GIT_REPOSITORY https://github.com/cosmolattice/templat.git
+  GIT_TAG ${TEMPLAT_BRANCH})
+FetchContent_MakeAvailable(TempLat)
 
-add_subdirectory(
-  /home/jorgebaeza/Jorge/PhD/CosmicStrings/CLonGPU/templat
-  ${CMAKE_BINARY_DIR}/templat_build
-)
 
 # ##############################################################################
 # Now, configure CosmoLattice
