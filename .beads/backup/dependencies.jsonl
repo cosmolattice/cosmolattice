@@ -1,3 +1,8 @@
+{"created_at":"2026-03-31T14:46:02Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-60v","issue_id":"cosmolattice_private-3i2.1","metadata":"{}","type":"parent-child"}
+{"created_at":"2026-03-31T14:44:29Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3i2.1","issue_id":"cosmolattice_private-3i2.2","metadata":"{}","type":"blocks"}
+{"created_at":"2026-03-31T14:46:03Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-60v","issue_id":"cosmolattice_private-3i2.2","metadata":"{}","type":"parent-child"}
+{"created_at":"2026-03-31T14:44:30Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3i2.2","issue_id":"cosmolattice_private-3i2.3","metadata":"{}","type":"blocks"}
+{"created_at":"2026-03-31T14:46:03Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-60v","issue_id":"cosmolattice_private-3i2.3","metadata":"{}","type":"parent-child"}
 {"created_at":"2026-03-30T18:53:42Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-292","issue_id":"cosmolattice_private-3x5","metadata":"{}","type":"discovered-from"}
 {"created_at":"2026-03-30T18:53:15Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3x5","issue_id":"cosmolattice_private-3x5.1","metadata":"{}","type":"parent-child"}
 {"created_at":"2026-03-30T18:53:24Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3x5","issue_id":"cosmolattice_private-3x5.10","metadata":"{}","type":"parent-child"}
@@ -26,3 +31,5 @@
 {"created_at":"2026-03-30T18:53:39Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3x5.6","issue_id":"cosmolattice_private-3x5.8","metadata":"{}","type":"blocks"}
 {"created_at":"2026-03-30T18:53:23Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3x5","issue_id":"cosmolattice_private-3x5.9","metadata":"{}","type":"parent-child"}
 {"created_at":"2026-03-30T18:53:39Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3x5.6","issue_id":"cosmolattice_private-3x5.9","metadata":"{}","type":"blocks"}
+{"created_at":"2026-03-31T14:33:41Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-472","issue_id":"cosmolattice_private-60v","metadata":"{}","type":"discovered-from"}
+{"created_at":"2026-03-31T14:33:37Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-60v","issue_id":"cosmolattice_private-60v.1","metadata":"{}","type":"parent-child"}
