@@ -1,6 +1,8 @@
 
 # CosmoLattice
 
+* This branch is under active development, NO GUARANTEES WHATSOEVER.*
+
 ## *A modern code for lattice simulations of scalar and gauge field dynamics in an expanding universe*
 ### Authors: Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg
 
