@@ -200,7 +200,7 @@ If this solves your problem, you can avoid having to specify the FFTW path each 
 
 `CMakeLists.txt:`
 
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2FCMakeLists.txt%23L50-L53&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(CMakeLists.txt:fetchcontent_templat)
 where, again `/path/to/fftw3/` is the path where fftw3 is located.
 
 #### Running the program with an input parameter file { #subsec_Input-Scalars }
@@ -214,7 +214,7 @@ This will launch the model `lphi4` with the parameters specified in the input fi
 
 `src/models/parameter-files/lphi4.in:`
 
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Fparameter-files%2Flphi4.in&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/parameter-files/lphi4.in)
 
 One of the perks of using CosmoLattice is its very flexible way of handling parameters. The standard way of passing parameters to the program is to bundle them in an input file such as `lphi4.in`, and indicate its path when calling the program with the `input=...` argument. The structure of the input file is rather straightforward. First, if we want to pass a single parameter, we just write down its name followed by an equal sign, and then define its value. Second, if we are passing parameters that admit multiple values, these must be separated with white spaces, as e.g. line `25` of `lphi4.in` above. And third, the character `\#` is use for comments, so everything following such character in a given line will be ignored. Note that the order in which the parameters are specified does not matter.  To sum it up, the way of defining parameters in an input file is
 ```text
@@ -306,24 +306,24 @@ To define a model, the only file we really need to modify/create is the correspo
 #### Definition and declaration of the model { #subsubsec_DefAndDeclModel }
 
 The first thing we need to do is to specify the matter content of our theory. In our model example we have two scalar fields, with a potential composed by the sum of two terms: the quartic potential of the inflaton, and the quadratic interaction between the inflaton and the preheat field, see Eq. ([*33*][eq_potentialExampleI]). This is indicated in the following extract of code:
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L16-L34&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:model_pars)
 
 If we want to include mode fields with further potential interactions, we simply need to modify the values of `NScalars` and `NPotTerms` of the \textcolor{blue}{`ModelPars`} structure accordingly. We can also include other types of matter fields by adding extra parameters in this structure, such as gauge fields or complex singlets/doublets, but we wait for Section [My first model of gauge fields](My first model of gauge fields.md) to explain this. Once `NScalars` and `NPotTerms` are fixed, we give a name to our model:
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L36-L37&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:model_name)
 
 **The name of the model must match the one of the file (without the .h extension)**. Following this prescription, the name of our example model is `lphi4`. This information is then passed to a macro `MakeModel` to generate a customizable skeleton class:
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L39-L44&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:make_model)
 
 Our customized model is then derived from this skeleton, as follows:
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L46-L51&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:class_declaration)
 
 #### Setting-up the model
 
 The next step is to declare and define some **model specific parameters**, which can be used for example as an input for the different potential terms. In our example, these are mainly the inflaton self-coupling $\lambda$, and the coupling constant of the interaction $g$. This scenario is characterized by parametric resonance of the preheat field, so it is also convenient to introduce an additional third parameter called the *resonance parameter*, defined in terms of the other two as $q \equiv g^2/\lambda$. Parameters are declared in the model file as follows:
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L52-L63&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:private_members)
 
 We now need to assign values to these parameters. We will do it inside the constructor of our model, namely the function in charge of its initialization:
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L67-L86&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:constructor_params)
 
 Lines `67` and `68` are simply the declaration of our constructor. The argument `parser` is the *parameter parser* which we will use to add and get model specific arguments. The argument  `runPar` contains generic parameters such as the lattice spacing and the box size, see Section [Appendix: Parameters](Appendix: Parameters.md) for more information. The `toolBox` is an object that contains information about the internal mechanics of the library, and of which any model needs to be aware. For example, it is used to instantiate the field variables and perform iterations over the lattice, see Section [What CosmoLattice does in detail](What CosmoLattice does in detail.md) for more information. Anyhow, these two lines should not be modified, as they are only there to declare the constructor.
 
@@ -332,35 +332,35 @@ Customization starts on line `75`, where we declare a new parameter to be read e
 We now need to initialize some generic variables of the skeleton model `Model`. In particular, we need to specify all the (non-zero) *initial homogeneous components* of the different scalar fields, the variables \{$\alpha$, $f_*$, $\omega_*$\} that will define our program variables, as well as the initial effective masses of the fields.
 
 Regarding the initial homogeneous components of the fields, we also read them from the input file:
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L89-L104&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:initial_conditions)
 
 The variables `fldS0` and `piS0` are arrays of doubles containing the homogeneous values of the scalar fields and their initial velocities. They are variables declared in the skeleton `Model<MODELNAME>`, see Section [What CosmoLattice does in detail](What CosmoLattice does in detail.md) for more information. We are using the same syntax as above to retrieve parameters from the input parameter file. The only novelty is the fact that now we read parameters that take multiple values. The size of the parameter is passed after the argument `double`, `2` in this case. The parameter `"initial_amplitudes"` is mandatory while `"initial_momenta"` is optional, as by default it takes the value zero in its entries. We note that the **field initial amplitudes and initial velocities must be introduced in the parameter file in units of GeV and GeV$^2$, respectively**. In the given example, we will consider from now on the field ''0" to be the inflaton $\phi$, and the field ''1" to be the daughter or preheat field $\chi$.
 
 Next we set up the re-scaling, as described in Eqs. ([*29*][eq_FieldSpaceTimeNaturalVariables]),([*30*][eq_Alpha-PowLaw]),([*37*][eq_lphi4-ProgVar]):
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L107-L117&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:rescaling)
 
 The code is self-explanatory. The parameters `fStar`, `omegaStar` and `alpha` are declared in the skeleton class.
 The last step is to set up the masses.
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L119-L130&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:masses_setup)
 
 Here, we use the default function which sets the masses from the second derivatives of the potential evaluated on the initial homogeneous values of the field, see Section [*The potential and its derivatives*][sec_PotDerivs] below. This function also computes the initial value of the potential, which is useful to initialise the Hubble rate. Were we want provide explicitly the initial field masses, the relevant parameter to be set is `masses2S`, which represents an array containing the square masses of the scalar fields.
 
 #### The potential and its derivatives { #sec_PotDerivs }
 
 The last and arguably the most important piece of information missing to be specified is the potential under consideration and its associated field derivatives. Let us start by defining the potential. We split it in `NPotTerms`, as specified on line `26` of the model file, two in our case.
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L132-L159&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:potential_terms)
 
 Here we wrote in dimensionless units, the potential defined in Eq. ([*38*][eq_PotNat]), in this example split in two terms. For each term, we need to define a function called `auto potentialTerms(Tag<r>)`, with `r` an integer between $0$ and `NPotTerms`. In our case, we define on line `143` as the first potential term (numbered as the 'zeroth' term) the inflaton potential $\frac{1}{4}{\tilde \phi}^4$, whereas and on line `156` we define the second potential term describing the interaction between the inflaton and the daughter field $\frac{1}{2}q\tilde\phi^2\tilde\chi^2$. The object `fldS` is the object which contains the scalar fields. Individual fields are accessed using by calling `fldS(s)` with `s` the number of the scalar field species, running from $0$ to `NScalars - 1`. Fields constitute an object of their own in CosmoLattice, so they can be manipulated with many functions and (differential) operators, see Appendix [List of Implemented Functions](List of Implemented Functions.md) for an exhaustive list. Here we use two different such functions, namely multiplication (which can be used between two fields to represent their site-by-site multiplication, or between a field and a number) and an integer power function `pow<n>`, which computes locally the $n^{th}$ integer power of the field.
 
 The `auto` keyword allows the compiler to automatically deduce the return type. In our case, it is essential as the expression we return are symbolic expression encoded inside the type, through the mechanism known as ''expression templates". We defer the interested reader to Appendix [Under the Hood: Expression Templates and CosmoLattice](Under the Hood: Expression Templates and CosmoLattice.md) for more information. For related reasons, the syntax `1_c` with the unusual `"_c"` is needed as it allows to simply defined compile-time integer.
 
 In exactly the same manner, we introduce the potential derivatives:
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L174-L190&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:potential_derivs)
 
 Let us highlight the fact that the numbering of these functions needs to be consistent with your numbering of the fields. By this we mean that the function `auto potentialTerms(Tag<0>)` corresponds to the derivative of the potential with respect to the numbered $0th$ field, `fldS(0_c)` in the code, and so on. The derivatives of the potential are used in the equations of motion.
 
 Finally, we also provide the second derivative of the potential with respect to the scalar field (these are needed to compute the effective masses of the fields):
-<script src="https://emgithub.com/embed-v2.js?target=https%3A%2F%2Fgithub.com%2Fcosmolattice%2Fcosmolattice%2Fblob%2Fmaster%2Fsrc%2Fmodels%2Flphi4.h%23L194-L214&style=github&type=code&showBorder=on&showLineNumbers=on&showFileMeta=on&showCopy=on&fetchFromJsDelivr=on"></script>
+@emgithub(models/lphi4.h:potential_second_derivs)
 
 With this we end our presentation of the model file. Any model consisting of canonically normalized interacting singlet scalar fields can be constructed in a similar manner.
 

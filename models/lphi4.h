@@ -13,6 +13,7 @@
 
 namespace TempLat
 {
+  // @label:model_pars
   /////////
   // Model name and number of fields
   /////////
@@ -34,21 +35,29 @@ namespace TempLat
     // See the model with gauge fields to have an example of how to turn
     // them on and specify interactions.
   };
+  // @endlabel
 
+  // @label:model_name
 #define MODELNAME lphi4
   // Here we define the name of the model. This should match the name of your file.
+  // @endlabel
 
+  // @label:make_model
   template <class R> using Model = MakeModel(R, ModelPars);
   // In this line, we define an appropriate generic model, with the correct
   // number of fields, ready to be customized.
   // If you are curious about what this is doing, the macro is defined in
   // the "CosmoInterface/abstractmodel.h" file.
+  // @endlabel
 
+  // @label:class_declaration
   class MODELNAME : public Model<MODELNAME>
   // Declaration of our model. It inherits from the generic model defined above.
   {
     //...
   private:
+  // @endlabel
+    // @label:private_members
     FloatType g, lambda, q;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
@@ -61,8 +70,10 @@ namespace TempLat
     // alpha, fStar, omegaStar : time and field rescaling to go to program units.
     //
     // fldS : The actual object which contains the scalar fields.
+    // @endlabel
 
   public:
+    // @label:constructor_params
     MODELNAME(ParameterParser &parser, RunParameters<FloatType> &runPar,
               auto toolBox)
         : // Constructor of our model.
@@ -84,7 +95,9 @@ namespace TempLat
 
       g = sqrt(q * lambda);
       // For convenience, we also define g as a function of lambda and q.
+    // @endlabel
 
+      // @label:initial_conditions
       /////////
       // Initial homogeneous components of the fields
       // (read from parameters file, or specified here if not)
@@ -101,7 +114,9 @@ namespace TempLat
       //, the "initial_momenta" is an optional parameter. It can still be specified through
       //  command line or input file as initial_momenta=value1 value2 ... valueNs,
       // but it can also be omitted, as we specified a default value of '{0, 0}'.
+      // @endlabel
 
+      // @label:rescaling
       /////////
       // Rescaling for program variables
       /////////
@@ -113,7 +128,9 @@ namespace TempLat
       // This consists of the  time rescaling exponent alpha, the field rescaling fStar
       // and the velocity rescaling omegaStar.
       // See the paper for more information on how to fix them.
+      // @endlabel
 
+      // @label:masses_setup
       setInitialPotentialAndMassesFromPotential();
       // Here we call this function to compute the value of the potential on the homogeneous
       // initial condition  (useful to set the initial Hubble rate). We also compute
@@ -126,7 +143,9 @@ namespace TempLat
         setInitialPotentialFromPotential();
        */
     }
+    // @endlabel
 
+    // @label:potential_terms
     /////////
     // Program potential (add as many functions as terms are in the potential)
     /////////
@@ -164,7 +183,9 @@ namespace TempLat
     // - The syntax 0_c is equivalent to Tag<0>(),
     // i.e. creating  an object of type 0. This operator '_c' is a modern C++ user-defined type literal,
     // taken from Boost and located in fcn/util/rangeiteration/tagliteral.h .
+    // @endlabel
 
+    // @label:potential_derivs
     /////////
     // Derivatives of the program potential with respect fields
     // (add one function for each field).
@@ -182,7 +203,9 @@ namespace TempLat
     {
       return q * fldS(1_c) * pow<2>(fldS(0_c));
     }
+    // @endlabel
 
+    // @label:potential_second_derivs
     /////////
     //  Second derivatives of the program potential with respect fields
     // (add one function for each field)
@@ -204,3 +227,4 @@ namespace TempLat
 } // namespace TempLat
 
 #endif // LPHI4_H
+// @endlabel

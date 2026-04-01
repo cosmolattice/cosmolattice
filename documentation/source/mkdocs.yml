@@ -89,6 +89,9 @@ extra_css:
   - extra.css
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css
 
+hooks:
+  - hooks/resolve_emgithub.py
+
 use_directory_urls: false # (optional) for better links without .html extension
 
 nav:

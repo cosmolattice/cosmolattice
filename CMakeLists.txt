@@ -47,12 +47,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # ##############################################################################
 
 include(FetchContent)
+# @label:fetchcontent_templat
 set(FETCHCONTENT_QUIET ON)
 set(TEMPLAT_BRANCH main CACHE STRING "Branch of TempLat to use")
 FetchContent_Declare(
   TempLat
   GIT_REPOSITORY https://github.com/cosmolattice/templat.git
   GIT_TAG ${TEMPLAT_BRANCH})
+# @endlabel
 FetchContent_MakeAvailable(TempLat)
 
 # ##############################################################################
