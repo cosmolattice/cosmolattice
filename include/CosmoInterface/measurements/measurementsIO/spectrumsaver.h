@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include "CosmoInterface/measurements/measurementsIO/std/spectrumsaverstd.h"
+#include "TempLat/lattice/measuringtools/projectionhelpers/unbinnedradialprojectionresult.h" //Added so that the code compiles without HDF5, even if not used here
 #ifdef HAVE_HDF5
 #include "CosmoInterface/measurements/measurementsIO/hdf5/spectrumsaverhdf5.h"
 #include "CosmoInterface/measurements/measurementsIO/hdf5/unbinnedspectrumsaverhdf5.h"
