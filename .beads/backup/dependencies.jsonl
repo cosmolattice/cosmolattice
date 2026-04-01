@@ -33,3 +33,10 @@
 {"created_at":"2026-03-30T18:53:39Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3x5.6","issue_id":"cosmolattice_private-3x5.9","metadata":"{}","type":"blocks"}
 {"created_at":"2026-03-31T14:33:41Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-472","issue_id":"cosmolattice_private-60v","metadata":"{}","type":"discovered-from"}
 {"created_at":"2026-03-31T14:33:37Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-60v","issue_id":"cosmolattice_private-60v.1","metadata":"{}","type":"parent-child"}
+{"created_at":"2026-04-01T14:35:01Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-3nk","issue_id":"cosmolattice_private-epw","metadata":"{}","type":"child"}
+{"created_at":"2026-04-01T13:51:52Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-zjt","issue_id":"cosmolattice_private-epw","metadata":"{}","type":"discovered-from"}
+{"created_at":"2026-04-01T13:51:45Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-epw","issue_id":"cosmolattice_private-epw.1","metadata":"{}","type":"parent-child"}
+{"created_at":"2026-04-01T13:51:46Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-epw","issue_id":"cosmolattice_private-epw.2","metadata":"{}","type":"parent-child"}
+{"created_at":"2026-04-01T13:51:52Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-epw.1","issue_id":"cosmolattice_private-epw.2","metadata":"{}","type":"blocks"}
+{"created_at":"2026-04-01T13:51:47Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-epw","issue_id":"cosmolattice_private-epw.3","metadata":"{}","type":"parent-child"}
+{"created_at":"2026-04-01T13:51:52Z","created_by":"aflorio","depends_on_id":"cosmolattice_private-epw.2","issue_id":"cosmolattice_private-epw.3","metadata":"{}","type":"blocks"}
