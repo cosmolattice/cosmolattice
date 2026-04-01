@@ -7,7 +7,7 @@ mkdir -p ${tmp_dir}
 mkdir -p ${build_dir}
 mkdir ${tmp_dir}/code_source
 
-git clone https://github.com/cosmolattice/cosmolattice_private.git ${tmp_dir}/code_source/cosmolattice
+git clone -b CLV2.0Alpha https://github.com/cosmolattice/cosmolattice.git ${tmp_dir}/code_source/cosmolattice
 git clone https://github.com/cosmolattice/templat.git ${tmp_dir}/code_source/templat
 
 source ./setup_python.sh
