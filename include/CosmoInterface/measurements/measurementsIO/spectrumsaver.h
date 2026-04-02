@@ -63,20 +63,20 @@ namespace TempLat
 
       if (not dontCreate) {
         if(unbinnedSpectra) {
-          #ifdef HAVE_HDF5
+#ifdef HAVE_HDF5
           unbinnedSaverHDF5 = std::make_shared<UnbinnedSpectrumSaverHDF5<T>>(fm, fld, amIRoot, appendMode, rPar);
-          #else
+#else
           throw(UseHDF5ButNotCompiled(
             "Unbinned spectra needs HDF5, but compiled without HDF5 option."));
-          #endif
+#endif
         }
         if (useHDF5) {
-  #ifdef HAVE_HDF5
+#ifdef HAVE_HDF5
           saverHDF5 = std::make_shared<SpectrumSaverHDF5<T>>(fm, fld, amIRoot, appendMode, rPar);
-  #else
+#else
           throw(
               UseHDF5ButNotCompiled("Call to use HDF5 for the measurementsIO output, but compiled without HDF5 option."));
-  #endif
+#endif
         } else {
           saverStd = std::make_shared<SpectrumSaverStd<T>>(fm, fld, amIRoot, appendMode, rPar);
         }
@@ -120,22 +120,22 @@ namespace TempLat
     }
 
     void saveSpectra(bool lastMeas, T& t, std::vector<std::shared_ptr<UnbinnedRadialProjectionResult<T>>> spectra) {
-      #ifdef HDF5
+#ifdef HAVE_HDF5
       unbinnedSaverHDF5->save(lastMeas, spectra, t);
-      #else
+#else
       throw (UseHDF5ButNotCompiled(
         "Unbinned spectra needs HDF5, but compiled without HDF5 option."));
-      #endif
+#endif
     }
 
     void saveSpectra(bool lastMeas, T& t, std::vector<std::shared_ptr<RadialProjectionResult<T>>> spectra){
       if(useHDF5) {
-        #ifdef HDF5
+#ifdef HAVE_HDF5
         saverHDF5->save(lastMeas,spectra, t);
-        #else
+#else
         throw (UseHDF5ButNotCompiled(
           "Call to use HDF5 for the measurementsIO output, but compiled without HDF5 option."));
-        #endif
+#endif
       }
       else {
         saverStd->save(spectra, t);

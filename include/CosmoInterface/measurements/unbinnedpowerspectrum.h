@@ -31,7 +31,7 @@ namespace TempLat
 
     template <typename R> auto powerSpectrum(R f)
     {
-      return this->powerSpectrum(pow<2>(abs(f.inFourierSpace())), GetNGrid::get(f), GetKIR::getKIR(f), GetToolBox::get(f));
+      return this->powerSpectrum(pow<2>(abs(f.inFourierSpace())), GetNGrid::get(f), GetToolBox::get(f));
     }
 
     template <typename Model>
@@ -39,37 +39,38 @@ namespace TempLat
     {
       if (PRJType == 1)
       {
-        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType1(model), GetNGrid::get(model), model.kIR, model.getToolBox());
+        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType1(model), GetNGrid::get(model), model.getToolBox());
       }
       else if (PRJType == 2)
       {
-        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType2(model), GetNGrid::get(model), model.kIR, model.getToolBox());
+        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType2(model), GetNGrid::get(model), model.getToolBox());
       }
       else if (PRJType == 3)
       {
-        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType3(model), GetNGrid::get(model), model.kIR, model.getToolBox());
+        return  pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) * (*this).powerSpectrum(projectGWType3(model), GetNGrid::get(model), model.getToolBox());
       }
 
       throw(WrongPRJType("You tried to call an undefined GR Projector Type " + std::to_string(PRJType) + ", abort."));
-      return (*this).powerSpectrum(projectGWType1(model), GetNGrid::get(model), model.kIR, model.getToolBox());
+      return (*this).powerSpectrum(projectGWType1(model), GetNGrid::get(model), model.getToolBox());
     }
 
     // This function computes the power spectrum.
     // --> The normalization factor ensures that it recovers the appropriate expression in the continuum limit.
     //     This is discussed in Sect. 3 of arXiv:2006.15122.
 
-    template <typename PS, typename tBox> UnbinnedRadialProjectionResult<T> powerSpectrum(const PS& f, ptrdiff_t N, T kIR, tBox toolBox)
+    template <typename PS, typename tBox> UnbinnedRadialProjectionResult<T> powerSpectrum(const PS& f, ptrdiff_t N, tBox toolBox)
     {
-      return projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox).measureUnbinned();
+
+      return projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox).measureUnbinned(N);
     }
 
-    template <typename R> auto powerSpectrum(R f, ptrdiff_t N, T kIR)
+    template <typename R> auto powerSpectrum(R f, ptrdiff_t N)
     { // This function is for expression/composite operator, which need their own memory to perform the fourier
       // transform.
       Field<T, NDim> tmp("tmp", GetToolBox::get(f));
       tmp = f;
 
-      return this->powerSpectrum(tmp, N, kIR);
+      return this->powerSpectrum(tmp, N);
     }
 
   };

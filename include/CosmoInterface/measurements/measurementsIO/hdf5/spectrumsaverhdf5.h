@@ -87,7 +87,7 @@ namespace TempLat
 
       if (verbosity != 0) {
         binAvData =
-            std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>("monBinAverage", dims, chunks));
+            std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>("momBinAverage", dims, chunks));
         binAvData->extend(nMeas);
         binAvData->close();
       }
@@ -120,7 +120,7 @@ namespace TempLat
       flush_single_spectra(multData, "momMultiplicity", group);
 
       if (verbosity != 0) {
-        flush_single_spectra(binAvData, "monBinAverage", group);
+        flush_single_spectra(binAvData, "momBinAverage", group);
       }
       if (verbosity != 1) {
         flush_single_spectra(binCtrData, "momBinCentralValues", group);

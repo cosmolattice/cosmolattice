@@ -55,6 +55,7 @@ FetchContent_Declare(
   GIT_TAG ${TEMPLAT_BRANCH})
 FetchContent_MakeAvailable(TempLat)
 
+
 # ##############################################################################
 # Now, configure CosmoLattice
 # ##############################################################################

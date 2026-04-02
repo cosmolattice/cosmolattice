@@ -32,7 +32,7 @@ namespace TempLat
     FilesManager(ParameterParser &parser, std::string fn, device::memory::host_ptr<MemoryToolBox<NDim>> toolbox,
                  bool pUseHDF5, bool pUseHDF5Spectra, bool pPrintHeaders, std::string pTag = "",
                  ptrdiff_t pFlushFreq = 1, ptrdiff_t pNMeas = 0, ptrdiff_t pNMeasInfreq = 0, bool isUnbinned = false)
-        : mToolbox(toolbox), mUseHDF5(pUseHDF5), mUseHDF5Spectra(pUseHDF5Spectra), mPrintHeaders(pPrintHeaders),
+        : mToolbox(toolbox), mUseHDF5(pUseHDF5), mUseHDF5Spectra(pUseHDF5Spectra || isUnbinned), mPrintHeaders(pPrintHeaders),
           workingDir(fn), tag(pTag), flushFreq(pFlushFreq), nMeas(pNMeas), nMeasInfreq(pNMeasInfreq)
     {
 #ifdef HAVE_HDF5
@@ -42,7 +42,7 @@ namespace TempLat
         fs.save_attr(parser);
         fs.close();
       }
-      if (mUseHDF5Spectra) {
+      if (mUseHDF5Spectra || isUnbinned) {
         FileSaverHDF5 fs;
         if (!isUnbinned) fs.create(getHDF5SpectraFn(), Exclusive);
         else fs.create(getHDF5UnbinnedSpectraFn(), Exclusive);

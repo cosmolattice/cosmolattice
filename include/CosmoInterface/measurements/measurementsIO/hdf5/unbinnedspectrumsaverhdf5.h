@@ -74,6 +74,7 @@ namespace TempLat
       size_t klength = arr.back()->size();
       HDF5File file;
       file.open(filename, ReadWrite);
+
       auto group = file.createGroup(grpName);
       std::vector<hsize_t> dims{0, klength};
       std::vector<hsize_t> chunks{64, klength};
@@ -84,7 +85,7 @@ namespace TempLat
       multData->close();
 
       binAvData =
-          std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>("monBinAverage", dims, chunks));
+          std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>("momBinAverage", dims, chunks));
       binAvData->extend(nMeas);
       binAvData->close();
 
@@ -108,7 +109,7 @@ namespace TempLat
     void flush_spectra(HDF5Group &group)
     {
       flush_single_spectra(multData, "momMultiplicity", group);
-      flush_single_spectra(binAvData, "monBinAverage", group);
+      flush_single_spectra(binAvData, "momBinAverage", group);
 
       for (size_t i = 0; i < valueAvData.size(); ++i) {
         flush_single_spectra(valueAvData[i], "spectAverage_" + std::to_string(i), group);
@@ -125,7 +126,7 @@ namespace TempLat
 
       std::vector<T> mult;
       for (auto &&it : (*arr[0])) {
-         mult.emplace_back(std::get<1>(it).multiplicity);
+         mult.emplace_back(std::get<1>(it).multiplicity * 2);
       }
       multData->push(mult);
 
