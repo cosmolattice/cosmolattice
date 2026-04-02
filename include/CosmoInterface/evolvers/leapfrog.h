@@ -210,11 +210,11 @@ namespace TempLat
       ForLoop(n, 0, Model::NSU2 - 1,
               auto rescaledPi = MakeVector(
                   i, 1, Model::NDim,
-                  toSU2(0.5 * pow(model.aSI, model.alpha - 1) * model.dx * model.dt * model.gQ_SU2DblSU2(0_c, n) *
-                        model.piSU2(n)(i))); // The 0_c is correct. In our convention, the link is normalized wrt the
-                                             // first doublet charge.
+                  exp(pow(model.aSI, model.alpha - 1) * model.dx * model.dt * model.gQ_SU2DblSU2(0_c, n) *
+                      model.piSU2(n)(i))); // The 0_c is correct. In our convention, the link is normalized wrt the
+                                           // first doublet charge.
 
-              model.fldSU2(n) = (rescaledPi * rescaledPi) * model.fldSU2(n););
+              model.fldSU2(n) = rescaledPi * model.fldSU2(n););
       // Here for instance we use the ForLoop again, as this makes it easier to define
       // the rescaled momenta in this case.
     }

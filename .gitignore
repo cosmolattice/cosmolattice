@@ -2,6 +2,11 @@ build*/
 .cache/
 .idea/
 
+.beads/
+CLAUDE.md
+
+*thoughts*
+
 dependencies/*/
 
 .DS_Store

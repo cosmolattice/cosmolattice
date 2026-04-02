@@ -26,11 +26,13 @@ namespace TempLat
   private:
     // This function converts, for complex scalars and SU(2) doublets, first derivatives wrt to norm to first
     // derivatives wrt the components. Used e.g. to set the initial fluctuations of the components.
+    //@label:norm_deriv
     template <class NormDeriv, class Fld, int I>
     static inline auto derivComponentFromNorm(NormDeriv nd, Fld fld, Tag<I> index)
     {
       return nd / norm(fld) * fld(index);
     }
+    //@endlabel
 
     // This function converts, for complex scalars and SU(2) doublets, second derivatives wrt to norm to second
     // derivatives wrt the components. Used e.g. to set the initial fluctuations of the components.
