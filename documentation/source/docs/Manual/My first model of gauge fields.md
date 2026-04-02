@@ -192,123 +192,38 @@ where $\lambda$, $g$, and $h$ are dimensionless coupling constants. The first te
 
 This scenario is implemented in the model file `src/models/lphi4SU2U1.h`, and the corresponding input parameter file is in `src/models/parameter-files/lphi4SU2U1.in`. Most of the parameters defined in the input file are the same as for singlet scalar fields, see Section [*Running the program with an input parameter file*][subsec_Input-Scalars]. However, there are several extra parameters that need to be set now. First, let us specify the initial homogeneous components of all scalar fields as follows:
 
-\inserttxtcode{src/models/parameter-files/lphi4-SU2U1.in}{19}{26}{code_files/lphi4SU2U1.in}
+@emgithub(models/parameter-files/lphi4SU2U1.in:initial_conditions)
 
 Above `initial_amplitudes` and `initial_momenta` contain the initial homogenous amplitudes of the scalar singlet, $\phi_*$ and $\dot{\phi}_*$. If we had more than one singlet, their initial conditions would be specified in a vector form, as explained in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md). Parameters `cmplx_field_initial_norm` and `cmplx_momentum_initial_norm` contain the initial **absolute values** of the complex field amplitude and its time-derivative , i.e. $|\varphi_*| \equiv \sqrt{(\varphi_{0*}^2 + \varphi_{1*}^2)/2}$ and $|\dot{\varphi}_*| \equiv \sqrt{(\dot{\varphi}_{0*}^2 + \dot{\varphi}_{1*}^2)/2}$ respectively (although in this example we set these to zero). Similarly, parameters `SU2Doublet_initial_norm` and `SU2Doublet_initial_momenta_norm` contain $|\Phi_*| \equiv \sqrt{ \sum_{n=0}^3 \varphi_{n*}^2 / 2}$ and $|\dot{\Phi}_*| \equiv \sqrt{ \sum_{n=0}^3 \dot{\varphi}_{n*}^2 / 2 }$ respectively. **As before, initial amplitudes must be introduced in $\text{GeV}$, and initial derivatives in $\text{GeV}^2$**.
 
 We also need to specify the parameters that deal with the gauge couplings and charges in the covariant derivatives. This is done as follows:
 
-\inserttxtcode{src/models/parameter-files/lphi4-SU2U1.in}{28}{33}{code_files/lphi4SU2U1.in}
+@emgithub(models/parameter-files/lphi4SU2U1.in:gauge_couplings)
 
 Here, `gU1s` fixes $g_A$, `gSU2s` fixes $g_B$, `CSU1Charges` fixes $Q_A^{(\varphi)}$, `SU2DoubletU1Charges` fixes $Q_A^{(\Phi)}$, and `SU2DoubletSU2Charges` fixes $Q_B$. Although in our example we only consider one field for each species, multiple couplings and charges can also be specified in vector form.
 
 Finally, we also want to specify the model parameters that appear in the potential ([*70*][eq_PotGauge]). This is done as follows,
 
-\inserttxtcode{src/models/parameter-files/lphi4-SU2U1.in}{35}{38}{code_files/lphi4SU2U1.in}
+@emgithub(models/parameter-files/lphi4SU2U1.in:model_parameters)
 where we have defined three parameters: `lambda` (which represents $\lambda$), `qG` (which contains $q_G \equiv g^2 / \lambda$, and `qH` (which contains $q_H \equiv h^2 / \lambda$).
 
 Let us now analyze the model file `src/models/lphi4-SU2U1.h`, which can be used as a template to simulate different gauge field theories. We start by specifying the field content of our theory:
-```cpp
-  /////////
-  // Model name and number of fields
-  /////////
-
-  // In the following class, we define the defining parameters of your model:
-  // number of fields of each species and the type of interactions.
-
-  struct ModelPars : public TempLat::DefaultModelPars {
-    static constexpr size_t NScalars = 1;
-    static constexpr size_t NCScalars = 1;
-    static constexpr size_t NU1Flds = 1;
-    static constexpr size_t NSU2Doublet = 1;
-    static constexpr size_t NSU2Flds = 1;
-    static constexpr size_t NPotTerms = 3;
-
-    // Coupling managers:  they deal with the different couplings between
-    // the gauge fields and complex scalars/SU2 doublets
-    //  --> If a type of interaction is not present, comment the corresponding line
-    typedef TempLat::CouplingsManager<NCScalars, NU1Flds, true> CsU1Couplings;
-    // activates coupling U(1)-complex scalar
-    typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings;
-    // activates coupling U(1)-doublet
-    typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds, true> SU2DoubletSU2Couplings;
-    // activates coupling SU(2)-doublet
-  };
-
-#define MODELNAME lphi4SU2U1
-```
+@emgithub(models/lphi4SU2U1.h:model_pars)
 
 In lines `24`-`28`, we have specified the number of fields of each species: `NScalars` refers to $\phi$, `NCScalars` refer to $\varphi$, `NU1Flds` refer to $A_{\mu}$, `NSU2Doublet` refers to $B_{\mu}^a$, and `NSU2Flds` refers to $\Phi$. In line `29` we specify the number of terms in the potential, which is $3$ in our case. Finally, in lines `34`-`38` we defined three types of *coupling managers*, which deal with the couplings between the scalar and gauge fields in the covariant derivatives. `U1CsCouplings` must be defined if $\varphi$ couples to $A_{\mu}$, `U1SU2DoubletCouplings` must be defined if $\Phi$ couples to $A_{\mu}$, and `SU2SU2DoubletCouplings` must be defined if $\Phi$ couples to $B_{\mu}^a$. Finally, in line `42`, we have specified that the name of our model is `lphi4SU2U1`, in agreement with the name of the header file.
 
 After that, inside the template model, we declare several model parameters (`g`, `h`, `lambda`, `qG`, `qH`) as private variables:
-```cpp
-  template <class R> using Model = MakeModel(R, ModelPars);
-  // In this line, we define an appropriate generic model, with the correct
-  // number of fields, ready to be customized.
-  // If you are curious about what this is doing, the macro is defined in
-  // the "CosmoInterface/abstractmodel.h" file.
-
-  class MODELNAME : public Model<MODELNAME>
-  // Declaration of our model. It inherits from the generic model defined above.
-  {
-  private:
-    double g, h, lambda, qG, qH;
-    // Here are the declaration of the model specific parameters. They are 'private'
-    // to force you using them only within your model and not outside.
-```
+@emgithub(models/lphi4SU2U1.h:class_declaration)
 
 We then use the parser to read the initial homogeneous components of the scalar field amplitudes and derivatives as follows:
-```cpp
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
-              device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
-        : // Constructor of our model.
-          Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
-                           STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.
-    {
-      /////////
-      // Initial homogeneous components of the fields
-      // (read from parameters file, or specified here if not)
-      /////////
-
-      // SCALAR SINGLET: initial homogeneous amplitude and derivative
-      fldS0(0_c) = parser.get<double>("initial_amplitudes");
-      piS0(0_c) = parser.get<double>("initial_momenta");
-
-      // COMPLEX SCALAR NORM: initial homogeneous amplitude and derivative
-      double normCmplx0 = parser.get<double>("cmplx_field_initial_norm");
-      double normPiCmplx0 = parser.get<double>("cmplx_momentum_initial_norm");
-
-      // We distribute the norm equally between the two components
-      // using the "Complexify" function
-      fldCS0(0_c) = Complexify(normCmplx0 / sqrt(2.0), normCmplx0 / sqrt(2.0));
-      piCS0(0_c) = Complexify(normPiCmplx0 / sqrt(2.0), normPiCmplx0 / sqrt(2.0));
-
-      // SU(2) COMPLEX NORM: initial homogeneous amplitude and derivative
-      double normDoublet0 = parser.get<double>("SU2Doublet_initial_norm");
-      double normPiDoublet0 = parser.get<double>("SU2Doublet_initial_momenta_norm");
-
-      // We distribute the norm equally between the four components
-      // using the "MakeSU2Doublet" function
-```
+@emgithub(models/lphi4SU2U1.h:constructor_initial_conditions)
 
 We can see that for the scalar singlet $\phi$, the initial amplitude and derivative are read by the parser from the input file in lines `72`-`73`, in the same way as described in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md). As explained, these values must be stored in the variables `fldS0(0_c)` and `piS0(0_c)` respectively, where `0` denotes the label of the field. Regarding $\varphi$, in lines `76`-`77` we use the same technique to read the initial values of $|\varphi_*|$ and $|\dot{\varphi}_*|$. For convenience, we stored them in the local variables `normCmplx0` and `normPiCmplx0` respectively. Then, in lines `81`-`82` we specify how these amplitudes are distributed between the two components of $\varphi$, i.e. $\varphi_0$ and $\varphi_1$ [see Eq. ([*3*][eq_ChargedScalars])]. In the example, this is done with the `Complexify` function, which creates a two-component vector storing the real and imaginary parts of a complex number. For consistency, one must always guarantee that the initial components satisfy $\sqrt{(\varphi_{0*}^2 + \varphi_{1*}^2) /2} = |\varphi_*|$ and $\sqrt{(\dot{\varphi}_{0*}^2 + \dot{\varphi}_{1*}^2) /2} = |\dot{\varphi}_*|$. In the example, we have decided to set the same initial power to all components, so that $\varphi_{0*} = |\varphi_*| $and $\varphi_{1*} = |\varphi_*|$, as well as $\dot{\varphi}_{0*} = |\dot{\varphi}_*|$ and $\dot{\varphi}_{1*} = |\dot{\varphi}_*| $. In any case, the created vectors must be stored in the model variables `fldCS0(0_c)` (for the amplitude) and `piCS0(0_c)` (for the time-derivative), where `0` is the field label.
 
 We use a similar technique in lines `85`-`91` to specify the initial conditions of $\Phi_*$ and $\dot{\Phi}_*$. First, in lines 53-54 we store the values of $|\Phi_*|$ and $|\dot{\Phi}_*|$ specified in the input file in the local variables `normDoublet0` and `normPiDoublet0` respectively. We then need to indicate how these are distributed between the four components of the doublets $\Phi_*$ and $\dot{\Phi}_*$, i.e. $\varphi_{n*}$ and $\dot{\varphi}_{n*}$ for $n=0,1,2,3$ [see Eq. ([*3*][eq_ChargedScalars])]. For consistency, we must always ensure that $\sqrt{ \sum_{n=0}^3 \varphi_{n*}^2 / 2} = |\Phi_*|$ and $\sqrt{ \sum_{n=0}^3 \dot{\varphi}_{n*}^2 / 2 } = |\dot{\Phi}_*|$. In the example, this is done in lines `90`-`91` with the `MakeSU2Doublet` function, which creates a SU(2) doublet with the same amplitude for all the components (in this case, $\varphi_{n*} = |{\Phi}_*| /\sqrt{2}$ and $\dot{\varphi}_{n*} = |\dot{\Phi}_*| / \sqrt{2}$. Finally, the corresponding initial SU(2) doublets must be stored in the variables `fldSU2Doublet0(0_c)` and `piSU2Doublet0(0_c)`, with `0` again denoting the field label.
 
 We now proceed to read model parameters `qG`, `qH`, and `lambda` from the input file in the usual way, as well as to compute new parameters `g` and `h` as follows,
-```cpp
-      piSU2Doublet0(0_c) = MakeSU2Doublet(a, normPiDoublet0 / 2);
-
-      /////////
-      // Parameters of the model (read from parameters file)
-      /////////
-      // --> Comment: Gauge couplings are specified in the parameters file (e.g. gU1s, gSU2s), and do not need to be
-      // defined here
-
-      qG = parser.get<double>("qG");
-      qH = parser.get<double>("qH");
-      lambda = parser.get<double>("lambda");
-```
+@emgithub(models/lphi4SU2U1.h:model_parameters)
 
 The next step is to define appropriate program variables for the model, as well as set the initial masses. The potential of the dominating oscillatory field is quartic, similar to the scalar case considered in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md), so mimicking Eq. ([*37*][eq_lphi4-ProgVar]), we choose them as
 ```math
@@ -318,29 +233,10 @@ f_*=|\overline{\Phi}_{*} | ,  \omega_*=\sqrt{\lambda} | \overline{\Phi}_* |,  \a
 ```
 
 This is done in the code as follows,
-```cpp
-      g = sqrt(qG * lambda);
-      h = sqrt(qH * lambda);
-
-      /////////
-      // Rescaling for program variables
-      /////////
-
-      alpha = 1;
-      fStar = normDoublet0;
-      omegaStar = sqrt(lambda) * normDoublet0;
-      // We now need to specify the rescaling from physical units to program units.
-```
+@emgithub(models/lphi4SU2U1.h:rescaling)
 
 Finally we call the generic function responsible to set the masses of the matter fields together with the initial potential
-```cpp
-      // and the velocity rescaling omegaStar.
-      // See the paper for more information on how to fix them.
-
-      setInitialPotentialAndMassesFromPotential();
-      // Here we call this function to compute the value of the potential on the homogeneous
-      // initial condition  (useful to set the initial Hubble rate). We also compute
-```
+@emgithub(models/lphi4SU2U1.h:masses_setup)
 
 We now need to specify the scalar potential of our field theory. As for scalar singlet theories, any gauge field theory in CosmoLattice is implemented by means of the *program potential*, defined in Eq. ([*57*][eq_ProgramPotMultiScalar]). In our example, it is given by
 ```math
@@ -350,82 +246,13 @@ We now need to specify the scalar potential of our field theory. As for scalar s
 ```
 
 The potential is composed of three different terms: the quartic potential of the inflaton, the quartic coupling between the inflaton and $\phi$, and the quartic coupling between the inflaton and $\varphi$. We label them as terms 0, 1, and 2 respectively. The different terms are implemented in the model file with the `potentialTerms` function as described in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md). Scalars are given by the variable `fldS(X_c)` as before, with `X` the field label. Fields $\varphi$ and $\Phi$ are given instead by the variables `fldCS(X_c)` and `fldSU2Doublet(X_c)` respectively. Of course, the potential only depends on the moduli of these fields, which we can obtain with the `norm` function as `norm(fldCS(X_c))` and `norm(fldSU2Doublet(X_c))` respectively. The three terms of the potential are then specified as follows:
-```cpp
-    }
-
-    /////////
-    // Program potential (add as many functions as terms are in the potential)
-    /////////
-    // --> Comment: These functions may depend on the norm of the complex scalar/doublets,
-    //     which are introduced as respectively "norm(fldCS(0_c))"
-    //     and "norm(fldSU2Doublet(0_c))".
-
-    auto potentialTerms(Tag<0>)
-    // Term 0: Quartic potential of the SU(2) doublet
-    {
-      return pow<4>(norm(fldSU2Doublet(0_c)));
-    }
-
-    auto potentialTerms(Tag<1>)
-    // Term 1: Interaction between SU(2) doublet and scalar singlet
-    {
-      return qG * pow<2>(norm(fldSU2Doublet(0_c)) * fldS(0_c));
-    }
-
-    auto potentialTerms(Tag<2>)
-    // Term 2: Interaction between SU(2) doublet and complex scalar
-    {
-```
+@emgithub(models/lphi4SU2U1.h:potential_terms)
 
 We now need to specify the first derivatives of $\tilde{V}$ with respect $\tilde\phi$, $|\tilde\varphi|$, and $|\tilde\Phi|$. These must be specified in the functions `potDeriv(Tag<0>)`, `potDerivNormCS(Tag<0>)` and `potDerivNormSU2Doublet(Tag<0>)` respectively, with `Tag<X>` indicating the corresponding field label (there is only one copy for each species, so it is `Tag<0>` in the three cases). This is done as follows:
-```cpp
-    }
-
-    /////////
-    // Derivatives of the program potential with respect fields
-    /////////
-
-    auto potDeriv(Tag<0>)
-    // Derivative with respect scalar singlet
-    {
-      return 2 * qG * pow<2>(norm(fldSU2Doublet(0_c))) * fldS(0_c);
-    }
-
-    auto potDerivNormCS(Tag<0>)
-    // Derivative with respect complex scalar norm
-    {
-      return 4 * qH * pow<2>(norm(fldSU2Doublet(0_c))) * norm(fldCS(0_c));
-    }
-
-    auto potDerivNormSU2Doublet(Tag<0>)
-    // Derivative with respect SU(2) doublet norm
-    {
-```
+@emgithub(models/lphi4SU2U1.h:potential_derivs)
 
 Finally, we need to specify the second derivatives of $\tilde{V}$ with respect $\tilde{\phi}$, $\tilde{\varphi}$, and $\tilde{\Phi}$. These are implemented in the functions `potDeriv2(Tag<X>)`, `potDeriv2NormCS(Tag<X>)` and `potDeriv2NormSU2Doublet(Tag<X>)` as follows:
-```cpp
-             norm(fldSU2Doublet(0_c)) * (2 * qG * pow<2>(fldS(0_c)) + 4 * qH * pow<2>(norm(fldCS(0_c))));
-    }
-
-    /////////
-    //  Second derivatives of the program potential with respect fields
-    /////////
-
-    auto potDeriv2(Tag<0>)
-    // 2nd derivative with respect scalar singlet
-    {
-      return 2 * qG * pow<2>(norm(fldSU2Doublet(0_c)));
-    }
-
-    auto potDeriv2NormCS(Tag<0>)
-    // 2nd derivative with respect complex scalar norm
-    {
-      return 4 * qH * pow<2>(norm(fldSU2Doublet(0_c)));
-    }
-
-    auto potDeriv2NormSU2Doublet(Tag<0>)
-    // 2nd derivative with respect SU(2) doublet norm
-```
+@emgithub(models/lphi4SU2U1.h:potential_second_derivs)
 
 ### Output files
 

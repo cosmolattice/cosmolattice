@@ -13,6 +13,7 @@
 
 namespace TempLat
 {
+  // @label:model_pars
   /////////
   // Model name and number of fields
   /////////
@@ -40,8 +41,10 @@ namespace TempLat
   };
 
 #define MODELNAME lphi4SU2U1
+  // @endlabel
   // Here we define the name of the model. This should match the name of your file.
 
+  // @label:class_declaration
   template <class R> using Model = MakeModel(R, ModelPars);
   // In this line, we define an appropriate generic model, with the correct
   // number of fields, ready to be customized.
@@ -55,10 +58,12 @@ namespace TempLat
     double g, h, lambda, qG, qH;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
+  // @endlabel
 
   public:
     static constexpr size_t NDim = Model<MODELNAME>::NDim;
 
+    // @label:constructor_initial_conditions
     MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
               device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
         : // Constructor of our model.
@@ -91,7 +96,9 @@ namespace TempLat
       // using the "MakeSU2Doublet" function
       fldSU2Doublet0(0_c) = MakeSU2Doublet(a, normDoublet0 / 2);
       piSU2Doublet0(0_c) = MakeSU2Doublet(a, normPiDoublet0 / 2);
+    // @endlabel
 
+      // @label:model_parameters
       /////////
       // Parameters of the model (read from parameters file)
       /////////
@@ -101,7 +108,9 @@ namespace TempLat
       qG = parser.get<double>("qG");
       qH = parser.get<double>("qH");
       lambda = parser.get<double>("lambda");
+      // @endlabel
 
+      // @label:rescaling
       g = sqrt(qG * lambda);
       h = sqrt(qH * lambda);
 
@@ -116,15 +125,19 @@ namespace TempLat
       // This consists of the  time rescaling exponent alpha, the field rescaling fStar
       // and the velocity rescaling omegaStar.
       // See the paper for more information on how to fix them.
+      // @endlabel
 
+      // @label:masses_setup
       setInitialPotentialAndMassesFromPotential();
       // Here we call this function to compute the value of the potential on the homogeneous
       // initial condition  (useful to set the initial Hubble rate). We also compute
       // in this function the masses from the second derivative of the potential
       // evaluated on the homogeneous initial conditions. If you want to do something else,
       // uncomment the next section and do whatever suits your needs.
+      // @endlabel
     }
 
+    // @label:potential_terms
     /////////
     // Program potential (add as many functions as terms are in the potential)
     /////////
@@ -149,7 +162,9 @@ namespace TempLat
     {
       return 2 * qH * pow<2>(norm(fldSU2Doublet(0_c)) * norm(fldCS(0_c)));
     }
+    // @endlabel
 
+    // @label:potential_derivs
     /////////
     // Derivatives of the program potential with respect fields
     /////////
@@ -172,7 +187,9 @@ namespace TempLat
       return 4 * pow<3>(norm(fldSU2Doublet(0_c))) +
              norm(fldSU2Doublet(0_c)) * (2 * qG * pow<2>(fldS(0_c)) + 4 * qH * pow<2>(norm(fldCS(0_c))));
     }
+    // @endlabel
 
+    // @label:potential_second_derivs
     /////////
     //  Second derivatives of the program potential with respect fields
     /////////
@@ -194,6 +211,7 @@ namespace TempLat
     {
       return 12 * pow<2>(norm(fldSU2Doublet(0_c))) + 2 * qG * pow<2>(fldS(0_c)) + 4 * qH * pow<2>(norm(fldCS(0_c)));
     }
+    // @endlabel
   };
 } // namespace TempLat
 
