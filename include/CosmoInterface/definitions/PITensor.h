@@ -33,13 +33,24 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     PITensor() = delete;
 
-  public:
-    template <class Model> static inline auto effectiveAnisotropicTensor(Model &model) { return ConstructSymTraceless(effectiveAnisotropicTensor(model, 1_c, 1_c),
-                                                                                                                      effectiveAnisotropicTensor(model, 1_c, 2_c),
-                                                                                                                      effectiveAnisotropicTensor(model, 1_c, 3_c),
-                                                                                                                      effectiveAnisotropicTensor(model, 2_c, 2_c),
-                                                                                                                      effectiveAnisotropicTensor(model, 2_c, 3_c),
-                                                                                                                      effectiveAnisotropicTensor(model, 3_c, 3_c)); }
+
+    template<class Model> requires (Model::NDim != 3)
+    static inline auto effectiveAnisotropicTensor(Model& model)
+    {
+      return ZeroType();
+    }
+
+    template<class Model> requires (Model::NDim == 3)
+    static inline auto effectiveAnisotropicTensor(Model &model)
+    {
+      return ConstructSymTraceless(effectiveAnisotropicTensor(model, 1_c, 1_c),
+                                   effectiveAnisotropicTensor(model, 1_c, 2_c),
+                                   effectiveAnisotropicTensor(model, 1_c, 3_c),
+                                   effectiveAnisotropicTensor(model, 2_c, 2_c),
+                                   effectiveAnisotropicTensor(model, 2_c, 3_c),
+                                   effectiveAnisotropicTensor(model, 3_c, 3_c));
+
+    }
 
   private:
     template <class Model, int I, int J> static inline auto effectiveAnisotropicTensor(Model &model, Tag<I> i, Tag<J> j)
