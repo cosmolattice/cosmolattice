@@ -71,7 +71,7 @@ Specifying the architecture is optional for HIP, as Kokkos can usually detect it
 
 To compile an application to be run on a different architecture, you can directly pass the target architecture to Kokkos. For a list of supported architectures, see [the Kokkos documentation](https://kokkos.org/kokkos-core-wiki/get-started/configuration-guide.html#gpu-architectures). For example, for an RTX 4070, you would pass 
 ```bash
-cmake -DMODEL=lphi4 -DKokkos_ARCH_ADA89 ../
+cmake -DMODEL=lphi4 -DKokkos_ARCH_ADA89=ON ../
 ```
 If no architecture is specified, Kokkos will attempt to detect the architecture of the machine. However, as compilation for GPU can take up to an hour, it is recommended on a cluster to queue the compilation separately on a node without a GPU, which requires offline compilation as described here.
 
