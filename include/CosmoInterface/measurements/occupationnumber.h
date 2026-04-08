@@ -44,8 +44,7 @@ namespace TempLat
       tmp = (pow(model.aI, model.alpha - 3) * model.piS(i)) + model.aDotI / model.aI * model.fldS(i);
       const auto part2 = projectRadiallyFourier(pow<2>(abs(tmp.inFourierSpace()))).measure(kMax);
 
-      const T normalisation =
-          pow<2>(model.aI) * pow<NDim>(model.dx / N) / 2 * pow<2>(model.fStar / model.omegaStar);
+      const T normalisation = pow<2>(model.aI) * pow<NDim>(model.dx / N) / 2 * pow<2>(model.fStar / model.omegaStar);
 
       const T m2 = average(model.potDeriv2(i));
 
@@ -56,7 +55,7 @@ namespace TempLat
     }
 
   private:
-    double deltakBin;
+    [[maybe_unused]] double deltakBin;
   };
 
 } // namespace TempLat
