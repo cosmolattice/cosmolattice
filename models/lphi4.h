@@ -22,7 +22,6 @@ namespace TempLat
   // number of fields of each species and the type of tinteractions.
 
   struct ModelPars : public TempLat::DefaultModelPars {
-    static constexpr size_t NDim = 2;
     static constexpr size_t NScalars = 2;
     // In our phi4 example, we only want 2 scalar fields.
     static constexpr size_t NPotTerms = 2;
