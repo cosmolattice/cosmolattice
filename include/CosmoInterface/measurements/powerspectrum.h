@@ -95,7 +95,7 @@ namespace TempLat
                                            // the dimension at compile time.
         if (PSType == 2) {
 
-          auto fk2 = projectRadially<3>(pow<NDim>(ntilde.norm()) * f, SpaceStateType::Fourier, toolBox, false)
+          auto fk2 = projectRadially<NDim>(pow<NDim>(ntilde.norm()) * f, SpaceStateType::Fourier, toolBox, false)
                          .measure(kMax, deltakBin);
           if constexpr(NDim == 1) return (pow<NDim>(kIR * dx / N) / Constants::pi<T>) * fk2;
           else if constexpr(NDim == 2)  return (pow<NDim>(kIR * dx / N) / 2.0 / Constants::pi<T>) * fk2;
