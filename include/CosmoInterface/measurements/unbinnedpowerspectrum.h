@@ -29,7 +29,11 @@ namespace TempLat
   public:
     UnbinnedPowerSpectrumMeasurer() = default;
 
-    template <typename R> auto powerSpectrum(R f)
+    template <typename R>
+    requires requires(R f) {
+      f.inFourierSpace();
+    }
+    auto powerSpectrum(R f)
     {
       return this->powerSpectrum(pow<2>(abs(f.inFourierSpace())), GetNGrid::get(f), GetToolBox::get(f));
     }
@@ -67,13 +71,13 @@ namespace TempLat
       return projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox).measureUnbinned(N);
     }
 
-    template <typename R> auto powerSpectrum(R f, ptrdiff_t N)
+    template <typename R> auto powerSpectrum(R f)
     { // This function is for expression/composite operator, which need their own memory to perform the fourier
       // transform.
       Field<T, NDim> tmp("tmp", GetToolBox::get(f));
       tmp = f;
 
-      return this->powerSpectrum(tmp, N);
+      return this->powerSpectrum(pow<2>(abs(tmp.inFourierSpace())), GetNGrid::get(tmp), GetToolBox::get(tmp));
     }
 
   };

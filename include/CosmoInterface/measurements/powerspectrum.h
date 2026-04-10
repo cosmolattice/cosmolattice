@@ -26,6 +26,7 @@ namespace TempLat
    *
    *
    **/
+
   template <typename T, size_t NDim> class PowerSpectrumMeasurer
   {
   public:
@@ -36,7 +37,11 @@ namespace TempLat
     {
     }
 
-    template <typename R> auto powerSpectrum(R f)
+    template <typename R>
+    requires requires(R f) {
+      f.inFourierSpace();
+    }
+    auto powerSpectrum(R f)
     {
       return this->powerSpectrum(pow<2>(abs(f.inFourierSpace())), GetNGrid::get(f), GetKIR::getKIR(f), GetToolBox::get(f));
     }
@@ -121,13 +126,13 @@ namespace TempLat
       }
     }
 
-    template <typename R> auto powerSpectrum(R f, ptrdiff_t N, T kIR)
+    template <typename R> auto powerSpectrum(R f)
     { // This function is for expression/composite operator, which need their own memory to perform the fourier
       // transform.
       Field<T, NDim> tmp("tmp", GetToolBox::get(f));
       tmp = f;
 
-      return this->powerSpectrum(tmp, N, kIR);
+      return this->powerSpectrum(pow<2>(abs(tmp.inFourierSpace())), GetNGrid::get(tmp), GetKIR::getKIR(tmp), GetToolBox::get(tmp));
     }
 
   private:
