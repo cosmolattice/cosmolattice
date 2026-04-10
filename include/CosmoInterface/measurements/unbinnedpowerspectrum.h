@@ -16,6 +16,7 @@
 #include "CosmoInterface/runparameters.h"
 #include "CosmoInterface/definitions/energies.h"
 #include "CosmoInterface/definitions/gwsprojector.h"
+#include "CosmoInterface/definitions/chiralpowerspectrum.h"
 
 namespace TempLat
 {
@@ -29,9 +30,17 @@ namespace TempLat
   public:
     UnbinnedPowerSpectrumMeasurer() = default;
 
+    //template <typename R> auto powerSpectrum(R f)
+    //{
+    //  return this->powerSpectrum(pow<2>(abs(f.inFourierSpace())), GetNGrid::get(f), GetToolBox::get(f));
+    //}
+
     template <typename R> auto powerSpectrum(R f)
     {
-      return this->powerSpectrum(pow<2>(abs(f.inFourierSpace())), GetNGrid::get(f), GetToolBox::get(f));
+      Field<T, NDim> tmp("tmp", GetToolBox::get(f));
+      tmp = f;
+
+      return this->powerSpectrum(pow<2>(abs(tmp.inFourierSpace())),GetNGrid::get(tmp),GetToolBox::get(tmp));
     }
 
     template <typename Model>
@@ -55,6 +64,12 @@ namespace TempLat
         throw(WrongPRJType("You tried to call an undefined GR Projector Type " + std::to_string(PRJType) + ", abort."));
         return (*this).powerSpectrum(projectGWType1(model), GetNGrid::get(model), model.getToolBox());
       }
+    }
+    
+    template <typename Model, int U1, int C>
+    auto chiralPowerSpectrumU1(Model& model, Tag<U1> u1, Tag<C> c, bool sign, bool AorE)
+    {
+      return this->powerSpectrum(projectChiralU1Type1(model, u1, c, sign, AorE),GetNGrid::get(model),model.getToolBox());
     }
 
     // This function computes the power spectrum.

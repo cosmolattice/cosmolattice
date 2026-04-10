@@ -82,6 +82,7 @@ namespace TempLat
                                        2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
           withGWs(par.get<bool>("withGWs", false, Important)),
           flagON(par.get<bool>("flagON", false)),
+          flagChiralPS(par.get<bool>("flagChiralPS", false)),
           unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false))
     {
       if (AlmostEqual(lSide, -1)) {
@@ -202,6 +203,7 @@ namespace TempLat
     const int GWprojectorType;
     const bool withGWs;
     const bool flagON;
+    const bool flagChiralPS;
     const bool unbinnedSpectra;
 
     LatticeParameters<T> getLatParams() { return LatticeParameters<T>(dx, lSide, kIR); }
