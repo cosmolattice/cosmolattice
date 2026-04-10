@@ -35,7 +35,7 @@ namespace TempLat
     using S = Model::FloatType;
 
     GWProjector(const R &pR, const T &pT, const Model &model)
-        : TempLat::BinaryOperator<R, T>(pR, pT), kIR(static_cast<S>(2 * Constants::pi<S> / GetNGrid::get(model)))
+        : TempLat::BinaryOperator<R, T>(pR, pT), kIR(static_cast<S>(2. * Constants::pi<S> / GetNGrid::get(model)))
     {
     }
 
@@ -97,7 +97,7 @@ namespace TempLat
                  Pu[8] * conj(Pu[8]);
       auto Tr2 = Pu[0] + Pu[4] + Pu[8];
 
-      return abs(Tr1 - .5 * Tr2 * conj(Tr2));
+      return abs(Tr1 - S(0.5) * Tr2 * conj(Tr2));
     }
   };
 
@@ -165,7 +165,7 @@ namespace TempLat
       auto Tr2 = Pu[0] + Pu[4] + Pu[8];
       auto Tr2s = Pus[0] + Pus[4] + Pus[8];
 
-      return abs(Tr1 - .5 * Tr2 * Tr2s);
+      return abs(Tr1 - S(.5) * Tr2 * Tr2s);
     }
   };
 
@@ -234,7 +234,7 @@ namespace TempLat
       auto Tr2 = Pu[0] + Pu[4] + Pu[8];
       auto Tr2s = Pus[0] + Pus[4] + Pus[8];
 
-      return abs(Tr1 - .5 * Tr2 * Tr2s);
+      return abs(Tr1 - S(0.5) * Tr2 * Tr2s);
     }
   };
 
