@@ -34,7 +34,6 @@ namespace TempLat
     using TempLat::BinaryOperator<R, T>::mT;
     using S = Model::FloatType;
 
-    DEVICE_FUNCTION
     GWProjector(const R &pR, const T &pT, const Model &model)
         : TempLat::BinaryOperator<R, T>(pR, pT), kIR(static_cast<S>(2 * Constants::pi<S> / GetNGrid::get(model)))
     {
@@ -52,7 +51,6 @@ namespace TempLat
   public:
     using S = typename GWProjector<R, T, Model>::S;
 
-    DEVICE_FUNCTION
     GWProjectorType1(const R &pR, const T &pT, const Model &model)
         : GWProjector<R, T, Model>::GWProjector(pR, pT, model)
     {
@@ -108,7 +106,6 @@ namespace TempLat
   public:
     using S = typename GWProjector<R, T, Model>::S;
 
-    DEVICE_FUNCTION
     GWProjectorType2(const R &pR, const T &pT, const Model &model)
         : GWProjector<R, T, Model>::GWProjector(pR, pT, model)
     {
@@ -177,7 +174,6 @@ namespace TempLat
   public:
     using S = typename GWProjector<R, T, Model>::S;
 
-    DEVICE_FUNCTION
     GWProjectorType3(const R &pR, const T &pT, const Model &model)
         : GWProjector<R, T, Model>::GWProjector(pR, pT, model)
     {
@@ -242,17 +238,17 @@ namespace TempLat
     }
   };
 
-  template <typename Model> DEVICE_FORCEINLINE_FUNCTION auto projectGWType1(const Model &model)
+  template <typename Model> auto projectGWType1(const Model &model)
   {
     return GWProjectorType1((*model.piGWs).inFourierSpace(), WaveNumber(model.getToolBox()), model);
   }
 
-  template <typename Model> DEVICE_FORCEINLINE_FUNCTION auto projectGWType2(const Model &model)
+  template <typename Model> auto projectGWType2(const Model &model)
   {
     return GWProjectorType2((*model.piGWs).inFourierSpace(), WaveNumber(model.getToolBox()), model);
   }
 
-  template <typename Model> DEVICE_FORCEINLINE_FUNCTION auto projectGWType3(const Model &model)
+  template <typename Model> auto projectGWType3(const Model &model)
   {
     return GWProjectorType3((*model.piGWs).inFourierSpace(), WaveNumber(model.getToolBox()), model);
   }
