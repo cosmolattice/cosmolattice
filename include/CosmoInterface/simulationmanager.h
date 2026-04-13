@@ -71,7 +71,7 @@ namespace TempLat
       ForLoop(i, 0, Model::Ns - 1, fIO.load(model.fldS(i)); fIO.load(model.piS(i)););
 
       if (model.fldGWs != nullptr) {
-        ForLoop(i, 0, Model::NGWs - 1, fIO.load((*model.fldGWs)(i)); fIO.load((*model.piGWs)(i)););
+        ForLoop(i, 0, 4, fIO.load((*model.fldGWs)(i)); fIO.load((*model.piGWs)(i)););
       }
 
       ForLoop(i, 0, Model::NCs - 1, fIO.load(model.fldCS(i)); fIO.load(model.piCS(i)););
@@ -107,7 +107,7 @@ namespace TempLat
       ForLoop(i, 0, Model::Ns - 1, fIO.save(model.fldS(i)); fIO.save(model.piS(i)););
 
       if (model.fldGWs != nullptr) {
-        ForLoop(i, 0, Model::NGWs - 1, fIO.save((*model.fldGWs)(i)); fIO.save((*model.piGWs)(i)););
+        ForLoop(i, 0, 4, fIO.save((*model.fldGWs)(i)); fIO.save((*model.piGWs)(i)););
       }
 
       ForLoop(i, 0, Model::NCs - 1, fIO.save(model.fldCS(i)); fIO.save(model.piCS(i)););
@@ -237,7 +237,7 @@ namespace TempLat
 
       // Gravitational waves (if present)
       if (model.fldGWs != nullptr) {
-        totalBytes += 2 * Model::NGWs * (*model.fldGWs)(0_c).getMemoryManager()->bytes();
+        totalBytes += 2 * 5 * (*model.fldGWs)(0_c).getMemoryManager()->bytes();
       }
 
       // Convert to human-readable format

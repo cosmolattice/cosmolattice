@@ -29,8 +29,8 @@ namespace TempLat
     template <typename Model>
     GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append):
     amIRoot(model.getToolBox()->amIRoot()),
-    energyOut(filesManager, "energies_gws", amIRoot, append, getGWEnergyHeaders(model)),
-    spectraOut(filesManager, "spectra_energy_gws", amIRoot, append, par, !model.fldGWs),
+    energyOut(filesManager, "energies_gws", amIRoot, append, getGWEnergyHeaders(model), model.fldGWs == nullptr),
+    spectraOut(filesManager, "energy_gws", amIRoot, append, par, model.fldG == nullptr),
     PRJType(par.GWprojectorType)
     { }
 
