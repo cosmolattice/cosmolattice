@@ -3,13 +3,13 @@
 #
 # Common options:
 # - MODEL: the model to compile. Default: lphi4
-# - COSMOINTERFACE_TESTS: whether to compile the tests. Default: OFF
+# - COSMOINTERFACE_TEST: whether to compile the tests. Default: OFF
 #
 # Options passed to TempLat:
 # - PARAFAFT: compile TempLat with ParaFaft support for parallel FFTs. Default: OFF
 # - MPI: compile TempLat with MPI support. Default: OFF
 # - HDF5: compile TempLat with HDF5 support. Default: OFF
-# - TEMPLAT_TESTS: enable TempLat's tests. Default: OFF
+# - TEMPLAT_TEST: enable TempLat's tests. Default: OFF
 # - DEVICE_PROVIDER: switches the backend for parallelization. Default: Kokkos
 #     - CUDA: compile with CUDA support for GPU parallelization. Default: OFF
 #     - HIP: compile with HIP support for GPU parallelization. Default: OFF
@@ -142,10 +142,10 @@ target_include_directories(
 #                              __/ |  
 #                             |___/   
 # Tests (only for CosmoInterface) are off by default. To enable tests set
-# -DCOSMOINTERFACE_TESTS=ON when configuring with cmake.
+# -DCOSMOINTERFACE_TEST=ON when configuring with cmake.
 # ##############################################################################
 
-if(COSMOINTERFACE_TESTS)
+if(COSMOINTERFACE_TEST)
   enable_testing()
   add_subdirectory(tests)
 endif()

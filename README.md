@@ -86,11 +86,11 @@ All custom CMake flags can be passed when configuring the project, e.g. `cmake -
 | Flag                   | Description                        | Default                                |
 | ---------------------- | ---------------------------------- | -------------------------------------- |
 | `MODEL`                | The model to compile               | `lphi4`                                |
-| `COSMOINTERFACE_TESTS` | Compile CosmoInterface tests       | `OFF`                                  |
+| `COSMOINTERFACE_TEST`  | Compile CosmoInterface tests       | `OFF`                                  |
 | `PARAFAFT`             | ParaFaft support for parallel FFTs | `OFF`                                  |
 | `MPI`                  | MPI support                        | `OFF`                                  |
 | `HDF5`                 | HDF5 support                       | `OFF`                                  |
-| `TEMPLAT_TESTS`        | Enable TempLat's tests             | `OFF`                                  |
+| `TEMPLAT_TEST`         | Enable TempLat's tests             | `OFF`                                  |
 | `DEVICE_PROVIDER`      | Backend for parallelization        | `Kokkos`                               |
 | `CUDA`                 | CUDA support for NVIDIA GPUs       | `OFF`                                  |
 | `HIP`                  | HIP support for AMD GPUs           | `OFF`                                  |
