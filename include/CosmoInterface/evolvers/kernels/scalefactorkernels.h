@@ -24,7 +24,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     ScaleFactorKernels() = default;
 
-    template <class Model> static auto get(Model &model, KernelsTypes::EoM<typename Model::FloatType> eom)
+    template <class Model> static auto get(Model &model, KernelsTypes::EoM<Model> eom)
     {
       using T = decltype(model.aI);
 
@@ -122,8 +122,7 @@ namespace TempLat
     // Default function returns EoM kernels, for backward compatibility.
     template <class Model> static auto get(Model &model)
     {
-      using T = typename Model::FloatType;
-      return ScaleFactorKernels::get(model, KernelsTypes::EoM<T>());
+      return ScaleFactorKernels::get(model, KernelsTypes::EoM<Model>());
     }
   };
 } // namespace TempLat

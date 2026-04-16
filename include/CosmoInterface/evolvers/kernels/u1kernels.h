@@ -28,7 +28,7 @@ namespace TempLat
     U1Kernels() = default;
 
     // Equations of motion:
-    template <class Model, int N, class T> static auto get(Model &model, Tag<N> a, KernelsTypes::EoM<T> eom)
+    template <class Model, int N> static auto get(Model &model, Tag<N> a, KernelsTypes::EoM<Model> eom)
     {
       auto tMinust0 = eom.tMinust0;
 
@@ -50,7 +50,7 @@ namespace TempLat
       return normGrad * (LaplU1 - GradU1) - normU1Source * U1Source + normU1AxionScalarSource * AxionScalarSource;
     }
 
-    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> a, KernelsTypes::EoM<T>)
+    template <class Model, int N> static auto get_momentum(Model &model, Tag<N> a, KernelsTypes::EoM<Model> eom)
     {
       // Computes U(1) momentum:
       return pow(model.aI, model.alpha - 1) * model.piU1(a);
@@ -59,7 +59,7 @@ namespace TempLat
     // Default function returns EoM kernels, for backward compatibility.
     template <class Model, int N> static auto get(Model &model, Tag<N> a)
     {
-      return U1Kernels::get(model, a, KernelsTypes::EoM<typename Model::FloatType>());
+      return U1Kernels::get(model, a, KernelsTypes::EoM<Model>());
     }
   };
 } // namespace TempLat

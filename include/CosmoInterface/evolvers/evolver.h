@@ -30,8 +30,7 @@ namespace TempLat
     using T = typename Model::FloatType;
 
     Evolver(Model &model, RunParameters<T> &rPar, ExtraFields<Model> extraFlds)
-        : type(rPar.eType),
-          lf(type == LF ? std::make_shared<LeapFrog<T>>(model, rPar) : nullptr),
+        : type(rPar.eType), lf(type == LF ? std::make_shared<LeapFrog<T>>(model, rPar) : nullptr),
           vv(VelocityVerletParameters<T>::isVerlet(type) ? std::make_shared<VelocityVerlet<T>>(model, rPar) : nullptr),
           rk2n(RK2NStorageParameters<T>::isRK2n(type) ? std::make_shared<RK2NStorage<Model>>(model, rPar) : nullptr)
     {
@@ -112,7 +111,7 @@ namespace TempLat
     std::shared_ptr<VelocityVerlet<T>> vv;
     std::shared_ptr<RK2NStorage<Model>> rk2n;
 
-    KernelsTypes::EoM<T> EoMKernels;
+    KernelsTypes::EoM<Model> EoMKernels;
   };
 
 } // namespace TempLat

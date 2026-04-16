@@ -12,23 +12,23 @@
 
 namespace TempLat::KernelsTypes
 {
-  /** \brief A mechanism to define different kernels for the same solver.
-   *
-   *
+  /** @brief A mechanism to define different kernels for the same solver.
    *
    **/
-  template <typename T> class EoM
+  template <typename Model> class EoM
   {
+    using T = typename Model::FloatType;
+
   public:
     T tMinust0 = T{};
 
-    template <class Model> void cache(Model &model, T tIn) { tMinust0 = tIn; }
+    void cache(Model &model, T tIn) { tMinust0 = tIn; }
 
   private:
-    template <class Model> void cache(Model &model) {}
+    void cache(Model &model) {}
   };
-  template <class Model, class T> auto getDt(Model &model, EoM<T> eom) { return model.dt; }
 
+  template <class Model, class T> auto getDt(Model &model, EoM<T> eom) { return model.dt; }
   template <class Model, class T> auto setDt(Model &model, EoM<T> eom, T dt) { model.dt = dt; }
 } // namespace TempLat::KernelsTypes
 

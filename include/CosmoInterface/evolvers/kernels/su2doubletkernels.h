@@ -25,14 +25,14 @@ namespace TempLat
     SU2DoubletKernels() = delete;
 
     // Equations of motion:
-    template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<Model> eom)
     {
       // Returns kernel for SU2 doublets (formed by covariant laplacian and potential derivative):
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianSU2Doublet(model, n) -
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivSU2Doublet(model, n);
     }
 
-    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    template <class Model, int N> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<Model> eom)
     {
       // Returns momentum for SU2 doublets:
       return pow(model.aI, model.alpha - 3) * model.piSU2Doublet(n);
@@ -41,8 +41,7 @@ namespace TempLat
     // Default function returns EoM kernels, for backward compatibility.
     template <class Model, int N> static auto get(Model &model, Tag<N> n)
     {
-      using T = typename Model::FloatType;
-      return SU2DoubletKernels::get(model, n, KernelsTypes::EoM<T>());
+      return SU2DoubletKernels::get(model, n, KernelsTypes::EoM<Model>());
     }
   };
 } // namespace TempLat

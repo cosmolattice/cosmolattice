@@ -27,7 +27,7 @@ namespace TempLat
     SU2Kernels() = delete;
 
     // Equations of motion:
-    template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> kt)
+    template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<Model> kt)
     {
       // Computes different terms in the SU(2) gauge kernels:
 
@@ -53,7 +53,7 @@ namespace TempLat
       return -normGrad * (GradSU2 - GradSU2Back) - normSU2Source * SU2Source;
     }
 
-    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> kt)
+    template <class Model, int N> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<Model> kt)
     {
       // Returns ''momentum'' for the SU(2) gauge fields' EOM (a bit different because evolving the links). Also note
       // that our algebra variables are antihermitean, so we are really saving i E.
@@ -63,8 +63,7 @@ namespace TempLat
     // Default function returns EoM kernels, for backward compatibility.
     template <class Model, int N> static auto get(Model &model, Tag<N> a)
     {
-      using T = typename Model::FloatType;
-      return SU2Kernels::get(model, a, KernelsTypes::EoM<T>());
+      return SU2Kernels::get(model, a, KernelsTypes::EoM<Model>());
     }
   };
 } // namespace TempLat
