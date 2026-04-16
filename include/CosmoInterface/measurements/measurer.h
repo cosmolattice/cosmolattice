@@ -44,10 +44,10 @@ namespace TempLat
                        par.hdf5Averages, par.hdf5Spectra , par.printHeaders, "", par.getFlushFreq(),
                        static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutFreq)),
                        static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutInfreq)), par.unbinnedSpectra),
-          outputFreq(par.tOutFreq / par.dt),         // Number of steps between frequent output
-          infreqOutputFreq(par.tOutInfreq / par.dt), // Number of steps between infrequent output
-          rareOutputFreq(par.tOutRareFreq / par.dt), // Number of steps between rare output
-          verbOutputFreq(par.tOutVerb / par.dt),     // Number of steps between updates in the terminal
+          outputFreq(static_cast<int>(round(par.tOutFreq / par.dt))),         // Number of steps between frequent output
+          infreqOutputFreq(static_cast<int>(round(par.tOutInfreq / par.dt))), // Number of steps between infrequent output
+          rareOutputFreq(static_cast<int>(round(par.tOutRareFreq / par.dt))), // Number of steps between rare output
+          verbOutputFreq(static_cast<int>(round(par.tOutVerb / par.dt))),     // Number of steps between updates in the terminal
           t0(par.t0),                                // Initial time of the simulation
           amIRoot(model.getToolBox()->amIRoot()),    // Boolean that returns true if in the root processor
           expansion(par.expansion), // Type of expansion (no expansion, fixed background, or self-consistent)

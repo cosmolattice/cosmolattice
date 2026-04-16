@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 
   /************************Time evolution*************************/
 
-  for (int i = 0; t < runParams.tMax - runParams.dt / 2.0; ++i) {
+  for (int i = 0; t < runParams.tMax - runParams.dt / FloatType(2.0); ++i) {
     // Loop for the time evolution. At each step we advance one time step dt
 
     if (measurer.areWeMeasuring(i))
