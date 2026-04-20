@@ -22,7 +22,6 @@ namespace TempLat
     template <class Model> FixedBackgroundExpansion(Model &model, RunParameters<T> &rPar)
     {
       H0 = rPar.H0 / model.omegaStar; // Initial Hubble parameter (in program units)
-
       // Coefficient of the power-law expansion: depends on EoS and alpha
       pEoS = 2.0 / (3.0 * (1.0 + rPar.omegaEoS) - 2.0 * model.alpha);
     }

@@ -13,7 +13,6 @@ namespace TempLat
   template <int NDIM, typename T> class GWBase
   {
   public:
-    static constexpr size_t NGWs = 5;
 
     std::unique_ptr<SymTracelessField<T, NDIM>> fldGWs;
     std::unique_ptr<SymTracelessField<T, NDIM>> piGWs;

@@ -27,7 +27,7 @@ namespace TempLat
     ScalarSingletKernels() = delete;
 
     // Equations of motion:
-    template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<Model> eom)
     {
       auto tMinust0 = eom.tMinust0;
 
@@ -38,7 +38,7 @@ namespace TempLat
                + pow<2>(model.omegaStar)/(model.fStar * Model::MPl) * pow(model.aI, model.alpha - 1) * AxionCouplings::ScalarAxionSource(model, n, tMinust0));
     }
 
-    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    template <class Model, int N> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<Model> eom)
     {
       // Returns momentum for scalar singlets:
       return pow(model.aI, model.alpha - 3) * model.piS(n);
@@ -47,8 +47,7 @@ namespace TempLat
     // Default function returns EoM kernels, for backward compatibility.
     template <class Model, int N> static auto get(Model &model, Tag<N> n)
     {
-      using T = typename Model::FloatType;
-      return ScalarSingletKernels::get(model, n, KernelsTypes::EoM<T>());
+      return ScalarSingletKernels::get(model, n, KernelsTypes::EoM<Model>());
     }
   };
 } // namespace TempLat

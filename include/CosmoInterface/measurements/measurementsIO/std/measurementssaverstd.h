@@ -57,7 +57,12 @@ namespace TempLat
 
     virtual ~MeasurementsSaverStd() = default;
 
-    void addAverage(const T &r) { (*stream) << std::setprecision(15) << "    " << r; }
+    void addAverage(const T &r) {
+      if constexpr (std::floating_point<T> && (sizeof(T) == sizeof(float))) (*stream) << std::setprecision(8);
+      else (*stream) << std::setprecision(15);
+      (*stream) << "    " << r;
+      // (*stream) << std::setprecision(15) << "    " << r;
+       }
 
     void addHeader(const std::string &str) { (*headerStream) << "    " << str; }
 

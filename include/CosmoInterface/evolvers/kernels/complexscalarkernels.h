@@ -24,14 +24,14 @@ namespace TempLat
     ComplexScalarKernels() = delete;
 
     // Equations of motion:
-    template <class Model, int N, class T> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<Model> eom)
     {
       // Returns kernel for complex scalars (formed by the covariant laplacian and potential derivative terms):
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianCS(model, n) -
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivCS(model, n);
     }
 
-    template <class Model, int N, class T> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<T> eom)
+    template <class Model, int N> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<Model> eom)
     {
       // Returns momentum for complex scalars:
       return pow(model.aI, model.alpha - 3) * model.piCS(n);
@@ -40,8 +40,7 @@ namespace TempLat
     // Default function returns EoM kernels, for backward compatibility.
     template <class Model, int N> static auto get(Model &model, Tag<N> n)
     {
-      using T = typename Model::FloatType;
-      return ComplexScalarKernels::get(model, n, KernelsTypes::EoM<T>());
+      return ComplexScalarKernels::get(model, n, KernelsTypes::EoM<Model>());
     }
   };
 } // namespace TempLat

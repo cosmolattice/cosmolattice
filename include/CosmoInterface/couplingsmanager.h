@@ -166,22 +166,25 @@ namespace TempLat
 
   template <int NMatter, int NGauge, bool... Bools> class CouplingsManager
   {
-    public:
-      template <typename FloatType> using Container = CouplingsManagerContainer<FloatType, NMatter, NGauge, Bools...>;
+  public:
+    template <typename FloatType> using Container = CouplingsManagerContainer<FloatType, NMatter, NGauge, Bools...>;
 
-      static constexpr int nGauge = NGauge;
-      static constexpr bool active = true;
+    static constexpr int nGauge = NGauge;
+    static constexpr bool active = (Bools || ...);
 
-      static constexpr size_t howManyCouples()
-      {
-        return Container<double>::howManyCouples();
-      }
+    static constexpr size_t howManyCouples()
+    {
+      return (static_cast<size_t>(Bools) + ...);
+    }
 
-      template <int nmat, int ng> static constexpr bool couples(Tag<nmat>, Tag<ng>)
-      {
-        return Container<double>::template couples<nmat, ng>(Tag<nmat>(), Tag<ng>());
-      }
-    };
+    template <int nmat, int ng> static constexpr bool couples(Tag<nmat>, Tag<ng>)
+    {
+      static_assert(nmat >= 0 && nmat < NMatter);
+      static_assert(ng >= 0 && ng < NGauge);
+      constexpr std::array<bool, NGauge * NMatter> doesCouples = {Bools...};
+      return doesCouples[nmat * NGauge + ng];
+    }
+  };
 
   /**
    * @brief This class is a specialization of the CouplingsManager for the case where there are no gauge field

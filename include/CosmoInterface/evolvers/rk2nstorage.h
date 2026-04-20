@@ -39,7 +39,7 @@ namespace TempLat
 
     template <int N> void deactivate(Tag<N> t) { ForLoop(n, 0, Model::getNFields(t) - 1, isDeactivated[t][n] = true;); }
 
-    void evolve(Model &model, T tMinust0) { evolve(model, tMinust0, KernelsTypes::EoM<T>()); }
+    void evolve(Model &model, T tMinust0) { evolve(model, tMinust0, KernelsTypes::EoM<Model>()); }
 
     template <class KernelType> void evolve(Model &model, T tMinust0, KernelType kt)
     {
@@ -80,7 +80,7 @@ namespace TempLat
       }
     }
 
-    bool deltaScaleFactor(Model &model, size_t i, KernelsTypes::EoM<T> kt)
+    bool deltaScaleFactor(Model &model, size_t i, KernelsTypes::EoM<Model> kt)
     {
       if (i == 0) {
         deltaADot = dt * ScaleFactorKernels::get(model, kt);
