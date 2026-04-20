@@ -1,4 +1,18 @@
-Pepe This is the manual for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, a modern package for lattice simulations of the dynamics of interactive fields in an expanding Universe. The theoretical basis for the equations implemented in the code can be found in our dissertation series on latttice techniques: *The art of simulating the early Universe, Part I* (Ref. [@Figueroa_2020rrl]), *The art of simulating the early Universe, Part II* (Ref. [@Baeza-Ballesteros:2025tme]), and *The art of simulating the early Universe, Part III* (Ref. [@Figueroa_2026XYZ]), which we will refer to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs. <!--with $\mathtt{X = I, II, III, ...}$  --> **The focus of this manual is, instead, on explaining how to use $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$**. The manual is in fact self-contained, and hence reading either of Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] is not strictly required in order to follow it. However, whenever needed lattice methods or theoretical results <!-- from Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] --> will be quoted in the manual without further clarification, as their explanation and/or derivation can be found in the monographs. Therefore, reading such references (or at least having them at hand) will help on grasping better the motivation(s) that sustain the equations and techniques used in the code. <!--, particularly for the less experienced user.--> A brief guide to the monographs' content <!-- of our lattice theory monographs -- $\mathtt{The~Art-I}$, $\mathtt{-II}$ and $\mathtt{-III}$ -- --> can be found below in the Theory Monographs Guide. 
+This is the manual for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, a modern package for lattice simulations of the dynamics of interactive fields in an expanding Universe. The theoretical basis for the equations implemented in the code can be found in our monographic series on latttice techniques: 
+
+*The art of simulating the early Universe -- Part I* (Ref. [@Figueroa_2020rrl]), *Part II* (Ref. [@Baeza-Ballesteros:2025tme]), and *Part III* (Ref. [@Figueroa_2026XYZ])   
+
+<!--
+*The art of simulating the early Universe, Part II* (Ref. [@Baeza-Ballesteros:2025tme]) 
+
+*The art of simulating the early Universe, Part III* (Ref. [@Figueroa_2026XYZ]) 
+-->
+
+We refer to them, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs. <!--with $\mathtt{X = I, II, III, ...}$  --> These monographic reviews will help the reader to understand the motivation(s) that sustain the equations and techniques used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. <!--, particularly for the less experienced user.--> **The focus of this manual, however, is on explaining how to use $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and not on the theory behind or the lattice techniques themselves**. The manual is actually self-contained, and reading Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] is not strictly required in order to follow it. However, whenever needed, lattice methods or theoretical results <!-- from Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] --> will be quoted in the manual without further clarification, as the user will be referred to the relevant section/s of the monographs for the appropriate explanation and/or derivation. Having the monographs at hand might therefore prove useful, so a brief description of their content <!-- of our lattice theory monographs -- $\mathtt{The~Art-I}$, $\mathtt{-II}$ and $\mathtt{-III}$ -- --> can be found below in the Theory Monographs Guide.
+
+
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *Versions* :
+
 
 -----------------
 
