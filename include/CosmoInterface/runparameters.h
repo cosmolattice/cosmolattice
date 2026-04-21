@@ -50,9 +50,14 @@ namespace TempLat
           energySnapshotMeas(par.get<std::string, 14>(
               "energy_snapshot",
               std::vector<std::string>(14, Constants::defaultString))), // Energy terms for which snapshots are printed
-          snapLower(par.get<ptrdiff_t,10>("snap_lowercoord", std::vector<ptrdiff_t>(10, 0))),  // Lower coordinates of the snapshoted volumes, in all dimensions
-          snapUpper(par.get<ptrdiff_t,10>("snap_uppercoord", std::vector<ptrdiff_t>(10, N))),  // Upper coordinates of the snapshoted volumes, in all dimensions
-          snapStep(par.get<ptrdiff_t,10>("snap_stepcoord", std::vector<ptrdiff_t>(10, 1))),  //Step used for snapshoting
+          snapLower(par.get<ptrdiff_t, 10>(
+              "snap_lowercoord",
+              std::vector<ptrdiff_t>(10, 0))), // Lower coordinates of the snapshoted volumes, in all dimensions
+          snapUpper(par.get<ptrdiff_t, 10>(
+              "snap_uppercoord",
+              std::vector<ptrdiff_t>(10, N))), // Upper coordinates of the snapshoted volumes, in all dimensions
+          snapStep(
+              par.get<ptrdiff_t, 10>("snap_stepcoord", std::vector<ptrdiff_t>(10, 1))), // Step used for snapshoting
           fixedBackground(expansion ? par.get<bool>("fixedBackground", false)
                                     : false), // If true, expansion is given by a fixed background
           omegaEoS(fixedBackground ? par.get<T>("omegaEoS", 1.0 / 3.0)
@@ -62,12 +67,15 @@ namespace TempLat
           spectraVerbosity(par.get<int>("spectraVerbosity", 0)), // Verbosity of spectra files
           deltaKBin(par.get<double>("deltaKBin", 1)),            // Bin width of the spectra
           nBinsSpectra(floor(sqrt(3.0) / 2.0 * N / deltaKBin)),  // Number of bins in spectra
-          hdf5Averages(par.get<bool>("hdf5Averages", false)),
-          hdf5FlushFreq(par.get<ptrdiff_t>("hdf5FlushFreq", 10)),
-          hdf5Spectra(par.get<bool>("hdf5Spectra", false)), // If true, spectra are printed in HDF5 format. If false, printed in txt format.
+          hdf5Averages(par.get<bool>("hdf5Averages", false)), hdf5FlushFreq(par.get<ptrdiff_t>("hdf5FlushFreq", 10)),
+          hdf5Spectra(par.get<bool>(
+              "hdf5Spectra", false)), // If true, spectra are printed in HDF5 format. If false, printed in txt format.
           eType(par.get<EvolverType>("evolver", LF, Important)), // Type of evolution algorithm
-          appendMode(par.get<bool>(  "appendToFiles", false)), // If true, output will be appended to pre-existing files. If false, files will be overwritten.
-          saveEndPath(par.get<std::string>("save_dir",  Constants::defaultString)()), // Folder where simulation is saved at the end
+          appendMode(par.get<bool>(
+              "appendToFiles",
+              false)), // If true, output will be appended to pre-existing files. If false, files will be overwritten.
+          saveEndPath(par.get<std::string>("save_dir",
+                                           Constants::defaultString)()), // Folder where simulation is saved at the end
           backupPath(par.get<std::string>(
               "backup_dir", Constants::defaultString)()),      // Folder where simulation is saved during the simulation
           printHeaders(par.get<bool>("print_headers", false)), // If true, headers are printed in all output files
@@ -76,12 +84,10 @@ namespace TempLat
               0)),            // Different verbosity in the output filename. By default, no info about model or params.
           doWeRestart(false), // Boolean which tells if we are runing in restart mode or not. Set in the main.
           tolerance(par.get<T>("tolerance", -1)), // For adaptative solvers only
-          powerSpectrumType(par.get<int>("PS_type", 1)),
-          powerSpectrumVersion(par.get<int>("PS_version", 1)),
+          powerSpectrumType(par.get<int>("PS_type", 1)), powerSpectrumVersion(par.get<int>("PS_version", 1)),
           GWprojectorType(par.get<int>("GWprojectorType",
                                        2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
-          withGWs(par.get<bool>("withGWs", false, Important)),
-          flagON(par.get<bool>("flagON", false)),
+          withGWs(par.get<bool>("withGWs", false, Important)), flagON(par.get<bool>("flagON", false)),
           unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false))
     {
       if (AlmostEqual(lSide, -1)) {
@@ -98,6 +104,13 @@ namespace TempLat
             "kIR = " + std::to_string(kIR) + " and lSide = " + std::to_string(lSide) +
             " are not consistent. If you think they should be, try removing one of the two."));
       // NOTE: We must have kIR=2*pi/lside for consistency.
+
+      if (AlmostEqual(dt, 0.)) throw(RunParametersInconsistent("dt cannot be zero, abort."));
+      if (tMax < t0) throw(RunParametersInconsistent("tMax must be >= t0, abort."));
+      if (tOutFreq < dt) throw(RunParametersInconsistent("tOutputFreq must be >= dt, abort."));
+      if (tOutInfreq < dt) throw(RunParametersInconsistent("tOutputInfreq must be >= dt, abort."));
+      if (tOutRareFreq < dt) throw(RunParametersInconsistent("tOutputRareFreq must be >= dt, abort."));
+      if (tOutVerb < dt) throw(RunParametersInconsistent("tOutputVerb must be >= dt, abort."));
 
       dx = lSide / N;                             // Lattice spacing
       kUV = std::sqrt(3) * Constants::pi<T> / dx; // Maximum momenta in the lattice
