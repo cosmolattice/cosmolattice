@@ -73,7 +73,10 @@ namespace TempLat
           eType(par.get<EvolverType>("evolver", LF, Important)), // Type of evolution algorithm
           appendMode(par.get<bool>(
               "appendToFiles",
-              false)), // If true, output will be appended to pre-existing files. If false, files will be overwritten.
+              false)), // If true, output is appended to pre-existing files. If false, existing files cause an error unless overwriteFiles=true.
+          overwriteMode(par.get<bool>(
+              "overwriteFiles",
+              false)), // If true (and appendToFiles=false), existing output files are deleted before writing.
           saveEndPath(par.get<std::string>("save_dir",
                                            Constants::defaultString)()), // Folder where simulation is saved at the end
           backupPath(par.get<std::string>(
@@ -104,6 +107,10 @@ namespace TempLat
             "kIR = " + std::to_string(kIR) + " and lSide = " + std::to_string(lSide) +
             " are not consistent. If you think they should be, try removing one of the two."));
       // NOTE: We must have kIR=2*pi/lside for consistency.
+
+      if (appendMode && overwriteMode)
+        throw(RunParametersInconsistent(
+            "'appendToFiles' and 'overwriteFiles' cannot both be true. Pick one."));
 
       if (AlmostEqual(dt, 0.)) throw(RunParametersInconsistent("dt cannot be zero, abort."));
       if (tMax < t0) throw(RunParametersInconsistent("tMax must be >= t0, abort."));
@@ -197,6 +204,7 @@ namespace TempLat
     bool boolBackup;
 
     bool appendMode;
+    bool overwriteMode;
 
     std::string saveEndPath;
     std::string backupPath;
