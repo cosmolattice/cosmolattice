@@ -42,18 +42,7 @@ namespace TempLat
     {
 #ifdef HAVE_HDF5
       auto ensureFreshOrAppend = [&](const std::string &h5fn, bool saveParser) {
-        const bool exists = std::filesystem::exists(h5fn);
-        if (mAppendMode) {
-          if (exists) return; // reuse existing file as-is
-        } else if (exists) {
-          if (mOverwriteMode) {
-            std::filesystem::remove(h5fn);
-          } else {
-            throw(FileAlreadyExistsError(
-                "Refusing to overwrite existing output file \"" + h5fn +
-                "\". Set 'appendToFiles = true' to append, or 'overwriteFiles = true' to delete."));
-          }
-        }
+        if (!prepareOutputFile(h5fn)) return;
         FileSaverHDF5 fs;
         fs.create(h5fn, Exclusive);
         if (saveParser) fs.save_attr(parser);
@@ -63,6 +52,19 @@ namespace TempLat
       if (mUseHDF5Spectra && !isUnbinned) ensureFreshOrAppend(getHDF5SpectraFn(), false);
       if (isUnbinned) ensureFreshOrAppend(getHDF5UnbinnedSpectraFn(), false);
 #endif
+    }
+
+    bool prepareOutputFile(const std::string &fn) const
+    {
+      const bool exists = std::filesystem::exists(fn);
+      if (mAppendMode) return !exists;
+      if (exists) {
+        if (mOverwriteMode) std::filesystem::remove(fn);
+        else throw(FileAlreadyExistsError(
+            "Refusing to overwrite existing output file \"" + fn +
+            "\". Set 'appendToFiles = true' to append, or 'overwriteFiles = true' to delete."));
+      }
+      return true;
     }
 
     void flush() {}
