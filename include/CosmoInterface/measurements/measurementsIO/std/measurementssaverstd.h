@@ -8,6 +8,7 @@
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
 #include "TempLat/util/conditionaloutput/outputstream.h"
+#include <filesystem>
 #include <sstream>
 #include <iomanip>
 #include "TempLat/lattice/field/field.h"
@@ -28,8 +29,8 @@ namespace TempLat
     MeasurementsSaverStd(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool appendMode,
                          const std::vector<std::string> &headers = {})
         : mMode(!appendMode ? std::ios_base::out : std::ios_base::app),
-          outputAv(std::make_shared<OutputStream<T>>(fm.getWorkingDir() + fm.getTag() + "average_" + fn + ".txt",
-                                                     amIRoot, mMode)),
+          outputAv(makeOutputStream(fm.getWorkingDir() + fm.getTag() + "average_" + fn + ".txt", amIRoot, appendMode,
+                                    fm.getOverwriteMode())),
           stream(std::make_shared<std::stringstream>()), headerStream(std::make_shared<std::stringstream>()),
           headerSaved(false)
     {
@@ -47,7 +48,7 @@ namespace TempLat
           headerStream(std::make_shared<std::stringstream>()), headerSaved(false)
     {
       auto name = fm.getCurredName(fld, true);
-      outputAv = std::make_shared<OutputStream<T>>(name + ".txt", amIRoot, mMode);
+      outputAv = makeOutputStream(name + ".txt", amIRoot, appendMode, fm.getOverwriteMode());
       if (!appendMode && fm.getPrintHeaders())
         for (auto &str : headers)
           addHeader(str);
@@ -79,6 +80,21 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
+    std::shared_ptr<OutputStream<T>> makeOutputStream(const std::string &fname, bool amIRoot, bool appendMode,
+                                                      bool overwriteMode)
+    {
+      if (!appendMode && std::filesystem::exists(fname)) {
+        if (overwriteMode) {
+          std::filesystem::remove(fname);
+        } else {
+          throw(FileAlreadyExistsError(
+              "Refusing to overwrite existing output file \"" + fname +
+              "\". Set 'appendToFiles = true' to append, or 'overwriteFiles = true' to delete."));
+        }
+      }
+      return std::make_shared<OutputStream<T>>(fname, amIRoot, mMode);
+    }
+
     std::ios_base::openmode mMode;
     std::shared_ptr<OutputStream<T>> outputAv;
     std::shared_ptr<std::stringstream> stream;

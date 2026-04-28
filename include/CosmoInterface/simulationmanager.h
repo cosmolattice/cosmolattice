@@ -7,11 +7,14 @@
 
 // File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2019
 
+#include <filesystem>
+
 #include "CosmoInterface/definitions/averages.h"
 #include "TempLat/util/cstyletime.h"
 #include "TempLat/lattice/IO/fileio.h"
 #include "CosmoInterface/abstractmodel.h"
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "TempLat/util/conditionaloutput/conditionalfilestream.h"
 #include "TempLat/parallel/threadsettings.h"
 
@@ -154,7 +157,15 @@ namespace TempLat
     void createInfoFile(ParameterParser &par, const RunParameters<T> &runPar, Model &model, const std::vector<int> &dec,
                         bool amIRoot)
     {
-      info = std::make_unique<ConditionalFileStream>(base_filename(runPar, model, true, true) + ".infos", amIRoot);
+      const std::string fname = base_filename(runPar, model, true, true) + ".infos";
+      if (!runPar.appendMode && std::filesystem::exists(fname)) {
+        if (runPar.overwriteMode) std::filesystem::remove(fname);
+        else throw(FileAlreadyExistsError(
+            "Refusing to overwrite existing output file \"" + fname +
+            "\". Set 'appendToFiles = true' to append, or 'overwriteFiles = true' to delete."));
+      }
+      info = std::make_unique<ConditionalFileStream>(
+          fname, amIRoot, runPar.appendMode ? std::ios_base::app : std::ios_base::out);
       (*info) << "Parameters: \n" << par << "\n";
       CStyleTime mt;
       mt.now();

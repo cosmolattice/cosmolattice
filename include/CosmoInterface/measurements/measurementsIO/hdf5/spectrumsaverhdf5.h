@@ -32,7 +32,7 @@ namespace TempLat
                       const RunParameters<T> &rPar)
         : filename(fm.getHDF5SpectraFn()), verbosity(rPar.spectraVerbosity), nBins(rPar.nBinsSpectra),
           deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName(fn), amIRoot(pAmIRoot),
-          nMeas(fm.getNInfreqMeas()), flushCount(0), flushFreq(fm.getFlushFreq())
+          appendMode(append), nMeas(fm.getNInfreqMeas()), flushCount(0), flushFreq(fm.getFlushFreq())
     {
     }
 
@@ -76,34 +76,28 @@ namespace TempLat
       size_t klength = arr.back()->size();
       HDF5File file;
       file.open(filename, ReadWrite);
-      auto group = file.createGroup(grpName);
+      auto group = file.createOrOpenGroup(grpName);
       std::vector<hsize_t> dims{0, klength};
       std::vector<hsize_t> chunks{64, klength};
 
-      multData =
-          std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>("momMultiplicity", dims, chunks));
-      multData->extend(nMeas);
-      multData->close();
+      auto openOrCreate = [&](const std::string &name) {
+        std::shared_ptr<HDF5TimeSeries<T>> ts;
+        if (appendMode && H5Lexists(group, name.c_str(), H5P_DEFAULT) > 0) {
+          ts = std::make_shared<HDF5TimeSeries<T>>(group.reopenDataset(name));
+          ts->setOffset(ts->getSizes()[0]);
+        } else {
+          ts = std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>(name, dims, chunks));
+        }
+        ts->extend(nMeas);
+        ts->close();
+        return ts;
+      };
 
-      if (verbosity != 0) {
-        binAvData =
-            std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>("momBinAverage", dims, chunks));
-        binAvData->extend(nMeas);
-        binAvData->close();
-      }
-      if (verbosity != 1) {
-        binCtrData = std::make_shared<HDF5TimeSeries<T>>(
-            group.template createTimeSeries<T>("momBinCentralValues", dims, chunks));
-        binCtrData->extend(nMeas);
-        binCtrData->close();
-      }
-
-      for (size_t i = 0; i < arr.size(); ++i) {
-        valueAvData.emplace_back(std::make_shared<HDF5TimeSeries<T>>(
-            group.template createTimeSeries<T>("spectAverage_" + std::to_string(i), dims, chunks)));
-        valueAvData.back()->extend(nMeas);
-        valueAvData.back()->close();
-      }
+      multData = openOrCreate("momMultiplicity");
+      if (verbosity != 0) binAvData = openOrCreate("momBinAverage");
+      if (verbosity != 1) binCtrData = openOrCreate("momBinCentralValues");
+      for (size_t i = 0; i < arr.size(); ++i)
+        valueAvData.emplace_back(openOrCreate("spectAverage_" + std::to_string(i)));
 
       if (verbosity == 2) {
         throw(NotImplementedInHDF5("Verbosity 2 is for the spectrum is not supported currently in hdf5. Easy to fix if "
@@ -175,6 +169,7 @@ namespace TempLat
     bool uninitialized;
     std::string grpName;
     bool amIRoot;
+    bool appendMode;
     ptrdiff_t nMeas;
     size_t flushCount;
     size_t flushFreq;

@@ -14,6 +14,7 @@
 #include "TempLat/lattice/field/field.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "CosmoInterface/runparameters.h"
+#include <filesystem>
 
 namespace TempLat
 {
@@ -28,8 +29,8 @@ namespace TempLat
     template <size_t NDim>
     SpectrumSaverStd(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool append, const RunParameters<T> &rPar)
         : mMode(!append ? std::ios_base::out : std::ios_base::app),
-          outputSpectrum(
-              std::make_shared<OutputStream<T>>(fm.getWorkingDir() + "spectra_" + fn + ".txt", amIRoot, mMode)),
+          outputSpectrum(makeOutputStream(fm.getWorkingDir() + "spectra_" + fn + ".txt", amIRoot, append,
+                                          fm.getOverwriteMode())),
           verbosity(rPar.spectraVerbosity), nBins(rPar.nBinsSpectra), deltaKBin(rPar.deltaKBin), nGrid(rPar.N),
           kIR(rPar.kIR), printHeader(fm.getPrintHeaders())
     {
@@ -47,7 +48,7 @@ namespace TempLat
       std::string name = fld.toString();
       name = name.erase(name.find("(", 3));
       name = fm.getWorkingDir() + "spectra_" + name;
-      outputSpectrum = std::make_shared<OutputStream<T>>(name + ".txt", amIRoot, mMode);
+      outputSpectrum = makeOutputStream(name + ".txt", amIRoot, append, fm.getOverwriteMode());
     }
 
     void save(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
@@ -97,6 +98,21 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
+
+    std::shared_ptr<OutputStream<T>> makeOutputStream(const std::string &fname, bool amIRoot, bool appendMode,
+                                                      bool overwriteMode)
+    {
+      if (!appendMode && std::filesystem::exists(fname)) {
+        if (overwriteMode) {
+          std::filesystem::remove(fname);
+        } else {
+          throw(FileAlreadyExistsError(
+              "Refusing to overwrite existing output file \"" + fname +
+              "\". Set 'appendToFiles = true' to append, or 'overwriteFiles = true' to delete."));
+        }
+      }
+      return std::make_shared<OutputStream<T>>(fname, amIRoot, mMode);
+    }
 
     std::ios_base::openmode mMode;
     std::shared_ptr<OutputStream<T>> outputSpectrum;

@@ -25,7 +25,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
     template<typename runParameters> EnergySnapshotsMeasurer(Model &model, runParameters& pars, FilesManager<Model::NDim> &fm, std::vector<std::string> toSave)
-        : mRoot(fm.getTag() + fm.getWorkingDir())
+        : mRoot(fm.getWorkingDir() + fm.getTag())
     {
       // This checks which energies are specified in the string "toSave" (passed as a parameter), and creates the
       // corresponding h5 files to save the snapshots.
@@ -48,85 +48,27 @@ namespace TempLat
 
       if(saveScalar || saveScalarK || saveScalarG || saveComplexScalar || saveComplexScalarK || saveComplexScalarG || saveSU2DoubletK || saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot || saveETotal ) fIO.setSaverLimits(pars.snapLower, pars.snapUpper, pars.snapStep);
 
-      if(saveScalar) {
-        nameScalar = mRoot + "snapshot_scalar_singlet.h5"; // name of the file
-        fIO.saver.create( nameScalar  );
-        fIO.saver.close();
-      }
-      if (saveScalarK) {
-        nameScalarK = mRoot + "kinetic_energy_snapshot_scalar.h5"; // name of the file
-        fIO.saver.create(nameScalarK);
-        fIO.saver.close();
-      }
-      if (saveScalarG) {
-        nameScalarG = mRoot + "gradient_energy_snapshot_scalar.h5"; // name of the file
+      auto createIfFresh = [&](const std::string &name) {
+        if (fm.prepareOutputFile(name)) {
+          fIO.saver.create(name, Exclusive);
+          fIO.saver.close();
+        }
+      };
 
-        fIO.saver.create(nameScalarG);
-        fIO.saver.close();
-      }
-      if(saveComplexScalar) {
-        nameComplexScalar = mRoot + "snapshot_complex_scalar.h5"; // name of the file
-        fIO.saver.create( nameComplexScalar );
-        fIO.saver.close();
-      }
-      if (saveComplexScalarK) {
-        nameComplexScalarK = mRoot + "kinetic_energy_snapshot_complex_scalar.h5"; // name of the file
-
-        fIO.saver.create(nameComplexScalarK);
-        fIO.saver.close();
-      }
-      if (saveComplexScalarG) {
-        nameComplexScalarG = mRoot + "gradient_energy_snapshot_complex_scalar.h5"; // name of the file
-
-        fIO.saver.create(nameComplexScalarG);
-        fIO.saver.close();
-      }
-      if (saveSU2DoubletK) {
-        nameSU2DoubletK = mRoot + "kinetic_energy_snapshot_SU2_doublet.h5"; // name of the file
-
-        fIO.saver.create(nameSU2DoubletK);
-        fIO.saver.close();
-      }
-      if (saveSU2DoubletG) {
-        nameSU2DoubletG = mRoot + "gradient_energy_snapshot_SU2_doublet.h5"; // name of the file
-
-        fIO.saver.create(nameSU2DoubletG);
-        fIO.saver.close();
-      }
-      if (saveU1El) {
-        nameU1El = mRoot + "electric_energy_snapshot_U1.h5"; // name of the file
-
-        fIO.saver.create(nameU1El);
-        fIO.saver.close();
-      }
-      if (saveU1Mag) {
-        nameU1Mag = mRoot + "magnetic_energy_snapshot_U1.h5"; // name of the file
-
-        fIO.saver.create(nameU1Mag);
-        fIO.saver.close();
-      }
-      if (saveSU2El) {
-        nameSU2El = mRoot + "electric_energy_snapshot_SU2.h5"; // name of the file
-
-        fIO.saver.create(nameSU2El);
-        fIO.saver.close();
-      }
-      if (saveSU2Mag) {
-        nameSU2Mag = mRoot + "magnetic_energy_snapshot_SU2.h5"; // name of the file
-
-        fIO.saver.create(nameSU2Mag);
-        fIO.saver.close();
-      }
-      if (savePot) {
-        namePot = mRoot + "potential_energy_snapshot.h5"; // name of the file
-        fIO.saver.create(namePot);
-        fIO.saver.close();
-      }
-      if(saveETotal) {
-        nameETotal = mRoot + "total_energy_snapshot.h5"; // name of the file
-        fIO.saver.create( nameETotal );
-        fIO.saver.close();
-      }
+      if (saveScalar) { nameScalar = mRoot + "snapshot_scalar_singlet.h5"; createIfFresh(nameScalar); }
+      if (saveScalarK) { nameScalarK = mRoot + "kinetic_energy_snapshot_scalar.h5"; createIfFresh(nameScalarK); }
+      if (saveScalarG) { nameScalarG = mRoot + "gradient_energy_snapshot_scalar.h5"; createIfFresh(nameScalarG); }
+      if (saveComplexScalar) { nameComplexScalar = mRoot + "snapshot_complex_scalar.h5"; createIfFresh(nameComplexScalar); }
+      if (saveComplexScalarK) { nameComplexScalarK = mRoot + "kinetic_energy_snapshot_complex_scalar.h5"; createIfFresh(nameComplexScalarK); }
+      if (saveComplexScalarG) { nameComplexScalarG = mRoot + "gradient_energy_snapshot_complex_scalar.h5"; createIfFresh(nameComplexScalarG); }
+      if (saveSU2DoubletK) { nameSU2DoubletK = mRoot + "kinetic_energy_snapshot_SU2_doublet.h5"; createIfFresh(nameSU2DoubletK); }
+      if (saveSU2DoubletG) { nameSU2DoubletG = mRoot + "gradient_energy_snapshot_SU2_doublet.h5"; createIfFresh(nameSU2DoubletG); }
+      if (saveU1El) { nameU1El = mRoot + "electric_energy_snapshot_U1.h5"; createIfFresh(nameU1El); }
+      if (saveU1Mag) { nameU1Mag = mRoot + "magnetic_energy_snapshot_U1.h5"; createIfFresh(nameU1Mag); }
+      if (saveSU2El) { nameSU2El = mRoot + "electric_energy_snapshot_SU2.h5"; createIfFresh(nameSU2El); }
+      if (saveSU2Mag) { nameSU2Mag = mRoot + "magnetic_energy_snapshot_SU2.h5"; createIfFresh(nameSU2Mag); }
+      if (savePot) { namePot = mRoot + "potential_energy_snapshot.h5"; createIfFresh(namePot); }
+      if (saveETotal) { nameETotal = mRoot + "total_energy_snapshot.h5"; createIfFresh(nameETotal); }
 #endif
     }
 

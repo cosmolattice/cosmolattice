@@ -1,5 +1,7 @@
 #Output
-outputfile = ./test5/
+outputfile = ./
+print_headers = true
+overwriteFiles = false
 
 #Evolution
 expansion = true

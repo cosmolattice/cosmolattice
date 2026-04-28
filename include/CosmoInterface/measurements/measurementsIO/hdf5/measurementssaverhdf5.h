@@ -31,10 +31,16 @@ namespace TempLat
     {
       HDF5File file;
       file.open(fName, ReadWrite);
-      auto group = file.createGroup(grpName);
+      auto group = file.createOrOpenGroup(grpName);
       for (auto h : mHeaders) {
-        averages.emplace_back(group.template createTimeSeries<T>(h, {0}, {4096}));
-        averages.back().extend(fm.getNMeas());
+        if (appendMode && H5Lexists(group, h.c_str(), H5P_DEFAULT) > 0) {
+          averages.emplace_back(group.reopenDataset(h));
+          averages.back().setOffset(averages.back().getSizes()[0]);
+          averages.back().extend(fm.getNMeas());
+        } else {
+          averages.emplace_back(group.template createTimeSeries<T>(h, {0}, {4096}));
+          averages.back().extend(fm.getNMeas());
+        }
         averages.back().close();
       }
       group.close();

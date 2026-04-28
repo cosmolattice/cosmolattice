@@ -41,7 +41,8 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     Measurer(Model &model, const RunParameters<T> &par, ParameterParser &parser)
         : filesManager(parser, SimulationManager<Model::NDim>::base_filename(par, model), model.getToolBox(),
-                       par.hdf5Averages, par.hdf5Spectra , par.printHeaders, "", par.getFlushFreq(),
+                       par.hdf5Averages, par.hdf5Spectra , par.printHeaders, par.appendMode, par.overwriteMode,
+                       "", par.getFlushFreq(),
                        static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutFreq)),
                        static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutInfreq)), par.unbinnedSpectra),
           outputFreq(static_cast<int>(round(par.tOutFreq / par.dt))),         // Number of steps between frequent output

@@ -1,6 +1,7 @@
 #Output
 outputfile = ./run_
 print_headers = true
+overwriteFiles = false
 
 #Evolution
 expansion = false

@@ -131,7 +131,7 @@ namespace TempLat
       constexpr_for<0, 3>([&](auto i) {
         kL[i] = complex<S>(sin(this->kIR * static_cast<S>(k[i])), -S(1.) + cos(this->kIR * static_cast<S>(k[i])));
       });
-      kL2 = pow<2>(abs(kL[0])) + pow<2>(abs(kL[1])) + pow<2>(abs(kL[2]));
+      kL2 = powr<2>(abs(kL[0])) + powr<2>(abs(kL[1])) + powr<2>(abs(kL[2]));
 
       P[0] = complex<S>(1., 0.) - conj(kL[0]) * kL[0] / kL2;
       P[1] = -conj(kL[0]) * kL[1] / kL2;
@@ -200,7 +200,7 @@ namespace TempLat
         kL[i] = complex<S>(sin(this->kIR * static_cast<S>(k[i])), S(1.) - cos(this->kIR * static_cast<S>(k[i])));
       });
 
-      kL2 = pow<2>(abs(kL[0])) + pow<2>(abs(kL[1])) + pow<2>(abs(kL[2]));
+      kL2 = powr<2>(abs(kL[0])) + powr<2>(abs(kL[1])) + powr<2>(abs(kL[2]));
 
       P[0] = complex<S>(1., 0.) - conj(kL[0]) * kL[0] / kL2;
       P[1] = -conj(kL[0]) * kL[1] / kL2;
