@@ -35,7 +35,8 @@ namespace TempLat
               pow(model.aI, 3 + model.alpha) *
                   (Potential::derivS(model, n) + IfElse(Model::NonMinimalCouplings::couples(Tag<N>(), Tag<0>()),
                                                         model.xis(n, 0_c) * model.fldS(n) * model.RI, ZeroType())) +
-              AxionCouplings::ScalarAxionSource(model, n, tMinust0));
+              pow<2>(model.omegaStar) / (model.fStar * Model::MPl) * pow(model.aI, model.alpha - 1) *
+                  AxionCouplings::ScalarAxionSource(model, n, tMinust0));
     }
 
     template <class Model, int N> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<Model> eom)
