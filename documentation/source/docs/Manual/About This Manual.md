@@ -1,16 +1,14 @@
-This is the manual for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, a modern package for lattice simulations of the dynamics of interactive fields in an expanding Universe. **This manual focuses on explaining how to use $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and not on the theory and/or techniques behind the code**. The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can be found in our monographic series on latttice techniques: 
+This is the manual for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, a modern package for lattice simulations of the dynamics of interactive fields in an expanding Universe. **This manual focuses on explaining how to use $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and not on the theory and/or techniques behind the code**, <!--The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ --> which can be found, instead, in our monographic series on latttice techniques, *"The art of simulating the early Universe"*, 
 
-*The art of simulating the early Universe. Part I. Integration techniques and canonical cases.* (Ref. [@Figueroa_2020rrl]), 
+*Part I. Integration techniques and canonical cases.* (Ref. [@Figueroa_2020rrl]), 
 
+*Part II. Non-canonical cases and gravitational waves.* (Ref. [@Baeza-Ballesteros:2025tme]), 
 
-*The art of simulating the early Universe, Part II. Non-canonical cases and gravitational waves.* (Ref. [@Baeza-Ballesteros:2025tme]), 
+*Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]). 
 
-*The art of simulating the early Universe, Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]), 
+These reviews, which from now on will be referred to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs, <!--with $\mathtt{X = I, II, III, ...}$   These references --> will help the reader to understand the motivation(s) that sustain the equations and techniques used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. <!--, particularly for the less experienced user.-->  The manual is, in any case, self-contained, and reading Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] is not really crucial in order to follow it. However, whenever needed, lattice methods or theoretical results <!-- from Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] --> will be quoted in the manual without further clarification, and the user will be referred to the appropriate explanation and/or derivation at the corresponding section/s of the monograph series. Having these monographs at hand, therefore, might prove to be useful, so a brief description of their content <!-- of our lattice theory monographs -- $\mathtt{The~Art-I}$, $\mathtt{-II}$ and $\mathtt{-III}$ -- --> can be found in the **Theory Monographs Guide**.
 
-
-which we will refer to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs. <!--with $\mathtt{X = I, II, III, ...}$  --> These references will help the reader to understand the motivation(s) that sustain the equations and techniques used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. <!--, particularly for the less experienced user.-->  The manual is, in any case, self-contained, and reading Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] is not mandatory in order to follow it. However, whenever needed, lattice methods or theoretical results <!-- from Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] --> will be quoted in the manual without further clarification, and the user will be referred to the appropriate explanation and/or derivation at the corresponding section/s of the monograph series. Having these monographs at hand might therefore prove useful, so a brief description of their content <!-- of our lattice theory monographs -- $\mathtt{The~Art-I}$, $\mathtt{-II}$ and $\mathtt{-III}$ -- --> can be found below in the **Theory Monographs Guide**.
-
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and sucessive improved versions are continuously developed. We typically release a new version publicly whenever either of the following aspects has been added: code algorithm improvements, new lattice methods, or new physics modules. Sucessive versions of the code always maintain previous lattice methods and physics modules, whereas algorithmic improvements might however supersede (and hence substitute) previous parts of the code. The latter typically concern the very internal tripes of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, as *e.g.* the Fourier transform or internal communication between cores in a cluster, which the majority of users will never modify. <!-- While the more-in-depth  --> Details of the different code versions can be found in the **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Versions Guide**. This manual can be apporached, at any rate, independently of the version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ that the reader is using (or intending to use). Many sections are common to all versions, and whenever new physics modules or features presented discussed in the manual are linked to specific versions of the code, this will be clearly specified. We recommend you in any case to always work with the latest version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ (*version 2.0* at the time of writing, May 2026), if possible.
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and sucessive improved versions are continuously developed. We typically release a new version publicly whenever either of the following aspects has been added: code algorithm improvements, new lattice methods, or new physics modules. Sucessive versions of the code always maintain previous lattice methods and physics modules, whereas algorithmic improvements might however supersede (and hence substitute) previous parts of the code. The latter typically concern the very internal tripes of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, as *e.g.* the Fourier transform or internal communication between cores in a cluster, which the majority of users will never touch. <!-- While the more-in-depth  --> Details of the different versions of the code can be found in the **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Versions Guide**. This manual can be approached, in any case, independently of the version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ that the reader is using (or intending to use). Most sections of the manual are common to all $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ versions, and whenever new physics modules and/or features presented in the manual require specific versions of the code, this will be clearly specified. We recommend to download and work always with the latest version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ (*version 2.0* at the time of writing, May 2026).
 
 <!-- a brief summary of the code versions is provided below: 
 
@@ -75,15 +73,14 @@ The present manual is structured as follows:
   space
 -->
 
--  Section [Gravitational Wave Dynamics](GW.md) explains how to use the gravitational wave (GW) module of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, so that the production of GWs can be  computed in simulations with scalar and/or gauge fields. While this section is suitable for *versions 1.1, 1.2* and *1.3* of the code, we currently recommend to use instead $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
+-  Section [Gravitational Wave Dynamics](GW.md) explains how to use the gravitational wave (GW) module of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, so that the production of GWs can be  computed in simulations with scalar and/or gauge fields. While this section is suitable for *versions 1.1, 1.2* and *1.3* of the code, we recommend to use instead $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
    
  <!--
   space
 -->
 
 
--  Section [Initial Conditions](IC.md) explains how to set up the initial condition of the different fields that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. This includes arbitrary spectra of scalar and/or gauge fields, and in the case of scalar-gauge theories ([Abelian $U(1)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) and [Non-Abelian $SU(2)$ Scalar-Gauge Dynamics](My first model of gauge fields.md)). 
-Different initial considitions require different versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, as we will indicate in each case.
+-  Section [Initial Conditions](IC.md) explains how to set up the initial condition of the different fields that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. This includes arbitrary spectra of scalar and/or gauge fields, and in the case of scalar-gauge theories ([Abelian $U(1)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) and [Non-Abelian $SU(2)$ Scalar-Gauge Dynamics](My first model of gauge fields.md)). This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, though different features or field content requires different code versions, as we will indicate in each case.
 
    
  <!--
@@ -113,6 +110,10 @@ Different initial considitions require different versions of $\mathcal{C}\mathtt
 The manual is also complemented with few appendices: 
 
 - [Installation](Installation.md) describes the installation process in detail, of both $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ itself and of different tools and libraries that it uses (some of them compulsory, others optional). 
+
+ <!--
+  space
+-->
 
 - [Appendix: Parameters](Appendix: Parameters.md), [Appendix: Generic Model variables](Appendix: Generic Model variables.md), [Appendix: CMake Flags](Appendix: CMake Flags.md), and [List of Implemented Functions](List of Implemented Functions.md), which contain, respectively, a list of the most relevant parameters, variables, functions, and CMake flags, used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
