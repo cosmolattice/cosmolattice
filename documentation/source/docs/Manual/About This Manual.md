@@ -8,9 +8,9 @@ This is the manual for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, a m
 *The art of simulating the early Universe, Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]), 
 
 
-which, from now on,  will be referred to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs. <!--with $\mathtt{X = I, II, III, ...}$  --> These references will help the reader to understand the motivation(s) that sustain the equations and techniques used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. <!--, particularly for the less experienced user.-->  The manual is in any case self-contained, and reading Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] is not strictly required in order to follow it. However, whenever needed, lattice methods or theoretical results <!-- from Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] --> will be quoted in the manual without further clarification, and the user will be referred to the appropriate explanation and/or derivation at the corresponding section/s of the monograph series. Having these monographs at hand might therefore prove useful, so a brief description of their content <!-- of our lattice theory monographs -- $\mathtt{The~Art-I}$, $\mathtt{-II}$ and $\mathtt{-III}$ -- --> can be found below in the **Theory Monographs Guide**.
+which we will refer to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs. <!--with $\mathtt{X = I, II, III, ...}$  --> These references will help the reader to understand the motivation(s) that sustain the equations and techniques used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. <!--, particularly for the less experienced user.-->  The manual is, in any case, self-contained, and reading Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] is not mandatory in order to follow it. However, whenever needed, lattice methods or theoretical results <!-- from Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] --> will be quoted in the manual without further clarification, and the user will be referred to the appropriate explanation and/or derivation at the corresponding section/s of the monograph series. Having these monographs at hand might therefore prove useful, so a brief description of their content <!-- of our lattice theory monographs -- $\mathtt{The~Art-I}$, $\mathtt{-II}$ and $\mathtt{-III}$ -- --> can be found below in the **Theory Monographs Guide**.
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and sucessive improved versions are continuously developed. We typically release a new version publicly whenever either of the following aspects has been added: code algorithm improvements, new lattice methods, or new physics modules. Sucessive versions of the code always maintain previous lattice methods and physics modules, whereas algorithmic improvements might however supersede (and hence substitute) previous parts of the code (these typically concern the very internal tripes of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, as *e.g.* the Fourier transform or internal communication between cores in a cluster, that the majority of users will not touch). <!-- While the more-in-depth  --> Details of the different code versions can be found in the **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Versions Guide**. 
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and sucessive improved versions are continuously developed. We typically release a new version publicly whenever either of the following aspects has been added: code algorithm improvements, new lattice methods, or new physics modules. Sucessive versions of the code always maintain previous lattice methods and physics modules, whereas algorithmic improvements might however supersede (and hence substitute) previous parts of the code. The latter typically concern the very internal tripes of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, as *e.g.* the Fourier transform or internal communication between cores in a cluster, which the majority of users will never modify. <!-- While the more-in-depth  --> Details of the different code versions can be found in the **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Versions Guide**. This manual can be apporached, at any rate, independently of the version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ that the reader is using (or intending to use). Many sections are common to all versions, and whenever new physics modules or features presented discussed in the manual are linked to specific versions of the code, this will be clearly specified. We recommend you in any case to always work with the latest version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ (*version 2.0* at the time of writing, May 2026), if possible.
 
 <!-- a brief summary of the code versions is provided below: 
 
@@ -28,65 +28,69 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package
 
 The present manual is structured as follows:
 
--  In Section [Overview](Overview.md) we provide an overview on $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, introduce the file structure of the code, and present (the continuum version of) the field equations and features that sucessive versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ have gone incorporating in time.   
+<!-- Common to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$: -->
+
+-  Section [Overview](Overview.md) provides an overview on $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, introducing the file structure of the code, and the continuum version of the field equations, as well as features/capabilities of the code, that sucessive versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ have gone incorporating in time. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and we strongly recommend to read it to newcomers.  
+ 
  <!--
 -  In Section [Introduction to $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$](Introduction to $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.md) we briefly review physically-motivated scenarios suitable for lattice simulations, we introduce the file structure of the code, and we present the basic field equations that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is ready to solve.
 
 -  In Section [Brief review on lattice techniques](Brief review on lattice techniques.md) we review basic but necessary concepts on lattice techniques, including lattice gauge invariant field theory formulations. 
 -->
 
--  In Section [Scalar Field Dynamics](My first model of (singlet) scalar fields.md) we present all necessary steps to run an example model with interacting singlet scalar fields. This chapter is particularly relevant for a newbie, as we introduce the concept of **program variables**, relevant for choosing appropriate re-scalings of both field and space-time variables, and we review how to to compile and run $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, how to define a new model, how to introduce the different parameters of the simulation, and how to interpret the output produced by the code. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
-   
- <!--
-  space
--->
--  In Section [Abelian $U(1)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) we explain how to simulate models with scalar fields interacting among themselves and charged under a U(1) gauge symmetry, and hence (gauge-)coupled to Abelian gauge fields. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
+-  Section [Scalar Field Dynamics](My first model of (singlet) scalar fields.md) presents all necessary steps to run an example model with interacting singlet scalar fields. This chapter is particularly relevant for a newbie, as we introduce the concept of **program variables**, relevant for choosing appropriate re-scalings of both field and space-time variables, and we review how to to compile and run $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, how to define a new model, how to introduce the different parameters of the simulation, and how to interpret the output produced by the code. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
    
  <!--
   space
 -->
 
--  In Section [Non-Abelian $SU(2)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) we explain how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can simulate models with scalar fields interacting among themselves and charged under a SU(2) gauge symmetry, and hence (gauge-)coupled to non-Abelian SU(2) gauge fields. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
+-  Section [Abelian $U(1)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) explains how to simulate models with scalar fields interacting among themselves and charged under a U(1) gauge symmetry, and hence interacting also with Abelian gauge fields. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
    
  <!--
   space
 -->
 
--  In Section [Axion-Gauge Dynamics](Axion-Gauge.md) we discuss the lattice formulation in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ of the interaction of an axion-like particle (ALP) with an Abelian gauge sector through the coupling $\phi F\tilde F$. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
-
+-  Section [Non-Abelian $SU(2)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) explains how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can simulate models with scalar fields interacting among themselves and charged under a SU(2) gauge symmetry, and hence interacting also with non-Abelian SU(2) gauge fields. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
    
  <!--
   space
 -->
 
--  In Section [Cosmic Defects](Defects.md) we discuss how the creation of cosmic defects can be studied with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. We explain techniques to accelerate the achievement of {\it scaling} in a cosmic defect network (in particular for cosmic strings and domain walls), and also introduce specific observables for each type of defect. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
-   
- <!--
-  space
--->
-
--  In Section [Non-minimal Scalar Fields Dynamics](NMC.md) we expand over the previous section on singlet scalar fields, explaining how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ also deals with lattice formulations of non-canonical interactions of scalar fields, either non-minimally coupled to gravity via $\phi^2 R$, or with non-minimal kinetic terms, $\mathcal{G}_{ab}\partial_{\mu}\phi_a \partial^{\mu}\phi_b$. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
-   
- <!--
-  space
--->
-
--  In Section [Gravitational Wave Dynamics](GW.md) we .... While this section is suitable for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *versions 1.1, 1.2* and *1.3*, we actually recommend to use instead $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
-   
- <!--
-  space
--->
-
-
--  In Section [Initial Conditions](IC.md) we . Different initial considitions require different versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
+-  Section [Axion-Gauge Dynamics](Axion-Gauge.md) discusses how to simulate scenarios in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ where there are an axion-like particle (ALP) and an Abelian gauge sector, interacting through the coupling $\phi F\tilde F$. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
 
    
  <!--
   space
 -->
 
--  In Section [Simulations in (2+1) and (1+1) dimensions](2dSims.md) we .... Different initial considitions require different versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. This section requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
+-  Section [Cosmic Defects](Defects.md) discusses how the creation of cosmic defects can be studied with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. We explain techniques to accelerate the achievement of {\it scaling} in a cosmic defect network (in particular for cosmic strings and domain walls), and also introduce specific observables for each type of defect. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
+   
+ <!--
+  space
+-->
 
+-  Section [Non-minimal Scalar Fields Dynamics](NMC.md) expands over previous sections on scalar fields, explaining how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can also deal with non-canonical interactions of scalar fields, either non-minimally coupled to gravity via $\phi^2 R$, or with non-minimal kinetic terms, $\mathcal{G}_{ab}\partial_{\mu}\phi_a \partial^{\mu}\phi_b$. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
+   
+ <!--
+  space
+-->
+
+-  Section [Gravitational Wave Dynamics](GW.md) explains how to use the gravitational wave (GW) module of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, so that the production of GWs can be  computed in simulations with scalar and/or gauge fields. While this section is suitable for *versions 1.1, 1.2* and *1.3* of the code, we currently recommend to use instead $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
+   
+ <!--
+  space
+-->
+
+
+-  Section [Initial Conditions](IC.md) explains how to set up the initial condition of the different fields that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. This includes arbitrary spectra of scalar and/or gauge fields, and in the case of scalar-gauge theories ([Abelian $U(1)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) and [Non-Abelian $SU(2)$ Scalar-Gauge Dynamics](My first model of gauge fields.md)). 
+Different initial considitions require different versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, as we will indicate in each case.
+
+   
+ <!--
+  space
+-->
+
+-  Section [Simulations in (2+1) and (1+1) dimensions](2dSims.md) explains how to simulate scalar field dynamics in (2+1) and (1+1) dimensions. This section requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
 
    
  <!--
@@ -94,12 +98,13 @@ The present manual is structured as follows:
 -->
 
 
--  In Section [What $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ does in detail](What $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ does in detail.md) we elaborate on the physics captured by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including details on how fields are initialized, how the equations of motion are solved, and what are the relevant observables that can be measured in a run. 
+-  Section [What $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ does in detail](What $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ does in detail.md) elaborates on the physics captured by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including details on how fields are initialized, how the equations of motion are solved, and what are the relevant observables that can be measured in a run. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
    
  <!--
   space
 -->
--  In Section [Useful features: parallel support, backing up and others](Useful features: parallel support, backing up and others.md) we describe some of the technical features implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including its parallel support and back-up options.
+
+-  Section [Useful features: parallel support, backing up and others](Useful features: parallel support, backing up and others.md) describes some of the technical features implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including its parallel support and back-up options. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
     
  <!--
   space
@@ -109,7 +114,7 @@ The manual is also complemented with few appendices:
 
 - [Installation](Installation.md) describes the installation process in detail, of both $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ itself and of different tools and libraries that it uses (some of them compulsory, others optional). 
 
-- The sections [Appendix: Parameters](Appendix: Parameters.md), [Appendix: Generic Model variables](Appendix: Generic Model variables.md), [Appendix: CMake Flags](Appendix: CMake Flags.md), and [List of Implemented Functions](List of Implemented Functions.md) contain, respectively, a list of the most relevant parameters, variables, functions, and CMake flags, used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
+- [Appendix: Parameters](Appendix: Parameters.md), [Appendix: Generic Model variables](Appendix: Generic Model variables.md), [Appendix: CMake Flags](Appendix: CMake Flags.md), and [List of Implemented Functions](List of Implemented Functions.md), which contain, respectively, a list of the most relevant parameters, variables, functions, and CMake flags, used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
 ------
 
