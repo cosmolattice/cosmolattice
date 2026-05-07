@@ -1,9 +1,10 @@
 # Cosmolattice Manual
 
 This website has been generated from the [CosmoLattice user manual](https://arxiv.org/abs/2102.01031)
+
 ## Table of contents
 
-- [About This Manual](About This Manual.md)
+- [**About This Manual**](About This Manual.md)
 - [Quick installation and execution](Quick installation and execution.md)
 - [Conventions and Notation](Conventions and Notation.md)
 <!-- - [Overview](Overview.md) -->

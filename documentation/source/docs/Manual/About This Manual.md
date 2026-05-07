@@ -1,12 +1,12 @@
-This is the manual for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, a modern package for lattice simulations of the dynamics of interactive fields in an expanding Universe. **This manual focuses on explaining how to use $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and not on the theory and/or techniques behind the code**, <!--The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ --> which can be found, instead, in our monographic series on latttice techniques, *"The art of simulating the early Universe"*, 
+This is the manual for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, a modern package for lattice simulations of the dynamics of interactive fields in an expanding Universe. **This manual focuses on explaining how to use $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and not on the theory and/or techniques behind the code**. The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can be found, instead, in our monographic series on latttice techniques, *"The art of simulating the early Universe"*, 
 
-*Part I. Integration techniques and canonical cases.* (Ref. [@Figueroa_2020rrl]), 
+*Part I. Integration techniques and canonical cases.* (Ref. [@Figueroa_2020rrl])
 
-*Part II. Non-canonical cases and gravitational waves.* (Ref. [@Baeza-Ballesteros:2025tme]), 
+*Part II. Non-canonical cases and gravitational waves.* (Ref. [@Baeza-Ballesteros:2025tme]) 
 
-*Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]). 
+*Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]) 
 
-These reviews, which from now on will be referred to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs, <!--with $\mathtt{X = I, II, III, ...}$   These references --> will help the reader to understand the motivation(s) that sustain the equations and techniques used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. <!--, particularly for the less experienced user.-->  The manual is, in any case, self-contained, and reading Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] is not really crucial in order to follow it. However, whenever needed, lattice methods or theoretical results <!-- from Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] --> will be quoted in the manual without further clarification, and the user will be referred to the appropriate explanation and/or derivation at the corresponding section/s of the monograph series. Having these monographs at hand, therefore, might prove to be useful, so a brief description of their content <!-- of our lattice theory monographs -- $\mathtt{The~Art-I}$, $\mathtt{-II}$ and $\mathtt{-III}$ -- --> can be found in the **Theory Monographs Guide**.
+which we refer to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs. <!--with $\mathtt{X = I, II, III, ...}$   These references  explain the motivation(s) that sustain the equations and techniques used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.--> <!--, particularly for the less experienced user.-->  Reading Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] is however not necessary in order to follow the manual, which is self-contained. Whenever lattice methods or theoretical results <!-- from Refs. [@Figueroa_2020rrl,@Baeza-Ballesteros:2025tme,@Figueroa_2026XYZ] --> are quoted in the manual without further explanation, the user will be referred to the corresponding part of the monograph series, for appropriate clarification. Having these monographs at hand, might therefore prove to be useful. A brief description of their content <!-- of our lattice theory monographs -- $\mathtt{The~Art-I}$, $\mathtt{-II}$ and $\mathtt{-III}$ -- --> can be found in the **Theory Monographs Guide**.
 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and sucessive improved versions are continuously developed. We typically release a new version publicly whenever either of the following aspects has been added: code algorithm improvements, new lattice methods, or new physics modules. Sucessive versions of the code always maintain previous lattice methods and physics modules, whereas algorithmic improvements might however supersede (and hence substitute) previous parts of the code. The latter typically concern the very internal tripes of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, as *e.g.* the Fourier transform or internal communication between cores in a cluster, which the majority of users will never touch. <!-- While the more-in-depth  --> Details of the different versions of the code can be found in the **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Versions Guide**. This manual can be approached, in any case, independently of the version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ that the reader is using (or intending to use). Most sections of the manual are common to all $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ versions, and whenever new physics modules and/or features presented in the manual require specific versions of the code, this will be clearly specified. We recommend to download and work always with the latest version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ (*version 2.0* at the time of writing, May 2026).
 
@@ -28,7 +28,7 @@ The present manual is structured as follows:
 
 <!-- Common to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$: -->
 
--  Section [Overview](Overview.md) provides an overview on $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, introducing the file structure of the code, and the continuum version of the field equations, as well as features/capabilities of the code, that sucessive versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ have gone incorporating in time. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and we strongly recommend to read it to newcomers.  
+-  Section [Overview](Overview.md) provides an overview on $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, introducing the file structure of the code, and the continuum version of the field equations, as well as features/capabilities of the code, that sucessive versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ have gone incorporating in time. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and we strongly recommend newcomers to read it.  
  
  <!--
 -  In Section [Introduction to $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$](Introduction to $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.md) we briefly review physically-motivated scenarios suitable for lattice simulations, we introduce the file structure of the code, and we present the basic field equations that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is ready to solve.
@@ -42,14 +42,16 @@ The present manual is structured as follows:
   space
 -->
 
--  Section [Abelian $U(1)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) explains how to simulate models with scalar fields interacting among themselves and charged under a U(1) gauge symmetry, and hence interacting also with Abelian gauge fields. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
+-  Section [Scalar-Gauge Dynamics](My first model of gauge fields.md) explains how to simulate models with scalar fields interacting among themselves and charged under a U(1) gauge symmetry (and hence interacting also with Abelian gauge fields), and under a SU(2) gauge symmetry [and thus interacting also with non-Abelian SU(2) gauge fields]. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
    
  <!--
   space
 -->
 
+ <!--
 -  Section [Non-Abelian $SU(2)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) explains how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can simulate models with scalar fields interacting among themselves and charged under a SU(2) gauge symmetry, and hence interacting also with non-Abelian SU(2) gauge fields. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
-   
+   -->
+
  <!--
   space
 -->

@@ -12,7 +12,7 @@ Unless otherwise specified, we use the following conventions throughout the docu
 
 -  Physical momenta are represented by ${\bf p}$, comoving momenta by ${\bf k}$, the $\alpha$-time Hubble rate is given by $\mathcal{H} = a'/a$, whereas the physical Hubble rate is denoted by $H = \mathcal{H}|_{\alpha = 0}$.
 
--  Cosmological parameters are fixed to the CMB values given in [@Aghanim_2018eyx;@Akrami_2018odb].
+<!-- -  Cosmological parameters are fixed to the CMB values given in [@Aghanim_2018eyx;@Akrami_2018odb].-->
 
 -  Our Fourier transform convention in the continuum is given by
 [](){ #eq_FTcont }
@@ -32,7 +32,9 @@ f({\bf n}) \equiv {1\over N^3}\sum_{\tilde n} e^{+i{2\pi\over N} {\bf \tilde n n
 
 -  A scalar field living in a generic lattice site $n = (n_o,{\bf n}) = (n_o,n_1,n_2,n_3)$, i.e. $\phi_n = \phi(n)$, will be simply denoted as $\phi$. If the point is displaced in the $\mu-$direction by one unit lattice spacing/time step, $n + \hat\mu$, we will then use the notation $n+\mu$ or simply by $+\mu$ to indicate this, so that the field amplitude in the new point is expressed as $\phi_{+\mu} \equiv \phi(n+\hat\mu)$.
 
--  When representing explicitly gauge fields on the lattice, we will automatically understand that they live in the middle of lattice points, i.e. $A_{\mu} \equiv A_{\mu}(n+{1\over2}\hat\mu)$. It follows then that e.g. $A_{\mu,+\nu} \equiv A_{\mu}\big(n + {1\over2}\hat\mu +  \hat\nu\big)$. In the case of links, we will use the notation $U_\mu \equiv U_{\mu,n} \equiv U_\mu(n+{1\over2}\hat\mu)$, and hence $U_{\mu,\pm\nu} = U_{\mu,n\pm\nu} \equiv U_\mu(n + {1\over2}\hat\mu \pm \hat\nu)$.
+-  When representing gauge fields on the lattice, it is usually understood that they live in between lattice points, half step away from each lattice site, i.e.~$A_{\mu} \equiv A_{\mu}(n+{1\over2}\hat\mu)$. It follows then that e.g.~$A_{\mu,+\nu} \equiv A_{\mu}\big(n + {1\over2}\hat\mu +  \hat\nu\big)$. 
+In the case of links, we will use the notation $U_\mu \equiv U_{\mu,n} \equiv U_\mu(n+{1\over2}\hat\mu)$, and hence $U_{\mu,\pm\nu} = U_{\mu,n\pm\nu} \equiv U_\mu(n + {1\over2}\hat\mu \pm \hat\nu)$. 
+In the very specific case of gauge fields coupled to a fluid, however, it is possible to consider an alternative formulation where the gauge fields are \textit{collocated}, i.e.~living at integer lattice sites $A_\mu \equiv A_\mu(n)$.
 
--  Even though the *lattice spacing* $\delta x$ and the *time step* $\delta t$ do not need to be equal, we will often speak loosely of corrections of order $\mathcal{O}(\delta x)$, independently of whether we are referring to the lattice spacing or the time step (the latter is actually always forced to be smaller than the former).
+-  Even though the *lattice spacing* $\delta x$ and the *time step* $\delta t$ do not need to be equal, we may often speak loosely of corrections of order $\mathcal{O}(\delta x)$, independently of whether we are referring to the lattice spacing or the time step. 
 
