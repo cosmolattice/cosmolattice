@@ -20,7 +20,7 @@ namespace TempLat
     using NonMinimalCouplings = typename NONMINCOUPLINGS::template Container<T>;
     static constexpr bool IsNonMinimallyCoupled = NONMINCOUPLINGS::howManyCouples() > 0;
 
-    NONMINCOUPLINGS xis;
+    NonMinimalCouplings xis;
 
     // Averages needed for non-minimal coupling
     T RI;

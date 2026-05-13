@@ -68,6 +68,7 @@ namespace TempLat
         // Relevant only for higher order evolvers.
         auto hubbleLaw = HubbleConstraint::get(model);
         model.aDotI = sqrt(hubbleLaw[2]);
+        if constexpr (Model::IsNonMinimallyCoupled) model.piAI = model.aDotI * pow(model.aI, 1 - model.alpha);
       }
     }
 

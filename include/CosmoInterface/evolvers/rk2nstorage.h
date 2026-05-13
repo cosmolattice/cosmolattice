@@ -12,6 +12,7 @@
 #include "CosmoInterface/evolvers/kernels/kernels.h"
 #include "CosmoInterface/evolvers/kernels/kernelstypes.h"
 #include "CosmoInterface/definitions/averages.h"
+#include "CosmoInterface/definitions/nonminimalcoupling.h"
 #include "CosmoInterface/extrafields.h"
 
 namespace TempLat
@@ -54,6 +55,10 @@ namespace TempLat
       kt.cache(model, tMinust0); // To be able to store some temporary info in the kernel type
 
       for (size_t i = 0; i < As.size(); ++i) { // loop over operations...
+        if constexpr (Model::IsNonMinimallyCoupled) {
+          model.RI = NonMinimalCoupling::R(model);
+        }
+
         ForEachField(
             Model, fld, n, if (!isDeactivated[fld][n]) {
               isDefined[fld][n] = delta(i, Delta->get(fld)(n), Kernels::get(fld, model, n, kt));
@@ -67,6 +72,9 @@ namespace TempLat
 
         if (expansion) {
           Averages::setAllAverages(model);
+          if constexpr (Model::IsNonMinimallyCoupled) {
+            model.RI = NonMinimalCoupling::R(model);
+          }
         }
         kt.cache(model, tMinust0);
       }
