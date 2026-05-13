@@ -1,12 +1,13 @@
 # Cosmolattice Manual
 
 This website has been generated from the [CosmoLattice user manual](https://arxiv.org/abs/2102.01031)
+
 ## Table of contents
 
 - [About This Manual](About This Manual.md)
 - [Quick installation and execution](Quick installation and execution.md)
 - [Conventions and Notation](Conventions and Notation.md)
-- [Overview](Overview.md)
+<!-- - [Overview](Overview.md) -->
 - [Introduction to CosmoLattice](Introduction to CosmoLattice.md)
 - [Brief review on lattice techniques](Brief review on lattice techniques.md)
 - [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md)
