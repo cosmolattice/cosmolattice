@@ -55,7 +55,6 @@ namespace TempLat
       T weight = synced ? 0.5 : 1.0;
 
       if constexpr (Model::Ns > 0) kickScalar(model, weight);
-      if (model.fldGWs != nullptr) kickGWs(model, weight);
       if constexpr (Model::NCs > 0) kickCS(model, weight);
       if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, weight);
       if constexpr (Model::NU1 > 0) kickU1Vector(model, weight);
@@ -75,7 +74,6 @@ namespace TempLat
       }
 
       if constexpr (Model::Ns > 0) driftScalar(model);
-      if (model.fldGWs != nullptr) driftGWs(model);
       if constexpr (Model::NCs > 0) driftCS(model);
       if constexpr (Model::NSU2Doublet > 0) driftSU2Doublet(model);
       if constexpr (Model::NU1 > 0) driftU1Vector(model);
@@ -93,7 +91,6 @@ namespace TempLat
     {
       if (!synced) {
         if constexpr (Model::Ns > 0) kickScalar(model, 0.5);
-        if (model.fldGWs != nullptr) kickGWs(model, 0.5);
         if constexpr (Model::NCs > 0) kickCS(model, 0.5);
         if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, 0.5);
         if constexpr (Model::NU1 > 0) kickU1Vector(model, 0.5);
@@ -132,6 +129,8 @@ namespace TempLat
 
     template <class Model> void kickGWs(Model &model, T w)
     {
+      say << w;
+      say << model.dt;
       (*model.piGWs) += (w * model.dt) * GWsKernels::get(model);
     }
 
@@ -263,7 +262,7 @@ namespace TempLat
       model.potAvI = average(Potential::potential(model));                                           // at t
     }
 
-  private:
+  public:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
     bool expansion;

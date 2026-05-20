@@ -88,9 +88,9 @@ namespace TempLat
           doWeRestart(false), // Boolean which tells if we are runing in restart mode or not. Set in the main.
           tolerance(par.get<T>("tolerance", -1)), // For adaptative solvers only
           powerSpectrumType(par.get<int>("PS_type", 1)), powerSpectrumVersion(par.get<int>("PS_version", 1)),
-          GWprojectorType(par.get<int>("GWprojectorType",
-                                       2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
           withGWs(par.get<bool>("withGWs", false, Important)),
+          eTypeGW(par.get<bool>("doLFforGWs", true, Important) ? LF : eType), // Type of evolution algorithm
+          GWprojectorType(par.get<int>("GWprojectorType", 2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
           flagON(par.get<bool>("flagON", false)),
           flagChiralPS(par.get<bool>("flagChiralPS", false)),
           unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false))
@@ -222,8 +222,9 @@ namespace TempLat
     const int powerSpectrumType;
     const int powerSpectrumVersion;
 
-    const int GWprojectorType;
     const bool withGWs;
+    const EvolverType eTypeGW;
+    const int GWprojectorType;
     const bool flagON;
     const bool flagChiralPS;
     const bool unbinnedSpectra;
