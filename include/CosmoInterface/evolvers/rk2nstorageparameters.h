@@ -61,6 +61,20 @@ namespace TempLat {
             return res;
         }
 
+        static size_t getEmbeddedStep(EvolverType eType){
+            //if(eType == RK3_4_A){
+             //   return 2;
+            //}else return 0;
+            return 0;
+        }
+
+        static bool isAdaptative(EvolverType eType){
+            //if(eType == RK3_4_A){
+            //    return true;
+            //}else return false;
+            return false;
+        }
+
 
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
