@@ -58,7 +58,7 @@ namespace TempLat
     {
       const bool exists = std::filesystem::exists(fn);
       if (mAppendMode) return !exists;
-      if (exists) {
+      if (exists && mToolbox->amIRoot()) {
         if (mOverwriteMode) std::filesystem::remove(fn);
         else throw(FileAlreadyExistsError(
             "Refusing to overwrite existing output file \"" + fn +

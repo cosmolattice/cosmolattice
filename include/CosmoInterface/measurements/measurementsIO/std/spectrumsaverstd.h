@@ -102,7 +102,7 @@ namespace TempLat
     std::shared_ptr<OutputStream<T>> makeOutputStream(const std::string &fname, bool amIRoot, bool appendMode,
                                                       bool overwriteMode)
     {
-      if (!appendMode && std::filesystem::exists(fname)) {
+      if (!appendMode && std::filesystem::exists(fname) && amIRoot) {
         if (overwriteMode) {
           std::filesystem::remove(fname);
         } else {

@@ -158,7 +158,7 @@ namespace TempLat
                         bool amIRoot)
     {
       const std::string fname = base_filename(runPar, model, true, true) + ".infos";
-      if (!runPar.appendMode && std::filesystem::exists(fname)) {
+      if (!runPar.appendMode && std::filesystem::exists(fname) && amIRoot) {
         if (runPar.overwriteMode) std::filesystem::remove(fname);
         else throw(FileAlreadyExistsError(
             "Refusing to overwrite existing output file \"" + fname +
