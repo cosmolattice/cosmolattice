@@ -48,15 +48,7 @@ namespace TempLat
               auto& s = model.extPS[i];
              
               if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
-                ForLoop(k, 0, Model::NU1-1,
-                    if(Model::ScalarU1AxionCouplings::couples(i,k))
-                    {
-                      model.fldS(i) = 0.0;                  // If a Scalar field is coupled to an AxionU1 field it is intialized with zero fluctuations.
-                      model.piS(i) = 0.0 ;
-                    }
-                    else{
                       fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI, kCutOff);                 
-                    });
               } else {
                 extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, kCutOff, PSType);
               }
