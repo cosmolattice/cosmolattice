@@ -14,7 +14,10 @@ namespace TempLat {
      **/
      // References:
      // - RK3_3:  https://arxiv.org/pdf/2101.05320
-     // - RK3_4:  https://ntrs.nasa.gov/api/citations/19940029698/downloads/19940029698.pdf . Can be made adaptive (embedded second order method)
+     // - RK3_4:  https://ntrs.nasa.gov/api/citations/19940029698/downloads/19940029698.pdf
+     //   The adaptive "_A" variants (RK2_A/RK3_3_A/RK3_4_A/RK4_5_A) reuse these same
+     //   coefficients and adjust dt via a PROXY error estimate (last-stage increment
+     //   magnitude); no embedded second-order weights are used.
      // - RK4_5:  https://arxiv.org/pdf/2101.05320 RK4CK
 
     template<typename T>
@@ -23,8 +26,19 @@ namespace TempLat {
         /* Put public methods here. These should change very little over time. */
         RK2NStorageParameters() = default;
 
+        // Maps an adaptive ("_A") variant to its underlying base RK2N method, so that the
+        // adaptive variants reuse exactly the base method's coefficients. Non-adaptive types
+        // pass through unchanged.
+        static EvolverType baseType(EvolverType eType){
+            if (eType == RK2_A) return RK2;
+            if (eType == RK3_3_A) return RK3_3;
+            if (eType == RK3_4_A) return RK3_4;
+            if (eType == RK4_5_A) return RK4_5;
+            return eType;
+        }
 
         static std::vector<T> getAs(EvolverType eType){
+            eType = baseType(eType);
             std::vector<T> res;
 
             if (eType == RK2) res = {0, -0.5};
@@ -36,6 +50,7 @@ namespace TempLat {
         }
 
         static std::vector<T> getBs(EvolverType eType){
+            eType = baseType(eType);
             std::vector<T> res;
 
             if (eType == RK2) res = {0.5, 1.0};
@@ -47,6 +62,7 @@ namespace TempLat {
         }
 
         static size_t order(EvolverType eType){
+            eType = baseType(eType);
             size_t res = 2;
             if(eType == RK3_3) res = 3;
             if(eType == RK3_4) res = 3;
@@ -56,23 +72,21 @@ namespace TempLat {
 
 
         static bool isRK2n(EvolverType ev){
+            ev = baseType(ev);
             bool res = false;
             if(ev == RK2 or ev == RK3_3 or ev == RK3_4 or ev == RK4_5) res = true;
             return res;
         }
 
         static size_t getEmbeddedStep(EvolverType eType){
-            //if(eType == RK3_4_A){
-             //   return 2;
-            //}else return 0;
+            // Inert: the adaptive variants use the PROXY error estimate (magnitude of the
+            // last-stage increment), which needs no embedded (b-hat) weights. This hook is
+            // kept returning 0 so nothing downstream attempts a (non-existent) embedded step.
             return 0;
         }
 
         static bool isAdaptative(EvolverType eType){
-            //if(eType == RK3_4_A){
-            //    return true;
-            //}else return false;
-            return false;
+            return (eType == RK2_A or eType == RK3_3_A or eType == RK3_4_A or eType == RK4_5_A);
         }
 
 
