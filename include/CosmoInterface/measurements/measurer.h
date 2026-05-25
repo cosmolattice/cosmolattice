@@ -45,6 +45,12 @@ namespace TempLat
                        "", par.getFlushFreq(),
                        static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutFreq)),
                        static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.tOutInfreq)), par.unbinnedSpectra),
+          // NOTE (adaptive dt): the output cadences below are step counts computed ONCE from
+          // the FIXED initial par.dt, and areWeMeasuring() triggers on the integer step index.
+          // Under an adaptive evolver (RK*_A, which varies dt) the PHYSICAL time between
+          // measurements therefore drifts away from tOutFreq/tOutInfreq/... , and end-of-run
+          // detection is likewise off. Acceptable for now; see follow-up bead to make the
+          // cadence time-based (trigger when t crosses the next output time).
           outputFreq(static_cast<int>(round(par.tOutFreq / par.dt))),         // Number of steps between frequent output
           infreqOutputFreq(static_cast<int>(round(par.tOutInfreq / par.dt))), // Number of steps between infrequent output
           rareOutputFreq(static_cast<int>(round(par.tOutRareFreq / par.dt))), // Number of steps between rare output

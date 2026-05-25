@@ -37,6 +37,9 @@ namespace TempLat
       // RK2N needs extra memory, allocated in the fields
       if (RK2NStorageParameters<T>::isRK2n(type)) {
         rk2n->setDelta(extraFlds);
+        // Adaptive RK2N additionally borrows the y_n backup buffer.
+        if (RK2NStorageParameters<T>::isAdaptative(type))
+          rk2n->setBackup(extraFlds);
       }
 
       if (lf == nullptr && vv == nullptr && (rk2n == nullptr || !RK2NStorageParameters<T>::isRK2n(type)))
