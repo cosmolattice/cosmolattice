@@ -55,9 +55,6 @@ namespace TempLat
       kt.cache(model, tMinust0); // To be able to store some temporary info in the kernel type
 
       for (size_t i = 0; i < As.size(); ++i) { // loop over operations...
-        if constexpr (Model::IsNonMinimallyCoupled) {
-          model.RI = NonMinimalCoupling::R(model);
-        }
 
         ForEachField(
             Model, fld, n, if (!isDeactivated[fld][n]) {
@@ -72,9 +69,7 @@ namespace TempLat
 
         if (expansion) {
           Averages::setAllAverages(model);
-          if constexpr (Model::IsNonMinimallyCoupled) {
-            model.RI = NonMinimalCoupling::R(model);
-          }
+          sync(model,tMinust0);
         }
         kt.cache(model, tMinust0);
       }
@@ -105,11 +100,15 @@ namespace TempLat
       }
     }
 
-    // This function is called before doing the measurements. It is used only to set aDotI to its correct value in case
+    // This function is called before doing the measurements or in the case of NMC evolution to sync the value of R obtained from the volumen averages of the matter fields. It is used to set aDotI to its correct value in case
     // of a background expansion.
     void sync(Model &model, T tMinust0)
     {
       //  if(fixedBackground) model.aDotI = aBackground.dot(tMinust0);
+      
+      if constexpr (Model::IsNonMinimallyCoupled) {
+            model.RI = NonMinimalCoupling::R(model);
+      }
     }
 
     void setDelta(ExtraFields<Model> extraFlds) { Delta = extraFlds.getAllFlds1(); }
