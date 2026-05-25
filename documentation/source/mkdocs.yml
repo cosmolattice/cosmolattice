@@ -96,6 +96,12 @@ use_directory_urls: false # (optional) for better links without .html extension
 
 nav:
   - Home: index.md
+  - Code: 
+      - "What is CosmoLattice": "code/HowToCiteCL.md"
+      - "How to cite CosmoLattice": "code/HowToCiteCL.md"
+      - "Download": "code/Download.md"
+      - "Features": "code/Features.md"
+      - "Links": "code/index.md"
   - API:
       - "Links": "CosmoLattice/links.md"
       - "Classes":
@@ -119,24 +125,25 @@ nav:
       - "Macros": "CosmoLattice/macros.md"
       - "Files": "CosmoLattice/files.md"
   #- Technical Notes:#
-  - Theoretical Framework:
+  - Theory Framework:
       #- "Power spectra": "tech_notes/Power spectra.md"#
       #- "Gravitational Waves": "tech_notes/Gravitational waves.md"#
       #- "Gravitational Waves from U(1) Gauge Theories": "tech_notes/Gravitational waves from U(1) gauge theories.md"#
-      - "Monographic Reviews on Lattice Cosmology Techniques": "th_framework/MonographicReviews.md"
+      - "<span style='font-size:0.85em; font-style:italic;'>Theory Framework Guide</span>": "th_framework/TF_readme.md"
+      - "Monographic Reviews on LCT": "th_framework/MonographicReviews.md"
+      - "Field Discretization Primer": "th_framework/Brief_Review_On_Lattice_Techniques.md"
       - "Technical Notes": "th_framework/TechnicalNotes.md"
       - "Technical Notes (online)":
         -  "Power Spectrum (Note I)": "th_framework/tech_notes/Power spectra.md"
         -  "GWs from Scalars (Note II)": "th_framework/tech_notes/Gravitational waves.md"
         -  "GWs from U(1) Scalar-Gauge theories (Note III)": "th_framework/tech_notes/Gravitational waves from U(1) gauge theories.md"
-  - Online Manual:
-      - "<span style='font-size:0.85em; font-style:italic;'>Quick installation and execution</span>": "Manual/Quick installation and execution.md"
-      - "<span style='font-size:0.85em; font-style:italic;'>Conventions and Notation</span>": "Manual/Conventions and Notation.md"
-      - "<span style='font-size:0.85em; font-style:italic;'>How to cite CosmoLattice</span>": "Manual/HowToCiteCL.md"
+  - User Manual:
       - "<span style='font-weight:bold;'>About This Manual</span>": "Manual/About This Manual.md"
+      - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- Quick installation and execution</span>": "Manual/Quick installation and execution.md"
+      - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- Conventions and Notation</span>": "Manual/Conventions and Notation.md"
+      - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- How to cite CosmoLattice</span>": "Manual/HowToCiteCL.md"
       #- "Overview": "Manual/Overview.md"
       - "<span style='font-weight:bold;'>Introduction to CosmoLattice</span>": "Manual/Introduction to CosmoLattice.md"
-      - "<span style='font-weight:bold;'>Field Discretization Primer</span>": "Manual/Brief review on lattice techniques.md"
       - "<span style='font-weight:bold;'>Scalar Field Dynamics</span>": "Manual/My first model of (singlet) scalar fields.md"
       - "<span style='font-weight:bold;'>Scalar-Gauge Theories</span>": "Manual/My first model of gauge fields.md"
       #- "<span style='font-weight:bold;'>Non-Abelian Gauge Theories</span>": "Manual/My first model of gauge fields.md"#
