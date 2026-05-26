@@ -28,8 +28,6 @@ namespace TempLat::KernelsTypes
     void cache(Model &model) {}
   };
 
-  template <class Model, class T> auto getDt(Model &model, EoM<T> eom) { return model.dt; }
-  template <class Model, class T> auto setDt(Model &model, EoM<T> eom, T dt) { model.dt = dt; }
 } // namespace TempLat::KernelsTypes
 
 #endif

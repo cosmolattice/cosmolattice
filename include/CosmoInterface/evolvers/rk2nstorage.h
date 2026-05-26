@@ -36,6 +36,16 @@ namespace TempLat
     using T = typename Model::FloatType;
 
     /* Put public methods here. These should change very little over time. */
+    // NOTE on adaptive clamps: `dtProposed`, `dtMin`, and `dtMax` below are seeded
+    // ONCE from `model.dt` at construction time. The adaptive controller never
+    // re-reads `model.dt` to refresh them — `model.dt` is mutated in-loop and
+    // the clamps stay fixed. Callers must therefore set `model.dt` to the
+    // intended INITIAL dt BEFORE constructing the evolver. (Adaptive cooling
+    // drivers `mccooling.cpp` / `mccoolingmeasurer.h` do this explicitly; the
+    // standard `Evolver<>` wrapper relies on `model.dt = runParams.dt` already
+    // having been set by the model's constructor.) If you ever expose
+    // user-overridable dt floors/ceilings, add them to `RunParameters` and pass
+    // them through here.
     RK2NStorage(Model &model, RunParameters<T> runParams)
         : type(runParams.eType), dt(model.dt), As(RK2NStorageParameters<T>::getAs(type)),
           Bs(RK2NStorageParameters<T>::getBs(type)), expansion(runParams.expansion),
@@ -68,7 +78,7 @@ namespace TempLat
 
       if (!adaptive) {
         // Fixed-dt path: unchanged behaviour.
-        dt = KernelsTypes::getDt(model, kt);
+        dt = model.dt;
         doStep(model, tMinust0, kt);
         return;
       }
@@ -80,7 +90,7 @@ namespace TempLat
       T ratio = T(0);
       bool accepted = false;
       do {
-        dt = KernelsTypes::getDt(model, kt); // current trial dt
+        dt = model.dt; // current trial dt
         snapshot(model);                     // back up y_n so a rejected step can be undone
         doStep(model, tMinust0, kt);         // attempt the step (overwrites the model fields)
         ratio = errorNorm() / tolerance;     // proxy local error relative to tolerance
@@ -173,6 +183,15 @@ namespace TempLat
       backup = extraFlds.getBackup();
       linkBackup = extraFlds.getLinkBackup();
     }
+
+    // Re-seed the adaptive controller's next-trial dt from model.dt. Use this
+    // when a long-lived evolver is reused across logically-distinct integration
+    // runs (e.g. MCCoolingMeasurer reuses a single evolver across MC sweeps) —
+    // without this call, the trial dt for the next run inherits the converged
+    // dt from the end of the previous run instead of starting from the
+    // caller's requested initial dt. No-op when not adaptive (the controller
+    // is never entered on the fixed-dt path).
+    void resetAdaptiveState(Model &model) { dtProposed = model.dt; }
 
     // Save the full dynamical state (all field species + scale-factor state) so an attempted
     // step can be undone if rejected. A plain elementwise copy is correct for every species
