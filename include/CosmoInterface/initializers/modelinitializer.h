@@ -48,7 +48,7 @@ namespace TempLat
       if (rPar.expansion) ScaleFactorInitializer::initializeScaleFactor(model, rPar);
 
       // Initialize scalar singlets:
-      if constexpr (Model::Ns > 0) ScalarSingletInitializer::initializeScalars(model, fg, extps, rPar.kCutoff, rPar.powerSpectrumType);
+      if constexpr (Model::Ns > 0) ScalarSingletInitializer::initializeScalars(model, fg, extps, rPar);
 
       // Initialize GWs:
       if (model.fldGWs != nullptr) GWsInitializer::initializeGWs(model);
@@ -59,7 +59,7 @@ namespace TempLat
 
       // Initialize the U1 gauge fields and complex scalars:
       if constexpr (Model::NCs > 0 || Model::NU1 > 0)
-        U1Initializer::initializeU1(model, fg, extps, rPar.kCutoff, extraFields);
+        U1Initializer::initializeU1(model, fg, extps, rPar, extraFields);
 
       Averages::setAllAverages(model);
       if constexpr (Model::IsNonMinimallyCoupled) model.RI = NonMinimalCoupling::R(model);

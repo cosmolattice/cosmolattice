@@ -38,14 +38,17 @@ namespace TempLat
     // --> Note: aDot has to be initialized before calling this function.
 
     template <class Model, typename T>
-    static void initializeU1(Model &model, FluctuationsGenerator<T> &fg, ExternalPowerSpectrumInitializer<T>& extps, T kCutOff, ExtraFields<Model> extraFlds)
+    static void initializeU1(Model &model, FluctuationsGenerator<T> &fg, ExternalPowerSpectrumInitializer<T>& extps, RunParameters<T> &rPar, ExtraFields<Model> extraFlds)
     {
-      if (model.getU1IC() == InitialConditionsType::RandomWithMatter)
-        initializeRandomWithMatterU1(model, fg, kCutOff);
-      else if (model.getU1IC() == InitialConditionsType::PlaneWavesZeroB)
-        initializePlaneWavesZeroBU1(model, fg, kCutOff, extraFlds);
-      else if (model.getU1IC() == InitialConditionsType::BunchDavisTransverseU1)
-        initializeBunchDavisTransverseU1(model, extps, kCutOff, extraFlds);
+      auto flagU1IC = rPar.U1IC;
+      if (rPar.U1IC == InitialConditionsType::U1::Default) flagU1IC = model.getU1IC();
+
+      if (flagU1IC == InitialConditionsType::U1::RandomWithMatter)
+        initializeRandomWithMatterU1(model, fg, rPar.kCutoff);
+      else if (flagU1IC == InitialConditionsType::U1::PlaneWavesZeroB)
+        initializePlaneWavesZeroBU1(model, fg, rPar.kCutoff, extraFlds);
+      else if (flagU1IC == InitialConditionsType::U1::BunchDavisTransverseU1)
+        initializeBunchDavisTransverseU1(model, extps, rPar.kCutoff, extraFlds);
       else
         throw(U1ICNotImplemented("The initial condition provided for U1 is not implemented."));
     }
