@@ -129,8 +129,6 @@ namespace TempLat
 
     template <class Model> void kickGWs(Model &model, T w)
     {
-      say << w;
-      say << model.dt;
       (*model.piGWs) += (w * model.dt) * GWsKernels::get(model);
     }
 

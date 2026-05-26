@@ -58,12 +58,9 @@ namespace TempLat
     inline void evolve(Model &model, T tMinust0) const
     {
 
-      sayMPI << LF;
       if (model.fldGWs != nullptr && typeGW == LF) {
-        sayMPI << "Running LF";
         lf->kickGWs(model, GWsynced ? 0.5 : 1.0);
         GWsynced = false;
-        sayMPI << average((*model.piGWs)(1_c,1_c));
       }
 
       if (type == LF) {
@@ -75,7 +72,7 @@ namespace TempLat
           throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
                                         "which dispatch between different evolvers. Abort."));
         else
-          vv->evolve(model, tMinust0, typeGW != LF);
+          vv->evolve(model, tMinust0, typeGW == type);
       }
 
       if (model.fldGWs != nullptr && typeGW == LF) lf->driftGWs(model);

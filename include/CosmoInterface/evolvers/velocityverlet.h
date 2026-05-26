@@ -99,7 +99,7 @@ namespace TempLat
         if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, w);
         if constexpr (Model::NU1 > 0) kickU1Vector(model, w);
         if constexpr (Model::NSU2 > 0) kickSU2Vector(model, w);
-        if (model.fldGWs != nullptr) kickGWs(model, w);
+        if (model.fldGWs != nullptr && evolveGWs) kickGWs(model, w);
 
         if (expansion && !fixedBackground) {
           storeMomentaAverages(model);
