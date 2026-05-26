@@ -33,7 +33,7 @@ namespace TempLat
     Evolver(Model &model, RunParameters<T> &rPar, ExtraFields<Model> extraFlds)
         : type(rPar.eType),
           typeGW(rPar.eTypeGW),
-          lf( (type == LF || typeGW == LF) ? std::make_shared<LeapFrog<T>>(model, rPar) : nullptr),
+          lf( (type == LF || (typeGW == LF && model.fldGWs != nullptr)) ? std::make_shared<LeapFrog<T>>(model, rPar) : nullptr),
           vv(VelocityVerletParameters<T>::isVerlet(type) ? std::make_shared<VelocityVerlet<T>>(model, rPar) : nullptr),
           rk2n(RK2NStorageParameters<T>::isRK2n(type) ? std::make_shared<RK2NStorage<Model>>(model, rPar) : nullptr),
           GWsynced(!rPar.doWeRestart)
@@ -57,7 +57,6 @@ namespace TempLat
 
     inline void evolve(Model &model, T tMinust0) const
     {
-
       if (model.fldGWs != nullptr && typeGW == LF) {
         lf->kickGWs(model, GWsynced ? 0.5 : 1.0);
         GWsynced = false;
@@ -88,6 +87,7 @@ namespace TempLat
         lf->kickGWs(model, 0.5);
         GWsynced = true;
       }
+
       if (type == LF) {
         lf->sync(model, tMinust0);
       } else if (RK2NStorageParameters<T>::isRK2n(type)) {
