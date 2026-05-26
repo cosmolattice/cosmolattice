@@ -44,7 +44,7 @@ namespace TempLat
     {
     }
 
-    template <class Model> void evolve(Model &model, T tMinust0)
+    template <class Model> void evolve(Model &model, T tMinust0, bool evolveGWs)
     {
       /*
        * Velocity Verlet can be understood as moving momenta by half step, fields by a step and momenta by half a step
@@ -69,7 +69,7 @@ namespace TempLat
         // We start by computing the kicks (pi_0 --> pi_1/2):
         if (expansion && !fixedBackground) kickScaleFactorHalf(model, w); // only if self-consistent expansion
 
-        if (model.fldGWs != nullptr) kickGWs(model, w);
+        if (model.fldGWs != nullptr && evolveGWs) kickGWs(model, w);
         if constexpr (Model::Ns > 0) kickScalar(model, w);
         if constexpr (Model::NCs > 0) kickCS(model, w);
         if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, w);
@@ -84,11 +84,11 @@ namespace TempLat
         }
 
         if constexpr (Model::Ns > 0) driftScalar(model, w);
-        if (model.fldGWs != nullptr) driftGWs(model, w);
         if constexpr (Model::NCs > 0) driftCS(model, w);
         if constexpr (Model::NSU2Doublet > 0) driftSU2Doublet(model, w);
         if constexpr (Model::NU1 > 0) driftU1Vector(model, w);
         if constexpr (Model::NSU2 > 0) driftSU2Vector(model, w);
+        if (model.fldGWs != nullptr && evolveGWs) driftGWs(model, w);
 
         if (expansion && !fixedBackground) storeFieldsAverages(model);
 
@@ -99,7 +99,7 @@ namespace TempLat
         if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, w);
         if constexpr (Model::NU1 > 0) kickU1Vector(model, w);
         if constexpr (Model::NSU2 > 0) kickSU2Vector(model, w);
-        if (model.fldGWs != nullptr) kickGWs(model, w);
+        if (model.fldGWs != nullptr && evolveGWs) kickGWs(model, w);
 
         if (expansion && !fixedBackground) {
           storeMomentaAverages(model);
