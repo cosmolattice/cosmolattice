@@ -14,6 +14,7 @@
 
 namespace TempLat
 {
+  MakeException(SICNotImplemented);
   /** @brief A class which is used to initialize the scalar singlets.
    *
    **/
@@ -39,35 +40,46 @@ namespace TempLat
      */
     template <class Model, typename T>
     static void initializeScalars(Model &model, const FluctuationsGenerator<T> &fg,
-                                  const ExternalPowerSpectrumInitializer<T> &extps, T kCutOff, int PSType)
+                                  const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar)
     {
-      if constexpr (Model::Ns > 0) {
-        
-        // We set fluctuations to the scalar singlets:
-            ForLoop(i, 0, Model::Ns-1, {
-              auto& s = model.extPS[i];
-             
-              if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
-                      fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI, kCutOff);                 
-              } else {
-                extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, kCutOff, PSType);
-              }
+
+      auto flagSIC = rPar.SIC;
+      if (rPar.SIC == InitialConditionsType::S::Default) flagSIC = InitialConditionsType::S::RandomWithMatter;
+
+      if (flagSIC == InitialConditionsType::S::RandomWithMatter)
+        initializeRandomScalar(model, fg, extps, rPar);
+      else
+        throw(SICNotImplemented("The initial condition provided for scalars is not implemented."));
             
-            });
-            
-            model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS;
-            model.piS = model.getFluctuationRatio(FieldsNumbering::piS()) * model.piS;
-            
-            // We set the initial homogeneous components of the fields and derivatives.
-            // model.fldCS0(i) and model.piCS0(i) are introduced in physical
-            // (dimensionful variables), so we transform them to program variables
-            // by dividing them by f_* and f_* omega_* respectively.
-        
-            model.fldS += model.fldS0 / model.fStar;                  // from the default ones.
-            model.piS += model.piS0 / model.fStar / model.omegaStar ;
+      model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS;
+      model.piS = model.getFluctuationRatio(FieldsNumbering::piS()) * model.piS;
+
+      // We set the initial homogeneous components of the fields and derivatives.
+      // model.fldCS0(i) and model.piCS0(i) are introduced in physical
+      // (dimensionful variables), so we transform them to program variables
+      // by dividing them by f_* and f_* omega_* respectively.
+
+      model.fldS += model.fldS0 / model.fStar;                  // from the default ones.
+      model.piS += model.piS0 / model.fStar / model.omegaStar ;
 
       }
+
+  private:
+
+    template <class Model, typename T>
+    static void initializeRandomScalar(Model &model, const FluctuationsGenerator<T> &fg,
+                                       const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar)
+    {
+      ForLoop(i, 0, Model::Ns - 1, {
+        auto &s = model.extPS[i];
+        if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
+          fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI, rPar.kCutoff);
+        } else {
+          extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, rPar.kCutoff, rPar.powerSpectrumType);
+        }
+      });
     }
+
   };
 } // namespace TempLat
 

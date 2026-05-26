@@ -99,8 +99,8 @@ namespace TempLat
       if (RK2NStorageParameters<T>::isRK2n(runPars.eType))
         allFlds1 = std::make_shared<FieldsAsInModel<Model>>(model, runPars, tag);
       if constexpr (Model::NU1 > 0)
-        if (model.getU1IC() == InitialConditionsType::PlaneWaves ||
-            model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) {
+        if (model.getU1IC() == InitialConditionsType::U1::PlaneWaves ||
+            model.getU1IC() == InitialConditionsType::U1::PlaneWavesZeroB) {
           fldU1IC = std::make_shared<VectorField<Field<T, Model::NDim>>>("U1ICfldU1", model.getToolBox(),
                                                                          runPars.getLatParams());
           piU1IC = std::make_shared<VectorField<Field<T, Model::NDim>>>("U1ICpiU1", model.getToolBox(),

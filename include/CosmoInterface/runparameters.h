@@ -10,9 +10,10 @@
 #include "TempLat/parameters/parameterparser.h"
 #include "TempLat/util/constants.h"
 #include "TempLat/lattice/latticeparameters.h"
-#include "CosmoInterface/evolvers/evolvertype.h"
 #include "TempLat/util/almostequal.h"
 #include "TempLat/util/floattostring.h"
+#include "CosmoInterface/evolvers/evolvertype.h"
+#include "CosmoInterface/initializers/initialconditionstype.h"
 
 namespace TempLat
 {
@@ -40,6 +41,8 @@ namespace TempLat
           tMax(par.get<T>("tMax", 10000 * dt, Important)), // Final time
           kCutoff(par.get<T>("kCutOff", std::numeric_limits<double>::infinity(),
                              Important)),                          // Momenta cutoff in spectra of initial fluctuations
+          SIC(par.get<InitialConditionsType::S>("ICtype_S", InitialConditionsType::S::Default)),
+          U1IC(par.get<InitialConditionsType::U1>("ICtype_U1", InitialConditionsType::U1::Default)),
           tOutFreq(par.get<T>("tOutputFreq", 10 * dt, Important)), // Printing time interval of frequent output
           tOutInfreq(par.get<T>("tOutputInfreq", 100 * dt, Important)), // Printing time interval of infrequent output
           tOutRareFreq(par.get<T>("tOutputRareFreq", 1000 * dt, Important)), // Printing time interval of rare output
@@ -175,6 +178,8 @@ namespace TempLat
     const T t0;
     const T tMax;
     const T kCutoff;
+    const InitialConditionsType::S SIC;
+    const InitialConditionsType::U1 U1IC;
     const T tOutFreq;
     const T tOutInfreq;
     const T tOutRareFreq;
