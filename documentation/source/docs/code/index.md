@@ -1,6 +1,8 @@
-# CosmoLattice
+<!-- # CosmoLattice
 
-## *A modern code for lattice simulations of scalar and gauge field dynamics in an expanding universe*
+## *A modern code for lattice simulations of scalar and gauge field dynamics in an expanding universe* 
+
+-->
 
 ### Documentation
 

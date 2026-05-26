@@ -8,7 +8,7 @@ The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}
 
 *Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]) 
 
-which will be refer to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs.
+which will be referred to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs.
 
 These monographs [@Figueroa_2020rrl,@BaezaBallesteros_2025tme,@Figueroa_2026XYZ] provide comprehensive discussions of lattice methods for scalar–gauge field theories in an expanding universe ($\mathtt{The~Art-I}$ [@Figueroa_2020rrl]), gravitational waves and non-canonical aspects of field theory - including interactions, initial conditions, dimensionality - ($\mathtt{The~Art-II}$ [@Baeza-Ballesteros:2025tme]), and fluid dynamics as a description of an ensemble of interacting scalar, gauge, and fermion fields ($\mathtt{The~Art-III}$ [@Figueroa_2026XYZ]). 
 
