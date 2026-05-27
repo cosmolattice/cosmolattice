@@ -14,10 +14,11 @@ namespace TempLat {
      **/
      // References:
      // - RK3_3:  https://arxiv.org/pdf/2101.05320
-     // - RK3_4:  https://ntrs.nasa.gov/api/citations/19940029698/downloads/19940029698.pdf
-     //   The adaptive "_A" variants (RK2_A/RK3_3_A/RK3_4_A/RK4_5_A) reuse these same
-     //   coefficients and adjust dt via a PROXY error estimate (last-stage increment
-     //   magnitude); no embedded second-order weights are used.
+     // - RK3_4:  https://ntrs.nasa.gov/api/citations/19940029698/downloads/19940029698.pdf .
+     //   The adaptive variant RK3_4_A reuses these coefficients and adjusts dt via a PROXY
+     //   error estimate (last-stage increment magnitude). RK3_4 is the carrier for adaptive
+     //   integration because it admits an embedded lower-order step; the other RK2N methods
+     //   do not, so they have no adaptive variant.
      // - RK4_5:  https://arxiv.org/pdf/2101.05320 RK4CK
 
     template<typename T>
@@ -26,14 +27,11 @@ namespace TempLat {
         /* Put public methods here. These should change very little over time. */
         RK2NStorageParameters() = default;
 
-        // Maps an adaptive ("_A") variant to its underlying base RK2N method, so that the
-        // adaptive variants reuse exactly the base method's coefficients. Non-adaptive types
+        // Maps the adaptive variant (currently only RK3_4_A) to its base RK2N method, so the
+        // adaptive variant reuses exactly the base method's coefficients. Non-adaptive types
         // pass through unchanged.
         static EvolverType baseType(EvolverType eType){
-            if (eType == RK2_A) return RK2;
-            if (eType == RK3_3_A) return RK3_3;
             if (eType == RK3_4_A) return RK3_4;
-            if (eType == RK4_5_A) return RK4_5;
             return eType;
         }
 
@@ -86,7 +84,7 @@ namespace TempLat {
         }
 
         static bool isAdaptative(EvolverType eType){
-            return (eType == RK2_A or eType == RK3_3_A or eType == RK3_4_A or eType == RK4_5_A);
+            return eType == RK3_4_A;
         }
 
 

@@ -26,13 +26,13 @@ namespace TempLat
    * - RK3_3: 3rd order 3 stages low storage Runge-Kutta
    * - RK3_4: 3rd order 4 stages low storage Runge-Kutta
    * - RK4_5: 4th order 5 stages low storage Runge-Kutta
-   * - RK2_A / RK3_3_A / RK3_4_A / RK4_5_A: adaptive (proxy error estimate) variants of the
-   *   corresponding RK2N method; they reuse the base method's coefficients and additionally
-   *   estimate the local error to adjust dt. Requires a positive `tolerance`.
+   * - RK3_4_A: adaptive (proxy error estimate) variant of RK3_4. Reuses RK3_4's coefficients
+   *   and additionally estimates the local error to adjust dt. RK3_4 is the carrier for the
+   *   adaptive scheme because it admits an embedded lower-order step; the other RK2N methods
+   *   do not have adaptive variants. Requires a positive `tolerance`.
    *
    **/
-  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_3, RK3_4, RK4_5,
-                     RK2_A, RK3_3_A, RK3_4_A, RK4_5_A };
+  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_3, RK3_4, RK4_5, RK3_4_A };
 
   std::istream &operator>>(std::istream &in, EvolverType &eType)
   {
@@ -60,14 +60,9 @@ namespace TempLat
       eType = RK3_4; // 3rd order 4 stages low storage RK
     else if (tmp == "RK4_5" || tmp == "10")
       eType = RK4_5; // 4th order 5 stages low storage RK
-    else if (tmp == "RK2_A")
-      eType = RK2_A; // adaptive RK2 (proxy error estimate)
-    else if (tmp == "RK3_3_A")
-      eType = RK3_3_A; // adaptive RK3_3 (proxy error estimate)
     else if (tmp == "RK3_4_A")
-      eType = RK3_4_A; // adaptive RK3_4 (proxy error estimate, primary adaptive carrier)
-    else if (tmp == "RK4_5_A")
-      eType = RK4_5_A; // adaptive RK4_5 (proxy error estimate)
+      eType = RK3_4_A; // adaptive RK3_4 (the only adaptive RK2N variant: RK3_4 admits an
+                       //                  embedded lower-order step; other RK2N methods do not)
     else if (tmp.empty()) {
     } // Otherwise crash for optional parameters.
     else
@@ -99,14 +94,8 @@ namespace TempLat
       return "RK3_4";
     else if (eType == RK4_5)
       return "RK4_5";
-    else if (eType == RK2_A)
-      return "RK2_A";
-    else if (eType == RK3_3_A)
-      return "RK3_3_A";
     else if (eType == RK3_4_A)
       return "RK3_4_A";
-    else if (eType == RK4_5_A)
-      return "RK4_5_A";
     else
       return "";
   }
