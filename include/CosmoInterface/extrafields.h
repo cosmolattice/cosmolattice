@@ -16,7 +16,6 @@
 #include "TempLat/lattice/algebra/complexalgebra/complexfield.h"
 #include "TempLat/lattice/algebra/su2algebra/su2doublet.h"
 #include "TempLat/lattice/algebra/su2algebra/su2liealgebrafield.h"
-#include "TempLat/lattice/algebra/su2algebra/su2field.h"
 
 namespace TempLat
 {
@@ -99,17 +98,6 @@ namespace TempLat
 
       if (RK2NStorageParameters<T>::isRK2n(runPars.eType))
         allFlds1 = std::make_shared<FieldsAsInModel<Model>>(model, runPars, tag);
-      // Adaptive RK2N needs an extra full field copy to back up y_n before an attempted
-      // step, so a rejected step can be restored. Allocated only when adaptive.
-      if (RK2NStorageParameters<T>::isAdaptative(runPars.eType)) {
-        backup = std::make_shared<FieldsAsInModel<Model>>(model, runPars, tag + "_backup");
-        // FieldsAsInModel stores fldSU2 as a Lie-algebra field (the right type for the Delta
-        // increment), but the model's SU2 link is a group element (SU2Field). Backing the
-        // link up there would be lossy, so links use a dedicated, correctly-typed buffer.
-        if constexpr (Model::NSU2 > 0)
-          linkBackup = std::make_shared<VectorFieldCollection<SU2Field<T, Model::NDim>, Model::NSU2>>(
-              tag + "_linkbackup", model.getToolBox(), runPars.getLatParams());
-      }
       if constexpr (Model::NU1 > 0)
         if (model.getU1IC() == InitialConditionsType::PlaneWaves ||
             model.getU1IC() == InitialConditionsType::PlaneWavesZeroB) {
@@ -121,13 +109,6 @@ namespace TempLat
     }
 
     std::shared_ptr<FieldsAsInModel<Model>> getAllFlds1() { return allFlds1; }
-
-    std::shared_ptr<FieldsAsInModel<Model>> getBackup() { return backup; }
-
-    std::shared_ptr<VectorFieldCollection<SU2Field<T, Model::NDim>, Model::NSU2>> getLinkBackup()
-    {
-      return linkBackup;
-    }
 
     auto fldForPlaneWavesU1()
     {
@@ -156,10 +137,6 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
     std::shared_ptr<FieldsAsInModel<Model>> allFlds1;
-    std::shared_ptr<FieldsAsInModel<Model>> backup;
-    // Correctly-typed (group-element) backup for SU2 links, since FieldsAsInModel stores
-    // fldSU2 as a Lie-algebra field. Allocated only when adaptive and the model has SU2 links.
-    std::shared_ptr<VectorFieldCollection<SU2Field<T, Model::NDim>, Model::NSU2>> linkBackup;
     std::shared_ptr<VectorField<Field<T, Model::NDim>>> fldU1IC;
     std::shared_ptr<VectorField<Field<T, Model::NDim>>> piU1IC;
   };

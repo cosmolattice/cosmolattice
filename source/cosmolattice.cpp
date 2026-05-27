@@ -4,12 +4,6 @@
 
 #include "CosmoInterface/common.h"
 
-// P2 smoke-test include (dev-rnp.2): force the new adaptive-wrapper header
-// to parse during the build. The wrapper is not yet wired into Evolver
-// dispatch — this include is removed by P3, which wires the wrapper via
-// evolver.h.
-#include "CosmoInterface/evolvers/rk2nstorageadaptive.h"
-
 #include STRINGIFY(MODELINCLUDE)
 // YourModel.h was loaded during compilation through a variable called MODELINCLUDE in CMake,
 // see CMakeList.txt. Here STRINGIFY is just a macro that converts MODELINCLUDE into a string.

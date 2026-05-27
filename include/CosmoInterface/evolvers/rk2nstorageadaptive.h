@@ -28,9 +28,7 @@
 namespace TempLat
 {
 
-  // NOTE: AdaptiveToleranceNotSet is currently declared in rk2nstorage.h (which this
-  // header includes). When rk2nstorage.h reverts to main in P3, the declaration moves
-  // here. Re-declaring it now would collide with the inner header's definition.
+  MakeException(AdaptiveToleranceNotSet);
 
   /** \brief A composing wrapper around RK2NStorage that adds adaptive (proxy error
    *         estimate) step-size control. The inner RK2NStorage runs a single fixed-dt
