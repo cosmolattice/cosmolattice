@@ -65,6 +65,9 @@ namespace TempLat
 
     template <int N> void deactivate(Tag<N> t) { ForLoop(n, 0, Model::getNFields(t) - 1, isDeactivated[t][n] = true;); }
 
+    template <int FLD, int N> bool isActive(Tag<FLD>, Tag<N>) const
+    { return !isDeactivated[FLD][N] && isDefined[FLD][N]; }
+
     void evolve(Model &model, T tMinust0) { evolve(model, tMinust0, KernelsTypes::EoM<Model>()); }
 
     template <class KernelType> void evolve(Model &model, T tMinust0, KernelType kt)
