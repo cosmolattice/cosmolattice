@@ -46,6 +46,17 @@ namespace TempLat {
             return res;
         }
 
+        static std::vector<T> getCs(EvolverType eType){
+            std::vector<T> res;
+
+            if (eType == RK2) res = {0.0, 0.5};
+            else if(eType == RK3_3) res = {0.0,1.0/3.0,3.0/4.0};
+            else if(eType == RK3_4) res = {0.0,0.06688758201974097,0.6924057816719806,1.0};
+            else if (eType == RK4_5) res = {0.0,1432997174477.0/9575080441755.0,0.37040095736420475,0.6222557631344432,0.9582821306746903};
+
+            return res;
+        }
+
         static size_t order(EvolverType eType){
             size_t res = 2;
             if(eType == RK3_3) res = 3;

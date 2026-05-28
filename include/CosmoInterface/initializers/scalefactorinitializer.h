@@ -31,6 +31,7 @@ namespace TempLat
       // If fixed background, the initial Hubble parameter H0 is given by the user
       if (rPar.fixedBackground) {
         model.aDotI = rPar.H0 / model.omegaStar;
+        if constexpr (Model::IsNonMinimallyCoupled) model.RI = -9.0 * pow<2>(rPar.H0 / model.omegaStar) * (rPar.omegaEoS - 1.0/3.0); 
         // H0 is in GeV, so we transform to program variables
       }
 

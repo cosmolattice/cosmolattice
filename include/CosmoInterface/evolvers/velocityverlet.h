@@ -222,7 +222,8 @@ namespace TempLat
       if (fixedBackground) { // if fixed background, the scale factor is given by the power-law function in
                              // fixedbackgroundexpansion.h
         model.aI = aBackground(tMinust0);
-        model.aSI = aBackground(tMinust0 + w * model.dt / 2.0);
+        model.aSI = aBackground(tMinust0 - w * model.dt / 2.0);
+        if constexpr (Model::IsNonMinimallyCoupled) model.RI = aBackground.R(tMinust0);
       } else { // if self-consistent expansion, the scale factor is evolved with the VV algorithm
         model.aI += model.dt * model.aDotSI * w;
         model.aSI = (model.aIM + model.aI) / 2.0;

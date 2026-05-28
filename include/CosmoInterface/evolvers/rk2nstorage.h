@@ -13,6 +13,7 @@
 #include "CosmoInterface/evolvers/kernels/kernelstypes.h"
 #include "CosmoInterface/definitions/averages.h"
 #include "CosmoInterface/definitions/nonminimalcoupling.h"
+#include "CosmoInterface/definitions/fixedbackgroundexpansion.h"
 #include "CosmoInterface/extrafields.h"
 
 namespace TempLat
@@ -30,7 +31,8 @@ namespace TempLat
     /* Put public methods here. These should change very little over time. */
     RK2NStorage(Model &model, RunParameters<T> runParams)
         : type(runParams.eType), dt(model.dt), As(RK2NStorageParameters<T>::getAs(type)),
-          Bs(RK2NStorageParameters<T>::getBs(type)), expansion(runParams.expansion)
+          Bs(RK2NStorageParameters<T>::getBs(type)),Cs(RK2NStorageParameters<T>::getCs(type)), expansion(runParams.expansion), 
+          fixedBackground(runParams.fixedBackground), aBackground(model, runParams)
     {
       ForEachField(Model, fld, n, isDefined[fld].emplace_back(true); isDeactivated[fld].emplace_back(false););
     }
@@ -65,49 +67,67 @@ namespace TempLat
 
         ForEachField(Model, fld, n, if (!isDeactivated[fld][n] && isDefined[fld][n]) { advance(i, fld, model, n); });
 
-        if (expansion) advanceScaleFactor(model, i);
+        if (expansion) advanceScaleFactor(model, i, tMinust0);
 
         if (expansion) {
           Averages::setAllAverages(model);
-          sync(model,tMinust0);
+          syncR(model,tMinust0);
         }
         kt.cache(model, tMinust0);
       }
     }
 
     bool deltaScaleFactor(Model &model, size_t i, KernelsTypes::EoM<Model> kt)
-    {
-      if (i == 0) {
-        deltaADot = dt * ScaleFactorKernels::get(model, kt);
-        deltaA = dt * model.aDotI;
-      } else {
-        deltaADot = As[i] * deltaADot + dt * ScaleFactorKernels::get(model, kt);
-        deltaA = As[i] * deltaA + dt * model.aDotI;
-      }
-      return true;
+    { 
+      if (!fixedBackground) {
+        if (i == 0) {
+          deltaADot = dt * ScaleFactorKernels::get(model, kt);
+          deltaA = dt * model.aDotI;
+        } else {
+          deltaADot = As[i] * deltaADot + dt * ScaleFactorKernels::get(model, kt);
+          deltaA = As[i] * deltaA + dt * model.aDotI;
+        }
+        return true;
+        }
+        return false;
     }
     template <class KernelType> bool deltaScaleFactor(Model &model, size_t i, KernelType) { return false; }
 
-    void advanceScaleFactor(Model &model, size_t i)
+    void advanceScaleFactor(Model &model, size_t i, T tMinust0)
     {
-      if (sfDefined) model.aI += Bs[i] * deltaA;
+       if (!fixedBackground) {      
+        if (sfDefined) model.aI += Bs[i] * deltaA;
 
-      if constexpr (not Model::IsNonMinimallyCoupled) {
+        if constexpr (not Model::IsNonMinimallyCoupled) {
         if (sfDefined) model.aDotI += Bs[i] * deltaADot;
-      } else {
+        } else {
         if (sfDefined) model.piAI += Bs[i] * deltaADot;
         if (sfDefined) model.aDotI = model.piAI * pow(model.aI, model.alpha - 1);
+        }
+      }
+      else
+      {
+        model.aI = aBackground(tMinust0 + Cs[i] * model.dt);
+        if constexpr (Model::IsNonMinimallyCoupled) model.RI = aBackground.R(tMinust0 + Cs[i] * model.dt);
+      }
+    } 
+
+    // This function is called before doing the measurements. It is used to set aI, aDotI and RI to its correct value in case
+    // of  fixed-background expansion.
+    void sync(Model &model, T tMinust0)
+    {  
+     if(fixedBackground) {
+        model.aI = aBackground(tMinust0);  
+        model.aDotI = aBackground.dot(tMinust0);
+
+        if constexpr (Model::IsNonMinimallyCoupled) model.RI = aBackground.R(tMinust0);
       }
     }
-
-    // This function is called before doing the measurements or in the case of NMC evolution to sync the value of R obtained from the volumen averages of the matter fields. It is used to set aDotI to its correct value in case
-    // of a background expansion.
-    void sync(Model &model, T tMinust0)
+    // This function is called in the case of NMC evolution to sync the value of R obtained from the volumen averages of the matter fields. 
+    void syncR(Model &model, T tMinust0)
     {
-      //  if(fixedBackground) model.aDotI = aBackground.dot(tMinust0);
-      
       if constexpr (Model::IsNonMinimallyCoupled) {
-            model.RI = NonMinimalCoupling::R(model);
+          if (!fixedBackground)  model.RI = NonMinimalCoupling::R(model);
       }
     }
 
@@ -142,8 +162,11 @@ namespace TempLat
 
     T dt; // Has its own dt as we can use it for other things than real time evolution (cooling for instance).
 
+   
+
     const std::vector<T> As;
     const std::vector<T> Bs;
+    const std::vector<T> Cs;
 
     std::shared_ptr<FieldsAsInModel<Model>> Delta;
 
@@ -154,6 +177,9 @@ namespace TempLat
     bool sfDefined;
 
     bool expansion;
+    bool fixedBackground;
+    
+    FixedBackgroundExpansion<T> aBackground;
   };
 
 } // namespace TempLat
