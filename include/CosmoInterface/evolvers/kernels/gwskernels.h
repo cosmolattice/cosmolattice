@@ -28,7 +28,7 @@ namespace TempLat
     template <class Model> static auto get(Model &model)
     {
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::LaplacianGWs(model) +
-             pow(model.aI, 1 + model.alpha) * 2. * (PITensor::effectiveAnisotropicTensor(model)); //TODO: Jorge: Needed to create the laplacian, as the LatLapl returns the evaluated object before multiplying, which is an array.
+             pow(model.aI, 1 + model.alpha) * 2. * (PITensor::effectiveAnisotropicTensor(model));
     }
   };
 } // namespace TempLat

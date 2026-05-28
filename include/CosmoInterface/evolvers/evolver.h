@@ -23,6 +23,7 @@ namespace TempLat
    **/
 
   MakeException(EvolverTypeNotInEvolver);
+  MakeException(InvalidEvolverTypeGW);
 
   template <class Model> class Evolver
   {
@@ -31,10 +32,13 @@ namespace TempLat
     using T = typename Model::FloatType;
 
     Evolver(Model &model, RunParameters<T> &rPar, ExtraFields<Model> extraFlds)
-        : type(rPar.eType), lf(type == LF ? std::make_shared<LeapFrog<T>>(model, rPar) : nullptr),
+        : type(rPar.eType),
+          typeGW(rPar.eTypeGW),
+          lf( (type == LF || (typeGW == LF && model.fldGWs != nullptr)) ? std::make_shared<LeapFrog<T>>(model, rPar) : nullptr),
           vv(VelocityVerletParameters<T>::isVerlet(type) ? std::make_shared<VelocityVerlet<T>>(model, rPar) : nullptr),
           pv(PositionVerletParameters<T>::isVerlet(type) ? std::make_shared<PositionVerlet<T>>(model, rPar) : nullptr),
-          rk2n(RK2NStorageParameters<T>::isRK2n(type) ? std::make_shared<RK2NStorage<Model>>(model, rPar) : nullptr)
+          rk2n(RK2NStorageParameters<T>::isRK2n(type) ? std::make_shared<RK2NStorage<Model>>(model, rPar) : nullptr),
+          GWsynced(!rPar.doWeRestart)
     {
       // RK2N needs extra memory, allocated in the fields
       if (RK2NStorageParameters<T>::isRK2n(type)) {
@@ -44,10 +48,22 @@ namespace TempLat
       if (lf == nullptr && vv == nullptr && pv == nullptr && (rk2n == nullptr || !RK2NStorageParameters<T>::isRK2n(type)))
         throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
                                       "which dispatch between different evolvers. Abort."));
+
+      if (Model::NU1 > 0 && rPar.withGWs && type == LF)
+        throw(InvalidEvolverTypeGW("The evolution of a model with U(1) and GWs requires to use an evolver that correctly synchronizes fields and momenta (as both electric and magnetic fields enter the kernel of GWs). You should use a different evolver for the matter fields (VVn, RK, PV). Abort."));
+
+      if (Model::NU1 > 0 && rPar.withGWs && type == PV && typeGW == PV)
+        throw(InvalidEvolverTypeGW("The evolution of a model with U(1) and GWs requires to use an evolver that correctly synchronizes fields and momenta (as both electric and magnetic fields enter the kernel of GWs). If you want to use PV for the matter fields, you should use LF for the GWs. Abort."));
+
     }
 
     inline void evolve(Model &model, T tMinust0) const
     {
+      if (model.fldGWs != nullptr && typeGW == LF) {
+        lf->kickGWs(model, GWsynced ? 0.5 : 1.0);
+        GWsynced = false;
+      }
+
       if (type == LF) {
         lf->evolve(model, tMinust0);
       } else if (RK2NStorageParameters<T>::isRK2n(type)) {
@@ -59,8 +75,10 @@ namespace TempLat
           throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
                                         "which dispatch between different evolvers. Abort."));
         else
-          vv->evolve(model, tMinust0);
+          vv->evolve(model, tMinust0, typeGW == type);
       }
+
+      if (model.fldGWs != nullptr && typeGW == LF) lf->driftGWs(model);
     }
 
     // The next function is used to synchronised all the fields to live
@@ -69,6 +87,11 @@ namespace TempLat
 
     inline void sync(Model &model, T tMinust0) const
     {
+      if (typeGW == LF && !GWsynced) {
+        lf->kickGWs(model, 0.5);
+        GWsynced = true;
+      }
+
       if (type == LF) {
         lf->sync(model, tMinust0);
       } else if (RK2NStorageParameters<T>::isRK2n(type)) {
@@ -85,6 +108,7 @@ namespace TempLat
               model,
               tMinust0); // The sync function is used to set aDot to its correct value in the case of fixed background.
       }
+
     }
 
     // To activate and deactivate fields. Can be useful if more than a kernel is defined, or maybe to deactivate GW.
@@ -112,11 +136,14 @@ namespace TempLat
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
     const EvolverType type;
+    const EvolverType typeGW;
 
     std::shared_ptr<LeapFrog<T>> lf;
     std::shared_ptr<VelocityVerlet<T>> vv;
     std::shared_ptr<PositionVerlet<T>> pv;
     std::shared_ptr<RK2NStorage<Model>> rk2n;
+
+    mutable bool GWsynced;
 
     KernelsTypes::EoM<Model> EoMKernels;
   };

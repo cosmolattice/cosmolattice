@@ -6,7 +6,7 @@ CosmoLattice is capable of simulating scalar-gauge field theories in an expandin
 [](){ #eq_Lagrangian }
 ```math
 \begin{align}
-S \hspace{-0.18cm}&=- \int d^4 x \left\{\frac{1}{2}\partial_{\mu} \phi \partial ^{\mu}\phi + (D_{\mu}^A \varphi)^{*}(D_A^{\mu} \varphi) +  (D_{\mu}\Phi )^{\dagger} (D^{\mu} \Phi) + \frac{1}{4} F_{\mu \nu} F^{\mu \nu} + \frac{1}{2}{\rm Tr}\{G_{\mu \nu}G^{\mu \nu}\} + V(\phi,|\varphi|, |\Phi|) \right\}  ,  \\
+S & =- \int d^4 x \left\{\frac{1}{2}\partial_{\mu} \phi \partial ^{\mu}\phi + (D_{\mu}^A \varphi)^{*}(D_A^{\mu} \varphi) +  (D_{\mu}\Phi )^{\dagger} (D^{\mu} \Phi) + \frac{1}{4} F_{\mu \nu} F^{\mu \nu} + \frac{1}{2}{\rm Tr}\{G_{\mu \nu}G^{\mu \nu}\} + V(\phi,|\varphi|, |\Phi|) \right\}  ,  \\
 \tag{50}
 \end{align}
 ```

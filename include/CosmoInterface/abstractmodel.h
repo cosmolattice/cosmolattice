@@ -92,7 +92,7 @@ namespace TempLat
         public ScaleFactorBase<T>,
         public ModelParametersBase<T>,
         public GWBase<NDIM, T>,
-        public U1Base<NDIM, T, NU1FLDS, NC>,
+        public U1Base<NDIM, T, NU1FLDS, NS, NC, SCALARU1AXIONCOUPLINGS>,
         public SU2Base<NDIM, T, NSU2FLDS>
   {
   public:
@@ -149,7 +149,8 @@ namespace TempLat
                                                                                                     par),
           ScalarU1AxionBase<T, SCALARU1AXIONCOUPLINGS>(parser), NonMinimalCouplingBase<T, NS, NONMINCOUPLINGS>(parser),
           ScaleFactorBase<T>(), ModelParametersBase<T>(par, pDt, std::move(pName)),
-          GWBase<NDIM, T>(parser, toolBox, par), U1Base<NDIM, T, NU1FLDS, NC>(toolBox, par),
+          GWBase<NDIM, T>(parser, toolBox, par),
+          U1Base<NDIM, T, NU1FLDS, NS, NC, SCALARU1AXIONCOUPLINGS>(toolBox, par),
           SU2Base<NDIM, T, NSU2FLDS>(toolBox, par)
     {
       // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this
@@ -196,16 +197,6 @@ namespace TempLat
     }
 
     template <int N> auto getFluctuationRatio(Tag<N>) { return OneType(); }
-
-    InitialConditionsType::U1 getU1IC()
-    {
-      if constexpr (NC > 0)
-        return InitialConditionsType::RandomWithMatter;
-      else if constexpr (NS > 0 && SCALARU1AXIONCOUPLINGS::howManyCouples() > 0)
-        return InitialConditionsType::BunchDavisTransverseU1;
-      else
-        return InitialConditionsType::PlaneWavesZeroB;
-    }
 
     // The "MemoryToolBox" is a shared variable between most instances of the program. It contains many useful
     // informations about
