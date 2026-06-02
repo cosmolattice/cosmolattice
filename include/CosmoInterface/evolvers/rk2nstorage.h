@@ -55,6 +55,7 @@ namespace TempLat
       dt = KernelsTypes::getDt(model, kt);
 
       kt.cache(model, tMinust0); // To be able to store some temporary info in the kernel type
+      const T aStart = model.aI;
 
       for (size_t i = 0; i < As.size(); ++i) { // loop over operations...
 
@@ -75,6 +76,8 @@ namespace TempLat
         }
         kt.cache(model, tMinust0);
       }
+
+      if (expansion) syncSemiIntegerScaleFactor(model, tMinust0, aStart);
     }
 
     bool deltaScaleFactor(Model &model, size_t i, KernelsTypes::EoM<Model> kt)
@@ -111,6 +114,19 @@ namespace TempLat
         if constexpr (Model::IsNonMinimallyCoupled) model.RI = aBackground.R(tMinust0 + Cs[i] * model.dt);
       }
     } 
+
+    void syncSemiIntegerScaleFactor(Model &model, T tMinust0, T aStart)
+    {
+      model.aIM = aStart;
+      if (fixedBackground) {
+        model.aI = aBackground(tMinust0 + model.dt);
+        model.aSI = aBackground(tMinust0 + model.dt / 2.0);
+        model.aDotI = aBackground.dot(tMinust0 + model.dt);
+        if constexpr (Model::IsNonMinimallyCoupled) model.RI = aBackground.R(tMinust0 + model.dt);
+      } else {
+        model.aSI = (model.aIM + model.aI) / 2.0;
+      }
+    }
 
     // This function is called before doing the measurements. It is used to set aI, aDotI and RI to its correct value in case
     // of  fixed-background expansion.

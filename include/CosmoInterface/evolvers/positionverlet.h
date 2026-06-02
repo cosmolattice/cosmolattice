@@ -43,7 +43,7 @@ namespace TempLat
     {
     }
 
-    template <class Model> void evolve(Model &model, T tMinust0)
+    template <class Model> void evolve(Model &model, T tMinust0, bool evolveGWs)
     {
       /*
        * Position Verlet can be understood as moving fields by half step, momenta by a step and fields by half a step
@@ -68,7 +68,7 @@ namespace TempLat
         // We start by computing the first drifts (phi_0 --> phi_1/2):
 
         if constexpr (Model::Ns > 0) driftScalar(model, w);
-        if (model.fldGWs != nullptr) driftGWs(model, w);
+        if (model.fldGWs != nullptr && evolveGWs) driftGWs(model, w);
         if constexpr (Model::NCs > 0) driftCS(model, w);
         if constexpr (Model::NSU2Doublet > 0) driftSU2Doublet(model, w);
         if constexpr (Model::NU1 > 0) driftU1Vector(model,w);
@@ -80,7 +80,7 @@ namespace TempLat
 
         // Now we compute the kicks (pi_0 --> pi_1):
 
-        if (model.fldGWs != nullptr) kickGWs(model,w);
+        if (model.fldGWs != nullptr && evolveGWs) kickGWs(model,w);
         if constexpr (Model::Ns > 0) kickScalar(model,w);
         if constexpr (Model::NCs > 0) kickCS(model,w);
         if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model,w);
@@ -96,7 +96,7 @@ namespace TempLat
         if (expansion) driftScaleFactorSecondHalf(model, tcurrent, w);
 
         if constexpr (Model::Ns > 0) driftScalar(model, w);
-        if (model.fldGWs != nullptr) driftGWs(model, w);
+        if (model.fldGWs != nullptr && evolveGWs) driftGWs(model, w);
         if constexpr (Model::NCs > 0) driftCS(model, w);
         if constexpr (Model::NSU2Doublet > 0) driftSU2Doublet(model, w);
         if constexpr (Model::NU1 > 0) driftU1Vector(model, w);
@@ -212,12 +212,15 @@ namespace TempLat
     // Prepares the first half-step scale-factor drift. 
     template <class Model> void driftScaleFactorFirstHalf(Model &model, T tMinust0, T w)
     {
+      model.aIM = model.aI;
       if (fixedBackground) { // if fixed background, the scale factor is given by the power-law function in
                              // fixedbackgroundexpansion.h
           model.aI = aBackground(tMinust0 + w * model.dt / 2.0);
+          model.aSI = model.aI;
           if constexpr (Model::IsNonMinimallyCoupled) model.RI = aBackground.R(tMinust0  + w * model.dt / 2.0);
       } else { // if self-consistent expansion, the scale factor is evolved with the VV algorithm
           model.aI += model.dt / 2.0 * model.aDotI * w;
+          model.aSI = model.aI;
       }
     }
 
@@ -229,6 +232,7 @@ namespace TempLat
         if constexpr (Model::IsNonMinimallyCoupled) model.RI = aBackground.R(tMinust0  + w * model.dt);
       } else {
         model.aI += model.dt / 2.0 * model.aDotI * w;
+        model.aSI = (model.aIM + model.aI) / 2.0;
       }
     }
 

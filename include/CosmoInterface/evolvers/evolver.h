@@ -52,7 +52,8 @@ namespace TempLat
       if (Model::NU1 > 0 && rPar.withGWs && type == LF)
         throw(InvalidEvolverTypeGW("The evolution of a model with U(1) and GWs requires to use an evolver that correctly synchronizes fields and momenta (as both electric and magnetic fields enter the kernel of GWs). You should use a different evolver for the matter fields (VVn, RK, PV). Abort."));
 
-      if (Model::NU1 > 0 && rPar.withGWs && type == PositionVerletParameters<T>::isVerlet(type) && typeGW == PositionVerletParameters<T>::isVerlet(type))
+      if (Model::NU1 > 0 && rPar.withGWs && PositionVerletParameters<T>::isVerlet(type) &&
+          PositionVerletParameters<T>::isVerlet(typeGW))
         throw(InvalidEvolverTypeGW("The evolution of a model with U(1) and GWs requires to use an evolver that correctly synchronizes fields and momenta (as both electric and magnetic fields enter the kernel of GWs). If you want to use PV for the matter fields, you should use LF for the GWs. Abort."));
 
     }
@@ -69,7 +70,7 @@ namespace TempLat
       } else if (RK2NStorageParameters<T>::isRK2n(type)) {
         rk2n->evolve(model, tMinust0, EoMKernels);
       } else if (PositionVerletParameters<T>::isVerlet(type)) {
-        pv->evolve(model, tMinust0);
+        pv->evolve(model, tMinust0, typeGW == type);
       } else {
         if (!(VelocityVerletParameters<T>::isVerlet(type)))
           throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
