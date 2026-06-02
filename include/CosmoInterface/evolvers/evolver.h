@@ -10,7 +10,6 @@
 #include "CosmoInterface/evolvers/leapfrog.h"
 #include "CosmoInterface/evolvers/velocityverlet.h"
 #include "CosmoInterface/evolvers/rk2nstorage.h"
-#include "CosmoInterface/evolvers/rk2nstorageadaptive.h"
 
 #include "TempLat/util/exception.h"
 
@@ -33,33 +32,23 @@ namespace TempLat
     Evolver(Model &model, RunParameters<T> &rPar, ExtraFields<Model> extraFlds)
         : type(rPar.eType), lf(type == LF ? std::make_shared<LeapFrog<T>>(model, rPar) : nullptr),
           vv(VelocityVerletParameters<T>::isVerlet(type) ? std::make_shared<VelocityVerlet<T>>(model, rPar) : nullptr),
-          rk2n((RK2NStorageParameters<T>::isRK2n(type) && !RK2NStorageParameters<T>::isAdaptative(type))
-                   ? std::make_shared<RK2NStorage<Model>>(model, rPar) : nullptr),
-          rk2nAdapt(RK2NStorageParameters<T>::isAdaptative(type)
-                        ? std::make_shared<RK2NStorageAdaptive<Model>>(model, rPar, extraFlds) : nullptr)
+          rk2n(RK2NStorageParameters<T>::isRK2n(type)
+                   ? std::make_shared<RK2NStorage<Model>>(model, rPar) : nullptr)
     {
-      // Non-adaptive RK2N needs Delta wired up here. Adaptive evolvers own their
-      // own RK2NStorage inner inside RK2NStorageAdaptive, which calls setDelta
-      // on it during construction.
+      // RK2N needs Delta wired up here.
       if (rk2n != nullptr) {
         rk2n->setDelta(extraFlds);
       }
 
-      if (lf == nullptr && vv == nullptr && rk2n == nullptr && rk2nAdapt == nullptr)
+      if (lf == nullptr && vv == nullptr && rk2n == nullptr)
         throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
                                       "which dispatch between different evolvers. Abort."));
     }
 
     inline void evolve(Model &model, T tMinust0) const
     {
-      // Adaptive RK2N is dispatched BEFORE the broader isRK2n branch because
-      // isAdaptative(type) implies isRK2n(baseType(type)); without this order
-      // adaptive types would fall through to the non-adaptive rk2n (nullptr
-      // for that path) and segfault.
       if (type == LF) {
         lf->evolve(model, tMinust0);
-      } else if (RK2NStorageParameters<T>::isAdaptative(type)) {
-        rk2nAdapt->evolve(model, tMinust0, EoMKernels);
       } else if (RK2NStorageParameters<T>::isRK2n(type)) {
         rk2n->evolve(model, tMinust0, EoMKernels);
       } else {
@@ -79,8 +68,6 @@ namespace TempLat
     {
       if (type == LF) {
         lf->sync(model, tMinust0);
-      } else if (RK2NStorageParameters<T>::isAdaptative(type)) {
-        rk2nAdapt->sync(model, tMinust0);
       } else if (RK2NStorageParameters<T>::isRK2n(type)) {
         rk2n->sync(model, tMinust0);
       } else { // The default evolvers have fields and momenta living at integer times, so no need to sync. for
@@ -98,9 +85,7 @@ namespace TempLat
     // To activate and deactivate fields. Can be useful if more than a kernel is defined, or maybe to deactivate GW.
     template <int N> void deactivate(Tag<N> t)
     {
-      if (RK2NStorageParameters<T>::isAdaptative(type)) {
-        rk2nAdapt->deactivate(t);
-      } else if (RK2NStorageParameters<T>::isRK2n(type)) {
+      if (RK2NStorageParameters<T>::isRK2n(type)) {
         rk2n->deactivate(t);
       } else {
         throw(EvolverTypeNotInEvolver("The activate/desactivate function is implemented only for the RK2N evolvers. "
@@ -110,9 +95,7 @@ namespace TempLat
 
     template <int N> void activate(Tag<N> t)
     {
-      if (RK2NStorageParameters<T>::isAdaptative(type)) {
-        rk2nAdapt->activate(t);
-      } else if (RK2NStorageParameters<T>::isRK2n(type)) {
+      if (RK2NStorageParameters<T>::isRK2n(type)) {
         rk2n->activate(t);
       } else {
         throw(EvolverTypeNotInEvolver("The activate/desactivate function is implemented only for the RK2N evolvers. "
@@ -128,7 +111,6 @@ namespace TempLat
     std::shared_ptr<LeapFrog<T>> lf;
     std::shared_ptr<VelocityVerlet<T>> vv;
     std::shared_ptr<RK2NStorage<Model>> rk2n;
-    std::shared_ptr<RK2NStorageAdaptive<Model>> rk2nAdapt;
 
     KernelsTypes::EoM<Model> EoMKernels;
   };

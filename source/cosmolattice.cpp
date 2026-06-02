@@ -125,14 +125,6 @@ int main(int argc, char *argv[])
   // Creates an object of the class responsible for performing and outputting all the required
   // measurements (averages, energies, spectra...).
 
-  if (iAmRoot && RK2NStorageParameters<FloatType>::isAdaptative(runParams.eType))
-    say << "WARNING: adaptive evolver (" << to_string(runParams.eType)
-        << ") varies dt, but measurement cadence and end-of-run detection are keyed to the "
-           "FIXED input dt (Measurer step counts, and the time-loop bound below). Output times "
-           "will not be evenly spaced in physical time, and the last measurement / tMax may be "
-           "slightly over- or under-shot. The physics is unaffected; only output timing drifts.";
-  // One-time (root-only) heads-up about the known adaptive-dt / fixed-cadence limitation.
-
   if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
   // Printing in the console all the parameters chosen (both run parameter and specific
   // model parameters)
@@ -143,10 +135,7 @@ int main(int argc, char *argv[])
   /************************Time evolution*************************/
 
   for (int i = 0; t < runParams.tMax - runParams.dt / FloatType(2.0); ++i) {
-    // Loop for the time evolution. At each step we advance one time step dt.
-    // NOTE (adaptive dt): the half-step margin uses the FIXED runParams.dt, not the live
-    // model.dt that an adaptive evolver (RK*_A) mutates. With adaptive dt the final step may
-    // slightly over/undershoot tMax. See the measurement-cadence follow-up bead.
+    // Loop for the time evolution. At each step we advance one time step dt
 
     if (measurer.areWeMeasuring(i))
     // We proceed to measure
