@@ -105,6 +105,16 @@ namespace TempLat
     // caller's requested initial dt.
     void resetAdaptiveState(Model &model) { dtProposed = model.dt; }
 
+    T getDtMin() const { return dtMin; }
+
+    // The controller's proposed dt for the NEXT step (accuracy gate), set at the
+    // end of the last accepted step as clampDt(dtAccepted * grow). Read-only;
+    // exposed so a secondary gate (e.g. MCInterface's topological-charge monitor)
+    // can take min(accuracy proposal, its own proposal) instead of blindly
+    // overriding dtProposed — which would discard the accuracy controller's
+    // equilibrium and can drive dt into a limit cycle below both gates.
+    T getDtProposed() const { return dtProposed; }
+
     // Save the full dynamical state (all field species + scale-factor state) so an
     // attempted step can be undone if rejected. A plain elementwise copy is correct
     // for every species (the SU2 exp() update only applies during accumulation, not
