@@ -70,7 +70,7 @@ namespace TempLat
         //  whether or not the field were synced or not.
 
         // Now we compute the drifts:
-        driftScaleFactor(model, tMinust0 + model.dt);
+        driftScaleFactor(model, tMinust0);
       }
 
       if constexpr (Model::Ns > 0) driftScalar(model);
@@ -104,10 +104,9 @@ namespace TempLat
           if constexpr (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model);                  // at t
           if (!fixedBackground)
             model.aDotI = model.aDotSI + model.dt / 2.0 * ScaleFactorKernels::get(model);
-          else
-            model.aDotI = aBackground.dot(tMinust0);
         }
       }
+      if (expansion && fixedBackground) model.aDotI = aBackground.dot(tMinust0);
       synced = true;
     }
 
@@ -162,7 +161,7 @@ namespace TempLat
       model.aIM = model.aI;  // at t
       if (fixedBackground) { // if fixed background, the scale factor is given by the power-law function in
                              // fixedbackgroundexpansion.h
-        model.aI = aBackground(tMinust0);
+        model.aI = aBackground(tMinust0 + model.dt);
         model.aSI = aBackground(tMinust0 + model.dt / 2.0);
       } else { // if self-consistent expansion, the scale factor is evolved with the VV algorithm
         model.aI += model.dt * model.aDotSI;      // at t+dt
