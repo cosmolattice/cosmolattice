@@ -10,7 +10,7 @@
 namespace TempLat
 {
 
-  template <int NDIM, typename T, size_t NU1FLDS, size_t NC> class U1Base
+  template <int NDIM, typename T, size_t NU1FLDS, size_t NS, size_t NC, typename SCALARU1AXIONCOUPLINGS> class U1Base
   {
   public:
     static constexpr size_t NU1 = NU1FLDS;
@@ -26,9 +26,11 @@ namespace TempLat
     InitialConditionsType::U1 getU1IC()
     {
       if constexpr (NC > 0)
-        return InitialConditionsType::RandomWithMatter;
+        return InitialConditionsType::U1::RandomWithMatter;
+      else if constexpr (NS > 0 && SCALARU1AXIONCOUPLINGS::howManyCouples() > 0)
+        return InitialConditionsType::U1::BunchDavisTransverseU1;
       else
-        return InitialConditionsType::PlaneWavesZeroB;
+        return InitialConditionsType::U1::PlaneWavesZeroB;
     }
 
   protected:

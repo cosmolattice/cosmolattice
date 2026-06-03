@@ -1,4 +1,4 @@
-site_name: CosmoLattice #Manual#
+site_name: CosmoLattice World #Manual#
 repo_url: https://github.com/cosmolattice/cosmolattice
 
 theme:
@@ -95,10 +95,13 @@ hooks:
 use_directory_urls: false # (optional) for better links without .html extension
 
 nav:
-  - Home: index.md
+  - Home: #CL.md
+      - "<span style='font-weight:bold;'>CosmoLattice in a Nutshell</span>": "CL.md"
+      - "<span style='font-weight:bold;'>If you use CosmoLattice </span>": "CLcitation.md"
+      - "<span style='font-weight:bold;'>Latest News </span>": "CLnews.md"
   - Code: 
-      - "What is CosmoLattice": "code/HowToCiteCL.md"
-      - "How to cite CosmoLattice": "code/HowToCiteCL.md"
+      #- "What is CosmoLattice": "code/HowToCiteCL.md"
+      #- "How to cite CosmoLattice": "code/HowToCiteCL.md"
       - "Download": "code/Download.md"
       - "Features": "code/Features.md"
       - "Links": "code/index.md"
