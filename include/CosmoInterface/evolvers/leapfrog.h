@@ -102,8 +102,7 @@ namespace TempLat
           if constexpr (Model::NSU2Doublet > 0) model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model); // at t
           if constexpr (Model::NU1 > 0) model.U1pi2AvI = Averages::pi2U1(model);                     // at t
           if constexpr (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model);                  // at t
-          if (!fixedBackground)
-            model.aDotI = model.aDotSI + model.dt / 2.0 * ScaleFactorKernels::get(model);
+          if (!fixedBackground) model.aDotI = model.aDotSI + model.dt / 2.0 * ScaleFactorKernels::get(model);
         }
       }
       if (expansion && fixedBackground) model.aDotI = aBackground.dot(tMinust0);
@@ -204,11 +203,11 @@ namespace TempLat
     template <class Model> void driftSU2Vector(Model &model)
     {
       ForLoop(n, 0, Model::NSU2 - 1,
-              auto rescaledPi = MakeVector(
-                  i, 1, Model::NDim,
-                  exp(pow(model.aSI, model.alpha - 1) * model.dx * model.dt * model.gQ_SU2DblSU2(0_c, n) *
-                      model.piSU2(n)(i))); // The 0_c is correct. In our convention, the link is normalized wrt the
-                                           // first doublet charge.
+              auto rescaledPi =
+                  MakeVector(i, 1, Model::NDim,
+                             exp(pow(model.aSI, model.alpha - 1) * model.dx * model.dt * model.gQ_SU2DblSU2(0_c, n) *
+                                 model.piSU2(n)(i))); // The 0_c is correct. In our convention, the link is normalized
+                                                      // wrt the first doublet charge.
 
               model.fldSU2(n) = rescaledPi * model.fldSU2(n););
       // Here for instance we use the ForLoop again, as this makes it easier to define
