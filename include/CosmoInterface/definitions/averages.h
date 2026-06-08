@@ -86,7 +86,7 @@ namespace TempLat
     template <typename Model> static inline void setAllAverages(Model &model)
     {
       model.potAvI = average(Potential::potential(model));
-      model.potAvSI = average(Potential::potential(model));
+      model.potAvSI = model.potAvI;
 
       if constexpr (Model::Ns > 0) {
         model.pi2AvI = Averages::pi2S(model);
