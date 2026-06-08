@@ -21,7 +21,7 @@ namespace TempLat {
     MakeException(NotAnICType);
 
     namespace  InitialConditionsType {
-        enum class S {Default, RandomWithMatter, DefectsNetwork, DefectsWhiteNoise};
+        enum class S {Default, RandomWithMatter, DefectsNetwork, DefectsWhiteNoise, Homogeneous};
         enum class U1 {Default, RandomWithMatter, PlaneWaves, PlaneWavesZeroB, BunchDavisTransverseU1, DefectsNetwork, DefectsWhiteNoise};
 
         std::istream& operator>>(std::istream& in, InitialConditionsType::S& ICType){
@@ -31,6 +31,7 @@ namespace TempLat {
             else if(tmp=="RandomWithMatter"||tmp=="1") ICType=InitialConditionsType::S::RandomWithMatter;
             else if(tmp=="DefectsNetwork"||tmp=="2") ICType=InitialConditionsType::S::DefectsNetwork;
             else if(tmp=="DefectsWhiteNoise"||tmp=="3") ICType=InitialConditionsType::S::DefectsWhiteNoise;
+            else if(tmp=="Homogeneous"||tmp=="4") ICType=InitialConditionsType::S::Homogeneous;
             else if(tmp.empty()){}
             else throw(NotAnICType(tmp +" is not a valid initial condition for scalar singlet, abort."));
             return in;
@@ -56,6 +57,7 @@ namespace TempLat {
             else if(ICType == InitialConditionsType::S::RandomWithMatter) return out << "RandomWithMatter";
             else if(ICType == InitialConditionsType::S::DefectsNetwork) return out << "DefectsNetwork";
             else if(ICType == InitialConditionsType::S::DefectsWhiteNoise) return out << "DefectsWhiteNoise";
+            else if(ICType == InitialConditionsType::S::Homogeneous) return out << "Homogeneous";
             return out;
         }
 
@@ -75,6 +77,7 @@ namespace TempLat {
             else if(ICType == InitialConditionsType::S::RandomWithMatter) return "RandomWithMatter";
             else if(ICType == InitialConditionsType::S::DefectsNetwork) return "DefectsNetwork";
             else if(ICType == InitialConditionsType::S::DefectsWhiteNoise) return "DefectsWhiteNoise";
+            else if(ICType == InitialConditionsType::S::Homogeneous) return "Homogeneous";
             else return "";
         }
 

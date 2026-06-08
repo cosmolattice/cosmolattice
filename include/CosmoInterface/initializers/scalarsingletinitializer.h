@@ -47,8 +47,8 @@ namespace TempLat
       if (rPar.SIC == InitialConditionsType::S::Default) flagSIC = InitialConditionsType::S::RandomWithMatter;
 
       if (flagSIC == InitialConditionsType::S::RandomWithMatter)
-        initializeRandomScalar(model, fg, extps, rPar);
-      else
+        initializeRandomScalar(model, fg, extps, rPar, rPar.SIC == InitialConditionsType::S::Default);
+      else if (flagSIC != InitialConditionsType::S::Homogeneous)
         throw(SICNotImplemented("The initial condition provided for scalars is not implemented."));
             
       model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS;
@@ -68,16 +68,31 @@ namespace TempLat
 
     template <class Model, typename T>
     static void initializeRandomScalar(Model &model, const FluctuationsGenerator<T> &fg,
-                                       const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar)
+                                       const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar,
+                                       bool useAxionU1HomogeneousDefault)
     {
       ForLoop(i, 0, Model::Ns - 1, {
-        auto &s = model.extPS[i];
-        if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
-          fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI, rPar.kCutoff);
-        } else {
-          extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, rPar.kCutoff, rPar.powerSpectrumType);
+        if (!(useAxionU1HomogeneousDefault && isAxionU1CoupledScalar<Model>(i))) {
+          auto &s = model.extPS[i];
+          if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
+            fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI,
+                                             rPar.kCutoff);
+          } else {
+            extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, rPar.kCutoff,
+                                                     rPar.powerSpectrumType);
+          }
         }
       });
+    }
+
+    template <class Model, int N> static bool isAxionU1CoupledScalar(Tag<N> n)
+    {
+      if constexpr (Model::IsAxionU1Coupled) {
+        bool isCoupled = false;
+        ForLoop(a, 0, Model::NU1 - 1, isCoupled = isCoupled || Model::ScalarU1AxionCouplings::couples(n, a););
+        return isCoupled;
+      } else
+        return false;
     }
 
   };
