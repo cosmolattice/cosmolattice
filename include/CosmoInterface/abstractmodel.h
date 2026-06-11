@@ -149,9 +149,10 @@ namespace TempLat
                                                                                                     par),
           ScalarU1AxionBase<T, SCALARU1AXIONCOUPLINGS>(parser), NonMinimalCouplingBase<T, NS, NONMINCOUPLINGS>(parser),
           ScaleFactorBase<T>(), ModelParametersBase<T>(par, pDt, std::move(pName)),
-          GWBase<NDIM, T>(parser, toolBox, par),
-          U1Base<NDIM, T, NU1FLDS, NS, NC, SCALARU1AXIONCOUPLINGS>(toolBox, par),
-          SU2Base<NDIM, T, NSU2FLDS>(toolBox, par)
+          GWBase<NDIM, T>(parser, toolBox, par), U1Base<NDIM, T, NU1FLDS, NS, NC, SCALARU1AXIONCOUPLINGS>(toolBox, par),
+          SU2Base<NDIM, T, NSU2FLDS>(toolBox, par),
+          // Don't leave variables uninitialized
+          potAvI(0), potAvSI(0), pot0(0), pot0SI(0)
     {
       // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this
       // feature has yet not been tested)
@@ -159,9 +160,11 @@ namespace TempLat
         if (this->fldGWs != nullptr)
           throw(RunParametersInconsistent(
               "NDims must be equal to 3 to run GWs. If you want to run with NDim != 3, make sure withGWs = false."));
-        if(parser.get<int>("PS_type", 1) != 2)
+        if (parser.get<int>("PS_type", 1) != 2)
           throw(RunParametersInconsistent(
-            "Spectra for simulations with NDim != 3 emulating the 3D dynamics have not been implemented for PSType=1, only for PSType=2. Abort. If you want to perform a real NDim != 3 simulations comment out this line. You may need to modify the EoM kernels"));
+              "Spectra for simulations with NDim != 3 emulating the 3D dynamics have not been implemented for "
+              "PSType=1, only for PSType=2. Abort. If you want to perform a real NDim != 3 simulations comment out "
+              "this line. You may need to modify the EoM kernels"));
       }
       if constexpr (NU1FLDS > 1)
         throw(NotTested("The physics interface has not been fully tested with NU1 > 1. Abort. If you want to go on "

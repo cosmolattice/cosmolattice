@@ -34,6 +34,8 @@ namespace TempLat
 
   protected:
     NonMinimalCouplingBase(ParameterParser &parser)
+        : // Initialize variables
+          RI(0), piAI(0)
     {
       auto xiCouplings = parser.get<T, NonMinimalCouplings::howManyCouples()>("xis", 1);
       xis.setEffectiveCharges(xiCouplings, {1});

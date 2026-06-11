@@ -64,7 +64,9 @@ namespace TempLat
   protected:
     ComplexScalarBase(ParameterParser &parser, device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
                       const LatticeParameters<T> &par)
-        : fldCS("cmplx_scalar", toolBox, par), piCS("pi_cmplx_scalar", toolBox, par)
+        : fldCS("cmplx_scalar", toolBox, par), piCS("pi_cmplx_scalar", toolBox, par),
+          // Initialize average fields
+          CSgrad2AvI(0), CSgrad2AvSI(0), CSpi2AvSI(0), CSpi2AvSIM(0), CSpi2AvIM(0), CSpi2AvI(0)
     {
       auto gU1s = parser.get<double, CsU1Couplings::nGauge>("gU1s", 1.0);
       auto CSU1Charges = parser.get<double, CsU1Couplings::howManyCouples()>("CSU1_charges", 1);

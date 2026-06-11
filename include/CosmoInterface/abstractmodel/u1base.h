@@ -35,7 +35,9 @@ namespace TempLat
 
   protected:
     U1Base(device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, const LatticeParameters<T> &par)
-        : fldU1("U1", toolBox, par), piU1("pi_U1", toolBox, par)
+        : fldU1("U1", toolBox, par), piU1("pi_U1", toolBox, par),
+          // Initialize average fields
+          U1Mag2AvI(0), U1Mag2AvSI(0), U1pi2AvSI(0), U1pi2AvSIM(0), U1pi2AvIM(0), U1pi2AvI(0)
     {
     }
   };
