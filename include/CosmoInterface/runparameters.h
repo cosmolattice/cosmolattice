@@ -39,8 +39,8 @@ namespace TempLat
                                   Important)),             // If true: self-consistent expansion. If false: no expansion
           t0(par.get<double>("t0", 0, Important)),         // Initial time
           tMax(par.get<T>("tMax", 10000 * dt, Important)), // Final time
-          kCutoff(par.get<T>("kCutOff", std::numeric_limits<double>::infinity(),
-                             Important)),                          // Momenta cutoff in spectra of initial fluctuations
+          kCutoff(par.get<T>("kCutOff", -1.0,
+                             Important)),                          // Momenta cutoff in spectra of initial fluctuations. -1 means no cutoff.
           SIC(par.get<InitialConditionsType::S>("ICtype_S", InitialConditionsType::S::Default)),
           U1IC(par.get<InitialConditionsType::U1>("ICtype_U1", InitialConditionsType::U1::Default)),
           tOutFreq(par.get<T>("tOutputFreq", 10 * dt, Important)), // Printing time interval of frequent output
@@ -127,6 +127,8 @@ namespace TempLat
       dx = lSide / N;                             // Lattice spacing
       kUV = std::sqrt(3) * Constants::pi<T> / dx; // Maximum momenta in the lattice
 
+      if(kCutoff < 0.0) kCutoff = 2 * kUV; // no cutoff means it's larger than kUV.
+
       // Now we see if the user wants to save the simulation at the end of the run. This is
       // specified by specifying a path different from the Constants::defaultString. If not
       // remove the save_dir from the ParameterParser.
@@ -177,7 +179,7 @@ namespace TempLat
 
     const T t0;
     const T tMax;
-    const T kCutoff;
+    T kCutoff;
     const InitialConditionsType::S SIC;
     const InitialConditionsType::U1 U1IC;
     const T tOutFreq;
