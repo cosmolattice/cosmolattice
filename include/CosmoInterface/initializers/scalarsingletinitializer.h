@@ -91,8 +91,9 @@ namespace TempLat
         bool isCoupled = false;
         ForLoop(a, 0, Model::NU1 - 1, isCoupled = isCoupled || Model::ScalarU1AxionCouplings::couples(n, a););
         return isCoupled;
-      } else
+      } else {
         return false;
+      }
     }
 
   };
