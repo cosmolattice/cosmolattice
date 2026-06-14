@@ -56,6 +56,10 @@ One of the major advantages of \CL is that it separates the **physics*** (i.e.~f
 
 Furthermore, \CL includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage of using \CL as a platform to implement a given scenario over writing your own code from scratch. In particular, \CL comes with symbolic scalar, complex [$U(1)$] and $SU(2)$ algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, \CL is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions **NAME**, making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**. \CL is publicly available, and it comes with a detailed manual explaining its whole structure and the basic instructions to start running your own simulations, see [**CosmoLattice Manual**](./Manual/About This Manual.md)
 
+### CosmoLattice Versions { #subsec_CLversions }
+
+
+
 ### Upcoming features { #subsec_CLupcoming }
 
 CosmoLattice is continuously evolving, with new physics modules and/or technical capabilities being constantly developed and made publicly available. At the time of writing (June 2026), we are enhancing the capabilities of CosmoLattice to simulate 

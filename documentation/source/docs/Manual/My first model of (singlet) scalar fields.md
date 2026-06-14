@@ -163,28 +163,28 @@ We note that the numerical schemes implemented in CosmoLattice use exclusively t
 
 ### My first run { #sec_MyFirstRun }
 
-CosmoLattice comes with a set of ready-to-run models, which are available in the folder `src/models/`. In particular, the file `src/models/lphi4.h` contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. ([*33*][eq_potentialExampleI]). We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
+CosmoLattice comes with a set of ready-to-run models, which are available in the folder $\texttt{src/models/}.~$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. ([*33*][eq_potentialExampleI]). We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
 
 #### Compilation
 
-First, we need to choose the location where the code will be compiled. This can be anywhere on your machine, **except in `src/` or any of its sub-folders**. As an example, let us create a `build/` directory and move inside it,
+First, we need to choose the location where the code will be compiled. This can be anywhere on your machine, **except in $\texttt{src/}$ or any of its sub-folders**. As an example, let us create a $\texttt{build/}$ directory and move inside it,
 ```bash
 cd cosmolattice
 mkdir build
 cd build
 ```
-CosmoLattice uses CMake for compilation (see Section [Appendix: CMake Flags](Appendix: CMake Flags.md) for more details). The model `lphi4.h` is compiled by typing the following commands,
+CosmoLattice uses CMake for compilation (see Section [Appendix: CMake Flags](Appendix: CMake Flags.md) for more details). The model $\texttt{lphi4.h}$ is compiled by typing the following commands,
 ```bash
 cmake -DMODEL=lphi4 ../
 make cosmolattice
 ```
 
-Some explanations are of order.  The last argument of the \textcolor{gray}{`cmake`} command is the path to the CMake configuration file, which is located at the root of the CosmoLattice folders. In our case, its relative path with respect to the `build/` folder is `../`. The first argument \textcolor{gray}{`-DMODEL=lphi4`} is passed to CMake, and tells it to compile the model `lphi4.h`. Changing this argument to any other model present inside the `src/models/` will determine which model is compiled. Note that this is not a CosmoLattice-specific CMake argument, see Appendix [Appendix: CMake Flags](Appendix: CMake Flags.md) for an exhaustive list.
+Some explanations are of order.  The last argument of the `cmake` command is the path to the CMake configuration file, which is located at the root of the CosmoLattice folders. In our case, its relative path with respect to the $\texttt{build/}$ folder is $\texttt{../}$. The first argument `-DMODEL=lphi4` is passed to CMake, and tells it to compile the model $\texttt{lphi4.h}$. Changing this argument to any other model present inside the $\texttt{src/models/}$ will determine which model is compiled. Note that this is not a CosmoLattice-specific CMake argument, see Appendix [Appendix: CMake Flags](Appendix: CMake Flags.md) for an exhaustive list.
 
 !!! note
-    **Important Note:** Every time you call CMake, it is a good practice to first remove the `CMakeCache.txt` file that was previously generated.
+    **Important Note:** Every time you call CMake, it is a good practice to first remove the $\texttt{CMakeCache.txt}$ file that was previously generated.
 
-At this point, if everything went smoothly, you should have generated an executable named `lphi4`. If this is the case, move on to the next section. If not, continue reading.
+At this point, if everything went smoothly, you should have generated an executable named $\texttt{lphi4}$. If this is the case, move on to the next section. If not, continue reading.
 
 #### Troubleshooting
 
@@ -194,25 +194,26 @@ cmake -DMODEL=lphi4 ../   #Does not work because your fftw3 is not found.
 rm CMakeCache.txt         #We want to clear the CMake before running it again.
 cmake  -DMYFFTW3_PATH="/path/to/fftw3/" -DMODEL=lphi4 ../   #And now this works!
 ```
-with `/path/to/fftw3/` the path where fftw3 is located. You can also call `make clean-cmake` to remove the `CMakeCache.txt` file.
+with $\texttt{/path/to/fftw3/}$ the path where *fftw3* is located. You can also call `make clean-cmake` to remove the $\texttt{CMakeCache.txt}$ file.
 
-If this solves your problem, you can avoid having to specify the FFTW path each time you compile by modifying line `52` of the `CMakeLists.txt` file (located at the root of the CosmoLattice files), as highlighted below:
+If this solves your problem, you can avoid having to specify the FFTW path each time you compile by modifying line `52` of the $\texttt{CMakeLists.txt}$ file (located at the root of the CosmoLattice files), as highlighted below:
+
+<div style="height:5px;"></div>
 
 `CMakeLists.txt:`
-
 @emgithub(CMakeLists.txt:fetchcontent_templat)
-where, again `/path/to/fftw3/` is the path where fftw3 is located.
+where, again $\texttt{/path/to/fftw3/}$ is the path where fftw3 is located.
 
 #### Running the program with an input parameter file { #subsec_Input-Scalars }
 
-Now that we have generated the executable `lphi4`, we are ready to run our first simulation as follows:
+Now that we have generated the executable $\texttt{lphi4}$, we are ready to run our first simulation as follows:
 ```bash
 ./lphi4 input=../src/models/parameter-files/lphi4.in
 ```
 
-This will launch the model `lphi4` with the parameters specified in the input file located in \path{src/models/parameter-files/lphi4.in}. Let us have a look at it.
+This will launch the model $\texttt{lphi4}$ with the parameters specified in the input file located in $\texttt{src/models/parameter-files/lphi4.in}$. Let us have a look at it.
 
-`src/models/parameter-files/lphi4.in:`
+$\texttt{src/models/parameter-files/lphi4.in}$:
 
 @emgithub(models/parameter-files/lphi4.in)
 
