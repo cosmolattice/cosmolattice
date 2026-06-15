@@ -2,6 +2,11 @@
     font-size: 1.1em !important;
 }
 
+/* Added by Dani on June 15th 2026, to justify all text paragraphs in the website 	*/
+.md-typeset p {
+    text-align: justify;
+}
+
 /* === emgithub CSS isolation === */
 
 /* Reset Material theme's pre>code styles inside emgithub containers */
