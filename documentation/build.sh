@@ -5,9 +5,18 @@ tmp_dir=${base_dir}/tmp/
 build_dir=${base_dir}/website/
 mkdir -p ${tmp_dir}
 mkdir -p ${build_dir}
-mkdir ${tmp_dir}/code_source
+mkdir -p ${tmp_dir}/code_source
 
-git clone -b CLV2.0Alpha https://github.com/cosmolattice/cosmolattice.git ${tmp_dir}/code_source/cosmolattice
+# Use the local cosmolattice_private working tree (tracked files, including
+# uncommitted edits) as the source scanned for @label line numbers. The
+# displayed code still comes from public CLV2.0Alpha: SOURCE_ROOTS in
+# hooks/resolve_emgithub.py builds the emgithub URLs against that branch, so the
+# embedded snippets show alpha. NOTE: line numbers are only correct where a
+# labeled file matches CLV2.0Alpha line-for-line in its labeled region.
+repo_root=${base_dir}/..
+mkdir -p ${tmp_dir}/code_source/cosmolattice
+( cd ${repo_root} && git ls-files -z | tar --null -T - -cf - ) | tar -xf - -C ${tmp_dir}/code_source/cosmolattice
+
 git clone https://github.com/cosmolattice/templat.git ${tmp_dir}/code_source/templat
 
 source ./setup_python.sh
