@@ -3,9 +3,11 @@ outputfile = ./
 print_headers = true
 overwriteFiles = false
 
+# @label:Evol
 #Evolution
 expansion = true
 evolver = LF
+# @endlabel
 
 #Lattice
 N = 128
@@ -32,5 +34,5 @@ initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
 
 #Model Parameters
 lambda = 9e-14
-q = 100
+q = 300
 #pepe private
