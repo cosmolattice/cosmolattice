@@ -67,7 +67,7 @@ namespace TempLat
           spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"},
                       filesManager.getUseHDF5()), // Output file that indicates at which times spectra are computed
           PSMeasurer(par),
-          UPSMeasurer()
+          UPSMeasurer(par)
           // TestTransTrace(par),
           // GWsPSMeasurer(par), nLast(par.tMax / par.dt), lastMeas(false)
     {

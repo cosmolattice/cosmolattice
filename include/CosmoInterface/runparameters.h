@@ -152,7 +152,7 @@ namespace TempLat
         par.erase("backup_dir");
       }
 
-      if (powerSpectrumType < 0 or powerSpectrumType > 2)
+      if (powerSpectrumType < 0 or powerSpectrumType > 3)
         throw(RunParametersInconsistent("powerSpectrumType " + std::to_string(powerSpectrumType) +
                                         " is not a valid powerSpectrumType."));
       if (powerSpectrumVersion < 1 or powerSpectrumVersion > 3)
