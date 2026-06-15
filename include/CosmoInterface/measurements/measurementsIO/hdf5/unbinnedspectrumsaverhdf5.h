@@ -114,8 +114,15 @@ namespace TempLat
     void flush_spectra(HDF5Group &group)
     {
 
-      if (multData != nullptr) flush_single_spectra(multData, "momMultiplicity", group);
-      if (binAvData != nullptr) flush_single_spectra(binAvData, "momBinAverage", group);
+      if (multData != nullptr) {
+        flush_single_spectra(multData, "momMultiplicity", group);
+        multData = nullptr;
+      }
+
+      if (binAvData != nullptr) {
+        flush_single_spectra(binAvData, "momBinAverage", group);
+        binAvData = nullptr;
+      }
 
       for (size_t i = 0; i < valueAvData.size(); ++i) {
         flush_single_spectra(valueAvData[i], "spectAverage_" + std::to_string(i), group);

@@ -156,6 +156,7 @@ namespace TempLat
         }
         binAvData->push(binAv);
       }
+
       if (verbosity != 1 && binCtrData != nullptr) {
         binCtrData->push(arr[0]->getCentralBinBounds());
       }
