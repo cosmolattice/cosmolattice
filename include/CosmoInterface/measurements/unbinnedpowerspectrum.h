@@ -85,7 +85,7 @@ namespace TempLat
 
       auto fk2 = projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox).measureUnbinned(N);
 
-      if (PSType == 3) return fk2;
+      if (PSType == 0) return fk2;
 
       if (PSType == 2) {
         if constexpr (NDim == 1) {
@@ -103,8 +103,6 @@ namespace TempLat
       fk2.sumInsteadOfAverage();
       if (PSType == 1) {
         return Function(ntilde, kIR * ntilde * dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
-      } else if (PSType == 0) {
-        return Function(ntilde, dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
       } else {
         throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
       }

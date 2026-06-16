@@ -102,16 +102,12 @@ namespace TempLat
         } else if (PSType == 1) {
           fk2.sumInsteadOfAverage();
           return Function(ntilde, kIR * ntilde * dx / deltakBin / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
-        } else if (PSType == 0) {
-          fk2.sumInsteadOfAverage();
-          return Function(ntilde, dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return fk2; // To remove moot warning.
         }
       } else {
-        WaveNumber ntilde(toolBox); // WaveNumber is the same as FourierSite, except it does not require to know
-                                    // the dimension at compile time.
+        WaveNumber ntilde(toolBox);
         if (PSType == 2) {
 
           auto fk2 = projectRadially<NDim>(pow<NDim>(ntilde.norm()) * f, SpaceStateType::Fourier, toolBox, false)
@@ -127,10 +123,6 @@ namespace TempLat
                          .measure(kMax, deltakBin);
           fk2.sumInsteadOfAverage();
           return (kIR * dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>)*fk2;
-        } else if (PSType == 0) {
-          auto fk2 = projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox, false).measure(kMax, deltakBin);
-          fk2.sumInsteadOfAverage();
-          return (dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>)*fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox, false)
