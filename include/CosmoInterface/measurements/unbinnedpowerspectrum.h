@@ -116,7 +116,8 @@ namespace TempLat
       Field<T, NDim> tmp("tmp", GetToolBox::get(f));
       tmp = f;
 
-      return this->powerSpectrum(pow<2>(abs(tmp.inFourierSpace())), GetNGrid::get(tmp), GetToolBox::get(tmp));
+      return this->powerSpectrum(pow<2>(abs(tmp.inFourierSpace())), GetNGrid::get(tmp), GetKIR::getKIR(tmp),
+                                 GetToolBox::get(tmp));
     }
 
   private:
