@@ -49,9 +49,9 @@ namespace TempLat
         initializePlaneWavesZeroBU1(model, fg, rPar.kCutoff, extraFlds);
       else if (flagU1IC == InitialConditionsType::U1::BunchDavisTransverseU1)
         initializeBunchDavisTransverseU1(model, extps, rPar.kCutoff, extraFlds);
-      else if (flagU1IC == InitialConditionsType::U1::DefectNetwork)
+      else if (flagU1IC == InitialConditionsType::U1::DefectsNetwork)
         initializeStringNetwork(model,fg,rPar.lcorr);
-      else if (flagU1IC == InitialConditionsType::U1::DefectWhiteNoise)
+      else if (flagU1IC == InitialConditionsType::U1::DefectsWhiteNoise)
         initializeStringNoise(model, fg, rPar.kCutoff, rPar.deltaNoise);
       else
         throw(U1ICNotImplemented("The initial condition provided for U1 is not implemented."));

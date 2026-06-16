@@ -45,17 +45,18 @@ namespace TempLat
       auto flagSIC = rPar.SIC;
       if (rPar.SIC == InitialConditionsType::S::Default) flagSIC = InitialConditionsType::S::RandomWithMatter;
 
-        if (flagSIC == InitialConditionsType::S::RandomWithMatter)
-          initializeRandomScalar(model, fg, extps, rPar);
-        else if (flagSIC == InitialConditionsType::S::DefectNetwork)
+        if (flagSIC == InitialConditionsType::S::RandomWithMatter) {
+          initializeRandomScalar(model, fg, extps, rPar, rPar.SIC == InitialConditionsType::S::Default);
+          model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS;
+          model.piS = model.getFluctuationRatio(FieldsNumbering::piS()) * model.piS;
+        }
+        else if (flagSIC == InitialConditionsType::S::DefectsNetwork)
           initializeScalarDomainWallNetwork(model, fg, rPar.lcorr);
-        else if (flagSIC == InitialConditionsType::S::DefectWhiteNoise)
+        else if (flagSIC == InitialConditionsType::S::DefectsWhiteNoise)
           initializeScalarDomainWallWhiteNoise(model, fg, rPar.kCutoff, rPar.deltaNoise);
-        else
+        else if (flagSIC != InitialConditionsType::S::Homogeneous)
           throw(SICNotImplemented("The initial condition provided for scalars is not implemented."));
 
-        model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS; //TODO: This is used for the axions, but could be reused for other fields. We probably want to make fluctuationsRatio a parameter, set to 1 by default.
-        model.piS = model.getFluctuationRatio(FieldsNumbering::piS()) * model.piS;
 
         // We set the initial homogeneous components of the fields and derivatives.
         // model.fldCS0(i) and model.piCS0(i) are introduced in physical
@@ -71,18 +72,33 @@ namespace TempLat
 
     template <class Model, typename T>
     static void initializeRandomScalar(Model &model, const FluctuationsGenerator<T> &fg,
-                                const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar)
+                                       const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar,
+                                       bool useAxionU1HomogeneousDefault)
     {
-        ForLoop(i, 0, Model::Ns - 1, {
+      ForLoop(i, 0, Model::Ns - 1, {
+        if (!(useAxionU1HomogeneousDefault && isAxionU1CoupledScalar<Model>(i))) {
           auto &s = model.extPS[i];
           if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
-            fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI, rPar.kCutoff);
+            fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI,
+                                             rPar.kCutoff);
           } else {
-            extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, rPar.kCutoff, rPar.powerSpectrumType);
+            extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, rPar.kCutoff,
+                                                     rPar.powerSpectrumType);
           }
-        });
+        }
+      });
     }
 
+    template <class Model, int N> static bool isAxionU1CoupledScalar(Tag<N> n)
+    {
+      if constexpr (Model::IsAxionU1Coupled) {
+        bool isCoupled = false;
+        ForLoop(a, 0, Model::NU1 - 1, isCoupled = isCoupled || Model::ScalarU1AxionCouplings::couples(n, a););
+        return isCoupled;
+      } else {
+        return false;
+      }
+    }
 
     template <class Model, typename T>
     static void initializeScalarDomainWallNetwork(Model &model, const FluctuationsGenerator<T> &fg, T lcorr)

@@ -7,7 +7,7 @@ overwriteFiles = false
 expansion = true
 evolver = LF
 
-#Lattice
+#Lattice 
 N = 128
 dt = 0.01
 kIR = .7
@@ -17,7 +17,6 @@ tOutputFreq = 1
 tOutputInfreq = 10
 tMax = 100
 
-
 #Spectra options
 PS_type = 1
 PS_version = 1
@@ -26,10 +25,13 @@ PS_version = 1
 GWprojectorType = 1
 withGWs=false
 
+#@label:IC 
 #IC
 initial_amplitudes = 5.6964e18 0  # homogeneous amplitudes in GeV
 initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
+#@endlabel
 
 #Model Parameters
 lambda = 9e-14
-q = 100
+q = 300
+#pepe private

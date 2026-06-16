@@ -10,9 +10,9 @@
 #include "TempLat/parameters/parameterparser.h"
 #include "TempLat/util/constants.h"
 #include "TempLat/lattice/latticeparameters.h"
-#include "CosmoInterface/evolvers/evolvertype.h"
 #include "TempLat/util/almostequal.h"
 #include "TempLat/util/floattostring.h"
+#include "CosmoInterface/evolvers/evolvertype.h"
 #include "CosmoInterface/initializers/initialconditionstype.h"
 
 namespace TempLat
@@ -39,7 +39,8 @@ namespace TempLat
                                   Important)),             // If true: self-consistent expansion. If false: no expansion
           t0(par.get<double>("t0", 0, Important)),         // Initial time
           tMax(par.get<T>("tMax", 10000 * dt, Important)), // Final time
-          kCutoff(par.get<T>("kCutOff", std::numeric_limits<double>::infinity(), Important)), // Momenta cutoff in spectra of initial fluctuations
+          kCutoff(par.get<T>("kCutOff", -1.0,
+                             Important)),                          // Momenta cutoff in spectra of initial fluctuations. -1 means no cutoff.
           SIC(par.get<InitialConditionsType::S>("ICtype_S", InitialConditionsType::S::Default)),
           U1IC(par.get<InitialConditionsType::U1>("ICtype_U1", InitialConditionsType::U1::Default)),
           tOutFreq(par.get<T>("tOutputFreq", 10 * dt, Important)), // Printing time interval of frequent output
@@ -90,11 +91,12 @@ namespace TempLat
           doWeRestart(false), // Boolean which tells if we are runing in restart mode or not. Set in the main.
           tolerance(par.get<T>("tolerance", -1)), // For adaptative solvers only
           powerSpectrumType(par.get<int>("PS_type", 1)), powerSpectrumVersion(par.get<int>("PS_version", 1)),
-          GWprojectorType(par.get<int>("GWprojectorType",
-                                       2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
-          withGWs(par.get<bool>("withGWs", false, Important)), flagON(par.get<bool>("flagON", false)),
+          withGWs(par.get<bool>("withGWs", false, Important)),
+          eTypeGW(par.get<bool>("doLFforGWs", true, Important) ? LF : eType), // Type of evolution algorithm
+          GWprojectorType(par.get<int>("GWprojectorType", 2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
+          flagON(par.get<bool>("flagON", false)),
+          flagChiralPS(par.get<bool>("flagChiralPS", false)),
           unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false)),
-          //The following parameters are related to simulations with cosmic defects.
           lcorr(par.get<T>("lcorr", 0.)),
           deltaNoise(par.get<T>("deltaNoise", 1.)),
           doDiffusion(par.get<bool>("doDiffusion", false)),
@@ -141,6 +143,8 @@ namespace TempLat
 
       dx = lSide / N;                             // Lattice spacing
       kUV = std::sqrt(3) * Constants::pi<T> / dx; // Maximum momenta in the lattice
+
+      if(kCutoff < 0.0) kCutoff = 2 * kUV; // no cutoff means it's larger than kUV.
 
       // Now we see if the user wants to save the simulation at the end of the run. This is
       // specified by specifying a path different from the Constants::defaultString. If not
@@ -198,7 +202,7 @@ namespace TempLat
 
     const T t0;
     const T tMax;
-    const T kCutoff;
+    T kCutoff;
     const InitialConditionsType::S SIC;
     const InitialConditionsType::U1 U1IC;
     const T tOutFreq;
@@ -248,9 +252,11 @@ namespace TempLat
     const int powerSpectrumType;
     const int powerSpectrumVersion;
 
-    const int GWprojectorType;
     const bool withGWs;
+    const EvolverType eTypeGW;
+    const int GWprojectorType;
     const bool flagON;
+    const bool flagChiralPS;
     const bool unbinnedSpectra;
 
     const T lcorr;

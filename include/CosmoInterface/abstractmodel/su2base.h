@@ -24,7 +24,9 @@ namespace TempLat
 
   protected:
     SU2Base(device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, const LatticeParameters<T> &par)
-        : fldSU2("SU2Fld", toolBox, par), piSU2("pi_SU2Fld", toolBox, par)
+        : fldSU2("SU2Fld", toolBox, par), piSU2("pi_SU2Fld", toolBox, par),
+          // Initialize average fields
+          SU2Mag2AvI(0), SU2Mag2AvSI(0), SU2pi2AvSI(0), SU2pi2AvSIM(0), SU2pi2AvIM(0), SU2pi2AvI(0)
     {
     }
   };

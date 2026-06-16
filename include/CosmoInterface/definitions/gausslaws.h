@@ -48,7 +48,8 @@ namespace TempLat
       auto avRHS = average(sqrt(pow<2>(RHS + RHSaxion)));
       auto avLHS = average(sqrt(pow<2>(LHS)));
 
-      return make_templatvector(static_cast<double>(avDiff / avSum), static_cast<double>(avLHS), static_cast<double>(avRHS));
+      return make_templatvector(static_cast<double>(avDiff / avSum), static_cast<double>(avLHS),
+                                static_cast<double>(avRHS));
     }
 
     // Checks Gauss constraint for the SU(2) gauge sector:
@@ -56,9 +57,9 @@ namespace TempLat
     {
       auto RHS = -model.dx * MatterCurrents::SU2ChargeDensity(model, n); // right hand side (source term)
       auto LHS = Total(i, 1, Model::NDim,
-                       (model.piSU2(n)(i) -
-                        shift(dagger(model.fldSU2(n)(i)) * model.piSU2(n)(i) * model.fldSU2(n)(i),
-                              -i))); // left hand side
+                       (1.0 / model.dx) * (model.piSU2(n)(i) -
+                                           shift(dagger(model.fldSU2(n)(i)) * model.piSU2(n)(i) * model.fldSU2(n)(i),
+                                                 -i))); // left hand side
 
       auto diff = LHS - RHS;
       auto sum = LHS + RHS;

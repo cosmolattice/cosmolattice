@@ -9,11 +9,12 @@
 
 #include "TempLat/util/constants.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-template <typename T>
-class ScaleFactorBase {
-public:
+  template <typename T> class ScaleFactorBase
+  {
+  public:
     static constexpr T MPl = Constants::reducedMPlanck<T>;
 
     T aSI, aI, aIM;
@@ -21,10 +22,9 @@ public:
     T b0;
     T fatteningFactor;
 
-protected:
-    ScaleFactorBase() : aSI(1), aI(1), aIM(1), fatteningFactor(1.)
-    {}
-};
+  protected:
+    ScaleFactorBase() : aSI(1), aI(1), aIM(1), aDotSI(0), aDotSIM(0), aDotI(0), aDotIM(0), b0(0), fatteningFactor(1.) {}
+  };
 
 } // namespace TempLat
 

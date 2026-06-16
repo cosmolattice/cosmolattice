@@ -20,7 +20,7 @@ namespace TempLat
     using NonMinimalCouplings = typename NONMINCOUPLINGS::template Container<T>;
     static constexpr bool IsNonMinimallyCoupled = NONMINCOUPLINGS::howManyCouples() > 0;
 
-    NONMINCOUPLINGS xis;
+    NonMinimalCouplings xis;
 
     // Averages needed for non-minimal coupling
     T RI;
@@ -34,6 +34,8 @@ namespace TempLat
 
   protected:
     NonMinimalCouplingBase(ParameterParser &parser)
+        : // Initialize variables
+          RI(0), piAI(0)
     {
       auto xiCouplings = parser.get<T, NonMinimalCouplings::howManyCouples()>("xis", 1);
       xis.setEffectiveCharges(xiCouplings, {1});

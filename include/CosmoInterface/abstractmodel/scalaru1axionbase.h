@@ -16,6 +16,7 @@ namespace TempLat
   {
   public:
     using ScalarU1AxionCouplings = typename SCALARU1AXIONCOUPLINGS::template Container<T>;
+    static constexpr bool IsAxionU1Coupled = SCALARU1AXIONCOUPLINGS::howManyCouples() > 0;
 
     ScalarU1AxionCouplings alphaLambda_SU1;
     // Time to switch from linear to non-linear evolution for AxionU1 coupling

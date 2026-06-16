@@ -56,7 +56,6 @@ namespace TempLat
       T weight = synced ? 0.5 : 1.0;
 
       if constexpr (Model::Ns > 0) kickScalar(model, weight);
-      if (model.fldGWs != nullptr) kickGWs(model, weight);
       if constexpr (Model::NCs > 0) kickCS(model, weight);
       if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, weight);
       if constexpr (Model::NU1 > 0) kickU1Vector(model, weight);
@@ -72,11 +71,10 @@ namespace TempLat
         //  whether or not the field were synced or not.
 
         // Now we compute the drifts:
-        driftScaleFactor(model, tMinust0 + model.dt);
+        driftScaleFactor(model, tMinust0);
       }
 
       if constexpr (Model::Ns > 0) driftScalar(model);
-      if (model.fldGWs != nullptr) driftGWs(model);
       if constexpr (Model::NCs > 0) driftCS(model);
       if constexpr (Model::NSU2Doublet > 0) driftSU2Doublet(model);
       if constexpr (Model::NU1 > 0) driftU1Vector(model);
@@ -94,7 +92,6 @@ namespace TempLat
     {
       if (!synced) {
         if constexpr (Model::Ns > 0) kickScalar(model, 0.5);
-        if (model.fldGWs != nullptr) kickGWs(model, 0.5);
         if constexpr (Model::NCs > 0) kickCS(model, 0.5);
         if constexpr (Model::NSU2Doublet > 0) kickSU2Doublet(model, 0.5);
         if constexpr (Model::NU1 > 0) kickU1Vector(model, 0.5);
@@ -106,12 +103,10 @@ namespace TempLat
           if constexpr (Model::NSU2Doublet > 0) model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model); // at t
           if constexpr (Model::NU1 > 0) model.U1pi2AvI = Averages::pi2U1(model);                     // at t
           if constexpr (Model::NSU2 > 0) model.SU2pi2AvI = Averages::pi2SU2(model);                  // at t
-          if (!fixedBackground)
-            model.aDotI = model.aDotSI + model.dt / 2.0 * ScaleFactorKernels::get(model);
-          else
-            model.aDotI = aBackground.dot(tMinust0);
+          if (!fixedBackground) model.aDotI = model.aDotSI + model.dt / 2.0 * ScaleFactorKernels::get(model);
         }
       }
+      if (expansion && fixedBackground) model.aDotI = aBackground.dot(tMinust0);
       synced = true;
     }
 
@@ -166,7 +161,7 @@ namespace TempLat
       model.aIM = model.aI;  // at t
       if (fixedBackground) { // if fixed background, the scale factor is given by the power-law function in
                              // fixedbackgroundexpansion.h
-        model.aI = aBackground(tMinust0);
+        model.aI = aBackground(tMinust0 + model.dt);
         model.aSI = aBackground(tMinust0 + model.dt / 2.0);
         if constexpr (Model::DefectsModel) {
           if (aBackground.areWeFattening()) Fattening::updateFatteningFactor(model, tMinust0, aBackground.t0, aBackground.t0Fat, aBackground.tMaxFat, aBackground.sFat);
@@ -213,11 +208,11 @@ namespace TempLat
     template <class Model> void driftSU2Vector(Model &model)
     {
       ForLoop(n, 0, Model::NSU2 - 1,
-              auto rescaledPi = MakeVector(
-                  i, 1, Model::NDim,
-                  exp(pow(model.aSI, model.alpha - 1) * model.dx * model.dt * model.gQ_SU2DblSU2(0_c, n) *
-                      model.piSU2(n)(i))); // The 0_c is correct. In our convention, the link is normalized wrt the
-                                           // first doublet charge.
+              auto rescaledPi =
+                  MakeVector(i, 1, Model::NDim,
+                             exp(pow(model.aSI, model.alpha - 1) * model.dx * model.dt * model.gQ_SU2DblSU2(0_c, n) *
+                                 model.piSU2(n)(i))); // The 0_c is correct. In our convention, the link is normalized
+                                                      // wrt the first doublet charge.
 
               model.fldSU2(n) = rescaledPi * model.fldSU2(n););
       // Here for instance we use the ForLoop again, as this makes it easier to define
@@ -268,7 +263,7 @@ namespace TempLat
       model.potAvI = average(Potential::potential(model));                                           // at t
     }
 
-  private:
+  public:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
     bool expansion;

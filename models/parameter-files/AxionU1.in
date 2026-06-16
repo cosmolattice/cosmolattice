@@ -9,23 +9,24 @@ evolver = RK2
 
 #Lattice
 N = 64
-dt = 0.01
+dt = 0.005
 kIR = 1
 
 #Times
 tOutputFreq = 0.05
-tOutputInfreq = 5
+tOutputInfreq = 0.5
 tOutputRareFreq = 10
-tMax = 12.5
+tMax = 12
 
 # if t < tNonlinearAxionU1 system will evolve during Linear regime of Axion U(1) else it evolves the full non-linear system 
-tNonLinearAxionU1 = 3.5
+tNonLinearAxionU1 = 1.5
 
 #Spectra options
-withGWs = false # for the current axion-U(1) model not implemented
+withGWs = false 
+flagChiralPS=false
 
 #IC
-kCutOff = 10
+kCutOff = 30
 initial_amplitudes = 3.39928e18  # homogeneous amplitudes in GeV
 initial_momenta = -3.0714e31     # homogeneous amplitudes in GeV2
 

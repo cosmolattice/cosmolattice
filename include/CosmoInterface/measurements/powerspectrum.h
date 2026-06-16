@@ -16,6 +16,7 @@
 #include "CosmoInterface/runparameters.h"
 #include "CosmoInterface/definitions/energies.h"
 #include "CosmoInterface/definitions/gwsprojector.h"
+#include "CosmoInterface/definitions/chiralpowerspectrum.h"
 
 namespace TempLat
 {
@@ -65,6 +66,11 @@ namespace TempLat
       }
     }
 
+    template <typename Model, int U1, int C>
+    auto chiralPowerSpectrumU1(Model& model, Tag<U1> u1, Tag<C> c, bool sign, bool AorE)
+    {
+      return this->powerSpectrum(projectChiralU1Type1(model, u1, c, sign, AorE),GetNGrid::get(model),model.kIR,model.getToolBox());
+    }
     // This function computes the power spectrum.
     // --> The normalization factor ensures that it recovers the appropriate expression in the continuum limit.
     //     This is discussed in Sect. 3 of arXiv:2006.15122.

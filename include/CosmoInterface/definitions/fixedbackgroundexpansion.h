@@ -22,6 +22,7 @@ namespace TempLat
     template <class Model> FixedBackgroundExpansion(Model &model, RunParameters<T> &rPar):
     H0(rPar.H0 / model.omegaStar), // Initial Hubble parameter (in program units)
     pEoS(2.0 / (3.0 * (1.0 + rPar.omegaEoS) - 2.0 * model.alpha)), // Coefficient of the power-law expansion: depends on EoS and alpha
+    alpha(model.alpha),
     doFattening(rPar.doFattening),
     t0(rPar.t0),
     t0Fat(rPar.t0Fat),
@@ -43,13 +44,17 @@ namespace TempLat
       return doFattening;
     }
 
-
+    auto R(T deltaT) // Ricci scalar for NMC field evolution in fixed background expansion
+    {
+      return -6.0 * pow<2>(H0) * pEoS * pow(1 + H0 / pEoS * deltaT, -2.0 * alpha * pEoS) * (1 + pEoS * (alpha-2)) / pow<2>(pEoS + H0 * deltaT);
+    }
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
     T H0;
     T pEoS;
+    T alpha;
     bool doFattening;
 
   public:

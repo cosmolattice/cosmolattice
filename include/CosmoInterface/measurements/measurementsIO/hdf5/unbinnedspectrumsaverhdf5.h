@@ -29,7 +29,7 @@ namespace TempLat
     UnbinnedSpectrumSaverHDF5(FilesManager<NDim> &fm, const std::string &fn, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
         : filename(fm.getHDF5UnbinnedSpectraFn()), verbosity(rPar.spectraVerbosity), nBins(rPar.nBinsSpectra),
-          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName(fn), amIRoot(pAmIRoot),
+          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName("unbinnedspectra_" + fn), amIRoot(pAmIRoot),
           appendMode(append), nMeas(fm.getNInfreqMeas()), flushCount(0), flushFreq(fm.getFlushFreq())
     {
     }
@@ -37,7 +37,7 @@ namespace TempLat
     template <size_t NDim>
     UnbinnedSpectrumSaverHDF5(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
-        : UnbinnedSpectrumSaverHDF5(fm, fm.getCurredName(fld, false, "spectra"), pAmIRoot, append, rPar)
+        : UnbinnedSpectrumSaverHDF5(fm, fm.getCurredName(fld, false, ""), pAmIRoot, append, rPar)
     {
     }
 
@@ -79,23 +79,27 @@ namespace TempLat
       std::vector<hsize_t> dims{0, klength};
       std::vector<hsize_t> chunks{64, klength};
 
-      auto openOrCreate = [&](const std::string &name) {
-        std::shared_ptr<HDF5TimeSeries<T>> ts;
+      auto openOrCreate = [&](const std::string &name, bool singleMeasurement = true) {
+        std::shared_ptr<HDF5TimeSeries<T>> ts = nullptr;
         if (appendMode && H5Lexists(group, name.c_str(), H5P_DEFAULT) > 0) {
-          ts = std::make_shared<HDF5TimeSeries<T>>(group.reopenDataset(name));
-          ts->setOffset(ts->getSizes()[0]);
+          if (!singleMeasurement) {
+            ts = std::make_shared<HDF5TimeSeries<T>>(group.reopenDataset(name));
+            ts->setOffset(ts->getSizes()[0]);
+          }
         } else {
           ts = std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>(name, dims, chunks));
         }
-        ts->extend(nMeas);
-        ts->close();
+        if (ts != nullptr) {
+          ts->extend(singleMeasurement ? 1 : nMeas);
+          ts->close();
+        }
         return ts;
       };
 
       multData = openOrCreate("momMultiplicity");
       binAvData = openOrCreate("momBinAverage");
       for (size_t i = 0; i < arr.size(); ++i)
-        valueAvData.emplace_back(openOrCreate("spectAverage_" + std::to_string(i)));
+        valueAvData.emplace_back(openOrCreate("spectAverage_" + std::to_string(i), false));
 
       if (verbosity == 2) {
         throw(NotImplementedInHDF5("Verbosity 2 is for the spectrum is not supported currently in hdf5. Easy to fix if "
@@ -109,8 +113,16 @@ namespace TempLat
 
     void flush_spectra(HDF5Group &group)
     {
-      flush_single_spectra(multData, "momMultiplicity", group);
-      flush_single_spectra(binAvData, "momBinAverage", group);
+
+      if (multData != nullptr) {
+        flush_single_spectra(multData, "momMultiplicity", group);
+        multData = nullptr;
+      }
+
+      if (binAvData != nullptr) {
+        flush_single_spectra(binAvData, "momBinAverage", group);
+        binAvData = nullptr;
+      }
 
       for (size_t i = 0; i < valueAvData.size(); ++i) {
         flush_single_spectra(valueAvData[i], "spectAverage_" + std::to_string(i), group);
@@ -119,23 +131,28 @@ namespace TempLat
 
     void push_spectra(std::vector<std::shared_ptr<UnbinnedRadialProjectionResult<T>>> arr, T t)
     {
-      if (nBins > -1) {
+
+      if (nBins > -1 && binAvData != nullptr) {
         for (size_t i = 0; i < arr.size(); ++i) {
           arr[i]->rescaleBins(kIR);
         }
       }
 
-      std::vector<T> mult;
-      for (auto &&it : (*arr[0])) {
-         mult.emplace_back(std::get<1>(it).multiplicity * 2);
+      if(multData != nullptr) {
+        std::vector<T> mult;
+        for (auto &&it : (*arr[0])) {
+          mult.emplace_back(std::get<1>(it).multiplicity * 2);
+        }
+        multData->push(mult);
       }
-      multData->push(mult);
 
-      std::vector<T> binAv;
-      for (auto &&it : (*arr[0])) {
-        binAv.emplace_back(std::get<0>(it));
+      if (binAvData != nullptr){
+        std::vector<T> binAv;
+        for (auto &&it : (*arr[0])) {
+          binAv.emplace_back(std::get<0>(it));
+        }
+        binAvData->push(binAv);
       }
-      binAvData->push(binAv);
 
       std::vector<T> valAv;
       for (size_t i = 0; i < arr.size(); ++i) {

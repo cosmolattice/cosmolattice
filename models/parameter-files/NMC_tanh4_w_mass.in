@@ -1,0 +1,38 @@
+#Output
+outputfile = ./
+
+#Evolution
+expansion = true
+evolver = RK2
+xis = 100.0 
+
+#Lattice
+N = 64
+dt = 0.1
+kIR = 0.02
+#nBinsSpectra = 200
+
+#Times
+tOutputFreq = 0.5
+tOutputInfreq = 1
+tMax = 50
+PS_type = 2
+PS_version = 1
+
+#IC
+
+#kCutOff = 1
+
+ext_PS0 = None 
+ext_PS1 = xi_100_Nafter_0p9_Nbefore_14_N256_M_5.dat 
+
+initial_amplitudes = 5.69091e17 0 # homogeneous amplitudes in GeV
+initial_momenta = -5.38566e30 0    # homogeneous amplitudes in (GeV)^2
+
+#Model Parameters
+M = 5 # M scale in mp  units
+Hstar = 2.40964e13 # Hubble rate -14 efolds from end of inflation in GeV
+V0 = 4.51289 # Lambda4 /(4*mp^2*Hstar^2)
+lambdaNMC = 0
+mNMC = 0
+

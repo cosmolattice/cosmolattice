@@ -10,22 +10,29 @@
 #include <string>
 #include "CosmoInterface/runparameters.h"
 
-namespace TempLat {
+namespace TempLat
+{
 
-template <typename T>
-class ModelParametersBase {
-public:
-    T alpha, fStar, omegaStar;
+  template <typename T> class ModelParametersBase
+  {
+  public:
     T dx, kIR, dt;
-    T t0, t;
     std::string name;
+    T t0, t;
+    T alpha, fStar, omegaStar;
 
     std::string extraInfoFn(int verbosity) { return verbosity > 0 ? name + "_" : ""; }
 
-protected:
+  protected:
     ModelParametersBase(const LatticeParameters<T> &par, T pDt, std::string pName)
-        : dx(par.getDx()), kIR(par.getKIR()), dt(pDt), name(std::move(pName)) {}
-};
+        : dx(par.getDx()), kIR(par.getKIR()), dt(pDt), name(std::move(pName)),
+          // Initialize time variables
+          t0(0), t(0),
+          // And model parameters
+          alpha(1), fStar(1), omegaStar(1)
+    {
+    }
+  };
 
 } // namespace TempLat
 

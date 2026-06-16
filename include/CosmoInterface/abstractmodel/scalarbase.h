@@ -52,6 +52,12 @@ namespace TempLat
     std::array<std::string, NS> extPS;
 
     // Potential stubs (to be overridden in derived models)
+    template <int N> auto potentialTerms(Tag<N>)
+    {
+      throw(PotentialDerivativeNotDefined("You tried to call potentialTerms N = " + std::to_string(N) +
+                                          ", which is not defined in your model. Abort."));
+      return ZeroType();
+    }
     template <int N> auto potDeriv(Tag<N>)
     {
       throw(PotentialDerivativeNotDefined("You tried to call potDeriv N = " + std::to_string(N) +
@@ -72,11 +78,13 @@ namespace TempLat
     {
     }
 
-    ScalarBase(ParameterParser &parser, device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, const LatticeParameters<T> &par)
+    ScalarBase(ParameterParser &parser, device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
+               const LatticeParameters<T> &par)
         : isInitialized(toolBox->template initializeFFT<T>()), fldS("scalar", toolBox, par),
           piS("pi_scalar", toolBox, par)
     {
-      ForLoop(i, 0, NS-1, {extPS[i] = parser.get<std::string>("ext_PS" + std::to_string(i), Constants::defaultString);});
+      ForLoop(i, 0, NS - 1,
+              { extPS[i] = parser.get<std::string>("ext_PS" + std::to_string(i), Constants::defaultString); });
     }
   };
 

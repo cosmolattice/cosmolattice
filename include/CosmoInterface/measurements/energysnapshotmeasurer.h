@@ -46,7 +46,10 @@ namespace TempLat
       savePot = IsInContainer::check("E_V", toSave);               // potential energy
       saveETotal = IsInContainer::check("E", toSave);              // total energy energy
 
-      if(saveScalar || saveScalarK || saveScalarG || saveComplexScalar || saveComplexScalarK || saveComplexScalarG || saveSU2DoubletK || saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot || saveETotal ) fIO.setSaverLimits(pars.snapLower, pars.snapUpper, pars.snapStep);
+      if (saveScalar || saveScalarK || saveScalarG || saveComplexScalar || saveComplexScalarK || saveComplexScalarG ||
+          saveSU2DoubletK || saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot ||
+          saveETotal)
+        fIO.setSaverLimits(pars.snapLower, pars.snapUpper, pars.snapStep);
 
       auto createIfFresh = [&](const std::string &name) {
         if (fm.prepareOutputFile(name)) {
@@ -76,10 +79,9 @@ namespace TempLat
     template <typename T> void measure(Model &model, T t)
     {
 #ifdef HAVE_HDF5
-      if(saveScalar) {   // kinetic energy of the scalar singlets
-        ForLoop(i, 0, Model::Ns -1, fIO.saver.open( nameScalar );
-                fIO.saver.save(t, model.fldS(i), "S_" + std::to_string(i));
-                fIO.saver.close(););
+      if (saveScalar) { // kinetic energy of the scalar singlets
+        ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalar);
+                fIO.saver.save(t, model.fldS(i), "S_" + std::to_string(i)); fIO.saver.close(););
       }
       if (saveScalarK) { // kinetic energy of the scalar singlets
         ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalarK); fIO.saver.save(
@@ -91,10 +93,9 @@ namespace TempLat
             t, Energies::gradientS(model, FieldFunctionals::grad2S(model, i)), "E_S_G_" + std::to_string(i));
                 fIO.saver.close(););
       }
-      if(saveComplexScalar) {   // kinetic energy of the complex scalars
-        ForLoop(i, 0, Model::NCs -1, fIO.saver.open( nameComplexScalar );
-                fIO.saver.save(t, norm(model.fldCS(i)), "CS_" + std::to_string(i));
-                fIO.saver.close(););
+      if (saveComplexScalar) { // kinetic energy of the complex scalars
+        ForLoop(i, 0, Model::NCs - 1, fIO.saver.open(nameComplexScalar);
+                fIO.saver.save(t, norm(model.fldCS(i)), "CS_" + std::to_string(i)); fIO.saver.close(););
       }
       if (saveComplexScalarK) { // kinetic energy of the complex scalars
         ForLoop(i, 0, Model::NCs - 1, fIO.saver.open(nameComplexScalarK); fIO.saver.save(
@@ -139,12 +140,17 @@ namespace TempLat
                 fIO.saver.close(););
       }
       if (savePot) {
-        fIO.saver.open(namePot);
-        fIO.saver.save(t, Potential::potential(model), "E_V");
-        fIO.saver.close();
+        if constexpr (Model::NPotTerms == 0)
+          throw(FileIOException(
+              "You tried to save the potential energy, but your model does not have any potential term. Abort."));
+        if constexpr (Model::NPotTerms > 0) {
+          fIO.saver.open(namePot);
+          fIO.saver.save(t, Potential::potential(model), "E_V");
+          fIO.saver.close();
+        }
       }
-      if(saveETotal) {
-        fIO.saver.open( nameETotal );
+      if (saveETotal) {
+        fIO.saver.open(nameETotal);
         fIO.saver.save(t, Energies::totalEnergy(model), "E_Total");
         fIO.saver.close();
       }

@@ -31,7 +31,7 @@ namespace TempLat
     SpectrumSaverHDF5(FilesManager<NDim> &fm, const std::string &fn, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
         : filename(fm.getHDF5SpectraFn()), verbosity(rPar.spectraVerbosity), nBins(rPar.nBinsSpectra),
-          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName(fn), amIRoot(pAmIRoot),
+          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName("spectra_" + fn), amIRoot(pAmIRoot),
           appendMode(append), nMeas(fm.getNInfreqMeas()), flushCount(0), flushFreq(fm.getFlushFreq())
     {
     }
@@ -39,7 +39,7 @@ namespace TempLat
     template <size_t NDim>
     SpectrumSaverHDF5(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
-        : SpectrumSaverHDF5(fm, fm.getCurredName(fld, false, "spectra"), pAmIRoot, append, rPar)
+        : SpectrumSaverHDF5(fm, fm.getCurredName(fld, false, ""), pAmIRoot, append, rPar)
     {
     }
 
@@ -80,16 +80,20 @@ namespace TempLat
       std::vector<hsize_t> dims{0, klength};
       std::vector<hsize_t> chunks{64, klength};
 
-      auto openOrCreate = [&](const std::string &name) {
-        std::shared_ptr<HDF5TimeSeries<T>> ts;
+      auto openOrCreate = [&](const std::string &name, bool singleMeasurement = true) {
+        std::shared_ptr<HDF5TimeSeries<T>> ts = nullptr;
         if (appendMode && H5Lexists(group, name.c_str(), H5P_DEFAULT) > 0) {
-          ts = std::make_shared<HDF5TimeSeries<T>>(group.reopenDataset(name));
-          ts->setOffset(ts->getSizes()[0]);
+          if (!singleMeasurement) {
+            ts = std::make_shared<HDF5TimeSeries<T>>(group.reopenDataset(name));
+            ts->setOffset(ts->getSizes()[0]);
+          }
         } else {
           ts = std::make_shared<HDF5TimeSeries<T>>(group.template createTimeSeries<T>(name, dims, chunks));
         }
-        ts->extend(nMeas);
-        ts->close();
+        if (ts != nullptr) {
+          ts->extend(singleMeasurement ? 1 : nMeas);
+          ts->close();
+        }
         return ts;
       };
 
@@ -97,7 +101,7 @@ namespace TempLat
       if (verbosity != 0) binAvData = openOrCreate("momBinAverage");
       if (verbosity != 1) binCtrData = openOrCreate("momBinCentralValues");
       for (size_t i = 0; i < arr.size(); ++i)
-        valueAvData.emplace_back(openOrCreate("spectAverage_" + std::to_string(i)));
+        valueAvData.emplace_back(openOrCreate("spectAverage_" + std::to_string(i), false));
 
       if (verbosity == 2) {
         throw(NotImplementedInHDF5("Verbosity 2 is for the spectrum is not supported currently in hdf5. Easy to fix if "
@@ -111,13 +115,17 @@ namespace TempLat
 
     void flush_spectra(HDF5Group &group)
     {
-      flush_single_spectra(multData, "momMultiplicity", group);
-
-      if (verbosity != 0) {
-        flush_single_spectra(binAvData, "momBinAverage", group);
+      if (multData != nullptr) {
+        flush_single_spectra(multData, "momMultiplicity", group);
+        multData = nullptr;
       }
-      if (verbosity != 1) {
+      if (verbosity != 0 && binAvData != nullptr) {
+        flush_single_spectra(binAvData, "momBinAverage", group);
+        binAvData = nullptr;
+      }
+      if (verbosity != 1 && binCtrData != nullptr) {
         flush_single_spectra(binCtrData, "momBinCentralValues", group);
+        binCtrData = nullptr;
       }
 
       for (size_t i = 0; i < valueAvData.size(); ++i) {
@@ -127,26 +135,29 @@ namespace TempLat
 
     void push_spectra(std::vector<std::shared_ptr<RadialProjectionResult<T>>> arr, T t)
     {
-      if (nBins > -1) {
+      if (nBins > -1 && (binAvData != nullptr || binCtrData != nullptr)) {
         for (size_t i = 0; i < arr.size(); ++i) {
           arr[i]->rescaleBins(kIR);
         }
       }
 
-      std::vector<T> mult;
-      for (auto &&it : (*arr[0])) {
-        mult.emplace_back(it.getValue().multiplicity * 2);
+      if (multData != nullptr) {
+        std::vector<T> mult;
+        for (auto &&it : (*arr[0])) {
+          mult.emplace_back(it.getValue().multiplicity * 2);
+        }
+        multData->push(mult);
       }
-      multData->push(mult);
 
-      if (verbosity != 0) {
+      if (verbosity != 0 && binAvData != nullptr) {
         std::vector<T> binAv;
         for (auto &&it : (*arr[0])) {
           binAv.emplace_back(it.getBin().average);
         }
         binAvData->push(binAv);
       }
-      if (verbosity != 1) {
+
+      if (verbosity != 1 && binCtrData != nullptr) {
         binCtrData->push(arr[0]->getCentralBinBounds());
       }
 

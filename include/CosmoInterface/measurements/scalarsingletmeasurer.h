@@ -40,10 +40,10 @@ namespace TempLat
               standardOut.emplace_back(
                   MeasurementsSaver<T>(filesManager, filesManager.getSimpleName(model.fldS(i)) + postfix , amIRoot, append, MeansMeasurer::header()));
               // File for volume-averages
-              spectraOut.emplace_back(SpectrumSaver<T>(filesManager, filesManager.getCurredName(model.fldS(i), false) + postfix, amIRoot, append, par, isSpectraMeasured));
+              spectraOut.emplace_back(SpectrumSaver<T>(filesManager, filesManager.getSimpleName(model.fldS(i)) + postfix, amIRoot, append, par, !isSpectraMeasured));
               // File for spectra
               ONOut.emplace_back(
-                  SpectrumSaver<T>(filesManager, "ON_scalar_" + std::to_string(i) + postfix, amIRoot, append, par, flagON && isSpectraMeasured)
+                  SpectrumSaver<T>(filesManager, "ON_scalar_" + std::to_string(i) + postfix, amIRoot, append, par, !(flagON && isSpectraMeasured))
                 );
                 // File for occupation number
       );
@@ -65,13 +65,16 @@ namespace TempLat
                               // requires one additional field to measure it (JBB, Nov 2023).
     void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
-      if (isSpectraMeasured) ForLoop(i, 0, Model::Ns - 1,
+      say << isSpectraMeasured;
+      if (isSpectraMeasured) {
+        ForLoop(i, 0, Model::Ns - 1,
               spectraOut(i).save(lastMeas, t,
                                  PSMeasurer.powerSpectrum(model.fldS(i)),
                                  pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i))
               );
               if (flagON) ONOut(i).save(lastMeas, t, ONMeasurer.occupationNumber(model, i));
       );
+      }
     }
 
   private:

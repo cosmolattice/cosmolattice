@@ -67,7 +67,9 @@ namespace TempLat
   protected:
     SU2DoubletSectorBase(ParameterParser &parser, device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox,
                          const LatticeParameters<T> &par)
-        : fldSU2Doublet("SU2Doublet", toolBox, par), piSU2Doublet("pi_SU2Doublet", toolBox, par)
+        : fldSU2Doublet("SU2Doublet", toolBox, par), piSU2Doublet("pi_SU2Doublet", toolBox, par),
+          // Initialize average fields
+          SU2DblGrad2AvI(0), SU2DblGrad2AvSI(0), SU2DblPi2AvSI(0), SU2DblPi2AvSIM(0), SU2DblPi2AvIM(0), SU2DblPi2AvI(0)
     {
       auto gU1s = parser.get<double, SU2DoubletU1Couplings::nGauge>("gU1s", 1.0);
       auto SU2DoubletU1Charges = parser.get<double, SU2DoubletU1Couplings::howManyCouples()>("SU2DoubletU1_charges", 1);

@@ -51,11 +51,16 @@ namespace TempLat
               gauss.emplace_back(
                   MeasurementsSaver<T>(filesManager, "gauss_U1_" + std::to_string(i) + postfix, amIRoot, append,
                                        {"t", "var(LHS-RHS)_over_var(LHS+RHS)", "var(LHS)",
-                                        "var(RHS)"}, isGaussMeasured)); // Checks the degree of conservation of the U(1) gauss law.
+                                        "var(RHS)"}, !isGaussMeasured)); // Checks the degree of conservation of the U(1) gauss law.
 
               spectra.emplace_back(SpectrumSaver<T>(filesManager, "norm_U1_" + std::to_string(i) + postfix, amIRoot, append,
-                                                    par, isSpectraMeasured)); // Contains the spectra of the electric and magnetic fields.
-      );
+                                                    par, !isSpectraMeasured)); // Contains the spectra of the electric and magnetic fields.
+              if (flagChiralPS)
+              {
+                chiralSpectraA.emplace_back(SpectrumSaver<T>(filesManager, "chiral_U1_" + std::to_string(i), amIRoot, append,par));
+                chiralSpectraE.emplace_back(SpectrumSaver<T>(filesManager, "chiral_Elec_U1_" + std::to_string(i), amIRoot, append,par));
+              }
+        );
     }
 
     // This measures the corresponding averages with MeansMeasurer::measure, and add them to the files.
@@ -91,7 +96,19 @@ namespace TempLat
           auto magSpecU1 = PSMeasurer.powerSpectrum(B1) + PSMeasurer.powerSpectrum(B2) + PSMeasurer.powerSpectrum(B3);
           auto elSpecU1 =
               Total(i, 1, Model::NDim, pow(model.aI, 2 * model.alpha - 2) * PSMeasurer.powerSpectrum(model.piU1(k)(i)));
-          spectra(k).save(lastMeas, t, elSpecU1, magSpecU1););
+          spectra(k).save(lastMeas, t, elSpecU1, magSpecU1);
+
+          if (flagChiralPS)
+          {
+            auto Aplus  = Total(i, 1, Model::NDim, PSMeasurer.chiralPowerSpectrumU1(model, k, i, true,  true));
+            auto Aminus = Total(i, 1, Model::NDim, PSMeasurer.chiralPowerSpectrumU1(model, k, i, false, true));
+            auto Eplus  = Total(i, 1, Model::NDim, pow(model.aI, 2 * model.alpha - 2) * PSMeasurer.chiralPowerSpectrumU1(model, k, i, true,  false));
+            auto Eminus = Total(i, 1, Model::NDim, pow(model.aI, 2 * model.alpha - 2) * PSMeasurer.chiralPowerSpectrumU1(model, k, i, false, false));
+
+            chiralSpectraA(k).save(lastMeas, t, Aplus, Aminus);
+            chiralSpectraE(k).save(lastMeas, t, Eplus, Eminus);
+          });
+
     }
 
   private:
@@ -102,6 +119,10 @@ namespace TempLat
     TempLatVector<MeasurementsSaver<T>> standardNormOut;
     TempLatVector<MeasurementsSaver<T>> gauss;
     TempLatVector<SpectrumSaver<T>> spectra;
+
+    bool flagChiralPS;
+    TempLatVector<SpectrumSaver<T>> chiralSpectraA;
+    TempLatVector<SpectrumSaver<T>> chiralSpectraE;
   };
 } // namespace TempLat
 
