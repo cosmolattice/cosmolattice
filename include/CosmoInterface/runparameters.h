@@ -152,7 +152,10 @@ namespace TempLat
         par.erase("backup_dir");
       }
 
-      if (powerSpectrumType < 0 or powerSpectrumType > 2)
+
+      if (powerSpectrumType == 0  and unbinnedSpectra = false)
+        throw(RunParametersInconsistent("powerSpectrumType 0 is only implemented for the unbinned power spectrum."));
+      if ( powerSpectrumType < 0 or powerSpectrumType > 1)
         throw(RunParametersInconsistent("powerSpectrumType " + std::to_string(powerSpectrumType) +
                                         " is not a valid powerSpectrumType."));
       if (powerSpectrumVersion < 1 or powerSpectrumVersion > 3)
