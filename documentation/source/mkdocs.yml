@@ -160,3 +160,12 @@ nav:
       - "Appendix: CMake Flags": "Manual/Appendix: CMake Flags.md"
       - "List of Implemented Functions": "Manual/List of Implemented Functions.md"
       - "Under the Hood: Expression Templates and CosmoLattice": "Manual/Under the Hood: Expression Templates and CosmoLattice.md"
+  - Events:
+      - "<span style='font-size:0.85em; font-style:italic;'>Hands-On CosmoLattice Workshop (2026, Complutense, Madrid)</span>": "events/School2026.md"
+      - "3rd CL School (2025, IBS, Daejeon)": "events/School2025.md"
+      - "2nd CL School (2023, Online)": "events/School2023.md"
+      - "1st CL School (2022, IFIC, Valencia)": "events/School2022.md"
+  - People: 
+      - "<span style='font-weight:bold;'>Developers </span>": "people/Developers.md"  
+  - Publications: 
+      - "<span style='font-weight:bold;'>Developers </span>": "publications/Publications.md"  
