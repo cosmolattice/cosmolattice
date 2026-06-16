@@ -86,7 +86,6 @@ namespace TempLat
       auto fk2 = projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox).measureUnbinned(N);
 
       if (PSType == 3) return fk2;
-      fk2.renormalizeBins();
 
       if (PSType == 2) {
         if constexpr (NDim == 1) {
@@ -99,8 +98,9 @@ namespace TempLat
           return Function(ntilde, pow<NDim>(kIR * ntilde * dx / N) / T(2) / pow<2>(Constants::pi<T>)) * fk2;
         }
       }
-      fk2.sumInsteadOfAverage();
 
+      fk2.renormalizeBins();
+      fk2.sumInsteadOfAverage();
       if (PSType == 1) {
         return Function(ntilde, kIR * ntilde * dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
       } else if (PSType == 0) {
