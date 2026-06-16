@@ -11,6 +11,7 @@
 #include "CosmoInterface/definitions/averages.h"
 #include "CosmoInterface/definitions/hubbleconstraint.h"
 #include "CosmoInterface/definitions/fixedbackgroundexpansion.h"
+#include "CosmoInterface/definitions/defectsmodule/fattening.h"
 
 namespace TempLat
 {
@@ -167,6 +168,9 @@ namespace TempLat
                              // fixedbackgroundexpansion.h
         model.aI = aBackground(tMinust0);
         model.aSI = aBackground(tMinust0 + model.dt / 2.0);
+        if constexpr (Model::DefectsModel) {
+          if (aBackground.areWeFattening()) Fattening::updateFatteningFactor(model, tMinust0, aBackground.t0, aBackground.t0Fat, aBackground.tMaxFat, aBackground.sFat);
+        }
       } else { // if self-consistent expansion, the scale factor is evolved with the VV algorithm
         model.aI += model.dt * model.aDotSI;      // at t+dt
         model.aSI = (model.aIM + model.aI) / 2.0; // at t+dt/2 (average)
@@ -202,7 +206,8 @@ namespace TempLat
 
     template <class Model> void driftU1Vector(Model &model)
     {
-      model.fldU1 += pow(model.aSI, model.alpha - 1) * model.dt * model.piU1;
+      model.fldU1 += pow(model.aSI, model.alpha - 1) * model.dt * model.piU1
+                     * IfElse(Model::DefectsModel, model.fatteningFactor, 1.);
     }
 
     template <class Model> void driftSU2Vector(Model &model)

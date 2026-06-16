@@ -21,12 +21,10 @@ namespace TempLat
   // number of fields of each species and the type of interactions.
 
   struct ModelPars : public TempLat::DefaultModelPars {
-    static constexpr size_t NScalars = 0;
     static constexpr size_t NCScalars = 1;
     static constexpr size_t NU1Flds = 1;
-    static constexpr size_t NSU2Doublet = 0;
-    static constexpr size_t NSU2Flds = 0;
     static constexpr size_t NPotTerms = 1;
+    static constexpr bool DefectsModel = true;
 
     using NumberType = double;
 
@@ -34,8 +32,6 @@ namespace TempLat
     // doublets
     //  --> If a type of interaction is not present, comment the corresponding line
     typedef TempLat::CouplingsManager<NCScalars, NU1Flds, true> CsU1Couplings; // activates coupling U(1)-complex scalar
-    // typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings;// activates coupling U(1)-doublet
-    // typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds,true> SU2DoubletSU2Couplings; // activates coupling SU(2)-doublet
   };
 
 #define MODELNAME localStrings
@@ -110,7 +106,7 @@ namespace TempLat
 
     auto potentialTerms(Tag<0>) // Term 0: Quartic potential of the complex scalar
     {
-      return (*this).fatteningfactor * pow<2>(pow<2>(norm(fldCS(0_c))) - FloatType(0.5))  ;
+      return fatteningFactor * pow<2>(pow<2>(norm(fldCS(0_c))) - FloatType(0.5))  ;
     }
 
     /////////
@@ -119,7 +115,7 @@ namespace TempLat
 
     auto potDerivNormCS(Tag<0>) // Derivative with respect complex scalar norm
     {
-      return (*this).fatteningfactor * FloatType(4.) * (pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) * norm(fldCS(0_c))  ;
+      return fatteningFactor * FloatType(4.) * (pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) * norm(fldCS(0_c))  ;
     }
 
     /////////
@@ -128,7 +124,7 @@ namespace TempLat
 
     auto potDeriv2NormCS(Tag<0>) // 2nd derivative with respect complex scalar norm
     {
-      return (*this).fatteningfactor * FloatType(4.) * (FloatType(3.) * pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) ;
+      return fatteningFactor * FloatType(4.) * (FloatType(3.) * pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) ;
     }
   };
 } // namespace TempLat

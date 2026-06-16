@@ -27,8 +27,8 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     template <typename Model>
     ScalarSingletMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par,
-                          bool append)
-        : ONMeasurer(par), flagON(par.flagON), PSType(par.powerSpectrumType)
+                          bool append, std::string postfix = "", bool createSpectra = true)
+        : ONMeasurer(par), flagON(par.flagON), PSType(par.powerSpectrumType), isSpectraMeasured(createSpectra)
     {
       bool amIRoot = model.getToolBox()->amIRoot();
       // We create two files for each singlet, one containing
@@ -38,16 +38,14 @@ namespace TempLat
       // adds a header to the file
       ForLoop(i, 0, Model::Ns - 1,
               standardOut.emplace_back(
-                  MeasurementsSaver<T>(filesManager, model.fldS(i), amIRoot, append, MeansMeasurer::header()));
+                  MeasurementsSaver<T>(filesManager, filesManager.getSimpleName(model.fldS(i)) + postfix , amIRoot, append, MeansMeasurer::header()));
               // File for volume-averages
-              spectraOut.emplace_back(SpectrumSaver<T>(filesManager, model.fldS(i), amIRoot, append, par));
+              spectraOut.emplace_back(SpectrumSaver<T>(filesManager, filesManager.getCurredName(model.fldS(i), false) + postfix, amIRoot, append, par, isSpectraMeasured));
               // File for spectra
-              if(flagON) {
-                ONOut.emplace_back(
-                  SpectrumSaver<T>(filesManager, "ON_scalar_" + std::to_string(i), amIRoot, append, par)
+              ONOut.emplace_back(
+                  SpectrumSaver<T>(filesManager, "ON_scalar_" + std::to_string(i) + postfix, amIRoot, append, par, flagON && isSpectraMeasured)
                 );
                 // File for occupation number
-              }
       );
     }
 
@@ -67,7 +65,7 @@ namespace TempLat
                               // requires one additional field to measure it (JBB, Nov 2023).
     void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
-      ForLoop(i, 0, Model::Ns - 1,
+      if (isSpectraMeasured) ForLoop(i, 0, Model::Ns - 1,
               spectraOut(i).save(lastMeas, t,
                                  PSMeasurer.powerSpectrum(model.fldS(i)),
                                  pow(model.aI, 2 * model.alpha - 6) * PSMeasurer.powerSpectrum(model.piS(i))
@@ -87,6 +85,7 @@ namespace TempLat
     bool flagON;
 
     const int PSType;
+    const bool isSpectraMeasured;
   };
 
 } // namespace TempLat

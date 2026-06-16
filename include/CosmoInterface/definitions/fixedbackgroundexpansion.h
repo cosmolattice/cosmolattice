@@ -19,12 +19,15 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    template <class Model> FixedBackgroundExpansion(Model &model, RunParameters<T> &rPar)
-    {
-      H0 = rPar.H0 / model.omegaStar; // Initial Hubble parameter (in program units)
-      // Coefficient of the power-law expansion: depends on EoS and alpha
-      pEoS = 2.0 / (3.0 * (1.0 + rPar.omegaEoS) - 2.0 * model.alpha);
-    }
+    template <class Model> FixedBackgroundExpansion(Model &model, RunParameters<T> &rPar):
+    H0(rPar.H0 / model.omegaStar), // Initial Hubble parameter (in program units)
+    pEoS(2.0 / (3.0 * (1.0 + rPar.omegaEoS) - 2.0 * model.alpha)), // Coefficient of the power-law expansion: depends on EoS and alpha
+    doFattening(rPar.doFattening),
+    t0(rPar.t0),
+    t0Fat(rPar.t0Fat),
+    tMaxFat(rPar.tMaxFat),
+    sFat(rPar.sFat)
+    {}
 
     auto operator()(T deltaT) // Scale factor
     {
@@ -36,11 +39,23 @@ namespace TempLat
       return H0 * pow(1 + H0 / pEoS * deltaT, pEoS - 1);
     }
 
+    auto const areWeFattening() const {
+      return doFattening;
+    }
+
+
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    T pEoS;
     T H0;
+    T pEoS;
+    bool doFattening;
+
+  public:
+
+    const T t0, t0Fat, tMaxFat, sFat;
+
   };
 
 } // namespace TempLat

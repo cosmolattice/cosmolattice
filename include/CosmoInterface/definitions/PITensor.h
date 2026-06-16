@@ -75,14 +75,17 @@ namespace TempLat
     {
       return Total(a, 0, Model::NU1 - 1,
                    -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * model.piU1(a)(i) *
-                       model.piU1(a)(j));
+                       model.piU1(a)(j)
+                   * IfElse(Model::DefectsModel, model.fatteningFactor, 1.)
+                   );
     }
 
     template <class Model, int I, int J> static inline auto magneticU1Contribution(const Model &model, Tag<I> i, Tag<J> j)
     {
       return Total(a, 0, Model::NU1 - 1,
                    -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * magneticFieldU1(model.fldU1(a), i) *
-                       magneticFieldU1(model.fldU1(a), j));
+                       magneticFieldU1(model.fldU1(a), j)
+                   / IfElse(Model::DefectsModel, model.fatteningFactor, 1.));
     }
 
     template <class Field> static inline auto magneticFieldU1(const Field &f, Tag<1>)

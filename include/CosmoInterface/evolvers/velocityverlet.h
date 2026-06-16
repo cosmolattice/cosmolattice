@@ -21,6 +21,7 @@
 #include "CosmoInterface/definitions/fixedbackgroundexpansion.h"
 #include "CosmoInterface/definitions/energies.h"
 #include "CosmoInterface/definitions/averages.h"
+#include "CosmoInterface/definitions/defectsmodule/fattening.h"
 
 namespace TempLat
 {
@@ -57,6 +58,7 @@ namespace TempLat
        * */
 
       T w;
+      T tcurrent = tMinust0;
       size_t parSize = ws.size(); // Number of distinct parameters (1 for VV2, 2 for VV4, 4 for VV6...)
 
       size_t stages = (parSize - 1) * 2 + 1; // Number of operations in each iteration
@@ -79,7 +81,7 @@ namespace TempLat
           if (!fixedBackground) storeMomentaAverages(model);
 
           // Now we compute the drifts (phi_0 --> phi_1)
-          driftScaleFactor(model, tMinust0 + model.dt, w);
+          driftScaleFactor(model, tcurrent + w * model.dt, w);
         }
 
         if constexpr (Model::Ns > 0) driftScalar(model, w);
@@ -104,6 +106,7 @@ namespace TempLat
           storeMomentaAverages(model);
           kickScaleFactorOne(model, w);
         }
+        tcurrent += model.dt * w;
       }
     }
 
@@ -197,7 +200,8 @@ namespace TempLat
     // Evolves fldU1
     template <class Model> void driftU1Vector(Model &model, T w)
     {
-      model.fldU1 += pow(model.aSI, model.alpha - 1) * w * model.dt * model.piU1;
+      model.fldU1 += pow(model.aSI, model.alpha - 1) * w * model.dt * model.piU1
+                     * IfElse(Model::DefectsModel, model.fatteningFactor, 1.);
     }
 
     // Evolves fldSU2
@@ -220,7 +224,10 @@ namespace TempLat
       if (fixedBackground) { // if fixed background, the scale factor is given by the power-law function in
                              // fixedbackgroundexpansion.h
         model.aI = aBackground(tMinust0);
-        model.aSI = aBackground(tMinust0 + model.dt / 2.0);
+        model.aSI = aBackground(tMinust0 + w * model.dt / 2.0);
+        if constexpr (Model::DefectsModel) {
+          if (aBackground.areWeFattening()) Fattening::updateFatteningFactor(model, tMinust0, aBackground.t0, aBackground.t0Fat, aBackground.tMaxFat, aBackground.sFat);
+        }
       } else { // if self-consistent expansion, the scale factor is evolved with the VV algorithm
         model.aI += model.dt * model.aDotSI * w;
         model.aSI = (model.aIM + model.aI) / 2.0;

@@ -21,31 +21,79 @@ namespace TempLat {
     MakeException(NotAnICType);
 
     namespace  InitialConditionsType {
-        enum U1 {RandomWithMatter, PlaneWaves, PlaneWavesZeroB, BunchDavisTransverseU1};
+        enum class S {Default, RandomWithMatter, DefectNetwork, DefectWhiteNoise};
+        enum class U1 {Default, RandomWithMatter, PlaneWaves, PlaneWavesZeroB, BunchDavisTransverseU1, DefectNetwork, DefectWhiteNoise};
 
+
+
+    std::istream& operator>>(std::istream& in, InitialConditionsType::S& ICType){
+        std::string tmp;
+        in>>tmp;
+        if(tmp=="Default"||tmp=="0") ICType=InitialConditionsType::S::Default;
+        else if(tmp=="RandomWithMatter"||tmp=="1") ICType=InitialConditionsType::S::RandomWithMatter;
+        else if(tmp=="DefectNetwork"||tmp=="2") ICType=InitialConditionsType::S::DefectNetwork;
+        else if(tmp=="DefectWhiteNoise"||tmp=="3") ICType=InitialConditionsType::S::DefectWhiteNoise;
+        else if(tmp.empty()){}
+        else throw(NotAnICType(tmp +" is not a valid initial condition for scalar singlet, abort."));
+        return in;
     }
 
     std::istream& operator>>(std::istream& in, InitialConditionsType::U1& ICType){
         std::string tmp;
         in>>tmp;
-        if(tmp=="RandomWithMatter"||tmp=="0") ICType=InitialConditionsType::RandomWithMatter;
-        else if(tmp=="PlaneWaves"||tmp=="1") ICType=InitialConditionsType::PlaneWaves;
-        else if(tmp=="PlaneWavesZeroB"||tmp=="2") ICType=InitialConditionsType::PlaneWavesZeroB;
-        else if(tmp=="BunchDavisTransverseU1"||tmp=="3") ICType=InitialConditionsType::BunchDavisTransverseU1;
+        if(tmp=="Default"||tmp=="0") ICType=InitialConditionsType::U1::Default;
+        else if(tmp=="RandomWithMatter"||tmp=="1") ICType=InitialConditionsType::U1::RandomWithMatter;
+        else if(tmp=="PlaneWaves"||tmp=="2") ICType=InitialConditionsType::U1::PlaneWaves;
+        else if(tmp=="PlaneWavesZeroB"||tmp=="3") ICType=InitialConditionsType::U1::PlaneWavesZeroB;
+        else if(tmp=="BunchDavisTransverseU1"||tmp=="4") ICType=InitialConditionsType::U1::BunchDavisTransverseU1;
+        else if(tmp=="DefectNetwork"||tmp=="5") ICType=InitialConditionsType::U1::DefectNetwork;
+        else if(tmp=="DefectWhiteNoise"||tmp=="6") ICType=InitialConditionsType::U1::DefectWhiteNoise;
         else if(tmp.empty()){}
         else throw(NotAnICType(tmp +" is not a valid initial condition for U(1), abort."));
         return in;
     }
 
-    std::string to_string(InitialConditionsType::U1&  ICType){
+    std::ostream& operator<<(std::ostream& out, const InitialConditionsType::S& ICType){
+        if(ICType == InitialConditionsType::S::Default) return out << "Default";
+        else if(ICType == InitialConditionsType::S::RandomWithMatter) return out << "RandomWithMatter";
+        else if(ICType == InitialConditionsType::S::DefectNetwork) return out << "DefectNetwork";
+        else if(ICType == InitialConditionsType::S::DefectWhiteNoise) return out << "DefectWhiteNoise";
+        return out;
+    }
 
-        if(ICType == InitialConditionsType::RandomWithMatter) return "RandomWithMatter";
-        else if(ICType == InitialConditionsType::PlaneWavesZeroB) return "PlaneWavesZeroB";
-        else if(ICType == InitialConditionsType::PlaneWaves) return "PlaneWaves";
-        else if(ICType == InitialConditionsType::BunchDavisTransverseU1) return "BunchDavisTransverseU1";
+    std::ostream& operator<<(std::ostream& out, const InitialConditionsType::U1& ICType){
+        if(ICType == InitialConditionsType::U1::Default) return out << "Default";
+        else if(ICType == InitialConditionsType::U1::RandomWithMatter) return out << "RandomWithMatter";
+        else if(ICType == InitialConditionsType::U1::PlaneWaves) return out << "PlaneWaves";
+        else if(ICType == InitialConditionsType::U1::PlaneWavesZeroB) return out << "PlaneWavesZeroB";
+        else if(ICType == InitialConditionsType::U1::BunchDavisTransverseU1) return out << "BunchDavisTransverseU1";
+        else if(ICType == InitialConditionsType::U1::DefectNetwork) return out << "DefectNetwork";
+        else if(ICType == InitialConditionsType::U1::DefectWhiteNoise) return out << "DefectWhiteNoise";
+        return out;
+    }
+
+    std::string to_string(const InitialConditionsType::S& ICType){
+
+        if(ICType == InitialConditionsType::S::Default) return "Default";
+        else if(ICType == InitialConditionsType::S::RandomWithMatter) return "RandomWithMatter";
+        else if(ICType == InitialConditionsType::S::DefectNetwork) return "DefectNetwork";
+        else if(ICType == InitialConditionsType::S::DefectWhiteNoise) return "DefectWhiteNoise";
         else return "";
     }
 
+    std::string to_string(const InitialConditionsType::U1& ICType){
+
+        if(ICType == InitialConditionsType::U1::Default) return "Default";
+        else if(ICType == InitialConditionsType::U1::RandomWithMatter) return "RandomWithMatter";
+        else if(ICType == InitialConditionsType::U1::PlaneWavesZeroB) return "PlaneWavesZeroB";
+        else if(ICType == InitialConditionsType::U1::PlaneWaves) return "PlaneWaves";
+        else if(ICType == InitialConditionsType::U1::BunchDavisTransverseU1) return "BunchDavisTransverseU1";
+        else if(ICType == InitialConditionsType::U1::DefectNetwork) return "DefectNetwork";
+        else if(ICType == InitialConditionsType::U1::DefectWhiteNoise) return "DefectWhiteNoise";
+        else return "";
+    }
+
+}
 
 } /* TempLat */
 

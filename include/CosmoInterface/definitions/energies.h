@@ -68,12 +68,14 @@ namespace TempLat
     static inline auto electricU1(Model &model, T fldf)
     { // This expects field already rescaled by the coupling constant. That ways, works like scalar, for different gauge
       // fields.
-      return 0.5 * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf;
+      return 0.5 * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf
+              * IfElse(Model::DefectsModel, model.fatteningFactor, 1.); //In case we perform a simulatin with defects that uses fattening techniques, the definition of the electric field needs to be rescaled. Note here we multiply (rather than dividing) to compensate the 1/fatteingFactor^2 within the definition of the conjugate momentum
     }
 
     template <class Model, class T> static inline auto magneticU1(Model &model, T fldf)
     { // U(1) gauge field: magnetic energy
-      return 0.5 * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf;
+      return 0.5 * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf
+              / IfElse(Model::DefectsModel, model.fatteningFactor, 1.); //In case we perform a simulation with defects that uses fattening techniques, the definition of the electric field needs to be rescaled
     }
 
     template <class Model, class T> // SU(2) gauge field: electric energy

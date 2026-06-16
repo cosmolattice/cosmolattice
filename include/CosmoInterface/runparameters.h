@@ -13,6 +13,7 @@
 #include "CosmoInterface/evolvers/evolvertype.h"
 #include "TempLat/util/almostequal.h"
 #include "TempLat/util/floattostring.h"
+#include "CosmoInterface/initializers/initialconditionstype.h"
 
 namespace TempLat
 {
@@ -38,8 +39,9 @@ namespace TempLat
                                   Important)),             // If true: self-consistent expansion. If false: no expansion
           t0(par.get<double>("t0", 0, Important)),         // Initial time
           tMax(par.get<T>("tMax", 10000 * dt, Important)), // Final time
-          kCutoff(par.get<T>("kCutOff", std::numeric_limits<double>::infinity(),
-                             Important)),                          // Momenta cutoff in spectra of initial fluctuations
+          kCutoff(par.get<T>("kCutOff", std::numeric_limits<double>::infinity(), Important)), // Momenta cutoff in spectra of initial fluctuations
+          SIC(par.get<InitialConditionsType::S>("ICtype_S", InitialConditionsType::S::Default)),
+          U1IC(par.get<InitialConditionsType::U1>("ICtype_U1", InitialConditionsType::U1::Default)),
           tOutFreq(par.get<T>("tOutputFreq", 10 * dt, Important)), // Printing time interval of frequent output
           tOutInfreq(par.get<T>("tOutputInfreq", 100 * dt, Important)), // Printing time interval of infrequent output
           tOutRareFreq(par.get<T>("tOutputRareFreq", 1000 * dt, Important)), // Printing time interval of rare output
@@ -91,7 +93,25 @@ namespace TempLat
           GWprojectorType(par.get<int>("GWprojectorType",
                                        2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
           withGWs(par.get<bool>("withGWs", false, Important)), flagON(par.get<bool>("flagON", false)),
-          unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false))
+          unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false)),
+          //The following parameters are related to simulations with cosmic defects.
+          lcorr(par.get<T>("lcorr", 0.)),
+          deltaNoise(par.get<T>("deltaNoise", 1.)),
+          doDiffusion(par.get<bool>("doDiffusion", false)),
+          diffType(par.get<EvolverType>("diffusionevolver", RK2)), // Type of evolution algorithm
+          dtdiff(par.get<double>("dtdiff", 0.)),
+          tmaxdiff(par.get<double>("tmaxdiff", 0.)),
+          tOutFreqDiff(par.get<T>("tOutputFreqDiff", 10 * dtdiff)), // Printing time interval of output during the diffusion phase
+          tOutRareFreqDiff(par.get<T>("tOutputRareFreqDiff", 100 * dtdiff)), // Printing time interval of output during the diffusion phase
+          energySnapshotMeasDiffusion(par.get<std::string, 14>(
+            "energy_snapshot_diffusion",
+            std::vector<std::string>(14, Constants::defaultString))),
+          doFattening(fixedBackground ?  par.get<bool>("doFattening", false) :  false), //Whether fattening is performed or not. It requires fixed background expansion (using it for self.consistent expansion is yet not tested nor thoroughly thought)
+          sFat(par.get<double>("sfat", 1.)),
+          t0Fat(par.get<double>("t0Fat", t0)),
+          tMaxFat(par.get<double>("tMaxFat", gettMaxFattening())),
+          measureDefectsEnergies(par.get<bool>("measureDefectsEnergies", false)),
+          measureDefectsStructure(par.get<bool>("measureDefectsStructure", false))
     {
       if (AlmostEqual(lSide, -1)) {
         if (AlmostEqual(kIR, -1))
@@ -160,6 +180,12 @@ namespace TempLat
 
     ptrdiff_t getFlushFreq() const { return hdf5FlushFreq; }
 
+    T gettMaxFattening() {
+      if (AlmostEqual(sFat, 0.)) return tMax;
+      return t0Fat * pow(tMax / t0Fat, -1. / (sFat - 1.));
+    }
+
+
   public:
     const int N;
     T kUV;
@@ -173,6 +199,8 @@ namespace TempLat
     const T t0;
     const T tMax;
     const T kCutoff;
+    const InitialConditionsType::S SIC;
+    const InitialConditionsType::U1 U1IC;
     const T tOutFreq;
     const T tOutInfreq;
     const T tOutRareFreq;
@@ -224,6 +252,25 @@ namespace TempLat
     const bool withGWs;
     const bool flagON;
     const bool unbinnedSpectra;
+
+    const T lcorr;
+    const T deltaNoise;
+
+    const bool doDiffusion;
+    const EvolverType diffType;
+    const T dtdiff;
+    const T tmaxdiff;
+    const T tOutFreqDiff;
+    const T tOutRareFreqDiff;
+    std::vector<std::string> energySnapshotMeasDiffusion;
+
+    const bool doFattening;
+    const T sFat;
+    const T t0Fat;
+    const T tMaxFat;
+
+    bool measureDefectsEnergies;
+    bool measureDefectsStructure;
 
     LatticeParameters<T> getLatParams() { return LatticeParameters<T>(dx, lSide, kIR); }
 

@@ -28,7 +28,7 @@ namespace TempLat
    * - RK4_5: 4th order 5 stages low storage Runge-Kutta
    *
    **/
-  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_3, RK3_4, RK4_5 };
+  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_3, RK3_4, RK4_5, FE };
 
   std::istream &operator>>(std::istream &in, EvolverType &eType)
   {
@@ -87,6 +87,8 @@ namespace TempLat
       return "RK3_4";
     else if (eType == RK4_5)
       return "RK4_5";
+    else if (eType == FE)
+      return "FE";
     else
       return "";
   }

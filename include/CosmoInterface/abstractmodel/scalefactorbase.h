@@ -19,9 +19,11 @@ public:
     T aSI, aI, aIM;
     T aDotSI, aDotSIM, aDotI, aDotIM;
     T b0;
+    T fatteningFactor;
 
 protected:
-    ScaleFactorBase() : aSI(1), aI(1), aIM(1) {}
+    ScaleFactorBase() : aSI(1), aI(1), aIM(1), fatteningFactor(1.)
+    {}
 };
 
 } // namespace TempLat

@@ -27,9 +27,9 @@ namespace TempLat
     using T = typename Model::FloatType;
 
     /* Put public methods here. These should change very little over time. */
-    RK2NStorage(Model &model, RunParameters<T> runParams)
-        : type(runParams.eType), dt(model.dt), As(RK2NStorageParameters<T>::getAs(type)),
-          Bs(RK2NStorageParameters<T>::getBs(type)), expansion(runParams.expansion)
+    RK2NStorage(Model &model, EvolverType eType, bool doExpansion)
+        : type(eType), dt(model.dt), As(RK2NStorageParameters<T>::getAs(type)),
+          Bs(RK2NStorageParameters<T>::getBs(type)), expansion(doExpansion)
     {
       ForEachField(Model, fld, n, isDefined[fld].emplace_back(true); isDeactivated[fld].emplace_back(false););
     }
@@ -49,19 +49,29 @@ namespace TempLat
        *
        * */
 
+      sayMPI << "I'm running RK!";
+
       dt = KernelsTypes::getDt(model, kt);
+      sayMPI << dt;
+      sayMPI << As.size();
 
       kt.cache(model, tMinust0); // To be able to store some temporary info in the kernel type
 
       for (size_t i = 0; i < As.size(); ++i) { // loop over operations...
         ForEachField(
             Model, fld, n, if (!isDeactivated[fld][n]) {
+              sayMPI << fld;
               isDefined[fld][n] = delta(i, Delta->get(fld)(n), Kernels::get(fld, model, n, kt));
+              sayMPI << fld;
             });
 
         if (expansion) sfDefined = deltaScaleFactor(model, i, kt);
 
+        sayMPI << "I do As!";
+
         ForEachField(Model, fld, n, if (!isDeactivated[fld][n] && isDefined[fld][n]) { advance(i, fld, model, n); });
+
+        sayMPI << "I do Bs!";
 
         if (expansion) advanceScaleFactor(model, i);
 
@@ -69,6 +79,8 @@ namespace TempLat
           Averages::setAllAverages(model);
         }
         kt.cache(model, tMinust0);
+        sayMPI << "I do caches!";
+
       }
     }
 

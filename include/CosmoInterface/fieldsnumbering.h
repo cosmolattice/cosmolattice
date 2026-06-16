@@ -34,11 +34,26 @@ namespace TempLat {
         using piU1 = Tag<7>;
         using fldSU2 = Tag<8>;
         using piSU2 = Tag<9>;
-        //TODO: GW are not fully supported by RK2N, which is the only place that uses this mechanism.
-        //static constexpr size_t fldGWNum = 10;
-        //static constexpr size_t piGWNum = 11;
         static constexpr size_t maxNum = 9;
 
+        template<int I>
+        static constexpr bool isConfigurationField(Tag<I> ) {
+            if constexpr (I == 0 || I == 2 || I == 4 || I == 6 || I == 8) {return true; }
+            return false;
+        }
+
+        template<int I>
+        static constexpr bool isMomentumField(Tag<I> ) {
+            if constexpr (I == 1 || I == 3 || I == 5 || I == 7 || I == 9) {return true; }
+            return false;
+        }
+
+        template<int I>
+        static constexpr auto getComplementaryFieldId(Tag<I> ) {
+            static_assert(I >= 0 && I <= maxNum, "Invalid field tag");
+            if constexpr (isMomentumField<I>(Tag<I>{})) {return Tag<I-1>{}; }
+            if constexpr (isConfigurationField<I>(Tag<I>{})) {return Tag<I+1>{}; }
+        }
 
     private:
         /* Put all member variables and private methods here. These may change arbitrarily. */
@@ -49,11 +64,29 @@ namespace TempLat {
 
 } /* TempLat */
 
-// Iterate over all field instances: calls expr with fld=Tag<K> and n=Tag<J>
+// Iterate over all field instances, including both field configurations and conjugate momenta: calls expr with fld=Tag<K> and n=Tag<J>
 // for each active species K and each instance J in [0, getNFields-1].
 #define ForEachField(Model, fld, n, expr) \
     ForLoop(fld, 0, TempLat::FieldsNumbering::maxNum, \
         if constexpr (Model::getNFields(fld) > 0) { \
+            ForLoop(n, 0, Model::getNFields(fld) - 1, expr); \
+        } \
+    )
+
+// Iterate over all field configurations: calls expr with fld=Tag<K> and n=Tag<J>
+// for each active species K and each instance J in [0, getNFields-1].
+#define ForEachConfigurationField(Model, fld, n, expr) \
+    ForLoop(fld, 0, TempLat::FieldsNumbering::maxNum, \
+        if constexpr (Model::getNFields(fld) > 0 && TempLat::FieldsNumbering::isConfigurationField<fld>(fld) ) { \
+            ForLoop(n, 0, Model::getNFields(fld) - 1, expr); \
+        } \
+    )
+
+// Iterate over all conjugate momenta: calls expr with fld=Tag<K> and n=Tag<J>
+// for each active species K and each instance J in [0, getNFields-1].
+#define ForEachConjugateMomenta(Model, fld, n, expr) \
+    ForLoop(fld, 0, TempLat::FieldsNumbering::maxNum, \
+        if constexpr (Model::getNFields(fld) > 0 && TempLat::FieldsNumbering::isMomentumField<fld>(fld) ) { \
             ForLoop(n, 0, Model::getNFields(fld) - 1, expr); \
         } \
     )

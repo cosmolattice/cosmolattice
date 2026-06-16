@@ -23,13 +23,13 @@ namespace TempLat
     T U1Mag2AvI, U1Mag2AvSI;
     T U1pi2AvSI, U1pi2AvSIM, U1pi2AvIM, U1pi2AvI;
 
-    InitialConditionsType::U1 getU1IC()
-    {
-      if constexpr (NC > 0)
-        return InitialConditionsType::RandomWithMatter;
-      else
-        return InitialConditionsType::PlaneWavesZeroB;
-    }
+    // InitialConditionsType::U1 getU1IC()
+    // {
+    //   if constexpr (NC > 0)
+    //     return InitialConditionsType::RandomWithMatter;
+    //   else
+    //     return InitialConditionsType::PlaneWavesZeroB;
+    // }
 
   protected:
     U1Base(device::memory::host_ptr<MemoryToolBox<NDIM>> toolBox, const LatticeParameters<T> &par)

@@ -14,6 +14,7 @@
 
 namespace TempLat
 {
+  MakeException(SICNotImplemented);
   /** @brief A class which is used to initialize the scalar singlets.
    *
    **/
@@ -34,29 +35,26 @@ namespace TempLat
      * @param fg The fluctuations generator to use for creating the initial fluctuations.
      * @param extps The fluctuations generator to use for creating the initial fluctuations from a external input power
      * spectrum.
-     * @param PSType Power spectrum type for initialization.
-     * @param kCutOff The cutoff scale for the fluctuations.
+     * @param rPar User parameters, so that they can be used for the different initialization types.
      */
     template <class Model, typename T>
     static void initializeScalars(Model &model, const FluctuationsGenerator<T> &fg,
-                                  const ExternalPowerSpectrumInitializer<T> &extps, T kCutOff, int PSType)
+                                  const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar)
     {
-      if constexpr (Model::Ns > 0) {
 
-        // We set fluctuations to the scalar singlets:
-        ForLoop(i, 0, Model::Ns - 1, {
-          auto &s = model.extPS[i];
+      auto flagSIC = rPar.SIC;
+      if (rPar.SIC == InitialConditionsType::S::Default) flagSIC = InitialConditionsType::S::RandomWithMatter;
 
-          if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
-            fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI,
-                                             kCutOff);
+        if (flagSIC == InitialConditionsType::S::RandomWithMatter)
+          initializeRandomScalar(model, fg, extps, rPar);
+        else if (flagSIC == InitialConditionsType::S::DefectNetwork)
+          initializeScalarDomainWallNetwork(model, fg, rPar.lcorr);
+        else if (flagSIC == InitialConditionsType::S::DefectWhiteNoise)
+          initializeScalarDomainWallWhiteNoise(model, fg, rPar.kCutoff, rPar.deltaNoise);
+        else
+          throw(SICNotImplemented("The initial condition provided for scalars is not implemented."));
 
-          } else {
-            extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, kCutOff, PSType);
-          }
-        });
-
-        model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS;
+        model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS; //TODO: This is used for the axions, but could be reused for other fields. We probably want to make fluctuationsRatio a parameter, set to 1 by default.
         model.piS = model.getFluctuationRatio(FieldsNumbering::piS()) * model.piS;
 
         // We set the initial homogeneous components of the fields and derivatives.
@@ -66,8 +64,66 @@ namespace TempLat
 
         model.fldS += model.fldS0 / model.fStar; // from the default ones.
         model.piS += model.piS0 / model.fStar / model.omegaStar;
-      }
+
     }
+
+  private:
+
+    template <class Model, typename T>
+    static void initializeRandomScalar(Model &model, const FluctuationsGenerator<T> &fg,
+                                const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar)
+    {
+        ForLoop(i, 0, Model::Ns - 1, {
+          auto &s = model.extPS[i];
+          if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
+            fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI, rPar.kCutoff);
+          } else {
+            extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, rPar.kCutoff, rPar.powerSpectrumType);
+          }
+        });
+    }
+
+
+    template <class Model, typename T>
+    static void initializeScalarDomainWallNetwork(Model &model, const FluctuationsGenerator<T> &fg, T lcorr)
+    {
+      auto toolBox = model.getToolBox();
+      using RGF = RandomGaussianField<T,Model::NDim>;
+
+      ForLoop(i, 0, Model::NCs - 1,
+
+              // 1. Norm of both real and imaginarry components:
+              auto fFluctuationNormDefect =  fg.getFluctuationsNormDefect(model,model.fldCS(i)(0_c),lcorr); // component 0
+
+              // 2. To obtain the amplitude at each point,multiply by a random Gaussian
+              auto a0 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(),toolBox); // component 0
+
+              model.fldS(i).inFourierSpace() = a0; // component 0
+              model.fldS(i).inFourierSpace().setZeroMode(0);
+              model.piS(i) =  0;
+      );
+    }
+
+    template <class Model, typename T>
+    static void initializeScalarDomainWallWhiteNoise(Model &model, const FluctuationsGenerator<T> &fg, T kCutoff, T delta)
+    {
+      auto toolBox = model.getToolBox();
+      using RGF = RandomGaussianField<T,Model::NDim>;
+
+      ForLoop(i, 0, Model::NCs - 1,
+
+              // 1. Norm of both real and imaginarry components:
+              auto fFluctuationNormDefect =  fg.getFluctuationsNormWhiteNoise(model, model.fldCS(i)(0_c), kCutoff, delta); // component 0
+
+              // 2. To obtain the amplitude at each point, multiply by a random Gaussian
+              auto a0 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(),toolBox); // component 0
+
+              model.fldS(i).inFourierSpace() = a0; // component 0
+              model.fldS(i).inFourierSpace().setZeroMode(0);
+              model.piS(i) =  0;
+      );
+    }
+
   };
 } // namespace TempLat
 

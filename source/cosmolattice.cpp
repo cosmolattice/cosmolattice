@@ -90,29 +90,6 @@ int main(int argc, char *argv[])
   typename ModelType::FloatType t = 0;
   // Our time variable. Initialized below.
 
-  if (not manager.doWeRestart()) // If this is a new simulation:
-  {
-
-    ModelInitializer<FloatType> initializer(model, runParams.lSide, runParams.baseSeed);
-    // 1) We create the class responsible for the initialization
-
-    initializer.initialize(model, runParams, extraFlds);
-    // 2) We initialize the model.
-
-    t = runParams.t0;
-    // 3) We set the initial time as specified in the input parameter file.
-    // By default it is zero.
-
-  } else // In case we are restarting from a previous simulation:
-  {
-
-    if (iAmRoot) say << "Running in restart mode.";
-    // We indicate in the console that we are re-starting a previous simulation.
-
-    manager.loadSim(model, t);
-    // The model is reloaded from an appropriate file created by a previous simulation.
-  }
-
   // We communicate t0 to the model, in case it needs it internally.
   model.t0 = runParams.t0;
 
@@ -132,6 +109,29 @@ int main(int argc, char *argv[])
   manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
   // Creation of an info file, which lists all parameters and options chosen
 
+  if (not manager.doWeRestart()) // If this is a new simulation:
+  {
+
+    ModelInitializer<FloatType> initializer(model, runParams.lSide, runParams.baseSeed);
+    // 1) We create the class responsible for the initialization
+
+    initializer.initialize(model, runParams, measurer.getFilesManager(), extraFlds);
+    // 2) We initialize the model.
+
+    t = runParams.t0;
+    // 3) We set the initial time as specified in the input parameter file.
+    // By default it is zero.
+
+  } else // In case we are restarting from a previous simulation:
+  {
+
+    if (iAmRoot) say << "Running in restart mode.";
+    // We indicate in the console that we are re-starting a previous simulation.
+
+    manager.loadSim(model, t);
+    // The model is reloaded from an appropriate file created by a previous simulation.
+  }
+
   /************************Time evolution*************************/
 
   for (int i = 0; t < runParams.tMax - runParams.dt / FloatType(2.0); ++i) {
@@ -148,6 +148,8 @@ int main(int argc, char *argv[])
       // the evolver (e.g. leapfrog) required them to have been synchronised previously for
       // a measurement.
     }
+
+    if constexpr (ModelType::DefectsModel) {if (runParams.doFattening && Fattening::updateTimeStep(model, runParams, t) ) i--; }
 
     evolver.evolve(model, t - runParams.t0);
     // We evolve the EoM by one time step dt. It needs the time variable in case we want to simulate
