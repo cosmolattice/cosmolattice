@@ -153,7 +153,7 @@ namespace TempLat
       }
 
 
-      if (powerSpectrumType == 0  and unbinnedSpectra = false)
+      if (powerSpectrumType == 0  and unbinnedSpectra == false)
         throw(RunParametersInconsistent("powerSpectrumType 0 is only implemented for the unbinned power spectrum."));
       if ( powerSpectrumType < 0 or powerSpectrumType > 1)
         throw(RunParametersInconsistent("powerSpectrumType " + std::to_string(powerSpectrumType) +
