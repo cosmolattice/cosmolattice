@@ -32,7 +32,6 @@ namespace TempLat
                   unbinnedSpectra(rPar.unbinnedSpectra)
 
     {
-      say << fn << " " << dontCreate;
       if (! dontCreate) {
         if (unbinnedSpectra) {
 #ifdef HAVE_HDF5

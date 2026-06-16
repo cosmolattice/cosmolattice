@@ -90,24 +90,9 @@ int main(int argc, char *argv[])
   typename ModelType::FloatType t = 0;
   // Our time variable. Initialized below.
 
-  // We communicate t0 to the model, in case it needs it internally.
-  model.t0 = runParams.t0;
-
-  Evolver<ModelType> evolver(model, runParams, extraFlds);
-  // Here an algorithm -- evolver -- to solve the field EoM is chosen. The type of evolver
-  // is specified by the user in the input parameter file, and here is passed through
-  // runParams. Model is passed as well to have access to normalisations.
-
   Measurer<ModelType, FloatType> measurer(model, runParams, parser);
   // Creates an object of the class responsible for performing and outputting all the required
   // measurements (averages, energies, spectra...).
-
-  if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
-  // Printing in the console all the parameters chosen (both run parameter and specific
-  // model parameters)
-
-  manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
-  // Creation of an info file, which lists all parameters and options chosen
 
   if (not manager.doWeRestart()) // If this is a new simulation:
   {
@@ -131,6 +116,21 @@ int main(int argc, char *argv[])
     manager.loadSim(model, t);
     // The model is reloaded from an appropriate file created by a previous simulation.
   }
+
+  // We communicate t0 to the model, in case it needs it internally.
+  model.t0 = runParams.t0;
+
+  Evolver<ModelType> evolver(model, runParams, extraFlds);
+  // Here an algorithm -- evolver -- to solve the field EoM is chosen. The type of evolver
+  // is specified by the user in the input parameter file, and here is passed through
+  // runParams. Model is passed as well to have access to normalisations.
+
+  if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
+  // Printing in the console all the parameters chosen (both run parameter and specific
+  // model parameters)
+
+  manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
+  // Creation of an info file, which lists all parameters and options chosen
 
   /************************Time evolution*************************/
 

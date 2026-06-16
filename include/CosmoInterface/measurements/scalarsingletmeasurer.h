@@ -65,7 +65,6 @@ namespace TempLat
                               // requires one additional field to measure it (JBB, Nov 2023).
     void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
-      say << isSpectraMeasured;
       if (isSpectraMeasured) {
         ForLoop(i, 0, Model::Ns - 1,
               spectraOut(i).save(lastMeas, t,

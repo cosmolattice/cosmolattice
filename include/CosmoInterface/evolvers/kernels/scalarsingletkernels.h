@@ -57,7 +57,6 @@ namespace TempLat
       return ScalarSingletKernels::get(model, n, KernelsTypes::EoM<Model>());
     }
 
-
     // Default function returns EoM kernels, for backward compatibility.
     template <class Model, int N> static auto get(Model &model, Tag<N> n)
     {
