@@ -34,6 +34,9 @@ namespace TempLat
     PowerSpectrumMeasurer(const RunParameters<T> &par)
         : deltakBin(par.deltaKBin), PSType(par.powerSpectrumType), PSVersion(par.powerSpectrumVersion)
     {
+      if constexpr (NDim == 1 || NDim == 2) {
+        if (PSType != 2) throw(WrongPSType("Power spectra for dimension 1 and 2 is only implemented for PSType = 2. Abort."));
+      }
     }
 
     template <typename R>
@@ -46,9 +49,10 @@ namespace TempLat
 
     template <typename Model> auto powerSpectrumGW(Model &model, size_t PRJType)
     {
-      if constexpr (Model::NDim != 3)
+      if constexpr (Model::NDim != 3) {
         return (*this).powerSpectrum(pow<2>(abs(model.getOneField().inFourierSpace())), GetNGrid::get(model), model.kIR,
                                      model.getToolBox());
+      }
       else {
         if (PRJType == 1) {
           return pow<2>(model.fStar / Constants::reducedMPlanck<T>) / (4 * pow(model.aI, 6) * Energies::rho(model)) *
@@ -69,7 +73,7 @@ namespace TempLat
     template <typename Model, int U1, int C>
     auto chiralPowerSpectrumU1(Model& model, Tag<U1> u1, Tag<C> c, bool sign, bool AorE)
     {
-      return this->powerSpectrum(projectChiralU1Type1(model, u1, c, sign, AorE),GetNGrid::get(model),model.kIR,model.getToolBox());
+      return this->powerSpectrum(projectChiralU1Type1(model, u1, c, sign, AorE), GetNGrid::get(model), model.kIR, model.getToolBox());
     }
     // This function computes the power spectrum.
     // --> The normalization factor ensures that it recovers the appropriate expression in the continuum limit.
@@ -89,25 +93,21 @@ namespace TempLat
         if (PSType == 2) {
           // NOTE: Simulations for NDim=1,2 are only implemented for PSType=2 spectra
           if constexpr (NDim == 1)
-            return Function(ntilde, pow<NDim>(kIR * ntilde * dx / deltakBin / N) / Constants::pi<T>) * fk2;
+            return Function(ntilde, pow<NDim>(kIR * ntilde * dx / N) / deltakBin / Constants::pi<T>) * fk2;
           else if constexpr (NDim == 2)
-            return Function(ntilde, pow<NDim>(kIR * ntilde * dx / deltakBin / N) / T(2) / Constants::pi<T>) * fk2;
+            return Function(ntilde, pow<NDim>(kIR * ntilde * dx / N) / deltakBin / T(2) / Constants::pi<T>) * fk2;
           else
-            return Function(ntilde, pow<NDim>(kIR * ntilde * dx / deltakBin / N) / T(2) / pow<2>(Constants::pi<T>)) *
+            return Function(ntilde, pow<NDim>(kIR * ntilde * dx / N) / deltakBin / T(2) / pow<2>(Constants::pi<T>)) *
                    fk2;
         } else if (PSType == 1) {
           fk2.sumInsteadOfAverage();
           return Function(ntilde, kIR * ntilde * dx / deltakBin / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
-        } else if (PSType == 0) {
-          fk2.sumInsteadOfAverage();
-          return Function(ntilde, dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>) * fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return fk2; // To remove moot warning.
         }
       } else {
-        WaveNumber ntilde(toolBox); // WaveNumber is the same as FourierSite, except it does not require to know
-                                    // the dimension at compile time.
+        WaveNumber ntilde(toolBox);
         if (PSType == 2) {
 
           auto fk2 = projectRadially<NDim>(pow<NDim>(ntilde.norm()) * f, SpaceStateType::Fourier, toolBox, false)
@@ -123,10 +123,6 @@ namespace TempLat
                          .measure(kMax, deltakBin);
           fk2.sumInsteadOfAverage();
           return (kIR * dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>)*fk2;
-        } else if (PSType == 0) {
-          auto fk2 = projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox, false).measure(kMax, deltakBin);
-          fk2.sumInsteadOfAverage();
-          return (dx / pow<2 * NDim - 1>(N) / T(2) / Constants::pi<T>)*fk2;
         } else {
           throw(WrongPSType("You tried to call an undefined PSType " + std::to_string(PSType) + ", abort."));
           return projectRadially<NDim>(f, SpaceStateType::Fourier, toolBox, false)
