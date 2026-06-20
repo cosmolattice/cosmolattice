@@ -22,6 +22,15 @@ git clone https://github.com/cosmolattice/templat.git ${tmp_dir}/code_source/tem
 source ./setup_python.sh
 cd ${base_dir}
 
+echo "---------------------------------------------------------------------"
+echo "         Checking the parameter appendix is in sync with the YAML..."
+echo "---------------------------------------------------------------------"
+
+# The parameter appendix (source/docs/Manual/Appendix_Parameters.md) is generated
+# from source/data/parameters.yaml. Fail fast if the committed appendix has
+# drifted, so the built docs never ship tables that disagree with the YAML.
+bash ${base_dir}/scripts/check_params_sync.sh || exit 1
+
 # now get the latex stuff
 # bash ${base_dir}/convert_arxiv_manual.sh
 
