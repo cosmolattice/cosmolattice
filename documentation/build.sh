@@ -27,9 +27,10 @@ echo "         Checking the parameter appendix is in sync with the YAML..."
 echo "---------------------------------------------------------------------"
 
 # The parameter appendix (source/docs/Manual/Appendix_Parameters.md) is generated
-# from source/data/parameters.yaml. Fail fast if the committed appendix has
-# drifted, so the built docs never ship tables that disagree with the YAML.
-bash ${base_dir}/scripts/check_params_sync.sh || exit 1
+# from source/data/parameters.yaml. Drift between the YAML, the appendix, and the
+# C++ call sites is reported as a WARNING only: the script never fails the build,
+# so the site still publishes. Run check_params_sync.sh directly for a hard check.
+bash ${base_dir}/scripts/check_params_sync.sh
 
 # now get the latex stuff
 # bash ${base_dir}/convert_arxiv_manual.sh

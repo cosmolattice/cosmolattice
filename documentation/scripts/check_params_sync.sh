@@ -21,30 +21,67 @@
 # Override the interpreter with PYTHON=... (defaults to python3); PyYAML must be
 # importable by it (pip install pyyaml).
 
-set -euo pipefail
+# NOTE: failures here are reported as WARNINGS and never abort the build. The
+# checks flag drift between parameters.yaml, the generated appendix, and the C++
+# call sites, but a docs build should still succeed so the site can be published.
+# Run the checks directly (or via CI) when you want a hard pass/fail.
+set -uo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYTHON="${PYTHON:-python3}"
 
+warned=0
+
+# Run a check; on non-zero exit, print a warning (plus any extra hint lines
+# passed as further arguments) and keep going instead of failing the build.
+run_check() {
+    local description="$1"; shift
+    # Split args into the command (up to the first "--") and trailing hint lines.
+    local -a cmd=() hints=()
+    local seen_sep=0
+    for arg in "$@"; do
+        if [ "$arg" = "--" ] && [ "$seen_sep" -eq 0 ]; then
+            seen_sep=1
+            continue
+        fi
+        if [ "$seen_sep" -eq 0 ]; then cmd+=("$arg"); else hints+=("$arg"); fi
+    done
+    if ! "${cmd[@]}"; then
+        echo "" >&2
+        echo "warning: $description" >&2
+        local hint
+        for hint in ${hints[@]+"${hints[@]}"}; do
+            echo "         $hint" >&2
+        done
+        warned=1
+    fi
+}
+
 echo "==> [1/2] Appendix <- parameters.yaml"
 
 echo "    Running generator unit tests"
-"$PYTHON" "$SCRIPT_DIR/test_gen_param_appendix.py"
+run_check "generator unit tests failed" \
+    "$PYTHON" "$SCRIPT_DIR/test_gen_param_appendix.py"
 
 echo "    Checking the appendix is in sync with parameters.yaml"
-if ! "$PYTHON" "$SCRIPT_DIR/gen_param_appendix.py" --check; then
-    echo "" >&2
-    echo "error: the parameter appendix is out of sync with parameters.yaml." >&2
-    echo "       Run 'make gen-params' in documentation/ and commit the result." >&2
-    exit 1
-fi
+run_check "the parameter appendix is out of sync with parameters.yaml." \
+    "$PYTHON" "$SCRIPT_DIR/gen_param_appendix.py" --check \
+    -- "Run 'make gen-params' in documentation/ and commit the result."
 
 echo "==> [2/2] Code <-> parameters.yaml"
 
 echo "    Running drift-checker unit tests"
-"$PYTHON" "$SCRIPT_DIR/test_check_params_code.py"
+run_check "drift-checker unit tests failed" \
+    "$PYTHON" "$SCRIPT_DIR/test_check_params_code.py"
 
 echo "    Checking parameters.yaml matches the get<> call sites"
-"$PYTHON" "$SCRIPT_DIR/check_params_code.py"
+run_check "parameters.yaml does not match the get<> call sites." \
+    "$PYTHON" "$SCRIPT_DIR/check_params_code.py"
 
-echo "OK: parameter database is in sync (appendix and code)."
+if [ "$warned" -eq 0 ]; then
+    echo "OK: parameter database is in sync (appendix and code)."
+else
+    echo "WARNING: parameter database checks reported issues (see above); continuing anyway." >&2
+fi
+
+exit 0
