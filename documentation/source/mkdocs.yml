@@ -84,6 +84,7 @@ extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
   - javascripts/emgithub-fixraw.js
+  - javascripts/sidebar-toggle.js
 
 extra_css:
   - extra.css

@@ -3,6 +3,7 @@ build*/
 .idea/
 
 .beads/
+.claude/
 CLAUDE.md
 
 *thoughts*

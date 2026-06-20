@@ -1,3 +1,45 @@
+/* === Sidebar collapse toggle === */
+.sidebar-toggle-btn {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    z-index: 300;
+    width: 26px;
+    height: 34px;
+    background: var(--md-default-bg-color);
+    border: 1px solid var(--md-default-fg-color--light);
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--md-default-fg-color);
+    font-size: 17px;
+    line-height: 1;
+    padding: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    transition: color 0.15s, box-shadow 0.15s;
+}
+
+.sidebar-toggle-btn:hover {
+    color: var(--md-accent-fg-color);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+
+@media screen and (min-width: 76.25em) {
+    .sidebar-toggle-btn {
+        display: flex;
+    }
+}
+
+body.nav-collapsed .md-sidebar--primary {
+    display: none !important;
+}
+
 .MathJax {
     font-size: 1.1em !important;
 }
