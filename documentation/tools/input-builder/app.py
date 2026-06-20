@@ -351,6 +351,20 @@ def group_by_category(entries: list[dict]) -> dict[str, list[dict]]:
     return {c: groups[c] for c in CATEGORY_ORDER if c in groups}
 
 
+def matches_query(p: dict, query: str) -> bool:
+    """Whether a parameter matches a search query (#65). Case-insensitive,
+    multi-term AND: each whitespace-separated term must appear somewhere in the
+    param's name, description, category, units or enum values."""
+    haystack = " ".join([
+        p["name"] or "",
+        p["description"] or "",
+        p["category"] or "",
+        p["units"] or "",
+        " ".join(p.get("enum_values") or []),
+    ]).lower()
+    return all(term in haystack for term in query.lower().split())
+
+
 # --------------------------------------------------------------------------- #
 # Widgets
 # --------------------------------------------------------------------------- #
@@ -382,11 +396,29 @@ def default_str(p: dict) -> str:
     return "" if d is None else str(d)
 
 
-def render_widget(p: dict, key: str):
-    """Render the appropriate input widget; returns the value as a string (or None)."""
+def render_widget(p: dict, model: str, store: dict):
+    """Render the appropriate input widget; persist and return its value as a
+    string (or None).
+
+    The widget is keyed f"{model}:{name}" and seeded from `store` (the persisted
+    value the user entered earlier), so it is restored even after it was hidden
+    and Streamlit dropped its transient widget state. The resolved value is
+    written back to `store` on every render so the live preview and the
+    required-field check stay complete regardless of what rendered this run.
+
+    Note: `store` is a plain dict living under its own session_state key, so
+    writing store[key] never touches the widget's own session_state[key] — there
+    is no value=/Session-State conflict.
+    """
     name = p["name"]
+    key = f"{model}:{name}"
+    prev = store.get(key)  # last persisted value (str) or None
     label = f"{name}" + (" *" if p["required"] else "")
     help_ = help_text(p)
+
+    def remember(val):
+        store[key] = val
+        return val
 
     # Vectors (arity != 1): one free-text field, space-separated values.
     if is_vector(p):
@@ -395,26 +427,30 @@ def render_widget(p: dict, key: str):
             placeholder = f"{p['arity']} space-separated values"
         elif p["default"] is not None:
             placeholder = str(p["default"])
-        val = st.text_input(label, value=default_str(p), key=key,
+        seed = prev if prev is not None else default_str(p)
+        val = st.text_input(label, value=seed, key=key,
                             help=help_, placeholder=placeholder)
-        return val.strip() or None
+        return remember(val.strip() or None)
 
     t = p["type"]
     if t == "bool":
         default_true = str(p["default"]).lower() == "true"
-        val = st.checkbox(label, value=default_true, key=key, help=help_)
-        return "true" if val else "false"
+        seed = (prev == "true") if prev is not None else default_true
+        val = st.checkbox(label, value=seed, key=key, help=help_)
+        return remember("true" if val else "false")
 
     if t == "enum":
         opts = p["enum_values"] or []
-        idx = opts.index(p["default"]) if p["default"] in opts else 0
+        seed_val = prev if prev in opts else p["default"]
+        idx = opts.index(seed_val) if seed_val in opts else 0
         val = st.selectbox(label, opts, index=idx, key=key, help=help_)
-        return val
+        return remember(val)
 
     # int / float / string -> text input (keeps symbolic defaults like "10*dt" usable)
     placeholder = "" if p["default"] is None else str(p["default"])
-    val = st.text_input(label, value="", key=key, help=help_, placeholder=placeholder)
-    return val.strip() or None
+    seed = prev if prev is not None else ""
+    val = st.text_input(label, value=seed, key=key, help=help_, placeholder=placeholder)
+    return remember(val.strip() or None)
 
 
 # --------------------------------------------------------------------------- #
@@ -422,10 +458,15 @@ def render_widget(p: dict, key: str):
 # --------------------------------------------------------------------------- #
 
 
-def render_snapshots_section(model: str, values: dict[str, str], caps: dict):
+def render_snapshots_section(model: str, store: dict, caps: dict):
     """Clickable snapshot UI: tick the quantities to save (-> energy_snapshot)
     and optionally restrict the saved region to a sub-volume (-> snap_* coords).
-    Only the field sectors the model actually has are offered (#64)."""
+    Only the field sectors the model actually has are offered (#64).
+
+    Selections persist in `store` under the same param-name keys as everything
+    else (f"{model}:energy_snapshot", f"{model}:snap_*"), and the widgets re-seed
+    from those persisted strings — so when a search hides this section (#65) the
+    selection survives and is restored on the way back."""
     st.header(CATEGORY_LABELS["snapshots"])
     st.caption(
         "Tick the configuration-space quantities to dump as HDF5 snapshots. "
@@ -437,16 +478,20 @@ def render_snapshots_section(model: str, values: dict[str, str], caps: dict):
                if key is None or caps.get(key, 0) > 0]
 
     # --- quantity selection -> energy_snapshot ---
+    prev_sel = set((store.get(f"{model}:energy_snapshot") or "").split())
     selected: list[str] = []
     cols = st.columns(3)
     for i, (sector, items) in enumerate(sectors):
         with cols[i % 3]:
             st.markdown(f"**{sector}**")
             for label, human in items:
-                if st.checkbox(human, key=f"snap:{model}:{label}"):
+                if st.checkbox(human, key=f"snap:{model}:{label}", value=label in prev_sel):
                     selected.append(label)
 
-    values["energy_snapshot"] = " ".join(selected) if selected else None
+    if selected:
+        store[f"{model}:energy_snapshot"] = " ".join(selected)
+    else:
+        store.pop(f"{model}:energy_snapshot", None)
 
     if selected:
         st.success("`energy_snapshot = " + " ".join(selected) + "`")
@@ -459,13 +504,18 @@ def render_snapshots_section(model: str, values: dict[str, str], caps: dict):
                 "or coarsened sub-volume. Leave a row at its defaults to keep that "
                 "dimension full. `N` is the lattice size you set above."
             )
-            restrict = st.checkbox("Restrict snapshot region", key=f"snap:{model}:restrict")
+            prev_lo = (store.get(f"{model}:snap_lowercoord") or "").split()
+            prev_up = (store.get(f"{model}:snap_uppercoord") or "").split()
+            prev_sp = (store.get(f"{model}:snap_stepcoord") or "").split()
+            restrict = st.checkbox("Restrict snapshot region",
+                                   key=f"snap:{model}:restrict", value=bool(prev_lo))
             if restrict:
                 # Offer up to the model's lattice dimensionality, defaulting to it
                 # (e.g. ON_2D -> 2, not 3).
                 ndim_max = caps.get("NDim", 3)
+                ndim_prev = len(prev_lo) if prev_lo else ndim_max
                 ndim = st.radio("Lattice dimensions", list(range(1, ndim_max + 1)),
-                                index=ndim_max - 1, horizontal=True,
+                                index=min(ndim_prev, ndim_max) - 1, horizontal=True,
                                 key=f"snap:{model}:ndim")
                 lowers, uppers, steps = [], [], []
                 hdr = st.columns([1, 2, 2, 2])
@@ -473,21 +523,31 @@ def render_snapshots_section(model: str, values: dict[str, str], caps: dict):
                 for d in range(ndim):
                     c = st.columns([1, 2, 2, 2])
                     c[0].markdown(f"dim {d + 1}")
-                    lo = c[1].number_input("lo", min_value=0, value=0, step=1,
-                                           key=f"snap:{model}:lo{d}", label_visibility="collapsed")
-                    up = c[2].text_input("up", value="", placeholder="N",
-                                         key=f"snap:{model}:up{d}", label_visibility="collapsed")
-                    sp = c[3].number_input("sp", min_value=1, value=1, step=1,
-                                           key=f"snap:{model}:sp{d}", label_visibility="collapsed")
-                    n_val = (values.get("N") or "N")
+                    lo = c[1].number_input(
+                        "lo", min_value=0, step=1,
+                        value=int(prev_lo[d]) if d < len(prev_lo) and prev_lo[d].isdigit() else 0,
+                        key=f"snap:{model}:lo{d}", label_visibility="collapsed")
+                    up = c[2].text_input(
+                        "up", value=prev_up[d] if d < len(prev_up) else "",
+                        placeholder="N", key=f"snap:{model}:up{d}", label_visibility="collapsed")
+                    sp = c[3].number_input(
+                        "sp", min_value=1, step=1,
+                        value=int(prev_sp[d]) if d < len(prev_sp) and prev_sp[d].isdigit() else 1,
+                        key=f"snap:{model}:sp{d}", label_visibility="collapsed")
+                    n_val = (store.get(f"{model}:N") or "N")
                     lowers.append(str(lo))
                     uppers.append(up.strip() or n_val)
                     steps.append(str(sp))
-                values["snap_lowercoord"] = " ".join(lowers)
-                values["snap_uppercoord"] = " ".join(uppers)
-                values["snap_stepcoord"] = " ".join(steps)
+                store[f"{model}:snap_lowercoord"] = " ".join(lowers)
+                store[f"{model}:snap_uppercoord"] = " ".join(uppers)
+                store[f"{model}:snap_stepcoord"] = " ".join(steps)
+            else:
+                for k in ("snap_lowercoord", "snap_uppercoord", "snap_stepcoord"):
+                    store.pop(f"{model}:{k}", None)
     else:
         st.info("No snapshot quantities selected — no snapshot files will be written.")
+        for k in ("snap_lowercoord", "snap_uppercoord", "snap_stepcoord"):
+            store.pop(f"{model}:{k}", None)
 
 
 # --------------------------------------------------------------------------- #
@@ -522,6 +582,17 @@ def main():
 
     all_params = load_params()
     model = st.sidebar.selectbox("Model", models(all_params))
+
+    query = st.sidebar.text_input(
+        "🔍 Search parameters",
+        key="cl_search",
+        placeholder="name, description, units…",
+    ).strip()
+    st.sidebar.caption(
+        "Searches names, descriptions, categories, units and enum values of "
+        "the selected model's parameters."
+    )
+
     st.sidebar.caption(
         "Required fields are marked with **\\***. "
         "Required + commonly-tuned parameters are shown directly; "
@@ -532,47 +603,82 @@ def main():
     entries = [p for p in params_for(all_params, model) if param_applies(p, caps)]
     grouped = group_by_category(entries)
 
-    values: dict[str, str] = {}
-    missing_required: list[str] = []
+    # Persisted, model-scoped store of resolved values (keyed f"{model}:{name}").
+    # Widgets seed from and write back to it, so the live preview and the
+    # required-field check stay complete even when a widget is not rendered on a
+    # given run (e.g. once a search hides it, #65) — Streamlit drops the transient
+    # state of un-rendered widgets, but this store, living under its own
+    # session_state key, survives.
+    store: dict = st.session_state.setdefault("cl_values", {})
 
     # Form on the left, live-generated file on the right. Streamlit runs the
     # whole script top-to-bottom on every interaction, so the form widgets in
-    # the left column return their current values before we build the preview
-    # in the right column. On narrow screens the columns stack (preview drops
-    # below the form) — see PREVIEW_CSS.
+    # the left column persist their current values to `store` before we build
+    # the preview in the right column. On narrow screens the columns stack
+    # (preview drops below the form) — see PREVIEW_CSS.
     form_col, preview_col = st.columns([2, 1], gap="large")
 
     with form_col:
-        for cat, cat_entries in grouped.items():
-            if cat == "snapshots":
-                render_snapshots_section(model, values, caps)
-                continue
+        if query:
+            # Search active (#65): flat, fully-editable list of matching params
+            # (no primary/advanced split). The custom snapshots section is not
+            # part of search — its persisted selections stay in the store and so
+            # remain in the preview. Widgets not rendered here keep their values
+            # in the store too, so clearing the search restores everything.
+            matched = [p for p in entries
+                       if p["category"] != "snapshots" and matches_query(p, query)]
+            n = len(matched)
+            st.caption(f"{n} match{'' if n == 1 else 'es'} for \"{query}\"")
+            if not matched:
+                st.info("No parameters match your search. Clear the box to return "
+                        "to the full form.")
+            for cat, cat_entries in group_by_category(matched).items():
+                st.header(CATEGORY_LABELS.get(cat, cat))
+                for p in cat_entries:
+                    render_widget(p, model, store)
+        else:
+            for cat, cat_entries in grouped.items():
+                if cat == "snapshots":
+                    render_snapshots_section(model, store, caps)
+                    continue
 
-            primary = [p for p in cat_entries if p["required"] or p["important"]]
-            advanced = [p for p in cat_entries if not (p["required"] or p["important"])]
+                primary = [p for p in cat_entries if p["required"] or p["important"]]
+                advanced = [p for p in cat_entries if not (p["required"] or p["important"])]
 
-            if not primary and not advanced:
-                continue
+                if not primary and not advanced:
+                    continue
 
-            st.header(CATEGORY_LABELS.get(cat, cat))
+                st.header(CATEGORY_LABELS.get(cat, cat))
 
-            for p in primary:
-                val = render_widget(p, key=f"{model}:{p['name']}")
-                values[p["name"]] = val
-                if p["required"] and val is None:
-                    missing_required.append(p["name"])
+                for p in primary:
+                    render_widget(p, model, store)
 
-            if advanced:
-                with st.expander(f"Advanced — {len(advanced)} optional parameter(s)"):
-                    for p in advanced:
-                        col_inc, col_w = st.columns([1, 6])
-                        include = col_inc.checkbox("set", key=f"inc:{model}:{p['name']}")
-                        with col_w:
-                            if include:
-                                values[p["name"]] = render_widget(p, key=f"{model}:{p['name']}")
-                            else:
-                                st.markdown(f"**{p['name']}** — *unset (uses default)*")
-                                st.caption(help_text(p))
+                if advanced:
+                    with st.expander(f"Advanced — {len(advanced)} optional parameter(s)"):
+                        for p in advanced:
+                            skey = f"{model}:{p['name']}"
+                            col_inc, col_w = st.columns([1, 6])
+                            include = col_inc.checkbox(
+                                "set", key=f"inc:{model}:{p['name']}",
+                                value=store.get(skey) is not None,
+                            )
+                            with col_w:
+                                if include:
+                                    render_widget(p, model, store)
+                                else:
+                                    # Drop it from the store so an un-set advanced
+                                    # param is never emitted (even if set earlier).
+                                    store.pop(skey, None)
+                                    st.markdown(f"**{p['name']}** — *unset (uses default)*")
+                                    st.caption(help_text(p))
+
+    # Build the emitted values and the missing-required list from the persisted
+    # store over all *applicable* params — not just the widgets rendered this
+    # run — so the preview is always complete.
+    values = {p["name"]: store[f"{model}:{p['name']}"]
+              for p in entries if store.get(f"{model}:{p['name']}") is not None}
+    missing_required = [p["name"] for p in entries
+                        if p["required"] and store.get(f"{model}:{p['name']}") is None]
 
     with preview_col:
         # key="cl-preview" -> DOM class st-key-cl-preview, which PREVIEW_CSS
