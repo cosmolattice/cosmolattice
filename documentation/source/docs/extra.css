@@ -49,3 +49,20 @@
 .emgithub-file .file-meta a[href*="cdn.jsdelivr.net"] {
     display: none;
 }
+/* === Embedded Streamlit input-file builder === */
+.inputgen-frame {
+    width: 100%;
+    height: 92vh;
+    min-height: 1000px;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 6px;
+}
+
+/* Let the input-builder page use the full content width (override the
+   theme's narrow text column) so the embedded app has more room. */
+.md-content:has(.inputgen-frame) {
+    max-width: none;
+}
+.md-content:has(.inputgen-frame) .md-grid {
+    max-width: none;
+}

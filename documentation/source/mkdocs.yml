@@ -105,6 +105,7 @@ nav:
       - "<span style='font-weight:bold;'>Download (github) </span>": "code/Download.md"
       - "<span style='font-weight:bold;'>Full Installation</span>": "code/Installation.md"
       - "<span style='font-weight:bold;'>Code Features </span>": "code/Features.md"
+      - "<span style='font-weight:bold;'>Input File Builder </span>": "code/InputBuilder.md"
       - "<span style='font-weight:bold;'>CosmoLattice Version Guide </span>": "code/Versions.md"
       - "Links": "code/Basics.md"
   - API:
@@ -172,7 +173,9 @@ nav:
       - "<span style='font-weight:bold;'>Useful features: parallel support, backing up and others (FRANZ) </span>": "Manual/Useful features: parallel support, backing up and others.md"
       #- "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- Acknowledgments </span>": "Manual/Acknowledgments.md"
       - "<span style='font-weight:bold;'>Appendices (A & F, ALL) </span>": "Manual/Appendix: Parameters.md.md"
-      - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- Appendix: Parameters </span>": "Manual/Appendix_Parameters.md"
+      - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- Appendix: Parameters </span>":
+          - "Manual/Appendix_Parameters.md"
+          - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- Input File Builder </span>": "code/InputBuilder.md"
       - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- Appendix: Generic Model variables </span>": "Manual/Appendix_Generic_Model_variables.md"
       - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- Appendix: CMake Flags </span>": "Manual/Appendix_CMake_Flags.md"
       - "<span style='font-size:0.85em; font-style:italic;'>&nbsp;&nbsp;&nbsp;&nbsp;- List of Implemented Functions </span>": "Manual/List of Implemented Functions.md"
