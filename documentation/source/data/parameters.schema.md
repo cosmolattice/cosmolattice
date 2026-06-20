@@ -90,9 +90,41 @@ configuration, `arity` stores a symbolic token verbatim:
 - `#couples` — number of coupled pairs/couplings.
 - `#SU2` — number of SU(2) gauge sectors.
 - `#NMC` — number of non-minimally-coupled fields.
+- `NDim` — number of spatial lattice dimensions (1, 2 or 3). One value is
+  supplied per dimension.
 
 These may also appear in simple arithmetic (e.g. `NS`, `#U1`) and are stored as
 strings so they can be resolved at parse time against the concrete configuration.
+
+### A note on `NDim` and the snapshot sub-volume parameters
+
+The snapshot sub-volume parameters (`snap_lowercoord`, `snap_uppercoord`,
+`snap_stepcoord`) use `arity: NDim`: you supply **one value per spatial
+dimension** — three numbers for a 3D run, two for 2D, one for 1D.
+
+These previously read `arity: 10`, which was misleading. The `10` is *not* a
+required field count: it is the fixed capacity of the internal array the HDF5
+saver pre-allocates (the maximum `NDim` the I/O layer supports). At parse time
+the saver keeps only the first `NDim` entries (`for i < NDim`) and discards the
+rest. Concretely:
+
+- Supply exactly `NDim` values (e.g. `snap_lowercoord = 0 0 0` for 3D).
+- Supplying more than `NDim` values up to 10 is harmless — entries beyond `NDim`
+  are ignored.
+- Supplying fewer values pads the remainder with the default for that parameter.
+
+So you never need to type 10 numbers; the meaningful length is always `NDim`.
+
+The related `energy_snapshot` parameter keeps `arity: 14`, but the same caveat
+applies: the `14` is a **maximum**, not a required count. It is the number of
+distinct recognised snapshot labels (`S`, `E_S_K`, `E_S_G`, `CS`, `E_CS_K`,
+`E_CS_G`, `E_SU2D_K`, `E_SU2D_G`, `E_A_K`, `E_A_G`, `E_B_K`, `E_B_G`, `E_V`,
+`E`). You supply a **space-separated subset** of those labels — list only the
+quantities you want saved, in any order. The parser checks membership of each
+recognised label in your list and caps it at 14; omitting the parameter (or
+giving an empty list) saves no snapshots. It is left as `type: string` with
+`arity: 14` rather than `type: enum` because it is a multi-value subset, not a
+single choice from a fixed set.
 
 ## Symbolic-default convention
 

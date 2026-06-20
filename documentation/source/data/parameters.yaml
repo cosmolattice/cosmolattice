@@ -450,49 +450,49 @@ parameters:
     enum_values: null
     arity: "14"
     required: false
-    default: "{defaultString,...} (14 entries)"
+    default: "(empty list — no snapshots saved)"
     important: false
     scope: "framework"
     category: "snapshots"
     units: "n/a"
-    description: "Fixed-length vector of energy contribution labels for which field snapshots (in HDF5 format) are printed, e.g. E_S_K, E_S_G, E_CS_K, E_CS_G, E_SU2D_K, E_SU2D_G, E_A_K, E_A_G, E_B_K, E_B_G, E_V."
-    constraints: "Fixed arity 14; default is a vector of 14 entries all set to Constants::defaultString (i.e. none selected)."
+    description: "Space-separated list of the configuration-space quantities to dump as HDF5 field snapshots. Each entry must be one of the 14 recognised labels; you list any subset (in any order), one label per quantity you want saved. Recognised labels: S (scalar-singlet field value), E_S_K / E_S_G (scalar-singlet kinetic / gradient energy), CS (complex-scalar modulus), E_CS_K / E_CS_G (complex-scalar kinetic / gradient energy), E_SU2D_K / E_SU2D_G (SU(2)-doublet kinetic / gradient energy), E_A_K / E_A_G (U(1) electric / magnetic energy), E_B_K / E_B_G (SU(2) electric / magnetic energy), E_V (potential energy), E (total energy). Selecting a label for a sector the model does not contain is harmless and simply produces no file."
+    constraints: "Variable-length subset, NOT 14 required values: the 14 is only the maximum (the number of distinct recognised labels). List as many or as few labels as you want; the parser checks membership of each recognised label in your list (order irrelevant, duplicates ignored) and caps the list at 14. Omitting the parameter, or giving an empty list, saves no snapshots (the C++ default fills the internal vector with Constants::defaultString, i.e. none selected)."
   - name: "snap_lowercoord"
     type: "int"
     enum_values: null
-    arity: "10"
+    arity: "NDim"
     required: false
-    default: "{0,...} (10 entries)"
+    default: "{0,...} (one 0 per dimension)"
     important: false
     scope: "framework"
     category: "snapshots"
     units: "dimensionless"
-    description: "Fixed-length vector of lower coordinates (in lattice units) of the sub-volumes used for snapshots, across all dimensions."
-    constraints: "Fixed arity 10; default is a vector of 10 zeros."
+    description: "Lower corner (in lattice units) of the sub-volume saved in snapshots, one value per spatial dimension. Together with snap_uppercoord and snap_stepcoord it selects which lattice region is written: snap_lowercoord is the first lattice index kept along each axis. Default 0 in every dimension (start at the box edge)."
+    constraints: "One value per spatial dimension (NDim = 1, 2 or 3); supply NDim values, e.g. '0 0 0' for a 3D run. The underlying HDF5 saver pre-allocates a fixed array of length 10 (the maximum supported NDim), but only the first NDim entries are read; any extra values up to 10 are ignored and fewer values are padded with the default. Default is 0 in every dimension."
   - name: "snap_uppercoord"
     type: "int"
     enum_values: null
-    arity: "10"
+    arity: "NDim"
     required: false
-    default: "{N,...} (10 entries)"
+    default: "{N,...} (one N per dimension)"
     important: false
     scope: "framework"
     category: "snapshots"
     units: "dimensionless"
-    description: "Fixed-length vector of upper coordinates (in lattice units) of the sub-volumes used for snapshots, across all dimensions."
-    constraints: "Fixed arity 10; default is a vector of 10 entries all equal to N (the lattice size)."
+    description: "Upper corner (in lattice units) of the sub-volume saved in snapshots, one value per spatial dimension. snap_uppercoord is the (exclusive) last lattice index kept along each axis. Default N (the lattice size) in every dimension, i.e. the full box."
+    constraints: "One value per spatial dimension (NDim = 1, 2 or 3); supply NDim values, e.g. 'N N N' for the full 3D box. The underlying HDF5 saver pre-allocates a fixed array of length 10 (the maximum supported NDim), but only the first NDim entries are read; any extra values up to 10 are ignored and fewer values are padded with the default. Default is N in every dimension."
   - name: "snap_stepcoord"
     type: "int"
     enum_values: null
-    arity: "10"
+    arity: "NDim"
     required: false
-    default: "{1,...} (10 entries)"
+    default: "{1,...} (one 1 per dimension)"
     important: false
     scope: "framework"
     category: "snapshots"
     units: "dimensionless"
-    description: "Fixed-length vector of strides (steps) used when sampling the snapshot sub-volumes, across all dimensions."
-    constraints: "Fixed arity 10; default is a vector of 10 ones."
+    description: "Stride (in lattice units) used when sampling the snapshot sub-volume, one value per spatial dimension. A value of s keeps every s-th lattice point along that axis (coarsening the saved data); 1 means keep every point."
+    constraints: "One value per spatial dimension (NDim = 1, 2 or 3); supply NDim values, e.g. '1 1 1' to keep every point in 3D. The underlying HDF5 saver pre-allocates a fixed array of length 10 (the maximum supported NDim), but only the first NDim entries are read; any extra values up to 10 are ignored and fewer values are padded with the default. Default is 1 in every dimension."
 
   # === framework / GW ===
   - name: "withGWs"
@@ -505,8 +505,8 @@ parameters:
     scope: "framework"
     category: "GW"
     units: "dimensionless"
-    description: "If true, the simulation evolves the tensor perturbations to compute the gravitational wave spectrum."
-    constraints: null
+    description: "If true, the simulation evolves the tensor perturbations to compute the gravitational wave spectrum (allocates the GW field tensor and its conjugate momentum, fldGWs and piGWs)."
+    constraints: "Read twice in gwbase.h (for fldGWs and piGWs) with the same key and default; when false both GW fields are left as nullptr."
   - name: "doLFforGWs"
     type: "bool"
     enum_values: null
@@ -531,18 +531,6 @@ parameters:
     units: "dimensionless"
     description: "Type of transverse-traceless projector used for the gravitational waves (1 = real, 2 = backwards/default, 3 = forward)."
     constraints: "Valid values: 1 (real), 2 (backwards, default), 3 (forward)."
-  - name: "withGWs"
-    type: "bool"
-    enum_values: null
-    arity: "1"
-    required: false
-    default: "false"
-    important: false
-    scope: "framework"
-    category: "GW"
-    units: "n/a"
-    description: "Whether to include gravitational waves in the simulation; if true, allocates the GW field tensor and its conjugate momentum (fldGWs, piGWs) so the transverse-traceless metric perturbations are evolved."
-    constraints: "Read twice in gwbase.h (for fldGWs and piGWs) with the same key and default; when false both GW fields are left as nullptr."
 
   # === framework / saving ===
   - name: "tBackupFreq"
