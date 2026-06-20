@@ -48,30 +48,32 @@ CATEGORY_LABELS = {
 # the tokens the C++ EnergySnapshotsMeasurer checks for in the `energy_snapshot`
 # list (see include/CosmoInterface/measurements/energysnapshotmeasurer.h). The
 # selected labels are emitted as a space-separated `energy_snapshot = ...` line.
+# The middle element is the model-capability key that must be > 0 for the sector
+# to be offered (None = always shown); used to hide sectors a model lacks (#64).
 SNAPSHOT_SECTORS = [
-    ("Scalar singlets", [
+    ("Scalar singlets", "NScalars", [
         ("S", "Field value"),
         ("E_S_K", "Kinetic energy"),
         ("E_S_G", "Gradient energy"),
     ]),
-    ("Complex scalars", [
+    ("Complex scalars", "NCScalars", [
         ("CS", "Field modulus"),
         ("E_CS_K", "Kinetic energy"),
         ("E_CS_G", "Gradient energy"),
     ]),
-    ("SU(2) doublets", [
+    ("SU(2) doublets", "NSU2Doublet", [
         ("E_SU2D_K", "Kinetic energy"),
         ("E_SU2D_G", "Gradient energy"),
     ]),
-    ("U(1) gauge sector", [
+    ("U(1) gauge sector", "NU1Flds", [
         ("E_A_K", "Electric energy"),
         ("E_A_G", "Magnetic energy"),
     ]),
-    ("SU(2) gauge sector", [
+    ("SU(2) gauge sector", "NSU2Flds", [
         ("E_B_K", "Electric energy"),
         ("E_B_G", "Magnetic energy"),
     ]),
-    ("Total / potential", [
+    ("Total / potential", None, [
         ("E_V", "Potential energy"),
         ("E", "Total energy"),
     ]),
@@ -273,6 +275,52 @@ def load_params() -> list[dict]:
         return yaml.safe_load(fh)["parameters"]
 
 
+@st.cache_data
+def load_model_caps() -> dict:
+    """Per-model capability registry from metadata.models (#63)."""
+    with find_database().open() as fh:
+        return yaml.safe_load(fh)["metadata"].get("models", {})
+
+
+def caps_for(model: str) -> dict:
+    """Field-sector counts, NDim and coupling flags for a model. Missing keys
+    degrade to 0 / absent so a model without an entry just shows nothing extra."""
+    c = load_model_caps().get(model, {})
+    return {
+        "NScalars": c.get("NScalars", 0), "NCScalars": c.get("NCScalars", 0),
+        "NU1Flds": c.get("NU1Flds", 0), "NSU2Doublet": c.get("NSU2Doublet", 0),
+        "NSU2Flds": c.get("NSU2Flds", 0), "NDim": c.get("NDim", 3),
+        "couplings": c.get("couplings", {}),
+    }
+
+
+def _coupling(caps: dict, flag: str) -> bool:
+    return bool(caps.get("couplings", {}).get(flag))
+
+
+# Params that only apply when a given field sector / coupling is present. Names
+# absent from this map are always shown. Predicates take a caps dict (#64, #61).
+PARAM_PREDICATES = {
+    "gU1s":                  lambda c: c["NU1Flds"] > 0,
+    "CSU1_charges":          lambda c: _coupling(c, "csU1"),
+    "SU2DoubletU1_charges":  lambda c: _coupling(c, "su2dbU1"),
+    "gSU2s":                 lambda c: c["NSU2Flds"] > 0,
+    "SU2DoubletSU2_charges": lambda c: _coupling(c, "su2dbSU2"),
+    "gAxionU1":              lambda c: _coupling(c, "axionU1"),
+    "alphaLambda_AxionU1":   lambda c: _coupling(c, "axionU1"),
+    "tNonLinearAxionU1":     lambda c: _coupling(c, "axionU1"),
+    "xis":                   lambda c: _coupling(c, "nonMinimal"),
+    "ext_PS":                lambda c: c["NScalars"] > 0,
+    "ICtype_U1":             lambda c: c["NU1Flds"] > 0,
+}
+
+
+def param_applies(p: dict, caps: dict) -> bool:
+    """False for sector/coupling-keyed params the selected model lacks."""
+    pred = PARAM_PREDICATES.get(p["name"])
+    return pred(caps) if pred else True
+
+
 def models(params: list[dict]) -> list[str]:
     found = {p["scope"].split(":", 1)[1] for p in params if p["scope"].startswith("model:")}
     # lphi4 (the default model) first, the rest alphabetical
@@ -374,20 +422,24 @@ def render_widget(p: dict, key: str):
 # --------------------------------------------------------------------------- #
 
 
-def render_snapshots_section(model: str, values: dict[str, str]):
+def render_snapshots_section(model: str, values: dict[str, str], caps: dict):
     """Clickable snapshot UI: tick the quantities to save (-> energy_snapshot)
-    and optionally restrict the saved region to a sub-volume (-> snap_* coords)."""
+    and optionally restrict the saved region to a sub-volume (-> snap_* coords).
+    Only the field sectors the model actually has are offered (#64)."""
     st.header(CATEGORY_LABELS["snapshots"])
     st.caption(
         "Tick the configuration-space quantities to dump as HDF5 snapshots. "
-        "Only sectors that actually exist in the selected model produce files — "
-        "selecting a quantity for an absent sector is harmless and simply ignored."
+        "Only the field sectors present in the selected model are shown."
     )
+
+    # Hide sectors the model lacks; "Total / potential" (key None) is always shown.
+    sectors = [(s, items) for (s, key, items) in SNAPSHOT_SECTORS
+               if key is None or caps.get(key, 0) > 0]
 
     # --- quantity selection -> energy_snapshot ---
     selected: list[str] = []
     cols = st.columns(3)
-    for i, (sector, items) in enumerate(SNAPSHOT_SECTORS):
+    for i, (sector, items) in enumerate(sectors):
         with cols[i % 3]:
             st.markdown(f"**{sector}**")
             for label, human in items:
@@ -409,8 +461,12 @@ def render_snapshots_section(model: str, values: dict[str, str]):
             )
             restrict = st.checkbox("Restrict snapshot region", key=f"snap:{model}:restrict")
             if restrict:
-                ndim = st.radio("Lattice dimensions", [1, 2, 3], index=2,
-                                horizontal=True, key=f"snap:{model}:ndim")
+                # Offer up to the model's lattice dimensionality, defaulting to it
+                # (e.g. ON_2D -> 2, not 3).
+                ndim_max = caps.get("NDim", 3)
+                ndim = st.radio("Lattice dimensions", list(range(1, ndim_max + 1)),
+                                index=ndim_max - 1, horizontal=True,
+                                key=f"snap:{model}:ndim")
                 lowers, uppers, steps = [], [], []
                 hdr = st.columns([1, 2, 2, 2])
                 hdr[1].caption("lower"); hdr[2].caption("upper (blank = N)"); hdr[3].caption("step")
@@ -472,7 +528,8 @@ def main():
         "the rest live under **Advanced** sections."
     )
 
-    entries = params_for(all_params, model)
+    caps = caps_for(model)
+    entries = [p for p in params_for(all_params, model) if param_applies(p, caps)]
     grouped = group_by_category(entries)
 
     values: dict[str, str] = {}
@@ -488,7 +545,7 @@ def main():
     with form_col:
         for cat, cat_entries in grouped.items():
             if cat == "snapshots":
-                render_snapshots_section(model, values)
+                render_snapshots_section(model, values, caps)
                 continue
 
             primary = [p for p in cat_entries if p["required"] or p["important"]]

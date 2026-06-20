@@ -624,7 +624,7 @@ parameters:
     default: "defaultString"
     important: false
     scope: "framework"
-    category: "couplings"
+    category: "IC"
     units: "path"
     description: "Per-scalar external initial power spectrum: path/name of a file providing the initial spectrum used to set the initial conditions of scalar singlet field i."
     constraints: "Dynamically named key 'ext_PS'+i, one per scalar singlet: keys ext_PS0..ext_PS(NS-1) where NS is the number of scalar singlet fields. Each defaults to the sentinel defaultString (no external spectrum)."
