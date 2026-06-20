@@ -12,6 +12,12 @@ metadata:
   schema_version: 1
   description: "..."
   field_order: [name, type, enum_values, arity, required, default, important, scope, category, units, description, constraints]
+  # === BEGIN generated model capabilities — scripts/gen_model_capabilities.py (do not edit) ===
+  models:
+    lphi4: {NScalars: 2, NDim: 3}
+    U1Axion: {NScalars: 1, NU1Flds: 1, NDim: 3, couplings: {axionU1: true}}
+    # ... (one entry per shipped model)
+  # === END generated model capabilities ===
 parameters:
   - name: ...
     type: ...
@@ -23,12 +29,67 @@ parameters:
   - `description` — human-readable summary of the file.
   - `field_order` — the canonical ordering of the 11 per-parameter fields; every
     entry under `parameters` emits its keys in this exact order.
+  - `models` — a **generated** per-model capability registry (see below). It is
+    written between marker comments by `scripts/gen_model_capabilities.py` and
+    must not be hand-edited.
 - **`parameters`** — a flat list of parameter entries. Entries are grouped for
   readability with a `# === <scope> / <category> ===` comment before each group:
   framework entries come first (ordered by category: `run`, `IC`, `output`,
   `spectra`, `snapshots`, `GW`, `saving`, `couplings`), followed by model entries
   grouped by `scope` with `model:lphi4` (the default model) first and the rest in
   alphabetical order. Original ordering is preserved within each group.
+
+## The `metadata.models` capability registry
+
+`metadata.models` is a **generated** mirror of each shipped model's field content
+and active couplings, so consumers (e.g. the input-builder GUI) can hide
+parameters and sectors a model does not use without parsing C++. It is the
+documented counterpart of the `struct ModelPars : public TempLat::DefaultModelPars`
+at the top of each `models/<stem>.h`.
+
+It is produced by `scripts/gen_model_capabilities.py`, which parses every
+`models/*.h` `ModelPars` struct and writes the block between the
+`# === BEGIN/END generated model capabilities ===` marker comments. Run the
+script after adding/changing a model; run it with `--check` to detect drift
+between the headers and this file (it exits non-zero, without writing, if they
+disagree). Both the `source/data` and `website/data` copies are kept identical.
+
+Each entry maps a model name to a flow mapping of its capabilities:
+
+```yaml
+models:
+  lphi4: {NScalars: 2, NDim: 3}
+  ON_2D: {NScalars: 2, NDim: 2}
+  U1Axion: {NScalars: 1, NU1Flds: 1, NDim: 3, couplings: {axionU1: true}}
+  lphi4SU2U1: {NScalars: 1, NCScalars: 1, NU1Flds: 1, NSU2Doublet: 1, NSU2Flds: 1,
+               NDim: 3, couplings: {csU1: true, su2dbU1: true, su2dbSU2: true}}
+```
+
+| Key | Meaning | Emitted |
+|-----|---------|---------|
+| `NScalars` | number of real scalar singlets | when `> 0` |
+| `NCScalars` | number of complex scalars | when `> 0` |
+| `NU1Flds` | number of U(1) gauge fields | when `> 0` |
+| `NSU2Doublet` | number of SU(2) doublets | when `> 0` |
+| `NSU2Flds` | number of SU(2) gauge fields | when `> 0` |
+| `NDim` | spatial lattice dimensions (default `3`) | always |
+| `couplings` | active coupling flags (see below) | when any is active |
+
+The `couplings` sub-mapping lists only the **active** interaction types — a flag
+is present (and `true`) iff the model re-declares the corresponding
+`CouplingsManager<...>` typedef with an active boolean (the defaults inherited
+from `DefaultModelPars` are inactive and omitted):
+
+| Flag | C++ `ModelPars` alias | Gated input parameters |
+|------|-----------------------|------------------------|
+| `csU1` | `CsU1Couplings` | `CSU1_charges` (`gU1s` also follows `NU1Flds`) |
+| `su2dbU1` | `SU2DoubletU1Couplings` | `SU2DoubletU1_charges` |
+| `su2dbSU2` | `SU2DoubletSU2Couplings` | `SU2DoubletSU2_charges` (`gSU2s` follows `NSU2Flds`) |
+| `axionU1` | `ScalarU1AxionCouplings` | `gAxionU1`, `alphaLambda_AxionU1`, `tNonLinearAxionU1` |
+| `nonMinimal` | `NonMinimalCouplings` | `xis` |
+
+The omit-when-zero/false convention keeps the block compact; a missing count
+means `0` and a missing flag means inactive.
 
 ## Per-parameter fields
 

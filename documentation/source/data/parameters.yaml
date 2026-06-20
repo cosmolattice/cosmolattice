@@ -2,6 +2,27 @@ metadata:
   schema_version: 1
   description: "Single source of truth for all CosmoLattice input parameters (framework + every shipped model). Drafted by automated extraction from source headers; descriptions to be curated."
   field_order: [name, type, enum_values, arity, required, default, important, scope, category, units, description, constraints]
+  # === BEGIN generated model capabilities — scripts/gen_model_capabilities.py (do not edit) ===
+  models:
+    lphi4: {NScalars: 2, NDim: 3}
+    NMC_tanh4_w_mass_P: {NScalars: 2, NDim: 3, couplings: {nonMinimal: true}}
+    O2: {NScalars: 2, NDim: 3}
+    ON_2D: {NScalars: 2, NDim: 2}
+    SU2: {NSU2Doublet: 1, NSU2Flds: 1, NDim: 3, couplings: {su2dbSU2: true}}
+    SU2Doub: {NSU2Doublet: 1, NDim: 3}
+    U1Axion: {NScalars: 1, NU1Flds: 1, NDim: 3, couplings: {axionU1: true}}
+    cscalar: {NCScalars: 1, NDim: 3}
+    domainWalls: {NScalars: 1, NDim: 3}
+    globalStrings: {NCScalars: 1, NDim: 3}
+    localStrings: {NCScalars: 1, NU1Flds: 1, NDim: 3, couplings: {csU1: true}}
+    lphi4NonMinimal: {NScalars: 2, NDim: 3, couplings: {nonMinimal: true}}
+    lphi4SU2U1: {NScalars: 1, NCScalars: 1, NU1Flds: 1, NSU2Doublet: 1, NSU2Flds: 1, NDim: 3, couplings: {csU1: true, su2dbU1: true, su2dbSU2: true}}
+    lphi4U1: {NCScalars: 1, NU1Flds: 1, NDim: 3, couplings: {csU1: true}}
+    m2phi2_axionU1: {NScalars: 1, NU1Flds: 1, NDim: 3, couplings: {axionU1: true}}
+    scalar: {NScalars: 1, NDim: 3}
+    tanh2: {NScalars: 2, NDim: 3}
+    tanhpp2: {NScalars: 2, NDim: 3}
+  # === END generated model capabilities ===
 parameters:
 
   # === framework / run ===
