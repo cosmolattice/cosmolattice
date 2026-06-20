@@ -47,6 +47,7 @@ They are declared in `src/include/CosmoInterface/runparameters.h`.
 | `ICtype_S` | `enum` | `Default` | n/a | Type of initial conditions used for scalar singlet fields (e.g. default vacuum fluctuations, random-with-matter, defect networks, white-noise defects, or homogeneous). Allowed values: `Default`, `RandomWithMatter`, `DefectsNetwork`, `DefectsWhiteNoise`, `Homogeneous`. |
 | `ICtype_U1` | `enum` | `Default` | n/a | Type of initial conditions used for U(1) gauge fields (e.g. default, random-with-matter, plane waves, plane waves with zero magnetic field, Bunch-Davies transverse modes, or defect networks). Allowed values: `Default`, `RandomWithMatter`, `PlaneWaves`, `PlaneWavesZeroB`, `BunchDavisTransverseU1`, `DefectsNetwork`, `DefectsWhiteNoise`. |
 | `baseSeed` | `string` | *required* | n/a | Seed for the random generator of initial field fluctuations; if not specified, a seed is generated randomly each run. |
+| `ext_PS` | `string` ×NS | `defaultString` | path | Per-scalar external initial power spectrum: path/name of a file providing the initial spectrum used to set the initial conditions of scalar singlet field i. |
 <!-- @endgen -->
 
 !!! note
@@ -143,7 +144,6 @@ in the corresponding gauge-field interface headers.
 <!-- @gen:params:framework:couplings -->
 | Parameter | Type | Default | Units | Description |
 | --- | --- | --- | --- | --- |
-| `ext_PS` | `string` ×NS | `defaultString` | path | Per-scalar external initial power spectrum: path/name of a file providing the initial spectrum used to set the initial conditions of scalar singlet field i. |
 | `gU1s` | `float` ×#U1 | `1.0` | dimensionless | Gauge couplings of the U(1) gauge fields, one per U(1) field; combined with per-couple charges to set the effective charges of complex scalars and SU(2) doublets coupled to U(1). |
 | `CSU1_charges` | `float` ×#couples | `1` | dimensionless | Charges of each complex-scalar / U(1)-gauge-field coupled pair; combined with gU1s to form the effective charges of the complex scalars under their U(1) gauge fields. |
 | `SU2DoubletU1_charges` | `float` ×#couples | `1` | dimensionless | Charges of each SU(2)-doublet / U(1)-gauge-field coupled pair; combined with gU1s to form the effective charges of the SU(2) doublets under their U(1) gauge fields. |
