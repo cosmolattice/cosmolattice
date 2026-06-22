@@ -45,8 +45,8 @@ CosmoLattice is freely available to anyone who wants to use or modify it, as lon
 
 <!--You can download CosmoLattice at any time from [ http://www.cosmolattice.net](http://www.cosmolattice.net)-->
 
-!!! note
-    **Note:** If you would like to help developing some aspect of CosmoLattice, or even implement your own modules with some new functionality we have not envisaged, please contact us and let us know about your idea(s). CosmoLattice introduces a natural language describing fields and operations between them, so it is a natural platform to implement new libraries (related or not to cosmology).
+!!! note "**Note**"
+    If you would like to help developing some aspect of CosmoLattice, or even implement your own modules with some new functionality we have not envisaged, please contact us and let us know about your idea(s). CosmoLattice introduces a natural language describing fields and operations between them, so it is a natural platform to implement new libraries (related or not to cosmology).
 
 ### The *Numerical* Early Universe { #subsec_EU }
 
@@ -174,9 +174,9 @@ and define standard *gauge covariant derivatives* $D_{\mu}^{\rm A} \equiv \parti
 [](){ #eq_SU2EOM }
 ```math
 \begin{align}
-\text{d}ot{\phi} - a^{-2} {\vec\nabla}^{ 2} \hspace{-1mm}\phi + 3 \frac{\dot{a}}{a} \dot{\phi} &= - V_{,\phi}  , \tag{4} \\
-\text{d}ot{\varphi} - a^{-2} {\vec D}_{\hspace{-0.5mm}A}^{ 2}\varphi + 3\frac{\dot{a}}{a}  {\dot \varphi} &= - {1\over2}{\varphi \over |\varphi|}V_{,|\varphi|}  , \tag{5}\\
-\text{d}ot{\Phi} - a^{-2} {\vec D}^{ 2}\Phi + 3 \frac{\dot a}{a}  {\dot{\Phi}} &= - {1\over2}{\Phi \over |\Phi |}V_{,|\Phi|}  , \tag{6}
+\ddot{\phi} - a^{-2} {\vec\nabla}^{ 2} \hspace{-1mm}\phi + 3 \frac{\dot{a}}{a} \dot{\phi} &= - V_{,\phi}  , \tag{4} \\
+\ddot{\varphi} - a^{-2} {\vec D}_{\hspace{-0.5mm}A}^{ 2}\varphi + 3\frac{\dot{a}}{a}  {\dot \varphi} &= - {1\over2}{\varphi \over |\varphi|}V_{,|\varphi|}  , \tag{5}\\
+\ddot{\Phi} - a^{-2} {\vec D}^{ 2}\Phi + 3 \frac{\dot a}{a}  {\dot{\Phi}} &= - {1\over2}{\Phi \over |\Phi |}V_{,|\Phi|}  , \tag{6}
 \\
 \partial_0 F_{0i} - a^{-2} \partial_j F_{ji} +  \frac{\dot a}{a} F_{0i} &=
 J^A_i  , \tag{7}
@@ -201,7 +201,7 @@ which represent the $U(1)$ and $SU(2)$ Gauss constraints in an expanding backgro
 In the case of self-consistent expansion, CosmoLattice obtains numerically the scale factor $a(t)$ by solving the *Friedmann* equation (here written in cosmic time)
 [](){ #eq_Friedmann-full }
 ```math
-\hspace{0.6cm} {\text{d}ot a\over a} = - \frac{1}{6 m_p^2}[ \bar\rho + 3 \bar p ] ,\tag{11}
+\hspace{0.6cm} {\ddot a\over a} = - \frac{1}{6 m_p^2}[ \bar\rho + 3 \bar p ] ,\tag{11}
 ```
 
 while checking that the other Friedmann equation -- the *Hubble constraint* -- (also written in cosmic time),

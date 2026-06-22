@@ -1,17 +1,39 @@
-In this section we explain how to simulate in CosmoLattice a model containing both charged scalar fields and gauge fields (either Abelian or non-Abelian).
+CosmoLattice is capable of simulating scalar-gauge field theories in an expanding universe. Here we explain how to simulate a model containing charged scalar fields and/or gauge fields, either Abelian or non-Abelian. We start be reviewing briefly the framework of scalar-gauge theories in the continuum.
 
 ### Scalar-gauge field dynamics: program variables
 
-CosmoLattice is capable of simulating scalar-gauge field theories in an expanding universe. The action of a generic theory (with canonically normalized scalar fields) that can be simulated by CosmoLattice is the following
+The action of a scalar-gauge theory -- with canonically normalized scalar fields -- that can be simulated in CosmoLattice, is the following
 [](){ #eq_Lagrangian }
 ```math
-\begin{align}
-S & =- \int d^4 x \left\{\frac{1}{2}\partial_{\mu} \phi \partial ^{\mu}\phi + (D_{\mu}^A \varphi)^{*}(D_A^{\mu} \varphi) +  (D_{\mu}\Phi )^{\dagger} (D^{\mu} \Phi) + \frac{1}{4} F_{\mu \nu} F^{\mu \nu} + \frac{1}{2}{\rm Tr}\{G_{\mu \nu}G^{\mu \nu}\} + V(\phi,|\varphi|, |\Phi|) \right\}  ,  \\
-\tag{50}
+\begin{align}\tag{50}
+S & =- \int d^4 x \left\{\frac{1}{2}\partial_{\mu} \phi \partial ^{\mu}\phi + (D_{\mu}^A \varphi)^{*}(D_A^{\mu} \varphi) +  (D_{\mu}\Phi )^{\dagger} (D^{\mu} \Phi) + \frac{1}{4} F_{\mu \nu} F^{\mu \nu} + \frac{1}{2}{\rm Tr}\{G_{\mu \nu}G^{\mu \nu}\} + V(\phi,|\varphi|, |\Phi|) \right\}  .  \\
 \end{align}
 ```
 
-which contains several types of scalar and gauge fields. In order to simplify notation, we have only added one copy of each field species, but CosmoLattice can also handle multiple fields of the same kind. This theory contains three types of scalar fields: a singlet $\phi$, a $U(1)$-charged scalar (complex field) $\varphi$, and a $SU(2)$ doublet $\Phi$. The latter two can be written in terms of real components as in Eq. ([*3*][eq_ChargedScalars]). The complex field $\varphi$ can be charged under a $U(1)$ gauge symmetry, while the doublet can be charged under both $U(1)$ and $SU(2)$. The scalar potential of the theory is $V = V(\phi, |\varphi|, |\Phi|)$, which depends on $\phi$, as well as on the modulus of the complex and doublet scalars, $|\varphi|$ and $|\Phi|$. The corresponding covariant derivatives and field strengths in action ([*50*][eq_Lagrangian]) are defined as
+This expression contains several types of scalar and gauge fields. In order to simplify notation, we have only added one copy of each field species, but CosmoLattice can also handle multiple fields of the same kind, though see Note below [*Number of fields in scalar-gauge theories*][NoteNumGaugeVariables]. The above action contains three types of scalar fields: a singlet $\phi$, a $U(1)$-charged scalar (complex field) $\varphi$, and a $SU(2)$ doublet $\Phi$, where the latter two can be written in terms of real components as
+
+<!-- [](){ #Table_Scalars } -->
+```math
+\begin{align} % \tag{3}
+\begin{array}{c|c|c}
+{\rm Singlet} & U(1){\rm-charged} & SU(2){\rm-charged Doublet}
+\\\hline   &   &\\
+\phi \in \mathcal{R}e &  \varphi \equiv {1\over\sqrt{2}}(\varphi_0 +i\varphi_1) & \Phi = \left(
+\begin{array}{c}
+\varphi^{(0)} \\ \varphi^{(1)}
+\end{array}
+\right) =
+{1\over\sqrt{2}}
+\left(
+\begin{array}{c}
+\varphi_0 +i\varphi_1 \\ \varphi_2 +i\varphi_3
+\end{array}
+\right)
+\end{array}
+\end{align}
+```
+
+*c.f.* Eq. ([*3*][eq_ChargedScalars]) in [*Basic Field Equations in CosmoLattice*][subsec_BasicEOM]. The complex field $\varphi$ can be charged under a $U(1)$ gauge symmetry, while the doublet can be charged under both $U(1)$ and $SU(2)$. The scalar potential of this theory is $V = V(\phi, |\varphi|, |\Phi|)$, which depends on $\phi$, and in the case of the complex and doublet scalars, on their moduli, $|\varphi|$ and $|\Phi|$, respectively. The corresponding covariant derivatives and field strengths in action ([*50*][eq_Lagrangian]) are defined as
 [](){ #eq_AbCovDerivCont }
 [](){ #eq_CovDerivCont }
 [](){ #eq_FmnAbelian }
@@ -29,14 +51,14 @@ G_{\mu \nu} &= \partial_{\mu} B_{\nu} - \partial_{\nu} B_{\mu} - i[B_\mu,B_\nu] 
 \end{align}
 ```
 
-where $Q_{A}^{(\varphi)}$ and $Q_{A}^{(\Phi)}$ are the Abelian charges of $\varphi$ and $\Phi$ respectively, $Q_B$ is the non-Abelian charge of $\Phi$, $g_A$ and $g_B$ are the corresponding gauge couplings, and $\mathcal{I}$ is the 2$\times$2 identity matrix. Note that, using the properties of the $SU(N)$ generators, $G_{\mu \nu}$ can be written as
+where $Q_{A}^{(\varphi)}$ and $Q_{A}^{(\Phi)}$ are the Abelian charges of $\varphi$ and $\Phi$ respectively, $Q_B$ is the non-Abelian charge of $\Phi$, $g_A$ and $g_B$ are the corresponding gauge couplings, and $\mathcal{I}$ is the 2$\times$2 identity matrix. Using the properties of the $SU(N)$ generators, $G_{\mu \nu}$ can be written as
 ```math
 \begin{align}
 G_{\mu \nu} \equiv G_{\mu \nu}^a T_a   , \hspace{0.4cm} G_{\mu \nu}^a \equiv \partial_{\mu} B_{\nu}^a - \partial_{\nu} B_{\mu}^a + f^{a b c} B_{\mu}^b B_{\nu}^c  ,
 \end{align}
 ```
 
-where $f_{abc}$ are the structure constants of the SU(N) group, determined by the relation $[T_a, T_b] = i f_{abc} T_c$. CosmoLattice is only implemented (at least for the time being) for $SU(2)$, for which we simply have $T_a \equiv \sigma_a /2$, with $\sigma_a$ the Pauli matrices. In CosmoLattice we evolve the fields in the temporal gauge, so $A_{0} = B_0^a = 0$. Furthermore, we define the Abelian and non-Abelian electric and magnetic fields as follows,
+where $f_{abc}$ are the structure constants of the SU(N) group, determined by the relation $[T_a, T_b] = i f_{abc} T_c$. At the time of writing (July 2026), in CosmoLattice there is only implemented the $SU(2)$ case, for which we simply have $T_a \equiv \sigma_a /2$, with $\sigma_a$ the Pauli matrices. In CosmoLattice we evolve the fields in the temporal gauge, so $A_{0} = B_0^a = 0$. Furthermore, we define the Abelian and non-Abelian electric and magnetic fields as follows,
 [](){ #eq_ElectricMagneticDefs }
 ```math
 \tag{55}
@@ -48,9 +70,9 @@ where $f_{abc}$ are the structure constants of the SU(N) group, determined by th
 
 with $\epsilon_{ijk}$ the Levi-Civita symbol. These expressions represent gauge-invariant physical quantites.
 
-!!! note
-    **Important Note:** As described in Section [*Program variables*][subsec_LatticeScalars] in the context of scalar theories, on the lattice we operate in a set of dimensionless spacetime and field variables called **program variables**. For scalar theories, these were defined in Eq. ([*29*][eq_FieldSpaceTimeNaturalVariables]) in terms of the three constants $\{f_*,\omega_*,\alpha\}$, that must be judiciously chosen for each specific model. The same definitions hold for the scalar sector(s) of scalar-gauge theories, where we also introduce new dimensionless program variables for the gauge fields. Putting all program variables together, we have
-    [](){ #eq_GaugeProgramVar }
+[](){ #eq_GaugeProgramVar }
+!!! note "**Program variables for Scalar-Gauge Theories**"
+    As described in Section [*Program variables*][subsec_LatticeScalars] in the context of scalar theories, on the lattice we operate in a set of dimensionless spacetime and field variables called **program variables**. For scalar theories, these were defined in Eq. ([*29*][eq_FieldSpaceTimeNaturalVariables]) in terms of the three constants $\{f_*,\omega_*,\alpha\}$, that must be judiciously chosen for each specific model. The same definitions hold for the scalar sector(s) of scalar-gauge theories, where we also introduce new dimensionless program variables for the gauge fields. Putting all program variables together, we have
     
     ```math
     
@@ -64,21 +86,27 @@ with $\epsilon_{ijk}$ the Levi-Civita symbol. These expressions represent gauge-
     
     ```
 
-!!! note
-    **Important Note:** CosmoLattice can run with an arbitrary number of scalar singlets, $U(1)$ complex scalars and $SU(2)$ doublets. CosmoLattice has been only tested however when considering a single $U(1)$ gauge field and a single $SU(2)$ gauge field. In principle, the code also works with multiple $U(1)$ gauge fields (coupled or not to scalars), but this feature has not thoroughly tested, so it is deactivated by default: the program crashes when a model is written with more than one $U(1)$ gauge field. It can be re-activated at one own's risk by commenting out line `216` in the file  `src/include/CosmoInterface/abstractmodel.h`. In the case of $SU(2)$ gauge fields, only one of such fields can be considered at once.
+[](){ #NoteNumGaugeVariables }
+!!! note "Important Note: Number of fields in scalar-gauge theories"
+    CosmoLattice can run with an arbitrary number of scalar singlets, $U(1)$ complex scalars and $SU(2)$ doublets. However, CosmoLattice has been only tested when considering a single $U(1)$ gauge field and a single $SU(2)$ gauge field. In principle, the code also works with multiple $U(1)$ gauge fields (coupled or not to scalars), but this feature has not been thoroughly tested, so it is deactivated by default: the program crashes when a model is written with more than one $U(1)$ gauge field. It can be re-activated at one own's risk by commenting out the following lines in  file $\texttt{include/CosmoInterface/abstractmodel.h}$
 
-We can see that the U(1)- and SU(2)-charged scalars are re-scaled in the same way as the singlet scalar fields. The gauge fields, however, are instead re-scaled by the parameter $\omega_*$. Similarly, we define program variables for the field strengths and covariant derivatives as follows:
+    @emgithub(include/CosmoInterface/abstractmodel.h:numb_U1_gauge_flds)
+
+    **In the case of $SU(2)$ gauge fields, however, only one of such fields can be considered at once in the code**. (<span style="color:red;">**Should we elimiate therefore the line "if constexpr (NSU2FLDS > 1)" in abstractmodel.h ?**</span>)
+    
+
+We can see that the U(1)- and SU(2)-charged scalars are re-scaled in the same way as the singlet scalar fields. The gauge fields, however, are instead re-scaled by the parameter $\omega_*$. Correspondingly, we define program variables for the field strengths and covariant derivatives as follows:
 ```math
 \begin{align}
 \widetilde{F}_{\mu \nu} \equiv F_{\mu \nu} / \omega_*^2 , \hspace{0.4cm} \widetilde{G}_{\mu \nu}^a \equiv G_{\mu \nu}^a / \omega_*^2 , \hspace{0.4cm} \widetilde{D}_{\mu}^A \equiv D_{\mu}^A / \omega_* , \hspace{0.4cm} \widetilde{D}_{\mu} \equiv D_{\mu} / \omega_* .
 \end{align}
 ```
 
-The program potential is defined, as before, as
+The program potential is defined as before, like in the case of singlet scalars, as
 [](){ #eq_ProgramPotMultiScalar }
 ```math
 \tag{57}
-\tilde{V} (\tilde{\phi}, |\tilde{\varphi}|, |\widetilde{\Phi}|) \equiv \frac{1}{f_*^2 \omega_*^2} V(f_* \tilde \phi, f_* |\tilde \varphi|, f_* |\widetilde \Phi|  )  .
+\widetilde{V} (\tilde{\phi}, |\tilde{\varphi}|, |\widetilde{\Phi}|) \equiv \frac{1}{f_*^2 \omega_*^2} V(f_* \tilde \phi, f_* |\tilde \varphi|, f_* |\widetilde \Phi|  )  .
 ```
 
 ### Scalar-gauge field dynamics: equations of motion
