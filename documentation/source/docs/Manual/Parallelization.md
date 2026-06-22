@@ -139,10 +139,10 @@ Before explaining some of the other features of the code, we want to give an ide
     ![Figure 6](assets/figures/figure7.png){ width=750px}
 </figure>
 
-Fig. [*6*][fig_speedup] compares the runtime of the `lphi4` model on a single GPU (`CUDA` backend) against a full CPU node (using `OpenMP` and `MPI`) for several lattice sizes. The GPU advantage grows with the problem size: for the larger lattices the single GPU is roughly $7$–$8\times$ faster than the whole CPU node (for example, at $N=512$, about $283\,$s on the GPU versus $\sim 1800\,$s with `OpenMP`). These results were obtained on a consumer-grade setup — an NVIDIA 4070 RTX mobile GPU against an AMD Ryzen 9 7945HX CPU — and should be read as indicative of the kind of speed-ups achievable, not as a hardware-independent benchmark.
+Fig. [*6*][fig_speedup] compares the runtime of the `lphi4SU2U1` model on 1-8 GPUs (`CUDA` backend) against 1-8 CPU nodes (using hybrid `OpenMP` and `MPI`) for fixed $N=512$. 
 
-For the distributed `MPI` strategy, CosmoLattice is also a very efficient parallel code. Following Amdahl's law [@conf_afips_Amdahl67], if a fraction $\alpha$ of the code runs in parallel, the speed-up on $n_{cores}$ cores is
+CosmoLattice is also mostly parallel code, with very little sequential work. Following Amdahl's law [@conf_afips_Amdahl67], if a fraction $\alpha$ of the code runs in parallel, the speed-up on $n_{cores}$ cores is
 ```math
 S=\frac{1}{\frac{\alpha}{n_{cores}} +1-\alpha}  .
 ```
-Fitting CosmoLattice's scaling gives $\alpha\approx 0.99$, i.e. effectively $99\%$ of the code is parallelized, so the distributed strategies continue to scale well up to large core counts. We expect this figure to be even better in realistic simulations, where the relatively poorly-scaling field initialization (dominated by Fourier transforms) becomes increasingly subdominant with respect to the field evolution.
+Fitting CosmoLattice's scaling gives $\alpha\approx 0.99$, i.e. effectively $99\%$ of the code is parallelized, so the parallel strategies continue to scale well up to large core counts. We expect this figure to be even better in realistic simulations, where the relatively poorly-scaling field initialization (dominated by Fourier transforms) becomes increasingly subdominant with respect to the field evolution.
