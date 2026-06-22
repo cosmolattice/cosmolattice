@@ -15,9 +15,15 @@ mkdir -p ${tmp_dir}/code_source
 # labeled file matches CLV2.0Alpha line-for-line in its labeled region.
 repo_root=${base_dir}/..
 mkdir -p ${tmp_dir}/code_source/cosmolattice
-( cd ${repo_root} && git ls-files -z | tar --null -T - -cf - ) | tar -xf - -C ${tmp_dir}/code_source/cosmolattice
+(cd ${repo_root} && git ls-files -z | tar --null -T - -cf -) | tar -xf - -C ${tmp_dir}/code_source/cosmolattice
 
-git clone https://github.com/cosmolattice/templat.git ${tmp_dir}/code_source/templat
+# Only pull templat if it's not already present
+if [ ! -d ${tmp_dir}/code_source/templat ]; then
+    git clone https://github.com/cosmolattice/templat.git ${tmp_dir}/code_source/templat
+else
+    # otherwise, git pull to update it
+    (cd ${tmp_dir}/code_source/templat && git pull)
+fi
 
 source ./setup_python.sh
 cd ${base_dir}
