@@ -25,11 +25,13 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     GWsKernels() = delete;
 
+    // @label:gws_kernel_source
     template <class Model> static auto get(Model &model)
     {
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::LaplacianGWs(model) +
              pow(model.aI, 1 + model.alpha) * 2. * (PITensor::effectiveAnisotropicTensor(model));
     }
+    // @endlabel
   };
 } // namespace TempLat
 

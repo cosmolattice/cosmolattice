@@ -2,7 +2,7 @@
 
 Here we discuss scalar field dynamics with a non-minimal coupling (NMC) to gravity. We first write the continuum equations for a single real scalar field coupled to the Ricci scalar through a term proportional to $\xi R\phi^2$, where $\xi$ is a dimensionless coupling constant and $R$ is the Ricci scalar. In the explicit example model, this NMC scalar is denoted by $\chi$, while $\phi$ is kept as a minimally coupled inflaton.
 
-This section is structured as follows. In Section [*The continuum theory*][sec_NMCcontinuum], we first introduce the equations of motion in the continuum for both the matter sector and the scale factor, and recall the corresponding *program variables*. In Section [*NMC model*][sec_NMCModel] we present an example model and define its corresponding program variables and potential specific to it. We then explain in Section [*My first NMC run*][sec_MyFirstNMCRun] how to compile and run the code. After that, in Section [*The model file*][sec_TheNMCModelFile] we walk the user through the *model file*, where the model details are actually implemented. Finally, in Section [*The NMC physics implemented in CosmoLattice*][sec_WhatHappensAutoinNMC] we provide a summarized picture of what happens 'under the hood', emphasizing the external-spectrum initialization of the NMC field and the Runge-Kutta evolution used by this module.
+This section is structured as follows. In Section [*The continuum theory*][sec_NMCcontinuum], we first introduce the equations of motion in the continuum for both the matter sector and the scale factor, and recall the corresponding *program variables*. In Section [*NMC model*][sec_NMCModel] we present an example model and define its corresponding program variables and potential specific to it. We then explain in Section [*My first NMC run*][sec_MyFirstNMCRun] how to compile and run the code. After that, in Section [*The model file*][sec_TheNMCModelFile] we walk the user through the *model file*, where the model details are actually implemented. Finally, in Section [*The NMC physics implemented in CosmoLattice*][sec_WhatHappensAutoinNMC] we provide a summarized picture of what happens 'under the hood', noting the external-spectrum initialization of the NMC field and the Runge-Kutta evolution used by this module.
 
 ### The continuum theory { #sec_NMCcontinuum }
 
@@ -278,19 +278,108 @@ For this example, the most relevant parameters are:
 | `tOutputFreq` | Time interval between frequent outputs. |
 | `tOutputInfreq` | Time interval between infrequent outputs, such as spectra. |
 | `expansion` | If `true`, the scale factor evolves self-consistently. |
-| `evolver` | Evolution algorithm. Since NMC kernels depend on momenta through $\tilde{\bar R}$, NMC simulations must be evolved with the Runge-Kutta family implemented in CosmoLattice, e.g. `RK2`, `RK3_3`, `RK3_4`, or `RK4_5`. |
+| `fixedBackground` | If `true`, the scale factor is not evolved self-consistently, but fixed by an external power-law background. |
+| `omegaEoS` | Barotropic equation-of-state parameter $\omega_{\rm EoS}=p/\rho$ of the external component sourcing the fixed background expansion. |
+| `H0` | Initial Hubble rate in GeV used for fixed background expansion. |
+| `evolver` | Evolution algorithm. For self-consistent NMC expansion, the NMC kernels depend on momenta through $\tilde{\bar R}$, so the simulation must be evolved with the Runge-Kutta family implemented in CosmoLattice, e.g. `RK2`, `RK3_3`, `RK3_4`, or `RK4_5`. |
 | `xis` | Non-minimal coupling $\xi$ of the NMC scalar field $\chi$. |
 | `initial_amplitudes` | Initial homogeneous field amplitudes for $\phi$ and $\chi$, in GeV. |
 | `initial_momenta` | Initial homogeneous field momenta for $\phi$ and $\chi$, in GeV$^2$. |
 | `lambda` | Inflaton quartic self-coupling $\lambda$. |
-| `ext_PS0`, `ext_PS1` | Optional external initial power spectra for fields 0 and 1. In this NMC example, `ext_PS1` should point to the external spectrum used to initialize the non-minimally coupled field $\chi$; `ext_PS0 = none` leaves the inflaton initialized with the default scalar prescription. |
-| `PS_type` | Power-spectrum convention, called `PSType` internally. `PSType = 1` selects Type-I spectra, while `PSType = 2` selects Type-II spectra. The same choice is used when CosmoLattice outputs spectra and when it initializes fields from an external spectrum. |
+| `ext_PS0`, `ext_PS1` | Optional external initial power spectra for fields 0 and 1. In this NMC example, `ext_PS1` initializes the non-minimally coupled field $\chi$; `ext_PS0 = none` leaves the inflaton initialized with the default scalar prescription. |
+| `PS_type` | Power-spectrum convention, called `PSType` internally; see Section [*External power spectrum for scalar singlet initialization*](IC.md#subsubsec_ExternalPSSingletIC). |
 
 !!! note
     In this model, `initial_amplitudes` and `initial_momenta` must contain two entries. The first entry corresponds to the minimally coupled inflaton $\phi$, and the second one to the non-minimally coupled field $\chi$.
 
 !!! note
-    The line `ext_PS1 = none` in the example input file is a placeholder. To initialize the NMC field with an external power spectrum, replace `none` by the path to the spectrum file, measured in the same momentum units as $\omega_*$. The corresponding inflaton parameter is `ext_PS0`; it can remain `none` if the inflaton fluctuations are initialized with the default prescription.
+    The line `ext_PS1 = none` in the example input file is a placeholder. To initialize the NMC field with an external power spectrum, replace `none` by the path to the spectrum file. The corresponding inflaton parameter is `ext_PS0`; it can remain `none` if the inflaton fluctuations are initialized with the default prescription.
+
+#### Fixed background expansion
+
+NMC models can also be run in a fixed background expansion, as in the scalar singlet case discussed around Eq. ([*37*][eq_ScaleFactorPowerLaw]). In this setup, the scale factor is prescribed by an external homogeneous component with constant equation of state $\omega_{\rm EoS}$, rather than being sourced self-consistently by the lattice fields. This is activated with
+```text
+expansion = true
+fixedBackground = true
+omegaEoS = ...
+H0 = ...
+```
+where `H0` is the initial Hubble rate in GeV. CosmoLattice converts it to program units as $\tilde{\mathcal H}_* \equiv H_0/\omega_*$.
+
+The fixed background scale factor is
+[](){ #eq_NMCFixedBackgroundScaleFactor }
+```math
+\begin{align}
+a(\tilde\eta)
+=
+\left[
+1+
+{\tilde{\mathcal H}_*\over p}
+\left(\tilde\eta-\tilde\eta_*\right)
+\right]^p,
+\hspace{0.6cm}
+{\mathcal H}(\tilde\eta)
+\equiv
+{a'\over a}
+=
+{\tilde{\mathcal H}_*\over
+1+
+{\tilde{\mathcal H}_*\over p}
+\left(\tilde\eta-\tilde\eta_*\right)},
+\hspace{0.6cm}
+p =
+{2\over 3(1+\omega_{\rm EoS})-2\alpha}.
+\end{align}
+```
+For NMC evolution, CosmoLattice also needs the background Ricci scalar appearing in the curvature-induced mass term. In a fixed background run it is not computed from the trace of the lattice energy-momentum tensor, but directly from the prescribed scale factor:
+[](){ #eq_NMCFixedBackgroundRicci }
+```math
+\begin{align}
+\tilde{\bar R}_{\rm fixed}(\tilde\eta)
+=
+\left[
+-6\tilde{\mathcal H}_*^2 p
+\left[
+1+
+{\tilde{\mathcal H}_*\over p}
+\left(\tilde\eta-\tilde\eta_*\right)
+\right]^{-2\alpha p}
+\left[1+p(\alpha-2)\right]
+\right]
+\left[
+p+\tilde{\mathcal H}_*
+\left(\tilde\eta-\tilde\eta_*\right)
+\right]^{-2}.
+\end{align}
+```
+At the initial time this reduces to
+```math
+\begin{align}
+\tilde{\bar R}_{\rm fixed}(\tilde\eta_*)
+=
+-9\tilde{\mathcal H}_*^2
+\left(\omega_{\rm EoS}-{1\over3}\right),
+\end{align}
+```
+so the fixed-background Ricci scalar vanishes for a radiation-dominated background, $\omega_{\rm EoS}=1/3$, as expected.
+
+#### Outputs
+
+An NMC run generates the same standard output files as a scalar singlet simulation, described in Section [*Outputs*](My first model of (singlet) scalar fields.md#outputs). In addition, when the model declares non-minimally coupled scalar fields, the following NMC-specific quantities are added to the standard averaged output:
+
+-  `average_energies.txt`: The energy-density file contains the usual scalar kinetic, scalar gradient, and potential-energy columns, followed by the NMC contribution before the total energy. For a model with $N_s$ scalar singlets and $N_p$ potential terms, the columns are
+
+$\hspace{1cm}$ $\tilde{\eta}$, $\tilde{E}_K^{(0)}$, $\tilde{E}_G^{(0)}$, ... , $\tilde{E}_K^{(N_s-1)}$, $\tilde{E}_G^{(N_s-1)}$, $\tilde{E}_V^{(0)}$, ... , $\tilde{E}_V^{(N_p-1)}$, $\tilde{\rho}_{\rm NMC}^{(1)}$, $\tilde{\rho}_{\rm NMC}^{(2)}$, $\tilde{\rho}_{\rm NMC}$, $\langle \tilde{\rho} \rangle$.
+
+Here $\tilde{\rho}_{\rm NMC}^{(1)}$ and $\tilde{\rho}_{\rm NMC}^{(2)}$ are the two volume-averaged non-minimal energy-density contributions generated by the $\xi R\phi^2$ coupling, and $\tilde{\rho}_{\rm NMC}$ is their sum. The total energy density $\langle \tilde{\rho} \rangle$ includes this NMC contribution.
+
+-  `average_scale_factor.txt`: In an expanding NMC simulation, the scale-factor file contains one additional column after the standard scale-factor quantities:
+
+$\hspace{1cm}$ $\tilde{\eta}$, $a$, $a'$, $a'/a$, $\tilde{\bar R}$.
+
+The last column is the volume-averaged background Ricci scalar in program units. This is the same quantity entering the curvature-induced mass term of the NMC scalar field.
+
+-  `average_energy_conservation.txt`: No separate NMC conservation file is produced. The usual Friedmann-constraint output is still used, but its right-hand side is computed with the total energy density including $\tilde{\rho}_{\rm NMC}$.
 
 ### The model file { #sec_TheNMCModelFile }
 
@@ -368,121 +457,17 @@ With these ingredients, the file $\texttt{lphi4NonMinimal.h}$ fully specifies th
 
 ### The NMC physics implemented in CosmoLattice { #sec_WhatHappensAutoinNMC }
 
-We now summarize what CosmoLattice does internally when running the NMC model described above. The structure is similar to the scalar singlet case, but two differences are essential. First, the NMC field $\chi$ is initialized from an external power spectrum. Second, the evolution must be performed with the Runge-Kutta family of algorithms, because the NMC kernels depend on volume averages involving the fields and their conjugate momenta.
+We now summarize what CosmoLattice does internally when running the NMC model described above with self-consistent expansion. The structure is similar to the scalar singlet case, but two differences are essential. First, the NMC field $\chi$ is initialized from an external power spectrum. Second, the self-consistent evolution must be performed with the Runge-Kutta family of algorithms, because the NMC kernels depend on volume averages involving the fields and their conjugate momenta.
 
 #### Initialization of fluctuations { #sec_InitNMC }
 
 As in the scalar singlet case, the simulation starts from homogeneous field values plus fluctuations. The homogeneous values are read from `initial_amplitudes` and `initial_momenta`: the first entries correspond to the minimally coupled inflaton $\phi$, and the second entries correspond to the NMC field $\chi$.
 
-The important NMC-specific ingredient is the initialization of the inhomogeneous $\chi$ fluctuations. Instead of relying only on the default vacuum prescription, the field $\chi$ can be initialized with a user-supplied external spectrum through
+The important NMC-specific ingredient is the initialization of the inhomogeneous $\chi$ fluctuations. The external power-spectrum prescription for scalar singlets is described in Section [*External power spectrum for scalar singlet initialization*](IC.md#subsubsec_ExternalPSSingletIC). In this model $\chi$ is scalar field `1`, so it can be initialized from an external spectrum with
 ```text
 ext_PS1 = path/to/spectrum.dat
 ```
-where the index `1` refers to the second scalar field, $\chi$. The corresponding parameter for the inflaton is `ext_PS0`. If `ext_PS0 = none`, the inflaton fluctuations are initialized with the standard scalar prescription. If `ext_PS1` is set to a file path, CosmoLattice uses that external power spectrum to draw the initial Fourier modes of $\chi$.
-
-As in the scalar singlet case, the spectrum is a compact way of specifying the variance of the fluctuations. For the NMC field we may write, in the continuum,
-[](){ #eq_NMCExternalSpectrum }
-```math
-\begin{align}
-\left\langle \delta \chi^2 \right\rangle
-= \int d\log k~ \Delta_{\delta\chi}(k),\hspace{0.6cm}
-\Delta_{\delta\chi}(k) \equiv {k^3\over 2\pi^2}\mathcal{P}_{\delta\chi}(k),\hspace{0.6cm}
-\left\langle \delta\chi_{\bf k}\delta\chi^*_{{\bf k}'} \right\rangle
-= (2\pi)^3\mathcal{P}_{\delta\chi}(k)\delta({\bf k}-{\bf k}') . \tag{103}
-\end{align}
-```
-The spectrum $\Delta_{\delta\chi}$ carries the dimensions of $\delta\chi^2$ and is invariant under a constant re-normalization of the scale factor. Equivalently, the Fourier-space spectrum $\mathcal{P}_{\delta\chi}$ scales as $a^{-3}$ when written as a function of the physical momentum $p=k/a$. This is the normalization convention assumed when the external spectrum is converted into program units and used on the lattice.
-
-On the lattice, the external spectrum is interpreted through the discrete counterpart of this continuum definition. For a generic field $f$, which in the present NMC initialization should be read as $f=\chi$, CosmoLattice uses
-[](){ #eq_NMCExternalSpectrumLattice }
-```math
-\begin{align}
-\Delta_f(k(|{\bf \tilde n}|))
-&\equiv
-{k(\tilde{\bf n})\over 2\pi}
-{\delta x\over N^5}
-\#_{R(\tilde{\bf n})}
-\left\langle
-\left| f(\tilde{\bf n})\right|^2
-\right\rangle_{R(\tilde{\bf n})}
-\\
-&=
-{k^3(\tilde{\bf n})\over 2\pi^2}
-\Upsilon_{|\tilde{\bf n}|}
-\left({\delta x\over N}\right)^3
-\left\langle
-\left| f(\tilde{\bf n})\right|^2
-\right\rangle_{R(\tilde{\bf n})} . \tag{104}
-\end{align}
-```
-Here $R(\tilde{\bf n})$ denotes the spherical shell of lattice momenta around $|\tilde{\bf n}|$, $\#_{R(\tilde{\bf n})}$ is the number of Fourier sites in that shell, and
-[](){ #eq_NMCExternalSpectrumUpsilon }
-```math
-\begin{align}
-\Upsilon_{|\tilde{\bf n}|}
-\equiv
-{\#_{R(\tilde{\bf n})}\over 4\pi|\tilde{\bf n}|^2} . \tag{105}
-\end{align}
-```
-The choice of power-spectrum type is precisely the choice of how this multiplicity factor is treated. Type-I spectra use the exact lattice multiplicity $\#_{R(\tilde{\bf n})}$, so $\Upsilon_{|\tilde{\bf n}|}$ is kept explicitly. Type-II spectra use the continuum shell multiplicity, $\#_{R(\tilde{\bf n})}=4\pi|\tilde{\bf n}|^2$, so $\Upsilon_{|\tilde{\bf n}|}=1$.
-
-Identifying the shell average with the statistical average of the Gaussian realization gives the variances used to initialize each Fourier mode from the external spectrum. In program units,
-[](){ #eq_NMCExternalSpectrumVariance }
-```math
-\begin{align}
-\left\langle
-\left|\tilde f(\tilde{\bf n})\right|^2
-\right\rangle_{\rm stat}
-&=
-{\mathcal C_*\over \Upsilon_{|\tilde{\bf n}|}}
-\left({N\over \delta\tilde x}\right)^3
-{\widetilde{\mathcal F}(\kappa/a)\over a^3},
-\\
-\left\langle
-\left|\tilde f'(\tilde{\bf n})\right|^2
-\right\rangle_{\rm stat}
-&=
-{\mathcal D_*\over \Upsilon_{|\tilde{\bf n}|}}
-\left({N\over \delta\tilde x}\right)^3
-{\widetilde{\mathcal G}(\kappa/a)\over a^{3-2\alpha}} . \tag{106}
-\end{align}
-```
-The normalization constants are
-[](){ #eq_NMCExternalSpectrumNorms }
-```math
-\begin{align}
-\mathcal C_*
-&\equiv
-\left\{
-\begin{array}{cl}
-\omega_*^3/(f_*^2E_*) & [{\rm general}],\\
-(\omega_*/f_*)^2 & [E_*=\omega_*],
-\end{array}
-\right.
-\\
-\mathcal D_*
-&\equiv
-\left\{
-\begin{array}{cl}
-\omega_*M_*/f_*^2 & [{\rm general}],\\
-(\omega_*/f_*)^2 & [M_*=\omega_*].
-\end{array}
-\right. \tag{107}
-\end{align}
-```
-CosmoLattice then draws the real and imaginary parts of $\tilde f(\tilde{\bf n})$ and $\tilde f'(\tilde{\bf n})$ from Gaussian distributions with zero mean and variance equal to one half of the corresponding expressions in Eq. ([*106*][eq_NMCExternalSpectrumVariance]). Equivalently, one may view the same initialization as drawing random phases and Rayleigh-distributed amplitudes whose expected square amplitudes are fixed by Eq. ([*106*][eq_NMCExternalSpectrumVariance]).
-
-The input flag `PS_type`, referred to as `PSType` in the code, selects between these two conventions: `PSType = 1` selects Type-I spectra, while `PSType = 2` selects Type-II spectra. The same flag is used when CosmoLattice measures and plots spectra during the simulation and when it initializes a field from an external spectrum. Therefore the convention used to produce the external file should match the convention selected by `PS_type` in the run that reads it.
-
-Operationally, the external spectrum plays the same role as the analytic quantum spectrum in the scalar singlet initialization: it fixes the variance of the Fourier amplitudes. CosmoLattice then draws Gaussian random modes for $\chi$, or equivalently random phases with Rayleigh-distributed amplitudes, so that the ensemble average reproduces the supplied spectrum. This is useful when the NMC spectator fluctuations have first been evolved in the linear regime as functions of momentum, and the resulting spectrum is then used as the initial condition for the fully nonlinear lattice stage.
-
-The same power-spectrum normalization also applies to any supplied initial spectrum for $\delta\chi'$. In that case the spectrum fixes $\left\langle \delta\chi'^2 \right\rangle$, with the additional $a^{2\alpha}$ scaling associated with the $\alpha$-time derivative used by CosmoLattice.
-
-!!! note
-    The external spectrum supplied through `ext_PS1` must be expressed in the units expected by the initializer, i.e. with momenta measured in the same units as $\omega_*$. This is why the example input file comments that the external spectrum is measured in the same units as `omegaStar`.
-
-!!! note
-    Type-I external-spectrum initialization is supported for three-dimensional lattices. For lower-dimensional runs, adapt $\Upsilon_{|\tilde{\bf n}|}$ according to the dimension $d$.
+The corresponding parameter for the inflaton is `ext_PS0`; it can remain `none` if the inflaton fluctuations are initialized with the default scalar prescription. The `PS_type` value must match the convention used to produce the external file, and the file momenta must be measured in the same units as $\omega_*$. This setup is useful when the NMC spectator fluctuations have first been evolved in the linear regime as functions of momentum, and the resulting spectrum is then used as the initial condition for the fully nonlinear lattice stage.
 
 #### Evolution of the system { #eq_evolution-NMC }
 
@@ -494,7 +479,7 @@ b=a^{1-\alpha} a'\,
 \hspace{0.6cm}
 \tilde\pi_\phi = a^{3-\alpha}\tilde\phi',
 \hspace{0.6cm}
-\tilde\pi_\chi = a^{3-\alpha}\tilde\chi' . \tag{108}
+\tilde\pi_\chi = a^{3-\alpha}\tilde\chi' . \tag{103}
 \end{align}
 ```
 The schematic first-order equations for the model introduced above are
@@ -523,7 +508,7 @@ a^{\alpha-1}b,
 \\
 b'
 &=
-\mathcal{K}^{\rm L}_a[a,\tilde{\bar R}] . \tag{109}
+\mathcal{K}^{\rm L}_a[a,\tilde{\bar R}] . \tag{104}
 \end{align}
 ```
 For the present example, the inflaton has the quartic potential derivative $\widetilde V_{,\tilde\phi}=\tilde\phi^3$, while $\chi$ has no direct potential interaction. The corresponding lattice kernels are
@@ -542,21 +527,20 @@ a^{1+\alpha}\sum_i\tilde\nabla_i^-\tilde\nabla_i^+\tilde\chi
 \\
 \mathcal{K}^{\rm L}_a
 &=
-\frac{a^{2+\alpha}}{6}\tilde{\bar R} , \tag{110}
+\frac{a^{2+\alpha}}{6}\tilde{\bar R} , \tag{105}
 \end{align}
 ```
 where $\tilde{\bar R}$ is computed from volume averages of the full system, including both $\phi$ and $\chi$, in the following manner:
 ```math
 \begin{align}
-\tilde{\bar R} &=\frac{f_*^2}{m_p^2} \left[\frac{2\left(1-6\xi \right) \big\langle\tilde  G^{\phi} -\tilde K^{\phi}\big\rangle  + 4\langle \tilde V\rangle- 6\xi\langle \tilde\phi \,\tilde V_{,\tilde\phi}\rangle+({\tilde{\bar\rho}}_{\rm  m}-3{\tilde{\bar p}}_{\rm  m})}{1 + \left(6\xi -1\right)\xi \langle\tilde\phi^2\rangle (f_*^2/m_p^2)}\right] . \tag{111}
+\tilde{\bar R} &=\frac{f_*^2}{m_p^2} \left[\frac{2\left(1-6\xi \right) \big\langle\tilde  G^{\phi} -\tilde K^{\phi}\big\rangle  + 4\langle \tilde V\rangle- 6\xi\langle \tilde\phi \,\tilde V_{,\tilde\phi}\rangle+({\tilde{\bar\rho}}_{\rm  m}-3{\tilde{\bar p}}_{\rm  m})}{1 + \left(6\xi -1\right)\xi \langle\tilde\phi^2\rangle (f_*^2/m_p^2)}\right] . \tag{106}
 \end{align}
 ```
 with
 ```math
-with
 \begin{align}
     \tilde K^{\phi} \equiv \frac{1}{2a^{2\alpha}} \tilde\phi'^2\, , \quad \tilde G^{\phi} \equiv \frac{1}{2a^{2}} (\tilde\nabla
-     \tilde\phi)^2 \, , \tag{112} 
+     \tilde\phi)^2 . \tag{107} 
 \end{align}
 ```
 The spatial discretization follows the standard scalar singlet prescription. Gradients are discretized with forward derivatives, while the Laplacian is implemented symmetrically,
@@ -571,14 +555,14 @@ The spatial discretization follows the standard scalar singlet prescription. Gra
 &\longrightarrow
 \sum_i \nabla_i^-\nabla_i^+f,
 \hspace{0.5cm}
-f\in\{\phi,\chi\}. \tag{113}
+f\in\{\phi,\chi\}. \tag{108}
 \end{align}
 ```
 
 !!! note
-    The background Ricci scalar $\tilde{\bar R}$ depends on volume averages of both fields and their conjugate momenta. Consequently, the NMC field kernel depends indirectly on $\tilde\pi_\phi$ and $\tilde\pi_\chi$ through $\tilde{\bar R}$. This momentum dependence means that symplectic algorithms such as LF, VV, or PV should not be used for NMC evolution.
+    In self-consistent NMC expansion, the background Ricci scalar $\tilde{\bar R}$ depends on volume averages of both fields and their conjugate momenta. Consequently, the NMC field kernel depends indirectly on $\tilde\pi_\phi$ and $\tilde\pi_\chi$ through $\tilde{\bar R}$. This momentum dependence means that symplectic algorithms such as LF, VV, or PV should not be used for self-consistent NMC evolution.
 
-CosmoLattice therefore evolves NMC models with explicit Runge-Kutta algorithms. The input parameter `evolver` should be chosen from the RK family implemented in CosmoLattice, such as `RK2`, `RK3_3`, `RK3_4`, or `RK4_5`. The example input file uses
+CosmoLattice therefore evolves self-consistent NMC models with explicit Runge-Kutta algorithms. The input parameter `evolver` should be chosen from the RK family implemented in CosmoLattice, such as `RK2`, `RK3_3`, `RK3_4`, or `RK4_5`. The example input file uses
 ```text
 evolver = RK2
 ```

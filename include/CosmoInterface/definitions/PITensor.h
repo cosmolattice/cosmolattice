@@ -53,24 +53,31 @@ namespace TempLat
     }
 
   private:
+    // @label:pitensor_total_source
     template <class Model, int I, int J> static inline auto effectiveAnisotropicTensor(Model &model, Tag<I> i, Tag<J> j)
     {
       return scalarSingletContribution(model, i, j) + complexScalarContribution(model, i, j) + electricU1Contribution(model, i, j) +
              magneticU1Contribution(model, i, j);
     }
+    // @endlabel
 
+    // @label:pitensor_singlet_source
     template <class Model, int I, int J> static inline auto scalarSingletContribution(Model &model, Tag<I> a, Tag<J> b)
     {
       return Total(i, 0, Model::Ns - 1, forwDiff(model.fldS(i), a) * forwDiff(model.fldS(i), b));
     }
+    // @endlabel
 
+    // @label:pitensor_complex_source
     template <class Model, int I, int J> static inline auto complexScalarContribution(Model &model, Tag<I> a, Tag<J> b)
     {
       return Total(i, 0, Model::NCs - 1,
                    2 * Real(GaugeDerivatives::forwardCovGradientCS(model, i, a) *
                             conj(GaugeDerivatives::forwardCovGradientCS(model, i, b))));
     }
+    // @endlabel
 
+    // @label:pitensor_u1_source
     template <class Model, int I, int J> static inline auto electricU1Contribution(const Model &model, Tag<I> i, Tag<J> j)
     {
       return Total(a, 0, Model::NU1 - 1,
@@ -84,7 +91,9 @@ namespace TempLat
                    -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * magneticFieldU1(model.fldU1(a), i) *
                        magneticFieldU1(model.fldU1(a), j));
     }
+    // @endlabel
 
+    // @label:pitensor_u1_magnetic_field
     template <class Field> static inline auto magneticFieldU1(const Field &f, Tag<1>)
     {
       return fieldStrength(f, 2_c, 3_c);
@@ -99,6 +108,7 @@ namespace TempLat
     {
       return fieldStrength(f, 1_c, 2_c);
     }
+    // @endlabel
   };
 } // namespace TempLat
 
