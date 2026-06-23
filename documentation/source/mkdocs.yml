@@ -13,17 +13,15 @@ theme:
   logo: assets/CL_Icon.png
   favicon: assets/CL_Icon.png
   palette:
-    # Light mode (follows OS preference)
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
+    # Light mode (default for everyone; toggle to switch manually)
+    - scheme: default
       primary: white
       accent: light blue
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
-    # Dark mode (follows OS preference)
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
+    # Dark mode (opt-in via toggle)
+    - scheme: slate
       primary: black
       accent: light blue
       toggle:
