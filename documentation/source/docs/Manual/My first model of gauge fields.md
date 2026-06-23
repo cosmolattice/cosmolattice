@@ -263,38 +263,40 @@ We use a similar technique in the remaining lines above, where we specify the in
 We now proceed to read the model parameters `qG`, `qH`, and `lambda` from the input file in the usual way, and to compute new parameters `g` and `h`, as follows
 @emgithub(models/lphi4SU2U1.h:model_parameters)
 
-The next step is to define appropriate program variables for the model, as well as setting the initial masses. The potential of the dominating oscillatory field is quartic, similar to the scalar case considered in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md), so mimicking Eq. ([*37*][eq_lphi4-ProgVar]), we choose them as
+The next step is to define appropriate program variables for the model, as well as setting the initial masses. The potential of the dominating oscillatory field is quartic, similar to the case considered in Section [Scalar-singlet interactions](My first model of (singlet) scalar fields.md), so mimicking Eq. ([*38*][eq_lphi4-ProgVar]), we choose them as
 ```math
 \begin{align}
-f_*=|\overline{\Phi}_{*} | ,  \omega_*=\sqrt{\lambda} | \overline{\Phi}_* |,  \alpha=1  .
+f_*=|\overline{\Phi}_{*} | ,~~  \omega_*=\sqrt{\lambda} | \overline{\Phi}_* |,~~  \alpha=1  .
 \end{align}
 ```
 
 This is done in the code as follows,
 @emgithub(models/lphi4SU2U1.h:rescaling)
 
-Finally we call the generic function responsible to set the masses of the matter fields together with the initial potential
+Finally, we call the generic function responsible to set the masses of the matter fields together with the initial potential
 @emgithub(models/lphi4SU2U1.h:masses_setup)
 
-We now need to specify the scalar potential of our field theory. As for scalar singlet theories, any gauge field theory in CosmoLattice is implemented by means of the *program potential*, defined in Eq. ([*57*][eq_ProgramPotMultiScalar]). In our example, it is given by
+We now need to specify the scalar potential of our field theory. As for scalar singlet interactions, a scalar-gauge theory in CosmoLattice requires a *program potential*, defined in Eq. ([*57*][eq_ProgramPotMultiScalar]). In our example, it is given by
+<!-- [](){ #eq_Pot_exampleSU2U1 } -->
 ```math
 \begin{align}
 \widetilde V( \tilde\phi, |\tilde\varphi|, |\tilde\Phi| ) \equiv \frac{1}{f_*^2 \omega_*^2}V(f_*\tilde \phi,f_*|\tilde \varphi |, f_*|\tilde \Phi |) = |\tilde\Phi|^4 + \frac{g^2}{\lambda}|\tilde\Phi|^2\tilde\phi^2 + 2 \frac{h^2}{\lambda}|\tilde\Phi|^2|\tilde\varphi|^2   .
+% \label{eq_Pot_exampleSU2U1}
 \end{align}
 ```
 
-The potential is composed of three different terms: the quartic potential of the inflaton, the quartic coupling between the inflaton and $\phi$, and the quartic coupling between the inflaton and $\varphi$. We label them as terms 0, 1, and 2 respectively. The different terms are implemented in the model file with the `potentialTerms` function as described in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md). Scalars are given by the variable `fldS(X_c)` as before, with `X` the field label. Fields $\varphi$ and $\Phi$ are given instead by the variables `fldCS(X_c)` and `fldSU2Doublet(X_c)` respectively. Of course, the potential only depends on the moduli of these fields, which we can obtain with the `norm` function as `norm(fldCS(X_c))` and `norm(fldSU2Doublet(X_c))` respectively. The three terms of the potential are then specified as follows:
+The potential above is composed of three different terms: the quartic potential of the inflaton, the quadratic coupling between the inflaton $\Phi$ and $\phi$, and the quadratic coupling between the inflaton and $\varphi$. We label them as terms 0, 1, and 2, respectively. The different terms are implemented in the model file with the `potentialTerms` function, similarly as we described it in the Section [Scalar-singlet interactions](My first model of (singlet) scalar fields.md). Singlet scalars are denoted by the variable `fldS(X_c)` as before, with `X_c` the field label. Charged scalars $\varphi$ and $\Phi$ are set, instead, by the variables `fldCS(X_c)` and `fldSU2Doublet(X_c)`, respectively. Due to gauge invariance, the potential only depends on the moduli of these fields, which we obtain with the `norm` function as `norm(fldCS(X_c))` and `norm(fldSU2Doublet(X_c))`, respectively. The three terms of the potential are then specified as follows:
 @emgithub(models/lphi4SU2U1.h:potential_terms)
 
-We now need to specify the first derivatives of $\tilde{V}$ with respect $\tilde\phi$, $|\tilde\varphi|$, and $|\tilde\Phi|$. These must be specified in the functions `potDeriv(Tag<0>)`, `potDerivNormCS(Tag<0>)` and `potDerivNormSU2Doublet(Tag<0>)` respectively, with `Tag<X>` indicating the corresponding field label (there is only one copy for each species, so it is `Tag<0>` in the three cases). This is done as follows:
+We now need to specify the first derivatives of $\tilde{V}$ with respect $\tilde\phi$, $|\tilde\varphi|$, and $|\tilde\Phi|$. These must be specified in the functions `potDeriv(Tag<0>)`, `potDerivNormCS(Tag<0>)` and `potDerivNormSU2Doublet(Tag<0>)`, respectively, with `Tag<X>` indicating the corresponding field label (in our example there is only one copy for each species, so it is `Tag<0>` in the three cases). This is done as follows:
 @emgithub(models/lphi4SU2U1.h:potential_derivs)
 
-Finally, we need to specify the second derivatives of $\tilde{V}$ with respect $\tilde{\phi}$, $\tilde{\varphi}$, and $\tilde{\Phi}$. These are implemented in the functions `potDeriv2(Tag<X>)`, `potDeriv2NormCS(Tag<X>)` and `potDeriv2NormSU2Doublet(Tag<X>)` as follows:
+Finally, we need to specify the second derivatives of $\tilde{V}$ with respect to $\tilde{\phi}$, $\tilde{\varphi}$, and $\tilde{\Phi}$. These are implemented in the functions `potDeriv2(Tag<X>)`, `potDeriv2NormCS(Tag<X>)` and `potDeriv2NormSU2Doublet(Tag<X>)`, as follows:
 @emgithub(models/lphi4SU2U1.h:potential_second_derivs)
 
 ### **Output files**
 
-We indicate here the different output files:
+We indicate here the different output files and their column content:
 
 -  `average_scalar_[nfld].txt`: $\tilde{ \eta}$, $\langle \tilde{\phi} \rangle$, $\langle \tilde{\phi}' \rangle$, $\langle \tilde{\phi}^2 \rangle$, $\langle \tilde{\phi}^{'2} \rangle$, $\text{rms} (\tilde{\phi})$, $\text{rms} (\tilde{\phi}')$
 
