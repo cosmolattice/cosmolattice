@@ -21,7 +21,7 @@ This website has been generated from the [CosmoLattice user manual](https://arxi
 - [Appendix: Generic Model variables](Appendix: Generic Model variables.md)
 - [Appendix: CMake Flags](Appendix: CMake Flags.md)
 - [List of Implemented Functions](List of Implemented Functions.md)
-- [Under the Hood: Expression Templates and CosmoLattice](Under the Hood: Expression Templates and CosmoLattice.md)
+- [Under the Hood: Expression Templates ](Under the Hood: Expression Templates .md)
 ## About
 
 ...

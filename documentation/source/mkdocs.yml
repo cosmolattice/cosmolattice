@@ -13,8 +13,22 @@ theme:
   logo: assets/CL_Icon.png
   favicon: assets/CL_Icon.png
   palette:
-    primary: white
-    accent: light blue
+    # Light mode (follows OS preference)
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: white
+      accent: light blue
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    # Dark mode (follows OS preference)
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      accent: light blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
   icon:
     repo: fontawesome/brands/git-alt
     admonition:
@@ -175,6 +189,7 @@ nav:
           - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Parallelization </span>": "Manual/Parallelization.md"
           - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Fourier Transforms </span>": "Manual/Fourier Transforms.md"
           - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Backing up simulations with HDF5 </span>": "Manual/Backing up simulations with HDF5.md"
+          - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Under the Hood: Expression Templates </span>": "Manual/Under the Hood: Expression Templates .md"
       #- "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgments </span>": "Manual/Acknowledgments.md"
       - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Input File Builder </span>": "code/InputBuilder.md"
       - "<span style='font-weight:bold;'>Appendices (A & F, ALL) </span>": "Manual/Appendix: Parameters.md.md"
@@ -182,13 +197,12 @@ nav:
       - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Appendix: Generic Model variables </span>": "Manual/Appendix_Generic_Model_variables.md"
       - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Appendix: CMake Flags </span>": "Manual/Appendix_CMake_Flags.md"
       - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;List of Implemented Functions </span>": "Manual/List of Implemented Functions.md"
-      - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Under the Hood: Expression Templates and CosmoLattice </span>": "Manual/Under the Hood: Expression Templates and CosmoLattice.md"
       #- "Acknowledgments": "Manual/Acknowledgments.md"
       #- "Appendix: Parameters (A & F, ALL)": "Manual/Appendix: Parameters.md"
       #- "Appendix: Generic Model variables (A & F, ALL)": "Manual/Appendix: Generic Model variables.md"
       #- "Appendix: CMake Flags (A & F, ALL)": "Manual/Appendix: CMake Flags.md"
       #- "List of Implemented Functions (A & F, ALL)": "Manual/List of Implemented Functions.md"
-      #- "Under the Hood: Expression Templates and CosmoLattice (A & F)": "Manual/Under the Hood: Expression Templates and CosmoLattice.md"
+      #- "Under the Hood: Expression Templates  (A & F)": "Manual/Under the Hood: Expression Templates .md"
   - CL Schools:
       - "<span style='font-size:0.85em;'>Hands-On CosmoLattice Workshop (2026, Complutense, Madrid)</span>": "events/School2026.md"
       - "3rd CL School (2025, IBS, Daejeon)": "events/School2025.md"
