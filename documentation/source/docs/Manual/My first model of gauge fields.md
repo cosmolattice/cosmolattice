@@ -1,8 +1,10 @@
-CosmoLattice is capable of simulating scalar-gauge field theories in an expanding universe. Here we explain how to simulate a model containing charged scalar fields and/or gauge fields, either Abelian or non-Abelian. We start be reviewing briefly the framework of scalar-gauge theories in the continuum.
+CosmoLattice is capable of simulating scalar-gauge field theories in an expanding universe. Note that we differentiate between *scalar-gauge interactions* and *ALP-gauge interactions*. While both contain gauge fields, the first case is based on charged scalars under gauge symmetries, as *e.g.* in scalar electrodynamics, or in the electroweak (bosonic) sector of the Standard model. In the second case, a pseudo-scalar field which is not charged under a gauge symmetry, known as the *axion-like-particle* or ALP, is coupled to gauge fields via $\phi F\tilde F$ (Abelian) or $\phi G\tilde G$ (non-Abelian). In this section we explain how to simulate scalar-gauge theories, *i.e.* models containing charged scalar fields and/or gauge fields, either Abelian or non-Abelian. For a description of ALP-gauge interactions in CosmoLattice, go to Section [Axion-Gauge Dynamics](ALP.md).
 
-### Scalar-gauge field dynamics: program variables
+<!-- We start be reviewing briefly the framework of scalar-gauge theories in the continuum. -->
 
-The action of a scalar-gauge theory -- with canonically normalized scalar fields -- that can be simulated in CosmoLattice, is the following
+### **Scalar-gauge field dynamics: program variables**
+
+The action of a scalar-gauge theory with canonically normalized scalar fields, that can be simulated in CosmoLattice, is the following
 [](){ #eq_Lagrangian }
 ```math
 \begin{align}\tag{50}
@@ -10,7 +12,7 @@ S & =- \int d^4 x \left\{\frac{1}{2}\partial_{\mu} \phi \partial ^{\mu}\phi + (D
 \end{align}
 ```
 
-This expression contains several types of scalar and gauge fields. In order to simplify notation, we have only added one copy of each field species, but CosmoLattice can also handle multiple fields of the same kind, though see Note below [*Number of fields in scalar-gauge theories*][NoteNumGaugeVariables]. The above action contains three types of scalar fields: a singlet $\phi$, a $U(1)$-charged scalar (complex field) $\varphi$, and a $SU(2)$ doublet $\Phi$, where the latter two can be written in terms of real components as
+This expression contains several types of scalar and gauge fields. In order to simplify notation, we have only added one copy of each field species, but CosmoLattice can also handle multiple fields of the same kind, though see Note below [*Number of fields in scalar-gauge theories*][NoteNumGaugeVariables]. The above action contains three types of scalar fields: a singlet $\phi$, a $U(1)$-charged scalar (complex field) $\varphi$, and a $SU(2)$ doublet $\Phi$, where the latter two can be written in terms of real components $\varphi_j \in \mathcal{R}e$, as
 
 <!-- [](){ #Table_Scalars } -->
 ```math
@@ -33,7 +35,7 @@ This expression contains several types of scalar and gauge fields. In order to s
 \end{align}
 ```
 
-*c.f.* Eq. ([*3*][eq_ChargedScalars]) in [*Basic Field Equations in CosmoLattice*][subsec_BasicEOM]. The complex field $\varphi$ can be charged under a $U(1)$ gauge symmetry, while the doublet can be charged under both $U(1)$ and $SU(2)$. The scalar potential of this theory is $V = V(\phi, |\varphi|, |\Phi|)$, which depends on $\phi$, and in the case of the complex and doublet scalars, on their moduli, $|\varphi|$ and $|\Phi|$, respectively. The corresponding covariant derivatives and field strengths in action ([*50*][eq_Lagrangian]) are defined as
+*c.f.* Eq. ([*3*][eq_ChargedScalars]) in [*Basic Field Equations in CosmoLattice*][subsec_BasicEOM]. The complex field $\varphi$ can be charged under a $U(1)$ gauge symmetry, while the doublet can be charged under both $U(1)$ and $SU(2)$. The scalar potential of this theory is $V = V(\phi, |\varphi|, |\Phi|)$, which depends on $\phi$, and/or on the moduli of the complex and doublet scalars, $|\varphi|, |\Phi|$. The corresponding covariant derivatives and field strengths in action ([*50*][eq_Lagrangian]) are defined as
 [](){ #eq_AbCovDerivCont }
 [](){ #eq_CovDerivCont }
 [](){ #eq_FmnAbelian }
@@ -58,7 +60,7 @@ G_{\mu \nu} \equiv G_{\mu \nu}^a T_a   , \hspace{0.4cm} G_{\mu \nu}^a \equiv \pa
 \end{align}
 ```
 
-where $f_{abc}$ are the structure constants of the SU(N) group, determined by the relation $[T_a, T_b] = i f_{abc} T_c$. At the time of writing (July 2026), in CosmoLattice there is only implemented the $SU(2)$ case, for which we simply have $T_a \equiv \sigma_a /2$, with $\sigma_a$ the Pauli matrices. In CosmoLattice we evolve the fields in the temporal gauge, so $A_{0} = B_0^a = 0$. Furthermore, we define the Abelian and non-Abelian electric and magnetic fields as follows,
+where $f_{abc}$ are the structure constants of the SU(N) group, determined by the relation $[T_a, T_b] = i f_{abc} T_c$. At the time of writing (July 2026), only the $SU(2)$ non-Abelian group is implemented in CosmoLattice, for which we simply have $T_a \equiv \sigma_a /2$, with $\sigma_a$ the Pauli matrices. In CosmoLattice we evolve the fields in the temporal gauge, so $A_{0} = B_0^a = 0$. Furthermore, we define the Abelian and non-Abelian electric and magnetic fields as follows,
 [](){ #eq_ElectricMagneticDefs }
 ```math
 \tag{55}
@@ -68,11 +70,11 @@ where $f_{abc}$ are the structure constants of the SU(N) group, determined by th
 \quad \mathcal{B}_i^a = \frac{1}{2} \epsilon_{i j k} G^{j k}_a,
 ```
 
-with $\epsilon_{ijk}$ the Levi-Civita symbol. These expressions represent gauge-invariant physical quantites.
+with $\epsilon_{ijk}$ the Levi-Civita symbol. **These expressions represent gauge-invariant physical quantites**.
 
 [](){ #eq_GaugeProgramVar }
-!!! note "**Program variables for Scalar-Gauge Theories**"
-    As described in Section [*Program variables*][subsec_LatticeScalars] in the context of scalar theories, on the lattice we operate in a set of dimensionless spacetime and field variables called **program variables**. For scalar theories, these were defined in Eq. ([*29*][eq_FieldSpaceTimeNaturalVariables]) in terms of the three constants $\{f_*,\omega_*,\alpha\}$, that must be judiciously chosen for each specific model. The same definitions hold for the scalar sector(s) of scalar-gauge theories, where we also introduce new dimensionless program variables for the gauge fields. Putting all program variables together, we have
+!!! note "**Program variables in Scalar-Gauge Theories**"
+    As described in Section [*Program variables*][subsec_LatticeScalars] in the context of singlet scalar theories, on the lattice we operate in a set of dimensionless spacetime and field variables called **program variables**. For scalar singlets, these were defined in Eq. ([*30*][eq_FieldSpaceTimeNaturalVariables]) in terms of the three constants $\{f_*,\omega_*,\alpha\}$, that must be judiciously chosen for each model. The same definitions hold for the scalar sector(s) of scalar-gauge theories, where we also introduce new dimensionless program variables for the gauge fields. Putting all program variables together, we have
     
     ```math
     
@@ -87,15 +89,15 @@ with $\epsilon_{ijk}$ the Levi-Civita symbol. These expressions represent gauge-
     ```
 
 [](){ #NoteNumGaugeVariables }
-!!! note "Important Note: Number of fields in scalar-gauge theories"
-    CosmoLattice can run with an arbitrary number of scalar singlets, $U(1)$ complex scalars and $SU(2)$ doublets. However, CosmoLattice has been only tested when considering a single $U(1)$ gauge field and a single $SU(2)$ gauge field. In principle, the code also works with multiple $U(1)$ gauge fields (coupled or not to scalars), but this feature has not been thoroughly tested, so it is deactivated by default: the program crashes when a model is written with more than one $U(1)$ gauge field. It can be re-activated at one own's risk by commenting out the following lines in  file $\texttt{include/CosmoInterface/abstractmodel.h}$
+!!! note "Number of fields in scalar-gauge theories in CosmoLattice"
+    CosmoLattice can run with an arbitrary number of scalar singlets, $U(1)$ complex scalars, and $SU(2)$ doublets. CosmoLattice has been, however, only tested when considering a single $U(1)$ gauge field. While, in principle, the code is prepared to work also with multiple $U(1)$ gauge fields (coupled or not to scalars), this feature has not been thoroughly tested, so it is deactivated by default: the program crashes when a model is written with more than one $U(1)$ gauge field. It can be re-activated at one own's risk by commenting out the following lines in  file $\texttt{include/CosmoInterface/abstractmodel.h}$
 
     @emgithub(include/CosmoInterface/abstractmodel.h:numb_U1_gauge_flds)
 
     **In the case of $SU(2)$ gauge fields, however, only one of such fields can be considered at once in the code**. (<span style="color:red;">**Should we elimiate therefore the line "if constexpr (NSU2FLDS > 1)" in abstractmodel.h ?**</span>)
     
 
-We can see that the U(1)- and SU(2)-charged scalars are re-scaled in the same way as the singlet scalar fields. The gauge fields, however, are instead re-scaled by the parameter $\omega_*$. Correspondingly, we define program variables for the field strengths and covariant derivatives as follows:
+We can see that the U(1)- and SU(2)-charged scalars are re-scaled in the same way as singlet scalar fields. **The gauge fields, however, are instead re-scaled by the parameter $\omega_*$**. Correspondingly, we define program variables for the field strengths and covariant derivatives as follows:
 ```math
 \begin{align}
 \widetilde{F}_{\mu \nu} \equiv F_{\mu \nu} / \omega_*^2 , \hspace{0.4cm} \widetilde{G}_{\mu \nu}^a \equiv G_{\mu \nu}^a / \omega_*^2 , \hspace{0.4cm} \widetilde{D}_{\mu}^A \equiv D_{\mu}^A / \omega_* , \hspace{0.4cm} \widetilde{D}_{\mu} \equiv D_{\mu} / \omega_* .
@@ -109,7 +111,7 @@ The program potential is defined as before, like in the case of singlet scalars,
 \widetilde{V} (\tilde{\phi}, |\tilde{\varphi}|, |\widetilde{\Phi}|) \equiv \frac{1}{f_*^2 \omega_*^2} V(f_* \tilde \phi, f_* |\tilde \varphi|, f_* |\widetilde \Phi|  )  .
 ```
 
-### Scalar-gauge field dynamics: equations of motion
+### **Scalar-gauge field dynamics: equations of motion**
 
 In terms of the program variables, the field equations can be written as
 [](){ #eq_singlet-eom }
@@ -135,7 +137,7 @@ a^{2 \alpha}\widetilde J^A_i  , \tag{61}
 \end{align}
 ```
 
-where $(\widetilde{\mathcal{D}}_{\nu}O)_a = (\widetilde{\mathcal{D}}_{\nu})_{a b}O_b \equiv ( \delta_{a b}  \tilde \partial_{\nu} - f_{abc} \tilde B_{\nu}^c ) O_b$, and the currents are given by
+where $(\widetilde{\mathcal{D}}_{\nu}O)_a = (\widetilde{\mathcal{D}}_{\nu})_{a b}O_b \equiv ( \delta_{a b}  \tilde \partial_{\nu} - f_{abc} \tilde B_{\nu}^c ) O_b$, and the scalar-charge currents are given by
 [](){ #eq_AbelianCurrent }
 [](){ #eq_NonAbelianCurrent }
 ```math
@@ -147,10 +149,11 @@ where $(\widetilde{\mathcal{D}}_{\nu}O)_a = (\widetilde{\mathcal{D}}_{\nu})_{a b
 \end{align}
 ```
 
-Similarly, we define the *program energy density* and *program pressure density* as
+Similarly, we define the *program pressure* and *energy density* as
 ```math
-\begin{align} \tilde{\rho} \equiv \frac{\rho}{f_*^2 \omega_*^2}  \hspace{-0.2cm} &= \hspace{-0.2cm} \tilde{K}_{\phi} + \tilde{K}_{\varphi} + \tilde{K}_{\Phi} + \tilde{G}_{\phi} + \tilde{G}_{\varphi} + \tilde{G}_{\Phi} +  \tilde{K}_{U(1)} + \tilde{G}_{U(1)} + \tilde{K}_{SU(2)} + \tilde{G}_{SU(2)} + \tilde{V}  , \\
-\tilde{p} \equiv \frac{p}{f_*^2 \omega_*^2} \hspace{-0.2cm} &= \hspace{-0.2cm} \tilde{K}_{\phi} + \tilde{K}_{\varphi} + \tilde{K}_{\Phi} -{1\over3}(\tilde{G}_{\phi} + \tilde{G}_{\varphi} + \tilde{G}_{\Phi}) + {1\over3}  (\tilde{K}_{U(1)} + \tilde{G}_{U(1)} + \tilde{K}_{SU(2)} + \tilde{G}_{SU(2)} ) - \tilde{V}  ,
+\begin{align} 
+\tilde{p} \equiv \frac{p}{f_*^2 \omega_*^2} \hspace{-0.2cm} &= \hspace{-0.2cm} \tilde{K}_{\phi} + \tilde{K}_{\varphi} + \tilde{K}_{\Phi} -{1\over3}(\tilde{G}_{\phi} + \tilde{G}_{\varphi} + \tilde{G}_{\Phi}) + {1\over3}  (\tilde{K}_{U(1)} + \tilde{G}_{U(1)} + \tilde{K}_{SU(2)} + \tilde{G}_{SU(2)} ) - \tilde{V}  ,\\
+\tilde{\rho} \equiv \frac{\rho}{f_*^2 \omega_*^2}  \hspace{-0.2cm} &= \hspace{-0.2cm} \tilde{K}_{\phi} + \tilde{K}_{\varphi} + \tilde{K}_{\Phi} + \tilde{G}_{\phi} + \tilde{G}_{\varphi} + \tilde{G}_{\Phi} +  \tilde{K}_{U(1)} + \tilde{G}_{U(1)} + \tilde{K}_{SU(2)} + \tilde{G}_{SU(2)} + \tilde{V}  , 
 \end{align}
 ```
 
@@ -158,38 +161,41 @@ where each of the individual kinetic, gradient, and potential energy contributio
 [](){ #eq_energy-contrib }
 ```math
 \begin{align}
-\begin{array}{lcl} \tag{67}
-\widetilde {K}_{\phi} &= \frac{1}{2 a^{2\alpha} } \tilde \phi'^2 \\
-\widetilde {K}_{\varphi} &= \frac{1}{a^{2\alpha} } (\widetilde D_0^A \widetilde  \varphi)^*(\widetilde D_0^A \widetilde \varphi)
+\left\lbrace
+\begin{array}{rcl} \tag{67}
+\widetilde {K}_{\phi} &=& \frac{1}{2 a^{2\alpha} } \tilde \phi'^2 \\
+\widetilde {K}_{\varphi} &=& \frac{1}{a^{2\alpha} } (\widetilde D_0^A \widetilde  \varphi)^*(\widetilde D_0^A \widetilde \varphi)
 \\
-\widetilde {K}_{\Phi} &= \frac{1}{a^{2\alpha} } (\widetilde D_0 \widetilde \Phi )^\dagger(\widetilde D_0 \widetilde \Phi)
+\widetilde {K}_{\Phi} &=& \frac{1}{a^{2\alpha} } (\widetilde D_0 \widetilde \Phi )^\dagger(\widetilde D_0 \widetilde \Phi)
 \\
-\end{array}
-\hspace{0.1cm};\hspace{0.3cm}
-\begin{array}{lcl}
-\widetilde {G}_{\phi} &= \frac{1}{2 a^2} \sum_i (\tilde \partial_i \tilde \phi)^2
+\end{array}\right.
+\hspace{0.1cm};\hspace{0.75cm}
+\left\lbrace
+\begin{array}{rcl}
+\widetilde {G}_{\phi} &=& \frac{1}{2 a^2} \sum_i (\tilde \partial_i \tilde \phi)^2
 \\
-\widetilde {G}_{\varphi} &= \frac{1}{a^2} \sum_i (\widetilde D_i^A \varphi)^*(\widetilde D_i^A \widetilde \varphi)
+\widetilde {G}_{\varphi} &=& \frac{1}{a^2} \sum_i (\widetilde D_i^A \varphi)^*(\widetilde D_i^A \widetilde \varphi)
 \\
-\widetilde {G}_{\Phi} &= \frac{1}{a^2} \sum_i (\widetilde  D_i\widetilde  \Phi)^\dagger(\widetilde D_i \widetilde \Phi)
+\widetilde {G}_{\Phi} &=& \frac{1}{a^2} \sum_i (\widetilde  D_i\widetilde  \Phi)^\dagger(\widetilde D_i \widetilde \Phi)
 \\
-\end{array}
-\hspace{0.1cm};\hspace{0.3cm}
-\begin{array}{lcl}
-\widetilde {K}_{U(1)} &= \frac{1}{2 a^{2 + 2 \alpha}} ( {\omega_* \over f_*} )^2  \sum_{i} \widetilde  F_{0i}^2
+\end{array}\right.
+\hspace{0.1cm};\hspace{0.75cm}
+\left\lbrace
+\begin{array}{rcl}
+\widetilde {K}_{U(1)} &=& \frac{1}{2 a^{2 + 2 \alpha}} ( {\omega_* \over f_*} )^2  \sum_{i} \widetilde  F_{0i}^2
 \\
-\widetilde {K}_{SU(2)} &= \frac{1}{2 a^{2 + 2 \alpha}} ( {\omega_* \over f_*} )^2 \sum_{a,i} (\widetilde G_{0i}^a)^2
+\widetilde {K}_{SU(2)} &=& \frac{1}{2 a^{2 + 2 \alpha}} ( {\omega_* \over f_*} )^2 \sum_{a,i} (\widetilde G_{0i}^a)^2
 \\
-\widetilde {G}_{U(1)} &= \frac{1}{2 a^4} ( {\omega_* \over f_*} )^2 \sum_{i,j < i} \widetilde F_{ij}^2
+\widetilde {G}_{U(1)} &=& \frac{1}{2 a^4} ( {\omega_* \over f_*} )^2 \sum_{i,j < i} \widetilde F_{ij}^2
 \\
-\widetilde {G}_{SU(2)} &= \frac{1}{2 a^4} ( {\omega_* \over f_*} )^2 \sum_{a,i,j < i}  (\widetilde G_{ij}^a)^2    . \\
-\end{array}
-\\
-\text{(Kinetic-Scalar)} \hspace{2.5cm} \text{(Gradient-Scalar)} \hspace{2.75cm} \text{(Electric & Magnetic)} \hspace{1cm}
+\widetilde {G}_{SU(2)} &=& \frac{1}{2 a^4} ( {\omega_* \over f_*} )^2 \sum_{a,i,j < i}  (\widetilde G_{ij}^a)^2    . \\
+\end{array}\right.
+\\\\
+\text{(Kinetic-Scalar)} \hspace{5cm} \text{(Gradient-Scalar)} \hspace{6.5cm} \text{(Electric & Magnetic)} \hspace{3.0cm}
 \end{align}
 ```
 
-If the expansion of the Universe is self-consistent, i.e. it is sourced by volume averages of the energy and pressure densities of the simulated fields, the scale factor evolution can be obtained from the Friedmann equations
+If the expansion of the Universe is self-consistent, i.e. it is sourced by the homogeneous (volume averaged) pressure and energy densities of the simulated fields, the scale factor evolution is dictated by the Friedmann equations
 [](){ #eq_FriedmannHubble }
 [](){ #eq_FriedmannDDa }
 ```math
@@ -198,31 +204,35 @@ If the expansion of the Universe is self-consistent, i.e. it is sourced by volum
 \\
 \tag{69}
 {a''\over a} &= \frac{a^{2 \alpha}}{3} \left( \frac{f_*}{m_p}\right)^2 \left[ (\alpha-2)(\widetilde E_K^{\phi} + \widetilde E_K^{\varphi} + \widetilde E_K^{\Phi}) + \alpha(\widetilde E_G^{\phi} + \widetilde E_G^{\varphi} + \widetilde E_G^{\Phi}) + (\alpha + 1)\widetilde E_V \right.\\
-& \hspace{5.1cm}\left. +  (\alpha-1)(\widetilde E_K^A + \widetilde E_K^B + \widetilde E_G^A + \widetilde E_G^B) \right]  ,
+& \hspace{8.1cm}\left. +  (\alpha-1)(\widetilde E_K^A + \widetilde E_K^B + \widetilde E_G^A + \widetilde E_G^B) \right]  ,
 \end{align}
 ```
 
-where we have defined the following volume-average energy contributions: $E_{K}^{f} = \langle \widetilde{K}_{f} \rangle$ and $E_{G}^{f} = \langle \widetilde{G}_{f} \rangle$ for the scalar fields $f=\phi,\varphi,\Phi$; $\widetilde E_{K}^{A} = \langle \widetilde{K}_{U(1)} \rangle$, $\widetilde E_{G}^{A} = \langle \tilde{G}_{U(1)} \rangle$, $\widetilde E_{K}^{B} = \langle \widetilde{K}_{SU(2)} \rangle$, and $\widetilde E_{G}^{B} = \langle \widetilde{G}_{SU(2)} \rangle$ for the gauge fields, and $\widetilde{E}_V = \langle \widetilde{V} \rangle$ for the potential energy. Instead, if the expansion is sourced by an external energetically-dominant fluid with constant equation of state $w$, $a(\eta)$ is given by the power-law function ([*36*][eq_ScaleFactorPowerLaw]).
+where we have defined the volume-averaged energy contributions as: $E_{K}^{f} = \langle \widetilde{K}_{f} \rangle$ and $E_{G}^{f} = \langle \widetilde{G}_{f} \rangle$ for the scalar fields $f=\phi,\varphi,\Phi$; $\widetilde E_{K}^{A} = \langle \widetilde{K}_{U(1)} \rangle$, $\widetilde E_{G}^{A} = \langle \tilde{G}_{U(1)} \rangle$, $\widetilde E_{K}^{B} = \langle \widetilde{K}_{SU(2)} \rangle$, and $\widetilde E_{G}^{B} = \langle \widetilde{G}_{SU(2)} \rangle$ for the gauge fields, and $\widetilde{E}_V = \langle \widetilde{V} \rangle$ for the potential energy. Instead, if the expansion is sourced by an external energetically-dominant fluid with constant equation of state $w$, $a(\eta)$ is given by the power-law function ([*37*][eq_ScaleFactorPowerLaw]).
 
-The evolution algorithms implemented in CosmoLattice use a discretized versions of Eqs. ([*58*][eq_singlet-eom])-([*62*][eq_SU2eom]) to solve for the field dynamics, and a lattice version of Eq. ([*69*][eq_FriedmannDDa]) to solve for the scale factor. Eqs. ([*63*][eq_GaussU1-eom]) and ([*64*][eq_GaussSU2-eom]) are the Gauss constraints of the U(1) and SU(2) gauge sectors respectively, which must be satisfied (by their lattice version counterparts) during all times during the simulation. Analogously, Eq. ([*68*][eq_FriedmannHubble]), which represents the Hubble constraint, must also be satisfied (again by its lattice analogue) all throughout the simulation. In a sense, this checks the ability of a given integrator to conserve energy). CosmoLattice monitors in particular the degree of conservation of both the Gauss and Hubble constraints, providing in this way a procedure for checking the validity of the numerical integration of the EOM. Our discretization techniques guarantee that the Gauss constraints are obeyed up to machine precision, see Ref. [@Figueroa_2020rrl] for details. On the other hand, the Hubble constraint ([*68*][eq_FriedmannHubble])  holds numerically only to a certain degree of approximation, possibly reaching down to machine precision (depending on the model) only in the case of the highest order integrators like `VV10`.
+[](){ #NoteNumGaugeVariables }
+!!! note "Important Note"
+    The evolution algorithms implemented in CosmoLattice use a discretized versions of Eqs. ([*58*][eq_singlet-eom])-([*62*][eq_SU2eom]) to solve for the field dynamics, and a lattice version of Eq. ([*69*][eq_FriedmannDDa]) to solve for the scale factor. Eqs. ([*63*][eq_GaussU1-eom]) and ([*64*][eq_GaussSU2-eom]) are the Gauss constraints of the U(1) and SU(2) gauge sectors respectively, which must be satisfied (by their lattice version counterparts) during all times during the simulation. Analogously, Eq. ([*68*][eq_FriedmannHubble]), which represents the Hubble constraint, must also be satisfied (again by its lattice analogue) all throughout the simulation. The degree of satisfaction of Eq. ([*68*][eq_FriedmannHubble]) is an indicator of the ability of a given integrator to conserve energy. CosmoLattice monitors the degree of conservation of both Gauss and Hubble constraints, providing in this manner a quantitative validation of the numerical integration of the EOM. Our discretization techniques guarantee that the Gauss constraints are obeyed up to machine precision, see $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl] for details. On the other hand, the Hubble constraint ([*68*][eq_FriedmannHubble]) holds numerically only to a certain degree of approximation, possibly reaching down to machine precision (depending on the model) only in the case of the highest order integrators like `VV10` or `PV10`.
 
-### The model and input files for gauge field theories
 
-Let us now explain how to implement a model with Abelian and non-Abelian gauge fields in CosmoLattice. Two gauge models are already implemented in CosmoLattice: `lphi4U1`, which includes a complex scalar charged under a $U(1)$ gauge symmetry and one Abelian gauge field (like in scalar-electrodynamics), and `lphi4SU2U1`, which contains a scalar field charged under $U(1)\times SU(2)$, and hence with both one Abelian and one non-Abelian gauge field (similar to the electroweak sector of the Standard Model). These are models ready-to-use as templates for your own models. In this manual, we will explain the implementation of the second model as an example, as it contains all possible field species and interactions that can be currently simulated with CosmoLattice.
 
-The model `lphi4SU2U1` consists of a doublet $\Phi$ charged under a $SU(2)\times U(1)$ gauge group, coupled to one Abelian gauge field $A_{\mu}$ and one non-Abelian one $B_{\mu}^a$ via the previously defined covariant derivative. We also couple $\Phi$ to a scalar singlet $\phi$ and to a $U(1)$-charged scalar field $\varphi$ via quadratic interactions. We will consider a scenario in which the doublet $\Phi$ acts as the dominant mother field, and simulate its non-perturbative decay into the gauge fields and the other scalars, which is induced via parametric field excitations of the other fields due to the coherent oscillations of $\Phi$. For the sake of simplicity, we will consider like if this was a preheating scenario where $\Phi$ plays the role of the inflaton field, coupled to the daughter fields $\phi, \varphi, A_\mu$ and $B_\mu = T_aB_\mu^a$. In particular, we will implement the theory described by action ([*50*][eq_Lagrangian]) with the following scalar potential,
+### **The model and input files for gauge field theories**
+
+We explain now how to implement a model with Abelian and non-Abelian gauge symmetries in CosmoLattice. Two gauge models are already implemented in CosmoLattice: the model $\texttt{lphi4U1}$, which includes a complex scalar charged under a $U(1)$ gauge symmetry and one Abelian gauge field, *i.e.* it describes **scalar-electrodynamics**; the model $\texttt{lphi4SU2U1}$, which contains a scalar field charged under $U(1)\times SU(2)$, one Abelian gauge field, and one non-Abelian $SU(2)$ gauge field, *i.e.* it describes **the electroweak (bosonic) sector of the Standard Model**. These are models ready-to-use as templates for your own models. You cna find their $\texttt{.h}$ implementations in the folder $\texttt{./models}$. In this manual, we will use as a reference example the model $\texttt{lphi4SU2U1}$, as it contains all possible field species and interactions in scalar-gauge theories that can be currently simulated with CosmoLattice. 
+
+The model $\texttt{lphi4SU2U1}$ consists of a doublet $\Phi$ charged under a $SU(2)\times U(1)$ gauge group, coupled to one Abelian gauge field $A_{\mu}$ and one non-Abelian one $B_{\mu}^a$, via the previously defined covariant derivative. We also couple $\Phi$ to a scalar singlet $\phi$ and to a $U(1)$-charged scalar field $\varphi$ via quadratic interactions in the scalar potential. We consider a scenario in which the doublet $\Phi$ acts as the dominant mother field, and we simulate its non-perturbative decay into gauge fields and other scalars, as induced through parametric resonance effects due to the coherent oscillations of $\Phi$. One could think of this situation as a preheating scenario where $\Phi$ plays the role of the inflaton field, coupled to the daughter fields $\phi, \varphi, A_\mu$ and $B_\mu = T_aB_\mu^a$. In particular, we will implement the theory described by action ([*50*][eq_Lagrangian]) with the following scalar potential,
 [](){ #eq_PotGauge }
 ```math
 V(\phi,|\varphi|,|\Phi |) = \lambda |\Phi|^4  + g^2 |\Phi |^2 \phi^2 + 2 h^2 |\Phi |^2 |\varphi|^2  , \tag{70}
 ```
 
-where $\lambda$, $g$, and $h$ are dimensionless coupling constants. The first term is the inflaton potential, and the second and third terms are quadratic interactions between the inflaton and $\phi$ and $\varphi$ respectively. As said, the theory contains one field of each kind. We will assume that at the onset of the simulation (say at the end of slow-roll inflation), the inflaton amplitude has an initial non-zero homogeneous component with modulus $|\Phi| = |\bar{\Phi}_*|$, while the homogeneous components of the rest of scalar and gauge fields are set to zero (this is natural as they are massive during inflation, with their mass induced by the large amplitude of $\Phi$, and hence they are not excited initially). The post-inflationary oscillations of $\Phi$ trigger a resonant growth of $\phi$ and $\varphi$ due to resonant effects via the second and third terms of the potential, and also a parametric excitation of the gauge fields $A_{\mu}$ and $B_{\mu}^a$ due to their coupling to $\Phi$ via the covariant derivative $(D_{\mu}\Phi )^{\dagger} (D^{\mu} \Phi) \in g_A^2 |\Phi|^2 A_{\mu}^2$, $g_B^2 |\Phi|^2 {B_{\mu}^{a}}^2$.
+where $\lambda$, $g$, and $h$ are dimensionless coupling constants. The first term is the inflaton potential, and the second and third terms are quadratic interactions between the inflaton and $\phi$ and $\varphi$, respectively. As said, the theory contains one field of each kind. We will assume that at the onset of the simulation (say at the end of slow-roll inflation), the inflaton amplitude has an initial non-zero homogeneous component with modulus $|\Phi| = |\bar{\Phi}_*|$, while the homogeneous components of the rest of scalar and gauge fields are set to zero (this is natural as they are massive during inflation, with their mass induced by the large amplitude of $\Phi$, and hence, initially, they are not excited). The post-inflationary oscillations of $\Phi$ will trigger a resonant growth of $\phi$ and $\varphi$ due to resonant effects via the second and third terms of the potential, and also a parametric excitation of the gauge fields $A_{\mu}$ and $B_{\mu}^a$ due to their coupling to $\Phi$ encoded in the covariant derivative $g_A^2 |\Phi|^2 A_{\mu}A^{\mu}$, $g_B^2 |\Phi|^2 B_{\mu}^{a}B^{\mu}_{a} \in (D_{\mu}\Phi )^{\dagger} (D^{\mu} \Phi)$.
 
-This scenario is implemented in the model file `src/models/lphi4SU2U1.h`, and the corresponding input parameter file is in `src/models/parameter-files/lphi4SU2U1.in`. Most of the parameters defined in the input file are the same as for singlet scalar fields, see Section [*Running the program with an input parameter file*][subsec_Input-Scalars]. However, there are several extra parameters that need to be set now. First, let us specify the initial homogeneous components of all scalar fields as follows:
+This scenario is implemented in the model file $\texttt{models/lphi4SU2U1.h}$, and the corresponding input parameter file is in $\texttt{models/parameter-files/lphi4SU2U1.in}$. Most of the parameters defined in the input file are the same as for singlet scalar fields, see Section [*Running the program with an input parameter file*][subsec_Input-Scalars] in Section [*singlet scalar-field dynamics*](My first model of (singlet) scalar fields.md). However, there are several extra parameters that need to be set now in $\texttt{models/parameter-files/lphi4SU2U1.in}$. First, let us specify the initial homogeneous components of all scalar fields, as follows:
 
 @emgithub(models/parameter-files/lphi4SU2U1.in:initial_conditions)
 
-Above `initial_amplitudes` and `initial_momenta` contain the initial homogenous amplitudes of the scalar singlet, $\phi_*$ and $\dot{\phi}_*$. If we had more than one singlet, their initial conditions would be specified in a vector form, as explained in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md). Parameters `cmplx_field_initial_norm` and `cmplx_momentum_initial_norm` contain the initial **absolute values** of the complex field amplitude and its time-derivative , i.e. $|\varphi_*| \equiv \sqrt{(\varphi_{0*}^2 + \varphi_{1*}^2)/2}$ and $|\dot{\varphi}_*| \equiv \sqrt{(\dot{\varphi}_{0*}^2 + \dot{\varphi}_{1*}^2)/2}$ respectively (although in this example we set these to zero). Similarly, parameters `SU2Doublet_initial_norm` and `SU2Doublet_initial_momenta_norm` contain $|\Phi_*| \equiv \sqrt{ \sum_{n=0}^3 \varphi_{n*}^2 / 2}$ and $|\dot{\Phi}_*| \equiv \sqrt{ \sum_{n=0}^3 \dot{\varphi}_{n*}^2 / 2 }$ respectively. **As before, initial amplitudes must be introduced in $\text{GeV}$, and initial derivatives in $\text{GeV}^2$**.
+Above, `initial_amplitudes` and `initial_momenta` represent the initial homogenous amplitudes of the scalar singlet, $\phi_*$ and $\dot{\phi}_*$. If there was more than one singlet, their initial conditions would be specified in a vector form, as explained in the tab [*Running the program with an input parameter file*][subsec_Input-Scalars] within the [*Scalar-singlet interactions*](My first model of (singlet) scalar fields.md) Section. Parameters `cmplx_field_initial_norm` and `cmplx_momentum_initial_norm` represent the **initial absolute values** of the complex field amplitude and its time-derivative, *i.e.* $|\varphi_*| \equiv \sqrt{(\varphi_{0*}^2 + \varphi_{1*}^2)/2}$ and $|\dot{\varphi}_*| \equiv \sqrt{(\dot{\varphi}_{0*}^2 + \dot{\varphi}_{1*}^2)/2}$, respectively (set to zero in this example). Similarly, the parameters `SU2Doublet_initial_norm`,  `SU2Doublet_initial_momenta_norm` specify $|\Phi_*| \equiv \sqrt{ \sum_{n=0}^3 \varphi_{n*}^2 / 2}$, and $|\dot{\Phi}_*| \equiv \sqrt{ \sum_{n=0}^3 \dot{\varphi}_{n*}^2 / 2 }$, respectively. **As before, initial amplitudes must be introduced in $\text{GeV}$, and initial derivatives in $\text{GeV}^2$**.
 
 We also need to specify the parameters that deal with the gauge couplings and charges in the covariant derivatives. This is done as follows:
 
@@ -233,12 +243,12 @@ Here, `gU1s` fixes $g_A$, `gSU2s` fixes $g_B$, `CSU1Charges` fixes $Q_A^{(\varph
 Finally, we also want to specify the model parameters that appear in the potential ([*70*][eq_PotGauge]). This is done as follows,
 
 @emgithub(models/parameter-files/lphi4SU2U1.in:model_parameters)
-where we have defined three parameters: `lambda` (which represents $\lambda$), `qG` (which contains $q_G \equiv g^2 / \lambda$, and `qH` (which contains $q_H \equiv h^2 / \lambda$).
+where we have defined three parameters: `lambda` (which represents $\lambda$), and `qG` and `qH` (representing $q_G \equiv g^2 / \lambda$ and $q_H \equiv h^2 / \lambda$, respectively).
 
-Let us now analyze the model file `src/models/lphi4-SU2U1.h`, which can be used as a template to simulate different gauge field theories. We start by specifying the field content of our theory:
+Let us now analyze the model file $\texttt{models/lphi4-SU2U1.h}$, which can be used as a template to simulate different gauge field theories. We start by specifying the field content of our theory:
 @emgithub(models/lphi4SU2U1.h:model_pars)
 
-In lines `24`-`28`, we have specified the number of fields of each species: `NScalars` refers to $\phi$, `NCScalars` refer to $\varphi$, `NU1Flds` refer to $A_{\mu}$, `NSU2Doublet` refers to $B_{\mu}^a$, and `NSU2Flds` refers to $\Phi$. In line `29` we specify the number of terms in the potential, which is $3$ in our case. Finally, in lines `34`-`38` we defined three types of *coupling managers*, which deal with the couplings between the scalar and gauge fields in the covariant derivatives. `U1CsCouplings` must be defined if $\varphi$ couples to $A_{\mu}$, `U1SU2DoubletCouplings` must be defined if $\Phi$ couples to $A_{\mu}$, and `SU2SU2DoubletCouplings` must be defined if $\Phi$ couples to $B_{\mu}^a$. Finally, in line `42`, we have specified that the name of our model is `lphi4SU2U1`, in agreement with the name of the header file.
+In first five lines inside the structure `ModelPars`, <!-- below `struct ModelPars : public TempLat::DefaultModelPars {`,  --> we have specified the number of fields of each species: `NScalars` refers to $\phi$, `NCScalars` refer to $\varphi$, `NU1Flds` refer to $A_{\mu}$, `NSU2Doublet` refers to $B_{\mu}^a$, and `NSU2Flds` refers to $\Phi$. In the following line we specify the number of terms `NPotTerms` in the potential, which is $3$ in our case. Finally, in lines starting by `typedef ...`, we define three types of *coupling managers*, which deal with the couplings between the scalar and gauge fields in the covariant derivatives: `U1CsCouplings` must be defined if $\varphi$ couples to $A_{\mu}$, `U1SU2DoubletCouplings` must be defined if $\Phi$ couples to $A_{\mu}$, and `SU2SU2DoubletCouplings` must be defined if $\Phi$ couples to $B_{\mu}^a$. Finally, in the last line, we specify the name of our model as `lphi4SU2U1`, in agreement with the name of the header file.
 
 After that, inside the template model, we declare several model parameters (`g`, `h`, `lambda`, `qG`, `qH`) as private variables:
 @emgithub(models/lphi4SU2U1.h:class_declaration)
@@ -282,7 +292,7 @@ We now need to specify the first derivatives of $\tilde{V}$ with respect $\tilde
 Finally, we need to specify the second derivatives of $\tilde{V}$ with respect $\tilde{\phi}$, $\tilde{\varphi}$, and $\tilde{\Phi}$. These are implemented in the functions `potDeriv2(Tag<X>)`, `potDeriv2NormCS(Tag<X>)` and `potDeriv2NormSU2Doublet(Tag<X>)` as follows:
 @emgithub(models/lphi4SU2U1.h:potential_second_derivs)
 
-### Output files
+### **Output files**
 
 We indicate here the different output files:
 
@@ -353,7 +363,7 @@ $\tilde{k}$,  $\widetilde{\Delta}_{\widetilde\varphi} (\tilde k)$, $\widetilde{\
 $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{\mathcal{E}}}(\tilde k)$
 $\widetilde{\Delta}_{\widetilde{\mathcal{B}}}(\tilde k)$, $\Delta n_{bin}$
 
-### The physics implemented in CosmoLattice
+### **The physics of scalar-gauge theories in CosmoLattice**
 
 #### Initial conditions { #subsubsec_initialConditionsNonAb }
 

@@ -55,12 +55,13 @@ namespace TempLat
   // Declaration of our model. It inherits from the generic model defined above.
   {
     //...
-  private:
-  // @endlabel
+    // @endlabel  
     // @label:private_members
+  private:
     FloatType g, lambda, q;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
+    // @endlabel
 
     // Some parameters which are declared in the class "Model" and which are useful (they are all 'public'):
 

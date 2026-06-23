@@ -56,7 +56,7 @@ The present manual is structured as follows:
   space
 -->
 
--  Section [Axion-Gauge Dynamics](Axion-Gauge.md) discusses how to simulate scenarios in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ where there are an axion-like particle (ALP) and an Abelian gauge sector, interacting through the coupling $\phi F\tilde F$. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
+-  Section [Axion-Gauge Dynamics](ALP.md) discusses how to simulate scenarios in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ where there are an axion-like particle (ALP) and an Abelian gauge sector, interacting through the coupling $\phi F\tilde F$. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
 
    
  <!--

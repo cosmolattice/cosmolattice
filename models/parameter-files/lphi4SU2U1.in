@@ -18,7 +18,7 @@ tOutputInfreq = 3
 tOutputRareFreq = 10
 tMax = 100
 
-# @label:initial_conditions
+#@label:initial_conditions
 #IC
 kCutOff = 6
 initial_amplitudes = 0
