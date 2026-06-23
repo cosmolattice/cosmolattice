@@ -173,6 +173,7 @@ nav:
       - "<span style='font-weight:bold;'>Inside CosmoLattice: Evolvers, Initializers & Observables (ADRIEN + J) </span>": "Manual/What CosmoLattice does in detail.md"
       - "<span style='font-weight:bold;'>Useful features (FRANZ) </span>":
           - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Parallelization </span>": "Manual/Parallelization.md"
+          - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Fourier Transforms </span>": "Manual/Fourier Transforms.md"
           - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Backing up simulations with HDF5 </span>": "Manual/Backing up simulations with HDF5.md"
       #- "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Acknowledgments </span>": "Manual/Acknowledgments.md"
       - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Input File Builder </span>": "code/InputBuilder.md"
