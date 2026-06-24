@@ -1,6 +1,6 @@
 <!-- <div style="text-align: justify;"> -->
 
-Here we explain step by step how to implement a model of interacting (singlet) scalar fields in CosmoLattice, using, as an example, a simple two-field post-inflationary preheating scenario. **This section is particularly relevant for a newcomer to CosmoLattice: besides explaining how to deal with singlet scalar-fields, it also introduces along the way relevant definitions and basic functionalities that are common to other circumstances beyond singlet scalar-field dynamics**.  
+Here we explain step by step how to implement a model of interactive singlet scalar fields in CosmoLattice, using as a reference example, a two-field post-inflationary preheating scenario. **This section is particularly relevant for a newcomer to CosmoLattice: besides explaining how to deal with singlet scalar-fields, it also introduces along the way relevant definitions and basic functionalities that are common to other circumstances beyond singlet scalar-field dynamics**.  
 
 This section is structured as follows. In Section [*Program variables*][subsec_LatticeScalars] we first introduce the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer. In Section [*The model*][sec_ScTheModel] we present an example model and define its corresponding program variables and potential specific to it. We then explain in Section [*My first run*][sec_MyFirstRun] how to compile and run the code. After that, in Section [*The model file*][sec_TheModelFile] we walk the user through the *model file*, where the model details are actually implemented. Finally, in Section [*The physics implemented in CosmoLattice*][sec_WhatHappensAuto] we provide a summarized picture of what happens 'under the hood', giving details on how the fields are initialized in the simulation, how their dynamical evolution is solved, and how different measurements are obtained. 
 
@@ -396,7 +396,7 @@ Finally, we also provide the second derivative of the potential with respect to 
 
 With this we end our presentation of the model file. Any model consisting of canonically normalized interacting singlet scalar fields can be constructed in a similar manner.
 
-### **The singlet-scalar physics inside CosmoLattice** { #sec_WhatHappensAuto }
+### **The scalar-singlet physics inside CosmoLattice** { #sec_WhatHappensAuto }
 
 We discuss now what actions the code executes when running a simulation with a model we have just set up. Our aim here is to provide a short overview of the different parts of the code automatically called when running a simulation, so that the user can have a full picture of what is happening at the physical level. For a deeper understanding on the implementation details of this, we refer the reader to Section [**Inside Cosmolattice**](What CosmoLattice does in detail.md).
 

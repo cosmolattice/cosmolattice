@@ -216,7 +216,7 @@ where we have defined the volume-averaged energy contributions as: $E_{K}^{f} = 
 
 
 
-### **The model and input files for gauge field theories**
+### **The model and input files for scalar-gauge theories** { #subsec_ScalarGaugeInput }
 
 We explain now how to implement a model with Abelian and non-Abelian gauge symmetries in CosmoLattice. Two gauge models are already implemented in CosmoLattice: the model $\texttt{lphi4U1}$, which includes a complex scalar charged under a $U(1)$ gauge symmetry and one Abelian gauge field, *i.e.* it describes **scalar-electrodynamics**; the model $\texttt{lphi4SU2U1}$, which contains a scalar field charged under $U(1)\times SU(2)$, one Abelian gauge field, and one non-Abelian $SU(2)$ gauge field, *i.e.* it describes **the electroweak (bosonic) sector of the Standard Model**. These are models ready-to-use as templates for your own models. You cna find their $\texttt{.h}$ implementations in the folder $\texttt{./models}$. In this manual, we will use as a reference example the model $\texttt{lphi4SU2U1}$, as it contains all possible field species and interactions in scalar-gauge theories that can be currently simulated with CosmoLattice. 
 
@@ -298,81 +298,79 @@ Finally, we need to specify the second derivatives of $\tilde{V}$ with respect t
 
 We indicate here the different output files and their column content:
 
--  `average_scalar_[nfld].txt`: $\tilde{ \eta}$, $\langle \tilde{\phi} \rangle$, $\langle \tilde{\phi}' \rangle$, $\langle \tilde{\phi}^2 \rangle$, $\langle \tilde{\phi}^{'2} \rangle$, $\text{rms} (\tilde{\phi})$, $\text{rms} (\tilde{\phi}')$
+-  $\texttt{average_scalar_[nfld].txt}$: $\tilde{ \eta}$, $\langle \tilde{\phi} \rangle$, $\langle \tilde{\phi}' \rangle$, $\langle \tilde{\phi}^2 \rangle$, $\langle \tilde{\phi}^{'2} \rangle$, $\text{rms} (\tilde{\phi})$, $\text{rms} (\tilde{\phi}')$
 
--  `average_norm_cmplx_scalar_[nfld].txt`:  $\tilde{ \eta}$, $\langle |\tilde{\varphi} |\rangle$, $\langle | \tilde{\varphi}' |\rangle$, $\langle |\tilde{\varphi} |^2 \rangle$, $\langle |\tilde{\varphi}'|^{2} \rangle$, $\text{rms} (|\tilde{\varphi}|)$, $\text{rms} (|\tilde{\varphi}'|)$
+-  $\texttt{average_norm_cmplx_scalar_[nfld].txt}$:  $\tilde{ \eta}$, $\langle |\tilde{\varphi} |\rangle$, $\langle | \tilde{\varphi}' |\rangle$, $\langle |\tilde{\varphi} |^2 \rangle$, $\langle |\tilde{\varphi}'|^{2} \rangle$, $\text{rms} (|\tilde{\varphi}|)$, $\text{rms} (|\tilde{\varphi}'|)$
 
--  `average_[Re/Im]_cmplx_scalar_[nfld].txt`: $\tilde{ \eta}$, $\langle \tilde{\varphi}_n \rangle$, $\langle \tilde{\varphi}'_n \rangle$, $\langle \tilde{\varphi}_n^2 \rangle$, $\langle \tilde{\varphi}^{'2}_n \rangle$, $\text{rms} (\tilde{\varphi}_n)$, $\text{rms} (\tilde{\varphi}'_n)$
+-  $\texttt{average_[Re/Im]_cmplx_scalar_[nfld].txt}$: $\tilde{ \eta}$, $\langle \tilde{\varphi}_n \rangle$, $\langle \tilde{\varphi}'_n \rangle$, $\langle \tilde{\varphi}_n^2 \rangle$, $\langle \tilde{\varphi}^{'2}_n \rangle$, $\text{rms} (\tilde{\varphi}_n)$, $\text{rms} (\tilde{\varphi}'_n)$
 
--  `average_norm_SU2Doublet_[nfld]\.txt`:  $\tilde{ \eta}$, $\langle |\tilde{\Phi} |\rangle$, $\langle | \tilde{\Phi}' |\rangle$, $\langle |\tilde{\Phi} |^2 \rangle$, $\langle |\tilde{\Phi}'|^{2} \rangle$, $\text{rms} (|\tilde{\Phi}|)$, $\text{rms} (|\tilde{\Phi}'|)$
+-  $\texttt{average_norm_SU2Doublet_[nfld]\.txt}$:  $\tilde{ \eta}$, $\langle |\tilde{\Phi} |\rangle$, $\langle | \tilde{\Phi}' |\rangle$, $\langle |\tilde{\Phi} |^2 \rangle$, $\langle |\tilde{\Phi}'|^{2} \rangle$, $\text{rms} (|\tilde{\Phi}|)$, $\text{rms} (|\tilde{\Phi}'|)$
 
--  `average_SU2Doublet_[nfld]_[n].txt`: $\tilde{ \eta}$, $\langle \tilde{\varphi}_n \rangle$, $\langle \tilde{\varphi}'_n \rangle$, $\langle \tilde{\varphi}_n^2 \rangle$, $\langle \tilde{\varphi}^{'2}_n \rangle$, $\text{rms} (\tilde{\varphi}_n)$, $\text{rms} (\tilde{\varphi}'_n)$
+-  $\texttt{average_SU2Doublet_[nfld]_[n].txt}$: $\tilde{ \eta}$, $\langle \tilde{\varphi}_n \rangle$, $\langle \tilde{\varphi}'_n \rangle$, $\langle \tilde{\varphi}_n^2 \rangle$, $\langle \tilde{\varphi}^{'2}_n \rangle$, $\text{rms} (\tilde{\varphi}_n)$, $\text{rms} (\tilde{\varphi}'_n)$
 
--  `average_norm_[U1]_[nfld].txt`: $\tilde{ \eta}$, $\langle {|\vec{\widetilde{ \mathcal E}}|} \rangle$, $\langle {|\vec{\widetilde{\mathcal B}}|} \rangle$, $\langle {|\vec{\widetilde{ \mathcal E}}|^2} \rangle$, $\langle {|\vec{\widetilde{\mathcal B}}|^2} \rangle$, $\text{rms} (|\vec{\widetilde{ \mathcal E}}|)$, $\text{rms} (|\vec{\widetilde{\mathcal B}}|)$
+-  $\texttt{average_norm_[U1]_[nfld].txt}$: $\tilde{ \eta}$, $\langle {|\vec{\widetilde{ \mathcal E}}|} \rangle$, $\langle {|\vec{\widetilde{\mathcal B}}|} \rangle$, $\langle {|\vec{\widetilde{ \mathcal E}}|^2} \rangle$, $\langle {|\vec{\widetilde{\mathcal B}}|^2} \rangle$, $\text{rms} (|\vec{\widetilde{ \mathcal E}}|)$, $\text{rms} (|\vec{\widetilde{\mathcal B}}|)$
 
--  `average_norm_[SU2]_[nfld].txt`:
+-  $\texttt{average_norm_[SU2]_[nfld].txt}$: $\tilde{ \eta}$, $\sum_a \langle {|\vec{\widetilde{ \mathcal E^a}}|} \rangle$, $\sum_a \langle {|\vec{\widetilde{\mathcal B^a}}|} \rangle$, $\sum_a \langle {|\vec{\widetilde{ \mathcal E^a}}|^2} \rangle$, $\sum_a \langle {|\vec{\widetilde{\mathcal B^a}}|^2} \rangle$, $\sum_a \text{rms} (|\vec{\widetilde{ \mathcal E^a}}|)$, $\sum_a \text{rms} (|\vec{\widetilde{\mathcal B^a}}|)$
 
-$\tilde{ \eta}$, $\sum_a \langle {|\vec{\widetilde{ \mathcal E^a}}|} \rangle$, $\sum_a \langle {|\vec{\widetilde{\mathcal B^a}}|} \rangle$, $\sum_a \langle {|\vec{\widetilde{ \mathcal E^a}}|^2} \rangle$, $\sum_a \langle {|\vec{\widetilde{\mathcal B^a}}|^2} \rangle$, $\sum_a \text{rms} (|\vec{\widetilde{ \mathcal E^a}}|)$, $\sum_a \text{rms} (|\vec{\widetilde{\mathcal B^a}}|)$
+-  $\texttt{average_energies.txt}$:
+```math
+\hspace{1.5cm}\begin{eqnarray}
+&&\tilde{\eta},
+\tilde{E}_K^{(\phi, 0)},
+\tilde{E}_G^{(\phi, 0)}, \ldots,
+\tilde{E}_K^{(\phi, N_s-1)},
+\tilde{E}_G^{(\phi, N_s-1)},\\
+&&\tilde{E}_K^{(\varphi, 0)},
+\tilde{E}_G^{(\varphi, 0)}, \ldots,
+\tilde{E}_K^{(\varphi, N_c-1)},
+\tilde{E}_G^{(\varphi, N_c-1)},\\
+&&\tilde{E}_K^{(\Phi, 0)},
+\tilde{E}_G^{(\Phi, 0)}, \ldots,
+\tilde{E}_K^{(\Phi, N_d-1)},
+\tilde{E}_G^{(\Phi, N_d-1)},\\
+&&\tilde{E}_K^{(A, 0)},
+\tilde{E}_G^{(A, 0)}, \ldots,
+\tilde{E}_K^{(A, N_{u1}-1)},
+\tilde{E}_G^{(A, N_{u1}-1)},\\
+&&\tilde{E}_K^{(B, 0)},
+\tilde{E}_G^{(B, 0)}, \ldots,
+\tilde{E}_K^{(B, N_{s2}-1)},
+\tilde{E}_G^{(B, N_{s2}-1)},\\
+&&\tilde{E}_V^{(0)}, \ldots,
+\tilde{E}_V^{(N_p-1)},
+\langle \tilde{\rho} \rangle
+\end{eqnarray}
+```
 
--  `average_energies.txt`:
+-  $\texttt{average_energy_conservation.txt}$:
 
-$\tilde{\eta}$,
-$\tilde{E}_K^{(\phi, 0)}$,
-$\tilde{E}_G^{(\phi, 0)}$, ... ,
-$\tilde{E}_K^{(\phi, N_s-1)}$,
-$\tilde{E}_G^{(\phi, N_s-1)}$,
-$\tilde{E}_K^{(\varphi, 0)}$,
-$\tilde{E}_G^{(\varphi, 0)}$, ... ,
-$\tilde{E}_K^{(\varphi, N_c-1)}$,
-$\tilde{E}_G^{(\varphi, N_c-1)}$,
+$\hspace{1.5cm}$ - If no expansion: $\tilde{\eta}$, $1 - \frac{\langle \tilde{\rho} (\tilde{\eta} ) \rangle}{\langle \tilde{\rho} (\tilde{\eta}_*  ) \rangle}$
 
-$\tilde{E}_K^{(\Phi, 0)}$,
-$\tilde{E}_G^{(\Phi, 0)}$, ... ,
-$\tilde{E}_K^{(\Phi, N_d-1)}$,
-$\tilde{E}_G^{(\Phi, N_d-1)}$,
-$\tilde{E}_K^{(A, 0)}$,
-$\tilde{E}_G^{(A, 0)}$, ... ,
-$\tilde{E}_K^{(A, N_{u1}-1)}$,
-$\tilde{E}_G^{(A, N_{u1}-1)}$,
+$\hspace{1.5cm}$ - If self-consistent expansion: $\tilde{\eta}$, $\frac{\langle\text{LHS} - \text{RHS}\rangle}{\langle \text{LHS} + \text{RHS}\rangle}$, $\langle  \text{LHS} \rangle$, $\langle \text{RHS} \rangle$,
 
-$\tilde{E}_K^{(B, 0)}$,
-$\tilde{E}_G^{(B, 0)}$, ...,
-$\tilde{E}_K^{(B, N_{s2}-1)}$,
-$\tilde{E}_G^{(B, N_{s2}-1)}$,
-$\tilde{E}_V^{(0)}$, ...,
-$\tilde{E}_V^{(N_p-1)}$,
-$\langle \tilde{\rho} \rangle$
+$\hspace{0.75cm}$  where LHS and RHS are the left- and right-hand sides of Eq. ([*68*][eq_FriedmannHubble]).
 
--  `average_energy_conservation.txt`:
+-  $\texttt{average_gauss_[U1/SU2]_[nfld].txt}$: $\tilde{\eta}$, $\frac{\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle}{\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle}$,  $\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle$ , $\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle$.
 
--  If no expansion: $\tilde{\eta}$, $1 - \frac{\langle \tilde{\rho} (\tilde{\eta} ) \rangle}{\langle \tilde{\rho} (\tilde{\eta}_*  ) \rangle}$
+$\hspace{0.75cm}$ where LHS and RHS are the left- and right-hand sides of Eq. ([*63*][eq_GaussU1-eom]) [for the U(1) sector] and Eq. ([*64*][eq_GaussSU2-eom]) [for the SU(2) sector].
 
--  If self-consistent expansion: $\tilde{\eta}$, $\frac{\langle\text{LHS} - \text{RHS}\rangle}{\langle \text{LHS} + \text{RHS}\rangle}$, $\langle  \text{LHS} \rangle$, $\langle \text{RHS} \rangle$,
+-  $\texttt{average_scale_factor.txt}$: $\tilde \eta$, $a$, $a'$, $a' \over a$
 
-where LHS and RHS are the left and hand sides of Eq. ([*68*][eq_FriedmannHubble]).
-
--  `average_gauss_[U1/SU2]_[nfld].txt`: $\tilde{\eta}$, $\frac{\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle}{\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle}$,  $\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle$ , $\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle$.
-
-where LHS and RHS are the left and hand sides of Eqs. ([*63*][eq_GaussU1-eom]) (for the U(1) sector) and Eqs. ([*64*][eq_GaussSU2-eom]) (for the SU(2) sector).
-
--  `average_scale_factor.txt`: $\tilde \eta$, $a$, $a'$, $a' \over a$
-
--  `spectra_scalar_[nfld].txt`:  $\tilde{k}$,  $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$, $\widetilde{\Delta}_{\tilde \phi'} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{bin}$
--  `spectra_norm_cmplx_scalar_[nfld].txt`:
+-  $\texttt{spectra_scalar_[nfld].txt}$:  $\tilde{k}$,  $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$, $\widetilde{\Delta}_{\tilde \phi'} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{bin}$
+-  $\texttt{spectra_norm_cmplx_scalar_[nfld].txt}$:
 $\tilde{k}$,  $\widetilde{\Delta}_{\widetilde\varphi} (\tilde k)$, $\widetilde{\Delta}_{\widetilde\varphi'} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{bin}$
--  `spectra_norm_SU2Doublet_scalar_[nfld].txt`: $\tilde{k}$, $\widetilde{\Delta}_{\widetilde\Phi} (\tilde k)$, $\widetilde{\Delta}_{\widetilde\Phi'} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{bin}$
--  `spectra_norm_[U1/SU2]_[nfld].txt`:
+-  $\texttt{spectra_norm_SU2Doublet_scalar_[nfld].txt}$: $\tilde{k}$, $\widetilde{\Delta}_{\widetilde\Phi} (\tilde k)$, $\widetilde{\Delta}_{\widetilde\Phi'} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{bin}$
+-  $\texttt{spectra_norm_[U1/SU2]_[nfld].txt}$:
 $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{\mathcal{E}}}(\tilde k)$
 $\widetilde{\Delta}_{\widetilde{\mathcal{B}}}(\tilde k)$, $\Delta n_{bin}$
 
-### **The physics of scalar-gauge theories in CosmoLattice**
+### **The scalar-gauge physics inside CosmoLattice**
 
 #### Initial conditions { #subsubsec_initialConditionsNonAb }
 
-In Section [*Initialization of fluctuations*][sec_InitScalar] we summarized how the initial conditions for scalar singlets are imposed.
-Here we explain now how we set the initial conditions to complex scalars and SU(2) doublets, as well as to the Abelian and non-Abelian gauge fields. We denote the time at which the initial conditions are imposed (i.e. the initial time of the simulation) as $t_*$, and all quantities with a $*$ subindex must be understood to be evaluated at that time: for example, $\varphi_* \equiv \varphi ({\bf x}, t_* )$ for complex scalars, and $\dot{\varphi}_* \equiv \dot{\varphi} ({\bf x}, t_* )$ for the doublets.
+In the tab [*Initialization of fluctuations*][sec_InitScalar] of Section [Scalar-singlet interactions](My first model of (singlet) scalar fields.md), we have presented how the initial conditions for singlet scalars are typically imposed in CosmoLattice. Here, we explain instead how to set the initial conditions for complex and SU(2) doublet scalars, as well as for the associated Abelian and non-Abelian gauge fields. We denote the time at which the initial conditions are imposed (typically the initial time of the simulation) as $\eta_*$, so that all quantities with a $*$ subindex must be understood to be evaluated at that time: for example, $\varphi_* \equiv \varphi ({\bf x}, \eta_* )$ for complex scalars, and $\dot{\varphi}_* \equiv \dot{\varphi} ({\bf x}, \eta_* )$ for the doublets.
 
-The initialization of the complex scalars and $SU(2)$ doublets is very similar to the scalar singlets: they consist in a homogeneous amplitude chosen by the user, over which a set of fluctuations is imposed. However, we must take into account that these fields have multiple components. As described above, in CosmoLattice the user can specify the initial absolute values $|\varphi_*|$ and $|\Phi_*|$ in the input file, and then decide how to distribute this power between the different components in the model file. However, as the scalar potential only depends on $|\varphi|$ and $|\Phi|$, we can always rotate the system so that all components have the same initial homogeneous amplitudes. Therefore, for the complex scalars we can impose
+The initialization of the complex and $SU(2)$ doublet scalars is very similar to the singlet scalars: they consist in a homogeneous amplitude chosen by the user, over which a set of fluctuations is superimposed. However, we must take into account that these fields have multiple components. As described above, see [*The model and input files for scalar-gauge theories*][subsec_ScalarGaugeInput], in CosmoLattice the user can specify the initial absolute values $|\varphi_*|$ and $|\Phi_*|$ in the input file Then one could decide how to distribute this power between the different components in the model file, but as the scalar potential only depends on $|\varphi|$ and $|\Phi|$, we can always *rotate* the field configuration so that all components have equal initial homogeneous amplitude. Thus, for the complex scalars we impose
 ```math
 \begin{align} \varphi_* &= \frac{1}{\sqrt{2}} (\varphi_{0*} + i \varphi_{1*} ) \hspace{0.4cm} \Longrightarrow \hspace{0.4cm}
 \varphi_{n*} \equiv |\varphi_*|  +  \delta \varphi_{n*} ({ \bf x})   , \hspace{0.4cm} [n=0,1]  ,  \\
@@ -381,7 +379,7 @@ The initialization of the complex scalars and $SU(2)$ doublets is very similar t
 \end{align}
 ```
 
-where $\delta \phi_{n*} (\vec{x})$ and $\delta \dot{\phi}_{n*} (\vec{x})$ are the initial spectrum of fluctuations of the field components and their corresponding time-derivatives (we present the functional form of these functions below). Similarly, for the complex doublets we impose
+where $\delta \phi_{n*} (\vec{x})$ and $\delta \dot{\phi}_{n*} (\vec{x})$ will be tyipcally set by a spectrum of fluctuations of the field amplitude and time-derivative components, specified in Fourier space. Similarly, for the doublets, we impose
 ```math
 \begin{align} \Phi_*  &=
 {1\over\sqrt{2}}
@@ -402,7 +400,7 @@ where $\delta \phi_{n*} (\vec{x})$ and $\delta \dot{\phi}_{n*} (\vec{x})$ are th
 \end{align}
 ```
 
-On the other hand, for the Abelian and non-Abelian gauge field modes we impose
+On the other hand, for the Abelian and non-Abelian gauge fields, we impose
 [](){ #eq_Inflc1 }
 [](){ #eq_Inflc2 }
 [](){ #eq_Inflc3 }
@@ -416,22 +414,22 @@ B_i^a ({\bf x}, t_* ) &= 0  ,  \tag{72} \\
 \end{align}
 ```
 
-i.e. the initial amplitude of the gauge fields is set *exactly* to zero at all lattice points, while we only impose an initial spectrum of fluctuations to their time-derivatives (over vanishing homogeneous values). Due to this, the initial magnetic energy will be exactly zero, while a small amount of electric energy will be initially present due to the fluctuations of the time-derivatives of the gauge fields.
+i.e. the initial amplitude of the gauge fields is set *exactly* to zero at all lattice points, while we only impose an initial spectrum of fluctuations to their time-derivatives (over vanishing homogeneous values). Due to this, the initial magnetic energy will be exactly zero, while a small amount of electric energy will be initially present due to the fluctuations of the time-derivatives of the gauge fields. While this is just a choice, the user is welcome to modify this prescription, but we anticipate that this might become a non-trivial task, due to the necessity to respect the Gauss-law(s), namely Eq. ([*63*][eq_GaussU1-eom]) [for the U(1) sector] and Eq. ([*64*][eq_GaussSU2-eom]) [for the SU(2) sector]. We discuss this next, for our chosen configuration above.
 
-The initial spectrum of fluctuations for both the charged scalars and gauge fields must be imposed so that the Gauss constraint is verified initially. As long as this is true, the Gauss constraint will remain preserved during the entire dynamical evolution of the system. More specifically, let us Fourier transform the Gauss constraints ([*63*][eq_GaussU1-eom]) and ([*64*][eq_GaussSU2-eom]) at the initial time $t=t_*$. We get
+The initial fluctuations of both charged scalars and gauge fields must be imposed so that the Gauss constraint is verified initially. As long as this is true, the Gauss constraint will remain preserved during the entire dynamical evolution of the system, thanks to the fact that CosmoLattice uses lattice gauge-invariant techniques. In order to achieve the said goal, let us first Fourier transform the Gauss constraints ([*63*][eq_GaussU1-eom]) and ([*64*][eq_GaussSU2-eom]) at the initial time $\eta_*$. We get
 [](){ #eq_kAi1 }
 ```math
 {k}^i \widetilde{A}'_i ({\bf k}) = \frac{f_*^2}{\omega_*^2} \widetilde{J}_0^A ({\bf k})  , \hspace{0.4cm} {k}^i \widetilde{B}_i^{a'} ({\bf k}) = \frac{f_*^2}{\omega_*^2} \widetilde{J}_0^a ({\bf k})  , \tag{75}
 ```
 
-where $J_0^A ({\bf k})$ and $J_0^a ({\bf k})$ are the Fourier transforms of each current. A solution of these equations is, for $\bf k \neq \bf 0$,
+where $J_0^A ({\bf k})$ and $J_0^a ({\bf k})$ are the Fourier transforms of each current. A solution of these equations, for $\bf k \neq \bf 0$, is trivially found as
 [](){ #eq_GaugeCurrentFluc }
 ```math
 \widetilde{A}'_i ({\bf k}) = i \frac{{k}_i}{{k}^2} \frac{f_*^2}{\omega_*^2} \widetilde{J}_0^A ({\bf k})  , \hspace{0.4cm} \widetilde{B}^{a'}_i ({\bf k}) = i \frac{{k}_i}{{k}^2} \frac{f_*^2}{\omega_*^2} \widetilde{J}_0^a ({\bf k}) \tag{76}  .
 ```
 
 The way in which we proceed to set fluctuations is the following. First,
-we impose on the lattice the following fluctuations to the components of the charged scalars (in program units), mimicking the spectrum of fluctuations of the scalar singlets ([*47*][eq_fpr_influct])-([*48*][eq_fpr_influct2]):
+we impose on the lattice the following fluctuations to the components of the charged scalars (in program units), following the same prescription for the fluctuations of the scalar singlets ([*47*][eq_fpr_influct])-([*48*][eq_fpr_influct2]):
 [](){ #eq_fpr_influct3 }
 [](){ #eq_fpr_influct4 }
 ```math
@@ -441,24 +439,24 @@ we impose on the lattice the following fluctuations to the components of the cha
 \end{align}
 ```
 
-where $\tilde{\omega}_{k,n}  \equiv \omega_{k,n} /\omega_* =  \sqrt{\tilde{k}^2 + a^2 (\partial^2 \tilde{V} / \partial \tilde{\varphi}_n^2)}$ is the initial effective frequency of the modes of each field component in program units. Then these fluctuations generate fluctuations on the currents $\widetilde{J}_0^A ({\bf x})$, and $\widetilde{J}_0^a ({\bf x})$, which can be used to compute the corresponding fluctuations to the gauge fields in momentum space via Eqs. ([*76*][eq_GaugeCurrentFluc]). Finally, transforming back to position space we obtain $\delta \widetilde{A'}_{i*} ({\bf x})$, $\delta \widetilde{B}_{i*}^{a'} ({\bf x}) $.
+where $\tilde{\omega}_{k,n}  \equiv \omega_{k,n} /\omega_* =  \sqrt{\tilde{k}^2 + a^2 (\partial^2 \tilde{V} / \partial \tilde{\varphi}_n^2)}$ is the initial effective frequency of the modes of each field component in program units. Once created, these fluctuations generate fluctuations on the currents $\widetilde{J}_0^A ({\bf x})$, and $\widetilde{J}_0^a ({\bf x})$, which can then be used to compute the corresponding fluctuations of the gauge fields in momentum space, via Eqs. ([*76*][eq_GaugeCurrentFluc]). Finally, transforming back to position space, we obtain $\delta \widetilde{A'}_{i*} ({\bf x})$, $\delta \widetilde{B}_{i*}^{a'} ({\bf x})$.
 
-However, in order for this procedure to work, we need to slightly modify the initialization of the charged field components ([*77*][eq_fpr_influct3])-([*78*][eq_fpr_influct4]) with respect to the prescription for scalar singlets. In the case of scalar singlets, we would have $\theta_1 ({\bf \tilde{n}})$ and $\theta_2 ({\bf \tilde{n}})$ as two random independent phases which vary uniformly in the range $[0, 2\pi)$ from point to point, while $|\delta \tilde{\phi}_1 ({\bf \tilde{n}})|$ and $|\delta \tilde{\phi}_2 ({\bf \tilde{n}})|$ would be two amplitudes that vary from point to point according to a *Rayleigh* distribution with expected square amplitude given by Eq. ([*49*][eq_QuantumFlucts2]). However, in the case of charged fields we need to set the homogeneous mode of the currents to zero, i.e. $J_0^A ({\bf k} ={\bf 0} ) = J_0^a ({\bf k} ={\bf 0} ) = 0$. As shown in Ref. [@Figueroa_2020rrl], this can be ensured if
+In order for this procedure to work consistenly, we need to slightly modify the initialization of the charged field components ([*77*][eq_fpr_influct3])-([*78*][eq_fpr_influct4]) with respect to the prescription for scalar singlets. In the case of scalar singlets, we would have $\theta_1 ({\bf \tilde{n}})$ and $\theta_2 ({\bf \tilde{n}})$ as two random independent phases which vary uniformly in the range $[0, 2\pi)$ from point to point, while $|\delta \tilde{\phi}_1 ({\bf \tilde{n}})|$ and $|\delta \tilde{\phi}_2 ({\bf \tilde{n}})|$ would be two amplitudes that vary from point to point according to a *Rayleigh* distribution with expected square amplitude given by Eq. ([*49*][eq_QuantumFlucts2]). However, in the case of charged fields, we need to set the homogeneous mode of the currents to zero, *i.e.* $J_0^A ({\bf k} ={\bf 0} ) = J_0^a ({\bf k} ={\bf 0} ) = 0$, so that there is a vanishing net-charge in the lattice. As shown in $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl], this can be ensured by the choice
 [](){ #InConstr_1 }
-[](){ #InConstr_2 }
+<!-- [](){ #InConstr_2 } -->
 ```math
-\begin{align}  |\delta \varphi_{n1} ({\bf k})| &= |\delta \varphi_{n2}  ({\bf k})|  , \hspace{3.5cm} n=0,1(,2,3)  , \tag{79} \\
-\theta_{n2} ({\bf k}) &= \theta_{02} ({\bf k}) + \theta_{n1} ({\bf k}) - \theta_{01} ({\bf k})  , \hspace{0.85cm} n=1(,2,3)  . \tag{80}
-\end{align}
+\begin{array}{rcll} |\delta \varphi_{n1} ({\bf k})| &=& |\delta \varphi_{n2}  ({\bf k})|  & , ~n=0,1(,2,3)  , \\
+\theta_{n2} ({\bf k}) &=& \theta_{02} ({\bf k}) + \theta_{n1} ({\bf k}) - \theta_{01} ({\bf k})  & , ~n=1(,2,3)  . 
+\end{array}\tag{79} 
 ```
 
-In CosmoLattice, we then generate randomly only $\theta_{01}$, $\theta_{02}$, as well as $\theta_{n1}$, $\varphi_{n1}$ for $n=1(,2,3)$, and let the other functions be imposed via constraints ([*79*][InConstr_1])-([*80*][InConstr_2]).
+In CosmoLattice, we thus generate randomly only $\theta_{01}$, $\theta_{02}$, as well as $\theta_{n1}$, $\varphi_{n1}$ for $n=1(,2,3)$, and let the other functions be initialized through out the constraints ([*79*][InConstr_1]).
 
 #### Evolution equations
 
-In Section [*Evolution of the system*][eq_evolution-sc] we wrote a Hamiltonian scheme for the equations of motion of a system of scalar singlets in an expanding universe. As explained, we conveniently defined a set of conjugate momenta $\{\pi_{\phi},b\}$ for the scalar field(s) $\phi$ and the scale factor $a$, in a manner that allowed us to write the field and Friedmann equations of motion as a set of four first-order differential equations. Thanks to our definitions, the kernels of the conjugate momenta do now depend on the time-derivatives of the corresponding fields, which then allow for solving the equations of motion (their discretized version) using algorithms such as staggered leapfrog or velocity verlet.
+In the tab [*Evolution of the system*][eq_evolution-sc] of Section [Scalar-singlet interactions](My first model of (singlet) scalar fields.md), we wrote a Hamiltonian scheme for the equations of motion (EOM) of a system of singlet scalars in an expanding universe. As explained there, we conveniently defined a set of conjugate momenta $\{\pi_{\phi},b\}$ for the scalar field(s) and the scale factor $\{\phi, a\}$, in such a way that the fields' EOM and Friedmann equations become a set of four first-order differential equations. Thanks to our definitions of conjugate momentum, the kernels in the EOM do not depend on the time-derivatives of the corresponding fields, allowing to solving the EOM (their discretized version) via symplectic algorithms, such as staggered leapfrog or verlet integration methods.
 
-The same idea can be applied in our present case of a scalar-gauge theory that contains both scalar and gauge fields. In particular, we can define the following momenta for each of the five field species $\{\phi,\varphi,\Phi,A_i,B_i^a\}$ and for the scale factor $a(\eta)$, as
+The same idea can be applied in the case of a scalar-gauge theory, which bsides scalar fields it also contains gauge fields. In particular, we define the following conjugate momentum for each of the five field species $\{\phi,\varphi,\Phi,A_i,B_i^a\}$, as well as for the scale factor $a(\eta)$, as follows
 [](){ #eq_momU1singlet }
 [](){ #eq_momSU2doublet }
 [](){ #eq_momU1vec }
@@ -483,7 +481,7 @@ With these definitions the equations of motion can be then written as
 (\tilde\pi_\varphi)'    &=   \mathcal{K}_{\varphi}[a,\tilde\phi,\tilde\varphi,|\widetilde{\Phi}|,\widetilde A_j]  & &   \equiv     a^{3 + \alpha} \widetilde V_{,|\tilde\varphi|} \frac{1}{2} \frac{\tilde\varphi}{|\tilde\varphi |} + a^{1 + \alpha} {\vec{\widetilde D}}_{\hspace{-0.5mm}A}^{ 2}\tilde\varphi    , \tag{85} \\
 (\widetilde\pi_\Phi)'    &=   \mathcal{K}_{\Phi}[a,\tilde\phi,|\tilde\varphi|,\widetilde\Phi,\widetilde B_j^a] & &    \equiv     - a^{3 + \alpha} \widetilde V_{,|\widetilde\Phi|} \frac{1}{2} \frac{\widetilde\Phi}{|\widetilde\Phi |} + a^{1 + \alpha} {\vec{\widetilde{D}}}_{\hspace{-0.5mm}A}^{ 2}\widetilde\Phi  \tag{86}    ,\\
 \left(\tilde\pi_A\right)'_i    &=   \mathcal{K}_{A_i}[a,\tilde\varphi,\widetilde \Phi,\widetilde A_j] & &   \equiv     a^{1+ \alpha}\widetilde J^A_i + a^{\alpha - 1}\tilde{\partial}_j \widetilde F_{ji}     ,   \\
-\left(\left(\tilde\pi_B\right)_i^a\right)'   &=   \mathcal{K}_{B_i}Comp[a,\widetilde\Phi,\widetilde A_j,\widetilde B_j^a] & &    \equiv     a^{1+ \alpha}\widetilde J^a_i + a^{\alpha - 1}( \mathcal{\widetilde D}_j )_{a b} (\widetilde G_{ji} )^b      .
+\left(\left(\tilde\pi_B\right)_i^a\right)'   &=   \mathcal{K}_{B_i}[a,\widetilde\Phi,\widetilde A_j,\widetilde B_j^a] & &    \equiv     a^{1+ \alpha}\widetilde J^a_i + a^{\alpha - 1}( \mathcal{\widetilde D}_j )_{a b} (\widetilde G_{ji} )^b      .
 \end{align}
 ```
 
@@ -492,11 +490,11 @@ On the other hand, the equation for the evolution of the scale factor can be wri
 \begin{align}
 \hspace{-1cm}
 b' &= \mathcal{K}_a\hspace{-1mm}\left[a,{\widetilde E}_K^\phi,{\widetilde E}_K^\varphi,{\widetilde E}_K^\Phi,{\widetilde E}_G^\phi,{\widetilde E}_G^\varphi,{\widetilde E}_G^\Phi,{\widetilde E}_K^A,{\widetilde E}_G^A,{\widetilde E}_K^B,{\widetilde E}_G^B,{\widetilde E}_V\right]  \\
-&= \frac{a^{2\alpha+1}}{3}{f_*^2\over m_p^2}\left[ (\alpha-2)({\widetilde E}_K^\phi  + {\widetilde E}_K^\varphi + {\widetilde E}_K^\Phi )  +
+&\equiv \frac{a^{2\alpha+1}}{3}{f_*^2\over m_p^2}\left[ (\alpha-2)({\widetilde E}_K^\phi  + {\widetilde E}_K^\varphi + {\widetilde E}_K^\Phi )  +
 \alpha ({\widetilde E}_G^\phi  + {\widetilde E}_G^\varphi + {\widetilde E}_G^\Phi )+ (\alpha-1)
-({\widetilde E}_K^A+{\widetilde E}_G^A + {\widetilde E}_K^B+{\widetilde E}_G^B) + (\alpha+1) {\widetilde E}_V  \right]  ,
+({\widetilde E}_K^A+{\widetilde E}_G^A + {\widetilde E}_K^B+{\widetilde E}_G^B) + (\alpha+1) {\widetilde E}_V  \right]  .
 \end{align}
 ```
 
-where $\mathcal{K}_f$ with $f=\phi,\varphi,\Phi,A_i,B_i^a$ are the kernels for the different field species. As for singlet scalar theories, CosmoLattice provides already implemented two different evolution algorithms to solve these equations: staggered leapfrog (of accuracy 2) and velocity verlet (with accuracy of order 2, 4, 6, 8, and even 10). The details of how these algorithms work, specialized for Abelian and non-Abelian gauge theories, can be found in Sections 5 and 6 of Ref. [@Figueroa_2020rrl], respectively. On the lattice, the different kernels can be discretized using the toolkits of Section [*Lattice gauge invariant techniques*][subsec_LGT], or Section 3 of Ref. [@Figueroa_2020rrl]. The details of the lattice version EOM can they all found in Sections 5 (for Abelian gauge theories) and 6 (non-Abelian gauge theories) of Ref. [@Figueroa_2020rrl].
+The functions $\mathcal{K}_f$ above, represent the kernels of the different matter field species, $f=\phi,\varphi,\Phi,A_i,B_i^a$, whereas $\mathcal{K}_a$ represents the kernel of the scale factor. On a lattice, the different kernels can be discretized using lattice gauge-invariant techniques, as described in *e.g.* Section 3 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl], or in this website's tab [*Lattice gauge invariant techniques*][subsec_LGT]. As for singlet scalar theories, CosmoLattice provides already implemented different evolution algorithms to solve the EOM of scalar-gauge theories, namely staggered *leapfrog* and *Verlet* evolvers. While the former has a fixed accuray in time-evolution of $\mathcal{O}(d\eta^2)$, the latter methods (both position- and velocity-Verlet), which by default have also $\mathcal{O}(d\eta^2)$ accuracy, can however be improved via recursive variants (using the Yoshida method), leading to algorithms of successive increasing accuracies, namely of $\mathcal{O}(d\eta^4)$, $\mathcal{O}(d\eta^6)$, $\mathcal{O}(d\eta^8)$, and $\mathcal{O}(d\eta^{10})$. The details of the lattice version of the EOM and of how the aforementioned evolution algorithms work, specialized for scalar-gauge theories, can be found in Sections 5 (for Abelian gauge theories) and 6 (non-Abelian gauge theories) of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl]. 
 
