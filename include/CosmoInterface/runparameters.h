@@ -40,10 +40,10 @@ namespace TempLat
           t0(par.get<double>("t0", 0, Important)),         // Initial time
           tMax(par.get<T>("tMax", 10000 * dt, Important)), // Final time
           kCutoff(par.get<T>("kCutOff", -1.0,
-                             Important)),                          // Momenta cutoff in spectra of initial fluctuations. -1 means no cutoff.
+                             Important)), // Momenta cutoff in spectra of initial fluctuations. -1 means no cutoff.
           SIC(par.get<InitialConditionsType::S>("ICtype_S", InitialConditionsType::S::Default)),
           U1IC(par.get<InitialConditionsType::U1>("ICtype_U1", InitialConditionsType::U1::Default)),
-          tOutFreq(par.get<T>("tOutputFreq", 10 * dt, Important)), // Printing time interval of frequent output
+          tOutFreq(par.get<T>("tOutputFreq", 10 * dt, Important)),      // Printing time interval of frequent output
           tOutInfreq(par.get<T>("tOutputInfreq", 100 * dt, Important)), // Printing time interval of infrequent output
           tOutRareFreq(par.get<T>("tOutputRareFreq", 1000 * dt, Important)), // Printing time interval of rare output
           tOutVerb(par.get<T>("tOutputVerb", 100 * dt)),                     // Output verbosity
@@ -74,9 +74,9 @@ namespace TempLat
           hdf5Spectra(par.get<bool>(
               "hdf5Spectra", false)), // If true, spectra are printed in HDF5 format. If false, printed in txt format.
           eType(par.get<EvolverType>("evolver", LF, Important)), // Type of evolution algorithm
-          appendMode(par.get<bool>(
-              "appendToFiles",
-              false)), // If true, output is appended to pre-existing files. If false, existing files cause an error unless overwriteFiles=true.
+          appendMode(par.get<bool>("appendToFiles",
+                                   false)), // If true, output is appended to pre-existing files. If false, existing
+                                            // files cause an error unless overwriteFiles=true.
           overwriteMode(par.get<bool>(
               "overwriteFiles",
               false)), // If true (and appendToFiles=false), existing output files are deleted before writing.
@@ -93,9 +93,9 @@ namespace TempLat
           powerSpectrumType(par.get<int>("PS_type", 1)), powerSpectrumVersion(par.get<int>("PS_version", 1)),
           withGWs(par.get<bool>("withGWs", false, Important)),
           eTypeGW(par.get<bool>("doLFforGWs", true, Important) ? LF : eType), // Type of evolution algorithm
-          GWprojectorType(par.get<int>("GWprojectorType", 2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
-          flagON(par.get<bool>("flagON", false)),
-          flagChiralPS(par.get<bool>("flagChiralPS", false)),
+          GWprojectorType(par.get<int>("GWprojectorType",
+                                       2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
+          flagON(par.get<bool>("flagON", false)), flagChiralPS(par.get<bool>("flagChiralPS", false)),
           unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false))
     {
       if (AlmostEqual(lSide, -1)) {
@@ -114,8 +114,7 @@ namespace TempLat
       // NOTE: We must have kIR=2*pi/lside for consistency.
 
       if (appendMode && overwriteMode)
-        throw(RunParametersInconsistent(
-            "'appendToFiles' and 'overwriteFiles' cannot both be true. Pick one."));
+        throw(RunParametersInconsistent("'appendToFiles' and 'overwriteFiles' cannot both be true. Pick one."));
 
       if (AlmostEqual(dt, 0.)) throw(RunParametersInconsistent("dt cannot be zero, abort."));
       if (tMax < t0) throw(RunParametersInconsistent("tMax must be >= t0, abort."));
@@ -127,7 +126,7 @@ namespace TempLat
       dx = lSide / N;                             // Lattice spacing
       kUV = std::sqrt(3) * Constants::pi<T> / dx; // Maximum momenta in the lattice
 
-      if(kCutoff < 0.0) kCutoff = 2 * kUV; // no cutoff means it's larger than kUV.
+      if (kCutoff < 0.0) kCutoff = 2 * kUV; // no cutoff means it's larger than kUV.
 
       // Now we see if the user wants to save the simulation at the end of the run. This is
       // specified by specifying a path different from the Constants::defaultString. If not
@@ -152,10 +151,9 @@ namespace TempLat
         par.erase("backup_dir");
       }
 
-
-      if (powerSpectrumType == 0  and unbinnedSpectra == false)
+      if (powerSpectrumType == 0 and unbinnedSpectra == false)
         throw(RunParametersInconsistent("powerSpectrumType 0 is only implemented for the unbinned power spectrum."));
-      if ( powerSpectrumType < 0 or powerSpectrumType > 1)
+      if (powerSpectrumType < 0 or powerSpectrumType > 1)
         throw(RunParametersInconsistent("powerSpectrumType " + std::to_string(powerSpectrumType) +
                                         " is not a valid powerSpectrumType."));
       if (powerSpectrumVersion < 1 or powerSpectrumVersion > 3)
@@ -172,11 +170,11 @@ namespace TempLat
 
   public:
     const int N;
-    T kUV;
     T kIR;
     T lSide;
-    T dx;
     T dt;
+    T dx;
+    T kUV;
 
     const bool expansion;
 
