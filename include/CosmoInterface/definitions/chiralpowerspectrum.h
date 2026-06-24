@@ -115,7 +115,7 @@ namespace TempLat
   };
 
   template <typename Model, int U1, int C>
-  DEVICE_FORCEINLINE_FUNCTION auto projectChiralU1Type1(const Model &model, Tag<U1>, Tag<C>, bool sign, bool AorE)
+  auto projectChiralU1Type1(const Model &model, Tag<U1>, Tag<C>, bool sign, bool AorE)
   {
     static_assert(C >= 1 && C <= 3, "Vector component tag must be 1,2,3.");
 
