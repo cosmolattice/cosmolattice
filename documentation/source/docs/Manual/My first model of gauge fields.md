@@ -74,7 +74,7 @@ with $\epsilon_{ijk}$ the Levi-Civita symbol. **These expressions represent gaug
 
 [](){ #eq_GaugeProgramVar }
 !!! note "**Program variables in Scalar-Gauge Theories**"
-    As described in Section [*Program variables*][subsec_LatticeScalars] in the context of singlet scalar theories, on the lattice we operate in a set of dimensionless spacetime and field variables called **program variables**. For scalar singlets, these were defined in Eq. ([*30*][eq_FieldSpaceTimeNaturalVariables]) in terms of the three constants $\{f_*,\omega_*,\alpha\}$, that must be judiciously chosen for each model. The same definitions hold for the scalar sector(s) of scalar-gauge theories, where we also introduce new dimensionless program variables for the gauge fields. Putting all program variables together, we have
+    As described in Section [*Program variables*][subsec_LatticeScalars] in the context of singlet scalar theories, on the lattice we operate in a set of dimensionless spacetime and field variables called **program variables**. For scalar singlets, these were defined in <!-- Eq. [Eq. (29)](My first model of (singlet) scalar fields.md#eq_FieldSpaceTimeNaturalVariables) --> Eq. ([*2*][eq:FieldSpaceTimeNaturalVariables]) from Section [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md), in terms of the three constants $\{f_*,\omega_*,\alpha\}$, that must be judiciously chosen for each model. The same definitions hold for the scalar sector(s) of scalar-gauge theories, where we also introduce new dimensionless program variables for the gauge fields. Putting all program variables together, we have
     
     ```math
     

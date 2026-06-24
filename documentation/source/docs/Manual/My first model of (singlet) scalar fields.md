@@ -1,46 +1,51 @@
 <!-- <div style="text-align: justify;"> -->
 
-Here we explain step by step how to implement a model of interactive singlet scalar fields in CosmoLattice, using as a reference example, a two-field post-inflationary preheating scenario. **This section is particularly relevant for a newcomer to CosmoLattice: besides explaining how to deal with singlet scalar-fields, it also introduces along the way relevant definitions and basic functionalities that are common to other circumstances beyond singlet scalar-field dynamics**.  
+In this section we explain, step by step, how to implement a model of interactive scalar fields in CosmoLattice. We focus on scalar fields that are not charged under a gauge symmetry, which will be referred to as *singlet-scalar* fields. <!-- For the dynamics of **charged scalar** fields, let it be under an Abelian or a non-Abelian gauge symmetry, see instead Section [Scalar-Gauge Interactions](My first model of gauge fields.md).  --> **This section is particularly relevant for a newcomer to CosmoLattice: besides explaining how to deal with singlet-scalar fields, it also introduces along the way relevant definitions and basic functionalities that are common to other field dynamics**. We introduce all the necessary concepts throughout the implementation of a basic two-field preheating scenario, which serves as a reference example. 
 
-This section is structured as follows. In Section [*Program variables*][subsec_LatticeScalars] we first introduce the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer. In Section [*The model*][sec_ScTheModel] we present an example model and define its corresponding program variables and potential specific to it. We then explain in Section [*My first run*][sec_MyFirstRun] how to compile and run the code. After that, in Section [*The model file*][sec_TheModelFile] we walk the user through the *model file*, where the model details are actually implemented. Finally, in Section [*The physics implemented in CosmoLattice*][sec_WhatHappensAuto] we provide a summarized picture of what happens 'under the hood', giving details on how the fields are initialized in the simulation, how their dynamical evolution is solved, and how different measurements are obtained. 
+After following this section, the reader will have enough information to implement in CosmoLattice any model involving interacting singlet-scalar fields. Readers interested in including gauge fields and their interactions with charged scalars, should go to Section [Scalar-gauge interactions](My first model of gauge fields.md). However, we only recommend to jump into scalar-gauge theories at this point, if the reader is already familiar with the lattice formulation of scalar-scalar interactions for singlets, that we provide precisely here below. 
 
-After following this section, the reader should have enough information to implement any model involving interacting singlet scalar fields. Users interested in including gauge fields in their models should proceed to read Section [Scalar-gauge Theories](My first model of gauge fields.md).
+This section is structured as follows. In Section [*Program variables*][subsec_LatticeScalars] we first introduce the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer. In Section [*The model*][sec_ScTheModel] we present our example model and define its corresponding program variables and program potential. In Section [*My first run*][sec_MyFirstRun] we explain how to compile and run the code. After that, in Section [*The model file*][sec_TheModelFile] we walk the user through the *model file*, where the model details are actually implemented. Finally, in Section [*The singlet-scalar physics implemented in CosmoLattice*][sec_WhatHappensAuto], we present a summarized picture of what happens 'under the hood' in the code, discussing details on how the fields are initialized in a simulation, and how their dynamical evolution is solved. <!-- and how different measurements are obtained.  -->
+
 
 <!-- </div> -->
 
 ### **Program variables** { #subsec_LatticeScalars }
 
 To describe the expansion of the universe, we consider a flat *Friedmann-Lemâitre-Robertson-Walker* (FLRW) background metric, described by the line element
-[](){ #eq_FLRWmetric }
 ```math
-\text{d} s^2 = g_{\mu\nu}\text{d} x^\mu\text{d} x^\nu = - a(\eta)^{2 \alpha} \text{d} \eta^2 + a(\eta)^2 \delta_{ij} \text{d} x^i \text{d} x^j  , \tag{29}
+\begin{equation}
+\text{d} s^2 = g_{\mu\nu}\text{d} x^\mu\text{d} x^\nu = - a(\eta)^{2 \alpha} \text{d} \eta^2 + a(\eta)^2 \delta_{ij} \text{d} x^i \text{d} x^j  , %\tag{29}
+\label{eq_FLRWmetric}
+\end{equation}
 ```
+
 where $a(\eta)$ is the scale factor, $\delta_{ij}$ is the Euclidean metric, and $\alpha$ is a constant parameter that we can freely choose conveniently in each scenario. The choice $\alpha = 0$ identifies $\eta$ with *cosmic time* $t$, whereas $\alpha = 1$ identifies it with *conformal time* $\tau \equiv \int {dt'  a^{-1}(t')}$. Independently of the value of $\alpha$, we will refer to $\eta$, from now on, as the **$\alpha$-time variable**.  
 
 !!! note "Program Variables"
     <!-- **Important:** --> On the lattice, we operate with a particular set of dimensionless field and spacetime variables, $\{\tilde{\phi},\tilde{\eta},\tilde{x}^i\}$, which we call **program variables**. The transformation from 'physical' to program variables, $t \rightarrow \tilde{\eta}$, $x^i \rightarrow \tilde{x}^i$, and $\phi \rightarrow \tilde{\phi}$, is given by the following relations 
-    [](){ #eq_FieldSpaceTimeNaturalVariables }
-    
+    [](){ #eq:FieldSpaceTimeNaturalVariables }
     ```math
-    
     \begin{align}
-    \tag{30}
+    %\tag{30}
     \tilde\phi \equiv {\frac{\phi}{f_*}} ,  d\tilde\eta \equiv a^{- \alpha}  \omega_* dt ,  d\tilde x^i \equiv \omega_* dx^i ,
+    \label{eq_FieldSpaceTimeNaturalVariables}
     \end{align}
-    
     ```
     
     where $f_*$ and $\omega_*$ are two constants with dimensions of energy. Program variables, and any quantity defined in terms of them, will be tagged in this manual with the *diacritic* symbol '$\sim$'. The program variable re-scalings for space and time variables, $d\tilde\eta, d\tilde x^i$, will be universal in CosmoLattice, independently of the matter field content. Program variable re-scalings for matter fields other than singlet scalar fields, will be introduced later on, when dealing *e.g.* with gauge fields or fluid dynamics. 
 
-Before simulating any particular model with CosmoLattice, the user must choose a certain set of values for $\{f_*,\omega_*,\alpha\}$, which will define the program variables used on the lattice via Eq. ([*30*][eq_FieldSpaceTimeNaturalVariables]). The choice of $f_*$ and $\omega_*$ can be made arbitrary, as they only re-scale variables by constant factors. However, if we simulate a scenario in which, e.g. a resonance is triggered by an oscillatory field, it can be convenient to set $f_*$ and $\omega_*$ to the initial amplitude and oscillation frequency of that field respectively. This way, the numbers produced by the code will be close to unity, which will help with the interpretation of results. In general, in every scenario there is always a natural choice (at least of the order of magnitude) of $f_*$ and $\omega_*$, related to the typical field amplitudes and time scales of the problem. Choosing such natural values will help to interpret more easily --in a more intuitive physical manner--, the numbers that the code outputs.
+Before simulating any particular model with CosmoLattice, the user must choose a certain set of values for $\{f_*,\omega_*,\alpha\}$, which will define the program variables used on the lattice via Eq.$~$\eqref{eq_FieldSpaceTimeNaturalVariables}. <!-- Eq. \eqref{eq_FieldSpaceTimeNaturalVariables}. --> The choice of $f_*$ and $\omega_*$ can be made arbitrary, as they only re-scale variables by constant factors. However, if we simulate a scenario in which, e.g. a resonance is triggered by an oscillatory field, it can be convenient to set $f_*$ and $\omega_*$ to the initial amplitude and oscillation frequency of that field respectively. This way, the numbers produced by the code will be close to unity, which will help with the interpretation of results. In general, in every scenario there is always a natural choice (at least of the order of magnitude) of $f_*$ and $\omega_*$, related to the typical field amplitudes and time scales of the problem. Choosing such natural values will help to interpret more easily --in a more intuitive physical manner--, the numbers that the code outputs.
 
 A correct choice of $\alpha$ is perhaps more relevant and subtle. A wrong choice of $\alpha$ could actually spoil the stability of the numerical solution at late times. To see this, let us go back to the case of an oscillating homogeneous scalar field that dominates the energy budget of the Universe. Typical evolution algorithms operate with a constant time step, so it would be a good idea to choose $\alpha$ so that the oscillation frequency of the dominant field species is approximately constant, when expressed in the corresponding $\alpha$-time. In this way, we will be able to resolve each physical oscillation with a similar accuracy. For example, let us consider the common case of an oscillatory field, with monomial potential $V(\phi) \propto \phi^p$, that sources the expansion of the Universe. As described in $\mathtt{The~Art{\text -}I}$[@Figueroa_2020rrl] [see discussion around $Eqs.\,(457)-(464)$], the oscillation frequency will be initially constant if we choose
 [](){ #eq_Alpha-PowLaw }
 ```math
-\alpha = 3 \left( \frac{p-2}{p+2} \right)  . \tag{31}
+\begin{equation}
+\alpha = 3 \left( \frac{p-2}{p+2} \right)  . %\tag{31}
+\label{eq_Alpha-PowLaw}
+\end{equation}
 ```
 
-We therefore recommend to use Eq. ([*31*][eq_Alpha-PowLaw]) for any scenario where there is an energetically dominant scalar field with potential $V(\phi) \propto \phi^p$. A more convenient choice of $\alpha$ in other scenarios must be done in a case by case basis.
+We therefore recommend to use Eq. \eqref{eq_Alpha-PowLaw} for any scenario where there is an energetically dominant scalar field with potential $V(\phi) \propto \phi^p$. A more convenient choice of $\alpha$ in other scenarios must be done in a case by case basis.
 
 **Observation:** Readers familiar with $\texttt{LatticeEasy}$[@Felder_2000hq], might have notticed that the above transformations are similar to those carried out in that code to define their program variables, $\tilde\phi \equiv a^{r}A\phi, d\tilde\eta \equiv a^{s}Bdt,  d\tilde \equiv x^i B dx^i$, if we set $A = 1/f_*$, $B= \omega_*$, $r=0$, and $s=-\alpha$ in their notation. As we will see, contrary to $\texttt{LatticeEasy}$, the evolution algorithms implemented in CosmoLattice *don't require a conformal rescaling of the fields*, so we do not need to introduce a parameter analogous to $r$.
 
@@ -51,69 +56,81 @@ We will consider a preheating scenario for illustrative purposes, consisting of 
 [](){ #eq_ScalarActionCont }
 [](){ #eq_potentialExampleI }
 ```math
-\begin{align} \tag{32}
+\begin{align} %\tag{32}
+\label{eq_ScalarActionCont}
 S_{\rm S} &= - \int d\eta d^3 x a(\eta)^{3+\alpha} \left\{{1\over2} \partial^{\mu} \phi \partial_{\mu}\phi +{1\over2} \partial^{\mu} \chi \partial_{\mu}\chi + V(\phi,\chi)\right\}  , \\
-V(\phi,\chi) &\equiv \sum_{m=0}^{N_p-1} V^{(m)} (\phi, \chi) =  \frac{\lambda}{4}\phi^4 +\frac{1}{2}g^2 \phi^2\chi^2 , \tag{33}
+\label{eq_potentialExampleI}
+V(\phi,\chi) &\equiv \sum_{m=0}^{N_p-1} V^{(m)} (\phi, \chi) =  \frac{\lambda}{4}\phi^4 +\frac{1}{2}g^2 \phi^2\chi^2 , %\tag{33}
 \end{align}
 ```
 
-where $V(\phi, \chi)$ is the scalar potential, and $\lambda$ and $g^2$ are dimensionless coupling parameters. The potential contains two different terms: the quartic potential of the inflaton and the interaction between both fields, which we denote as $V^{(m)}$ with $m=0,1$ respectively. The total number of potential terms is denoted as $N_p$, as in this case we have $N_p = 2$. Indices are raised/lowered using the FLRW metric defined in Eq. ([*29*][eq_FLRWmetric]), e.g. $\partial^{\mu} \phi \partial_{\mu}\phi=g^{\mu\nu}\partial_\mu\phi\partial_\nu\phi$. 
+where $V(\phi, \chi)$ is the scalar potential, and $\lambda$ and $g^2$ are dimensionless coupling parameters. The potential contains two different terms: the quartic potential of the inflaton and the interaction between both fields, which we denote as $V^{(m)}$ with $m=0,1$ respectively. The total number of potential terms is denoted as $N_p$, as in this case we have $N_p = 2$. Indices are raised/lowered using the FLRW metric defined in Eq. \eqref{eq_FLRWmetric}, e.g. $\partial^{\mu} \phi \partial_{\mu}\phi=g^{\mu\nu}\partial_\mu\phi\partial_\nu\phi$. 
 
 !!! note
     We reserve the symbol $\dot f \equiv {df/dt}$ for derivatives with respect to cosmic time, and $f' \equiv {df/ d\eta}$ for derivatives with respect to $\alpha$-time.
 
-The field equations of motion in $\alpha$-time read [@Figueroa_2020rrl]
+The field equations of motion in $\alpha$-time read <!-- [@Figueroa_2020rrl] -->
 [](){ #eq_scEOM }
+[](){ #eq_scEOM_II }
 ```math
-\begin{align*}
-\phi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{ 2} \hspace{-1mm}\phi + (3 - \alpha)\frac{{a'}}{a} {\phi'} &= - a^{2 \alpha} V_{,\phi}  , \\
-&=- a^{2 \alpha} (\lambda \phi^3 +g^2\phi\chi^2) \tag{34}\\
-\chi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{ 2} \hspace{-1mm}\chi + (3 - \alpha)\frac{{a'}}{a} {\chi'} &= - a^{2 \alpha} V_{,\chi} \\
-&=- a^{2 \alpha} g^2\phi^2\chi  ,
-\end{align*}
+\begin{align}\label{eq_scEOM}
+\phi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{ 2} \hspace{-1mm}\phi + (3 - \alpha)\frac{{a'}}{a} {\phi'} &= - a^{2 \alpha} V_{,\phi} \equiv - a^{2 \alpha} (\lambda \phi^3 +g^2\phi\chi^2) %\tag{34}\\
+, \\
+\label{eq_scEOM_II}
+\chi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{ 2} \hspace{-1mm}\chi + (3 - \alpha)\frac{{a'}}{a} {\chi'} &= - a^{2 \alpha} V_{,\chi} \equiv - a^{2 \alpha} g^2\phi^2\chi  ,
+\end{align}
 ```
 
 with the evolution of the scale factor $a(\eta)$ given by the Friedmann equations. If these two fields constitute the only energy sources in the Universe (or at least the dominant ones), either of the Friedmann equations
 [](){ #eq_sfEOM }
+[](){ #eq_sfEOM_II }
 ```math
-\begin{align*}
-\mathcal{H}^2 \equiv  \left({a'\over a}\right)^2 &=  \frac{a^{2 \alpha}}{3 m_p^2}\left\langle  {K}  + {G} +  {V} \right\rangle  ,
-\\
-{a''\over a} &= \frac{a^{2 \alpha}}{3 m_p^2}\left\langle (\alpha-2)  {K} + \alpha  {G} + (\alpha + 1)  {V}  \right\rangle  ,  \tag{35}
-\end{align*}
+\begin{align}\label{eq_sfEOM}
+\mathcal{H}^2 \equiv  \left({a'\over a}\right)^2 &=  \frac{a^{2 \alpha}}{3 m_p^2}\left\langle  {K}  + {G} +  {V} \right\rangle,\\
+\label{eq_sfEOM_II}
+{a''\over a} &= \frac{a^{2 \alpha}}{3 m_p^2}\left\langle (\alpha-2)  {K} + \alpha  {G} + (\alpha + 1)  {V}  \right\rangle  ,  %\tag{35}
+\end{align}
 ```
 
 can be solved self-consistently, together with the fields' equations of motion. Here $\langle \dots \rangle$ indicates a volume average, and $K$ and $G$ are the total kinetic and gradient energies. All scalar fields contribute to these quantities as $K \equiv \sum_{n=0}^{N_s-1} {K}^{(n)}$ and $G \equiv \sum_{n=0}^{N_s-1} {G}^{(n)}$, with
-[](){ #eq_sfEOM } 
+[](){ #eq_KG } 
 ```math
-{K}^{(n)} = \frac{1}{2 a^{2\alpha} } \phi_n^{'2}  ~, \hspace{0.4cm} {G}^{(n)} = \frac{1}{2 a^2} \sum_i (\nabla_i \phi_n)^2  ~, \tag{36}
+\begin{equation}
+{K}^{(n)} = \frac{1}{2 a^{2\alpha} } \phi_n^{'2}  ~, \hspace{0.4cm} {G}^{(n)} = \frac{1}{2 a^2} \sum_i (\nabla_i \phi_n)^2  ~, %\tag{36}
+\label{eq_KG}
+\end{equation}
 ```
 where $\phi_0 \equiv \phi$ and $\phi_1 \equiv \chi$. 
 
 !!! note
-    The volume average in Eq. ([*35*][eq_sfEOM]) must be considered over length scales sufficiently large compared to the excited wavelengths in the matter fields. Only then we obtain a well-defined notion of a ’homogeneous and isotropic’ expanding background, within the given volume.
+    The volume average in Eqs. \eqref{eq_sfEOM}, \eqref{eq_sfEOM_II} must be considered over length scales sufficiently large compared to the excited wavelengths in the matter fields. Only then we obtain a well-defined notion of a ’homogeneous and isotropic’ expanding background, within the given volume.
 
 In other scenarios, one could have the expansion of the Universe to be fixed by an external, energetically-dominant fluid with (constant) equation of state $w$. In this case, the evolution of the scale factor and the Hubble parameter in program variables is given by the following functions,
 [](){ #eq_ScaleFactorPowerLaw }
 ```math
-\tag{37}
+\begin{equation}
+%\tag{37}
 a(\tilde \eta) = a (\tilde \eta_* ) \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde\eta_*) \right)^p  ,\hspace{0.3cm} \mathcal{H}(\eta) = {\mathcal{H}_*\over \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde \eta_*) \right)}   ,\hspace{0.5cm} p \equiv \frac{2}{3(1 + \omega) - 2 \alpha }  .
+\label{eq_ScaleFactorPowerLaw}
+\end{equation}
 ```
 
-As mentioned before, numerical simulations are carried out in the dimensionless program variables defined in Eq. ([*30*][eq_FieldSpaceTimeNaturalVariables]). Therefore, we need to choose appropriate values for $\{ f_*, \omega_*, \alpha\}$ in this model. We take them as follows,
+As mentioned before, numerical simulations are carried out in the dimensionless program variables defined in Eq. \eqref{eq_FieldSpaceTimeNaturalVariables}. Therefore, we need to choose appropriate values for $\{ f_*, \omega_*, \alpha\}$ in this model. We take them as follows,
 [](){ #eq_lphi4-ProgVar }
 ```math
-\begin{align} \tag{38}
+\begin{align} %\tag{38}
+\label{eq_lphi4-ProgVar}
 f_*=\overline{\phi}_{*}~ ,~ ~ \omega_*=\lambda^{1/2}  \overline{\phi}_*~,  ~~\alpha=1\,,
 \end{align}
 ```
 
-where $\overline{\phi}_{*}$ and $\lambda^{1/2} \overline{\phi}_*$ are the amplitude and oscillation frequency of the inflaton at the end of inflation, see *e.g.* Ref. [@Greene_1997fu]. The constant $\alpha$ was chosen according to Eq. ([*31*][eq_Alpha-PowLaw]), which guarantees that the oscillation frequency remains approximately constant as long as the oscillatory inflaton field $\phi$ dominates the energy budget.
+where $\overline{\phi}_{*}$ and $\lambda^{1/2} \overline{\phi}_*$ are the amplitude and oscillation frequency of the inflaton at the end of inflation, see *e.g.* Ref. [@Greene_1997fu]. The constant $\alpha$ was chosen according to Eq. \eqref{eq_Alpha-PowLaw}, which guarantees that the oscillation frequency remains approximately constant as long as the oscillatory inflaton field $\phi$ dominates the energy budget.
 
 In CosmoLattice, any theory involving scalar fields is implemented by means of the *program potential*, which is a dimensionless quantity defined in terms of the program variables. In our present example, it is written as 
 [](){ #eq_PotNat }
 ```math
-\begin{align}\tag{39}
+\begin{align}%\tag{39}
+\label{eq_PotNat}
 \widetilde V( \tilde\phi, \tilde\chi ) \equiv \frac{1}{f_*^2 \omega_*^2}V(f_*\tilde \phi,f_*\tilde\chi) = \frac{1}{4}\tilde\phi^4 +\frac{1}{2}\frac{g^2}{\lambda}\tilde\phi^2\tilde\chi^2  .
 \end{align}
 ```
@@ -122,14 +139,16 @@ Similarly, we define each of the individual contributions of this quantity as $\
 [](){ #eq_rhoProg }
 ```math
 \begin{align}
-\widetilde{\rho} \equiv \frac{\rho}{f_*^2 \omega_*^2} = \widetilde{K} + \widetilde{G}  + \widetilde V  ~, ~~   \widetilde{p} \equiv \frac{p}{f_*^2 \omega_*^2} = \widetilde{K} - \frac{1}{3} \widetilde{\rm G} - \widetilde V  , \tag{40}
+\label{eq_rhoProg}
+\widetilde{\rho} \equiv \frac{\rho}{f_*^2 \omega_*^2} = \widetilde{K} + \widetilde{G}  + \widetilde V  ~, ~~   \widetilde{p} \equiv \frac{p}{f_*^2 \omega_*^2} = \widetilde{K} - \frac{1}{3} \widetilde{\rm G} - \widetilde V  , %\tag{40}
 \end{align}
 ```
 
-with $\widetilde{V} = \widetilde{V}^{(0)} + \widetilde{V}^{(1)}$ given by Eq. ([*39*][eq_PotNat]), and where we have introduced the following *program kinetic and gradient energies* as $\widetilde{K} \equiv \sum_{n=0}^{N_s-1} \widetilde{K}^{(n)}$ and $\widetilde{G} \equiv \sum_{n=0}^{N_s-1} \widetilde{G}^{(n)}$, with
+with $\widetilde{V} = \widetilde{V}^{(0)} + \widetilde{V}^{(1)}$ given by Eq. \eqref{eq_PotNat}, and where we have introduced the following *program kinetic and gradient energies* as $\widetilde{K} \equiv \sum_{n=0}^{N_s-1} \widetilde{K}^{(n)}$ and $\widetilde{G} \equiv \sum_{n=0}^{N_s-1} \widetilde{G}^{(n)}$, with
 [](){ #eq_KandGprogramUnits }
 ```math
-\begin{align}\tag{41}
+\begin{align}%\tag{41}
+\label{eq_KandGprogramUnits}
 \widetilde{K}^{(n)} = \frac{1}{2 a^{2\alpha}} ({\tilde \phi_n}')^2   , \hspace{0.4cm}
 \widetilde{G}^{(n)} = \frac{1}{2 a^2 }  \sum_{i} (\widetilde\nabla_i \tilde \phi_{n})^2  .
 \end{align}
@@ -138,7 +157,8 @@ with $\widetilde{V} = \widetilde{V}^{(0)} + \widetilde{V}^{(1)}$ given by Eq. ([
 We denote the corresponding volume-averaged energy density components as
 [](){ #eq_EK_EG_EV }
 ```math
-\begin{align}\tag{43}
+\begin{align}%\tag{43}
+\label{eq_EK_EG_EV}
 {\widetilde E}_K \equiv \left\langle \widetilde{K} \right\rangle ,~  {\widetilde E}_G \equiv \left\langle \widetilde{G} \right\rangle ,~  {\widetilde E}_V \equiv \left\langle \widetilde{V} \right\rangle  ,
 \end{align}
 ```
@@ -147,30 +167,35 @@ and their partial contributions as ${\widetilde E}_K^{(n)}$, ${\widetilde E}_G^{
 
 !!! note "Continuum Eq.'s of motion in program variables"
     [](){ #eq_EOMscalarContinuumNat }
+    [](){ #eq_EOMscalarContinuumNat_II }
     [](){ #eq_NewFriedmannEQsII }
     [](){ #eq_NewFriedmannEQsI }
     
     ```math
     
-    \begin{align*}
-    \tilde\phi'' - a^{-2 (1  - \alpha )} \tilde\nabla^2 \tilde\phi + (3 - \alpha)\frac{a'}{a} \tilde\phi'_a  &= -  a^{2 \alpha} \widetilde V_{,\tilde\phi} \tag{41}\\
-    &= -  a^{2 \alpha}\left( \tilde \phi^3 + \frac{g^2}{\lambda}\tilde\phi\tilde\chi^2\right) \\
-    \tilde\chi'' - a^{-2 (1  - \alpha )} \tilde\nabla^2 \tilde\chi + (3 - \alpha)\frac{a'}{a} \tilde\chi'_a  &= -  a^{2 \alpha} \widetilde V_{,\tilde\chi} \\
-    &=- a^{2 \alpha}  \frac{g^2}{\lambda}\tilde\phi^2\tilde\chi
+    \begin{align}
+    \label{eq_EOMscalarContinuumNat}
+    \tilde\phi'' - a^{-2 (1  - \alpha )} \tilde\nabla^2 \tilde\phi + (3 - \alpha)\frac{a'}{a} \tilde\phi'_a  &= -  a^{2 \alpha} \widetilde V_{,\tilde\phi} %\tag{41} 
+    \equiv -  a^{2 \alpha}\left( \tilde \phi^3 + \frac{g^2}{\lambda}\tilde\phi\tilde\chi^2\right) \\
+    \label{eq_EOMscalarContinuumNat_II}
+    \tilde\chi'' - a^{-2 (1  - \alpha )} \tilde\nabla^2 \tilde\chi + (3 - \alpha)\frac{a'}{a} \tilde\chi'_a  &= -  a^{2 \alpha} \widetilde V_{,\tilde\chi} 
+    \equiv - a^{2 \alpha}  \frac{g^2}{\lambda}\tilde\phi^2\tilde\chi
     \\
-    \tag{42}
+    %\tag{42}
+    \label{eq_NewFriedmannEQsII}
     {a''\over a} &=  \frac{a^{2\alpha}}{3} \left( \frac{ f_*}{m_p} \right)^2 \Big[ (\alpha - 2){\widetilde E}_{K}  + \alpha {{\widetilde E}_{G}} + (\alpha + 1 ) {{\widetilde E}_V} \Big]  ,\\
-    \tag{43}
+    %\tag{43}
+    \label{eq_NewFriedmannEQsI}
     a'^{ 2} &= \frac{a^{2\alpha + 2}}{3} \left( \frac{ f_*}{m_p} \right)^2 \Big[ {\widetilde E}_{K}  + {{\widetilde E}_{G}} + {{\widetilde E}_V} \Big]  .
-    \end{align*}
+    \end{align}
     
     ```
 
-We note that the numerical schemes implemented in CosmoLattice use the second-order differential Eq. ([*42*][eq_NewFriedmannEQsII]) to solve for the scale factor, whereas Eq. ([*43*][eq_NewFriedmannEQsI]) is used as a *constraint* equation to monitor the accuracy of the obtained solution.
+We note that the numerical schemes implemented in CosmoLattice use the second-order differential Eq. \eqref{eq_NewFriedmannEQsII} to solve for the scale factor, whereas Eq. \eqref{eq_NewFriedmannEQsI} is used as a *constraint* equation to monitor the accuracy of the obtained solution.
 
 ### **My first run** { #sec_MyFirstRun }
 
-CosmoLattice comes with a set of ready-to-run models, which are available in the folder $\texttt{models/}.~$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. ([*33*][eq_potentialExampleI]). We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
+CosmoLattice comes with a set of ready-to-run models, which are available in the folder $\texttt{models/}.~$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. \eqref{eq_potentialExampleI} [more precisely,  the program potential given in Eq. \eqref{eq_PotNat}]. We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
 
 #### Compilation
 
@@ -248,7 +273,7 @@ will launch $\texttt{lphi4}$ with the parameters specified in $\texttt{models/pa
 ```
 In this case, both fields are initialized with zero velocity, and the lattice size is set to `N=64`.
 
-A table of the most important parameters is shown below. Most of these parameters must be specified in program units, *c.f.* Eq. ([*30*][eq_FieldSpaceTimeNaturalVariables]), so that variables are dimensionless. For example, one must introduce the length side of the box as $\tilde{L} \equiv L \omega_*$, the infrared cutoff the lattice as $\tilde{k}_{\rm IR} \equiv k_{\rm IR}/\omega_*$, etc.
+A table of the most important parameters is shown below. Most of these parameters must be specified in program units, *c.f.* Eq. \eqref{eq_FieldSpaceTimeNaturalVariables}, so that variables are dimensionless. For example, one must introduce the length side of the box as $\tilde{L} \equiv L \omega_*$, the infrared cutoff the lattice as $\tilde{k}_{\rm IR} \equiv k_{\rm IR}/\omega_*$, etc.
 
 **Relevant input parameters**:
 
@@ -293,7 +318,7 @@ $\hspace{1cm}$ $\tilde{\eta}$, $\tilde{E}_K^{(0)}$, $\tilde{E}_G^{(0)}$, ... , $
 
 $\hspace{1.5cm}$- If there is no expansion, it prints the relative degree of energy conservation as follows: $\tilde{\eta}$, $1 - \frac{\langle \tilde{\rho} (\tilde{\eta} ) \rangle}{\langle \tilde{\rho} (\tilde{\eta}_*  ) \rangle}$.
 
-$\hspace{1.5cm}$- In the case of self-consistent expansion, it prints the degree of relative conservation of the Hubble constraint as follows [here LHS and RHS are the left and hand sides of Eq. ([*43*][eq_NewFriedmannEQsI])]: $\tilde{\eta}$, $\frac{\langle\text{LHS} - \text{RHS}\rangle}{\langle \text{LHS} + \text{RHS}\rangle}$, $\langle  \text{LHS} \rangle$, $\langle \text{RHS} \rangle$.
+$\hspace{1.5cm}$- In the case of self-consistent expansion, it prints the degree of relative conservation of the Hubble constraint as follows [here LHS and RHS are the left and hand sides of Eq. \eqref{eq_NewFriedmannEQsI}]: $\tilde{\eta}$, $\frac{\langle\text{LHS} - \text{RHS}\rangle}{\langle \text{LHS} + \text{RHS}\rangle}$, $\langle  \text{LHS} \rangle$, $\langle \text{RHS} \rangle$.
 
 -  $\texttt{average_scalar_[n].txt}$: One file is produced for each individual scalar field, containing the following averages: 
 
@@ -307,20 +332,23 @@ $\hspace{1cm}$ $\tilde{\eta}$, $a$, $a'$, $a' \over a$.
 
 $\hspace{1cm}$ $\tilde{k}$,  $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$, $\widetilde{\Delta}_{\tilde \phi'} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{bin}$ (multiplicity = lattice sites/bin), 
 
-where $\tilde k \equiv k/\omega_*$, the dimensionless power spectra are related to their dimensionful counterparts [see Eq. ([*24*][eq_discretePS])] by $\Delta_{\phi} \equiv \widetilde \Delta_{\tilde\phi}f_*^2$, and $\Delta_{\phi'} \equiv \widetilde\Delta_{\tilde\phi'}f_*^2\omega_*^2$, $\Delta n_{bin}$ is the *multiplicity* (*i.e.* lattice sites/bin), and we have defined a (dimensionless) *lattice occupation number* as
+where $\tilde k \equiv k/\omega_*$, the dimensionless power spectra are related to their dimensionful counterparts [see Eq. ([*24*][eq_discretePS]) in <span style="color:red;">**WHERE ?**</span>] by $\Delta_{\phi} \equiv \widetilde \Delta_{\tilde\phi}f_*^2$, and $\Delta_{\phi'} \equiv \widetilde\Delta_{\tilde\phi'}f_*^2\omega_*^2$, $\Delta n_{bin}$ is the *multiplicity* (*i.e.* lattice sites/bin), and we have defined a (dimensionless) *lattice occupation number* as
 [](){ #eq_OccuppationNum }
 ```math
-\tag{44}
+\begin{equation}
+%\tag{44}
 {\tilde n}_{\tilde k}(\tilde{\bf n}) = \frac{a^2\tilde{L}^3}{2N^6} \frac{f_*^2}{\omega_*^2} \left( \tilde{\omega}_{\tilde k(\tilde{\bf n})} \left\langle\Big| \tilde \phi_{\tilde k(\tilde{\bf n})}\Big|^2\right\rangle_{R(\tilde {\bf n})} + \frac{a^{2(1 - \alpha)}}{\tilde{\omega}_{\tilde k(\tilde{\bf n})}} \left\langle\Big| \tilde{\phi}_{\tilde k(\tilde{\bf n})}' + \frac{a'}{a} \tilde{\phi}_{\tilde k(\tilde{\bf n})}  \Big|^2\right\rangle_{R(\tilde {\bf n})} \right)    ,
+\label{eq_OccuppationNum}
+\end{equation}
 ```
 
 with $\left\langle ... \right\rangle_{R(\tilde {\bf n})}$ denoting angular averaging within the spherical shells of each bin, and $\tilde{\omega}_{\tilde k(\tilde{\bf n})}^2 \simeq {\tilde k^2(\tilde{\bf n})} + a^{2} \left\langle \frac{\partial^2 \tilde{V} }{\partial \tilde{\phi}^2}\right\rangle_{L^3}$, with $\left\langle ... \right\rangle_{L^3}$ a volume average. We note that the occupation number ${\tilde n}_{\tilde k}(\tilde{\bf n})$ is independent of either $N$ or $\delta \tilde x$ at a given $\tilde n$. However, the total number density of particles $n_\phi \equiv \int {d^3k\over(2\pi)^3} n_k = {\tilde n}_\phi\omega_*^3$ with ${\tilde n}_\phi \simeq {1\over {\tilde L}^3}\sum_{\tilde {\bf n}}{\tilde n}_{\tilde k(\tilde{\bf n})}$, may depend of the choice of $N$ and $\delta \tilde x$, as these determine the infrared and ultraviolet extremes of momenta in the reciprocal lattice.
 
--  `average_spectra_times.txt`: List of times at which the above spectra are outputted.
+-  $\texttt{average_spectra_times.txt}$: List of times at which the above spectra are outputted.
 
--  `[energy_term]_scalar.h5`: If indicated in the parameters file, these files contain the entire distribution throughout the lattice of a given energy component (e.g. kinetic, gradient, potential).
+-  $\texttt{[energy_term]_scalar.h5}$: If indicated in the parameters file, these files contain the entire distribution throughout the lattice of a given energy component (e.g. kinetic, gradient, potential).
 
--  `[model_name].infos`: Information about the run, such as parameter values, time of onset and end of the simulation, etc.
+-  $\texttt{[model_name].infos}$: Information about the run, such as parameter values, time of onset and end of the simulation, etc.
 
 !!! note "Important Note"
      Definitions of the output variables just defined may vary in successive updates of CosmoLattice. For instance, whereas the form to calculate the scalar power spectrum $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$ was unique in CosmoLattice `v1.0`, in later versions (starting from CosmoLattice `v1.1`) we enabled the option to choose between different versions of a scalar field power spectrum. Check [**Observables**](Observables.md) for up-to-date definitions, and 
@@ -332,10 +360,10 @@ To define a model, the only file we really need to modify/create is the correspo
 
 #### Definition and declaration of the model { #subsubsec_DefAndDeclModel }
 
-The first thing we need to do is to specify the matter content of our theory. In the above model example we have two scalar fields, with a potential composed by the sum of also two terms: the quartic potential of the inflaton, and the quadratic interaction between the inflaton and the daugther field, *c.f.* Eq. ([*33*][eq_potentialExampleI]). This is indicated in the following extract of code of the file $\texttt{models/lphi4.h}$:
+The first thing we need to do is to specify the matter content of our theory. In the above model example we have two scalar fields, with a potential composed by the sum of also two terms: the quartic potential of the inflaton, and the quadratic interaction between the inflaton and the daugther field, *c.f.* Eq. \eqref{eq_potentialExampleI}. This is indicated in the following extract of code of the file $\texttt{models/lphi4.h}$:
 @emgithub(models/lphi4.h:model_pars)
 
-If we want to include more fields and/or further potential interactions, we simply need to modify the values of `NScalars` and `NPotTerms` of the <code style="color:purple;">ModelPars</code> <!-- `ModelPars`  --> structure accordingly. We can also include other types of fundamental fields by adding extra parameters in this structure, such as gauge fields or complex/doublet scalars, but we wait for Section [My first model of gauge fields](My first model of gauge fields.md) to explain this. Once `NScalars` and `NPotTerms` are fixed, we give a name to our model:
+If we want to include more fields and/or further potential interactions, we simply need to modify the values of `NScalars` and `NPotTerms` of the <code style="color:purple;">ModelPars</code> <!-- `ModelPars`  --> structure accordingly. We can also include other types of fundamental fields by adding extra parameters in this structure, such as gauge fields or complex/doublet scalars, but we wait for Section [Scalar-Gauge Interactions](My first model of gauge fields.md) to explain this. Once `NScalars` and `NPotTerms` are fixed, we give a name to our model:
 @emgithub(models/lphi4.h:model_name)
 
 **The name of the model must match the one of the file (without the .h extension)**. Following this prescription, the name of our example model is $\texttt{lphi4}$. This information is then passed to a macro `MakeModel` to generate a customizable skeleton class:
@@ -363,7 +391,7 @@ Regarding the initial homogeneous components of the fields, we also read them fr
 
 The variables `fldS0` and `piS0` are arrays of doubles (<span style="color:red;">**floats?**</span>) containing the homogeneous values of the scalar fields and their initial velocities. They are variables declared in the skeleton `Model<MODELNAME>`, see Section [**Inside Cosmolattice**](What CosmoLattice does in detail.md) for more information. We are using the same syntax as above to retrieve parameters from the input parameter file. The only novelty is the fact that now we read parameters that take multiple values. The type of the parameter is passed as the first arguemt, <code style="color:red;">FloatType</code> in this case, whereas the 'size' of the parameter is passed as the second argument, `2` in our case, as there are two fields. The parameter `"initial_amplitudes"` is mandatory, while `"initial_momenta"` is optional, as by default it takes vanishing values if it is not specified. We note that the **field initial amplitudes and initial velocities must be introduced in the parameter file in units of GeV and GeV$^2$, respectively**. In the given example, we will consider from now on the field ''0" to be the inflaton $\phi$, and the field ''1" to be the daughter or preheat field $\chi$.
 
-Next we set up the program variables' re-scalings, as described in Eqs. ([*29*][eq_FieldSpaceTimeNaturalVariables]),([*30*][eq_Alpha-PowLaw]),([*37*][eq_lphi4-ProgVar]):
+Next we set up the program variables' re-scalings, as described in Eqs. \eqref{eq_FieldSpaceTimeNaturalVariables},\eqref{eq_Alpha-PowLaw},\eqref{eq_lphi4-ProgVar}:
 @emgithub(models/lphi4.h:rescaling)
 
 The code is self-explanatory. The parameters `fStar`, `omegaStar` and `alpha` are declared in the skeleton class.
@@ -378,7 +406,7 @@ Here, we use the default function which sets the masses from the second derivati
 The last and arguably the most important piece of information missing to be specified is the potential under consideration and its associated field derivatives. Let us start by defining the potential. We split it in `NPotTerms`, as specified on the line `static constexpr size_t NPotTerms = 2;` of the model file, $i.e.$ 2 in our case.
 @emgithub(models/lphi4.h:potential_terms)
 
-Here we wrote in dimensionless units, the potential defined in Eq. ([*38*][eq_PotNat]), in this example split in two terms. For each term, we need to define a function called `auto potentialTerms(Tag<r>)`, with `r` an integer between $0$ and `NPotTerms-1`. In our case, we define on the line `return 0.25 * pow<4>(fldS(0_c));` as the first potential term (numbered as the 'zeroth' term) the inflaton potential $\frac{1}{4}{\tilde \phi}^4$, whereas and on the line `return 0.5 * q * pow<2>(...` we define the second potential term, describing the interaction between the inflaton and the daughter field, $\frac{1}{2}q\tilde\phi^2\tilde\chi^2$. The object `fldS` contains the scalar fields, so that individual fields are accessed by calling `fldS(s)`, with `s` the number of the scalar field species, running from $0$ to `NScalars - 1`. Fields constitute an object of their own in CosmoLattice, so they can be manipulated with many functions and (differential) operators, see Appendix [**List of Implemented Functions**](List of Implemented Functions.md) for an exhaustive list. Here we use two different such functions, namely multiplication (which can be used between two fields to represent their site-by-site multiplication, or between a field and a number) and an integer power function `pow<n>`, which computes locally the $n^{th}$ integer-power of a field.
+Here we wrote in dimensionless units, the potential defined in Eq. \eqref{eq_PotNat}, in this example split in two terms. For each term, we need to define a function called `auto potentialTerms(Tag<r>)`, with `r` an integer between $0$ and `NPotTerms-1`. In our case, we define on the line `return 0.25 * pow<4>(fldS(0_c));` as the first potential term (numbered as the 'zeroth' term) the inflaton potential $\frac{1}{4}{\tilde \phi}^4$, whereas and on the line `return 0.5 * q * pow<2>(...` we define the second potential term, describing the interaction between the inflaton and the daughter field, $\frac{1}{2}q\tilde\phi^2\tilde\chi^2$. The object `fldS` contains the scalar fields, so that individual fields are accessed by calling `fldS(s)`, with `s` the number of the scalar field species, running from $0$ to `NScalars - 1`. Fields constitute an object of their own in CosmoLattice, so they can be manipulated with many functions and (differential) operators, see Appendix [**List of Implemented Functions**](List of Implemented Functions.md) for an exhaustive list. Here we use two different such functions, namely multiplication (which can be used between two fields to represent their site-by-site multiplication, or between a field and a number) and an integer power function `pow<n>`, which computes locally the $n^{th}$ integer-power of a field.
 
 <<<<<<< HEAD
 The keyword `auto` allows the compiler to automatically deduce the return type. In our case, it is essential as the expression we return are symbolic expression encoded inside the type, through the mechanism known as *''expression templates"*. We defer the interested reader to Appendix [Under the Hood: Expression Templates ](Under the Hood: Expression Templates .md) for more information. For related reasons, the syntax `1_c` with the unusual `_c`, is needed as it allows to simply defined compile-time integer.
@@ -407,7 +435,8 @@ In most applications, on top of the corresponding initial homogeneous modes set 
 Whenever considering initial fluctuations $\delta\phi$, these can be characterized in the continuum by their variance
 [](){ #eq_SpectrumContinuum }
 ```math
-\begin{align}\tag{45}
+\begin{align}%\tag{45}
+\label{eq_SpectrumContinuum}
 \left\langle \delta \phi^2 \right\rangle = \int d\log k~ \Delta_{\delta \phi}(k) ,\hspace{0.6cm} \Delta_{\delta \phi}(k) \equiv {k^3\over 2\pi^2} \mathcal{P}_{\delta \phi}(k) ,\hspace{0.6cm} \left\langle {\delta \phi}_{\bf k}{\delta \phi}_{{\bf k}'} \right\rangle \equiv (2\pi)^3\mathcal{P}_{\delta \phi} (k)\delta(\bf{k}-\bf{k}')  ,
 \end{align}
 ```
@@ -415,7 +444,8 @@ where $\langle \cdots \rangle$ represents an ensemble average, and $\Delta_{\del
 [](){ #eq_QuantumFlucts }
 ```math
 \begin{align}
-\Delta_{\delta \phi}(k) \equiv {k^3\over 2\pi^2} \mathcal{P}_{\delta \phi}(k) ,\hspace{0.6cm}  \mathcal{P}_{\delta \phi} (k) \equiv {1\over 2a^2\omega_{k,\phi}} ,\hspace{0.6cm}  \omega_{k,\phi} \equiv \sqrt{k^2 + a^2m_{\phi}^2}  ,\hspace{0.6cm}  m_{\phi}^2 \equiv \frac{\partial^2 V}{\partial \phi^2}\Big|_{\phi = \bar{\phi}_*}  . \tag{46}
+\label{eq_QuantumFlucts}
+\Delta_{\delta \phi}(k) \equiv {k^3\over 2\pi^2} \mathcal{P}_{\delta \phi}(k) ,\hspace{0.6cm}  \mathcal{P}_{\delta \phi} (k) \equiv {1\over 2a^2\omega_{k,\phi}} ,\hspace{0.6cm}  \omega_{k,\phi} \equiv \sqrt{k^2 + a^2m_{\phi}^2}  ,\hspace{0.6cm}  m_{\phi}^2 \equiv \frac{\partial^2 V}{\partial \phi^2}\Big|_{\phi = \bar{\phi}_*}  . %\tag{46}
 \end{align}
 ```
 
@@ -426,15 +456,19 @@ In CosmoLattice, this is represented by imposing a sum of left- and right-moving
 [](){ #eq_fpr_influct2 }
 ```math
 \begin{align}
-\delta \tilde \phi ({  \bf \tilde{n}}) &= \frac{1}{\sqrt{2}} (|\delta \tilde \phi_1 ({  \bf \tilde{n}})|  e^{i \theta_1 ({   \bf \tilde{n}}) } + |\delta \tilde \phi_2 ({   \bf \tilde{n}})| e^{i \theta_2 ({   \bf \tilde{n}}) }   ) \tag{47}  , \\
-\delta \tilde {\phi}' ({   \bf \tilde{n}}) &= {1\over a^{1-\alpha}}\left[\frac{i \tilde{\omega}_k}{\sqrt{2}}  \left(|\delta \tilde \phi_1 ({   \bf \tilde{n}})| e^{i \theta_1 ({   \bf \tilde{n}}) } - |\delta \tilde \phi_2  ({   \bf \tilde{n}})| e^{i \theta_2 ({   \bf \tilde{n}}) }   \right)\right]  - \tilde{\mathcal{H}}  \delta \tilde \phi ({   \bf \tilde{n}}) , \tag{48}
+\label{eq_fpr_influct}
+\delta \tilde \phi ({  \bf \tilde{n}}) &= \frac{1}{\sqrt{2}} (|\delta \tilde \phi_1 ({  \bf \tilde{n}})|  e^{i \theta_1 ({   \bf \tilde{n}}) } + |\delta \tilde \phi_2 ({   \bf \tilde{n}})| e^{i \theta_2 ({   \bf \tilde{n}}) }   ) %\tag{47}  
+, \\
+\label{eq_fpr_influct2}
+\delta \tilde {\phi}' ({   \bf \tilde{n}}) &= {1\over a^{1-\alpha}}\left[\frac{i \tilde{\omega}_k}{\sqrt{2}}  \left(|\delta \tilde \phi_1 ({   \bf \tilde{n}})| e^{i \theta_1 ({   \bf \tilde{n}}) } - |\delta \tilde \phi_2  ({   \bf \tilde{n}})| e^{i \theta_2 ({   \bf \tilde{n}}) }   \right)\right]  - \tilde{\mathcal{H}}  \delta \tilde \phi ({   \bf \tilde{n}}) , %\tag{48}
 \end{align}
 ```
 
 where $\tilde{\omega}_k \equiv \sqrt{\tilde{k}^2(\tilde{\bf n}) + a^2\tilde{m}_{\phi}^2}$, and $\tilde{\mathcal{H}} \equiv a^\alpha H / \omega_*$. In these expressions, $\theta_1 ({\bf \tilde{n}})$ and $\theta_2 ({\bf \tilde{n}})$ are two random independent phases drawn from a uniform distribution in the range $[0, 2\pi)$, and $|\delta \tilde{\phi}_1 ({\bf \tilde{n}})|$ and $|\delta \tilde{\phi}_2 ({\bf \tilde{n}})|$ are random amplitudes, drawn from a *Rayleigh* distribution with expected square amplitude given by
 [](){ #eq_QuantumFlucts2 }
 ```math
-\begin{align} \tag{49}
+\begin{align} %\tag{49}
+\label{eq_QuantumFlucts2}
 \left\langle | \delta \tilde \phi (\tilde{\bf n})|^2\right\rangle \equiv \left({\omega_*\over f_*}\right)^2\left({N\over \delta \tilde{x}}\right)^3{1\over 2a^2\sqrt{\tilde{k}^2(\tilde{\bf n}) + a^2\tilde{m}_{\phi}^2}}  , \hspace{0.6cm} \tilde{m}_{\phi}^2 \equiv \frac{\partial^2 \tilde{V}}{\partial \tilde{\phi}^2 }\Big|_{\tilde{\phi} = \tilde{\bar{\phi}}_*}\,.
 \end{align}
 ```
@@ -445,7 +479,7 @@ Drawing both phases and modulus amplitudes as above is mathematically equivalent
 
 Let us now explain how our evolution algorithms solve the field EOM and the evolution of the scale factor. For the purpose of this discussion, we will assume self-consistent expansion of the universe, as the cases of no expansion and fixed background are just a particularization of this. We also consider the case of one single scalar field, as the generalization to multiple fields is immediate.
 
-The equations of motion are solved by using a Hamiltonian evolution scheme, in which we conveniently define the conjugate momenta of $\phi$ and $a$ as $\tilde\pi_\phi \equiv  a^{3-\alpha}\tilde\phi'$ and $b \equiv a'$ respectively. Note that at a given time, $\tilde\pi_\phi$ varies from point to point on the lattice, while $a$ is just a number. The equations of motion ([*41*][eq_EOMscalarContinuumNat]) and ([*42*][eq_NewFriedmannEQsII]) can then be written as the following set of four first-order differential equations,
+The equations of motion are solved by using a Hamiltonian evolution scheme, in which we conveniently define the conjugate momenta of $\phi$ and $a$ as $\tilde\pi_\phi \equiv  a^{3-\alpha}\tilde\phi'$ and $b \equiv a'$ respectively. Note that at a given time, $\tilde\pi_\phi$ varies from point to point on the lattice, while $a$ is just a number. The equations of motion \eqref{eq_EOMscalarContinuumNat}, \eqref{eq_EOMscalarContinuumNat_II}, \eqref{eq_NewFriedmannEQsII}, \eqref{eq_NewFriedmannEQsI} can then be written as the following set of four first-order differential equations,
 [](){ #eq_HamiltonEOMsinglets }
 ```math
 \begin{align}
@@ -454,13 +488,17 @@ a' &    =    b  ,  \\
 (\tilde\pi_\phi)' &  =   \mathcal{K}_{\phi}[a,\tilde\phi]       \equiv     - a^{3 + \alpha} \widetilde V_{,\tilde\phi}  + a^{1 + \alpha} {\widetilde \nabla}^{2} \tilde\phi  , \\
 b' &  =    \mathcal{K}_a\hspace{-1mm}\left[a,{\widetilde E}_K^\phi,{\widetilde E}_G^\phi,{\widetilde E}_V\right]
    \equiv    \frac{a^{2\alpha+1}}{3}{f_*^2\over m_p^2}\left[ (\alpha-2) {\widetilde E}_K^\phi + \alpha {\widetilde E}_G^\phi + (\alpha+1) {\widetilde E}_V  \right]  ,
-\end{align}\tag{50}
+\label{eq_HamiltonEOMsinglets}
+\end{align}%\tag{50}
 ```
 
 where the kinetic, gradient, and potential energies of the field in program variables, are given by
 [](){ #eq_Energysinglets }
 ```math
-{\widetilde E}_K \equiv \frac{1}{2 a^{6} }\sum_{i}\left\langle \tilde\pi_i^2 \right\rangle ,  {\widetilde E}_G \equiv \frac{1}{2 a^2 }\sum_{i,k} \left\langle ({\widetilde\nabla}_k \tilde \phi_{i})^2 \right\rangle ,  {\widetilde E}_V \equiv \left\langle \widetilde{V}(\lbrace \tilde\phi_j\rbrace) \right\rangle \tag{51}
+\begin{equation}
+{\widetilde E}_K \equiv \frac{1}{2 a^{6} }\sum_{i}\left\langle \tilde\pi_i^2 \right\rangle ,  {\widetilde E}_G \equiv \frac{1}{2 a^2 }\sum_{i,k} \left\langle ({\widetilde\nabla}_k \tilde \phi_{i})^2 \right\rangle ,  {\widetilde E}_V \equiv \left\langle \widetilde{V}(\lbrace \tilde\phi_j\rbrace) \right\rangle %\tag{51}
+\label{eq_Energysinglets}
+\end{equation}
 ```
 
 Above $\mathcal{K}_{\phi}$ and $\mathcal{K}_a$ are the **kernels** of $\phi$ and $a$ respectively. Note that the definition of $\tilde\pi_\phi$ has been chosen so that the kernels are not functions on the time-derivatives of their respective variables.
@@ -468,3 +506,4 @@ Above $\mathcal{K}_{\phi}$ and $\mathcal{K}_a$ are the **kernels** of $\phi$ and
 The current version of CosmoLattice ($\texttt{v2.0}$) has implemented  different numerical schemes to solve these equations: *staggered leapfrog* (LF), *velocity verlet* (VV), *position verlet* (PV) and *Runge-Kutta* (RK). One difference between these schemes is the moments at which the fields and momenta are defined during the evolution of the system. In LF, fields and momenta are specified at different times, so they must be synchronized each time an output is printed. On the contrary, in VV, PV and RK, fields and momenta are obtained at the same time, so no such synchronization is needed. A detailed account on the properties and ins and outs of how these algorithms work, can be found in Section 3 of The-Art-I [@Figueroa_2020rrl]. A derivation of the adaptation of these algorithms to the particular problem of the dynamics of (canonically normalized) interacting (singlet) scalar fields, can be found in Section 4 of of The-Art-I [@Figueroa_2020rrl]. The reader can also check the details of our evolution algorithms in [**Evolvers**][subsec_Evolvers]
 
 The use of standard $\mathcal{O}(\delta \tilde{\eta}^2)$ accuracy algorithms, you need to choose in the input file `evolver=LF`, `evolver=VV2`, or `evolver=PV2`, respectively. Although both have an accuracy of order $\mathcal{O}(\delta \tilde{\eta}^2)$, `LF` only needs two steps by iteration, while `VV2` and `PV2` need three. Therefore, *verlet* algorithms are slower than *leapfrog*, typically by a factor $\sim$ 30$\%$-50$\%$ for `VV2` $\sim$ 20$\%$-40$\%$  for `PV2`, in our test runs (<span style="color:red;">**NICO confirms?**</span>). The VV and PV algorithms have the advantage, however, that they can be promoted recursively into higher order integrators with accuracies $\mathcal{O}(\delta \tilde{\eta}^4)$, $\mathcal{O}(\delta \tilde{\eta}^6)$, $\mathcal{O}(\delta \tilde{\eta}^8)$, and $\mathcal{O}(\delta \tilde{\eta}^{10})$. These improved algorithms, known as *Yoshida* integrators, are also implemented in CosmoLattice, and to use them you simply need to specify in the parameter file, `evolver=VV4`, `VV6`, `VV8`, `VV10`, or `evolver=PV4`, `PV6`, `PV8`, `PV10`, respectively. Such improved algorithms conserve energy much better than `LP`, `VV2` or `PV2`, but they are naturally slower, as they require more steps per iteration (the more the higher the accuracy of the integrator). For a discussion on the construction of all these integrators and dedicated versions of them to the dynamics of (canonically normalized) interacting (singlet) scalar field dynamics, we refer again the reader to Sections 3 and 4 of The-Art-I [@Figueroa_2020rrl], and to the Section [**Evolvers**][subsec_Evolvers].
+
