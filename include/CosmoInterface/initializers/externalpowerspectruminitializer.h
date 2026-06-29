@@ -91,9 +91,11 @@ namespace TempLat
 
       auto invmult = MomentumMultiplicity<T, NDim>(f.getToolBox());
 
+      // @label:externalps_typeI_norm
       return Hcut * (model.omegaStar / model.fStar) * (T(1) / pow(model.aI, T(1.5))) *
              pow(lSide / pow<2>(f.getDx()), T(1.5)) *
              safeSqrt(T(4) * Constants::pi<T> * pow(ntilde.norm(), T(2)) * invmult * PSinterp / T(2));
+      // @endlabel
     }
 
     template <class Model, size_t NDim>
@@ -104,8 +106,10 @@ namespace TempLat
       auto k = ntilde.norm() * f.getKIR();
       auto Hcut = heaviside(kCutOff - k);
 
+      // @label:externalps_typeII_norm
       return Hcut * (model.omegaStar / model.fStar) * (T(1) / pow(model.aI, T(1.5))) *
              pow(lSide / pow<2>(f.getDx()), T(1.5)) * safeSqrt(PSinterp) / sqrt(T(2));
+      // @endlabel
     }
 
     template <class Model, size_t NDim>
@@ -120,8 +124,10 @@ namespace TempLat
     auto getInputFluctuationsTypeII(const MomentumInterpolator<T, NDim> &PSinterp, Model &model, Field<T, NDim> f,
                                     const std::string &mySeed, T kCutOff) const
     {
+      // @label:externalps_random_gaussian_field
       auto norm = getInputFluctuationsNormTypeII<Model, NDim>(PSinterp, model, f, kCutOff);
       return norm * RandomGaussianField<T, NDim>(baseSeed + mySeed + f.toString(), f.getToolBox());
+      // @endlabel
     }
 
     template <class Model, size_t NDim>
@@ -131,8 +137,10 @@ namespace TempLat
       std::vector<T> kIN, PSfld, PSmom;
       readSpectrumFile(model, str, kIN, PSfld, PSmom);
 
+      // @label:externalps_interpolators
       MomentumInterpolator<T, NDim> PSinterpFld(kIN, PSfld, f.getToolBox(), f.getKIR());
       MomentumInterpolator<T, NDim> PSinterpMom(kIN, PSmom, f.getToolBox(), f.getKIR());
+      // @endlabel
 
       if (PSType == 1) {
         auto fLeft = getInputFluctuationsTypeI<Model, NDim>(PSinterpFld, model, f, "Random left", kCutOff);
@@ -147,17 +155,21 @@ namespace TempLat
         p.inFourierSpace() = pow(model.aI, model.alpha) * (pLeft + pRight) / sqrt(T(2));
         p.inFourierSpace().setZeroMode(0);
       } else {
+        // @label:externalps_sample_field_modes
         auto fLeft = getInputFluctuationsTypeII<Model, NDim>(PSinterpFld, model, f, "Random left", kCutOff);
         auto fRight = getInputFluctuationsTypeII<Model, NDim>(PSinterpFld, model, f, "Random right", kCutOff);
 
         f.inFourierSpace() = (fLeft + fRight) / sqrt(T(2));
         f.inFourierSpace().setZeroMode(0);
+        // @endlabel
 
+        // @label:externalps_sample_momentum_modes
         auto pLeft = getInputFluctuationsTypeII<Model, NDim>(PSinterpMom, model, p, "Random left", kCutOff);
         auto pRight = getInputFluctuationsTypeII<Model, NDim>(PSinterpMom, model, p, "Random right", kCutOff);
 
         p.inFourierSpace() = pow(model.aI, model.alpha) * (pLeft + pRight) / sqrt(T(2));
         p.inFourierSpace().setZeroMode(0);
+        // @endlabel
       }
     }
 

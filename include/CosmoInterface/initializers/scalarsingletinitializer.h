@@ -59,8 +59,10 @@ namespace TempLat
       // (dimensionful variables), so we transform them to program variables
       // by dividing them by f_* and f_* omega_* respectively.
 
+      // @label:default_scalar_homogeneous_modes
       model.fldS += model.fldS0 / model.fStar;                  // from the default ones.
       model.piS += model.piS0 / model.fStar / model.omegaStar ;
+      // @endlabel
 
       }
 
@@ -75,11 +77,15 @@ namespace TempLat
         if (!(useAxionU1HomogeneousDefault && isAxionU1CoupledScalar<Model>(i))) {
           auto &s = model.extPS[i];
           if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
+            // @label:default_scalar_dispatch
             fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI,
                                              rPar.kCutoff);
+            // @endlabel
           } else {
+            // @label:externalps_scalar_dispatch
             extps.conjugateGaussianInputFluctuations(model, model.fldS(i), model.piS(i), s, rPar.kCutoff,
                                                      rPar.powerSpectrumType);
+            // @endlabel
           }
         }
       });
