@@ -1,13 +1,13 @@
 <!-- <div style="text-align: justify;"> -->
 
-Here we explain how CosmoLattice implements the dynamics and measurement of gravitational waves (GWs) on a lattice. We first review the continuum description of tensor perturbations and their transverse-traceless (TT) projection. We then summarize the different sources that can contribute to the effective anisotropic stress tensor in the field theories supported by CosmoLattice. Finally, we describe the lattice implementation: the auxiliary tensor fields evolved by the code, the lattice TT projection, and the lattice definition of the GW energy density spectrum.
+Here we explain how CosmoLattice implements the dynamics (creation, evolution and measurement) of gravitational waves (GWs) on a lattice. We first review the continuum description of tensor perturbations and of a transverse-traceless (TT) projection. Following, we summarize the different fields that can contribute to the effective anisotropic stress tensor that sources GWs. We then describe the dynamics of GWs in CosmoLattice, which follows the proposal of (<span style="color:red;">**Ref. 2007 w/ Sastre paper**</span>) of evolving an auxiliary tensor field that is only TT-projected at spectral measurements, not at every time step. We finally discuss the lattice definition of the GW energy density spectrum in terms of this auxiliary tensor. 
 
 !!! note
-    This section concerns the GW module itself. The expression for the effective anisotropic stress tensor below assumes canonical scalar and gauge sectors. Models with non-canonical interactions, such as non-minimal coupling to gravity or non-canonical kinetic terms, require the corresponding source term to be adapted.
+    This section concerns the GW module itself. The expression for the effective anisotropic stress tensor below assumes canonically normalized scalar and gauge sectors. Models with non-canonical interactions, such as non-minimally coupled to gravity scalars or non-canonical kinetic scalar theories, would require to adapt the GW source terms to their non-minimal nature. While we plan to make these additions in a near future, CosmoLattice 2.0 can only run GW dynamics for canonicaly-normalized field models. 
 
 ### **Gravitational waves in the continuum** { #subsec_GWcont }
 
-Gravitational waves are tensor perturbations $h_{ij}$ on top of a FLRW background. In $\alpha$-time, the perturbed line element is
+Gravitational waves are tensor perturbations, $i.e.$ transverse-traceless (TT) degrees of freedom of metric perturbations over an isotropic background spacetime. Considering the FLRW solution as the background metric, the perturbed line element (in $\alpha$-time) is
 [](){ #eq_GWmetric }
 ```math
 \begin{align}
@@ -15,11 +15,14 @@ Gravitational waves are tensor perturbations $h_{ij}$ on top of a FLRW backgroun
 ds^2
 =
 -a^{2\alpha}(\eta)d\eta^2
-+a^2(\eta)\left(\delta_{ij}+h_{ij}\right)dx^idx^j,
-\hspace{0.6cm}
-\partial_i h_{ij}=0,
-\hspace{0.3cm}
-h_{ii}=0 .
++a^2(\eta)\left(\delta_{ij}+h_{ij}\right)dx^idx^j\,,
+\end{align}
+```
+where
+```math
+\begin{align}
+\partial_i h_{ij}=0\,~~~\&~~~ h_{ii}=0 \,.
+\label{eq_TT}
 \end{align}
 ```
 
@@ -78,7 +81,7 @@ P_{ij}(\hat{\bf k})
 ```
 This guarantees $k_i\Pi_{ij}^{\rm TT}=0$ and $\Pi_{ii}^{\rm TT}=0$.
 
-Solving Eq.$~$\eqref{eq_GWEOMcontinuum} directly would require a TT projection of the source at every time step. Instead, CosmoLattice evolves auxiliary tensor fields whose sources are local in configuration space. The first option is a symmetric tensor $u_{ij}$ with six independent components,
+Solving Eq.$~$\eqref{eq_GWEOMcontinuum} directly would require a TT projection of the source at every time step. Instead, CosmoLattice evolves auxiliary tensor fields whose sources are local in configuration space, following the idea introduced in Ref. (<span style="color:red;">**2007 w/ Sastre paper**</span>). One option is to choose a symmetric tensor $u_{ij}$ with six independent components,
 [](){ #eq_GWuToh }
 ```math
 \begin{align}
@@ -100,7 +103,7 @@ u_{ij}''
 {2\over m_p^2a^{2(1-\alpha)}}\Pi_{ij}^{\rm eff}.
 \end{align}
 ```
-The second option uses only five independent components by evolving a symmetric traceless tensor $v_{ij}$,
+A second option is to use only five independent components by evolving a symmetric traceless tensor $v_{ij}$,
 [](){ #eq_GWvTraceless }
 ```math
 \begin{align}
@@ -134,7 +137,7 @@ h_{ij}({\bf k},\eta)
 \Lambda_{ij,lm}(\hat{\bf k})v_{lm}({\bf k},\eta).
 \end{align}
 ```
-Using $v_{ij}$ saves one sixth of the memory required by the $u_{ij}$ representation, at the price of computing the traceless source at every lattice site.
+Using $v_{ij}$ saves one sixth of the memory required by the $u_{ij}$ representation, at the price of computing the traceless part of source at every lattice site. The original idea from Ref.~(<span style="color:red;">**2007 w/ Sastre paper**</span>), based on the $u_{ij}$ 6-component representation, was implemented by default in CosmoLattice v1.1-v1.3. The $v_{ij}$ 5-component representation, proposed more recently in Ref.~(<span style="color:red;">**Art-II**</span>), is however the default representation in CosmoLattice v2.0 and above, (<span style="color:red;">**where one can switch in any case between either representation ?.**</span>)  
 
 The energy density of a GW background is
 [](){ #eq_GWrhoContinuum }
@@ -168,7 +171,7 @@ This gives the continuum spectral density
 h'_{ij}(\hat{\bf k},k,\eta)h_{ij}^{\prime *}(\hat{\bf k},k,\eta).
 \end{align}
 ```
-For stochastic sources, one can define the power spectrum of $h'_{ij}$ as
+For stochastic sources, <span style="color:red;">**WRITE Eq. (2.99) from Art-II ?**</span>  one can define the power spectrum of $h'_{ij}$ as
 [](){ #eq_GWhprimePS }
 ```math
 \begin{align}
@@ -195,6 +198,8 @@ The fractional GW energy density spectrum is then
 \end{align}
 ```
 
+(<span style="color:red;">**LIST below stop at Abelian-Higgs theories and don't highlight the TBA-cases, instead add a box**</span>)
+
 ### **GWs from singlet scalars** { #subsec_SingletGW }
 
 For canonically normalized real singlet scalars $\{\phi_b\}$, the effective anisotropic stress contribution is
@@ -207,13 +212,13 @@ For canonically normalized real singlet scalars $\{\phi_b\}$, the effective anis
 \sum_b \partial_i\phi_b\,\partial_j\phi_b .
 \end{align}
 ```
-All pressure terms and terms proportional to $\delta_{ij}$ have been omitted because they vanish after TT projection.
+Pressure and other terms proportional to $\delta_{ij}$, have been omitted because they vanish after TT projection.
 
 In the code, this contribution is implemented with forward lattice derivatives of each real singlet scalar:
 
 @emgithub(include/CosmoInterface/definitions/PITensor.h:pitensor_singlet_source)
 
-### **GWs from complex scalars** { #subsec_ComplexGW }
+### **GWs from U(1)-charged complex scalars** { #subsec_ComplexGW }
 
 For $U(1)$-charged complex scalars $\{\varphi_b\}$, the effective source is
 [](){ #eq_GWsourceComplex }
@@ -227,16 +232,16 @@ For $U(1)$-charged complex scalars $\{\varphi_b\}$, the effective source is
 \left[
 \left(D_i^A\varphi_b\right)^*
 \left(D_j^A\varphi_b\right)
-\right].
+\right],
 \end{align}
 ```
-Here $D_i^A$ is the $U(1)$ covariant derivative.
+with $D_i^A$ the $U(1)$ covariant derivative, which contains the corresponding Abelian gauge field(s).
 
 The corresponding source term is computed with the forward $U(1)$ covariant lattice derivative:
 
 @emgithub(include/CosmoInterface/definitions/PITensor.h:pitensor_complex_source)
 
-### **GWs from doublet scalars** { #subsec_DoubletGW }
+### **GWs from SU(2)-charged doublet scalars** { #subsec_DoubletGW }
 
 For charged doublet scalars $\{\Phi_b\}$, the effective source is
 [](){ #eq_GWsourceDoublet }
@@ -253,7 +258,7 @@ For charged doublet scalars $\{\Phi_b\}$, the effective source is
 \right].
 \end{align}
 ```
-The covariant derivative $D_i$ contains the gauge fields under which the doublet is charged.
+The covariant derivative $D_i$ contains the non-Abelian gauge fields under which the doublet is charged.
 
 This is the continuum doublet contribution to the GW source. In the current implementation of `PITensor.h`, the explicit source terms exposed in this file are the singlet scalar, complex scalar, and Abelian gauge contributions shown in the surrounding subsections.
 
@@ -288,7 +293,8 @@ The components of the Abelian magnetic field are obtained from the spatial field
 
 ### **How to activate GWs** { #subsec_ActivateGW }
 
-The GW module is activated from the input parameter file. The relevant parameters can be added to any model input file; for example, the scalar singlet file contains the following GW block:
+The GW module is activated from the input parameter file. The relevant parameters can be added to any model input file; for example, the scalar singlet file contains the following GW block ((<span style="color:red;">**FILE ?**</span>)
+):
 
 @emgithub(models/parameter-files/lphi4.in:GW_settings)
 
@@ -296,9 +302,9 @@ To evolve gravitational waves in a simulation, set `withGWs = true`. This can be
 ```bash
 ./lphi4 input=../models/parameter-files/lphi4.in withGWs=true GWprojectorType=2 doLFforGWs=true
 ```
-When this flag is enabled, CosmoLattice allocates the auxiliary GW tensor fields and their conjugate momenta, evolves them together with the matter sector, and measures the GW spectra from the projected tensor perturbations.
+When the flag `withGWs` is enabled, CosmoLattice will create the auxiliary tensor fields (amplitudes and conjugate momenta), and these will be evolved simulataneously along the matter sectors. Such evolution is **passive**, in the sense that only the sourcing of GWs by the matter sectors is considered, but the backreaction of the GWs onto the matter sectors is not taken into account (as it is expected to be negligible in the majority of cases). When GWs are activated, CosmoLattice will measure the spectrum of the resulting GW background (at the same frequency as the matter sectors' spectra), using a TT-projection of the auxiliary tensor perturbations. 
 
-The parameter `GWprojectorType` selects which lattice TT projector is used when reconstructing $h_{ij}$ from the auxiliary fields in Fourier space:
+On the lattice one can build different TT-projectors, see Ref.~<span style="color:red;">**2011 w/Rajantie**</span> for an explanation on this. The parameter `GWprojectorType` selects which lattice TT projector is used when reconstructing $h_{ij}$ from the auxiliary fields in Fourier space. The options in CosmoLattice are:
 
 ```text
 GWprojectorType = 1  # real projector, built from k^0_L
@@ -306,7 +312,7 @@ GWprojectorType = 2  # backward projector, built from k^-_L; default choice
 GWprojectorType = 3  # forward projector, built from k^+_L
 ```
 
-The corresponding lattice momenta are defined explicitly in Eqs.$~$\eqref{eq_GWLatticeMomenta}-\eqref{eq_GWComplexProjector} below. If `GWprojectorType` is not specified, CosmoLattice uses the default value `2`. The GW module is implemented for three spatial dimensions, so simulations with a different number of spatial dimensions must keep `withGWs = false`.
+The corresponding lattice momenta are defined explicitly in Eqs.$~$\eqref{eq_GWLatticeMomenta}-\eqref{eq_GWComplexProjector} below. If `GWprojectorType` is not specified, CosmoLattice uses the default the value `2`. **The GW module is implemented for three spatial dimensions, so simulations with a different number of spatial dimensions must keep `withGWs = false`, as the notion of GWs, and their mere existence, must be revised in those cases**.
 
 ### **Evolvers used for GWs** { #subsec_GWEvolvers }
 
@@ -314,15 +320,16 @@ The GW sector has its own evolver choice, controlled by `doLFforGWs`, which by d
 
 @emgithub(include/CosmoInterface/evolvers/evolver.h:gws_evolver_dispatch)
 
-Before measurements, GWs are synchronized when they have been advanced by leapfrog:
+Before measurements, GWs are synchronized in case they are been evolved with leapfrog:
 
 @emgithub(include/CosmoInterface/evolvers/evolver.h:gws_evolver_sync)
 
-There is one important restriction for models containing gauge fields. Since the GW source depends on both magnetic fields and electric fields, and the latter are conjugate momenta, the code rejects evolver combinations that do not synchronize fields and momenta consistently. In practice, for scalar-only models the default `doLFforGWs = true` is the standard choice. For models with $U(1)$ gauge fields and GWs, do not use `evolver = LF` for the matter sector; use a synchronized matter evolver such as `VVn`, `PVn`, or an RK family. If the matter sector uses a position-Verlet evolver in a $U(1)$ model, keep the GW sector on leapfrog.
+There is an important restriction for models containing gauge fields. Since the GW source depends on <!-- both magnetic fields and --> electric fields, and <!-- the latter --> these are conjugate momenta, the code rejects evolver combinations that do not synchronize fields and momenta consistently. In practice, for scalar-only models the default `doLFforGWs = true` is the standard choice, since there is no problem in this case. For models with $U(1)$ gauge fields and GWs, however, one cannot use `evolver = LF` for the matter sector; We need to use, instead, a synchronized matter evolver such as `VVn`, `PVn`, or the `RK` family. If the matter sector uses a position-Verlet evolver in a $U(1)$ model, one can still keep the evolution of the GW sector on leapfrog. (<span style="color:red;">**No queda clara la lógica de la casuistica aquí, i.e. el por qué. A table with combinations enable/disable would be desirable**</span>)
+
 
 ### **Gravitational waves on the lattice** { #subsec_GWlattice }
 
-On the lattice, CosmoLattice evolves the auxiliary $u$- or $v$-fields in configuration space and applies the TT projection only when reconstructing the physical GW field $h_{ij}$ for measurements. Below we describe the $v$-field implementation; the $u$-field case is obtained by replacing the traceless source by $\Pi_{ij}^{\rm eff}$.
+On the lattice, CosmoLattice evolves the auxiliary $u$- or $v$-fields in configuration space and applies the TT projection only when reconstructing the physical GW field $h_{ij}$ for measurements (<span style="color:red;">**SWITCH between u_ij and v_ij in CosmoLattice ?**</span>). Below we describe the $v$-field implementation; the $u$-field case is obtained by replacing the traceless source by $\Pi_{ij}^{\rm eff}$.
 
 The program variables for space and time follow the standard CosmoLattice definitions. The auxiliary tensor is also rescaled as
 [](){ #eq_GWProgramVars }
@@ -447,7 +454,8 @@ k^+_{{\rm L},i}(\tilde{\bf n})
 [\texttt{GWprojectorType}=3].
 \end{align}
 ```
-The overall factor $1/\delta\tilde x$ has been omitted in Eq.$~$\eqref{eq_GWLatticeMomenta}, because it cancels in the projector ratios. Equivalently, one may multiply every component by $1/\delta\tilde x$ when interpreting ${\bf k}_{\rm L}$ as a dimensionful lattice momentum. The neutral momentum ${\bf k}^0_{\rm L}$ is real, while the forward and backward momenta ${\bf k}^{\pm}_{\rm L}$ are complex.
+The overall factor $1/\delta\tilde x$ has been omitted in Eq.$~$\eqref{eq_GWLatticeMomenta}, because it cancels in the projector ratios (<span style="color:red;">**only Eq 31 ?**</span>)
+. Equivalently, one may multiply every component by $1/\delta\tilde x$ when interpreting ${\bf k}_{\rm L}$ as a dimensionful lattice momentum. The neutral momentum ${\bf k}^0_{\rm L}$ is real, while the forward and backward momenta ${\bf k}^{\pm}_{\rm L}$ are complex.
 
 For neutral derivatives, the lattice momentum is real and the projector can be written as
 [](){ #eq_GWRealProjector }
@@ -467,7 +475,7 @@ P_{ij}^{{\rm L},0}
 |{\bf k}^0_{\rm L}|^2}.
 \end{align}
 ```
-For the forward or backward choices in Eq.$~$\eqref{eq_GWLatticeMomenta}, the lattice momentum is complex and the projector is
+For the forward or backward choices in Eq.$~$\eqref{eq_GWLatticeMomenta} (<span style="color:red;">**other eqs**</span>), the lattice momentum is complex and the projector is
 [](){ #eq_GWComplexProjector }
 ```math
 \begin{align}
