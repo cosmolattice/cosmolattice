@@ -97,10 +97,12 @@ extra_javascript:
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
   - javascripts/emgithub-fixraw.js
   - javascripts/sidebar-toggle.js
+  - javascripts/news-bar.js #Added by DGF (July 3rd 2026) for have a news bar on top
 
 extra_css:
   - extra.css
   - https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css
+  - stylesheets/news-bar.css #Added by DGF (July 3rd 2026) for have a news bar on top
 
 hooks:
   - hooks/resolve_emgithub.py
@@ -115,7 +117,7 @@ nav:
 #           - "What makes CosmoLattice different ?": "CLnutshell/CLisDifferent.md"
 #           - "CosmoLattice Versions": "CLnutshell/CLversions.md"
 #           - "Upcoming features": "CLnutshell/CLupcoming.md"                  
-      - "<span style='font-weight:bold;'>CosmoLattice News </span>": "CLnews.md"
+      # - "<span style='font-weight:bold;'>CosmoLattice News </span>": "CLnews.md"
       - "<span style='font-weight:bold;'>If you use CosmoLattice </span>": "CLcitation.md"
   - Code:
       #- "What is CosmoLattice": "code/HowToCiteCL.md"
@@ -124,30 +126,31 @@ nav:
       - "<span style='font-weight:bold;'>Full Installation</span>": "code/Installation.md"
       - "<span style='font-weight:bold;'>Code Features </span>": "code/Features.md"
       - "<span style='font-weight:bold;'>Input File Builder </span>": "code/InputBuilder.md"
-      - "<span style='font-weight:bold;'>CosmoLattice Version Guide </span>": "code/Versions.md"
-      - "Links": "code/Basics.md"
-  - API:
-      - "Links": "CosmoLattice/links.md"
-      - "Classes":
-          - "Class List": "CosmoLattice/annotated.md"
-          - "Class Index": "CosmoLattice/classes.md"
-          - "Class Hierarchy": "CosmoLattice/hierarchy.md"
-          - "Class Members": "CosmoLattice/class_members.md"
-          - "Class Member Functions": "CosmoLattice/class_member_functions.md"
-          - "Class Member Variables": "CosmoLattice/class_member_variables.md"
-          - "Class Member Typedefs": "CosmoLattice/class_member_typedefs.md"
-          - "Class Member Enumerations": "CosmoLattice/class_member_enums.md"
-      - "Namespaces":
-          - "Namespace List": "CosmoLattice/namespaces.md"
-          - "Namespace Members": "CosmoLattice/namespace_members.md"
-          - "Namespace Member Functions": "CosmoLattice/namespace_member_functions.md"
-          - "Namespace Member Variables": "CosmoLattice/namespace_member_variables.md"
-          - "Namespace Member Typedefs": "CosmoLattice/namespace_member_typedefs.md"
-          - "Namespace Member Enumerations": "CosmoLattice/namespace_member_enums.md"
-      - "Functions": "CosmoLattice/functions.md"
-      - "Variables": "CosmoLattice/variables.md"
-      - "Macros": "CosmoLattice/macros.md"
-      - "Files": "CosmoLattice/files.md"
+      - "<span style='font-weight:bold;'>Code Version Guide </span>": "code/Versions.md"
+      - "<span style='font-weight:bold;'>Useful Links </span>": "code/Basics.md"
+      - "<span style='font-weight:bold;'>API </span>": 
+#   - API:
+        - "Links": "CosmoLattice/links.md"
+        - "Classes":
+            - "Class List": "CosmoLattice/annotated.md"
+            - "Class Index": "CosmoLattice/classes.md"
+            - "Class Hierarchy": "CosmoLattice/hierarchy.md"
+            - "Class Members": "CosmoLattice/class_members.md"
+            - "Class Member Functions": "CosmoLattice/class_member_functions.md"
+            - "Class Member Variables": "CosmoLattice/class_member_variables.md"
+            - "Class Member Typedefs": "CosmoLattice/class_member_typedefs.md"
+            - "Class Member Enumerations": "CosmoLattice/class_member_enums.md"
+        - "Namespaces":
+            - "Namespace List": "CosmoLattice/namespaces.md"
+            - "Namespace Members": "CosmoLattice/namespace_members.md"
+            - "Namespace Member Functions": "CosmoLattice/namespace_member_functions.md"
+            - "Namespace Member Variables": "CosmoLattice/namespace_member_variables.md"
+            - "Namespace Member Typedefs": "CosmoLattice/namespace_member_typedefs.md"
+            - "Namespace Member Enumerations": "CosmoLattice/namespace_member_enums.md"
+        - "Functions": "CosmoLattice/functions.md"
+        - "Variables": "CosmoLattice/variables.md"
+        - "Macros": "CosmoLattice/macros.md"
+        - "Files": "CosmoLattice/files.md"
   #- Technical Notes:#
   - Theory Framework:
       #- "Power spectra": "tech_notes/Power spectra.md"#
@@ -215,3 +218,5 @@ nav:
       - "<span style='font-weight:bold;'>Developers </span>": "people/Developers.md"
   - Publications:
       - "<span style='font-weight:bold;'>Developers </span>": "publications/Publications.md"
+  - CL News:
+      - "<span style='font-weight:bold;'>CosmoLattice News </span>": "CL_News/CLnews.md"

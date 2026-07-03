@@ -51,10 +51,10 @@ body.nav-collapsed .md-sidebar--primary {
    is an unambiguous signal — actual pages stay upright (set in mkdocs.yml).
    Muted + indented to read as subordinate to their parent page link. */
 .md-sidebar--primary .md-nav--secondary .md-nav__link {
-    font-size: 0.85em;
+    font-size: 1.00em; /* DGF: changed from 0.85 */
     font-style: italic;
     color: var(--md-default-fg-color--light);
-    padding-left: 1.4rem;
+    padding-left: 0.1rem; /* DGF: changed from 1.4*/
 }
 
 /* Added by Dani on June 15th 2026, to justify all text paragraphs in the website 	*/
