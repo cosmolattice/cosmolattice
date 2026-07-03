@@ -43,10 +43,12 @@ namespace TempLat
       // Fourier lattice site, see eq.(57) of arXiv:2006.15122v2
       auto k = ntilde.norm() * f.getKIR();
       // comoving momentum (in program units), obtained by multiplying it by k_IR
+      // @label:default_scalar_frequency_cutoff
       auto omega = omega_k(k, mass2, f.toString());
       // mode frequency
 
       auto Hcut = heaviside(kCutOff - k) * pow(k,(3. - Model::NDim) / 2.);
+      // @endlabel
       // function that sets to zero all modes over a certain cutoff
 
       // Returns the rms of the (real and imaginary) parts of the fluctuations
@@ -57,7 +59,9 @@ namespace TempLat
       else if constexpr (Model::NDim == 2)
         return Hcut * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(2 * omega, -0.5) / sqrt(2.*Constants::pi<T>) ;
       else
+        // @label:default_scalar_norm_3d
         return Hcut  * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5)) * pow(2 * omega, -0.5) / sqrt(2) ;
+        // @endlabel
 
       // Here 1/sqrt{2omega_k} characterises rms of |phi_k|, but since |phi_k|^2 =
       //  Re(phi_k)^2 + Im(phi_k)^2, hence there is extra 1/sqrt{2} as this 'return' is
@@ -93,9 +97,11 @@ namespace TempLat
     template <class Model>
     auto getNormedFluctuations(Model &model, Field<T, Model::NDim> f, T mass2, std::string mySeed, T kCutOff) const
     {
+      // @label:default_scalar_random_gaussian_field
       auto fFluctuationNorm = getFluctuationsNorm(model, f, mass2, kCutOff); // norm
       return fFluctuationNorm * RandomGaussianField<T, Model::NDim>(baseSeed + mySeed + f.toString(),
                                                                     f.getToolBox()); // baseSeed is given in input file
+      // @endlabel
     }
 
     // Sums left-moving and right-moving waves, both following a Gaussian distribution
@@ -118,12 +124,15 @@ namespace TempLat
     void conjugateGaussianFluctuations(Model &model, Field<T, Model::NDim> f, Field<T, Model::NDim> p, T mass2, T aDot,
                                        T kCutOff) const
     {
+      // @label:default_scalar_field_modes
       auto fLeft = getNormedFluctuations(model, f, mass2, "Random left", kCutOff);
       auto fRight = getNormedFluctuations(model, f, mass2, "Random right", kCutOff);
 
       f.inFourierSpace() = (fLeft + fRight) / sqrt(2);
       f.inFourierSpace().setZeroMode(0); // sets the zero mode to 0
+      // @endlabel
 
+      // @label:default_scalar_momentum_modes
       FourierSite<Model::NDim> ntilde(f.getToolBox()); // Fourier lattice site, see eq.(57) of arXiv:2006.15122v2
       auto k = ntilde.norm() * f.getKIR(); // comoving momentum (in program units), obtained by multiplying it by k_IR
       auto omega = omega_k(k, mass2, f.toString()); // mode frequency (defined below)
@@ -131,6 +140,7 @@ namespace TempLat
       p.inFourierSpace() = Constants::I<T> * omega * (fLeft - fRight) / sqrt(2) -
                            aDot * f.inFourierSpace(); // derived in Sec. 7.1. of arXiv:2006.15122
       p.inFourierSpace().setZeroMode(0);              // sets the zero mode to 0
+      // @endlabel
     }
 
 

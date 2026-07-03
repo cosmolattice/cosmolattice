@@ -35,4 +35,8 @@ else
     source ${tmp_dir}/.venv/bin/activate
 fi
 
+# Ensure PyYAML is present even in pre-existing venvs (needed by the parameter
+# appendix generator / sync check). Idempotent and fast once installed.
+pip install -q pyyaml
+
 cd ${base_dir}

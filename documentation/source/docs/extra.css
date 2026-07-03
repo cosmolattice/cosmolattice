@@ -1,5 +1,60 @@
+/* === Sidebar collapse toggle === */
+.sidebar-toggle-btn {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    z-index: 300;
+    width: 26px;
+    height: 34px;
+    background: var(--md-default-bg-color);
+    border: 1px solid var(--md-default-fg-color--light);
+    border-left: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: var(--md-default-fg-color);
+    font-size: 17px;
+    line-height: 1;
+    padding: 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.10);
+    transition: color 0.15s, box-shadow 0.15s;
+}
+
+.sidebar-toggle-btn:hover {
+    color: var(--md-accent-fg-color);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+
+@media screen and (min-width: 76.25em) {
+    .sidebar-toggle-btn {
+        display: flex;
+    }
+}
+
+body.nav-collapsed .md-sidebar--primary {
+    display: none !important;
+}
+
 .MathJax {
     font-size: 1.1em !important;
+}
+
+/* === Integrated per-page TOC (toc.integrate) ===
+   These are the IN-PAGE HEADINGS of the currently open page (injected into the
+   left sidebar by toc.integrate), NOT navigable sub-pages. Style them as the
+   ONLY italic entries in the nav so "italic == a section inside the open page"
+   is an unambiguous signal — actual pages stay upright (set in mkdocs.yml).
+   Muted + indented to read as subordinate to their parent page link. */
+.md-sidebar--primary .md-nav--secondary .md-nav__link {
+    font-size: 0.85em;
+    font-style: italic;
+    color: var(--md-default-fg-color--light);
+    padding-left: 1.4rem;
 }
 
 /* Added by Dani on June 15th 2026, to justify all text paragraphs in the website 	*/
@@ -48,4 +103,21 @@
 /* Hide emgithub's "view raw" link (points to jsDelivr) — we inject our own via JS */
 .emgithub-file .file-meta a[href*="cdn.jsdelivr.net"] {
     display: none;
+}
+/* === Embedded Streamlit input-file builder === */
+.inputgen-frame {
+    width: 100%;
+    height: 92vh;
+    min-height: 1000px;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 6px;
+}
+
+/* Let the input-builder page use the full content width (override the
+   theme's narrow text column) so the embedded app has more room. */
+.md-content:has(.inputgen-frame) {
+    max-width: none;
+}
+.md-content:has(.inputgen-frame) .md-grid {
+    max-width: none;
 }

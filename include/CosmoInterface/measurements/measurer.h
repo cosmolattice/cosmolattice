@@ -69,9 +69,16 @@ namespace TempLat
           spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"},
                       filesManager.getUseHDF5()), // Output file that indicates at which times spectra are computed
           PSMeasurer(par),
-          UPSMeasurer(par)
+          UPSMeasurer(par),
+          // nLast and lastMeas MUST be initialized here. nLast is read in areWeMeasuring();
+          // left uninitialized it holds per-rank garbage that randomly trips the "last
+          // measurement" test on a subset of MPI ranks, making only those ranks flush HDF5
+          // collectively (HDF5File::open is collective on MPI_COMM_WORLD) while the rest skip
+          // it -> COMM_WORLD collective mismatch -> deadlock. Bites nondeterministically at
+          // scale; harmless on a single rank. Value = index of the final time step.
+          nLast(static_cast<ptrdiff_t>(round((par.tMax - par.t0) / par.dt))), lastMeas(false)
           // TestTransTrace(par),
-          // GWsPSMeasurer(par), nLast(par.tMax / par.dt), lastMeas(false)
+          // GWsPSMeasurer(par)
     {
     }
 

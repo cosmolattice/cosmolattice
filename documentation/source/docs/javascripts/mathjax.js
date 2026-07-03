@@ -17,3 +17,11 @@ document$.subscribe(() => {
     MathJax.texReset()
     MathJax.typesetPromise()
 })
+
+//Following lines added by DGF on June 24th 2026
+window.MathJax = {
+  tex: {
+    tags: 'ams',          // automatic numbering
+    useLabelIds: true    // allows \label{} and \ref{}
+  }
+};

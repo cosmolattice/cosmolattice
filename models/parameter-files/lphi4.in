@@ -14,8 +14,8 @@ kIR = .7
 
 #Times
 tOutputFreq = 1
-tOutputInfreq = 10
-tMax = 100
+tOutputInfreq = 5
+tMax = 10
 
 #Spectra options
 PS_type = 1

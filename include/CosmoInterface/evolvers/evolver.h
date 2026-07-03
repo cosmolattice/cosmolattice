@@ -49,15 +49,18 @@ namespace TempLat
         throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
                                       "which dispatch between different evolvers. Abort."));
 
+      // 
       if (Model::NU1 > 0 && rPar.withGWs && type == LF)
         throw(InvalidEvolverTypeGW("The evolution of a model with U(1) and GWs requires to use an evolver that correctly synchronizes fields and momenta (as both electric and magnetic fields enter the kernel of GWs). You should use a different evolver for the matter fields (VVn, RK, PV). Abort."));
 
       if (Model::NU1 > 0 && rPar.withGWs && PositionVerletParameters<T>::isVerlet(type) &&
           PositionVerletParameters<T>::isVerlet(typeGW))
         throw(InvalidEvolverTypeGW("The evolution of a model with U(1) and GWs requires to use an evolver that correctly synchronizes fields and momenta (as both electric and magnetic fields enter the kernel of GWs). If you want to use PV for the matter fields, you should use LF for the GWs. Abort."));
+      // 
 
     }
 
+    // @label:gws_evolver_dispatch
     inline void evolve(Model &model, T tMinust0) const
     {
       if (model.fldGWs != nullptr && typeGW == LF) {
@@ -81,11 +84,13 @@ namespace TempLat
 
       if (model.fldGWs != nullptr && typeGW == LF) lf->driftGWs(model);
     }
+    // @endlabel
 
     // The next function is used to synchronise all the fields to live
     // at integer time before measurements. Useful for evolvers where
     // this is not naturally the case, such as leapfrog.
 
+    // @label:gws_evolver_sync
     inline void sync(Model &model, T tMinust0) const
     {
       if (typeGW == LF && !GWsynced) {
@@ -111,6 +116,7 @@ namespace TempLat
       }
 
     }
+    // @endlabel
 
     // To activate and deactivate fields. Can be useful if more than a kernel is defined, or maybe to deactivate GW.
     template <int N> void deactivate(Tag<N> t)

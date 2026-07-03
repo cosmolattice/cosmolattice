@@ -108,12 +108,12 @@ namespace TempLat
       qG = parser.get<double>("qG");
       qH = parser.get<double>("qH");
       lambda = parser.get<double>("lambda");
-      // @endlabel
 
-      // @label:rescaling
       g = sqrt(qG * lambda);
       h = sqrt(qH * lambda);
-
+      // @endlabel
+      
+      // @label:rescaling
       /////////
       // Rescaling for program variables
       /////////

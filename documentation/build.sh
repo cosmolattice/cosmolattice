@@ -15,12 +15,28 @@ mkdir -p ${tmp_dir}/code_source
 # labeled file matches CLV2.0Alpha line-for-line in its labeled region.
 repo_root=${base_dir}/..
 mkdir -p ${tmp_dir}/code_source/cosmolattice
-( cd ${repo_root} && git ls-files -z | tar --null -T - -cf - ) | tar -xf - -C ${tmp_dir}/code_source/cosmolattice
+(cd ${repo_root} && git ls-files -z | tar --null -T - -cf -) | tar -xf - -C ${tmp_dir}/code_source/cosmolattice
 
-git clone https://github.com/cosmolattice/templat.git ${tmp_dir}/code_source/templat
+# Only pull templat if it's not already present
+if [ ! -d ${tmp_dir}/code_source/templat ]; then
+    git clone https://github.com/cosmolattice/templat.git ${tmp_dir}/code_source/templat
+else
+    # otherwise, git pull to update it
+    (cd ${tmp_dir}/code_source/templat && git pull)
+fi
 
 source ./setup_python.sh
 cd ${base_dir}
+
+echo "---------------------------------------------------------------------"
+echo "         Checking the parameter appendix is in sync with the YAML..."
+echo "---------------------------------------------------------------------"
+
+# The parameter appendix (source/docs/Manual/Appendix_Parameters.md) is generated
+# from source/data/parameters.yaml. Drift between the YAML, the appendix, and the
+# C++ call sites is reported as a WARNING only: the script never fails the build,
+# so the site still publishes. Run check_params_sync.sh directly for a hard check.
+bash ${base_dir}/scripts/check_params_sync.sh
 
 # now get the latex stuff
 # bash ${base_dir}/convert_arxiv_manual.sh

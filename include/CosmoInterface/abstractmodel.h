@@ -156,8 +156,6 @@ namespace TempLat
           // Don't leave variables uninitialized
           potAvI(0), potAvSI(0), pot0(0), pot0SI(0)
     {
-      // Uncomment these exceptions in case you want to run a model with more than one U(1) or SU(2) gauge field (this
-      // feature has yet not been tested)
       if constexpr (NDIM != 3) {
         if (this->fldGWs != nullptr)
           throw(RunParametersInconsistent(
@@ -168,14 +166,22 @@ namespace TempLat
               "PSType=1, only for PSType=2. Abort. If you want to perform a real NDim != 3 simulations comment out "
               "this line. You may need to modify the EoM kernels"));
       }
+      //@label:numb_U1_gauge_flds
+      // Uncomment this exception in case you want to run a model with more than one U(1) gauge field (this
+      // feature has yet not been tested)
       if constexpr (NU1FLDS > 1)
         throw(NotTested("The physics interface has not been fully tested with NU1 > 1. Abort. If you want to go on "
                         "anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and "
                         "please report any problems."));
+      //@endlabel
+      //@label:numb_SU2_gauge_flds
+	  // Uncomment this exception in case you want to run a model with more than one SU(2) gauge field (this
+      // feature has yet not been tested)     
       if constexpr (NSU2FLDS > 1)
         throw(NotTested("The physics interface has not been fully tested with NSU2 > 1. Abort. If you want to go on "
                         "anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and "
                         "please report any problems."));
+      //@endlabel
     }
 
     // AbstractModel should never be copied, so we delete the copy constructor and copy assignment operator.
