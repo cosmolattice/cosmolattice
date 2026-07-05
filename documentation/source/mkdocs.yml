@@ -98,6 +98,7 @@ extra_javascript:
   - javascripts/emgithub-fixraw.js
   - javascripts/sidebar-toggle.js
   - javascripts/news-bar.js #Added by DGF (July 3rd 2026) for have a news bar on top
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js #Added by DGF (July 5th 2026) to have latex
 
 extra_css:
   - extra.css
@@ -111,7 +112,7 @@ use_directory_urls: false # (optional) for better links without .html extension
 
 nav:
   - Home: #CL.md
-      - "<span style='font-weight:bold;'>CosmoLattice in a Nutshell</span>": "CL.md"
+      - "<span style='font-weight:bold;'>What is CosmoLattice ?</span>": "CL.md"
 #           - "What is CosmoLattice ?": "CLnutshell/WhatIsCL.md"
 #           - "Features & Capabilities of CosmoLattice": "CLnutshell/FeaturesCapabilitiesCL.md"
 #           - "What makes CosmoLattice different ?": "CLnutshell/CLisDifferent.md"
@@ -127,9 +128,10 @@ nav:
       - "<span style='font-weight:bold;'>Code Features </span>": "code/Features.md"
       - "<span style='font-weight:bold;'>Input File Builder </span>": "code/InputBuilder.md"
       - "<span style='font-weight:bold;'>Code Version Guide </span>": "code/Versions.md"
+#         - "Versions 2.X": "code/Versions2X.md"
+#         - "Versions 1.X": "code/Versions1X.md"
       - "<span style='font-weight:bold;'>Useful Links </span>": "code/Basics.md"
-      - "<span style='font-weight:bold;'>API </span>": 
-#   - API:
+      - "<span style='font-weight:bold;'>Application Programming Interface (API) </span>": # - API:
         - "Links": "CosmoLattice/links.md"
         - "Classes":
             - "Class List": "CosmoLattice/annotated.md"
