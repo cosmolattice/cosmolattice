@@ -124,7 +124,7 @@ Following in the same file,
 
 @emgithub(include/CosmoInterface/definitions/gaugederivatives.h:u1sforcscovderivs)
 
-We encounter the function `fold_multiply` in line `87`, which takes vectorial objects as an argument, and returns the multiplication of all the elements inside the object. In this case we use it on an array, created on line `88` by the macro `MakeArray`, which contains either the link `U1Links(model.fldU1(a),i)` or ''$1$", depending on whether the matter field $N$ couples to the $a^{th}$ $U(1)$ gauge field. The constant $1$ is represented by the object `OneType` on line `91`, which is then automatically discarded by the compiler in multiplications. For more information about how this works, we refer the reader to Appendix [Under the Hood: Expression Templates ](Under the Hood: Expression Templates .md).
+We encounter the function `fold_multiply` in line `87`, which takes vectorial objects as an argument, and returns the multiplication of all the elements inside the object. In this case we use it on an array, created on line `88` by the macro `MakeArray`, which contains either the link `U1Links(model.fldU1(a),i)` or ''$1$", depending on whether the matter field $N$ couples to the $a^{th}$ $U(1)$ gauge field. The constant $1$ is represented by the object `OneType` on line `91`, which is then automatically discarded by the compiler in multiplications. For more information about how this works, we refer the reader to Appendix [Expression Templates](Expression Templates.md).
 
 The rest of the `GaugeDerivatives` class contains similar functions to compute the other covariant derivatives, as well as functions which implement gradients. As they are all implemented in a very similar fashion, we let the reader explore the code by themselves.
 
