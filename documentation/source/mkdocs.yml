@@ -123,8 +123,7 @@ nav:
   - Code:
       #- "What is CosmoLattice": "code/HowToCiteCL.md"
       #- "How to cite CosmoLattice": "code/HowToCiteCL.md"
-      - "<span style='font-weight:bold;'>Download (github) </span>": "code/Download.md"
-      - "<span style='font-weight:bold;'>Full Installation</span>": "code/Installation.md"
+      - "<span style='font-weight:bold;'>Installation</span>": "code/Installation.md"
       - "<span style='font-weight:bold;'>Code Features </span>": "code/Features.md"
       - "<span style='font-weight:bold;'>Input File Builder </span>": "code/InputBuilder.md"
       - "<span style='font-weight:bold;'>Code Version Guide </span>": "code/Versions.md"
@@ -132,7 +131,7 @@ nav:
       #         - "Versions 1.X": "code/Versions1X.md"
       - "<span style='font-weight:bold;'>Useful Links </span>": "code/Basics.md"
       - ? "<span style='font-weight:bold;'>Application Programming Interface (API) </span>" # - API:
-        : - "Links": "CosmoLattice/links.md"
+        : #- "Links": "CosmoLattice/links.md"
           - "Classes":
               - "Class List": "CosmoLattice/annotated.md"
               - "Class Index": "CosmoLattice/classes.md"
@@ -149,8 +148,8 @@ nav:
               - "Namespace Member Variables": "CosmoLattice/namespace_member_variables.md"
               - "Namespace Member Typedefs": "CosmoLattice/namespace_member_typedefs.md"
               - "Namespace Member Enumerations": "CosmoLattice/namespace_member_enums.md"
-          - "Functions": "CosmoLattice/functions.md"
-          - "Variables": "CosmoLattice/variables.md"
+          #- "Functions": "CosmoLattice/functions.md"
+          #- "Variables": "CosmoLattice/variables.md"
           - "Macros": "CosmoLattice/macros.md"
           - "Files": "CosmoLattice/files.md"
   #- Technical Notes:#
