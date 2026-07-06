@@ -90,8 +90,7 @@ The present manual is structured as follows:
  <!--
   space
 -->
-
--  Sections [Parallelization](Parallelization.md) and [Backing up simulations with HDF5](Backing up simulations with HDF5.md) describe some of the technical features implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including its parallel support and back-up options. These sections apply to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
+-  Sections [Parallelization](Parallelization.md) and [HDF5: Output and Backups ](HDF5: Output and Backups.md) describe some of the technical features implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including its parallel support and back-up options. These sections apply to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
     
  <!--
   space

@@ -122,7 +122,7 @@ This requires that you have an `MPI` installation present on your system. OpenMP
 #### HDF5: A Hierarchical Data Format
 
 `HDF5` is a file format and set of tools for managing complex data. It is particularly useful for saving whole simulations, restarting them, and automatically backing them up. 
-Enabling `HDF5` allows you to use this format for all output files instead of the default text files. For more details, see also the [Backing up simulations with HDF5](../Manual/Backing up simulations with HDF5.md) section in the manual.
+Enabling `HDF5` allows you to use this format for all output files instead of the default text files. For more details, see also the [HDF5: Output and Backups](../Manual/HDF5: Output and Backups.md) section in the manual.
 
 To use `HDF5` with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, you can either install it using your system's package manager, or pass `-DAUTOBUILD_HDF5=ON` to the `cmake` command, which will automatically download and build it for you:
 ```bash
