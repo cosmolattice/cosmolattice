@@ -75,72 +75,106 @@ non-linear dynamics of the appropriate fields in comoving two- or three-dimensio
 CosmoLattice is structured in such a way that all the technicalities, such as memory handling or parallelization tasks, remain mostly hidden to a typical user. These are integrated in a set of libraries called `TempLat`, which in principle, a standard user will never need to edit. In `TempLat` we have implemented a new language that can be used to define new fields and operations between them in a natural way. For example, let us imagine that we have two fields `f` and `g` in a lattice and we want to sum them. Without `TempLat`, we would need to explicitly write a loop that sums the amplitudes of both fields at each node of the lattice. Instead, with `TempLat` we can just write `f + g`, and the hidden structure handles the whole operation of summing their values everywhere on the lattice. At the same time, we have developed another collection of libraries called `CosmoInterface`, where all relevant aspects of the physics of scalar-gauge theories are handled, such as the initialization, evolution equations, or relevant field observables. This makes the physics part of the code easy to understand and well separated from technical details. This separation significantly simplifies the process of writing new operations for your own purposes.
 
 The basic folder tree structure of CosmoLattice is the following:
+
 ```math
 \begin{align}
 {\tt cosmolattice}:
 \left\lbrace
 \begin{array}{l}
-{\it CMakeLists.txt}  {\rm[+ other files]}\\
-{\tt dependencies} \\
-{\tt docs} \\
-{\tt src}:\left\lbrace
+{\it CMakeLists.txt}\\
+{\tt cmake}:\left\lbrace
 \begin{array}{l}
-{\it cosmolattice.cpp}  {\rm[+ other files]}\\
-{\tt cmake} \\
-{\tt models} \\
-{\tt tests} \\
+{\it title.cmake}
+\end{array}\right.\\
+{\tt source}:\left\lbrace
+\begin{array}{l}
+{\it cosmolattice.cpp}
+\end{array}\right.\\
 {\tt include}:\left\lbrace
 \begin{array}{l}
-{\tt TempLat}:\left\lbrace
-\begin{array}{l}
-{\it cosmolattice.h}\\
-{\tt fft}\\
-{\tt lattice}\\
-{\tt parallel}\\
-{\tt parameters}\\
-{\tt session}\\
-{\tt util}
-\end{array} \right.\\
 {\tt CosmoInterface}:\left\lbrace
 \begin{array}{l}
-{\it CosmoInterface.h}  {\rm[+ other files]}\\
+{\tt abstractmodel}\\
 {\tt definitions}\\
-{\tt evolvers}\\
+{\tt evolvers}:\left\lbrace
+\begin{array}{l}
+{\tt kernels}
+\end{array}\right.\\
 {\tt initializers}\\
-{\tt measurements}
-\end{array} \right.
-\end{array} \right.
-\end{array} \right.
-\end{array} \right.
+{\tt measurements}:\left\lbrace
+\begin{array}{l}
+{\tt measurementsIO}
+\end{array}\right.\\
+{\it cosmointerface.h}\\
+{\it runparameters.h}\\
+{\it simulationmanager.h}
+\end{array}\right.
+\end{array}\right.\\
+{\tt models}:\left\lbrace
+\begin{array}{l}
+{\it *.h}\\
+{\tt parameter-files}
+\end{array}\right.\\
+{\tt tests}:\left\lbrace
+\begin{array}{l}
+{\tt CosmoInterface}\\
+{\tt benchmarks}
+\end{array}\right.\\
+{\tt documentation}:\left\lbrace
+\begin{array}{l}
+{\tt source}\\
+{\tt scripts}\\
+{\tt tools}
+\end{array}\right.\\
+{\tt profile}\\
+{\tt thoughts}\\
+{\tt build}:\left\lbrace
+\begin{array}{l}
+{\tt \_deps}:\left\lbrace
+\begin{array}{l}
+{\tt templat-src}:\left\lbrace
+\begin{array}{l}
+{\tt include/TempLat}\\
+{\tt cmake}\\
+{\tt tests}\\
+{\tt external}
+\end{array}\right.\\
+{\tt kokkos-src}\\
+{\tt parafaft-src}\\
+{\tt \ldots}
+\end{array}\right.
+\end{array}\right.
+\end{array}\right.
 \end{align}
 ```
 
+The CMake configuration first selects the model to compile from `models/`, then builds the executable from `source/cosmolattice.cpp`. The executable includes `CosmoInterface` from this repository and links against the external `TempLat::TempLat` target. `TempLat` is fetched at configure time and is responsible for the lattice-expression machinery, memory layout, parameter parsing, Fourier-transform infrastructure, and device backend setup. Depending on the selected CMake options, `TempLat` may in turn fetch or find external packages such as Kokkos, KokkosFFT, ParaFaFT, FFTW, HDF5, MPI, OpenMP, or C++ threads.
+
 with the content of each folder summarized as:
 
-| **folder name(s)** | **brief description of each folder**                                                          |
-| ------------------ | --------------------------------------------------------------------------------------------- |
-| `dependencies`     | scripts to install external libraries                                                         |
-| `docs`             | documentation files                                                                           |
-| `src`              | source code (contains `cmake, models, tests, include`)                                        |
-| `cmake`            | files for compilation                                                                         |
-| `models`           | model files                                                                                   |
-| `tests`            | files for testing purposes                                                                    |
-| `include`          | libraries for lattice operations (`TempLat`) and field dynamics (`CosmoInterface`)            |
-| `TempLat`          | library for lattice operations (contains `fft, lattice, parallel, parameters, session, util)` |
-| `CosmoInterface`   | library for field dynamics (contains `definitions, evolvers, initializers, measurements)`     |
-| `fft`              | library to handle Fourier transformations                                                     |
-| `lattice`          | library for basic lattice definitions and field operations                                    |
-| `parallel`         | library for parallelization routines                                                          |
-| `parameters`       | library for parsing parameters from the command-line/files.                                   |
-| `session`          | library for taking care of initialization and destruction of external libraries               |
-| `util`             | library for basic useful operations                                                           |
-| `definitions`      | library for basic field definitions (EOM terms, energy terms, etc)                            |
-| `evolvers`         | library for evolution algorithms                                                              |
-| `initializers`     | library for initialization algorithms                                                         |
-| `measurements`     | library for observables (energy densities, field spectra, etc)                                |
+| **folder name(s)** | **brief description of each folder** |
+| ------------------ | ------------------------------------ |
+| `CMakeLists.txt` | top-level build configuration; fetches `TempLat`, selects the model, creates the executable, and links `TempLat::TempLat` with `CosmoInterface` |
+| `cmake` | CosmoLattice-specific CMake helper files |
+| `source` | executable entry point, currently `cosmolattice.cpp` |
+| `include/CosmoInterface` | CosmoLattice physics interface: model abstraction, field definitions, evolution algorithms, initial conditions, measurements, and simulation management |
+| `abstractmodel` | base classes and shared data structures for scalar, gauge, scale-factor, gravitational-wave, and non-minimal-coupling model sectors |
+| `definitions` | reusable physical definitions such as potentials, gauge derivatives, Gauss laws, power-spectrum helpers, and anisotropic-stress tensors |
+| `evolvers` | evolution algorithms and evolution kernels |
+| `initializers` | initialization for fields, scale factor and model state |
+| `measurements` | observables, spectra, energy outputs, gravitational-wave outputs, and measurement I/O helpers |
+| `models` | user-facing model files selected with `-DMODEL=...` |
+| `models/parameter-files` | example input parameter files for the implemented models |
+| `tests` | CosmoInterface tests and benchmarks, enabled with `-DCOSMOINTERFACE_TEST=ON` |
+| `documentation` | Documentation source |
+| `build` | local build directory generated by CMake; contains object files and fetched dependency sources under `_deps/`. This directory is **created by the user.** |
+| `build/_deps/templat-src` | generated checkout of the external `TempLat` repository, which provides the lattice language and technical infrastructure |
+| `build/_deps/kokkos-src` | generated Kokkos source tree used by `TempLat` as the default device backend |
+| `build/_deps/parafaft-src` | generated optional ParaFaFT source tree for MPI parallel Fourier transforms |
+| `build/_deps/...` | generated dependency trees for optional packages such as KokkosFFT, FFTW, or HDF5, depending on the build options |
 
 !!! note
-    **Note:** A remarkable feature of CosmoLattice is that the operations and parallelization of `TempLat` can actually work in an arbitrary number of spatial dimensions $d$, including $d < 3$ and $d>3$. This feature is not exploited in `version 1.0` of CosmoLattice, but the `TempLat` library has this capability, which makes it a perfect basis for developing future interfaces dealing with field dynamics on lower- or higher-dimensional lattices. Visit [ https://cosmolattice.net/technicalnotes/](https://cosmolattice.net/technicalnotes/) to check for additional modules incorporated in successive updated versions of CosmoLattice to run in $d \neq 3$ spatial dimensions.
+    **Note:** `TempLat` is no longer stored inside the CosmoLattice source tree. It is an external dependency fetched by CMake into the local build directory. A remarkable feature of `TempLat` is that its operations and parallelization can work in an arbitrary number of spatial dimensions $d$, including $d < 3$ and $d > 3$. This makes it a natural basis for future interfaces dealing with field dynamics on lower- or higher-dimensional lattices. Visit [ https://cosmolattice.net/technicalnotes/](https://cosmolattice.net/technicalnotes/) to check for additional modules incorporated in successive updated versions of CosmoLattice to run in $d \neq 3$ spatial dimensions.
 
 ### Basic Field Equations implemented (so far) in CosmoLattice { #subsec_BasicEOM }
 
@@ -234,4 +268,3 @@ where $a(t_*)$ and $H (t_*)$ are the scale factor and Hubble parameter evaluated
 
 We note that the dynamical equations presented before were expressed in cosmic time just for simplicity. In reality, CosmoLattice can solve them in any time variable of the user's preference, such as conformal time. More importantly,
 we note that, of course, CosmoLattice does not really solve exactly the continuum differential equations as formulated in Eqs. ([*4*][eq_singletEOM])-([*8*][eq_SU2EOM]) or Eq. ([*11*][eq_Friedmann-full]), nor it really checks the differential constraint Eqs. ([*9*][eq_GaussU1])-([*10*][eq_GaussSU2]) or Eq. ([*12*][eq_HC]). CosmoLattice rather solves and/or checks a set of finite difference equations -- the *lattice equations* -- that approximate the above equations in the continuum. The lattice equations, and hence their numerical solutions, can reproduce the continuum results with higher or lower accuracy, depending on the integrator algorithm on which the lattice equations are based on. Some algorithms can solve lattice equations with numerical solutions that satisfy the (lattice) constraint equations down to machine precision. For a detailed description of different numerical integration algorithms, we refer the interested reader to Sections 3.3-3.5 of Ref. [@Figueroa_2020rrl]. The detailed implementation of such algorithms in CosmoLattice, as specialized for the dynamics of singlet scalar fields, Abelian-gauge theories and non-Abelian gauge theories, can be found in sections 4, 5, and 6 of Ref. [@Figueroa_2020rrl], respectively.
-

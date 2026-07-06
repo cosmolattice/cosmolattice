@@ -21,9 +21,11 @@ tMax = 10
 PS_type = 1
 PS_version = 1
 
+#@label:GW_settings 
 #GWs
 GWprojectorType = 1
 withGWs=false
+#@label:GW_settings 
 
 #@label:IC 
 #IC

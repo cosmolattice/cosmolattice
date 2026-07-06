@@ -1,0 +1,29 @@
+#Output
+outputfile = ./
+
+#Evolution
+expansion = true
+evolver = VV2
+
+#Lattice
+N = 32
+dt = 0.1
+kIR = 0.15
+baseSeed = 10
+
+#Times
+tMax = 80
+tOutputFreq = 0.1
+tOutputInfreq = 10
+
+tOutputRareFreq = 1
+energy_snapshot = E_S_K E_S_G E_V
+
+#IC
+kCutOff = 1.
+initial_amplitudes = 7.717e16
+initial_momenta = -2.598e28 
+
+#Model Parameters
+M = 2.435e16
+Lambda4 = 1.217e59

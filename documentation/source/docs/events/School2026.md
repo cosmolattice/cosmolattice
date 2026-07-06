@@ -1,15 +1,38 @@
-<!-- ** Theory Monographs Guide. **  -->
+# Hands-On CosmoLattice Workshop 2026
 
-The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is given in our monographic series on latttice techniques, *"The art of simulating the early Universe"*, 
+## Simulating the Early Universe
 
-*Part I. Integration techniques and canonical cases.* (Ref. [@Figueroa_2020rrl])
+The Hands-On CosmoLattice Workshop: Simulating the Early Universe was held on May 7-8, 2026, at the Department of Theoretical Physics of the Complutense University of Madrid, Spain.
 
-*Part II. Non-canonical cases and gravitational waves.* (Ref. [@BaezaBallesteros_2025tme]) 
+This workshop was conceived as an intensive and practical introduction to lattice-based numerical techniques for studying non-linear field dynamics in cosmology. The program combined focused lectures with guided hands-on sessions, enabling participants to gain both conceptual understanding and direct experience with state-of-the-art simulation tools.
 
-*Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]) 
+A central component of the workshop was the use of CosmoLattice, an open-access high-performance framework for lattice simulations of field theories in an expanding universe. Participants learned how the code is structured, how to configure and run simulations efficiently, and how to interpret their physical output in cosmological contexts.
 
-which will be referred to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs.
+## Scientific Program
 
-These monographs [@Figueroa_2020rrl,@BaezaBallesteros_2025tme,@Figueroa_2026XYZ] provide comprehensive discussions of lattice methods for scalar–gauge field theories in an expanding universe ($\mathtt{The~Art-I}$ [@Figueroa_2020rrl]), gravitational waves and non-canonical aspects of field theory - including interactions, initial conditions, dimensionality - ($\mathtt{The~Art-II}$ [@Baeza-Ballesteros:2025tme]), and fluid dynamics as a description of an ensemble of interacting scalar, gauge, and fermion fields ($\mathtt{The~Art-III}$ [@Figueroa_2026XYZ]). 
+- Introduction to non-linear phenomena in the early universe.
+- Lattice field theory techniques.
+- Structure and architecture of CosmoLattice.
+- Simulation of interacting fields in expanding backgrounds:
+    - Scalar field dynamics with general potentials.
+    - Abelian gauge fields coupled to charged scalars.
+    - Gravitational wave generation from non-linear field dynamics.
 
-We recommend users without previous experience on lattice techniques, that before diving into the code, they read at least sections 2, 3 and 4 of Ref. [@Figueroa_2020rrl], in order to have a better understanding of the basic lattice concepts used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. In particular, Section 2 of [@Figueroa_2020rrl] reviews the formulation of scalar and gauge field interactions in the continuum, both in flat and *Friedmann-Lemâitre-Robertson-Walker* (FLRW) backgrounds, whereas Section 3 of [@Figueroa_2020rrl] introduces the basic tools for discretizing any bosonic field theory in an expanding background, including a discussion on *lattice gauge-invariant* techniques for both *Abelian* and *non-Abelian* gauge theories. Section 4 of Ref. [@Figueroa_2020rrl] describes the formulation and properties of the evolution algorithms used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the dynamics of interacting singlet scalar fields. If the user wants to run simulations of the dynamics of Abelian and non-Abelian scalar-gauge theories, we recommend them to read sections 5 and 6 of Ref. [@Figueroa_2020rrl], as we discuss there in detail the different evolution algorithms implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ for dealing with gauge theories.
+The workshop was aimed at graduate students, PhD students, and postdoctoral researchers interested in computational approaches to early-Universe physics. The objective was to equip participants with the tools needed to confidently implement and analyze lattice simulations of complex cosmological models.
+
+## Lecturers
+
+- N. Loayza, CEICO-FZU, Prague, Czechia.
+- K. Marschall, IFIC, Valencia, Spain.
+- J. Rubio, Universidad Complutense de Madrid, Spain.
+- F. Torrenti, Universidad Carlos III de Madrid, Spain.
+
+## Organizers
+
+- T. Mendes, Universidad Complutense de Madrid, Spain.
+- J. Rubio, Universidad Complutense de Madrid, Spain.
+- F. Torrenti, Universidad Carlos III de Madrid, Spain.
+
+## Observations
+
+There was no registration fee for the workshop. Participants were requested to bring a personal laptop in order to take part in the hands-on sessions. Access to a cluster to run parallelized simulations was also recommended.

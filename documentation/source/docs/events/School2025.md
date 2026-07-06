@@ -1,15 +1,50 @@
-<!-- ** Theory Monographs Guide. **  -->
+# CosmoLattice School 2025
 
-The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is given in our monographic series on latttice techniques, *"The art of simulating the early Universe"*, 
+## IBS, Daejeon, September 22-26, 2025
 
-*Part I. Integration techniques and canonical cases.* (Ref. [@Figueroa_2020rrl])
+The third edition of the CosmoLattice school on lattice techniques for cosmology took place at the Institute for Basic Science (IBS) in Daejeon, South Korea.
 
-*Part II. Non-canonical cases and gravitational waves.* (Ref. [@BaezaBallesteros_2025tme]) 
+This school offered a pedagogical introduction to lattice field theory techniques and their application to simulations of interacting fields in an expanding Universe. Participants were also introduced to <a href="https://cosmolattice.net" target="_blank" rel="noopener noreferrer">CosmoLattice</a>, an open-access code designed for such simulations. The school provided a comprehensive guide to using CosmoLattice for modeling the non-linear dynamics of scalar and gauge fields in cosmological contexts.
 
-*Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]) 
+Event page: <a href="https://indico.ific.uv.es/event/8110/" target="_blank" rel="noopener noreferrer">indico.ific.uv.es/event/8110</a>
 
-which will be referred to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs.
+## Topics
 
-These monographs [@Figueroa_2020rrl,@BaezaBallesteros_2025tme,@Figueroa_2026XYZ] provide comprehensive discussions of lattice methods for scalar–gauge field theories in an expanding universe ($\mathtt{The~Art-I}$ [@Figueroa_2020rrl]), gravitational waves and non-canonical aspects of field theory - including interactions, initial conditions, dimensionality - ($\mathtt{The~Art-II}$ [@Baeza-Ballesteros:2025tme]), and fluid dynamics as a description of an ensemble of interacting scalar, gauge, and fermion fields ($\mathtt{The~Art-III}$ [@Figueroa_2026XYZ]). 
+- **Lattice field theory techniques:** discretization schemes, lattice gauge techniques, and more.
+- **Numerical algorithms for differential equations:** Leapfrog, Verlet, Runge-Kutta, etc.
+- **Overview of CosmoLattice:** libraries, modularity, parallelization, etc.
+- **Lattice simulations of interacting fields in an expanding background:**
+    - Scalar field dynamics with arbitrary potentials.
+    - U(1) gauge theories coupled to complex charged scalars.
+    - SU(2) gauge theories coupled to doublet charged scalars.
+- **Modern applications to early Universe scenarios:**
+    - Preheating scenarios and onset of radiation domination.
+    - Production and evolution of gravitational waves.
+    - Dynamics of derivatively coupled axion-like fields.
+    - Dynamics of non-minimally coupled scalar fields.
+    - Fluid dynamics and gravitational waves from turbulence.
+    - Evolution and experimental signatures of topological defects.
 
-We recommend users without previous experience on lattice techniques, that before diving into the code, they read at least sections 2, 3 and 4 of Ref. [@Figueroa_2020rrl], in order to have a better understanding of the basic lattice concepts used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. In particular, Section 2 of [@Figueroa_2020rrl] reviews the formulation of scalar and gauge field interactions in the continuum, both in flat and *Friedmann-Lemâitre-Robertson-Walker* (FLRW) backgrounds, whereas Section 3 of [@Figueroa_2020rrl] introduces the basic tools for discretizing any bosonic field theory in an expanding background, including a discussion on *lattice gauge-invariant* techniques for both *Abelian* and *non-Abelian* gauge theories. Section 4 of Ref. [@Figueroa_2020rrl] describes the formulation and properties of the evolution algorithms used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the dynamics of interacting singlet scalar fields. If the user wants to run simulations of the dynamics of Abelian and non-Abelian scalar-gauge theories, we recommend them to read sections 5 and 6 of Ref. [@Figueroa_2020rrl], as we discuss there in detail the different evolution algorithms implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ for dealing with gauge theories.
+## Lecturers
+
+- J. Baeza-Ballesteros, DESY, Zeuthen, Germany.
+- D. G. Figueroa, IFIC, Valencia, Spain.
+- N. Loayza, IFIC, Valencia, Spain.
+- K. Marschall, IFIC, Valencia, Spain.
+- A. S. Midiri, University of Geneva, Switzerland.
+- A. Roper Pol, University of Geneva, Switzerland.
+- F. R. Sattler, Bielefeld University, Germany.
+- F. Torrenti, University of Barcelona, Barcelona, Spain.
+- A. Urio, UPV/EHU, Bilbao, Spain.
+
+## Organization
+
+**Organizers:** Mohammad Ali Gorji, Daniel G. Figueroa, Dong-Won Jung, Masahide Yamaguchi.
+
+**Scientific secretaries:** Jorge Baeza-Ballesteros, Antonino S. Midiri.
+
+## Observations
+
+There was no fee to participate in the school. Practice sessions required access to a personal laptop.
+
+![IBS logo](../assets/img/IBS.png){ style="max-width: 480px; width: 100%; height: auto;" }

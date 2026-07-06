@@ -1,15 +1,59 @@
-<!-- ** Theory Monographs Guide. **  -->
+# CosmoLattice School Material (2022)
 
-The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is given in our monographic series on latttice techniques, *"The art of simulating the early Universe"*, 
+Here we compile all the presentation slides, notes, and other materials prepared for the CosmoLattice School 2022.
 
-*Part I. Integration techniques and canonical cases.* (Ref. [@Figueroa_2020rrl])
+## Main Lectures
 
-*Part II. Non-canonical cases and gravitational waves.* (Ref. [@BaezaBallesteros_2025tme]) 
+- **Lecture 1: Welcome to the Lattice!**
+  Daniel G. Figueroa
+  Slides: <a href="../assets/CLschool-material/L1-TheLattice.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
 
-*Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]) 
+- **Lecture 2a: Introduction to Inflation and post-inflationary dynamics**
+  Francisco Torrenti
+  Slides: <a href="../assets/CLschool-material/L2-Inflation+non-linear.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
 
-which will be referred to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs.
+- **Lecture 2b: Primer on Lattice simulations: phi^4 in an expanding background**
+  Francisco Torrenti
+  Slides: <a href="../assets/CLschool-material/L2b-PrimerOnLatticeSimulations.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
+  Notebooks: <a href="../assets/CLschool-material/L2b-lphi4.nb" target="_blank" rel="noopener noreferrer">Mathematica</a> (F. Torrenti), <a href="../assets/CLschool-material/L2b-lphi4.ipynb" target="_blank" rel="noopener noreferrer">Python</a> (A. Florio)
 
-These monographs [@Figueroa_2020rrl,@BaezaBallesteros_2025tme,@Figueroa_2026XYZ] provide comprehensive discussions of lattice methods for scalar–gauge field theories in an expanding universe ($\mathtt{The~Art-I}$ [@Figueroa_2020rrl]), gravitational waves and non-canonical aspects of field theory - including interactions, initial conditions, dimensionality - ($\mathtt{The~Art-II}$ [@Baeza-Ballesteros:2025tme]), and fluid dynamics as a description of an ensemble of interacting scalar, gauge, and fermion fields ($\mathtt{The~Art-III}$ [@Figueroa_2026XYZ]). 
+- **Lecture 3: Evolution algorithms for ordinary differential equations**
+  Adrien Florio
+  Slides: <a href="../assets/CLschool-material/L3-Algorithms.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
+  Scripts: <a href="../assets/CLschool-material/L3-TimeEvolution.jl" target="_blank" rel="noopener noreferrer">TimeEvolution.jl</a>, <a href="../assets/CLschool-material/L3-waveeq.jl" target="_blank" rel="noopener noreferrer">waveeq.jl</a>
 
-We recommend users without previous experience on lattice techniques, that before diving into the code, they read at least sections 2, 3 and 4 of Ref. [@Figueroa_2020rrl], in order to have a better understanding of the basic lattice concepts used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. In particular, Section 2 of [@Figueroa_2020rrl] reviews the formulation of scalar and gauge field interactions in the continuum, both in flat and *Friedmann-Lemâitre-Robertson-Walker* (FLRW) backgrounds, whereas Section 3 of [@Figueroa_2020rrl] introduces the basic tools for discretizing any bosonic field theory in an expanding background, including a discussion on *lattice gauge-invariant* techniques for both *Abelian* and *non-Abelian* gauge theories. Section 4 of Ref. [@Figueroa_2020rrl] describes the formulation and properties of the evolution algorithms used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the dynamics of interacting singlet scalar fields. If the user wants to run simulations of the dynamics of Abelian and non-Abelian scalar-gauge theories, we recommend them to read sections 5 and 6 of Ref. [@Figueroa_2020rrl], as we discuss there in detail the different evolution algorithms implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ for dealing with gauge theories.
+- **Lecture 4: Lattice formulation of interacting scalar fields in an expanding background**
+  Daniel G. Figueroa
+  Slides: <a href="../assets/CLschool-material/L4-ScalarFieldsWithExpansion.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
+
+- **Lecture 5: Lattice simulations of U(1) gauge theories**
+  Francisco Torrenti
+  Slides: <a href="../assets/CLschool-material/L5-U1GaugeFields.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
+
+- **Lecture 6: Lattice simulations of SU(2) gauge theories**
+  Adrien Florio
+  Slides: <a href="../assets/CLschool-material/L6-SU2GaugeFields(part1).pdf" target="_blank" rel="noopener noreferrer">PDF part 1</a>, <a href="../assets/CLschool-material/L6-SU2GaugeFields(part2).pdf" target="_blank" rel="noopener noreferrer">PDF part 2</a>
+
+- **Lecture 7: Parallelization techniques in CosmoLattice**
+  Adrien Florio
+  Slides: <a href="../assets/CLschool-material/L7-Parallelization(part1).pdf" target="_blank" rel="noopener noreferrer">PDF part 1</a>, <a href="../assets/CLschool-material/L7-Parallelization(part2).pdf" target="_blank" rel="noopener noreferrer">PDF part 2</a>
+
+## Topical Lectures
+
+- **Topical 1: Non-linear dynamics of non-minimally coupled scalar fields**
+  Toby Opferkuch and Ben Stefanek
+  Slides: <a href="../assets/CLschool-material/T1-NonMinimalCoupling(part1).pdf" target="_blank" rel="noopener noreferrer">PDF part 1</a>, <a href="../assets/CLschool-material/T1-NonMinimalCoupling(part2).pdf" target="_blank" rel="noopener noreferrer">PDF part 2</a>
+
+- **Topical 2: Creation and evolution of primordial gravitational waves**
+  Jorge Baeza-Ballesteros and Nicolas Loayza
+  Slides: <a href="../assets/CLschool-material/T2-GWs.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
+
+- **Topical 3: Non-linear dynamics of axion inflation**
+  Joanes Lizarraga and Ander Urio
+  Slides: <a href="../assets/CLschool-material/T3-AxionInflation.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
+
+- **Topical 4: Plotting 3D data with CosmoLattice**
+  Kenneth Marschall
+  Slides: <a href="../assets/CLschool-material/T4-Plot3Ddata.pdf" target="_blank" rel="noopener noreferrer">PDF</a>
+  Model and input files: <a href="../assets/CLschool-material/T4-tanh2hdf5.h" target="_blank" rel="noopener noreferrer">tanh2hdf5.h</a>, <a href="../assets/CLschool-material/T4-tanh2hdf5.in" target="_blank" rel="noopener noreferrer">tanh2hdf5.in</a>
+  Notebook: <a href="../assets/CLschool-material/T4-SnapshotPrinter.nb" target="_blank" rel="noopener noreferrer">Mathematica</a>

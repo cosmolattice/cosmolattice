@@ -14,7 +14,7 @@ namespace TempLat
         static constexpr size_t NScalars = 2;
         static constexpr size_t NPotTerms = 1;
 
-        // Non-minimal coupling: only the second scalar (index 1) couples to gravity
+        // Non-minimal coupling: only the second scalar (index 1) couples to gravity, The first scalar (index 0) couples only minimally to gravity.
         typedef CouplingsManager<NScalars, 1, false, true> NonMinimalCouplings;
     };
     // @endlabel

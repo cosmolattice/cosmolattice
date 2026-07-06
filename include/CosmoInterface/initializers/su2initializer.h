@@ -38,7 +38,9 @@ namespace TempLat
     template <class Model, typename T> static void initializeSU2(Model &model, FluctuationsGenerator<T> &fg, T kCutOff)
     {
       // 1. We set the homogeneous components and fluctuations of the SU(2) doublets.
+      // @label:su2initializer_initsu2
       initializeSU2Doublet(model, fg.getBaseSeed(), fg, kCutOff);
+      // @endlabel
 
       // 2. We now impose fluctuations to the TIME-DERIVATIVES of the non-Abelian
       // gauge fields (the amplitudes are set exactly to 0 at all lattice points).
@@ -65,6 +67,7 @@ namespace TempLat
                 ForLoop(a, 1, 3,
                         j0a = -model.dx * su2density(a); // SU2 current
 
+                        // @label:su2_gauss_solve
                         // We set the time-derivatives of the gauge fields via
                         // the Gauss constraint in momentum space.
                         ForLoop(i, 1, Model::NDim,
@@ -79,6 +82,7 @@ namespace TempLat
                 ForLoop(i, 1, Model::NDim, ForLoop(a, 1, 3, model.fldSU2(n)(i)(a) = 0;););
                 // Recompute c0 = sqrt(1 - 0 - 0 - 0) = 1 for all gauge links.
                 ForLoop(i, 1, Model::NDim, model.fldSU2(n)(i).unitarize();););
+                // @endlabel
       }
     }
 
@@ -88,6 +92,7 @@ namespace TempLat
     static void initializeSU2Doublet(Model &model, std::string baseSeed, FluctuationsGenerator<T> &fg, T kCutOff)
     {
       // 1. We set fluctuations to the SU2 doublets:
+      // @label:su2initializer_doublet
       addFluctuationsSU2DoubletFromPhases(model, baseSeed, fg, model.aDotI, kCutOff);
 
       // 2. We set the initial homogeneous components of the fields and derivatives.
@@ -98,6 +103,7 @@ namespace TempLat
               model.piSU2Doublet(i) += model.piSU2Doublet0(i) / model.fStar / model.omegaStar;);
       model.SU2DblPi2AvI = Averages::pi2SU2Doublet(model);
       model.SU2DblPi2AvSI = model.SU2DblPi2AvI;
+      // @endlabel
     }
 
     // Sets fluctuations to SU2 doublet components
@@ -115,6 +121,7 @@ namespace TempLat
       // the wave amplitudes and phases.
       // Note that these fluctuations do not exactly follow a Gaussian distribution.
 
+      // @label:su2initializer_fluctuations
       auto toolBox = model.getToolBox();
 
       using RRF = RandomRayleighField<T, Model::NDim>;
@@ -133,16 +140,20 @@ namespace TempLat
           // phases of left-moving waves (for each of the four components), set randomly:
           auto leftPhases =
               MakeArray(a, 0, 3, RUF(baseSeed + "phaseLeft" + model.fldSU2Doublet(i)(a).toString(), toolBox));
+      // @endlabel
 
           // the phase of the right-moving wave of the 0 component is also set randomly:
+          // @label:su2_doublet_constrained_phases
           auto rightPhase0 = RUF(baseSeed + "phaseRight" + model.fldSU2Doublet(i)(0_c).toString(), toolBox);
           // the phases of the right-moving waves of
           // the other components (1,2,3) are functions of the other ones:
 
           auto rightPhases = MakeArray(a, 0, 3, rightPhase0 * leftPhases(a) * conj(leftPhases(0_c)));
           // adds redundantly the 0 phase.
+          // @endlabel
 
           // 3. Fluctuations for the amplitudes of the SU(2) doublet components:
+          // @label:su2_doublet_modes
           ForLoop(a, 0, 3,
                   model.fldSU2Doublet(i)(a).inFourierSpace() =
                       amplitudes(a) * (leftPhases(a) + rightPhases(a)) / sqrt(2) / sqrt(2);
@@ -166,6 +177,7 @@ namespace TempLat
                   // Sets the zero mode to 0.
 
           ););
+          // @endlabel
     }
   };
 } // namespace TempLat

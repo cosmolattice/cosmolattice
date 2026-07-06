@@ -1,6 +1,6 @@
 <!-- <div style="text-align: justify;"> -->
 
-Here we explain how to implement the initial conditions
+Here we explain how to implement the initial conditions for the different matter sectors.
 
 ### **Singlet scalars** { #subsec_SingletIC }
 
@@ -241,10 +241,321 @@ The same power-spectrum normalization also applies to any supplied initial spect
 
 ### **Complex scalars** { #subsec_ComplexIC }
 
+Complex scalars are initialized by the Abelian-sector initializer, even in models with complex scalars but no dynamical U(1) gauge field. There is no independent input flag `ICtype_CS`. Instead, the complex scalar initialization is selected when the U(1) initial-condition type is `RandomWithMatter`, or when `ICtype_U1 = Default` and the model contains at least one complex scalar.
+
+The initializer first samples fluctuations for each complex scalar and then adds the homogeneous values supplied by the model. In input-parameter language these homogeneous values are usually set by the model through `initial_amplitudes` and `initial_momenta`, or by model-specific aliases for the complex scalar initial norm and initial momentum norm.
+
+The purpose of this special initialization is to generate charged matter fluctuations without introducing a homogeneous charge density. As in the singlet case, each real component is written as a sum of left- and right-moving waves. For charged fields, however, the left- and right-moving amplitudes of each real component are taken equal, and some phases are constrained. This is the minimal condition used by the code to make the zero mode of the electric charge density vanish before the gauge momenta are solved from Gauss' law.
+
+For a complex scalar written as two real components $\varphi_0$ and $\varphi_1$, the Fourier-space fluctuation is built as
+[](){ #eq_ICComplexScalarModes }
+```math
+\begin{align}
+\label{eq_ICComplexScalarModes}
+\delta\tilde\varphi_n(\tilde{\bf n})
+&=
+{1\over\sqrt{2}}
+\left[
+|\delta\tilde\varphi^{(l)}_n(\tilde{\bf n})|
+e^{i\theta^{(l)}_n(\tilde{\bf n})}
++
+|\delta\tilde\varphi^{(r)}_n(\tilde{\bf n})|
+e^{i\theta^{(r)}_n(\tilde{\bf n})}
+\right],
+\hspace{0.6cm}
+n=0,1 .
+\end{align}
+```
+The amplitudes are Rayleigh-distributed and use the same vacuum fluctuation normalization as scalar singlets, with the corresponding complex-scalar mass matrix entries. In the code an additional factor $1/\sqrt{2}$ is applied for the conversion between a complex field and its two real components.
+
+The zero-mode electric charge condition is enforced mode by mode through
+[](){ #eq_ICComplexScalarZeroCharge }
+```math
+\begin{align}
+\label{eq_ICComplexScalarZeroCharge}
+\mathrm{Re}
+\left[
+\tilde\varphi'_1(\tilde{\bf n})
+\tilde\varphi^*_0(\tilde{\bf n})
+-
+\tilde\varphi'_0(\tilde{\bf n})
+\tilde\varphi^*_1(\tilde{\bf n})
+\right]
+=
+0 .
+\end{align}
+```
+In the notation of Eq.$~$\eqref{eq_ICComplexScalarModes}, CosmoLattice realizes this by imposing
+[](){ #eq_ICComplexScalarPhaseConstraint }
+```math
+\begin{align}
+\label{eq_ICComplexScalarPhaseConstraint}
+|\delta\tilde\varphi^{(l)}_0|
+&=
+|\delta\tilde\varphi^{(r)}_0|,
+\hspace{0.6cm}
+|\delta\tilde\varphi^{(l)}_1|
+=
+|\delta\tilde\varphi^{(r)}_1|,
+\\
+\theta^{(r)}_1
+&=
+\theta^{(r)}_0
++
+\theta^{(l)}_1
+-
+\theta^{(l)}_0 .
+\end{align}
+```
+The code draws two independent amplitudes and three independent phases, uses the same amplitude for the left- and right-moving waves of each component, and fixes the remaining phase with Eq.$~$\eqref{eq_ICComplexScalarPhaseConstraint}. Because of this constraint, the complex-scalar fluctuations are not a completely independent Gaussian draw component by component, although their amplitudes follow the same fluctuation spectrum as the default scalar prescription.
+
+The conjugate momenta are built from the difference of the two waves and include the Hubble-drag term, in direct analogy with the scalar singlet case,
+[](){ #eq_ICComplexScalarMomenta }
+```math
+\begin{align}
+\label{eq_ICComplexScalarMomenta}
+\delta\tilde\varphi'_n(\tilde{\bf n})
+=
+-{i\tilde\omega_{k,n}\over\sqrt{2}}
+\left[
+|\delta\tilde\varphi^{(l)}_n|
+e^{i\theta^{(l)}_n}
+-
+|\delta\tilde\varphi^{(r)}_n|
+e^{i\theta^{(r)}_n}
+\right]
+-\tilde{\mathcal H}\delta\tilde\varphi_n(\tilde{\bf n}) .
+\end{align}
+```
+The zero mode of the fluctuation is set to zero. The homogeneous complex scalar field and momentum are then added to the zero mode in program units.
+
+The corresponding code path is `initializeCScalar` and `addFluctuationsCScalarFromPhases` in `include/CosmoInterface/initializers/u1initializer.h`. The constrained phase choice is implemented as
+
+@emgithub(include/CosmoInterface/initializers/u1initializer.h:complex_scalar_constrained_phases)
+
+and the field and momentum modes are then assigned through
+
+@emgithub(include/CosmoInterface/initializers/u1initializer.h:complex_scalar_modes)
+
 ### **Doublet scalars** { #subsec_DoubletIC }
+
+SU(2) doublet scalars are initialized by the non-Abelian-sector initializer. They do not have an independent run-parameter flag analogous to `ICtype_S`. When a model contains SU(2) doublets, CosmoLattice initializes the doublet fields first and then uses their charge density to initialize the non-Abelian gauge momenta.
+
+The structure is the same as for the complex scalar initialization, but now the doublet is represented by four real components $h_a$, with $a=0,1,2,3$. The homogeneous doublet norm supplied by the model is distributed among the real components by the model definition. Fluctuations are then added component by component,
+[](){ #eq_ICDoubletScalarModes }
+```math
+\begin{align}
+\label{eq_ICDoubletScalarModes}
+\delta\tilde h_a(\tilde{\bf n})
+=
+{1\over\sqrt{2}}
+\left[
+|\delta\tilde h^{(l)}_a(\tilde{\bf n})|
+e^{i\theta^{(l)}_a(\tilde{\bf n})}
++
+|\delta\tilde h^{(r)}_a(\tilde{\bf n})|
+e^{i\theta^{(r)}_a(\tilde{\bf n})}
+\right],
+\hspace{0.6cm}
+a=0,1,2,3 .
+\end{align}
+```
+The zero-mode charge constraints can be written as
+[](){ #eq_ICDoubletScalarZeroCharge }
+```math
+\begin{align}
+\label{eq_ICDoubletScalarZeroCharge}
+\mathrm{Re}
+\left[
+\tilde h'_m(\tilde{\bf n})
+\tilde h^*_0(\tilde{\bf n})
+-
+\tilde h'_0(\tilde{\bf n})
+\tilde h^*_m(\tilde{\bf n})
+\right]
+=
+0,
+\hspace{0.6cm}
+m=1,2,3 .
+\end{align}
+```
+CosmoLattice imposes these conditions with the same choice used in `IC.txt`,
+[](){ #eq_ICDoubletScalarPhaseConstraint }
+```math
+\begin{align}
+\label{eq_ICDoubletScalarPhaseConstraint}
+|\delta\tilde h^{(l)}_a|
+&=
+|\delta\tilde h^{(r)}_a|,
+\hspace{0.6cm}
+a=0,1,2,3,
+\\
+\theta^{(r)}_m
+&=
+\theta^{(r)}_0
++
+\theta^{(l)}_m
+-
+\theta^{(l)}_0,
+\hspace{0.6cm}
+m=1,2,3 .
+\end{align}
+```
+The left-moving phases are sampled independently. The right-moving phase of the first component is also sampled independently, while the other right-moving phases are fixed by Eq.$~$\eqref{eq_ICDoubletScalarPhaseConstraint}. The equal left/right moduli and the three phase constraints ensure that the homogeneous modes of the SU(2) charge densities vanish initially. The gauge momenta can then be obtained from the lattice Gauss constraints without introducing a net charge.
+
+The momenta are initialized as
+[](){ #eq_ICDoubletScalarMomenta }
+```math
+\begin{align}
+\label{eq_ICDoubletScalarMomenta}
+\delta\tilde h'_a(\tilde{\bf n})
+=
+-{i\tilde\omega_{k,a}\over\sqrt{2}}
+\left[
+|\delta\tilde h^{(l)}_a|
+e^{i\theta^{(l)}_a}
+-
+|\delta\tilde h^{(r)}_a|
+e^{i\theta^{(r)}_a}
+\right]
+-{\tilde{\mathcal H}\over\sqrt{2}}\delta\tilde h_a(\tilde{\bf n}) .
+\end{align}
+```
+After the fluctuation zero mode is set to zero, the model-supplied homogeneous doublet field and momentum are added.
+
+The corresponding code path is `initializeSU2Doublet` and `addFluctuationsSU2DoubletFromPhases` in `include/CosmoInterface/initializers/su2initializer.h`. The constrained right-moving phases are set by
+
+@emgithub(include/CosmoInterface/initializers/su2initializer.h:su2_doublet_constrained_phases)
+
+and the doublet field and momentum modes are assigned through
+
+@emgithub(include/CosmoInterface/initializers/su2initializer.h:su2_doublet_modes)
 
 ### **Abelian gauge fields** { #subsec_AbelianGaugeIC }
 
+The Abelian sector is controlled by the input parameter `ICtype_U1`. If `ICtype_U1 = Default`, the model chooses the initialization according to its matter content:
+
+| Matter content | Default Abelian IC |
+|---|---|
+| Complex scalars present | `RandomWithMatter` |
+| No complex scalars, but scalar-U(1) axion couplings present | `BunchDavisTransverseU1` |
+| Otherwise | `PlaneWavesZeroB` |
+
+The U(1) initializer implements three choices: `RandomWithMatter`, `PlaneWavesZeroB`, and `BunchDavisTransverseU1`. Other names may be accepted by the parser, such as `PlaneWaves`, `DefectsNetwork`, and `DefectsWhiteNoise`, but they are not dispatched by the U(1) initializer and lead to an error.
+
+#### Random matter with constrained Abelian gauge momenta { #subsubsec_RandomWithMatterU1IC }
+
+For `ICtype_U1 = RandomWithMatter`, CosmoLattice first initializes the complex scalar fields as described in Section [*Complex scalars*](#subsec_ComplexIC). If the model also contains U(1) gauge fields, their initial vector potentials are set to zero and their momenta are determined by the lattice Gauss constraint sourced by the matter charge density.
+
+This is the lattice version of the continuum prescription $A_i(\mathbf{x},\eta_*)=0$, with only the electric field initialized. Since the vector potential vanishes initially, the magnetic energy is initially zero. The electric field is then fixed by
+[](){ #eq_ICU1ContinuumGauss }
+```math
+\begin{align}
+\label{eq_ICU1ContinuumGauss}
+\partial_i A'_i(\mathbf{x})
+=
+J^A_0(\mathbf{x}),
+\hspace{0.6cm}
+A'_i(\mathbf{k})
+=
+i{k_i\over k^2}J^A_0(\mathbf{k}),
+\hspace{0.6cm}
+\mathbf{k}\neq \mathbf{0}.
+\end{align}
+```
+The zero mode of $J^A_0$ must vanish for this equation to be solvable at $\mathbf{k}=0$; this is the reason for the constrained charged-scalar phases above.
+
+In Fourier space, the code solves
+[](){ #eq_ICU1GaussSolve }
+```math
+\begin{align}
+\label{eq_ICU1GaussSolve}
+\tilde\Pi^{(a)}_{A_i}(\tilde{\bf n})
+=
+{(k^-_{L,i})^*\over |{\bf k}^-_L|^2}
+\tilde j^{(a)}_0(\tilde{\bf n}),
+\hspace{0.6cm}
+\tilde j^{(a)}_0
+=
+-\delta\tilde x^2\,
+\widetilde{J^{(a)}_0},
+\hspace{0.6cm}
+\tilde A^{(a)}_i=0 .
+\end{align}
+```
+Here $a$ labels the Abelian gauge field and $k^-_{L,i}=1-\exp(-2\pi i n_i/N)$ is the backward lattice momentum used by the implementation. The zero mode of the gauge momentum is set to zero.
+
+The corresponding code path is `initializeRandomWithMatterU1` in `include/CosmoInterface/initializers/u1initializer.h`:
+
+@emgithub(include/CosmoInterface/initializers/u1initializer.h:u1_gauss_solve)
+
+#### Transverse plane waves with zero magnetic field { #subsubsec_PlaneWavesZeroBU1IC }
+ 
+For `ICtype_U1 = PlaneWavesZeroB`, CosmoLattice generates transverse plane-wave fluctuations for the gauge momentum using two polarizations. The gauge field itself is then set to zero,
+[](){ #eq_ICU1PlaneWavesZeroB }
+```math
+\begin{align}
+\label{eq_ICU1PlaneWavesZeroB}
+\tilde A_i^{(a)}(\tilde{\bf n})=0,
+\hspace{0.6cm}
+k^-_{L,i}\tilde\Pi^{(a)}_{A_i}(\tilde{\bf n})=0 .
+\end{align}
+```
+Thus the initial magnetic field vanishes, while the electric field is a transverse random plane-wave configuration. The zero modes are set to zero.
+
+The corresponding code path is `initializePlaneWavesZeroBU1` in `include/CosmoInterface/initializers/u1initializer.h`.
+
+#### Bunch-Davies transverse Abelian fields { #subsubsec_BunchDaviesTransverseU1IC }
+
+**To be expanded by Ander**
+
 ### **Non-Abelian gauge fields** { #subsec_NonAbelianGaugeIC }
 
-### **Fluids (TBA)** { #subsec_FluidIC }
+The implemented non-Abelian initialization is tied to the SU(2) doublet sector. The model initializer calls the SU(2) initializer when SU(2) doublets are present. First the doublet matter fluctuations are generated, as described in Section [*Doublet scalars*](#subsec_DoubletIC). Then the SU(2) gauge links and gauge momenta are initialized from the non-Abelian Gauss constraint.
+
+The gauge links are set to the identity, equivalently the gauge field starts from zero. As in the Abelian case, the initial magnetic energy vanishes and only the electric components are initialized. In the continuum this corresponds to solving
+[](){ #eq_ICSU2ContinuumGauss }
+```math
+\begin{align}
+\label{eq_ICSU2ContinuumGauss}
+\partial_i B_i^{b\,\prime}(\mathbf{x})
+=
+J^b_0(\mathbf{x}),
+\hspace{0.6cm}
+B_i^{b\,\prime}(\mathbf{k})
+=
+i{k_i\over k^2}J^b_0(\mathbf{k}),
+\hspace{0.6cm}
+\mathbf{k}\neq \mathbf{0}.
+\end{align}
+```
+On the lattice, the electric fields are solved in Fourier space from the SU(2) charge density:
+[](){ #eq_ICSU2GaussSolve }
+```math
+\begin{align}
+\label{eq_ICSU2GaussSolve}
+\tilde\Pi^{(n),b}_{B_i}(\tilde{\bf n})
+=
+{(k^-_{L,i})^*\over |{\bf k}^-_L|^2}
+\tilde j^{(n),b}_0(\tilde{\bf n}),
+\hspace{0.6cm}
+\tilde j^{(n),b}_0
+=
+-\delta\tilde x\,
+\widetilde{J^{(n),b}_0},
+\hspace{0.6cm}
+U_i^{(n)}=\mathbb{1}.
+\end{align}
+```
+Here $n$ labels the SU(2) gauge field, $b=1,2,3$ labels the algebra component, and $k^-_{L,i}=1-\exp(-2\pi i n_i/N)$ is the backward lattice momentum. The zero mode of the gauge momentum is set to zero.
+
+The corresponding code path is `initializeSU2` in `include/CosmoInterface/initializers/su2initializer.h`:
+
+@emgithub(include/CosmoInterface/initializers/su2initializer.h:su2_gauss_solve)
+
+There is currently no independent `ICtype_SU2` input parameter and no independent non-Abelian vacuum plane-wave initializer in this initialization path.
+
+<!-- ### **Fluids (TBA)** { #subsec_FluidIC }
+
+Fluid initial conditions are not implemented in the current matter-sector initializer. The main model initializer initializes scale factor variables, scalar singlets, gravitational waves, SU(2) doublets and gauge fields, and the Abelian sector; it does not dispatch to a fluid initializer.
+-->

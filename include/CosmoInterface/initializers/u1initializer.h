@@ -91,6 +91,7 @@ namespace TempLat
             a, 0, Model::NU1 - 1, auto j0 = model.fldU1(a)(1_c);
             j0 = -pow<2>(model.dx) * MatterCurrents::U1ChargeDensity(model, a); // U1 current
 
+            // @label:u1_gauss_solve
             // We set the time-derivatives of the gauge fields via the Gauss constraint in momentum space.
             ForLoop(i, 1, Model::NDim,
                     model.piU1(a)(i).inFourierSpace() = asFourier(conj(keffm(i)) * (1 / keffm2)) * j0.inFourierSpace();
@@ -101,6 +102,7 @@ namespace TempLat
             ForLoop(i, 1, Model::NDim,
                     model.fldU1(a)(i) = 0; // we set the amplitude of the gauge fields exactly to zero.
             ););
+            // @endlabel
       }
     }
 
@@ -166,6 +168,7 @@ namespace TempLat
               // 3. Random phases for the waves:
               // 	-->	Note: We only generate three of the four phases randomly, the fourth is imposed so that the Gauss
               // constraint is preserved initially, see documentation.
+              // @label:complex_scalar_constrained_phases
               auto eitheta00 = RUF(baseSeed + "phase00" + model.fldCS(i)(0_c).toString(),
                                    toolBox); // left-moving wave phase, component 0
               auto eitheta01 = RUF(baseSeed + "phase01" + model.fldCS(i)(0_c).toString(),
@@ -174,9 +177,11 @@ namespace TempLat
                                    toolBox); // left-moving wave phase, component 1
               auto eitheta11 = eitheta01 * eitheta10 *
                                conj(eitheta00); // right-moving wave phase, component 1 (depends on the other three!)
+              // @endlabel
 
               // 4. Fluctuations for the complex field components, imposed as a sum of left-moving and right-moving
               // waves in momentum space:
+              // @label:complex_scalar_modes
               model.fldCS(i)(0_c).inFourierSpace() =
                   a0 * (eitheta00 + eitheta01) / sqrt(2) /
                   sqrt(2); // component 0. Second sqrt(2) comes from normalisation of complex scalar.
@@ -201,6 +206,7 @@ namespace TempLat
                   -Constants::I<T> * omega0 * a1 * (eitheta10 - eitheta11) / sqrt(2) / sqrt(2) -
                   aDot * model.fldCS(i)(1_c).inFourierSpace();    // component 1
               model.piCS(i)(1_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
+              // @endlabel
 
       );
     }

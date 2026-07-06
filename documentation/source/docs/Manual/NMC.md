@@ -6,7 +6,7 @@ This section is structured as follows. In Section [*Non-minimally coupled scalar
 
 ### **Non-minimally coupled scalar dynamics** { #subsec_NMCcontinuum }
 
-We work in the Jordan frame and keep the non-minimal coupling $\propto \phi^2R$ explicit. We keep the presentation compact, so for details on theoretical derivations, we point the reader to (<span style="color:red;">** Section XXX of Ref.~1st paper with Ben & Toby**</span>). For one non-minimally coupled scalar $\chi$, together with any additional minimally coupled matter sector, the relevant part of the action is
+We work in the Jordan frame and keep the non-minimal coupling $\propto \phi^2R$ explicit. We keep the presentation compact, so for details on theoretical derivations we point the reader to Section II of Ref [@Figueroa_2021iwm]. For one non-minimally coupled scalar $\chi$, together with any additional minimally coupled matter sector, the relevant part of the action is
 [](){ #eq_NMCaction }
 ```math
 \begin{align}
@@ -123,8 +123,7 @@ Combining Eq.$~$\eqref{eq_NMCricciTrace} with Eq.$~$\eqref{eq_NMCricciMetric} gi
 \right] .
 \end{align}
 ```
-
-The homogeneous energy density of a single NMC scalar, $\chi$, <!-- written in the same $\chi$ notation --> is (<span style="color:red;">** What is this for ? **</span>)
+The homogeneous energy density of a single NMC scalar is also modified, thereofre new terms will arise due to this coupling which will have to be accounted in the total energy density
 [](){ #eq_NMCEnergyDensityContinuum }
 ```math
 \begin{align}
@@ -144,8 +143,9 @@ The homogeneous energy density of a single NMC scalar, $\chi$, <!-- written in t
 \mathcal{H}\equiv\frac{a'}{a}.
 \end{align}
 ```
+This expression fixes the NMC contribution to the averaged total energy density, which is used in the Friedmann constraint and in the energy-output columns described below. The final term is a total spatial derivative and drops out of volume averages for periodic boundary conditions.
 
-The program variables are the scalar-singlet ones of Eq. ([*2*](My first model of (singlet) scalar fields.md#eq:FieldSpaceTimeNaturalVariables)) (<span style="color:red;">** ??? **</span>). No new spacetime or field rescalings are introduced by the NMC module; the only additional program quantity required is the dimensionless Ricci scalar
+The program variables are the scalar-singlet ones of Eq. ([*2*](My first model of (singlet) scalar fields.md#eq:FieldSpaceTimeNaturalVariables)), from Section [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md). No new spacetime or field rescalings are introduced by the NMC module; the only additional program quantity required is the dimensionless Ricci scalar
 [](){ #eq_NMCRicciProgram }
 ```math
 \begin{align}
@@ -231,7 +231,7 @@ The corresponding input file is $\texttt{models/parameter-files/lphi4NonMinimal.
 
 @emgithub(models/parameter-files/lphi4NonMinimal.in)
 
-The parameter syntax, <!-- command-line overrides,  --> lattice parameters, output frequencies, and scalar initial conditions are the same as in Section [*Running the program with an input parameter file*][subsec_Input-Scalars] (<span style="color:red;">**from Section ...**</span>). The NMC-specific additions are:
+The parameter syntax, <!-- command-line overrides,  --> lattice parameters, output frequencies, and scalar initial conditions are the same as in Section [*Running the program with an input parameter file*](My first model of (singlet) scalar fields.md#subsec_Input-Scalars). The NMC-specific additions are:
 
 | **Parameters** <div style="width:150px"> | **Explanation** |
 | ---------------------------------------- | --------------- |
@@ -257,7 +257,7 @@ omegaEoS = ...
 H0 = ...
 ```
 
-In that case, the scale factor is not sourced by the lattice fields, but by an external homogeneous component with constant equation of state $\omega_{\rm EoS}$. The NMC term still needs the background Ricci scalar, which CosmoLattice computes directly from the prescribed scale factor (<span style="color:red;">**which one of the two?**</span>):
+In that case, the scale factor is not sourced by the lattice fields, but by an external homogeneous component with constant equation of state $\omega_{\rm EoS}$. The NMC term still needs the background Ricci scalar, which CosmoLattice computes directly from the prescribed scale factor. The first line below gives the time-dependent Ricci scalar, while the second line is its value at the initial time $\tilde\eta_*$:
 [](){ #eq_NMCFixedBackgroundRicci }
 ```math
 \begin{align}
@@ -276,8 +276,8 @@ p+\tilde{\mathcal H}_*
 \left(\tilde\eta-\tilde\eta_*\right)
 \right]^{-2},
 \\
-\tilde{\bar R}_{\rm fixed}(\tilde\eta_*)
-&=
+\tilde{\bar R}_{\rm fixed,*}
+&\equiv \tilde{\bar R}_{\rm fixed,*}(\tilde\eta = \tilde\eta_*) =  
 -9\tilde{\mathcal H}_*^2
 \left(\omega_{\rm EoS}-{1\over3}\right),
 \end{align}
@@ -329,7 +329,7 @@ $\hspace{1cm}$ $\tilde{\eta}$, $a$, $a'$, $a'/a$, $\widetilde{\bar R}$.
 
 ### **The NMC model file** { #sec_TheNMCModelFile }
 
-To define a new NMC model, start from a scalar-singlet model file and add the NMC field assignment in the `ModelPars` structure. In $\texttt{models/lphi4NonMinimal.h}$ this is (<span style="color:red;">** second scalar (index 1) couples to gravity --> second scalar (index 1) couples non-minimally to gravity**</span>)
+To define a new NMC model, start from a scalar-singlet model file and add the NMC field assignment in the `ModelPars` structure. In $\texttt{models/lphi4NonMinimal.h}$ this declares that the second scalar, field index `1`, couples non-minimally to gravity:
 
 @emgithub(models/lphi4NonMinimal.h:model_pars)
 
@@ -368,7 +368,7 @@ The numbering of these functions must be consistent with the scalar-field number
 
 #### Initialization of fluctuations { #sec_InitNMC }
 
-The NMC-specific use case is to initialize the non-minimally coupled field from an external spectrum, following the prescription described in Section [*External power spectrum for scalar singlet initialization*](IC.md#subsubsec_ExternalPSSingletIC) (<span style="color:red;">**comment this is for any scalar field (singlets only?), not just NMC, right?**</span>). For the present model this is done with
+Any scalar singlet can be initialized from an external spectrum, following the prescription described in Section [*External power spectrum for scalar singlet initialization*](IC.md#subsubsec_ExternalPSSingletIC). The NMC-specific use case is to apply this mechanism to the non-minimally coupled scalar. For the present model this is done with
 ```text
 ext_PS1 = path/to/spectrum.dat
 ```
@@ -377,7 +377,7 @@ because in $\texttt{lphi4NonMinimal.h}$ field `1` is $\chi$. The corresponding i
 
 #### Evolution equations { #eq_evolution-NMC }
 
-For self-consistent expansion, CosmoLattice evolves the fields by solving a set of first-order differential equatoins. Defining the conjugate momenta
+For self-consistent expansion, CosmoLattice evolves the fields by solving a set of first-order differential equations. Defining the conjugate momenta
 [](){ #eq_NMCmomentumChi }
 ```math
 \begin{align}
