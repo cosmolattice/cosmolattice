@@ -26,6 +26,7 @@ namespace TempLat
    * for all fields and parameters.
    *
    **/
+  // @label:modelinitializer_class
   template <typename T> class ModelInitializer
   {
   public:
@@ -63,14 +64,16 @@ namespace TempLat
 
       Averages::setAllAverages(model);
       if constexpr (Model::IsNonMinimallyCoupled) model.RI = NonMinimalCoupling::R(model);
-      if (rPar.expansion) {
+      if (rPar.expansion && !rPar.fixedBackground) {
         // For consistency, correct the scale factor time-derivative with the fluctuations.
-        // Relevant only for higher order evolvers.
+        // Relevant only for higher order evolvers. Not done for a fixed background,
+        // where aDot is prescribed by the user through H0.
         auto hubbleLaw = HubbleConstraint::get(model);
         model.aDotI = sqrt(hubbleLaw[2]);
         if constexpr (Model::IsNonMinimallyCoupled) model.piAI = model.aDotI * pow(model.aI, 1 - model.alpha);
       }
     }
+    // @endlabel
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

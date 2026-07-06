@@ -49,8 +49,8 @@ namespace TempLat
 
               gauss.emplace_back(
                   MeasurementsSaver<T>(filesManager, "gauss_U1_" + std::to_string(i), amIRoot, append,
-                                       {"t", "var(LHS-RHS)_over_var(LHS+RHS)", "var(LHS)",
-                                        "var(RHS)"})); // Checks the degree of conservation of the U(1) gauss law.
+                                       {"t", "av|LHS-RHS|_over_av|LHS+RHS|", "av|LHS|",
+                                        "av|RHS|"})); // Checks the degree of conservation of the U(1) gauss law.
 
               spectra.emplace_back(SpectrumSaver<T>(filesManager, "norm_U1_" + std::to_string(i), amIRoot, append,
                                                     par)); // Contains the spectra of the electric and magnetic fields.
@@ -75,9 +75,9 @@ namespace TempLat
               auto gaussU1Arr =
                   GaussLaws::checkU1(model, i);   // the function returns a 3-component vector with information of the
                                                   // left and right hand sides of the Gauss law.
-              gauss(i).addAverage(gaussU1Arr(0)); // var(LHS - RHS)_over_var(LHS + RHS),
-              gauss(i).addAverage(gaussU1Arr(1)); // var(LHS),
-              gauss(i).addAverage(gaussU1Arr(2)); // and var(RHS)
+              gauss(i).addAverage(gaussU1Arr(0)); // av|LHS - RHS|_over_av|LHS + RHS|,
+              gauss(i).addAverage(gaussU1Arr(1)); // av|LHS|,
+              gauss(i).addAverage(gaussU1Arr(2)); // and av|RHS|
               gauss(i).save(lastMeas););
     }
 

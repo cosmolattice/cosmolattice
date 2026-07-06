@@ -38,6 +38,7 @@ namespace TempLat
      * @param PSType Power spectrum type for initialization.
      * @param kCutOff The cutoff scale for the fluctuations.
      */
+    // @label:initializescalars
     template <class Model, typename T>
     static void initializeScalars(Model &model, const FluctuationsGenerator<T> &fg,
                                   const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar)
@@ -50,14 +51,15 @@ namespace TempLat
         initializeRandomScalar(model, fg, extps, rPar, rPar.SIC == InitialConditionsType::S::Default);
       else if (flagSIC != InitialConditionsType::S::Homogeneous)
         throw(SICNotImplemented("The initial condition provided for scalars is not implemented."));
-            
+
       model.fldS = model.getFluctuationRatio(FieldsNumbering::fldS()) * model.fldS;
       model.piS = model.getFluctuationRatio(FieldsNumbering::piS()) * model.piS;
 
       // We set the initial homogeneous components of the fields and derivatives.
-      // model.fldCS0(i) and model.piCS0(i) are introduced in physical
+      // model.fldS0(i) and model.piS0(i) are introduced in physical
       // (dimensionful variables), so we transform them to program variables
       // by dividing them by f_* and f_* omega_* respectively.
+      // @endlabel
 
       // @label:default_scalar_homogeneous_modes
       model.fldS += model.fldS0 / model.fStar;                  // from the default ones.
@@ -68,6 +70,7 @@ namespace TempLat
 
   private:
 
+    // @label:initializerandomscalar
     template <class Model, typename T>
     static void initializeRandomScalar(Model &model, const FluctuationsGenerator<T> &fg,
                                        const ExternalPowerSpectrumInitializer<T> &extps, RunParameters<T> &rPar,
@@ -77,6 +80,7 @@ namespace TempLat
         if (!(useAxionU1HomogeneousDefault && isAxionU1CoupledScalar<Model>(i))) {
           auto &s = model.extPS[i];
           if (s == Constants::defaultString || s.empty() || s == "None" || s == "none") {
+            // @endlabel
             // @label:default_scalar_dispatch
             fg.conjugateGaussianFluctuations(model, model.fldS(i), model.piS(i), model.masses2S[i], model.aDotI,
                                              rPar.kCutoff);

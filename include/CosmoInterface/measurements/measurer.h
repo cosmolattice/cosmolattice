@@ -80,6 +80,7 @@ namespace TempLat
     {
     }
 
+    // @label:measurer_measure
     template <typename R> void measure(int n, R t, Model &model)
     {
       bool isInitialTime = (n == 0);
@@ -165,6 +166,7 @@ namespace TempLat
       } else
         model.getToolBox()->unsetVerbose();
     }
+    // @endlabel
 
     bool areWeMeasuring(int n)
     {
@@ -177,6 +179,8 @@ namespace TempLat
         su2Measurer.setLastMeas(true);
         energiesMeasurer.setLastMeas(true);
         scaleFactorMeasurer.setLastMeas(true);
+        gwsMeasurer.setLastMeas(true);
+        topologicalChargesMeasurer.setLastMeas(true);
       }
       return (n % outputFreq == 0 || n % infreqOutputFreq == 0 || n % rareOutputFreq == 0);
     }
@@ -194,6 +198,7 @@ namespace TempLat
     EvolverType eType;
     bool unbinnedSpectra;
 
+    // @label:measurer_members
     ScalarSingletMeasurer<T> scalarSingletMeasurer;
     GWsMeasurer<T> gwsMeasurer;
     ComplexScalarMeasurer<T> complexScalarMeasurer;
@@ -208,6 +213,7 @@ namespace TempLat
     MeasurementsSaver<T> spectraTime;
     PowerSpectrumMeasurer<T, Model::NDim> PSMeasurer;
     UnbinnedPowerSpectrumMeasurer<T, Model::NDim> UPSMeasurer;
+    // @endlabel
 
     ptrdiff_t nLast;
     bool lastMeas;

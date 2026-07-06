@@ -27,6 +27,7 @@ namespace TempLat
   public:
     using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
+    // @label:su2measurer_constructor
     template <typename Model>
     SU2Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
     {
@@ -42,15 +43,17 @@ namespace TempLat
 
               gauss.emplace_back(
                   MeasurementsSaver<T>(filesManager, "gauss_SU2_" + std::to_string(i), amIRoot, append,
-                                       {"t", "var(LHS-RHS)_over_var(LHS+RHS)", "var(LHS)",
-                                        "var(RHS)"})); // Checks the degree of conservation of the SU(2) gauss law.
+                                       {"t", "av|LHS-RHS|_over_av|LHS+RHS|", "av|LHS|",
+                                        "av|RHS|"})); // Checks the degree of conservation of the SU(2) gauss law.
 
               spectra.emplace_back(SpectrumSaver<T>(filesManager, "norm_SU2_" + std::to_string(i), amIRoot, append,
                                                     par)); // Contains the spectra of the electric and magnetic fields.
 
       );
     }
+    // @endlabel
 
+    // @label:su2measurer_measurestandard
     // This measures the corresponding averages with MeansMeasurer::measure, and add them to the files.
     // NOTE: For gauge fields, their momenta is defined as pi=a^(alpha-1)*B'_i, with A'_i the electric field.
 
@@ -64,12 +67,14 @@ namespace TempLat
               // the function returns a 3-component vector with information
               // of the left and right hand sides of the Gauss law.
 
-              gauss(i).addAverage(gaussArr(0)); // var(LHS - RHS)_over_var(LHS + RHS),
-              gauss(i).addAverage(gaussArr(1)); // var(LHS)
-              gauss(i).addAverage(gaussArr(2)); // and var(RHS)
+              gauss(i).addAverage(gaussArr(0)); // av|LHS - RHS|_over_av|LHS + RHS|,
+              gauss(i).addAverage(gaussArr(1)); // av|LHS|
+              gauss(i).addAverage(gaussArr(2)); // and av|RHS|
               gauss(i).save(lastMeas););
     }
+    // @endlabel
 
+    // @label:su2measurer_measurespectra
     // This measures the electric and magnetic spectra and adds them to the files.
     template <typename Model, typename PowerSpectrumMeasurer> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
@@ -81,6 +86,7 @@ namespace TempLat
 
               spectra(k).save(lastMeas, t, elSpecSU2, magSpecSU2););
     }
+    // @endlabel
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

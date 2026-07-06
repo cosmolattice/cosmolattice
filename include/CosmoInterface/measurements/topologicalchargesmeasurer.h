@@ -8,6 +8,7 @@
 // File info: Main contributor(s):  Adrien Florio, Year: 2024
 
 #include "CosmoInterface/runparameters.h"
+#include "CosmoInterface/measurements/abstractmeasurer.h"
 #include "CosmoInterface/measurements/meansmeasurer.h"
 #include "CosmoInterface/measurements/measurementsIO/filesmanager.h"
 #include "TempLat/util/templatvector.h"
@@ -21,7 +22,7 @@ namespace TempLat
    *
    * Unit test: make test-topologicalchargesmeasurer
    **/
-  template <typename T> class TopologicalChargesMeasurer
+  template <typename T> class TopologicalChargesMeasurer : public AbstractMeasurer
   {
   public:
     /* Put public methods here. These should change very little over time. */
@@ -51,7 +52,7 @@ namespace TempLat
                 auto EB2 = average(pow<2>(FieldFunctionals::TrEBSU2(model, i))); topologicalCharges->addAverage(EB);
                 topologicalCharges->addAverage(EB2););*/
 
-        topologicalCharges->save();
+        topologicalCharges->save(lastMeas);
       }
     }
 

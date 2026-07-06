@@ -25,6 +25,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
+    // @label:spectrumsaver_constructor
     template <size_t NDim>
     SpectrumSaver(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool appendMode, const RunParameters<T> &rPar,
                   bool dontCreate = false):
@@ -53,6 +54,7 @@ namespace TempLat
         }
       }
     }
+    // @endlabel
 
     template <size_t NDim>
     SpectrumSaver(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool amIRoot, bool appendMode,
@@ -70,7 +72,7 @@ namespace TempLat
             "Unbinned spectra needs HDF5, but compiled without HDF5 option."));
 #endif
         }
-        if (useHDF5) {
+        else if (useHDF5) {
 #ifdef HAVE_HDF5
           saverHDF5 = std::make_shared<SpectrumSaverHDF5<T>>(fm, fld, amIRoot, appendMode, rPar);
 #else
@@ -128,6 +130,7 @@ namespace TempLat
 #endif
     }
 
+    // @label:spectrumsaver_save
     void saveSpectra(bool lastMeas, T& t, std::vector<std::shared_ptr<RadialProjectionResult<T>>> spectra){
       if(useHDF5) {
 #ifdef HAVE_HDF5
@@ -141,6 +144,7 @@ namespace TempLat
         saverStd->save(spectra, t);
       }
     }
+    // @endlabel
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

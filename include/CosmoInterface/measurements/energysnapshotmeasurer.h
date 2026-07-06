@@ -24,6 +24,7 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
+    // @label:energysnapshotsmeasurer_constructor
     template <typename runParameters>
     EnergySnapshotsMeasurer(Model &model, runParameters &pars, FilesManager<Model::NDim> &fm,
                             std::vector<std::string> toSave)
@@ -118,11 +119,13 @@ namespace TempLat
       }
 #endif
     }
+    // @endlabel
 
     // This saves the energy snapshots at the corresponding HDF5 files
     template <typename T> void measure(Model &model, T t)
     {
 #ifdef HAVE_HDF5
+      // @label:energysnapshotsmeasurer_measure
       if (saveScalar) { // kinetic energy of the scalar singlets
         ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalar);
                 fIO.saver.save(t, model.fldS(i), "S_" + std::to_string(i)); fIO.saver.close(););
@@ -137,6 +140,7 @@ namespace TempLat
             t, Energies::gradientS(model, FieldFunctionals::grad2S(model, i)), "E_S_G_" + std::to_string(i));
                 fIO.saver.close(););
       }
+      // @endlabel
       if (saveComplexScalar) { // kinetic energy of the complex scalars
         ForLoop(i, 0, Model::NCs - 1, fIO.saver.open(nameComplexScalar);
                 fIO.saver.save(t, norm(model.fldCS(i)), "CS_" + std::to_string(i)); fIO.saver.close(););
@@ -180,7 +184,7 @@ namespace TempLat
       }
       if (saveSU2Mag) { // magnetic energy of the SU(2) gauge sector
         ForLoop(i, 0, Model::NSU2 - 1, fIO.saver.open(nameSU2Mag); fIO.saver.save(
-            t, Energies::magneticSU2(model, FieldFunctionals::B2U1(model, i)), "E_B_G_" + std::to_string(i));
+            t, Energies::magneticSU2(model, FieldFunctionals::B2SU2(model, i)), "E_B_G_" + std::to_string(i));
                 fIO.saver.close(););
       }
       if (savePot) {
