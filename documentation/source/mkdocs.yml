@@ -1,8 +1,10 @@
 site_name: CosmoLattice World #Manual#
 repo_url: https://github.com/cosmolattice/cosmolattice
+repo_name: CosmoLattice
 
 theme:
   name: material
+  custom_dir: overrides
   features:
     - content.code.copy
     - content.code.select
@@ -124,26 +126,26 @@ nav:
       #- "What is CosmoLattice": "code/HowToCiteCL.md"
       #- "How to cite CosmoLattice": "code/HowToCiteCL.md"
       - "<span style='font-weight:bold;'>Installation</span>": "code/Installation.md"
-      - "<span style='font-weight:bold;'>Code Features </span>": "code/Features.md"
+      #- "<span style='font-weight:bold;'>Code Features </span>": "code/Features.md"
       - "<span style='font-weight:bold;'>Input File Builder </span>": "code/InputBuilder.md"
       - "<span style='font-weight:bold;'>Code Version Guide </span>": "code/Versions.md"
       #         - "Versions 2.X": "code/Versions2X.md"
       #         - "Versions 1.X": "code/Versions1X.md"
-      - "<span style='font-weight:bold;'>Useful Links </span>": "code/Basics.md"
+      #- "<span style='font-weight:bold;'>Useful Links </span>": "code/Basics.md"
       - ? "<span style='font-weight:bold;'>Application Programming Interface (API) </span>" # - API:
         : #- "Links": "CosmoLattice/links.md"
           - "Classes":
               - "Class List": "CosmoLattice/annotated.md"
-              - "Class Index": "CosmoLattice/classes.md"
+              #- "Class Index": "CosmoLattice/classes.md"
               - "Class Hierarchy": "CosmoLattice/hierarchy.md"
-              - "Class Members": "CosmoLattice/class_members.md"
-              - "Class Member Functions": "CosmoLattice/class_member_functions.md"
-              - "Class Member Variables": "CosmoLattice/class_member_variables.md"
-              - "Class Member Typedefs": "CosmoLattice/class_member_typedefs.md"
-              - "Class Member Enumerations": "CosmoLattice/class_member_enums.md"
+              #- "Class Members": "CosmoLattice/class_members.md"
+              #- "Class Member Functions": "CosmoLattice/class_member_functions.md"
+              #- "Class Member Variables": "CosmoLattice/class_member_variables.md"
+              #- "Class Member Typedefs": "CosmoLattice/class_member_typedefs.md"
+              #- "Class Member Enumerations": "CosmoLattice/class_member_enums.md"
           - "Namespaces":
               - "Namespace List": "CosmoLattice/namespaces.md"
-              - "Namespace Members": "CosmoLattice/namespace_members.md"
+              #- "Namespace Members": "CosmoLattice/namespace_members.md"
               - "Namespace Member Functions": "CosmoLattice/namespace_member_functions.md"
               - "Namespace Member Variables": "CosmoLattice/namespace_member_variables.md"
               - "Namespace Member Typedefs": "CosmoLattice/namespace_member_typedefs.md"

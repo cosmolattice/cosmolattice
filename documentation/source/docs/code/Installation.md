@@ -3,8 +3,8 @@
 <span style="font-size: 34px;">**Download**</span>
 
 The code can be downloaded from our <a href="https://github.com/cosmolattice/cosmolattice_private" target="_blank">
-**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ GitHub repository**. 
-</a>
+**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ GitHub repository**
+</a>, see also the installation instructions below on how to do this directly from the command line.
 
 <span style="font-size: 34px;">**Installation**</span>
 
@@ -62,6 +62,43 @@ cmake -DAUTOBUILD_FFTW=ON ..
 
 ### Device configuration
 
+A device is a fixed pair of hardware and corresponding drivers that can be used to perform computations. In the context of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, a device can usually be either a CPU together with a parallelization framework (e.g. OpenMP or POSIX threads) or a GPU with a parallelization framework (e.g. CUDA or HIP), for more details see the [*Parallelization*](../Manual/Parallelization.md) section in the manual.
+
+The library is designed to be able to run on a wide range of devices, and it can automatically detect what devices are available on a given machine.
+In that case, it will first check for GPU support, checking first CUDA (used for Nvidia cards) and then HIP (for AMD cards).
+
+A CPU device is always required. TempLat will always check first for OpenMP support and then for POSIX threads. If none of these are available, it will fall back to a serial implementation.
+
+If you want to force the use of a specific device, you can do so by setting the appropriate flag when configuring the project with CMake.
+The available options are `-DCUDA=ON`, `-DHIP=ON`, `-DOPENMP=ON`, `-DPTHREADS=ON` and `-DNOTHREADING=ON`. For example, to disable all shared-memory parallelization, you can do
+```bash
+cmake -DMODEL=lphi4 -DNOTHREADING=ON ../
+```
+
+#### CUDA
+To compile for NVIDIA GPUs using CUDA, you can enable the CUDA backend by setting
+```bash
+cmake -DMODEL=lphi4 -DCUDA=ON ../
+```
+Specifying the architecture is optional for CUDA, as Kokkos can usually detect it correctly. However, when compiling offline (e.g. on a HPC cluster) it may be necessary to specify it manually. 
+You can do so by passing the appropriate flag to Kokkos as described in the section [Offline compilation (Kokkos)](#offline-compilation-kokkos) below.
+
+#### HIP
+
+To compile for AMD GPUs using HIP, you can enable the HIP backend by setting
+```bash
+cmake -DMODEL=lphi4 -DHIP=ON ..
+```
+Note that specifying the architecture is mandatory for HIP.
+
+#### Offline compilation
+
+To compile an application to be run on a specific architecture, you can directly pass the target architecture to Kokkos.
+For a list of supported architectures, see [the Kokkos documentation](https://kokkos.org/kokkos-core-wiki/get-started/configuration-guide.html#gpu-architectures). For example, for an RTX 4070, you would pass 
+```bash
+cmake -DMODEL=lphi4 -DKokkos_ARCH_ADA89 ../
+```
+
 ### Optional features
 
 Optionally, you can enable the following libraries:
@@ -74,7 +111,7 @@ Optionally, you can enable the following libraries:
 
 #### MPI: Distributed Parallelization
 
-Enabling `MPI` allows you to run simulations in parallel on multiple machines, which is particularly useful on HPC clusters and large simulations. For more details, see also the [*Parallelization*](Parallelization.md) section in the manual.
+Enabling `MPI` allows you to run simulations in parallel on multiple machines, which is particularly useful on HPC clusters and large simulations. For more details, see also the [*Parallelization*](../Manual/Parallelization.md) section in the manual.
 
  To enable it, you need to pass the `-DMPI=ON` flag to the `cmake` command:
 ```bash
@@ -82,7 +119,7 @@ cmake -DMPI=ON -DHDF5=ON ..
 ```
 This requires that you have an `MPI` installation present on your system. OpenMPI can be easily installed on typical POSIX systems using the default package manager, see [*Installing Dependencies*][subsec_install_dependencies].
 
-### HDF5: A Hierarchical Data Format
+#### HDF5: A Hierarchical Data Format
 
 `HDF5` is a file format and set of tools for managing complex data. It is particularly useful for saving whole simulations, restarting them, and automatically backing them up. 
 Enabling `HDF5` allows you to use this format for all output files instead of the default text files. For more details, see also the [Backing up simulations with HDF5](Backing up simulations with HDF5.md) section in the manual.
@@ -134,9 +171,14 @@ At this point, you should be able to compile and run $\mathcal{C}\mathtt{osmo}\m
 ```bash
 sudo apt-get install make g++ cmake openmpi git
 ```
-The `sudo` command is necessary to give you the admin rights, which you need to have to install software ''globally" on your PC.
+The `sudo` command is necessary for the admin rights needed to install software ''globally" on your PC.
 
-**Fedora:** On Fedora, you can use `dnf` as a default package manager. Then the command are the same than on Ubuntu.
+**Arch Linux:** On Arch Linux, `pacman` is the default package manager. 
+```bash
+sudo pacman -S make g++ cmake openmpi git
+```
+
+**Fedora:** On Fedora, you can use `dnf` as a default package manager. 
 ```bash
 sudo dnf install make g++ cmake openmpi-devel git
 ```

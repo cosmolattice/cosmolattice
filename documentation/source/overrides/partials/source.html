@@ -1,0 +1,13 @@
+{#-
+  Override of the mkdocs-material source partial: opens the repository
+  link in a new tab instead of navigating away from the documentation.
+-#}
+<a href="{{ config.repo_url }}" target="_blank" rel="noopener" title="{{ lang.t('source') }}" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    {% set icon = config.theme.icon.repo or "fontawesome/brands/git-alt" %}
+    {% include ".icons/" ~ icon ~ ".svg" %}
+  </div>
+  <div class="md-source__repository">
+    {{ config.repo_name }}
+  </div>
+</a>
