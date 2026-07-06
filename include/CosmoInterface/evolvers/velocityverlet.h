@@ -34,6 +34,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
+    // @label:velocityverlet_constructor
     template <class Model>
     VelocityVerlet(Model &model, RunParameters<T> &rPar)
         : expansion(rPar.expansion), fixedBackground(rPar.fixedBackground), // A boolean. If true, expansion is fixed
@@ -43,7 +44,9 @@ namespace TempLat
           order(VelocityVerletParameters<T>::getOrder(rPar.eType)) // Order of the VV algorithm
     {
     }
+    // @endlabel
 
+    // @label:velocityverlet_composition
     template <class Model> void evolve(Model &model, T tMinust0, bool evolveGWs)
     {
       /*
@@ -108,6 +111,7 @@ namespace TempLat
         tcurrent += model.dt * w;
       }
     }
+    // @endlabel
 
     // This function is called before doing the measurements. It is used only to set aDotI to its correct value in case
     // of a background expansion.

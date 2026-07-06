@@ -39,6 +39,7 @@ namespace TempLat
     {
     }
 
+    // @label:energiesmeasurer_measure
     template <class Model> void measure(Model &model, T t, bool saveEtot)
     {
       energies.addAverage(t); // add to file
@@ -117,6 +118,7 @@ namespace TempLat
         energyCons.save(lastMeas);
       }
     }
+    // @endlabel
 
   private:
     // Returns string with the header of the energies file.

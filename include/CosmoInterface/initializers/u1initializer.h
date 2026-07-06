@@ -37,6 +37,7 @@ namespace TempLat
     // INITIALIZATION: U(1) GAUGE FIELDS
     // --> Note: aDot has to be initialized before calling this function.
 
+    // @label:u1initializer_initializeu1
     template <class Model, typename T>
     static void initializeU1(Model &model, FluctuationsGenerator<T> &fg, ExternalPowerSpectrumInitializer<T>& extps, RunParameters<T> &rPar, ExtraFields<Model> extraFlds)
     {
@@ -52,6 +53,7 @@ namespace TempLat
       else
         throw(U1ICNotImplemented("The initial condition provided for U1 is not implemented."));
     }
+    // @endlabel
 
     template<class Model, typename T>
     static void initializeBunchDavisTransverseU1(Model& model, ExternalPowerSpectrumInitializer<T>& extps, T kCutOff, ExtraFields<Model> extraFlds)

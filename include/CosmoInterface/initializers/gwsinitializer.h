@@ -23,12 +23,14 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     GWsInitializer() = delete;
 
+    // @label:gwsinitializer_initializegws
     template <class Model> static void initializeGWs(Model &model)
     {
       ForLoop(i, 0_c, 4_c, (*model.fldGWs)(i) = 0.;
                            (*model.piGWs)(i) = 0.;
       );
     }
+    // @endlabel
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

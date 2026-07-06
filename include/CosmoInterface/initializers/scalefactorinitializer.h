@@ -26,6 +26,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     ScaleFactorInitializer() = delete;
 
+    // @label:scalefactorinitializer_class
     template <class Model, typename T> static void initializeScaleFactor(Model &model, RunParameters<T> &rPar)
     {
       // If fixed background, the initial Hubble parameter H0 is given by the user
@@ -76,6 +77,7 @@ namespace TempLat
         //  only contributions from the kinetic energies and the potential.
       }
     }
+    // @endlabel
   };
 } // namespace TempLat
 

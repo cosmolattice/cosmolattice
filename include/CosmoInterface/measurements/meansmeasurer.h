@@ -24,6 +24,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     MeansMeasurer() = delete;
 
+    // @label:meansmeasurer_measure
     template <typename S, typename Q, typename T> static void measure(MeasurementsSaver<T> &ms, S fld, Q mom, T t)
     {
       auto phi = average(fld);
@@ -45,6 +46,7 @@ namespace TempLat
       ms.addAverage(rmsPhi2 > 0 ? sqrt(rmsPhi2) : 0); // rms(phi)
       ms.addAverage(rmsPi2 > 0 ? sqrt(rmsPi2) : 0);   // rms(pi)
     }
+    // @endlabel
 
     // Header for average files of scalar fields (scalar singlets, complex scalars, and SU(2) doublets)
     static std::vector<std::string> header()

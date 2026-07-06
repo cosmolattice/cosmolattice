@@ -26,6 +26,7 @@ namespace TempLat
   public:
     using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
+    // @label:gwsmeasurer_constructor
     template <typename Model>
     GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append):
     amIRoot(model.getToolBox()->amIRoot()),
@@ -33,7 +34,9 @@ namespace TempLat
     spectraOut(filesManager, "energy_gws", amIRoot, append, par, model.fldGWs == nullptr),
     PRJType(par.GWprojectorType)
     { }
+    // @endlabel
 
+    // @label:gwsmeasurer_measurespectra
     template <typename Model, typename PowerSpectrumMeasurer> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
       if (model.fldGWs != nullptr) {
@@ -46,6 +49,7 @@ namespace TempLat
         energyOut.save(lastMeas);
       }
     }
+    // @endlabel
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

@@ -25,6 +25,7 @@ namespace TempLat
   public:
     using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
+    // @label:scalarsingletmeasurer_constructor
     template <typename Model>
     ScalarSingletMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par,
                           bool append)
@@ -50,7 +51,9 @@ namespace TempLat
               }
       );
     }
+    // @endlabel
 
+    // @label:scalarsingletmeasurer_measurestandard
     // The following function measures the corresponding averages
     // with MeansMeasurer::measure, and adds them to the files.
     // NOTE: For scalar fields, the momenta is defined as pi=a^(3-alpha)*f',
@@ -61,7 +64,9 @@ namespace TempLat
               MeansMeasurer::measure(standardOut(i), model.fldS(i), model.piS(i) * pow(model.aI, model.alpha - 3), t);
               standardOut(i).save(lastMeas););
     }
+    // @endlabel
 
+    // @label:scalarsingletmeasurer_spectra
     // The following function measures the spectra of the norm and its time-derivative.
     template <typename Model, typename PowerSpectrumMeasurer> // The occupation number is only measured if the user indicates it. The current version
                               // requires one additional field to measure it (JBB, Nov 2023).
@@ -75,6 +80,7 @@ namespace TempLat
               if (flagON) ONOut(i).save(lastMeas, t, ONMeasurer.occupationNumber(model, i));
       );
     }
+    // @endlabel
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */

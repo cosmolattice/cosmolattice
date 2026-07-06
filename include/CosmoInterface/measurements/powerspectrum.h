@@ -79,6 +79,7 @@ namespace TempLat
     // --> The normalization factor ensures that it recovers the appropriate expression in the continuum limit.
     //     This is discussed in Sect. 3 of arXiv:2006.15122.
 
+    // @label:powerspectrum_measure
     template <typename PS, typename tBox>
     RadialProjectionResult<T> powerSpectrum(const PS &f, ptrdiff_t N, T kIR, tBox toolBox)
     {
@@ -130,6 +131,7 @@ namespace TempLat
         }
       }
     }
+    // @endlabel
 
     template <typename R> auto powerSpectrum(R f)
     { // This function is for expression/composite operator, which need their own memory to perform the fourier

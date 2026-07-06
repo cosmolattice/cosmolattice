@@ -35,6 +35,7 @@ namespace TempLat
     // INITIALIZATION: SU(2) GAUGE FIELDS
     // --> Note: aDot has to be initialized before calling this function.
 
+    // @label:su2initializer_initsu2
     template <class Model, typename T> static void initializeSU2(Model &model, FluctuationsGenerator<T> &fg, T kCutOff)
     {
       // 1. We set the homogeneous components and fluctuations of the SU(2) doublets.
@@ -85,9 +86,11 @@ namespace TempLat
                 // @endlabel
       }
     }
+    // @endlabel
 
     // INITIALIZATION: SU2 doublets
     // --> Note: aDot has to be initialized before calling this function.
+    // @label:su2initializer_doublet
     template <class Model, typename T>
     static void initializeSU2Doublet(Model &model, std::string baseSeed, FluctuationsGenerator<T> &fg, T kCutOff)
     {
@@ -105,8 +108,10 @@ namespace TempLat
       model.SU2DblPi2AvSI = model.SU2DblPi2AvI;
       // @endlabel
     }
+    // @endlabel
 
     // Sets fluctuations to SU2 doublet components
+    // @label:su2initializer_fluctuations
     template <class Model, typename T>
     static void addFluctuationsSU2DoubletFromPhases(Model &model, std::string baseSeed, FluctuationsGenerator<T> &fg,
                                                     T aDot, T kCutOff)
@@ -179,6 +184,7 @@ namespace TempLat
           ););
           // @endlabel
     }
+    // @endlabel
   };
 } // namespace TempLat
 

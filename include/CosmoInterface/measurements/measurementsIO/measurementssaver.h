@@ -23,6 +23,7 @@ namespace TempLat
   template <typename T> class MeasurementsSaver
   {
   public:
+    // @label:measurementssaver_constructor
     template <size_t NDim>
     MeasurementsSaver(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool appendMode,
                       const std::vector<std::string> &headers = {}, bool dontCreate = false)
@@ -43,6 +44,7 @@ namespace TempLat
       } else
         IExist = false;
     }
+    // @endlabel
 
     template <size_t NDim>
     MeasurementsSaver(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool amIRoot, bool appendMode,
@@ -78,6 +80,7 @@ namespace TempLat
       }
     }
 
+    // @label:measurementssaver_save
     void save(bool lastMeas = false)
     {
       if (IExist) {
@@ -90,6 +93,7 @@ namespace TempLat
         }
       }
     }
+    // @endlabel
 
   private:
     std::shared_ptr<MeasurementsSaverStd<T>> ms;

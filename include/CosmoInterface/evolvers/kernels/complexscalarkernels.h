@@ -17,6 +17,7 @@ namespace TempLat
    *
    *
    **/
+  // @label:complexscalarkernels_class
   class ComplexScalarKernels
   {
   public:
@@ -43,6 +44,7 @@ namespace TempLat
       return ComplexScalarKernels::get(model, n, KernelsTypes::EoM<Model>());
     }
   };
+  // @endlabel
 } // namespace TempLat
 
 #endif

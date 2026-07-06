@@ -24,6 +24,7 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
+    // @label:leapfrog_constructor
     template <class Model>
     LeapFrog(Model &model, RunParameters<T> &rPar)
         : expansion(rPar.expansion), synced(!rPar.doWeRestart), // If this is the initial time, all fields are a t=0
@@ -34,7 +35,9 @@ namespace TempLat
       // If this is time t=0 in a new simulation, we set aDotSI at t=-1/2, so we can
       // evolve it by a full time step without changing the algorithm.
     }
+    // @endlabel
 
+    // @label:leapfrog_evolve
     template <class Model> void evolve(Model &model, T tMinust0)
     {
       /*
@@ -83,7 +86,9 @@ namespace TempLat
 
       synced = false;
     }
+    // @endlabel
 
+    // @label:leapfrog_sync
     // Function used to synchronize the momentum to the field, by evolving them
     // only by half a time step. Called before performing the measurements,
     //  so everything can be measured at integer time.
@@ -108,7 +113,9 @@ namespace TempLat
       if (expansion && fixedBackground) model.aDotI = aBackground.dot(tMinust0);
       synced = true;
     }
+    // @endlabel
 
+    // @label:leapfrog_kicks
     /********
      * KICKS
      *********/
@@ -150,7 +157,9 @@ namespace TempLat
     {
       ForLoop(n, 0, Model::NSU2 - 1, model.piSU2(n) += (w * model.dt) * SU2Kernels::get(model, n););
     }
+    // @endlabel
 
+    // @label:leapfrog_drifts
     /********
      * DRIFTS
      *********/
@@ -213,7 +222,9 @@ namespace TempLat
       // Here for instance we use the ForLoop again, as this makes it easier to define
       // the rescaled momenta in this case.
     }
+    // @endlabel
 
+    // @label:leapfrog_averages
     /********
      * FUNCTIONS STORING VOLUME AVERAGES OF COMPOSITE FIELDS AND MOMENTA at different times
      *********/
@@ -257,6 +268,7 @@ namespace TempLat
       if constexpr (Model::NSU2 > 0) model.SU2Mag2AvI = Averages::B2SU2(model);                      // at t
       model.potAvI = average(Potential::potential(model));                                           // at t
     }
+    // @endlabel
 
   public:
     /* Put all member variables and private methods here. These may change arbitrarily. */

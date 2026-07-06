@@ -2,6 +2,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
+// @label:main_includes
 #include "CosmoInterface/common.h"
 
 #include STRINGIFY(MODELINCLUDE)
@@ -15,9 +16,11 @@ using ModelType = TempLat::MODELTYPE;
 using FloatType = typename ModelType::FloatType;
 // We also define a convenient alias for the floating point type of the model, which is defined in the model itself.
 // This is useful to avoid having to write 'typename ModelType::FloatType
+// @endlabel
 
 // ------ COSMOLATTICE MAIN ------ //
 
+// @label:main_sessionguard
 int main(int argc, char *argv[])
 {
   using namespace TempLat;
@@ -29,13 +32,17 @@ int main(int argc, char *argv[])
   // Instantiating the class SessionGuard is needed to take care of allocation
   // and freeing of MPI and FFT objects. Unless you are an advance user,
   // you can simply forget about this. Keep this line here in either case.
+  // @endlabel
 
+  // @label:main_paramparser
   ParameterParser parser(argc, argv);
   // We create the ParameterParser used to read the parameters from either:
   // - the input file,
   // - the command line,
   // - or from previous simulations
+  // @endlabel
 
+  // @label:main_simmanager
   SimulationManager<ModelType::NDim> manager(parser);
   // The SimulationManager takes care of saving the simulations at the end,
   // backing up or restarting simulations, when appropriate options are passed.
@@ -43,7 +50,9 @@ int main(int argc, char *argv[])
 
   if (manager.doWeRestart()) manager.getParams(parser);
   // If restart is set, the 'overridable' parameters are overridden here.
+  // @endlabel
 
+  // @label:main_runparams
   RunParameters<FloatType> runParams(parser);
   runParams.setDoWeRestart(manager.doWeRestart());
   // The RunParameters class holds all relevant (model independent)
@@ -52,9 +61,10 @@ int main(int argc, char *argv[])
   // the lattice spacing (dx), the time step (dt), the initial and final times,
   // the time interval for (in)frequency measurements, the output directory, etc
   // They are initialised from the parser.
+  // @endlabel
 
+  // @label:main_toolbox
   int nGhost = 1;
-  // bool changedt = true;
   //  Number of lattice site layers for memory sharing among the neighbouring sub-lattices
   //  split in a parallelised run. By default is set to nGhost = 1, as typically we need only
   //  the closest neighbouring lattice sites to compute a gradient. Setting nGhost > 1
@@ -71,7 +81,9 @@ int main(int argc, char *argv[])
   bool iAmRoot = toolBox->amIRoot();
   // Boolean to determine whether one processor of a parallel run is the Root processor.
   // We use this to order printing in the console from only the root processor.
+  // @endlabel
 
+  // @label:main_model
   ModelType model(parser, runParams, toolBox);
   // Actual creation of your model. The parser is required to provide
   // the model dependent parameters.
@@ -86,7 +98,9 @@ int main(int argc, char *argv[])
   // Printing the model name from the root processor.
   // You can check in this way, in the console output,
   // that you are running indeed the model you intended.
+  // @endlabel
 
+  // @label:main_initializer
   typename ModelType::FloatType t = 0;
   // Our time variable. Initialized below.
 
@@ -103,7 +117,10 @@ int main(int argc, char *argv[])
     // 3) We set the initial time as specified in the input parameter file.
     // By default it is zero.
 
-  } else // In case we are restarting from a previous simulation:
+  }
+  // @endlabel
+  // @label:main_restart
+  else // In case we are restarting from a previous simulation:
   {
 
     if (iAmRoot) say << "Running in restart mode.";
@@ -115,7 +132,9 @@ int main(int argc, char *argv[])
 
   // We communicate t0 to the model, in case it needs it internally.
   model.t0 = runParams.t0;
+  // @endlabel
 
+  // @label:main_evolver_measurer
   Evolver<ModelType> evolver(model, runParams, extraFlds);
   // Here an algorithm -- evolver -- to solve the field EoM is chosen. The type of evolver
   // is specified by the user in the input parameter file, and here is passed through
@@ -124,16 +143,20 @@ int main(int argc, char *argv[])
   Measurer<ModelType, FloatType> measurer(model, runParams, parser);
   // Creates an object of the class responsible for performing and outputting all the required
   // measurements (averages, energies, spectra...).
+  // @endlabel
 
+  // @label:main_infofile
   if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
   // Printing in the console all the parameters chosen (both run parameter and specific
   // model parameters)
 
   manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
   // Creation of an info file, which lists all parameters and options chosen
+  // @endlabel
 
   /************************Time evolution*************************/
 
+  // @label:main_timeloop
   for (int i = 0; t < runParams.tMax - runParams.dt / FloatType(2.0); ++i) {
     // Loop for the time evolution. At each step we advance one time step dt
 
@@ -163,7 +186,9 @@ int main(int argc, char *argv[])
     // to re-start the simulation at the same moment, once we launch another job.
 
   } // End of time evolution.
+  // @endlabel
 
+  // @label:main_savesim
   if (runParams.boolSaveEnd)
   // Here we check whether we want to save the simulation details at the end of evolution.
   // If this option is activated, an appropriate file is  created, containing all
@@ -186,3 +211,4 @@ int main(int argc, char *argv[])
 
   return 0;
 }
+// @endlabel

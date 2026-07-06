@@ -60,6 +60,7 @@ namespace TempLat
       kt.cache(model, tMinust0); // To be able to store some temporary info in the kernel type
       const T aStart = model.aI;
 
+      // @label:rk2nstorage_genericloop
       for (size_t i = 0; i < As.size(); ++i) { // loop over operations...
 
         ForEachField(
@@ -79,6 +80,7 @@ namespace TempLat
         }
         kt.cache(model, tMinust0);
       }
+      // @endlabel
 
       if (expansion) syncSemiIntegerScaleFactor(model, tMinust0, aStart);
     }

@@ -31,6 +31,7 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     using T = typename Model::FloatType;
 
+    // @label:evolver_constructor
     Evolver(Model &model, RunParameters<T> &rPar, ExtraFields<Model> extraFlds)
         : type(rPar.eType),
           typeGW(rPar.eTypeGW),
@@ -56,9 +57,10 @@ namespace TempLat
       if (Model::NU1 > 0 && rPar.withGWs && PositionVerletParameters<T>::isVerlet(type) &&
           PositionVerletParameters<T>::isVerlet(typeGW))
         throw(InvalidEvolverTypeGW("The evolution of a model with U(1) and GWs requires to use an evolver that correctly synchronizes fields and momenta (as both electric and magnetic fields enter the kernel of GWs). If you want to use PV for the matter fields, you should use LF for the GWs. Abort."));
-      // 
+      //
 
     }
+    // @endlabel
 
     // @label:gws_evolver_dispatch
     inline void evolve(Model &model, T tMinust0) const
@@ -142,6 +144,7 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
+    // @label:evolver_members
     const EvolverType type;
     const EvolverType typeGW;
 
@@ -153,6 +156,7 @@ namespace TempLat
     mutable bool GWsynced;
 
     KernelsTypes::EoM<Model> EoMKernels;
+    // @endlabel
   };
 
 } // namespace TempLat

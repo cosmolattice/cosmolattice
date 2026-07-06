@@ -32,6 +32,7 @@ namespace TempLat
 
     // Laplacian and gauge covariant Laplacian
 
+    // @label:gaugederivatives_laplacians
     template <class Model, int N> static auto LaplacianS(Model &model, Tag<N> n)
     {
       return (1.0 / pow<2>(model.dx)) *
@@ -62,6 +63,7 @@ namespace TempLat
                                   -i));
       return (covPlus + covMinus - (2.0 * Model::NDim) * model.fldSU2Doublet(n)) / pow<2>(model.dx);
     }
+    // @endlabel
 
     // Forward gradients and forward covariant gradients
 
@@ -86,6 +88,7 @@ namespace TempLat
     // Functions to compute the correct link contributions to the covariant derivatives,
     // depending on to which matter fields couples to which gauge fields.
 
+    // @label:u1sforcscovderivs
     template <class Model, int N, int I>
     static auto U1sForCSCovDerivs(Model &model, Tag<N> n,
                                   Tag<I> i) // N is the matter index and i is the spatial dimension
@@ -109,6 +112,7 @@ namespace TempLat
                                         model.fldU1(a)(i)), // if this SU2 doublet couples to this U1, then U1 link
                            OneType())));                    // else, 1
     }
+    // @endlabel
 
     template <class Model, int N, int I>
     static auto SU2sForSU2DoubletCovDerivs(Model &model, Tag<N> t,
