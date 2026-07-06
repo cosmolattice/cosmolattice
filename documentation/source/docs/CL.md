@@ -36,7 +36,7 @@ h_{ij}''-a^{-2(1-\alpha)}\nabla^2h_{ij}+(3-\alpha)\frac{a'}{a}h_{ij}=\frac{2}{m_
 ```
 
 !!! note "Cutting to the chase ..."
-    If the reader is eager to start running their own simulations, they can download the code directly from [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Download**](/code/Download.md), or jump into the code's manual at [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual**](./Manual/About This Manual.md). If the reader is however a newcomer to the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ world, we recommend them, instead, to keep on reading. 
+    If the reader is eager to start running their own simulations, they can install the code directly as described in  [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Installation**](./code/Installation.md), or jump into the code's manual at [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual**](./Manual/About This Manual.md). If the reader is however a newcomer to the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ world, we recommend them, instead, to keep on reading. 
     
 ## **What makes $\mathcal{CL}$ different ?**  {#subsec_CLspecial } 
 <!-- ## **Is $\mathcal{CL}$ different from other codes?**  {#subsec_CLspecial } -->
@@ -74,7 +74,7 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 
 <!-- 
 !!! note "$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ updates & versions"                              
-    $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and either new or improved features are continuously being added. We typically release new versions of the code whenever new physics modules or new lattice methods are added, though code structure improvements can also occur. Details of the different versions of the code can be found below in the [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](code/Versions.md). The latest version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is currently $\tt v2.0$, released on July 2026. It can be downloaded at [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Download**](/code/Download.md).
+    $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and either new or improved features are continuously being added. We typically release new versions of the code whenever new physics modules or new lattice methods are added, though code structure improvements can also occur. Details of the different versions of the code can be found below in the [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](code/Versions.md). The latest version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is currently $\tt v2.0$, released on July 2026. It can be downloaded at [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Download**](./code/Download.md).
  -->
 
 
@@ -103,5 +103,5 @@ As $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is continuously evolving
 15. *Axion like particle - Non-Abelian $SU(2)$ gauge field interactions*,
 16. [...]
 
-As all these new physics capabilities are being developed simultaneously in parallel by different teams, so it is difficult to predict which aspects will become publicly available first. It is therefore important to keep an eye on the tab [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](code/Versions.md), to check for new code releases, which may include new features such as new field variable definitions, options, evolution algorithms, and/or new interactions as those listed just above. All these changes are gradually incorporated in successive updated versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and whenever a new code release is made, this is announced in the [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ News**](../CL_News/CLnews.md) tab. 
+As all these new physics capabilities are being developed simultaneously in parallel by different teams, so it is difficult to predict which aspects will become publicly available first. It is therefore important to keep an eye on the tab [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](code/Versions.md), to check for new code releases, which may include new features such as new field variable definitions, options, evolution algorithms, and/or new interactions as those listed just above. All these changes are gradually incorporated in successive updated versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and whenever a new code release is made, this is announced in the [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ News**](CL_News/CLnews.md) tab. 
 

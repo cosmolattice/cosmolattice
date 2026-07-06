@@ -16,7 +16,7 @@ In this <!-- **Theoretical Framework**  --> Tab the user can find all the detail
   space
 -->
 
-- Section [Technical Notes](TechnicalNotes.md) provides further theory support for equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, given in the form of Technical Notes (downloadable in PDF format), which we have written over the years, expanding on some of the aspects presented in our [Monographic Reviews on Lattice Cosmology Techniques](MonographicReviews.md), or in the [**User Manual**](../Mannual/About This Manual.md).
+- Section [Technical Notes](TechnicalNotes.md) provides further theory support for equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, given in the form of Technical Notes (downloadable in PDF format), which we have written over the years, expanding on some of the aspects presented in our [Monographic Reviews on Lattice Cosmology Techniques](MonographicReviews.md), or in the [**User Manual**](../Manual/About This Manual.md).
  
    
  <!--

@@ -112,6 +112,11 @@ hooks:
 
 use_directory_urls: false # (optional) for better links without .html extension
 
+validation:
+  links:
+    absolute_links: warn # absolute links are NOT rewritten to .html and end up dead on the site
+    unrecognized_links: warn
+
 nav:
   - Home: #CL.md
       - "<span style='font-weight:bold;'>What is CosmoLattice ?</span>": "CL.md"
@@ -204,8 +209,8 @@ nav:
       - "<span style='font-weight:bold;'>Appendices (A & F, ALL) </span>": "Manual/Appendix: Parameters.md.md"
       - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Appendix: Parameters </span>": "Manual/Appendix_Parameters.md"
       - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Appendix: Generic Model variables </span>": "Manual/Appendix_Generic_Model_variables.md"
-      - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Appendix: CMake Flags </span>": "Manual/Appendix_CMake_Flags.md"
-      - "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;List of Implemented Functions </span>": "Manual/List of Implemented Functions.md"
+      #- "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;Appendix: CMake Flags </span>": "Manual/Appendix_CMake_Flags.md"
+      #- "<span style='font-size:0.85em;'>&nbsp;&nbsp;&nbsp;&nbsp;List of Implemented Functions </span>": "Manual/List of Implemented Functions.md"
       #- "Acknowledgments": "Manual/Acknowledgments.md"
       #- "Appendix: Parameters (A & F, ALL)": "Manual/Appendix: Parameters.md"
       #- "Appendix: Generic Model variables (A & F, ALL)": "Manual/Appendix: Generic Model variables.md"
