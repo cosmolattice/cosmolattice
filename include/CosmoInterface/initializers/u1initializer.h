@@ -64,16 +64,6 @@ namespace TempLat
     // --> Note: aDot has to be initialized before calling this function.
 
 
-    template<class Model, typename T>
-    static void initializeBunchDavisTransverseU1(Model& model, ExternalPowerSpectrumInitializer<T>& extps, T kCutOff, ExtraFields<Model> extraFlds)
-        {
-
-          ForLoop(n, 0, Model::NU1-1,
-				    extps.BunchDavisTransverseU1(model, model.fldU1(n), model.piU1(n), extraFlds.fldForPlaneWavesU1(), extraFlds.piForPlaneWavesU1(), model.aDotI, kCutOff);
-				    model.fldU1(n) = model.getFluctuationRatio(FieldsNumbering::fldU1()) * model.fldU1(n);
-				    model.piU1(n) = model.getFluctuationRatio(FieldsNumbering::piU1()) * model.piU1(n);
-			    );
-    }
 
     template <class Model, typename T>
     static void initializeRandomWithMatterU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff)
@@ -117,8 +107,16 @@ namespace TempLat
       }
     }
 
+    template<class Model, typename T>
+    static void initializeBunchDavisTransverseU1(Model& model, ExternalPowerSpectrumInitializer<T>& extps, T kCutOff, ExtraFields<Model> extraFlds)
+        {
 
-
+          ForLoop(n, 0, Model::NU1-1,
+				    extps.BunchDavisTransverseU1(model, model.fldU1(n), model.piU1(n), extraFlds.fldForPlaneWavesU1(), extraFlds.piForPlaneWavesU1(), model.aDotI, kCutOff);
+				    model.fldU1(n) = model.getFluctuationRatio(FieldsNumbering::fldU1()) * model.fldU1(n);
+				    model.piU1(n) = model.getFluctuationRatio(FieldsNumbering::piU1()) * model.piU1(n);
+			    );
+    }
 
     template <class Model, typename T>
     static void initializePlaneWavesZeroBU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff,

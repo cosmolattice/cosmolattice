@@ -61,7 +61,7 @@ namespace TempLat
     // fldS : The actual object which contains the scalar fields.
 
   public:
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar, device::memory::host_ptr<MemoryToolBox> toolBox)
+    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar, auto toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
                            STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.

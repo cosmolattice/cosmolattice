@@ -1,0 +1,87 @@
+Parameters: 
+Important parameters:
+
+          doLFforGWs       true                
+             evolver       VV2                 
+       tOutputInfreq       1                   
+             kCutOff       6                   
+                 kIR       0.75                
+                  t0       0                   
+     tOutputRareFreq       5                   
+         tOutputFreq       0.1                 
+                tMax       10                  
+           expansion       true                
+                   N       64                  
+                  dt       0.01                
+             withGWs       false               
+
+
+Other parameters:
+
+   tNonLinearAxionU1       -1                  
+SU2DoubletSU2_charges       1                   
+SU2DoubletU1_charges       1                   
+        CSU1_charges       1                   
+             ext_PS0       ✖                 
+measureDefectsEnergies       false               
+                sFat       1                   
+     tOutputFreqDiff       0                   
+            tmaxdiff       0                   
+    diffusionevolver       7                   
+         doDiffusion       false               
+               lcorr       0                   
+ saveUnbinnedSpectra       false               
+            load_dir       ✖                 
+                gU1s       1.11037e-05         
+       print_headers       true                
+              flagON       false               
+               t0Fat       0                   
+            ICtype_S       Default             
+       hdf5FlushFreq       10                  
+               input       ../models/parameter-files/lphi4SU2U1.in
+               gSU2s       2.22075e-05         
+          deltaNoise       1                   
+              lambda       9e-14               
+cmplx_momentum_initial_norm       1e-15               
+ snapshots_diffusion       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
+          outputfile       ./                  
+SU2Doublet_initial_momenta_norm       -4.45258e30         
+                  qH       50                  
+  initial_amplitudes       0.                  
+                  a0       1                   
+     initial_momenta       0.                  
+      snap_stepcoord       1 1 1 1 1 1 1 1 1 1 
+cmplx_field_initial_norm       1e-15               
+      overwriteFiles       false               
+           snapshots       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
+              dtdiff       0                   
+         tBackupFreq       -1                  
+           ICtype_U1       Default             
+             PS_type       1                   
+         tOutputVerb       1                   
+SU2Doublet_initial_norm       5.25151e18          
+            baseSeed       3974441553          
+             tMaxFat       0                   
+     snap_uppercoord       64 64 64 64 64 64 64 64 64 64
+measureDefectsStructure       false               
+     snap_lowercoord       0 0 0 0 0 0 0 0 0 0 
+     fixedBackground       false               
+    spectraVerbosity       0                   
+        hdf5Averages       false               
+         hdf5Spectra       false               
+           deltaKBin       1                   
+       appendToFiles       false               
+ tOutputRareFreqDiff       0                   
+     GWprojectorType       2                   
+           tolerance       -1                  
+          PS_version       1                   
+        fn_verbosity       0                   
+                  qG       50                  
+        flagChiralPS       false               
+
+The simulation started on the d7 m7 y2026 around h16m6.
+It will be running on an MPI grid of (2,1,1) cores with 8 threads per MPI task.
+Memory usage is estimated to be around 49.72 MB per MPI task.
+The simulation finished on the d7 m7 y2026 around h16m13.
+The timer indicates that it ran for 408.709s.
+As it ran on 16 cores, this corresponds to 1.81648 core hours.

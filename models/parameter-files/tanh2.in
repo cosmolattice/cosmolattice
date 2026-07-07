@@ -9,14 +9,14 @@ evolver = VV2
 
 #Lattice
 N = 64
-dt = 0.003
+dt = 0.005
 kIR = 3
 
 #Times
 tOutputFreq = 0.1
-tOutputInfreq = 3
+tOutputInfreq = 1
 tOutputRareFreq = 10
-tMax = 300
+tMax = 10
 
 #IC
 kCutOff = 18
@@ -29,5 +29,5 @@ Lambda4 = 1.7966e65
 q = 4e4
 
 #GWs
-GWprojectorType = 1
 withGWs=false
+GWprojectorType = 1

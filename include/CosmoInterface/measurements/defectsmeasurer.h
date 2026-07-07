@@ -33,9 +33,9 @@ namespace TempLat
         : amIRoot(model.getToolBox()->amIRoot()),
           measureDefectsEnergies(rPar.measureDefectsEnergies && !onlyMeasureNorm),
           measureDefectsStructure(rPar.measureDefectsStructure && !onlyMeasureNorm),
-          normOut(filesManager, "norm" + postfix , amIRoot, append, {"t", "norm(phi)", "norm(phi)^2", "var(norm(phi))"}, (Model::Ns == 0 && Model::NCs == 1) ),
-          defects(filesManager, "defects" + postfix, amIRoot, append, getDefectHeaders(model), !((Model::Ns > 0 && Model::NCs == 0) || (Model::Ns == 0 && Model::NCs == 1) || measureDefectsEnergies || measureDefectsStructure)), // Output file for defect observables.
-          normSpectraOut(filesManager, "norm"+ postfix, amIRoot, append, rPar, !(Model::Ns > 0 && Model::NCs == 0) )
+          normOut(filesManager, "norm" + postfix , amIRoot, append, {"t", "norm(phi)", "norm(phi)^2", "var(norm(phi))"}, !Model::DefectsModel || (Model::Ns == 0 && Model::NCs == 1) ),
+          defects(filesManager, "defects" + postfix, amIRoot, append, getDefectHeaders(model), !Model::DefectsModel || !((Model::Ns > 0 && Model::NCs == 0) || (Model::Ns == 0 && Model::NCs == 1) || measureDefectsEnergies || measureDefectsStructure)), // Output file for defect observables.
+          normSpectraOut(filesManager, "norm"+ postfix, amIRoot, append, rPar, !Model::DefectsModel || !(Model::Ns > 0 && Model::NCs == 0) )
     {
     }
 

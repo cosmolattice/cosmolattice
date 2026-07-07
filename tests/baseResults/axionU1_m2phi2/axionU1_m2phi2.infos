@@ -1,0 +1,78 @@
+Parameters: 
+Important parameters:
+
+         tOutputFreq       0.05                
+             evolver       RK2                 
+             kCutOff       30                  
+                  t0       0                   
+       tOutputInfreq       0.5                 
+                 kIR       1                   
+     tOutputRareFreq       5                   
+          doLFforGWs       true                
+                tMax       10                  
+           expansion       true                
+                  dt       0.005               
+             withGWs       false               
+                   N       64                  
+
+
+Other parameters:
+
+            gAxionU1       1                   
+             ext_PS0       ✖                 
+measureDefectsEnergies       false               
+               t0Fat       0                   
+                sFat       1                   
+  initial_amplitudes       3.39928e18          
+                  a0       1                   
+            load_dir       ✖                 
+ alphaLambda_AxionU1       13                  
+       print_headers       true                
+               lcorr       0                   
+ saveUnbinnedSpectra       false               
+             PS_type       1                   
+           ICtype_U1       Default             
+   tNonLinearAxionU1       1.5                 
+               input       ../models/parameter-files/axionU1_m2phi2.in
+ snapshots_diffusion       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
+          outputfile       ./                  
+            ICtype_S       Default             
+                Mass       1.5e13              
+       hdf5FlushFreq       10                  
+        flagChiralPS       false               
+        fn_verbosity       0                   
+            tmaxdiff       0                   
+          PS_version       1                   
+     initial_momenta       -3.0714e31          
+      snap_stepcoord       1 1 1 1 1 1 1 1 1 1 
+              flagON       false               
+      overwriteFiles       false               
+           snapshots       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
+     GWprojectorType       1                   
+ tOutputRareFreqDiff       0                   
+         tOutputVerb       0.5                 
+            baseSeed       788478823           
+             tMaxFat       0                   
+     snap_uppercoord       64 64 64 64 64 64 64 64 64 64
+measureDefectsStructure       false               
+     snap_lowercoord       0 0 0 0 0 0 0 0 0 0 
+     fixedBackground       false               
+    spectraVerbosity       0                   
+       appendToFiles       false               
+           deltaKBin       1                   
+        hdf5Averages       false               
+         hdf5Spectra       false               
+         tBackupFreq       -1                  
+              dtdiff       0                   
+           tolerance       -1                  
+          deltaNoise       1                   
+         doDiffusion       false               
+    diffusionevolver       7                   
+     tOutputFreqDiff       0                   
+
+The simulation started on the d7 m7 y2026 around h15m8.
+It will be running on an MPI grid of (2,1,1) cores with 8 threads per MPI task.
+Memory usage is estimated to be around 9.04 MB per MPI task.
+The simulation finished on the d7 m7 y2026 around h15m12.
+The timer indicates that it ran for 261.407s.
+As it ran on 16 cores, this corresponds to 1.16181 core hours.

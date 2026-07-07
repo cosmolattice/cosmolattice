@@ -26,14 +26,13 @@ namespace TempLat
         static constexpr size_t NPotTerms = 2;
         // Only the inflaton has a potential
 
-
-
         // All the numbers of fields are 0 by default, so we need only
         // to specify that we want two scalar fields.
         // See the model with gauge fields to have an example of how to turn
         // them on and specify interactions.
 
-        typedef CouplingsManager<NScalars, 1, false, true> NonMinimalCouplings;   // Non-minimal coupling to gravity of scalars, only the second scalar.
+        // Non-minimal coupling: the second scalar (index 1) couples non-minimally to gravity. The first scalar (index 0) only couples minimally to gravity.
+        typedef CouplingsManager<NScalars, 1, false, true> NonMinimalCouplings;
 
 
     };
