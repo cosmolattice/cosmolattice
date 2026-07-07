@@ -31,14 +31,14 @@ namespace TempLat
         static void updateFatteningFactor(Model &model, T tminust0, T t0, T t0Fat, T tMaxFat, T sfat)
         {
             if(tminust0 + t0 < tMaxFat && tminust0 + t0 >= t0Fat - model.dt) {
-                model.fatteningFactor = pow(model.aI / model.aIM, 2. * (sfat - 1.));
+                model.fatteningFactor *= pow(model.aI / model.aIM, 2. * (sfat - 1.));
             }
         }
 
         template<typename Model, typename T>
         static bool updateTimeStep(Model &model, RunParameters<T> &rPar, T t)
         {
-            if (t > (rPar.tMaxFat - rPar.dt * 1.5) && !AlmostEqual(rPar.tMaxFat, t)) {
+            if (t > (rPar.tMaxFat - rPar.dt) && t < rPar.tMaxFat && !AlmostEqual(rPar.tMaxFat, t)) {
                 model.dt = rPar.tMaxFat - t;
                 return true;
             }

@@ -45,10 +45,10 @@ namespace TempLat
       for (size_t i = 0; i < As.size(); ++i) { // loop over operations...
         ForEachConfigurationField(
             Model, fld, n,
-            isDefined[fld][n] = delta(i, model.getField(TempLat::FieldsNumbering::getComplementaryFieldId(fld))(n), Kernels::get(fld, model, n, kt));
+               isDefined[fld][n] = delta(i, model.getField(TempLat::FieldsNumbering::getComplementaryFieldId(fld))(n), Kernels::get(fld, model, n, kt));
         );
 
-        ForEachField(Model, fld, n, if (isDefined[fld][n]) { advance(i, fld, model, n); });
+        ForEachConfigurationField(Model, fld, n, if (isDefined[fld][n]) { advance(i, fld, model, n); });
 
         kt.cache(model, tMinust0);
       }

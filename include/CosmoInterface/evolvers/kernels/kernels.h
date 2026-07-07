@@ -34,14 +34,12 @@ namespace TempLat::Kernels {
         template<class Model, class KernelType, int N>
         static inline auto get(FieldsNumbering::fldCS, Model& model, Tag<N> n, KernelType kt)
         {
-            sayMPI << "Evolving CS";
             return ComplexScalarKernels::get_momentum(model, n, kt);
         }
 
         template<class Model, class KernelType, int N>
         static inline auto get(FieldsNumbering::piCS, Model& model, Tag<N> n, KernelType kt)
         {
-            sayMPI << "Evolving CS momentum";
             return ComplexScalarKernels::get(model, n, kt);
         }
 

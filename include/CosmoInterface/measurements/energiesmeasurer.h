@@ -36,7 +36,7 @@ namespace TempLat
           Etot0(0),                             // Initial total energy
           energies(filesManager, "energies" + postfix, amIRoot, append,
                    getEnergyHeaders(model)), // Output file for volume-average energies.
-          energyCons(filesManager, "energy_conservation", amIRoot, append, getEnergyConsHeaders(),  fixedBackground && isEnergyConservationMeasured) // Output file for checking energy conservation.
+          energyCons(filesManager, "energy_conservation", amIRoot, append, getEnergyConsHeaders(),  fixedBackground || !isEnergyConservationMeasured) // Output file for checking energy conservation.
     {
     }
 

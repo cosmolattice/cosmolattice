@@ -244,30 +244,14 @@ namespace TempLat
 
       ForLoop(i, 0, Model::NCs - 1,
 
-        // auto fFluctuationNorm0 = fg.getFluctuationsNormDefect(model, model.fldCS(i)(0_c), lcorr); // component 0
-        // auto fFluctuationNorm1 = fg.getFluctuationsNormDefect(model, model.fldCS(i)(1_c), lcorr); // component 1
-        //
-        // auto a0 = fFluctuationNorm0 * RRF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(), toolBox); // component 0
-        // auto a1 = fFluctuationNorm1 * RRF(fg.getBaseSeed() + "norm1" + model.fldCS(i)(1_c).toString(), toolBox); // component 1
-        //
-        // auto eitheta00 = RUF(fg.getBaseSeed() + "phase00" + model.fldCS(i)(0_c).toString(), toolBox); // left-moving wave phase, component 0
-        // auto eitheta01 = RUF(fg.getBaseSeed() + "phase01" + model.fldCS(i)(0_c).toString(), toolBox); // right-moving wave phase, component 0
-        // auto eitheta10 = RUF(fg.getBaseSeed() + "phase10" + model.fldCS(i)(1_c).toString(), toolBox); // left-moving wave phase, component 1
-        // auto eitheta11 = eitheta01 * eitheta10 * conj(eitheta00); // right-moving wave phase, component 1 (depends on the other three!)
-        //
-        // model.fldCS(i)(0_c).inFourierSpace() = a0 * (eitheta00 + eitheta01) / sqrt(2) / sqrt(2); // component 0. Second sqrt(2) comes from normalisation of complex scalar.
-        // model.fldCS(i)(0_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
-        // model.fldCS(i)(1_c).inFourierSpace() = a1 * (eitheta10 + eitheta11) / sqrt(2) / sqrt(2); // component 1
-        // model.fldCS(i)(1_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
-
         auto fFluctuationNormDefect =  fg.getFluctuationsNormDefect(model, model.fldCS(i)(0_c), lcorr); // component 0
 
         auto a0 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(), toolBox); // component 0
         auto a1 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm1" + model.fldCS(i)(1_c).toString(), toolBox);  // component 1
 
-        model.fldCS(i)(0_c).inFourierSpace() = a0 / sqrt(2.); // component 0
+        model.fldCS(i)(0_c).inFourierSpace() = a0 / sqrt(2.) / sqrt(2.); // component 0
         model.fldCS(i)(0_c).inFourierSpace().setZeroMode(0.);
-        model.fldCS(i)(1_c).inFourierSpace() = a1 / sqrt(2.); // component 1
+        model.fldCS(i)(1_c).inFourierSpace() = a1 / sqrt(2.) / sqrt(2.); // component 1
         model.fldCS(i)(1_c).inFourierSpace().setZeroMode(0.);
 
         model.piCS(i) =  Complexify(0., 0.);

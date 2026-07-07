@@ -32,6 +32,7 @@ namespace TempLat
 
 #ifdef HAVE_HDF5
       saveScalar = IsInContainer::check("S", toSave);              // value of the scalar singlets
+      saveScalarNorm = IsInContainer::check("Snorm", toSave);              // value of the scalar singlets
       saveScalarK = IsInContainer::check("E_S_K", toSave);         // kinetic energy of the scalar singlets
       saveScalarG = IsInContainer::check("E_S_G", toSave);         // gradient energy of the scalar singlets
       saveComplexScalar = IsInContainer::check("CS", toSave);      // modulus of the complex scalars
@@ -46,7 +47,7 @@ namespace TempLat
       savePot = IsInContainer::check("E_V", toSave);               // potential energy
       saveETotal = IsInContainer::check("E", toSave);              // total energy energy
 
-      if (saveScalar || saveScalarK || saveScalarG || saveComplexScalar || saveComplexScalarK || saveComplexScalarG ||
+      if (saveScalar || saveScalarNorm || saveScalarK || saveScalarG || saveComplexScalar || saveComplexScalarK || saveComplexScalarG ||
           saveSU2DoubletK || saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot ||
           saveETotal)
         fIO.setSaverLimits(pars.snapLower, pars.snapUpper, pars.snapStep);
@@ -59,6 +60,7 @@ namespace TempLat
       };
 
       if (saveScalar) { nameScalar = mRoot + "snapshot_scalar_singlet" + postfix + ".h5"; createIfFresh(nameScalar); }
+      if (saveScalarNorm) { nameScalarNorm = mRoot + "snapshot_scalar_singlet_norm" + postfix + ".h5"; createIfFresh(nameScalarNorm); }
       if (saveScalarK) { nameScalarK = mRoot + "kinetic_energy_snapshot_scalar" + postfix + ".h5"; createIfFresh(nameScalarK); }
       if (saveScalarG) { nameScalarG = mRoot + "gradient_energy_snapshot_scalar" + postfix + ".h5"; createIfFresh(nameScalarG); }
       if (saveComplexScalar) { nameComplexScalar = mRoot + "snapshot_complex_scalar" + postfix + ".h5"; createIfFresh(nameComplexScalar); }
@@ -82,6 +84,13 @@ namespace TempLat
       if (saveScalar) { // kinetic energy of the scalar singlets
         ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalar);
                 fIO.saver.save(t, model.fldS(i), "S_" + std::to_string(i)); fIO.saver.close(););
+      }
+      if (saveScalarNorm) { // kinetic energy of the scalar singlets
+        if constexpr (Model::Ns > 0) {
+          fIO.saver.open(nameScalarNorm);
+          fIO.saver.save(t, sqrt(Total(i, 0, Model::Ns-1, pow<2>(model.fldS(i));)), "S_norm");
+          fIO.saver.close();
+        }
       }
       if (saveScalarK) { // kinetic energy of the scalar singlets
         ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalarK); fIO.saver.save(
@@ -136,7 +145,7 @@ namespace TempLat
       }
       if (saveSU2Mag) { // magnetic energy of the SU(2) gauge sector
         ForLoop(i, 0, Model::NSU2 - 1, fIO.saver.open(nameSU2Mag); fIO.saver.save(
-            t, Energies::magneticSU2(model, FieldFunctionals::B2U1(model, i)), "E_B_G_" + std::to_string(i));
+            t, Energies::magneticSU2(model, FieldFunctionals::B2SU2(model, i)), "E_B_G_" + std::to_string(i));
                 fIO.saver.close(););
       }
       if (savePot) {
@@ -155,10 +164,11 @@ namespace TempLat
         fIO.saver.close();
       }
 #else
-      if (saveScalarK || saveScalarG || saveComplexScalarK || saveComplexScalarG || saveSU2DoubletK ||
+      if (saveScalar || saveScalarNorm || saveScalarK || saveScalarG || saveComplexScalar || saveComplexScalarK || saveComplexScalarG || saveSU2DoubletK ||
           saveSU2DoubletG || saveU1El || saveU1Mag || saveSU2El || saveSU2Mag || savePot) {
         std::stringstream ss;
         if (saveScalar) ss << "\n- Value of the scalar singlets.";
+        if (saveScalarNorm) ss << "\n- Norm of all the scalar singlets, treated as a vector of scalars.";
         if (saveScalarK) ss << "\n- Kinetic energy of the scalar singlets.";
         if (saveScalarG) ss << "\n- Gradient energy of the scalar singlets.";
         if (saveComplexScalar) ss << "\n- Magnitude of the complex scalars.";
@@ -185,14 +195,14 @@ namespace TempLat
     FileIO<Model::NDim> fIO;
     std::string mRoot;
 
-    bool saveScalar = false, saveScalarG = false, saveScalarK = false;
+    bool saveScalar = false, saveScalarNorm = false, saveScalarG = false, saveScalarK = false;
     bool saveComplexScalar = false, saveComplexScalarG = false, saveComplexScalarK = false;
     bool saveSU2DoubletG = false, saveSU2DoubletK = false;
     bool saveU1Mag = false, saveU1El = false;
     bool saveSU2Mag = false, saveSU2El = false;
     bool savePot = false, saveETotal = false;
 
-    std::string nameScalar, nameScalarG, nameScalarK;
+    std::string nameScalar, nameScalarNorm, nameScalarG, nameScalarK;
     std::string nameComplexScalar, nameComplexScalarG, nameComplexScalarK;
     std::string nameSU2DoubletG, nameSU2DoubletK;
     std::string nameU1Mag, nameU1El;

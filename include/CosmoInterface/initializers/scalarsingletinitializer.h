@@ -51,7 +51,7 @@ namespace TempLat
           model.piS = model.getFluctuationRatio(FieldsNumbering::piS()) * model.piS;
         }
         else if (flagSIC == InitialConditionsType::S::DefectsNetwork)
-          initializeScalarDomainWallNetwork(model, fg, rPar.lcorr);
+          initializeScalarDefectsNetwork(model, fg, rPar.lcorr);
         else if (flagSIC == InitialConditionsType::S::DefectsWhiteNoise)
           initializeScalarDomainWallWhiteNoise(model, fg, rPar.kCutoff, rPar.deltaNoise);
         else if (flagSIC != InitialConditionsType::S::Homogeneous)
@@ -107,20 +107,20 @@ namespace TempLat
     }
 
     template <class Model, typename T>
-    static void initializeScalarDomainWallNetwork(Model &model, const FluctuationsGenerator<T> &fg, T lcorr)
+    static void initializeScalarDefectsNetwork(Model &model, const FluctuationsGenerator<T> &fg, T lcorr)
     {
       auto toolBox = model.getToolBox();
       using RGF = RandomGaussianField<T,Model::NDim>;
 
-      ForLoop(i, 0, Model::NCs - 1,
+      ForLoop(i, 0, Model::Ns - 1,
 
               // 1. Norm of both real and imaginarry components:
-              auto fFluctuationNormDefect =  fg.getFluctuationsNormDefect(model,model.fldCS(i)(0_c),lcorr); // component 0
+              auto fFluctuationNormDefect =  fg.getFluctuationsNormDefect(model,model.fldS(i),lcorr); // component 0
 
               // 2. To obtain the amplitude at each point,multiply by a random Gaussian
-              auto a0 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(),toolBox); // component 0
+              auto a0 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm0" + model.fldS(i).toString(),toolBox); // component 0
 
-              model.fldS(i).inFourierSpace() = a0; // component 0
+              model.fldS(i).inFourierSpace() = a0 / sqrt(Model::Ns); // component 0
               model.fldS(i).inFourierSpace().setZeroMode(0);
               model.piS(i) =  0;
       );
@@ -132,15 +132,15 @@ namespace TempLat
       auto toolBox = model.getToolBox();
       using RGF = RandomGaussianField<T,Model::NDim>;
 
-      ForLoop(i, 0, Model::NCs - 1,
+      ForLoop(i, 0, Model::Ns - 1,
 
               // 1. Norm of both real and imaginarry components:
-              auto fFluctuationNormDefect =  fg.getFluctuationsNormWhiteNoise(model, model.fldCS(i)(0_c), kCutoff, delta); // component 0
+              auto fFluctuationNormDefect =  fg.getFluctuationsNormWhiteNoise(model, model.fldS(i), kCutoff, delta); // component 0
 
               // 2. To obtain the amplitude at each point, multiply by a random Gaussian
-              auto a0 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(),toolBox); // component 0
+              auto a0 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm0" + model.fldS(i).toString(),toolBox); // component 0
 
-              model.fldS(i).inFourierSpace() = a0; // component 0
+              model.fldS(i).inFourierSpace() = a0 / sqrt(Model::Ns); // component 0
               model.fldS(i).inFourierSpace().setZeroMode(0);
               model.piS(i) =  0;
       );

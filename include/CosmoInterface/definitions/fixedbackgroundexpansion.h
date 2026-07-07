@@ -20,15 +20,17 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
     template <class Model> FixedBackgroundExpansion(Model &model, RunParameters<T> &rPar):
-    H0(rPar.H0 / model.omegaStar), // Initial Hubble parameter (in program units)
     pEoS(2.0 / (3.0 * (1.0 + rPar.omegaEoS) - 2.0 * model.alpha)), // Coefficient of the power-law expansion: depends on EoS and alpha
+    H0( (AlmostEqual(rPar.H0, 0.0) && Model::DefectsModel) ? pEoS / rPar.t0 : rPar.H0 / model.omegaStar), // Initial Hubble parameter (in program units)
     alpha(model.alpha),
     doFattening(rPar.doFattening),
     t0(rPar.t0),
     t0Fat(rPar.t0Fat),
     tMaxFat(rPar.tMaxFat),
     sFat(rPar.sFat)
-    {}
+    {
+       if(AlmostEqual(H0, 0.0)) throw(RunParametersInconsistent("For models that do not involve cosmic defects, you need to specify a non-zero H0 to run a simulation with fixed background. If you want to disable expansion, please set expansion = false in the input file."));
+    }
 
     auto operator()(T deltaT) // Scale factor
     {
@@ -52,8 +54,8 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    T H0;
     T pEoS;
+    T H0;
     T alpha;
     bool doFattening;
 

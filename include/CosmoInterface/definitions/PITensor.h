@@ -83,7 +83,7 @@ namespace TempLat
       return Total(a, 0, Model::NU1 - 1,
                    -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * model.piU1(a)(i) *
                        model.piU1(a)(j)
-                   * IfElse(Model::DefectsModel, model.fatteningFactor, 1.)
+                   * model.fatteningFactor
                    );
     }
 
@@ -92,7 +92,7 @@ namespace TempLat
       return Total(a, 0, Model::NU1 - 1,
                    -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * magneticFieldU1(model.fldU1(a), i) *
                        magneticFieldU1(model.fldU1(a), j)
-                   / IfElse(Model::DefectsModel, model.fatteningFactor, 1.));
+                   / model.fatteningFactor);
     }
     // @endlabel
 

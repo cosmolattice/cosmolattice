@@ -35,7 +35,8 @@ namespace TempLat
     template <typename Model>
     U1Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append, std::string postfix = "", bool measureGauss = true, bool createSpectra = true):
     isGaussMeasured(measureGauss),
-    isSpectraMeasured(createSpectra)
+    isSpectraMeasured(createSpectra),
+    flagChiralPS(par.flagChiralPS)
     {
       bool amIRoot = model.getToolBox()->amIRoot();
 

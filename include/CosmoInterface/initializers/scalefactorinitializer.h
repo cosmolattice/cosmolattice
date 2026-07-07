@@ -28,10 +28,16 @@ namespace TempLat
 
     template <class Model, typename T> static void initializeScaleFactor(Model &model, RunParameters<T> &rPar)
     {
+      //For model swith defects, only a fixed background is allowed by default
+      if (!rPar.fixedBackground && Model::DefectsModel)
+        throw(RunParametersInconsistent("Running a defects model with self-consistent expansion is not tested, and features such as (extra)fattening may not work correctly. If you really want to run this option, comment out this exception in scalefactorinitializar.h"));
+
       // If fixed background, the initial Hubble parameter H0 is given by the user
       if (rPar.fixedBackground) {
-        model.aDotI = rPar.H0 / model.omegaStar;
-        if constexpr (Model::IsNonMinimallyCoupled) model.RI = -9.0 * pow<2>(rPar.H0 / model.omegaStar) * (rPar.omegaEoS - 1.0/3.0); 
+        auto fbe = FixedBackgroundExpansion(model, rPar);
+        model.aI = fbe(0.);
+        model.aDotI = fbe.dot(0.);
+        if constexpr (Model::IsNonMinimallyCoupled) model.RI = fbe.R(0.);
         // H0 is in GeV, so we transform to program variables
       }
 

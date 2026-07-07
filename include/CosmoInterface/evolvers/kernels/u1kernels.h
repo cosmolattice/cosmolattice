@@ -46,7 +46,7 @@ namespace TempLat
 
       auto normU1Source = pow(model.aI, 1 + model.alpha);
       auto normGrad = pow(model.aI, -1 + model.alpha)
-                      / IfElse(Model::DefectsModel, model.fatteningFactor, 1.);
+                      / model.fatteningFactor;
 
       return normGrad * (LaplU1 - GradU1) - normU1Source * U1Source + normU1AxionScalarSource * AxionScalarSource;
     }
@@ -55,7 +55,7 @@ namespace TempLat
     {
       // Computes U(1) momentum:
       return pow(model.aI, model.alpha - 1) * model.piU1(a)
-             * IfElse(Model::DefectsModel, model.fatteningFactor, 1.);
+             * model.fatteningFactor;
     }
 
     template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::Diffusion<Model> diffusion)
@@ -67,7 +67,6 @@ namespace TempLat
     template <class Model, int N> static auto get_momentum(Model &model, Tag<N> a, KernelsTypes::Diffusion<Model> diffusion)
     {
       // Returns momentum for complex scalars:
-      sayMPI << "U1 kernels work!";
       return U1Kernels::get(model, a, KernelsTypes::EoM<Model>());
     }
 

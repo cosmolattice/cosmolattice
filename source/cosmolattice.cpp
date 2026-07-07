@@ -87,6 +87,13 @@ int main(int argc, char *argv[])
   // You can check in this way, in the console output,
   // that you are running indeed the model you intended.
 
+  if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
+  // Printing in the console all the parameters chosen (both run parameter and specific
+  // model parameters)
+
+  manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
+  // Creation of an info file, which lists all parameters and options chosen
+
   typename ModelType::FloatType t = 0;
   // Our time variable. Initialized below.
 
@@ -125,12 +132,6 @@ int main(int argc, char *argv[])
   // is specified by the user in the input parameter file, and here is passed through
   // runParams. Model is passed as well to have access to normalisations.
 
-  if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
-  // Printing in the console all the parameters chosen (both run parameter and specific
-  // model parameters)
-
-  manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
-  // Creation of an info file, which lists all parameters and options chosen
 
   /************************Time evolution*************************/
 

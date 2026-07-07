@@ -15,6 +15,7 @@
 #include "CosmoInterface/definitions/hubbleconstraint.h"
 #include "CosmoInterface/definitions/fieldfunctionals.h"
 #include "CosmoInterface/definitions/defectsmodule/weights.h"
+#include "CosmoInterface/definitions/defectsmodule/defectsobservables.h"
 #include "CosmoInterface/measurements/abstractmeasurer.h"
 
 namespace TempLat
@@ -28,13 +29,13 @@ namespace TempLat
     using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
-    DefectsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &rPar, bool append, std::string postfix = "")
+    DefectsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &rPar, bool append, std::string postfix = "", bool onlyMeasureNorm = false)
         : amIRoot(model.getToolBox()->amIRoot()),
-          measureDefectsEnergies(rPar.measureDefectsEnergies),
-          measureDefectsStructure(rPar.measureDefectsStructure),
-          normOut(filesManager, "norm" + postfix , amIRoot, append, {"t", "norm(phi)", "norm(phi)^2", "var(norm(phi))"}, (Model::Ns > 0 && Model::NCs == 0) ),
-          defects(filesManager, "defects" + postfix, amIRoot, append, getDefectHeaders(model), (Model::Ns > 0 && Model::NCs == 0) || (Model::Ns == 0 && Model::NCs == 1) || measureDefectsEnergies || measureDefectsStructure), // Output file for defect observables.
-          normSpectraOut(filesManager, "norm"+ postfix, amIRoot, append, rPar, (Model::Ns > 0 && Model::NCs == 0) )
+          measureDefectsEnergies(rPar.measureDefectsEnergies && !onlyMeasureNorm),
+          measureDefectsStructure(rPar.measureDefectsStructure && !onlyMeasureNorm),
+          normOut(filesManager, "norm" + postfix , amIRoot, append, {"t", "norm(phi)", "norm(phi)^2", "var(norm(phi))"}, (Model::Ns == 0 && Model::NCs == 1) ),
+          defects(filesManager, "defects" + postfix, amIRoot, append, getDefectHeaders(model), !((Model::Ns > 0 && Model::NCs == 0) || (Model::Ns == 0 && Model::NCs == 1) || measureDefectsEnergies || measureDefectsStructure)), // Output file for defect observables.
+          normSpectraOut(filesManager, "norm"+ postfix, amIRoot, append, rPar, !(Model::Ns > 0 && Model::NCs == 0) )
     {
     }
 
@@ -43,8 +44,8 @@ namespace TempLat
 
       if constexpr (Model::Ns > 0 && Model::NCs == 0) {
         T norm, norm2, varnorm;
-        norm = average(sqrt(Total(i, 0, Model::Ns-1, abs(model.fldS(i));)));
-        norm2 = average(Total(i, 0, Model::Ns-1, abs(model.fldS(i));));
+        norm = average(sqrt(Total(i, 0, Model::Ns-1, pow<2>(model.fldS(i));)));
+        norm2 = average(Total(i, 0, Model::Ns-1, pow<2>(model.fldS(i));));
         varnorm = pow<2>(norm) - norm2;
 
         normOut.addAverage(t);
@@ -71,10 +72,10 @@ namespace TempLat
       if (measureDefectsEnergies) {
         if constexpr (Model::Ns > 0 && Model::NCs == 0) {
           ForLoop(i, 0, Model::Ns - 1,
-              Ekin += average(Energies::kineticS(model, FieldFunctionals::pi2S(model, i)) * Weights::weightScalarSinglet(model));
-              Egrad += average(Energies::gradientS(model, FieldFunctionals::grad2S(model, i)) * Weights::weightScalarSinglet(model));
+              Ekin += pow<3>(GetNGrid::get(model) * model.dx * model.aI) * average(Energies::kineticS(model, FieldFunctionals::pi2S(model, i)) * Weights::weightScalarSinglet(model));
+              Egrad += pow<3>(GetNGrid::get(model) * model.dx * model.aI) * average(Energies::gradientS(model, FieldFunctionals::grad2S(model, i)) * Weights::weightScalarSinglet(model));
           );
-          Epot += average(Potential::potential(model) * Weights::weightScalarSinglet(model));
+          Epot += pow<3>(GetNGrid::get(model) * model.dx * model.aI) * average(Potential::potential(model) * Weights::weightScalarSinglet(model));
           Etot = Egrad + Ekin + Epot;
           Elag = - Egrad + Ekin - Epot;
           defects.addAverage(Ekin);
@@ -86,17 +87,17 @@ namespace TempLat
 
         if constexpr (Model::NCs > 0 && Model::Ns == 0) {
           ForLoop(i, 0, Model::NCs - 1,
-              Ekin += average(Energies::kineticCS(model, FieldFunctionals::pi2CS(model, i)) * Weights::weightComplexScalar(model));
-              Egrad += average(Energies::gradientCS(model, FieldFunctionals::grad2CS(model, i)) * Weights::weightComplexScalar(model));
+              Ekin += pow<3>(GetNGrid::get(model) * model.dx * model.aI) * average(Energies::kineticCS(model, FieldFunctionals::pi2CS(model, i)) * Weights::weightComplexScalar(model));
+              Egrad += pow<3>(GetNGrid::get(model) * model.dx * model.aI) * average(Energies::gradientCS(model, FieldFunctionals::grad2CS(model, i)) * Weights::weightComplexScalar(model));
           );
-          Epot += average(Potential::potential(model) * Weights::weightComplexScalar(model));
+          Epot += pow<3>(GetNGrid::get(model) * model.dx * model.aI) * average(Potential::potential(model) * Weights::weightComplexScalar(model));
           defects.addAverage(Ekin);
           defects.addAverage(Egrad);
           defects.addAverage(Epot);
           if constexpr (Model::NU1 > 0) {
             ForLoop(i, 0, Model::NU1 - 1,
-              Ekin += average(Energies::electricU1(model, FieldFunctionals::pi2U1(model, i)) * Weights::weightComplexScalar(model));
-              Egrad += average(Energies::magneticU1(model, FieldFunctionals::B2U1(model, i)) * Weights::weightComplexScalar(model));
+              EE += pow<3>(GetNGrid::get(model) * model.dx * model.aI) * average(Energies::electricU1(model, FieldFunctionals::pi2U1(model, i)) * Weights::weightComplexScalar(model));
+              EB += pow<3>(GetNGrid::get(model) * model.dx * model.aI) * average(Energies::magneticU1(model, FieldFunctionals::B2U1(model, i)) * Weights::weightComplexScalar(model));
             );
               defects.addAverage(EE);
               defects.addAverage(EB);
@@ -110,9 +111,9 @@ namespace TempLat
       }
 
       if (measureDefectsStructure) {
-          if constexpr (Model::Ns == 1) { defects.addAverage(computeAreaParameter(model)); }
-          if constexpr (Model::Ns == 2) { defects.addAverage(computeWindingNumberLengthScalarSinglet(model)); }
-          if constexpr (Model::NCs == 2 && Model::NU1 == 1) { defects.addAverage(computeWindingNumberLengthScalarComplexU1(model)); }
+          if constexpr (Model::Ns == 1) { defects.addAverage(DefectsObservables::computeAreaParameter(model)); }
+          if constexpr (Model::Ns == 2) { defects.addAverage(DefectsObservables::computeWindingNumberLengthScalarSinglet(model)); }
+          if constexpr (Model::NCs == 1 && Model::NU1 == 1) { defects.addAverage(DefectsObservables::computeWindingNumberLengthComplexScalarU1(model)); }
       }
 
       defects.save(lastMeas);
@@ -141,7 +142,7 @@ namespace TempLat
           ret.emplace_back("Ekin");
           ret.emplace_back("Egrad");
           ret.emplace_back("Epot");
-          if constexpr ((Model::Ns > 0 && Model::NCs == 0) && Model::NU1 > 0) {
+          if constexpr ((Model::Ns == 0 && Model::NCs > 0) && Model::NU1 > 0) {
             ret.emplace_back("EE");
             ret.emplace_back("EB");
           }
@@ -152,7 +153,7 @@ namespace TempLat
 
       if (measureDefectsStructure) {
         if constexpr (Model::Ns == 1) { ret.emplace_back("areaDW"); }
-        if constexpr (Model::Ns == 2 || (Model::NCs == 2 && Model::NU1 == 0) || (Model::NCs == 2 && Model::NU1 == 1)){ ret.emplace_back("lengthStrings"); }
+        if constexpr (Model::Ns == 2 || (Model::NCs == 1 && Model::NU1 == 1)){ ret.emplace_back("winfindLengthStrings"); }
       }
 
       return ret;

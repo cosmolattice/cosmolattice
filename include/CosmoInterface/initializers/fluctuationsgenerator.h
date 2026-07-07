@@ -74,7 +74,7 @@ namespace TempLat
       FourierSite<Model::NDim> ntilde(f.getToolBox());
       auto k = ntilde.norm() * f.getKIR();
 
-      return pow( sqrt(2. * Constants::pi<T>) * lcorr * lSide / pow<2>(model.dx) , 1.5) * sqrt( 0.5 * exp(-0.5 * k * k * lcorr * lcorr)) / sqrt(2.);
+      return pow( sqrt(2. * Constants::pi<T>) * lcorr * lSide / pow<2>(model.dx) , 1.5) * sqrt( 0.5 * exp(-0.5 * k * k * lcorr * lcorr));
     }
 
     template <class Model> auto getFluctuationsNormWhiteNoise(Model &model, Field<T, Model::NDim> f, T kCutOff, T delta) const

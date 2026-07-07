@@ -50,9 +50,9 @@ namespace TempLat
           tBackupFreqFloat(par.get<T>("tBackupFreq", -1)),                   // Frequency of backups
           baseSeed(par.getSeed("baseSeed")),                 // Seed for random generator of initial fluctuations
           outFn(par.get<std::string>("outputfile", "./")()), // Folder where output is saved
-          energySnapshotMeas(par.get<std::string, 14>(
+          energySnapshotMeas(par.get<std::string, 15>(
               "energy_snapshot",
-              std::vector<std::string>(14, Constants::defaultString))), // Energy terms for which snapshots are printed
+              std::vector<std::string>(15, Constants::defaultString))), // Energy terms for which snapshots are printed
           snapLower(par.get<ptrdiff_t, 10>(
               "snap_lowercoord",
               std::vector<ptrdiff_t>(10, 0))), // Lower coordinates of the snapshoted volumes, in all dimensions
@@ -65,7 +65,7 @@ namespace TempLat
                                     : false), // If true, expansion is given by a fixed background
           omegaEoS(fixedBackground ? par.get<T>("omegaEoS", 1.0 / 3.0)
                                    : 0.0),              // For fixed background expansion: equation of state
-          H0(fixedBackground ? par.get<T>("H0") : 0.0), // For fixed background expansion: initial Hubble parameter
+          H0(fixedBackground ? par.get<T>("H0", 0.0) : 0.0), // For fixed background expansion: initial Hubble parameter
           a0(par.get<T>("a0", 1.0)),                    // Initial scale factor (default 1.0)
           spectraVerbosity(par.get<int>("spectraVerbosity", 0)), // Verbosity of spectra files
           deltaKBin(par.get<double>("deltaKBin", 1)),            // Bin width of the spectra
@@ -105,11 +105,11 @@ namespace TempLat
           tmaxdiff(par.get<double>("tmaxdiff", 0.)),
           tOutFreqDiff(par.get<T>("tOutputFreqDiff", 10 * dtdiff)), // Printing time interval of output during the diffusion phase
           tOutRareFreqDiff(par.get<T>("tOutputRareFreqDiff", 100 * dtdiff)), // Printing time interval of output during the diffusion phase
-          energySnapshotMeasDiffusion(par.get<std::string, 14>(
+          energySnapshotMeasDiffusion(par.get<std::string, 15>(
             "energy_snapshot_diffusion",
-            std::vector<std::string>(14, Constants::defaultString))),
+            std::vector<std::string>(15, Constants::defaultString))),
           doFattening(fixedBackground ?  par.get<bool>("doFattening", false) :  false), //Whether fattening is performed or not. It requires fixed background expansion (using it for self.consistent expansion is yet not tested nor thoroughly thought)
-          sFat(par.get<double>("sfat", 1.)),
+          sFat(par.get<double>("sFat", 1.)),
           t0Fat(par.get<double>("t0Fat", t0)),
           tMaxFat(par.get<double>("tMaxFat", gettMaxFattening())),
           measureDefectsEnergies(par.get<bool>("measureDefectsEnergies", false)),
@@ -170,7 +170,7 @@ namespace TempLat
 
       if (powerSpectrumType == 0 and unbinnedSpectra == false)
         throw(RunParametersInconsistent("powerSpectrumType 0 is only implemented for the unbinned power spectrum."));
-      if (powerSpectrumType < 0 or powerSpectrumType > 1)
+      if (powerSpectrumType < 0 or powerSpectrumType > 2)
         throw(RunParametersInconsistent("powerSpectrumType " + std::to_string(powerSpectrumType) +
                                         " is not a valid powerSpectrumType."));
       if (powerSpectrumVersion < 1 or powerSpectrumVersion > 3)
@@ -186,8 +186,9 @@ namespace TempLat
     ptrdiff_t getFlushFreq() const { return hdf5FlushFreq; }
 
     T gettMaxFattening() {
+      if (sFat >= 1.) return t0;
       if (AlmostEqual(sFat, 0.)) return tMax;
-      return t0Fat * pow(tMax / t0Fat, -1. / (sFat - 1.));
+      return t0Fat * pow(tMax / t0Fat, -1. / (sFat - 1.)); //This is correct for scale factors that evolve as a power law and which have a0 ~ (t/t0)^p !
     }
 
 

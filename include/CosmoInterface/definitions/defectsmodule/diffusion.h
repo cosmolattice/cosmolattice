@@ -33,15 +33,24 @@ namespace TempLat
         static void diffuse(Model &model, RunParameters<T> &rPar, FilesManager<Model::NDim> &filesManager, ExtraFields<Model> extraFields)
         {
 
+            bool iAmRoot  = model.getToolBox()->amIRoot();
+            typename Model::FloatType auxg;
+
+            if constexpr (Model::DefectsModel && Model::Ns == 1) {
+                auxg = model.g;
+                model.g = 0;
+            }
+
+            if (iAmRoot) say << "Diffusing initial defect conditions";
             if (!RK2NStorageParameters<T>::isRK2n(rPar.diffType)) throw(DiffusionEvolverInvalid("You need to choose a RK integrator to diffuse initial conditions for defect simulations. Abort."));
 
             auto diffuser = RK2NStorageFields(model, rPar.diffType);
 
-            std::optional<ScalarSingletMeasurer<T>> measurerS;
+            std::optional<DefectsMeasurer<T>> measurerS;
             std::optional<ComplexScalarMeasurer<T>> measurerCS;
             std::optional<U1Measurer<T>> measurerU1;
 
-            if constexpr (Model::Ns > 0)  measurerS.emplace(model, filesManager, rPar, rPar.appendMode, "_diffusion", false);
+            if constexpr (Model::Ns > 0)  measurerS.emplace(model, filesManager, rPar, rPar.appendMode, "_diffusion", true);
             if constexpr (Model::NCs > 0) measurerCS.emplace(model, filesManager, rPar, rPar.appendMode, "_diffusion", false);
             if constexpr (Model::NU1 > 0) measurerU1.emplace(model, filesManager, rPar, rPar.appendMode, "_diffusion", false, false);
             EnergiesMeasurer<T> measurerE(model, filesManager, rPar, rPar.appendMode, "_diffusion", false);
@@ -54,7 +63,8 @@ namespace TempLat
 
             for (int i = 0; tdiff < rPar.tmaxdiff + rPar.dtdiff * T(0.5); i++) {
                 if ( i % outputFreqDiffusion == 0) {
-                    if constexpr (Model::Ns > 0) measurerS->measureStandard(model, tdiff);
+                    if (iAmRoot) say << "Diffusion step " << i << " completed. Diffusion time " << tdiff;
+                    if constexpr (Model::Ns > 0) measurerS->measure(model, tdiff);
                     if constexpr (Model::NCs > 0) measurerCS->measureStandard(model, tdiff);
                     if constexpr (Model::NU1 > 0) measurerU1->measureStandard(model, tdiff);
                     measurerE.measure(model, tdiff, i == 0);
@@ -67,10 +77,13 @@ namespace TempLat
 
             ForLoop(n, 0, Model::Ns - 1, model.piS(n) = 0.; );
             ForLoop(n, 0, Model::NCs - 1, model.piCS(n) = Complexify(0.,0.); );
-            ForLoop(n, 0, Model::Ns - 1, ForLoop(i, 1, Model::NDim, model.piU1(n)(i) = 0.;) );
+            ForLoop(n, 0, Model::NU1 - 1, ForLoop(i, 1, Model::NDim, model.piU1(n)(i) = 0.;) );
 
             model.dt = rPar.dt;
 
+            if constexpr (Model::DefectsModel && Model::Ns == 1) {
+                model.g = auxg;
+            }
         }
 
     };

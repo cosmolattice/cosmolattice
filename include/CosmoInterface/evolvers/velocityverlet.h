@@ -201,7 +201,7 @@ namespace TempLat
     template <class Model> void driftU1Vector(Model &model, T w)
     {
       model.fldU1 += pow(model.aSI, model.alpha - 1) * w * model.dt * model.piU1
-                     * IfElse(Model::DefectsModel, model.fatteningFactor, 1.);
+                     * model.fatteningFactor;
     }
 
     // Evolves fldSU2
