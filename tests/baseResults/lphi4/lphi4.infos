@@ -1,0 +1,78 @@
+Parameters: 
+Important parameters:
+
+             kCutOff       -1                  
+         tOutputFreq       0.2                 
+     tOutputRareFreq       10                  
+                  t0       0                   
+       tOutputInfreq       1                   
+                 kIR       .7                  
+          doLFforGWs       true                
+                tMax       10                  
+             evolver       LF                  
+           expansion       true                
+                  dt       0.01                
+             withGWs       false               
+                   N       64                  
+
+
+Other parameters:
+
+   tNonLinearAxionU1       -1                  
+             ext_PS1       ✖                 
+             ext_PS0       ✖                 
+measureDefectsEnergies       false               
+               t0Fat       0                   
+                sFat       1                   
+         tOutputVerb       1                   
+            tmaxdiff       0                   
+  initial_amplitudes       5.6964e18 0         
+                  a0       1                   
+            load_dir       ✖                 
+       print_headers       true                
+    diffusionevolver       7                   
+               lcorr       0                   
+ saveUnbinnedSpectra       false               
+               input       ../models/parameter-files/lphi4.in
+             PS_type       1                   
+           ICtype_U1       Default             
+            ICtype_S       Default             
+       hdf5FlushFreq       10                  
+        flagChiralPS       false               
+        fn_verbosity       0                   
+          PS_version       1                   
+     initial_momenta       -4.86735e30 0       
+      snap_stepcoord       1 1 1 1 1 1 1 1 1 1 
+              flagON       false               
+      overwriteFiles       false               
+           snapshots       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
+     GWprojectorType       1                   
+ tOutputRareFreqDiff       0                   
+                   q       300                 
+            baseSeed       3692063681          
+             tMaxFat       0                   
+     snap_uppercoord       64 64 64 64 64 64 64 64 64 64
+measureDefectsStructure       false               
+     snap_lowercoord       0 0 0 0 0 0 0 0 0 0 
+     fixedBackground       false               
+    spectraVerbosity       0                   
+       appendToFiles       false               
+           deltaKBin       1                   
+        hdf5Averages       false               
+          outputfile       ./                  
+ snapshots_diffusion       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
+         hdf5Spectra       false               
+         tBackupFreq       -1                  
+              dtdiff       0                   
+           tolerance       -1                  
+              lambda       9e-14               
+          deltaNoise       1                   
+         doDiffusion       false               
+     tOutputFreqDiff       0                   
+
+The simulation started on the d7 m7 y2026 around h14m28.
+It will be running on an MPI grid of (2,1,1) cores with 8 threads per MPI task.
+Memory usage is estimated to be around 4.52 MB per MPI task.
+The simulation finished on the d7 m7 y2026 around h14m28.
+The timer indicates that it ran for 3.902s.
+As it ran on 16 cores, this corresponds to 0.0173422 core hours.

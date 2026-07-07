@@ -40,6 +40,7 @@ namespace TempLat
     static constexpr size_t NU1Flds = 0;     // U(1) gauge fields
     static constexpr size_t NSU2Doublet = 0; // SU(2) doublets
     static constexpr size_t NSU2Flds = 0;    // SU(2) gauge fields
+    static constexpr bool DefectsModel = false;
 
     // Number of terms in the potential. It can be changed in the model file.
     static constexpr size_t NPotTerms = 1;
@@ -70,7 +71,7 @@ namespace TempLat
       _ModelParsType::NSU2Doublet, _ModelParsType::NSU2Flds, typename _ModelParsType::CsU1Couplings,                   \
       typename _ModelParsType::SU2DoubletU1Couplings, typename _ModelParsType::SU2DoubletSU2Couplings,                 \
       typename _ModelParsType::ScalarU1AxionCouplings, typename _ModelParsType::NonMinimalCouplings, _FloatType,       \
-      _ModelParsType::NDim
+      _ModelParsType::NDim, _ModelParsType::DefectsModel
 #define MakeModelFloatType(_ModelName, _ModelParsType, _FloatType)                                                     \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, _FloatType)>
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
@@ -82,7 +83,7 @@ namespace TempLat
    **/
   template <class R, size_t NPOTTERMS, size_t NS, size_t NC, size_t NU1FLDS, size_t NSU2DOUBLET, size_t NSU2FLDS,
             typename CSU1COUPLINGS, typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS,
-            typename SCALARU1AXIONCOUPLINGS, typename NONMINCOUPLINGS, typename T = double, int NDIM = 3>
+            typename SCALARU1AXIONCOUPLINGS, typename NONMINCOUPLINGS, typename T = double, int NDIM = 3, bool DEFECTSMODEL = false>
   class AbstractModel
       : public ScalarBase<NDIM, T, NS>,
         public ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>,
@@ -98,6 +99,7 @@ namespace TempLat
   public:
     // NPotTerms stays here — no natural sector base home without adding a template parameter
     static constexpr size_t NPotTerms = NPOTTERMS;
+    static constexpr size_t DefectsModel = DEFECTSMODEL;
 
     // --- Field iteration API (centralized) ---
 

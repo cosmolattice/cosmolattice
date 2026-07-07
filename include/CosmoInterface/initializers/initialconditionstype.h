@@ -91,7 +91,6 @@ namespace TempLat {
             else if(ICType == InitialConditionsType::U1::DefectsWhiteNoise) return "DefectsWhiteNoise";
             else return "";
         }
-
     }
 } /* TempLat */
 

@@ -44,9 +44,9 @@ namespace TempLat
 
   public:
     // Total potential energy (sum of all its terms)
-    template <class Model> static inline auto potential(Model &pM)
+    template <class Model> static inline auto potential(Model &model)
     {
-      return Total(i, 0, Model::NPotTerms - 1, pM.potentialTerms(i));
+      return Total(i, 0, Model::NPotTerms - 1, model.potentialTerms(i));
     }
 
     // First derivative of the potential wrt scalar field n.
@@ -59,13 +59,13 @@ namespace TempLat
     // IfElse is to avoid compilation errors when no scalars are specified.
     template <class Model> static inline auto derivS(Model &model)
     {
-      return IfElse((Model::Ns > 0), MakeArray(i, 0, Model::Ns - 1, model.potDeriv(i)), ZeroType());
+      return IfElse((Model::Ns > 0), MakeArray(i, 0, Model::Ns - 1, derivS(model, i));, ZeroType());
     }
 
-    template <class Model> static inline auto derivSSI(Model &model)
-    {
-      return IfElse((Model::Ns > 0), MakeArray(i, 0, Model::Ns - 1, derivSSI(i)), ZeroType());
-    }
+    // template <class Model> static inline auto derivSSI(Model &model)
+    // {
+    //   return IfElse((Model::Ns > 0), MakeArray(i, 0, Model::Ns - 1, derivSSI(i)), ZeroType());
+    // }
 
     // Second derivative of the potential wrt scalar field n.
     template <class Model, int N> static inline auto deriv2S(Model &model, Tag<N> n) { return model.potDeriv2(n); }

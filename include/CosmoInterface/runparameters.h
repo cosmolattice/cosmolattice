@@ -42,9 +42,9 @@ namespace TempLat
         say << "WARNING: the input parameter 'energy_snapshot' is deprecated, please use 'snapshots' instead. "
                "Its value is used to fill 'snapshots'.";
       if (hasOld && !hasNew)
-        return par.get<std::string, 14>("energy_snapshot",
-                                        std::vector<std::string>(14, Constants::defaultString));
-      return par.get<std::string, 14>("snapshots", std::vector<std::string>(14, Constants::defaultString));
+        return par.get<std::string, 15>("energy_snapshot",
+                                        std::vector<std::string>(15, Constants::defaultString));
+      return par.get<std::string, 15>("snapshots", std::vector<std::string>(15, Constants::defaultString));
     }
 
     // List of run parameters and their default values:
@@ -81,7 +81,7 @@ namespace TempLat
                                     : false), // If true, expansion is given by a fixed background
           omegaEoS(fixedBackground ? par.get<T>("omegaEoS", 1.0 / 3.0)
                                    : 0.0),              // For fixed background expansion: equation of state
-          H0(fixedBackground ? par.get<T>("H0") : 0.0), // For fixed background expansion: initial Hubble parameter
+          H0(fixedBackground ? par.get<T>("H0", 0.0) : 0.0), // For fixed background expansion: initial Hubble parameter
           a0(par.get<T>("a0", 1.0)),                    // Initial scale factor (default 1.0)
           spectraVerbosity(par.get<int>("spectraVerbosity", 0)), // Verbosity of spectra files
           deltaKBin(par.get<double>("deltaKBin", 1)),            // Bin width of the spectra
@@ -106,13 +106,31 @@ namespace TempLat
               0)),            // Different verbosity in the output filename. By default, no info about model or params.
           doWeRestart(false), // Boolean which tells if we are runing in restart mode or not. Set in the main.
           tolerance(par.get<T>("tolerance", -1)), // For adaptative solvers only
-          powerSpectrumType(par.get<int>("PS_type", 1)), powerSpectrumVersion(par.get<int>("PS_version", 1)),
+          powerSpectrumType(par.get<int>("PS_type", 1)),
+          powerSpectrumVersion(par.get<int>("PS_version", 1)),
           withGWs(par.get<bool>("withGWs", false, Important)),
           eTypeGW(par.get<bool>("doLFforGWs", true, Important) ? LF : eType), // Type of evolution algorithm
-          GWprojectorType(par.get<int>("GWprojectorType",
-                                       2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
-          flagON(par.get<bool>("flagON", false)), flagChiralPS(par.get<bool>("flagChiralPS", false)),
-          unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false))
+          GWprojectorType(par.get<int>("GWprojectorType", 2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)
+          flagON(par.get<bool>("flagON", false)),
+          flagChiralPS(par.get<bool>("flagChiralPS", false)),
+          unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false)),
+          lcorr(par.get<T>("lcorr", 0.)),
+          deltaNoise(par.get<T>("deltaNoise", 1.)),
+          doDiffusion(par.get<bool>("doDiffusion", false)),
+          diffType(par.get<EvolverType>("diffusionevolver", RK2)), // Type of evolution algorithm
+          dtdiff(par.get<double>("dtdiff", 0.)),
+          tmaxdiff(par.get<double>("tmaxdiff", 0.)),
+          tOutFreqDiff(par.get<T>("tOutputFreqDiff", 10 * dtdiff)), // Printing time interval of output during the diffusion phase
+          tOutRareFreqDiff(par.get<T>("tOutputRareFreqDiff", 100 * dtdiff)), // Printing time interval of output during the diffusion phase
+          energySnapshotMeasDiffusion(par.get<std::string, 15>(
+            "snapshots_diffusion",
+            std::vector<std::string>(15, Constants::defaultString))),
+          doFattening(fixedBackground ?  par.get<bool>("doFattening", false) :  false), //Whether fattening is performed or not. It requires fixed background expansion (using it for self.consistent expansion is yet not tested nor thoroughly thought)
+          sFat(par.get<double>("sFat", 1.)),
+          t0Fat(par.get<double>("t0Fat", t0)),
+          tMaxFat(par.get<double>("tMaxFat", gettMaxFattening())),
+          measureDefectsEnergies(par.get<bool>("measureDefectsEnergies", false)),
+          measureDefectsStructure(par.get<bool>("measureDefectsStructure", false))
     {
       if (AlmostEqual(lSide, -1)) {
         if (AlmostEqual(kIR, -1))
@@ -169,7 +187,7 @@ namespace TempLat
 
       if (powerSpectrumType == 0 and unbinnedSpectra == false)
         throw(RunParametersInconsistent("powerSpectrumType 0 is only implemented for the unbinned power spectrum."));
-      if (powerSpectrumType < 0 or powerSpectrumType > 1)
+      if (powerSpectrumType < 0 or powerSpectrumType > 2)
         throw(RunParametersInconsistent("powerSpectrumType " + std::to_string(powerSpectrumType) +
                                         " is not a valid powerSpectrumType."));
       if (powerSpectrumVersion < 1 or powerSpectrumVersion > 3)
@@ -183,6 +201,13 @@ namespace TempLat
     void setDoWeRestart(bool pDoWeRestart) { doWeRestart = pDoWeRestart; }
 
     ptrdiff_t getFlushFreq() const { return hdf5FlushFreq; }
+
+    T gettMaxFattening() {
+      if (sFat >= 1.) return t0;
+      if (AlmostEqual(sFat, 0.)) return tMax;
+      return t0Fat * pow(tMax / t0Fat, -1. / (sFat - 1.)); //This is correct for scale factors that evolve as a power law and which have a0 ~ (t/t0)^p !
+    }
+
 
   public:
     const int N;
@@ -252,6 +277,25 @@ namespace TempLat
     const bool flagON;
     const bool flagChiralPS;
     const bool unbinnedSpectra;
+
+    const T lcorr;
+    const T deltaNoise;
+
+    const bool doDiffusion;
+    const EvolverType diffType;
+    const T dtdiff;
+    const T tmaxdiff;
+    const T tOutFreqDiff;
+    const T tOutRareFreqDiff;
+    std::vector<std::string> energySnapshotMeasDiffusion;
+
+    const bool doFattening;
+    const T sFat;
+    const T t0Fat;
+    const T tMaxFat;
+
+    bool measureDefectsEnergies;
+    bool measureDefectsStructure;
 
     LatticeParameters<T> getLatParams() { return LatticeParameters<T>(dx, lSide, kIR); }
 

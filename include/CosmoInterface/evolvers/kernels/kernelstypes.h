@@ -28,8 +28,24 @@ namespace TempLat::KernelsTypes
     void cache(Model &model) {}
   };
 
-  template <class Model, class T> auto getDt(Model &model, EoM<T> eom) { return model.dt; }
-  template <class Model, class T> auto setDt(Model &model, EoM<T> eom, T dt) { model.dt = dt; }
+  template <typename Model> class Diffusion
+  {
+    using T = typename Model::FloatType;
+
+  public:
+    T tMinust0 = T{};
+
+    void cache(Model &model, T tIn) { tMinust0 = tIn; }
+
+  private:
+    void cache(Model &model) {}
+  };
+
+  template <class Model> auto getDt(Model &model, EoM<Model> &kt) { return model.dt; }
+  template <class Model> auto setDt(Model &model, EoM<Model> &kt, typename Model::FloatType dt) { model.dt = dt; }
+
+  template <class Model> auto getDt(Model &model, Diffusion<Model> &kt) { return model.dt; }
+  template <class Model> auto setDt(Model &model, Diffusion<Model> &kt, typename Model::FloatType dt) { model.dt = dt; }
 } // namespace TempLat::KernelsTypes
 
 #endif

@@ -17,6 +17,7 @@
 #include "CosmoInterface/definitions/averages.h"
 #include "CosmoInterface/definitions/hubbleconstraint.h"
 #include "CosmoInterface/definitions/nonminimalcoupling.h"
+#include "CosmoInterface/definitions/defectsmodule/diffusion.h"
 
 namespace TempLat
 {
@@ -43,7 +44,7 @@ namespace TempLat
      * @param model The model to initialize.
      * @param rPar The run parameters, which determine the initial conditions for the fields and scale factor.
      */
-    template <class Model> void initialize(Model &model, RunParameters<T> &rPar, ExtraFields<Model> extraFields)
+    template <class Model> void initialize(Model &model, RunParameters<T> &rPar, FilesManager<Model::NDim> &filesManager, ExtraFields<Model> extraFields)
     {
       // Initialize scale factor:
       if (rPar.expansion) ScaleFactorInitializer::initializeScaleFactor(model, rPar);
@@ -61,6 +62,10 @@ namespace TempLat
       // Initialize the U1 gauge fields and complex scalars:
       if constexpr (Model::NCs > 0 || Model::NU1 > 0)
         U1Initializer::initializeU1(model, fg, extps, rPar, extraFields);
+
+      if constexpr (Model::DefectsModel) {
+        if (rPar.doDiffusion) Diffusion::diffuse(model, rPar, filesManager, extraFields);
+      }
 
       Averages::setAllAverages(model);
       if constexpr (Model::IsNonMinimallyCoupled) model.RI = NonMinimalCoupling::R(model);

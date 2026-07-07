@@ -33,7 +33,7 @@ namespace TempLat
                   unbinnedSpectra(rPar.unbinnedSpectra)
 
     {
-      if (not dontCreate) {
+      if (! dontCreate) {
         if (unbinnedSpectra) {
 #ifdef HAVE_HDF5
           unbinnedSaverHDF5 = std::make_shared<UnbinnedSpectrumSaverHDF5<T>>(fm, fn, amIRoot, appendMode, rPar);
@@ -63,7 +63,7 @@ namespace TempLat
         unbinnedSpectra(rPar.unbinnedSpectra)
     {
 
-      if (not dontCreate) {
+      if (! dontCreate) {
         if(unbinnedSpectra) {
 #ifdef HAVE_HDF5
           unbinnedSaverHDF5 = std::make_shared<UnbinnedSpectrumSaverHDF5<T>>(fm, fld, amIRoot, appendMode, rPar);

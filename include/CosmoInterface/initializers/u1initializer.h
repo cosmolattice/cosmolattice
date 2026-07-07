@@ -50,27 +50,26 @@ namespace TempLat
         initializePlaneWavesZeroBU1(model, fg, rPar.kCutoff, extraFlds);
       else if (flagU1IC == InitialConditionsType::U1::BunchDavisTransverseU1)
         initializeBunchDavisTransverseU1(model, extps, rPar.kCutoff, extraFlds);
+      else if (flagU1IC == InitialConditionsType::U1::DefectsNetwork)
+        initializeStringNetwork(model,fg,rPar.lcorr);
+      else if (flagU1IC == InitialConditionsType::U1::DefectsWhiteNoise)
+        initializeStringNoise(model, fg, rPar.kCutoff, rPar.deltaNoise);
       else
         throw(U1ICNotImplemented("The initial condition provided for U1 is not implemented."));
     }
     // @endlabel
 
-    template<class Model, typename T>
-    static void initializeBunchDavisTransverseU1(Model& model, ExternalPowerSpectrumInitializer<T>& extps, T kCutOff, ExtraFields<Model> extraFlds)
-        {
+  private:
+    // INITIALIZATION: COMPLEX SCALARS
+    // --> Note: aDot has to be initialized before calling this function.
 
-          ForLoop(n, 0, Model::NU1-1,
-				    extps.BunchDavisTransverseU1(model, model.fldU1(n), model.piU1(n), extraFlds.fldForPlaneWavesU1(), extraFlds.piForPlaneWavesU1(), model.aDotI, kCutOff);
-				    model.fldU1(n) = model.getFluctuationRatio(FieldsNumbering::fldU1()) * model.fldU1(n);
-				    model.piU1(n) = model.getFluctuationRatio(FieldsNumbering::piU1()) * model.piU1(n);
-			    );
-    }
+
 
     template <class Model, typename T>
     static void initializeRandomWithMatterU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff)
     {
       // 1. We set the homogeneous components and fluctuations for the complex scalar fields.
-      initializeCScalar(model, fg.getBaseSeed(), fg, kCutOff);
+      initializeCScalar(model, fg, kCutOff);
 
       // 2. We now impose fluctuations to the TIME-DERIVATIVES of the Abelian gauge fields (the amplitudes are set
       // exactly to 0 at all lattice points) This is done by imposing the Gauss constraint in momentum space, in which
@@ -108,6 +107,17 @@ namespace TempLat
       }
     }
 
+    template<class Model, typename T>
+    static void initializeBunchDavisTransverseU1(Model& model, ExternalPowerSpectrumInitializer<T>& extps, T kCutOff, ExtraFields<Model> extraFlds)
+        {
+
+          ForLoop(n, 0, Model::NU1-1,
+				    extps.BunchDavisTransverseU1(model, model.fldU1(n), model.piU1(n), extraFlds.fldForPlaneWavesU1(), extraFlds.piForPlaneWavesU1(), model.aDotI, kCutOff);
+				    model.fldU1(n) = model.getFluctuationRatio(FieldsNumbering::fldU1()) * model.fldU1(n);
+				    model.piU1(n) = model.getFluctuationRatio(FieldsNumbering::piU1()) * model.piU1(n);
+			    );
+    }
+
     template <class Model, typename T>
     static void initializePlaneWavesZeroBU1(Model &model, FluctuationsGenerator<T> &fg, T kCutOff,
                                             ExtraFields<Model> extraFlds)
@@ -120,15 +130,12 @@ namespace TempLat
               ForLoop(i, 1, Model::NDim, model.fldU1(n)(i) = 0;););
     }
 
-  private:
-    // INITIALIZATION: COMPLEX SCALARS
-    // --> Note: aDot has to be initialized before calling this function.
 
     template <class Model, typename T>
-    static void initializeCScalar(Model &model, std::string baseSeed, FluctuationsGenerator<T> &fg, T kCutOff)
+    static void initializeCScalar(Model &model, FluctuationsGenerator<T> &fg, T kCutOff)
     {
       // 1. We set fluctuations to the complex scalars:
-      addFluctuationsCScalarFromPhases(model, baseSeed, fg, model.aDotI, kCutOff);
+      addFluctuationsCScalarFromPhases(model, fg, model.aDotI, kCutOff);
 
       // 2. We set the initial homogeneous components of the fields and derivatives.
       // 		model.fldCS0(i) and model.piCS0(i) are introduced in GeV,
@@ -139,7 +146,7 @@ namespace TempLat
 
     // Sets fluctuations to complex scalar components
     template <class Model, typename T>
-    static void addFluctuationsCScalarFromPhases(Model &model, std::string baseSeed, FluctuationsGenerator<T> &fg,
+    static void addFluctuationsCScalarFromPhases(Model &model, FluctuationsGenerator<T> &fg,
                                                  T aDot, T kCutOff)
     {
       // When imposing initial fluctuations to the complex scalars, one must ensure that the Gauss constraints are
@@ -163,19 +170,20 @@ namespace TempLat
 
               // 2. Random amplitudes for the (left-moving and right-moving) waves:
               auto a0 =
-                  fFluctuationNorm0 * RRF(baseSeed + "norm0" + model.fldCS(i)(0_c).toString(), toolBox); // component 0
+                  fFluctuationNorm0 * RRF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(), toolBox); // component 0
               auto a1 =
-                  fFluctuationNorm1 * RRF(baseSeed + "norm1" + model.fldCS(i)(1_c).toString(), toolBox); // component 1
+                  fFluctuationNorm1 * RRF(fg.getBaseSeed() + "norm1" + model.fldCS(i)(1_c).toString(), toolBox); // component 1
 
               // 3. Random phases for the waves:
               // 	-->	Note: We only generate three of the four phases randomly, the fourth is imposed so that the Gauss
               // constraint is preserved initially, see documentation.
+
               // @label:complex_scalar_constrained_phases
-              auto eitheta00 = RUF(baseSeed + "phase00" + model.fldCS(i)(0_c).toString(),
+              auto eitheta00 = RUF(fg.getBaseSeed() + "phase00" + model.fldCS(i)(0_c).toString(),
                                    toolBox); // left-moving wave phase, component 0
-              auto eitheta01 = RUF(baseSeed + "phase01" + model.fldCS(i)(0_c).toString(),
+              auto eitheta01 = RUF(fg.getBaseSeed() + "phase01" + model.fldCS(i)(0_c).toString(),
                                    toolBox); // right-moving wave phase, component 0
-              auto eitheta10 = RUF(baseSeed + "phase10" + model.fldCS(i)(1_c).toString(),
+              auto eitheta10 = RUF(fg.getBaseSeed() + "phase10" + model.fldCS(i)(1_c).toString(),
                                    toolBox); // left-moving wave phase, component 1
               auto eitheta11 = eitheta01 * eitheta10 *
                                conj(eitheta00); // right-moving wave phase, component 1 (depends on the other three!)
@@ -209,6 +217,94 @@ namespace TempLat
                   aDot * model.fldCS(i)(1_c).inFourierSpace();    // component 1
               model.piCS(i)(1_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
               // @endlabel
+
+      );
+    }
+
+    template <class Model, typename T>
+    static void initializeStringNetwork(Model &model, FluctuationsGenerator<T> &fg, T lcorr)
+    {
+      // 1. We set the fluctuations for the complex scalar fields, with a zero homogeneous component.
+      addFluctuationsCScalarDefectNetwork(model, fg, lcorr);
+
+      // 2. We now impose fluctuations to the TIME-DERIVATIVES of the Abelian gauge fields (the amplitudes are set
+      // exactly to 0 at all lattice points) This is done by imposing the Gauss constraint in momentum space, in which
+      // the current (given by the complex scalars) sources the gauge fields.
+
+      if constexpr (Model::NU1 > 0) {
+        ForLoop(a, 0, Model::NU1 - 1,
+                ForLoop(i, 1, Model::NDim,
+                        model.piU1(a)(i) = 0;
+                        model.fldU1(a)(i) = 0; // we set the amplitude of the gauge fields exactly to zero.
+                );
+        );
+      }
+    }
+
+    template <class Model, typename T>
+    static void addFluctuationsCScalarDefectNetwork(Model &model, FluctuationsGenerator<T> &fg, T lcorr)
+    {
+      auto toolBox = model.getToolBox();
+      using RGF = RandomGaussianField<T, Model::NDim>;
+      // using RRF = RandomRayleighField<T, Model::NDim>;
+      // using RUF = RandomUniformUnitaryField<T, Model::NDim>;
+
+      ForLoop(i, 0, Model::NCs - 1,
+
+        auto fFluctuationNormDefect =  fg.getFluctuationsNormDefect(model, model.fldCS(i)(0_c), lcorr); // component 0
+
+        auto a0 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(), toolBox); // component 0
+        auto a1 = fFluctuationNormDefect * RGF(fg.getBaseSeed() + "norm1" + model.fldCS(i)(1_c).toString(), toolBox);  // component 1
+
+        model.fldCS(i)(0_c).inFourierSpace() = a0 / sqrt(2.) / sqrt(2.); // component 0
+        model.fldCS(i)(0_c).inFourierSpace().setZeroMode(0.);
+        model.fldCS(i)(1_c).inFourierSpace() = a1 / sqrt(2.) / sqrt(2.); // component 1
+        model.fldCS(i)(1_c).inFourierSpace().setZeroMode(0.);
+
+        model.piCS(i) =  Complexify(0., 0.);
+      );
+
+    }
+
+    template <class Model, typename T>
+    static void initializeStringNoise(Model &model, FluctuationsGenerator<T> &fg, T kCutoff, T delta)
+    {
+      addFluctuationsCScalarNoise(model, fg, kCutoff, delta);
+
+      if constexpr (Model::NU1 > 0) {
+        ForLoop(a, 0, Model::NU1 - 1,
+                ForLoop(i, 1, Model::NDim,
+                        model.piU1(a)(i) = 0;
+                        model.fldU1(a)(i) = 0; // we set the amplitude of the gauge fields exactly to zero.
+                );
+        );
+      }
+    }
+
+    template <class Model, typename T>
+    static void addFluctuationsCScalarNoise(Model &model, FluctuationsGenerator<T> &fg, T kCutOff, T delta)
+    {
+
+      auto toolBox = model.getToolBox();
+      using RGF = RandomGaussianField<T,Model::NDim>;
+
+      ForLoop(i, 0, Model::NCs - 1,
+
+              auto fFluctuationNormWhiteNoise =  fg.getFluctuationsNormWhiteNoise(model, model.fldCS(i)(0_c), kCutOff, delta); // component 0
+
+              // 2. To obtain the amplitude at each point, multiply by a random Gaussian
+              auto a0 = fFluctuationNormWhiteNoise * RGF(fg.getBaseSeed() + "norm0" + model.fldCS(i)(0_c).toString(),toolBox); // component 0
+              auto a1 = fFluctuationNormWhiteNoise * RGF(fg.getBaseSeed() + "norm1" + model.fldCS(i)(1_c).toString(),toolBox);  // component 1
+
+              // 3. Finally, we set the fields to the desired values.
+              model.fldCS(i)(0_c).inFourierSpace() = a0 / sqrt(2); // component 0
+              model.fldCS(i)(0_c).inFourierSpace().setZeroMode(0);
+              model.fldCS(i)(1_c).inFourierSpace() = a1 / sqrt(2); // component 1
+              model.fldCS(i)(1_c).inFourierSpace().setZeroMode(0);
+
+              // 4. Conjugate momenta is set to zero.
+              model.piCS(i)(0_c) =  0;
+              model.piCS(i)(1_c) =  0;
 
       );
     }

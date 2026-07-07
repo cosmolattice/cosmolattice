@@ -55,7 +55,7 @@ namespace TempLat
   // Declaration of our model. It inherits from the generic model defined above.
   {
   private:
-    double g, h, lambda, qG, qH;
+    double lambda, qG, qH;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
   // @endlabel
@@ -108,9 +108,6 @@ namespace TempLat
       qG = parser.get<double>("qG");
       qH = parser.get<double>("qH");
       lambda = parser.get<double>("lambda");
-
-      g = sqrt(qG * lambda);
-      h = sqrt(qH * lambda);
       // @endlabel
       
       // @label:rescaling
@@ -203,7 +200,7 @@ namespace TempLat
     auto potDeriv2NormCS(Tag<0>)
     // 2nd derivative with respect complex scalar norm
     {
-      return 4 * qH * pow<2>(norm(fldSU2Doublet(0_c)));
+      return 4 * qH;
     }
 
     auto potDeriv2NormSU2Doublet(Tag<0>)

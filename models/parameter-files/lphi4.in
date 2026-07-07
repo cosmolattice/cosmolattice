@@ -8,23 +8,24 @@ expansion = true
 evolver = LF
 
 #Lattice 
-N = 128
+N = 64
 dt = 0.01
 kIR = .7
 
 #Times
-tOutputFreq = 1
-tOutputInfreq = 5
+tOutputFreq = 0.2
+tOutputInfreq = 1
 tMax = 10
 
 #Spectra options
 PS_type = 1
 PS_version = 1
+saveUnbinnedSpectra = false
 
 #@label:GW_settings 
 #GWs
-GWprojectorType = 1
 withGWs=false
+GWprojectorType = 1
 #@label:GW_settings 
 
 #@label:IC 
@@ -36,4 +37,3 @@ initial_momenta = -4.86735e30 0   # homogeneous amplitudes in GeV2
 #Model Parameters
 lambda = 9e-14
 q = 300
-#pepe private

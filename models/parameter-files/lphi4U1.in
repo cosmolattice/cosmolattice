@@ -8,15 +8,15 @@ expansion = true
 evolver = LF
 
 #Lattice
-N = 32
+N = 64
 dt = 0.01
 kIR = .6
 
 #Times
-tOutputFreq = 2
-tOutputInfreq = 10
-tOutputRareFreq = 20
-tMax = 100
+tOutputFreq = 0.2
+tOutputInfreq = 1
+tOutputRareFreq = 5
+tMax = 10
 
 #GWs
 withGWs = false

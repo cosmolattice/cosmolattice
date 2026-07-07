@@ -21,6 +21,7 @@
 #include "CosmoInterface/measurements/scalefactormeasurer.h"
 #include "CosmoInterface/measurements/energysnapshotmeasurer.h"
 #include "CosmoInterface/measurements/topologicalchargesmeasurer.h"
+#include "CosmoInterface/measurements/defectsmeasurer.h"
 
 #include "CosmoInterface/measurements/powerspectrum.h"
 
@@ -63,6 +64,7 @@ namespace TempLat
           energiesMeasurer(model, filesManager, par, par.appendMode),      // Measurer of energies and scale factor
           scaleFactorMeasurer(model, filesManager, par, par.appendMode),   // Measurer of energies and scale factor
           topologicalChargesMeasurer(model, filesManager, par, par.appendMode),
+          defectsMeasurer(model, filesManager, par, par.appendMode),
           energySnapshotsMeasurer(model, par, filesManager, par.energySnapshotMeas), // Measurer of energy and field snapshots
           spectraTime(filesManager, "spectra_times", amIRoot, par.appendMode, {"tSpectra"},
                       filesManager.getUseHDF5()), // Output file that indicates at which times spectra are computed
@@ -109,6 +111,8 @@ namespace TempLat
         // Scale factor and derivatives
         topologicalChargesMeasurer.measure(model, t);
         // Topological charges
+        if constexpr (Model::DefectsModel) { defectsMeasurer.measure(model, t); };
+        // Measurerments related to topological defects
         // gwsMeasurer.measureStandard(model,t, TestTransTrace);
         // Transversality and tracelessness test of GWs
 
@@ -131,6 +135,7 @@ namespace TempLat
           // Electric and magnetic spectra, U(1) gauge sector
           su2Measurer.measureSpectra(model,t, PSMeasurer);
           // Electric and magnetic spectra, SU(2) gauge sector
+          if constexpr (Model::DefectsModel) { defectsMeasurer.measureSpectra(model, t, PSMeasurer); };
         }
         else {
           scalarSingletMeasurer.measureSpectra(model,t, UPSMeasurer);
@@ -145,6 +150,7 @@ namespace TempLat
           // Electric and magnetic spectra, U(1) gauge sector
           su2Measurer.measureSpectra(model,t, UPSMeasurer);
           // Electric and magnetic spectra, SU(2) gauge sector
+           if constexpr (Model::DefectsModel) { defectsMeasurer.measureSpectra(model, t, UPSMeasurer); };
         }
 
         if (!filesManager.getUseHDF5()) {
@@ -185,6 +191,8 @@ namespace TempLat
       return (n % outputFreq == 0 || n % infreqOutputFreq == 0 || n % rareOutputFreq == 0);
     }
 
+    auto& getFilesManager() {return (*this).filesManager;}
+
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
@@ -208,6 +216,7 @@ namespace TempLat
     EnergiesMeasurer<T> energiesMeasurer;
     ScaleFactorMeasurer<T> scaleFactorMeasurer;
     TopologicalChargesMeasurer<T> topologicalChargesMeasurer;
+    DefectsMeasurer<T> defectsMeasurer;
     EnergySnapshotsMeasurer<Model> energySnapshotsMeasurer;
 
     MeasurementsSaver<T> spectraTime;
