@@ -63,7 +63,7 @@ namespace TempLat
 
             for (int i = 0; tdiff < rPar.tmaxdiff + rPar.dtdiff * T(0.5); i++) {
                 if ( i % outputFreqDiffusion == 0) {
-                    if (iAmRoot) say << "Diffusion step " << i << " completed. Diffusion time " << tdiff;
+                    if (iAmRoot) say << "Diffusion step " << i << " completed. Current diffusion time " << tdiff << "\n";
                     if constexpr (Model::Ns > 0) measurerS->measure(model, tdiff);
                     if constexpr (Model::NCs > 0) measurerCS->measureStandard(model, tdiff);
                     if constexpr (Model::NU1 > 0) measurerU1->measureStandard(model, tdiff);

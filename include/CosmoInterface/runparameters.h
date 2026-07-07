@@ -43,8 +43,8 @@ namespace TempLat
                "Its value is used to fill 'snapshots'.";
       if (hasOld && !hasNew)
         return par.get<std::string, 15>("energy_snapshot",
-                                        std::vector<std::string>(14, Constants::defaultString));
-      return par.get<std::string, 15>("snapshots", std::vector<std::string>(14, Constants::defaultString));
+                                        std::vector<std::string>(15, Constants::defaultString));
+      return par.get<std::string, 15>("snapshots", std::vector<std::string>(15, Constants::defaultString));
     }
 
     // List of run parameters and their default values:
@@ -106,7 +106,8 @@ namespace TempLat
               0)),            // Different verbosity in the output filename. By default, no info about model or params.
           doWeRestart(false), // Boolean which tells if we are runing in restart mode or not. Set in the main.
           tolerance(par.get<T>("tolerance", -1)), // For adaptative solvers only
-          powerSpectrumType(par.get<int>("PS_type", 1)), powerSpectrumVersion(par.get<int>("PS_version", 1)),
+          powerSpectrumType(par.get<int>("PS_type", 1)),
+          powerSpectrumVersion(par.get<int>("PS_version", 1)),
           withGWs(par.get<bool>("withGWs", false, Important)),
           eTypeGW(par.get<bool>("doLFforGWs", true, Important) ? LF : eType), // Type of evolution algorithm
           GWprojectorType(par.get<int>("GWprojectorType", 2)), // Type of GWprojector (real = 1, backwards = 2 (default), forward = 3)

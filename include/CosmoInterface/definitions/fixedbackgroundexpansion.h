@@ -29,7 +29,7 @@ namespace TempLat
     tMaxFat(rPar.tMaxFat),
     sFat(rPar.sFat)
     {
-       if(AlmostEqual(H0, 0.0)) throw(RunParametersInconsistent("For models that do not involve cosmic defects, you need to specify a non-zero H0 to run a simulation with fixed background. If you want to disable expansion, please set expansion = false in the input file."));
+       if(AlmostEqual(H0, 0.0) && rPar.fixedBackground) throw(RunParametersInconsistent("For models that do not involve cosmic defects, you need to specify a non-zero H0 to run a simulation with fixed background. If you want to disable expansion, please set expansion = false in the input file."));
     }
 
     auto operator()(T deltaT) // Scale factor

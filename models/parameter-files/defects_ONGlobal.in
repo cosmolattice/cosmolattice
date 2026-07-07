@@ -1,7 +1,7 @@
 #Output
 outputfile = ./
 print_headers = true
-overwriteFiles = true
+overwriteFiles = false
 
 #Evolution
 expansion = true
@@ -22,13 +22,12 @@ t0 = 70
 tMax = 102
 
 #Spectra options
-PS_type = 2
+PS_type = 1
 PS_version = 1
-saveUnbinnedSpectra = false
 
 #GWs
-GWprojectorType = 1
 withGWs = false
+GWprojectorType = 1
 
 #IC
 ICtype_S = DefectsNetwork

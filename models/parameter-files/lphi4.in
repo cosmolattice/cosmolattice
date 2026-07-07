@@ -20,11 +20,12 @@ tMax = 10
 #Spectra options
 PS_type = 1
 PS_version = 1
+saveUnbinnedSpectra = false
 
 #@label:GW_settings 
 #GWs
-GWprojectorType = 1
 withGWs=false
+GWprojectorType = 1
 #@label:GW_settings 
 
 #@label:IC 

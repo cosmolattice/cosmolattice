@@ -55,11 +55,7 @@ namespace TempLat
        *
        * */
 
-      sayMPI << "I'm running RK!";
-
       dt = KernelsTypes::getDt(model, kt);
-      sayMPI << dt;
-      sayMPI << As.size();
 
       kt.cache(model, tMinust0); // To be able to store some temporary info in the kernel type
       const T aStart = model.aI;
@@ -69,14 +65,10 @@ namespace TempLat
 
         ForEachField(
             Model, fld, n, if (!isDeactivated[fld][n]) {
-              sayMPI << fld;
               isDefined[fld][n] = delta(i, Delta->get(fld)(n), Kernels::get(fld, model, n, kt));
-              sayMPI << fld;
             });
 
         if (expansion) sfDefined = deltaScaleFactor(model, i, kt);
-
-        sayMPI << "I do As!";
 
         ForEachField(Model, fld, n, if (!isDeactivated[fld][n] && isDefined[fld][n]) { advance(i, fld, model, n); });
 
@@ -87,7 +79,6 @@ namespace TempLat
           syncR(model,tMinust0);
         }
         kt.cache(model, tMinust0);
-        sayMPI << "I do caches!";
 
       }
       // @endlabel

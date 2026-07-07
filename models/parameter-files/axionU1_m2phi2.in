@@ -15,15 +15,21 @@ kIR = 1
 #Times
 tOutputFreq = 0.05
 tOutputInfreq = 0.5
-tOutputRareFreq = 10
-tMax = 12
+tOutputRareFreq = 5
+tMax = 10
 
-# if t < tNonlinearAxionU1 system will evolve during Linear regime of Axion U(1) else it evolves the full non-linear system 
+# Sets the time at which the full non-linear dynamics of the axion system is taken into account.
+# For t < tNonlinearAxionU1, the system is evolved on the linear regime of Axion U(1)
 tNonLinearAxionU1 = 1.5
 
 #Spectra options
-withGWs = false 
+PS_type = 1
+PS_version = 1
 flagChiralPS=false
+
+#GW options
+withGWs = false
+GWprojectorType = 1
 
 #IC
 kCutOff = 30
