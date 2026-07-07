@@ -69,6 +69,7 @@ namespace TempLat
     {
         return 0.25 * pow<4>(fldS(0_c));
     }
+
     // @endlabel
 
     // @label:potential_derivs
@@ -76,12 +77,20 @@ namespace TempLat
     {
         return pow<3>(fldS(0_c));
     }
+    auto potDeriv(Tag<1>)
+    {
+        return ZeroType();
+    }
     // @endlabel
 
     // @label:potential_second_derivs
     auto potDeriv2(Tag<0>)
     {
         return 3 * pow<2>(fldS(0_c));
+    }
+    auto potDeriv2(Tag<1>)
+    {
+        return ZeroType();
     }
     // @endlabel
 
