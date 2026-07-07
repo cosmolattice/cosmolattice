@@ -17,7 +17,7 @@ tOutputFreq = 0.1
 tOutputInfreq = 10
 
 tOutputRareFreq = 1
-energy_snapshot = E_S_K E_S_G E_V
+snapshots = E_S_K E_S_G E_V
 
 #IC
 kCutOff = 1.

@@ -29,6 +29,24 @@ namespace TempLat
   public:
     // Put public methods here. These should change very little over time.
 
+    // Reads the "snapshots" input parameter, falling back to the deprecated "energy_snapshot"
+    // alias if "snapshots" was not specified. If both are specified, "snapshots" takes precedence.
+    static std::vector<std::string> getSnapshotLabels(ParameterParser &par)
+    {
+      const bool hasOld = par.getParams().count("energy_snapshot") > 0;
+      const bool hasNew = par.getParams().count("snapshots") > 0;
+      if (hasOld && hasNew)
+        say << "WARNING: both 'snapshots' and the deprecated 'energy_snapshot' parameters were specified; "
+               "'snapshots' takes precedence and 'energy_snapshot' is ignored.";
+      else if (hasOld)
+        say << "WARNING: the input parameter 'energy_snapshot' is deprecated, please use 'snapshots' instead. "
+               "Its value is used to fill 'snapshots'.";
+      if (hasOld && !hasNew)
+        return par.get<std::string, 14>("energy_snapshot",
+                                        std::vector<std::string>(14, Constants::defaultString));
+      return par.get<std::string, 14>("snapshots", std::vector<std::string>(14, Constants::defaultString));
+    }
+
     // List of run parameters and their default values:
     RunParameters(ParameterParser &par)
         : N(par.getOverride<ptrdiff_t>("N", Important)),     // Number of lattice points per dimension
@@ -50,9 +68,7 @@ namespace TempLat
           tBackupFreqFloat(par.get<T>("tBackupFreq", -1)),                   // Frequency of backups
           baseSeed(par.getSeed("baseSeed")),                 // Seed for random generator of initial fluctuations
           outFn(par.get<std::string>("outputfile", "./")()), // Folder where output is saved
-          energySnapshotMeas(par.get<std::string, 14>(
-              "energy_snapshot",
-              std::vector<std::string>(14, Constants::defaultString))), // Energy terms for which snapshots are printed
+          energySnapshotMeas(getSnapshotLabels(par)), // Energy terms for which snapshots are printed
           snapLower(par.get<ptrdiff_t, 10>(
               "snap_lowercoord",
               std::vector<ptrdiff_t>(10, 0))), // Lower coordinates of the snapshoted volumes, in all dimensions

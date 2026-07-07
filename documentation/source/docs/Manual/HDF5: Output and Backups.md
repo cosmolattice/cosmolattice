@@ -38,9 +38,9 @@ With the ''start and stop" mechanism presented in the section above, it is natur
 
 #### Saving three dimensional energy distributions
 
-CosmoLattice is also capable of saving three-dimensional distributions of arbitrary observables in a file. At present, the user can save three-dimensional distributions of the various energy components of the system by adding different flags to the `energy_snapshot` parameter in the parameter file. The different flags are indicated in Appendix [Appendix: Parameters](Appendix_Parameters.md). Let us show an example: suppose we are running the `lphi4SU2U1` gauge model and we want to save to file the scalars kinetic energies and the $SU(2)$ electric energy. We would then run
+CosmoLattice is also capable of saving three-dimensional distributions of arbitrary observables in a file. At present, the user can save three-dimensional distributions of the various energy components of the system by adding different flags to the `snapshots` parameter in the parameter file (previously named `energy_snapshot`, which still works as a deprecated alias). The different flags are indicated in Appendix [Appendix: Parameters](Appendix_Parameters.md). Let us show an example: suppose we are running the `lphi4SU2U1` gauge model and we want to save to file the scalars kinetic energies and the $SU(2)$ electric energy. We would then run
 ```bash
-./lphi4SU2U1 input=input.in energy_densities="E_S_K E_B_K"
+./lphi4SU2U1 input=input.in snapshots="E_S_K E_B_K"
 ```
 Again, as usual, this parameter can go in the input file (in which case you do not need the quotes surrounding the arguments).
 

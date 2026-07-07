@@ -176,7 +176,7 @@ rest. Concretely:
 
 So you never need to type 10 numbers; the meaningful length is always `NDim`.
 
-The related `energy_snapshot` parameter keeps `arity: 14`, but the same caveat
+The related `snapshots` parameter keeps `arity: 14`, but the same caveat
 applies: the `14` is a **maximum**, not a required count. It is the number of
 distinct recognised snapshot labels (`S`, `E_S_K`, `E_S_G`, `CS`, `E_CS_K`,
 `E_CS_G`, `E_SU2D_K`, `E_SU2D_G`, `E_A_K`, `E_A_G`, `E_B_K`, `E_B_G`, `E_V`,
@@ -186,6 +186,11 @@ recognised label in your list and caps it at 14; omitting the parameter (or
 giving an empty list) saves no snapshots. It is left as `type: string` with
 `arity: 14` rather than `type: enum` because it is a multi-value subset, not a
 single choice from a fixed set.
+
+`snapshots` was previously named `energy_snapshot` — that name is kept as a
+deprecated alias. If `snapshots` is not given but `energy_snapshot` is, its
+value fills `snapshots` and a deprecation notice is printed; if both are
+given, `snapshots` wins.
 
 ## Symbolic-default convention
 
