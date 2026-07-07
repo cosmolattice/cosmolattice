@@ -466,7 +466,7 @@ parameters:
     constraints: "Required to be true to use PS_type=0."
 
   # === framework / snapshots ===
-  - name: "energy_snapshot"
+  - name: "snapshots"
     type: "string"
     enum_values: null
     arity: "14"
@@ -478,6 +478,18 @@ parameters:
     units: "n/a"
     description: "Space-separated list of the configuration-space quantities to dump as HDF5 field snapshots. Each entry must be one of the 14 recognised labels; you list any subset (in any order), one label per quantity you want saved. Recognised labels: S (scalar-singlet field value), E_S_K / E_S_G (scalar-singlet kinetic / gradient energy), CS (complex-scalar modulus), E_CS_K / E_CS_G (complex-scalar kinetic / gradient energy), E_SU2D_K / E_SU2D_G (SU(2)-doublet kinetic / gradient energy), E_A_K / E_A_G (U(1) electric / magnetic energy), E_B_K / E_B_G (SU(2) electric / magnetic energy), E_V (potential energy), E (total energy). Selecting a label for a sector the model does not contain is harmless and simply produces no file."
     constraints: "Variable-length subset, NOT 14 required values: the 14 is only the maximum (the number of distinct recognised labels). List as many or as few labels as you want; the parser checks membership of each recognised label in your list (order irrelevant, duplicates ignored) and caps the list at 14. Omitting the parameter, or giving an empty list, saves no snapshots (the C++ default fills the internal vector with Constants::defaultString, i.e. none selected)."
+  - name: "energy_snapshot"
+    type: "string"
+    enum_values: null
+    arity: "14"
+    required: false
+    default: null
+    important: false
+    scope: "framework"
+    category: "snapshots"
+    units: "n/a"
+    description: "Deprecated alias for `snapshots`, kept for backward compatibility. If `snapshots` is not given but `energy_snapshot` is, its value fills `snapshots` and a deprecation notice is printed. If both are given, `snapshots` takes precedence and a conflict warning is printed."
+    constraints: "Deprecated; use `snapshots` instead. Same label set and arity as `snapshots`."
   - name: "snap_lowercoord"
     type: "int"
     enum_values: null

@@ -45,9 +45,9 @@ CATEGORY_LABELS = {
 }
 
 # Snapshot energy/field quantities, grouped by field sector. Each label is one of
-# the tokens the C++ EnergySnapshotsMeasurer checks for in the `energy_snapshot`
+# the tokens the C++ EnergySnapshotsMeasurer checks for in the `snapshots`
 # list (see include/CosmoInterface/measurements/energysnapshotmeasurer.h). The
-# selected labels are emitted as a space-separated `energy_snapshot = ...` line.
+# selected labels are emitted as a space-separated `snapshots = ...` line.
 # The middle element is the model-capability key that must be > 0 for the sector
 # to be offered (None = always shown); used to hide sectors a model lacks (#64).
 SNAPSHOT_SECTORS = [
@@ -459,12 +459,12 @@ def render_widget(p: dict, model: str, store: dict):
 
 
 def render_snapshots_section(model: str, store: dict, caps: dict):
-    """Clickable snapshot UI: tick the quantities to save (-> energy_snapshot)
+    """Clickable snapshot UI: tick the quantities to save (-> snapshots)
     and optionally restrict the saved region to a sub-volume (-> snap_* coords).
     Only the field sectors the model actually has are offered (#64).
 
     Selections persist in `store` under the same param-name keys as everything
-    else (f"{model}:energy_snapshot", f"{model}:snap_*"), and the widgets re-seed
+    else (f"{model}:snapshots", f"{model}:snap_*"), and the widgets re-seed
     from those persisted strings — so when a search hides this section (#65) the
     selection survives and is restored on the way back."""
     st.header(CATEGORY_LABELS["snapshots"])
@@ -477,8 +477,8 @@ def render_snapshots_section(model: str, store: dict, caps: dict):
     sectors = [(s, items) for (s, key, items) in SNAPSHOT_SECTORS
                if key is None or caps.get(key, 0) > 0]
 
-    # --- quantity selection -> energy_snapshot ---
-    prev_sel = set((store.get(f"{model}:energy_snapshot") or "").split())
+    # --- quantity selection -> snapshots ---
+    prev_sel = set((store.get(f"{model}:snapshots") or "").split())
     selected: list[str] = []
     cols = st.columns(3)
     for i, (sector, items) in enumerate(sectors):
@@ -489,12 +489,12 @@ def render_snapshots_section(model: str, store: dict, caps: dict):
                     selected.append(label)
 
     if selected:
-        store[f"{model}:energy_snapshot"] = " ".join(selected)
+        store[f"{model}:snapshots"] = " ".join(selected)
     else:
-        store.pop(f"{model}:energy_snapshot", None)
+        store.pop(f"{model}:snapshots", None)
 
     if selected:
-        st.success("`energy_snapshot = " + " ".join(selected) + "`")
+        st.success("`snapshots = " + " ".join(selected) + "`")
 
         # --- optional sub-volume restriction -> snap_lowercoord/upper/step ---
         with st.expander("Restrict to a sub-volume (optional)"):
