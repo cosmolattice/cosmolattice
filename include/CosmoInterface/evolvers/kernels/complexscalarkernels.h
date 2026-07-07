@@ -28,6 +28,8 @@ namespace TempLat
     template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<Model> eom)
     {
       // Returns kernel for complex scalars (formed by the covariant laplacian and potential derivative terms):
+
+      // return ZeroType();
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::covLaplacianCS(model, n) -
              pow(model.aI, 3 + model.alpha) / 2 * Potential::derivCS(model, n);
     }
@@ -36,6 +38,18 @@ namespace TempLat
     {
       // Returns momentum for complex scalars:
       return pow(model.aI, model.alpha - 3) * model.piCS(n);
+    }
+
+    template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::Diffusion<Model> diffusion)
+    {
+      // Returns momentum for complex scalars:
+      return ZeroType();
+    }
+
+    template <class Model, int N> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::Diffusion<Model> diffusion)
+    {
+      // Returns momentum for complex scalars:
+      return ComplexScalarKernels::get(model, n, KernelsTypes::EoM<Model>());
     }
 
     // Default function returns EoM kernels, for backward compatibility.

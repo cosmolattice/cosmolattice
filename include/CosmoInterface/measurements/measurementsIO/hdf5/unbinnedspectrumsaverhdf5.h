@@ -29,7 +29,7 @@ namespace TempLat
     UnbinnedSpectrumSaverHDF5(FilesManager<NDim> &fm, const std::string &fn, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
         : filename(fm.getHDF5UnbinnedSpectraFn()), verbosity(rPar.spectraVerbosity), nBins(rPar.nBinsSpectra),
-          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName(fn), amIRoot(pAmIRoot),
+          deltaKBin(rPar.deltaKBin), nGrid(rPar.N), kIR(rPar.kIR), uninitialized(true), grpName("unbinnedspectra_" + fn), amIRoot(pAmIRoot),
           appendMode(append), nMeas(fm.getNInfreqMeas()), flushCount(0), flushFreq(fm.getFlushFreq())
     {
     }
@@ -37,7 +37,7 @@ namespace TempLat
     template <size_t NDim>
     UnbinnedSpectrumSaverHDF5(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool pAmIRoot, bool append,
                       const RunParameters<T> &rPar)
-        : UnbinnedSpectrumSaverHDF5(fm, fm.getCurredName(fld, false, "unbinnedspectra"), pAmIRoot, append, rPar)
+        : UnbinnedSpectrumSaverHDF5(fm, fm.getCurredName(fld, false, ""), pAmIRoot, append, rPar)
     {
     }
 

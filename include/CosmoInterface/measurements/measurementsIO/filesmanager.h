@@ -84,11 +84,19 @@ namespace TempLat
     std::string getHDF5UnbinnedSpectraFn() const { return getWorkingDir() + getTag() + "unbinned_spectra.h5"; }
 
     template <typename T>
-    std::string getCurredName(const Field<T, NDim> &fld, bool withDir, std::string nametag = "average")
+    std::string getCurredName(const Field<T, NDim> &fld, bool withDir, std::string nametag = "average_")
     {
       std::string name = fld.toString();
       name = name.erase(name.find("(", 3));
-      name = withDir ? getWorkingDir() + nametag + "_" + name : nametag + "_" + name;
+      name = withDir ? getWorkingDir() + nametag + name : nametag + name;
+      return name;
+    }
+
+    template <typename T>
+    std::string getSimpleName(const Field<T, NDim> &fld)
+    {
+      std::string name = fld.toString();
+      name = name.erase(name.find("(", 3));
       return name;
     }
 

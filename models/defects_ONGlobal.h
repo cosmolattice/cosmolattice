@@ -1,11 +1,11 @@
-#ifndef DOMAINWALLS_H // Usual macro guard to prevent multiple inclusion
-#define DOMAINWALLS_H
+#ifndef DEFECTSONGLOBAL_H // Usual macro guard to prevent multiple inclusion
+#define DEFECTSONGLOBAL_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
+// File info: Main contributor(s): Jorge Baeza-Ballesteros,  Year: 2026
 
 #include "CosmoInterface/cosmointerface.h"
 
@@ -22,23 +22,14 @@ namespace TempLat
 
   struct ModelPars : public TempLat::DefaultModelPars {
     static constexpr size_t NScalars = 1;
-    static constexpr size_t NCScalars = 0;
-    static constexpr size_t NU1Flds = 0;
-    static constexpr size_t NSU2Doublet = 0;
-    static constexpr size_t NSU2Flds = 0;
     static constexpr size_t NPotTerms = 1;
+    static constexpr bool DefectsModel = true;
 
     using NumberType = double;
 
-    // Coupling managers:  they deal with the different couplings between the gauge fields and complex scalars/SU2
-    // doublets
-    //  --> If a type of interaction is not present, comment the corresponding line
-    // typedef TempLat::CouplingsManager<NCScalars, NU1Flds, true> CsU1Couplings; // activates coupling U(1)-complex scalar
-    // typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings;// activates coupling U(1)-doublet
-    // typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds,true> SU2DoubletSU2Couplings; // activates coupling SU(2)-doublet
   };
 
-#define MODELNAME domainWalls
+#define MODELNAME defects_ONGlobal
   // Here we define the name of the model. This should match the name of your file.
 
   template <class R> using Model = MakeModel(R, ModelPars);
@@ -51,11 +42,12 @@ namespace TempLat
   // Declaration of our model. It inherits from the generic model defined above.
   {
   private:
-    FloatType lambda, vev, q, g;
+    FloatType lambda, vev, q;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
 
   public:
+    FloatType g;
     static constexpr size_t NDim = Model<MODELNAME>::NDim;
 
     MODELNAME(ParameterParser &parser, RunParameters<FloatType> &runPar,
@@ -70,9 +62,10 @@ namespace TempLat
       /////////
 
       // COMPLEX SCALAR NORM: set to zero to have a non-biased model
-      fldCS0(0_c) = Complexify(0., 0.);
-      piCS0(0_c) = Complexify(0., 0.);
-
+      ForLoop(i, 0, ModelPars::NScalars - 1,
+              fldS0(i) = 0.;
+              piS0(i) = 0.;
+      );
       /////////
       // Parameters of the model (read from parameters file)
       /////////
@@ -80,7 +73,7 @@ namespace TempLat
       // defined here
 
       lambda = parser.get<FloatType>("lambda", 1.);
-      vev = parser.get<FloatType>("lambda", 1.);
+      vev = parser.get<FloatType>("vev", 1.);
       q = parser.get<FloatType>("qbias", 0.);
 
       /////////
@@ -112,25 +105,27 @@ namespace TempLat
 
     auto potentialTerms(Tag<0>) // Term 0: Quartic potential of the complex scalar
     {
-      return (*this).fatteningfactor * FloatType(0.25) * pow<2>(pow<2>(fldS(0_c)) - FloatType(1.)) + g * pow<3>(fldS(0_c))   ;
+      return fatteningFactor * FloatType(0.25) * pow<2>(Total(i, 0, ModelPars::NScalars - 1, pow<2>(fldS(i))) - FloatType(1.)) + IfElse( ModelPars::NScalars == 1, g * pow<3>(fldS(0_c)), ZeroType() ) ;
     }
 
     /////////
     // Derivatives of the program potential with respect fields
     /////////
 
-    auto potDerivNormCS(Tag<0>) // Derivative with respect complex scalar norm
+    template<int M>
+    auto potDeriv(Tag<M> m) // Derivative with respect complex scalar norm
     {
-      return (*this).fatteningfactor * fldS(0_c) * (pow<2>(fldS(0_c)) - FloatType(1.)) + FloatType(3.) * g * pow<2>(fldS(0_c))   ;
+      return fatteningFactor * fldS(m) * (Total(i, 0, ModelPars::NScalars - 1, pow<2>(fldS(i))) - FloatType(1.))  +  IfElse( ModelPars::NScalars == 1, 3 * g * pow<2>(fldS(0_c)), ZeroType() ) ;
     }
 
     /////////
     //  Second derivatives of the program potential with respect fields
     /////////
 
-    auto potDeriv2NormCS(Tag<0>) // 2nd derivative with respect complex scalar norm
+    template<int M>
+    auto potDeriv2(Tag<M> m) // 2nd derivative with respect complex scalar norm
     {
-      return (*this).fatteningfactor * (FloatType(3.) *  pow<2>(fldS(0_c)) - FloatType(1.)) + FloatType(6.) * g * fldS(0_c)   ;
+      return fatteningFactor * (Total(i, 0, ModelPars::NScalars - 1, pow<2>(fldS(i))) +  FloatType(2.) * pow<2>(fldS(m))) +  IfElse( ModelPars::NScalars == 1, 6 * g * fldS(0_c), ZeroType() ) ;
     }
   };
 } // namespace TempLat

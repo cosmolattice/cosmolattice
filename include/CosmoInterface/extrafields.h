@@ -96,7 +96,7 @@ namespace TempLat
     {
       // TODO: This logic is wrong as it has been before, we should discuss this.
 
-      if (RK2NStorageParameters<T>::isRK2n(runPars.eType))
+      if (RK2NStorageParameters<T>::isRK2n(runPars.eType) || RK2NStorageParameters<T>::isRK2n(runPars.diffType) )
         allFlds1 = std::make_shared<FieldsAsInModel<Model>>(model, runPars, tag);
       if constexpr (Model::NU1 > 0)
         if (model.getU1IC() == InitialConditionsType::U1::PlaneWaves ||

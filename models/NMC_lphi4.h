@@ -1,5 +1,5 @@
-#ifndef LPHI4NONMINIMAL_H
-#define LPHI4NONMINIMAL_H
+#ifndef NMCLPHI4_H
+#define NMCLPHI4_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -14,13 +14,13 @@ namespace TempLat
         static constexpr size_t NScalars = 2;
         static constexpr size_t NPotTerms = 1;
 
-        // Non-minimal coupling: only the second scalar (index 1) couples to gravity, The first scalar (index 0) couples only minimally to gravity.
+        // Non-minimal coupling: the second scalar (index 1) couples non-minimally to gravity. The first scalar (index 0) only couples minimally to gravity.
         typedef CouplingsManager<NScalars, 1, false, true> NonMinimalCouplings;
     };
     // @endlabel
 
   // @label:model_name
-  #define MODELNAME lphi4NonMinimal
+  #define MODELNAME NMC_lphi4
   // @endlabel
 
   // @label:make_model

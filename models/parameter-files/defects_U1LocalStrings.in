@@ -1,0 +1,70 @@
+#Output
+outputfile = ./
+print_headers = true
+overwriteFiles = true
+
+#Evolution
+expansion = true
+fixedBackground = true
+omegaEoS = 0.333333333333333333
+evolver = LF
+
+#Lattice
+N = 128
+dt = 0.01
+lSide = 64
+
+#Times
+tOutputFreq = 1
+tOutputInfreq = 1
+tOutputRareFreq = 1
+t0 = 70
+tMax = 110
+
+#Spectra options
+PS_type = 2
+PS_version = 1
+saveUnbinnedSpectra = false
+
+#GWs
+GWprojectorType = 1
+withGWs = false
+
+#IC
+ICtype_U1 = DefectsNetwork
+lcorr = 3
+
+#Model Parameters
+CSU1Charges = 1
+gU1s = 1
+lambda = 0.5
+vev = 1
+
+#Random seed
+#baseSeed = 4567751
+
+#Snapshots
+energy_snapshot = CS E_A_G E_V
+#snap_lowercoord = 6 6 6
+#snap_uppercoord = 10 10 10
+#snap_stepcoord = 2 2 2
+
+#Diffusion
+doDiffusion = true
+diffusionevolver = RK2
+dtdiff = 0.005
+tmaxdiff = 5
+tOutputFreqDiff = 1
+tOutputRareFreqDiff = 1
+energy_snapshot_diffusion = CS E_A_G E_V
+
+#Fattening
+doFattening = true
+sFat = 0.
+t0Fat = 70.
+
+#Measurements defects
+measureDefectsEnergies = true
+measureDefectsStructure = true
+
+#save_dir = ./outputLS/

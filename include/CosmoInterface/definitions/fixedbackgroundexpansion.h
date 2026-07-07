@@ -19,12 +19,17 @@ namespace TempLat
   {
   public:
     // Put public methods here. These should change very little over time.
-    template <class Model> FixedBackgroundExpansion(Model &model, RunParameters<T> &rPar)
+    template <class Model> FixedBackgroundExpansion(Model &model, RunParameters<T> &rPar):
+    pEoS(2.0 / (3.0 * (1.0 + rPar.omegaEoS) - 2.0 * model.alpha)), // Coefficient of the power-law expansion: depends on EoS and alpha
+    H0( (AlmostEqual(rPar.H0, 0.0) && Model::DefectsModel) ? pEoS / rPar.t0 : rPar.H0 / model.omegaStar), // Initial Hubble parameter (in program units)
+    alpha(model.alpha),
+    doFattening(rPar.doFattening),
+    t0(rPar.t0),
+    t0Fat(rPar.t0Fat),
+    tMaxFat(rPar.tMaxFat),
+    sFat(rPar.sFat)
     {
-      H0 = rPar.H0 / model.omegaStar; // Initial Hubble parameter (in program units)
-      // Coefficient of the power-law expansion: depends on EoS and alpha
-      pEoS = 2.0 / (3.0 * (1.0 + rPar.omegaEoS) - 2.0 * model.alpha);
-      alpha = model.alpha;
+       if(AlmostEqual(H0, 0.0)) throw(RunParametersInconsistent("For models that do not involve cosmic defects, you need to specify a non-zero H0 to run a simulation with fixed background. If you want to disable expansion, please set expansion = false in the input file."));
     }
 
     auto operator()(T deltaT) // Scale factor
@@ -37,6 +42,10 @@ namespace TempLat
       return H0 * pow(1 + H0 / pEoS * deltaT, pEoS - 1);
     }
 
+    auto const areWeFattening() const {
+      return doFattening;
+    }
+
     auto R(T deltaT) // Ricci scalar for NMC field evolution in fixed background expansion
     {
       return -6.0 * pow<2>(H0) * pEoS * pow(1 + H0 / pEoS * deltaT, -2.0 * alpha * pEoS) * (1 + pEoS * (alpha-2)) / pow<2>(pEoS + H0 * deltaT);
@@ -45,9 +54,15 @@ namespace TempLat
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
 
-    T alpha;
     T pEoS;
     T H0;
+    T alpha;
+    bool doFattening;
+
+  public:
+
+    const T t0, t0Fat, tMaxFat, sFat;
+
   };
 
 } // namespace TempLat

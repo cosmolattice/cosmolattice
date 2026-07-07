@@ -28,14 +28,15 @@ namespace TempLat
     using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
-    EnergiesMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
-        : amIRoot(model.getToolBox()->amIRoot()), expansion(par.expansion),
+    EnergiesMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append, std::string postfix = "", bool measureEnergyConservation = true)
+        : amIRoot(model.getToolBox()->amIRoot()),
+          isEnergyConservationMeasured(measureEnergyConservation),
+          expansion(par.expansion),
           fixedBackground(par.fixedBackground), // boolean: if true, expansion is given by fixed background
           Etot0(0),                             // Initial total energy
-          energies(filesManager, "energies", amIRoot, append,
+          energies(filesManager, "energies" + postfix, amIRoot, append,
                    getEnergyHeaders(model)), // Output file for volume-average energies.
-          energyCons(filesManager, "energy_conservation", amIRoot, append, getEnergyConsHeaders(),
-                     fixedBackground) // Output file for checking energy conservation.
+          energyCons(filesManager, "energy_conservation", amIRoot, append, getEnergyConsHeaders(),  fixedBackground || !isEnergyConservationMeasured) // Output file for checking energy conservation.
     {
     }
 
@@ -99,7 +100,7 @@ namespace TempLat
       energies.addAverage(Etot);
       energies.save(lastMeas);
 
-      if (!fixedBackground) { // Energy cannot be checked if expansion is fixed
+      if (!fixedBackground && isEnergyConservationMeasured) { // Energy cannot be checked if expansion is fixed
 
         // We now check energy conservation:
         energyCons.addAverage(t);
@@ -165,6 +166,7 @@ namespace TempLat
 
     /* Put all member variables and private methods here. These may change arbitrarily. */
     const bool amIRoot;
+    const bool isEnergyConservationMeasured;
     const bool expansion, fixedBackground;
     T Etot0;
 

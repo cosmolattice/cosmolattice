@@ -1,11 +1,11 @@
-#ifndef LPHI4SU2U1_H // Usual macro guard to prevent multiple inclusion
-#define LPHI4SU2U1_H
+#ifndef DEFECTSU1LOCALSTRINGS_H // Usual macro guard to prevent multiple inclusion
+#define DEFECTSU1LOCALSTRINGS_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Wessel Valkenburg,  Year: 2020
+// File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
 
 #include "CosmoInterface/cosmointerface.h"
 
@@ -21,25 +21,20 @@ namespace TempLat
   // number of fields of each species and the type of interactions.
 
   struct ModelPars : public TempLat::DefaultModelPars {
-    static constexpr size_t NScalars = 0;
-    static constexpr size_t NCScalars = 0;
-    static constexpr size_t NU1Flds = 0;
-    static constexpr size_t NSU2Doublet = 1;
-    static constexpr size_t NSU2Flds = 0;
+    static constexpr size_t NCScalars = 1;
+    static constexpr size_t NU1Flds = 1;
     static constexpr size_t NPotTerms = 1;
+    static constexpr bool DefectsModel = true;
 
-    // Coupling managers:  they deal with the different couplings between
-    // the gauge fields and complex scalars/SU2 doublets
+    using NumberType = double;
+
+    // Coupling managers:  they deal with the different couplings between the gauge fields and complex scalars/SU2
+    // doublets
     //  --> If a type of interaction is not present, comment the corresponding line
-    // typedef TempLat::CouplingsManager<NCScalars, NU1Flds, true> CsU1Couplings;
-    // activates coupling U(1)-complex scalar
-    // typedef TempLat::CouplingsManager<NSU2Doublet, NU1Flds, true> SU2DoubletU1Couplings;
-    // activates coupling U(1)-doublet
-    // typedef TempLat::CouplingsManager<NSU2Doublet, NSU2Flds, true> SU2DoubletSU2Couplings;
-    // activates coupling SU(2)-doublet
+    typedef TempLat::CouplingsManager<NCScalars, NU1Flds, true> CsU1Couplings; // activates coupling U(1)-complex scalar
   };
 
-#define MODELNAME SU2Doub
+#define MODELNAME defects_U1LocalStrings
   // Here we define the name of the model. This should match the name of your file.
 
   template <class R> using Model = MakeModel(R, ModelPars);
@@ -52,14 +47,14 @@ namespace TempLat
   // Declaration of our model. It inherits from the generic model defined above.
   {
   private:
-    double g, h, lambda, qG, qH;
+    FloatType lambda, vev;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
 
   public:
     static constexpr size_t NDim = Model<MODELNAME>::NDim;
 
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
+    MODELNAME(ParameterParser &parser, RunParameters<FloatType> &runPar,
               device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
@@ -70,14 +65,9 @@ namespace TempLat
       // (read from parameters file, or specified here if not)
       /////////
 
-      // SU(2) COMPLEX NORM: initial homogeneous amplitude and derivative
-      double normDoublet0 = parser.get<double>("SU2Doublet_initial_norm");
-      double normPiDoublet0 = parser.get<double>("SU2Doublet_initial_momenta_norm");
-
-      // We distribute the norm equally between the four components
-      // using the "MakeSU2Doublet" function
-      fldSU2Doublet0(0_c) = MakeSU2Doublet(a, normDoublet0 / 2);
-      piSU2Doublet0(0_c) = MakeSU2Doublet(a, normPiDoublet0 / 2);
+      // COMPLEX SCALAR NORM: set to zero to have a non-biased model
+      fldCS0(0_c) = Complexify(0., 0.);
+      piCS0(0_c) = Complexify(0., 0.);
 
       /////////
       // Parameters of the model (read from parameters file)
@@ -85,20 +75,16 @@ namespace TempLat
       // --> Comment: Gauge couplings are specified in the parameters file (e.g. gU1s, gSU2s), and do not need to be
       // defined here
 
-      qG = parser.get<double>("qG");
-      qH = parser.get<double>("qH");
-      lambda = parser.get<double>("lambda");
-
-      g = sqrt(qG * lambda);
-      h = sqrt(qH * lambda);
+      lambda = parser.get<FloatType>("lambda", 1.);
+      vev = parser.get<FloatType>("lambda", 1.);
 
       /////////
       // Rescaling for program variables
       /////////
 
       alpha = 1;
-      fStar = normDoublet0;
-      omegaStar = sqrt(lambda) * normDoublet0;
+      fStar = vev;
+      omegaStar = sqrt(lambda) * vev;
       // We now need to specify the rescaling from physical units to program units.
       // This consists of the  time rescaling exponent alpha, the field rescaling fStar
       // and the velocity rescaling omegaStar.
@@ -116,47 +102,31 @@ namespace TempLat
     // Program potential (add as many functions as terms are in the potential)
     /////////
     // --> Comment: These functions may depend on the norm of the complex scalar/doublets,
-    //     which are introduced as respectively "norm(fldCS(0_c))"
-    //     and "norm(fldSU2Doublet(0_c))".
+    //      which are introduced as "norm(fldCS(0_c))" and "norm(fldSU2Doublet(0_c))" respectively.
 
-    auto potentialTerms(Tag<0>)
-    // Term 0: Quartic potential of the SU(2) doublet
+    auto potentialTerms(Tag<0>) // Term 0: Quartic potential of the complex scalar
     {
-      return pow<4>(norm(fldSU2Doublet(0_c)));
+      return fatteningFactor * pow<2>(pow<2>(norm(fldCS(0_c))) - FloatType(0.5))  ;
     }
 
     /////////
     // Derivatives of the program potential with respect fields
     /////////
 
-    auto potDerivNormSU2Doublet(Tag<0>)
-    // Derivative with respect SU(2) doublet norm
+    auto potDerivNormCS(Tag<0>) // Derivative with respect complex scalar norm
     {
-      return 4 * pow<3>(norm(fldSU2Doublet(0_c)));
+      return fatteningFactor * FloatType(4.) * (pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) * norm(fldCS(0_c))  ;
     }
 
     /////////
     //  Second derivatives of the program potential with respect fields
     /////////
 
-    auto potDeriv2(Tag<0>)
-    // 2nd derivative with respect scalar singlet
+    auto potDeriv2NormCS(Tag<0>) // 2nd derivative with respect complex scalar norm
     {
-      return 2 * qG * pow<2>(norm(fldSU2Doublet(0_c)));
-    }
-
-    auto potDeriv2NormCS(Tag<0>)
-    // 2nd derivative with respect complex scalar norm
-    {
-      return 4 * qH * pow<2>(norm(fldSU2Doublet(0_c)));
-    }
-
-    auto potDeriv2NormSU2Doublet(Tag<0>)
-    // 2nd derivative with respect SU(2) doublet norm
-    {
-      return 12 * pow<2>(norm(fldSU2Doublet(0_c)));
+      return fatteningFactor * FloatType(4.) * (FloatType(3.) * pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) ;
     }
   };
 } // namespace TempLat
 
-#endif // LPHI4_H
+#endif // LPHI4U1_H

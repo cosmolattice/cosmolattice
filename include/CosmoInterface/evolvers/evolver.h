@@ -46,7 +46,7 @@ namespace TempLat
         rk2n->setDelta(extraFlds);
       }
 
-      if (lf == nullptr && vv == nullptr && pv == nullptr && (rk2n == nullptr || !RK2NStorageParameters<T>::isRK2n(type)))
+      if (lf == nullptr && vv == nullptr && pv == nullptr && rk2n == nullptr)
         throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
                                       "which dispatch between different evolvers. Abort."));
 
@@ -88,7 +88,7 @@ namespace TempLat
     }
     // @endlabel
 
-    // The next function is used to synchronised all the fields to live
+    // The next function is used to synchronise all the fields to live
     // at integer time before measurements. Useful for evolvers where
     // this is not naturally the case, such as leapfrog.
 
@@ -123,22 +123,15 @@ namespace TempLat
     // To activate and deactivate fields. Can be useful if more than a kernel is defined, or maybe to deactivate GW.
     template <int N> void deactivate(Tag<N> t)
     {
-      if (RK2NStorageParameters<T>::isRK2n(type)) {
-        rk2n->deactivate(t);
-      } else {
-        throw(EvolverTypeNotInEvolver("The activate/desactivate function is implemented only for the RK2N evolvers. "
-                                      "Go implement it in the others if you need it."));
-      }
+      sayMPI << t ;
+      if (RK2NStorageParameters<T>::isRK2n(type)) rk2n->deactivate(t);
+      if (!RK2NStorageParameters<T>::isRK2n(type) ) throw(EvolverTypeNotInEvolver("The activate/desactivate function is implemented only for the RK2N evolvers. Go implement it in the others if you need it."));
     }
 
     template <int N> void activate(Tag<N> t)
     {
-      if (RK2NStorageParameters<T>::isRK2n(type)) {
-        rk2n->activate(t);
-      } else {
-        throw(EvolverTypeNotInEvolver("The activate/desactivate function is implemented only for the RK2N evolvers. "
-                                      "Go implement it in the others if you need it."));
-      }
+      if (RK2NStorageParameters<T>::isRK2n(type)) rk2n->activate(t);
+      if (!RK2NStorageParameters<T>::isRK2n(type) ) throw(EvolverTypeNotInEvolver("The activate/desactivate function is implemented only for the RK2N evolvers. Go implement it in the others if you need it."));
     }
 
   private:

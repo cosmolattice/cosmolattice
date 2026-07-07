@@ -1,5 +1,5 @@
-#ifndef M2PHI2_AXIONU1_H  //Usual macro guard to prevent multiple inclusion
-#define M2PHI2_AXIONU1_H
+#ifndef AXIONU1_M2PHI2_H  //Usual macro guard to prevent multiple inclusion
+#define AXIONU1_M2PHI2_H
 
 /* This file is part of CosmoLattice, available at www.cosmolattice.net .
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
@@ -36,7 +36,7 @@ namespace TempLat
 
 	};
 
-	#define MODELNAME m2phi2_axionU1
+	#define MODELNAME axionU1_m2phi2
 	// Here we define the name of the model. This should match the name of your file.
 
 template<class R>

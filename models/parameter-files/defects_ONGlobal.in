@@ -1,0 +1,57 @@
+#Output
+outputfile = ./
+print_headers = true
+overwriteFiles = true
+
+#Evolution
+expansion = true
+fixedBackground = true
+omegaEoS = 0.333333333333333333
+evolver = LF
+
+#Lattice
+N = 64
+dt = 0.05
+lSide = 32
+
+#Times
+tOutputFreq = 1
+tOutputInfreq = 1
+tOutputRareFreq = 1
+t0 = 70
+tMax = 102
+
+#Spectra options
+PS_type = 2
+PS_version = 1
+saveUnbinnedSpectra = false
+
+#GWs
+GWprojectorType = 1
+withGWs = false
+
+#IC
+ICtype_S = DefectsNetwork
+lcorr = 4
+
+#Model Parameters
+lambda = 1
+vev = 1
+qbias = 0.02 #Only used dor N = 1 (domain walls)
+
+#Diffusion
+doDiffusion = true
+diffusionevolver = RK2
+dtdiff = 0.005
+tmaxdiff = 10
+tOutputFreqDiff = 1
+tOutputRareFreqDiff = 1
+
+#Fattening
+doFattening = true
+sFat = -1
+t0Fat = 70
+
+#Measurements defects
+measureDefectsEnergies = true
+measureDefectsStructure = true

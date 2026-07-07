@@ -33,6 +33,7 @@ namespace TempLat
     {
     }
 
+
     // This function computes the norm of the left-moving and right-moving waves:
     //  --> It's also used to initialize the complex scalars and SU2 doublets
     // (called from u1initializer.h and su2initializer.h).
@@ -56,15 +57,39 @@ namespace TempLat
       if constexpr (Model::NDim == 1)
         return Hcut * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()),.5)) * pow(2 * omega, -0.5) / sqrt(4.*Constants::pi<T>) ;
       else if constexpr (Model::NDim == 2)
-          return Hcut * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(2 * omega, -0.5) / sqrt(2.*Constants::pi<T>) ;
+        return Hcut * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(2 * omega, -0.5) / sqrt(2.*Constants::pi<T>) ;
       else
-          // @label:default_scalar_norm_3d
-          return Hcut  * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5)) * pow(2 * omega, -0.5) / sqrt(2) ;
-          // @endlabel
+        // @label:default_scalar_norm_3d
+        return Hcut  * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5)) * pow(2 * omega, -0.5) / sqrt(2) ;
+        // @endlabel
 
       // Here 1/sqrt{2omega_k} characterises rms of |phi_k|, but since |phi_k|^2 =
       //  Re(phi_k)^2 + Im(phi_k)^2, hence there is extra 1/sqrt{2} as this 'return' is
       //  in reality the rms of either Re(phi_k) or Im(phi_k).
+    }
+
+
+    template <class Model> auto getFluctuationsNormDefect(Model &model, Field<T, Model::NDim> f, T lcorr) const
+    {
+      FourierSite<Model::NDim> ntilde(f.getToolBox());
+      auto k = ntilde.norm() * f.getKIR();
+
+      return pow( sqrt(2. * Constants::pi<T>) * lcorr * lSide / pow<2>(model.dx) , 1.5) * sqrt( 0.5 * exp(-0.5 * k * k * lcorr * lcorr));
+    }
+
+    template <class Model> auto getFluctuationsNormWhiteNoise(Model &model, Field<T, Model::NDim> f, T kCutOff, T delta) const
+    {
+      FourierSite<Model::NDim> ntilde(f.getToolBox());
+      auto k = ntilde.norm() * f.getKIR();
+
+      auto Hcut = heaviside(kCutOff - k) * pow(k,(3. - Model::NDim) / 2.);
+
+      if constexpr (Model::NDim == 1)
+        return Hcut * delta * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()),.5)) * pow(2, -0.5) / sqrt(4.*Constants::pi<T>) ;
+      else if constexpr (Model::NDim == 2)
+        return Hcut * delta * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(2, -0.5) / sqrt(2.*Constants::pi<T>) ;
+      else
+        return Hcut * delta * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5)) * pow(2, -0.5) / sqrt(2) ;
     }
 
     // Returns the amplitude of the (left- or right-moving) waves,
@@ -117,6 +142,7 @@ namespace TempLat
       p.inFourierSpace().setZeroMode(0);              // sets the zero mode to 0
       // @endlabel
     }
+
 
     std::string getBaseSeed() const { return baseSeed; }
 

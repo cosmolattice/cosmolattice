@@ -29,7 +29,8 @@ namespace TempLat
     // Put public methods here. These should change very little over time.
     template <typename Model>
     ComplexScalarMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par,
-                          bool append)
+                          bool append, std::string postfix = "", bool createSpectra = true):
+                          isSpectraMeasured(createSpectra)
     {
       bool amIRoot = model.getToolBox()->amIRoot();
 
@@ -38,16 +39,16 @@ namespace TempLat
       // is added to the file name; the fifth one adds a header to the file
       ForLoop(i, 0, Model::NCs - 1,
               standardReOut.emplace_back( // real part
-                  MeasurementsSaver<T>(filesManager, model.fldCS(i)(0_c), amIRoot, append, MeansMeasurer::header()));
+                  MeasurementsSaver<T>(filesManager, filesManager.getSimpleName(model.fldCS(i)(0_c)) + postfix , amIRoot, append, MeansMeasurer::header()));
               standardImOut.emplace_back( // imaginary part
-                  MeasurementsSaver<T>(filesManager, model.fldCS(i)(1_c), amIRoot, append, MeansMeasurer::header()));
+                  MeasurementsSaver<T>(filesManager, filesManager.getSimpleName(model.fldCS(i)(1_c)) + postfix , amIRoot, append, MeansMeasurer::header()));
               standardNormOut.emplace_back( // norm
-                  MeasurementsSaver<T>(filesManager, "norm_cmplx_scalar_" + std::to_string(i), amIRoot, append,
+                  MeasurementsSaver<T>(filesManager, "norm_cmplx_scalar_" + std::to_string(i) + postfix, amIRoot, append,
                                        MeansMeasurer::header()));
 
               // We also create a fourth file containing the spectra of the norm.
               spectraNormOut.emplace_back(
-                  SpectrumSaver<T>(filesManager, "norm_cmplx_scalar_" + std::to_string(i), amIRoot, append, par)););
+                  SpectrumSaver<T>(filesManager, "norm_cmplx_scalar_" + std::to_string(i) + postfix, amIRoot, append, par, !isSpectraMeasured)););
     }
 
     // The following function measures the corresponding averages with MeansMeasurer::measure, and adds them to the
@@ -76,7 +77,7 @@ namespace TempLat
     // components.
     template <typename Model, typename PowerSpectrumMeasurer> void measureSpectra(Model &model, T t, PowerSpectrumMeasurer& PSMeasurer)
     {
-      ForLoop(i, 0, Model::NCs - 1,
+      if (isSpectraMeasured) ForLoop(i, 0, Model::NCs - 1,
               spectraNormOut(i).save(
                   lastMeas, t,
                   (PSMeasurer.powerSpectrum(model.fldCS(i)(0_c)) + PSMeasurer.powerSpectrum(model.fldCS(i)(1_c))),
@@ -91,6 +92,7 @@ namespace TempLat
     TempLatVector<MeasurementsSaver<T>> standardNormOut; // Contains averages of norm
 
     TempLatVector<SpectrumSaver<T>> spectraNormOut; // Contains spectra of norm
+    const bool isSpectraMeasured;
   };
 
 } // namespace TempLat

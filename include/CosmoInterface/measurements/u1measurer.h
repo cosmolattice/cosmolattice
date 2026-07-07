@@ -33,8 +33,10 @@ namespace TempLat
     using AbstractMeasurer::lastMeas;
     // Put public methods here. These should change very little over time.
     template <typename Model>
-    U1Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append)
-        : flagChiralPS(par.flagChiralPS)
+    U1Measurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append, std::string postfix = "", bool measureGauss = true, bool createSpectra = true):
+    isGaussMeasured(measureGauss),
+    isSpectraMeasured(createSpectra),
+    flagChiralPS(par.flagChiralPS)
     {
       bool amIRoot = model.getToolBox()->amIRoot();
 
@@ -43,23 +45,23 @@ namespace TempLat
               // We create three files for each U(1) gauge field:
 
               standardNormOut.emplace_back(MeasurementsSaver<T>(
-                  filesManager, "norm_U1_" + std::to_string(i), amIRoot, append,
+                  filesManager, "norm_U1_" + std::to_string(i) + postfix, amIRoot, append,
                   MeansMeasurer::headerEB())); // Contains volume-averages of the electric and magnetic fields: norm
                                                // squared, norm to the fourth, and variances
 
               gauss.emplace_back(
-                  MeasurementsSaver<T>(filesManager, "gauss_U1_" + std::to_string(i), amIRoot, append,
+                  MeasurementsSaver<T>(filesManager, "gauss_U1_" + std::to_string(i) + postfix, amIRoot, append,
                                        {"t", "av|LHS-RHS|_over_av|LHS+RHS|", "av|LHS|",
-                                        "av|RHS|"})); // Checks the degree of conservation of the U(1) gauss law.
+                                         "av|RHS|"}, !isGaussMeasured)); // Checks the degree of conservation of the U(1) gauss law.
 
-              spectra.emplace_back(SpectrumSaver<T>(filesManager, "norm_U1_" + std::to_string(i), amIRoot, append,
-                                                    par)); // Contains the spectra of the electric and magnetic fields.
+              spectra.emplace_back(SpectrumSaver<T>(filesManager, "norm_U1_" + std::to_string(i) + postfix, amIRoot, append,
+                                                    par, !isSpectraMeasured)); // Contains the spectra of the electric and magnetic fields.
               if (flagChiralPS)
               {
                 chiralSpectraA.emplace_back(SpectrumSaver<T>(filesManager, "chiral_U1_" + std::to_string(i), amIRoot, append,par));
                 chiralSpectraE.emplace_back(SpectrumSaver<T>(filesManager, "chiral_Elec_U1_" + std::to_string(i), amIRoot, append,par));
               }
-              );
+        );
     }
 
     // This measures the corresponding averages with MeansMeasurer::measure, and add them to the files.
@@ -71,14 +73,17 @@ namespace TempLat
                                      norm(magneticField(model.fldU1(i))), t);
               standardNormOut(i).save(lastMeas);
 
-              gauss(i).addAverage(t); // adds time to the Gauss law file
-              auto gaussU1Arr =
+              if(isGaussMeasured) {
+                gauss(i).addAverage(t); // adds time to the Gauss law file
+                auto gaussU1Arr =
                   GaussLaws::checkU1(model, i);   // the function returns a 3-component vector with information of the
                                                   // left and right hand sides of the Gauss law.
               gauss(i).addAverage(gaussU1Arr(0)); // av|LHS - RHS|_over_av|LHS + RHS|,
               gauss(i).addAverage(gaussU1Arr(1)); // av|LHS|,
               gauss(i).addAverage(gaussU1Arr(2)); // and av|RHS|
-              gauss(i).save(lastMeas););
+              gauss(i).save(lastMeas);
+              }
+      );
     }
 
     // This measures the electric and magnetic spectra and adds them to the files.
@@ -109,6 +114,8 @@ namespace TempLat
 
   private:
     /* Put all member variables and private methods here. These may change arbitrarily. */
+    const bool isGaussMeasured;
+    const bool isSpectraMeasured;
 
     TempLatVector<MeasurementsSaver<T>> standardNormOut;
     TempLatVector<MeasurementsSaver<T>> gauss;

@@ -100,17 +100,28 @@ int main(int argc, char *argv[])
   // that you are running indeed the model you intended.
   // @endlabel
 
-  // @label:main_initializer
+  if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
+  // Printing in the console all the parameters chosen (both run parameter and specific
+  // model parameters)
+
+  manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
+  // Creation of an info file, which lists all parameters and options chosen
+
   typename ModelType::FloatType t = 0;
   // Our time variable. Initialized below.
 
+  Measurer<ModelType, FloatType> measurer(model, runParams, parser);
+  // Creates an object of the class responsible for performing and outputting all the required
+  // measurements (averages, energies, spectra...).
+
+  // @label:main_initializer
   if (not manager.doWeRestart()) // If this is a new simulation:
   {
 
     ModelInitializer<FloatType> initializer(model, runParams.lSide, runParams.baseSeed);
     // 1) We create the class responsible for the initialization
 
-    initializer.initialize(model, runParams, extraFlds);
+    initializer.initialize(model, runParams, measurer.getFilesManager(), extraFlds);
     // 2) We initialize the model.
 
     t = runParams.t0;
@@ -140,20 +151,6 @@ int main(int argc, char *argv[])
   // is specified by the user in the input parameter file, and here is passed through
   // runParams. Model is passed as well to have access to normalisations.
 
-  Measurer<ModelType, FloatType> measurer(model, runParams, parser);
-  // Creates an object of the class responsible for performing and outputting all the required
-  // measurements (averages, energies, spectra...).
-  // @endlabel
-
-  // @label:main_infofile
-  if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
-  // Printing in the console all the parameters chosen (both run parameter and specific
-  // model parameters)
-
-  manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
-  // Creation of an info file, which lists all parameters and options chosen
-  // @endlabel
-
   /************************Time evolution*************************/
 
   // @label:main_timeloop
@@ -171,6 +168,11 @@ int main(int argc, char *argv[])
       // the evolver (e.g. leapfrog) required them to have been synchronised previously for
       // a measurement.
     }
+
+    if constexpr (ModelType::DefectsModel) {if (runParams.doFattening && Fattening::updateTimeStep(model, runParams, t) ) i--; }
+    // If a phase of extrafattening is performed, we need to check whether it will end in the incoming step.
+    // To ensure correct evolution and conservation of Gauss law for U1 theories, we subdivide this evoution
+    // step in two substeps. One until the exact time at which extrafattening ends, and the remaining of the original step.
 
     evolver.evolve(model, t - runParams.t0);
     // We evolve the EoM by one time step dt. It needs the time variable in case we want to simulate
