@@ -1,12 +1,14 @@
 !!! note
-    **Note:** If the reader is already familiar with scalar and gauge field lattice simulations, or they have already read Section 3 of Ref. [@Figueroa_2020rrl], they can skip this section and jump right ahead into Sections [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md) or [My first model of gauge fields](My first model of gauge fields.md) of the present document, in order to set up their first scalar or scalar-gauge field lattice simulations, respectively. If the reader is familiar with scalar field lattice simulations but not with gauge lattice field theories, we recommend them to read at least Section [*Lattice gauge invariant techniques*][subsec_LGT]. The present section [Brief review on lattice techniques](Brief review on lattice techniques.md) represents, in any case, a summary of the more extended discussion about basic lattice concepts presented in Section 3 of Ref. [@Figueroa_2020rrl].
+    The present tab [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md) contains discussions about basic lattice concepts based on Section 3 of $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]), Section 2 of $\mathtt{The~Art-I}$ (Ref. [@BaezaBallesteros_2025tme]), and Section 3 of $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2026XYZ]). If the reader has already read either of those Sections, or they are simply familiar with scalar and/or gauge field lattice simulations, they can jump right ahead into Section [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md) or [Scalar-Gauge Interations](My first model of gauge fields.md) of the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](About This Manual.md), in order to set up their first singlet scalar or scalar-gauge field lattice simulations, respectively. If the reader is familiar with scalar field lattice simulations but not with gauge lattice field theories, we still recommend them to read the Section [*Lattice gauge invariant techniques*][subsec_LGT], before jumping into [Scalar-Gauge Interations](My first model of gauge fields.md). 
 
-### Basic lattice definitions
+## Definition of a Lattice
 
 CosmoLattice simulates the dynamics of interacting fields in a regular cubic lattice of $N^{d}$ points in total, with $N$ the number of lattice sites per dimension, and $d$ the number of spatial dimensions. In in this document we set $d = 3$ unless otherwise specified, as CosmoLattice works by default in 3-spatial dimensions. The complete set of points in a lattice can then be labeled as
+[](){ #eq_LatticeCoordinates } 
 ```math
 \begin{align}
 {\bf n} = (n_1,n_2,n_3),  \quad{\rm with}\,\,  n_i = 0,1,...,N-1  , i = 1,2,3 .
+\label{eq_LatticeCoordinates}
 \end{align}
 ```
 
