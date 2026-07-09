@@ -11,7 +11,7 @@
 #include "CosmoInterface/definitions/averages.h"
 #include "CosmoInterface/definitions/hubbleconstraint.h"
 #include "CosmoInterface/definitions/fixedbackgroundexpansion.h"
-#include "CosmoInterface/definitions/defectsmodule/fattening.h"
+#include "CosmoInterface/definitions/defectsmodule/resolutionpreserving.h"
 
 namespace TempLat
 {
@@ -39,7 +39,7 @@ namespace TempLat
     // @endlabel
 
     // @label:leapfrog_evolve
-    template <class Model> void evolve(Model &model, T tMinust0)
+    template <class Model> void evolve(Model &model, T tMinustRP0)
     {
       /*
        * Leapfrog has momenta living at half-integer steps
@@ -74,7 +74,7 @@ namespace TempLat
         //  whether or not the field were synced or not.
 
         // Now we compute the drifts:
-        driftScaleFactor(model, tMinust0);
+        driftScaleFactor(model, tMinustRP0);
       }
 
       if constexpr (Model::Ns > 0) driftScalar(model);
@@ -93,7 +93,7 @@ namespace TempLat
     // Function used to synchronize the momentum to the field, by evolving them
     // only by half a time step. Called before performing the measurements,
     //  so everything can be measured at integer time.
-    template <class Model> void sync(Model &model, T tMinust0)
+    template <class Model> void sync(Model &model, T tMinustRP0)
     {
       if (!synced) {
         if constexpr (Model::Ns > 0) kickScalar(model, 0.5);
@@ -111,7 +111,7 @@ namespace TempLat
           if (!fixedBackground) model.aDotI = model.aDotSI + model.dt / 2.0 * ScaleFactorKernels::get(model);
         }
       }
-      if (expansion && fixedBackground) model.aDotI = aBackground.dot(tMinust0);
+      if (expansion && fixedBackground) model.aDotI = aBackground.dot(tMinustRP0);
       synced = true;
     }
     // @endlabel
@@ -165,15 +165,15 @@ namespace TempLat
      * DRIFTS
      *********/
 
-    template <class Model> void driftScaleFactor(Model &model, T tMinust0)
+    template <class Model> void driftScaleFactor(Model &model, T tMinustRP0)
     {
       model.aIM = model.aI;  // at t
       if (fixedBackground) { // if fixed background, the scale factor is given by the power-law function in
                              // fixedbackgroundexpansion.h
-        model.aI = aBackground(tMinust0 + model.dt);
-        model.aSI = aBackground(tMinust0 + model.dt / 2.0);
+        model.aI = aBackground(tMinustRP0 + model.dt);
+        model.aSI = aBackground(tMinustRP0 + model.dt / 2.0);
         if constexpr (Model::DefectsModel) {
-          if (aBackground.areWeFattening()) Fattening::updateFatteningFactor(model, tMinust0, aBackground.t0, aBackground.t0Fat, aBackground.tMaxFat, aBackground.sFat);
+          if (aBackground.areWeResolutionPreserving()) ResolutionPreserving::updateResolutionPreservingFactor(model, tMinustRP0, aBackground.t0, aBackground.tRP0, aBackground.tRPMax, aBackground.sRP);
         }
       } else { // if self-consistent expansion, the scale factor is evolved with the VV algorithm
         model.aI += model.dt * model.aDotSI;      // at t+dt
@@ -211,7 +211,7 @@ namespace TempLat
     template <class Model> void driftU1Vector(Model &model)
     {
       model.fldU1 += pow(model.aSI, model.alpha - 1) * model.dt * model.piU1
-                     * IfElse(Model::DefectsModel, model.fatteningFactor, 1.);
+                     * IfElse(Model::DefectsModel, model.resolutionPreservingFactor, OneType());
     }
 
     template <class Model> void driftSU2Vector(Model &model)

@@ -33,11 +33,13 @@ GWprojectorType = 1
 ICtype_U1 = DefectsNetwork
 lcorr = 4
 
+// @label:model_pars
 #Model Parameters. Default corresponds to the critical case of local strings.
-CSU1Charges = 1
-gU1s = 1
 lambda = 0.5
 vev = 1
+gU1s = 1
+CSU1Charges = 1
+// @endlabel
 
 #Diffusion
 doDiffusion = true
@@ -48,10 +50,10 @@ tOutputFreqDiff = 1
 tOutputRareFreqDiff = 1
 #snapshots_diffusion = CS
 
-#Fattening
-doFattening = true
-sFat = 0.
-t0Fat = 70.
+#ResolutionPreserving
+doResolutionPreserving = true
+sRP = 0.
+tRP0 = 70.
 
 #Measurements defects
 measureDefectsEnergies = true

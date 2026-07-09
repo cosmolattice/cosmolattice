@@ -20,10 +20,10 @@ namespace TempLat
     T aSI, aI, aIM;
     T aDotSI, aDotSIM, aDotI, aDotIM;
     T b0;
-    T fatteningFactor;
+    T resolutionPreservingFactor;
 
   protected:
-    ScaleFactorBase() : aSI(1), aI(1), aIM(1), aDotSI(0), aDotSIM(0), aDotI(0), aDotIM(0), b0(0), fatteningFactor(1.) {}
+    ScaleFactorBase() : aSI(1), aI(1), aIM(1), aDotSI(0), aDotSIM(0), aDotI(0), aDotIM(0), b0(0), resolutionPreservingFactor(1.) {}
   };
 
 } // namespace TempLat

@@ -21,8 +21,8 @@ Other parameters:
    tNonLinearAxionU1       -1                  
         CSU1_charges       1                   
 measureDefectsEnergies       false               
-               t0Fat       0                   
-                sFat       1                   
+               tRP0       0
+                sRP       1
      tOutputFreqDiff       0                   
          tOutputVerb       1                   
                   a0       1                   
@@ -44,7 +44,7 @@ cmplx_field_initial_norm       5.6964e18
       overwriteFiles       false               
            snapshots       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
             baseSeed       49036311            
-             tMaxFat       0                   
+             tRPMax       0
      snap_uppercoord       64 64 64 64 64 64 64 64 64 64
 measureDefectsStructure       false               
      snap_lowercoord       0 0 0 0 0 0 0 0 0 0 

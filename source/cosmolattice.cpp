@@ -169,10 +169,10 @@ int main(int argc, char *argv[])
       // a measurement.
     }
 
-    if constexpr (ModelType::DefectsModel) {if (runParams.doFattening && Fattening::updateTimeStep(model, runParams, t) ) i--; }
-    // If a phase of extrafattening is performed, we need to check whether it will end in the incoming step.
+    if constexpr (ModelType::DefectsModel) {if (runParams.doResolutionPreserving && ResolutionPreserving::updateTimeStep(model, runParams, t) ) i--; }
+    // If a resolution-preserving phase is performed, we need to check whether it will end in the incoming step.
     // To ensure correct evolution and conservation of Gauss law for U1 theories, we subdivide this evoution
-    // step in two substeps. One until the exact time at which extrafattening ends, and the remaining of the original step.
+    // step in two substeps. One until the exact time at which the phase ends ends, and the remaining of the original step.
 
     evolver.evolve(model, t - runParams.t0);
     // We evolve the EoM by one time step dt. It needs the time variable in case we want to simulate

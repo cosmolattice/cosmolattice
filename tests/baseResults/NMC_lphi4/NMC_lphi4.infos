@@ -20,8 +20,8 @@ Other parameters:
 
    tNonLinearAxionU1       -1                  
 measureDefectsEnergies       false               
-               t0Fat       0                   
-                sFat       1                   
+               tRP0       0
+                sRP       1
          tOutputVerb       1                   
   initial_amplitudes       5.6964e18 0         
                   a0       1                   
@@ -30,7 +30,7 @@ measureDefectsEnergies       false
            snapshots       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
             tmaxdiff       0                   
                input       ../models/parameter-files/NMC_lphi4.in
-             tMaxFat       0                   
+             tRPMax       0
      snap_uppercoord       64 64 64 64 64 64 64 64 64 64
  snapshots_diffusion       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
           outputfile       ./                  

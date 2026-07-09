@@ -22,8 +22,8 @@ Other parameters:
              ext_PS1       ✖                 
              ext_PS0       ✖                 
 measureDefectsEnergies       false               
-               t0Fat       0                   
-                sFat       1                   
+               tRP0       0
+                sRP       1
          tOutputVerb       1                   
             tmaxdiff       0                   
   initial_amplitudes       5.6964e18 0         
@@ -50,7 +50,7 @@ measureDefectsEnergies       false
  tOutputRareFreqDiff       0                   
                    q       300                 
             baseSeed       3692063681          
-             tMaxFat       0                   
+             tRPMax       0
      snap_uppercoord       64 64 64 64 64 64 64 64 64 64
 measureDefectsStructure       false               
      snap_lowercoord       0 0 0 0 0 0 0 0 0 0 

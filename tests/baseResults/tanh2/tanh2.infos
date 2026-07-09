@@ -22,8 +22,8 @@ Other parameters:
              ext_PS1       ✖                 
              ext_PS0       ✖                 
 measureDefectsEnergies       false               
-               t0Fat       0                   
-                sFat       1                   
+               tRP0       0
+                sRP       1
          tOutputVerb       0.5                 
   initial_amplitudes       3.39928e18 0        
                   a0       1                   
@@ -34,7 +34,7 @@ measureDefectsEnergies       false
              Lambda4       1.7966e65           
                input       ../models/parameter-files/tanh2.in
             baseSeed       148801558           
-             tMaxFat       0                   
+             tRPMax       0
      snap_uppercoord       64 64 64 64 64 64 64 64 64 64
  snapshots_diffusion       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
           outputfile       ./                  

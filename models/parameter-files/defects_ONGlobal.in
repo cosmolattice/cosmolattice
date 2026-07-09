@@ -52,11 +52,11 @@ dtdiff = 0.005
 tOutputFreqDiff = 1
 # @endlabel
 
-# @label:fattening
-#Fattening
-doFattening = true
-sFat = -1
-t0Fat = 70
+# @label:resolutionpreserving
+#ResolutionPreserving
+doResolutionPreserving = true
+sRP = -1
+tRP0 = 70
 # @endlabel
 
 # @label:observables

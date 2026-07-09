@@ -21,7 +21,7 @@
 #include "CosmoInterface/definitions/fixedbackgroundexpansion.h"
 #include "CosmoInterface/definitions/energies.h"
 #include "CosmoInterface/definitions/averages.h"
-#include "CosmoInterface/definitions/defectsmodule/fattening.h"
+#include "CosmoInterface/definitions/defectsmodule/resolutionpreserving.h"
 
 namespace TempLat
 {
@@ -205,7 +205,7 @@ namespace TempLat
     template <class Model> void driftU1Vector(Model &model, T w)
     {
       model.fldU1 += pow(model.aSI, model.alpha - 1) * w * model.dt * model.piU1
-                     * model.fatteningFactor;
+                     * IfElse(Model::DefectsModel, model.resolutionPreservingFactor, OneType());
     }
 
     // Evolves fldSU2
@@ -229,7 +229,7 @@ namespace TempLat
                              // fixedbackgroundexpansion.h
         model.aI = aBackground(tMinust0);
         if constexpr (Model::DefectsModel) {
-          if (aBackground.areWeFattening()) Fattening::updateFatteningFactor(model, tMinust0, aBackground.t0, aBackground.t0Fat, aBackground.tMaxFat, aBackground.sFat);
+          if (aBackground.areWeResolutionPreserving()) ResolutionPreserving::updateResolutionPreservingFactor(model, tMinust0, aBackground.t0, aBackground.tRP0, aBackground.tRPMax, aBackground.sRP);
         }
         if constexpr (Model::IsNonMinimallyCoupled) {
           model.RI = aBackground.R(tMinust0);

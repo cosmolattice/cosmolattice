@@ -33,7 +33,7 @@ namespace TempLat
                      :
                      Model::DefectsModel
                      ?
-                     std::vector<std::string>{"t", "a", "aDot", "H", "fatteningFactor"}
+                     std::vector<std::string>{"t", "a", "aDot", "H", "resolutionPreservingFactor"}
                      :
                      std::vector<std::string>{"t", "a", "aDot", "H"},
                    !expansion) // Output file for scale factor and derivatives.
@@ -48,7 +48,7 @@ namespace TempLat
         scaleOut.addAverage(model.aDotI);            // First time-derivative of the scale factor
         scaleOut.addAverage(model.aDotI / model.aI); // Hubble parameter
         if constexpr (Model::IsNonMinimallyCoupled) scaleOut.addAverage(model.RI);
-        if constexpr (Model::DefectsModel) scaleOut.addAverage(model.fatteningFactor);
+        if constexpr (Model::DefectsModel) scaleOut.addAverage(model.resolutionPreservingFactor);
       }
       scaleOut.save(lastMeas);
     }

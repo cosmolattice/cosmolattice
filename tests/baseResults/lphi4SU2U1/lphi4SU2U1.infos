@@ -24,7 +24,7 @@ SU2DoubletU1_charges       1
         CSU1_charges       1                   
              ext_PS0       ✖                 
 measureDefectsEnergies       false               
-                sFat       1                   
+                sRP       1
      tOutputFreqDiff       0                   
             tmaxdiff       0                   
     diffusionevolver       7                   
@@ -35,7 +35,7 @@ measureDefectsEnergies       false
                 gU1s       1.11037e-05         
        print_headers       true                
               flagON       false               
-               t0Fat       0                   
+               tRP0       0
             ICtype_S       Default             
        hdf5FlushFreq       10                  
                input       ../models/parameter-files/lphi4SU2U1.in
@@ -61,7 +61,7 @@ cmplx_field_initial_norm       1e-15
          tOutputVerb       1                   
 SU2Doublet_initial_norm       5.25151e18          
             baseSeed       3974441553          
-             tMaxFat       0                   
+             tRPMax       0
      snap_uppercoord       64 64 64 64 64 64 64 64 64 64
 measureDefectsStructure       false               
      snap_lowercoord       0 0 0 0 0 0 0 0 0 0 

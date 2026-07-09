@@ -106,7 +106,7 @@ namespace TempLat
 
     auto potentialTerms(Tag<0>) // Term 0: Quartic potential of the complex scalar
     {
-      return fatteningFactor * pow<2>(pow<2>(norm(fldCS(0_c))) - FloatType(0.5))  ;
+      return resolutionPreservingFactor * pow<2>(pow<2>(norm(fldCS(0_c))) - FloatType(0.5))  ;
     }
 
     /////////
@@ -115,7 +115,7 @@ namespace TempLat
 
     auto potDerivNormCS(Tag<0>) // Derivative with respect complex scalar norm
     {
-      return fatteningFactor * FloatType(4.) * (pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) * norm(fldCS(0_c))  ;
+      return resolutionPreservingFactor * FloatType(4.) * (pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) * norm(fldCS(0_c))  ;
     }
 
     /////////
@@ -124,7 +124,7 @@ namespace TempLat
 
     auto potDeriv2NormCS(Tag<0>) // 2nd derivative with respect complex scalar norm
     {
-      return fatteningFactor * FloatType(4.) * (FloatType(3.) * pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) ;
+      return resolutionPreservingFactor * FloatType(4.) * (FloatType(3.) * pow<2>(norm(fldCS(0_c))) - FloatType(0.5)) ;
     }
   };
 } // namespace TempLat

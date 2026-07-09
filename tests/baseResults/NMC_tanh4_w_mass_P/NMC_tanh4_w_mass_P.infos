@@ -20,8 +20,8 @@ Other parameters:
 
    tNonLinearAxionU1       -1                  
 measureDefectsEnergies       false               
-               t0Fat       0                   
-                sFat       1                   
+               tRP0       0
+                sRP       1
      tOutputFreqDiff       0                   
             tmaxdiff       0                   
     diffusionevolver       7                   
@@ -48,7 +48,7 @@ measureDefectsEnergies       false
            snapshots       ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖ ✖
                  xis       100.0               
             baseSeed       2891652665          
-             tMaxFat       0                   
+             tRPMax       0
      snap_uppercoord       64 64 64 64 64 64 64 64 64 64
               dtdiff       0                   
          tBackupFreq       -1                  

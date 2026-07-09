@@ -119,16 +119,16 @@ namespace TempLat
           doDiffusion(par.get<bool>("doDiffusion", false)),
           tmaxdiff(doDiffusion ? par.get<double>("tmaxdiff") : 0.0),
           dtdiff(doDiffusion ? par.get<double>("dtdiff") : 0.0),
-          diffType(par.get<EvolverType>("diffusionevolver", RK2)), // Type of evolution algorithm
-          tOutFreqDiff(par.get<T>("tOutputFreqDiff", 10 * dtdiff)), // Printing time interval of output during the diffusion phase
-          tOutRareFreqDiff(par.get<T>("tOutputRareFreqDiff", 100 * dtdiff)), // Printing time interval of output during the diffusion phase
-          energySnapshotMeasDiffusion(par.get<std::string, 15>(
+          diffType(doDiffusion ? par.get<EvolverType>("diffusionevolver", RK2) : RK2), // Type of evolution algorithm
+          tOutFreqDiff(doDiffusion ?  par.get<T>("tOutputFreqDiff", 10 * dtdiff) : tMax), // Printing time interval of output during the diffusion phase
+          tOutRareFreqDiff(doDiffusion ?  par.get<T>("tOutputRareFreqDiff", 100 * dtdiff) : tMax), // Printing time interval of output during the diffusion phase
+          energySnapshotMeasDiffusion(doDiffusion ? par.get<std::string, 15>(
             "snapshots_diffusion",
-            std::vector<std::string>(15, Constants::defaultString))),
-          doFattening(fixedBackground ?  par.get<bool>("doFattening", false) :  false), //Whether fattening is performed or not. It requires fixed background expansion (using it for self.consistent expansion is yet not tested nor thoroughly thought)
-          sFat(par.get<double>("sFat", 1.)),
-          t0Fat(par.get<double>("t0Fat", t0)),
-          tMaxFat(par.get<double>("tMaxFat", gettMaxFattening())),
+            std::vector<std::string>(15, Constants::defaultString)) : std::vector<std::string>(15, Constants::defaultString)),
+          doResolutionPreserving(fixedBackground ?  par.get<bool>("doResolutionPreserving", false) :  false), //Whether a resolution-preserving techniques is performed or not. It requires fixed background expansion (using it for self.consistent expansion is yet not tested nor thoroughly thought)
+          sRP(doResolutionPreserving ? par.get<double>("sRP") : 1.0),
+          tRP0(doResolutionPreserving ? par.get<double>("tRP0", t0) : t0),
+          tRPMax(doResolutionPreserving ? par.get<double>("tRPMax", gettRPMaxtening()) : t0),
           measureDefectsEnergies(par.get<bool>("measureDefectsEnergies", false)),
           measureDefectsStructure(par.get<bool>("measureDefectsStructure", false))
     {
@@ -202,10 +202,10 @@ namespace TempLat
 
     ptrdiff_t getFlushFreq() const { return hdf5FlushFreq; }
 
-    T gettMaxFattening() {
-      if (sFat >= 1.) return t0;
-      if (AlmostEqual(sFat, 0.)) return tMax;
-      return t0Fat * pow(tMax / t0Fat, -1. / (sFat - 1.)); //This is correct for scale factors that evolve as a power law and which have a0 ~ (t/t0)^p !
+    T gettRPMaxtening() {
+      if (sRP > 0.0) throw(RunParametersInconsistent("The parameter sRP of the resolution-preserving phase must obey sRP <= 0. Aborting."));
+      if (AlmostEqual(sRP, 0.)) return tMax;
+      return tRP0 * pow(tMax / tRP0, -1. / (sRP - 1.)); //This is correct for scale factors that evolve as a power law and which have a0 ~ (t/t0)^p !
     }
 
 
@@ -281,17 +281,17 @@ namespace TempLat
     const T deltaNoise;
 
     const bool doDiffusion;
-    const EvolverType diffType;
-    const T dtdiff;
     const T tmaxdiff;
+    const T dtdiff;
+    const EvolverType diffType;
     const T tOutFreqDiff;
     const T tOutRareFreqDiff;
     std::vector<std::string> energySnapshotMeasDiffusion;
 
-    const bool doFattening;
-    const T sFat;
-    const T t0Fat;
-    const T tMaxFat;
+    const bool doResolutionPreserving;
+    const T sRP;
+    const T tRP0;
+    const T tRPMax;
 
     bool measureDefectsEnergies;
     bool measureDefectsStructure;

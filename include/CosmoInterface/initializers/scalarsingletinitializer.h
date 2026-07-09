@@ -45,7 +45,7 @@ namespace TempLat
 
       auto flagSIC = rPar.SIC;
 
-      if (!Model::DefectsModel && ( flagSIC != InitialConditionsType::S::DefectsNetwork || flagSIC != InitialConditionsType::S::DefectsWhiteNoise))
+      if (Model::DefectsModel && ( flagSIC != InitialConditionsType::S::DefectsNetwork && flagSIC != InitialConditionsType::S::DefectsWhiteNoise))
         throw(RunParametersInconsistent("You are running a simulation with cosmic defects. Initial conditions specified via the ICtype_S must be either DefectsNetwork or WhiteNoise. We also recomment using an initial diffusion phase."));
 
       if (rPar.SIC == InitialConditionsType::S::Default) flagSIC = InitialConditionsType::S::RandomWithMatter;

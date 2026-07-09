@@ -63,6 +63,7 @@ namespace TempLat
 
             for (int i = 0; tdiff < rPar.tmaxdiff + rPar.dtdiff * T(0.5); i++) {
                 if ( i % outputFreqDiffusion == 0) {
+                    ForEachConjugateMomenta(Model, fld, n, model.getField(fld)(n) = Kernels::get(fld, model, n, KernelsTypes::Diffusion<Model>()) ); //Sets the conjugate momenta fields, which are used as auxiliary variables for the evolution, to zero.
                     if (iAmRoot) say << "Diffusion step " << i << " completed. Current diffusion time " << tdiff << "\n";
                     if constexpr (Model::Ns > 0) measurerS->measure(model, tdiff);
                     if constexpr (Model::NCs > 0) measurerCS->measureStandard(model, tdiff);

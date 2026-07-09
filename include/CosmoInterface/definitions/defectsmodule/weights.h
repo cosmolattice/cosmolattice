@@ -29,13 +29,13 @@ namespace TempLat
         template<typename Model>
         static auto weightScalarSinglet(Model &model)
         {
-            return 4 * Potential::potential(model) *  heaviside(1 - sqrt(Total(i, 0_c, Model::Ns - 1, pow<2>(model.fldS(i)); )) ) / model.fatteningFactor;
+            return 4 * Potential::potential(model) *  heaviside(1 - sqrt(Total(i, 0_c, Model::Ns - 1, pow<2>(model.fldS(i)); )) ) / model.resolutionPreservingFactor;
         }
 
         template<typename Model>
         static auto weightComplexScalar(Model &model)
         {
-            return 4 * Potential::potential(model) * heaviside(0.5 - norm2(model.fldCS(0_c))) / model.fatteningFactor;
+            return 4 * Potential::potential(model) * heaviside(0.5 - norm2(model.fldCS(0_c))) / model.resolutionPreservingFactor;
         }
 
     };

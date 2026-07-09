@@ -43,7 +43,7 @@ namespace TempLat
     {
       auto flagU1IC = rPar.U1IC;
 
-      if (!Model::DefectsModel && ( flagU1IC != InitialConditionsType::U1::DefectsNetwork || flagU1IC != InitialConditionsType::U1::DefectsWhiteNoise))
+      if (Model::DefectsModel && ( flagU1IC != InitialConditionsType::U1::DefectsNetwork && flagU1IC != InitialConditionsType::U1::DefectsWhiteNoise))
         throw(RunParametersInconsistent("You are running a simulation with cosmic defects. Initial conditions specified via the ICtype_U1 must be either DefectsNetwork or WhiteNoise. We also recomment using an initial diffusion phase."));
 
       if (rPar.U1IC == InitialConditionsType::U1::Default) flagU1IC = model.getU1IC();

@@ -43,7 +43,7 @@ namespace TempLat
     template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::Diffusion<Model> diffusion)
     {
       // Returns momentum for complex scalars:
-      return ZeroType();
+      return Complexify(ZeroType(), ZeroType());
     }
 
     template <class Model, int N> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::Diffusion<Model> diffusion)

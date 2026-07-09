@@ -50,11 +50,11 @@ Other parameters:
                lcorr       4                   
          doFattening       true                
         hdf5Averages       false               
-                sFat       -1                  
-               t0Fat       70                  
+                sRP       -1
+               tRP0       70
 measureDefectsEnergies       true                
             baseSeed       4154835512          
-             tMaxFat       84.4985             
+             tRPMax       84.4985
      snap_uppercoord       64 64 64 64 64 64 64 64 64 64
               dtdiff       0.005               
          tBackupFreq       -1                  

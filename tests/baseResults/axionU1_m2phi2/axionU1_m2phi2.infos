@@ -21,8 +21,8 @@ Other parameters:
             gAxionU1       1                   
              ext_PS0       ✖                 
 measureDefectsEnergies       false               
-               t0Fat       0                   
-                sFat       1                   
+               tRP0       0
+                sRP       1
   initial_amplitudes       3.39928e18          
                   a0       1                   
             load_dir       ✖                 
@@ -52,7 +52,7 @@ measureDefectsEnergies       false
  tOutputRareFreqDiff       0                   
          tOutputVerb       0.5                 
             baseSeed       788478823           
-             tMaxFat       0                   
+             tRPMax       0
      snap_uppercoord       64 64 64 64 64 64 64 64 64 64
 measureDefectsStructure       false               
      snap_lowercoord       0 0 0 0 0 0 0 0 0 0 

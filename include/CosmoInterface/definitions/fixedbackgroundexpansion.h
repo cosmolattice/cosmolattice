@@ -23,11 +23,11 @@ namespace TempLat
     pEoS(2.0 / (3.0 * (1.0 + rPar.omegaEoS) - 2.0 * model.alpha)), // Coefficient of the power-law expansion: depends on EoS and alpha
     H0( (AlmostEqual(rPar.H0, 0.0) && Model::DefectsModel) ? pEoS / rPar.t0 : rPar.H0 / model.omegaStar), // Initial Hubble parameter (in program units)
     alpha(model.alpha),
-    doFattening(rPar.doFattening),
+    doResolutionPreserving(rPar.doResolutionPreserving),
     t0(rPar.t0),
-    t0Fat(rPar.t0Fat),
-    tMaxFat(rPar.tMaxFat),
-    sFat(rPar.sFat)
+    tRP0(rPar.tRP0),
+    tRPMax(rPar.tRPMax),
+    sRP(rPar.sRP)
     {
        if(AlmostEqual(H0, 0.0) && rPar.fixedBackground) throw(RunParametersInconsistent("For models that do not involve cosmic defects, you need to specify a non-zero H0 to run a simulation with fixed background. If you want to disable expansion, please set expansion = false in the input file."));
     }
@@ -42,8 +42,8 @@ namespace TempLat
       return H0 * pow(1 + H0 / pEoS * deltaT, pEoS - 1);
     }
 
-    auto const areWeFattening() const {
-      return doFattening;
+    auto const areWeResolutionPreserving() const {
+      return doResolutionPreserving;
     }
 
     auto R(T deltaT) // Ricci scalar for NMC field evolution in fixed background expansion
@@ -57,11 +57,11 @@ namespace TempLat
     T pEoS;
     T H0;
     T alpha;
-    bool doFattening;
+    bool doResolutionPreserving;
 
   public:
 
-    const T t0, t0Fat, tMaxFat, sFat;
+    const T t0, tRP0, tRPMax, sRP;
 
   };
 
