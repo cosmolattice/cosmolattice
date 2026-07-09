@@ -1,6 +1,18 @@
 <!-- **Theoretical Framework** -->
 
-Dear reader, here you can find all the details of the theoretical aspects behind $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
+Here you can find all the details of the theoretical aspects behind $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, which we divide in three Sections: [Continuum Field Theory](Brief_Review_On_Continuum_Dynamics.md), [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md) and [Lattice-Cosmology Reviews](MonographicReviews.md). 
+
+<!--
+  space
+-->
+
+----------
+
+<!--
+  space
+-->
+
+In Section [Continuum Field Theory](Brief_Review_On_Continuum_Dynamics.md), we describe briefly the formulation of scalar and gauge field theories in the continuum. We describe the dynamics of scalar and gauge fields living in a (spatially-flat) *Friedmann–Lemaître–Robertson–Walker* (FLRW) background , and the dynamics of the background itself, as sourced by the fields that live within it.
 
 <!--
   space

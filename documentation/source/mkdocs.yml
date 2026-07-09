@@ -164,12 +164,14 @@ nav:
       #- "Power spectra": "tech_notes/Power spectra.md"#
       #- "Gravitational Waves": "tech_notes/Gravitational waves.md"#
       #- "Gravitational Waves from U(1) Gauge Theories": "tech_notes/Gravitational waves from U(1) gauge theories.md"#
-      - "<span style='font-weight:bold;'>Theory Framework Guide </span>": "th_framework/TF_readme.md"
-      - "Field Discretization Primer": "th_framework/latticeintroV5.md" #Brief_Review_On_Lattice_Techniques.md" #:
+      # - "<span style='font-weight:bold;'>Theory Framework Guide </span>": "th_framework/TF_readme.md"
+      - "Theory Framework Guide": "th_framework/TF_readme.md"
+      - "<span style='font-weight:bold;'>Continuum Field Theory </span>": "th_framework/Brief_Review_On_Continuum_Dynamics.md"
+      - "<span style='font-weight:bold;'>Field Discretization Primer </span>": "th_framework/latticeintroV5.md" #Brief_Review_On_Lattice_Techniques.md" #:
           # - "Power Spectrum (Note I)": "th_framework/tech_notes/Power spectra.md"
 #           - "GWs from Scalars (Note II)": "th_framework/tech_notes/Gravitational waves.md"
 #           - "GWs from U(1) Scalar-Gauge theories (Note III)": "th_framework/tech_notes/Gravitational waves from U(1) gauge theories.md"
-      - "Lattice-Cosmology Reviews": #: "th_framework/MonographicReviews.md":
+      - "<span style='font-weight:bold;'>Lattice-Cosmology Reviews </span>": #: "th_framework/MonographicReviews.md":
           - "Power Spectrum (Note I)": "th_framework/tech_notes/Power spectra.md"
           - "GWs from Scalars (Note II)": "th_framework/tech_notes/Gravitational waves.md"
           - "GWs from U(1) Scalar-Gauge theories (Note III)": "th_framework/tech_notes/Gravitational waves from U(1) gauge theories.md"
