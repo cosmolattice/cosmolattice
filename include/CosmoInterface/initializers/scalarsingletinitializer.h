@@ -44,6 +44,10 @@ namespace TempLat
     {
 
       auto flagSIC = rPar.SIC;
+
+      if (!Model::DefectsModel && ( flagSIC != InitialConditionsType::S::DefectsNetwork || flagSIC != InitialConditionsType::S::DefectsWhiteNoise))
+        throw(RunParametersInconsistent("You are running a simulation with cosmic defects. Initial conditions specified via the ICtype_S must be either DefectsNetwork or WhiteNoise. We also recomment using an initial diffusion phase."));
+
       if (rPar.SIC == InitialConditionsType::S::Default) flagSIC = InitialConditionsType::S::RandomWithMatter;
 
         if (flagSIC == InitialConditionsType::S::RandomWithMatter) {
@@ -54,7 +58,7 @@ namespace TempLat
         else if (flagSIC == InitialConditionsType::S::DefectsNetwork)
           initializeScalarDefectsNetwork(model, fg, rPar.lcorr);
         else if (flagSIC == InitialConditionsType::S::DefectsWhiteNoise)
-          initializeScalarDomainWallWhiteNoise(model, fg, rPar.kCutoff, rPar.deltaNoise);
+          initializeScalarDefectsWhiteNoise(model, fg, rPar.kCutoff, rPar.deltaNoise);
         else if (flagSIC != InitialConditionsType::S::Homogeneous)
           throw(SICNotImplemented("The initial condition provided for scalars is not implemented."));
 
@@ -130,7 +134,7 @@ namespace TempLat
     }
 
     template <class Model, typename T>
-    static void initializeScalarDomainWallWhiteNoise(Model &model, const FluctuationsGenerator<T> &fg, T kCutoff, T delta)
+    static void initializeScalarDefectsWhiteNoise(Model &model, const FluctuationsGenerator<T> &fg, T kCutoff, T delta)
     {
       auto toolBox = model.getToolBox();
       using RGF = RandomGaussianField<T,Model::NDim>;

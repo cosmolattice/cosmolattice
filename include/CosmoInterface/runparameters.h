@@ -114,12 +114,12 @@ namespace TempLat
           flagON(par.get<bool>("flagON", false)),
           flagChiralPS(par.get<bool>("flagChiralPS", false)),
           unbinnedSpectra(par.get<bool>("saveUnbinnedSpectra", false)),
-          lcorr(par.get<T>("lcorr", 0.)),
-          deltaNoise(par.get<T>("deltaNoise", 1.)),
+          lcorr((SIC == InitialConditionsType::S::DefectsNetwork || U1IC == InitialConditionsType::U1::DefectsNetwork) ? par.get<T>("lcorr") : 0.0),
+          deltaNoise((SIC == InitialConditionsType::S::DefectsWhiteNoise || U1IC == InitialConditionsType::U1::DefectsWhiteNoise) ? par.get<T>("deltaNoise") : 0.0),
           doDiffusion(par.get<bool>("doDiffusion", false)),
+          tmaxdiff(doDiffusion ? par.get<double>("tmaxdiff") : 0.0),
+          dtdiff(doDiffusion ? par.get<double>("dtdiff") : 0.0),
           diffType(par.get<EvolverType>("diffusionevolver", RK2)), // Type of evolution algorithm
-          dtdiff(par.get<double>("dtdiff", 0.)),
-          tmaxdiff(par.get<double>("tmaxdiff", 0.)),
           tOutFreqDiff(par.get<T>("tOutputFreqDiff", 10 * dtdiff)), // Printing time interval of output during the diffusion phase
           tOutRareFreqDiff(par.get<T>("tOutputRareFreqDiff", 100 * dtdiff)), // Printing time interval of output during the diffusion phase
           energySnapshotMeasDiffusion(par.get<std::string, 15>(
@@ -158,7 +158,7 @@ namespace TempLat
       if (tOutVerb < dt) throw(RunParametersInconsistent("tOutputVerb must be >= dt, abort."));
 
       dx = lSide / N;                             // Lattice spacing
-      kUV = std::sqrt(3) * Constants::pi<T> / dx; // Maximum momenta in the lattice
+      T kUV = std::sqrt(3) * Constants::pi<T> / dx; // Maximum momenta in the lattice
 
       if (kCutoff < 0.0) kCutoff = 2 * kUV; // no cutoff means it's larger than kUV.
 
@@ -215,7 +215,6 @@ namespace TempLat
     T lSide;
     T dt;
     T dx;
-    T kUV;
 
     const bool expansion;
 

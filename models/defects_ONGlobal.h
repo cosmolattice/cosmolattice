@@ -20,14 +20,15 @@ namespace TempLat
   // In the following class, we define the defining parameters of your model:
   // number of fields of each species and the type of interactions.
 
+  // @label:model_pars
   struct ModelPars : public TempLat::DefaultModelPars {
     static constexpr size_t NScalars = 1;
     static constexpr size_t NPotTerms = 1;
     static constexpr bool DefectsModel = true;
 
     using NumberType = double;
-
   };
+  // @endlabel
 
 #define MODELNAME defects_ONGlobal
   // Here we define the name of the model. This should match the name of your file.
@@ -75,14 +76,17 @@ namespace TempLat
       lambda = parser.get<FloatType>("lambda", 1.);
       vev = parser.get<FloatType>("vev", 1.);
       q = parser.get<FloatType>("qbias", 0.);
+      if (!AlmostEqual(q, 0.0) && Model::NScalars != 1) throw(RunParametersInconsistent("The bias potential is only implemented for domain wall simulations. Please, set qbias to zero or remove it from the parameter file to run a simulation with NScalars > 1."));
 
       /////////
       // Rescaling for program variables
       /////////
 
+      // @label:program_variables
       alpha = 1;
       fStar = vev;
       omegaStar = sqrt(lambda) * vev;
+      // @endlabel
       g = q / lambda;
       // We now need to specify the rescaling from physical units to program units.
       // This consists of the  time rescaling exponent alpha, the field rescaling fStar
@@ -97,12 +101,13 @@ namespace TempLat
       // uncomment the next section and do whatever suits your needs.
     }
 
+
+    // @label:model_potential
     /////////
     // Program potential (add as many functions as terms are in the potential)
     /////////
     // --> Comment: These functions may depend on the norm of the complex scalar/doublets,
     //      which are introduced as "norm(fldCS(0_c))" and "norm(fldSU2Doublet(0_c))" respectively.
-
     auto potentialTerms(Tag<0>) // Term 0: Quartic potential of the complex scalar
     {
       return fatteningFactor * FloatType(0.25) * pow<2>(Total(i, 0, ModelPars::NScalars - 1, pow<2>(fldS(i))) - FloatType(1.)) + IfElse( ModelPars::NScalars == 1, g * pow<3>(fldS(0_c)), ZeroType() ) ;
@@ -111,17 +116,16 @@ namespace TempLat
     /////////
     // Derivatives of the program potential with respect fields
     /////////
-
     template<int M>
     auto potDeriv(Tag<M> m) // Derivative with respect complex scalar norm
     {
       return fatteningFactor * fldS(m) * (Total(i, 0, ModelPars::NScalars - 1, pow<2>(fldS(i))) - FloatType(1.))  +  IfElse( ModelPars::NScalars == 1, 3 * g * pow<2>(fldS(0_c)), ZeroType() ) ;
     }
+    // @endlabel
 
     /////////
     //  Second derivatives of the program potential with respect fields
     /////////
-
     template<int M>
     auto potDeriv2(Tag<M> m) // 2nd derivative with respect complex scalar norm
     {

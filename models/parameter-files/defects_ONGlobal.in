@@ -3,11 +3,13 @@ outputfile = ./
 print_headers = true
 overwriteFiles = false
 
+# @label:model_expansion
 #Evolution
 expansion = true
 fixedBackground = true
 omegaEoS = 0.333333333333333333
 evolver = LF
+# @endlabel
 
 #Lattice
 N = 64
@@ -29,28 +31,36 @@ PS_version = 1
 withGWs = false
 GWprojectorType = 1
 
-#IC
-ICtype_S = DefectsNetwork
-lcorr = 4
-
+# @label:model_parameters
 #Model Parameters
 lambda = 1
 vev = 1
-qbias = 0.02 #Only used dor N = 1 (domain walls)
+# @endlabel
 
+# @label:model_IC
+#IC
+ICtype_S = DefectsNetwork
+lcorr = 4
+# @endlabel
+
+# @label:diffusion
 #Diffusion
 doDiffusion = true
+tmaxdiff = 10
 diffusionevolver = RK2
 dtdiff = 0.005
-tmaxdiff = 10
 tOutputFreqDiff = 1
-tOutputRareFreqDiff = 1
+# @endlabel
 
+# @label:fattening
 #Fattening
 doFattening = true
 sFat = -1
 t0Fat = 70
+# @endlabel
 
+# @label:observables
 #Measurements defects
 measureDefectsEnergies = true
 measureDefectsStructure = true
+# @endlabel

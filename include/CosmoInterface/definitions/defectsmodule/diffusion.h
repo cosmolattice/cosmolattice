@@ -41,8 +41,8 @@ namespace TempLat
                 model.g = 0;
             }
 
-            if (iAmRoot) say << "Diffusing initial defect conditions";
             if (!RK2NStorageParameters<T>::isRK2n(rPar.diffType)) throw(DiffusionEvolverInvalid("You need to choose a RK integrator to diffuse initial conditions for defect simulations. Abort."));
+            if (iAmRoot) say << "Diffusing initial defect conditions";
 
             auto diffuser = RK2NStorageFields(model, rPar.diffType);
 

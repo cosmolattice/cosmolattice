@@ -447,7 +447,7 @@ where $\langle \cdots \rangle$ represents an ensemble average, and $\Delta_{\del
 
 In this expression, $\omega_{k,\phi}$ is the comoving frequency of the mode, and $m_{\phi}$ is the effective mass of the field, evaluated in terms of the initial homogeneous amplitude $\bar{\phi}_*$ of the field.
 
-In CosmoLattice, this is represented by imposing a sum of left- and right-moving waves of the field amplitude at each Fourier site ${\bf \tilde n}$,
+In CosmoLattice, (<span style="color:orange;">**Jorge comment: THIS IS NOT TRUE. FOR SCALAR SINGETS COSMOLATTICE SAMPES FROM A GAUSSIAN**</span>) this is represented by imposing a sum of left- and right-moving waves of the field amplitude at each Fourier site ${\bf \tilde n}$,
 [](){ #eq_fpr_influct }
 [](){ #eq_fpr_influct2 }
 ```math
