@@ -193,8 +193,8 @@ In CosmoLattice, the resoluton preserving phase is implemented via a `resolution
 ```math
 \begin{equation}\label{eq_resolutionPreservingFactor}
 \Lambda_\text{RP}(\tau) = \left\{\begin{array}{lr}
-1  & \quad\quad\quad\quad\quad \tau < \tau_\text{RP,0}\,,
-\left[\frac{a(\tau)}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau_\text{RP,0} \leq \tau < \tau_{RP, max}\, \\
+1  & \quad\quad\quad\quad\quad \tau < \tau_\text{RP,0}\,,\\
+\left[\frac{a(\tau)}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau_\text{RP,0} \leq \tau < \tau_{RP, max}\,, \\
 \left[\frac{a(\tau_{RP,max})}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau \geq \tau_{RP, max}\,. \\
 \end{array}\right\}
 \end{equation}
@@ -282,13 +282,13 @@ An example of the observables section in the parameter file can be found in the 
 
 
 
-### Simulations of local defects { #sec_simulationsLocalStrings }
+### Simulations of local strings { #sec_simulationsLocalStrings }
 
 In addition to models of global defects, CosmoLattice is also prepared to simulate local U(1) strings, using the $\texttt{defects_LocalStrings.h}$ model. This model implements a model with a complex scalar field charged under a U(1) gauge symmetry, with action
 [](){ #eq_localStringsAction }
 ```math
 \begin{equation}\label{eq_localStringsAction}
-S=-\int\text{d}^4x\sqrt{-g}\left\{\partial_\mu\varphi\partial^\mu\varphi+V_2[\phi_1, \phi_2]\right\}\,,
+S=-\int\text{d}^4x\sqrt{-g}\left\{(D^A_\mu\varphi)^*D_A^\mu\varphi+\frac{1}{2}F_{\mu\nu}F^{\mu\nu}+V_2[\phi_1, \phi_2]\right\}\,,
 \end{equation}
 ```
 where here $\phi_1$ and $\phi_2$ refer to the real and imaginary parts of the complex field, which are defined via, $\varphi=\frac{1}{\sqrt{2}}(\phi_1+i\phi_2)$., and the scalar potential is identical to that in Eq. \eqref{eq_globalDefectsPotential} for $N=2$. This model has a local U(1) symmetry which is spontaneously broken, leading to the formation of local cosmic strings. Their evolution is governed by the dynamics of the underlying fields, which follow the classical equations of motion,
@@ -329,14 +329,69 @@ As in the global case, the evoluton is performed with a Runge-Kuta algorithm, an
 
 #### Resolution-preserving techniques { #sec_ResolutionPreservingTechniquesLocal }
 
-CosmoLattice also allows for the use of resolution-preserving techniques for local strings, analogous to those used for global defects. In aprticular, the euqations of motion of the fields are modified to be
-
-Again, this is implemented in the code suing the `resolutionPreservingFactor` variable, that takes time dependent values according to Eq. \eqref{}. An important difference to the scalar case is that this factor enters the definition of the conjugate momentum of the gauge field,
-
+CosmoLattice also allows for the use of resolution-preserving techniques for local strings, analogous to those used for global defects. In aprticular, the equations of motion of the fields are modified to be
+[](){ #eq_localFatteningEOM }
+```math
+\begin{equation}\label{eq_localFatteningEOM}
+\left.\begin{array}{rcl}
+(a^2 \tilde{\varphi}')'  & = &a^2 \tilde{D}_{A,i}^-\tilde{D}_{A,i}^+ \tilde{\varphi} + \displaystyle -2 a^4 \left(\frac{a}{a_0}\right) ^ {2(s-1)}\tilde{\varphi} \left(|\tilde{\varphi}|^2 -\frac{1}{2}\right)\,,\\[10pt]
+\displaystyle \left[\left(\frac{a}{a_0}\right)^{-2(s-1)}\tilde{A}_i'\right]' & = &\displaystyle \left(\frac{a}{a_0}\right)^{-2(s-1)}\left[\tilde{\nabla}_j^-\tilde{\nabla}_j^+\tilde{A}_i - \tilde{\nabla}_j^-\tilde{\nabla}_i^+ \tilde{A}_j \right] +  2 a^2 e \left(\frac{\fstar}{\omegastar}\right)^2 \text{Im}[\tilde{\varphi}^* \tilde{D}_{A,i}^+ \tilde{\varphi}]\,,
+\end{array}\right.
+\end{equation}
+```
+Again, this is implemented in the code using the `resolutionPreservingFactor` variable, that takes time dependent values according to Eq. \eqref{eq_resolutionPreservingFactor}. An important difference to the scalar case is that this factor enters the definition of the conjugate momentum of the gauge field,
+[](){ #eq_localConjugateMomemtaFattening }
+```math
+\begin{equation}\label{eq_localFatteningEOM}
+\left.\begin{array}{rcl}
+(\tilde{\pi}_A)_i=\Lambda_\text{RP}^{-1}\tilde{A}_i'\,,
+\end{array}\right.
+\end{equation}
+```
 as well as definitions that involve the electric and magnetic energy of the U(1) field,
+[](){ #eq_localConjugateMomemtaFattening }
+```math
+\begin{equation}\label{eq_localFatteningEOM}
+K_{U(1)} & = & \displaystyle\frac{1}{2a^4\Lambda_\text{RP}} \sum_i E_i^2(\mathbf{n})\,,\\[10pt]
+K_{U(1)} & = & \displaystyle\frac{1}{2a^4\Lambda_\text{RP}} \sum_i B_i^2(\mathbf{n})\,.
+ \end{equation}
+```
+This factor similarly enters the definition of the anisotropic stress tensor acting as the source of gravitational waves---see .
 
-This factor similarly enters the definition of the
+
 
 #### Defect-specific observables { #sec_ObservablesLocal }
 
-Finally, CosmoLattice also incorporates some especific observables to study the dynamics and evolution of local strings. Contrary to the global case, the norm of the complex field and its corresponding power spectrum are measured by default in the $\texttt{.txt}$ and $\texttt{.txt}$ files, and so no additional measurement is performed by default. Note however, that the normalization of the field is different that in the global case, and the vacuum corresponds
+Finally, CosmoLattice also incorporates some especific observables to study the dynamics and evolution of local strings. Contrary to the global case, the norm of the complex field and its corresponding power spectrum are measured by default in the $\texttt{average_norm_cmplx_scalar_0.txt}$ and $\texttt{spectra_norm_cmplx_scalar_0.txt}$ files, and so no additional measurement is performed by default. Note however, that the normalization of the field is different that in the global case, and the vacuum corresponds to $\langle |\tilde\varphi|^2\rangle = 1/2.
+
+However, CosmoLattice makes it possible to measure the energy components of the comsic strings and the total length of the strings, which get saved in the $\texttt{average_defects.txt}$ output file. If one sets `measureDefectsEnergies = true` in the input file,this file will contain the average weighted energies,
+[](){ #eq_localStringsEnergies }
+```math
+\begin{equation}\label{eq_localStringsEnergies}
+\begin{array}{rcl}
+E_{K,\str}&=&\displaystyle\frac{\delta x^3}{a^3}\sum_{\mathbf{n}} W[\varphi(\mathbf{n})] |\pi_\varphi(\mathbf{n})|^2\,,\\[10pt]
+ E_{G,\str} & =&\displaystyle a\delta x^3\sum_{\mathbf{n}}\sum_i W[\varphi(\mathbf{n})]|D_{A,i}^+\varphi(\mathbf{n})|^2\,,\\[10pt]
+E_{V,\str}&=&\displaystyle a^3\delta x^3 \sum_{\mathbf{n}} W[\varphi(\mathbf{n})] V[\varphi(\mathbf{n})]\,,\\[10pt]
+ E_{E,\str} & =&\displaystyle\frac{a}{2}\sum_{{\mathbf{n}}}W[\varphi(\mathbf{n})] \sum_i E_i^2(\mathbf{n})\,,\\[10pt]
+ E_{B,\str} & = &\displaystyle \frac{1}{2a}\sum_{\mathbf{n}} W[\varphi(\mathbf{n})] \sum_i B_i^2(\mathbf{n})\,,
+\end{array}
+\end{equation}
+```
+where the weight function is analogous to the one used for global defects
+[](){ #eq_localWeightFunction }
+```math
+\begin{equation}\label{eq_localWeightFunction}
+W[\varphi]=\frac{4V[\varphi]}{\lambda v^4}\,\Theta\left(\frac{v^2}{2}-|\varphi|^2\right)\,,
+\end{equation}
+```
+
+Second, if `measureDefectsStructure = true` is indicated in the parameter file, the last column of the $\texttt{average_defects.txt}$ file would correspond to the total length of the strings, measured from the number of pierced plaquettes as indicated in Eq. \eqref{eq_lengthGlobal}. Recall we define a pierced plaquette as that one with a non-zero winding number. In the case of local strings, this is defined as in Eq. (), where now the contribution from each link is
+[](){ #eq_phaseVariation }
+```math
+\begin{equation}\label{eq_phaseVariation-local}
+Y_i(\mathbf{n})=\left[g_AQ_A^\varphi \delta x A_i(\mathbf{n})+\theta(\mathbf{n})-\theta(\mathbf{n}+\hat{\imath})\right]_\pi- g_AQ_A^\varphi\delta x A_i(\mathbf{n})\,
+\end{equation}
+```
+with $\theta$ the phase of the complex field.
+
+
