@@ -1,21 +1,20 @@
+<!-- ## Canonical field theory { #subsec_eomCont } -->
 
-In Cosmology, the Universe is considered to be described by a homogeneous and isotropic spacetime background, characterized by the *Friedmann–Lemaître–Robertson–Walker* (FLRW) line element
+In Cosmology, we consider the Universe to be well described by a homogeneous and isotropic background characterized by the *Friedmann–Lemaître–Robertson–Walker* (FLRW) line element, which we write as
 [](){ #eq_FLRWmetric }
 ```math
 \begin{equation}
 d s^2 \equiv g_{\mu\nu}d x^\mu d x^\nu = - d t^2 + a^2(t) \delta_{ij} d x^i d x^j \ , \label{eq_FLRWmetric}
 \end{equation}
 ```
-where $t$ is the cosmic time, and $a(t)$ is the scale factor. It is useful to define a new time variable $\eta$ through the relation
+with $t$ the cosmic time and $a(t)$ the scale factor. It is useful to define a new time coordinate $\eta$ through the relation
 [](){ #eq_auto_001 }
 ```math
-\begin{equation} 
-d \eta \equiv a^{-\alpha} (t) dt \ ,\label{eq_auto_001} 
-\end{equation}
+\begin{equation} d \eta \equiv a^{-\alpha} (t) dt \ ,\label{eq_auto_001} \end{equation}
 ```
-with $\alpha$ a real number conveniently chosen for each problem at hand. We refer to $\eta$ as the **$\alpha$-time**, and note that for $\alpha=1$, it represents the *conformal time*, whereas for $\alpha=0$, we recover cosmic time. In general, we will keep $\alpha$ as an unspecified real number, writing all the relevant equations in terms of $\alpha$-time. Only when a physical problem is chosen, then one needs to make a concrete choice for $\alpha$.
+where $\alpha$ is a real number conveniently chosen for a given problem at hand. We denote $\eta$ as the **$\alpha$-time**, and note that it represents cosmic and conformal time for $\alpha=0,1$, respectively. In the following, we will keep $\alpha$ as an unspecified real number, writing all the relevant equations in terms of $\alpha$-time. 
 
-The evolution of the scale factor is dictated by the stress-energy tensor of the matter fields, which in order to be compatible with the statistical homogeneity and isotropy of the universe, it must take the form of a *perfect fluid* as
+The evolution of the scale factor is dictated by the stress-energy tensor of the matter fields, which in order to be compatible with the statistical homogeneity and isotropy of the universe, it must take the form of a $perfect fluid$ as
 [](){ #eq_stresstensor }
 ```math
 \begin{equation} {\bar T}_{\mu \nu} \equiv (\bar\rho + \bar p )u_{\mu} u_{\nu} + \bar p g_{\mu \nu}  \ , \hspace{0.4cm} g_{\mu \nu} u^{\mu} u^{\nu} = -1 \hspace{0.4cm} \Longrightarrow \hspace{0.4cm}   \begin{cases}
@@ -35,12 +34,10 @@ is the four-velocity of a fluid at rest. The evolution of the scale factor is de
 ```
 where ${f}' \equiv \text{d} f/ \text{d} \eta$ and $m_p \simeq 2.435\cdot10^{18}$ GeV is the reduced Planck mass. 
 
-## Canonical Field Theory { #subsec_eomCont }
-
 <!-- 
 In Section [Lattice-Cosmology Reviews](MonographicReviews.md) we present the lattice formulation of different theories involving scalar and/or gauge fields, based on the techniques introduced in [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md). In order to introduce notation, 
  -->
-We introduce now the equations of motion resulting in a scalar-gauge theory with three kinds of canonically-normalized scalar fields: a real scalar singlet $\phi$, a $U(1)$-charged complex scalar field $\varphi$, and a $[SU(N) \times U(1)]$-charged doublet scalar field $\Phi$. In the last two cases, there are also present, respectively, Abelian and non-Abelian gauge fields, $A_{\mu}$ and $C_{\mu} \equiv C_{\mu}^a T_a$, with $T_a$ the $N^2-1$ group generators, satisfying the $SU(N)$ Lie algebra properties $[T_a, T_b] = i f_{abc} T_c$ , ${\rm Tr}(T_a) = 0$ , ${\rm Tr}(T_a T_b) = \frac{1}{2} \delta_{ab}$, and $T^{\dagger}_a = T_a$, with $f_{abc}$ the totally anti-symmetric *structure constants* of the group, and $[\cdot,\cdot]$ the usual matrix commutator. In the particular case of $SU(2)$, $T_a \equiv \sigma_a / 2$, $a=1,2,3$, with $\sigma_a$ the *Pauli matrices*, and $f_{abc} = \epsilon_{abc}$ the total anti-symmetric tensor. The scalar fields can be explicitly written in terms of real components as follows,
+We discuss now the equations of motion resulting in a scalar-gauge theory with three kinds of canonically-normalized scalar fields: a real scalar singlet $\phi$, a $U(1)$-charged complex scalar field $\varphi$, and a $[SU(N) \times U(1)]$-charged doublet scalar field $\Phi$. In the last two cases, there are also present, respectively, Abelian and non-Abelian gauge fields, $A_{\mu}$ and $C_{\mu} \equiv C_{\mu}^a T_a$, with $T_a$ the $N^2-1$ group generators, satisfying the $SU(N)$ Lie algebra properties $[T_a, T_b] = i f_{abc} T_c$ , ${\rm Tr}(T_a) = 0$ , ${\rm Tr}(T_a T_b) = \frac{1}{2} \delta_{ab}$, and $T^{\dagger}_a = T_a$, with $f_{abc}$ the totally anti-symmetric *structure constants* of the group, and $[\cdot,\cdot]$ the usual matrix commutator. In the particular case of $SU(2)$, $T_a \equiv \sigma_a / 2$, $a=1,2,3$, with $\sigma_a$ the *Pauli matrices*, and $f_{abc} = \epsilon_{abc}$ the total anti-symmetric tensor. The scalar fields can be explicitly written in terms of real components as follows,
 [](){ #eq_ChargedScalars }
 ```math
 \begin{eqnarray} \label{eq_ChargedScalars}
@@ -169,13 +166,13 @@ Here is the same text with all \tilde, \widetilde, and \widetilde{...} removed, 
 \hspace{0.1cm};\hspace{0.75cm}
 \left\lbrace
 \begin{array}{rcl}
-{K}_{U(1)} &=& \frac{1}{2 a^{2 + 2 \alpha}} \sum_{i} F_{0i}^2
+{K}_{U(1)} &=& \frac{1}{2 a^{2 + 2 \alpha}} ( {\omega_* \over f_*} )^2  \sum_{i} F_{0i}^2
 \\
-{K}_{SU(2)} &=& \frac{1}{2 a^{2 + 2 \alpha}}  \sum_{a,i} (G_{0i}^a)^2
+{K}_{SU(2)} &=& \frac{1}{2 a^{2 + 2 \alpha}} ( {\omega_* \over f_*} )^2 \sum_{a,i} (G_{0i}^a)^2
 \\
-{G}_{U(1)} &=& \frac{1}{2 a^4}  \sum_{i,j < i} F_{ij}^2
+{G}_{U(1)} &=& \frac{1}{2 a^4} ( {\omega_* \over f_*} )^2 \sum_{i,j < i} F_{ij}^2
 \\
-{G}_{SU(2)} &=& \frac{1}{2 a^4}  \sum_{a,i,j < i}  (G_{ij}^a)^2    . \\
+{G}_{SU(2)} &=& \frac{1}{2 a^4} ( {\omega_* \over f_*} )^2 \sum_{a,i,j < i}  (G_{ij}^a)^2    . \\
 \end{array}\right.
 \\\nonumber\\
 \text{(Kinetic-Scalar)} \hspace{5cm} \text{(Gradient-Scalar)} \hspace{6.5cm} \text{(Electric & Magnetic)} \hspace{3.0cm}\nonumber
@@ -191,31 +188,8 @@ If the fields dominate the energy budget of the Universe, the expansion rate can
 \\
 \label{eq_FriedmannD2a}
 {a''\over a} &= \frac{a^{2 \alpha}}{3} \left( \frac{f_*}{m_p}\right)^2 \left[ (\alpha-2)(E_K^{\phi} + E_K^{\varphi} + E_K^{\Phi}) + \alpha(E_G^{\phi} + E_G^{\varphi} + E_G^{\Phi}) + (\alpha + 1)E_V \right.\\
-& \hspace{18cm}\left. +  (\alpha-1)(E_K^A + E_K^B + E_G^A + E_G^B) \right]  ,\nonumber
+& \hspace{8.1cm}\left. +  (\alpha-1)(E_K^A + E_K^B + E_G^A + E_G^B) \right]  ,\nonumber
 \end{align}
 ```
-with $\langle \dots \rangle$ denoting an average over sufficiently large volumes that encompass all relevant wavelengths of the fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we use Eq. (\ref{eq_FriedmannD2a}) to solve for the scale factor, while monitoring that the constraint equation (\ref{eq_FriedmannHub}) is verified throughout the evolution to some desired accuracy, see Section [*Evolution Algorithms*][subsec_Algorithms]. 
-
-
-## Non-Canonical Field Theories { #subsec_eomNonCanonical }
-
-To be added soon ...
-
-**Scalar Non-Minimally Coupled to Gravity**
-
-**Non-Minimal Kinetic Scalar Theories**
-
-**Axion-Gauge interactions**
-
-## Scalar-Gauge-Fluid Dynamics { #subsec_eomFluids }
-
-To be added soon ...
-
-**Fluid Dynamics**
-
-**Scalar-Fluid Dynamics**
-
-**Gauge-Fluid Dynamics**
-
-<!-- **Scalar-Gauge-Fluid Dynamics** -->
+with $\langle \dots \rangle$ denoting an average over a sufficiently large volume to encompass all relevant wavelengths of the fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we use Eq.~(\ref{eq_FriedmannD2a}) to solve for the scale factor, while monitoring that the constraint equation (\ref{eq_FriedmannHub}) is verified throughout the evolution to some desired accuracy, see Section [*Evolution Algorithms*][subsec_Algorithms]. 
 
