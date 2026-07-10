@@ -57,7 +57,7 @@ body.nav-collapsed .md-sidebar--primary {
     padding-left: 0.1rem; /* DGF: changed from 1.4*/
 }
 
-/* Added by Dani on June 15th 2026, to justify all text paragraphs in the website 	*/
+/* Added by DGF on June 15th 2026, to justify all text paragraphs in the website 	*/
 .md-typeset p {
     text-align: justify;
 }
