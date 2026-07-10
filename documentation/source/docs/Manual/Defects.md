@@ -195,7 +195,7 @@ In CosmoLattice, the resolution-preserving technique outline above is implemente
 1  & \quad\quad\quad\quad\quad \tau < \tau_\text{RP,0}\,,\\
 \left[\frac{a(\tau)}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau_\text{RP,0} \leq \tau < \tau_{RP, max}\,, \\
 \left[\frac{a(\tau_{RP,max})}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau \geq \tau_{RP, max}\,. \\
-\end{array}\right\.
+\end{array}\right.
 \end{equation}
 ```
 where we note it is kept fixed after the resolution preserving-phase has ended. The value of this parameter is saved as the last column in the $\texttt{average_scale_factor.txt}$ file if a defects model (`DefectsModel = true`) is simulated, irrespective of whether it contains a resolution-preserving phase or not.
@@ -371,15 +371,15 @@ Finally, CosmoLattice also incorporates some especific observables to study the 
 
 In particular, it is possible to measure two types of observables:
 
--  If `measureDefectsEnergies = true`, the energy components of the cosmic strings, measured using a window function centered in the strings, are saved to $\texttt{defectS_observables.txt}$. These are defined as
+-  If `measureDefectsEnergies = true`, the energy components of the cosmic strings, measured using a window function centered in the strings, are saved to $\texttt{defects_observables.txt}$. These are defined as
 [](){ #eq_localStringsEnergies }
 ```math
 \begin{equation}\label{eq_localStringsEnergies}
 \begin{array}{rcl}
-<!-- E_{K,\text{str}}&=&\displaystyle\frac{\delta x^3}{a^3}\sum_{\mathbf{n}} W[\varphi(\mathbf{n})] |\pi_\varphi(\mathbf{n})|^2\,,\\[10pt] -->
- E_{G,\text{str}} & =&\displaystyle a\delta x^3\sum_{\mathbf{n}}\sum_i W[\varphi(\mathbf{n})]|D_{A,i}^+\varphi(\mathbf{n})|^2\,,\\[10pt]
-E_{V,\text{str}}&=&\displaystyle a^3\delta x^3 \sum_{\mathbf{n}} W[\varphi(\mathbf{n})] V[\varphi(\mathbf{n})]\,,\\[10pt]
- E_{E,\text{str}} & =&\displaystyle\frac{a}{2}\sum_{{\mathbf{n}}}W[\varphi(\mathbf{n})] \sum_i E_i^2(\mathbf{n})\,,\\[10pt]
+E_{K,\text{str}}&=&\displaystyle\frac{\delta x^3}{a^3}\sum_{\mathbf{n}} W[\varphi(\mathbf{n})] |\pi_\varphi(\mathbf{n})|^2\,,\\[5pt]
+ E_{G,\text{str}} & =&\displaystyle a\delta x^3\sum_{\mathbf{n}}\sum_i W[\varphi(\mathbf{n})]|D_{A,i}^+\varphi(\mathbf{n})|^2\,,\\[5pt]
+E_{V,\text{str}}&=&\displaystyle a^3\delta x^3 \sum_{\mathbf{n}} W[\varphi(\mathbf{n})] V[\varphi(\mathbf{n})]\,,\\[5pt]
+ E_{E,\text{str}} & =&\displaystyle\frac{a}{2}\sum_{{\mathbf{n}}}W[\varphi(\mathbf{n})] \sum_i E_i^2(\mathbf{n})\,,\\[5pt]
  E_{B,\text{str}} & = &\displaystyle \frac{1}{2a}\sum_{\mathbf{n}} W[\varphi(\mathbf{n})] \sum_i B_i^2(\mathbf{n})\,,
 \end{array}
 \end{equation}
