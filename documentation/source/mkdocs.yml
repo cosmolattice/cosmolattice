@@ -196,7 +196,7 @@ nav:
       #- "<span style='font-weight:bold;'>Non-Abelian Gauge Theories</span>": "Manual/My first model of gauge fields.md"#
       - "<span style='font-weight:bold;'>Axion-Gauge Interactions (ANDER) </span>": "Manual/ALP.md"
       - "<span style='font-weight:bold;'>Non-Minimal Interactions (NICO) </span>": "Manual/NMC.md"
-      - "<span style='font-weight:bold;'>Cosmic Defects (JORGE) </span>": "Manual/Defects.md"
+      - "<span style='font-weight:bold;'>Cosmic Defects </span>": "Manual/Defects.md"
       - "<span style='font-weight:bold;'>Gravitational Waves (N & J) </span>": "Manual/GW.md"
       - "<span style='font-weight:bold;'>Initial Conditions (J, N, A) </span>": "Manual/IC.md"
       - "<span style='font-weight:bold;'>Output Observables (J, N, A) </span>": "Manual/Observables.md"
