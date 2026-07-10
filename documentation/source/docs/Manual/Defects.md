@@ -356,8 +356,10 @@ as well as definitions that involve the electric and magnetic energy of the U(1)
 [](){ #eq_localEnergiesFattening }
 ```math
 \begin{equation}\label{eq_localEnergiesFattening}
+\begin{array}{rcl}
 K_{U(1)} & = & \displaystyle\frac{1}{2a^4\Lambda_\text{RP}} \sum_i E_i^2(\mathbf{n})\,,\\[10pt]
 G_{U(1)} & = & \displaystyle\frac{1}{2a^4\Lambda_\text{RP}} \sum_i B_i^2(\mathbf{n})\,.
+\end{array}
  \end{equation}
 ```
 This factor similarly enters the definition of the anisotropic stress tensor acting as the source of gravitational waves---see [**Gravitational waves**](GW.md).
