@@ -208,7 +208,7 @@ nav:
           - "<span style='font-size:0.95em;'>&nbsp;&nbsp;Expression Templates </span>": "Manual/Expression Templates.md"
       #- "<span style='font-size:0.95em;'>&nbsp;&nbsp;Acknowledgments </span>": "Manual/Acknowledgments.md"
       - "<span style='font-size:0.95em;'>&nbsp;&nbsp;Input File Builder </span>": "code/InputBuilder.md"
-      - "<span style='font-weight:bold;'>Appendices (A & F, ALL) </span>": "Manual/Appendix: Parameters.md.md"
+      - "<span style='font-weight:bold;'>Appendices (A & F, ALL) </span>": "Manual/Appendix: Parameters.md"
       - "<span style='font-size:0.95em;'>&nbsp;&nbsp;Appendix: Parameters </span>": "Manual/Appendix_Parameters.md"
       - "<span style='font-size:0.95em;'>&nbsp;&nbsp;Appendix: Generic Model variables </span>": "Manual/Appendix_Generic_Model_variables.md"
       #- "<span style='font-size:0.95em;'>&nbsp;&nbsp;Appendix: CMake Flags </span>": "Manual/Appendix_CMake_Flags.md"
