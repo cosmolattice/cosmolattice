@@ -92,7 +92,7 @@ Furthermore, the self-consistent expansion is governed by the Friedmann equation
 
 ### **Model and input files for axion-U(1) theories** { #subsec_ALPInput }
 
-The example model $\texttt{axionU1m2phi.h}$ contains one scalar singlet, $N_s=1$, which represents the axion-like particle, and one $U(1)$ gauge field, $N_{U(1)}=1$. The potential consists of a single term, $N_{\rm pot}=1$, given by
+The example model $\texttt{axionU1_m2phi.h}$ contains one scalar singlet, $N_s=1$, which represents the axion-like particle, and one $U(1)$ gauge field, $N_{U(1)}=1$. The potential consists of a single term, $N_{\rm pot}=1$, given by
 
 [](){ #eq_AxionExamplePotential }
 ```math
@@ -144,7 +144,7 @@ The parameter syntax, <!-- command-line overrides,  --> lattice parameters, outp
 | `alphaLambda_AxionU1` | Dimensionless coupling constant $\alpha_{\Lambda}$ between the axion-like particle and the $U(1)$ gauge field. In this model there is one ALP, so one value is expected. |
 | `mass` | Mass $m$ of the axion-like particle in GeV. In this model there is one ALP, so one value is expected. |
 | `evolver` | Axion-gauge models  can only  be used with of the Runge-Kutta evolvers, such as `RK2`, `RK3_3`, `RK3_4`, or `RK4_5`. |
-| `tNonLinearAxionU1` | If a value between `t0` and `max` is specified for this variable, the evolution up to this value will take place in what is known as the *linear regime*. Further details are provided in Section [*Linear Regime*][sec_evolution-axionU1_linear_regime]. |
+| `tNonLinearAxionU1` | If a value between `t0` and `tmax` is specified for this variable, the evolution up to this value will take place in what is known as the *linear regime*. Further details are provided in Section [*Linear Regime*][sec_evolution-axionU1_linear_regime]. |
 | `flagChiralPS` | Setting this parameter to `true` triggers the generation of the $\texttt{spectra_chiral_U1_0.txt}$ and $\texttt{spectra_chiral_Elec_U1_0.txt}$ files, which contain the chiral spectra $A^{\pm}$ and $E^{\pm}$, respectively. More details are provided in the [*Output*][subsubsec_output] part of this section. |
 
 Standard scalar-singlet parameters still apply. In particular, `initial_amplitudes` and `initial_momenta` contain only one entry, corresponding to the axion field $\phi$. A typical command-line override is
@@ -155,7 +155,7 @@ which runs the model on a $64^3$ lattice and sets $\alpha_{\Lambda}=13$ and $m=1
 
 #### Fixed background expansion
 
-This model can also be run in a fixed expanding background, analogously to the scalar-singlet setup around Eq. ([*11*](My first model of (singlet) scalar fields.md#eq_ScaleFactorPowerLaw)). This is activated with
+This model can also be run in a fixed expanding background. This is activated with
 
 ```text
 expansion = true
@@ -168,22 +168,27 @@ In that case, the scale factor is not sourced by the lattice fields, but by an e
 
 #### Output files { #subsubsec_output }
 
-An axion-$U(1)$ simulation generates the standard output files for both the scalar-singlet (the axion) and the $U(1)$ gauge field sectors, following the default conventions described in Sections [A] and [B]. The specific features and additional files for this module are:
+An axion-$U(1)$ simulation generates the standard output files for both the scalar-singlet (the axion) and the $U(1)$ gauge field sectors, following the default conventions described in Section [Scalar-Gauge Interactions](My first model of gauge fields.md). The specific features and additional files for this module are:
 
-*   **Gauss Constraint**: The Gauss constraint evaluation is adapted to the specific axion-$U(1)$ expression given in Eq. [C], but the file output format remains identical to the standard gauge setup.
-*   **Energy Conservation**: When evolving within the *linear regime* (see Section [B]), the total energy density calculation used for the energy conservation check does not include the contribution from the gauge sector.
-*   **Chiral Spectra**: If `flagChiral = true`, the module generates additional output files containing the chiral spectra:
+*   **Gauss Constraint**: The Gauss constraint evaluation is adapted to the specific axion-$U(1)$ expression given in Eq.$~$\eqref{eqn:Gauss_pralpha}, but the file output format remains identical to the standard gauge setup.
+*   **Energy Conservation**: When evolving within the *linear regime* (see Section [*Output*][sec_evolution-axionU1_linear_regime]), the total energy density calculation used for the energy conservation check does not include the contribution from the gauge sector.
+*   **Chiral Spectra**: If `flagChiral = true`, the module generates additional output files containing the chiral spectra of the gauge field and conjugate momentum.
 
-    <span style="color:red">Briefly explain the code part where this is computed.</span>
+The procedure for computing the power spectra follows the standard methodology of CosmoLattice. The additional step required in this module consists of projecting the gauge fields and their conjugate momenta from the Cartesian basis, $(A_i, E_i)$, into the chiral basis, $(A^{\pm}, E^{\pm})$. 
 
-    *   $\texttt{spectra\_chiral\_U1\_0.txt}$: Chiral power spectra of the $U(1)$ gauge field, containing the columns:  
-        $\hspace{1cm}$ $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{A}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{A}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
-    *   $\texttt{spectra\_chiral\_Elec\_U1\_0.txt}$: Chiral power spectra of the $U(1)$ electric field, containing the columns:  
-        $\hspace{1cm}$ $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{E}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{E}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
+This transformation is performed using a chiral projector, which is explicitly constructed in $\texttt{include/CosmoInterface/definitions/chiralpowerspectrum.h}$. The reader is referred to chapter 4 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme] for a detailed definition and mathematical construction of this chiral projector in both the continuum theory and the discrete lattice formulation.
+
+The specific outputs are:
+
+* $\texttt{spectra_chiral_U1_0.txt}$: Chiral power spectra of the $U(1)$ gauge field, containing the columns:  
+  $\hspace{1cm}$ $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{A}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{A}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
+* $\texttt{spectra_chiral_Elec_U1_0.txt}$: Chiral power spectra of the $U(1)$ electric field, containing the columns:  
+  $\hspace{1cm}$ $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{E}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{E}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
+
 
 ### **The axion-U(1) model file** { #sec_TheALPModelFile }
 
-To define a new axion-$U(1)$ model, start from the example model file $\texttt{models/m2phi2_axionU1.h}$. You simply define the total number of scalar fields and gauge fields in the `ModelPars` structure, and activate the interaction via the coupling manager:
+To define a new axion-$U(1)$ model, start from the example model file $\texttt{models/axionU1_m2phi2.h}$. You simply define the total number of scalar fields and gauge fields in the `ModelPars` structure, and activate the interaction via the coupling manager:
 
 @emgithub(models/axionU1_m2phi2.h:model_pars)
 
@@ -225,11 +230,9 @@ This is a particular example of a potential, any other option can be tested by c
 
 #### Initialization of the fields present { #sec_InitAxionU1 }
 
-By default, the simulation initializes each chirality of the $U(1)$ gauge field and the electric field using the Bunch-Davies solution, while the longitudinal components of both fields are set to zero. Consequently, the user does not need to specify any additional initialization parameters in the input file, as these initial conditions are automatically applied across the momentum range $[k_{\rm IR}, k_{\rm UV}]$.
+By default, the simulation initializes each chirality of the $U(1)$ gauge field and the electric field using the Bunch-Davies solution, while the longitudinal components of both fields are set to zero. Consequently, the user does not need to specify any additional initialization parameters in the input file for the abelian gauge sector, as these initial conditions are automatically applied across the momentum range $[\tilde{k}_{\rm IR}, \tilde{k}_{\rm UV}]$.
 
 Furthermore, to satisfy the initial Gauss constraint—which, under these initial conditions, implies that the divergence of the electric field vanishes—the scalar field and its time derivative are set to be initially homogeneous. Their initial values are determined entirely by the standard parameters provided in the input file. For a more detailed discussion on the theoretical background and the current implementation of this procedure, see [*Bunch-Davies transverse Abelian fields*](IC.md#subsubsec_BunchDaviesTransverseU1IC).
-
-
 
 
 #### Evolution equations { #sec_evolution-axionU1 }
@@ -262,7 +265,7 @@ where the lattice kernels for the fields are given by:
 [](){ #eq_explicitEOMKernels }
 ```math
 \begin{align}
-\mathcal{K}^{\rm L}_{\phi}={}&a^{1+\alpha} \sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi} - a^{\alpha+3}\frac{d\tilde{V}(\tilde{\phi})}{d\tilde{\phi}} + \left(\frac{\omega^2_{*}}{f_{*}m_p}\right)\alpha_\Lambda a^{\alpha-1}\sum_i \left(\tilde{\pi}_{A}\right)_{i}^{(2)}\tilde{B}_i^{(4)} \;, \label{eq:explicitEOMscalarKernelAlpha} \\
+\mathcal{K}^{\rm L}_{\phi}={}&a^{1+\alpha} \sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi} - a^{\alpha+3}\widetilde V_{,\tilde\phi} + \left(\frac{\omega^2_{*}}{f_{*}m_p}\right)\alpha_\Lambda a^{\alpha-1}\sum_i \left(\tilde{\pi}_{A}\right)_{i}^{(2)}\tilde{B}_i^{(4)} \;, \label{eq:explicitEOMscalarKernelAlpha} \\
 \mathcal{K}^{\rm L}_{A_i} ={}& - a^{1+\alpha} \sum_{j,k} \epsilon_{ijk} \tilde{\nabla}_j^- \tilde{B}_k- \left(\frac{f_{*}}{m_p}\right) \frac{\alpha_\Lambda a^{\alpha-3}}{2}\left(\tilde{\pi}_{\phi} \tilde{B}_i^{(4)} + \tilde{\pi}_{\phi,+i}\tilde{B}^{(4)}_{i,+i} \right) + \left(\frac{f_{*}}{m_p}\right)\frac{\alpha_\Lambda a^{\alpha-1}}{4} \sum_\pm \sum_{j,k} \epsilon_{ijk}  \left\{ \left[ (\tilde{\nabla}_j^\pm \tilde{\phi}) \left(\tilde{\pi}_{A}\right)_{k,\pm j}^{(2)} \right]_{+i} +  \left[ (\tilde{\nabla}_j^\pm \tilde{\phi}) \left(\tilde{\pi}_A\right)_{k,\pm j}^{(2)}   \right] \right\} \;, \label{eq:explicitEOMgaugeKernelAlpha}
 \end{align}
 ```
@@ -276,9 +279,9 @@ and the scale factor kernel reads:
 \end{align}
 ```
 
-The matter kernels $\mathcal{K}_{\phi}^{\rm L}$ and $\mathcal{K}_{A_i}^{\rm L}$ represent the discrete lattice formulations that govern the dynamical evolution of the system. All terms not coupled to the axion-like parameter $\alpha_\Lambda$ follow the standard spatial discretization that strictly respects lattice gauge invariance. This default procedure can be reviewed in Section [A/B] or in [*The Art of CosmoLattice I*](https://arxiv.org/abs/2006.15122).
+The matter kernels $\mathcal{K}_{\phi}^{\rm L}$ and $\mathcal{K}_{A_i}^{\rm L}$ represent the discrete lattice formulations that govern the dynamical evolution of the system. All terms not coupled to the axion-like parameter $\alpha_\Lambda$ follow the standard spatial discretization that strictly respects lattice gauge invariance. This default procedure can be reviewed in Section [Scalar-Gauge Interactions](My first model of gauge fields.md) or in $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl].
 
-However, due to the chiral coupling between the axion-like particle (ALP) and the Abelian gauge field, the lattice formulation must additionally capture the topological nature of the $\phi F\tilde{F}$ term while preserving the aforementioned gauge symmetries. To achieve this, we make use of the redefined discrete electric and magnetic fields, $\left(\tilde{\pi}_{A}\right)^{(2)}_i$ and $\tilde{B}^{(4)}_i$, which are defined at each lattice site $\mathbf{n}$ as:
+However, due to the chiral coupling between the axion-like particle and the Abelian gauge field, the lattice formulation must additionally capture the topological nature of the $\phi F\tilde{F}$ term while preserving the aforementioned gauge symmetries. To achieve this, we make use of the redefined discrete electric and magnetic fields, $\left(\tilde{\pi}_{A}\right)^{(2)}_i$ and $\tilde{B}^{(4)}_i$, which are defined at each lattice site $\mathbf{n}$ as:
 [](){ #eq_DiscreteAveragedFields }
 ```math
 \begin{align}
@@ -293,9 +296,9 @@ The use of these specifically averaged operators guarantees that we:
 
 *   Preserve the continuous topological properties and gauge invariances at the discrete level.
 *   Maintain the standard second-order spatial accuracy, $\mathcal{O}(dx^2)$.
-*   Satisfy the discrete Bianchi identities structurally.
+*   Satisfy the discrete Bianchi identities.
 
-For a comprehensive technical discussion of this lattice gauge-invariant implementation, the reader is referred to [The Art of CosmoLattice II](https://arxiv.org/abs/2108.01086) or to the original papers where this topological lattice formulation was first introduced (see e.g. [Cuissa & Figueroa (2020)](https://arxiv.org/abs/2002.04656)).
+For a comprehensive technical discussion of this lattice gauge-invariant implementation, the reader is referred to chapter 4 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme] or to the original paper where this lattice formulation was first introduced Ref. [@Figueroa:2017qmv] . Moreover, the user can find the all the coupling terms of the kernels in $\texttt{include/CosmoInterface/definitions/axioncouplings.h}$ and the functions of the redefined electric and magnetic field in $\texttt{TempLat/lattice/algebra/axionalgebra/electricfield2.h}$ and $\texttt{TempLat/lattice/algebra/axionalgebra/magneticfield4.h}$.
 
 
 
@@ -312,29 +315,32 @@ Higher-order RK algorithms can be used if better time-integration accuracy is ne
 
 #### Linear Regime { #sec_evolution-axionU1_linear_regime }
 
-#### Linear regime { #eq_linear-regime-axionU1 }
+The linear regime represents a specific simplified case of the full dynamics where the backreaction from the gauge sector onto the axion field is switched off. Operationally, this means the topological backreaction term proportional to $\sum_i \left(\tilde{\pi}_A\right)_i^{(2)}\tilde{B}_i^{(4)}$ is explicitly removed from the axion equation of motion on the lattice. 
 
-The linear regime represents a specific simplified case of the full dynamics where the backreaction from the gauge sector onto the axion field is switched off on the lattice. Operationally, this means the topological backreaction term proportional to $\sum_i \tilde{E}_i^{(2)}\tilde{B}_i^{(4)}$ is explicitly removed from the axion equation of motion. 
-
-As a direct consequence of neglecting this backreaction, no spatial gradients are generated for the axion field, causing the spatial Laplacian to vanish ($\sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi} = 0$). In turn, this spatial homogeneity implies that the discrete terms containing spatial derivatives of the axion field, $(\tilde{\nabla}_j^\pm \tilde{\phi})$—which constitute the lattice counterpart of the continuous $\epsilon_{ijk}\partial_j\phi E_k$ term—become strictly zero. 
+As a direct consequence of neglecting this backreaction, no spatial gradients are generated for the axion field, causing the spatial Laplacian to vanish ($\sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi} = 0$). In turn, this spatial homogeneity implies that the discrete terms containing spatial derivatives of the axion field in the gauge field kernel become strictly zero ($\sum_\pm \sum_{j,k} \epsilon_{ijk}  \left\{ \left[ (\tilde{\nabla}_j^\pm \tilde{\phi}) \left(\tilde{\pi}_{A}\right)_{k,\pm j}^{(2)} \right]_{+i} +  \left[ (\tilde{\nabla}_j^\pm \tilde{\phi}) \left(\tilde{\pi}_A\right)_{k,\pm j}^{(2)}   \right]\right\}=0$). 
 
 Accounting for these simplifications, the discrete lattice kernels actually evolved in the linear regime reduce to:
 [](){ #eq_linearEOMKernels }
 ```math
 \begin{align}
-\mathcal{K}^{\rm L}_{\phi}[a,\tilde{\phi},a',\tilde{\pi}_{\phi}] ={}& -(3-\alpha)\frac{a'}{a}\tilde{\pi}_{\phi} - a^{2\alpha}\frac{d\tilde{V}(\tilde{\phi})}{d\tilde{\phi}} \;, \label{eq:linearEOMscalarKernel} \\
-\mathcal{K}^{\rm L}_{A_i}[a,\tilde{\phi},\tilde{A}_j,a',\tilde{\pi}_{\phi},\tilde{E}_j] ={}& (\alpha-1)\frac{a'}{a}\tilde{E}_i - a^{2(\alpha-1)} \sum_{j,k} \epsilon_{ijk} \tilde{\nabla}_j^- \tilde{B}_k \nonumber\\
-& - \left(\frac{f_{*}}{m_p}\right) \frac{\alpha_\Lambda a^{\alpha-1}}{2}\left(\tilde{\pi}_{\phi} \tilde{B}_i^{(4)} + \tilde{\pi}_{\phi,+i}\tilde{B}^{(4)}_{i,+i} \right) \;. \label{eq:linearEOMgaugeKernel}
+\mathcal{K}^{\rm L}_{\phi}={}& - a^{\alpha+3}\widetilde V_{,\tilde\phi} \;, \label{eq:linearEOMscalarKernel} \\
+\mathcal{K}^{\rm L}_{A_i} ={}&  - a^{2(1+\alpha)} \sum_{j,k} \epsilon_{ijk} \tilde{\nabla}_j^- \tilde{B}_k - \left(\frac{f_{*}}{m_p}\right) \frac{\alpha_\Lambda a^{\alpha-3}}{2}\left(\tilde{\pi}_{\phi} \tilde{B}_i^{(4)} + \tilde{\pi}_{\phi,+i}\tilde{B}^{(4)}_{i,+i} \right) \;. \label{eq:linearEOMgaugeKernel}
 \end{align}
 ```
 
-Additionally, the contribution of the gauge sector to the cosmic expansion is completely eliminated in the linear regime. The energy density of the gauge fields is omitted from both the dynamical evolution of the scale factor and the evaluation of the Friedmann (Hubble) constraint. Since the axion field remains homogeneous (setting the axion gradient energy to zero, $\tilde{E}^{\phi}_{G} = 0$), the scale factor kernel simplifies to:
+Additionally, the contribution of the gauge sector to the cosmic expansion is completely eliminated in the linear regime. The energy density of the gauge fields is omitted from both the dynamical evolution of the scale factor and the Hubble constraint. Since the axion field remains homogeneous (setting the axion gradient energy to zero, $\tilde{E}^{\phi}_{G} = 0$), the scale factor kernel simplifies to:
 [](){ #eq_linearScaleFactorKernel }
 ```math
 \begin{align}
 \label{eq:linearScaleFactorKernel}
-\mathcal{K}_{a}^{\rm L}[a,\tilde{E}^{\phi}_{K},\tilde{E}^{\phi}_{V}] = \left(\frac{f_{*}}{m_{\text{p}}}\right)^2\frac{a^{2\alpha+1}}{3}\left[(\alpha-2)\tilde{E}^{\phi}_{K}+(\alpha+1)\tilde{E}^{\phi}_{V}\right]\,.
+\mathcal{K}_{a}^{\rm L} = \left(\frac{f_{*}}{m_{\text{p}}}\right)^2\frac{a^{2\alpha+1}}{3}\left[(\alpha-2)\tilde{E}^{\phi}_{K}+(\alpha+1)\tilde{E}^{\phi}_{V}\right]\,.
 \end{align}
 ```
+
+The motivation for simulating linearly from an initial time `t0` up to `ttNonLinearAxionU1`, and only then switching to the full non-linear dynamics until `tmax`, stems from the physical behavior of the initial state. In certain scenarios, the UV tail of the initial Bunch-Davies vacuum solution can unphysically dominate the dynamics rather than remaining subdominant.
+
+Through this multi-stage procedure, we allow the gauge modes to first undergo chiral excitation within the homogeneous scalar field background. Once this physical excitation grows to dominate over the unphysical UV tail, the full non-linear dynamics can be safely activated. Crucially, this transition must be triggered before the backreaction of the gauge sector becomes non-negligible.
+
+Note that any preliminary analysis—such as determining the optimal time thresholds, assessing the impact of the UV tail for the specific range of momentum modes simulated on the lattice, etc.—is not performed by CosmoLattice. It is the user's responsibility to carry out these checks beforehand to ensure the correct and physical application of this hybrid evolution scheme.
 
 
