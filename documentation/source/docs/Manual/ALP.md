@@ -92,7 +92,7 @@ Furthermore, the self-consistent expansion is governed by the Friedmann equation
 
 ### **Model and input files for axion-U(1) theories** { #subsec_ALPInput }
 
-The example model $\texttt{m2phi_axionU1.h}$ contains one scalar singlet, $N_s=1$, which represents the axion-like particle, and one $U(1)$ gauge field, $N_{U1}=1$. The potential consists of a single term, $N_{\rm pot}=1$, given by
+The example model $\texttt{axionU1m2phi.h}$ contains one scalar singlet, $N_s=1$, which represents the axion-like particle, and one $U(1)$ gauge field, $N_{U(1)}=1$. The potential consists of a single term, $N_{\rm pot}=1$, given by
 
 [](){ #eq_AxionExamplePotential }
 ```math
@@ -137,15 +137,15 @@ The corresponding input file is $\texttt{models/parameter-files/axionU1_m2phi2.i
 
 @emgithub(models/parameter-files/axionU1_m2phi2.in)
 
-The parameter syntax, <!-- command-line overrides,  --> lattice parameters, output frequencies, and scalar initial conditions are the same as in Section [*Running the program with an input parameter file*](My first model of (singlet) scalar fields.md#subsec_Input-Scalars). The Axion-Guage specific additions are:
+The parameter syntax, <!-- command-line overrides,  --> lattice parameters, output frequencies, and scalar initial conditions are the same as in Section [*Running the program with an input parameter file*](My first model of (singlet) scalar fields.md#subsec_Input-Scalars). The axion-gauge specific additions are:
 
 | **Parameters** <div style="width:150px"> | **Explanation** |
 | ---------------------------------------- | --------------- |
 | `alphaLambda_AxionU1` | Dimensionless coupling constant $\alpha_{\Lambda}$ between the axion-like particle and the $U(1)$ gauge field. In this model there is one ALP, so one value is expected. |
 | `mass` | Mass $m$ of the axion-like particle in GeV. In this model there is one ALP, so one value is expected. |
 | `evolver` | Axion-gauge models  can only  be used with of the Runge-Kutta evolvers, such as `RK2`, `RK3_3`, `RK3_4`, or `RK4_5`. |
-| `tNonLinearAxionU1` | If a value between `t0` and `max` is specified for this variable, the evolution up to this value will take place in what is known as the *linear regime*. Further details are provided in Section [B]. |
-| `flagChiralPS` | Setting this parameter to `true` triggers the generation of the $\texttt{spectra_chiral_U1_0.txt}$ and $\texttt{spectra_chiral_Elec_U1_0.txt}$ files, which contain the chiral spectra $A^{\pm}$ and $E^{\pm}$, respectively. More details are provided in Section [*External power spectrum for scalar singlet initialization*](IC.md#subsubsec_ExternalPSSingletIC). |
+| `tNonLinearAxionU1` | If a value between `t0` and `max` is specified for this variable, the evolution up to this value will take place in what is known as the *linear regime*. Further details are provided in Section [*Linear Regime*][sec_evolution-axionU1_linear_regime]. |
+| `flagChiralPS` | Setting this parameter to `true` triggers the generation of the $\texttt{spectra_chiral_U1_0.txt}$ and $\texttt{spectra_chiral_Elec_U1_0.txt}$ files, which contain the chiral spectra $A^{\pm}$ and $E^{\pm}$, respectively. More details are provided in the [*Output*][subsubsec_output] part of this section. |
 
 Standard scalar-singlet parameters still apply. In particular, `initial_amplitudes` and `initial_momenta` contain only one entry, corresponding to the axion field $\phi$. A typical command-line override is
 ```bash
@@ -166,13 +166,16 @@ H0 = ...
 
 In that case, the scale factor is not sourced by the lattice fields, but by an external homogeneous component with constant equation of state $\omega_{\rm EoS}$.
 
-#### Output files
+#### Output files { #subsubsec_output }
 
 An axion-$U(1)$ simulation generates the standard output files for both the scalar-singlet (the axion) and the $U(1)$ gauge field sectors, following the default conventions described in Sections [A] and [B]. The specific features and additional files for this module are:
 
 *   **Gauss Constraint**: The Gauss constraint evaluation is adapted to the specific axion-$U(1)$ expression given in Eq. [C], but the file output format remains identical to the standard gauge setup.
 *   **Energy Conservation**: When evolving within the *linear regime* (see Section [B]), the total energy density calculation used for the energy conservation check does not include the contribution from the gauge sector.
 *   **Chiral Spectra**: If `flagChiral = true`, the module generates additional output files containing the chiral spectra:
+
+    <span style="color:red">Briefly explain the code part where this is computed.</span>
+
     *   $\texttt{spectra\_chiral\_U1\_0.txt}$: Chiral power spectra of the $U(1)$ gauge field, containing the columns:  
         $\hspace{1cm}$ $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{A}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{A}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
     *   $\texttt{spectra\_chiral\_Elec\_U1\_0.txt}$: Chiral power spectra of the $U(1)$ electric field, containing the columns:  
@@ -229,7 +232,7 @@ Furthermore, to satisfy the initial Gauss constraint—which, under these initia
 
 
 
-#### Evolution equations { #eq_evolution-axionU1 }
+#### Evolution equations { #sec_evolution-axionU1 }
 
 For self-consistent expansion, CosmoLattice evolves the fields by solving a set of first-order differential equations. Defining the conjugate momenta
 [](){ #eq_AxionU1momentum }
@@ -305,4 +308,33 @@ evolver = RK2
 ```
 
 Higher-order RK algorithms can be used if better time-integration accuracy is needed. During the run, CosmoLattice always monitors the Friedmann constraint using the total energy density, while the dynamical update of the scale factor is performed through the kernel equation defined above.
+
+
+#### Linear Regime { #sec_evolution-axionU1_linear_regime }
+
+#### Linear regime { #eq_linear-regime-axionU1 }
+
+The linear regime represents a specific simplified case of the full dynamics where the backreaction from the gauge sector onto the axion field is switched off on the lattice. Operationally, this means the topological backreaction term proportional to $\sum_i \tilde{E}_i^{(2)}\tilde{B}_i^{(4)}$ is explicitly removed from the axion equation of motion. 
+
+As a direct consequence of neglecting this backreaction, no spatial gradients are generated for the axion field, causing the spatial Laplacian to vanish ($\sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi} = 0$). In turn, this spatial homogeneity implies that the discrete terms containing spatial derivatives of the axion field, $(\tilde{\nabla}_j^\pm \tilde{\phi})$—which constitute the lattice counterpart of the continuous $\epsilon_{ijk}\partial_j\phi E_k$ term—become strictly zero. 
+
+Accounting for these simplifications, the discrete lattice kernels actually evolved in the linear regime reduce to:
+[](){ #eq_linearEOMKernels }
+```math
+\begin{align}
+\mathcal{K}^{\rm L}_{\phi}[a,\tilde{\phi},a',\tilde{\pi}_{\phi}] ={}& -(3-\alpha)\frac{a'}{a}\tilde{\pi}_{\phi} - a^{2\alpha}\frac{d\tilde{V}(\tilde{\phi})}{d\tilde{\phi}} \;, \label{eq:linearEOMscalarKernel} \\
+\mathcal{K}^{\rm L}_{A_i}[a,\tilde{\phi},\tilde{A}_j,a',\tilde{\pi}_{\phi},\tilde{E}_j] ={}& (\alpha-1)\frac{a'}{a}\tilde{E}_i - a^{2(\alpha-1)} \sum_{j,k} \epsilon_{ijk} \tilde{\nabla}_j^- \tilde{B}_k \nonumber\\
+& - \left(\frac{f_{*}}{m_p}\right) \frac{\alpha_\Lambda a^{\alpha-1}}{2}\left(\tilde{\pi}_{\phi} \tilde{B}_i^{(4)} + \tilde{\pi}_{\phi,+i}\tilde{B}^{(4)}_{i,+i} \right) \;. \label{eq:linearEOMgaugeKernel}
+\end{align}
+```
+
+Additionally, the contribution of the gauge sector to the cosmic expansion is completely eliminated in the linear regime. The energy density of the gauge fields is omitted from both the dynamical evolution of the scale factor and the evaluation of the Friedmann (Hubble) constraint. Since the axion field remains homogeneous (setting the axion gradient energy to zero, $\tilde{E}^{\phi}_{G} = 0$), the scale factor kernel simplifies to:
+[](){ #eq_linearScaleFactorKernel }
+```math
+\begin{align}
+\label{eq:linearScaleFactorKernel}
+\mathcal{K}_{a}^{\rm L}[a,\tilde{E}^{\phi}_{K},\tilde{E}^{\phi}_{V}] = \left(\frac{f_{*}}{m_{\text{p}}}\right)^2\frac{a^{2\alpha+1}}{3}\left[(\alpha-2)\tilde{E}^{\phi}_{K}+(\alpha+1)\tilde{E}^{\phi}_{V}\right]\,.
+\end{align}
+```
+
 
