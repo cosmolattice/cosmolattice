@@ -191,11 +191,185 @@ If the fields dominate the energy budget of the Universe, the expansion rate can
 \\
 \label{eq_FriedmannD2a}
 {a''\over a} &= \frac{a^{2 \alpha}}{3} \left( \frac{f_*}{m_p}\right)^2 \left[ (\alpha-2)(E_K^{\phi} + E_K^{\varphi} + E_K^{\Phi}) + \alpha(E_G^{\phi} + E_G^{\varphi} + E_G^{\Phi}) + (\alpha + 1)E_V \right.\\
-& \hspace{18cm}\left. +  (\alpha-1)(E_K^A + E_K^B + E_G^A + E_G^B) \right]  ,\nonumber
+& \hspace{2cm} \left. +  (\alpha-1)(E_K^A + E_K^B + E_G^A + E_G^B) \right]  ,\nonumber
 \end{align}
 ```
 with $\langle \dots \rangle$ denoting an average over sufficiently large volumes that encompass all relevant wavelengths of the fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we use Eq. (\ref{eq_FriedmannD2a}) to solve for the scale factor, while monitoring that the constraint equation (\ref{eq_FriedmannHub}) is verified throughout the evolution to some desired accuracy, see Section [*Evolution Algorithms*][subsec_Algorithms]. 
 
+**Dynamics of gravitational waves**
+
+Gravitational waves are transverse and traceless tensor perturbations, $h_{ij}$, of the background metric. Considering the FLRW solution as the background metric, the perturbed line element (in $\alpha$-time) is
+[](){ #eq_GWmetric }
+```math
+\begin{align}
+\label{eq_GWmetric}
+ds^2
+=
+-a^{2\alpha}(\eta)d\eta^2
++a^2(\eta)\left(\delta_{ij}+h_{ij}\right)dx^idx^j\,,
+\end{align}
+```
+which are transverse, $\partial_i h_{ij}=0$, and traceless, $h_{ii}=0$. In the linearized gravity regime, the equation of motion of GWs reads
+[](){ #eq_GWEOMcontinuum }
+```math
+\begin{align}
+\label{eq_GWEOMcontinuum}
+h_{ij}''
++(3-\alpha){a'\over a}h_{ij}'
+-a^{-2(1-\alpha)}\nabla^2h_{ij}
+=
+{2\over m_p^2a^{2(1-\alpha)}}\Pi_{ij}^{\rm TT} \,.
+\end{align}
+```
+GWs are sourced by the transverse-traceless (TT) part of the anisotropic stress tensor, $\Pi_{ij}^{\rm TT}$. For a generic background fluid, this anisotropic stress tensor takes the form,
+[](){ #eq_GWAnisotropicStress }
+```math
+\begin{align}
+\label{eq_GWAnisotropicStress}
+\Pi_{ij}
+\equiv
+T_{ij}-\bar p\,g_{ij},
+\end{align}
+```
+In the practive, however, it is more convenient to define an effective anisotropic strees tensor containing only those contributions to $\Pi_{ij}$ that have a non-zero TT projection. For example, for a generic model consisting of canonically normalized scalars and Abelian fields, this takes the form,
+[](){ #eq_GWEffectiveAnisotropicStress }
+```math
+\begin{align}
+\label{eq_GWAnisotropicStress}
+\Pi_{ij}^\mathrm{eff}=\sum_a \nabla_i\phi_a \nabla_j\phi_a+2\sum_b \text{Re}\left[\left(D_i^A\varphi_b)^*D_j^A\varphi_b\right]-a^{-2\alpha}E_iE_j-a^{-2}B_iB_j\,,
+\equiv
+\end{align}
+```
+from which the source of GWs is obtained after TT projection. This operation is non-local in real space, but corresponds to an algebraic relation in Fourier space,
+[](){ #eq_GWTTsourceProjection }
+```math
+\begin{align}
+\label{eq_GWTTsourceProjection}
+\Pi_{ij}^{\rm TT}({\bf k},\eta)
+=
+\Lambda_{ij,lm}(\hat{\bf k})\Pi_{lm}^{\rm eff}({\bf k},\eta)\,,
+\end{align}
+```
+where the Fourier-space TT projector takes the form,
+[](){ #eq_GWTTprojector }
+```math
+\begin{align}
+\label{eq_GWTTprojector}
+\Lambda_{ij,lm}(\hat{\bf k})
+&\equiv
+P_{il}(\hat{\bf k})P_{jm}(\hat{\bf k})
+-{1\over2}P_{ij}(\hat{\bf k})P_{lm}(\hat{\bf k})\,,\quad\quad \text{with}\quad\quad P_{ij}(\hat{\bf k})
+&\equiv
+\delta_{ij}-\hat k_i\hat k_j\,,
+\end{align}
+```
+and $\hat k_i\equiv {k_i\over k}$. This guarantees the projected tensor is both transverse, $k_i\Pi_{ij}^{\rm TT}=0$, and traceless, $\Pi_{ii}^{\rm TT}=0$.
+
+Numerically solving Eq.$~$\eqref{eq_GWEOMcontinuum} directly requires to determine the TT projected anisotropic stress tensor every time the GWs need to be evolved, which is a very costly operation. An alternative was proposed in Ref. [@GarciaBellido_2008], based on the use of auxiliary fields sourced by $\Pi_{ij}^\text{eff}$. While the original proposad used six unphysical degrees of freedom to simulate the GWs, it is possible to reduce this number to five, as discussed in $\mathtt{The~Art{\text -}II}$ [@BaezaBallesteros_2025tme],  by using a symmetric traceless tensor of auxiliary fields, $v_{ij}$, which obeys $v_{33}=-(v_{11}+v_{22})$. If these fields are evolved following
+[](){ #eq_GWvEOM }
+```math
+\begin{align}
+\label{eq_GWvEOM}
+v_{ij}''
++(3-\alpha){a'\over a}v_{ij}'
+-a^{-2(1-\alpha)}\nabla^2v_{ij}
+=
+{2\over m_p^2a^{2(1-\alpha)}}
+\left[
+\Pi_{ij}^{\rm eff}
+-{1\over3}\delta_{ij}\Pi_{kk}^{\rm eff}\,.
+\right],
+\end{align}
+```
+then the physical degrees of freedom can be recovered at any time by TT projection,
+[](){ #eq_GWvToh }
+```math
+\begin{align}
+\label{eq_GWvToh}
+h_{ij}({\bf k},\eta)
+=
+\Lambda_{ij,lm}(\hat{\bf k})v_{lm}({\bf k},\eta)\,.
+\end{align}
+```
+This is the algorithm used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the evolution of GWs.
+
+Finally, it is worth mentioning about GW observables. The most relevant quantity related to GWs is the energy density of the GW background,
+[](){ #eq_GWrhoContinuum }
+```math
+\begin{align}
+\label{eq_GWrhoContinuum}
+\rho_{\rm GW}(\eta)
+&=
+{m_p^2\over 4a^{2\alpha}V}
+\int_V d^3{\bf x}\,
+h'_{ij}({\bf x},\eta)h'_{ij}({\bf x},\eta)
+\\
+&\simeq
+{m_p^2\over 4a^{2\alpha}V}
+\int_V {d^3{\bf k}\over(2\pi)^3}
+h'_{ij}({\bf k},\eta)h_{ij}^{\prime *}({\bf k},\eta)
+\\
+&\equiv
+\int {d\rho_{\rm GW}\over d\log k}d\log k \,,
+\end{align}
+```
+from which the spectral density can be defined as
+[](){ #eq_GWrhoSpectrumContinuum }
+```math
+\begin{align}
+\label{eq_GWrhoSpectrumContinuum}
+\left({d\rho_{\rm GW}\over d\log k}\right)(k,\eta)
+=
+{m_p^2 k^3\over 8\pi^2a^{2\alpha}V}
+\int {d\Omega_k\over4\pi}\,
+h'_{ij}(\hat{\bf k},k,\eta)h_{ij}^{\prime *}(\hat{\bf k},k,\eta)\,.
+\end{align}
+```
+For stochastic sources the volume average can be replaced by an ensemble average $\langle...\rangle$ over the independent realizations of the tensor fluctuations,
+[](){ #eq_stochasticPS }
+```math
+\begin{align}
+\rho_{\rm GW}(\eta)
+&= \dfrac{m_p^2}{4a^{2\alpha}}
+\left\langle h'_{ij}({\bf x},\eta) h_{ij}^{\prime *}({\bf x},\eta)\right\rangle
+\nonumber \\
+&= \dfrac{m_p^2}{4a^{2\alpha}}
+\int \dfrac{\text{d}^3{\bf k}}{(2\pi)^3}
+\dfrac{\text{d}^3{\bf k'}}{(2\pi)^3}
+e^{-i {\bf x}\cdot({\bf k} - {\bf k'})}
+\left\langle h'_{ij}({\bf k},\eta) h_{ij}^{\prime *}({\bf k'},\eta)\right\rangle
+\nonumber \\
+&\equiv
+\dfrac{m_p^2}{8\pi^2a^{2\alpha}}
+\int\dfrac{\text{d}k}{k} k^3 P_{h'}(k,\eta)\,,
+\label{eq_stochasticPS}
+\end{align}
+```
+where we have introduced the power spectrum of the time derivative of $h_{ij}$,
+[](){ #eq_stochasticPS_2 }
+```math
+\begin{align}
+\left\langle h'_{ij}({\bf k},\eta)h_{ij}^{\prime *}({\bf k'},\eta) \right\rangle
+=
+(2\pi)^3 P_{h'}(k,\eta)\delta^{(3)}({\bf k} - {\bf k'})\,.
+\label{eq_stochasticPS_2}
+\end{align}
+```
+In addition to the energy density, one usually also defines the fractional GW energy density power spectrum as
+[](){ #eq_GWOmegaContinuum }
+```math
+\begin{align}
+\label{eq_GWOmegaContinuum}
+\Omega_{\rm GW}(k,\eta)
+\equiv
+{1\over\rho_\text{c}}{d\rho_{\rm GW}\over d\log k}
+=
+{k^3\over 24\pi^2\mathcal H^2}P_{h'}(k,\eta)
+=
+{k^3\over 24\pi^2a^{2\alpha}H^2}P_{h'}(k,\eta)\,.
+\end{align}
+```
+where $\rho_\text{c}=3m_p^2 H^2$ is the critical energy density.
 
 ## Non-Canonical Field Theories { #subsec_eomNonCanonical }
 
