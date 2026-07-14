@@ -507,7 +507,28 @@ The corresponding code path is `initializePlaneWavesZeroBU1` in `include/CosmoIn
 
 #### Bunch-Davies transverse Abelian fields { #subsubsec_BunchDaviesTransverseU1IC }
 
-**To be expanded by Ander**
+When `ICtype_U1 = BunchDavisTransverseU1` is selected, CosmoLattice initializes the gauge and electric fields using the Bunch-Davies (BD) vacuum solution. The BD solutions for the chiral modes are given by:
+```math
+A^{\pm}_k = \frac{1}{\sqrt{2k}}e^{ik/aH} \;, \quad E^{\pm}_k = -\frac{i}{a} \sqrt{\frac{k}{2}}e^{ik/aH}  \;.
+```
+This initialization implies that both fields are strictly transverse, meaning their longitudinal components are exactly zero. 
+
+To achieve this, the initialization routine calls `BunchDavisTransverseU1` (located in $\texttt{CosmoInterface/initializers/fluctuationsgenerator.h}$), which executes the following sequence of steps:
+
+1. **RGF Initialization**: First, it generates Random Gaussian Field fluctuations with a unit variance for both the gauge and electric fields. This is performed in the exact same way as described in [*External power spectrum for scalar singlet initialization*][subsubsec_ExternalPSSingletIC], but applied independently to each spatial component of the vector field.
+
+2. **Transverse Projection**: A transverse projector is constructed and applied to the generated fluctuations. The discrete lattice transverse projector in momentum space is defined as:
+    ```math
+    \Pi^{L}_{ij}(\tilde{\mathbf{n}}) = \delta_{ij} - \frac{k_{\text{L},i} k_{\text{L},j}}{k_{\text{L}}^2} \;.
+    ```
+    
+    Physically, the BD vacuum solutions correspond to the chiral basis. To ensure the absence of a longitudinal part in the Cartesian basis (i.e., enforcing $\nabla \cdot \mathbf{E} = 0$), we must project out the longitudinal modes. Since the BD amplitudes for both the plus ($+$) and minus ($-$) chiral polarizations are identical, applying this standard symmetric transverse projector is entirely sufficient. This avoids the need for chiral projector utilized in [*Output*][subsubsec_output] of [*Axion-Gauge Interactions*](ALP.md).
+
+3. **Phase Shift Application**: The correct relative phase shift between the gauge field and the electric field is properly established. In complex space, the BD vacuum solution dictates a strict $\pi/2$ phase difference between the field and its conjugate momentum. Assigning this phase accurately is crucial to eliminate unphysical fluctuations during the subsequent temporal evolution.
+
+4. **Amplitude Assignment**: Finally, the physical BD amplitudes are assigned according.
+
+In the specific case of the axion-gauge coupling, combining these transverse initial conditions for the Abelian field with a strictly homogeneous initial scalar (axion) field guarantees that the Gauss constraint is satisfied to machine precision at the beginning of the simulation.
 
 ### **Non-Abelian gauge fields** { #subsec_NonAbelianGaugeIC }
 
