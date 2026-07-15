@@ -196,7 +196,29 @@ If the fields dominate the energy budget of the Universe, the expansion rate can
 ```
 with $\langle \dots \rangle$ denoting an average over sufficiently large volumes that encompass all relevant wavelengths of the fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we use Eq. (\ref{eq_FriedmannD2a}) to solve for the scale factor, while monitoring that the constraint equation (\ref{eq_FriedmannHub}) is verified throughout the evolution to some desired accuracy, see Section [*Evolution Algorithms*][subsec_Algorithms]. 
 
-**Dynamics of gravitational waves**
+## Non-Canonical Field Theories { #subsec_eomNonCanonical }
+
+To be added soon ...
+
+**Scalar Non-Minimally Coupled to Gravity**
+
+**Non-Minimal Kinetic Scalar Theories**
+
+**Axion-Gauge interactions**
+
+## Scalar-Gauge-Fluid Dynamics { #subsec_eomFluids }
+
+To be added soon ...
+
+**Fluid Dynamics**
+
+**Scalar-Fluid Dynamics**
+
+**Gauge-Fluid Dynamics**
+
+<!-- **Scalar-Gauge-Fluid Dynamics** -->
+
+## Gravitational Waves { #subsec_eomGWs }
 
 Gravitational waves are transverse and traceless tensor perturbations, $h_{ij}$, of the background metric. Considering the FLRW solution as the background metric, the perturbed line element (in $\alpha$-time) is
 [](){ #eq_GWmetric }
@@ -370,26 +392,3 @@ In addition to the energy density, one usually also defines the fractional GW en
 \end{align}
 ```
 where $\rho_\text{c}=3m_p^2 H^2$ is the critical energy density.
-
-## Non-Canonical Field Theories { #subsec_eomNonCanonical }
-
-To be added soon ...
-
-**Scalar Non-Minimally Coupled to Gravity**
-
-**Non-Minimal Kinetic Scalar Theories**
-
-**Axion-Gauge interactions**
-
-## Scalar-Gauge-Fluid Dynamics { #subsec_eomFluids }
-
-To be added soon ...
-
-**Fluid Dynamics**
-
-**Scalar-Fluid Dynamics**
-
-**Gauge-Fluid Dynamics**
-
-<!-- **Scalar-Gauge-Fluid Dynamics** -->
-

@@ -1,10 +1,10 @@
 <!-- <div style="text-align: justify;"> -->
 
-In this section we explain, step by step, how to implement a model of interactive scalar fields in CosmoLattice. We focus on scalar fields that are not charged under a gauge symmetry, which will be referred to as *singlet-scalar* fields. <!-- For the dynamics of **charged scalar** fields, let it be under an Abelian or a non-Abelian gauge symmetry, see instead Section [Scalar-Gauge Interactions](My first model of gauge fields.md).  --> **This section is particularly relevant for a newcomer to CosmoLattice: besides explaining how to deal with singlet-scalar fields, it also introduces along the way relevant definitions and basic functionalities that are common to other field dynamics**. We introduce all the necessary concepts throughout the implementation of a basic two-field preheating scenario, which serves as a reference example. 
+In this section we explain, step by step, how to implement a model of interactive scalar fields in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. We focus on scalar fields that are not charged under a gauge symmetry, which will be referred to as *singlet-scalar* fields. <!-- For the dynamics of **charged scalar** fields, let it be under an Abelian or a non-Abelian gauge symmetry, see instead Section [Scalar-Gauge Interactions](My first model of gauge fields.md).  --> **This section is particularly relevant for a newcomer to $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$: besides explaining how to deal with singlet-scalar fields, it also introduces along the way relevant definitions and basic functionalities that are common to other field dynamics**. We introduce all the necessary concepts throughout the implementation of a basic two-field preheating scenario, which serves as a reference example. 
 
-After following this section, the reader will have enough information to implement in CosmoLattice any model involving interacting singlet-scalar fields. Readers interested in including gauge fields and their interactions with charged scalars, should go to Section [Scalar-gauge interactions](My first model of gauge fields.md). However, we only recommend to jump into scalar-gauge theories at this point, if the reader is already familiar with the lattice formulation of scalar-scalar interactions for singlets, that we provide precisely here below. 
+After following this section, the reader will have enough information to implement in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ any model involving interacting singlet-scalar fields. Readers interested in including gauge fields and their interactions with charged scalars, should go to Section [Scalar-gauge interactions](My first model of gauge fields.md). However, we only recommend to jump into scalar-gauge theories at this point, if the reader is already familiar with the lattice formulation of scalar-scalar interactions for singlets, that we provide precisely here below. 
 
-This section is structured as follows. In Section [*Program variables*][subsec_LatticeScalars] we first introduce the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer. In Section [*The model*][sec_ScTheModel] we present our example model and define its corresponding program variables and program potential. In Section [*My first run*][sec_MyFirstRun] we explain how to compile and run the code. After that, in Section [*The model file*][sec_TheModelFile] we walk the user through the *model file*, where the model details are actually implemented. Finally, in Section [*The singlet-scalar physics implemented in CosmoLattice*][sec_WhatHappensAuto], we present a summarized picture of what happens 'under the hood' in the code, discussing details on how the fields are initialized in a simulation, and how their dynamical evolution is solved. <!-- and how different measurements are obtained.  -->
+This section is structured as follows. In Section [*Program variables*][subsec_LatticeScalars] we first introduce the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer. In Section [*The model*][sec_ScTheModel] we present our example model and define its corresponding program variables and program potential. In Section [*My first run*][sec_MyFirstRun] we explain how to compile and run the code. After that, in Section [*The model file*][sec_TheModelFile] we walk the user through the *model file*, where the model details are actually implemented. Finally, in Section [*The singlet-scalar physics implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*][sec_WhatHappensAuto], we present a summarized picture of what happens 'under the hood' in the code, discussing details on how the fields are initialized in a simulation, and how their dynamical evolution is solved. <!-- and how different measurements are obtained.  -->
 
 
 <!-- </div> -->
@@ -12,6 +12,7 @@ This section is structured as follows. In Section [*Program variables*][subsec_L
 ### **Program variables** { #subsec_LatticeScalars }
 
 To describe the expansion of the universe, we consider a flat *Friedmann-Lemâitre-Robertson-Walker* (FLRW) background metric, described by the line element
+[](){ #eq_FLRWmetric }
 ```math
 \begin{equation}
 \text{d} s^2 = g_{\mu\nu}\text{d} x^\mu\text{d} x^\nu = - a(\eta)^{2 \alpha} \text{d} \eta^2 + a(\eta)^2 \delta_{ij} \text{d} x^i \text{d} x^j  , %\tag{29}
@@ -32,11 +33,11 @@ where $a(\eta)$ is the scale factor, $\delta_{ij}$ is the Euclidean metric, and 
     \end{align}
     ```
     
-    where $f_*$ and $\omega_*$ are two constants with dimensions of energy. Program variables, and any quantity defined in terms of them, will be tagged in this manual with the *diacritic* symbol '$\sim$'. The program variable re-scalings for space and time variables, $d\tilde\eta, d\tilde x^i$, will be universal in CosmoLattice, independently of the matter field content. Program variable re-scalings for matter fields other than singlet scalar fields, will be introduced later on, when dealing *e.g.* with gauge fields or fluid dynamics. 
+    where $f_*$ and $\omega_*$ are two constants with dimensions of energy. Program variables, and any quantity defined in terms of them, will be tagged in this manual with the *diacritic* symbol '$\sim$'. The program variable re-scalings for space and time variables, $d\tilde\eta, d\tilde x^i$, will be universal in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, independently of the matter field content. Program variable re-scalings for matter fields other than singlet scalar fields, will be introduced later on, when dealing *e.g.* with gauge fields or fluid dynamics. 
 
-Before simulating any particular model with CosmoLattice, the user must choose a certain set of values for $\{f_*,\omega_*,\alpha\}$, which will define the program variables used on the lattice via Eq.$~$\eqref{eq_FieldSpaceTimeNaturalVariables}. <!-- Eq. \eqref{eq_FieldSpaceTimeNaturalVariables}. --> The choice of $f_*$ and $\omega_*$ can be made arbitrary, as they only re-scale variables by constant factors. However, if we simulate a scenario in which, e.g. a resonance is triggered by an oscillatory field, it can be convenient to set $f_*$ and $\omega_*$ to the initial amplitude and oscillation frequency of that field respectively. This way, the numbers produced by the code will be close to unity, which will help with the interpretation of results. In general, in every scenario there is always a natural choice (at least of the order of magnitude) of $f_*$ and $\omega_*$, related to the typical field amplitudes and time scales of the problem. Choosing such natural values will help to interpret more easily --in a more intuitive physical manner--, the numbers that the code outputs.
+Before simulating any particular model with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, the user must choose a certain set of values for $\{f_*,\omega_*,\alpha\}$, which will define the program variables used on the lattice via Eq.$~$\eqref{eq_FieldSpaceTimeNaturalVariables}. <!-- Eq. \eqref{eq_FieldSpaceTimeNaturalVariables}. --> The choice of $f_*$ and $\omega_*$ can be made arbitrary, as they only re-scale variables by constant factors. However, if we simulate a scenario in which, e.g. a resonance is triggered by an oscillatory field, it can be convenient to set $f_*$ and $\omega_*$ to the initial amplitude and oscillation frequency of that field respectively. This way, the numbers produced by the code will be close to unity, which will help with the interpretation of results. In general, in every scenario there is always a natural choice (at least of the order of magnitude) of $f_*$ and $\omega_*$, related to the typical field amplitudes and time scales of the problem. Choosing such natural values will help to interpret more easily --in a more intuitive physical manner--, the numbers that the code outputs.
 
-A correct choice of $\alpha$ is perhaps more relevant and subtle. A wrong choice of $\alpha$ could actually spoil the stability of the numerical solution at late times. To see this, let us go back to the case of an oscillating homogeneous scalar field that dominates the energy budget of the Universe. Typical evolution algorithms operate with a constant time step, so it would be a good idea to choose $\alpha$ so that the oscillation frequency of the dominant field species is approximately constant, when expressed in the corresponding $\alpha$-time. In this way, we will be able to resolve each physical oscillation with a similar accuracy. For example, let us consider the common case of an oscillatory field, with monomial potential $V(\phi) \propto \phi^p$, that sources the expansion of the Universe. As described in $\mathtt{The~Art{\text -}I}$[@Figueroa_2020rrl] [see discussion around $Eqs.\,(457)-(464)$], the oscillation frequency will be initially constant if we choose
+A correct choice of $\alpha$ is perhaps more relevant and subtle. A wrong choice of $\alpha$ could actually spoil the stability of the numerical solution at late times. To see this, let us go back to the case of an oscillating homogeneous scalar field that dominates the energy budget of the Universe. Typical evolution algorithms operate with a constant time step, so it would be a good idea to choose $\alpha$ so that the oscillation frequency of the dominant field species is approximately constant, when expressed in the corresponding $\alpha$-time. In this way, we will be able to resolve each physical oscillation with a similar accuracy. For example, let us consider the common case of an oscillatory field, with monomial potential $V(\phi) \propto \phi^p$, that sources the expansion of the Universe. As described in $\mathtt{The~Art{\text -}I}$[@Figueroa_2020rrl] [see there discussion around $Eqs.\,(457)-(464)$], the oscillation frequency will be initially constant if we choose
 [](){ #eq_Alpha-PowLaw }
 ```math
 \begin{equation}
@@ -47,7 +48,7 @@ A correct choice of $\alpha$ is perhaps more relevant and subtle. A wrong choice
 
 We therefore recommend to use Eq. \eqref{eq_Alpha-PowLaw} for any scenario where there is an energetically dominant scalar field with potential $V(\phi) \propto \phi^p$. A more convenient choice of $\alpha$ in other scenarios must be done in a case by case basis.
 
-**Observation:** Readers familiar with $\texttt{LatticeEasy}$[@Felder_2000hq], might have notticed that the above transformations are similar to those carried out in that code to define their program variables, $\tilde\phi \equiv a^{r}A\phi, d\tilde\eta \equiv a^{s}Bdt,  d\tilde \equiv x^i B dx^i$, if we set $A = 1/f_*$, $B= \omega_*$, $r=0$, and $s=-\alpha$ in their notation. As we will see, contrary to $\texttt{LatticeEasy}$, the evolution algorithms implemented in CosmoLattice *don't require a conformal rescaling of the fields*, so we do not need to introduce a parameter analogous to $r$.
+**Observation:** Readers familiar with $\texttt{LatticeEasy}$[@Felder_2000hq], might have notticed that the above transformations are similar to those carried out in that code to define their program variables, $\tilde\phi \equiv a^{r}A\phi, d\tilde\eta \equiv a^{s}Bdt,  d\tilde \equiv x^i B dx^i$, if we set $A = 1/f_*$, $B= \omega_*$, $r=0$, and $s=-\alpha$ in their notation. As we will see, contrary to $\texttt{LatticeEasy}$, the evolution algorithms implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *don't require a conformal rescaling of the fields*, so we do not need to introduce a parameter analogous to $r$.
 
 
 ### **A simple model** { #sec_ScTheModel }
@@ -126,7 +127,7 @@ f_*=\overline{\phi}_{*}~ ,~ ~ \omega_*=\lambda^{1/2}  \overline{\phi}_*~,  ~~\al
 
 where $\overline{\phi}_{*}$ and $\lambda^{1/2} \overline{\phi}_*$ are the amplitude and oscillation frequency of the inflaton at the end of inflation, see *e.g.* Ref. [@Greene_1997fu]. The constant $\alpha$ was chosen according to Eq. \eqref{eq_Alpha-PowLaw}, which guarantees that the oscillation frequency remains approximately constant as long as the oscillatory inflaton field $\phi$ dominates the energy budget.
 
-In CosmoLattice, any theory involving scalar fields is implemented by means of the *program potential*, which is a dimensionless quantity defined in terms of the program variables. In our present example, it is written as 
+In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, any theory involving scalar fields is implemented by means of the *program potential*, which is a dimensionless quantity defined in terms of the program variables. In our present example, it is written as 
 [](){ #eq_PotNat }
 ```math
 \begin{align}%\tag{39}
@@ -191,13 +192,14 @@ and their partial contributions as ${\widetilde E}_K^{(n)}$, ${\widetilde E}_G^{
     
     ```
 
-We note that the numerical schemes implemented in CosmoLattice use the second-order differential Eq. \eqref{eq_NewFriedmannEQsII} to solve for the scale factor, whereas Eq. \eqref{eq_NewFriedmannEQsI} is used as a *constraint* equation to monitor the accuracy of the obtained solution.
+We note that the numerical schemes implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ use the second-order differential Eq. \eqref{eq_NewFriedmannEQsII} to solve for the scale factor, whereas Eq. \eqref{eq_NewFriedmannEQsI} is used as a *constraint* equation to monitor the accuracy of the obtained solution.
 
 ### **My first run** { #sec_MyFirstRun }
 
-CosmoLattice comes with a set of ready-to-run models, which are available in the folder $\texttt{models/}.~$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. \eqref{eq_potentialExampleI} [more precisely,  the program potential given in Eq. \eqref{eq_PotNat}]. We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with a set of ready-to-run models, which are available in the folder $\texttt{models/}.~$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. \eqref{eq_potentialExampleI} [more precisely,  the program potential given in Eq. \eqref{eq_PotNat}]. We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
 
-#### Compilation
+<!-- #### Compilation -->
+**Compilation**
 
 First, we need to choose the location where the code will be compiled. This can be anywhere on your machine. 
  <!-- **except in $\texttt{src/}$ or any of its sub-folders**.--> 
@@ -207,13 +209,13 @@ cd cosmolattice
 mkdir build
 cd build
 ```
-CosmoLattice uses CMake for compilation (see Section [Appendix: CMake Flags](Appendix_CMake_Flags.md) for more details). The model $\texttt{lphi4.h}$ is compiled by typing the following commands (<span style="color:red;">**CHANGE ?**</span>),
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ uses CMake for compilation (see Section [Appendix: CMake Flags](Appendix_CMake_Flags.md) for more details). The model $\texttt{lphi4.h}$ is compiled by typing the following commands (<span style="color:red;">**CHANGE ?**</span>),
 ```bash
 cmake -DMODEL=lphi4 ../
 make cosmolattice
 ```
 
-Some explanations are of order.  The last argument of the `cmake` command is the path to the CMake configuration file, which is located at the root of the CosmoLattice folders. In our case, its relative path with respect to the $\texttt{build/}$ folder is $\texttt{../}$. The first argument `-DMODEL=lphi4` is passed to CMake, and tells it to compile the model $\texttt{lphi4.h}$. Changing this argument to any other model present inside the folder $\texttt{models/}$ will determine which model will be compiled. Note that this is not a CosmoLattice-specific CMake argument, see Appendix [Appendix: CMake Flags](Appendix_CMake_Flags.md) for an exhaustive list.
+Some explanations are of order.  The last argument of the `cmake` command is the path to the CMake configuration file, which is located at the root of the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ folders. In our case, its relative path with respect to the $\texttt{build/}$ folder is $\texttt{../}$. The first argument `-DMODEL=lphi4` is passed to CMake, and tells it to compile the model $\texttt{lphi4.h}$. Changing this argument to any other model present inside the folder $\texttt{models/}$ will determine which model will be compiled. Note that this is not a $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$-specific CMake argument, see Appendix [Appendix: CMake Flags](Appendix_CMake_Flags.md) for an exhaustive list.
 
 !!! note "**Important Note**"
     Every time you call CMake, it is a good practice to first remove the $\texttt{CMakeCache.txt}$ file that was previously generated.
@@ -232,7 +234,7 @@ cmake  -DMYFFTW3_PATH="/path/to/fftw3/" -DMODEL=lphi4 ../   #And now this works!
 ```
 with $\texttt{/path/to/fftw3/}$ the path where *fftw3* is located. You can also call `make clean-cmake` to remove the $\texttt{CMakeCache.txt}$ file.
 
-If this solves your problem, you can avoid having to specify the FFTW path each time you compile by modifying line `52` of the $\texttt{CMakeLists.txt}$ file (located at the root of the CosmoLattice files), as highlighted below:
+If this solves your problem, you can avoid having to specify the FFTW path each time you compile by modifying line `52` of the $\texttt{CMakeLists.txt}$ file (located at the root of the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ files), as highlighted below:
 
 <div style="height:5px;"></div>
 
@@ -241,7 +243,9 @@ If this solves your problem, you can avoid having to specify the FFTW path each 
 where, again $\texttt{/path/to/fftw3/}$ is the path where fftw3 is located.
 -->
 
-#### Running the program with an input parameter file { #subsec_Input-Scalars }
+<!-- #### Running the program with an input parameter file { #subsec_Input-Scalars } -->
+[](){ #subsec_Input-Scalars }
+**Running the program with an input parameter file**
 
 Now that we have generated the executable $\texttt{lphi4}$, we are ready to run our first simulation as follows (<span style="color:red;">**CHANGE ?**</span>):
 ```bash
@@ -254,7 +258,7 @@ $\texttt{models/parameter-files/lphi4.in}$
 
 @emgithub(models/parameter-files/lphi4.in)
 
-One of the perks of using CosmoLattice is its very flexible way of handling parameters. The standard way of passing parameters to the program is to bundle them in an input file such as $\texttt{lphi4.in}$, and indicate its path when calling the program with the `input=...` argument. The structure of the input file is rather straightforward. First, if we want to pass a single parameter, we just write down its name followed by an equal sign, and then define its value. Second, if we are passing parameters that admit multiple values, these must be separated with white spaces, as e.g. in the following lines of $\texttt{lphi4.in}$, where we indicate the initial homogenous values of the field and conjugate momenta for both the inflaton and the daugther field: 
+One of the perks of using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is its very flexible way of handling parameters. The standard way of passing parameters to the program is to bundle them in an input file such as $\texttt{lphi4.in}$, and indicate its path when calling the program with the `input=...` argument. The structure of the input file is rather straightforward. First, if we want to pass a single parameter, we just write down its name followed by an equal sign, and then define its value. Second, if we are passing parameters that admit multiple values, these must be separated with white spaces, as e.g. in the following lines of $\texttt{lphi4.in}$, where we indicate the initial homogenous values of the field and conjugate momenta for both the inflaton and the daugther field: 
 
 @emgithub(models/parameter-files/lphi4.in:IC)
 
@@ -263,7 +267,7 @@ And third, the character `#` is use for comments, so everything following such c
 singleParameterName = value
 multipleParametersName = value1 value2 value3 ...
 ```
-A convenient feature of CosmoLattice is that we can also pass arguments directly through the console. Moreover, this feature can be used together with an input file: **even if the argument is already specified in the file, it will always be overwritten by the one passed through the command-line**. For instance,
+A convenient feature of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is that we can also pass arguments directly through the console. Moreover, this feature can be used together with an input file: **even if the argument is already specified in the file, it will always be overwritten by the one passed through the command-line**. For instance,
 ```bash
 ./lphi4 input=../models/parameter-files/lphi4.in N=64
 ```
@@ -300,7 +304,9 @@ An exhaustive list of all available parameters is given in Appendix [Appendix: P
 !!! note "Important"
     The parameters $\lbrace \tilde{k}_{\rm IR}, \tilde{L}, \delta \tilde x \rbrace$ characterize the lattice length scales, but not independently, as they obey the relations $\tilde{k}_{\rm IR} = 2\pi /\tilde L$ and $\tilde L \equiv N\delta \tilde x$. As $N$ must be always specified by the user, only one of the previous three parameters above must be specified by the user for a simulation, whereas the remaining two parameters will be automatically computed by the code. For example, the user could indicate the value of $\tilde{k}_{\rm IR}$ so that the code automatically obtains $\tilde L = 2\pi/\tilde{k}_{\rm IR}$ and $\delta \tilde x = \tilde L / N$. (<span style="color:red;">**is $\delta\tilde x$ really a parameter, or is it always derived ?**</span>)
 
-#### Outputs
+<!-- #### Outputs -->
+[](){ #subsec_Outputs }
+**Outputs**
 
 The code generates three different kinds of output files, classified according to the information they contain:
 
@@ -351,14 +357,16 @@ with $\left\langle ... \right\rangle_{R(\tilde {\bf n})}$ denoting angular avera
 -  $\texttt{[model_name].infos}$: Information about the run, such as parameter values, time of onset and end of the simulation, etc.
 
 !!! note "Important Note"
-     Definitions of the output variables just defined may vary in successive updates of CosmoLattice. For instance, whereas the form to calculate the scalar power spectrum $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$ was unique in CosmoLattice `v1.0`, in later versions (starting from CosmoLattice `v1.1`) we enabled the option to choose between different versions of a scalar field power spectrum. Check [**Observables**](Observables.md) for up-to-date definitions, and 
+     Definitions of the output variables just defined may vary in successive updates of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. For instance, whereas the form to calculate the scalar power spectrum $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$ was unique in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ `v1.0`, in later versions (starting from $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ `v1.1`) we enabled the option to choose between different versions of a scalar field power spectrum. Check [**Observables**](Observables.md) for up-to-date definitions, and 
      [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](../code/Versions.md) to follow the addition of new features (ranging from new definitions, options, algorithms, interactions, etc), as incorporated in successive versions of the code. 
 
 ### **The model file** { #sec_TheModelFile }
 
 To define a model, the only file we really need to modify/create is the corresponding *model file* specified through the `-DMODEL=...` argument of CMake. In the previous example, the model file used was $\texttt{lphi4.h}$. In the following, we will review carefully the contents of such file, so that you can imitate its structure to write a new model file $\texttt{myModel.h}$, for the simulation of any other scenario of (canonically normalized) interacting (singlet) scalar fields.
 
-#### Definition and declaration of the model { #subsubsec_DefAndDeclModel }
+<!-- #### Definition and declaration of the model { #subsubsec_DefAndDeclModel } -->
+[](){ #subsec_DefAndDeclModel }
+**Definition and declaration of the model**
 
 The first thing we need to do is to specify the matter content of our theory. In the above model example we have two scalar fields, with a potential composed by the sum of also two terms: the quartic potential of the inflaton, and the quadratic interaction between the inflaton and the daugther field, *c.f.* Eq. \eqref{eq_potentialExampleI}. This is indicated in the following extract of code of the file $\texttt{models/lphi4.h}$:
 @emgithub(models/lphi4.h:model_pars)
@@ -372,7 +380,9 @@ If we want to include more fields and/or further potential interactions, we simp
 Our customized model is then derived from this skeleton, as follows:
 @emgithub(models/lphi4.h:class_declaration)
 
-#### Setting-up the model
+<!-- #### Setting-up the model -->
+[](){ #subsec_SetUp }
+**Setting-up the model**
 
 The next step is to declare and define some **model specific parameters**, which can be used for example as an input for the different potential terms. In our example, these are mainly the inflaton self-coupling $\lambda$, and the coupling constant of the interaction $g$. This scenario is characterized by parametric resonance of the preheat field, so it is also convenient to introduce an additional third parameter called the *resonance parameter*, defined in terms of the other two as $q \equiv g^2/\lambda$. Parameters are declared in the model file as follows:
 @emgithub(models/lphi4.h:private_members)
@@ -380,7 +390,7 @@ The next step is to declare and define some **model specific parameters**, which
 We now need to assign values to these parameters. We will do it inside the constructor of our model, namely the function in charge of its initialization:
 @emgithub(models/lphi4.h:constructor_params)
 
-The two lines starting by `MODELNAME(ParameterParser &parser, ...` and `Model<MODELNAME>(parser, ...`, respectively, are simply the declaration of our constructor. The argument `parser` is the *parameter parser* which we will use to add and get model specific arguments. The argument  `runPar` contains generic parameters such as the lattice spacing and the box size, see Section [Appendix: Parameters](Appendix_Parameters.md) for more information. The `toolBox` is an object that contains information about the internal mechanics of the library, and of which any model needs to be aware. For example, it is used to instantiate the field variables and perform iterations over the lattice, see Section [**Inside Cosmolattice**](What CosmoLattice does in detail.md) for more information. Anyhow, **these two lines should not be modified, as they are only there to declare the constructor**.
+The two lines starting by `MODELNAME(ParameterParser &parser, ...` and `Model<MODELNAME>(parser, ...`, respectively, are simply the declaration of our constructor. The argument `parser` is the *parameter parser* which we will use to add and get model specific arguments. The argument  `runPar` contains generic parameters such as the lattice spacing and the box size, see Section [Appendix: Parameters](Appendix_Parameters.md) for more information. The `toolBox` is an object that contains information about the internal mechanics of the library, and of which any model needs to be aware. For example, it is used to instantiate the field variables and perform iterations over the lattice, see Section [**Inside Cosmolattice**](What $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ does in detail.md) for more information. Anyhow, **these two lines should not be modified, as they are only there to declare the constructor**.
 
 Customization starts on line `lambda = parser.get< ...`, where we declare a new parameter to be read either from the input file or the command line. To do so, we use the `parser` object and its `get<double>` function. The specification of `double` means that we are expecting a number with double precision (<span style="color:red;">**FloatType in the example?**</span>). The argument '`lambda`' is the name of the parameter, which is specified as `lambda=...` in the input. The parameter `"q"` on line `q = parser.get< ...` is defined in the same way. On line `g = sqrt(...` we  compute $g$ as a function of $\lambda$ and $q$.
 
@@ -401,12 +411,15 @@ The last step is to set up the masses.
 
 Here, we use the default function which sets the masses from the second derivatives of the potential evaluated on the initial homogeneous values of the field, see Section [*The potential and its derivatives*][sec_PotDerivs] below. This function also computes the initial value of the potential, which is useful to initialise the Hubble rate (<span style="color:red;">**This out?**</span>). If the user prefers instead to provide explicitly the initial field masses, the relevant parameter to be set is `masses2S`, which represents an array containing the square masses of the scalar fields (evaluated on the initial homogeneous values of the field) [<span style="color:red;">**This also out?**</span>].
 
-#### The potential and its derivatives { #sec_PotDerivs }
+<!-- #### The potential and its derivatives { #sec_PotDerivs } -->
+[](){ #sec_PotDerivs }
+**The potential and its derivatives**
+
 
 The last and arguably the most important piece of information missing to be specified is the potential under consideration and its associated field derivatives. Let us start by defining the potential. We split it in `NPotTerms`, as specified on the line `static constexpr size_t NPotTerms = 2;` of the model file, $i.e.$ 2 in our case.
 @emgithub(models/lphi4.h:potential_terms)
 
-Here we wrote in dimensionless units, the potential defined in Eq. \eqref{eq_PotNat}, in this example split in two terms. For each term, we need to define a function called `auto potentialTerms(Tag<r>)`, with `r` an integer between $0$ and `NPotTerms-1`. In our case, we define on the line `return 0.25 * pow<4>(fldS(0_c));` as the first potential term (numbered as the 'zeroth' term) the inflaton potential $\frac{1}{4}{\tilde \phi}^4$, whereas and on the line `return 0.5 * q * pow<2>(...` we define the second potential term, describing the interaction between the inflaton and the daughter field, $\frac{1}{2}q\tilde\phi^2\tilde\chi^2$. The object `fldS` contains the scalar fields, so that individual fields are accessed by calling `fldS(s)`, with `s` the number of the scalar field species, running from $0$ to `NScalars - 1`. Fields constitute an object of their own in CosmoLattice, so they can be manipulated with many functions and (differential) operators, see Appendix [**List of Implemented Functions**](List of Implemented Functions.md) for an exhaustive list. Here we use two different such functions, namely multiplication (which can be used between two fields to represent their site-by-site multiplication, or between a field and a number) and an integer power function `pow<n>`, which computes locally the $n^{th}$ integer-power of a field.
+Here we wrote in dimensionless units, the potential defined in Eq. \eqref{eq_PotNat}, in this example split in two terms. For each term, we need to define a function called `auto potentialTerms(Tag<r>)`, with `r` an integer between $0$ and `NPotTerms-1`. In our case, we define on the line `return 0.25 * pow<4>(fldS(0_c));` as the first potential term (numbered as the 'zeroth' term) the inflaton potential $\frac{1}{4}{\tilde \phi}^4$, whereas and on the line `return 0.5 * q * pow<2>(...` we define the second potential term, describing the interaction between the inflaton and the daughter field, $\frac{1}{2}q\tilde\phi^2\tilde\chi^2$. The object `fldS` contains the scalar fields, so that individual fields are accessed by calling `fldS(s)`, with `s` the number of the scalar field species, running from $0$ to `NScalars - 1`. Fields constitute an object of their own in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, so they can be manipulated with many functions and (differential) operators, see Appendix [**List of Implemented Functions**](List of Implemented Functions.md) for an exhaustive list. Here we use two different such functions, namely multiplication (which can be used between two fields to represent their site-by-site multiplication, or between a field and a number) and an integer power function `pow<n>`, which computes locally the $n^{th}$ integer-power of a field.
 
 The keyword `auto` allows the compiler to automatically deduce the return type. In our case, it is essential as the expression we return are symbolic expression encoded inside the type, through the mechanism known as *''expression templates"*. We refer the interested reader to Appendix [Expression Templates](Expression Templates.md) for more information. For related reasons, the syntax `1_c` with the unusual `_c`, is needed as it allows to simply define compile-time integers.
 
@@ -420,13 +433,16 @@ Finally, we also provide the second derivative of the potential with respect to 
 
 With this we end our presentation of the model file. Any model consisting of canonically normalized interacting singlet scalar fields can be constructed in a similar manner.
 
-### **The scalar-singlet physics inside CosmoLattice** { #sec_WhatHappensAuto }
+### **Scalar physics inside $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** { #sec_WhatHappensAuto }
 
 We discuss now what actions the code executes when running a simulation with a model we have just set up. Our aim here is to provide a short overview of the different parts of the code automatically called when running a simulation, so that the user can have a full picture of what is happening at the physical level. For a deeper understanding on the implementation details of this, we refer the reader to Section [**Inside Cosmolattice**](What CosmoLattice does in detail.md).
 
-#### Initialization of fluctuations { #sec_InitScalar }
+<!-- #### Initialization of fluctuations { #sec_InitScalar } -->
+[](){ #sec_InitScalar }
+**Initialization of fluctuations**
 
-In most applications, on top of the corresponding initial homogeneous modes set up before, we require to initiate as well  a set of fluctuations for each of the scalar fields. An extensive description of how to set initial conditions for scalars fields on a lattice can be found in Section 7 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl]. Here we basically summarize the most important results, as well as explain their implementation in CosmoLattice.
+
+In most applications, on top of the corresponding initial homogeneous modes set up before, we require to initiate as well  a set of fluctuations for each of the scalar fields. An extensive description of how to set initial conditions for scalars fields on a lattice can be found in Section 7 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl]. Here we basically summarize the most important results, as well as explain their implementation in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
 Whenever considering initial fluctuations $\delta\phi$, these can be characterized in the continuum by their variance
 [](){ #eq_SpectrumContinuum }
@@ -447,7 +463,7 @@ where $\langle \cdots \rangle$ represents an ensemble average, and $\Delta_{\del
 
 In this expression, $\omega_{k,\phi}$ is the comoving frequency of the mode, and $m_{\phi}$ is the effective mass of the field, evaluated in terms of the initial homogeneous amplitude $\bar{\phi}_*$ of the field.
 
-In CosmoLattice, (<span style="color:orange;">**Jorge comment: THIS IS NOT TRUE. FOR SCALAR SINGETS COSMOLATTICE SAMPES FROM A GAUSSIAN**</span>) this is represented by imposing a sum of left- and right-moving waves of the field amplitude at each Fourier site ${\bf \tilde n}$,
+In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, (<span style="color:orange;">**Jorge comment: THIS IS NOT TRUE. FOR SCALAR SINGETS COSMOLATTICE SAMPES FROM A GAUSSIAN**</span>) this is represented by imposing a sum of left- and right-moving waves of the field amplitude at each Fourier site ${\bf \tilde n}$,
 [](){ #eq_fpr_influct }
 [](){ #eq_fpr_influct2 }
 ```math
@@ -471,7 +487,9 @@ where $\tilde{\omega}_k \equiv \sqrt{\tilde{k}^2(\tilde{\bf n}) + a^2\tilde{m}_{
 
 Drawing both phases and modulus amplitudes as above is mathematically equivalent to drawing $\delta \tilde \phi ({  \bf \tilde{n}})$ and $\delta \tilde \phi'({  \bf \tilde{n}})$ as Gaussian random fields. The way in which this initialization is implemented in the code is discussed in more detail in Section [**Initializers**][subsec_Initializers].
 
-#### Evolution of the system { #eq_evolution-sc }
+<!-- #### Evolution of the system { #eq_evolution-sc } -->
+[](){ #eq_evolution-sc }
+**Evolution of the system**
 
 Let us now explain how our evolution algorithms solve the field EOM and the evolution of the scale factor. For the purpose of this discussion, we will assume self-consistent expansion of the universe, as the cases of no expansion and fixed background are just a particularization of this. We also consider the case of one single scalar field, as the generalization to multiple fields is immediate.
 
@@ -499,7 +517,7 @@ where the kinetic, gradient, and potential energies of the field in program vari
 
 Above $\mathcal{K}_{\phi}$ and $\mathcal{K}_a$ are the **kernels** of $\phi$ and $a$ respectively. Note that the definition of $\tilde\pi_\phi$ has been chosen so that the kernels are not functions on the time-derivatives of their respective variables.
 
-The current version of CosmoLattice ($\texttt{v2.0}$) has implemented  different numerical schemes to solve these equations: *staggered leapfrog* (LF), *velocity verlet* (VV), *position verlet* (PV) and *Runge-Kutta* (RK). One difference between these schemes is the moments at which the fields and momenta are defined during the evolution of the system. In LF, fields and momenta are specified at different times, so they must be synchronized each time an output is printed. On the contrary, in VV, PV and RK, fields and momenta are obtained at the same time, so no such synchronization is needed. A detailed account on the properties and ins and outs of how these algorithms work, can be found in Section 3 of The-Art-I [@Figueroa_2020rrl]. A derivation of the adaptation of these algorithms to the particular problem of the dynamics of (canonically normalized) interacting (singlet) scalar fields, can be found in Section 4 of of The-Art-I [@Figueroa_2020rrl]. The reader can also check the details of our evolution algorithms in [**Evolvers**][subsec_Evolvers]
+The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\texttt{v2.0}$) has implemented  different numerical schemes to solve these equations: *staggered leapfrog* (LF), *velocity verlet* (VV), *position verlet* (PV) and *Runge-Kutta* (RK). One difference between these schemes is the moments at which the fields and momenta are defined during the evolution of the system. In LF, fields and momenta are specified at different times, so they must be synchronized each time an output is printed. On the contrary, in VV, PV and RK, fields and momenta are obtained at the same time, so no such synchronization is needed. A detailed account on the properties and ins and outs of how these algorithms work, can be found in Section 3 of The-Art-I [@Figueroa_2020rrl]. A derivation of the adaptation of these algorithms to the particular problem of the dynamics of (canonically normalized) interacting (singlet) scalar fields, can be found in Section 4 of of The-Art-I [@Figueroa_2020rrl]. The reader can also check the details of our evolution algorithms in [**Evolvers**][subsec_Evolvers]
 
-The use of standard $\mathcal{O}(\delta \tilde{\eta}^2)$ accuracy algorithms, you need to choose in the input file `evolver=LF`, `evolver=VV2`, or `evolver=PV2`, respectively. Although both have an accuracy of order $\mathcal{O}(\delta \tilde{\eta}^2)$, `LF` only needs two steps by iteration, while `VV2` and `PV2` need three. Therefore, *verlet* algorithms are slower than *leapfrog*, typically by a factor $\sim$ 30$\%$-50$\%$ for `VV2` $\sim$ 20$\%$-40$\%$  for `PV2`, in our test runs (<span style="color:red;">**NICO confirms?**</span>). The VV and PV algorithms have the advantage, however, that they can be promoted recursively into higher order integrators with accuracies $\mathcal{O}(\delta \tilde{\eta}^4)$, $\mathcal{O}(\delta \tilde{\eta}^6)$, $\mathcal{O}(\delta \tilde{\eta}^8)$, and $\mathcal{O}(\delta \tilde{\eta}^{10})$. These improved algorithms, known as *Yoshida* integrators, are also implemented in CosmoLattice, and to use them you simply need to specify in the parameter file, `evolver=VV4`, `VV6`, `VV8`, `VV10`, or `evolver=PV4`, `PV6`, `PV8`, `PV10`, respectively. Such improved algorithms conserve energy much better than `LP`, `VV2` or `PV2`, but they are naturally slower, as they require more steps per iteration (the more the higher the accuracy of the integrator). For a discussion on the construction of all these integrators and dedicated versions of them to the dynamics of (canonically normalized) interacting (singlet) scalar field dynamics, we refer again the reader to Sections 3 and 4 of The-Art-I [@Figueroa_2020rrl], and to the Section [**Evolvers**][subsec_Evolvers].
+The use of standard $\mathcal{O}(\delta \tilde{\eta}^2)$ accuracy algorithms, you need to choose in the input file `evolver=LF`, `evolver=VV2`, or `evolver=PV2`, respectively. Although both have an accuracy of order $\mathcal{O}(\delta \tilde{\eta}^2)$, `LF` only needs two steps by iteration, while `VV2` and `PV2` need three. Therefore, *verlet* algorithms are slower than *leapfrog*, typically by a factor $\sim$ 30$\%$-50$\%$ for `VV2` $\sim$ 20$\%$-40$\%$  for `PV2`, in our test runs (<span style="color:red;">**NICO confirms?**</span>). The VV and PV algorithms have the advantage, however, that they can be promoted recursively into higher order integrators with accuracies $\mathcal{O}(\delta \tilde{\eta}^4)$, $\mathcal{O}(\delta \tilde{\eta}^6)$, $\mathcal{O}(\delta \tilde{\eta}^8)$, and $\mathcal{O}(\delta \tilde{\eta}^{10})$. These improved algorithms, known as *Yoshida* integrators, are also implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and to use them you simply need to specify in the parameter file, `evolver=VV4`, `VV6`, `VV8`, `VV10`, or `evolver=PV4`, `PV6`, `PV8`, `PV10`, respectively. Such improved algorithms conserve energy much better than `LP`, `VV2` or `PV2`, but they are naturally slower, as they require more steps per iteration (the more the higher the accuracy of the integrator). For a discussion on the construction of all these integrators and dedicated versions of them to the dynamics of (canonically normalized) interacting (singlet) scalar field dynamics, we refer again the reader to Sections 3 and 4 of The-Art-I [@Figueroa_2020rrl], and to the Section [**Evolvers**][subsec_Evolvers].
 
