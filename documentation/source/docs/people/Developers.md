@@ -4,8 +4,8 @@
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 2rem 1.5rem; align-items: start; text-align: center;">
   <div>
-    <img src="../assets/img/people/jorge.png" alt="J. Baeza-Ballesteros" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <p><strong>J. Baeza-Ballesteros</strong><br>Contributor</p>
+    <img src="../assets/img/people/jorge.png" alt="Jorge Baeza-Ballesteros" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+    <p><strong>Jorge Baeza-Ballesteros</strong><br>Contributor</p>
   </div>
   <div>
     <img src="../assets/img/people/dani.png" alt="Daniel G. Figueroa" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
