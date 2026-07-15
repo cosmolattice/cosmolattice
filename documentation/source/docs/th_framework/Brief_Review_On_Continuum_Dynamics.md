@@ -1,9 +1,10 @@
 
 In Cosmology, the Universe is considered to be described by a homogeneous and isotropic spacetime background, characterized by the *Friedmann–Lemaître–Robertson–Walker* (FLRW) line element
-[](){ #eq_FLRWmetric }
+[](){ #eq_FLRWlineElem }
 ```math
 \begin{equation}
-d s^2 \equiv g_{\mu\nu}d x^\mu d x^\nu = - d t^2 + a^2(t) \delta_{ij} d x^i d x^j \ , \label{eq_FLRWmetric}
+d s^2 \equiv g_{\mu\nu}d x^\mu d x^\nu = - d t^2 + a^2(t) \delta_{ij} d x^i d x^j \ , 
+\label{eq_FLRWlineElem}
 \end{equation}
 ```
 where $t$ is the cosmic time, and $a(t)$ is the scale factor. It is useful to define a new time variable $\eta$ through the relation

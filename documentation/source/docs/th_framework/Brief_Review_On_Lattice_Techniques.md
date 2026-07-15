@@ -142,7 +142,7 @@ where $\delta x^{\mu}$ represents either the time step $\delta \eta$ (for $\mu =
     \end{array}\right.
 \end{eqnarray}
 ```
-where $\nabla_{\mu}^+f$ and $\nabla_\mu^- {f}$ are called the *forward* and *backward* derivatives, respectively. Compared to the neutral derivative, they have the advantage of being sensitive to the minimum space interval captured by a lattice, *i.e.* to the lattice spacing. These expressions, if expanded around an actual lattice site ${\bf n}$,  only recover the continuum derivative up to $\mathcal{O}({\delta x}_\mu)$. However, if expanded in between the two lattice sites involved, they approximate the continuum expression to $\mathcal{O}({\delta x}_\mu^2)$. One can also implement discrete derivatives of higher order at either grid or half-grid points, involving field values of at more lattice points, see below Subsection [*Higher order derivatives and lattice momenta*][subsec_HigherOrder]
+where $\nabla_{\mu}^+f$ and $\nabla_\mu^- {f}$ are called the *forward* and *backward* derivatives, respectively. Compared to the neutral derivative, they have the advantage of being sensitive to the minimum space interval captured by a lattice, *i.e.* to the lattice spacing. These expressions, if expanded around an actual lattice site ${\bf n}$,  only recover the continuum derivative up to $\mathcal{O}({\delta x}_\mu)$. However, if expanded in between the two lattice sites involved, they approximate the continuum expression to $\mathcal{O}({\delta x}_\mu^2)$. One can also implement discrete derivatives of higher order at either grid or half-grid points, involving field values of at more lattice points, see below Subsection [*Higher order derivatives and lattice momenta*][subsec_HigherOrder].
 
 Associated to each spatial lattice derivative, we can define a *lattice momentum* ${\bf k_\text{L}}$ through the following relation in Fourier space,
   [](){ #eqn_latticemomentum }
@@ -167,7 +167,8 @@ while for the charged derivative \eqref{eq_forwardbackwardd} we have instead
 ```
 where the first expression applies when $\nabla^\pm_i {\tt f}$ is defined on integer lattice sites, and the second when it is defined on half-integer lattice sites.
 
-Finally, we mention that when one wishes to simulate scalar-gauge theories on a lattice, it is important to preserve gauge invariance. For such purpose, one needs to discretize the theory more carefully, in particular using *links* and *plaquettes*, which are quantities purposely defined to build gauge-invariant versions of discretized gauge theories. We refer the reader to Sect.~3.2 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl] for a discussion on lattice gauge-invariant techniques, which we summarise here in [*Lattice gauge invariant techniques*][subsec_LatticeGaugeInv].  
+**Note.** When one wishes to simulate scalar-gauge theories on a lattice, it is important to preserve gauge invariance. For such purpose, one needs to discretize the theory more carefully, in particular using *links* and *plaquettes*, which are quantities purposely defined to build gauge-invariant versions of discretized gauge theories. We refer the reader to [*Lattice gauge invariant techniques*][subsec_LatticeGaugeInv] for a discussion on lattice gauge-invariant techniques; see also Sect.~3.2 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl].
+
 
 [](){ #subsec_HigherOrder }
 **Higher-Order gradients and lattice momenta**
@@ -214,7 +215,7 @@ where
     \Upsilon_{|\tilde{\bf n}|} \equiv \frac{\#_{R(\tilde{\bf n})}}{4\pi|\tilde{\bf n}|^2}\;.
 \end{eqnarray}
 ```
-While the most precise evaluation of Eq.~(\ref{eq_discretePST1}) requires to compute $\Upsilon_{|\tilde{\bf n}|}$ exactly (for each bin) using to Eq.~(\ref{eq_Upsilon}), many works (specially in the past) commonly used the multiplicity approximation $\#_{R(\tilde{\bf n})} \simeq 4\pi |\tilde{\bf n}|^2$, so that $\Upsilon_{|\tilde{\bf n}|} \simeq 1$, thus dropping $\Upsilon_{|\tilde{\bf n}|}$ from Eq.~(\ref{eq_discretePST1}). While this is only an approximation, for historical reasons we still define two types of power spectra, depending on the multiplicity assumption, 
+While the most precise evaluation of Eq.~(\ref{eq_discretePST1}) requires to compute $\Upsilon_{|\tilde{\bf n}|}$ exactly (for each bin), *i.e.* using Eq.~(\ref{eq_Upsilon}), many works (specially in the past) often  used the multiplicity approximation $\#_{R(\tilde{\bf n})} \simeq 4\pi |\tilde{\bf n}|^2$. In that case $\Upsilon_{|\tilde{\bf n}|} \simeq 1$, and thus $\Upsilon_{|\tilde{\bf n}|}$ drops from Eq.~(\ref{eq_discretePST1}). While this is only an approximation, for historical reasons we still define two types of power spectra, depending on the multiplicity assumption, 
 [](){ #eq_TypeIandIIPS }
 ```math
 \begin{eqnarray}\label{eq_TypeIandIIPS}
@@ -247,35 +248,34 @@ where $m_{\tt f}^2 \equiv \frac{\partial^2 V({\tt f})}{\partial {\tt f}^2} > 0$.
 |\tilde {f}(\tilde{\bf n})|^2  \equiv  {1\over \Upsilon_{|\tilde{\bf n}|}} \left(\frac{{N}}{\delta \tilde{x}}\right)^3 \mathcal{N}\big[0,\mathcal{P}_{\tt f}^{1/2}(k(|{\bf \tilde{n}}|))\big]^2\,,~~~~ |\tilde {f}'(\tilde{\bf n})|^2 \equiv {1\over \Upsilon_{|\tilde{\bf n}|}} \left(\frac{{N}}{\delta \tilde{x}}\right)^3 \mathcal{N}\big[0,\mathcal{P}_{\tt f'}^{1/2}(k(|{\bf \tilde{n}}|))\big]^2\;.
 \end{eqnarray}
 ```
-For a broader discussion on initial conditions from a generic power spectrum, see [*Observables*](../Manual/Observables.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md)
+These expressions are, of course, valid for arbitrary power spectra $\mathcal{P}_{\tt f}(k), \mathcal{P}_{\tt f'}(k)$, that one wishes to impose on the initial fluctuations. For a broader discussion on initial conditions from a generic power spectrum, see [*Observables*](../Manual/Observables.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md)
 
 ## Lattice gauge invariant techniques { #subsec_LatticeGaugeInv }
 
 Discretizing a gauge theory requires a special care in order to preserve gauge invariance at the lattice level. It is not enough to recover gauge invariance in the continuum, i.e. in the limit of zero lattice spacing/time step, as gauge invariance is meant to remove spurious transverse degrees of freedom.  If we were to discretize a gauge theory by substituting all ordinary derivatives in the continuum EOM by finite differences like those in Eqs. $~$\eqref{eq_neutrald}, \eqref{eq_forwardbackwardd}, the gauge symmetry would not be preserved and the spurious degrees of freedom would propagate on the lattice. Lattice gauge invariant techniques are meant to avoid this type of trouble.
 
 In order to build an action or EOM for any gauge theory that preserves a discretized version of the gauge symmetry, it is customary to define *link* variables as
+[](){ #eq_LinkDef }
 ```math
-\begin{align*}
-U_{0,n} &\equiv P\exp\left\lbrace-ie\int_{x(n)}^{x(n+\hat0)}dt'A_0 \right\rbrace \approx  e^{-ie\delta t A_0} ,
-\\
-U_{i,n} &\equiv P\exp\left\lbrace-ie\int_{x(n)}^{x(n+\hat\imath)} dxA_i \right\rbrace \approx e^{-ie\delta x A_i} ,
-\end{align*}
-\tag{26}
+\begin{eqnarray}\label{eq_LinkDef}
+U_{0,n} \equiv P\exp\left\lbrace-ie\int_{x(n)}^{x(n+\hat0)}dt'A_0 \right\rbrace \approx  e^{-ie\delta t A_0}\,,~~~~
+U_{i,n} \equiv P\exp\left\lbrace-ie\int_{x(n)}^{x(n+\hat\imath)} dxA_i \right\rbrace \approx e^{-ie\delta x A_i} ,
+\end{eqnarray}
 ```
 where $P\exp\lbrace...\rbrace$ means *path-ordered* along the integration trajectory, as the construction of links is based on the definition of a *parallel transporter*, connecting two points in space-time as $U(x,y) = P\exp\left\lbrace-ie\int_{x}^{y}dx^{\mu}A_\mu  \right\rbrace$. Above, the gauge field $A_\mu$, and hence the link $U_\mu$, is considered to live in the point $n + {\hat\mu\over2}$. We also define $U_{-\mu,n} = U_{\mu,n-\mu}^\dagger \equiv U_\mu^\dagger(n-{1\over 2}\hat\mu)$. In the continuum limit, the gauge fields can be recovered simply from $-i(\mathcal{I}- U_{\mu,n})/(e\delta x^\mu) \longrightarrow  A_\mu\big(n+{1\over2}\hat\mu\big) + \mathcal{O}(\delta x^\mu)$.
 
-!!! note "**Important to know**$"
+!!! note "**Important to know**"
 	 To simplify the notation on the lattice, a scalar field living in a generic lattice site $n = (n_o,{\bf n}) = (n_o,n_1,n_2,n_3)$, i.e. $\phi_n = \phi(n)$, will be simply denoted as $\phi$. If the point is displaced in the $\mu-$direction by one unit lattice spacing/time step, $n + \hat\mu$, we use the notation $n+\mu$ or simply by $+\mu$ to indicate this, so that the field amplitude in the new point is expressed as $\phi_{+\mu} \equiv \phi(n+\hat\mu)$. In the case of gauge fields, whenever represented explicitly on the lattice, we will automatically understand that they live in the middle of lattice points, i.e. $A_{\mu} \equiv A_{\mu}(n+{1\over2}\hat\mu)$. It follows then that e.g. $A_{\mu,+\nu} \equiv A_{\mu}\big(n + {1\over2}\hat\mu +  \hat\nu\big)$. In the case of links, we will use the notation $U_\mu \equiv U_{\mu,n} \equiv U_\mu(n+{1\over2}\hat\mu)$, and hence $U_{\mu,\pm\nu} = U_{\mu,n\pm\nu} \equiv U_\mu(n + {1\over2}\hat\mu \pm \hat\nu)$.
 
 
-One can actually build an action or EOM for any gauge theory, preserving a discretized version of the gauge symmetry, using only link variables and no gauge fields. That is known as the *compact formulation* of lattice gauge theories, and this can be applied to both Abelian and non-Abelian gauge theories. In the case of non-Abelian theories, compact formulations are actually the only way to discretize them while respecting gauge invariance on the lattice. For Abelian gauge theories, however, it is still possible to make use of an explicit representation of the  gauge fields, in the so called *non-compact formulation*. Below we provide both. We introduce standard definitions for $links$, $plaquettes$ and *lattice covariant derivatives*, specialized to both Abelian and non-Abelian gauge groups, setting back $e=g_A Q_A$. We provide also basic definitions, together with useful approximations and expressions (in the case of Abelian theories for both compact and non-compact formulations). All these ingredients, summarized in the $U(1)$ and $SU(2)$ toolkits below, represent all one needs to know in order to discretize gauge theories while preserving the gauge invariance at the lattice level.
+One can actually build an action or EOM for any gauge theory, preserving a discretized version of the gauge symmetry, using only link variables and no gauge fields. That is known as the **compact formulation** of lattice gauge theories, and this can be applied to both Abelian and non-Abelian gauge theories. In the case of non-Abelian theories, compact formulations are actually the only way to discretize them while respecting gauge invariance on the lattice. For Abelian gauge theories, however, it is still possible to make use of an explicit representation of the  gauge fields, in the so called **non-compact formulation**. Below we provide both. We introduce standard definitions for *links*, *plaquettes* and *lattice covariant derivatives*, specialized to both Abelian and non-Abelian gauge groups, setting $e=g_A Q_A$. We provide also basic definitions, together with useful approximations and expressions (in the case of Abelian theories for both compact and non-compact formulations). All these ingredients, summarized in the $U(1)$ and $SU(2)$ toolkits below, represent all one needs to know in order to discretize gauge theories while preserving the gauge invariance at the lattice level.
 
 [](){ #eq_U1toolkit }
 !!! note "**U(1) toolkit**"
     
     ```math
     
-    \begin{align*}
+    \begin{align*}\label{eq_U1toolkit}
     &{\rm Links:}  V_{\mu} \equiv e^{-i g_AQ_A \delta x_{\mu} A_{\mu}} = \cos(g_AQ_A\delta x_{\mu} A_{\mu}) - i \sin (g_AQ_A\delta x_{\mu} A_{\mu}) ;  V_{- \mu} \equiv V_{\mu,-\mu}^* ;  V_{\mu}^* V_{\mu} = 1 ;\\
     &{\rm Plaquettes}:  V_{\mu \nu} \equiv V_{\mu} V_{\mu,+\mu} V_{\mu, +\nu}^* V_\nu^* \simeq e^{-i g_AQ_A\delta x_{\mu} \delta x_{\nu} [ F_{\mu \nu} + \mathcal{O}(\delta x)] };  V_{\mu\nu}^* = V_{\nu\mu} ;
     \\
@@ -316,18 +316,17 @@ One can actually build an action or EOM for any gauge theory, preserving a discr
     V_{\mu\nu}  & \longrightarrow & V_{\mu\nu}  {\rm (gauge inv. !)}
     \end{array}\right.
     
-    \tag{27}
     \end{align*}
     
     ```
 
-[](){ #eq_SU2toolkit }
+<!-- [](){ #eq_SU2toolkit } -->
 [](){ #eq_SUNtoolkit }
-!!! note "**SU(2) toolkit**"    
+!!! note "**SU(N) toolkit**"    
     
     ```math
     
-    \begin{align*}
+    \begin{align*}\label{eq_SUNtoolkit}
     &{\rm Links}:  U_{\mu} \equiv e^{-i g_B Q_B \delta x B_\mu} = e^{-i g_B Q_B \delta x B_{\mu}^a T_a} ;  U_{- \mu} \equiv U_{\mu,-\mu}^{\dagger} ;  U_{\mu}^{\dagger} U_{\mu} = \mathcal{I} \\
     &{\rm Plaquettes}:  U_{\mu \nu} \equiv U_{\mu} U_{\nu,+ \mu} U_{\mu, +\nu}^{\dagger} U_{\nu}^{\dagger} \simeq e^{-ig_B Q_B \delta x_{\mu} \delta x_{\nu} [ G_{\mu \nu}^a T_a + \mathcal{O} (\delta x_{\mu} ) ] } ;   U_{\mu \nu}^\dagger = U_{\nu\mu} \\
     &{\rm Covariant Derivs.}:  (D_{\mu}^\pm\Phi)({\bf l}) = \pm{1\over \delta x^\mu}(U_{\pm\mu}\Phi_{\pm\mu} - \Phi)  \longrightarrow  (D_{\mu}\Phi)({\bf l}) + \mathcal{O}(\delta x^2), {\bf l} = {\bf n} \pm {1\over2}{\hat\mu}
@@ -362,19 +361,16 @@ One can actually build an action or EOM for any gauge theory, preserving a discr
     \\
     {\rm Tr}\lbrace U_{\mu\nu} \rbrace  & \longrightarrow & {\rm Tr}\lbrace U_{\mu\nu} \rbrace
     \end{array}\right.
-    \tag{28}
     \end{align*}
     
     ```
 
+For further discussion on lattice gauge-invariant techniques, see  Sect. 3.2 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ (Ref. [@Figueroa_2020rrl]).
+
 [](){ #subsec_Algorithms }
 ## Evolution algorithms
 
-The equations of motion (EOM) of canonical relativistic fields, Eqs.~(\ref{eq_singlet-eom})–(\ref{eq_SU2eom}), form a system of coupled second-order hyperbolic partial differential equations (PDE). As the fields propagate in an expanding background, we need to simultaneously consider  the EOM for the scale factor, Eq.~(\ref{eq_FriedmannDDa}). To solve all these equations on a lattice, we need to construct discretized versions of the EOM, and choose suitable integration schemes that satisfy the Hubble constraint in Eq.~(\ref{eq_FriedmannHubble}), and in the case of gauge theories, the Gauss constraints in Eqs.~(\ref{eq_GaussU1-eom})-(\ref{eq_GaussSU2-eom}). 
-During the evolution 
-we need to track 
-the field amplitudes $\{ f_i \}$ and their corresponding conjugate momenta $\{ \pi_i \}$ ($\pi_i \propto \dot f_i$), both of which are evaluated at each lattice site. We also need to track 
-the scale factor amplitude $a(\eta)$ and its conjugate momentum $\pi_a \equiv a'(\eta)$, which contrary to the fields, are homogeneous functions. 
+The equations of motion (EOM) of standard relativistic fields [Eqs. ([*10*][eq_singlet-eom])–([*14*][eq_SU2eom]) in [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)], form a system of coupled second-order hyperbolic partial differential equations (PDE). As the fields propagate in an expanding background, we need to simultaneously consider the EOM for the evolution of the scale factor [Eq. ([*24*][eq_FriedmannD2a]) in [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)]. To solve all these equations on a lattice, we need to construct discretized versions of the EOM, and choose suitable integration schemes that satisfy the *Hubble constraint* [represented by Eq. ([*23*][eq_FriedmannHub]) in [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)], and in the case of gauge theories, the Gauss constraints [given by Eqs. ([*15*][eq_GaussU1-eom])–([*16*][eq_GaussSU2-eom]) in [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)]. During the evolution we need to track the field amplitudes $\{ f_i \}$ and their corresponding conjugate momenta $\{ \pi_i \}$ ($\pi_i \propto \dot f_i$), both of which are evaluated at each lattice site. We also need to track the scale factor amplitude $a(\eta)$ and its conjugate momentum $\pi_a \equiv a'(\eta)$, which contrary to the fields, are homogeneous functions. 
 
 The number of field amplitudes $\{ f_i \}$ defines the number of degrees of freedom (*dof*) in the system. 
 The EOM of the fields then take the general form
@@ -383,24 +379,19 @@ The EOM of the fields then take the general form
 [](){ #eq_SchemeContVirgin3 }
 [](){ #eq_SchemeContVirgin4 }
 ```math
-\begin{eqnarray}\label{eq_SchemeContVirgin1}
-\pi_a(\eta) &=& a'(\eta)\,,\\
-\label{eq_SchemeContVirgin2}
-\pi_a'(\eta) &=& \mathcal{K}_a[a(\eta), E_V(\eta), E_K(\eta), E_G(\eta)]\,,\\
-\label{eq_SchemeContVirgin3}
-\pi_i({\bf x},\eta) &=& \mathcal{D}_i[f_i'({\bf x},\eta),a(\eta),\pi_a(\eta);\lbrace f_{j}({\bf x},\eta) \rbrace, \lbrace f'_{j\neq i}({\bf x},\eta) \rbrace]\,,\\
-\label{eq_SchemeContVirgin4}
-\pi_i'({\bf x},\eta) &=& \mathcal{K}_i[f_i({\bf x},\eta),\pi_i({\bf x},\eta),a(\eta),\pi_a(\eta);\lbrace f_{j\neq i}({\bf x},\eta) \rbrace, \lbrace \pi_{j\neq i}({\bf x},\eta) \rbrace]\,,
+\begin{eqnarray}
+\pi_a(\eta) &=& a'(\eta)\,, \label{eq_SchemeContVirgin1} \\
+\pi_a'(\eta) &=& \mathcal{K}_a[a(\eta), E_V(\eta), E_K(\eta), E_G(\eta)]\,, \label{eq_SchemeContVirgin2} \\
+\pi_i({\bf x},\eta) &=& \mathcal{D}_i[f_i'({\bf x},\eta),a(\eta),\pi_a(\eta);\lbrace f_j({\bf x},\eta) \rbrace,\lbrace f'_{j\neq i}({\bf x},\eta) \rbrace]\,, \label{eq_SchemeContVirgin3} \\
+\pi_i'({\bf x},\eta) &=& \mathcal{K}_i[f_i({\bf x},\eta),\pi_i({\bf x},\eta),a(\eta),\pi_a(\eta);\lbrace f_{j\neq i}({\bf x},\eta) \rbrace,\lbrace \pi_{j\neq i}({\bf x},\eta) \rbrace]\,. \label{eq_SchemeContVirgin4}
 \end{eqnarray}
 ```
-where primes denote differentiation with respect to $\alpha$-time. Here $\mathcal{D}_i[...]$ is a functional---the {\it drift}---that defines the conjugate momentum of the $i$th $dof$, and $\mathcal{K}_i[...]$ is another functional---the {\it kernel} or {\it kick}---, that determines the interactions of the $i$th $dof$ with the rest of $dof's$ (possibly including itself). The kernel of the scale factor,  $\mathcal{K}_a[...]$, is given by the $rhs$ of Eq.~(\ref{eq_FriedmannDDa}), based on the volume average $\langle ... \rangle$ 
-of the potential, kinetic and gradient energy densities of the $dof$ involved in the problem, namely $E_V \equiv \langle V \rangle$, $E_{K} \equiv \langle  \sum_j K_{j}\rangle $ and $E_{G} \equiv \langle \sum_j  G_{j}\rangle$.
+where primes denote differentiation with respect to $\alpha$-time. Here $\mathcal{D}_i[...]$ is a functional---the *drift*---that defines the conjugate momentum of the $i$th $dof$, and $\mathcal{K}_i[...]$ is another functional---the *kernel* or *kick*---, that determines the interactions of the $i$th $dof$ with the rest of $dof's$ (possibly including itself). The kernel of the scale factor,  $\mathcal{K}_a[...]$, is given by the $rhs$ of Eq. ([*24*][eq_FriedmannD2a]) from [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)], based on the volume average $\langle ... \rangle$ 
+of the potential, kinetic and gradient energy densities of the $dof$ involved in the problem, namely $E_V \equiv \langle V \rangle$, $E_{K} \equiv \langle  \sum_j K_{j}\rangle$ and $E_{G} \equiv \langle \sum_j  G_{j}\rangle$.
 
-This section reviews time-integration algorithms suitable for both canonical and non-canonical systems. While the algorithms we discuss can be adapted for any system of interactive fields, for clarity we illustrate each method adapting the algorithm to the the case of $N_s$ 
-canonically normalized interacting scalar fields $\{\phi_i\}$.  
-This are characterized by an action $S = - \int d^4x\, \sqrt{-g}\left(\frac{1}{2}\partial_{\mu} \phi_i \partial^{\mu} \phi_i + V(\lbrace \phi_j \rbrace) \right)$,
-which, when specialized into a flat FLRW background given in Eq.~(\ref{eq_FLRWmetric}) and 
-re-casted in terms of the program variables defined in Eqs.~(\ref{eq_GaugeProgramVar})-(\ref{eq_ProgramPotMultiScalar}), can be re-written as
+Similarly, EOM of non-canonical field theory examples are given in the subsection [Non-Canonical Field Theories][subsec_eomNonCanonical] from [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)]. These equations take the same form as in Eqs.$~$\eqref{eq_SchemeContVirgin1}-\eqref{eq_SchemeContVirgin4}, with the major difference that their Kernels $\mathcal{K}_i$ contain explicitly a dependence on the conjugate momenta $\pi_i$, whereas in canonical field theory, we can choose variables such that $\mathcal{K}_i$ does not depend on  $\pi_i$ (nor on the other conjugate momenta $\pi_j$). 
+
+We review below time-integration algorithms suitable for both canonical and non-canonical systems. While the algorithms we discuss can be adapted for any system of interactive fields, for clarity we illustrate each method adapting the algorithm to the the case of $N_s$ canonically normalized interacting scalar fields $\{\phi_i\}$.   These are characterized by an action $S = - \int d^4x\, \sqrt{-g}\left(\frac{1}{2}\partial_{\mu} \phi_i \partial^{\mu} \phi_i + V(\lbrace \phi_j \rbrace) \right)$, which, when specialized into a flat FLRW background [see Eq. ([*1*][eq_FLRWlineElem]) from [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)] and re-casted in terms of the program variables defined in Eqs.$~$\eqref{eq_ScalarGaugeProgramVar}, can be re-written as
 [](){ #eq_ActionScalar }
 ```math
 \begin{eqnarray}
@@ -409,23 +400,25 @@ re-casted in terms of the program variables defined in Eqs.~(\ref{eq_GaugeProgra
 \end{eqnarray}
 ```
 
-While there is no unique way to obtain the discrete version of the EOM (see {\tt The Art\,I} for discussion on this), in this review we adopt a {\it hybrid} scheme, where at the level of the action only spatial derivatives are discretized\footnote{We demand  to recover the continuum limit at the level of the action at least to order $\mathcal{O}(dx^2)$}, while the temporal coordinate is treated as a continuous variable. Thus, the action for our reference example, using for example forward derivatives, reads
+While there is no unique way to obtain the discrete version of the EOM (see $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) for discussion on this), here we adopt a *hybrid* scheme, where at the level of the action only spatial derivatives are discretized, while the temporal coordinate is treated as a continuous variable. We demand recovery of the continuum limit at the level of the action at least to order $\mathcal{O}(dx^2)$. Thus, the action for our reference example, using *e.g.* forward derivatives, reads
 [](){ #eq_ActionScDiscHybrib }
 ```math
 \begin{equation}
-\widetilde S^{\rm L} = \int d\tilde\eta\sum_{\bn} \delta \tilde x^{\,3} \left\{\frac{ 1}{2} a^{3 - \alpha}\sum_i( \tilde\phi_{i}')^2 - \frac{1}{2} a^{1 + \alpha}   \sum_{i,k} (\widetilde\nabla_k^+ \tilde\phi_{i})^2 - a^{3 + \alpha} \widetilde V (\lbrace \tilde\phi_j \rbrace ) \right\} \, , \label{eq_ActionScDiscHybrib}
+\widetilde S^{\rm L} = \int d\tilde\eta\sum_{\mathbf n} \delta \tilde x^{\,3} \left\{\frac{ 1}{2} a^{3 - \alpha}\sum_i( \tilde\phi_{i}')^2 - \frac{1}{2} a^{1 + \alpha}   \sum_{i,k} (\widetilde\nabla_k^+ \tilde\phi_{i})^2 - a^{3 + \alpha} \widetilde V (\lbrace \tilde\phi_j \rbrace ) \right\} \, , \label{eq_ActionScDiscHybrib}
 \end{equation}
 ```
 and the scalar fields EOM 
 [](){ #eq_EOMScalar-Discr_Hybrid }
+```math
+\begin{equation}\label{eq_EOMScalar-Discr_Hybrid}
+\left(a^{3 - \alpha} \tilde\phi_{i}' \right)' = a^{1 + \alpha} \sum_k \widetilde\nabla_k^- \widetilde\nabla_k^+ \tilde\phi_{i} - a^{3 + \alpha} \widetilde V_{,\tilde\phi_{i}}\,,\qquad i = 1, 2, ..., N_s\,.
+\end{equation}
+```
 [](){ #eq_EOMScaleFactor-Discr_Hybrid }
 ```math
-\begin{eqnarray}
-\label{eq_EOMScalar-Discr_Hybrid}
-\left(a^{3 - \alpha} \tilde\phi_{i}' \right)' & = & a^{1 + \alpha} \sum_k \widetilde\nabla_k^- \widetilde\nabla_k^+ \tilde\phi_{i}  -  a^{3 + \alpha} \widetilde V_{,\tilde\phi_{i}}\,,~~~~ i = 1, 2, ..., N_s\, , \\
-\label{eq_EOMScaleFactor-Discr_Hybrid}
-a'' & = &  \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2 a^{1+2\alpha}\Big[ (\alpha - 2){\widetilde E}_{K}  + \alpha {{\widetilde E}_{G}} + (\alpha + 1 ) {{\widetilde E}_V} \Big] \,,
-\end{eqnarray}
+\begin{equation}\label{eq_EOMScaleFactor-Discr_Hybrid}
+a'' = \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2 a^{1+2\alpha}\Big[ (\alpha - 2){\widetilde E}_{K} + \alpha {{\widetilde E}_{G}} + (\alpha + 1 ) {{\widetilde E}_V} \Big] \,,
+\end{equation}
 ```
 with 
 [](){ #eq_EK_EG_EV_Discrete }
@@ -434,27 +427,19 @@ with
 {\widetilde E}_K \equiv \frac{1}{2 a^{2\alpha}}\sum_{i}\left\langle (\tilde \phi_i')^2 \right\rangle\,,~~~ {\widetilde E}_G \equiv \frac{1}{2 a^2 }\sum_{i,k} \left\langle (\widetilde \nabla_k^+ \tilde \phi_{i})^2 \right\rangle\,, ~~~{\widetilde E}_V \equiv \left\langle \tilde{V}(\lbrace \tilde\phi_i\rbrace) \right\rangle\,.
 \end{eqnarray}
 ```
-From here, one can choose a suitable evolution algorithm to solve Eqs.~(\ref{eq_EOMScalar-Discr_Hybrid})-(\ref{eq_EOMScaleFactor-Discr_Hybrid}). 
-As we will see, the hybrid prescription is specially suitable for the examples considered in this review, as it allows for a flexible choice of the time-integrator. 
+From here, one can choose a suitable evolution algorithm to solve Eqs.$~$\eqref{eq_EOMScalar-Discr_Hybrid}~\eqref{eq_EOMScaleFactor-Discr_Hybrid}. As we will see, the hybrid prescription is suitable for either canonical or non-canonical field theories, allowing for a flexible choice of the time-integrator. 
 
-In the following we present a collection of algorithms, 
-divided into *symplectic* and *non-symplectic* integrators. Symplectic integrators include the {\it Leapfrog} and {\it Position-} and {\it Velocity-Verlet} methods, which are very stable numerical algorithms for canonical field theories, 
-allowing for large-time evolution. They can also be extended 
-to higher-order accuracy evolvers, know as {\it Yoshida} integrators, through recursive compositions of sub-steps. Non-symplectic integrators, on the other hand, are suitable for more general applications, including systems with non-canonical kinetic terms, dissipative dynamics, or interactions containing canonical momenta in the kernels. These algorithms include explicit {\it Runge–Kutta} schemes of various orders and multi-stage algorithms, which naturally allow for adaptive time-stepping and the use of auxiliary fields to handle intermediate sub-steps. Many of the complex models discussed in this review are non-canonical, and hence non-symplectic integrators are necessary to maintain accuracy and stability of the numerical solutions.
+In the following we present a collection of algorithms, divided into *symplectic* and *non-symplectic* integrators. Symplectic integrators include the *Leapfrog* and *Position-* and *Velocity-Verlet* methods, which are very stable numerical algorithms for canonical field theories, allowing for large-time evolution. They can also be extended to higher-order accuracy evolvers, know as *Yoshida* integrators, through recursive compositions of sub-steps. Non-symplectic integrators, on the other hand, are suitable for more general applications, including systems with non-canonical kinetic terms, dissipative dynamics, or interactions containing canonical momenta in the kernels. These algorithms include explicit *Runge–Kutta* schemes of various orders and multi-stage algorithms, which naturally allow for adaptive time-stepping and the use of auxiliary fields to handle intermediate sub-steps. 
 
 [](){ #subsubsec_SymplecticInt }
 **Symplectic integrators**
 
-Time integrators that are symplectic represent a class of algorithms tailored for the integration of Hamiltonian systems. The core principle of symplectic methods stems from {\it Liouville’s theorem}, which states that the phase-space volume must remain conserved throughout the system’s evolution. As a result, the field amplitudes and the corresponding conjugate momenta remain bounded, and they accurately preserve key constraints of the system, such as energy conservation. This property makes them particularly suitable for problems where a long-term dynamical behaviour is of primary importance.
+Time integrators that are symplectic represent a class of algorithms tailored for the integration of Hamiltonian systems. The core principle of symplectic methods stems from *Liouville’s theorem*, which states that the phase-space volume must remain conserved throughout the system’s evolution. As a result, the field amplitudes and the corresponding conjugate momenta remain bounded, and they accurately preserve key constraints of the system, such as energy conservation. This property makes them particularly suitable for problems where a long-term dynamical behaviour is of primary importance.
 
-One subtlety of these integrators lies in the importance of a wise choice of the conjugate momenta associated to the {\it dof}. 
-An `improper' choice may lead to the loss of 
-`symplecticity', resulting in a degradation of the 
-desired 
-numerical stability. This situation arises, for instance, when the choice of conjugate momentum $\pi_i$ associated to the $dof$ $f_i$, leads to a kernel that contains such momentum. 
-In those cases, the application of a symplectic algorithm will not lead to an accurate (or even stable) solution. 
+One subtlety of these integrators lies in the importance of a wise choice of the conjugate momenta associated to the *dof*. An "improper" choice may lead to the loss of *symplecticity*, resulting in a degradation of the 
+desired numerical stability. This situation arises, for instance, when the choice of conjugate momentum $\pi_i$ associated to the $dof$ $f_i$, leads to a kernel that contains such momentum. In those cases, the application of a symplectic algorithm will not lead to an accurate (or even stable) solution. 
 
-Following with the example of interacting scalar fields introduced in the previous subsection, a convenient choice for the conjugate momenta is the canonical choice (see {\tt The Art\,I} for a detailed discussion) 
+Following with the example of interacting scalar fields introduced in the previous subsection, a convenient choice for the conjugate momenta is the canonical choice [see $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) for a detailed discussion] 
 [](){ #eq_auto_010 }
 ```math
 \begin{equation}
@@ -475,17 +460,15 @@ The evolution kernels for our canonically normalised fields read therefore
 [](){ #eq_EOMScaleFactor-LatKernel }
 ```math
 \begin{eqnarray}
-\label{eq_EOMScalar-LatKernel}
-\mathcal{K}^{\rm L}_{i}[a,\lbrace \tilde\phi_j \rbrace] & = & a^{1 + \alpha} \sum_k \widetilde\nabla_k^- \widetilde\nabla_k^+ \tilde\phi_{i}  -  a^{3 + \alpha} \widetilde V_{,\tilde\phi_{i}}\,,~~~~ i = 1, 2, ..., N_s\,, \\
-\label{eq_EOMScaleFactor-LatKernel}
-\mathcal{K}^{\rm L}_{a}[a,{\widetilde E}_K,{\widetilde E}_G,{\widetilde E}_V] & = & \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2 a^{1+2\alpha}\Big[ (\alpha - 2){\widetilde E}_{K}  + \alpha {{\widetilde E}_{G}} + (\alpha + 1 ) {{\widetilde E}_V} \Big] \,,
+\mathcal{K}^{\rm L}_{i}[a,\lbrace \tilde\phi_j \rbrace] &=& a^{1 + \alpha} \sum_k \widetilde\nabla_k^- \widetilde\nabla_k^+ \tilde\phi_{i} - a^{3 + \alpha} \widetilde V_{,\tilde\phi_{i}}\,,\qquad i = 1, 2, ..., N_s\,, \label{eq_EOMScalar-LatKernel} \\
+\mathcal{K}^{\rm L}_{a}[a,{\widetilde E}_K,{\widetilde E}_G,{\widetilde E}_V] &=& \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2 a^{1+2\alpha}\Big[ (\alpha - 2){\widetilde E}_{K} + \alpha {{\widetilde E}_{G}} + (\alpha + 1 ) {{\widetilde E}_V} \Big]\,. \label{eq_EOMScaleFactor-LatKernel}
 \end{eqnarray}
 ```
 
-We review now representative cases of symplectic integrators (for en extensive discussion on these, see {\tt The Art-I}). To this end, we present their concrete implementation for the reference case of scalar interactive singlets.\\
+We review now representative cases of symplectic integrators [for en extensive discussion on these, see $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl])]. We present below their concrete implementation for the reference case of scalar interactive singlets.
 
 
-\textbf{I) (Staggered) Leapfrog}. The {\it leapfrog} algorithm is one of the simplest methods for solving second order differential equations that ensures order $\mathcal{O}(\delta \eta^2)$. It requires that the field amplitudes and their conjugate momenta are displaced between each other by a half-time step $\delta\eta/2$. The same applies to the scale-factor and its derivative. In our case of reference, a convenient choice of the conjugate momenta is
+**I) (Staggered) Leapfrog.** The *leapfrog* algorithm is one of the simplest methods for solving second order differential equations that ensures order $\mathcal{O}(\delta \eta^2)$. It requires that the field amplitudes and their conjugate momenta are displaced between each other by a half-time step $\delta\eta/2$. The same applies to the scale-factor and its derivative. In our case of reference, a convenient choice of the conjugate momenta is
 [](){ #eq_auto_012 }
 ```math
 \begin{equation}
@@ -513,81 +496,77 @@ An iterative scheme is then written as
 [](){ #eq_HCschemeIII }
 ```math
 \begin{eqnarray}
-&& \hspace*{2mm}IC  :  \lbrace \tilde\phi_i,a \rbrace {\rm ~at~} \tilde\eta_0, ~~~\lbrace \tilde\pi_{i,-{0}/2},b_{-{0}/2}\rbrace {\rm ~at~} \tilde\eta_0-0.5\delta\tilde\eta\, , \nonumber\\[1mm]
+&& IC  :  \lbrace \tilde\phi_i,a \rbrace {\rm ~at~} \tilde\eta_0, ~~~\lbrace \tilde\pi_{i,-{0}/2},b_{-{0}/2}\rbrace {\rm ~at~} \tilde\eta_0-0.5\delta\tilde\eta\, , \nonumber\\[1mm]
 && \left\lbrace
 \begin{array}{rcl}
-\tilde\pi_{i,+0/2} & = & \tilde\pi_{i,-0/2} + \delta\tilde\eta\mathcal{K}^{\rm L}_{i}[a,\lbrace \tilde\phi_j \rbrace]\, , \vspace*{0.15cm}\\
-b_{+0/2} &=& b_{-0/2} + \delta\tilde\eta \mathcal{K}^{\rm L}_{a}[a,\overline{{\widetilde E}}_{K},{\widetilde E}_G,{\widetilde E}_V]\, , \vspace*{0.15cm}\\
-a_{+0} &=&  a + \delta\tilde\eta\, b_{+0/2},\ ~~~~ \longrightarrow ~~~~ a_{+0/2} \equiv (a_{+0} + a)/2\,,\\
-\tilde\phi_{i,+0} &=& \tilde\phi_a + \delta\tilde\eta\,\tilde\pi_{i,+0/2}a_{+0/2}^{-(3-\alpha)}\,,\vspace*{0.15cm}\\
+\tilde\pi_{i,+0/2} & = & \tilde\pi_{i,-0/2} + \delta\tilde\eta\mathcal{K}^{\rm L}_{i}[a,\lbrace \tilde\phi_j \rbrace]\, ,\\[1.5mm]
+b_{+0/2} &=& b_{-0/2} + \delta\tilde\eta \mathcal{K}^{\rm L}_{a}[a,\overline{{\widetilde E}}_{K},{\widetilde E}_G,{\widetilde E}_V]\, ,\\[1.5mm]
+a_{+0} &=&  a + \delta\tilde\eta\, b_{+0/2},\ ~~~~ \longrightarrow ~~~~ a_{+0/2} \equiv (a_{+0} + a)/2\,,\\[1.5mm]
+\tilde\phi_{i,+0} &=& \tilde\phi_a + \delta\tilde\eta\,\tilde\pi_{i,+0/2}a_{+0/2}^{-(3-\alpha)}\,,
 \end{array}
 \right. \\[1mm]
-&& \hspace*{2mm}HC : b_{+0/2}^2 = \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2a_{+0/2}^{2(\alpha+1)} \Big({{\widetilde E}_{K}} + \overline{{\widetilde E}}_{G} + \overline{{\widetilde E}}_{V} \,\Big)\,,\nonumber
+&& HC : b_{+0/2}^2 = \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2a_{+0/2}^{2(\alpha+1)} \Big({{\widetilde E}_{K}} + \overline{{\widetilde E}}_{G} + \overline{{\widetilde E}}_{V} \,\Big)\,,\nonumber
 \label{eq_HCschemeIII}
 \end{eqnarray}
 ```
-where $\overline{{\widetilde E}}_{K} \equiv \left({\widetilde E}_{K, -0/2} + {\widetilde E}_{K,+0/2} \right)/2$, $\overline{{\widetilde E}}_{G} \equiv \left({\widetilde E}_{G} + {\widetilde E}_{G,+0} \right)/2$ and $\overline{{\widetilde E}}_{V} \equiv \left({\widetilde E}_{V} + {\widetilde E}_{V,+0} \right)/2$. Above $IC$ represents the *initial conditions*, whereas $HC$ stands for {\it Hubble Constraint}.\\
+where $\overline{{\widetilde E}}_{K} \equiv \left({\widetilde E}_{K, -0/2} + {\widetilde E}_{K,+0/2} \right)/2$, $\overline{{\widetilde E}}_{G} \equiv \left({\widetilde E}_{G} + {\widetilde E}_{G,+0} \right)/2$ and $\overline{{\widetilde E}}_{V} \equiv \left({\widetilde E}_{V} + {\widetilde E}_{V,+0} \right)/2$. Above $IC$ represents the *initial conditions*, whereas $HC$ stands for *Hubble Constraint*.
 
-\textbf{II) Velocity- and Position-Verlet}. Verlet methods eliminate the half–time-step offset in the leapfrog method between field amplitudes and conjugate momenta, by either applying the velocity part of the leapfrog algorithm at two successive half–time steps but with a single position update in between, or by applying the coordinate part of the leapfrog algorithm at two successive half–time steps with one velocity update in between. The former prescription is known as the {\it Velocity-Verlet} (VV) or “kick–drift–kick”  scheme, whereas the latter is known as the {\it Position-Verlet} (PV) or “drift-kick–drift” scheme. Through the intermediate steps both position and velocity can be obtained after the three steps at integer times, with an accuracy up to order $\mathcal{O}(\delta \eta^2)$. For our reference example of singlet fields, the Verlet iterative schemes read\\
+**II) Velocity- and Position-Verlet.** Verlet methods eliminate the half–time-step offset in the leapfrog method between field amplitudes and conjugate momenta, by either applying the velocity part of the leapfrog algorithm at two successive half–time steps but with a single position update in between, or by applying the coordinate part of the leapfrog algorithm at two successive half–time steps with one velocity update in between. The former prescription is known as the *Velocity-Verlet* (VV) or “kick–drift–kick”  scheme, whereas the latter is known as the *Position-Verlet* (PV) or “drift-kick–drift” scheme. Through the intermediate steps both position and velocity can be obtained after the three steps at integer times, with an accuracy up to order $\mathcal{O}(\delta \eta^2)$. For our reference example of singlet fields, the Verlet iterative schemes read
 
-\hspace{0.15cm}\textbf{II-1)} Velocity Verlet
-\textbf{II-2)} Position Verlet
-\hspace{0.45cm}$IC: \{\tilde{\phi}_i,\tilde{\pi}_i,a,b\}\ \text{at}\ \tilde{\eta}_0\, ,$
-\hspace{0.25cm}$IC:  \{\tilde{\phi}_i,\tilde{\pi}_i,a,b\}\ \text{at}\ \tilde{\eta}_0\, ,$
+**II-1).** Velocity Verlet
+**II-2).** Position Verlet
+$IC: \{\tilde{\phi}_i,\tilde{\pi}_i,a,b\}\ \text{at}\ \tilde{\eta}_0\, ,$
+$IC:  \{\tilde{\phi}_i,\tilde{\pi}_i,a,b\}\ \text{at}\ \tilde{\eta}_0\, ,$
 [](){ #eq_auto_013 }
 ```math
 \begin{equation}
-\vcenter{\hbox{%
-$\displaystyle
 \left\lbrace
 \begin{array}{@{}l}
 b_{+0/2} = b +{\dfrac{\delta\tilde\eta}{2}} 
-\mathcal{K}^{\rm L}_{a}[a,{\widetilde E}_{K},{\widetilde E}_G,{\widetilde E}_V]\,,\\\vspace{0.15cm}
+\mathcal{K}^{\rm L}_{a}[a,{\widetilde E}_{K},{\widetilde E}_G,{\widetilde E}_V]\,,\\
 \tilde\pi_{i,+0/2} = \tilde\pi^{(b)} + 
-{\dfrac{\delta\tilde\eta}{2}} \mathcal{K}^{\rm L}_{i}[a,\{\tilde\phi_j\}]\,,~\\\vspace{0.15cm}
-a_{+0} =  a +  {\delta\tilde\eta}b_{+0/2}\,,~a_{+0/2} = \dfrac{a_{+0}+a}{2}\,,\\\hspace{0.15cm}
+{\dfrac{\delta\tilde\eta}{2}} \mathcal{K}^{\rm L}_{i}[a,\{\tilde\phi_j\}]\,,~\\
+a_{+0} =  a +  {\delta\tilde\eta}b_{+0/2}\,,~a_{+0/2} = \dfrac{a_{+0}+a}{2}\,,\\
 \tilde\phi_{i,+0} = \tilde\phi_i + 
-\delta\tilde\eta\,\tilde\pi_{i,+0/2}a_{+0/2}^{-(3-\alpha)}\,,\\\vspace{0.15cm}
+\delta\tilde\eta\,\tilde\pi_{i,+0/2}a_{+0/2}^{-(3-\alpha)}\,,\\
 \tilde\pi_{i,+0} = \tilde\pi_{i,+0/2} +
-{\dfrac{\delta\tilde\eta}{2}} \mathcal{K}^{\rm L}_{i}[a,\{\tilde\phi_j\}]\big|_{+0}\,,\\\vspace{0.15cm}
+{\dfrac{\delta\tilde\eta}{2}} \mathcal{K}^{\rm L}_{i}[a,\{\tilde\phi_j\}]\big|_{+0}\,,\\
 b_{+0} = b_{+0/2} + {\dfrac{\delta\tilde\eta}{2}}  
 \mathcal{K}^{\rm L}_{a}[a,{\widetilde E}_{K},{\widetilde E}_G,{\widetilde E}_V]\big|_{+0}\,,
 \end{array}
 \right.
-$}}\nonumber
+\nonumber
 \label{eq_auto_013}
 \end{equation}
 ```
 [](){ #eq_auto_014 }
 ```math
 \begin{equation}
-\vcenter{\hbox{%
-$\displaystyle
 \left\lbrace
 \begin{array}{@{}l}
-a_{+0/2} =  a + {\dfrac{\delta\tilde\eta}{2}} b\,,\\\vspace{0.15cm}
+a_{+0/2} =  a + {\dfrac{\delta\tilde\eta}{2}} b\,,\\
 \tilde\phi_{i,+0/2} = \tilde\phi_i + 
-{\dfrac{\delta\tilde\eta}{2}}\,\tilde\pi_i a^{-(3-\alpha)}\,,\\\vspace{0.15cm}
+{\dfrac{\delta\tilde\eta}{2}}\,\tilde\pi_i a^{-(3-\alpha)}\,,\\
 \tilde\pi_{i,+0} = \tilde\pi_i +
-{\delta\tilde\eta}\,\mathcal{K}^{\rm L}_{i}[a,\{\tilde\phi_j\}]\big|_{+0/2}\,,\\\vspace{0.15cm}
+{\delta\tilde\eta}\,\mathcal{K}^{\rm L}_{i}[a,\{\tilde\phi_j\}]\big|_{+0/2}\,,\\
 b_{+0} = b +{\delta\tilde\eta}\,
-\mathcal{K}^{\rm L}_{a}[a,\overline{\widetilde{E}}_{K},{\widetilde E}_G,{\widetilde E}_V]\big|_{+0/2}\,,\\\hspace{0.15cm}
-a_{+0} =  a_{+0/2} + {\dfrac{\delta\tilde\eta}{2}} b_{+0}\,,\\\vspace{0.15cm}
+\mathcal{K}^{\rm L}_{a}[a,\overline{\widetilde{E}}_{K},{\widetilde E}_G,{\widetilde E}_V]\big|_{+0/2}\,,\\
+a_{+0} =  a_{+0/2} + {\dfrac{\delta\tilde\eta}{2}} b_{+0}\,,\\
 \tilde\phi_{i,+0} = \tilde\phi_{i,+0/2} + 
 {\dfrac{\delta\tilde\eta}{2}}\,\tilde\pi_{i,+0}a_{+0}^{-(3-\alpha)}\,,
 \end{array}
 \right.
-$}}
+
 \label{eq_auto_014}
 \end{equation}
 ```
-\hspace{0.45cm}$HC: b^2 = \dfrac{1}{3}\!\left(\dfrac{ f_*}{m_p}\right)^2
+$HC: b^2 = \dfrac{1}{3}\!\left(\dfrac{ f_*}{m_p}\right)^2
 a^{2(\alpha+1)} \big({\widetilde E}_{K} + {\widetilde E}_{G} + {\widetilde E}_{V}\big)\, ,$
-\hspace{0.25cm}$HC: b^2 = \dfrac{1}{3}\!\left(\dfrac{ f_*}{m_p}\right)^2
-a^{2(\alpha+1)} \big({\widetilde E}_{K} + {\widetilde E}_{G} + {\widetilde E}_{V}\big)\, ,$\\
+$HC: b^2 = \dfrac{1}{3}\!\left(\dfrac{ f_*}{m_p}\right)^2
+a^{2(\alpha+1)} \big({\widetilde E}_{K} + {\widetilde E}_{G} + {\widetilde E}_{V}\big)\, ,$
 with $\overline{{\widetilde E}}_{K} \equiv \left({\widetilde E}_{K} + {\widetilde E}_{K,+0} \right)/2$.
 
-\textbf{III) Yoshida: Verlet Integration of $\mathcal{O}(\delta\eta^n)$}. The Verlet integration methods can be used recursively to construct higher–order (even) integrators with accuracy $\mathcal{O}(\delta \eta^n)$, with $n = 4, 6, 8, ...$. A single time step $\delta \eta$ is decomposed into $s$ sub-steps, $\delta \eta_p = w_p \delta \eta$, with $\sum_{p=1}^s w_p = 1$, and the corresponding Verlet algorithm is applied sequentially in each sub-step. For instance, the Velocity-Verlet version of this scheme can be written as
+**III) Yoshida: Verlet Integration of $\mathcal{O}(\delta\eta^n)$.** The Verlet integration methods can be used recursively to construct higher–order (even) integrators with accuracy $\mathcal{O}(\delta \eta^n)$, with $n = 4, 6, 8, ...$. A single time step $\delta \eta$ is decomposed into $s$ sub-steps, $\delta \eta_p = w_p \delta \eta$, with $\sum_{p=1}^s w_p = 1$, and the corresponding Verlet algorithm is applied sequentially in each sub-step. For instance, the Velocity-Verlet version of this scheme can be written as
 [](){ #eq_auto_015 }
 ```math
 \begin{equation}
@@ -600,23 +579,23 @@ IC  :  \lbrace \tilde \phi_i^{(0)},\tilde\pi_i^{(0)},a^{(0)},b^{(0)}\rbrace {\rm
 \begin{equation}
 \left\lbrace
 \begin{array}{rcl}
-b^{(p)}_{1/2} &=& b^{(p-1)} + \omega_p{\delta\tilde\eta\over 2}\mathcal{K}_{ a}^{{\rm L},(p-1)}\, ,\vspace*{0.15cm}\\
-\tilde\pi^{(p)}_{i,1/2} &=& \tilde\pi_i^{(p-1)} + \omega_p{\delta\tilde\eta\over 2}\mathcal{K}_{i}^{{\rm L},(p-1)}\, ,\vspace*{0.15cm}\\
-a_{1/2}^{(p)} &=&  a^{(p-1)} + b_{1/2}^{(p)}\omega_p{\delta\tilde\eta\over2}\, ,\vspace*{0.15cm}\\
-\tilde\phi^{(p)}_{i} &=& \tilde\phi^{(p-1)}_i + \omega_p\delta\tilde\eta\,\tilde\pi_{i,1/2}^{(p)}(a_{1/2}^{(p)})^{-(3-\alpha)}\, ,\vspace*{0.15cm}\\
-a^{(p)} &=& a^{(p)}_{1/2} +  b^{(p)}_{1/2}\omega_p{\delta\tilde\eta\over2}\,,\vspace*{0.15cm}\\
-\tilde\pi_{i}^{(p)} & = & \tilde\pi^{(p)}_{i,1/2} + \omega_p{\delta\tilde\eta\over 2}\mathcal{K}_{i}^{{\rm L}, (p)}\, ,
-\vspace*{0.15cm}\\
+b^{(p)}_{1/2} &=& b^{(p-1)} + \omega_p{\delta\tilde\eta\over 2}\mathcal{K}_{ a}^{{\rm L},(p-1)}\, ,\\[1.5mm]
+\tilde\pi^{(p)}_{i,1/2} &=& \tilde\pi_i^{(p-1)} + \omega_p{\delta\tilde\eta\over 2}\mathcal{K}_{i}^{{\rm L},(p-1)}\, ,\\[1.5mm]
+a_{1/2}^{(p)} &=&  a^{(p-1)} + b_{1/2}^{(p)}\omega_p{\delta\tilde\eta\over2}\, ,\\[1.5mm]
+\tilde\phi^{(p)}_{i} &=& \tilde\phi^{(p-1)}_i + \omega_p\delta\tilde\eta\,\tilde\pi_{i,1/2}^{(p)}(a_{1/2}^{(p)})^{-(3-\alpha)}\, ,\\[1.5mm]
+a^{(p)} &=& a^{(p)}_{1/2} +  b^{(p)}_{1/2}\omega_p{\delta\tilde\eta\over2}\,,\\[1.5mm]
+\tilde\pi_{i}^{(p)} & = & \tilde\pi^{(p)}_{i,1/2} + \omega_p{\delta\tilde\eta\over 2}\mathcal{K}_{i}^{{\rm L}, (p)}\, ,\\[1.5mm]
+
 b^{(p)} &=& b^{(p)}_{1/2} + \omega_p{\delta\tilde\eta\over 2}\mathcal{K}_{a}^{{\rm L}, (p)}\, ,
 \end{array}
-\right\rbrace_{p\,=\,1,\, ...,\, s} \hspace*{-1cm}
+\right\rbrace_{p\,=\,1,\, ...,\, s} 
 \Longrightarrow
 \left\lbrace
 \begin{array}{rcl}
-\tilde\phi_{i,+0} &=&  \tilde\phi_i^{(s)}\, , \vspace*{0.15cm}\\
-a_{+0} &=& a^{(s)}\, , \vspace*{0.15cm}\\
-\tilde\pi_{i,+0} &=& \tilde\pi_i^{(s)}\, , \vspace*{0.15cm}\\
-b_{+0} &=& b^{(s)}\, ,\vspace*{0.15cm} 
+\tilde\phi_{i,+0} &=&  \tilde\phi_i^{(s)}\, ,\\[1.5mm]
+a_{+0} &=& a^{(s)}\, ,\\[1.5mm]
+\tilde\pi_{i,+0} &=& \tilde\pi_i^{(s)}\, ,\\[1.5mm]
+b_{+0} &=& b^{(s)}\, , 
 \end{array}
 \right.
 \label{eq_auto_016}
@@ -642,7 +621,7 @@ schemes, both
 the field amplitudes and their 
 conjugate momenta are defined 
 at the same time step. 
-On the other hand, because these methods involve the execution of intermediate sub-steps, {\it auxiliary fields} are required to store the information at each stage. In the case of interacting scalar fields, a simple choice for the conjugate momenta,  
+On the other hand, because these methods involve the execution of intermediate sub-steps, *auxiliary fields* are required to store the information at each stage. In the case of interacting scalar fields, a simple choice for the conjugate momenta,  
 [](){ #eq_auto_018 }
 ```math
 \begin{equation}
@@ -654,12 +633,12 @@ suffices. The evolution kernel takes then the form
 [](){ #eq_scalar_singlet_eom }
 ```math
 \begin{equation}\label{eq_scalar_singlet_eom}
-\tilde{\pi}'_i = \mathcal{K}^{\rm L}_{i}[a,\lbrace\tilde\phi_{j}\rbrace, b, \tilde{\pi}_{i}] \equiv -(3 - \alpha)\frac{a'}{a}\tilde{\pi}_{i} + a^{-2 (1  - \alpha )} \sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi}_i - \widetilde V_{,\tilde\phi_{i}} \; , ~~~~ i = 1, 2, ..., N_s\,.\\
+\tilde{\pi}'_i = \mathcal{K}^{\rm L}_{i}[a,\lbrace\tilde\phi_{j}\rbrace, b, \tilde{\pi}_{i}] \equiv -(3 - \alpha)\frac{a'}{a}\tilde{\pi}_{i} + a^{-2 (1  - \alpha )} \sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi}_i - \widetilde V_{,\tilde\phi_{i}} \; , ~~~~ i = 1, 2, ..., N_s\,.
 \end{equation}
 ```
-which we note it depends explicitly on $\tilde{\pi}_{i}$.\\ 
+which we note it depends explicitly on $\tilde{\pi}_{i}$.
 
-\textbf{I) Runge-Kutta 2nd order (RK2)}. These algorithms provide an evolution scheme accurate to $\mathcal{O}(\delta \eta^2)$ by introducing one intermediate step, whose information is stored in auxiliary fields, one per field *dof*. While there exist several implementations, here we review one of the most common ones, known as the *modified Euler* method,
+**I) Runge-Kutta 2nd order (RK2).** These algorithms provide an evolution scheme accurate to $\mathcal{O}(\delta \eta^2)$ by introducing one intermediate step, whose information is stored in auxiliary fields, one per field *dof*. While there exist several implementations, here we review one of the most common ones, known as the *modified Euler* method,
 [](){ #eq_auto_019 }
 ```math
 \begin{equation}
@@ -670,13 +649,13 @@ IC  :  \lbrace \tilde \phi_i,\tilde\pi_i,a,b\rbrace {\rm ~at~} \tilde\eta_0\,,\\
 [](){ #eq_RK2algorithm_1 }
 ```math
 \begin{equation}
-\vspace{-0.75cm}
+
 \left\lbrace
 \begin{array}{rcl}
-\tilde{\phi_i}^{(1)} = \tilde{\phi_i}\,, & \tilde{\phi_i}^{(2)} = \tilde{\phi_i}^{(1)} + \delta\tilde{\eta}\tilde{\pi}^{(1)}_{i}\,,\vspace*{0.15cm}\\
-\tilde{\pi}^{(1)}_{i} = \tilde{\pi}_{i} & \tilde{\pi}^{(2)}_{i} = \tilde{\pi}^{(1)}_{i} + {\delta\tilde{\eta}}\mathcal{K}_{i}^{{\rm L},(1)} \,,
-\vspace*{0.15cm}\\
-a^{(1)} = a\,, & a^{(2)} = a^{(1)} + {\delta\tilde{\eta}}\tilde{\pi}^{(1)}_a\,,\vspace*{0.15cm}\\
+\tilde{\phi_i}^{(1)} = \tilde{\phi_i}\,, & \tilde{\phi_i}^{(2)} = \tilde{\phi_i}^{(1)} + \delta\tilde{\eta}\tilde{\pi}^{(1)}_{i}\,,\\[1.5mm]
+\tilde{\pi}^{(1)}_{i} = \tilde{\pi}_{i} & \tilde{\pi}^{(2)}_{i} = \tilde{\pi}^{(1)}_{i} + {\delta\tilde{\eta}}\mathcal{K}_{i}^{{\rm L},(1)} \,,\\[1.5mm]
+
+a^{(1)} = a\,, & a^{(2)} = a^{(1)} + {\delta\tilde{\eta}}\tilde{\pi}^{(1)}_a\,,\\[1.5mm]
 b^{(1)} = b\,, & b^{(2)} = b^{(1)} + {\delta\tilde{\eta}}\mathcal{K}_{a}^{{\rm L}, (1)}\,,
 \end{array}
 \right\rbrace\Longrightarrow
@@ -707,9 +686,9 @@ HC : b^2 = \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2a^{2(\alpha+1)} \Big({{\
 \label{eq_auto_020}
 \end{eqnarray}
 ```
-where again we use $\mathcal{K}^{{\rm L},(l)}_{ i} = \mathcal{K}_{i}^{\rm L}[a^{(l)},\lbrace\tilde\phi_{j}^{(l)}\rbrace,b^{(l)},\tilde{\pi}^{(l)}_{i}]$ and $\mathcal{K}_{a}^{{\rm L}, (l)}=\mathcal{K}_{a}^{\rm L}[a^{(l)},{\widetilde E}_K^{(l)},{\widetilde E}_G^{(l)},{\widetilde E}_V^{(l)}]$.\\
+where again we use $\mathcal{K}^{{\rm L},(l)}_{ i} = \mathcal{K}_{i}^{\rm L}[a^{(l)},\lbrace\tilde\phi_{j}^{(l)}\rbrace,b^{(l)},\tilde{\pi}^{(l)}_{i}]$ and $\mathcal{K}_{a}^{{\rm L}, (l)}=\mathcal{K}_{a}^{\rm L}[a^{(l)},{\widetilde E}_K^{(l)},{\widetilde E}_G^{(l)},{\widetilde E}_V^{(l)}]$.
 
-\textbf{II) Runge-Kutta 4th order (RK4)}. The accuracy can be increased to $\mathcal{O}(\delta\eta^4)$ by adding a weighted average of four derivative stages in the previous Runge-Kutta algorithm of 2nd order. This leads to the renowned RK4 algorithm as
+**II) Runge-Kutta 4th order (RK4).** The accuracy can be increased to $\mathcal{O}(\delta\eta^4)$ by adding a weighted average of four derivative stages in the previous Runge-Kutta algorithm of 2nd order. This leads to the renowned RK4 algorithm as
 [](){ #eq_auto_021 }
 ```math
 \begin{equation}
@@ -721,13 +700,13 @@ IC :  \lbrace \tilde \phi_i,\tilde\pi_i,a,b\rbrace {\rm ~at~} \tilde\eta_0\,,\\ 
 ```math
 \begin{equation}
 \left.
-\hspace{7.5mm}
+
 \begin{array}{c}
 \left\lbrace
 \begin{array}{llll}
-\tilde{\phi}^{(1)}_i = \tilde{\phi}_i\,, & \tilde{\phi}^{(2)}_i = \tilde{\phi}^{(1)}_i + {{\delta\tilde{\eta}}\over2}\tilde{\pi}^{(1)}_{i}\,, & \tilde{\phi}^{(3)}_i = \tilde{\phi}^{(1)}_i + {{\delta\tilde{\eta}}\over2}\tilde{\pi}^{(2)}_{i}\,, & \tilde{\phi}^{(4)}_i = \tilde{\phi}^{(1)} + {\delta\tilde{\eta}}\tilde{\pi}^{(3)}_{i}\,,\vspace*{0.15cm}\\
-\tilde{\pi}^{(1)}_{i} = \tilde{\pi}_{i} & \tilde{\pi}^{(2)}_{i} = \tilde{\pi}^{(1)}_{i} + {{\delta\tilde{\eta}}\over2}\mathcal{K}^{{\rm L}, (1)}_{i}\,, & \tilde{\pi}^{(3)}_{i} = \tilde{\pi}^{(1)}_{i} + {{\delta\tilde{\eta}}\over2}\mathcal{K}^{{\rm L}, (2)}_{i}\,, & \tilde{\pi}^{(4)}_{i} = \tilde{\pi}^{(1)}_{i} + {\delta\tilde{\eta}}\mathcal{K}^{{\rm L}, (3)}_{i}\,,\vspace*{0.15cm}\\
-a^{(1)} = a\,, & a^{(2)} = a^{(1)} + {{\delta\tilde{\eta}}\over2}b^{(1)}\,, & a^{(3)} = a^{(1)} + {{\delta\tilde{\eta}}\over2}b^{(2)}\,, & a^{(4)} = a^{(1)} + {\delta\tilde{\eta}}b^{(3)}\,,\vspace*{0.15cm}\\
+\tilde{\phi}^{(1)}_i = \tilde{\phi}_i\,, & \tilde{\phi}^{(2)}_i = \tilde{\phi}^{(1)}_i + {{\delta\tilde{\eta}}\over2}\tilde{\pi}^{(1)}_{i}\,, & \tilde{\phi}^{(3)}_i = \tilde{\phi}^{(1)}_i + {{\delta\tilde{\eta}}\over2}\tilde{\pi}^{(2)}_{i}\,, & \tilde{\phi}^{(4)}_i = \tilde{\phi}^{(1)} + {\delta\tilde{\eta}}\tilde{\pi}^{(3)}_{i}\,,\\[1.5mm]
+\tilde{\pi}^{(1)}_{i} = \tilde{\pi}_{i} & \tilde{\pi}^{(2)}_{i} = \tilde{\pi}^{(1)}_{i} + {{\delta\tilde{\eta}}\over2}\mathcal{K}^{{\rm L}, (1)}_{i}\,, & \tilde{\pi}^{(3)}_{i} = \tilde{\pi}^{(1)}_{i} + {{\delta\tilde{\eta}}\over2}\mathcal{K}^{{\rm L}, (2)}_{i}\,, & \tilde{\pi}^{(4)}_{i} = \tilde{\pi}^{(1)}_{i} + {\delta\tilde{\eta}}\mathcal{K}^{{\rm L}, (3)}_{i}\,,\\[1.5mm]
+a^{(1)} = a\,, & a^{(2)} = a^{(1)} + {{\delta\tilde{\eta}}\over2}b^{(1)}\,, & a^{(3)} = a^{(1)} + {{\delta\tilde{\eta}}\over2}b^{(2)}\,, & a^{(4)} = a^{(1)} + {\delta\tilde{\eta}}b^{(3)}\,,\\[1.5mm]
 b^{(1)} = b\,, & b^{(2)} = b^{(1)} + {{\delta\tilde{\eta}}\over2}\mathcal{K}_{a}^{{\rm L}, (1)}\,, & b^{(3)} = b^{(1)} + {{\delta\tilde{\eta}}\over2}\mathcal{K}_{a}^{{\rm L},(2)}\,, & b^{(4)} = b^{(1)} + {\delta\tilde{\eta}}\mathcal{K}_{a}^{{\rm L}, (3)}\,, 
 \end{array}
 \right\rbrace\Longrightarrow\nonumber
@@ -736,21 +715,21 @@ b^{(1)} = b\,, & b^{(2)} = b^{(1)} + {{\delta\tilde{\eta}}\over2}\mathcal{K}_{a}
 \label{eq_auto_022}
 \end{equation}
 ```
-\\
+
 [](){ #eq_RK4algorithm_1 }
 ```math
 \begin{equation}
 \Longrightarrow
 \left\lbrace
 \begin{array}{rcl}
-\tilde{\phi}_{i,+0} &=& \tilde{\phi}^{(1)}_i + {1\over6}\delta\tilde{\eta}\left[\tilde{\pi}^{(1)}_{i}+2\tilde{\pi}^{(2)}_{i}+2\tilde{\pi}^{(3)}_{i}+\tilde{\pi}^{(4)}_{i}\right]\,,\vspace*{0.15cm}\\
-a_{+0} &=& a^{(1)} + {1\over6}\delta\tilde{\eta}\left[b^{(1)}+2b^{(2)}+2b^{(3)}+b^{(4)}\right]\,,\vspace*{0.2cm}\\
-\tilde{\pi}_{i,+0}&=&\tilde{\pi}^{(1)}_{i}+{1\over6}\delta\tilde{\eta}\left[\mathcal{K}^{{\rm L},(1)}_{i}+2\mathcal{K}^{{\rm L}, (2)}_{i}+2\mathcal{K}^{{\rm L}, (3)}_{i}+\mathcal{K}^{{\rm L}, (4)}_{i}\right]\,,\vspace*{0.15cm}\\
-b_{+0}&=&b^{(1)}+{1\over6}\delta\tilde{\eta}\left[\mathcal{K}_{a}^{{\rm L}, (1)}+2\mathcal{K}_{a}^{{\rm L}, (2)}+2\mathcal{K}_{a}^{{\rm L},(3)}+\mathcal{K}_{a}^{{\rm L}, (4)}\right]\,,\vspace*{0.15cm}\\
+\tilde{\phi}_{i,+0} &=& \tilde{\phi}^{(1)}_i + {1\over6}\delta\tilde{\eta}\left[\tilde{\pi}^{(1)}_{i}+2\tilde{\pi}^{(2)}_{i}+2\tilde{\pi}^{(3)}_{i}+\tilde{\pi}^{(4)}_{i}\right]\,,\\[1.5mm]
+a_{+0} &=& a^{(1)} + {1\over6}\delta\tilde{\eta}\left[b^{(1)}+2b^{(2)}+2b^{(3)}+b^{(4)}\right]\,,\\[1.5mm]
+\tilde{\pi}_{i,+0}&=&\tilde{\pi}^{(1)}_{i}+{1\over6}\delta\tilde{\eta}\left[\mathcal{K}^{{\rm L},(1)}_{i}+2\mathcal{K}^{{\rm L}, (2)}_{i}+2\mathcal{K}^{{\rm L}, (3)}_{i}+\mathcal{K}^{{\rm L}, (4)}_{i}\right]\,,\\[1.5mm]
+b_{+0}&=&b^{(1)}+{1\over6}\delta\tilde{\eta}\left[\mathcal{K}_{a}^{{\rm L}, (1)}+2\mathcal{K}_{a}^{{\rm L}, (2)}+2\mathcal{K}_{a}^{{\rm L},(3)}+\mathcal{K}_{a}^{{\rm L}, (4)}\right]\,,
 \end{array}\right. \label{eq_RK4algorithm_1}
 \end{equation}
 ```
-\\
+
 [](){ #eq_auto_023 }
 ```math
 \begin{eqnarray}
@@ -759,7 +738,7 @@ HC : b^2 = \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2a^{2(\alpha+1)} \Big({{\
 \end{eqnarray}
 ```
 
-\textbf{III) Low-storage Runge-Kutta}. These methods represent a refined version of the previous schemes, in which the number of auxiliary fields is reduced while maintaining the integration accuracy of $\mathcal{O}(\delta \eta^n)$ \cite{Carpenter1994Thirdorder2R,Carpenter1994Fourthorder2R,Bazavov:2021pik,Bazavov:2025dzo,Bazavov:2025exj}. This is achieved by introducing $s$ intermediate sub-stages, each with its corresponding weight coefficient.
+**III) Low-storage Runge-Kutta.** These methods represent a refined version of the previous schemes, in which the number of auxiliary fields is reduced while maintaining the integration accuracy of $\mathcal{O}(\delta \eta^n)$ \cite{Carpenter1994Thirdorder2R,Carpenter1994Fourthorder2R,Bazavov:2021pik,Bazavov:2025dzo,Bazavov:2025exj}. This is achieved by introducing $s$ intermediate sub-stages, each with its corresponding weight coefficient.
 [](){ #eq_auto_024 }
 ```math
 \begin{equation}
@@ -767,7 +746,7 @@ IC  :  \lbrace \tilde \phi_i^{(0)},\tilde\pi_i^{(0)},a^{(0)},b^{(0)}\rbrace {\rm
 \label{eq_auto_024}
 \end{equation}
 ```
-\\
+
 [](){ #eq_auto_025 }
 ```math
 \begin{equation}
@@ -788,13 +767,13 @@ IC  :  \lbrace \tilde \phi_i^{(0)},\tilde\pi_i^{(0)},a^{(0)},b^{(0)}\rbrace {\rm
  \end{array}
  \Longrightarrow
  \begin{array}{rcl}
-       \tilde\phi^{(p)}_i &=& \tilde\phi^{(p-1)}_i + B_p  \Delta\tilde\phi^{(p)}_i\, ,  \vspace*{0.15cm}\\
-        \tilde\pi_{i}^{(p)} &=&\tilde\pi_{i}^{(p-1)}+  B_p \Delta\tilde\pi_{i}^{(p)}\, ,   \vspace*{0.15cm}\\
-        a^{(p)} &=&a^{(p-1)} +B_p  \Delta a^{(p)}\, ,  \vspace*{0.15cm}\\
-        b^{(p)} &=&b^{(p-1)} +B_p  \Delta b^{(p)}\, , \vspace*{0.15cm}
+       \tilde\phi^{(p)}_i &=& \tilde\phi^{(p-1)}_i + B_p  \Delta\tilde\phi^{(p)}_i\, ,\\[1.5mm]
+        \tilde\pi_{i}^{(p)} &=&\tilde\pi_{i}^{(p-1)}+  B_p \Delta\tilde\pi_{i}^{(p)}\, ,\\[1.5mm]
+        a^{(p)} &=&a^{(p-1)} +B_p  \Delta a^{(p)}\, ,\\[1.5mm]
+        b^{(p)} &=&b^{(p-1)} +B_p  \Delta b^{(p)}\, , 
 \end{array}
 \right\rbrace_{p\,=\,1,\, ...,\, s} \Longrightarrow
-\hspace*{-1cm}\nonumber
+\nonumber
 \label{eq_auto_025}
 \end{equation}
 ```
@@ -804,15 +783,15 @@ IC  :  \lbrace \tilde \phi_i^{(0)},\tilde\pi_i^{(0)},a^{(0)},b^{(0)}\rbrace {\rm
 \Longrightarrow
 \left\lbrace
 \begin{array}{rcl}
-\tilde\phi_{i,+0} &=&  \tilde \phi_i^{(s)}\, , \vspace*{0.15cm}\\
-a_{+0} &=& a^{(s)}\,, \vspace*{0.15cm}\\
-\tilde\pi_{i,+0} &=& \tilde\pi_i^{(s)}\, , \vspace*{0.15cm}\\
-b_{+0} &=& b^{(s)}\, ,\\
+\tilde\phi_{i,+0} &=&  \tilde \phi_i^{(s)}\, ,\\[1.5mm]
+a_{+0} &=& a^{(s)}\,,\\[1.5mm]
+\tilde\pi_{i,+0} &=& \tilde\pi_i^{(s)}\, ,\\[1.5mm]
+b_{+0} &=& b^{(s)}\, ,
 \end{array}\label{eq_RKLSalgorithm_1}
 \right.
 \end{equation}
 ```
-\\
+
 [](){ #eq_auto_026 }
 ```math
 \begin{eqnarray}
