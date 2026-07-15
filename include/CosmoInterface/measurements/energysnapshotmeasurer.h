@@ -35,7 +35,7 @@ namespace TempLat
 
 #ifdef HAVE_HDF5
       saveScalar = IsInContainer::check("S", toSave);              // value of the scalar singlets
-      saveScalarNorm = IsInContainer::check("Snorm", toSave);              // value of the scalar singlets
+      saveScalarNorm = (IsInContainer::check("Snorm", toSave) && Model::DefectsModel) ;              // value of the scalar singlets
       saveScalarK = IsInContainer::check("E_S_K", toSave);         // kinetic energy of the scalar singlets
       saveScalarG = IsInContainer::check("E_S_G", toSave);         // gradient energy of the scalar singlets
       saveComplexScalar = IsInContainer::check("CS", toSave);      // modulus of the complex scalars
@@ -90,7 +90,7 @@ namespace TempLat
         ForLoop(i, 0, Model::Ns - 1, fIO.saver.open(nameScalar);
                 fIO.saver.save(t, model.fldS(i), "S_" + std::to_string(i)); fIO.saver.close(););
       }
-      if (saveScalarNorm) { // kinetic energy of the scalar singlets
+      if (saveScalarNorm) { // norm of the scalar singlets
         if constexpr (Model::Ns > 0) {
           fIO.saver.open(nameScalarNorm);
           fIO.saver.save(t, sqrt(Total(i, 0, Model::Ns-1, pow<2>(model.fldS(i));)), "S_norm");

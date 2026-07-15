@@ -44,7 +44,7 @@ To download the code, open a terminal in a folder of your choice and run the fol
 ```bash
 git clone https://github.com/cosmolattice/cosmolattice.git
 ```
-This will create a folder called `cosmolattice` in the current directory. To build the code, you will need to use the `CMake` build system. To do so, navigate to the new `cosmolattice` folder and run the following commands:
+This will create a folder called `cosmolattice` in the current directory. To build the code, you will need to use the `CMake` build system. To do so, navigate to the new `cosmolattice` folder and run the following commands: (<span style="color:orange;">**Jorge comment: Isn't this missing a -DMODEL and make cosmolattice?**</span>)
 ```bash
 cd cosmolattice
 mkdir build
