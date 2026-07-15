@@ -1,11 +1,15 @@
-This section summarizes the output results that are obtained from a simulation using CosmoLattice, including information about the content of the output files and about the parameters that can be used to control the type and style of the output. More concretely, we will first cover in [*Average observables*][sec_averages] those observables related to averages of fields or energies. We will then comment on the measurements of power spectra in [*Power spectra*][sec_PS], and finally briefly cover the measurement of field and energy snapshots in [*Field and energy snapshots*][sec_snapshots].
+This section summarizes the output results that are obtained from a simulation using CosmoLattice, including information about the content of the output files and about the parameters that can be used to control the type and style of the output. More concretely, we will first cover in [**Average observables**][sec_averages] those observables related to averages of fields or energies. We will then comment on the measurements of power spectra in [**Power spectra**][sec_PS], and finally briefly cover the measurement of field and energy snapshots in [**Field and energy snapshots**][sec_snapshots].
 
 We note that most of the information presented here can also be found in other section of this manual. For example [**Scalar-scalar interactions**](My first model of (singlet) scalar fields.md) and [**Scalar-gauge interactions**](My first model of gauge fields.md) contains information about the output from default simulations of theories containing scalar and gauge fields, while information about $\texttt{HDF5}$ output can also be found in [**HDF5: Output and Backups**](HDF5: Output and Backups.md). Other information about module specific observables can be found in the corresponding sections of this manual.
 
 Before moving to the description of the output, we first note some general keywords that make it possible to control the style of the output:
+
 -   `outputfile`: Folder to which all observable output files are saved. Defaults to the folder where the simulation is executed.
+
 -   `print_headers`: If set to `true` prints headers in the first line of the files, that describe the content of each column. Headers are written for both average and power psectra output filed. Defaults to `false`
+
 -   `overwriteFiles`: If set to `true` overwrites already existing files from a previous simulation. Otherwise, the simulation will fail if trying to overwrite files. Defaults to `false` to prevent the deletion of previous results. Note that the directory does not get completely wiped, only those files that are going to be recreated by the simulation.
+
 -   `appendToFiles`: Instead of writing new files, appends the results to previously existing ones when set to `true`. If the files don't exist, they are newly created. Defaults to `false`. Cannot be `true` simultaneously with `overwriteFiles`. In that case, the simulation is aborted.
 
 ### **Average observables** { #sec_averages }
@@ -65,21 +69,22 @@ For simulations with $\mathrm{U}(1)$ gauge fields `NU1Flds > 0`, the following m
 
 -  $\texttt{average_gauss_U1_[nfld].txt}$: Contains information about the conservation of Gauss law in the $\mathrm{U}(1)$ sector, which is in general obeyed to machine precision in CosmoLattice. Here LHS and RHS are the left- and right-hand sides of Eq.$~$(17) from [**Scalar-gauge interactions**](My first model of gauge fields.md).
 ```math
-\begin{equation}\tilde{\eta}\,,\quad\frac{\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle}{\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle}$,  $\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle$ , $\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle\end{equation}
+\begin{equation}\tilde{\eta}\,,\quad\frac{\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle}{\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle}\,,\quad\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle\,,\quad\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle\end{equation}
 ```
 $\hspace{0.75cm}$ where LHS and RHS are the left- and right-hand sides of Eq.$~$\eqref{eq_GaussU1-eom} [for the U(1) sector] and Eq.$~$\eqref{eq_GaussSU2-eom} [for the SU(2) sector].
 
 -  $\texttt{average_topological_charges.txt}$: Contains information about the topological charges associated to the $\textrm{U}(1)$ fields. A single file is created, and contains two columns per field species:
 ```math
-\begin{equation}\tilde{ \eta}\,,\quad\langle {\vec{\widetilde{ \mathcal E_a^{(2)}}}\cdot \vec{\widetilde{ \mathcal B_a^{(4)}}}} \rangle\,,\quad\langle {()\vec{\widetilde{ \mathcal E_a^{(2)}}}\cdot \vec{\widetilde{ \mathcal B_a^{(4)}}})^2} \rangle\,...
+\begin{equation}\tilde{ \eta}\,,\quad\langle {\vec{\widetilde{ \mathcal E}_a^{(2)}}\cdot \vec{\widetilde{ \mathcal B}_a^{(4)}}} \rangle\,,\quad\langle {()\vec{\widetilde{ \mathcal E}_a^{(2)}}\cdot \vec{\widetilde{ \mathcal B}_a^{(4)}})^2} \rangle\,...
 \end{equation}
 ```
 Here, the electric and magnetic fields are defined using improved definitions,
 ```math
 \begin{equation}
 \begin{array}{rcl}
-\widetilde{ \mathcal E_{i}^{(2)}} & \equiv & \displaystyle \frac{1}{2} (\widetilde{ \mathcal E_{i}} + \widetilde{ \mathcal E_{i,-\imath}})\,,\\[5pt]
-\widetilde{ \mathcal B_{i}^{(4)}} & \equiv & \displaystyle \frac{1}{4} (\widetilde{ \mathcal B_{i}} + \widetilde{ \mathcal B_{i,-\jmath}} + \widetilde{ \mathcal B_{i,-\hat{k}}} + \widetilde{ \mathcal B_{i,-\jmath-\hat{k}}})\,.
+\widetilde{ \mathcal E}_{i}^{(2)} & \equiv & \displaystyle \frac{1}{2} (\widetilde{ \mathcal E_{i}} + \widetilde{ \mathcal E_{i,-\imath}})\,,\\[5pt]
+\widetilde{ \mathcal B}_{i}^{(4)} & \equiv & \displaystyle \frac{1}{4} (\widetilde{ \mathcal B_{i}} + \widetilde{ \mathcal B_{i,-\jmath}} + \widetilde{ \mathcal B_{i,-\hat{k}}} + \widetilde{ \mathcal B_{i,-\jmath-\hat{k}}})\,.
+\end{array}
 \end{equation}
 ```
 where we have left implicit the species index, for simplicty.
@@ -89,13 +94,13 @@ For simulations with a $\mathrm{SU}(2)$ gauge field, `NSU2Flds > 0`, the followi
 
 -  $\texttt{average_norm_SU2_[nfld].txt}$: Contains averages of the electric and magnetic fields arising from the $\mathrm{SU}(2)$ sector. One file is created per field species $\texttt{nfld}$, with columns:
 ```math
-\begin{equation}\tilde{ \eta}\,,\quad\sum_a \langle {|\vec{\widetilde{ \mathcal E^{\mathrm{SU}(2)}_a}}|} \rangle\,,\quad\sum_a \langle {|\vec{\widetilde{\mathcal B^{\mathrm{SU}(2)}_a}}|} \rangle\,,\quad\sum_a \langle {|\vec{\widetilde{ \mathcal E^{\mathrm{SU}(2)}_a}}|^2} \rangle\,,\quad\sum_a \langle {|\vec{\widetilde{\mathcal B^{\mathrm{SU}(2)}_a}}|^2} \rangle\,,\quad\sum_a \text{rms} (|\vec{\widetilde{ \mathcal E^{\mathrm{SU}(2)}_a}}|)\,,\quad\sum_a \text{rms} (|\vec{\widetilde{\mathcal B^{\mathrm{SU}(2)}_a}}|)
+\begin{equation}\tilde{ \eta}\,,\quad\sum_a \langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_a|} \rangle\,,\quad\sum_a \langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_a|} \rangle\,,\quad\sum_a \langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_a|^2} \rangle\,,\quad\sum_a \langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_a|^2} \rangle\,,\quad\sum_a \text{rms} (|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_a|)\,,\quad\sum_a \text{rms} (|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_a|)
 \end{equation}
 ```
 
 -  $\texttt{average_gauss_SU2_[nfld].txt}$: Contains information about the conservation of Gauss law in the $\mathrm{SU}(2)$ sector. Here LHS and RHS are the left- and right-hand sides of Eq.$~$(18) from [**Scalar-gauge interactions**](My first model of gauge fields.md).
 ```math
-\begin{equation}\tilde{\eta}\,,\quad\frac{\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle}{\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle}$,  $\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle$ , $\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle
+\begin{equation}\tilde{\eta}\,,\quad\frac{\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle}{\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle}\,,\quad\langle \sqrt{(\text{LHS} - \text{RHS})^2} \rangle\,,\quad\langle \sqrt{(\text{LHS} + \text{RHS})^2} \rangle
 \end{equation}
 ```
 
@@ -106,7 +111,7 @@ In addition to these files related to field averages, results for the evolution 
 -  $\texttt{average_scale_factor.txt}$: by default, contains the following columns:
 
 ```math
-\begin{equation}\tilde \eta\,,\quad a\,,\quad a'\,,\quad a' \over a
+\begin{equation}\tilde \eta\,,\quad a\,,\quad a'\,,\quad a' / a
 \end{equation}
 ```
 
@@ -160,7 +165,7 @@ In addition to the averages presented above, which are generated automatically f
 
 If simulations are run with **gravitational waves**, indicating `withGWs = true` when running the simulation, an addtional file is created containing an estimate of the total energy density of gravitational waves, see [**Gravitational Waves**](GW.md):
 
--  `average_energies_gws.txt`: Contains the volume-averaged GW energy density. The columns are
+-  $\texttt{average_energies_gws.txt}$: Contains the volume-averaged GW energy density. The columns are
 [](){ #eq_GWenergymeasurements }
 ```math
 \begin{align}
@@ -212,11 +217,12 @@ What the columns of the first and second sets contain can be chosen by the user 
 | `spectraVerbosity = 2` | Central value, $\langle\tilde{k}\rangle$, $\text{var}(\tilde{k})$, $\text{min}(\tilde{k})$, $\text{max}(\tilde{k})$ |
 
 Second, for each quantity $f$ or which the power spectra is measured:
+
 | **Option** <div style="width:160px"> | **Explanation** |
 | ---------------------------------------- | --------------- |
 | `spectraVerbosity = 0` | $\tilde{\Delta}_\tilde{f}(\tilde{k})$  |
 | `spectraVerbosity = 1` | $\tilde{\Delta}_\tilde{f}(\tilde{k})$ |
-| `spectraVerbosity = 2` | $\tilde{\Delta}_\tilde{f}(\tilde{k})$, $\text{var}(\tilde{\Delta}_\tilde{f}(\tilde{k})$)$, $\text{min}(\tilde{\Delta}_\tilde{f}(\tilde{k})$)$, $\text{max}(\tilde{\Delta}_\tilde{f}(\tilde{k})$)$  |
+| `spectraVerbosity = 2` | $\tilde{\Delta}_\tilde{f}(\tilde{k})$, $\text{var}(\tilde{\Delta}_\tilde{f}(\tilde{k})$)$, $\text{min}(\tilde{\Delta}_\tilde{f}(\tilde{k}))$, $\text{max}(\tilde{\Delta}_\tilde{f}(\tilde{k}))$  |
 
 In all cases, the last column of the fields always corresponds to the bin multiplicity.
 
@@ -233,10 +239,11 @@ Related to the binning, there is the alternative option to generate an unbinned 
 where here $l$ labels each bin, associated with a fixed value of $\tilde{k}_l=|\tilde{\mathbf{k}}_l|$, $\langle\cdot\rangle_l$ is the average of the function over all points in Fourier space with the same momentum magnitude, $\tilde{k}_l$, and $\#_l$ is the multiplicity of such points. In addition, we introduce a width function $w_l$ that corrects for the effective width of each bin, and which we define as
 ```math
 \begin{equation}
-k_\text{IR} w_l=\left\{\begin{array}{rcl}
-\frac{k_2-k_1}{2}-\frac{k_\text{IR}{2}}\,,&\quad\quad\quad\quad& $l=1$\,,\\[7pt]
-\frac{k_{l+1}-k_{l-1}}{2}\,,&\quad\quad\quad\quad& $1<l<l_\text{max}$\,,\\[7pt]
-k_{l_\text{max}}-k_{l_\text{max}-1}\,,&\quad\quad\quad\quad& $l=l_\text{max}$\,.
+k_\mathrm{IR} w_l=\left\{\begin{array}{lcl}
+\displaystyle\frac{k_2-k_1}{2}-\frac{k_\mathrm{IR}}{2}\,, & \quad\quad\quad\quad& l=1\,,\\[7pt]
+\displaystyle\frac{k_{l+1}-k_{l-1}}{2}\,, & \quad\quad\quad\quad& 1 < l < l_\mathrm{max}\,,\\[7pt]
+k_{l_\mathrm{max}}-k_{l_\mathrm{max}-1}\,, & \quad\quad\quad\quad & l=l_\text{max}\,.
+\end{array}\right.
 \end{equation}
 ```
 where the width choices for the first and last bins are just conventions. We note that, while $l$ takes continuous integer values, its number does not coincide with $k^2/k_\text{IR}^2$ for 3 or less dimensions, as not all squares can be written as the sum of three or less squares (this is possible for four or more dimensions).
@@ -252,7 +259,7 @@ We now summarize the spectrum files that get measured in CosmoLattice, depending
 -  $\texttt{spectra_ON_scalar_[nfld].txt}$: For models with `NScalars > 0` and if `ONflag = true` is indicated in the parameter file, it contains the occupation number of eachscalar field. This is defined (for `NDim = 3`) as (<span style="color:orange;">**Jorge comment: Please somebody check**</span>)
 ```math
 \begin{equation}
-\tilde{\Delta}^\text{ON}_a=\frac{a^2}{3}\left(\frac{\delta \tilde{x}}{N}\right)^3\left(\frac{f_*}{\omega_*})^2\left[\langle|\phi_a|^2\rangle + \left\langle|\phi_a'+\frac{a'}{a}\phi|\right\rangle\right]\,.
+\tilde{\Delta}^\mathrm{ON}_a=\frac{a^2}{3}\left(\frac{\delta \tilde{x}}{N}\right)^3\left(\frac{f_*}{\omega_*}\right)^2\left[\left\langle\left|\tilde{\phi}_a\right|^2\right\rangle + \left\langle\left|\tilde{\phi}_a'+\frac{a'}{a}\tilde{\phi}_a\right|^2\right\rangle\right]\,.
 \end{equation}
 ```
 
