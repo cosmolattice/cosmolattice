@@ -1,4 +1,6 @@
-The present Section [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md) introduces basic lattice concepts, following closely our discussions on these topics, already presented in Section 3 of $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]), Section 2 of $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]), and Section 3 of $\mathtt{The~Art-III}$ (Ref. [@Figueroa_2026XYZ]). If the user has already read either of those Sections or the $\mathtt{The~Art}$ monographs (available [here](MonographicReviews.md)), or they are simply familiar with scalar and/or gauge field lattice simulations, they can jump right ahead into the Sections [Scalar-Scalar Interactions](../Manual/My first model of (singlet) scalar fields.md) or [Scalar-Gauge Interations](../Manual/My first model of gauge fields.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md), in order to set up their first scalar or scalar-gauge field simulations, respectively. If the reader is familiar with scalar field lattice simulations but not with scalar-gauge lattice field theories, we still recommend them to read below our discussion on [*Lattice gauge invariant techniques*][subsec_LGT], before jumping into [Scalar-Gauge Interations](My first model of gauge fields.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md). 
+<!-- The present Section [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md) --> 
+In this section we introduce basic lattice concepts, following closely our discussions on these topics from Section 3 of $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]), Section 2 of $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]), and Section 3 of $\mathtt{The~Art-III}$ (Ref. [@Figueroa_2026XYZ]). If the user has already read either of those Sections or the $\mathtt{The~Art}$ monographs (available [here](MonographicReviews.md)), or they are simply familiar with scalar and/or gauge field lattice simulations, they can jump right ahead into the Sections [Scalar-Scalar Interactions](../Manual/My first model of (singlet) scalar fields.md) or [Scalar-Gauge Interations](../Manual/My first model of gauge fields.md) of the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md), in order to set up their first scalar or scalar-gauge field simulations, respectively. If the reader is familiar with scalar field lattice simulations but not with gauge-invariant lattice  field theory, we recommend them to read our discussion below on [*Lattice gauge invariant techniques*][subsec_LGT], before jumping into [Scalar-Gauge Interations](My first model of gauge fields.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md). 
+
 
 !!! note "On the Number of Spatial Dimensions"
 	While $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can simulate the dynamics of interacting fields in a regular hyper-cubic lattice of $N^{d}$ points, <!-- in total, with $N$ the number of lattice sites per dimension, and --> with $d$ the number of spatial dimensions, in this Section we will set $d = 3$, as $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ works by default in 3-spatial dimensions. After all... we live a three-dimenensional world ;) 
@@ -67,34 +69,35 @@ k_{\rm IR} \equiv \frac{2\pi}{L} = \frac{2\pi}{Ndx}\,, \hspace{0.7cm}  k_{\rm UV
 We note that $k_{\rm UV}$ is also known as the *Nyquist* frequency.
 
 The reciprocal lattice thus captures a range of discrete momenta, 
-[](){ #eq_auto_006 }
+[](){ #eq_lin_k_lattice }
 ```math
 \begin{eqnarray}
 {\bf k} = k_{\rm IR} (\tilde{n}_1,\tilde{n}_2,\tilde{n}_3)\,,
-\label{eq_auto_006}
+\label{eq_lin_k_lattice}
 \end{eqnarray}
 ```
-with the maximum modulus corresponding to the diagonal of the reciprocal lattice $k_{\rm max}  = \sqrt{3}{N \over 2}k_{\rm IR} = \sqrt{3}\pi / dx$. The modulus of momentum will be indicated as $k = k(\tilde n) 
-\equiv k_{\rm IR}|\tilde {\bf n}|$, where $\tilde n = |\tilde {\bf n}| \equiv (\tilde{n}_1^2+\tilde{n}_2^2+\tilde{n}_3^2)^{1/2}$. We note that while the
-the number of modes with approximately the same modulus 
-grows roughly as $4\pi |\tilde{\bf n}|^2$ for sub-Nyquist modes ($k < k_{\rm UV}$), 
-this number  starts decaying abruptly for supra-Nyquist modes ($k > k_{\rm UV}$) as we approach $k_{\rm max}$.
+with the maximum modulus corresponding to the diagonal of the reciprocal lattice $k_{\rm max}  = \sqrt{3}{N \over 2}k_{\rm IR} = \sqrt{3}\pi / dx$. The modulus of momentum will be indicated as $k = k(\tilde n) \equiv k_{\rm IR}|\tilde {\bf n}|$, where $\tilde n = |\tilde {\bf n}| \equiv$ $({\tilde n}^2_1 +{\tilde n}^2_2 +{\tilde n}^2_3)^{1/2}$. We note that while the the number of modes with approximately the same modulus grows roughly as $\sim 4\pi |\tilde{\bf n}|^2$ for sub-Nyquist modes ($k < k_{\rm UV}$), this number  starts decaying abruptly for supra-Nyquist modes ($k > k_{\rm UV}$) as we approach $k_{\rm max}$.
+
+
 
 [](){ #subsubsec_ProgramVariables }
 **Program variables**
 
-When simulating the evolution of interactive fields on a lattice, it is convenient to work with \textit{program variables}, which are a set of dimensionless field and spacetime variables defined as follows,
-[](){ #eq_GaugeProgramVar }
+When simulating the evolution of interactive fields on a lattice, it is convenient to work with *program variables*, which are a set of dimensionless field and spacetime variables defined as follows,
+[](){ #eq_ScalarGaugeProgramVar }
 ```math
 \begin{align}
-    \hspace*{-0.4cm}\delta\tilde\eta \equiv a^{- \alpha} \omega_* \delta t\ , \hspace{0.4cm}
-    \delta\tilde x^i \equiv \omega_* \delta x\ ,
-    \hspace{0.4cm}
-    \tilde\phi = \frac{\phi}{f_*} \ , \hspace{0.4cm}
-    \tilde\varphi = \frac{\varphi}{f_*} \ , \hspace{0.4cm} \widetilde{\Phi} = \frac{\Phi}{f_*} \ , \hspace{0.4cm}  \widetilde{A}_\mu=\frac{A_\mu }{\omega_*} \ , \hspace{0.4cm} \widetilde C_{\mu}^a = \frac{C_{\mu}^a}{\omega_*} \ , \label{eq_GaugeProgramVar}
+d\tilde\eta \equiv a^{- \alpha} \omega_* dt , \hspace{0.4cm}
+d\tilde x^i \equiv \omega_* dx^i ,
+\hspace{0.4cm}
+\tilde\phi = \frac{\phi}{f_*}  , \hspace{0.4cm}
+\tilde\varphi = \frac{\varphi}{f_*}  , \hspace{0.4cm} \widetilde{\Phi} = \frac{\Phi}{f_*}  , \hspace{0.4cm}  \widetilde{A}_\mu=\frac{A_\mu }{\omega_*}  , \hspace{0.4cm} \widetilde B_{\mu}^a = \frac{B_{\mu}^a}{\omega_*}  . %\tag{56}
+\label{eq_ScalarGaugeProgramVar}
 \end{align}
 ```
-where $\delta t$ and $\delta x$ are the time-step and lattice spacing used for solving the field dynamics, respectively, and $f_*$ and $\omega_*$ are constants of dimension mass +1. For each problem, one can choose $f_*$ and $\omega_*$ appropriately so that the program variables take numerical values of order unity during the fields' evolution. It is also convenient to define the \textit{program potential} as
+where $\delta t$ and $\delta x$ are the time-step and lattice spacing used for solving the field dynamics, respectively, and $f_*$ and $\omega_*$ are constants of dimension mass +1. For each problem, one can choose $f_*$ and $\omega_*$ appropriately so that the program variables take numerical values of order unity during the fields' evolution. See further discussion on the choice of program variables in [*Program variables*][subsec_LatticeScalars] from Section [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md) and [*Program variables*][subsec_LatticeScalarGauge] from Section [Scalar-Gauge Interactions](My first model of gauge fields.md).
+
+It is also convenient to define the *program potential* as
 [](){ #eq_ProgramPotMultiScalar }
 ```math
 \begin{equation}\label{eq_ProgramPotMultiScalar}
@@ -108,7 +111,7 @@ as well as program variables for the field strengths and covariant derivatives a
 \label{eq_auto_007}
 \end{eqnarray}
 ```
-Finally, we note that as the definition of linear momentum in Sect.~\ref{sub_reciprocal} scales as $k\propto {1/\delta x}$, we naturally normalize the linear momentum on the lattice using the inverse re-scaling for $\delta x$, {\it i.e.}
+Finally, we note that as the definition of linear momentum in Eq.$~$\eqref{eq_lin_k_lattice} scales as $k\propto {1/\delta x}$, we then naturally normalize linear momenta on the lattice using the inverse re-scaling for $\delta x$, *i.e.*
 [](){ #eq_auto_008 }
 ```math
 \begin{eqnarray}
@@ -117,32 +120,31 @@ Finally, we note that as the definition of linear momentum in Sect.~\ref{sub_rec
 \end{eqnarray}
 ```
 
-[](){ #subsec_LatticeMomentum }
-**Gradients and lattice momentum**
+<!-- [](){ #subsec_LatticeMomentum } -->
+## Gradients and lattice momentum { #subsec_LatticeMomentum }
 
-When writing the fields' equation of motion (EOM) on the lattice, we need to substitute continuum derivatives by discretized operations that must reproduce the continuum expressions up to some order of accuracy in the lattice spacing/time step. For example, the derivative of a continuous function {\tt f}  
-can be approximated by the following \textit{neutral} or \textit{centered} difference,
+When writing the fields' equation of motion (EOM) on the lattice, we need to substitute continuum derivatives by discretized operations that must reproduce the continuum expressions up to some order of accuracy in the lattice spacing/time step. For example, the derivative of a continuous function ${\tt f}$ can be approximated by the following *neutral* or *centered* difference,
 [](){ #eq_neutrald }
 ```math
 \begin{equation}
     \label{eq_neutrald}
-    [\nabla^{(0)}_\mu {\tt f}] = \frac{{\tt f}({n}+\hat\mu) - {\tt f}({n}-\hat\mu)}{2dx ^\mu} ~~\longrightarrow ~~ \partial_{\mu} {\tt f}({x})\big|_{{x}\,\equiv\, {\bf n}dx+n_0\deta} + \mathcal{O}(dx_\mu^2)\,,
+    [\nabla^{(0)}_\mu {f}] = \frac{{f}({n}+\hat\mu) - {f}({n}-\hat\mu)}{2dx ^\mu} ~~\longrightarrow ~~ \partial_{\mu} {f}({x})\big|_{{x}\,\equiv\, {\bf n}dx+n_0{d\eta}} + \mathcal{O}(dx_\mu^2)\,,
 \end{equation}
 ```
-where $\delta x^{\mu}$ represents either the time step $\delta \eta$ (for $\mu = 0$) or the lattice spacing $\delta x$ (for $\mu = i$). The expression is symmetric around the lattice point $n$, and recovers the continuum expression up to $\mathcal{O}(\delta x_\mu^2)$. We could also approximate the continuous derivative by the following \textit{charged} difference,
+where $\delta x^{\mu}$ represents either the time step $\delta \eta$ (for $\mu = 0$) or the lattice spacing $\delta x$ (for $\mu = i$). The expression is symmetric around the lattice point $n$, and recovers the continuum expression up to $\mathcal{O}(\delta x_\mu^2)$. We could also approximate the continuous derivative by the following *charged* difference,
 [](){ #eq_forwardbackwardd }
 ```math
 \begin{eqnarray}
     \label{eq_forwardbackwardd}
-    [\nabla^\pm_\mu {\tt f}] = \frac{\pm {\tt f}({n}\pm \hat\mu) \mp {\tt f}({n})}{dx^\mu} ~~\longrightarrow ~~ \left\lbrace\begin{array}{l}
-        \partial_{\mu} {\tt f}({x})\big|_{{x}\,\equiv\, {\bf n}dx+n_0\deta} + \mathcal{O}(dx_\mu)\,,  \vspace*{0.2cm}\\
-        \partial_{\mu} {\tt f}({x})\big|_{{x}\,\equiv\, ({n} \pm \hat\mu/2)dx^\mu} + \mathcal{O}(dx_\mu^2)\,,
+    [\nabla^\pm_\mu {f}] = \frac{\pm {f}({n}\pm \hat\mu) \mp {f}({n})}{dx^\mu} ~~\longrightarrow ~~ \left\lbrace\begin{array}{l}
+        \partial_{\mu} {f}({x})\big|_{{x}\,\equiv\, {\bf n}dx+n_0{d\eta}} + \mathcal{O}(dx_\mu)\,,  \\[0.5em]
+        \partial_{\mu} {f}({x})\big|_{{x}\,\equiv\, ({n} \pm \hat\mu/2)dx^\mu} + \mathcal{O}(dx_\mu^2)\,,
     \end{array}\right.
 \end{eqnarray}
 ```
-where $\nabla^+_\mu {\tt f}$ and $\nabla^-_\mu {\tt f}$ are called the \textit{forward} and \textit{backward} derivatives, respectively. Compared to the neutral derivative, they have the advantage of being sensitive to the minimum space interval captured by a lattice, {\it i.e.}~to the lattice spacing. These expressions, if expanded around an actual lattice site ${\bf n}$,  only recover the continuum derivative up to $\mathcal{O}({\delta x}_\mu)$. However, if expanded in between the two lattice sites involved, they approximate the continuum expression to $\mathcal{O}({\delta x}_\mu^2)$. One can also implement discrete derivatives of higher order at either grid or half-grid points, involving field values of at more lattice points \cite{DiscreteDerivatives}. 
+where $\nabla_{\mu}^+f$ and $\nabla_\mu^- {f}$ are called the *forward* and *backward* derivatives, respectively. Compared to the neutral derivative, they have the advantage of being sensitive to the minimum space interval captured by a lattice, *i.e.* to the lattice spacing. These expressions, if expanded around an actual lattice site ${\bf n}$,  only recover the continuum derivative up to $\mathcal{O}({\delta x}_\mu)$. However, if expanded in between the two lattice sites involved, they approximate the continuum expression to $\mathcal{O}({\delta x}_\mu^2)$. One can also implement discrete derivatives of higher order at either grid or half-grid points, involving field values of at more lattice points, see below Subsection [*Higher order derivatives and lattice momenta*][subsec_HigherOrder]
 
-Associated to each spatial lattice derivative, we can define a {\it lattice momentum} ${\bf k_\text{L}}$ through the following relation in Fourier space,
+Associated to each spatial lattice derivative, we can define a *lattice momentum* ${\bf k_\text{L}}$ through the following relation in Fourier space,
   [](){ #eqn_latticemomentum }
 ```math
 \begin{equation}  \label{eqn_latticemomentum}  [\nabla_i f]({\tilde{\bf n}}) = -i{\bf k}_{\text{L}}({\tilde{\bf n}}) f({\tilde{\bf n}}) \:. \end{equation}
@@ -151,7 +153,7 @@ For example, the cartesian components of the lattice momentum for the derivative
 [](){ #eqn_k0 }
 ```math
 \begin{equation}
-    k^0_{\text{L}, i} = \dfrac{\sin (2\pi \Tilde{n}_i/N)}{\delta x} \: .\label{eqn_k0}\\
+    k^0_{\text{L}, i} = \dfrac{\sin (2\pi {\tilde n}_i/N)}{\delta x} \: .\label{eqn_k0}\\
 \end{equation}
 ```
 while for the charged derivative \eqref{eq_forwardbackwardd} we have instead
@@ -165,9 +167,12 @@ while for the charged derivative \eqref{eq_forwardbackwardd} we have instead
 ```
 where the first expression applies when $\nabla^\pm_i {\tt f}$ is defined on integer lattice sites, and the second when it is defined on half-integer lattice sites.
 
-Finally, we mention that when one wishes to simulate scalar-gauge theories on a lattice, 
-it is important to preserve gauge invariance. For such purpose, one needs to discretize the theory more carefully, in particular using {\it links} and {\it plaquettes}, which are quantities purposely defined to build gauge-invariant versions of discretized gauge theories. In this review, only the particular case of local strings 
-in Sect.~\ref{sec_DefectsV}, involve scalar-gauge interactions that require to use these techniques, so we do not dwell on them here. We refer the reader to Sect.~3.2 of {\tt The Art\,I} for a discussion on lattice gauge-invariant techniques. 
+Finally, we mention that when one wishes to simulate scalar-gauge theories on a lattice, it is important to preserve gauge invariance. For such purpose, one needs to discretize the theory more carefully, in particular using *links* and *plaquettes*, which are quantities purposely defined to build gauge-invariant versions of discretized gauge theories. We refer the reader to Sect.~3.2 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl] for a discussion on lattice gauge-invariant techniques, which we summarise here in [*Lattice gauge invariant techniques*][subsec_LatticeGaugeInv].  
+
+[](){ #subsec_HigherOrder }
+**Higher-Order gradients and lattice momenta**
+
+*To be added soon ...*
 
 [](){ #subsec_PS }
 ## Power spectrum and initial conditions
@@ -195,7 +200,7 @@ and using the definition of the discrete Fourier transform \eqref{eq_FTdiscrete}
 \label{eq_discretePSaux}
 \end{equation}
 ```
-where we have defined $\Delta \log k(\tilde{\bf n}) \equiv k_{\rm IR}/k(\tilde{\bf n})$, and introduced $\langle ( ... ) \rangle_{R(\tilde{\bf n})} \equiv \frac{1}{\#_{R(\tilde{\bf n})}}\sum_{\tilde{\bf n}^{\prime}\in R(\tilde{\bf n})}( ... )$ representing an angular average over a spherical shell, $R(\tilde{\bf n})$, that contains all sites with radius $|\tilde{\bf n}^{\prime}| \in \big[|\tilde{\bf n}|,|\tilde{\bf n}|+ \Delta\tilde{n}\big)$, with $\Delta\tilde{n}$ a given radial binning, and $\#_{R(\tilde{\bf n})} $ the {\it multiplicity}, {\it i.e.}~the number of sites contained within the spherical shell. Comparing Eq.~(\ref{eq_discretePSaux}) with Eq.~(\ref{eq_continuumPS}), we can define the lattice power spectrum as follows 
+where we have defined $\Delta \log k(\tilde{\bf n}) \equiv k_{\rm IR}/k(\tilde{\bf n})$, and introduced $\langle ( ... ) \rangle_{R(\tilde{\bf n})} \equiv \frac{1}{\#_{R(\tilde{\bf n})}}\sum_{\tilde{\bf n}^{\prime}\in R(\tilde{\bf n})}( ... )$ representing an angular average over a spherical shell, $R(\tilde{\bf n})$, that contains all sites with radius $|\tilde{\bf n}^{\prime}| \in \big[|\tilde{\bf n}|,|\tilde{\bf n}|+ \Delta\tilde{n}\big)$, with $\Delta\tilde{n}$ a given radial binning, and $\#_{R(\tilde{\bf n})}$ the *multiplicity*, *i.e.* the number of sites contained within the spherical shell. Comparing Eqs.~(\ref{eq_continuumPS}) and (\ref{eq_discretePSaux}), we can define the lattice power spectrum as follows 
 [](){ #eq_discretePST1 }
 ```math
 \begin{eqnarray}\label{eq_discretePST1}
@@ -209,22 +214,25 @@ where
     \Upsilon_{|\tilde{\bf n}|} \equiv \frac{\#_{R(\tilde{\bf n})}}{4\pi|\tilde{\bf n}|^2}\;.
 \end{eqnarray}
 ```
-While the most precise evaluation of Eq.~(\ref{eq_discretePST1}) 
-requires to compute $\Upsilon_{|\tilde{\bf n}|}$ exactly (for each bin) according to Eq.~(\ref{eq_Upsilon}), many works in the past commonly used the multiplicity approximation $\#_{R(\tilde{\bf n})} \simeq 4\pi |\tilde{\bf n}|^2$, so that $\Upsilon_{|\tilde{\bf n}|} \simeq 1$, hence dropping $\Upsilon_{|\tilde{\bf n}|}$ from Eq.~(\ref{eq_discretePST1}). While this is only an approximation, for historical reasons we define two types of power spectra, depending on the multiplicity assumption, 
+While the most precise evaluation of Eq.~(\ref{eq_discretePST1}) requires to compute $\Upsilon_{|\tilde{\bf n}|}$ exactly (for each bin) using to Eq.~(\ref{eq_Upsilon}), many works (specially in the past) commonly used the multiplicity approximation $\#_{R(\tilde{\bf n})} \simeq 4\pi |\tilde{\bf n}|^2$, so that $\Upsilon_{|\tilde{\bf n}|} \simeq 1$, thus dropping $\Upsilon_{|\tilde{\bf n}|}$ from Eq.~(\ref{eq_discretePST1}). While this is only an approximation, for historical reasons we still define two types of power spectra, depending on the multiplicity assumption, 
 [](){ #eq_TypeIandIIPS }
 ```math
 \begin{eqnarray}\label{eq_TypeIandIIPS}
 \left\lbrace
     \begin{array}{ccll}
-         \Upsilon_{|\tilde{\bf n}|} \equiv  \frac{\#_{R(\tilde{\bf n})}}{4\pi|\tilde{\bf n}|^2} \neq 1 & \Rightarrow & \Delta_{f}(k(|{\bf \tilde{n}}|)) \equiv {k(\tilde {\bf n})\delta x\over 2\pi N^5}\#_{|\tilde{\bf n}|}\big\langle\left|f (\tilde{\bf n})\right|^2\big\rangle_{R(\tilde{\bf n})} &  \text{\tt [Type-I]} \vspace*{4mm}\\
-          \Upsilon_{|\tilde{\bf n}|} = 1 \;, & \Rightarrow & \Delta_{f}(k(|{\bf \tilde{n}}|)) \simeq \frac{k^3(\tilde {\bf n})}{2\pi^2}\left(\frac{\delta x}{N}\right)^3 \big\langle \big|{f}(\tilde{\bf n})\big|^2\big\rangle_{R(\tilde{\bf n})} &  \text{\tt [Type-II]}
+         \Upsilon_{|\tilde{\bf n}|} \equiv  \frac{\#_{R(\tilde{\bf n})}}{4\pi|\tilde{\bf n}|^2} \neq 1 & \Rightarrow & \Delta_{f}(k(|{\bf \tilde{n}}|)) \equiv {k(\tilde {\bf n})\delta x\over 2\pi N^5}\#_{|\tilde{\bf n}|}\big\langle\left|f (\tilde{\bf n})\right|^2\big\rangle_{R(\tilde{\bf n})} &  {\tt [Type-I]} \\[0.5em]
+          \Upsilon_{|\tilde{\bf n}|} = 1 \;, & \Rightarrow & \Delta_{f}(k(|{\bf \tilde{n}}|)) \simeq \frac{k^3(\tilde {\bf n})}{2\pi^2}\left(\frac{\delta x}{N}\right)^3 \big\langle \big|{f}(\tilde{\bf n})\big|^2\big\rangle_{R(\tilde{\bf n})} & {\tt [Type-II]}
     \end{array}\right.\,.
 \end{eqnarray}
 ```
-The definition of {\tt Type-I} spectrum naturally incorporates the exact multiplicity, and hence the actual lack of statistical sampling of supra-Nyquist frequencies $k > {N\over2}k_{\rm IR}$ on a lattice\footnote{\CL uses by default {\tt Type-I} spectra for its output, but allows the user to switch to {\tt Type-II} if desired.}.
-{\tt Type-II} can be actually seen as a good approximation of {\tt Type-I} spectra for many points in the (reciprocal) lattice, namely in the bins where $\#_{R(\tilde{\bf n})} \approx 4\pi |\tilde{\bf n}|^2$ holds. While such approximation is quite good at intermediate scales on a lattice, it fails moderately for the most infrared modes, and most noticeably it fails significantly for the ultraviolet modes above the {\it Nyquist} frequency, {\it i.e.}~$k > {N\over2}k_{\rm IR}$. For further details on these aspects, see~\cite{TechnicalNoteI}. 
+The definition of ${\tt Type-I}$ spectrum naturally incorporates the exact multiplicity, and hence the actual lack of statistical sampling of supra-Nyquist frequencies $k > {N\over2}k_{\rm IR}$ on a lattice. ${\tt Type-II}$ can be actually seen as a good approximation of {\tt Type-I} spectra for many points in the (reciprocal) lattice, namely in the bins where $\#_{R(\tilde{\bf n})} \approx 4\pi |\tilde{\bf n}|^2$ holds. While such approximation is quite good at intermediate scales on a lattice, it fails onnly moderately for the most infrared modes, and most noticeably it fails significantly for the ultraviolet modes above the *Nyquist* frequency, *i.e.* $k > {N\over2}k_{\rm IR}$. 
 
-The notion of power spectrum is particularly useful to initialize fundamental fields on a lattice. In the case of a scalar field, it is common to consider quantum vacuum fluctuations, characterized by a vacuum expectation value (continuum variance) as
+!!! note "Spectrum-${\tt Type}$ in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$"
+	 While $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ uses by default ${\tt Type-I}$ spectra for its output, it allows the user to switch to ${\tt Type-II}$ if desired. For further details on these aspects, see 
+	 [*$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Technical Notes*](TechnicalNotes.md), and read
+	 [*Observables*](../Manual/Observables.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md) (<span style="color:red;">**CHECK !**</span>). 
+
+The notion of power spectrum is particularly useful to initialize fundamental fields on a lattice. In the case of a scalar field, it is common to consider *e.g.* quantum vacuum fluctuations, characterized by a vacuum expectation value (continuum variance) as
 [](){ #eq_auto_009 }
 ```math
 \begin{eqnarray}
@@ -239,7 +247,125 @@ where $m_{\tt f}^2 \equiv \frac{\partial^2 V({\tt f})}{\partial {\tt f}^2} > 0$.
 |\tilde {f}(\tilde{\bf n})|^2  \equiv  {1\over \Upsilon_{|\tilde{\bf n}|}} \left(\frac{{N}}{\delta \tilde{x}}\right)^3 \mathcal{N}\big[0,\mathcal{P}_{\tt f}^{1/2}(k(|{\bf \tilde{n}}|))\big]^2\,,~~~~ |\tilde {f}'(\tilde{\bf n})|^2 \equiv {1\over \Upsilon_{|\tilde{\bf n}|}} \left(\frac{{N}}{\delta \tilde{x}}\right)^3 \mathcal{N}\big[0,\mathcal{P}_{\tt f'}^{1/2}(k(|{\bf \tilde{n}}|))\big]^2\;.
 \end{eqnarray}
 ```
-For a broader discussion on initial conditions from a generic power spectrum, see Sect.~\ref{subsec_ArbitrarySpectrum}.
+For a broader discussion on initial conditions from a generic power spectrum, see [*Observables*](../Manual/Observables.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md)
+
+## Lattice gauge invariant techniques { #subsec_LatticeGaugeInv }
+
+Discretizing a gauge theory requires a special care in order to preserve gauge invariance at the lattice level. It is not enough to recover gauge invariance in the continuum, i.e. in the limit of zero lattice spacing/time step, as gauge invariance is meant to remove spurious transverse degrees of freedom.  If we were to discretize a gauge theory by substituting all ordinary derivatives in the continuum EOM by finite differences like those in Eqs. $~$\eqref{eq_neutrald}, \eqref{eq_forwardbackwardd}, the gauge symmetry would not be preserved and the spurious degrees of freedom would propagate on the lattice. Lattice gauge invariant techniques are meant to avoid this type of trouble.
+
+In order to build an action or EOM for any gauge theory that preserves a discretized version of the gauge symmetry, it is customary to define *link* variables as
+```math
+\begin{align*}
+U_{0,n} &\equiv P\exp\left\lbrace-ie\int_{x(n)}^{x(n+\hat0)}dt'A_0 \right\rbrace \approx  e^{-ie\delta t A_0} ,
+\\
+U_{i,n} &\equiv P\exp\left\lbrace-ie\int_{x(n)}^{x(n+\hat\imath)} dxA_i \right\rbrace \approx e^{-ie\delta x A_i} ,
+\end{align*}
+\tag{26}
+```
+where $P\exp\lbrace...\rbrace$ means *path-ordered* along the integration trajectory, as the construction of links is based on the definition of a *parallel transporter*, connecting two points in space-time as $U(x,y) = P\exp\left\lbrace-ie\int_{x}^{y}dx^{\mu}A_\mu  \right\rbrace$. Above, the gauge field $A_\mu$, and hence the link $U_\mu$, is considered to live in the point $n + {\hat\mu\over2}$. We also define $U_{-\mu,n} = U_{\mu,n-\mu}^\dagger \equiv U_\mu^\dagger(n-{1\over 2}\hat\mu)$. In the continuum limit, the gauge fields can be recovered simply from $-i(\mathcal{I}- U_{\mu,n})/(e\delta x^\mu) \longrightarrow  A_\mu\big(n+{1\over2}\hat\mu\big) + \mathcal{O}(\delta x^\mu)$.
+
+!!! note "**Important to know**$"
+	 To simplify the notation on the lattice, a scalar field living in a generic lattice site $n = (n_o,{\bf n}) = (n_o,n_1,n_2,n_3)$, i.e. $\phi_n = \phi(n)$, will be simply denoted as $\phi$. If the point is displaced in the $\mu-$direction by one unit lattice spacing/time step, $n + \hat\mu$, we use the notation $n+\mu$ or simply by $+\mu$ to indicate this, so that the field amplitude in the new point is expressed as $\phi_{+\mu} \equiv \phi(n+\hat\mu)$. In the case of gauge fields, whenever represented explicitly on the lattice, we will automatically understand that they live in the middle of lattice points, i.e. $A_{\mu} \equiv A_{\mu}(n+{1\over2}\hat\mu)$. It follows then that e.g. $A_{\mu,+\nu} \equiv A_{\mu}\big(n + {1\over2}\hat\mu +  \hat\nu\big)$. In the case of links, we will use the notation $U_\mu \equiv U_{\mu,n} \equiv U_\mu(n+{1\over2}\hat\mu)$, and hence $U_{\mu,\pm\nu} = U_{\mu,n\pm\nu} \equiv U_\mu(n + {1\over2}\hat\mu \pm \hat\nu)$.
+
+
+One can actually build an action or EOM for any gauge theory, preserving a discretized version of the gauge symmetry, using only link variables and no gauge fields. That is known as the *compact formulation* of lattice gauge theories, and this can be applied to both Abelian and non-Abelian gauge theories. In the case of non-Abelian theories, compact formulations are actually the only way to discretize them while respecting gauge invariance on the lattice. For Abelian gauge theories, however, it is still possible to make use of an explicit representation of the  gauge fields, in the so called *non-compact formulation*. Below we provide both. We introduce standard definitions for $links$, $plaquettes$ and *lattice covariant derivatives*, specialized to both Abelian and non-Abelian gauge groups, setting back $e=g_A Q_A$. We provide also basic definitions, together with useful approximations and expressions (in the case of Abelian theories for both compact and non-compact formulations). All these ingredients, summarized in the $U(1)$ and $SU(2)$ toolkits below, represent all one needs to know in order to discretize gauge theories while preserving the gauge invariance at the lattice level.
+
+[](){ #eq_U1toolkit }
+!!! note "**U(1) toolkit**"
+    
+    ```math
+    
+    \begin{align*}
+    &{\rm Links:}  V_{\mu} \equiv e^{-i g_AQ_A \delta x_{\mu} A_{\mu}} = \cos(g_AQ_A\delta x_{\mu} A_{\mu}) - i \sin (g_AQ_A\delta x_{\mu} A_{\mu}) ;  V_{- \mu} \equiv V_{\mu,-\mu}^* ;  V_{\mu}^* V_{\mu} = 1 ;\\
+    &{\rm Plaquettes}:  V_{\mu \nu} \equiv V_{\mu} V_{\mu,+\mu} V_{\mu, +\nu}^* V_\nu^* \simeq e^{-i g_AQ_A\delta x_{\mu} \delta x_{\nu} [ F_{\mu \nu} + \mathcal{O}(\delta x)] };  V_{\mu\nu}^* = V_{\nu\mu} ;
+    \\
+    &{\rm Covariant Derivs.}:  (D_{\mu}^\pm\varphi)({\bf l}) = \pm{1\over \delta x^\mu}(V_{\pm\mu}\varphi_{\pm\mu} - \varphi) , {\bf l} = {\bf n} \pm {1\over2}{\hat\mu}
+    \\
+    &{\rm Expansions}:
+    \left\lbrace
+    \begin{array}{rcl}
+    (D_{\mu}^\pm\varphi)({\bf l})  & \longrightarrow & (D_{\mu}\varphi)({\bf l}) + \mathcal{O}(\delta x^2)  {\bf l} = {\bf n} \pm {1\over2}{\hat\mu}\\
+    \mathcal{R}e\lbrace V_{\mu \nu} \rbrace  & \longrightarrow & 1 - \frac{1}{2} \delta x_{\mu}^2 \delta x_{\nu}^2g_A^2Q_A^2 F_{\mu \nu}^2 + \mathcal{O}(\delta x^5) , {\bf l} = {\bf n} + {1\over2}{\hat\mu} + {1\over2}{\hat\nu}\\ \mathcal{I}m\lbrace V_{\mu \nu} \rbrace & \longrightarrow & - \delta x_{\mu} \delta x_{\nu} g_AQ_AF_{\mu \nu} + \mathcal{O}(\delta x^3) , {\bf l} = {\bf n} + {1\over2}{\hat\mu} + {1\over2}{\hat\nu}
+    \end{array}\right.
+    \\
+    &{\rm Expressions}:
+    \left\lbrace
+    \begin{array}{l}
+    \left.
+    \begin{array}{l}
+    \sum_n {1\over 4}F_{\mu \nu}^2 \cong -{1\over 2}\sum_n{\mathcal{R}e\lbrace V_{\mu \nu} \rbrace \over \delta x_{\mu}^2 \delta x_{\nu}^2g_A^2Q_A^2} = -{1\over4}\sum_n {(V_{\mu \nu}+V_{\mu \nu}^*)\over \delta x_{\mu}^2 \delta x_{\nu}^2g_A^2Q_A^2} + \mathcal{O}(\delta x^2)\\
+    \sum_n {1\over4}F_{\mu \nu}^2 \simeq \sum_n {1\over4}{\mathcal{I}m^2\lbrace V_{\mu \nu} \rbrace \over \delta x_{\mu}^2 \delta x_{\nu}^2g_A^2Q_A^2} = -\sum_n {1\over4}{(V_{\mu \nu}-V_{\mu \nu}^*)^2\over \delta x_{\mu}^2 \delta x_{\nu}^2g_A^2Q_A^2} + \mathcal{O}(\delta x^2)
+    \end{array}\right] ({\tt Compact})\\
+    \left.
+    \begin{array}{l}
+    \sum_n {1\over4}F_{\mu \nu}^2 \simeq {1\over4}\sum_n (\Delta^+_\mu A_\nu - \Delta^+_\nu A_\mu)^2 + \mathcal{O}(\delta x^2)
+    \end{array}\right] ({\tt Non-Compact})
+    \end{array}\right.
+    \\
+    &{\rm Gauge Trans}
+    \left.
+    \left\lbrace
+    \begin{array}{cll}
+    \phi  & \longrightarrow & e^{+ig_AQ_A\alpha}\phi\\
+    A_\mu & \longrightarrow & A_\mu - \Delta_\mu^+\alpha\\
+    V_{\pm \mu}  & \longrightarrow & V_{\pm \mu}e^{ig_AQ_A(\alpha_{\pm\mu}-\alpha)}
+    \end{array}\right.
+    \right]  \Longrightarrow   \left\lbrace
+    \begin{array}{cll}
+    D_\mu^\pm\phi & \longrightarrow & e^{ig_AQ_A\alpha}(D_\mu^\pm\phi)\\
+    V_{\mu\nu}  & \longrightarrow & V_{\mu\nu}  {\rm (gauge inv. !)}
+    \end{array}\right.
+    
+    \tag{27}
+    \end{align*}
+    
+    ```
+
+[](){ #eq_SU2toolkit }
+[](){ #eq_SUNtoolkit }
+!!! note "**SU(2) toolkit**"    
+    
+    ```math
+    
+    \begin{align*}
+    &{\rm Links}:  U_{\mu} \equiv e^{-i g_B Q_B \delta x B_\mu} = e^{-i g_B Q_B \delta x B_{\mu}^a T_a} ;  U_{- \mu} \equiv U_{\mu,-\mu}^{\dagger} ;  U_{\mu}^{\dagger} U_{\mu} = \mathcal{I} \\
+    &{\rm Plaquettes}:  U_{\mu \nu} \equiv U_{\mu} U_{\nu,+ \mu} U_{\mu, +\nu}^{\dagger} U_{\nu}^{\dagger} \simeq e^{-ig_B Q_B \delta x_{\mu} \delta x_{\nu} [ G_{\mu \nu}^a T_a + \mathcal{O} (\delta x_{\mu} ) ] } ;   U_{\mu \nu}^\dagger = U_{\nu\mu} \\
+    &{\rm Covariant Derivs.}:  (D_{\mu}^\pm\Phi)({\bf l}) = \pm{1\over \delta x^\mu}(U_{\pm\mu}\Phi_{\pm\mu} - \Phi)  \longrightarrow  (D_{\mu}\Phi)({\bf l}) + \mathcal{O}(\delta x^2), {\bf l} = {\bf n} \pm {1\over2}{\hat\mu}
+    \\
+    &{\rm Expansions}:
+    \left\lbrace
+    \begin{array}{ccl}
+    (D_{\mu}^\pm\Phi)({\bf l}) & \longrightarrow & (D_{\mu}\Phi)({\bf l}) + \mathcal{O}(\delta x^2) , {\bf l} = {\bf n} \pm {1\over2}{\hat\mu}\\
+    (U_{\mu \nu} - U_{\mu \nu}^\dagger ) & \longrightarrow & -2ig_B Q_B\delta x_{\mu} \delta x_{\nu}G_{\mu \nu} + \mathcal{O} (\delta x_{\mu}^3) , {\bf l} = {\bf n} + {1\over2}{\hat\mu} + {1\over2}{\hat\nu} \\ {\rm Tr} [ U_{\mu \nu} ] & \longrightarrow & 2 - \frac{\delta x_{\mu}^2 \delta x_{\nu}^2g_B^2 Q_B^2}{4}\sum_a (G_{\mu \nu}^a)^2 + \mathcal{O} (\delta x_{\mu}^5) , {\bf l} = {\bf n} + {1\over2}{\hat\mu} + {1\over2}{\hat\nu}
+    \end{array}
+    \right.
+    \\
+    &{\rm Expressions}:
+    \left\lbrace
+    \begin{array}{l}
+    {1\over2}{\rm Tr}[G_{\mu\nu}G^{\mu\nu}] = {1\over4}\sum_a (G_{\mu\nu}^a)^2 \cong -{{\rm Tr} [ U_{\mu \nu} ]\over \delta x_{\mu}^2 \delta x_{\nu}^2 g_B^2 Q_B^2} + \mathcal{O}(\delta x^2) , \\
+    G_{\mu \nu} = G_{\mu \nu}^aT_a \simeq \frac{i}{2\delta x_{\mu} \delta x_{\nu}g_B Q_B} (U_{\mu \nu} - U_{\mu \nu}^\dagger) + \mathcal{O}(\delta x^2)  ,\\
+    G_{\mu \nu}^a \simeq \frac{1}{\delta x_{\mu} \delta x_{\nu}g_B Q_B} {\rm Tr} [ (i T_a)  (U_{\mu \nu} - U_{\mu \nu}^\dagger ) ] + \mathcal{O}(\delta x^2)
+    \end{array}\right.
+    \\
+    &{\rm Gauge Trans.}
+    \left.
+    \left\lbrace
+    \begin{array}{cll}
+    \Phi  & \longrightarrow & \Omega \Phi ,  \Omega \equiv e^{+ig_B Q_B\alpha_aT_a}\\
+    U_{\pm \mu}  & \longrightarrow & \Omega  U_{\pm \mu} \Omega^\dagger_{\pm \mu}
+    \end{array}\right.
+    \right]  \Longrightarrow   \left\lbrace
+    \begin{array}{cll}
+    D_\mu^\pm\Phi & \longrightarrow & \Omega (D_\mu^\pm\Phi)\\
+    U_{\mu\nu}  & \longrightarrow & \Omega  U_{\mu\nu} \Omega^\dagger
+    \\
+    {\rm Tr}\lbrace U_{\mu\nu} \rbrace  & \longrightarrow & {\rm Tr}\lbrace U_{\mu\nu} \rbrace
+    \end{array}\right.
+    \tag{28}
+    \end{align*}
+    
+    ```
 
 [](){ #subsec_Algorithms }
 ## Evolution algorithms
@@ -250,7 +376,7 @@ we need to track
 the field amplitudes $\{ f_i \}$ and their corresponding conjugate momenta $\{ \pi_i \}$ ($\pi_i \propto \dot f_i$), both of which are evaluated at each lattice site. We also need to track 
 the scale factor amplitude $a(\eta)$ and its conjugate momentum $\pi_a \equiv a'(\eta)$, which contrary to the fields, are homogeneous functions. 
 
-The number of field amplitudes $\{ f_i \}$ defines the number of degrees of freedom ({\it dof}) in the system. 
+The number of field amplitudes $\{ f_i \}$ defines the number of degrees of freedom (*dof*) in the system. 
 The EOM of the fields then take the general form
 [](){ #eq_SchemeContVirgin1 }
 [](){ #eq_SchemeContVirgin2 }
@@ -312,7 +438,7 @@ From here, one can choose a suitable evolution algorithm to solve Eqs.~(\ref{eq_
 As we will see, the hybrid prescription is specially suitable for the examples considered in this review, as it allows for a flexible choice of the time-integrator. 
 
 In the following we present a collection of algorithms, 
-divided into {\it symplectic} and {\it non-symplectic} integrators. Symplectic integrators include the {\it Leapfrog} and {\it Position-} and {\it Velocity-Verlet} methods, which are very stable numerical algorithms for canonical field theories, 
+divided into *symplectic* and *non-symplectic* integrators. Symplectic integrators include the {\it Leapfrog} and {\it Position-} and {\it Velocity-Verlet} methods, which are very stable numerical algorithms for canonical field theories, 
 allowing for large-time evolution. They can also be extended 
 to higher-order accuracy evolvers, know as {\it Yoshida} integrators, through recursive compositions of sub-steps. Non-symplectic integrators, on the other hand, are suitable for more general applications, including systems with non-canonical kinetic terms, dissipative dynamics, or interactions containing canonical momenta in the kernels. These algorithms include explicit {\it Runge–Kutta} schemes of various orders and multi-stage algorithms, which naturally allow for adaptive time-stepping and the use of auxiliary fields to handle intermediate sub-steps. Many of the complex models discussed in this review are non-canonical, and hence non-symplectic integrators are necessary to maintain accuracy and stability of the numerical solutions.
 
@@ -400,7 +526,7 @@ a_{+0} &=&  a + \delta\tilde\eta\, b_{+0/2},\ ~~~~ \longrightarrow ~~~~ a_{+0/2}
 \label{eq_HCschemeIII}
 \end{eqnarray}
 ```
-where $\overline{{\widetilde E}}_{K} \equiv \left({\widetilde E}_{K, -0/2} + {\widetilde E}_{K,+0/2} \right)/2$, $\overline{{\widetilde E}}_{G} \equiv \left({\widetilde E}_{G} + {\widetilde E}_{G,+0} \right)/2$ and $\overline{{\widetilde E}}_{V} \equiv \left({\widetilde E}_{V} + {\widetilde E}_{V,+0} \right)/2$. Above $IC$ represents the {\it initial conditions}, whereas $HC$ stands for {\it Hubble Constraint}.\\
+where $\overline{{\widetilde E}}_{K} \equiv \left({\widetilde E}_{K, -0/2} + {\widetilde E}_{K,+0/2} \right)/2$, $\overline{{\widetilde E}}_{G} \equiv \left({\widetilde E}_{G} + {\widetilde E}_{G,+0} \right)/2$ and $\overline{{\widetilde E}}_{V} \equiv \left({\widetilde E}_{V} + {\widetilde E}_{V,+0} \right)/2$. Above $IC$ represents the *initial conditions*, whereas $HC$ stands for {\it Hubble Constraint}.\\
 
 \textbf{II) Velocity- and Position-Verlet}. Verlet methods eliminate the half–time-step offset in the leapfrog method between field amplitudes and conjugate momenta, by either applying the velocity part of the leapfrog algorithm at two successive half–time steps but with a single position update in between, or by applying the coordinate part of the leapfrog algorithm at two successive half–time steps with one velocity update in between. The former prescription is known as the {\it Velocity-Verlet} (VV) or “kick–drift–kick”  scheme, whereas the latter is known as the {\it Position-Verlet} (PV) or “drift-kick–drift” scheme. Through the intermediate steps both position and velocity can be obtained after the three steps at integer times, with an accuracy up to order $\mathcal{O}(\delta \eta^2)$. For our reference example of singlet fields, the Verlet iterative schemes read\\
 
@@ -533,7 +659,7 @@ suffices. The evolution kernel takes then the form
 ```
 which we note it depends explicitly on $\tilde{\pi}_{i}$.\\ 
 
-\textbf{I) Runge-Kutta 2nd order (RK2)}. These algorithms provide an evolution scheme accurate to $\mathcal{O}(\delta \eta^2)$ by introducing one intermediate step, whose information is stored in auxiliary fields, one per field \textit{dof}. While there exist several implementations, here we review one of the most common ones, known as the \textit{modified Euler} method,
+\textbf{I) Runge-Kutta 2nd order (RK2)}. These algorithms provide an evolution scheme accurate to $\mathcal{O}(\delta \eta^2)$ by introducing one intermediate step, whose information is stored in auxiliary fields, one per field *dof*. While there exist several implementations, here we review one of the most common ones, known as the *modified Euler* method,
 [](){ #eq_auto_019 }
 ```math
 \begin{equation}

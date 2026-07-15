@@ -1,10 +1,10 @@
-CosmoLattice is capable of simulating scalar-gauge field theories in an expanding universe. Note that we differentiate between *scalar-gauge interactions* and *ALP-gauge interactions*. While both contain gauge fields, the first case is based on charged scalars under gauge symmetries (as *e.g.* in scalar electrodynamics or the electroweak sector of the Standard Model). In the second case, a pseudo-scalar field which is not charged under a gauge symmetry, known as an *axion-like-particle* or ALP, is coupled to gauge fields via $\phi F\tilde F$ (Abelian) or $\phi G\tilde G$ (non-Abelian). In this section we explain how to simulate scalar-gauge theories, *i.e.* models containing charged scalar fields interacting with gauge fields, either Abelian or non-Abelian. For a description of ALP-gauge interactions in CosmoLattice, go to Section [Axion-Gauge Dynamics](ALP.md).
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is capable of simulating scalar-gauge field theories in an expanding universe. Note that we differentiate between *scalar-gauge interactions* and *ALP-gauge interactions*. While both contain gauge fields, the first case is based on charged scalars under gauge symmetries (as *e.g.* in scalar electrodynamics or the electroweak sector of the Standard Model). In the second case, a pseudo-scalar field which is not charged under a gauge symmetry, known as an *axion-like-particle* or ALP, is coupled to gauge fields via $\phi F\tilde F$ (Abelian) or $\phi G\tilde G$ (non-Abelian). In this section we explain how to simulate scalar-gauge theories, *i.e.* models containing charged scalar fields interacting with gauge fields, either Abelian or non-Abelian. For a description of ALP-gauge interactions in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, go to Section [Axion-Gauge Dynamics](ALP.md).
 
 <!-- We start be reviewing briefly the framework of scalar-gauge theories in the continuum. -->
 
-### **Scalar-gauge field dynamics: program variables**
+### **Program Variables** { #subsec_LatticeScalarGauge }
 
-The action of a scalar-gauge theory with canonically normalized scalar fields, that can be simulated in CosmoLattice, is the following
+The action of a scalar-gauge theory with canonically normalized scalar fields, that can be simulated in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, is the following
 [](){ #eq_Lagrangian }
 ```math
 \begin{align}%\tag{50}
@@ -13,7 +13,7 @@ S & =- \int d^4 x \left\{\frac{1}{2}\partial_{\mu} \phi \partial ^{\mu}\phi + (D
 \end{align}
 ```
 
-This expression contains several types of scalar and gauge fields. In order to simplify notation, we have only added one copy of each field species, but CosmoLattice can also handle multiple fields of the same kind, though see below the Note on the [*Number of fields in scalar-gauge theories*][NoteNumGaugeVariables]. The above action contains three types of scalar fields: a singlet $\phi$, a $U(1)$-charged scalar (complex field) $\varphi$, and a $SU(2)$ doublet $\Phi$, where the latter two can be written in terms of real components $\varphi_j \in \mathcal{R}e$, as
+This expression contains several types of scalar and gauge fields. In order to simplify notation, we have only added one copy of each field species, but $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can also handle multiple fields of the same kind, though see below the Note on the [*Number of fields in scalar-gauge theories*][NoteNumGaugeVariables]. The above action contains three types of scalar fields: a singlet $\phi$, a $U(1)$-charged scalar (complex field) $\varphi$, and a $SU(2)$ doublet $\Phi$, where the latter two can be written in terms of real components $\varphi_j \in \mathcal{R}e$, as
 
 <!-- [](){ #Table_Scalars } -->
 ```math
@@ -36,7 +36,7 @@ This expression contains several types of scalar and gauge fields. In order to s
 \end{align}
 ```
 
-*c.f.* Eq. ([*3*][eq_ChargedScalars]) from [*Basic Field Equations in CosmoLattice*][subsec_BasicEOM] in Section [*Introduction to CosmoLattice*](Introduction to CosmoLattice.md). The complex field $\varphi$ can be charged under a $U(1)$ gauge symmetry, while the doublet can be charged under both $U(1)$ and $SU(2)$. The scalar potential of this theory is $V = V(\phi, |\varphi|, |\Phi|)$, which depends on $\phi$, and/or on the moduli of the complex and doublet scalars, $|\varphi|, |\Phi|$. The corresponding covariant derivatives and field strengths in action $~$\eqref{eq_Lagrangian} are defined as
+*c.f.* Eq. ([*3*][eq_ChargedScalars]) from [*Basic Field Equations in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*][subsec_BasicEOM] in Section [*Introduction to $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*](Introduction to CosmoLattice.md). The complex field $\varphi$ can be charged under a $U(1)$ gauge symmetry, while the doublet can be charged under both $U(1)$ and $SU(2)$. The scalar potential of this theory is $V = V(\phi, |\varphi|, |\Phi|)$, which depends on $\phi$, and/or on the moduli of the complex and doublet scalars, $|\varphi|, |\Phi|$. The corresponding covariant derivatives and field strengths in action $~$\eqref{eq_Lagrangian} are defined as
 [](){ #eq_AbCovDerivCont }
 [](){ #eq_CovDerivCont }
 [](){ #eq_FmnAbelian }
@@ -68,7 +68,7 @@ G_{\mu \nu} \equiv G_{\mu \nu}^a T_a   , \hspace{0.4cm} G_{\mu \nu}^a \equiv \pa
 \end{align}
 ```
 
-where $f_{abc}$ are the structure constants of the SU(N) group, determined by the relation $[T_a, T_b] = i f_{abc} T_c$. At the time of writing (July 2026), only the $SU(2)$ non-Abelian group is implemented in CosmoLattice, for which we simply have $T_a \equiv \sigma_a /2$, with $\sigma_a$ the Pauli matrices. In CosmoLattice we evolve the fields in the temporal gauge, so $A_{0} = B_0^a = 0$. Furthermore, we define the Abelian and non-Abelian electric and magnetic fields as follows,
+where $f_{abc}$ are the structure constants of the SU(N) group, determined by the relation $[T_a, T_b] = i f_{abc} T_c$. At the time of writing (July 2026), only the $SU(2)$ non-Abelian group is implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, for which we simply have $T_a \equiv \sigma_a /2$, with $\sigma_a$ the Pauli matrices. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we evolve the fields in the temporal gauge, so $A_{0} = B_0^a = 0$. Furthermore, we define the Abelian and non-Abelian electric and magnetic fields as follows,
 [](){ #eq_ElectricMagneticDefs }
 ```math
 \begin{equation}
@@ -101,8 +101,8 @@ with $\epsilon_{ijk}$ the Levi-Civita symbol. **These expressions represent gaug
     ```
 
 [](){ #NoteNumGaugeVariables }
-!!! note "Number of fields in scalar-gauge theories in CosmoLattice"
-    CosmoLattice can run with an arbitrary number of scalar singlets, $U(1)$ complex scalars, and $SU(2)$ doublets. CosmoLattice has been, however, only tested when considering a single $U(1)$ gauge field. While, in principle, the code is prepared to work also with multiple $U(1)$ gauge fields (coupled or not to scalars), this feature has not been thoroughly tested, so it is deactivated by default: the program crashes when a model is written with more than one $U(1)$ gauge field. It can be re-activated at one own's risk by commenting out the following lines in  file $\texttt{include/CosmoInterface/abstractmodel.h}$
+!!! note "Number of fields in scalar-gauge theories in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$"
+    $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can run with an arbitrary number of scalar singlets, $U(1)$ complex scalars, and $SU(2)$ doublets. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ has been, however, only tested when considering a single $U(1)$ gauge field. While, in principle, the code is prepared to work also with multiple $U(1)$ gauge fields (coupled or not to scalars), this feature has not been thoroughly tested, so it is deactivated by default: the program crashes when a model is written with more than one $U(1)$ gauge field. It can be re-activated at one own's risk by commenting out the following lines in  file $\texttt{include/CosmoInterface/abstractmodel.h}$
 
     @emgithub(include/CosmoInterface/abstractmodel.h:numb_U1_gauge_flds)
 
@@ -128,7 +128,7 @@ The program potential is defined as before, like in the case of singlet scalars,
 \end{eqnarray}
 ```
 
-### **Scalar-gauge field dynamics: equations of motion**
+### **Equations of Motion**
 
 In terms of the program variables, the field equations can be written as
 [](){ #eq_singlet-eom }
@@ -250,13 +250,13 @@ where we have defined the volume-averaged energy contributions as: $E_{K}^{f} = 
 
 [](){ #NoteNumGaugeVariables }
 !!! note "Important Note"
-    The evolution algorithms implemented in CosmoLattice use a discretized versions of Eq.$~$\eqref{eq_singlet-eom}-\eqref{eq_SU2eom} to solve for the field dynamics, and a lattice version of Eq.$~$\eqref{eq_FriedmannDDa} to solve for the scale factor. Eq.$~$\eqref{eq_GaussU1-eom} and Eq.$~$\eqref{eq_GaussSU2-eom} are the Gauss constraints of the U(1) and SU(2) gauge sectors respectively, which must be satisfied (by their lattice version counterparts) during all times during the simulation. Analogously, Eq.$~$\eqref{eq_FriedmannHubble}, which represents the Hubble constraint, must also be satisfied (again by its lattice analogue) all throughout the simulation. The degree of satisfaction of Eq.$~$\eqref{eq_FriedmannHubble} is an indicator of the ability of a given integrator to conserve energy. CosmoLattice monitors the degree of conservation of both Gauss and Hubble constraints, providing in this manner a quantitative validation of the numerical integration of the EOM. Our discretization techniques guarantee that the Gauss constraints are obeyed up to machine precision, see $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl] for details. On the other hand, the Hubble constraint Eq.$~$\eqref{eq_FriedmannHubble} holds numerically only to a certain degree of approximation, possibly reaching down to machine precision (depending on the model) only in the case of the highest order integrators like `VV10` or `PV10`.
+    The evolution algorithms implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ use a discretized versions of Eq.$~$\eqref{eq_singlet-eom}-\eqref{eq_SU2eom} to solve for the field dynamics, and a lattice version of Eq.$~$\eqref{eq_FriedmannDDa} to solve for the scale factor. Eq.$~$\eqref{eq_GaussU1-eom} and Eq.$~$\eqref{eq_GaussSU2-eom} are the Gauss constraints of the U(1) and SU(2) gauge sectors respectively, which must be satisfied (by their lattice version counterparts) during all times during the simulation. Analogously, Eq.$~$\eqref{eq_FriedmannHubble}, which represents the Hubble constraint, must also be satisfied (again by its lattice analogue) all throughout the simulation. The degree of satisfaction of Eq.$~$\eqref{eq_FriedmannHubble} is an indicator of the ability of a given integrator to conserve energy. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ monitors the degree of conservation of both Gauss and Hubble constraints, providing in this manner a quantitative validation of the numerical integration of the EOM. Our discretization techniques guarantee that the Gauss constraints are obeyed up to machine precision, see $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl] for details. On the other hand, the Hubble constraint Eq.$~$\eqref{eq_FriedmannHubble} holds numerically only to a certain degree of approximation, possibly reaching down to machine precision (depending on the model) only in the case of the highest order integrators like `VV10` or `PV10`.
 
 
 
-### **The model and input files for scalar-gauge theories** { #subsec_ScalarGaugeInput }
+### **Model and input files** { #subsec_ScalarGaugeInput }
 
-We explain now how to implement a model with Abelian and non-Abelian gauge symmetries in CosmoLattice. Two gauge models are already implemented in CosmoLattice: the model $\texttt{lphi4U1}$, which includes a complex scalar charged under a $U(1)$ gauge symmetry and one Abelian gauge field, *i.e.* it describes **scalar-electrodynamics**; the model $\texttt{lphi4SU2U1}$, which contains a scalar field charged under $U(1)\times SU(2)$, one Abelian gauge field, and one non-Abelian $SU(2)$ gauge field, *i.e.* it describes **the electroweak (bosonic) sector of the Standard Model**. These are models ready-to-use as templates for your own models. You cna find their $\texttt{.h}$ implementations in the folder $\texttt{./models}$. In this manual, we will use as a reference example the model $\texttt{lphi4SU2U1}$, as it contains all possible field species and interactions in scalar-gauge theories that can be currently simulated with CosmoLattice. 
+We explain now how to implement a model with Abelian and non-Abelian gauge symmetries in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Two gauge models are already implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$: the model $\texttt{lphi4U1}$, which includes a complex scalar charged under a $U(1)$ gauge symmetry and one Abelian gauge field, *i.e.* it describes **scalar-electrodynamics**; the model $\texttt{lphi4SU2U1}$, which contains a scalar field charged under $U(1)\times SU(2)$, one Abelian gauge field, and one non-Abelian $SU(2)$ gauge field, *i.e.* it describes **the electroweak (bosonic) sector of the Standard Model**. These are models ready-to-use as templates for your own models. You cna find their $\texttt{.h}$ implementations in the folder $\texttt{./models}$. In this manual, we will use as a reference example the model $\texttt{lphi4SU2U1}$, as it contains all possible field species and interactions in scalar-gauge theories that can be currently simulated with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
 
 The model $\texttt{lphi4SU2U1}$ consists of a doublet $\Phi$ charged under a $SU(2)\times U(1)$ gauge group, coupled to one Abelian gauge field $A_{\mu}$ and one non-Abelian one $B_{\mu}^a$, via the previously defined covariant derivative. We also couple $\Phi$ to a scalar singlet $\phi$ and to a $U(1)$-charged scalar field $\varphi$ via quadratic interactions in the scalar potential. We consider a scenario in which the doublet $\Phi$ acts as the dominant mother field, and we simulate its non-perturbative decay into gauge fields and other scalars, as induced through parametric resonance effects due to the coherent oscillations of $\Phi$. One could think of this situation as a preheating scenario where $\Phi$ plays the role of the inflaton field, coupled to the daughter fields $\phi, \varphi, A_\mu$ and $B_\mu = T_aB_\mu^a$. In particular, we will implement the theory described by action Eq.$~$\eqref{eq_Lagrangian} with the following scalar potential,
 [](){ #eq_PotSingletComplexDoublet }
@@ -321,7 +321,7 @@ This is done in the code as follows,
 Finally, we call the generic function responsible to set the masses of the matter fields together with the initial potential
 @emgithub(models/lphi4SU2U1.h:masses_setup)
 
-We now need to specify the scalar potential of our field theory. As for scalar singlet interactions, a scalar-gauge theory in CosmoLattice requires a *program potential*, defined in Eq.$~$\eqref{eq_ProgramPotMultiScalar}. In our example, it is given by
+We now need to specify the scalar potential of our field theory. As for scalar singlet interactions, a scalar-gauge theory in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ requires a *program potential*, defined in Eq.$~$\eqref{eq_ProgramPotMultiScalar}. In our example, it is given by
 <!-- [](){ #eq_Pot_exampleSU2U1 } -->
 ```math
 \begin{align}
@@ -409,13 +409,15 @@ $\tilde{k}$,  $\widetilde{\Delta}_{\widetilde\varphi} (\tilde k)$, $\widetilde{\
 $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{\mathcal{E}}}(\tilde k)$
 $\widetilde{\Delta}_{\widetilde{\mathcal{B}}}(\tilde k)$, $\Delta n_{bin}$
 
-### **The scalar-gauge physics inside CosmoLattice**
+### **Scalar-gauge physics inside $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$**
 
-#### Initial conditions { #subsubsec_initialConditionsNonAb }
+<!-- #### Initial conditions { #subsubsec_initialConditionsNonAb } -->
+[](){ #subsubsec_initialConditionsNonAb }
+**Initial conditions**
 
-In the tab [*Initialization of fluctuations*][sec_InitScalar] of Section [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md), we have presented how the initial conditions for singlet scalars are typically imposed in CosmoLattice. Here, we explain instead how to set the initial conditions for complex and SU(2) doublet scalars, as well as for the associated Abelian and non-Abelian gauge fields, see also Section [*Initial Conditions*]IC.md). We denote the time at which the initial conditions are imposed (typically the initial time of the simulation) as $\eta_*$, so that all quantities with a $*$ subindex must be understood to be evaluated at that time: for example, $\varphi_* \equiv \varphi ({\bf x}, \eta_* )$ for complex scalars, and $\dot{\varphi}_* \equiv \dot{\varphi} ({\bf x}, \eta_* )$ for the doublets.
+In the tab [*Initialization of fluctuations*][sec_InitScalar] of Section [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md), we have presented how the initial conditions for singlet scalars are typically imposed in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Here, we explain instead how to set the initial conditions for complex and SU(2) doublet scalars, as well as for the associated Abelian and non-Abelian gauge fields, see also Section [*Initial Conditions*]IC.md). We denote the time at which the initial conditions are imposed (typically the initial time of the simulation) as $\eta_*$, so that all quantities with a $*$ subindex must be understood to be evaluated at that time: for example, $\varphi_* \equiv \varphi ({\bf x}, \eta_* )$ for complex scalars, and $\dot{\varphi}_* \equiv \dot{\varphi} ({\bf x}, \eta_* )$ for the doublets.
 
-The initialization of the complex and $SU(2)$ doublet scalars is very similar to the singlet scalars: they consist in a homogeneous amplitude chosen by the user, over which a set of fluctuations is superimposed. However, we must take into account that these fields have multiple components. As described above, see [*The model and input files for scalar-gauge theories*][subsec_ScalarGaugeInput], in CosmoLattice the user can specify the initial absolute values $|\varphi_*|$ and $|\Phi_*|$ in the input file Then one could decide how to distribute this power between the different components in the model file, but as the scalar potential only depends on $|\varphi|$ and $|\Phi|$, we can always *rotate* the field configuration so that all components have equal initial homogeneous amplitude. Thus, for the complex scalars we impose
+The initialization of the complex and $SU(2)$ doublet scalars is very similar to the singlet scalars: they consist in a homogeneous amplitude chosen by the user, over which a set of fluctuations is superimposed. However, we must take into account that these fields have multiple components. As described above, see [*The model and input files for scalar-gauge theories*][subsec_ScalarGaugeInput], in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ the user can specify the initial absolute values $|\varphi_*|$ and $|\Phi_*|$ in the input file Then one could decide how to distribute this power between the different components in the model file, but as the scalar potential only depends on $|\varphi|$ and $|\Phi|$, we can always *rotate* the field configuration so that all components have equal initial homogeneous amplitude. Thus, for the complex scalars we impose
 
 [](){ #eq_ICcomplex }
 [](){ #eq_ICcomplexDeriv }
@@ -473,7 +475,7 @@ B_i^a ({\bf x}, t_* ) &= 0  ,  \label{eq_Inflc2} \\
 
 i.e. the initial amplitude of the gauge fields is set *exactly* to zero at all lattice points, while we only impose an initial spectrum of fluctuations to their time-derivatives (over vanishing homogeneous values). Due to this, the initial magnetic energy will be exactly zero, while a small amount of electric energy will be initially present due to the fluctuations of the time-derivatives of the gauge fields. While this is just a choice, the user is welcome to modify this prescription, but we anticipate that this might become a non-trivial task, due to the necessity to respect the Gauss-law(s), namely Eq.$~$\eqref{eq_GaussU1-eom} [for the U(1) sector] and Eq.$~$\eqref{eq_GaussSU2-eom} [for the SU(2) sector]. We discuss this next, for our chosen configuration above.
 
-The initial fluctuations of both charged scalars and gauge fields must be imposed so that the Gauss constraint is verified initially. As long as this is true, the Gauss constraint will remain preserved during the entire dynamical evolution of the system, thanks to the fact that CosmoLattice uses lattice gauge-invariant techniques. In order to achieve the said goal, let us first Fourier transform the Gauss constraints Eq.$~$\eqref{eq_GaussU1-eom} and Eq.$~$\eqref{eq_GaussSU2-eom} at the initial time $\eta_*$. We get
+The initial fluctuations of both charged scalars and gauge fields must be imposed so that the Gauss constraint is verified initially. As long as this is true, the Gauss constraint will remain preserved during the entire dynamical evolution of the system, thanks to the fact that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ uses lattice gauge-invariant techniques. In order to achieve the said goal, let us first Fourier transform the Gauss constraints Eq.$~$\eqref{eq_GaussU1-eom} and Eq.$~$\eqref{eq_GaussSU2-eom} at the initial time $\eta_*$. We get
 [](){ #eq_kAi1 }
 ```math
 \begin{eqnarray}
@@ -513,9 +515,11 @@ In order for this procedure to work consistenly, we need to slightly modify the 
 \end{eqnarray}
 ```
 
-In CosmoLattice, we thus generate randomly only $\theta_{01}$, $\theta_{02}$, as well as $\theta_{n1}$, $\varphi_{n1}$ for $n=1(,2,3)$, and let the other functions be initialized through out the constraints given in Eq.$~$\eqref{InConstr_2}.
+In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, we thus generate randomly only $\theta_{01}$, $\theta_{02}$, as well as $\theta_{n1}$, $\varphi_{n1}$ for $n=1(,2,3)$, and let the other functions be initialized through out the constraints given in Eq.$~$\eqref{InConstr_2}.
 
-#### Evolution equations
+<!-- #### Evolution equations -->
+[](){ #subsubsec_EvolEqsScalarGauge }
+**Evolution equations**
 
 In the tab [*Evolution of the system*][eq_evolution-sc] of Section [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md), we wrote a Hamiltonian scheme for the equations of motion (EOM) of a system of singlet scalars in an expanding universe. As explained there, we conveniently defined a set of conjugate momenta $\{\pi_{\phi},b\}$ for the scalar field(s) and the scale factor $\{\phi, a\}$, in such a way that the fields' EOM and Friedmann equations become a set of four first-order differential equations. Thanks to our definitions of conjugate momentum, the kernels in the EOM do not depend on the time-derivatives of the corresponding fields, allowing to solving the EOM (their discretized version) via symplectic algorithms, such as staggered leapfrog or verlet integration methods.
 
@@ -565,5 +569,5 @@ b' &= \mathcal{K}_a\hspace{-1mm}\left[a,{\widetilde E}_K^\phi,{\widetilde E}_K^\
 \end{align}
 ```
 
-The functions $\mathcal{K}_f$ above, represent the kernels of the different matter field species, $f=\phi,\varphi,\Phi,A_i,B_i^a$, whereas $\mathcal{K}_a$ represents the kernel of the scale factor. On a lattice, the different kernels can be discretized using lattice gauge-invariant techniques, as described *e.g.* in  Section 3 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl], or in this website's tab [*Lattice gauge invariant techniques*][subsec_LGT]. As for singlet scalar theories, CosmoLattice provides already implemented different evolution algorithms to solve the EOM of scalar-gauge theories, namely staggered *leapfrog* and *Verlet* evolvers. While the former has a fixed accuray in time-evolution of $\mathcal{O}(d\eta^2)$, the latter methods (both position- and velocity-Verlet), which by default have also $\mathcal{O}(d\eta^2)$ accuracy, can however be improved via recursive variants (using the Yoshida method), leading to algorithms of successive increasing accuracies, namely of $\mathcal{O}(d\eta^4)$, $\mathcal{O}(d\eta^6)$, $\mathcal{O}(d\eta^8)$, and $\mathcal{O}(d\eta^{10})$. The details of the lattice version of the EOM specialized for scalar-gauge theories, and of how the aforementioned evolution algorithms work, can be found in Sections 5 (for Abelian gauge theories) and 6 (non-Abelian gauge theories) of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl]. 
+The functions $\mathcal{K}_f$ above, represent the kernels of the different matter field species, $f=\phi,\varphi,\Phi,A_i,B_i^a$, whereas $\mathcal{K}_a$ represents the kernel of the scale factor. On a lattice, the different kernels can be discretized using lattice gauge-invariant techniques, as described *e.g.* in  Section 3 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl], or in this website's tab [*Lattice gauge invariant techniques*][subsec_LGT]. As for singlet scalar theories, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ provides already implemented different evolution algorithms to solve the EOM of scalar-gauge theories, namely staggered *leapfrog* and *Verlet* evolvers. While the former has a fixed accuray in time-evolution of $\mathcal{O}(d\eta^2)$, the latter methods (both position- and velocity-Verlet), which by default have also $\mathcal{O}(d\eta^2)$ accuracy, can however be improved via recursive variants (using the Yoshida method), leading to algorithms of successive increasing accuracies, namely of $\mathcal{O}(d\eta^4)$, $\mathcal{O}(d\eta^6)$, $\mathcal{O}(d\eta^8)$, and $\mathcal{O}(d\eta^{10})$. The details of the lattice version of the EOM specialized for scalar-gauge theories, and of how the aforementioned evolution algorithms work, can be found in Sections 5 (for Abelian gauge theories) and 6 (non-Abelian gauge theories) of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl]. 
 
