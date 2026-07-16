@@ -389,7 +389,7 @@ The EOM of the fields then take the general form
 where primes denote differentiation with respect to $\alpha$-time. Here $\mathcal{D}_i[...]$ is a functional---the *drift*---that defines the conjugate momentum of the $i$th $dof$, and $\mathcal{K}_i[...]$ is another functional---the *kernel* or *kick*---, that determines the interactions of the $i$th $dof$ with the rest of $dof's$ (possibly including itself). The kernel of the scale factor,  $\mathcal{K}_a[...]$, is given by the $rhs$ of Eq. ([*24*][eq_FriedmannD2a]) from [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)], based on the volume average $\langle ... \rangle$ 
 of the potential, kinetic and gradient energy densities of the $dof$ involved in the problem, namely $E_V \equiv \langle V \rangle$, $E_{K} \equiv \langle  \sum_j K_{j}\rangle$ and $E_{G} \equiv \langle \sum_j  G_{j}\rangle$.
 
-Similarly, EOM of non-canonical field theory examples are given in the subsection [Non-Canonical Field Theories][subsec_eomNonCanonical] from [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)]. These equations take the same form as in Eqs.$~$\eqref{eq_SchemeContVirgin1}-\eqref{eq_SchemeContVirgin4}, with the major difference that their Kernels $\mathcal{K}_i$ contain explicitly a dependence on the conjugate momenta $\pi_i$, whereas in canonical field theory, we can choose variables such that $\mathcal{K}_i$ does not depend on  $\pi_i$ (nor on the other conjugate momenta $\pi_j$). 
+Similarly, EOM of non-canonical field theory examples are given in the subsection [Non-Canonical Field Theories][subsec_eomNonCanonical] from [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)]. These equations take the same form as in Eqs.$~$\eqref{eq_SchemeContVirgin1}-\eqref{eq_SchemeContVirgin4}, with the major difference that their Kernels $\mathcal{K}_i$ contain explicitly a dependence on the conjugate momenta $\pi_i$, whereas in canonical field theory, we can choose variables such that $\mathcal{K}_i$ does not depend on  $\pi_i$ (nor on the other conjugate momenta $\pi_{j\neq i}$). 
 
 We review below time-integration algorithms suitable for both canonical and non-canonical systems. While the algorithms we discuss can be adapted for any system of interactive fields, for clarity we illustrate each method adapting the algorithm to the the case of $N_s$ canonically normalized interacting scalar fields $\{\phi_i\}$.   These are characterized by an action $S = - \int d^4x\, \sqrt{-g}\left(\frac{1}{2}\partial_{\mu} \phi_i \partial^{\mu} \phi_i + V(\lbrace \phi_j \rbrace) \right)$, which, when specialized into a flat FLRW background [see Eq. ([*1*][eq_FLRWlineElem]) from [*Continuum Field Theory*](Brief_Review_On_Continuum_Dynamics.md)] and re-casted in terms of the program variables defined in Eqs.$~$\eqref{eq_ScalarGaugeProgramVar}, can be re-written as
 [](){ #eq_ActionScalar }
@@ -400,7 +400,7 @@ We review below time-integration algorithms suitable for both canonical and non-
 \end{eqnarray}
 ```
 
-While there is no unique way to obtain the discrete version of the EOM (see $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) for discussion on this), here we adopt a *hybrid* scheme, where at the level of the action only spatial derivatives are discretized, while the temporal coordinate is treated as a continuous variable. We demand recovery of the continuum limit at the level of the action at least to order $\mathcal{O}(dx^2)$. Thus, the action for our reference example, using *e.g.* forward derivatives, reads
+While there is no unique way to obtain the discrete version of the EOM [see $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) for a discussion on this], here we adopt a *hybrid* scheme. This means that at the level of the action only spatial derivatives are discretized, while the temporal coordinate is treated as a continuous variable. The hybrid prescription is actually suitable for either canonical or non-canonical field theories, allowing for a flexible choice of the time-integrator. We will typically demand recovery of the continuum limit, at the level of the action, at least to order $\mathcal{O}(dx^2)$. Thus, the action of our reference example, using *e.g.* forward derivatives, reads
 [](){ #eq_ActionScDiscHybrib }
 ```math
 \begin{equation}
@@ -427,7 +427,7 @@ with
 {\widetilde E}_K \equiv \frac{1}{2 a^{2\alpha}}\sum_{i}\left\langle (\tilde \phi_i')^2 \right\rangle\,,~~~ {\widetilde E}_G \equiv \frac{1}{2 a^2 }\sum_{i,k} \left\langle (\widetilde \nabla_k^+ \tilde \phi_{i})^2 \right\rangle\,, ~~~{\widetilde E}_V \equiv \left\langle \tilde{V}(\lbrace \tilde\phi_i\rbrace) \right\rangle\,.
 \end{eqnarray}
 ```
-From here, one can choose a suitable evolution algorithm to solve Eqs.$~$\eqref{eq_EOMScalar-Discr_Hybrid}~\eqref{eq_EOMScaleFactor-Discr_Hybrid}. As we will see, the hybrid prescription is suitable for either canonical or non-canonical field theories, allowing for a flexible choice of the time-integrator. 
+From here, one can choose a suitable evolution algorithm to solve Eqs.$~$\eqref{eq_EOMScalar-Discr_Hybrid}~\eqref{eq_EOMScaleFactor-Discr_Hybrid}. 
 
 In the following we present a collection of algorithms, divided into *symplectic* and *non-symplectic* integrators. Symplectic integrators include the *Leapfrog* and *Position-* and *Velocity-Verlet* methods, which are very stable numerical algorithms for canonical field theories, allowing for large-time evolution. They can also be extended to higher-order accuracy evolvers, know as *Yoshida* integrators, through recursive compositions of sub-steps. Non-symplectic integrators, on the other hand, are suitable for more general applications, including systems with non-canonical kinetic terms, dissipative dynamics, or interactions containing canonical momenta in the kernels. These algorithms include explicit *Runge–Kutta* schemes of various orders and multi-stage algorithms, which naturally allow for adaptive time-stepping and the use of auxiliary fields to handle intermediate sub-steps. 
 
@@ -465,7 +465,7 @@ The evolution kernels for our canonically normalised fields read therefore
 \end{eqnarray}
 ```
 
-We review now representative cases of symplectic integrators [for en extensive discussion on these, see $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl])]. We present below their concrete implementation for the reference case of scalar interactive singlets.
+We discuss now representative cases of symplectic integrators [for en extensive discussion on these, see $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl])]. Below, we present concrete implementations for the reference case of scalar interactive singlets.
 
 
 **I) (Staggered) Leapfrog.** The *leapfrog* algorithm is one of the simplest methods for solving second order differential equations that ensures order $\mathcal{O}(\delta \eta^2)$. It requires that the field amplitudes and their conjugate momenta are displaced between each other by a half-time step $\delta\eta/2$. The same applies to the scale-factor and its derivative. In our case of reference, a convenient choice of the conjugate momenta is
@@ -509,18 +509,16 @@ a_{+0} &=&  a + \delta\tilde\eta\, b_{+0/2},\ ~~~~ \longrightarrow ~~~~ a_{+0/2}
 \label{eq_HCschemeIII}
 \end{eqnarray}
 ```
-where $\overline{{\widetilde E}}_{K} \equiv \left({\widetilde E}_{K, -0/2} + {\widetilde E}_{K,+0/2} \right)/2$, $\overline{{\widetilde E}}_{G} \equiv \left({\widetilde E}_{G} + {\widetilde E}_{G,+0} \right)/2$ and $\overline{{\widetilde E}}_{V} \equiv \left({\widetilde E}_{V} + {\widetilde E}_{V,+0} \right)/2$. Above $IC$ represents the *initial conditions*, whereas $HC$ stands for *Hubble Constraint*.
+where $\overline{{\widetilde E}}_{K} \equiv \left({\widetilde E}_{K, -0/2} + {\widetilde E}_{K,+0/2} \right)/2$, $\overline{{\widetilde E}}_{G} \equiv \left({\widetilde E}_{G} + {\widetilde E}_{G,+0} \right)/2$ and $\overline{{\widetilde E}}_{V} \equiv \left({\widetilde E}_{V} + {\widetilde E}_{V,+0} \right)/2$. Above, $IC$ represents the *initial conditions*, whereas $HC$ stands for *Hubble Constraint*.
 
 **II) Velocity- and Position-Verlet.** Verlet methods eliminate the half–time-step offset in the leapfrog method between field amplitudes and conjugate momenta, by either applying the velocity part of the leapfrog algorithm at two successive half–time steps but with a single position update in between, or by applying the coordinate part of the leapfrog algorithm at two successive half–time steps with one velocity update in between. The former prescription is known as the *Velocity-Verlet* (VV) or “kick–drift–kick”  scheme, whereas the latter is known as the *Position-Verlet* (PV) or “drift-kick–drift” scheme. Through the intermediate steps both position and velocity can be obtained after the three steps at integer times, with an accuracy up to order $\mathcal{O}(\delta \eta^2)$. For our reference example of singlet fields, the Verlet iterative schemes read
 
 **II-1).** Velocity Verlet
-**II-2).** Position Verlet
-$IC: \{\tilde{\phi}_i,\tilde{\pi}_i,a,b\}\ \text{at}\ \tilde{\eta}_0\, ,$
-$IC:  \{\tilde{\phi}_i,\tilde{\pi}_i,a,b\}\ \text{at}\ \tilde{\eta}_0\, ,$
 [](){ #eq_auto_013 }
 ```math
-\begin{equation}
-\left\lbrace
+\begin{eqnarray}
+&&IC: \{\tilde{\phi}_i,\tilde{\pi}_i,a,b\}\ \text{at}\ \tilde{\eta}_0\, , \nonumber\\
+&& \left\lbrace
 \begin{array}{@{}l}
 b_{+0/2} = b +{\dfrac{\delta\tilde\eta}{2}} 
 \mathcal{K}^{\rm L}_{a}[a,{\widetilde E}_{K},{\widetilde E}_G,{\widetilde E}_V]\,,\\
@@ -534,15 +532,21 @@ a_{+0} =  a +  {\delta\tilde\eta}b_{+0/2}\,,~a_{+0/2} = \dfrac{a_{+0}+a}{2}\,,\\
 b_{+0} = b_{+0/2} + {\dfrac{\delta\tilde\eta}{2}}  
 \mathcal{K}^{\rm L}_{a}[a,{\widetilde E}_{K},{\widetilde E}_G,{\widetilde E}_V]\big|_{+0}\,,
 \end{array}
-\right.
+\right.\\
+&&HC: b^2 = \dfrac{1}{3}\!\left(\dfrac{ f_*}{m_p}\right)^2
+a^{2(\alpha+1)} \big({\widetilde E}_{K} + {\widetilde E}_{G} + {\widetilde E}_{V}\big)\, ,
 \nonumber
 \label{eq_auto_013}
-\end{equation}
+\end{eqnarray}
 ```
+
+
+**II-2).** Position Verlet
 [](){ #eq_auto_014 }
 ```math
-\begin{equation}
-\left\lbrace
+\begin{eqnarray}
+&& IC:  \{\tilde{\phi}_i,\tilde{\pi}_i,a,b\}\ \text{at}\ \tilde{\eta}_0\, ,\nonumber\\
+&& \left\lbrace
 \begin{array}{@{}l}
 a_{+0/2} =  a + {\dfrac{\delta\tilde\eta}{2}} b\,,\\
 \tilde\phi_{i,+0/2} = \tilde\phi_i + 
@@ -555,15 +559,12 @@ a_{+0} =  a_{+0/2} + {\dfrac{\delta\tilde\eta}{2}} b_{+0}\,,\\
 \tilde\phi_{i,+0} = \tilde\phi_{i,+0/2} + 
 {\dfrac{\delta\tilde\eta}{2}}\,\tilde\pi_{i,+0}a_{+0}^{-(3-\alpha)}\,,
 \end{array}
-\right.
-
+\right.\\
+&&HC: b^2 = \dfrac{1}{3}\!\left(\dfrac{ f_*}{m_p}\right)^2
+a^{2(\alpha+1)} \big({\widetilde E}_{K} + {\widetilde E}_{G} + {\widetilde E}_{V}\big)\, ,\nonumber
 \label{eq_auto_014}
-\end{equation}
+\end{eqnarray}
 ```
-$HC: b^2 = \dfrac{1}{3}\!\left(\dfrac{ f_*}{m_p}\right)^2
-a^{2(\alpha+1)} \big({\widetilde E}_{K} + {\widetilde E}_{G} + {\widetilde E}_{V}\big)\, ,$
-$HC: b^2 = \dfrac{1}{3}\!\left(\dfrac{ f_*}{m_p}\right)^2
-a^{2(\alpha+1)} \big({\widetilde E}_{K} + {\widetilde E}_{G} + {\widetilde E}_{V}\big)\, ,$
 with $\overline{{\widetilde E}}_{K} \equiv \left({\widetilde E}_{K} + {\widetilde E}_{K,+0} \right)/2$.
 
 **III) Yoshida: Verlet Integration of $\mathcal{O}(\delta\eta^n)$.** The Verlet integration methods can be used recursively to construct higher–order (even) integrators with accuracy $\mathcal{O}(\delta \eta^n)$, with $n = 4, 6, 8, ...$. A single time step $\delta \eta$ is decomposed into $s$ sub-steps, $\delta \eta_p = w_p \delta \eta$, with $\sum_{p=1}^s w_p = 1$, and the corresponding Verlet algorithm is applied sequentially in each sub-step. For instance, the Velocity-Verlet version of this scheme can be written as
@@ -608,7 +609,7 @@ HC : b^2 = \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2a^{2(\alpha+1)} \Big({{\
 \label{eq_auto_017}
 \end{equation}
 ```
-where we have compacted the notation introducing  $\mathcal{K}^{{\rm L}, (l)}_{a}=\mathcal{K}^{\rm L}_{a}[a^{(l)},{\widetilde E}_K^{(l)},{\widetilde E}_G^{(l)},{\widetilde E}_V^{(l)}]$ and $\mathcal{K}^{{\rm L}, (l)}_{i}= \mathcal{K}^{\rm L}_{i}[a^{(l)},\lbrace\tilde\phi_{j}^{(l)}\rbrace]$. The sub-index $_{1/2}$ represents intermediate updates of the variables at each iteration step and should not be confused with a half–time-step displacement. Using the appropriate coefficients $w_p$, see Table~\ref{tab_VVnCoeffs} of the Appendix, one achieves a cancellation of truncation errors up to order $\mathcal{O}(\delta \eta^{n})$, with $n = 4, 6, 8,$ and $10$, corresponding to $s = 3, 7, 15,$ and $31$ sub-steps, respectively.
+where we have compacted the notation introducing  $\mathcal{K}^{{\rm L}, (l)}_{a}=\mathcal{K}^{\rm L}_{a}[a^{(l)},{\widetilde E}_K^{(l)},{\widetilde E}_G^{(l)},{\widetilde E}_V^{(l)}]$ and $\mathcal{K}^{{\rm L}, (l)}_{i}= \mathcal{K}^{\rm L}_{i}[a^{(l)},\lbrace\tilde\phi_{j}^{(l)}\rbrace]$. The sub-index $_{1/2}$ represents intermediate updates of the variables at each iteration step and should not be confused with a half–time-step displacement. Using the appropriate coefficients $w_p$ [see *e.g.* Table 2 in the Appendix of $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme])], one can achieve a cancellation of truncation errors up to order $\mathcal{O}(\delta \eta^{n})$, with $n = 4, 6, 8,$ and $10$, corresponding to $s = 3, 7, 15,$ and $31$ sub-steps, respectively.
 
 [](){ #subsubsec_NonSymplecticInt }
 **Non-symplectic integrators**
@@ -616,12 +617,7 @@ where we have compacted the notation introducing  $\mathcal{K}^{{\rm L}, (l)}_{a
 Non-symplectic integrators form a versatile set 
 of methods with broad applicability, performing well across a variety of systems for which symplectic methods are less suitable, including non-Hamiltonian, dissipative, or stiff ones with canonical momenta appearing in the kernels. Non-symplectic methods can naturally accommodate adaptive time-stepping. 
 
-In these  
-schemes, both 
-the field amplitudes and their 
-conjugate momenta are defined 
-at the same time step. 
-On the other hand, because these methods involve the execution of intermediate sub-steps, *auxiliary fields* are required to store the information at each stage. In the case of interacting scalar fields, a simple choice for the conjugate momenta,  
+In these schemes, both the field amplitudes and their conjugate momenta are defined at the same time step. On the other hand, because these methods involve the execution of intermediate sub-steps, *auxiliary fields* are required to store the information at each stage. In the case of interacting scalar fields, a simple choice for the conjugate momenta,  
 [](){ #eq_auto_018 }
 ```math
 \begin{equation}
@@ -738,7 +734,7 @@ HC : b^2 = \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2a^{2(\alpha+1)} \Big({{\
 \end{eqnarray}
 ```
 
-**III) Low-storage Runge-Kutta.** These methods represent a refined version of the previous schemes, in which the number of auxiliary fields is reduced while maintaining the integration accuracy of $\mathcal{O}(\delta \eta^n)$ \cite{Carpenter1994Thirdorder2R,Carpenter1994Fourthorder2R,Bazavov:2021pik,Bazavov:2025dzo,Bazavov:2025exj}. This is achieved by introducing $s$ intermediate sub-stages, each with its corresponding weight coefficient.
+**III) Low-storage Runge-Kutta.** These methods represent a refined version of the previous schemes, in which the number of auxiliary fields is reduced while maintaining the integration accuracy of $\mathcal{O}(\delta \eta^n)$. <!-- (Refs.[@Carpenter1994_Fourthorder2R,@Carpenter_1994Thirdorder2R], [@Bazavov_2021pik],[@Bazavov_2025dzo],[@Bazavov_2025exj] ).--> This is achieved by introducing $s$ intermediate sub-stages, each with its corresponding weight coefficient.
 [](){ #eq_auto_024 }
 ```math
 \begin{equation}
@@ -802,6 +798,5 @@ HC : b^2 = \frac{1}{3} \left( \frac{ f_*}{m_p} \right)^2a^{2(\alpha+1)} \Big({{\
 
 The auxiliary fields $\{\Delta\tilde{\phi}^{(p)}, \Delta\tilde{\pi}^{(p)}_{i}, \Delta a^{(p)}, \Delta b^{(p)}\}$ are updated with information at each stage $p$ up to a total of $s$ stages, without the need to define additional kernels.
 
-For instance, using 2 intermediate stages and  $\{(A_p, B_p)\} = \{ (0, 1), (-1, 1/2) \}$, we recover the explicit 2nd order RK. Moreover, the accuracy can be increased to third order with 4 intermediate stages  using
-$\{(A_p, B_p)\}~ = ~ \{ \,(\,0.0, 0.06688758201974097\,)\,,\,(\,-0.7825460361923583\,, \,2.876554598956719\,),\, ...$
-\\$ ~(\,-2.042914325731225\,,\,0.5534657361343982\,),(\,-1.799337253940777\,,\, 0.3912730180961791\,)\,\}\,$, for example. We refer the reader to the Table \ref{tab_RKlsCoefficients} from the Appendix to find the necessary coefficients for other orders/stages.
+For instance, using 2 intermediate stages and  $\{(A_p, B_p)\} = \{ (0, 1), (-1, 1/2) \}$, we recover the explicit 2nd order RK. Moreover, the accuracy can be increased to third order with 4 intermediate stages using
+$\{(A_p, B_p)\}~ = ~ \{ \,(\,0.0, 0.06688758201974097\,)\,$, $\,(\,-0.7825460361923583\,, \,2.876554598956719\,)\,,\,(\,-2.042914325731225\,,\,0.5534657361343982\,),(\,-1.799337253940777\,,\, 0.3912730180961791\,)\,\}\,$, for example. We refer the reader to Table 3 from the Appendix of $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]), to find the necessary coefficients for other orders/stages.
