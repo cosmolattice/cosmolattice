@@ -238,7 +238,7 @@ In addition to techniques to generate the initial conditions and prevent the los
 |\phi|=\left(\sum_{a=1}^N \phi_a^2\right)^{1/2}\,,
 \end{equation}
 ```
-which is saved to the $\texttt{average_norm.txt}$ file, together with the average of its square, $\langle|\phi|^2\rangle$, and its variance, $\text{var}(|\phi|)$. The frequency of these measurements is controlled by the `tOutputFreq` parameter.
+which is saved to the $\texttt{average_norm.txt}$ file, together with the average of its square, $\langle|\phi|^2\rangle$, and its root mean square, $\text{rms}(|\phi|)$. The frequency of these measurements is controlled by the `tOutputFreq` parameter.
 
 -  The power spectrum of the norm, which is saved to the $\texttt{spectra_norm.txt}$ file, with a frequency controlled by the `tOutputInfreq` keyword.
 
