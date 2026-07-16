@@ -67,7 +67,7 @@ For simulations with $\mathrm{U}(1)$ gauge fields `NU1Flds > 0`, the following m
 \end{equation}
 ```
 
--  $\texttt{average_gauss_U1_[nfld].txt}$: Contains information about the conservation of Gauss law in the $\mathrm{U}(1)$ sector, which is in general obeyed to machine precision in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Here $\text{LHS}_{\texttt{nfld}}$ and $RHS__{\texttt{nfld}}$ are the left- and right-hand sides of Eq.$~$(17) from [**Scalar-gauge interactions**](My first model of gauge fields.md).
+-  $\texttt{average_gauss_U1_[nfld].txt}$: Contains information about the conservation of Gauss law in the $\mathrm{U}(1)$ sector, which is in general obeyed to machine precision in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Here $\text{LHS}_{\texttt{nfld}}$ and $RHS_{\texttt{nfld}}$ are the left- and right-hand sides of Eq.$~$(17) from [**Scalar-gauge interactions**](My first model of gauge fields.md).
 ```math
 \begin{equation}\tilde{\eta}\,,\quad\frac{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle}{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle}\,,\quad\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle\,,\quad\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle\end{equation}\,.
 ```
@@ -82,7 +82,7 @@ Here, the electric and magnetic fields are defined using improved definitions,
 \begin{equation}
 \begin{array}{rcl}
 \widetilde{ \mathcal E}_{i}^{(2)} & \equiv & \displaystyle \frac{1}{2} (\widetilde{ \mathcal E}_{i} + \widetilde{ \mathcal E}_{i,-\hat{\imath}})\,,\\[5pt]
-\widetilde{ \mathcal B}_{i}^{(4)} & \equiv & \displaystyle \frac{1}{4} (\widetilde{ \mathcal B}_{i}} + \widetilde{ \mathcal B}_{i,-\hat{\jmath}} + \widetilde{ \mathcal B}_{i,-\hat{k}} + \widetilde{ \mathcal B}_{i,-\hat{\jmath}-\hat{k}})\,.
+\widetilde{ \mathcal B}_{i}^{(4)} & \equiv & \displaystyle \frac{1}{4} (\widetilde{ \mathcal B}_{i} + \widetilde{ \mathcal B}_{i,-\hat{\jmath}} + \widetilde{ \mathcal B}_{i,-\hat{k}} + \widetilde{ \mathcal B}_{i,-\hat{\jmath}-\hat{k}})\,.
 \end{array}
 \end{equation}
 ```
