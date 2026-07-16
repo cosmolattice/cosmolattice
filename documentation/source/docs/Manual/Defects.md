@@ -196,15 +196,16 @@ In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, the resolution-preservi
 ```math
 \begin{equation}\label{eq_resolutionPotentialResolutionPreserving}
  V_N[\{\phi_a\}]=\frac{\lambda}{4}\Lambda_\text{RP}(\tau)\left(\sum_{a=1}^N\phi_a^2-v^2\right)^2\,,
+ \end{equation}
 ```
 where $\Lambda_\text{RP}(\tau)$ takes the values,
 [](){ #eq_resolutionPreservingFactor }
 ```math
 \begin{equation}\label{eq_resolutionPreservingFactor}
 \Lambda_\text{RP}(\tau) = \left\{\begin{array}{lr}
-1  & \quad\quad\quad\quad\quad \tau < \tau_\text{RP,0}\,,\\
-\left[\frac{a(\tau)}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau_\text{RP,0} \leq \tau < \tau_{RP, max}\,, \\
-\left[\frac{a(\tau_{RP,max})}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau \geq \tau_{RP, max}\,. \\
+1  & \quad\quad\quad\quad\quad \tau < \tau_\text{RP,0}\,,\\[7pt]
+\displaystyle\left[\frac{a(\tau)}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau_\text{RP,0} \leq \tau < \tau_{RP, max}\,, \\[7pt]
+\displaystyle\left[\frac{a(\tau_{RP,max})}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau \geq \tau_{RP, max}\,. \\
 \end{array}\right.
 \end{equation}
 ```
@@ -291,7 +292,7 @@ where
 Y_i(\mathbf{n})=\left[\theta(\mathbf{n})-\theta(\mathbf{n}+\hat{\imath})\right]_\pi\,,
 \end{equation}
 ```
-is the phase variation along each link, which is defined as $\theta(\mathbf{n})=\text{atan}(\phi_2/\phi_1)$, and $[\varepsilon]_\pi$ sets $\theta$ in the range $-\pi <\varepsilon \leq\pi$.
+is the phase variation along each link, which is defined as $\theta(\mathbf{n})=\text{atan}(\phi_2/\phi_1)$, and $[\varepsilon]_\pi$ sets $\theta$ in the range $-\pi < \varepsilon \leq \pi$.
 
 An example of the observables section can be found in the default parameter file,
 @emgithub(models/parameter-files/defects_ONGlobal.in:observables)
@@ -314,15 +315,13 @@ This model has a local $\text{U}(1)$ symmetry which is spontaneously broken by t
 \begin{equation}\label{eq_localStringsEOM}
 \left.\begin{array}{rcl}
 (a^2\varphi')'-a^2 D_A^2\varphi & = & \displaystyle -2a^{4}\lambda\varphi\left(|\varphi|^2-\frac{v^2}{2}\right)\,,\\[10pt]
-A_i''-\nabla^2A_i + \nabla_j \nabla_i A_j & = & \displaystyle 2a^{2}g_A^\varphi Q_A\text{Im}[\varphi^*D_i\varphi]\,.
+A_i''-\nabla^2A_i + \nabla_j \nabla_i A_j & = & \displaystyle 2a^{2}g_AQ_A^\varphi\text{Im}[\varphi^*D_i\varphi]\,.
 \end{array}\right.
 \end{equation}
 ```
 
 In addition to $\lambda$ and the vaccuum expectation value, $v$, the model also depends on the gauge coupling, $g_A$, and the charge of the complex scalar field under the $\mathrm{U}(1)$ symmetry, $Q_A^\varphi$. All these need to be specified in the parameter file,
-
-@emgithub(models/parameter-files/defects_localStrings.in:model_pars)
-
+@emgithub(models/parameter-files/defects_U1LocalStrings.in:model_pars)
 These parameters are used to define program variables analogously as it is done in the case of global defects, see Eq. \eqref{eq_globalProgramVariables}. The particular example presented here corresponds to the so-called critical case, $2\lambda=(Q_a^\varphi g_A)^2$, for which the gauge ans scalar radii of the local strings coincide, although $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ also allows one to simulate other non-critical cases. Note that as this model only contains one complex scalar field, there is a redundancy between the values of $g_a$ and $Q_A^\varphi$. However, both need to be included in the parameter file to run $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
 Simulations of local strings in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ follow similar lines than those of global defects presentedabove in [*Simultations of global defects*][sec_simulationsGlobalDefects]. In particular, they can only be simulated on a flat background or on a background with fixed expansion. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ also incorporates local versions of the initial conditions, resolution-preserving techniques and observables discussed above, which are controlled by the same input parameters as in the global case. We now briefly discuss the main differences, but refer the reader to the corresponding subsections fromthe global strings model for more detailed information about the usage of these techniques and the associated parameters.
@@ -339,7 +338,7 @@ Following the initialization of the scalar field, a phase of diffusion can also 
 \begin{equation}\label{eq_localStringsDiffusion}
 \left.\begin{array}{rcl}
 \varphi' & = & a^2 D_A^2\varphi \displaystyle - 2a^{4}\lambda\varphi\left(|\varphi|^2-\frac{v^2}{2}\right)\,,\\[10pt]
-A_i' & = & \nabla^2A_i - \nabla_j \nabla_i A_j + \displaystyle 2a^{2}g_A^\varphi Q_A\text{Im}[\varphi^*D_i\varphi]\,.
+A_i' & = & \nabla^2A_i - \nabla_j \nabla_i A_j + \displaystyle 2a^{2}g_AQ_A^\varphi\text{Im}[\varphi^*D_i\varphi]\,.
 \end{array}\right.
 \end{equation}
 ```
@@ -353,7 +352,7 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows one to use of resolu
 \begin{equation}\label{eq_localFatteningEOM}
 \left.\begin{array}{rcl}
 (a^2 \tilde{\varphi}')'  & = &a^2 \tilde{D}_{A,i}^-\tilde{D}_{A,i}^+ \tilde{\varphi} \displaystyle -2 a^4 \left(\frac{a}{a_0}\right) ^ {2(s-1)}\tilde{\varphi} \left(|\tilde{\varphi}|^2 -\frac{1}{2}\right)\,,\\[10pt]
-\displaystyle \left[\left(\frac{a}{a_0}\right)^{-2(s-1)}\tilde{A}_i'\right]' & = &\displaystyle \left(\frac{a}{a_0}\right)^{-2(s-1)}\left[\tilde{\nabla}_j^-\tilde{\nabla}_j^+\tilde{A}_i - \tilde{\nabla}_j^-\tilde{\nabla}_i^+ \tilde{A}_j \right] +  2 a^2 g_A^\varphi Q_A \left(\frac{f_*}{\omega_*}\right)^2 \text{Im}[\tilde{\varphi}^* \tilde{D}_{A,i}^+ \tilde{\varphi}]\,,
+\displaystyle \left[\left(\frac{a}{a_0}\right)^{-2(s-1)}\tilde{A}_i'\right]' & = &\displaystyle \left(\frac{a}{a_0}\right)^{-2(s-1)}\left[\tilde{\nabla}_j^-\tilde{\nabla}_j^+\tilde{A}_i - \tilde{\nabla}_j^-\tilde{\nabla}_i^+ \tilde{A}_j \right] +  2 a^2 g_AQ_A^\varphi \left(\frac{f_*}{\omega_*}\right)^2 \text{Im}[\tilde{\varphi}^* \tilde{D}_{A,i}^+ \tilde{\varphi}]\,,
 \end{array}\right.
 \end{equation}
 ```
