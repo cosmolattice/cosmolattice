@@ -115,7 +115,7 @@ In addition to these files related to field averages, results for the evolution 
 \end{equation}
 ```
 
-   In addition, an extra column is added at the end for some particular cases. For simulations with non-minimal couplings to gravity, this last column contains the value of the Ricci scalar, $R$, as given in Eq.$~$(5) of [**Non-Minimal Interactions**](NMC.md). On the other hand, for simulatins of cosmic defects, the last column contains the value of the fattening factor, see Eq.$~$(15) of [**Cosmic Defects**](Defects.md).
+   In addition, an extra column is added at the end for some particular cases. For simulations with non-minimal couplings to gravity, this last column contains the value of the Ricci scalar, $R$, as given in Eq.$~$(5) of [**Non-Minimal Interactions**](NMC.md). On the other hand, for simulatins of cosmic defects, the last column contains the value of the fattening factor, see Eq.$~$(16) of [**Cosmic Defects**](Defects.md).
 
 
 Finally, **energy averages** are also measured, together with information about the energy conservation in the simulation.
