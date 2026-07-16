@@ -1,23 +1,23 @@
 <!-- <div style="text-align: justify;"> -->
 
-This section covers how CosmoLattice simulates the production and dynamics of gravitational waves (GWs). We explain how GWs are implemented in CL, making emphasis on the form of the anisotropic stress tensor. We also explain which options of the simulations can be controlled from the parameter file and some of the restrictions built in CosmoLattice since version 2.0. Finally, we briefly describe in [*GW observables*][subsec_GWobservables] the most relevant GW-related observables and how they can be measured with CosmoLattice. A brief review of the dynamics of GWs in the continuum can be found in [*Canonical Field Theory*][subsec_eomCont].
+This section covers how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ simulates the production and dynamics of gravitational waves (GWs). We explain how GWs are implemented in CL, making emphasis on the form of the anisotropic stress tensor. We also explain which options of the simulations can be controlled from the parameter file and some of the restrictions built in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ since version 2.0. Finally, we briefly describe in [*GW observables*][subsec_GWobservables] the most relevant GW-related observables and how they can be measured with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. A brief review of the dynamics of GWs in the continuum can be found in [*Canonical Field Theory*][subsec_eomCont].
 
 !!! Scope of the GW module
-    As of CosmoLattice 2.0, the simulation of GWs is limited to the case of canonically normalized scalar (real and complex) and Abelian gauge fields. Models with non-canonical interactions, such as non-minimally coupled to gravity scalars or non-canonical kinetic scalar theories, would require adapting the GW source terms to their non-minimal nature. These features are planned to be realease in the future.
+    As of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ 2.0, the simulation of GWs is limited to the case of canonically normalized scalar (real and complex) and Abelian gauge fields. Models with non-canonical interactions, such as non-minimally coupled to gravity scalars or non-canonical kinetic scalar theories, would require adapting the GW source terms to their non-minimal nature. These features are planned to be realease in the future.
 
 !!! Linearized gravity regime
-    GWs in CosmoLattice are simulated in the linearized gravity regime, this is, backreaction of the GWs into the matter fields is neglected. We usually say that GWs are thus *passive*.
+    GWs in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are simulated in the linearized gravity regime, this is, backreaction of the GWs into the matter fields is neglected. We usually say that GWs are thus *passive*.
 
 
 
 
-### Gravitatonal waves in CosmoLattice { #subsec_GWlatt }
+### Gravitatonal waves in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ { #subsec_GWlatt }
 
-The simulation of GW production and evolution can be easily simulated with CosmoLattice, simply by setting `withGWs = true` in the parameter file before running any simulation. At the moment, the emission of GWs is implemented for canonically normalized scalars (both real and complex) and Abelian $\mathrm{U}(1)$ fields. We will now review how GWs are simulated on the lattice, and explain in detail the different options that can be chosen in the parameter file when running CosmoLattice.
+The simulation of GW production and evolution can be easily simulated with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, simply by setting `withGWs = true` in the parameter file before running any simulation. At the moment, the emission of GWs is implemented for canonically normalized scalars (both real and complex) and Abelian $\mathrm{U}(1)$ fields. We will now review how GWs are simulated on the lattice, and explain in detail the different options that can be chosen in the parameter file when running $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
 ##### **Gravitational waves on the lattice** { #subsec_GWinCL }
 
-In CosmoLattice, the simulation of GWs makes use of five auxiliary degrees of freedom, following the algorithm presented in [@GarciaBellido_2008,@BaezaBallesteros_2025tme]. These form a symmetric and traceless tensor, $v_{ij} with $v_{33}=-v_{11}-v_{22}$, which is evolved following a discretized version of
+In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, the simulation of GWs makes use of five auxiliary degrees of freedom, following the algorithm presented in [@GarciaBellido_2008,@BaezaBallesteros_2025tme]. These form a symmetric and traceless tensor, $v_{ij} with $v_{33}=-v_{11}-v_{22}$, which is evolved following a discretized version of
 [](){ #eq_GWvEOM2 }
 ```math
 \begin{align}
@@ -33,7 +33,7 @@ v_{ij}''
 \right],
 \end{align}
 ```
-where $\Pi_{ij}^\text{eff}$ is the effective anisotropic stress tensor, that we describe below. In CosmoLattice, this is implemented by defining a conjugate momenta are $(\tilde\pi_v)_{ij}=a^{3-\alpha}\tilde v'_{ij}$, so that the equation of motion can be rewritten as
+where $\Pi_{ij}^\text{eff}$ is the effective anisotropic stress tensor, that we describe below. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, this is implemented by defining a conjugate momenta are $(\tilde\pi_v)_{ij}=a^{3-\alpha}\tilde v'_{ij}$, so that the equation of motion can be rewritten as
 ```math
 \begin{align}
 \label{eq_GWFirstOrderSystem}
@@ -64,7 +64,7 @@ The GW kernel, corresponding to the right hand side of the second equation in Eq
 @emgithub(include/CosmoInterface/evolvers/kernels/gwskernels.h:gws_kernel_source)
 
 !!! Note for advanced users
-    The auxiliary fields used to simulate the evolution of GWs are implemented in CosmoLattice using smart pointers from C++, instead of static objects as is the case for matter fields. This makes it possible to turn the GWs on or off from the parameter file without the need to recompile the model, but it also means that some routines are implemented in a slightly different manner..
+    The auxiliary fields used to simulate the evolution of GWs are implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ using smart pointers from C++, instead of static objects as is the case for matter fields. This makes it possible to turn the GWs on or off from the parameter file without the need to recompile the model, but it also means that some routines are implemented in a slightly different manner..
 
 **Effective anisotropic stress tensor**
 
@@ -92,7 +92,7 @@ a^{-2\alpha}\tilde E_i\tilde E_j
 \right].
 \end{align}
 ```
-where we highlight the presence of the $(\omega_*^2/f_*^2)$ multiplying the products of program electric and magnetic fields, related to the particular choice of program variables made in CosmoLattice. In the code, the effective anisotropic stress tensor is implemented in `definitions/PItensor.h`, where the contributions from the different types of fields are implemented separately:
+where we highlight the presence of the $(\omega_*^2/f_*^2)$ multiplying the products of program electric and magnetic fields, related to the particular choice of program variables made in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. In the code, the effective anisotropic stress tensor is implemented in `definitions/PItensor.h`, where the contributions from the different types of fields are implemented separately:
 
 -   Scalar singlets:
 
@@ -148,7 +148,7 @@ P^{\rm L}_{ij}(\tilde{\bf n})
 |{\bf k}_{\rm L}(\tilde{\bf n})|^2}.
 \end{align}
 ```
-Here ${\bf k}_{\rm L}$ is the definition of the  lattice momentum associated with the derivative operator used in the TT projection, and characterized the form of the projector. In CosmoLattice three different choices are implemented,
+Here ${\bf k}_{\rm L}$ is the definition of the  lattice momentum associated with the derivative operator used in the TT projection, and characterized the form of the projector. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ three different choices are implemented,
 [](){ #eq_GWLatticeMomenta}
 ```math
 \begin{align}
@@ -218,7 +218,7 @@ The lattice projector is transverse with respect to the lattice derivative used 
 
 ### **Managing a simulation with GWs** { #subsec_ActivateGW }
 
-The simulation of GW production from the matter fields in CosmoLattice is controlled with the `withGWs` keyword in the parameter file input parameter file. This can be done for any model with the valid matter content. For example, $\texttt{models/parameter-files/lphi4.in}$ contains the following GW block:
+The simulation of GW production from the matter fields in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is controlled with the `withGWs` keyword in the parameter file input parameter file. This can be done for any model with the valid matter content. For example, $\texttt{models/parameter-files/lphi4.in}$ contains the following GW block:
 
 @emgithub(models/parameter-files/lphi4.in:GW_settings)
 
@@ -227,13 +227,13 @@ Thus, a simulation with GWs can be performed by simply changing this falg to `wi
 ./lphi4 input=../models/parameter-files/lphi4.in withGWs=true GWprojectorType=2 doLFforGWs=true
 ```
 
-When the flag `withGWs` is enabled, CosmoLattice will create the auxiliary tensor fields (amplitudes and conjugate momenta), and these will be evolved simultaneously along the matter sectors. As already mentioned, such evolution is **passive**, in the sense that only the sourcing of GWs by the matter sectors is considered, but the backreaction of the GWs onto the matter sectors is not taken into account (as it is expected to be negligible in the majority of cases).
+When the flag `withGWs` is enabled, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will create the auxiliary tensor fields (amplitudes and conjugate momenta), and these will be evolved simultaneously along the matter sectors. As already mentioned, such evolution is **passive**, in the sense that only the sourcing of GWs by the matter sectors is considered, but the backreaction of the GWs onto the matter sectors is not taken into account (as it is expected to be negligible in the majority of cases).
 
 !!! warning Linearized gravity regime
     GWs are only defined for `NDim = 3` spacial dimensions. Simulations with other number of dimensions will fail when tried to run with GWs, and so must keep `withGWs = false`.
 
 
-Another option that can be controlled by the user is related to the evolver used for the GWs. Since CosmoLattice 2.0, the GW sector has its own evolver choice, controlled by the `doLFforGWs` keywork. By default `doLFforGWs = true`, and the tensor sector is evolved with the leapfrog algorithm even if the matter fields use a different evolver. This aims at reducing the numerical cost of the simulation when using more complex algorithms for the matter sector, as the equations of motion of the GWs are always simplectic (as matter fields act as a *external* source).
+Another option that can be controlled by the user is related to the evolver used for the GWs. Since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ 2.0, the GW sector has its own evolver choice, controlled by the `doLFforGWs` keywork. By default `doLFforGWs = true`, and the tensor sector is evolved with the leapfrog algorithm even if the matter fields use a different evolver. This aims at reducing the numerical cost of the simulation when using more complex algorithms for the matter sector, as the equations of motion of the GWs are always simplectic (as matter fields act as a *external* source).
 
 Alternatively, one can set `doLFforGWs = false` so that the GW sector uses the same evolver as the matter fields, as specified by the usual `evolver` parameter. This case, however, has some restrictions for models containing gauge fields. As the Abelian GW source depends on the electric field in addition to the magnetic and scalar fields, it needs to be evaluated at a time where fields and conjugate momenta are synchronized. The code therefore rejects evolver combinations that cannot provide a consistently synchronized matter source for the GW update. The supported combinations are:
 
@@ -345,7 +345,7 @@ h'_{ij}(\tilde{\bf n},\eta)h_{ij}^{\prime *}(\tilde{\bf n},\eta)
 Other versions are also defined in analogously to the power spectra of matter fields.
 
 !!! warning "Fractional energy density normalization"
-    The fractional energy density in CosmoLAttice is defined with respect to the total energy density of the matter sector. This corresponds to the critical density for self consistent expansion, but it is different for fixed expansion or flat background. If in the case of fixed expansion you want the results normalized with the critical energy density, you need to use the results for the total energy density and the Hublle constant stored in $\texttt{average_energies.txt}$ and $\texttt{average_scale_factor.txt}$, respectively.
+    The fractional energy density in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is defined with respect to the total energy density of the matter sector. This corresponds to the critical density for self consistent expansion, but it is different for fixed expansion or flat background. If in the case of fixed expansion you want the results normalized with the critical energy density, you need to use the results for the total energy density and the Hublle constant stored in $\texttt{average_energies.txt}$ and $\texttt{average_scale_factor.txt}$, respectively.
 
 Finally, it is worth noting that, on the lattice, the relevant bilinear $h'_{ij}h_{ij}^{\prime *}$ can be computed directly from the conjugate momenta of the auxiliary fields in terms of traces
 [](){ #eq_GWTraceFormula }
@@ -387,7 +387,7 @@ Measurements of the GW energy density are automatically performed for simulation
 ```
 Here $\tilde{E}_{\rm GW}/\tilde{E}_{\rm matter}$ is obtained by integrating the measured GW energy-density spectrum over the available momentum bins. The quantity $\tilde{E}_{\rm GW}$ is this fraction multiplied by the total matter energy density at the same time.
 
-For both outputs, the observables are determined after TT projecting the auxiliary fields used by CosmoLattice, using Eq.~\eqref{eq_GWTraceFormula}}. The type of projector to be used is controlled using the `GWprojectorType` in the parameter file. This can take three different values, corresponding to the three choices of lattice momenta in Eq.~\eqref{eq_GWRealProjector}:
+For both outputs, the observables are determined after TT projecting the auxiliary fields used by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, using Eq.~\eqref{eq_GWTraceFormula}}. The type of projector to be used is controlled using the `GWprojectorType` in the parameter file. This can take three different values, corresponding to the three choices of lattice momenta in Eq.~\eqref{eq_GWRealProjector}:
 
 
 | **Value** <div style="width:150px"> | **Projector type** |
