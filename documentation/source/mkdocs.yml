@@ -1,4 +1,4 @@
-site_name: CosmoLattice World #Manual#
+site_name: CosmoLattice Website #World #Manual#
 repo_url: https://github.com/cosmolattice/cosmolattice
 repo_name: CosmoLattice
 
@@ -176,7 +176,7 @@ nav:
 #           - "Power Spectrum (Note I)": "th_framework/tech_notes/Power spectra.md"
 #           - "GWs from Scalars (Note II)": "th_framework/tech_notes/Gravitational waves.md"
 #           - "GWs from U(1) Scalar-Gauge theories (Note III)": "th_framework/tech_notes/Gravitational waves from U(1) gauge theories.md"
-      - "Technical Notes": "th_framework/TechnicalNotes.md"
+      - "<span style='font-weight:bold;'>Technical Notes </span>": "th_framework/TechnicalNotes.md"
       # - "Technical Notes (online)":
 #             -  "Power Spectrum (Note I)": "th_framework/tech_notes/Power spectra.md"
 #             -  "GWs from Scalars (Note II)": "th_framework/tech_notes/Gravitational waves.md"
