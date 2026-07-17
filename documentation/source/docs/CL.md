@@ -42,20 +42,36 @@ In the expanding case, let this be during or after inflation, the matter fields 
 <!-- ## **Is $\mathcal{CL}$ different from other codes?**  {#subsec_CLspecial } -->
 <!-- $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ special ?** -->
 
+<div class="cl-prose-grid" markdown>
+
+<div class="cl-prose-card" markdown>
+
 **A platform, not a single-purpose code**
 {: .cl-minihead }
 
-**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is not a code dedicated to one type of simulation, say with a given type of field content and fixed integration technique**, such as *e.g.* the dynamics of interacting scalar fields in an expanding background solved by the Leapfrog algorithm. The idea is something else: **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is as a platform where one can implement any system of partial differential equations suitable for discretization on a lattice, and the corresponding associated observables**. $\mathcal{CL}$ is a package that introduces its own **symbolic language**, defining field variables and operations over them. Once the user becomes familiar with the basic *vocabulary* of the $\mathcal{CL}$ language, they can write their own code: be it for the time evolution of interactive fields in a model of interest with whichever suitable field content, or for some other operation, like a Monte-Carlo generator for thermal configurations, it is up to the user. 
+**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is not a code dedicated to one type of simulation, say with a given type of field content and fixed integration technique**, such as *e.g.* the dynamics of interacting scalar fields in an expanding background solved by the Leapfrog algorithm. The idea is something else: **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is as a platform where one can implement any system of partial differential equations suitable for discretization on a lattice, and the corresponding associated observables**. $\mathcal{CL}$ is a package that introduces its own **symbolic language**, defining field variables and operations over them. Once the user becomes familiar with the basic *vocabulary* of the $\mathcal{CL}$ language, they can write their own code: be it for the time evolution of interactive fields in a model of interest with whichever suitable field content, or for some other operation, like a Monte-Carlo generator for thermal configurations, it is up to the user.
+
+</div>
+
+<div class="cl-prose-card" markdown>
 
 **Physics up front, machinery under the hood**
 {: .cl-minihead }
 
-One of the major advantages of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is that it separates the **physics** (i.e.~fields living on a lattice and operations between them) from the **technical details**, such as the handling of the parallelization or the Fourier transforms. For example, let us imagine a beginner user with little experience in programming, and with no experience at all in parallelization techniques. With $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, they will be able to run a fully parallelized simulation of their favourite model (say using hundreds of processors in a cluster), while being completely oblivious to the technical details. They will just need to write a basic **model file** in the language of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, containing the details of the model that they want to simulate. If, on the contrary, the user is rather an experienced one and wants to look inside the core routines of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and modify, for example, the MPI-implementation, they can always do so, and perhaps even contribute to improving them. 
+One of the major advantages of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is that it separates the **physics** (i.e.~fields living on a lattice and operations between them) from the **technical details**, such as the handling of the parallelization or the Fourier transforms. For example, let us imagine a beginner user with little experience in programming, and with no experience at all in parallelization techniques. With $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, they will be able to run a fully parallelized simulation of their favourite model (say using hundreds of processors in a cluster), while being completely oblivious to the technical details. They will just need to write a basic **model file** in the language of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, containing the details of the model that they want to simulate. If, on the contrary, the user is rather an experienced one and wants to look inside the core routines of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and modify, for example, the MPI-implementation, they can always do so, and perhaps even contribute to improving them.
+
+</div>
+
+<div class="cl-prose-card" markdown>
 
 **Symbolic algebras, parallel FFTs, and more**
 {: .cl-minihead }
 
 Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [$U(1)$] and $SU(2)$ algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions (<span style="color:red;">**CHANGE ?**</span>), making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is publicly available, and it comes with a detailed manual explaining its whole structure and the basic instructions to start running your own simulations, see [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual**](./Manual/About This Manual.md).
+
+</div>
+
+</div>
 
 ## **$\mathcal{CL}$ Features & Capabilities** { #subsec_CLfeatAndCapa }
 <!-- of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$**  -->
@@ -131,20 +147,36 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2
 [Kokkos](Manual/Parallelization.md#subsubsec_devices){ .cl-fact }
 </div>
 
+<div class="cl-prose-grid" markdown>
+
+<div class="cl-prose-card" markdown>
+
 **High-order integrators, machine-precision constraints**
 {: .cl-minihead }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ provides symplectic integrators with accuracy ranging from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{10})$, and non-symplectic integrators with accuracies from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{4})$ <!-- (see *e.g.* Sections 3.3, 3.4 and 3.5 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl], for a discussion on integrators and their properties) -->. Appropriate observables are also provided for each algorithm, like the energy density components of each field, their relevant spectra, or dynamical constraints. Our algorithms conserve energy up to the accuracy set by the order of the evolution algorithm, reaching even machine precision in the case of the highest order integrators. Notably, our algorithms for scalar-gauge theories, either Abelian or non-Abelian, always respect the Gauss constraint to machine precision, independently of the integrator, even in the case of self-consistent expansion. 
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ provides symplectic integrators with accuracy ranging from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{10})$, and non-symplectic integrators with accuracies from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{4})$ <!-- (see *e.g.* Sections 3.3, 3.4 and 3.5 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl], for a discussion on integrators and their properties) -->. Appropriate observables are also provided for each algorithm, like the energy density components of each field, their relevant spectra, or dynamical constraints. Our algorithms conserve energy up to the accuracy set by the order of the evolution algorithm, reaching even machine precision in the case of the highest order integrators. Notably, our algorithms for scalar-gauge theories, either Abelian or non-Abelian, always respect the Gauss constraint to machine precision, independently of the integrator, even in the case of self-consistent expansion.
+
+</div>
+
+<div class="cl-prose-card" markdown>
 
 **Change parameters, not code**
 {: .cl-minihead }
 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and fully exploits the *object oriented  programming* nature of this language, with a modular structure that separates well all the ingredients involved. This allows $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to have a clear separation between the physics and the technical implementation details. **The code is designed so that the user can simulate a given scenario with different parameters, without requiring to re-compile each time that parameter values are changed**. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows for an easy implementation of new models with either scalar or gauge interactions.
 
+</div>
+
+<div class="cl-prose-card" markdown>
+
 **Built to scale**
 {: .cl-minihead }
 
 **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is fully parallelized using *Message Passing Interface* (MPI), and uses a discrete Fourier Transform parallelized in multiple spatial dimensions** (<span style="color:red;">**CHANGE ?**</span>). This makes it ideal for probing physical problems with well-separated mass/length scales, running very high resolution simulations, or simply shortening the running time of long simulations. **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is actually a general package that defines field variables and their operations, by introducing its own symbolic language**. Once you become familiar with the basic ‘syntaxis’ defined in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, editing the code or implementing your own model--resembling as much as possible how you would write it in the continuum--, becomes a relatively straightforward task.
+
+</div>
+
+</div>
 
 <span style="color:red;">**PARAGRAPH on GPU Capabilities [...]**</span>
 
