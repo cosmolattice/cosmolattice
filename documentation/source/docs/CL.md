@@ -13,7 +13,7 @@ S = - \int d^4 x \sqrt{-g}&&\left\{\class{cl-eq-scalar}{\sum_b\frac{1}{2}\partia
 ```
 These sectors can be activated either in isolation or simultaneously with the others — *click on any highlighted term to jump to its manual chapter*. More is on its way: non-minimal kinetic terms, axion–$SU(2)$ interactions, and fluids coupled to scalar or gauge fields (see [*Upcoming Features*][subsec_CLupcoming]).
 
-The *matter* fields can evolve in flat space-time, or in an expanding background given by the spatially-flat Friedmann-Lemaître-Robertson-Walker (FLRW) metric, with line element (here $\eta$ is the $\alpha$-time)
+The fields can evolve in flat space-time, or in an expanding background given by the spatially-flat Friedmann-Lemaître-Robertson-Walker (FLRW) metric, with line element (here $\eta$ is the $\alpha$-time)
 [](){ #eq_lineFLRW }
 ```math
 \begin{eqnarray}\label{eq_lineFLRW}
