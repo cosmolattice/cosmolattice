@@ -322,8 +322,39 @@ body.nav-collapsed .md-sidebar--primary {
 .md-typeset .grid.cl-sectors > ul > li:nth-child(6) { --cl-accent: var(--cl-defects); }
 .md-typeset .grid.cl-sectors > ul > li:nth-child(7) { --cl-accent: var(--cl-gw); }
 
+/* === "At a glance" fact chips ===
+   Compact highlight strip under the sector cards in Features & Capabilities.
+   Kept neutral on purpose: on this page color always means a physics sector. */
+.md-typeset .cl-facts {
+    margin: 1.2em 0 0.4em;
+}
+
+/* Override the site-wide justified paragraphs, which would stretch the
+   chip row across the full line width. */
+.md-typeset .cl-facts p {
+    text-align: left;
+}
+
+.md-typeset .cl-facts .cl-fact {
+    display: inline-block;
+    margin: 0.2em 0.25em 0.2em 0;
+    padding: 0.3em 0.85em;
+    border: 1px solid var(--md-default-fg-color--lighter);
+    border-radius: 2em;
+    font-size: 0.72em;
+    font-weight: 600;
+    color: var(--md-default-fg-color--light);
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+    white-space: nowrap;
+}
+
+.md-typeset .cl-facts .cl-fact:hover {
+    border-color: var(--md-accent-fg-color);
+    color: var(--md-accent-fg-color);
+}
+
 /* === Paragraph mini-titles ===
-   Bold run-in titles above the long paragraphs of "What makes CL different?"
+   Bold run-in titles above the long paragraphs of the Home page
    ({: .cl-minihead } in the Markdown). Deliberately plain paragraphs, not
    headings, so they stay out of the sidebar TOC. */
 .md-typeset p.cl-minihead {

@@ -122,9 +122,27 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2
 
 </div>
 
+<div class="cl-facts" markdown>
+[Symplectic integrators up to $\mathcal{O}(\delta t^{10})$](Manual/What CosmoLattice does in detail.md#subsec_Evolvers){ .cl-fact }
+[Low-order Runge-Kutta up to $\mathcal{O}(\delta t^{4})$](Manual/What CosmoLattice does in detail.md#velocityverlet-positionverlet-and-rk2nstorage){ .cl-fact }
+[Gauss constraint to machine precision](Manual/My first model of gauge fields.md#eq_GaussU1-eom){ .cl-fact }
+[MPI + parallel FFTs](Manual/Parallelization.md#subsubsec_para2D){ .cl-fact }
+[CMake](code/Installation.md#download-and-build){ .cl-fact }
+[Kokkos](Manual/Parallelization.md#subsubsec_devices){ .cl-fact }
+</div>
+
+**High-order integrators, machine-precision constraints**
+{: .cl-minihead }
+
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ provides symplectic integrators with accuracy ranging from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{10})$, and non-symplectic integrators with accuracies from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{4})$ <!-- (see *e.g.* Sections 3.3, 3.4 and 3.5 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$ [@Figueroa_2020rrl], for a discussion on integrators and their properties) -->. Appropriate observables are also provided for each algorithm, like the energy density components of each field, their relevant spectra, or dynamical constraints. Our algorithms conserve energy up to the accuracy set by the order of the evolution algorithm, reaching even machine precision in the case of the highest order integrators. Notably, our algorithms for scalar-gauge theories, either Abelian or non-Abelian, always respect the Gauss constraint to machine precision, independently of the integrator, even in the case of self-consistent expansion. 
 
+**Change parameters, not code**
+{: .cl-minihead }
+
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and fully exploits the *object oriented  programming* nature of this language, with a modular structure that separates well all the ingredients involved. This allows $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to have a clear separation between the physics and the technical implementation details. **The code is designed so that the user can simulate a given scenario with different parameters, without requiring to re-compile each time that parameter values are changed**. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows for an easy implementation of new models with either scalar or gauge interactions.
+
+**Built to scale**
+{: .cl-minihead }
 
 **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is fully parallelized using *Message Passing Interface* (MPI), and uses a discrete Fourier Transform parallelized in multiple spatial dimensions** (<span style="color:red;">**CHANGE ?**</span>). This makes it ideal for probing physical problems with well-separated mass/length scales, running very high resolution simulations, or simply shortening the running time of long simulations. **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is actually a general package that defines field variables and their operations, by introducing its own symbolic language**. Once you become familiar with the basic ‘syntaxis’ defined in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, editing the code or implementing your own model--resembling as much as possible how you would write it in the continuum--, becomes a relatively straightforward task.
 
