@@ -2,7 +2,7 @@
 
 ## **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ in a Nutshell** { #subsec_WhatIsCL }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\mathcal{CL}$) is a modern package for **lattice simulations of the non-linear dynamics of interactive fields in an expanding Universe**. In continuous development, it provides an up-to-date relevant numerical tool for investigating the physics of **the early Universe**. The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\tt v2.0$, released on July 2026), can simulate the dynamics of interactive (singlet) scalar fields, local $U(1)$ and/or $SU(2)$ charged scalar fields interacting with the corresponding Abelian and/or non-Abelian gauge fields, axion-like-particles (ALPs) interacting with Abelian gauge sectors, singlet scalar fields non-minimally coupled to gravity, and soon enough (see [*Upcoming Features*][subsec_CLupcoming] below), non-minimal scalar kinetic interactions, ALPs interacting with SU(2) gauge sectors, and fluids coupled to scalar or gauge fields. At present, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$ is ready to simulate the dynamics of field theories described by an action of the type
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\mathcal{CL}$) is a modern package for **lattice simulations of the non-linear dynamics of interactive fields in an expanding Universe**, providing an up-to-date numerical tool for investigating the physics of **the early Universe**. The current version ($\tt v2.0$) is ready to simulate the dynamics of field theories described by an action of the type
 [](){ #eq_actionCL }
 ```math
 \begin{eqnarray}
@@ -11,9 +11,9 @@ S = - \int d^4 x \sqrt{-g}&&\left\{\class{cl-eq-scalar}{\sum_b\frac{1}{2}\partia
 && ~~~~~~~~\left. + \class{cl-eq-u1-gauge}{\frac{1}{4} F_{\mu \nu} F^{\mu \nu}} + \class{cl-eq-su2-gauge}{\frac{1}{2}{\rm Tr}\{G_{\mu \nu}G^{\mu \nu}\}} +\class{cl-eq-nmc-coup}{\frac{1}{2}\xi R \chi^{2}} - \class{cl-eq-alp-coup}{\frac{1}{4}\frac{\theta}{\Lambda} F_{\mu \nu}\,\tilde{F}^{\mu \nu}} + V_{\rm int}(\lbrace \phi_c \rbrace,|\varphi|, |\Phi|, \chi, \theta)\right\}\,.
 \end{eqnarray}
 ```
-These sectors can be activated, either in isolation, or simultaneously with the others. 
+These sectors can be activated either in isolation or simultaneously with the others — *click on any highlighted term to jump to its manual chapter*. More is on its way: non-minimal kinetic terms, axion–$SU(2)$ interactions, and fluids coupled to scalar or gauge fields (see [*Upcoming Features*][subsec_CLupcoming]).
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can simulate the dynamics of the above *matter* fields in flat space-time, or in an expanding background, given by the spatially-flat Friedmann-Lemaître-Robertson-Walker (FLRW) metric, with line element (here $\eta$ is the $\alpha$-time)
+The *matter* fields can evolve in flat space-time, or in an expanding background given by the spatially-flat Friedmann-Lemaître-Robertson-Walker (FLRW) metric, with line element (here $\eta$ is the $\alpha$-time)
 [](){ #eq_lineFLRW }
 ```math
 \begin{eqnarray}\label{eq_lineFLRW}
@@ -21,7 +21,7 @@ ds^2 \equiv g_{\mu\nu}dx^\mu dx^\nu = - a^{2\alpha} (\eta)d\eta^2 + a^2 (\eta) \
 \end{eqnarray}
 ```
 
-In the expanding case, let this be during or after inflation, the matter fields can be either evolved over a **fixed background** (e.g. with fixed equation of state), or using a **self-consistent expansion of the Universe**, with the fields dictating themselves the expansion rate of the Universe via the Friedmann equations. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows to make predictions on the gravitational wave (GW) backgrounds produced throughout the dynamics of the above matter fields, by simultaneously simulating the emission of GWs
+In the expanding case, the fields can be evolved either over a **fixed background** (e.g. with fixed equation of state), or with a **self-consistent expansion of the Universe**, the fields themselves dictating the expansion rate via the Friedmann equations. Alongside the matter dynamics, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can simultaneously simulate the emission of the sourced **gravitational wave (GW) backgrounds**
 [](){ #eq_GWeomCL }
 [](){ #eq_GWsourceCL }
 ```math
