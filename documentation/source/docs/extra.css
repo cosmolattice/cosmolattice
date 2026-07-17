@@ -729,6 +729,79 @@ body.nav-collapsed .md-sidebar--primary {
     }
 }
 
+/* === Whole-section folds ===
+   Headings tagged { .cl-sec-fold } in the Markdown become toggles for their
+   entire section (wrapped into .cl-sec-body by prose-fold.js). Collapsed
+   bodies keep their layout width (height:0, not display:none) so MathJax
+   typesets correctly. No JS = plain visible sections. */
+.md-typeset h2.cl-sec-fold,
+.md-typeset h3.cl-sec-fold {
+    cursor: pointer;
+}
+
+.md-typeset h2.cl-sec-fold:hover,
+.md-typeset h3.cl-sec-fold:hover {
+    color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-sec-fold::after {
+    content: "";
+    display: inline-block;
+    width: 0.4em;
+    height: 0.4em;
+    margin-left: 0.6em;
+    margin-bottom: 0.1em;
+    border-right: 2.5px solid var(--md-default-fg-color--lighter);
+    border-bottom: 2.5px solid var(--md-default-fg-color--lighter);
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+}
+
+.md-typeset .cl-sec-fold:hover::after {
+    border-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-sec-fold[aria-expanded="true"]::after {
+    transform: rotate(-135deg) translate(-0.1em, -0.1em);
+}
+
+/* Collapsed: the section's first lines stay visible, fading into the page
+   (same preview language as the prose cards) */
+.md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body {
+    position: relative;
+    max-height: 6.6em;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3.2em;
+    background: linear-gradient(to bottom, transparent, var(--md-default-bg-color) 92%);
+    pointer-events: none;
+}
+
+.md-typeset .cl-prose-toggle.cl-sec-toggle {
+    display: block;
+    margin: 0.4em auto 1.4em;
+}
+
+@media print {
+    .md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body {
+        max-height: none;
+        overflow: visible;
+        cursor: auto;
+    }
+    .md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body::after,
+    .md-typeset .cl-sec-fold::after {
+        display: none;
+    }
+}
+
 /* === Sector tags on manual equations ===
    Small colored labels over individual equations of the EOM block in the
    manual introduction (same look as the Home action-equation labels, but

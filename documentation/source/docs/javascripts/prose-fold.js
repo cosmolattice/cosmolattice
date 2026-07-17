@@ -108,7 +108,83 @@
         if (card.classList.contains("cl-start")) setOpen(true);
     }
 
+    // Whole-section folds: headings tagged { .cl-sec-fold } keep their place
+    // (and their TOC entry) but collapse everything up to the next heading.
+    // Collapsing uses height:0 instead of display:none so MathJax typesets
+    // the hidden equations at the correct width.
+    function setUpSections() {
+        document.querySelectorAll(".md-typeset h2.cl-sec-fold, .md-typeset h3.cl-sec-fold").forEach(function (h) {
+            if (h.dataset.clSecDone) return;
+            h.dataset.clSecDone = "1";
+            var body = document.createElement("div");
+            body.className = "cl-sec-body";
+            var node = h.nextSibling;
+            while (node) {
+                if (node.nodeType === 1) {
+                    if (/^H[123]$/.test(node.tagName)) break;
+                    // never swallow the bibliography (citations.js folds it)
+                    if (node.classList.contains("footnote")) break;
+                }
+                var next = node.nextSibling;
+                body.appendChild(node);
+                node = next;
+            }
+            h.insertAdjacentElement("afterend", body);
+            h.setAttribute("aria-expanded", "false");
+            h.setAttribute("title", "Click to expand this section");
+            var btn = makeToggle("cl-sec-toggle");
+            body.insertAdjacentElement("afterend", btn);
+
+            function setOpen(open) {
+                h.classList.toggle("cl-sec-open", open);
+                h.setAttribute("aria-expanded", open ? "true" : "false");
+                h.setAttribute("title", open ? "Click to collapse this section"
+                                             : "Click to expand this section");
+                btn.setAttribute("aria-expanded", open ? "true" : "false");
+                btn.clProseLabel.textContent = open ? "Show less" : "Read more";
+            }
+            h.clSecOpen = function () { setOpen(true); };
+            h.addEventListener("click", function (e) {
+                if (e.target.closest("a")) return; // permalink anchors etc.
+                setOpen(!h.classList.contains("cl-sec-open"));
+            });
+            btn.addEventListener("click", function () {
+                setOpen(!h.classList.contains("cl-sec-open"));
+            });
+            // the faded preview itself expands too — but never hijack a link
+            body.addEventListener("click", function (e) {
+                if (h.classList.contains("cl-sec-open") || e.target.closest("a")) return;
+                setOpen(true);
+            });
+        });
+    }
+
+    // Navigating to an anchor inside (or at) a collapsed section opens it —
+    // covers the sidebar TOC, the intro's section links, and equation refs.
+    function revealSection() {
+        if (!location.hash) return;
+        var el;
+        try {
+            el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        } catch (e) {
+            return;
+        }
+        if (!el) return;
+        var h = el.classList && el.classList.contains("cl-sec-fold") ? el : null;
+        var body = el.closest ? el.closest(".cl-sec-body") : null;
+        if (body) h = body.previousElementSibling;
+        if (h && h.clSecOpen && h.getAttribute("aria-expanded") !== "true") {
+            h.clSecOpen();
+            requestAnimationFrame(function () {
+                el.scrollIntoView({ block: h === el ? "start" : "center" });
+            });
+        }
+    }
+
     function init() {
+        setUpSections();
+        revealSection();
+        window.addEventListener("hashchange", revealSection);
         document.querySelectorAll(".md-typeset .cl-prose-grid").forEach(function (grid) {
             if (grid.dataset.clProseDone) return;
             grid.dataset.clProseDone = "1";
