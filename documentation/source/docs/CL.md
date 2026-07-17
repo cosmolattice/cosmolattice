@@ -49,7 +49,7 @@ In the expanding case, let this be during or after inflation, the matter fields 
 **A platform, not a single-purpose code**
 {: .cl-minihead }
 
-**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is not a code dedicated to one type of simulation, say with a given type of field content and fixed integration technique**, such as *e.g.* the dynamics of interacting scalar fields in an expanding background solved by the Leapfrog algorithm. The idea is something else: **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is as a platform where one can implement any system of partial differential equations suitable for discretization on a lattice, and the corresponding associated observables**. $\mathcal{CL}$ is a package that introduces its own **symbolic language**, defining field variables and operations over them. Once the user becomes familiar with the basic *vocabulary* of the $\mathcal{CL}$ language, they can write their own code: be it for the time evolution of interactive fields in a model of interest with whichever suitable field content, or for some other operation, like a Monte-Carlo generator for thermal configurations, it is up to the user.
+**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a platform, not a code dedicated to one type of simulation**, such as *e.g.* the dynamics of interacting scalar fields in an expanding background solved by the Leapfrog algorithm. The idea is something else: **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a framework where one can implement any system of partial differential equations suitable for discretization on a lattice, and the corresponding associated observables**. $\mathcal{CL}$ is a package that introduces its own **symbolic language**, defining field variables and operations over them. Once the user becomes familiar with the basic *vocabulary* of the $\mathcal{CL}$ language, they can write their own code: be it for the time evolution of interactive fields in a model of interest with whichever suitable field content, or for some other operation, like a Monte-Carlo generator for thermal configurations, it is up to the user.
 
 </div>
 
@@ -58,7 +58,8 @@ In the expanding case, let this be during or after inflation, the matter fields 
 **Physics up front, machinery under the hood**
 {: .cl-minihead }
 
-One of the major advantages of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is that it separates the **physics** (i.e.~fields living on a lattice and operations between them) from the **technical details**, such as the handling of the parallelization or the Fourier transforms. For example, let us imagine a beginner user with little experience in programming, and with no experience at all in parallelization techniques. With $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, they will be able to run a fully parallelized simulation of their favourite model (say using hundreds of processors in a cluster), while being completely oblivious to the technical details. They will just need to write a basic **model file** in the language of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, containing the details of the model that they want to simulate. If, on the contrary, the user is rather an experienced one and wants to look inside the core routines of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and modify, for example, the MPI-implementation, they can always do so, and perhaps even contribute to improving them.
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ separates the **physics** (i.e.~fields living on a lattice and operations between them) from the **technical details**, such as the handling of the parallelization or the Fourier transforms. A beginner user with little experience in programming, and with no experience at all in parallelization techniques.
+will be able to run a fully parallelized simulation of their favourite model (using hundreds of processors in a cluster if they wish), while being completely oblivious to the technical details. They will just need to write a basic **model file** in the language of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, containing the details of the model that they want to simulate. At the same time, an experienced user that wants to look inside the core routines of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and modify, for example, the MPI-implementation, they can always do so, and perhaps even contribute to improving them.
 
 </div>
 
@@ -67,9 +68,17 @@ One of the major advantages of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attic
 **Symbolic algebras, parallel FFTs, and more**
 {: .cl-minihead }
 
-Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [$U(1)$] and $SU(2)$ algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions (<span style="color:red;">**CHANGE ?**</span>), making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is publicly available, and it comes with a detailed manual explaining its whole structure and the basic instructions to start running your own simulations, see [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual**](./Manual/About This Manual.md).
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [$U(1)$] and $SU(2)$ algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions (<span style="color:red;">**CHANGE ?**</span>), making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**.
 
 </div>
+
+</div>
+
+<div class="cl-manual-banner" markdown>
+
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is **publicly available**, and comes with a **detailed manual** which includes the basic instructions to start running your own simulations.
+
+[$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual →](Manual/About This Manual.md){ .cl-manual-link }
 
 </div>
 

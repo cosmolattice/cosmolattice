@@ -408,10 +408,15 @@ body.nav-collapsed .md-sidebar--primary {
 .md-typeset .cl-prose-grid.cl-managed {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-auto-flow: dense;
     gap: 0.8rem;
     align-items: stretch;
     margin: 1.2em 0;
+}
+
+/* While a card is open it grows down inside its own column; release the
+   others from row-stretch so they keep their compact height. */
+.md-typeset .cl-prose-grid.cl-managed:has(.cl-open) {
+    align-items: start;
 }
 
 .md-typeset .cl-prose-grid.cl-managed .cl-prose-card {
@@ -462,13 +467,15 @@ body.nav-collapsed .md-sidebar--primary {
     pointer-events: none;
 }
 
-/* Expanded: the card takes the full row, and the text its usual justification */
+/* Expanded: full text in place, still in its column (left-aligned — the
+   column is too narrow for justified text), with a subtly stronger border */
 .md-typeset .cl-prose-grid.cl-managed .cl-prose-card.cl-open {
-    grid-column: 1 / -1;
+    border-color: var(--md-default-fg-color--lighter);
 }
 
 .md-typeset .cl-prose-grid.cl-managed .cl-prose-card.cl-open p:not(.cl-minihead) {
     margin: 0 0 0.7em;
+    text-align: left;
 }
 
 /* Toggle pill pinned to the card bottom, same family as the .cl-fact chips */
@@ -507,8 +514,19 @@ body.nav-collapsed .md-sidebar--primary {
     transform: rotate(-135deg) translate(-0.1em, -0.1em);
 }
 
-/* Narrow screens: single column, previews still collapsed */
-@media screen and (max-width: 59.9375em) {
+/* Keep the 3-column row alive under heavy zoom / narrow windows by first
+   tightening the gaps; only true phone widths stack to a single column
+   (previews stay collapsed either way) */
+@media screen and (max-width: 44.9375em) {
+    .md-typeset .cl-prose-grid.cl-managed {
+        gap: 0.45rem;
+    }
+    .md-typeset .cl-prose-grid.cl-managed .cl-prose-card {
+        padding: 0.7em 0.75em 0.5em;
+    }
+}
+
+@media screen and (max-width: 37.4375em) {
     .md-typeset .cl-prose-grid.cl-managed {
         grid-template-columns: 1fr;
     }
@@ -526,6 +544,40 @@ body.nav-collapsed .md-sidebar--primary {
     .md-typeset .cl-prose-toggle {
         display: none;
     }
+}
+
+/* === Manual call-to-action banner ===
+   Full-width, deliberately visible strip under the "What makes CL different?"
+   card grid: the public-availability sentence plus a filled button to the
+   manual. Accent-colored button (site accent = interactive), neutral box, so
+   it does not read as a physics-sector element. */
+.md-typeset .cl-manual-banner {
+    margin: 1.4em 0 1.6em;
+    padding: 0.9em 1.4em 1em;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    text-align: center;
+}
+
+.md-typeset .cl-manual-banner p {
+    margin: 0 0 0.55em;
+    text-align: center;
+}
+
+.md-typeset .cl-manual-banner p:last-child {
+    margin-bottom: 0;
+}
+
+.md-typeset .cl-manual-banner .cl-manual-link {
+    display: inline-block;
+    padding: 0.32em 1.2em;
+    border: 1px solid var(--md-accent-fg-color);
+    border-radius: 2em;
+    font-weight: 700;
+}
+
+.md-typeset .cl-manual-banner .cl-manual-link:hover {
+    background: color-mix(in srgb, var(--md-accent-fg-color) 10%, transparent);
 }
 
 /* === Embedded Streamlit input-file builder === */
