@@ -104,6 +104,265 @@ body.nav-collapsed .md-sidebar--primary {
 .emgithub-file .file-meta a[href*="cdn.jsdelivr.net"] {
     display: none;
 }
+/* === Sector color palette ===
+   One accent color per physics sector, shared by the Home-page sector cards
+   and the highlighted terms of the action equation. Slate (dark) scheme gets
+   brighter variants for contrast. */
+:root {
+    --cl-scalar:  #3f51b5; /* scalar-scalar: indigo */
+    --cl-u1:      #00897b; /* U(1) scalar-gauge: teal */
+    --cl-su2:     #8e24aa; /* SU(2) scalar-gauge: purple */
+    --cl-alp:     #ef6c00; /* axion-gauge: orange */
+    --cl-nmc:     #c2185b; /* non-minimal gravity: pink */
+    --cl-defects: #6d4c41; /* cosmic defects: brown */
+    --cl-gw:      #0288d1; /* gravitational waves: light blue */
+    --cl-upcoming: #78909c; /* upcoming features: muted blue-grey */
+}
+
+[data-md-color-scheme="slate"] {
+    --cl-scalar:  #7986cb;
+    --cl-u1:      #4db6ac;
+    --cl-su2:     #ba68c8;
+    --cl-alp:     #ffb74d;
+    --cl-nmc:     #f06292;
+    --cl-defects: #a1887f;
+    --cl-gw:      #4fc3f7;
+    --cl-upcoming: #90a4ae;
+}
+
+/* === Sector-colored terms in the action equation ===
+   Applied through MathJax's \class{...}{...} in the LaTeX source of CL.md;
+   colors match the sector cards below. */
+.cl-eq-scalar                    { --cl-accent: var(--cl-scalar); }
+.cl-eq-u1-kin, .cl-eq-u1-gauge   { --cl-accent: var(--cl-u1); }
+.cl-eq-su2-kin, .cl-eq-su2-gauge { --cl-accent: var(--cl-su2); }
+.cl-eq-alp-kin, .cl-eq-alp-coup  { --cl-accent: var(--cl-alp); }
+.cl-eq-nmc-kin, .cl-eq-nmc-coup  { --cl-accent: var(--cl-nmc); }
+
+/* The MathJax-generated elements carry exactly one class, so a prefix
+   selector covers every boxed term without listing all nine classes. */
+[class^="cl-eq-"] {
+    position: relative;
+    cursor: pointer;
+    border: 1.5px solid var(--cl-accent);
+    border-radius: 0.3em;
+    padding: 0.15em 0.15em 0.1em;
+    background: color-mix(in srgb, var(--cl-accent) 6%, transparent);
+}
+
+[class^="cl-eq-"]:hover {
+    background: color-mix(in srgb, var(--cl-accent) 16%, transparent);
+}
+
+/* Small bold sector label sitting on top of each box */
+[class^="cl-eq-"]::before {
+    position: absolute;
+    top: -1.45em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.58em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--cl-accent);
+    white-space: nowrap;
+    text-align: center;
+    pointer-events: none;
+}
+.cl-eq-scalar::before    { content: "scalar"; }
+.cl-eq-u1-kin::before    { content: "U(1) singlet"; }
+.cl-eq-u1-gauge::before  { content: "U(1)"; }
+.cl-eq-su2-kin::before   { content: "SU(2) doublet"; }
+.cl-eq-su2-gauge::before { content: "SU(2)"; }
+.cl-eq-alp-kin::before   { content: "axion"; }
+.cl-eq-alp-coup::before  { content: "axion coupling"; }
+.cl-eq-nmc-coup::before  { content: "non-minimal coupling"; }
+.cl-eq-nmc-kin::before {
+    /* two lines: \A is a forced line break, needs white-space: pre */
+    content: "non-minimally\A coupled scalar";
+    white-space: pre;
+    line-height: 1.15;
+    top: -2.6em;
+}
+
+/* The equation container clips content that sticks out above the math
+   (Material makes mjx-container horizontally scrollable). Give the action
+   equation enough top padding for the two-line label to fit inside. */
+.md-typeset mjx-container:has(.cl-eq-nmc-kin) {
+    padding-top: 1.5em;
+}
+
+/* Tooltip under the hovered box, naming the sector + where the click goes */
+[class^="cl-eq-"]:hover::after {
+    position: absolute;
+    top: calc(100% + 0.55em);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.55em;
+    font-weight: 400;
+    background: var(--cl-accent);
+    color: var(--md-default-bg-color);
+    padding: 0.45em 0.9em;
+    border-radius: 0.5em;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    pointer-events: none;
+}
+.cl-eq-scalar:hover::after { content: "Scalar–Scalar Interactions · User Manual →"; }
+.cl-eq-u1-kin:hover::after, .cl-eq-u1-gauge:hover::after {
+    content: "Abelian U(1) Scalar–Gauge Interactions · User Manual →";
+}
+.cl-eq-su2-kin:hover::after, .cl-eq-su2-gauge:hover::after {
+    content: "Non-Abelian SU(2) Scalar–Gauge Interactions · User Manual →";
+}
+.cl-eq-alp-kin:hover::after, .cl-eq-alp-coup:hover::after {
+    content: "Axion–Gauge Interactions · User Manual →";
+}
+.cl-eq-nmc-kin:hover::after, .cl-eq-nmc-coup:hover::after {
+    content: "Non-Minimal Couplings to Gravity · User Manual →";
+}
+
+/* === Gravitational-wave equation panel ===
+   The GW evolution + source equations are boxed as a whole: the LaTeX tags
+   the math with the invisible marker \class{cl-gw-mark}{...} (deliberately
+   NOT prefixed cl-eq-, so the per-term box styles don't apply), and the panel
+   is drawn on the surrounding MathJax container. The container clips content
+   outside it (it scrolls horizontally), so label and tooltip sit inside. */
+.md-typeset mjx-container:has(.cl-gw-mark) {
+    position: relative;
+    cursor: pointer;
+    border: 1.5px solid var(--cl-gw);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--cl-gw) 5%, transparent);
+    padding: 1.7em 0.6em 1.9em;
+}
+
+.md-typeset mjx-container:has(.cl-gw-mark):hover {
+    background: color-mix(in srgb, var(--cl-gw) 12%, transparent);
+}
+
+.md-typeset mjx-container:has(.cl-gw-mark)::before {
+    content: "gravitational waves";
+    position: absolute;
+    top: 0.55em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.62em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--cl-gw);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.md-typeset mjx-container:has(.cl-gw-mark):hover::after {
+    content: "Gravitational Waves · User Manual →";
+    position: absolute;
+    bottom: 0.55em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.6em;
+    font-weight: 400;
+    background: var(--cl-gw);
+    color: var(--md-default-bg-color);
+    padding: 0.45em 0.9em;
+    border-radius: 0.5em;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* === Sector cards on the Home page ===
+   Colored, fully-clickable boxes for the matter/gauge sectors, each linking to
+   its user-manual section. Built on Material's "grid cards" (attr_list +
+   md_in_html); per-card accent colors are assigned by position below. */
+.md-typeset .grid.cl-sectors > ul > li {
+    position: relative;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-top: 4px solid var(--cl-accent);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--cl-accent) 5%, var(--md-default-bg-color));
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.md-typeset .grid.cl-sectors > ul > li:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Card title picks up the accent color */
+.md-typeset .grid.cl-sectors > ul > li > p:first-child strong {
+    color: var(--cl-accent);
+}
+
+/* The "User Manual →" link stretches invisibly over the whole card,
+   making the entire box clickable. */
+.md-typeset .grid.cl-sectors > ul > li > p:last-child > a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.md-typeset .grid.cl-sectors > ul > li > p:last-child > a {
+    font-weight: 700;
+    color: var(--cl-accent);
+}
+
+/* Per-card accent colors (order must match the card order in CL.md) */
+.md-typeset .grid.cl-sectors > ul > li:nth-child(1) { --cl-accent: var(--cl-scalar); }
+.md-typeset .grid.cl-sectors > ul > li:nth-child(2) { --cl-accent: var(--cl-u1); }
+.md-typeset .grid.cl-sectors > ul > li:nth-child(3) { --cl-accent: var(--cl-su2); }
+.md-typeset .grid.cl-sectors > ul > li:nth-child(4) { --cl-accent: var(--cl-alp); }
+.md-typeset .grid.cl-sectors > ul > li:nth-child(5) { --cl-accent: var(--cl-nmc); }
+.md-typeset .grid.cl-sectors > ul > li:nth-child(6) { --cl-accent: var(--cl-defects); }
+.md-typeset .grid.cl-sectors > ul > li:nth-child(7) { --cl-accent: var(--cl-gw); }
+
+/* === Paragraph mini-titles ===
+   Bold run-in titles above the long paragraphs of "What makes CL different?"
+   ({: .cl-minihead } in the Markdown). Deliberately plain paragraphs, not
+   headings, so they stay out of the sidebar TOC. */
+.md-typeset p.cl-minihead {
+    margin: 1.8em 0 0.4em;
+    font-size: 1.12em;
+    text-align: left;
+}
+
+.md-typeset p.cl-minihead + p {
+    margin-top: 0.4em;
+}
+
+/* === Upcoming-feature cards ===
+   Same card language as the sector grid, but uniformly grayed out: one muted
+   accent, no links (these features have no manual chapter yet), no hover
+   lift. A small "in development" tag replaces the "User Manual" link. */
+.md-typeset .grid.cl-upcoming > ul > li {
+    position: relative;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-top: 4px solid var(--cl-upcoming);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--cl-upcoming) 4%, var(--md-default-bg-color));
+    color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .grid.cl-upcoming > ul > li strong {
+    color: var(--cl-upcoming);
+}
+
+.md-typeset .grid.cl-upcoming > ul > li::after {
+    content: "in development";
+    position: absolute;
+    top: 0.6em;
+    right: 0.8em;
+    font-size: 0.62em;
+    font-style: italic;
+    color: var(--md-default-fg-color--lighter);
+}
+
 /* === Embedded Streamlit input-file builder === */
 .inputgen-frame {
     width: 100%;
