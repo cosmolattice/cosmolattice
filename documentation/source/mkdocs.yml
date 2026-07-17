@@ -8,6 +8,7 @@ theme:
   features:
     - content.code.copy
     - content.code.select
+    - content.footnote.tooltips
     - navigation.tabs
     - navigation.path
     - navigation.indexes
@@ -81,6 +82,8 @@ markdown_extensions:
   #    insert_fonts_css: True
   - admonition
   - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.superfences:
@@ -100,6 +103,7 @@ extra_javascript:
   - javascripts/emgithub-fixraw.js
   - javascripts/sidebar-toggle.js
   - javascripts/prose-fold.js
+  - javascripts/citations.js
   - javascripts/news-bar.js #Added by DGF (July 3rd 2026) for have a news bar on top
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js #Added by DGF (July 5th 2026) to have latex
 

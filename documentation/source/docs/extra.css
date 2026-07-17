@@ -514,11 +514,22 @@ body.nav-collapsed .md-sidebar--primary {
     transform: rotate(-135deg) translate(-0.1em, -0.1em);
 }
 
+/* Cards whose full text already fits the preview height: no fade, no toggle,
+   no pointer (prose-fold.js adds .cl-short after measuring) */
+.md-typeset .cl-prose-grid.cl-managed .cl-prose-card.cl-short {
+    cursor: default;
+}
+
+.md-typeset .cl-prose-grid.cl-managed .cl-prose-card.cl-short p:not(.cl-minihead)::after {
+    display: none;
+}
+
 /* Keep the 3-column row alive under heavy zoom / narrow windows by first
    tightening the gaps; only true phone widths stack to a single column
    (previews stay collapsed either way) */
 @media screen and (max-width: 44.9375em) {
-    .md-typeset .cl-prose-grid.cl-managed {
+    .md-typeset .cl-prose-grid.cl-managed,
+    .md-typeset .cl-art-grid {
         gap: 0.45rem;
     }
     .md-typeset .cl-prose-grid.cl-managed .cl-prose-card {
@@ -527,9 +538,106 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 @media screen and (max-width: 37.4375em) {
-    .md-typeset .cl-prose-grid.cl-managed {
+    .md-typeset .cl-prose-grid.cl-managed,
+    .md-typeset .cl-art-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* === Manual landing: "The Art" monograph cards ===
+   The three parts of the monographic series as a compact 3-column strip;
+   text untouched, the nickname tag is drawn by CSS. */
+.md-typeset .cl-art-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.8rem;
+    margin: 1em 0;
+}
+
+.md-typeset .cl-art-grid .cl-art-card {
+    position: relative;
+    margin: 0;
+    padding: 2em 1em 0.8em;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--md-default-fg-color) 2.5%, var(--md-default-bg-color));
+}
+
+.md-typeset .cl-art-grid .cl-art-card::before {
+    position: absolute;
+    top: 0.7em;
+    left: 1em;
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.62em;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-art-grid .cl-art-card:nth-child(1)::before { content: "The Art — I"; }
+.md-typeset .cl-art-grid .cl-art-card:nth-child(2)::before { content: "The Art — II"; }
+.md-typeset .cl-art-grid .cl-art-card:nth-child(3)::before { content: "The Art — III"; }
+
+.md-typeset .cl-art-grid .cl-art-card p {
+    margin: 0;
+    text-align: left;
+}
+
+/* === Manual landing: chapter cards ===
+   Reuses the prose-card grid; each card carries the accent color of its
+   physics sector (same palette as the Home page — generic chapters stay
+   neutral), a version badge in the bottom-right corner, and optionally a
+   "start here" tag for the newcomer chapters. */
+.md-typeset .cl-prose-grid.cl-chapters .cl-prose-card {
+    position: relative;
+    border-top: 4px solid var(--cl-accent, var(--md-default-fg-color--lightest));
+    padding-bottom: 1.9em; /* keep the badge strip clear of text and toggle */
+}
+
+.md-typeset .cl-chapters .cl-prose-card p.cl-minihead a {
+    color: var(--cl-accent, inherit);
+}
+
+/* Per-card sector accents (same variables as the Home sector cards) */
+.md-typeset .cl-chapters .cl-ch-scalar  { --cl-accent: var(--cl-scalar); }
+.md-typeset .cl-chapters .cl-ch-u1     { --cl-accent: var(--cl-u1); }
+.md-typeset .cl-chapters .cl-ch-su2    { --cl-accent: var(--cl-su2); }
+.md-typeset .cl-chapters .cl-ch-alp    { --cl-accent: var(--cl-alp); }
+.md-typeset .cl-chapters .cl-ch-nmc    { --cl-accent: var(--cl-nmc); }
+.md-typeset .cl-chapters .cl-ch-defects { --cl-accent: var(--cl-defects); }
+.md-typeset .cl-chapters .cl-ch-gw     { --cl-accent: var(--cl-gw); }
+
+/* Version badges, bottom-right corner */
+.md-typeset .cl-chapters .cl-v-all::after,
+.md-typeset .cl-chapters .cl-v-20::after,
+.md-typeset .cl-chapters .cl-v-20r::after {
+    position: absolute;
+    bottom: 0.55em;
+    right: 0.9em;
+    font-size: 0.6em;
+    font-style: italic;
+    color: var(--md-default-fg-color--lighter);
+    pointer-events: none;
+}
+
+.md-typeset .cl-chapters .cl-v-all::after { content: "all versions"; }
+.md-typeset .cl-chapters .cl-v-20::after  { content: "requires v2.0+"; }
+.md-typeset .cl-chapters .cl-v-20r::after { content: "v2.0+ recommended"; }
+
+/* "Start here" tag above the newcomer chapters' titles */
+.md-typeset .cl-chapters .cl-start p.cl-minihead::before {
+    content: "start here";
+    display: block;
+    width: max-content;
+    margin-bottom: 0.5em;
+    padding: 0.15em 0.75em;
+    border-radius: 2em;
+    background: var(--md-accent-fg-color);
+    color: var(--md-default-bg-color);
+    font-size: 0.55em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 /* Print: plain stacked prose, no masking, no controls */
@@ -543,6 +651,435 @@ body.nav-collapsed .md-sidebar--primary {
     .md-typeset .cl-prose-grid.cl-managed .cl-prose-card:not(.cl-open) p:not(.cl-minihead)::after,
     .md-typeset .cl-prose-toggle {
         display: none;
+    }
+}
+
+/* === Sector chips (Manual introduction) ===
+   The capability and upcoming-feature lists rendered as wrapping pills, each
+   in its sector color (the .cl-chip-upcoming ones stay muted, no link). */
+.md-typeset .cl-sector-chips {
+    margin: 0.8em 0 1em;
+}
+
+.md-typeset .cl-sector-chips p {
+    text-align: left;
+    margin: 0;
+}
+
+.md-typeset .cl-sector-chips .cl-chip {
+    display: inline-block;
+    margin: 0.22em 0.28em 0.22em 0;
+    padding: 0.3em 0.9em;
+    border: 1px solid var(--cl-accent, var(--md-default-fg-color--lighter));
+    border-radius: 2em;
+    font-size: 0.78em;
+    font-weight: 600;
+    color: var(--cl-accent, var(--md-default-fg-color--light));
+    background: color-mix(in srgb, var(--cl-accent, var(--md-default-fg-color)) 6%, transparent);
+}
+
+.md-typeset a.cl-chip:hover {
+    background: color-mix(in srgb, var(--cl-accent, var(--md-default-fg-color)) 16%, transparent);
+    color: var(--cl-accent, var(--md-default-fg-color));
+}
+
+.md-typeset .cl-sector-chips .cl-chip-scalar  { --cl-accent: var(--cl-scalar); }
+.md-typeset .cl-sector-chips .cl-chip-u1      { --cl-accent: var(--cl-u1); }
+.md-typeset .cl-sector-chips .cl-chip-su2     { --cl-accent: var(--cl-su2); }
+.md-typeset .cl-sector-chips .cl-chip-alp     { --cl-accent: var(--cl-alp); }
+.md-typeset .cl-sector-chips .cl-chip-nmc     { --cl-accent: var(--cl-nmc); }
+.md-typeset .cl-sector-chips .cl-chip-defects { --cl-accent: var(--cl-defects); }
+.md-typeset .cl-sector-chips .cl-chip-gw      { --cl-accent: var(--cl-gw); }
+.md-typeset .cl-sector-chips .cl-chip-upcoming { --cl-accent: var(--cl-upcoming); }
+
+/* === Single-paragraph folds ===
+   Long reference/literature paragraphs tagged {: .cl-fold } collapse to a
+   short faded preview with a centered pill (prose-fold.js adds .cl-managed;
+   no JS or print = full text, same as the cards). */
+.md-typeset p.cl-fold.cl-managed:not(.cl-open) {
+    position: relative;
+    max-height: 6.4em;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.md-typeset p.cl-fold.cl-managed:not(.cl-open)::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 3em;
+    background: linear-gradient(to bottom, transparent, var(--md-default-bg-color) 92%);
+    pointer-events: none;
+}
+
+.md-typeset .cl-prose-toggle.cl-fold-toggle {
+    margin: 0.4em auto 1.2em;
+}
+
+@media print {
+    .md-typeset p.cl-fold.cl-managed:not(.cl-open) {
+        max-height: none;
+        cursor: auto;
+    }
+    .md-typeset p.cl-fold.cl-managed:not(.cl-open)::after,
+    .md-typeset .cl-fold-toggle {
+        display: none;
+    }
+}
+
+/* === Sector tags on manual equations ===
+   Small colored labels over individual equations of the EOM block in the
+   manual introduction (same look as the Home action-equation labels, but
+   plain: no boxes, no links). Named cl-tag-* on purpose — the cl-eq-*
+   prefix would inherit the Home page's boxed/tooltip styling. */
+[class^="cl-tag-"] {
+    position: relative;
+}
+
+[class^="cl-tag-"]::before {
+    position: absolute;
+    top: -1.35em;
+    left: 0;
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.55em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--cl-accent);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.cl-tag-scalar { --cl-accent: var(--cl-scalar); }
+.cl-tag-u1s,
+.cl-tag-u1g    { --cl-accent: var(--cl-u1); }
+.cl-tag-su2s,
+.cl-tag-su2g   { --cl-accent: var(--cl-su2); }
+
+.cl-tag-scalar::before { content: "scalar"; }
+.cl-tag-u1s::before    { content: "U(1) scalar"; }
+.cl-tag-su2s::before   { content: "SU(2) doublet"; }
+.cl-tag-u1g::before    { content: "U(1) gauge"; }
+.cl-tag-su2g::before   { content: "SU(2) gauge"; }
+
+/* Room inside the (scrollable) math container for the first row's label */
+.md-typeset mjx-container:has([class^="cl-tag-"]) {
+    padding-top: 1.4em;
+}
+
+/* === Labeled equation panels (manual introduction) ===
+   Neutral boxed panels — like the GW panel on Home, but non-interactive —
+   drawn around the constraint/expansion equations via invisible cl-panel-*
+   markers in the LaTeX. */
+.md-typeset mjx-container:has([class^="cl-panel-"]) {
+    position: relative;
+    border: 1.5px solid var(--md-default-fg-color--lighter);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+    padding: 1.9em 0.6em 0.9em;
+}
+
+.md-typeset mjx-container:has([class^="cl-panel-"])::before {
+    position: absolute;
+    top: 0.6em;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.62em;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--md-default-fg-color--light);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.md-typeset mjx-container:has(.cl-panel-gauss)::before     { content: "Gauss constraints"; }
+.md-typeset mjx-container:has(.cl-panel-friedmann)::before { content: "self-consistent expansion"; }
+.md-typeset mjx-container:has(.cl-panel-hubble)::before    { content: "Hubble constraint"; }
+.md-typeset mjx-container:has(.cl-panel-fixed)::before     { content: "fixed-background expansion"; }
+
+/* === Linked folder tree (manual introduction) ===
+   Interactive replacement for the LaTeX folder-tree figure: CSS connector
+   lines, one pill per node linking to the file/folder on GitHub. Dashed
+   nodes are locally generated build artifacts; accent pills link out to the
+   external dependency repositories. */
+.md-typeset .cl-tree {
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.72rem;
+    margin: 0.8em 0 0.3em;
+    overflow-x: auto;
+}
+
+/* Horizontal (left-to-right) layout, mirroring the brace diagram it
+   replaces: each node's children stack in a column to its right, the parent
+   pill vertically centered on that column. Connector geometry: a stub from
+   the parent pill to a vertical rail, and one horizontal branch from the
+   rail into each child. */
+.md-typeset .cl-tree ul {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.md-typeset .cl-tree li {
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 0 !important;
+    padding: 0.18em 0;
+}
+
+.md-typeset .cl-tree li > ul {
+    position: relative;
+    margin-left: 2rem !important;
+    flex: none;
+}
+
+/* stub leaving the parent pill, at the children-column center */
+.md-typeset .cl-tree li > ul::before {
+    content: "";
+    position: absolute;
+    left: -2rem;
+    top: 50%;
+    width: 1rem;
+    border-top: 1.5px solid var(--md-default-fg-color--lighter);
+}
+
+/* horizontal branch from the rail into each child */
+.md-typeset .cl-tree ul ul > li::before {
+    content: "";
+    position: absolute;
+    left: -1rem;
+    top: 50%;
+    width: 1rem;
+    border-top: 1.5px solid var(--md-default-fg-color--lighter);
+}
+
+/* vertical rail: per-child segments, trimmed at the first and last child */
+.md-typeset .cl-tree ul ul > li::after {
+    content: "";
+    position: absolute;
+    left: -1rem;
+    top: 0;
+    bottom: 0;
+    border-left: 1.5px solid var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .cl-tree ul ul > li:first-child::after {
+    top: 50%;
+}
+
+.md-typeset .cl-tree ul ul > li:last-child::after {
+    bottom: 50%;
+}
+
+.md-typeset .cl-tree ul ul > li:only-child::after {
+    display: none;
+}
+
+.md-typeset .cl-tree .cl-tnode {
+    display: inline-block;
+    padding: 0.02em 0.55em;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 0.7em;
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+    color: var(--md-default-fg-color);
+}
+
+.md-typeset a.cl-tnode:hover {
+    border-color: var(--md-accent-fg-color);
+    color: var(--md-accent-fg-color);
+    background: color-mix(in srgb, var(--md-accent-fg-color) 8%, transparent);
+}
+
+.md-typeset .cl-tree .cl-tnode-root {
+    font-weight: 700;
+    background: var(--md-accent-fg-color);
+    border-color: var(--md-accent-fg-color);
+    color: var(--md-default-bg-color);
+}
+
+.md-typeset a.cl-tnode-root:hover {
+    color: var(--md-default-bg-color);
+    opacity: 0.85;
+}
+
+.md-typeset .cl-tree .cl-tnode-dir {
+    font-weight: 700;
+}
+
+.md-typeset .cl-tree .cl-tnode-file {
+    background: transparent;
+    border-color: transparent;
+    color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .cl-tree .cl-tnode-ext {
+    border-color: color-mix(in srgb, var(--md-accent-fg-color) 45%, transparent);
+    background: color-mix(in srgb, var(--md-accent-fg-color) 6%, transparent);
+    color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-tree .cl-tnode-ext::after {
+    content: " \2197";
+    font-size: 0.85em;
+}
+
+.md-typeset .cl-tree .cl-tnode-gen {
+    border-style: dashed;
+    background: transparent;
+    color: var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .cl-tree-hint {
+    font-size: 0.68rem;
+    font-style: italic;
+    color: var(--md-default-fg-color--light);
+    text-align: left;
+}
+
+/* === Citations (javascripts/citations.js) ===
+   Runs of 3+ citation superscripts collapse into one "[49–56]" chip; the
+   page-bottom bibliography folds behind a "References (N)" bar and opens as
+   a compact two-column list. No JS = stock footnote rendering. */
+.md-typeset .cl-cite-group:not(.cl-open) sup {
+    display: none;
+}
+
+.md-typeset .cl-cite-toggle {
+    padding: 0 0.5em 0.05em;
+    border: 1px solid var(--md-default-fg-color--lighter);
+    border-radius: 2em;
+    background: transparent;
+    font-size: 0.62em;
+    font-weight: 600;
+    color: var(--md-default-fg-color--light);
+    vertical-align: super;
+    cursor: pointer;
+}
+
+.md-typeset .cl-cite-toggle:hover {
+    border-color: var(--md-accent-fg-color);
+    color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-cite-group.cl-open .cl-cite-toggle {
+    margin-right: 0.2em;
+}
+
+/* Adjacent citation numbers render glued together ("34" for refs 3 and 4);
+   space out every consecutive pair — ungrouped short runs and expanded
+   chips alike. */
+.md-typeset sup:has(> a.footnote-ref) + sup:has(> a.footnote-ref) {
+    margin-left: 0.25em;
+}
+
+/* The "References (N)" bar, same design family as the collapsible notes */
+.md-typeset .cl-bib-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 2em 0 0;
+    padding: 0.55em 1em;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+    font-weight: 700;
+    color: var(--md-default-fg-color--light);
+    cursor: pointer;
+    text-align: left;
+}
+
+.md-typeset .cl-bib-toggle:hover {
+    border-color: var(--md-accent-fg-color);
+    color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-bib-toggle .cl-prose-chevron {
+    display: inline-block;
+    width: 0.45em;
+    height: 0.45em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+}
+
+.md-typeset .cl-bib-toggle[aria-expanded="true"] .cl-prose-chevron {
+    transform: rotate(-135deg);
+}
+
+.md-typeset .footnote.cl-bib-folded {
+    display: none;
+}
+
+.md-typeset .footnote.cl-bib-folded.cl-bib-open {
+    display: block;
+}
+
+/* Open state: compact two-column list, the bar already separates it */
+.md-typeset .footnote.cl-bib-open > hr {
+    display: none;
+}
+
+.md-typeset .footnote.cl-bib-open > ol {
+    columns: 2;
+    column-gap: 2.2rem;
+    margin-top: 0.8em;
+}
+
+.md-typeset .footnote.cl-bib-open > ol > li {
+    break-inside: avoid;
+    margin-bottom: 0.7em;
+}
+
+/* Bibliography typography: left-aligned (justify makes rivers in narrow
+   columns), muted, tight */
+.md-typeset .footnote.cl-bib-open p {
+    text-align: left;
+    color: var(--md-default-fg-color--light);
+    margin: 0 0 0.2em;
+}
+
+/* arXiv / DOI links as small chips (classes added by citations.js); the
+   .md-tooltip2 scope styles the cloned copy inside citation hover tooltips */
+.md-tooltip2 .cl-ref-chip,
+.md-typeset .footnote .cl-ref-chip {
+    display: inline-block;
+    padding: 0 0.55em;
+    border: 1px solid color-mix(in srgb, var(--md-accent-fg-color) 40%, transparent);
+    border-radius: 2em;
+    background: color-mix(in srgb, var(--md-accent-fg-color) 5%, transparent);
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.86em;
+    line-height: 1.6;
+    color: var(--md-accent-fg-color);
+}
+
+.md-tooltip2 .cl-ref-chip:hover,
+.md-typeset .footnote .cl-ref-chip:hover {
+    background: color-mix(in srgb, var(--md-accent-fg-color) 14%, transparent);
+}
+
+@media screen and (max-width: 44.9375em) {
+    .md-typeset .footnote.cl-bib-open > ol {
+        columns: 1;
+    }
+}
+
+/* Print: everything visible, controls hidden */
+@media print {
+    .md-typeset .cl-cite-group:not(.cl-open) sup {
+        display: inline;
+    }
+    .md-typeset .cl-cite-toggle,
+    .md-typeset .cl-bib-toggle {
+        display: none;
+    }
+    .md-typeset .footnote.cl-bib-folded {
+        display: block;
     }
 }
 
