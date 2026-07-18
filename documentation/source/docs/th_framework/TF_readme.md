@@ -1,6 +1,7 @@
 <!-- **Theoretical Framework** -->
 
-Here we provide details on the theoretical aspects behind $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, which we divide in three Sections: [Continuum Field Theory](Brief_Review_On_Continuum_Dynamics.md), [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md) and [Lattice-Cosmology Reviews](MonographicReviews.md). 
+<!-- In this Tab --> 
+Welcome to the **Theory Framework** Tab. Here we discuss the theoretical aspects behind $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, which we separate in four sections. <!-- [Continuum Field Theory](Brief_Review_On_Continuum_Dynamics.md), [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md) and [Lattice-Cosmology Reviews](MonographicReviews.md). --> The first two sections, [Continuum Field Theory](Brief_Review_On_Continuum_Dynamics.md) and [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md), are rather introductory, meant as a basic summary of continuum <!-- (Sect. [Continuum Field Theory](Brief_Review_On_Continuum_Dynamics.md)) --> and lattice <!-- (Sect. [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md)) --> aspects of field theories, respectively, that serve to set up vocabulary, concepts, field variables, operators, etc. We recommend users without previous experience with lattice simulations, to read these two sections before diving into the <!-- code's manual --> [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md), or into the code itself. In the third section, [Lattice-Cosmology Reviews](MonographicReviews.md), we present in-depth discussions on the rationale behind the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, from the evolution equations, to the initializers and output observables of the code. As the theoretical framework of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is quite broad, we preset this material split in a series of monographic reviews on lattice-cosmology techniques. The user interested in understanding well the lattice formulations behind $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ should read these monographs. Finally, in the last section, [Technical Notes](TechnicalNotes.md), we expand on a few technical aspects of lattice field theory. 
 
 <!--
   space
@@ -60,7 +61,7 @@ When all these techniques are put together to solve problems characterized by a 
   space
 -->
 
-In Section [Lattice-Cosmology Reviews](MonographicReviews.md), we present the LTC basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, $i.e.$ the rationale behind initializers, output observables and evolution equations in the code. As the theoretical framework for this is quite broad, we preset the material split in a series of monographic reviews which we have written over the years: *The art of simulating the early Universe, Part I* (Ref. [@Figueroa_2020rrl]), *Part II* (Ref. [@BaezaBallesteros_2025tme]), and *Part III* (Ref. [@Figueroa_2026XYZ]). These reviews, downloadable in PDF format, are colloquially referred to as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs, respectively. They provide comprehensive discussions on the Lattice-Cosmology methods used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate non-linear field theory dynamics in an expanding universe of
+In Section [Lattice-Cosmology Reviews](MonographicReviews.md), we present the LCT basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, $i.e.$ the rationale behind initializers, output observables and evolution equations in the code. As the theoretical framework of these aspects is quite broad, we preset the material split in a series of monographic reviews that we have written over the years: *The art of simulating the early Universe, Part I* (Ref. [@Figueroa_2020rrl]), *Part II* (Ref. [@BaezaBallesteros_2025tme]), and *Part III* (Ref. [@Figueroa_2026XYZ]). These reviews, downloadable in PDF format, are colloquially referred to as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs, respectively. They provide comprehensive discussions on the Lattice-Cosmology methods used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate non-linear field theory dynamics in an expanding universe of
 
 &nbsp;&nbsp; I) Singlet scalar, and Abelian-$U(1)$ & NonAbelian-$SU(2)$ scalar-gauge field theories $\longrightarrow$ discussed in $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) <br>
 
@@ -69,21 +70,21 @@ In Section [Lattice-Cosmology Reviews](MonographicReviews.md), we present the LT
 
 &nbsp;&nbsp; III) Fluid dynamics as a description of an ensemble of scalar, gauge & fermion fields $\longrightarrow$ discussed in $\mathtt{The~Art-III}$ (Ref. [@Figueroa_2026XYZ]) 
  
-   
  <!--
   space
 -->
 
- 
-   
- <!--
+----------
+
+<!--
   space
 -->
 
-<!-- 
-- Section [Technical Notes](TechnicalNotes.md) provides further theory support for equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, given in the form of Technical Notes (downloadable in PDF format), which we have written over the years, expanding on some of the aspects presented in our [Monographic Reviews on Lattice Cosmology Techniques](MonographicReviews.md), or in the [**User Manual**](../Manual/About This Manual.md).
 
- --> 
+
+In Section [Technical Notes](TechnicalNotes.md), we provide further discussion on technical aspects of lattice field theory. This material, presented in the form of notes downloadable in PDF format, expands on some of the notions introduced in Section [Lattice-Cosmology Reviews](MonographicReviews.md), <!-- or in the [**User Manual**](../Manual/About This Manual.md). --> dwelling in particular on the concepts of power spectrum and gravitational waves on the lattice.
+
+
    
  <!--
   space
