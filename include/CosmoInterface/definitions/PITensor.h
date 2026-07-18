@@ -62,18 +62,18 @@ namespace TempLat
     // @endlabel
 
     // @label:pitensor_singlet_source
-    template <class Model, int I, int J> static inline auto scalarSingletContribution(Model &model, Tag<I> a, Tag<J> b)
+    template <class Model, int I, int J> static inline auto scalarSingletContribution(Model &model, Tag<I> i, Tag<J> j)
     {
-      return Total(i, 0, Model::Ns - 1, forwDiff(model.fldS(i), a) * forwDiff(model.fldS(i), b));
+      return Total(a, 0, Model::Ns - 1, forwDiff(model.fldS(a), i) * forwDiff(model.fldS(a), j));
     }
     // @endlabel
 
     // @label:pitensor_complex_source
-    template <class Model, int I, int J> static inline auto complexScalarContribution(Model &model, Tag<I> a, Tag<J> b)
+    template <class Model, int I, int J> static inline auto complexScalarContribution(Model &model, Tag<I> i, Tag<J> j)
     {
-      return Total(i, 0, Model::NCs - 1,
-                   2 * Real(GaugeDerivatives::forwardCovGradientCS(model, i, a) *
-                            conj(GaugeDerivatives::forwardCovGradientCS(model, i, b))));
+      return Total(a, 0, Model::NCs - 1,
+                   2 * Real(GaugeDerivatives::forwardCovGradientCS(model, a, i) *
+                            conj(GaugeDerivatives::forwardCovGradientCS(model, a, j))));
     }
     // @endlabel
 

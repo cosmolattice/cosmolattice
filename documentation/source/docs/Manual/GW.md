@@ -1,23 +1,24 @@
 <!-- <div style="text-align: justify;"> -->
 
-This section covers how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ simulates the production and dynamics of gravitational waves (GWs). We explain how GWs are implemented in CL, making emphasis on the form of the anisotropic stress tensor. We also explain which options of the simulations can be controlled from the parameter file and some of the restrictions built in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ since version 2.0. Finally, we briefly describe in [*GW observables*][subsec_GWobservables] the most relevant GW-related observables and how they can be measured with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. A brief review of the dynamics of GWs in the continuum can be found in [*Canonical Field Theory*][subsec_eomCont].
+This section covers how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ simulates the production and evolution of gravitational waves (GWs). We first explain in [*Gravitational waves on the lattice*][subsec_GWinCL] how the dynamics of GWs are simulated on the lattice, and describe how they are implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. We make emphasis on the form of the anisotropic stress tensor and the form of the lattice transverse-traceless projector. We also describe how the simulation of GWs can be controlled from the parameter file and some of the restrictions built in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ since version 2.0. We later describe in [*GW observables*][subsec_GWobservables] the most relevant GW-related observables and how they can be measured with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. A brief review of the dynamics of GWs in the continuum can be found in [*Canonical Field Theory*][subsec_eomCont].
 
-!!! Scope of the GW module
-    As of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ 2.0, the simulation of GWs is limited to the case of canonically normalized scalar (real and complex) and Abelian gauge fields. Models with non-canonical interactions, such as non-minimally coupled to gravity scalars or non-canonical kinetic scalar theories, would require adapting the GW source terms to their non-minimal nature. These features are planned to be realease in the future.
+!!! "Scope of the GW module"
+    As of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ 2.0, the simulation of GWs is limited to models of canonically normalized scalar (real and complex) and Abelian gauge fields. Models with non-canonical interactions, such as non-minimally coupled to gravity scalars or non-canonical kinetic scalar theories, would require adapting the GW source terms to their non-minimal nature. The production of GWs from models involving $\mathrm{SU}(2)$ doublets or gauge fields are also not implemented in the current version. Both these features are planned to be realeased in the future.
 
-!!! Linearized gravity regime
-    GWs in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are simulated in the linearized gravity regime, this is, backreaction of the GWs into the matter fields is neglected. We usually say that GWs are thus *passive*.
-
-
+!!! "Linearized gravity regime"
+    GWs in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are simulated in the linearized gravity regime, this is, backreaction of the GWs into the matter fields is neglected. We usually say that GWs are thus **passive**.
 
 
-### Gravitatonal waves in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ { #subsec_GWlatt }
 
-The simulation of GW production and evolution can be easily simulated with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, simply by setting `withGWs = true` in the parameter file before running any simulation. At the moment, the emission of GWs is implemented for canonically normalized scalars (both real and complex) and Abelian $\mathrm{U}(1)$ fields. We will now review how GWs are simulated on the lattice, and explain in detail the different options that can be chosen in the parameter file when running $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
-##### **Gravitational waves on the lattice** { #subsec_GWinCL }
+### Gravitational waves in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ { #subsec_GWlatt }
 
-In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, the simulation of GWs makes use of five auxiliary degrees of freedom, following the algorithm presented in [@GarciaBellido_2008,@BaezaBallesteros_2025tme]. These form a symmetric and traceless tensor, $v_{ij} with $v_{33}=-v_{11}-v_{22}$, which is evolved following a discretized version of
+The production and evolution of gravitatonal waves can be easily simulated with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, simply by setting `withGWs = true` in the parameter file. At the moment, the emission of GWs is implemented for canonically normalized scalars (both real and complex) and Abelian $\mathrm{U}(1)$ fields. We now review how GWs are simulated in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and explain in detail the different options that can be chosen in the parameter file.
+
+**Gravitational waves on the lattice**
+ Directly simulating the physical degrees of freedom, sourced by the transverse-traceless part of the anisotropic stress tensor, would require the computation of TT projections on every time step, which involves back-and-forth transformations to Fourier space. This would be etremely expensive in terms of computational cost, scaling as $\mathcal{O}(N^3\logN)$ with the number of points per dimension of the lattice. An alternative algorithm that overcomes this limitation by using unphysical degrees of freedom that are sourced by an effective stress anisotropic tensor was first proposed in [@GarciaBellido_2008]. The original algorithm, that employs siz unphysical degrees of freedom, was used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ v1.1 to v1.3.
+
+Since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ v2.0, the simulation of GWs follows an alternative algorithm first presented in $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme]. This makes use of five auxiliary degrees of freedom, which form a symmetric and traceless tensor, $v_{ij} with $v_{33}=-v_{11}-v_{22}$ that is evolved following a discretized version of
 [](){ #eq_GWvEOM2 }
 ```math
 \begin{align}
@@ -29,17 +30,17 @@ v_{ij}''
 {2\over m_p^2a^{2(1-\alpha)}}
 \left[
 \Pi_{ij}^{\rm eff}
--{1\over3}\delta_{ij}\Pi_{kk}^{\rm eff}\,.
-\right],
+-{1\over3}\delta_{ij}\Pi_{kk}^{\rm eff}
+\right]\,,
 \end{align}
 ```
-where $\Pi_{ij}^\text{eff}$ is the effective anisotropic stress tensor, that we describe below. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, this is implemented by defining a conjugate momenta are $(\tilde\pi_v)_{ij}=a^{3-\alpha}\tilde v'_{ij}$, so that the equation of motion can be rewritten as
+where $\Pi_{ij}^\text{eff}$ is the effective anisotropic stress tensor, that we describe below. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, this is implemented by defining conjugate momenta variables $(\tilde\pi_v)_{ij}=a^{3-\alpha}\tilde v'_{ij}$, and rewriting the equation of motion as
 ```math
 \begin{align}
 \label{eq_GWFirstOrderSystem}
 \tilde v_{ij}'
 &=
-a^{\alpha-3}(\tilde\pi_v)_{ij},
+a^{\alpha-3}(\tilde\pi_v)_{ij}\,,
 \\
 (\tilde\pi_v)'_{ij}
 &=
@@ -60,11 +61,11 @@ where the auxiliary tensor, although dimensionless, is rescaled as
 \left({m_p\over f_*}\right)^2v_{ij}.
 \end{align}
 ```
-The GW kernel, corresponding to the right hand side of the second equation in Eq.~\eqref{eq_GWFirstOrderSystem}, is implemented in `evolvers/kernels/gwskernels.h`. It contains the lattice Laplacian of the auxiliary tensor field and the effective anisotropic tensor source:
+The GW kernel, corresponding to the right hand side of the second equation in Eq.$~$\eqref{eq_GWFirstOrderSystem}, is implemented in `evolvers/kernels/gwskernels.h`. It contains the lattice Laplacian of the auxiliary tensor field and the effective anisotropic tensor source, which we discuss below,
 @emgithub(include/CosmoInterface/evolvers/kernels/gwskernels.h:gws_kernel_source)
 
-!!! Note for advanced users
-    The auxiliary fields used to simulate the evolution of GWs are implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ using smart pointers from C++, instead of static objects as is the case for matter fields. This makes it possible to turn the GWs on or off from the parameter file without the need to recompile the model, but it also means that some routines are implemented in a slightly different manner..
+!!! "Note for advanced users"
+    The auxiliary fields used to simulate the evolution of GWs are implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ using smart pointers from C++, instead of static objects as is the case for matter fields. This makes it possible to turn the GWs on or off from the parameter file without the need to recompile the model, but it also means that some routines are implemented in a slightly different manner, compared to matter fields.
 
 **Effective anisotropic stress tensor**
 
@@ -89,10 +90,11 @@ For a generic model with scalar and Abelian gauge fields, the effective anisotro
 \left[
 a^{-2\alpha}\tilde E_i\tilde E_j
 +a^{-2}\tilde B_i\tilde B_j
-\right].
+\right]\,.
+\end{array}
 \end{align}
 ```
-where we highlight the presence of the $(\omega_*^2/f_*^2)$ multiplying the products of program electric and magnetic fields, related to the particular choice of program variables made in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. In the code, the effective anisotropic stress tensor is implemented in `definitions/PItensor.h`, where the contributions from the different types of fields are implemented separately:
+where we highlight the presence of the $(\omega_*^2/f_*^2)$ multiplying the products of electric and magnetic fields. This is related to the particular choice of program variables made in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. In the code, the effective anisotropic stress tensor is defined in $\texttt{definitions/PItensor.h$, where the contributions from the different types of fields are implemented separately:
 
 -   Scalar singlets:
 
@@ -114,8 +116,9 @@ The effective anisotropic stress tensor is finally the sum of all the separate c
 
 @emgithub(include/CosmoInterface/definitions/PITensor.h:pitensor_total_source)
 
+**Transverse-traceless projection**
 
-As the auxiliary degrees of freedom are evolved, they can be used to reconstruct the physical GW field. This is obtained in Fourier space after a lattice TT projection
+As the auxiliary degrees of freedom are evolved, they can be used to reconstruct the physical GW field which are needed to determine the energy density of GWs, as we discuss later. Such physical degrees of freedom are obtained in Fourier space after a lattice TT projection
 [](){ #eq_GWhLattice }
 ```math
 \begin{align}
@@ -125,7 +128,7 @@ h_{ij}(\tilde{\bf n},\eta)
 \Lambda^{\rm L}_{ij,lm}(\tilde{\bf n})v_{lm}(\tilde{\bf n},\eta)\,,
 \end{align}
 ```
-where  the lattice projector is
+where  the lattice projector is defined analogously to its continuous counterpart,
 [](){ #eq_GWTTProjectorLattice }
 ```math
 \begin{align}
@@ -148,35 +151,35 @@ P^{\rm L}_{ij}(\tilde{\bf n})
 |{\bf k}_{\rm L}(\tilde{\bf n})|^2}.
 \end{align}
 ```
-Here ${\bf k}_{\rm L}$ is the definition of the  lattice momentum associated with the derivative operator used in the TT projection, and characterized the form of the projector. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ three different choices are implemented,
+Here ${\bf k}_{\rm L}$ is the  lattice momentum associated with the derivative operator that characterizes the form of the projector. It determines with respect to which lattice derivative operators are GWs transverse, this is, with respect to which operator $\nabla^\text{L}$ the projected fields obey $\nabla^\text{L}_i h_{ij}=0$.   In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ three different choices are implemented,
 [](){ #eq_GWLatticeMomenta}
 ```math
 \begin{align}
 \label{eq_GWLatticeMomenta_1}
 \begin{array}{rcll}
-k^0_{{\rm L},i}(\tilde{\bf n})
+k^0_{{\rm L},j}(\tilde{\bf n})
 &=&\displaystyle
-\frac{1}{\delta \tilde{x}}\sin\theta_i\,,
+\frac{1}{\delta \tilde{x}}\sin\theta_j\,,
 &
 [\texttt{Neutral derivative}]\,,\\[10pt]
-k^-_{{\rm L},i}(\tilde{\bf n})
+k^-_{{\rm L},j}(\tilde{\bf n})
 &=&\displaystyle
-\frac{1}{\delta \tilde{x}}\left[\sin\theta_i
--i\left(1-\cos\theta_i\right)\right]\,,&
+\frac{1}{\delta \tilde{x}}\left[\sin\theta_j
+-i\left(1-\cos\theta_j\right)\right]\,,&
 \hspace{1cm}
 [\texttt{Forward derivative}],
 \\[10pt]
-k^+_{{\rm L},i}(\tilde{\bf n})
+k^+_{{\rm L},j}(\tilde{\bf n})
 &=&\displaystyle
-\frac{1}{\delta \tilde{x}}\left[\sin\theta_i
-+i\left(1-\cos\theta_i\right)\right]\,,\quad\quad\quad&
+\frac{1}{\delta \tilde{x}}\left[\sin\theta_j
++i\left(1-\cos\theta_j\right)\right]\,,\quad\quad\quad&
 [\texttt{Backward derivative}]\,.
 \end{array}
 \end{align}
 ```
-where $\theta_i\equiv 2\pi\tilde n_i/N$. The neutral momentum, ${\bf k}^0_{\rm L}$, is real, while the forward and backward momenta, ${\bf k}^{\pm}_{\rm L}$, are complex.
+where $\theta_j\equiv 2\pi\tilde n_j/N$. The neutral momentum, ${\bf k}^0_{\rm L}$, is real, while the forward and backward momenta, ${\bf k}^{\pm}_{\rm L}$, are complex.
 
-For TT projection with respect to neutral derivatives, as the associated lattice momentum is real, the projector can be written as
+In the case of TT projection with respect to neutral derivatives, as the associated lattice momentum is real, the projector can be written as
 [](){ #eq_GWRealProjector }
 ```math
 \begin{align}
@@ -194,7 +197,7 @@ P_{ij}^{{\rm L},0}
 |{\bf k}^0_{\rm L}|^2}.
 \end{align}
 ```
-On the other hand, for forward or backward derivatives, the lattice momentum is complex and the projector is
+On the other hand, for forward or backward derivatives, the lattice momentum is complex and the projector becomes
 [](){ #eq_GWComplexProjector }
 ```math
 \begin{align}
@@ -212,30 +215,29 @@ P_{ij}^{{\rm L},\pm}
 |{\bf k}^\pm_{\rm L}|^2}.
 \end{align}
 ```
-The lattice projector is transverse with respect to the lattice derivative used to define it. For the complex projector, it is also Hermitian and idempotent, properties that are essential for a consistent lattice TT projection.
+For the complex projector, it is also Hermitian and idempotent, properties that are essential for a consistent lattice TT projection. For a complete listof the projector properties see, for example, $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme].
 
+### **Running a simulation with GWs** { #subsec_ActivateGW }
 
-
-### **Managing a simulation with GWs** { #subsec_ActivateGW }
-
-The simulation of GW production from the matter fields in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is controlled with the `withGWs` keyword in the parameter file input parameter file. This can be done for any model with the valid matter content. For example, $\texttt{models/parameter-files/lphi4.in}$ contains the following GW block:
+Simulating the production of GWs in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is controlled with the `withGWs` keyword in the input parameter file. For any model with the valid matter content, setting this to `withGWs = true` will include the production of GWs in the simulation. For example, $\texttt{models/parameter-files/lphi4.in}$ contains the following GW block:
 
 @emgithub(models/parameter-files/lphi4.in:GW_settings)
 
-Thus, a simulation with GWs can be performed by simply changing this falg to `withGWs = true`. Alternatively, the parameter can be override directly from the command line when executing the model, for example
+Thus, a simulation of the $\texttt{lphi4}$ model with GWs could be performed by simply changing this flag to `withGWs = true`. Alternatively, the parameter can be override directly from the command line when executing the model, for example
 ```bash
 ./lphi4 input=../models/parameter-files/lphi4.in withGWs=true GWprojectorType=2 doLFforGWs=true
 ```
+where we explain later the remaining parameters.
 
-When the flag `withGWs` is enabled, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will create the auxiliary tensor fields (amplitudes and conjugate momenta), and these will be evolved simultaneously along the matter sectors. As already mentioned, such evolution is **passive**, in the sense that only the sourcing of GWs by the matter sectors is considered, but the backreaction of the GWs onto the matter sectors is not taken into account (as it is expected to be negligible in the majority of cases).
+When the flag `withGWs` is enabled, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes the auxiliary tensor fields (amplitudes and conjugate momenta), which are evolved simultaneously along the matter sectors. As already mentioned, such evolution is **passive**, in the sense that only the sourcing of GWs by the matter sectors is considered, while the backreaction of the GWs onto the matter sectors is not taken into account (as it is expected to be negligible in the majority of cases).
 
-!!! warning Linearized gravity regime
+!!! warning "Linearized gravity regime"
     GWs are only defined for `NDim = 3` spacial dimensions. Simulations with other number of dimensions will fail when tried to run with GWs, and so must keep `withGWs = false`.
 
 
-Another option that can be controlled by the user is related to the evolver used for the GWs. Since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ 2.0, the GW sector has its own evolver choice, controlled by the `doLFforGWs` keywork. By default `doLFforGWs = true`, and the tensor sector is evolved with the leapfrog algorithm even if the matter fields use a different evolver. This aims at reducing the numerical cost of the simulation when using more complex algorithms for the matter sector, as the equations of motion of the GWs are always simplectic (as matter fields act as a *external* source).
+Another option that can be controlled by the user is related to the evolver used for the GWs. Since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ 2.0, the GW sector has its own evolver choice, controlled by the `doLFforGWs` keyword. By default `doLFforGWs = true`, and the tensor sector is evolved with the leapfrog algorithm even if the matter fields use a different evolver. This aims at reducing the numerical cost of the simulation when using higher-order or non-symplectic algorithms for the matter sector. We note that, while it is possible to run a higher-order evolver for the matter sector compared to GWs, the presence of discretization effects on the simulation for GWs needs to be studied in a case-by-case basis.
 
-Alternatively, one can set `doLFforGWs = false` so that the GW sector uses the same evolver as the matter fields, as specified by the usual `evolver` parameter. This case, however, has some restrictions for models containing gauge fields. As the Abelian GW source depends on the electric field in addition to the magnetic and scalar fields, it needs to be evaluated at a time where fields and conjugate momenta are synchronized. The code therefore rejects evolver combinations that cannot provide a consistently synchronized matter source for the GW update. The supported combinations are:
+Alternatively, one can set `doLFforGWs = false` so that the GW sector uses the same evolver as the matter fields, as specified by the usual `evolver` parameter. This case, however, has some restrictions for models containing gauge fields. As the Abelian GW source depends on the electric field in addition to the magnetic and scalar fields, it needs to be evaluated at a time where fields and conjugate momenta are synchronized. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ therefore rejects evolver combinations that cannot provide a consistently synchronized matter source for the GW update. The supported combinations are:
 
 | Matter content | Matter evolver | GW evolver | Supported |
 | -------------- | -------------- | ---------- | --------- |
@@ -254,24 +256,24 @@ Alternatively, one can set `doLFforGWs = false` so that the GW sector uses the s
 | Scalars + $U(1)$ gauge fields | `RKn` | `LF` | ✓ |
 | Scalars + $U(1)$ gauge fields | `RKn` | `RKn` | Not implemented |
 
-Rows with GW evolver `LF` correspond to `doLFforGWs = true`, and rows where the GW evolver matches the matter evolver correspond to `doLFforGWs = false`. The unsupported $\mathrm{U}(1)$ rows reflect the staggered-time mismatch of the gauge electric field and gauge links when the matter sector itself is evolved with `LF` and `PVn`. Evolvers `RKn` are not implemented for GWs evolution as ov version 2.0.
+Rows with GW evolver `LF` correspond to `doLFforGWs = true`, and rows where the GW evolver matches the matter evolver correspond to `doLFforGWs = false`. The unsupported $\mathrm{U}(1)$ rows reflect the staggered-time mismatch of the gauge electric field and gauge links when the matter sector itself is evolved with `LF` and `PVn`. Evolvers `RKn` are not implemented for GWs evolution as ov version 2.0. Note this is not the case for the velocity Verlet algorithm, as the kernel of GWs only needs to be evaluated before any matter is evolved or after the end of the matter evolution.
 
-Finally, we briefly comment on the implementation of the GW leapfrog evolver. This applies kicks and drifts to the auxiliary GW fields whenever `typeGW == LF`:
+Finally, we briefly comment on the implementation of the GW leapfrog evolver. This applies kicks and drifts to the auxiliary GW fields whenever `typeGW == LF`, and is implemented within the $\texttt{evolvers/evolver.h}$ header file,
 
 @emgithub(include/CosmoInterface/evolvers/evolver.h:gws_evolver_dispatch)
 
-In addition, GWs are synchronized before measurement:
+In addition, GWs are synchronized before measurement, similarly to matter fields when using the LF algorithm,
 
 @emgithub(include/CosmoInterface/evolvers/evolver.h:gws_evolver_sync)
 
 
-### **GW observables** { #subsec_GWobservables }
+## **GW observables** { #subsec_GWobservables }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ makes it possible to keep track of the evolution of the energy density of GWs, both its total value for a simulation and its spectral density. Before explaning how they are measured in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, we briefly review the relevant lattice definitions.
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ makes it possible to keep track of the evolution of the energy density of GWs, both its total value and its spectral density. Before explaning how they are measured in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, we briefly review the relevant lattice definitions.
 
-### **GW observables on the lattice** { #subsec_GWobservablesLattice }
+**GW observables on the lattice** { #subsec_GWobservablesLattice }
 
-On the lattice, the GW energy density is defined from the discrete analogous to Eq.~\eqref{eq_GWrhoContinuum},
+On the lattice, the GW energy density is defined as
 [](){ #eq_GWrhoLattice }
 ```math
 \begin{align}
@@ -289,7 +291,7 @@ h'_{ij}({\bf n},\eta)h'_{ij}({\bf n},\eta)
 h'_{ij}(\tilde{\bf n},\eta)h_{ij}^{\prime *}(\tilde{\bf n},\eta).
 \end{align}
 ```
-As for any other power spectrum, one divides the sum over a radial sum over radial bins, and an average over spherical shells, $R(l)$,
+As for any other power spectrum, this sum can be separated as a radial sum over radial bins, and an average over spherical shells, $R(l)$,
 [](){ #eq_GWrhoShells }
 ```math
 \begin{align}
@@ -322,10 +324,10 @@ from which the associated lattice power spectrum and the energy density power sp
 h'_{ij}(\tilde{\bf n},\eta)h_{ij}^{\prime *}(\tilde{\bf n},\eta)
 \right\rangle_{R(l)}
 \hspace{0.5cm}
-[{\rm Type~I, version 1}].
+[{\rm Type~I, version~1}].
 \end{align}
 ```
-while the Type II version 1 power spectrum takes the form
+with $\#_l$ the multiplicity of bin $l$. Alternatively, the Type II version 1 power spectrum takes the form
 [](){ #eq_GWOmegaTypeII }
 ```math
 \begin{align}
@@ -339,15 +341,14 @@ while the Type II version 1 power spectrum takes the form
 h'_{ij}(\tilde{\bf n},\eta)h_{ij}^{\prime *}(\tilde{\bf n},\eta)
 \right\rangle_{R(\tilde{\bf n})}
 \hspace{0.5cm}
-[{\rm Type~II, version 1}]\,.
+[{\rm Type~II, version~1}]\,.
 \end{align}
 ```
 Other versions are also defined in analogously to the power spectra of matter fields.
 
-!!! warning "Fractional energy density normalization"
-    The fractional energy density in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is defined with respect to the total energy density of the matter sector. This corresponds to the critical density for self consistent expansion, but it is different for fixed expansion or flat background. If in the case of fixed expansion you want the results normalized with the critical energy density, you need to use the results for the total energy density and the Hublle constant stored in $\texttt{average_energies.txt}$ and $\texttt{average_scale_factor.txt}$, respectively.
+Note that the fractional energy density in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is defined with respect to the total energy density of the matter sector. This corresponds to the critical density for self consistent expansion, but it is different for fixed expansion or flat background. If in the case of fixed expansion you want the results normalized with the critical energy density, you shall use the results for the total energy density and the Hubble constant stored in $\texttt{average_energies.txt}$ and $\texttt{average_scale_factor.txt}$, respectively.
 
-Finally, it is worth noting that, on the lattice, the relevant bilinear $h'_{ij}h_{ij}^{\prime *}$ can be computed directly from the conjugate momenta of the auxiliary fields in terms of traces
+Finally, it is worth noting that, on the lattice, the relevant bilinear $h'_{ij}h_{ij}^{\prime *}$ needed to evaluate the energy density of GWs can be computed directly from the conjugate momenta of the auxiliary fields in terms of traces
 [](){ #eq_GWTraceFormula }
 ```math
 \begin{align}
@@ -360,38 +361,35 @@ h'_{ij}h_{ij}^{\prime *}
 {\rm Tr}({\tt P}{\tt v}^{\prime *})\,,
 \end{align}
 ```
-where ${\tt v}'$ and ${\tt P}$ are matrices with entries $({\tt v}')_{ij}=v'_{ij}$ and $({\tt P})_{ij} = P^{\rm L} _{ij} $. This expression slightly simplifies in the case of a real TT projector.
+where ${\tt v}'$ and ${\tt P}$ are matrices with entries $({\tt v}')_{ij}=v'_{ij}$ and $({\tt P})_{ij} = P^{\rm L}_{ij}$. This expression slightly simplifies in the case of a real TT projector.
 
-### **GW observables on the lattice** { #subsec_GWobservablesLattice }
+**GW observables in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** { #subsec_GWobservablesLattice }
 
-Measurements of the GW energy density are automatically performed for simulations with GWs with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. If the keyword `withGWs = true` is especified in the parameter file, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will generate, in addition to the measurements related of the matter sector, two GW-specific output files, saved inside the directory specified by `outputfile`:
+Measurements of the GW energy density are automatically performed for simulations with GWs with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. If the keyword `withGWs = true` is especified in the parameter file, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will generate, in addition to the measurements related of the matter sector, two GW-related output files, saved inside the same directory as specified by `outputfile`:
 
--  $\texttt{spectra_energy_gws.txt}$: GW fractional energy-density spectrum measured from the projected tensor perturbations. As for other spectra in the simulation, the frequency of measurements is controlled by the`tOutputInfreq` keyword. By default, the file contains
+-  $\texttt{spectra_energy_gws.txt}$: GW fractional energy-density spectrum measured from the projected tensor perturbations. As for matter spectra, the frequency of the measurements is controlled by the`tOutputInfreq` keyword. By default, the file contains
 [](){ #eq_GWPSmeasurements }
 ```math
 \begin{align}
 \tilde{k}\,,\quad\quad\Omega_{\rm GW}(\tilde{k})\,,\quad\quad\#_{\rm bin}\,,
 \end{align}
 ```
-   The first column is the momentum scale associated with the bin, the second is the GW spectrum computed with the projector selected by `GWprojectorType`, and the last one gives the bin multiplicity. Additional bin information can also be printed if `spectraVerbosity = 1` or `spectraVerbosity = 2` are indicated in the parameter file, analogously to the scalar spectra described in Section [*Outputs*](My first model of (singlet) scalar fields.md#outputs). The times at which the spectra are measured are saved sequencially in the $\texttt{average_spectra_times.txt}$ file.
+The first column is the momentum scale associated with each bin, the second is the GW spectrum computed with the projector selected by `GWprojectorType` as discussed below, and the last one gives the bin multiplicity.  The specific output can be controlled with the same parameters as for other power spectra, see [**Output Observables**](Observables.md) for a detailed explanation.  The times at which the spectra are measured are saved sequentially in the $\texttt{average_spectra_times.txt}$ file. Finally, we recall that the fractional energy density is normalized with the total energy density of the matter fields, rather than the critical energy density.
 
-   We note that the fractional energy density is normalized with the total energy density of the matter fields, rather than the critical energy density. In case of self-consistent expansion the two
-
-
--   `average_energies_gws.txt`: Volume-averaged GW energy density, determined from summing over the contributions of all bins in the power spectrum, as indicated in Eq.~\eqref{eq_GWrhoShells}. The columns are
+-   `average_energies_gws.txt`: Volume-averaged GW energy density, determined from summing over the contributions of all bins in the power spectrum, as indicated in Eq.$~$\eqref{eq_GWrhoShells}. The columns of this file correspond to
 [](){ #eq_GWenergymeasurements }
 ```math
 \begin{align}
-\tilde{\eta}\,,\quad\quad\tilde{E}_{\rm GW}/\tilde{E}_{\rm matter}\,,\quad\quad\tilde{E}_{\rm GW}$.
+\tilde{\eta}\,,\quad\quad\tilde{\rho}_{\rm GW}\,/\,\tilde{\rho}_{\rm matter}\,,\quad\quad\tilde{\rho}_{\rm GW}$.
 \end{align}
 ```
-Here $\tilde{E}_{\rm GW}/\tilde{E}_{\rm matter}$ is obtained by integrating the measured GW energy-density spectrum over the available momentum bins. The quantity $\tilde{E}_{\rm GW}$ is this fraction multiplied by the total matter energy density at the same time.
+Here $\tilde{\rho}_{\rm GW}/\tilde{\rho}_{\rm matter}$ is obtained by integrating the measured GW energy-density spectrum over the available momentum bins. The quantity $\tilde{\rho}_{\rm GW}$ is this fraction multiplied by the total matter energy density at the same time.
 
-For both outputs, the observables are determined after TT projecting the auxiliary fields used by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, using Eq.~\eqref{eq_GWTraceFormula}}. The type of projector to be used is controlled using the `GWprojectorType` in the parameter file. This can take three different values, corresponding to the three choices of lattice momenta in Eq.~\eqref{eq_GWRealProjector}:
+For both outputs, the observables are determined after TT projecting the auxiliary fields used by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, using Eq.$~$\eqref{eq_GWTraceFormula}}. The type of projector used is controlled using the `GWprojectorType` keyword in the parameter file. This can take three different values, corresponding to the three choices of lattice momenta in Eq.$~$\eqref{eq_GWRealProjector}:
 
 
 | **Value** <div style="width:150px"> | **Projector type** |
 | ---------------------------------------- | --------------- |
-| `GWprojectorType = 1` | Real projector, built from k^0_L |
-| `GWprojectorType = 2` | Backward projector, built from k^-_L; **default choice** |
-| `GWprojectorType = 3` | Forward projector, built from k^+_L. |
+| `GWprojectorType = 1` | Real projector, built from $k^0_\mathrm{L}$ |
+| `GWprojectorType = 2` | Backward projector, built from $k^-_\mathrm{L}$. Default choice. |
+| `GWprojectorType = 3` | Forward projector, built from $k^+_\mathrm{L}$. |

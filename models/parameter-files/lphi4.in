@@ -26,7 +26,7 @@ saveUnbinnedSpectra = false
 #GWs
 withGWs=false
 GWprojectorType = 1
-#@label:GW_settings 
+#@endlabel
 
 #@label:IC 
 #IC

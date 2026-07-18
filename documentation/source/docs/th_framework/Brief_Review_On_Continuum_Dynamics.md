@@ -254,7 +254,7 @@ GWs are sourced by the transverse-traceless (TT) part of the anisotropic stress 
 T_{ij}-\bar p\,g_{ij},
 \end{align}
 ```
-In the practive, however, it is more convenient to define an effective anisotropic strees tensor containing only those contributions to $\Pi_{ij}$ that have a non-zero TT projection. For example, for a generic model consisting of canonically normalized scalars and Abelian fields, this takes the form,
+In the practice, however, it is more convenient to define an effective anisotropic strees tensor containing only those contributions to $\Pi_{ij}$ that have a non-zero TT projection. For example, for a generic model consisting of canonically normalized scalars and Abelian gauge fields, this takes the form,
 [](){ #eq_GWEffectiveAnisotropicStress }
 ```math
 \begin{align}
@@ -288,7 +288,7 @@ P_{il}(\hat{\bf k})P_{jm}(\hat{\bf k})
 ```
 and $\hat k_i\equiv {k_i\over k}$. This guarantees the projected tensor is both transverse, $k_i\Pi_{ij}^{\rm TT}=0$, and traceless, $\Pi_{ii}^{\rm TT}=0$.
 
-Numerically solving Eq.$~$\eqref{eq_GWEOMcontinuum} directly requires to determine the TT projected anisotropic stress tensor every time the GWs need to be evolved, which is a very costly operation. An alternative was proposed in Ref. [@GarciaBellido_2008], based on the use of auxiliary fields sourced by $\Pi_{ij}^\text{eff}$. While the original proposad used six unphysical degrees of freedom to simulate the GWs, it is possible to reduce this number to five, as discussed in $\mathtt{The~Art{\text -}II}$ [@BaezaBallesteros_2025tme],  by using a symmetric traceless tensor of auxiliary fields, $v_{ij}$, which obeys $v_{33}=-(v_{11}+v_{22})$. If these fields are evolved following
+<!--Numerically solving Eq.$~$\eqref{eq_GWEOMcontinuum} directly requires to determine the TT projected anisotropic stress tensor every time the GWs need to be evolved, which is a very costly operation. An alternative was proposed in Ref. [@GarciaBellido_2008], based on the use of auxiliary fields sourced by $\Pi_{ij}^\text{eff}$. While the original proposad used six unphysical degrees of freedom to simulate the GWs, it is possible to reduce this number to five, as discussed in $\mathtt{The~Art{\text -}II}$ [@BaezaBallesteros_2025tme],  by using a symmetric traceless tensor of auxiliary fields, $v_{ij}$, which obeys $v_{33}=-(v_{11}+v_{22})$. If these fields are evolved following
 [](){ #eq_GWvEOM }
 ```math
 \begin{align}
@@ -314,7 +314,7 @@ h_{ij}({\bf k},\eta)
 \Lambda_{ij,lm}(\hat{\bf k})v_{lm}({\bf k},\eta)\,.
 \end{align}
 ```
-This is the algorithm used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the evolution of GWs.
+This is the algorithm used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the evolution of GWs.-->
 
 Finally, it is worth mentioning about GW observables. The most relevant quantity related to GWs is the energy density of the GW background,
 [](){ #eq_GWrhoContinuum }
