@@ -113,10 +113,8 @@ namespace TempLat
         // Topological charges
         if constexpr (Model::DefectsModel) { defectsMeasurer.measure(model, t); };
         // Measurerments related to topological defects
-        // gwsMeasurer.measureStandard(model,t, TestTransTrace);
-        // Transversality and tracelessness test of GWs
 
-        filesManager.flush();
+        if (model.fldGWs != nullptr) filesManager.flush();
       }
 
       // Infrequent output (spectra):
@@ -159,6 +157,8 @@ namespace TempLat
           // average_spectra_time.txt
           spectraTime.save();
         }
+
+
       }
       // Rare output (snapshots):
       if (n % rareOutputFreq == 0) {

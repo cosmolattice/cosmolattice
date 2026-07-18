@@ -58,8 +58,8 @@ namespace TempLat
     {
       std::vector<std::string> ret;
       ret.emplace_back("t");
-      ret.emplace_back("EGW / Ematter");
-      ret.emplace_back("EGW");
+      ret.emplace_back("rhoGW / rho");
+      ret.emplace_back("rhoGW");
 
       return ret;
     }
