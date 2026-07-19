@@ -110,8 +110,9 @@
 
     // Manual-landing contents rail: each .cl-toc-row collapses to its
     // summary line (p.cl-toc-line); a chevron — or clicking the row —
-    // reveals the full chapter description underneath.
-    function setUpTocRow(row) {
+    // reveals the full chapter description underneath. An "Expand all"
+    // master toggle above the rail opens every description at once.
+    function setUpTocRow(row, onToggle) {
         var line = row.querySelector(".cl-toc-line");
         if (!line) return;
         var hasBody = Array.prototype.some.call(row.children, function (el) {
@@ -135,7 +136,9 @@
             btn.setAttribute("aria-expanded", open ? "true" : "false");
             btn.setAttribute("aria-label", open ? "Hide chapter description"
                                                 : "Show chapter description");
+            if (onToggle) onToggle();
         }
+        row.clTocSetOpen = setOpen;
 
         btn.addEventListener("click", function (e) {
             e.stopPropagation();
@@ -240,7 +243,37 @@
             if (rail.dataset.clTocDone) return;
             rail.dataset.clTocDone = "1";
             rail.classList.add("cl-managed");
-            rail.querySelectorAll(".cl-toc-row").forEach(setUpTocRow);
+
+            var rows = [];
+            var master = null;
+
+            // Keep the master toggle's label honest whichever way rows are
+            // opened — individually or all at once.
+            function updateMaster() {
+                if (!master) return;
+                var allOpen = rows.every(function (r) {
+                    return r.classList.contains("cl-open");
+                });
+                master.clProseLabel.textContent = allOpen ? "Collapse all" : "Expand all";
+                master.setAttribute("aria-expanded", allOpen ? "true" : "false");
+            }
+
+            rail.querySelectorAll(".cl-toc-row").forEach(function (row) {
+                setUpTocRow(row, updateMaster);
+                if (row.clTocSetOpen) rows.push(row);
+            });
+
+            if (rows.length) {
+                master = makeToggle("cl-toc-master");
+                master.clProseLabel.textContent = "Expand all";
+                master.addEventListener("click", function () {
+                    var anyClosed = rows.some(function (r) {
+                        return !r.classList.contains("cl-open");
+                    });
+                    rows.forEach(function (r) { r.clTocSetOpen(anyClosed); });
+                });
+                rail.insertAdjacentElement("afterbegin", master);
+            }
         });
         document.querySelectorAll(".md-typeset p.cl-fold").forEach(function (p) {
             if (p.dataset.clFoldDone) return;

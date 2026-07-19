@@ -620,8 +620,14 @@ body.nav-collapsed .md-sidebar--primary {
     color: var(--md-default-fg-color--lighter);
 }
 
-.md-typeset .cl-toc p.cl-toc-group:first-child {
+.md-typeset .cl-toc p.cl-toc-group:first-of-type {
     margin-top: 0;
+}
+
+/* "Expand all" master toggle at the rail's top right (added by
+   prose-fold.js, so it never renders without the folding behavior) */
+.md-typeset .cl-toc .cl-prose-toggle.cl-toc-master {
+    margin: 0 0 0.7em auto;
 }
 
 .md-typeset .cl-toc .cl-toc-row {
