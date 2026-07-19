@@ -354,9 +354,9 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 /* === Paragraph mini-titles ===
-   Bold run-in titles above the long paragraphs of the Home page
-   ({: .cl-minihead } in the Markdown). Deliberately plain paragraphs, not
-   headings, so they stay out of the sidebar TOC. */
+   Bold run-in titles above long paragraphs ({: .cl-minihead } in the
+   Markdown). Deliberately plain paragraphs, not headings, so they stay out
+   of the sidebar TOC. */
 .md-typeset p.cl-minihead {
     margin: 1.8em 0 0.4em;
     font-size: 1.12em;
@@ -365,6 +365,35 @@ body.nav-collapsed .md-sidebar--primary {
 
 .md-typeset p.cl-minihead + p {
     margin-top: 0.4em;
+}
+
+/* === Full-width claim blocks (Home page) ===
+   The prose of "Features & Capabilities" and "What makes CL different?":
+   each block is a <div class="cl-claim" markdown> holding a mini-title
+   (restyled as a small eyebrow label) plus its full paragraph, always
+   visible at full line measure behind a thin left rule. No fold, no JS.
+   Kept neutral on purpose: on this page color always means a physics
+   sector. */
+.md-typeset .cl-claim {
+    margin: 1.7em 0;
+    padding-left: 1.1em;
+    border-left: 2px solid var(--md-default-fg-color--lightest);
+}
+
+.md-typeset .cl-claim p.cl-minihead {
+    margin: 0 0 0.45em;
+    font-size: 0.74em;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .cl-claim p {
+    margin: 0;
+}
+
+.md-typeset .cl-claim p + p {
+    margin-top: 0.7em;
 }
 
 /* === Upcoming-feature cards ===
@@ -395,8 +424,8 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 /* === Prose-card grids ===
-   The mini-titled paragraph trios of the Home page ("What makes CL
-   different?", "Features & Capabilities") are wrapped in
+   Mini-titled paragraph trios (used on the Manual's introduction pages;
+   the Home page now uses the full-width .cl-claim blocks above) wrapped in
    <div class="cl-prose-grid" markdown> holding one
    <div class="cl-prose-card" markdown> per minihead + paragraph pair.
    javascripts/prose-fold.js activates the grid by adding .cl-managed: three
@@ -1296,10 +1325,11 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 /* === Manual call-to-action banner ===
-   Full-width, deliberately visible strip under the "What makes CL different?"
-   card grid: the public-availability sentence plus a filled button to the
-   manual. Accent-colored button (site accent = interactive), neutral box, so
-   it does not read as a physics-sector element. */
+   Full-width, deliberately visible strip after the GW equations of the
+   Nutshell section: the public-availability sentence plus buttons to the
+   manual and the installation page. Accent-colored buttons (site accent =
+   interactive), neutral box, so it does not read as a physics-sector
+   element. */
 .md-typeset .cl-manual-banner {
     margin: 1.4em 0 1.6em;
     padding: 0.9em 1.4em 1em;
@@ -1327,6 +1357,16 @@ body.nav-collapsed .md-sidebar--primary {
 
 .md-typeset .cl-manual-banner .cl-manual-link:hover {
     background: color-mix(in srgb, var(--md-accent-fg-color) 10%, transparent);
+}
+
+/* Side-by-side buttons: breathing room between them, and between them and
+   the sentence above when they wrap on narrow screens */
+.md-typeset .cl-manual-banner .cl-manual-link + .cl-manual-link {
+    margin-left: 0.7em;
+}
+
+.md-typeset .cl-manual-banner .cl-manual-link {
+    margin-top: 0.15em;
 }
 
 /* === Embedded Streamlit input-file builder === */
