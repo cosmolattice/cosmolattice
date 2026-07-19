@@ -1,12 +1,11 @@
-## **Hands-On $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Workshop 2026**
+<!-- **Hands-On $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Workshop 2026** -->
 
-### **Simulating the Early Universe**
+The **Hands-On $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Workshop: Simulating the Early Universe** was held at the Department of Theoretical Physics of the Complutense University of Madrid, Spain, during May 7-8 2026. This workshop was conceived as an intensive and practical introduction to lattice-based numerical techniques for studying non-linear field dynamics in cosmology. The program combined focused lectures with guided hands-on sessions, enabling participants to gain both conceptual understanding and direct experience with state-of-the-art simulation tools. A central component of the workshop was the use of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, an open-access high-performance framework for lattice simulations of field theories in an expanding Universe. Participants learned how the code is structured, how to configure and run simulations efficiently, and how to interpret their physical output in cosmological contexts.
 
-The Hands-On $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Workshop: Simulating the Early Universe was held at the Department of Theoretical Physics of the Complutense University of Madrid, Spain, during May 7-8 2026.
+The Indico page of the event was:
 
-The workshop was conceived as an intensive and practical introduction to lattice-based numerical techniques for studying non-linear field dynamics in cosmology. The program combined focused lectures with guided hands-on sessions, enabling participants to gain both conceptual understanding and direct experience with state-of-the-art simulation tools.
+<a href="https://indico.fis.ucm.es/event/41/" target="_blank" rel="noopener noreferrer">https://indico.fis.ucm.es/event/41/</a>
 
-A central component of the workshop was the use of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, an open-access high-performance framework for lattice simulations of field theories in an expanding Universe. Participants learned how the code is structured, how to configure and run simulations efficiently, and how to interpret their physical output in cosmological contexts.
 
 Lecturers:
 
@@ -22,9 +21,9 @@ Lecturers:
 <ul style="line-height: 1.2; margin-top: 0.4em; margin-bottom: 1em; margin-left: 1cm;">
   <li style="margin: 0 0 0.4em 0;">Introduction to non-linear phenomena in the early Universe.</li>
   <li style="margin: 0 0 0.4em 0;">Lattice field theory techniques.</li>
-  <li style="margin: 0 0 0.4em 0;">Structure and architecture of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.</li>
+  <li style="margin: 0 0 0.4em 0;">Structure and architecture of CosmoLattice.</li>
   <li style="margin: 0;">
-    <strong>Simulation of interacting fields in expanding backgrounds:</strong>
+    Simulation of interacting fields in expanding backgrounds:
     <ul style="line-height: 1.2; margin-top: 0.2em; margin-bottom: 0;">
       <li style="margin: 0;">Scalar field dynamics with general potentials.</li>
       <li style="margin: 0;">Abelian gauge fields coupled to charged scalars.</li>
@@ -43,4 +42,6 @@ The workshop was aimed at graduate students, PhD students, and postdoctoral rese
   <li style="margin: 0;">F. Torrenti ........... Universidad Carlos III de Madrid, Spain</li>
 </ol>
 
+<!-- 
 There was no registration fee for the workshop. Participants were requested to bring a personal laptop in order to take part in the hands-on sessions. Access to a cluster to run parallelized simulations was also recommended.
+ -->

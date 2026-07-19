@@ -1,14 +1,13 @@
-## **3rd $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ School**
+<!-- ## **3rd $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ School** -->
+<!-- **3rd School: 2025 (Daejeon)** -->
 
-The 3rd $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ School was held at the Institute for Basic Science (IBS) in Daejeon, South Korea, during Sept. 22-26 2025.
-
-The school offered a pedagogical introduction to lattice field theory techniques and their application to simulations of interacting fields in an expanding Universe. Participants were also introduced to <a href="https://cosmolattice.net" target="_blank" rel="noopener noreferrer">$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$</a>, an open-access code designed for such simulations. The school provided a comprehensive guide to using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to model the non-linear dynamics of scalar and gauge fields in cosmological contexts.
+The **3rd $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ school** was held at the Institute for Basic Science (IBS) in Daejeon, South Korea, during Sept. 22-26 2025. The school offered a pedagogical introduction to lattice field theory techniques and their application to simulations of interacting fields in an expanding Universe. Participants were also introduced to <a href="https://cosmolattice.net" target="_blank" rel="noopener noreferrer">$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$</a>, an open-access code designed for such simulations. The school provided a comprehensive guide to using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to model the non-linear dynamics of scalar and gauge fields in cosmological contexts.
 
 The Indico page of the event was:
 
 <a href="https://indico.ific.uv.es/event/8110/" target="_blank" rel="noopener noreferrer">https://indico.ific.uv.es/event/8110/</a>
 
-Lecturers:
+Lectures were given by:
 
 <ol style="line-height: 1.2; margin-top: 0.4em; margin-bottom: 1em; margin-left: 1cm;">
   <li style="margin: 0;">J. Baeza-Ballesteros ........... DESY, Zeuthen, Germany</li>
@@ -32,7 +31,7 @@ Lecturers:
     <strong>Numerical algorithms for differential equations:</strong> Leapfrog, Verlet, Runge-Kutta, etc.
   </li>
   <li style="margin: 0 0 0.4em 0;">
-    <strong>Overview of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$:</strong> libraries, modularity, parallelization, etc.
+    <strong>Overview of CosmoLattice:</strong> libraries, modularity, parallelization, etc.
   </li>
   <li style="margin: 0 0 0.4em 0;">
     <strong>Lattice simulations of interacting fields in an expanding background:</strong>
@@ -62,6 +61,7 @@ Lecturers:
   <li style="margin: 0;"><strong>Scientific secretaries:</strong> Jorge Baeza-Ballesteros, Antonino S. Midiri.</li>
 </ul>
 
-There was no fee to participate in the school. The practice sessions required access to a personal laptop.
+<!-- There was no fee to participate in the school. The practice sessions required access to a personal laptop. -->
 
-![IBS logo](../assets/img/IBS.png){ style="max-width: 480px; width: 100%; height: auto;" }
+<!-- ![IBS logo](../assets/img/IBS.png){ style="max-width: 480px; width: 100%; height: auto;" } -->
+

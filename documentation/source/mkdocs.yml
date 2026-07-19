@@ -225,13 +225,20 @@ nav:
       #- "Appendix: CMake Flags (A & F, ALL)": "Manual/Appendix: CMake Flags.md"
       #- "List of Implemented Functions (A & F, ALL)": "Manual/List of Implemented Functions.md"
       #- "Under the Hood: Expression Templates  (A & F)": "Manual/Under the Hood: Expression Templates .md"
-  - CL Schools:
-      - "<span style='font-size:0.95em;'>&nbsp;&nbsp;Hands-On CosmoLattice Workshop (2026, Complutense, Madrid)</span>": "events/School2026.md"
-      - "3rd CL School (2025, IBS, Daejeon)": "events/School2025.md"
-      - "2nd CL School (2023, Online)": "events/School2023.md"
-      - "1st CL School (2022, IFIC, Valencia)": "events/School2022.md"
+  - CL-Events:
+        - "Overview": "events/EventsGuide.md"
+        - "<span style='font-weight:bold;'> CosmoLattice Schools </span>": # "events/Schools.md"
+            - "3rd School: 2025 (Daejeon)": "events/Schools/School2025.md"
+            - "2nd School: 2023 (Online)": "events/Schools/School2023.md"
+            - "1st School: 2022 (Valencia)": "events/Schools/School2022.md"
+        - "<span style='font-weight:bold;'> Other events</span>": # "events/Other.md"
+            - "Hands-On CL Workshop 2026": "events/Workshops/School2026.md"
+      # - "<span style='font-size:0.95em;'>Hands-On CosmoLattice Workshop (2026, Complutense, Madrid)</span>": "events/School2026.md"
+#       - "3rd CL School (2025, IBS, Daejeon)": "events/School2025.md"
+#       - "2nd CL School (2023, Online)": "events/School2023.md"
+#       - "1st CL School (2022, IFIC, Valencia)": "events/School2022.md"
   - People:
-      - "<span style='font-weight:bold;'>Developers </span>": "people/Developers.md"
+      - "<span style='font-weight:bold;'>Developers </span>": "people/People.md"
   - Publications:
       - "<span style='font-weight:bold;'>Developers </span>": "publications/Publications.md"
   - CL News:

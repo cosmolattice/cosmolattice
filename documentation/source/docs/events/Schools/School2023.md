@@ -1,13 +1,14 @@
-<!-- ## **2nd $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ School** -->
-## **2nd School: 2023 (Online)**
+<!-- **2nd $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ School** -->
 
-The 2nd $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ School was held online during Sept. 25-29 2023. The school provided a pedagogical introduction to lattice field theory techniques and their adaptation to simulate the dynamics of interacting fields in an expanding background. The lectures also introduced $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a public code for lattice simulations of early Universe scenarios. The program covered the use of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the non-linear dynamics of scalar and gauge fields in an expanding Universe, together with applications to inflation, preheating, gravitational wave production, non-minimally coupled scalar field dynamics, axion-like field dynamics, and related topics.
+The **2nd $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ school** was held online during Sept. 25-29 2023. The school provided a pedagogical introduction to lattice field theory techniques and their adaptation to simulate the dynamics of interacting fields in an expanding background.
+
+The lectures also introduced $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a public code for lattice simulations of early Universe scenarios. The program covered the use of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the non-linear dynamics of scalar and gauge fields in an expanding Universe, together with applications to inflation, preheating, gravitational wave production, non-minimally coupled scalar field dynamics, axion-like field dynamics, and related topics.
 
 The Indico page of the event was:
 
 <a href="https://indico.ific.uv.es/event/7055/" target="_blank" rel="noopener noreferrer">https://indico.ific.uv.es/event/7055/</a>
 
-Lectures were given by:
+Lecturers:
 
 <ol style="line-height: 1.2; margin-top: 0.4em; margin-bottom: 1em; margin-left: 1cm;">
   <li style="margin: 0;">J. Baeza-Ballesteros ....... IFIC, Valencia, Spain</li>
@@ -53,3 +54,4 @@ Lectures were given by:
     </ul>
   </li>
 </ul>
+
