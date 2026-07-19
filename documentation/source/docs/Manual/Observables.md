@@ -6,7 +6,7 @@ Before moving to the description of the output, we first note some general keywo
 
 -   `outputfile`: Folder to which all observable output files are saved. Defaults to the folder where the simulation is executed.
 
--   `print_headers`: If set to `true`, prints headers in the first line of the $\texttt{.txt}$ files, describing the content of each column. Headers are written for both average and power psectra output filed. Defaults to `false`. Does not have effect for measurements saved in HDF5 format.
+-   `print_headers`: If set to `true`, prints headers in the first line of the $\texttt{.txt}$ files, describing the content of each column. Headers are written for both average and power spectra output files. Defaults to `false`. Does not have effect for measurements saved in HDF5 format.
 
 -   `overwriteFiles`: If set to `true` overwrites already existing files from a previous simulation. Otherwise, the simulation will fail if files already exist. Defaults to `false` to prevent the deletion of previous results. Note that the directory does not get completely wiped, only those files that are used by the simulation.
 
@@ -55,7 +55,7 @@ For simulations with scalar doublets, `NSU2Doublet > 0`, one also gets:
 
 -   `average_norm_SU2Doublet_[nfld].txt`{ .cl-fname }
 
-    Containing measurements related to the norm of the scalar doublet, $|\Phi_{\texttt{nfld}}|^2=|\Phi_{\texttt{nfld},1}|^2+|\Phi_{\texttt{nfld},2}|^2+|\Phi_{\texttt{nfld},3}|^2+|\Phi_{\texttt{nfld},4}|^2$. One file is created per filed species, $\texttt{nfld}$. It contains:
+    Containing measurements related to the norm of the scalar doublet, $|\Phi_{\texttt{nfld}}|^2=|\Phi_{\texttt{nfld},1}|^2+|\Phi_{\texttt{nfld},2}|^2+|\Phi_{\texttt{nfld},3}|^2+|\Phi_{\texttt{nfld},4}|^2$. One file is created per field species, $\texttt{nfld}$. It contains:
 
     $\tilde{ \eta}$, $\langle |\tilde{\Phi}_{\texttt{nfld}} |\rangle$, $\langle | \tilde{\Phi}_{\texttt{nfld}}' |\rangle$, $\langle |\tilde{\Phi}_{\texttt{nfld}} |^2 \rangle$, $\langle |\tilde{\Phi}_{\texttt{nfld}}'|^{2} \rangle$, $\text{rms} (|\tilde{\Phi}_{\texttt{nfld}}|)$, $\text{rms} (|\tilde{\Phi}_{\texttt{nfld}}'|)$
     {: .cl-schema }
@@ -64,7 +64,7 @@ For simulations with scalar doublets, `NSU2Doublet > 0`, one also gets:
 
     Measurements related to each component of the scalar doublets. Four files are created per field species. They contain:
 
-    $\tilde{ \eta}$, $\langle \tilde{\Phi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\Phi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\Phi}_{\texttt{nfld}}^2 \rangle$, $\langle \tilde{\Phi}^{'2}_{\texttt{nfld}} \rangle$, $\text{rms} (\tilde{\Phi}_{\texttt{nfld}})$, $\text{rms} (\tilde{\Phi}'_{\texttt{nfld}})$
+    $\tilde{ \eta}$, $\langle \tilde{\Phi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\Phi}'_{\texttt{nfld}} \rangle$, $\langle \tilde{\Phi}_{\texttt{nfld}}^2 \rangle$, $\langle \tilde{\Phi}^{'2}_{\texttt{nfld}} \rangle$, $\text{rms} (\tilde{\Phi}_{\texttt{nfld}})$, $\text{rms} (\tilde{\Phi}'_{\texttt{nfld}})$
     {: .cl-schema }
 
 </div>
@@ -141,7 +141,7 @@ In addition to these files related to field averages, results for the evolution 
     $\tilde \eta$, $a$, $a'$, $a' / a$
     {: .cl-schema }
 
-    In addition, an extra column is added at the end for some particular cases. For simulations with non-minimal couplings to gravity, this last column contains the value of the Ricci scalar, $R$, as given in Eq.$~$(5) of [**Non-Minimal Interactions**](NMC.md). On the other hand, for simulatins of cosmic defects, the last column contains the value of the fattening factor, see Eq.$~$(16) of [**Cosmic Defects**](Defects.md).
+    In addition, an extra column is added at the end for some particular cases. For simulations with non-minimal couplings to gravity, this last column contains the value of the Ricci scalar, $R$, as given in Eq.$~$(5) of [**Non-Minimal Interactions**](NMC.md). On the other hand, for simulations of cosmic defects, the last column contains the value of the fattening factor, see Eq.$~$(16) of [**Cosmic Defects**](Defects.md).
 
 </div>
 
@@ -179,7 +179,7 @@ Finally, **energy averages** are also measured, together with information about 
 
 In addition to the averages presented above, which are generated automatically for any model containing the correct field content, some other quantities are measured when using one of the modules implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
-If simulations are run with **gravitational waves**, indicating `withGWs = true` in the parameter file when running the simulation, an addtional file is created containing an estimate of the total energy density of gravitational waves, see [**Gravitational Waves**](GW.md):
+If simulations are run with **gravitational waves**, indicating `withGWs = true` in the parameter file when running the simulation, an additional file is created containing an estimate of the total energy density of gravitational waves, see [**Gravitational Waves**](GW.md):
 
 <div class="grid cards cl-files" markdown>
 
@@ -373,7 +373,7 @@ for which snapshots of the field, its kinetic energy density and the total poten
 Each of these snapshots gets saved to a different binary file. For example, if `S` is specified, the potential energy is saved to the `snapshot_scalar_singlet.h5` file, as indicated in the table. This file contains a different hdf5 group for each scalar species, and each group contains a series of three-dimensional datasets named with the time at which the snapshot was taken. We recommend the user to take a look at the generated files to get familiar with these naming conventions.
 
 !!! note Compatibility note
-    In Cosmoattice versions previous to v2.0, snapshots were indicated using the `energy_snapshots` keyword. This is still supported for compatibility reasons, but will be removed in a future version.
+    In CosmoLattice versions previous to v2.0, snapshots were indicated using the `energy_snapshots` keyword. This is still supported for compatibility reasons, but will be removed in a future version.
 
 In addition to saving the three-dimensional distributions, since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ v2.0 it is possible to save snapshots of subvolumes or of a sparse grid, which may be very handy for visualization of very large simulations. For example, it is possible to only output a two-dimensional slice of the simulation. These options are controlled with the following three keywords, to which a set of $\texttt{NDim}$ integers needs to be indicated:
 

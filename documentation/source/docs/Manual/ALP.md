@@ -172,7 +172,7 @@ An axion-$U(1)$ simulation generates the standard output files for both the scal
 
 *   **Gauss Constraint**: The Gauss constraint evaluation is adapted to the specific axion-$U(1)$ expression given in Eq.$~$\eqref{eqn:Gauss_pralpha}, but the file output format remains identical to the standard gauge setup.
 *   **Energy Conservation**: When evolving within the *linear regime* (see Section [*Output*][sec_evolution-axionU1_linear_regime]), the total energy density calculation used for the energy conservation check does not include the contribution from the gauge sector.
-*   **Chiral Spectra**: If `flagChiral = true`, the module generates additional output files containing the chiral spectra of the gauge field and conjugate momentum.
+*   **Chiral Spectra**: If `flagChiralPS = true`, the module generates additional output files containing the chiral spectra of the gauge field and conjugate momentum.
 
 The procedure for computing the power spectra follows the standard methodology of CosmoLattice. The additional step required in this module consists of projecting the gauge fields and their conjugate momenta from the Cartesian basis, $(A_i, E_i)$, into the chiral basis, $(A^{\pm}, E^{\pm})$. 
 

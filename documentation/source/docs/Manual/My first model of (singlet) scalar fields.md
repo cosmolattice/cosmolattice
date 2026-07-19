@@ -355,11 +355,11 @@ The code generates three different kinds of output files, classified according t
 
 -   **Averages**
 
-    Volume-averages of field quantities (e.g. mean amplitude, variance), or other quantities that are independent of the lattice site (e.g. scale factor). Their printing frequency is controlled by the parameter `tOutpufFreq`.
+    Volume-averages of field quantities (e.g. mean amplitude, variance), or other quantities that are independent of the lattice site (e.g. scale factor). Their printing frequency is controlled by the parameter `tOutputFreq`.
 
 -   **Spectra**
 
-    Binned spectra of fields and other quantities in momentum space. Their printing frequency is controlled by the parameter `tOutpufInfreq`. Their computation is generally more time-consuming than averages, as they imply Fourier transforming the whole lattice forth and back.
+    Binned spectra of fields and other quantities in momentum space. Their printing frequency is controlled by the parameter `tOutputInfreq`. Their computation is generally more time-consuming than averages, as they imply Fourier transforming the whole lattice forth and back.
 
 -   **Snapshots**
 

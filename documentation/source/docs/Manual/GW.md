@@ -271,7 +271,8 @@ In addition, GWs are synchronized before measurement, similarly to matter fields
 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ makes it possible to keep track of the evolution of the energy density of GWs, both its total value and its spectral density. Before explaning how they are measured in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, we briefly review the relevant lattice definitions.
 
-**GW observables on the lattice** { #subsec_GWobservablesLattice }
+[](){ #subsec_GWobservablesLattice }
+**GW observables on the lattice**
 
 On the lattice, the GW energy density is defined as
 [](){ #eq_GWrhoLattice }
@@ -363,9 +364,10 @@ h'_{ij}h_{ij}^{\prime *}
 ```
 where ${\tt v}'$ and ${\tt P}$ are matrices with entries $({\tt v}')_{ij}=v'_{ij}$ and $({\tt P})_{ij} = P^{\rm L}_{ij}$. This expression slightly simplifies in the case of a real TT projector.
 
-**GW observables in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** { #subsec_GWobservablesLattice }
+[](){ #subsec_GWobservablesCL }
+**GW observables in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$**
 
-Measurements of the GW energy density are automatically performed for simulations with GWs with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. If the keyword `withGWs = true` is especified in the parameter file, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will generate, in addition to the measurements related of the matter sector, two GW-related output files, saved inside the same directory as specified by `outputfile`:
+Measurements of the GW energy density are automatically performed for simulations with GWs with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. If the keyword `withGWs = true` is specified in the parameter file, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will generate, in addition to the measurements related of the matter sector, two GW-related output files, saved inside the same directory as specified by `outputfile`:
 
 <div class="grid cards cl-files" markdown>
 
@@ -391,7 +393,7 @@ Measurements of the GW energy density are automatically performed for simulation
 
 </div>
 
-For both outputs, the observables are determined after TT projecting the auxiliary fields used by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, using Eq.$~$\eqref{eq_GWTraceFormula}}. The type of projector used is controlled using the `GWprojectorType` keyword in the parameter file. This can take three different values, corresponding to the three choices of lattice momenta in Eq.$~$\eqref{eq_GWRealProjector}:
+For both outputs, the observables are determined after TT projecting the auxiliary fields used by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, using Eq.$~$\eqref{eq_GWTraceFormula}. The type of projector used is controlled using the `GWprojectorType` keyword in the parameter file. This can take three different values, corresponding to the three choices of lattice momenta in Eq.$~$\eqref{eq_GWRealProjector}:
 
 
 | **Value** <div style="width:150px"> | **Projector type** |
