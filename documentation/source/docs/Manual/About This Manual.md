@@ -30,104 +30,113 @@ which we refer to, colloquially, as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ 
 
 -----------------
 
-The present manual is structured as follows:
+The present manual is structured as follows (click any chapter for its full description):
 
-<div class="cl-prose-grid cl-chapters" markdown>
+<div class="cl-toc" markdown>
 
-<div class="cl-prose-card cl-start cl-v-all" markdown>
+Start here
+{: .cl-toc-group }
 
-**[Introduction](Introduction to CosmoLattice.md)**
-{: .cl-minihead }
+<div class="cl-toc-row cl-v-all" markdown>
+
+**[Introduction](Introduction to CosmoLattice.md)** <span class="cl-toc-brief">code structure, features, and the field equations being solved</span>
+{: .cl-toc-line }
 
 Provides an overview on $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, introducing the file structure of the code, and the continuum version of the field equations, as well as features/capabilities of the code, that sucessive versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ have gone incorporating in time. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and **we strongly recommend newcomers to read it**.
 
 </div>
 
-<div class="cl-prose-card cl-start cl-ch-scalar cl-v-all" markdown>
+<div class="cl-toc-row cl-ch-scalar cl-v-all" markdown>
 
-**[Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md)**
-{: .cl-minihead }
+**[Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md)** <span class="cl-toc-brief">your first run: compile, define a model, set parameters, read the output</span>
+{: .cl-toc-line }
 
 Presents all necessary steps to run an example model with interacting singlet scalar fields. **This chapter is particularly relevant for a newbie**, as we introduce the concept of *program variables*, relevant for choosing appropriate re-scalings of both field and space-time variables, and we review how to to compile and run $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, how to define a new model, how to introduce the different parameters of the simulation, and how to interpret the output produced by the code. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
 </div>
 
-<div class="cl-prose-card cl-ch-u1 cl-v-all" markdown>
+Physics modules
+{: .cl-toc-group }
 
-**[Scalar-Gauge Dynamics](My first model of gauge fields.md)**
-{: .cl-minihead }
+<div class="cl-toc-row cl-ch-u1 cl-v-all" markdown>
+
+**[Scalar-Gauge Dynamics](My first model of gauge fields.md)** <span class="cl-toc-brief">scalars charged under Abelian U(1) and non-Abelian SU(2) symmetries</span>
+{: .cl-toc-line }
 
 Explains how to simulate models with scalar fields interacting among themselves and charged under a U(1) gauge symmetry (and hence interacting also with Abelian gauge fields), and under a SU(2) gauge symmetry [and thus interacting also with non-Abelian SU(2) gauge fields]. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
 </div>
 
-<div class="cl-prose-card cl-ch-alp cl-v-20" markdown>
+<div class="cl-toc-row cl-ch-alp cl-v-20" markdown>
 
-**[Axion-Gauge Dynamics](ALP.md)**
-{: .cl-minihead }
+**[Axion-Gauge Dynamics](ALP.md)** <span class="cl-toc-brief">an axion-like particle coupled to a gauge sector via $\phi F\tilde F$</span>
+{: .cl-toc-line }
 
 Discusses how to simulate scenarios in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ where there are an axion-like particle (ALP) and an Abelian gauge sector, interacting through the coupling $\phi F\tilde F$. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
 
 </div>
 
-<div class="cl-prose-card cl-ch-defects cl-v-20" markdown>
+<div class="cl-toc-row cl-ch-defects cl-v-20" markdown>
 
-**[Cosmic Defects](Defects.md)**
-{: .cl-minihead }
+**[Cosmic Defects](Defects.md)** <span class="cl-toc-brief">cosmic strings and domain walls, and how to reach scaling faster</span>
+{: .cl-toc-line }
 
 Discusses how the creation of cosmic defects can be studied with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. We explain techniques to accelerate the achievement of *scaling* in a cosmic defect network (in particular for cosmic strings and domain walls), and also introduce specific observables for each type of defect. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
 
 </div>
 
-<div class="cl-prose-card cl-ch-nmc cl-v-20" markdown>
+<div class="cl-toc-row cl-ch-nmc cl-v-20" markdown>
 
-**[Non-minimal Scalar Fields Dynamics](NMC.md)**
-{: .cl-minihead }
+**[Non-minimal Scalar Fields Dynamics](NMC.md)** <span class="cl-toc-brief">non-minimal couplings to gravity and non-canonical kinetic terms</span>
+{: .cl-toc-line }
 
 Expands over previous sections on scalar fields, explaining how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can also deal with non-canonical interactions of scalar fields, either non-minimally coupled to gravity via $\phi^2 R$, or with non-minimal kinetic terms, $\mathcal{G}_{ab}\partial_{\mu}\phi_a \partial^{\mu}\phi_b$. This sections requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
 
 </div>
 
-<div class="cl-prose-card cl-ch-gw cl-v-20r" markdown>
+<div class="cl-toc-row cl-ch-gw cl-v-20r" markdown>
 
-**[Gravitational Wave Dynamics](GW.md)**
-{: .cl-minihead }
+**[Gravitational Wave Dynamics](GW.md)** <span class="cl-toc-brief">the gravitational waves sourced by your scalar/gauge simulation</span>
+{: .cl-toc-line }
 
 Explains how to use the gravitational wave (GW) module of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, so that the production of GWs can be  computed in simulations with scalar and/or gauge fields. While this section is suitable for *versions 1.1, 1.2* and *1.3* of the code, we recommend to use instead $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
 
 </div>
 
-<div class="cl-prose-card cl-v-all" markdown>
+Setup & internals
+{: .cl-toc-group }
 
-**[Initial Conditions](IC.md)**
-{: .cl-minihead }
+<div class="cl-toc-row cl-v-all" markdown>
+
+**[Initial Conditions](IC.md)** <span class="cl-toc-brief">how the initial field fluctuations are set, including arbitrary spectra</span>
+{: .cl-toc-line }
 
 Explains how to set up the initial condition of the different fields that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. This includes arbitrary spectra of scalar and/or gauge fields, and in the case of scalar-gauge theories ([Abelian $U(1)$ Scalar-Gauge Dynamics](My first model of gauge fields.md) and [Non-Abelian $SU(2)$ Scalar-Gauge Dynamics](My first model of gauge fields.md)). This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, though different features or field content requires different code versions, as we will indicate in each case.
 
 </div>
 
-<div class="cl-prose-card cl-v-20" markdown>
+<div class="cl-toc-row cl-v-20" markdown>
 
-**[Simulations in (2+1) and (1+1) dimensions](Scalars_n_dims.md)**
-{: .cl-minihead }
+**[Simulations in (2+1) and (1+1) dimensions](Scalars_n_dims.md)** <span class="cl-toc-brief">scalar field dynamics on lower-dimensional lattices</span>
+{: .cl-toc-line }
 
 Explains how to simulate scalar field dynamics in (2+1) and (1+1) dimensions. This section requires $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *version 2.0* or above.
 
 </div>
 
-<div class="cl-prose-card cl-v-all" markdown>
+<div class="cl-toc-row cl-v-all" markdown>
 
-**[What $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ does in detail](What CosmoLattice does in detail.md)**
-{: .cl-minihead }
+**[What $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ does in detail](What CosmoLattice does in detail.md)** <span class="cl-toc-brief">under the hood: initialization, evolution algorithms, observables</span>
+{: .cl-toc-line }
 
 Elaborates on the physics captured by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including details on how fields are initialized, how the equations of motion are solved, and what are the relevant observables that can be measured in a run. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
 </div>
 
-<div class="cl-prose-card cl-v-all" markdown>
+<div class="cl-toc-row cl-v-all" markdown>
 
-**[Parallelization](Parallelization.md) & [HDF5: Output and Backups](HDF5: Output and Backups.md)**
-{: .cl-minihead }
+**[Parallelization](Parallelization.md) & [HDF5: Output and Backups](HDF5: Output and Backups.md)** <span class="cl-toc-brief">running on many cores; output files and backups</span>
+{: .cl-toc-line }
 
 Describe some of the technical features implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including its parallel support and back-up options. These sections apply to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 

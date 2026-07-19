@@ -108,6 +108,49 @@
         if (card.classList.contains("cl-start")) setOpen(true);
     }
 
+    // Manual-landing contents rail: each .cl-toc-row collapses to its
+    // summary line (p.cl-toc-line); a chevron — or clicking the row —
+    // reveals the full chapter description underneath.
+    function setUpTocRow(row) {
+        var line = row.querySelector(".cl-toc-line");
+        if (!line) return;
+        var hasBody = Array.prototype.some.call(row.children, function (el) {
+            return el !== line;
+        });
+        if (!hasBody) return;
+
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "cl-toc-toggle";
+        btn.setAttribute("aria-expanded", "false");
+        btn.setAttribute("aria-label", "Show chapter description");
+        var chevron = document.createElement("span");
+        chevron.className = "cl-prose-chevron";
+        chevron.setAttribute("aria-hidden", "true");
+        btn.appendChild(chevron);
+        line.appendChild(btn);
+
+        function setOpen(open) {
+            row.classList.toggle("cl-open", open);
+            btn.setAttribute("aria-expanded", open ? "true" : "false");
+            btn.setAttribute("aria-label", open ? "Hide chapter description"
+                                                : "Show chapter description");
+        }
+
+        btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            setOpen(!row.classList.contains("cl-open"));
+        });
+
+        // The whole collapsed row is clickable — but never hijack a link
+        // click, and never collapse from the row body (it would fire while
+        // selecting text).
+        row.addEventListener("click", function (e) {
+            if (row.classList.contains("cl-open") || e.target.closest("a")) return;
+            setOpen(true);
+        });
+    }
+
     // Whole-section folds: headings tagged { .cl-sec-fold } keep their place
     // (and their TOC entry) but collapse everything up to the next heading.
     // Collapsing uses height:0 instead of display:none so MathJax typesets
@@ -192,6 +235,12 @@
             grid.querySelectorAll(".cl-prose-card").forEach(function (card) {
                 setUpCard(card, grid);
             });
+        });
+        document.querySelectorAll(".md-typeset .cl-toc").forEach(function (rail) {
+            if (rail.dataset.clTocDone) return;
+            rail.dataset.clTocDone = "1";
+            rail.classList.add("cl-managed");
+            rail.querySelectorAll(".cl-toc-row").forEach(setUpTocRow);
         });
         document.querySelectorAll(".md-typeset p.cl-fold").forEach(function (p) {
             if (p.dataset.clFoldDone) return;
