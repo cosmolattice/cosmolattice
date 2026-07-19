@@ -4,12 +4,26 @@ In this section we explain, step by step, how to implement a model of interactiv
 
 After following this section, the reader will have enough information to implement in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ any model involving interacting singlet-scalar fields. Readers interested in including gauge fields and their interactions with charged scalars, should go to Section [Scalar-gauge interactions](My first model of gauge fields.md). However, we only recommend to jump into scalar-gauge theories at this point, if the reader is already familiar with the lattice formulation of scalar-scalar interactions for singlets, that we provide precisely here below. 
 
-This section is structured as follows. In Section [*Program variables*][subsec_LatticeScalars] we first introduce the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer. In Section [*The model*][sec_ScTheModel] we present our example model and define its corresponding program variables and program potential. In Section [*My first run*][sec_MyFirstRun] we explain how to compile and run the code. After that, in Section [*The model file*][sec_TheModelFile] we walk the user through the *model file*, where the model details are actually implemented. Finally, in Section [*The singlet-scalar physics implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*][sec_WhatHappensAuto], we present a summarized picture of what happens 'under the hood' in the code, discussing details on how the fields are initialized in a simulation, and how their dynamical evolution is solved. <!-- and how different measurements are obtained.  -->
+This section is structured as follows.
+
+<div class="grid cards cl-roadmap" markdown>
+
+-   [*Program variables*][subsec_LatticeScalars] first introduces the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer.
+
+-   [*The model*][sec_ScTheModel] presents our example model and define its corresponding program variables and program potential.
+
+-   [*My first run*][sec_MyFirstRun] explains how to compile and run the code.
+
+-   [*The model file*][sec_TheModelFile] walks the user through the *model file*, where the model details are actually implemented.
+
+-   [*The singlet-scalar physics implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*][sec_WhatHappensAuto], presents a summarized picture of what happens 'under the hood' in the code, discussing details on how the fields are initialized in a simulation, and how their dynamical evolution is solved.
+
+</div> <!-- and how different measurements are obtained.  -->
 
 
 <!-- </div> -->
 
-### **Program variables** { #subsec_LatticeScalars }
+### **Program variables** { #subsec_LatticeScalars .cl-sec-fold }
 
 To describe the expansion of the universe, we consider a flat *Friedmann-Lemâitre-Robertson-Walker* (FLRW) background metric, described by the line element
 [](){ #eq_FLRWmetric }
@@ -35,7 +49,13 @@ where $a(\eta)$ is the scale factor, $\delta_{ij}$ is the Euclidean metric, and 
     
     where $f_*$ and $\omega_*$ are two constants with dimensions of energy. Program variables, and any quantity defined in terms of them, will be tagged in this manual with the *diacritic* symbol '$\sim$'. The program variable re-scalings for space and time variables, $d\tilde\eta, d\tilde x^i$, will be universal in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, independently of the matter field content. Program variable re-scalings for matter fields other than singlet scalar fields, will be introduced later on, when dealing *e.g.* with gauge fields or fluid dynamics. 
 
+**Choosing $f_*$ and $\omega_*$**
+{: .cl-minihead }
+
 Before simulating any particular model with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, the user must choose a certain set of values for $\{f_*,\omega_*,\alpha\}$, which will define the program variables used on the lattice via Eq.$~$\eqref{eq_FieldSpaceTimeNaturalVariables}. <!-- Eq. \eqref{eq_FieldSpaceTimeNaturalVariables}. --> The choice of $f_*$ and $\omega_*$ can be made arbitrary, as they only re-scale variables by constant factors. However, if we simulate a scenario in which, e.g. a resonance is triggered by an oscillatory field, it can be convenient to set $f_*$ and $\omega_*$ to the initial amplitude and oscillation frequency of that field respectively. This way, the numbers produced by the code will be close to unity, which will help with the interpretation of results. In general, in every scenario there is always a natural choice (at least of the order of magnitude) of $f_*$ and $\omega_*$, related to the typical field amplitudes and time scales of the problem. Choosing such natural values will help to interpret more easily --in a more intuitive physical manner--, the numbers that the code outputs.
+
+**Choosing $\alpha$**
+{: .cl-minihead }
 
 A correct choice of $\alpha$ is perhaps more relevant and subtle. A wrong choice of $\alpha$ could actually spoil the stability of the numerical solution at late times. To see this, let us go back to the case of an oscillating homogeneous scalar field that dominates the energy budget of the Universe. Typical evolution algorithms operate with a constant time step, so it would be a good idea to choose $\alpha$ so that the oscillation frequency of the dominant field species is approximately constant, when expressed in the corresponding $\alpha$-time. In this way, we will be able to resolve each physical oscillation with a similar accuracy. For example, let us consider the common case of an oscillatory field, with monomial potential $V(\phi) \propto \phi^p$, that sources the expansion of the Universe. As described in $\mathtt{The~Art{\text -}I}$[@Figueroa_2020rrl] [see there discussion around $Eqs.\,(457)-(464)$], the oscillation frequency will be initially constant if we choose
 [](){ #eq_Alpha-PowLaw }
@@ -48,10 +68,19 @@ A correct choice of $\alpha$ is perhaps more relevant and subtle. A wrong choice
 
 We therefore recommend to use Eq. \eqref{eq_Alpha-PowLaw} for any scenario where there is an energetically dominant scalar field with potential $V(\phi) \propto \phi^p$. A more convenient choice of $\alpha$ in other scenarios must be done in a case by case basis.
 
-**Observation:** Readers familiar with $\texttt{LatticeEasy}$[@Felder_2000hq], might have notticed that the above transformations are similar to those carried out in that code to define their program variables, $\tilde\phi \equiv a^{r}A\phi, d\tilde\eta \equiv a^{s}Bdt,  d\tilde \equiv x^i B dx^i$, if we set $A = 1/f_*$, $B= \omega_*$, $r=0$, and $s=-\alpha$ in their notation. As we will see, contrary to $\texttt{LatticeEasy}$, the evolution algorithms implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *don't require a conformal rescaling of the fields*, so we do not need to introduce a parameter analogous to $r$.
+??? note "Observation — relation to LatticeEasy"
+    Readers familiar with $\texttt{LatticeEasy}$[@Felder_2000hq], might have notticed that the above transformations are similar to those carried out in that code to define their program variables, $\tilde\phi \equiv a^{r}A\phi, d\tilde\eta \equiv a^{s}Bdt,  d\tilde \equiv x^i B dx^i$, if we set $A = 1/f_*$, $B= \omega_*$, $r=0$, and $s=-\alpha$ in their notation. As we will see, contrary to $\texttt{LatticeEasy}$, the evolution algorithms implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *don't require a conformal rescaling of the fields*, so we do not need to introduce a parameter analogous to $r$.
 
 
-### **A simple model** { #sec_ScTheModel }
+### **A simple model** { #sec_ScTheModel .cl-sec-fold }
+
+<div class="cl-facts" markdown>
+[example model: lphi4](#sec_TheModelFile){ .cl-fact }
+[2 scalar fields](#eq_ScalarActionCont){ .cl-fact }
+[2 potential terms](#eq_potentialExampleI){ .cl-fact }
+[quartic inflaton + interaction](#eq_potentialExampleI){ .cl-fact }
+[preheating scenario](#sec_MyFirstRun){ .cl-fact }
+</div>
 
 We will consider a preheating scenario for illustrative purposes, consisting of an inflaton $\phi$ with quartic potential $V(\phi) \propto \phi^4$, coupled to a secondary massless scalar field $\chi$ through a quadratic interaction $\propto  \phi^2\chi^2$. We denote the total number of scalar fields in a model as $N_s$, so in our present example $N_s=2$. The action of the field theory we want so simulate in this case is
 [](){ #eq_ScalarActionCont }
@@ -82,39 +111,45 @@ The field equations of motion in $\alpha$-time read <!-- [@Figueroa_2020rrl] -->
 \end{align}
 ```
 
-with the evolution of the scale factor $a(\eta)$ given by the Friedmann equations. If these two fields constitute the only energy sources in the Universe (or at least the dominant ones), either of the Friedmann equations
-[](){ #eq_sfEOM }
-[](){ #eq_sfEOM_II }
-```math
-\begin{align}\label{eq_sfEOM}
-\mathcal{H}^2 \equiv  \left({a'\over a}\right)^2 &=  \frac{a^{2 \alpha}}{3 m_p^2}\left\langle  {K}  + {G} +  {V} \right\rangle,\\
-\label{eq_sfEOM_II}
-{a''\over a} &= \frac{a^{2 \alpha}}{3 m_p^2}\left\langle (\alpha-2)  {K} + \alpha  {G} + (\alpha + 1)  {V}  \right\rangle  ,  %\tag{35}
-\end{align}
-```
+with the evolution of the scale factor $a(\eta)$ given by the Friedmann equations, which take one of two forms depending on the scenario:
 
-can be solved self-consistently, together with the fields' equations of motion. Here $\langle \dots \rangle$ indicates a volume average, and $K$ and $G$ are the total kinetic and gradient energies. All scalar fields contribute to these quantities as $K \equiv \sum_{n=0}^{N_s-1} {K}^{(n)}$ and $G \equiv \sum_{n=0}^{N_s-1} {G}^{(n)}$, with
-[](){ #eq_KG } 
-```math
-\begin{equation}
-{K}^{(n)} = \frac{1}{2 a^{2\alpha} } \phi_n^{'2}  ~, \hspace{0.4cm} {G}^{(n)} = \frac{1}{2 a^2} \sum_i (\nabla_i \phi_n)^2  ~, %\tag{36}
-\label{eq_KG}
-\end{equation}
-```
-where $\phi_0 \equiv \phi$ and $\phi_1 \equiv \chi$. 
+=== "Self-consistent expansion"
+
+    If these two fields constitute the only energy sources in the Universe (or at least the dominant ones), either of the Friedmann equations
+    [](){ #eq_sfEOM }
+    [](){ #eq_sfEOM_II }
+    ```math
+    \begin{align}\label{eq_sfEOM}
+    \mathcal{H}^2 \equiv  \left({a'\over a}\right)^2 &=  \frac{a^{2 \alpha}}{3 m_p^2}\left\langle  {K}  + {G} +  {V} \right\rangle,\\
+    \label{eq_sfEOM_II}
+    {a''\over a} &= \frac{a^{2 \alpha}}{3 m_p^2}\left\langle (\alpha-2)  {K} + \alpha  {G} + (\alpha + 1)  {V}  \right\rangle  ,  %\tag{35}
+    \end{align}
+    ```
+
+    can be solved self-consistently, together with the fields' equations of motion. Here $\langle \dots \rangle$ indicates a volume average, and $K$ and $G$ are the total kinetic and gradient energies. All scalar fields contribute to these quantities as $K \equiv \sum_{n=0}^{N_s-1} {K}^{(n)}$ and $G \equiv \sum_{n=0}^{N_s-1} {G}^{(n)}$, with
+    [](){ #eq_KG }
+    ```math
+    \begin{equation}
+    {K}^{(n)} = \frac{1}{2 a^{2\alpha} } \phi_n^{'2}  ~, \hspace{0.4cm} {G}^{(n)} = \frac{1}{2 a^2} \sum_i (\nabla_i \phi_n)^2  ~, %\tag{36}
+    \label{eq_KG}
+    \end{equation}
+    ```
+    where $\phi_0 \equiv \phi$ and $\phi_1 \equiv \chi$.
+
+=== "Fixed-background expansion"
+
+    In other scenarios, one could have the expansion of the Universe to be fixed by an external, energetically-dominant fluid with (constant) equation of state $w$. In this case, the evolution of the scale factor and the Hubble parameter in program variables is given by the following functions,
+    [](){ #eq_ScaleFactorPowerLaw }
+    ```math
+    \begin{equation}
+    %\tag{37}
+    a(\tilde \eta) = a (\tilde \eta_* ) \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde\eta_*) \right)^p  ,\hspace{0.3cm} \mathcal{H}(\eta) = {\mathcal{H}_*\over \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde \eta_*) \right)}   ,\hspace{0.5cm} p \equiv \frac{2}{3(1 + \omega) - 2 \alpha }  .
+    \label{eq_ScaleFactorPowerLaw}
+    \end{equation}
+    ```
 
 !!! note
     The volume average in Eqs. \eqref{eq_sfEOM}, \eqref{eq_sfEOM_II} must be considered over length scales sufficiently large compared to the excited wavelengths in the matter fields. Only then we obtain a well-defined notion of a ’homogeneous and isotropic’ expanding background, within the given volume.
-
-In other scenarios, one could have the expansion of the Universe to be fixed by an external, energetically-dominant fluid with (constant) equation of state $w$. In this case, the evolution of the scale factor and the Hubble parameter in program variables is given by the following functions,
-[](){ #eq_ScaleFactorPowerLaw }
-```math
-\begin{equation}
-%\tag{37}
-a(\tilde \eta) = a (\tilde \eta_* ) \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde\eta_*) \right)^p  ,\hspace{0.3cm} \mathcal{H}(\eta) = {\mathcal{H}_*\over \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde \eta_*) \right)}   ,\hspace{0.5cm} p \equiv \frac{2}{3(1 + \omega) - 2 \alpha }  .
-\label{eq_ScaleFactorPowerLaw}
-\end{equation}
-```
 
 As mentioned before, numerical simulations are carried out in the dimensionless program variables defined in Eq. \eqref{eq_FieldSpaceTimeNaturalVariables}. Therefore, we need to choose appropriate values for $\{ f_*, \omega_*, \alpha\}$ in this model. We take them as follows,
 [](){ #eq_lphi4-ProgVar }
@@ -194,11 +229,14 @@ and their partial contributions as ${\widetilde E}_K^{(n)}$, ${\widetilde E}_G^{
 
 We note that the numerical schemes implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ use the second-order differential Eq. \eqref{eq_NewFriedmannEQsII} to solve for the scale factor, whereas Eq. \eqref{eq_NewFriedmannEQsI} is used as a *constraint* equation to monitor the accuracy of the obtained solution.
 
-### **My first run** { #sec_MyFirstRun }
+### **My first run** { #sec_MyFirstRun .cl-sec-fold }
 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with a set of ready-to-run models, which are available in the folder $\texttt{models/}.~$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. \eqref{eq_potentialExampleI} [more precisely,  the program potential given in Eq. \eqref{eq_PotNat}]. We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
 
 <!-- #### Compilation -->
+
+<div class="cl-hero" markdown>
+
 **Compilation**
 
 First, we need to choose the location where the code will be compiled. This can be anywhere on your machine. 
@@ -222,6 +260,18 @@ Some explanations are of order.  The last argument of the `cmake` command is the
 
 At this point, if everything went smoothly, you should have generated an executable named $\texttt{lphi4}$. 
 
+[](){ #subsec_Input-Scalars }
+**Running the program with an input parameter file**
+
+Now that we have generated the executable $\texttt{lphi4}$, we are ready to run our first simulation as follows (<span style="color:red;">**CHANGE ?**</span>):
+```bash
+./lphi4 input=../models/parameter-files/lphi4.in
+```
+
+This will launch the model $\texttt{lphi4}$ with the parameters specified in the input file $\texttt{lphi4.in}$ located in $\texttt{models/parameter-files/}$.
+
+</div>
+
 <!-- If this is the case, move on to the next section. If not, continue reading. -->
 
 <!-- #### Troubleshooting
@@ -243,16 +293,7 @@ If this solves your problem, you can avoid having to specify the FFTW path each 
 where, again $\texttt{/path/to/fftw3/}$ is the path where fftw3 is located.
 -->
 
-<!-- #### Running the program with an input parameter file { #subsec_Input-Scalars } -->
-[](){ #subsec_Input-Scalars }
-**Running the program with an input parameter file**
-
-Now that we have generated the executable $\texttt{lphi4}$, we are ready to run our first simulation as follows (<span style="color:red;">**CHANGE ?**</span>):
-```bash
-./lphi4 input=../models/parameter-files/lphi4.in
-```
-
-This will launch the model $\texttt{lphi4}$ with the parameters specified in the input file $\texttt{lphi4.in}$ located in $\texttt{models/parameter-files/}$. Let us have a look at the input parameter file:
+Let us have a look at the input parameter file:
 
 $\texttt{models/parameter-files/lphi4.in}$
 
@@ -310,33 +351,67 @@ An exhaustive list of all available parameters is given in Appendix [Appendix: P
 
 The code generates three different kinds of output files, classified according to the information they contain:
 
--  **Averages:** Volume-averages of field quantities (e.g. mean amplitude, variance), or other quantities that are independent of the lattice site (e.g. scale factor). Their printing frequency is controlled by the parameter `tOutpufFreq`.
--  **Spectra:** Binned spectra of fields and other quantities in momentum space. Their printing frequency is controlled by the parameter `tOutpufInfreq`. Their computation is generally more time-consuming than averages, as they imply Fourier transforming the whole lattice forth and back.
--  **Snapshots:** Values of a certain quantity (such as energy components) at all points of the lattice. These files are printed in HDF5 format, and their printing frequency is controlled by the parameter `tOutputRareFreq`. Their computation is also typically  time-consuming, and the produced files are significantly heavier than other files.
+<div class="grid cards cl-outkinds" markdown>
+
+-   **Averages**
+
+    Volume-averages of field quantities (e.g. mean amplitude, variance), or other quantities that are independent of the lattice site (e.g. scale factor). Their printing frequency is controlled by the parameter `tOutpufFreq`.
+
+-   **Spectra**
+
+    Binned spectra of fields and other quantities in momentum space. Their printing frequency is controlled by the parameter `tOutpufInfreq`. Their computation is generally more time-consuming than averages, as they imply Fourier transforming the whole lattice forth and back.
+
+-   **Snapshots**
+
+    Values of a certain quantity (such as energy components) at all points of the lattice. These files are printed in HDF5 format, and their printing frequency is controlled by the parameter `tOutputRareFreq`. Their computation is also typically  time-consuming, and the produced files are significantly heavier than other files.
+
+</div>
 
 When the simulated model contains only scalar singlets, the files generated by the simulation and the information they contain are the following:
 
--  $\texttt{average_energies.txt}$: Energy density volume-averaged components in the following order: (<span style="color:red;">**CHECK**</span>)
+<div class="grid cards cl-files" markdown>
 
-$\hspace{1cm}$ $\tilde{\eta}$, $\tilde{E}_K^{(0)}$, $\tilde{E}_G^{(0)}$, ... , $\tilde{E}_K^{(N_s-1)}$, $\tilde{E}_G^{(N_s-1)}$, $\tilde{E}_V^{(0)}$, ... , $\tilde{E}_V^{(N_p-1)}$, $\langle \tilde{\rho} \rangle$.
+-   `average_energies.txt`{ .cl-fname }
 
--  $\texttt{average_energy_conservation.txt}$:
+    Energy density volume-averaged components in the following order: (<span style="color:red;">**CHECK**</span>)
 
-$\hspace{1.5cm}$- If there is no expansion, it prints the relative degree of energy conservation as follows: $\tilde{\eta}$, $1 - \frac{\langle \tilde{\rho} (\tilde{\eta} ) \rangle}{\langle \tilde{\rho} (\tilde{\eta}_*  ) \rangle}$.
+    $\tilde{\eta}$, $\tilde{E}_K^{(0)}$, $\tilde{E}_G^{(0)}$, ... , $\tilde{E}_K^{(N_s-1)}$, $\tilde{E}_G^{(N_s-1)}$, $\tilde{E}_V^{(0)}$, ... , $\tilde{E}_V^{(N_p-1)}$, $\langle \tilde{\rho} \rangle$
+    {: .cl-schema }
 
-$\hspace{1.5cm}$- In the case of self-consistent expansion, it prints the degree of relative conservation of the Hubble constraint as follows [here LHS and RHS are the left and hand sides of Eq. \eqref{eq_NewFriedmannEQsI}]: $\tilde{\eta}$, $\frac{\langle\text{LHS} - \text{RHS}\rangle}{\langle \text{LHS} + \text{RHS}\rangle}$, $\langle  \text{LHS} \rangle$, $\langle \text{RHS} \rangle$.
+-   `average_energy_conservation.txt`{ .cl-fname }
 
--  $\texttt{average_scalar_[n].txt}$: One file is produced for each individual scalar field, containing the following averages: 
+    If there is no expansion, it prints the relative degree of energy conservation as follows:
 
-$\hspace{1cm}$ $\tilde{ \eta}$, $\langle \tilde{\phi}_n \rangle$, $\langle \tilde{\phi}'_n \rangle$, $\langle \tilde{\phi}_n^2 \rangle$, $\langle \tilde{\phi}^{'2}_n \rangle$, $\text{rms} (\tilde{\phi}_n)$, $\text{rms} (\tilde{\phi}'_n)$.
+    $\tilde{\eta}$, $1 - \frac{\langle \tilde{\rho} (\tilde{\eta} ) \rangle}{\langle \tilde{\rho} (\tilde{\eta}_*  ) \rangle}$
+    {: .cl-schema }
 
--  $\texttt{average_scale_factor.txt}$: Scale factor and their derivatives: 
+    In the case of self-consistent expansion, it prints the degree of relative conservation of the Hubble constraint as follows [here LHS and RHS are the left and hand sides of Eq. \eqref{eq_NewFriedmannEQsI}]:
 
-$\hspace{1cm}$ $\tilde{\eta}$, $a$, $a'$, $a' \over a$.
+    $\tilde{\eta}$, $\frac{\langle\text{LHS} - \text{RHS}\rangle}{\langle \text{LHS} + \text{RHS}\rangle}$, $\langle  \text{LHS} \rangle$, $\langle \text{RHS} \rangle$
+    {: .cl-schema }
 
--  $\texttt{spectra_scalar_[nfld].txt}$: One file is produced for each individual scalar field, in which the following data is printed: 
+-   `average_scalar_[n].txt`{ .cl-fname }
 
-$\hspace{1cm}$ $\tilde{k}$,  $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$, $\widetilde{\Delta}_{\tilde \phi'} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{bin}$ (multiplicity = lattice sites/bin), 
+    One file is produced for each individual scalar field, containing the following averages:
+
+    $\tilde{ \eta}$, $\langle \tilde{\phi}_n \rangle$, $\langle \tilde{\phi}'_n \rangle$, $\langle \tilde{\phi}_n^2 \rangle$, $\langle \tilde{\phi}^{'2}_n \rangle$, $\text{rms} (\tilde{\phi}_n)$, $\text{rms} (\tilde{\phi}'_n)$
+    {: .cl-schema }
+
+-   `average_scale_factor.txt`{ .cl-fname }
+
+    Scale factor and their derivatives:
+
+    $\tilde{\eta}$, $a$, $a'$, $a' \over a$
+    {: .cl-schema }
+
+-   `spectra_scalar_[nfld].txt`{ .cl-fname }
+
+    One file is produced for each individual scalar field, in which the following data is printed:
+
+    $\tilde{k}$,  $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$, $\widetilde{\Delta}_{\tilde \phi'} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{bin}$ (multiplicity = lattice sites/bin)
+    {: .cl-schema }
+
+</div>
 
 where $\tilde k \equiv k/\omega_*$, the dimensionless power spectra are related to their dimensionful counterparts [see Eq. ([*24*][eq_discretePS]) in <span style="color:red;">**WHERE ?**</span>] by $\Delta_{\phi} \equiv \widetilde \Delta_{\tilde\phi}f_*^2$, and $\Delta_{\phi'} \equiv \widetilde\Delta_{\tilde\phi'}f_*^2\omega_*^2$, $\Delta n_{bin}$ is the *multiplicity* (*i.e.* lattice sites/bin), and we have defined a (dimensionless) *lattice occupation number* as
 [](){ #eq_OccuppationNum }
@@ -350,17 +425,27 @@ where $\tilde k \equiv k/\omega_*$, the dimensionless power spectra are related 
 
 with $\left\langle ... \right\rangle_{R(\tilde {\bf n})}$ denoting angular averaging within the spherical shells of each bin, and $\tilde{\omega}_{\tilde k(\tilde{\bf n})}^2 \simeq {\tilde k^2(\tilde{\bf n})} + a^{2} \left\langle \frac{\partial^2 \tilde{V} }{\partial \tilde{\phi}^2}\right\rangle_{L^3}$, with $\left\langle ... \right\rangle_{L^3}$ a volume average. We note that the occupation number ${\tilde n}_{\tilde k}(\tilde{\bf n})$ is independent of either $N$ or $\delta \tilde x$ at a given $\tilde n$. However, the total number density of particles $n_\phi \equiv \int {d^3k\over(2\pi)^3} n_k = {\tilde n}_\phi\omega_*^3$ with ${\tilde n}_\phi \simeq {1\over {\tilde L}^3}\sum_{\tilde {\bf n}}{\tilde n}_{\tilde k(\tilde{\bf n})}$, may depend of the choice of $N$ and $\delta \tilde x$, as these determine the infrared and ultraviolet extremes of momenta in the reciprocal lattice.
 
--  $\texttt{average_spectra_times.txt}$: List of times at which the above spectra are outputted.
+<div class="grid cards cl-files" markdown>
 
--  $\texttt{[energy_term]_scalar.h5}$: If indicated in the parameters file, these files contain the entire distribution throughout the lattice of a given energy component (e.g. kinetic, gradient, potential).
+-   `average_spectra_times.txt`{ .cl-fname }
 
--  $\texttt{[model_name].infos}$: Information about the run, such as parameter values, time of onset and end of the simulation, etc.
+    List of times at which the above spectra are outputted.
 
-!!! note "Important Note"
+-   `[energy_term]_scalar.h5`{ .cl-fname }
+
+    If indicated in the parameters file, these files contain the entire distribution throughout the lattice of a given energy component (e.g. kinetic, gradient, potential).
+
+-   `[model_name].infos`{ .cl-fname }
+
+    Information about the run, such as parameter values, time of onset and end of the simulation, etc.
+
+</div>
+
+??? note "Definitions may change between versions"
      Definitions of the output variables just defined may vary in successive updates of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. For instance, whereas the form to calculate the scalar power spectrum $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$ was unique in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ `v1.0`, in later versions (starting from $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ `v1.1`) we enabled the option to choose between different versions of a scalar field power spectrum. Check [**Observables**](Observables.md) for up-to-date definitions, and 
      [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](../code/Versions.md) to follow the addition of new features (ranging from new definitions, options, algorithms, interactions, etc), as incorporated in successive versions of the code. 
 
-### **The model file** { #sec_TheModelFile }
+### **The model file** { #sec_TheModelFile .cl-sec-fold }
 
 To define a model, the only file we really need to modify/create is the corresponding *model file* specified through the `-DMODEL=...` argument of CMake. In the previous example, the model file used was $\texttt{lphi4.h}$. In the following, we will review carefully the contents of such file, so that you can imitate its structure to write a new model file $\texttt{myModel.h}$, for the simulation of any other scenario of (canonically normalized) interacting (singlet) scalar fields.
 
@@ -433,7 +518,7 @@ Finally, we also provide the second derivative of the potential with respect to 
 
 With this we end our presentation of the model file. Any model consisting of canonically normalized interacting singlet scalar fields can be constructed in a similar manner.
 
-### **Scalar physics inside $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** { #sec_WhatHappensAuto }
+### **Scalar physics inside $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** { #sec_WhatHappensAuto .cl-sec-fold }
 
 We discuss now what actions the code executes when running a simulation with a model we have just set up. Our aim here is to provide a short overview of the different parts of the code automatically called when running a simulation, so that the user can have a full picture of what is happening at the physical level. For a deeper understanding on the implementation details of this, we refer the reader to Section [**Inside Cosmolattice**](What CosmoLattice does in detail.md).
 
@@ -462,6 +547,9 @@ where $\langle \cdots \rangle$ represents an ensemble average, and $\Delta_{\del
 ```
 
 In this expression, $\omega_{k,\phi}$ is the comoving frequency of the mode, and $m_{\phi}$ is the effective mass of the field, evaluated in terms of the initial homogeneous amplitude $\bar{\phi}_*$ of the field.
+
+**Realization on the lattice**
+{: .cl-minihead }
 
 In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, (<span style="color:orange;">**Jorge comment: THIS IS NOT TRUE. FOR SCALAR SINGETS COSMOLATTICE SAMPES FROM A GAUSSIAN**</span>) this is represented by imposing a sum of left- and right-moving waves of the field amplitude at each Fourier site ${\bf \tilde n}$,
 [](){ #eq_fpr_influct }

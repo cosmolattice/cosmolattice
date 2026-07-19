@@ -1373,3 +1373,93 @@ body.nav-collapsed .md-sidebar--primary {
 .md-typeset .cl-req table td {
     padding: 0.35em 0.6em;
 }
+
+/* === "My first model of (singlet) scalar fields" page: section rhythm ===
+   Scoped via :has(.cl-roadmap) so only this page is affected. A light rule
+   under each top-level (h3) section heading gives the long tutorial a clear
+   beat, mirroring the Installation page's h2 treatment. Neutral on purpose —
+   color always means a physics sector on this site. */
+.md-content:has(.cl-roadmap) .md-typeset h3 {
+    margin-top: 2.4em;
+    padding-bottom: 0.25em;
+    border-bottom: 2px solid var(--md-default-fg-color--lightest);
+}
+
+/* === "My first model" page: sections collapsed to a blurred teaser ===
+   Each section heading carries { .cl-sec-fold }; prose-fold.js wraps its body
+   and clips it to a short preview. Here we blur that preview so the collapsed
+   section reads as a frosted "click to read" teaser rather than plain clipped
+   text. Removing the blur/opacity is enough to fall back to the toolkit's
+   default faded preview. Opening a section (.cl-sec-open, added on toggle or
+   on inbound-anchor navigation) drops the blur automatically. Scoped via
+   :has(.cl-roadmap) so other pages that use section folds are untouched. */
+.md-content:has(.cl-roadmap) .md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body {
+    max-height: 5em;
+    filter: blur(3px);
+    opacity: 0.72;
+    user-select: none;
+}
+
+/* === Output-file cards (reusable component) ===
+   Turns the manual's recurring "boring list of generated files" (the Outputs
+   sections) into a scannable grid of file "spec cards", built on Material's
+   grid cards. Deliberately NEUTRAL: the site UI accent is reserved for build/
+   interactive elements (the run hero), while output files are *reference*, so
+   their signature is structural, not colour — a monospace file name used as a
+   card title plus a labelled COLUMNS strip. Per card:
+     `name.ext`{ .cl-fname }   monospace file name, styled as the card title
+     [ cols ]{ .cl-schema }    the printed columns as a labelled schema strip
+   A companion .cl-outkinds grid gives the three output *kinds* an overview.
+   All three card families on the page (roadmap, kinds, files) share the one
+   quiet top-rule below, so the page reads as a single system. */
+
+/* One shared, neutral top-rule for every content-card family on the page */
+.md-typeset .grid.cards.cl-roadmap > ul > li,
+.md-typeset .grid.cards.cl-outkinds > ul > li,
+.md-typeset .grid.cards.cl-files > ul > li {
+    border-top: 3px solid var(--md-default-fg-color--lighter);
+}
+
+/* File name = card title: monospace, bold, with a quiet neutral underline so
+   it reads as a title/tab without borrowing the build accent */
+.md-typeset code.cl-fname {
+    display: inline-block;
+    margin-bottom: 0.4em;
+    padding: 0 0 0.12em;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid var(--md-default-fg-color--light);
+    border-radius: 0;
+    font-weight: 700;
+    font-size: 0.9em;
+    color: var(--md-default-fg-color);
+    overflow-wrap: anywhere;
+}
+
+/* "Schema" strip: the file's printed columns, one scrollable line under a
+   small COLUMNS caption (replaces the old $\hspace{1cm}$-indented lists) */
+.md-typeset .cl-schema {
+    display: block;
+    margin: 0.45em 0 0.2em;
+    padding: 0.5em 0.7em 0.45em;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-left: 3px solid var(--md-default-fg-color--lighter);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+    font-size: 0.82em;
+    text-align: left;
+    overflow-x: auto;
+}
+
+.md-typeset .cl-schema::before {
+    content: "columns";
+    display: block;
+    margin-bottom: 0.25em;
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.62em;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--md-default-fg-color--light);
+    white-space: normal;
+}
