@@ -35,57 +35,19 @@ In the expanding case, the fields can be evolved either over a **fixed backgroun
 \end{eqnarray}
 ```
 
-!!! note "Cutting to the chase ..."
-    If the reader is eager to start running their own simulations, they can install the code directly as described in  [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Installation**](./code/Installation.md), or jump into the code's manual at [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual**](./Manual/About This Manual.md). If the reader is however a newcomer to the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ world, we recommend them, instead, to keep on reading. 
-    
-## **What makes $\mathcal{CL}$ different ?**  {#subsec_CLspecial } 
-<!-- ## **Is $\mathcal{CL}$ different from other codes?**  {#subsec_CLspecial } -->
-<!-- $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ special ?** -->
-
-<div class="cl-prose-grid" markdown>
-
-<div class="cl-prose-card" markdown>
-
-**A platform, not a single-purpose code**
-{: .cl-minihead }
-
-**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a platform, not a code dedicated to one type of simulation**, such as *e.g.* the dynamics of interacting scalar fields in an expanding background solved by the Leapfrog algorithm. The idea is something else: **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a framework where one can implement any system of partial differential equations suitable for discretization on a lattice, and the corresponding associated observables**. $\mathcal{CL}$ is a package that introduces its own **symbolic language**, defining field variables and operations over them. Once the user becomes familiar with the basic *vocabulary* of the $\mathcal{CL}$ language, they can write their own code: be it for the time evolution of interactive fields in a model of interest with whichever suitable field content, or for some other operation, like a Monte-Carlo generator for thermal configurations, it is up to the user.
-
-</div>
-
-<div class="cl-prose-card" markdown>
-
-**Physics up front, machinery under the hood**
-{: .cl-minihead }
-
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ separates the **physics** (i.e.~fields living on a lattice and operations between them) from the **technical details**, such as the handling of the parallelization or the Fourier transforms. A beginner user with little experience in programming, and with no experience at all in parallelization techniques.
-will be able to run a fully parallelized simulation of their favourite model (using hundreds of processors in a cluster if they wish), while being completely oblivious to the technical details. They will just need to write a basic **model file** in the language of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, containing the details of the model that they want to simulate. At the same time, an experienced user that wants to look inside the core routines of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and modify, for example, the MPI-implementation, they can always do so, and perhaps even contribute to improving them.
-
-</div>
-
-<div class="cl-prose-card" markdown>
-
-**Symbolic algebras, parallel FFTs, and more**
-{: .cl-minihead }
-
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [$U(1)$] and $SU(2)$ algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions (<span style="color:red;">**CHANGE ?**</span>), making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**.
-
-</div>
-
-</div>
-
 <div class="cl-manual-banner" markdown>
 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is **publicly available**, and comes with a **detailed manual** which includes the basic instructions to start running your own simulations.
 
 [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual →](Manual/About This Manual.md){ .cl-manual-link }
+[$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Installation →](code/Installation.md){ .cl-manual-link }
 
 </div>
 
 ## **$\mathcal{CL}$ Features & Capabilities** { #subsec_CLfeatAndCapa }
 <!-- of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$**  -->
 
-The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2.0$, released on July 2026) can simulate the dynamics of the following sectors, either in isolation or combined with each other. *Click on a box to jump to the corresponding section of the user manual:*
+The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2.0$, released on July 2026) can simulate the dynamics of the following sectors. *Click on a box to jump to the corresponding section of the user manual:*
 
 <div class="grid cards cl-sectors" markdown>
 
@@ -156,9 +118,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2
 [Kokkos](Manual/Parallelization.md#subsubsec_devices){ .cl-fact }
 </div>
 
-<div class="cl-prose-grid" markdown>
-
-<div class="cl-prose-card" markdown>
+<div class="cl-claim" markdown>
 
 **High-order integrators, machine-precision constraints**
 {: .cl-minihead }
@@ -167,7 +127,7 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ provides symplectic integra
 
 </div>
 
-<div class="cl-prose-card" markdown>
+<div class="cl-claim" markdown>
 
 **Change parameters, not code**
 {: .cl-minihead }
@@ -176,7 +136,7 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 
 </div>
 
-<div class="cl-prose-card" markdown>
+<div class="cl-claim" markdown>
 
 **Built to scale**
 {: .cl-minihead }
@@ -185,15 +145,44 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 
 </div>
 
-</div>
-
 <span style="color:red;">**PARAGRAPH on GPU Capabilities [...]**</span>
 
 <!-- 
-!!! note "$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ updates & versions"                              
-    $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and either new or improved features are continuously being added. We typically release new versions of the code whenever new physics modules or new lattice methods are added, though code structure improvements can also occur. Details of the different versions of the code can be found below in the [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](code/Versions.md). The latest version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is currently $\tt v2.0$, released on July 2026. It can be downloaded at [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Download**](./code/Download.md).
+!!! note "Cutting to the chase ..."
+    If the reader is eager to start running their own simulations, they can install the code directly as described in  [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Installation**](./code/Installation.md), or jump into the code's manual at [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual**](./Manual/About This Manual.md). If the reader is however a newcomer to the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ world, we recommend them, instead, to keep on reading. 
  -->
 
+## **What makes $\mathcal{CL}$ different ?**  {#subsec_CLspecial } 
+<!-- ## **Is $\mathcal{CL}$ different from other codes?**  {#subsec_CLspecial } -->
+<!-- $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ special ?** -->
+
+<div class="cl-claim" markdown>
+
+**A platform, not a single-purpose code**
+{: .cl-minihead }
+
+**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a platform, not a code dedicated to one type of simulation**, such as *e.g.* the dynamics of interacting scalar fields in an expanding background solved by the Leapfrog algorithm. The idea is something else: **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a framework where one can implement any system of partial differential equations suitable for discretization on a lattice, and the corresponding associated observables**. $\mathcal{CL}$ is a package that introduces its own **symbolic language**, defining field variables and operations over them. Once the user becomes familiar with the basic *vocabulary* of the $\mathcal{CL}$ language, they can write their own code: be it for the time evolution of interactive fields in a model of interest with whichever suitable field content, or for some other operation, like a Monte-Carlo generator for thermal configurations, it is up to the user.
+
+</div>
+
+<div class="cl-claim" markdown>
+
+**Physics up front, machinery under the hood**
+{: .cl-minihead }
+
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ separates the **physics** (i.e.~fields living on a lattice and operations between them) from the **technical details**, such as the handling of the parallelization or the Fourier transforms. A beginner user with little experience in programming, and with no experience at all in parallelization techniques.
+will be able to run a fully parallelized simulation of their favourite model (using hundreds of processors in a cluster if they wish), while being completely oblivious to the technical details. They will just need to write a basic **model file** in the language of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, containing the details of the model that they want to simulate. At the same time, an experienced user that wants to look inside the core routines of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and modify, for example, the MPI-implementation, they can always do so, and perhaps even contribute to improving them.
+
+</div>
+
+<div class="cl-claim" markdown>
+
+**Symbolic algebras, parallel FFTs, and more**
+{: .cl-minihead }
+
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [$U(1)$] and $SU(2)$ algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions (<span style="color:red;">**CHANGE ?**</span>), making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**.
+
+</div>
 
 ## **$\mathcal{CL}$ Code Versions** { #subsec_CLversions }
 <!-- **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Versions**  -->
@@ -224,4 +213,3 @@ As $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is continuously evolving
 </div>
 
 As all these new physics capabilities are being developed simultaneously in parallel by different teams, so it is difficult to predict which aspects will become publicly available first. It is therefore important to keep an eye on the tab [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](code/Versions.md), to check for new code releases, which may include new features such as new field variable definitions, options, evolution algorithms, and/or new interactions as those listed just above. All these changes are gradually incorporated in successive updated versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and whenever a new code release is made, this is announced in the [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ News**](CL_News/CLnews.md) tab. 
-

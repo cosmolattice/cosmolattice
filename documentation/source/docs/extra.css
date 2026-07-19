@@ -354,9 +354,9 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 /* === Paragraph mini-titles ===
-   Bold run-in titles above the long paragraphs of the Home page
-   ({: .cl-minihead } in the Markdown). Deliberately plain paragraphs, not
-   headings, so they stay out of the sidebar TOC. */
+   Bold run-in titles above long paragraphs ({: .cl-minihead } in the
+   Markdown). Deliberately plain paragraphs, not headings, so they stay out
+   of the sidebar TOC. */
 .md-typeset p.cl-minihead {
     margin: 1.8em 0 0.4em;
     font-size: 1.12em;
@@ -365,6 +365,35 @@ body.nav-collapsed .md-sidebar--primary {
 
 .md-typeset p.cl-minihead + p {
     margin-top: 0.4em;
+}
+
+/* === Full-width claim blocks (Home page) ===
+   The prose of "Features & Capabilities" and "What makes CL different?":
+   each block is a <div class="cl-claim" markdown> holding a mini-title
+   (restyled as a small eyebrow label) plus its full paragraph, always
+   visible at full line measure behind a thin left rule. No fold, no JS.
+   Kept neutral on purpose: on this page color always means a physics
+   sector. */
+.md-typeset .cl-claim {
+    margin: 1.7em 0;
+    padding-left: 1.1em;
+    border-left: 2px solid var(--md-default-fg-color--lightest);
+}
+
+.md-typeset .cl-claim p.cl-minihead {
+    margin: 0 0 0.45em;
+    font-size: 0.74em;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .cl-claim p {
+    margin: 0;
+}
+
+.md-typeset .cl-claim p + p {
+    margin-top: 0.7em;
 }
 
 /* === Upcoming-feature cards ===
@@ -395,8 +424,8 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 /* === Prose-card grids ===
-   The mini-titled paragraph trios of the Home page ("What makes CL
-   different?", "Features & Capabilities") are wrapped in
+   Mini-titled paragraph trios (used on the Manual's introduction pages;
+   the Home page now uses the full-width .cl-claim blocks above) wrapped in
    <div class="cl-prose-grid" markdown> holding one
    <div class="cl-prose-card" markdown> per minihead + paragraph pair.
    javascripts/prose-fold.js activates the grid by adding .cl-managed: three
@@ -583,61 +612,200 @@ body.nav-collapsed .md-sidebar--primary {
     text-align: left;
 }
 
-/* === Manual landing: chapter cards ===
-   Reuses the prose-card grid; each card carries the accent color of its
-   physics sector (same palette as the Home page — generic chapters stay
-   neutral), a version badge in the bottom-right corner, and optionally a
-   "start here" tag for the newcomer chapters. */
-.md-typeset .cl-prose-grid.cl-chapters .cl-prose-card {
+/* === Sector accent hooks ===
+   .cl-ch-<sector> loads the sector's color into --cl-accent for whatever
+   component it sits on (manual contents rail, chapter map tiles, ...).
+   Chapters without a sector class stay neutral on purpose. */
+.md-typeset .cl-ch-scalar  { --cl-accent: var(--cl-scalar); }
+.md-typeset .cl-ch-u1      { --cl-accent: var(--cl-u1); }
+.md-typeset .cl-ch-su2     { --cl-accent: var(--cl-su2); }
+.md-typeset .cl-ch-alp     { --cl-accent: var(--cl-alp); }
+.md-typeset .cl-ch-nmc     { --cl-accent: var(--cl-nmc); }
+.md-typeset .cl-ch-defects { --cl-accent: var(--cl-defects); }
+.md-typeset .cl-ch-gw      { --cl-accent: var(--cl-gw); }
+
+/* === Manual landing: contents rail ===
+   The chapter list as a compact table of contents: one .cl-toc-row per
+   chapter holding a one-line summary (p.cl-toc-line: numbered title link +
+   brief + version chip) followed by the full, untouched chapter description.
+   prose-fold.js adds .cl-managed to the .cl-toc wrapper and collapses each
+   row to its line; clicking a row (or its chevron) reveals the description
+   underneath. With JS disabled — and in print — rows render as plain
+   title + paragraph prose. Small .cl-toc-group eyebrow labels split the
+   rail into reading stages; numbering runs through them. */
+.md-typeset .cl-toc {
+    counter-reset: cl-chapter;
+    margin: 1.2em 0 1.6em;
+}
+
+.md-typeset .cl-toc p.cl-toc-group {
+    margin: 1.5em 0 0.15em;
+    padding-left: calc(2.3em + 3px); /* align with the row content edge */
+    font-size: 0.66em;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .cl-toc p.cl-toc-group:first-of-type {
+    margin-top: 0;
+}
+
+/* "Expand all" master toggle at the rail's top right (added by
+   prose-fold.js, so it never renders without the folding behavior) */
+.md-typeset .cl-toc .cl-prose-toggle.cl-toc-master {
+    margin: 0 0 0.7em auto;
+}
+
+.md-typeset .cl-toc .cl-toc-row {
     position: relative;
-    border-top: 4px solid var(--cl-accent, var(--md-default-fg-color--lightest));
-    padding-bottom: 1.9em; /* keep the badge strip clear of text and toggle */
+    counter-increment: cl-chapter;
+    margin: 0;
+    padding: 0.55em 1.9em 0.55em 2.3em; /* right gutter hosts the chevron */
+    border-left: 3px solid var(--cl-accent, var(--md-default-fg-color--lightest));
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
 }
 
-.md-typeset .cl-chapters .cl-prose-card p.cl-minihead a {
-    color: var(--cl-accent, inherit);
+/* The one-line summary: number | title | brief ... version chip | chevron */
+.md-typeset .cl-toc p.cl-toc-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 0.55em;
+    row-gap: 0.1em;
+    margin: 0;
+    text-align: left;
 }
 
-/* Per-card sector accents (same variables as the Home sector cards) */
-.md-typeset .cl-chapters .cl-ch-scalar  { --cl-accent: var(--cl-scalar); }
-.md-typeset .cl-chapters .cl-ch-u1     { --cl-accent: var(--cl-u1); }
-.md-typeset .cl-chapters .cl-ch-su2    { --cl-accent: var(--cl-su2); }
-.md-typeset .cl-chapters .cl-ch-alp    { --cl-accent: var(--cl-alp); }
-.md-typeset .cl-chapters .cl-ch-nmc    { --cl-accent: var(--cl-nmc); }
-.md-typeset .cl-chapters .cl-ch-defects { --cl-accent: var(--cl-defects); }
-.md-typeset .cl-chapters .cl-ch-gw     { --cl-accent: var(--cl-gw); }
-
-/* Version badges, bottom-right corner */
-.md-typeset .cl-chapters .cl-v-all::after,
-.md-typeset .cl-chapters .cl-v-20::after,
-.md-typeset .cl-chapters .cl-v-20r::after {
+.md-typeset .cl-toc p.cl-toc-line::before {
+    content: counter(cl-chapter);
     position: absolute;
-    bottom: 0.55em;
-    right: 0.9em;
+    left: 0.8em;
+    margin-top: 0.2em;
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.68em;
+    font-weight: 700;
+    color: var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .cl-toc p.cl-toc-line a {
+    color: var(--cl-accent, var(--md-typeset-a-color));
+}
+
+/* The brief shares the line with the title when there is room, and drops
+   to its own full-width line (aligned under the title) when there is not —
+   the generous flex-basis is what forces the clean drop. */
+.md-typeset .cl-toc .cl-toc-brief {
+    flex: 1 1 16em;
+    font-size: 0.78em;
+    color: var(--md-default-fg-color--light);
+}
+
+/* Version chip at the line's right edge (content set per .cl-v-* class) */
+.md-typeset .cl-toc p.cl-toc-line::after {
+    order: 98;
+    margin-left: auto;
+    align-self: center;
     font-size: 0.6em;
     font-style: italic;
+    white-space: nowrap;
     color: var(--md-default-fg-color--lighter);
-    pointer-events: none;
 }
 
-.md-typeset .cl-chapters .cl-v-all::after { content: "all versions"; }
-.md-typeset .cl-chapters .cl-v-20::after  { content: "requires v2.0+"; }
-.md-typeset .cl-chapters .cl-v-20r::after { content: "v2.0+ recommended"; }
+.md-typeset .cl-toc .cl-v-all p.cl-toc-line::after { content: "all versions"; }
+.md-typeset .cl-toc .cl-v-20 p.cl-toc-line::after  { content: "requires v2.0+"; }
+.md-typeset .cl-toc .cl-v-20r p.cl-toc-line::after { content: "v2.0+ recommended"; }
 
-/* "Start here" tag above the newcomer chapters' titles */
-.md-typeset .cl-chapters .cl-start p.cl-minihead::before {
-    content: "start here";
+/* The full chapter description under the line */
+.md-typeset .cl-toc .cl-toc-row > p:not(.cl-toc-line) {
+    margin: 0.5em 0 0.6em;
+    text-align: left;
+}
+
+/* JS active: rows collapse to their summary line */
+.md-typeset .cl-toc.cl-managed .cl-toc-row > :not(.cl-toc-line) {
+    display: none;
+}
+
+.md-typeset .cl-toc.cl-managed .cl-toc-row.cl-open > :not(.cl-toc-line) {
     display: block;
-    width: max-content;
-    margin-bottom: 0.5em;
-    padding: 0.15em 0.75em;
-    border-radius: 2em;
-    background: var(--md-accent-fg-color);
-    color: var(--md-default-bg-color);
-    font-size: 0.55em;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
+}
+
+.md-typeset .cl-toc.cl-managed .cl-toc-row:not(.cl-open) {
+    cursor: pointer;
+}
+
+.md-typeset .cl-toc.cl-managed .cl-toc-row:not(.cl-open):hover {
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+}
+
+.md-typeset .cl-toc.cl-managed .cl-toc-row.cl-open {
+    background: color-mix(in srgb, var(--md-default-fg-color) 2%, transparent);
+}
+
+/* Chevron toggle appended to the line by prose-fold.js; pinned to the
+   row's right gutter so it never disturbs the line's flex wrapping. */
+.md-typeset .cl-toc-toggle {
+    position: absolute;
+    top: 0.5em;
+    right: 0.25em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6em;
+    height: 1.6em;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--md-default-fg-color--lighter);
+    cursor: pointer;
+}
+
+.md-typeset .cl-toc-toggle:hover {
+    color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-toc-toggle:focus-visible {
+    outline: 2px solid var(--md-accent-fg-color);
+    outline-offset: 2px;
+}
+
+.md-typeset .cl-toc-toggle .cl-prose-chevron {
+    display: inline-block;
+    width: 0.4em;
+    height: 0.4em;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.25s ease;
+}
+
+.md-typeset .cl-toc-toggle[aria-expanded="true"] .cl-prose-chevron {
+    transform: rotate(-135deg);
+}
+
+@media screen and (max-width: 44.9375em) {
+    .md-typeset .cl-toc .cl-toc-row {
+        padding-left: 1.9em;
+    }
+    .md-typeset .cl-toc p.cl-toc-group {
+        padding-left: calc(1.9em + 3px);
+    }
+    .md-typeset .cl-toc p.cl-toc-line::before {
+        left: 0.6em;
+    }
+}
+
+@media print {
+    .md-typeset .cl-toc.cl-managed .cl-toc-row > :not(.cl-toc-line) {
+        display: block;
+    }
+    .md-typeset .cl-toc-toggle {
+        display: none;
+    }
 }
 
 /* Print: plain stacked prose, no masking, no controls */
@@ -1157,10 +1325,11 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 /* === Manual call-to-action banner ===
-   Full-width, deliberately visible strip under the "What makes CL different?"
-   card grid: the public-availability sentence plus a filled button to the
-   manual. Accent-colored button (site accent = interactive), neutral box, so
-   it does not read as a physics-sector element. */
+   Full-width, deliberately visible strip after the GW equations of the
+   Nutshell section: the public-availability sentence plus buttons to the
+   manual and the installation page. Accent-colored buttons (site accent =
+   interactive), neutral box, so it does not read as a physics-sector
+   element. */
 .md-typeset .cl-manual-banner {
     margin: 1.4em 0 1.6em;
     padding: 0.9em 1.4em 1em;
@@ -1188,6 +1357,16 @@ body.nav-collapsed .md-sidebar--primary {
 
 .md-typeset .cl-manual-banner .cl-manual-link:hover {
     background: color-mix(in srgb, var(--md-accent-fg-color) 10%, transparent);
+}
+
+/* Side-by-side buttons: breathing room between them, and between them and
+   the sentence above when they wrap on narrow screens */
+.md-typeset .cl-manual-banner .cl-manual-link + .cl-manual-link {
+    margin-left: 0.7em;
+}
+
+.md-typeset .cl-manual-banner .cl-manual-link {
+    margin-top: 0.15em;
 }
 
 /* === Embedded Streamlit input-file builder === */
