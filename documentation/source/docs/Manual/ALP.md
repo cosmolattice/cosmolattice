@@ -180,10 +180,23 @@ This transformation is performed using a chiral projector, which is explicitly c
 
 The specific outputs are:
 
-* $\texttt{spectra_chiral_U1_0.txt}$: Chiral power spectra of the $U(1)$ gauge field, containing the columns:  
-  $\hspace{1cm}$ $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{A}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{A}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
-* $\texttt{spectra_chiral_Elec_U1_0.txt}$: Chiral power spectra of the $U(1)$ electric field, containing the columns:  
-  $\hspace{1cm}$ $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{E}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{E}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
+<div class="grid cards cl-files" markdown>
+
+-   `spectra_chiral_U1_0.txt`{ .cl-fname }
+
+    Chiral power spectra of the $U(1)$ gauge field, containing the columns:
+
+    $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{A}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{A}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
+    {: .cl-schema }
+
+-   `spectra_chiral_Elec_U1_0.txt`{ .cl-fname }
+
+    Chiral power spectra of the $U(1)$ electric field, containing the columns:
+
+    $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{E}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{E}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
+    {: .cl-schema }
+
+</div>
 
 
 ### **The axion-U(1) model file** { #sec_TheALPModelFile }

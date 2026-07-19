@@ -18,65 +18,84 @@ One of the main results from running a simulation with $\mathcal{C}\mathtt{osmo}
 
 For a model containing scalar singlet fields, `NScalars > 0`, the simulation will contain the following files:
 
--   $\texttt{average_scalar_[nfld].txt}$: for each scalar field species $\texttt{nfld}$, containing the following columns:
+<div class="grid cards cl-files" markdown>
 
-```math
-\begin{equation}
-\tilde{ \eta}\,,\quad\langle \tilde{\phi}_{\texttt{nfld}} \rangle\,,\quad\langle \tilde{\phi}_{\texttt{nfld}}' \rangle\,,\quad\langle \tilde{\phi}_{\texttt{nfld}}^2 \rangle\,,\quad\langle \tilde{\phi}_{\texttt{nfld}}^{'2} \rangle\,,\quad\text{rms} (\tilde{\phi}_{\texttt{nfld}})\,,\quad\text{rms} (\tilde{\phi}_{\texttt{nfld}}')\,.
-\end{equation}
-```
+-   `average_scalar_[nfld].txt`{ .cl-fname }
+
+    For each scalar field species $\texttt{nfld}$, containing the following columns:
+
+    $\tilde{ \eta}$, $\langle \tilde{\phi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\phi}_{\texttt{nfld}}' \rangle$, $\langle \tilde{\phi}_{\texttt{nfld}}^2 \rangle$, $\langle \tilde{\phi}_{\texttt{nfld}}^{'2} \rangle$, $\text{rms} (\tilde{\phi}_{\texttt{nfld}})$, $\text{rms} (\tilde{\phi}_{\texttt{nfld}}')$
+    {: .cl-schema }
+
+</div>
 
 If the model contains complex scalar, `NCScalars > 0`, the following measurements are generated:
 
--   $\texttt{average_norm_cmplx_scalar_[nfld].txt}$: for each complex scalar species $\texttt{nfld}$. It contains:
+<div class="grid cards cl-files" markdown>
 
-```math
-\begin{equation}\tilde{ \eta}\,,\quad\langle |\tilde{\varphi}_{\texttt{nfld}} |\rangle\,,\quad\langle | \tilde{\varphi}_{\texttt{nfld}}' |\rangle\,,\quad\langle |\tilde{\varphi}_{\texttt{nfld}} |^2 \rangle\,,\quad\langle |\tilde{\varphi}_{\texttt{nfld}}'|^{2} \rangle\,,\quad\text{rms} (|\tilde{\varphi}_{\texttt{nfld}}|)\,,\quad\text{rms} (|\tilde{\varphi}_{\texttt{nfld}}'|)\,.
-\end{equation}
-```
+-   `average_norm_cmplx_scalar_[nfld].txt`{ .cl-fname }
 
--   $\texttt{average_[Re/Im]_cmplx_scalar_[nfld].txt}$: two additional files for each complex field species, containing information about its real ($n=1$) and imaginary  ($n=2$) parts, respectively, $\varphi_{\texttt{nfld}}=\varphi_{\texttt{nfld},1}+i\varphi_{\texttt{nfld},2}$. We note this separation in real and imaginary parts differs by a factor of $\sqrt{2}$ from the canonical normalization, $\varphi_{\texttt{nfld}}=(\phi_{\texttt{nfld},1}+i\phi_{\texttt{nfld},2})/\sqrt{2}$.
+    For each complex scalar species $\texttt{nfld}$. It contains:
 
-```math
-\begin{equation}\tilde{ \eta}\,,\quad\langle \tilde{\varphi}_{\texttt{nfld}} \rangle\,,\quad\langle \tilde{\varphi}'_{\texttt{nfld}} \rangle\,,\quad\langle \tilde{\varphi}_{\texttt{nfld}}^2 \rangle\,,\quad\langle \tilde{\varphi}^{'2}_{\texttt{nfld}} \rangle\,,\quad\text{rms} (\tilde{\varphi}_{\texttt{nfld}})\,,\quad\text{rms} (\tilde{\varphi}'_{\texttt{nfld}})\,.
-\end{equation}
-```
+    $\tilde{ \eta}$, $\langle |\tilde{\varphi}_{\texttt{nfld}} |\rangle$, $\langle | \tilde{\varphi}_{\texttt{nfld}}' |\rangle$, $\langle |\tilde{\varphi}_{\texttt{nfld}} |^2 \rangle$, $\langle |\tilde{\varphi}_{\texttt{nfld}}'|^{2} \rangle$, $\text{rms} (|\tilde{\varphi}_{\texttt{nfld}}|)$, $\text{rms} (|\tilde{\varphi}_{\texttt{nfld}}'|)$
+    {: .cl-schema }
+
+-   `average_[Re/Im]_cmplx_scalar_[nfld].txt`{ .cl-fname }
+
+    Two additional files for each complex field species, containing information about its real ($n=1$) and imaginary  ($n=2$) parts, respectively, $\varphi_{\texttt{nfld}}=\varphi_{\texttt{nfld},1}+i\varphi_{\texttt{nfld},2}$. We note this separation in real and imaginary parts differs by a factor of $\sqrt{2}$ from the canonical normalization, $\varphi_{\texttt{nfld}}=(\phi_{\texttt{nfld},1}+i\phi_{\texttt{nfld},2})/\sqrt{2}$.
+
+    $\tilde{ \eta}$, $\langle \tilde{\varphi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\varphi}'_{\texttt{nfld}} \rangle$, $\langle \tilde{\varphi}_{\texttt{nfld}}^2 \rangle$, $\langle \tilde{\varphi}^{'2}_{\texttt{nfld}} \rangle$, $\text{rms} (\tilde{\varphi}_{\texttt{nfld}})$, $\text{rms} (\tilde{\varphi}'_{\texttt{nfld}})$
+    {: .cl-schema }
+
+</div>
 
 For simulations with scalar doublets, `NSU2Doublet > 0`, one also gets:
 
--  $\texttt{average_norm_SU2Doublet_[nfld]\.txt}$: containing measurements related to the norm of the scalar doublet, $|\Phi_{\texttt{nfld}}|^2=|\Phi_{\texttt{nfld},1}|^2+|\Phi_{\texttt{nfld},2}|^2+|\Phi_{\texttt{nfld},3}|^2+|\Phi_{\texttt{nfld},4}|^2$. One file is created per filed species, $\texttt{nfld}$. It contains:
+<div class="grid cards cl-files" markdown>
 
-```math
-\begin{equation}\tilde{ \eta}\,,\quad\langle |\tilde{\Phi}_{\texttt{nfld}} |\rangle\,,\quad\langle | \tilde{\Phi}_{\texttt{nfld}}' |\rangle\,,\quad\langle |\tilde{\Phi}_{\texttt{nfld}} |^2 \rangle\,,\quad\langle |\tilde{\Phi}_{\texttt{nfld}}'|^{2} \rangle\,,\quad\text{rms} (|\tilde{\Phi}_{\texttt{nfld}}|)\,,\quad\text{rms} (|\tilde{\Phi}_{\texttt{nfld}}'|)
-\end{equation}
-```
+-   `average_norm_SU2Doublet_[nfld].txt`{ .cl-fname }
 
--  $\texttt{average_SU2Doublet_[nfld]_[n].txt}$: measurements related to each component of the scalar doublets. Four files are created per field species. They contain:
+    Containing measurements related to the norm of the scalar doublet, $|\Phi_{\texttt{nfld}}|^2=|\Phi_{\texttt{nfld},1}|^2+|\Phi_{\texttt{nfld},2}|^2+|\Phi_{\texttt{nfld},3}|^2+|\Phi_{\texttt{nfld},4}|^2$. One file is created per filed species, $\texttt{nfld}$. It contains:
 
-```math
-\begin{equation}\tilde{ \eta}\,,\quad\langle \tilde{\Phi}_{\texttt{nfld}} \rangle\,,\quad\langle \tilde{\Phi}_{\texttt{nfld}} \rangle\,,\quad\langle \tilde{\Phi}_{\texttt{nfld}}^2 \rangle\,,\quad\langle \tilde{\Phi}^{'2}_{\texttt{nfld}} \rangle\,,\quad\text{rms} (\tilde{\Phi}_{\texttt{nfld}})\,,\quad\text{rms} (\tilde{\Phi}'_{\texttt{nfld}})
-\end{equation}
-```
+    $\tilde{ \eta}$, $\langle |\tilde{\Phi}_{\texttt{nfld}} |\rangle$, $\langle | \tilde{\Phi}_{\texttt{nfld}}' |\rangle$, $\langle |\tilde{\Phi}_{\texttt{nfld}} |^2 \rangle$, $\langle |\tilde{\Phi}_{\texttt{nfld}}'|^{2} \rangle$, $\text{rms} (|\tilde{\Phi}_{\texttt{nfld}}|)$, $\text{rms} (|\tilde{\Phi}_{\texttt{nfld}}'|)$
+    {: .cl-schema }
+
+-   `average_SU2Doublet_[nfld]_[n].txt`{ .cl-fname }
+
+    Measurements related to each component of the scalar doublets. Four files are created per field species. They contain:
+
+    $\tilde{ \eta}$, $\langle \tilde{\Phi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\Phi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\Phi}_{\texttt{nfld}}^2 \rangle$, $\langle \tilde{\Phi}^{'2}_{\texttt{nfld}} \rangle$, $\text{rms} (\tilde{\Phi}_{\texttt{nfld}})$, $\text{rms} (\tilde{\Phi}'_{\texttt{nfld}})$
+    {: .cl-schema }
+
+</div>
 
 For simulations with $\mathrm{U}(1)$ gauge fields `NU1Flds > 0`, the following measurements are also generated. Note that simulations with `NU1Flds > 1` have not been thoroughly tested.
 
--  $\texttt{average_norm_U1_[nfld].txt}$: Contains information about the $\textrm{U}(1)$ fields. Again, a different field is generated for each field species, $\texttt{nfld}$, with columns:
+<div class="grid cards cl-files" markdown>
 
-```math
-\begin{equation}\tilde{ \eta}\,,\quad\langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|} \rangle\,,\quad\langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|} \rangle\,,\quad\langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|^2} \rangle\,,\quad\langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|^2} \rangle\,,\quad\text{rms} (|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|)\,,\quad\text{rms} (|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|)\,.
-\end{equation}
-```
+-   `average_norm_U1_[nfld].txt`{ .cl-fname }
 
--  $\texttt{average_gauss_U1_[nfld].txt}$: Contains information about the conservation of Gauss law in the $\mathrm{U}(1)$ sector, which is in general obeyed to machine precision in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Here $\text{LHS}_{\texttt{nfld}}$ and $RHS_{\texttt{nfld}}$ are the left- and right-hand sides of Eq.$~$(17) from [**Scalar-gauge interactions**](My first model of gauge fields.md).
-```math
-\begin{equation}\tilde{\eta}\,,\quad\frac{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle}{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle}\,,\quad\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle\,,\quad\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle\end{equation}\,.
-```
+    Contains information about the $\textrm{U}(1)$ fields. Again, a different field is generated for each field species, $\texttt{nfld}$, with columns:
 
--  $\texttt{average_topological_charges.txt}$: Contains information about the topological charges associated to the $\textrm{U}(1)$ fields. A single file is created, and contains two columns per field species:
-```math
-\begin{equation}\tilde{ \eta}\,,\quad\langle {\vec{\widetilde{ \mathcal E}}_{0}^{(2)}\cdot \vec{\widetilde{ \mathcal B}_{0}}^{(4)}} \rangle\,,\quad\langle {(\vec{\widetilde{ \mathcal E}}_{0}^{(2)}\cdot \vec{\widetilde{ \mathcal B}}_{0}^{(4)})^2} \rangle\, ...
-\end{equation}
-```
+    $\tilde{ \eta}$, $\langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|} \rangle$, $\langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|} \rangle$, $\langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|^2} \rangle$, $\langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|^2} \rangle$, $\text{rms} (|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|)$, $\text{rms} (|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|)$
+    {: .cl-schema }
+
+-   `average_gauss_U1_[nfld].txt`{ .cl-fname }
+
+    Contains information about the conservation of Gauss law in the $\mathrm{U}(1)$ sector, which is in general obeyed to machine precision in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Here $\text{LHS}_{\texttt{nfld}}$ and $RHS_{\texttt{nfld}}$ are the left- and right-hand sides of Eq.$~$(17) from [**Scalar-gauge interactions**](My first model of gauge fields.md).
+
+    $\tilde{\eta}$, $\frac{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle}{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle}$, $\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle$, $\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle$
+    {: .cl-schema }
+
+-   `average_topological_charges.txt`{ .cl-fname }
+
+    Contains information about the topological charges associated to the $\textrm{U}(1)$ fields. A single file is created, and contains two columns per field species:
+
+    $\tilde{ \eta}$, $\langle {\vec{\widetilde{ \mathcal E}}_{0}^{(2)}\cdot \vec{\widetilde{ \mathcal B}_{0}}^{(4)}} \rangle$, $\langle {(\vec{\widetilde{ \mathcal E}}_{0}^{(2)}\cdot \vec{\widetilde{ \mathcal B}}_{0}^{(4)})^2} \rangle$, $\ldots$
+    {: .cl-schema }
+
+</div>
+
 Here, the electric and magnetic fields are defined using improved definitions,
 ```math
 \begin{equation}
@@ -91,71 +110,70 @@ where we have left implicit the species index, for simplicity.
 
 For simulations with a $\mathrm{SU}(2)$ gauge field, `NSU2Flds > 0`, the following output is created:
 
--  $\texttt{average_norm_SU2_[nfld].txt}$: Contains averages of the electric and magnetic fields arising from the $\mathrm{SU}(2)$ sector. One file is created per field species $\texttt{nfld}$, with columns:
-```math
-\begin{equation}\tilde{ \eta}\,,\quad\sum_i \langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|} \rangle\,,\quad\sum_i \langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|} \rangle\,,\quad\sum_i \langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|^2} \rangle\,,\quad\sum_i \langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|^2} \rangle\,,\quad\sum_i \text{rms} (|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|)\,,\quad\sum_i \text{rms} (|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|)
-\end{equation}
-```
+<div class="grid cards cl-files" markdown>
 
--  $\texttt{average_gauss_SU2_[nfld].txt}$: Contains information about the conservation of Gauss law in the $\mathrm{SU}(2)$ sector. Here LHS and RHS are the left- and right-hand sides of Eq.$~$(18) from [**Scalar-gauge interactions**](My first model of gauge fields.md) for each species.
-```math
-\begin{equation}\tilde{\eta}\,,\quad\frac{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle}{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle}\,,\quad\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle\,,\quad\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle\end{equation}\,.
-```
+-   `average_norm_SU2_[nfld].txt`{ .cl-fname }
+
+    Contains averages of the electric and magnetic fields arising from the $\mathrm{SU}(2)$ sector. One file is created per field species $\texttt{nfld}$, with columns:
+
+    $\tilde{ \eta}$, $\sum_i \langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|} \rangle$, $\sum_i \langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|} \rangle$, $\sum_i \langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|^2} \rangle$, $\sum_i \langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|^2} \rangle$, $\sum_i \text{rms} (|\vec{\widetilde{ \mathcal E}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|)$, $\sum_i \text{rms} (|\vec{\widetilde{\mathcal B}}^{\mathrm{SU}(2)}_{\texttt{nfld},i}|)$
+    {: .cl-schema }
+
+-   `average_gauss_SU2_[nfld].txt`{ .cl-fname }
+
+    Contains information about the conservation of Gauss law in the $\mathrm{SU}(2)$ sector. Here LHS and RHS are the left- and right-hand sides of Eq.$~$(18) from [**Scalar-gauge interactions**](My first model of gauge fields.md) for each species.
+
+    $\tilde{\eta}$, $\frac{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle}{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle}$, $\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle$, $\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle$
+    {: .cl-schema }
+
+</div>
 
 
 
 In addition to these files related to field averages, results for the evolution of the scale factor are also saved with the same frequency for simulations running with self-consistent or fixed expansion, `expansion = true`. This file is not created for simulations without expansion. The file contains:
 
--  $\texttt{average_scale_factor.txt}$: by default, contains the following columns:
+<div class="grid cards cl-files" markdown>
 
-```math
-\begin{equation}\tilde \eta\,,\quad a\,,\quad a'\,,\quad a' / a
-\end{equation}
-```
+-   `average_scale_factor.txt`{ .cl-fname }
 
-   In addition, an extra column is added at the end for some particular cases. For simulations with non-minimal couplings to gravity, this last column contains the value of the Ricci scalar, $R$, as given in Eq.$~$(5) of [**Non-Minimal Interactions**](NMC.md). On the other hand, for simulatins of cosmic defects, the last column contains the value of the fattening factor, see Eq.$~$(16) of [**Cosmic Defects**](Defects.md).
+    By default, contains the following columns:
+
+    $\tilde \eta$, $a$, $a'$, $a' / a$
+    {: .cl-schema }
+
+    In addition, an extra column is added at the end for some particular cases. For simulations with non-minimal couplings to gravity, this last column contains the value of the Ricci scalar, $R$, as given in Eq.$~$(5) of [**Non-Minimal Interactions**](NMC.md). On the other hand, for simulatins of cosmic defects, the last column contains the value of the fattening factor, see Eq.$~$(16) of [**Cosmic Defects**](Defects.md).
+
+</div>
 
 
 Finally, **energy averages** are also measured, together with information about the energy conservation in the simulation.
 
--  $\texttt{average_energies.txt}$: Contains information about the energy density component of all field types and species. The last column always corresponds to the total matter energy density:
+<div class="grid cards cl-files" markdown>
 
-```math
-\hspace{1.5cm}\begin{eqnarray}
-&&\tilde{\eta},
-\tilde{E}_K^{(\phi, 0)},
-\tilde{E}_G^{(\phi, 0)}, \ldots,
-\tilde{E}_K^{(\phi, N_s-1)},
-\tilde{E}_G^{(\phi, N_s-1)},\nonumber\\
-&&\tilde{E}_K^{(\varphi, 0)},
-\tilde{E}_G^{(\varphi, 0)}, \ldots,
-\tilde{E}_K^{(\varphi, N_c-1)},
-\tilde{E}_G^{(\varphi, N_c-1)},\nonumber\\
-&&\tilde{E}_K^{(\Phi, 0)},
-\tilde{E}_G^{(\Phi, 0)}, \ldots,
-\tilde{E}_K^{(\Phi, N_d-1)},
-\tilde{E}_G^{(\Phi, N_d-1)},\nonumber\\
-&&\tilde{E}_K^{(A, 0)},
-\tilde{E}_G^{(A, 0)}, \ldots,
-\tilde{E}_K^{(A, N_{u1}-1)},
-\tilde{E}_G^{(A, N_{u1}-1)},\nonumber\\
-&&\tilde{E}_K^{(B, 0)},
-\tilde{E}_G^{(B, 0)}, \ldots,
-\tilde{E}_K^{(B, N_{s2}-1)},
-\tilde{E}_G^{(B, N_{s2}-1)},\nonumber\\
-&&\tilde{E}_V^{(0)}, \ldots,
-\tilde{E}_V^{(N_p-1)},
-\langle \tilde{\rho} \rangle \nonumber
-\end{eqnarray}
-```
+-   `average_energies.txt`{ .cl-fname }
 
--  $\texttt{average_energy_conservation.txt}$: Contains information about energy conservation (which is evaluated using the first Friedman equation in case of a self-consistent expanding background). The columns are:
+    Contains information about the energy density component of all field types and species. The last column always corresponds to the total matter energy density:
 
-$\hspace{1.5cm}$ -  If no expansion: $\displaystyle\tilde{\eta}\,,\quad1 - \frac{\langle \tilde{\rho} (\tilde{\eta} ) \rangle}{\langle \tilde{\rho} (\tilde{\eta}_*  ) \rangle}$
+    $\tilde{\eta}$, $\tilde{E}_K^{(\phi, 0)}$, $\tilde{E}_G^{(\phi, 0)}$, $\ldots$, $\tilde{E}_K^{(\phi, N_s-1)}$, $\tilde{E}_G^{(\phi, N_s-1)}$, $\tilde{E}_K^{(\varphi, 0)}$, $\tilde{E}_G^{(\varphi, 0)}$, $\ldots$, $\tilde{E}_K^{(\varphi, N_c-1)}$, $\tilde{E}_G^{(\varphi, N_c-1)}$, $\tilde{E}_K^{(\Phi, 0)}$, $\tilde{E}_G^{(\Phi, 0)}$, $\ldots$, $\tilde{E}_K^{(\Phi, N_d-1)}$, $\tilde{E}_G^{(\Phi, N_d-1)}$, $\tilde{E}_K^{(A, 0)}$, $\tilde{E}_G^{(A, 0)}$, $\ldots$, $\tilde{E}_K^{(A, N_{u1}-1)}$, $\tilde{E}_G^{(A, N_{u1}-1)}$, $\tilde{E}_K^{(B, 0)}$, $\tilde{E}_G^{(B, 0)}$, $\ldots$, $\tilde{E}_K^{(B, N_{s2}-1)}$, $\tilde{E}_G^{(B, N_{s2}-1)}$, $\tilde{E}_V^{(0)}$, $\ldots$, $\tilde{E}_V^{(N_p-1)}$, $\langle \tilde{\rho} \rangle$
+    {: .cl-schema }
 
-$\hspace{1.5cm}$ -  If self-consistent expansion: $\displaystyle \tilde{\eta}\,,\quad\frac{\langle\text{LHS} - \text{RHS}\rangle}{\langle \text{LHS} + \text{RHS}\rangle}\,,\quad\langle  \text{LHS} \rangle\,,\quad\langle \text{RHS} \rangle$ where LHS and RHS here are the left- and right-hand sides of Eq.$~$(24) in [**Scalar-gauge interactions**](My first model of gauge fields.md). For simulations with non-minimally coupled scalars, this also incorporates the additional NMC contribution, see [**Non-Minimal Interactions**](NMC.md).
+-   `average_energy_conservation.txt`{ .cl-fname }
 
-$\hspace{1.5cm}$ -  The file is not created for fixed background expansion.
+    Contains information about energy conservation (which is evaluated using the first Friedman equation in case of a self-consistent expanding background). The columns are:
+
+    If no expansion:
+
+    $\displaystyle\tilde{\eta}$, $1 - \frac{\langle \tilde{\rho} (\tilde{\eta} ) \rangle}{\langle \tilde{\rho} (\tilde{\eta}_*  ) \rangle}$
+    {: .cl-schema }
+
+    If self-consistent expansion:
+
+    $\displaystyle \tilde{\eta}$, $\frac{\langle\text{LHS} - \text{RHS}\rangle}{\langle \text{LHS} + \text{RHS}\rangle}$, $\langle  \text{LHS} \rangle$, $\langle \text{RHS} \rangle$
+    {: .cl-schema }
+
+    where LHS and RHS here are the left- and right-hand sides of Eq.$~$(24) in [**Scalar-gauge interactions**](My first model of gauge fields.md). For simulations with non-minimally coupled scalars, this also incorporates the additional NMC contribution, see [**Non-Minimal Interactions**](NMC.md). The file is not created for fixed background expansion.
+
+</div>
 
 **Module-specific measurements**
 
@@ -163,32 +181,43 @@ In addition to the averages presented above, which are generated automatically f
 
 If simulations are run with **gravitational waves**, indicating `withGWs = true` in the parameter file when running the simulation, an addtional file is created containing an estimate of the total energy density of gravitational waves, see [**Gravitational Waves**](GW.md):
 
--  $\texttt{average_energies_gws.txt}$: Contains the volume-averaged GW energy density. The columns are
-[](){ #eq_GWenergymeasurements }
-```math
-\begin{align}
-\tilde{\eta}\,,\quad\quad\tilde{\rho}_{\rm GW}/\tilde{\rho}\,,\quad\quad\tilde{\rho}_{\rm GW}\,,
-\end{align}
-```
-where $\rho$ here corresponds to the total energy density of the matter sector.
+<div class="grid cards cl-files" markdown>
 
-For simulations of **cosmic defects**, see [**Cosmic Defects**](Defects.md) for more details, several additional files may be generated, containing information related to the defects. Mainly, we have the following two:
+-   `average_energies_gws.txt`{ .cl-fname }
 
--  $\texttt{average_scalar_norm.txt}$: It is generated only for simulations of global defects. It contains information about the norm of the real scalar field, regarded as a vector of $N$ scalar fields,
+    Contains the volume-averaged GW energy density. The columns are
+
+    [](){ #eq_GWenergymeasurements }
+    $\tilde{\eta}$, $\tilde{\rho}_{\rm GW}/\tilde{\rho}$, $\tilde{\rho}_{\rm GW}$
+    {: .cl-schema }
+
+    where $\rho$ here corresponds to the total energy density of the matter sector.
+
+</div>
+
+For simulations of **cosmic defects**, see [**Cosmic Defects**](Defects.md) for more details, several additional files may be generated, containing information related to the defects. These involve the norm of the real scalar field, regarded as a vector of $N$ scalar fields,
 [](){ #eq_globalNorm }
 ```math
 \begin{equation}\label{eq_globalNorm}
 |\phi|=\left(\sum_{a=1}^N \phi_a^2\right)^{1/2}\,,
 \end{equation}
 ```
-In particular, the file contains four columns:
+Mainly, we have the following two files:
 
-```math
-\begin{equation}\tilde \eta\,,\quad \langle |\tilde{\phi} |\rangle\,,\quad \langle |\tilde{\phi}^2 |\rangle\,,\quad \text{rms} (|\tilde{\phi}|)\,.
-\end{equation}
-```
+<div class="grid cards cl-files" markdown>
 
--  $\texttt{average_defects.txt}$: Contains additional information about the defects. If `measureDefectsEnergies = true` is indicated in the parameter file, the energy components of the defects are saved. If `measureDefectsStructure = true` is indicated, estimates of the area of domain walls or the total length of cosmic strings is saved as the last column. See [**Cosmic Defects**](Defects.md) for a more detailed discussion on this output file.
+-   `average_scalar_norm.txt`{ .cl-fname }
+
+    It is generated only for simulations of global defects. It contains information about the norm of the real scalar field $|\phi|$, defined in Eq.$~$\eqref{eq_globalNorm}. In particular, the file contains four columns:
+
+    $\tilde \eta$, $\langle |\tilde{\phi} |\rangle$, $\langle |\tilde{\phi}^2 |\rangle$, $\text{rms} (|\tilde{\phi}|)$
+    {: .cl-schema }
+
+-   `average_defects.txt`{ .cl-fname }
+
+    Contains additional information about the defects. If `measureDefectsEnergies = true` is indicated in the parameter file, the energy components of the defects are saved. If `measureDefectsStructure = true` is indicated, estimates of the area of domain walls or the total length of cosmic strings is saved as the last column. See [**Cosmic Defects**](Defects.md) for a more detailed discussion on this output file.
+
+</div>
 
 In addition, if a diffusion phase of the initial conditions is performed, some additional files are generated, measuring similar quantities as discussed above during the diffusion phase. For more information on these, see [**Cosmic Defects**](Defects.md),
 
@@ -258,30 +287,59 @@ To activate the unbinned power spectrum, one needs to compile the code with the 
 
 We now summarize the spectrum files that get measured in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, depending on the model, the field content and the choices made in the parameter file. For each case, we indicate the quantities for which the power spectra is measured. We note that for matter fields, a file is generated per species.
 
--  $\texttt{spectra_scalar_[nfld].txt}$: For models with `NScalars > 0`, it contains the spectra of $\tilde\phi_\texttt{nfld}$ and $\tilde\phi'_\texttt{nfld}$.
+<div class="grid cards cl-files" markdown>
 
--  $\texttt{spectra_ON_scalar_[nfld].txt}$: For models with `NScalars > 0` and if `ONflag = true` is indicated in the parameter file, it contains the occupation number of each scalar singlet field. This is defined (for `NDim = 3`) as (<span style="color:orange;">**Jorge comment: Please somebody check**</span>)
+-   `spectra_scalar_[nfld].txt`{ .cl-fname }
+
+    For models with `NScalars > 0`, it contains the spectra of $\tilde\phi_\texttt{nfld}$ and $\tilde\phi'_\texttt{nfld}$.
+
+-   `spectra_ON_scalar_[nfld].txt`{ .cl-fname }
+
+    For models with `NScalars > 0` and if `ONflag = true` is indicated in the parameter file, it contains the occupation number of each scalar singlet field. This is defined (for `NDim = 3`) as (<span style="color:orange;">**Jorge comment: Please somebody check**</span>)
+
+</div>
+
 ```math
 \begin{equation}
 \tilde{\Delta}^\mathrm{ON}_{\texttt{nfld}}=\frac{a^2}{3}\left(\frac{\delta \tilde{x}}{N}\right)^3\left(\frac{f_*}{\omega_*}\right)^2\left[\left\langle\left|\tilde{\phi}_{\texttt{nfld}}\right|^2\right\rangle + \left\langle\left|\tilde{\phi}_{\texttt{nfld}}'+\frac{a'}{a}\tilde{\phi}_{\texttt{nfld}}\right|^2\right\rangle\right]\,.
 \end{equation}
 ```
 
--  $\texttt{spectra_norm_cmplx_scalar_[nfld].txt}$: For models with `NCScalars > 0`, it contains the spectra of $|\tilde\varphi_\texttt{nfld}|$ and $|\tilde\varphi'_\texttt{nfld}|$.
+<div class="grid cards cl-files" markdown>
 
--  $\texttt{spectra_norm_SU2Doublet_scalar_[nfld].txt}$: For models with `NSU2Doublet > 0`, it contains the spectra of $|\tilde\Phi_\texttt{nfld}|$ and $|\tilde\Phi'_\texttt{nfld}|$.
+-   `spectra_norm_cmplx_scalar_[nfld].txt`{ .cl-fname }
 
--  $\texttt{spectra_norm_U1_[nfld].txt}$: For models with `NU1Flds > 0`, contains the spectra of $|\widetilde{\mathcal{E}}^{\mathrm{U}(1)}_\texttt{nfld}|$ and $|\widetilde{\mathcal{B}}^{\mathrm{U}(1)}_\texttt{nfld}|$
+    For models with `NCScalars > 0`, it contains the spectra of $|\tilde\varphi_\texttt{nfld}|$ and $|\tilde\varphi'_\texttt{nfld}|$.
 
--  $\texttt{spectra_norm_SU2_[nfld].txt}$: For models with `NSU2Flds > 0`, contains the spectra of $|\widetilde{\mathcal{E}}^{\mathrm{SU}(2)}_\texttt{nfld}|$ and $|\widetilde{\mathcal{B}}^{\mathrm{SU}(2)}_\texttt{nfld}|$
+-   `spectra_norm_SU2Doublet_scalar_[nfld].txt`{ .cl-fname }
 
--  $\texttt{spectra_energy_gws.txt}$: For models run with `withGWs = true`, contains the fractional energy density power spectrum of GWs. See [**Gravitational Waves**](GW.md) for more details.
+    For models with `NSU2Doublet > 0`, it contains the spectra of $|\tilde\Phi_\texttt{nfld}|$ and $|\tilde\Phi'_\texttt{nfld}|$.
 
--  $\texttt{spectra_norm.txt}$: For models with `NScalars > 0` and `DefectsModel = true`, measures the spectra of $|\phi|$ as defined in Eq.$~$\eqref{eq_globalNorm}. See [**Cosmic Defects**](Defects.md) for more details.
+-   `spectra_norm_U1_[nfld].txt`{ .cl-fname }
 
--  $\texttt{spectra_chiral_U1_0.txt}$: For models with axion couplings, measures the chiral power spectra of the $\mathrm{U}(1)$ field. See [**Axion-Gauge Interactions**](ALP.md) for more details.
+    For models with `NU1Flds > 0`, contains the spectra of $|\widetilde{\mathcal{E}}^{\mathrm{U}(1)}_\texttt{nfld}|$ and $|\widetilde{\mathcal{B}}^{\mathrm{U}(1)}_\texttt{nfld}|$
 
--  $\texttt{spectra_chiral_Elec_U1_0.txt}$: For models with axion couplings, measures the chiral power spectra of the electric $\mathrm{U}(1)$ field. See [**Axion-Gauge Interactions**](ALP.md) for more details.
+-   `spectra_norm_SU2_[nfld].txt`{ .cl-fname }
+
+    For models with `NSU2Flds > 0`, contains the spectra of $|\widetilde{\mathcal{E}}^{\mathrm{SU}(2)}_\texttt{nfld}|$ and $|\widetilde{\mathcal{B}}^{\mathrm{SU}(2)}_\texttt{nfld}|$
+
+-   `spectra_energy_gws.txt`{ .cl-fname }
+
+    For models run with `withGWs = true`, contains the fractional energy density power spectrum of GWs. See [**Gravitational Waves**](GW.md) for more details.
+
+-   `spectra_norm.txt`{ .cl-fname }
+
+    For models with `NScalars > 0` and `DefectsModel = true`, measures the spectra of $|\phi|$ as defined in Eq.$~$\eqref{eq_globalNorm}. See [**Cosmic Defects**](Defects.md) for more details.
+
+-   `spectra_chiral_U1_0.txt`{ .cl-fname }
+
+    For models with axion couplings, measures the chiral power spectra of the $\mathrm{U}(1)$ field. See [**Axion-Gauge Interactions**](ALP.md) for more details.
+
+-   `spectra_chiral_Elec_U1_0.txt`{ .cl-fname }
+
+    For models with axion couplings, measures the chiral power spectra of the electric $\mathrm{U}(1)$ field. See [**Axion-Gauge Interactions**](ALP.md) for more details.
+
+</div>
 
 ### **Snapshots** { #sec_snapshots }
 

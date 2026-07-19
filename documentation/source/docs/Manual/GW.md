@@ -367,23 +367,29 @@ where ${\tt v}'$ and ${\tt P}$ are matrices with entries $({\tt v}')_{ij}=v'_{ij
 
 Measurements of the GW energy density are automatically performed for simulations with GWs with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. If the keyword `withGWs = true` is especified in the parameter file, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will generate, in addition to the measurements related of the matter sector, two GW-related output files, saved inside the same directory as specified by `outputfile`:
 
--  $\texttt{spectra_energy_gws.txt}$: GW fractional energy-density spectrum measured from the projected tensor perturbations. As for matter spectra, the frequency of the measurements is controlled by the`tOutputInfreq` keyword. By default, the file contains
-[](){ #eq_GWPSmeasurements }
-```math
-\begin{align}
-\tilde{k}\,,\quad\quad\Omega_{\rm GW}(\tilde{k})\,,\quad\quad\#_{\rm bin}\,,
-\end{align}
-```
-The first column is the momentum scale associated with each bin, the second is the GW spectrum computed with the projector selected by `GWprojectorType` as discussed below, and the last one gives the bin multiplicity.  The specific output can be controlled with the same parameters as for other power spectra, see [**Output Observables**](Observables.md) for a detailed explanation.  The times at which the spectra are measured are saved sequentially in the $\texttt{average_spectra_times.txt}$ file. Finally, we recall that the fractional energy density is normalized with the total energy density of the matter fields, rather than the critical energy density.
+<div class="grid cards cl-files" markdown>
 
--   `average_energies_gws.txt`: Volume-averaged GW energy density, determined from summing over the contributions of all bins in the power spectrum, as indicated in Eq.$~$\eqref{eq_GWrhoShells}. The columns of this file correspond to
-[](){ #eq_GWenergymeasurements }
-```math
-\begin{align}
-\tilde{\eta}\,,\quad\quad\tilde{\rho}_{\rm GW}\,/\,\tilde{\rho}_{\rm matter}\,,\quad\quad\tilde{\rho}_{\rm GW}$.
-\end{align}
-```
-Here $\tilde{\rho}_{\rm GW}/\tilde{\rho}_{\rm matter}$ is obtained by integrating the measured GW energy-density spectrum over the available momentum bins. The quantity $\tilde{\rho}_{\rm GW}$ is this fraction multiplied by the total matter energy density at the same time.
+-   `spectra_energy_gws.txt`{ .cl-fname }
+
+    GW fractional energy-density spectrum measured from the projected tensor perturbations. As for matter spectra, the frequency of the measurements is controlled by the `tOutputInfreq` keyword. By default, the file contains
+
+    [](){ #eq_GWPSmeasurements }
+    $\tilde{k}$, $\Omega_{\rm GW}(\tilde{k})$, $\#_{\rm bin}$
+    {: .cl-schema }
+
+    The first column is the momentum scale associated with each bin, the second is the GW spectrum computed with the projector selected by `GWprojectorType` as discussed below, and the last one gives the bin multiplicity.  The specific output can be controlled with the same parameters as for other power spectra, see [**Output Observables**](Observables.md) for a detailed explanation.  The times at which the spectra are measured are saved sequentially in the $\texttt{average_spectra_times.txt}$ file. Finally, we recall that the fractional energy density is normalized with the total energy density of the matter fields, rather than the critical energy density.
+
+-   `average_energies_gws.txt`{ .cl-fname }
+
+    Volume-averaged GW energy density, determined from summing over the contributions of all bins in the power spectrum, as indicated in Eq.$~$\eqref{eq_GWrhoShells}. The columns of this file correspond to
+
+    [](){ #eq_GWenergymeasurements }
+    $\tilde{\eta}$, $\tilde{\rho}_{\rm GW}/\tilde{\rho}_{\rm matter}$, $\tilde{\rho}_{\rm GW}$
+    {: .cl-schema }
+
+    Here $\tilde{\rho}_{\rm GW}/\tilde{\rho}_{\rm matter}$ is obtained by integrating the measured GW energy-density spectrum over the available momentum bins. The quantity $\tilde{\rho}_{\rm GW}$ is this fraction multiplied by the total matter energy density at the same time.
+
+</div>
 
 For both outputs, the observables are determined after TT projecting the auxiliary fields used by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, using Eq.$~$\eqref{eq_GWTraceFormula}}. The type of projector used is controlled using the `GWprojectorType` keyword in the parameter file. This can take three different values, corresponding to the three choices of lattice momenta in Eq.$~$\eqref{eq_GWRealProjector}:
 

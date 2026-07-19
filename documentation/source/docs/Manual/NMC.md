@@ -289,9 +289,16 @@ where $\tilde{\mathcal H}_* \equiv H_0/\omega_*$ and $p=2/[3(1+\omega_{\rm EoS})
 
 An NMC run generates the usual scalar-singlet output files listed in Section [*Outputs*](My first model of (singlet) scalar fields.md#outputs). The NMC module adds the following information:
 
--  $\texttt{average_energies.txt}$: after the usual scalar kinetic, scalar gradient, and potential-energy columns, the file contains the two NMC energy-density contributions and their sum,
+<div class="grid cards cl-files" markdown>
 
-$\hspace{1cm}$ $\tilde{\eta}$, $\tilde{E}_K^{(0)}$, $\tilde{E}_G^{(0)}$, ... , $\tilde{E}_K^{(N_s-1)}$, $\tilde{E}_G^{(N_s-1)}$, $\tilde{E}_V^{(0)}$, ... , $\tilde{E}_V^{(N_p-1)}$, $\tilde{E}_{\rm NMC}^{(1)}$, $\tilde{E}_{\rm NMC}^{(2)}$, $\tilde{E}_{\rm NMC}$, $\langle \tilde{\rho} \rangle$.
+-   `average_energies.txt`{ .cl-fname }
+
+    After the usual scalar kinetic, scalar gradient, and potential-energy columns, the file contains the two NMC energy-density contributions and their sum,
+
+    $\tilde{\eta}$, $\tilde{E}_K^{(0)}$, $\tilde{E}_G^{(0)}$, ... , $\tilde{E}_K^{(N_s-1)}$, $\tilde{E}_G^{(N_s-1)}$, $\tilde{E}_V^{(0)}$, ... , $\tilde{E}_V^{(N_p-1)}$, $\tilde{E}_{\rm NMC}^{(1)}$, $\tilde{E}_{\rm NMC}^{(2)}$, $\tilde{E}_{\rm NMC}$, $\langle \tilde{\rho} \rangle$
+    {: .cl-schema }
+
+</div>
 
 The two NMC columns are the averaged contributions
 [](){ #eq_NMCOutputEnergyContributions }
@@ -321,11 +328,20 @@ The two NMC columns are the averaged contributions
 
 For the example model, the sum contains only $I=1$, with $\tilde\phi_1=\tilde\chi$. The last term in Eq.$~$\eqref{eq_NMCEnergyDensityContinuum} is a total spatial derivative and therefore vanishes in the volume average for periodic lattice boundary conditions; it is not printed as a separate averaged-energy column.
 
--  $\texttt{average_scale_factor.txt}$: in an expanding NMC simulation, the file contains one additional final column,
+<div class="grid cards cl-files" markdown>
 
-$\hspace{1cm}$ $\tilde{\eta}$, $a$, $a'$, $a'/a$, $\widetilde{\bar R}$.
+-   `average_scale_factor.txt`{ .cl-fname }
 
--  $\texttt{average_energy_conservation.txt}$: no separate NMC conservation file is produced. The usual Friedmann-constraint output is used, with the total energy density including the NMC contribution.
+    In an expanding NMC simulation, the file contains one additional final column,
+
+    $\tilde{\eta}$, $a$, $a'$, $a'/a$, $\widetilde{\bar R}$
+    {: .cl-schema }
+
+-   `average_energy_conservation.txt`{ .cl-fname }
+
+    No separate NMC conservation file is produced. The usual Friedmann-constraint output is used, with the total energy density including the NMC contribution.
+
+</div>
 
 ### **The NMC model file** { #sec_TheNMCModelFile }
 
