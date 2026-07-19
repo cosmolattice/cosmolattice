@@ -27,7 +27,7 @@ make cosmolattice
 This will compile the ``lphi4`` model. To run it with the default input file, you can do
 
 ```bash
-./lphi4 input=../src/models/parameter-files/lphi4.in
+./lphi4 input=../models/parameter-files/lphi4.in
 ```
 
 The above commands just represent a very brief guide for the installation and execution of CosmoLattice. 

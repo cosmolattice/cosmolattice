@@ -25,7 +25,7 @@ By default, CosmoLattice will auto-detect available backends. GPU backends are c
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------- |
 | `-DMPI`       | `ON` or `OFF`. Enable MPI parallelization. Default: `OFF`.                                                                       |
 | `-DHDF5`      | `ON` or `OFF`. Enable HDF5 support for I/O (saving/loading simulations, 3D snapshots). Default: `OFF`.                           |
-| `-DPARAFAFT`  | `ON` or `OFF`. Enable ParaFaFT for parallel FFTs (requires MPI). Replaces the old PFFT library. Default: `OFF`.                  |
+| `-DPARAFAFT`  | `ON` or `OFF`. Enable ParaFaFT for parallel FFTs (requires MPI; automatically enabled when `-DMPI=ON`). Replaces the old PFFT library. Default: `OFF`.                  |
 | `-DFLOAT`     | `ON` or `OFF`. Enable single-precision (float) FFTW support. Automatically enabled when using KokkosFFT. Default: `OFF`.         |
 | `-DKOKKOSFFT` | `ON` or `OFF`. Enable KokkosFFT for single-node GPU FFTs. Automatically set to `ON` when CUDA or HIP is enabled. Default: `OFF`. |
 

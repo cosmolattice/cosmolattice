@@ -16,7 +16,7 @@ This website has been generated from the [CosmoLattice user manual](https://arxi
 - [Parallelization](Parallelization.md)
 - [HDF5: Output and Backups ](HDF5: Output and Backups.md)
 - [Acknowledgments](Acknowledgments.md)
-- [Installation](Installation.md)
+- [Installation](../code/Installation.md)
 - [Appendix: Parameters](Appendix: Parameters.md)
 - [Appendix: Generic Model variables](Appendix: Generic Model variables.md)
 - [Appendix: CMake Flags](Appendix: CMake Flags.md)

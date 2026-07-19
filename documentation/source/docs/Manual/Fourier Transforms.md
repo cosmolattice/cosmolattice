@@ -44,7 +44,7 @@ By default the transforms are computed in double precision. You can switch to si
 cmake -DFLOAT=ON -DMODEL=lphi4 ../
 make cosmolattice
 ```
-`FFTW` is expected to be available on the system. If it is not, you can let `CMake` download and build it for you with `-DAUTOBUILD_FFTW=ON`. See Appendix [Installation](Installation.md) for installation details and guidance on HPC clusters.
+`FFTW` is expected to be available on the system. If it is not, you can let `CMake` download and build it for you with `-DAUTOBUILD_FFTW=ON`. See Appendix [Installation](../code/Installation.md) for installation details and guidance on HPC clusters.
 
 ### GPU Fourier transforms: `KokkosFFT` { #subsec_fft_kokkos }
 
@@ -101,4 +101,4 @@ A few constraints are worth keeping in mind when planning large or unusual runs:
 ```
 in your model's `ModelPars` class.
 
-For the broader picture of how these FFT backends fit into CosmoLattice's overall parallelization strategy — distributed (`MPI`) versus shared-memory and GPU parallelism — see Section [Parallelization](Parallelization.md). For the complete reference of compilation flags, see Appendix [CMake flags](Appendix_CMake_Flags.md), and for library installation, Appendix [Installation](Installation.md).
+For the broader picture of how these FFT backends fit into CosmoLattice's overall parallelization strategy — distributed (`MPI`) versus shared-memory and GPU parallelism — see Section [Parallelization](Parallelization.md). For the complete reference of compilation flags, see Appendix [CMake flags](Appendix_CMake_Flags.md), and for library installation, Appendix [Installation](../code/Installation.md).

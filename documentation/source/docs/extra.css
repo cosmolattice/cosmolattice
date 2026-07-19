@@ -1207,3 +1207,169 @@ body.nav-collapsed .md-sidebar--primary {
 .md-content:has(.inputgen-frame) .md-grid {
     max-width: none;
 }
+
+/* === Hero panel ===
+   A highlighted container for the "get started" centerpiece of a page (build
+   steps, environment recipes, ...). Accent left-border + tint + soft shadow
+   mark it as the focal point. Uses the site UI accent (light blue), never a
+   physics-sector color. .cl-steps below is a specialised hero for numbered
+   procedures. */
+.md-typeset .cl-hero {
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-left: 4px solid var(--md-accent-fg-color);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--md-accent-fg-color) 4%, var(--md-default-bg-color));
+    padding: 1.2em 1.5em 0.7em;
+    margin: 1.2em 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* Let the tab set sit flush inside the hero panel. */
+.md-typeset .cl-hero > .tabbed-set {
+    margin: 0;
+}
+
+/* === Numbered "quick start" steps ===
+   A guided, copy-paste happy path: an ordered list wrapped in
+   <div class="cl-steps" markdown> becomes a panel of numbered steps with a
+   badge per step and a connecting spine. Used for the Installation build path;
+   reusable on any short procedure. The badge uses the site UI accent (light
+   blue), NOT a physics-sector color, so it never collides with the semantic
+   color scheme. */
+.md-typeset .cl-steps {
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-left: 4px solid var(--md-accent-fg-color);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--md-accent-fg-color) 4%, var(--md-default-bg-color));
+    padding: 1.3em 1.6em 0.4em;
+    margin: 1.2em 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.md-typeset .cl-steps > ol {
+    counter-reset: cl-step;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.md-typeset .cl-steps > ol > li {
+    counter-increment: cl-step;
+    position: relative;
+    margin: 0 0 0.4em;
+    padding: 0 0 1.1em 3em;
+}
+
+.md-typeset .cl-steps > ol > li > :first-child {
+    margin-top: 0;
+}
+
+/* Left-align step prose (override the site-wide justified paragraphs, which
+   look gappy in this narrower column). */
+.md-typeset .cl-steps p {
+    text-align: left;
+}
+
+/* Numbered badge */
+.md-typeset .cl-steps > ol > li::before {
+    content: counter(cl-step);
+    position: absolute;
+    left: 0;
+    top: -0.1em;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    background: var(--md-accent-fg-color);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9em;
+    line-height: 2em;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Connecting spine between badges */
+.md-typeset .cl-steps > ol > li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc(1em - 1px);
+    top: 2.2em;
+    bottom: 0;
+    width: 2px;
+    background: var(--md-default-fg-color--lightest);
+}
+
+/* === Installation page: prerequisites strip ===
+   The chip row under the intro (class cl-prereqs) lists the handful of tools
+   needed before building. Monospace chips read as tool/command names; a
+   CSS-generated label makes the row self-explanatory. Neutral on purpose —
+   no physics-sector colors. */
+.md-typeset .cl-prereqs {
+    margin: 1.4em 0 0.2em;
+    padding: 0.6em 1em 0.4em;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--md-accent-fg-color) 3%, var(--md-default-bg-color));
+}
+
+.md-typeset .cl-prereqs p::before {
+    content: "You'll need";
+    display: inline-block;
+    margin-right: 0.7em;
+    font-size: 0.68em;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--md-default-fg-color--light);
+    vertical-align: middle;
+}
+
+.md-typeset .cl-prereqs .cl-fact {
+    font-family: var(--md-code-font);
+    font-size: 0.7em;
+}
+
+/* === Installation page: section rhythm & card accents ===
+   Scoped to this page via :has(.cl-prereqs) so every other page is untouched.
+   A light rule under each top-level section heading gives the long page a
+   clear beat, and a neutral top-accent ties the option cards (device backends,
+   optional features) into the site's card language without borrowing the
+   physics-sector colors. */
+.md-content:has(.cl-prereqs) .md-typeset h2 {
+    margin-top: 2.4em;
+    padding-bottom: 0.25em;
+    border-bottom: 2px solid var(--md-default-fg-color--lightest);
+}
+
+.md-content:has(.cl-prereqs) .md-typeset .grid.cards > ul > li {
+    border-top: 3px solid var(--md-default-fg-color--lighter);
+}
+
+/* === Installation page: compact Requirements ===
+   The two requirement tables sit side by side (a .grid of two cells) and read
+   as reference, so they are tightened up: smaller type, tight margins, and a
+   small run-in caption in place of the former subsection headings. */
+.md-typeset .grid.cl-req {
+    gap: 0.4rem 1.4rem;
+    margin: 0.8em 0 0.4em;
+}
+
+.md-typeset .cl-req .cl-req-cap {
+    margin: 0 0 0.3em;
+    font-size: 0.8em;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    text-align: left;
+    color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .cl-req table {
+    margin: 0;
+    width: 100%;
+    font-size: 0.74em;
+}
+
+.md-typeset .cl-req table th,
+.md-typeset .cl-req table td {
+    padding: 0.35em 0.6em;
+}
