@@ -15,3 +15,9 @@ dependencies/*/
 */.DS_Store
 */*/.DS_Store
 documentation/manual/
+
+# Editor swap files
+*.kate-swp
+*.swp
+*.swo
+*~

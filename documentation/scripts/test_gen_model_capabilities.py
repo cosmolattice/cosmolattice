@@ -41,7 +41,7 @@ def test_capability_matrix_spot_checks():
     assert caps["lphi4SU2U1"]["couplings"] == {
         "csU1": True, "su2dbU1": True, "su2dbSU2": True}
     # non-minimal models
-    assert caps["lphi4NonMinimal"]["couplings"] == {"nonMinimal": True}
+    assert caps["NMC_lphi4"]["couplings"] == {"nonMinimal": True}
     assert caps["NMC_tanh4_w_mass_P"]["couplings"] == {"nonMinimal": True}
     # SU(2) gauge model
     assert caps["SU2"]["couplings"] == {"su2dbSU2": True}

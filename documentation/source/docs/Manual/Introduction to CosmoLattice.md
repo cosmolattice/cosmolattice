@@ -34,7 +34,11 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can be used at multiple lev
 **Basic level**
 {: .cl-minihead }
 
+<<<<<<< HEAD
 For instance, a **basic level** user, say someone with no experience at all in parallelization techniques and with little to no experience at all on programming, will be able to run fully parallelized simulations of their favourite models (say using hundreds of cores in a cluster), while being completely oblivious to the technical details of the algorithm implementation or parallelization. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ automatically prints a collection of relevant observables, such as volume averages, field spectra, or dynamical constraints, which can be used to monitor the evolution of the system. 
+=======
+A **basic level** user with no experience at all in parallelization techniques and with little to no programming experience will be able to run fully parallelized simulations of their favourite models on hundreds of cores in a cluster, while being completely oblivious to the technical details of the algorithm implementation or parallelization. CosmoLattice automatically prints a collection of relevant observables, such as volume averages, field spectra, or dynamical constraints, which can be used to monitor the evolution of the system. 
+>>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
 
 </div>
 
@@ -43,7 +47,11 @@ For instance, a **basic level** user, say someone with no experience at all in p
 **Intermediate level**
 {: .cl-minihead }
 
+<<<<<<< HEAD
 However, an **intermediate level** user, say with certain programming experience, will want to modify the type of output $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ generates, change the initial condition routine (e.g. turn it into a Monte-Carlo generator for thermal configurations), or even design their own evolution algorithms and add these to the family of integrators available in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
+=======
+An **intermediate level** user with a certain programming experience, will want to modify the type of output CosmoLattice generates, change the initial condition routine (e.g. turn it into a Monte-Carlo generator for thermal configurations), or even design their own evolution algorithms and add these to the family of integrators available in CosmoLattice. 
+>>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
 
 </div>
 
@@ -52,7 +60,7 @@ However, an **intermediate level** user, say with certain programming experience
 **Advanced level**
 {: .cl-minihead }
 
-Finally, **advanced level** users may want to play as well with the hard core inner parts of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, in an attempt to understand or to improve the most advanced technical aspects of the code. This could include e.g. the handling of the parallelization, which is something that typically will remain as a black box for the majority of users. 
+An **advanced level** user may want to play as well with the hard core inner parts of CosmoLattice, in an attempt to understand or to improve the most advanced technical aspects of the code. This could include e.g. the handling of the parallelization, which is something that typically will remain as a black box for the majority of users. This means contributing to TempLat, the C++ engine at the core of CosmoLattice.
 
 </div>
 
@@ -77,7 +85,11 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is freely available to anyo
 !!! note "**Note**"
     If you would like to help developing some aspect of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, or even implement your own modules with some new functionality we have not envisaged, please contact us and let us know about your idea(s). $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ introduces a natural language describing fields and operations between them, so it is a natural platform to implement new libraries (related or not to cosmology).
 
+<<<<<<< HEAD
 ### Purpose, capabilities and structure of the code { #subsec_Purpose .cl-sec-fold }
+=======
+### The *Numerical* Early Universe { #subsec_EU }
+>>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
 
 !!! note "**Note**"
     Work focused on developing and applying numerical methods to address non-linear field theory phenomena in the early Universe is rapidly evolving, leading to the emergence of a research field of its own. We like to refer to this field as **Lattice Cosmology**, and to the methods used as **Lattice Cosmology Techniques (LCT)**. From now on, we will adopt this terminology, which will be used constantly throughout this document.
@@ -93,6 +105,10 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is structured in such a way
 !!! note
     **Note:** `TempLat` is no longer stored inside the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ source tree. It is an external dependency fetched by CMake into the local build directory. A remarkable feature of `TempLat` is that its operations and parallelization can work in an arbitrary number of spatial dimensions $d$, including $d < 3$ and $d > 3$. This makes it a natural basis for future interfaces dealing with field dynamics on lower- or higher-dimensional lattices. Visit [ https://cosmolattice.net/technicalnotes/](https://cosmolattice.net/technicalnotes/) to check for additional modules incorporated in successive updated versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to run in $d \neq 3$ spatial dimensions.
 
+<<<<<<< HEAD
+=======
+### Purpose, capabilities and structure of CosmoLattice { #subsec_Purpose }
+>>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
 
 
 The basic folder tree structure of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is the following:
@@ -165,7 +181,14 @@ The basic folder tree structure of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{a
 The CMake configuration first selects the model to compile from `models/`, then builds the executable from `source/cosmolattice.cpp`. The executable includes `CosmoInterface` from this repository and links against the external `TempLat::TempLat` target. `TempLat` is fetched at configure time and is responsible for the lattice-expression machinery, memory layout, parameter parsing, Fourier-transform infrastructure, and device backend setup. Depending on the selected CMake options, `TempLat` may in turn fetch or find external packages such as Kokkos, KokkosFFT, ParaFaFT, FFTW, HDF5, MPI, OpenMP, or C++ threads.
 
 
+<<<<<<< HEAD
 ### Basic Field Equations implemented (so far) <!-- in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$  --> { #subsec_BasicEOM .cl-sec-fold }
+=======
+!!! note
+    **Note:** `TempLat` is no longer stored inside the CosmoLattice source tree. It is an external dependency fetched by CMake into the local build directory. A remarkable feature of `TempLat` is that its operations and parallelization can work in an arbitrary number of spatial dimensions $d$, including $d < 3$ and $d > 3$. This makes it a natural basis for future interfaces dealing with field dynamics on lower- or higher-dimensional lattices. Visit [ https://cosmolattice.net/technicalnotes/](https://cosmolattice.net/technicalnotes/) to check for additional modules incorporated in successive updated versions of CosmoLattice to run in $d \neq 3$ spatial dimensions.
+
+### Basic Field Equations implemented (so far) in CosmoLattice { #subsec_BasicEOM }
+>>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
 
 Let us consider scalar fields of the type
 

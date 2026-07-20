@@ -15,7 +15,7 @@ metadata:
     domainWalls: {NScalars: 1, NDim: 3}
     globalStrings: {NCScalars: 1, NDim: 3}
     localStrings: {NCScalars: 1, NU1Flds: 1, NDim: 3, couplings: {csU1: true}}
-    lphi4NonMinimal: {NScalars: 2, NDim: 3, couplings: {nonMinimal: true}}
+    NMC_lphi4: {NScalars: 2, NDim: 3, couplings: {nonMinimal: true}}
     lphi4SU2U1: {NScalars: 1, NCScalars: 1, NU1Flds: 1, NSU2Doublet: 1, NSU2Flds: 1, NDim: 3, couplings: {csU1: true, su2dbU1: true, su2dbSU2: true}}
     lphi4U1: {NCScalars: 1, NU1Flds: 1, NDim: 3, couplings: {csU1: true}}
     m2phi2_axionU1: {NScalars: 1, NU1Flds: 1, NDim: 3, couplings: {axionU1: true}}
@@ -891,7 +891,7 @@ parameters:
     description: "Quartic self-coupling of the complex scalar field, controlling the strength of the symmetry-breaking potential whose vacuum manifold supports the formation of local cosmic strings; it sets the velocity rescaling omegaStar = sqrt(lambda)*vev and, combined with the gauge coupling, the derived gauge parameter g = sqrt(q*lambda). This same literal key is also reused to initialize the vacuum expectation value vev."
     constraints: "The literal string \"lambda\" is read twice in the constructor: once into the variable lambda and once into the variable vev (the vev is read under the key name \"lambda\", not a separate \"vev\" key). Both reads share the same default of 1."
 
-  # === model:lphi4NonMinimal / model ===
+  # === model:NMC_lphi4 / model ===
   - name: "lambda"
     type: "float"
     enum_values: null
@@ -899,7 +899,7 @@ parameters:
     required: true
     default: null
     important: false
-    scope: "model:lphi4NonMinimal"
+    scope: "model:NMC_lphi4"
     category: "model"
     units: "dimensionless"
     description: "Quartic self-coupling of the inflaton (first scalar) in the lphi4 potential 0.25*lambda*phi^4; sets the characteristic frequency omegaStar=sqrt(lambda)*fStar and, together with q, the derived coupling g=sqrt(q*lambda)."
@@ -911,7 +911,7 @@ parameters:
     required: true
     default: null
     important: false
-    scope: "model:lphi4NonMinimal"
+    scope: "model:NMC_lphi4"
     category: "model"
     units: "dimensionless"
     description: "Resonance parameter setting the strength of the quartic interaction 0.5*q*lambda*phi^2*chi^2 between the inflaton (scalar 0) and the daughter field (scalar 1); enters the derived coupling g=sqrt(q*lambda)."
@@ -923,7 +923,7 @@ parameters:
     required: true
     default: null
     important: false
-    scope: "model:lphi4NonMinimal"
+    scope: "model:NMC_lphi4"
     category: "model"
     units: "program units"
     description: "Initial homogeneous amplitudes of the two scalar fields (in program/reduced-Planck units); the first entry fixes fStar=initial_amplitudes[0] used to define omegaStar=sqrt(lambda)*fStar."
@@ -935,7 +935,7 @@ parameters:
     required: false
     default: "{0,0}"
     important: false
-    scope: "model:lphi4NonMinimal"
+    scope: "model:NMC_lphi4"
     category: "model"
     units: "program units"
     description: "Initial homogeneous time-derivatives (conjugate momenta) of the two scalar fields; defaults to zero velocity for both fields if not specified."

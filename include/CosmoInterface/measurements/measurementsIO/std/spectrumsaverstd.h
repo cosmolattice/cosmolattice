@@ -73,7 +73,7 @@ namespace TempLat
       // Now we construct the file with the appropriate format.
 
       std::stringstream sstream;
-      for (size_t i = 0; i < (*arr[0]).getNBins(); ++i) {
+      for (size_t i = 0; i < (*arr[0]).size(); ++i) {
         sstream.str("");
 
         if (verbosity == 0) {
