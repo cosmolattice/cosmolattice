@@ -34,7 +34,7 @@ CosmoLattice can be used at multiple levels of complexity:
 **Basic level**
 {: .cl-minihead }
 
-For instance, a **basic level** user, say someone with no experience at all in parallelization techniques and with little to no experience at all on programming, will be able to run fully parallelized simulations of their favourite models (say using hundreds of cores in a cluster), while being completely oblivious to the technical details of the algorithm implementation or parallelization. CosmoLattice automatically prints a collection of relevant observables, such as volume averages, field spectra, or dynamical constraints, which can be used to monitor the evolution of the system. 
+A **basic level** user with no experience at all in parallelization techniques and with little to no programming experience will be able to run fully parallelized simulations of their favourite models on hundreds of cores in a cluster, while being completely oblivious to the technical details of the algorithm implementation or parallelization. CosmoLattice automatically prints a collection of relevant observables, such as volume averages, field spectra, or dynamical constraints, which can be used to monitor the evolution of the system. 
 
 </div>
 
@@ -43,7 +43,7 @@ For instance, a **basic level** user, say someone with no experience at all in p
 **Intermediate level**
 {: .cl-minihead }
 
-However, an **intermediate level** user, say with certain programming experience, will want to modify the type of output CosmoLattice generates, change the initial condition routine (e.g. turn it into a Monte-Carlo generator for thermal configurations), or even design their own evolution algorithms and add these to the family of integrators available in CosmoLattice. 
+An **intermediate level** user with a certain programming experience, will want to modify the type of output CosmoLattice generates, change the initial condition routine (e.g. turn it into a Monte-Carlo generator for thermal configurations), or even design their own evolution algorithms and add these to the family of integrators available in CosmoLattice. 
 
 </div>
 
@@ -52,7 +52,7 @@ However, an **intermediate level** user, say with certain programming experience
 **Advanced level**
 {: .cl-minihead }
 
-Finally, **advanced level** users may want to play as well with the hard core inner parts of CosmoLattice, in an attempt to understand or to improve the most advanced technical aspects of the code. This could include e.g. the handling of the parallelization, which is something that typically will remain as a black box for the majority of users. 
+An **advanced level** user may want to play as well with the hard core inner parts of CosmoLattice, in an attempt to understand or to improve the most advanced technical aspects of the code. This could include e.g. the handling of the parallelization, which is something that typically will remain as a black box for the majority of users. This means contributing to TempLat, the C++ engine at the core of CosmoLattice.
 
 </div>
 
