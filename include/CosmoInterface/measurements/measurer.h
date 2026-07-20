@@ -185,8 +185,10 @@ namespace TempLat
         su2Measurer.setLastMeas(true);
         energiesMeasurer.setLastMeas(true);
         scaleFactorMeasurer.setLastMeas(true);
-        gwsMeasurer.setLastMeas(true);
         topologicalChargesMeasurer.setLastMeas(true);
+      }
+      else if (n % infreqOutputFreq == 0 and (n == nLast or n + infreqOutputFreq >= nLast)) {
+        gwsMeasurer.setLastMeas(true);
       }
       return (n % outputFreq == 0 || n % infreqOutputFreq == 0 || n % rareOutputFreq == 0);
     }

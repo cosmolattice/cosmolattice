@@ -30,7 +30,8 @@ namespace TempLat
     template <typename Model>
     GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append):
     amIRoot(model.getToolBox()->amIRoot()),
-    energyOut(filesManager, "energies_gws", amIRoot, append, getGWEnergyHeaders(model), model.fldGWs == nullptr),
+    computeGWenergy(par.powerSpectrumType != 0),
+    energyOut(filesManager, "energies_gws", amIRoot, append, getGWEnergyHeaders(model), model.fldGWs == nullptr || !computeGWenergy),
     spectraOut(filesManager, "energy_gws", amIRoot, append, par, model.fldGWs == nullptr),
     PRJType(par.GWprojectorType)
     { }
@@ -42,11 +43,13 @@ namespace TempLat
       if (model.fldGWs != nullptr) {
         auto GWspectrum = PSMeasurer.powerSpectrumGW(model, PRJType);
         spectraOut.save(lastMeas, t, GWspectrum);
-        energyOut.addAverage(t);
-        auto fracEgws = GWspectrum.integrate(PRJType == 1);
-        energyOut.addAverage(fracEgws);
-        energyOut.addAverage(fracEgws * Energies::rho(model));
-        energyOut.save(lastMeas);
+        if (computeGWenergy) {
+          energyOut.addAverage(t);
+          auto fracEgws = GWspectrum.integrate(PRJType == 1);
+          energyOut.addAverage(fracEgws);
+          energyOut.addAverage(fracEgws * Energies::rho(model));
+          energyOut.save(lastMeas);
+        }
       }
     }
     // @endlabel
@@ -64,7 +67,7 @@ namespace TempLat
       return ret;
     }
 
-    bool amIRoot;
+    bool amIRoot, computeGWenergy;
     MeasurementsSaver<T> energyOut;
     SpectrumSaver<T> spectraOut;
     size_t PRJType;
