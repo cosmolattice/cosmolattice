@@ -39,11 +39,9 @@ namespace TempLat
           averages.back().extend(fm.getNMeas());
         } else {
           averages.emplace_back(group.template createTimeSeries<T>(h, {0}, {4096}));
-          say << fm.getNMeas();
           averages.back().extend(fm.getNMeas());
         }
         averages.back().close();
-        say << h;
       }
       group.close();
       file.close();
