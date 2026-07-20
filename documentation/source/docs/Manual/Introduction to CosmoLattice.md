@@ -45,11 +45,8 @@ A **basic level** user with no experience at all in parallelization techniques a
 **Intermediate level**
 {: .cl-minihead }
 
-<<<<<<< HEAD
-However, an **intermediate level** user, say with certain programming experience, will want to modify the type of output $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ generates, change the initial condition routine (e.g. turn it into a Monte-Carlo generator for thermal configurations), or even design their own evolution algorithms and add these to the family of integrators available in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. 
 =======
 An **intermediate level** user with a certain programming experience, will want to modify the type of output CosmoLattice generates, change the initial condition routine (e.g. turn it into a Monte-Carlo generator for thermal configurations), or even design their own evolution algorithms and add these to the family of integrators available in CosmoLattice. 
->>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
 
 </div>
 
