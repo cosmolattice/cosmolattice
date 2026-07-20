@@ -77,7 +77,7 @@ CosmoLattice is freely available to anyone who wants to use or modify it, as lon
 !!! note "**Note**"
     If you would like to help developing some aspect of CosmoLattice, or even implement your own modules with some new functionality we have not envisaged, please contact us and let us know about your idea(s). CosmoLattice introduces a natural language describing fields and operations between them, so it is a natural platform to implement new libraries (related or not to cosmology).
 
-### The *Numerical* Early Universe { #subsec_EU .cl-sec-fold }
+### The *Numerical* Early Universe { #subsec_EU }
 
 The phenomenology of high energy physics in the early universe is vast and very rich, and it is often characterized by non-linear dynamics. The *numerical early universe*, i.e. the study with numerical techniques of high energy non-linear field theory phenomena in the early universe, is an emerging field increasingly gaining relevance, especially as a methodology to assess our experimental capabilities to constrain the physics of this epoch. The details of nonlinear phenomena are often too difficult, when not impossible, to be described by analytic means. In order to fully understand the non-linearities developed in the dynamics of a given scenario, the use of numerical techniques becomes mandatory. The outcome from non-linear early universe phenomena represents, more and more, an important perspective in determining the best observational strategies to probe the unknown physics from this era. It is therefore crucial to develop numerical techniques, as efficient and robust as possible, to simulate these phenomena. Numerical algorithms developed for this purpose must satisfy a number of physical constraints (e.g. energy conservation), and keep the numerical integration errors under control. It is actually useful to develop as many techniques as possible, to validate and double check results from simulations. Only in this way, we will achieve a certain robustness in the predictions of the potentially probeable implications from these phenomena.
 
@@ -92,7 +92,7 @@ The techniques developed for studying nonlinear dynamics of classical fields are
 
 In summary the study of non-linear dynamics of early universe high-energy phenomena, represents an important emerging and phenomenologically rich field, which will help to determine best our observational strategies to probe the unknown physics from this era. Its study requires the development of appropriate numerical techniques, as efficient and robust as possible, to simulate such phenomena.
 
-### Purpose, capabilities and structure of CosmoLattice { #subsec_Purpose .cl-sec-fold }
+### Purpose, capabilities and structure of CosmoLattice { #subsec_Purpose }
 
 A number of public packages for lattice simulations have appeared over the years, mostly dedicated to the simulation of interacting scalar fields, like `LatticeEasy` [@Felder_2000hq], `ClusterEasy` [@Felder_2007nz],  `Defrost` [@Frolov_2008hy], `CUDAEasy` [@Sainio_2009hm], `HLattice` [@Huang_2011gf],  `PyCOOL` [@Sainio_2012mw] and `GABE` [@Child_2013ria], which use finite difference techniques and a FLRW background metric. Other packages are suitable for full general relativistic evolution, like `GABERel` [@Giblin_2019nuv] or the recent `GRChombo` [@Andrade_2021rbd]. Others use pseudo-spectral techniques, like `PSpectRe` [@Easther_2010qz] and `Stella` [@Amin_2018xfe]. `Latfield2` [@Daverio_2015ryl], on the other hand, is a library in C++ designed to simplify writing parallel codes for solving partial differential equations, and hence can be used for field dynamics as long as the users implement their own lattice equations of motion. Finally, `GFiRe` [@Lozanov_2019jff] is a package dedicated to Abelian gauge theories, and even though the code itself has not been made publicly available yet, their algorithm is clearly spelled out in their publication.
 
@@ -176,7 +176,7 @@ The CMake configuration first selects the model to compile from `models/`, then 
 !!! note
     **Note:** `TempLat` is no longer stored inside the CosmoLattice source tree. It is an external dependency fetched by CMake into the local build directory. A remarkable feature of `TempLat` is that its operations and parallelization can work in an arbitrary number of spatial dimensions $d$, including $d < 3$ and $d > 3$. This makes it a natural basis for future interfaces dealing with field dynamics on lower- or higher-dimensional lattices. Visit [ https://cosmolattice.net/technicalnotes/](https://cosmolattice.net/technicalnotes/) to check for additional modules incorporated in successive updated versions of CosmoLattice to run in $d \neq 3$ spatial dimensions.
 
-### Basic Field Equations implemented (so far) in CosmoLattice { #subsec_BasicEOM .cl-sec-fold }
+### Basic Field Equations implemented (so far) in CosmoLattice { #subsec_BasicEOM }
 
 Let us consider scalar fields of the type
 [](){ #eq_ChargedScalars }
