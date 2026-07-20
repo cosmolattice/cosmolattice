@@ -1,6 +1,15 @@
-# People
+# $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ People
 
-## Current & Past Developers
+<!--
+  space
+-->
+
+<!--
+  space
+-->
+
+
+## **Developers**
 
 <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; align-items: start;">
 
@@ -10,13 +19,14 @@
          style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
     <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
       <strong>Jorge Baeza-Ballesteros</strong><br>
-      Contributor to CosmoLattice v1.1-v1.2; 
-      Contributor to CosmoLattice v2.0
+		<em>DESY, Zeuthen, Germany</em><br>
+		Contributor to CL v1.1, v1.2<br>
+    	Contributor to CL v2.0<br>
     </div>
   </div>
 
   <div style="text-align: center;">
-    <img src="../assets/img/people/dani.png"
+    <img src="../assets/img/people/dani3.png"
          alt="Daniel G. Figueroa"
          style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
     <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
@@ -25,10 +35,11 @@
          rel="noopener noreferrer">
         <strong>Daniel G. Figueroa</strong>
       </a><br>
-      Founder of CosmoLattice; 
-      Contributor to CosmoLattice v1.0-v1.2;
-      Contributor to CosmoLattice v2.0 
-      Contributor to CosmoLattice v3.0 (work in progress) 
+		<em>IFIC (CSIC-UV), Valencia, Spain</em><br>
+        <strong>Creator of CosmoLattice (CL)</strong><br>
+		Contributor to CL v1.1, v1.2<br>
+    	Contributor to CL v2.0<br>
+    	<!-- Contributor to CL v3.0 (work in progress) -->
     </div>
   </div>
 
@@ -42,9 +53,10 @@
          rel="noopener noreferrer">
         <strong>Adrien Florio</strong>
       </a><br>
-      Founder of CosmoLattice; 
-      Contributor to CosmoLattice v1.0-v1.2;
-      Contributor to CosmoLattice v2.0 
+		<em>Bielefeld University, Germany</em><br>
+        <strong>Creator of CosmoLattice (CL);</strong><br>
+		Contributor to CL v1.1, v1.2<br>
+    	Contributor to CL v2.0<br>
     </div>
   </div>
 
@@ -54,7 +66,20 @@
          style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
     <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
       <strong>Nicolas Loayza</strong><br>
-      Contributor to CosmoLattice v1.1-v1.2, v2.0
+		<em>CEICO, FZU, Prague, Czechia</em><br>
+		Contributor to CL v1.1, v1.2<br>
+    	Contributor to CL v2.0<br>
+    </div>
+  </div>
+  
+    <div style="text-align: center;">
+    <img src="../assets/img/people/Franz.png"
+         alt="Franz R. Sattler"
+         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
+      <strong>Franz R. Sattler</strong><br>
+		<em>Bielefeld University, Germany</em><br>
+        Contributor to CL v2.0
     </div>
   </div>
 
@@ -68,7 +93,10 @@
          rel="noopener noreferrer">
         <strong>Francisco Torrenti</strong>
       </a><br>
-      Creator of CosmoLattice v1.0; Contributor to CosmoLattice v1.1-v1.3, v2.0
+		<em>Univ. Carlos III de Madrid, Spain</em><br>
+        <strong>Creator of CosmoLattice (CL)</strong><br>
+		Contributor to CL v1.1, v1.2<br>
+    	Contributor to CL v2.0<br>
     </div>
   </div>
 
@@ -78,52 +106,123 @@
          style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
     <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
       <strong>Ander Urio</strong><br>
-      Contributor to CosmoLattice v2.0
+		<em>UPV/EHU, Bilbao, Spain</em><br>
+    	Contributor to CL v2.0<br>
+    </div>
+  </div>
+  
+   <div style="text-align: center;">
+    <img src="../assets/img/people/wessel.png"
+         alt="Wessel Valkenburg"
+         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
+      <strong>Wessel Valkenburg</strong><br>
+		<!-- <em>Private sector since 2019</em><br> -->
+		<em>Enjoying la vida loca out of academia</em><br>
+    	 <strong>Creator of CosmoLattice (CL)</strong><br>
+    </div>
+  </div>
+
+
+</div>
+
+<!--
+  space
+-->
+
+----------
+
+<!--
+  space
+-->
+
+## **New Developers**
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; align-items: start;">
+
+  <div style="text-align: center;">
+    <img src="../assets/img/people/ken.jpeg"
+         alt="Kenneth Marschall"
+         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
+      <strong>Kenneth Marschall</strong><br>
+	  <em>IFIC, Valencia, Spain</em><br>
+      Contributor to CL v3.0 (work in progress)
     </div>
   </div>
 
   <div style="text-align: center;">
-    <img src="../assets/img/people/Franz.png"
-         alt="Franz R. Sattler"
+    <img src="../assets/img/people/antonino.png"
+         alt="Antonino S. Midiri"
          style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
     <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Franz R. Sattler</strong><br>
-      Contributor to CosmoLattice v2.0
+      <a href="http://ftorrenti.github.io"
+         target="_blank"
+         rel="noopener noreferrer">
+        <strong>Antonino S. Midiri</strong>
+      </a><br>
+	  <em>University of Geneva, Switzerland</em><br>
+      Contributor to CL v3.0 (work in progress)
+    </div>
+  </div>
+
+  <div style="text-align: center;">
+    <img src="../assets/img/people/ander.jpg"
+         alt="Alberto Roper Pol"
+         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
+      <strong>Alberto Roper Pol</strong><br>
+	  <em>University of Geneva, Switzerland</em><br>
+      Contributor to CL v3.0 (work in progress)
     </div>
   </div>
 
 </div>
+<!--
+  space
+-->
 
-## Upcoming Developers
+----------
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 2rem 1.5rem; align-items: start; text-align: center;">
-  <div>
-    <img src="../assets/img/people/ken.jpeg" alt="Kenneth Marschall" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <p><strong>Kenneth Marschall</strong><br>Contributor to CosmoLattice v3.0 (work in progress)</p>
-  </div>
-  <div>
-    <img src="../assets/img/people/paco.png" alt="Antonino S. Midiri" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <p><a href="http://ftorrenti.github.io" target="_blank" rel="noopener noreferrer"><strong>Antonino S. Midiri</strong></a><br>Contributor to CosmoLattice v3.0 (work in progress)</p>
-  </div>
-  <div>
-    <img src="../assets/img/people/ander.jpg" alt="Alberto Roper Pol" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <p><strong>Alberto Roper Pol</strong><br>Contributor to CosmoLattice v3.0 (work in progress)</p>
-  </div>
-</div>
+<!--
+  space
+-->
 
-## Other Contributors
+## **Other Contributors**
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 2rem 1.5rem; align-items: start; text-align: center;">
-  <div>
-    <img src="../assets/img/people/joanes.png" alt="Joanes Lizarraga" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <p><strong>Joanes Lizarraga</strong><br>Contributor to Axion-Gauge interactions</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; align-items: start;">
+
+  <div style="text-align: center;">
+    <img src="../assets/img/people/joanes.png"
+         alt="Joanes Lizarraga"
+         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
+      <strong>Joanes Lizarraga</strong><br>
+	  <em>UPV/EHU, Bilbao, Spain</em><br>
+      Contributor to Axion-Gauge module
+    </div>
   </div>
-  <div>
-    <img src="../assets/img/people/toby.png" alt="Toby Opferkuch" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <p><strong>Toby Opferkuch</strong><br>Contributor to NMC interactions</p>
+
+  <div style="text-align: center;">
+    <img src="../assets/img/people/toby.png"
+         alt="Toby Opferkuch"
+         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
+      <strong>Toby Opferkuch</strong><br>
+	  <em>SISSA, Trieste, Italy</em><br>
+      Contributor to NMC module
+    </div>
   </div>
-  <div>
-    <img src="../assets/img/people/ben.png" alt="Ben A. Stefanek" style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <p><strong>Ben A. Stefanek</strong><br>Contributor to NMC interactions</p>
+
+  <div style="text-align: center;">
+    <img src="../assets/img/people/ben.png"
+         alt="Ben A. Stefanek"
+         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
+    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
+      <strong>Ben A. Stefanek</strong><br>
+	  <em>King's College London, UK</em><br>
+      Contributor to NMC module
+    </div>
   </div>
+
 </div>

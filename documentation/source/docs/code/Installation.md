@@ -4,9 +4,9 @@ The code can be downloaded from our <a href="https://github.com/cosmolattice/cos
 **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ GitHub repository**
 </a>, see also the installation instructions below on how to do this directly from the command line.
 
-Here, we will present in detail how to build $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ for different platforms both on macOS and Linux. 
+In this Tab we discuss in detail how to build $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ for different platforms both on macOS and Linux. 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ requires almost nothing beyond standard development tools on a UNIX machine, see [*Requirements*][subsec_requirements].
-We will also explain how to integrate it with external libraries and make some general comments on to make it work on High Performance Clusters (HPC).
+We also explain how to integrate $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ with external libraries and make some general comments on to make it work on High Performance Clusters (HPC).
 
 <div class="cl-facts cl-prereqs" markdown>
 [git](#subsec_requirements){ .cl-fact }
