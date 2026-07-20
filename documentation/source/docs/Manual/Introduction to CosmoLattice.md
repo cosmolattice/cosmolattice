@@ -34,11 +34,9 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can be used at multiple lev
 **Basic level**
 {: .cl-minihead }
 
-<<<<<<< HEAD
-For instance, a **basic level** user, say someone with no experience at all in parallelization techniques and with little to no experience at all on programming, will be able to run fully parallelized simulations of their favourite models (say using hundreds of cores in a cluster), while being completely oblivious to the technical details of the algorithm implementation or parallelization. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ automatically prints a collection of relevant observables, such as volume averages, field spectra, or dynamical constraints, which can be used to monitor the evolution of the system. 
-=======
+
 A **basic level** user with no experience at all in parallelization techniques and with little to no programming experience will be able to run fully parallelized simulations of their favourite models on hundreds of cores in a cluster, while being completely oblivious to the technical details of the algorithm implementation or parallelization. CosmoLattice automatically prints a collection of relevant observables, such as volume averages, field spectra, or dynamical constraints, which can be used to monitor the evolution of the system. 
->>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
+
 
 </div>
 
