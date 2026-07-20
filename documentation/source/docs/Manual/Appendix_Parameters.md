@@ -30,6 +30,14 @@ expansion. They are declared in `src/include/CosmoInterface/runparameters.h`.
 | `a0` | `float` | `1.0` | dimensionless | Initial value of the scale factor at the start of the simulation. |
 | `evolver` | `enum` | `LF` | n/a | Type of time-evolution algorithm: LF (staggered leapfrog), velocity-Verlet (VV*), position-Verlet (PV*), or Runge-Kutta (RK*) schemes of various orders. Allowed values: `LF`, `VV2`, `VV4`, `VV6`, `VV8`, `VV10`, `VV6_2`, `RK2`, `RK3_3`, `RK3_4`, `RK4_5`, `PV2`, `PV4`, `PV6`, `PV8`, `PV10`, `PV6_2`. |
 | `tolerance` | `float` | `-1` | dimensionless | Error tolerance used by adaptive (e.g. Runge-Kutta) solvers to control the adaptive time step. |
+| `doDiffusion` | `bool` | `false` | dimensionless | Master switch enabling a post-evolution diffusion phase, in which the fields are further relaxed after the main simulation has finished (used e.g. to smooth defect configurations). The diffusion-phase parameters (tmaxdiff, dtdiff, diffusionevolver, tOutputFreqDiff, tOutputRareFreqDiff, snapshots_diffusion) are only read when this is true. |
+| `tmaxdiff` | `float` | — | program units | Duration (maximum time) of the diffusion phase in program units. |
+| `dtdiff` | `float` | — | program units | Time step used during the diffusion phase in program units. |
+| `diffusionevolver` | `enum` | `RK2` | n/a | Time-evolution algorithm used during the diffusion phase (same set of integrators as evolver). Allowed values: `LF`, `VV2`, `VV4`, `VV6`, `VV8`, `VV10`, `VV6_2`, `RK2`, `RK3_3`, `RK3_4`, `RK4_5`, `PV2`, `PV4`, `PV6`, `PV8`, `PV10`, `PV6_2`. |
+| `doResolutionPreserving` | `bool` | `false` | dimensionless | Master switch enabling the resolution-preserving technique, which rescales the lattice and fields during the run to keep the relevant physical scales resolved. Its parameters (sRP, tRP0, tRPMax) are only read when this is true. |
+| `sRP` | `float` | — | dimensionless | Rescaling (stretch) factor applied by the resolution-preserving technique. |
+| `tRP0` | `float` | `t0` | program units | Time at which the resolution-preserving rescaling starts, in program units. |
+| `tRPMax` | `float` | `(computed)` | program units | Time at which the resolution-preserving rescaling stops, in program units. |
 <!-- @endgen -->
 
 !!! note
@@ -47,6 +55,8 @@ They are declared in `src/include/CosmoInterface/runparameters.h`.
 | `ICtype_S` | `enum` | `Default` | n/a | Type of initial conditions used for scalar singlet fields (e.g. default vacuum fluctuations, random-with-matter, defect networks, white-noise defects, or homogeneous). Allowed values: `Default`, `RandomWithMatter`, `DefectsNetwork`, `DefectsWhiteNoise`, `Homogeneous`. |
 | `ICtype_U1` | `enum` | `Default` | n/a | Type of initial conditions used for U(1) gauge fields (e.g. default, random-with-matter, plane waves, plane waves with zero magnetic field, Bunch-Davies transverse modes, or defect networks). Allowed values: `Default`, `RandomWithMatter`, `PlaneWaves`, `PlaneWavesZeroB`, `BunchDavisTransverseU1`, `DefectsNetwork`, `DefectsWhiteNoise`. |
 | `baseSeed` | `string` | *required* | n/a | Seed for the random generator of initial field fluctuations; if not specified, a seed is generated randomly each run. |
+| `lcorr` | `float` | — | program units | Initial comoving correlation length of the defect network used when generating DefectsNetwork initial conditions. |
+| `deltaNoise` | `float` | — | dimensionless | Amplitude of the white-noise field distribution used when generating DefectsWhiteNoise initial conditions. |
 | `ext_PS` | `string` ×NS | `defaultString` | path | Per-scalar external initial power spectrum: path/name of a file providing the initial spectrum used to set the initial conditions of scalar singlet field i. |
 <!-- @endgen -->
 
@@ -73,6 +83,10 @@ output is written.
 | `overwriteFiles` | `bool` | `false` | dimensionless | If true (and appendToFiles=false), existing output files are deleted before writing. |
 | `print_headers` | `bool` | `false` | dimensionless | If true, a header line describing the contents is printed at the top of each text output file. |
 | `fn_verbosity` | `int` | `0` | dimensionless | Verbosity level controlling how much model/parameter information is embedded in output filenames (0 = none; higher levels append N, kIR, dt, evolver, etc.). |
+| `tOutputFreqDiff` | `float` | `10*dtdiff` | program units | Time interval between frequent output during the diffusion phase, in program units (the diffusion-phase counterpart of tOutputFreq). |
+| `tOutputRareFreqDiff` | `float` | `100*dtdiff` | program units | Time interval between rare/infrequent output during the diffusion phase, in program units (the diffusion-phase counterpart of tOutputRareFreq). |
+| `measureDefectsEnergies` | `bool` | `false` | dimensionless | If true, enables measurement and output of the energy stored in the defect network. |
+| `measureDefectsStructure` | `bool` | `false` | dimensionless | If true, enables measurement and output of the defect-network structure/geometry (e.g. defect positions and length/area). |
 <!-- @endgen -->
 
 ## Spectra parameters
@@ -100,10 +114,12 @@ These parameters select which energy contributions are saved as field snapshots
 <!-- @gen:params:framework:snapshots -->
 | Parameter | Type | Default | Units | Description |
 | --- | --- | --- | --- | --- |
-| `snapshots` | `string` ×14 | `(empty list — no snapshots saved)` | n/a | Space-separated list of the configuration-space quantities to dump as HDF5 field snapshots. Each entry must be one of the 14 recognised labels; you list any subset (in any order), one label per quantity you want saved. Recognised labels: S (scalar-singlet field value), E_S_K / E_S_G (scalar-singlet kinetic / gradient energy), CS (complex-scalar modulus), E_CS_K / E_CS_G (complex-scalar kinetic / gradient energy), E_SU2D_K / E_SU2D_G (SU(2)-doublet kinetic / gradient energy), E_A_K / E_A_G (U(1) electric / magnetic energy), E_B_K / E_B_G (SU(2) electric / magnetic energy), E_V (potential energy), E (total energy). Selecting a label for a sector the model does not contain is harmless and simply produces no file. Was previously named `energy_snapshot`, which still works as a deprecated alias. |
+| `snapshots` | `string` ×14 | `(empty list — no snapshots saved)` | n/a | Space-separated list of the configuration-space quantities to dump as HDF5 field snapshots. Each entry must be one of the 14 recognised labels; you list any subset (in any order), one label per quantity you want saved. Recognised labels: S (scalar-singlet field value), E_S_K / E_S_G (scalar-singlet kinetic / gradient energy), CS (complex-scalar modulus), E_CS_K / E_CS_G (complex-scalar kinetic / gradient energy), E_SU2D_K / E_SU2D_G (SU(2)-doublet kinetic / gradient energy), E_A_K / E_A_G (U(1) electric / magnetic energy), E_B_K / E_B_G (SU(2) electric / magnetic energy), E_V (potential energy), E (total energy). Selecting a label for a sector the model does not contain is harmless and simply produces no file. |
+| `energy_snapshot` | `string` ×14 | — | n/a | Deprecated alias for `snapshots`, kept for backward compatibility. If `snapshots` is not given but `energy_snapshot` is, its value fills `snapshots` and a deprecation notice is printed. If both are given, `snapshots` takes precedence and a conflict warning is printed. |
 | `snap_lowercoord` | `int` ×NDim | `{0,...} (one 0 per dimension)` | dimensionless | Lower corner (in lattice units) of the sub-volume saved in snapshots, one value per spatial dimension. Together with snap_uppercoord and snap_stepcoord it selects which lattice region is written: snap_lowercoord is the first lattice index kept along each axis. Default 0 in every dimension (start at the box edge). |
 | `snap_uppercoord` | `int` ×NDim | `{N,...} (one N per dimension)` | dimensionless | Upper corner (in lattice units) of the sub-volume saved in snapshots, one value per spatial dimension. snap_uppercoord is the (exclusive) last lattice index kept along each axis. Default N (the lattice size) in every dimension, i.e. the full box. |
 | `snap_stepcoord` | `int` ×NDim | `{1,...} (one 1 per dimension)` | dimensionless | Stride (in lattice units) used when sampling the snapshot sub-volume, one value per spatial dimension. A value of s keeps every s-th lattice point along that axis (coarsening the saved data); 1 means keep every point. |
+| `snapshots_diffusion` | `string` ×15 | `(empty list — no snapshots saved)` | n/a | Space-separated list of the configuration-space quantities to dump as HDF5 field snapshots during the diffusion phase (the diffusion-phase counterpart of snapshots). Same recognised labels as snapshots; you list any subset (in any order), one label per quantity you want saved. |
 <!-- @endgen -->
 
 ## Gravitational waves
@@ -173,39 +189,26 @@ annotated with their arity (e.g. `×NS` for the number of scalar fields).
 | `initial_amplitudes` | `float` ×2 | *required* | GeV | Initial homogeneous amplitudes of the two scalar fields (inflaton and daughter field), given in GeV; the first component (inflaton) also sets the field rescaling fStar=fldS0[0]. |
 | `initial_momenta` | `float` ×2 | `{0,0}` | GeV^2 | Initial homogeneous time-derivatives (canonical momenta) of the two scalar fields, given in GeV^2; optional parameter defaulting to zero velocity for both fields. |
 
-### `cscalar`
+### `defects_ONGlobal`
 
 | Parameter | Type | Default | Units | Description |
 | --- | --- | --- | --- | --- |
-| `m2` | `float` | *required* | GeV^2 | Mass squared of the complex scalar field, entering the quadratic potential term V = 0.5*m2*\|fldCS\|^2 used as the inflaton/field potential energy. |
-| `initial_amplitudes` | `float` | *required* | GeV | Initial homogeneous amplitude (norm) of the complex scalar field; the value is split equally between real and imaginary parts as norm/sqrt(2) each to set fldCS0. |
-| `initial_momenta` | `float` | `0` | GeV^2 | Initial homogeneous time-derivative (conjugate momentum norm) of the complex scalar field; split equally between real and imaginary parts as norm/sqrt(2) each to set piCS0, defaulting to zero. |
+| `lambda` | `float` | `1.` | dimensionless | Quartic self-coupling of the real O(N) scalar multiplet whose spontaneous symmetry breaking produces the global defects (domain walls for N=1, global strings for N=2, monopoles/textures for higher N); it sets the velocity rescaling omegaStar=sqrt(lambda)*vev and enters the derived bias coupling g=qbias/lambda. |
+| `vev` | `float` | `1.` | GeV | Vacuum expectation value of the O(N) scalar multiplet, i.e. the radius of the vacuum manifold on which the defect network forms; it sets the field rescaling fStar=vev and the velocity rescaling omegaStar=sqrt(lambda)*vev. |
+| `qbias` | `float` | `0.` | dimensionless | Bias parameter adding a term that breaks the vacuum degeneracy, used to bias domain-wall networks; it sets the derived bias coupling g=qbias/lambda. A value of 0 gives an unbiased network. |
 
-### `domainWalls`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `lambda` | `float` | `1.` | dimensionless | Quartic self-coupling of the real scalar field whose double-well potential drives domain wall formation; it also sets the velocity rescaling omegaStar=sqrt(lambda)*vev and enters the derived bias coupling g=qbias/lambda. |
-| `qbias` | `float` | `0.` | dimensionless | Bias parameter that adds a cubic term to the potential to break the Z2 degeneracy of the two vacua, controlling the energy difference between domain wall sides; it sets the derived bias coupling g=qbias/lambda used in the cubic potential term g*phi^3. A value of 0 gives an unbiased (symmetric) model. |
-
-### `globalStrings`
+### `defects_U1LocalStrings`
 
 | Parameter | Type | Default | Units | Description |
 | --- | --- | --- | --- | --- |
-| `lambda` | `float` | `1.` | dimensionless | Quartic self-coupling of the complex scalar field whose phase forms the global cosmic strings; it sets the velocity rescaling omegaStar = sqrt(lambda)*vev and, since the same key is reused for the vacuum expectation value, also fixes the field rescaling fStar. |
-
-### `localStrings`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `lambda` | `float` | `1.` | dimensionless | Quartic self-coupling of the complex scalar field, controlling the strength of the symmetry-breaking potential whose vacuum manifold supports the formation of local cosmic strings; it sets the velocity rescaling omegaStar = sqrt(lambda)*vev and, combined with the gauge coupling, the derived gauge parameter g = sqrt(q*lambda). This same literal key is also reused to initialize the vacuum expectation value vev. |
+| `lambda` | `float` | `1.` | dimensionless | Quartic self-coupling of the complex scalar field, controlling the strength of the symmetry-breaking potential whose vacuum manifold supports the formation of local cosmic strings; together with the vacuum expectation value vev it sets the velocity rescaling omegaStar = sqrt(lambda)*vev. |
+| `vev` | `float` | `1.` | GeV | Vacuum expectation value of the complex scalar field, i.e. the radius of the vacuum manifold on which the local cosmic strings form; it sets the field rescaling fStar=vev and the velocity rescaling omegaStar=sqrt(lambda)*vev. |
 
 ### `NMC_lphi4`
 
 | Parameter | Type | Default | Units | Description |
 | --- | --- | --- | --- | --- |
 | `lambda` | `float` | *required* | dimensionless | Quartic self-coupling of the inflaton (first scalar) in the lphi4 potential 0.25*lambda*phi^4; sets the characteristic frequency omegaStar=sqrt(lambda)*fStar and, together with q, the derived coupling g=sqrt(q*lambda). |
-| `q` | `float` | *required* | dimensionless | Resonance parameter setting the strength of the quartic interaction 0.5*q*lambda*phi^2*chi^2 between the inflaton (scalar 0) and the daughter field (scalar 1); enters the derived coupling g=sqrt(q*lambda). |
 | `initial_amplitudes` | `float` ×2 | *required* | program units | Initial homogeneous amplitudes of the two scalar fields (in program/reduced-Planck units); the first entry fixes fStar=initial_amplitudes[0] used to define omegaStar=sqrt(lambda)*fStar. |
 | `initial_momenta` | `float` ×2 | `{0,0}` | program units | Initial homogeneous time-derivatives (conjugate momenta) of the two scalar fields; defaults to zero velocity for both fields if not specified. |
 
@@ -231,7 +234,7 @@ annotated with their arity (e.g. `×NS` for the number of scalar fields).
 | `cmplx_momentum_initial_norm` | `float` | *required* | GeV^2 | Initial homogeneous amplitude (norm) of the complex scalar field's conjugate momentum (time derivative), distributed equally between the two real components via Complexify. |
 | `lambda` | `float` | *required* | dimensionless | Quartic self-coupling of the complex scalar in the V = lambda*\|phi\|^4 potential; it sets the velocity rescaling omegaStar = sqrt(lambda)*cmplx_field_initial_norm and, together with the gauge charge, the derived gauge coupling g = sqrt(q*lambda). |
 
-### `m2phi2_axionU1`
+### `axionU1_m2phi2`
 
 | Parameter | Type | Default | Units | Description |
 | --- | --- | --- | --- | --- |
@@ -251,55 +254,6 @@ annotated with their arity (e.g. `×NS` for the number of scalar fields).
 | `initial_amplitudes` | `float` ×2 | *required* | GeV | Initial homogeneous field amplitudes for the two scalar fields (inflaton and NMC field), in GeV. |
 | `initial_momenta` | `float` ×2 | `{0, 0}` | GeV^2 | Initial homogeneous field velocities (conjugate momenta) for the two scalar fields, in GeV^2; optional, defaults to zero for both fields. |
 
-### `O2`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `m2` | `float` | *required* | GeV^2 | Mass squared parameter of the O(2) scalar doublet, entering the quadratic potential V = 0.5*m2*(phi_0^2 + phi_1^2) for the two scalar field components. |
-| `initial_amplitudes` | `float` | *required* | GeV | Initial homogeneous amplitude of the scalar field; read as a single value, divided by sqrt(2) and assigned to both scalar components (fldS0[0] and fldS0[1]). |
-| `initial_momenta` | `float` | `0` | GeV^2 | Initial homogeneous time-derivative (canonical momentum) of the scalar field; read as a single value, divided by sqrt(2) and assigned to both scalar components (piS0[0] and piS0[1]); defaults to 0. |
-
-### `ON_2D`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `lambda` | `float` | *required* | dimensionless | Quartic self-coupling of the O(N) scalar fields, appearing in the lambda/4 (phi_i^2 phi_j^2) interaction term of the potential; also enters the velocity rescaling omegaStar = sqrt(m2) + sqrt(0.5*lambda)*fStar. |
-| `m2` | `float` | *required* | GeV^2 | Mass-squared parameter of the scalar fields, appearing in the m2*phi_i^2 mass term of the potential and entering the velocity rescaling omegaStar = sqrt(m2) + sqrt(0.5*lambda)*fStar. |
-| `A` | `float` | *required* | GeV^2 | Amplitude of the oscillatory driving term A*sin(omega*t)*DriveProfile added to the field equation of motion (band-limited in Fourier space between lowCut and highCut); set A=0 to disable the drive. |
-| `omega` | `float` | *required* | program units | Angular frequency of the time-oscillating driving force A*sin(omega*t)*DriveProfile added to the equations of motion. |
-| `highCut` | `float` | *required* | program units | Upper momentum cutoff of the driving profile; DriveProfile in Fourier space is heaviside(highCut - k)*heaviside(k - lowCut) with k = ntilde.norm()*kIR, so only modes with lowCut < k < highCut are driven. |
-| `lowCut` | `float` | *required* | program units | Lower momentum cutoff of the driving profile; DriveProfile in Fourier space is heaviside(highCut - k)*heaviside(k - lowCut) with k = ntilde.norm()*kIR, so only modes with lowCut < k < highCut are driven. |
-| `initial_amplitudes` | `float` | *required* | GeV | Initial homogeneous amplitude assigned to every scalar field (all N=2 fields are given the same value in a loop); also used to set the field rescaling fStar = fldS0[0]. |
-| `initial_momenta` | `float` | `0.` | GeV^2 | Initial homogeneous time-derivative (conjugate momentum) assigned to every scalar field; optional, defaults to 0 for each field if not supplied. |
-
-### `scalar`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `m2` | `float` | *required* | GeV^2 | Mass squared of the single scalar inflaton field, entering the quadratic potential term V = (1/2) m2 phi^2 and its derivatives. |
-| `initial_amplitudes` | `float` | *required* | program units | Initial homogeneous amplitude(s) of the scalar field(s); for this single-scalar model it is a length-1 vector (fldS0) giving the initial value of the inflaton. |
-| `initial_momenta` | `float` | `0` | program units | Initial homogeneous time-derivative (conjugate momentum) of the scalar field(s); for this single-scalar model it is a length-1 vector (piS0) defaulting to zero. |
-
-### `SU2`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `SU2Doublet_initial_norm` | `float` | *required* | program units | Initial homogeneous amplitude of the SU(2) doublet norm; the norm is distributed equally between the four real components via MakeSU2Doublet (each component set to normDoublet0/2), and this value also sets the field rescaling fStar. |
-| `SU2Doublet_initial_momenta_norm` | `float` | *required* | program units | Initial homogeneous amplitude of the SU(2) doublet conjugate momentum (time-derivative) norm; distributed equally between the four components via MakeSU2Doublet (each set to normPiDoublet0/2). |
-| `qG` | `float` | *required* | dimensionless | Dimensionless resonance/coupling parameter relating the SU(2) gauge coupling g to the quartic self-coupling lambda via g = sqrt(qG*lambda). |
-| `qH` | `float` | *required* | dimensionless | Dimensionless resonance/coupling parameter relating the secondary coupling h to the quartic self-coupling lambda via h = sqrt(qH*lambda). |
-| `lambda` | `float` | *required* | dimensionless | Quartic self-coupling of the SU(2) doublet appearing in the potential \|Phi\|^4; also sets the frequency rescaling omegaStar = sqrt(lambda)*normDoublet0 and enters the derived couplings g = sqrt(qG*lambda) and h = sqrt(qH*lambda). |
-
-### `SU2Doub`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `SU2Doublet_initial_norm` | `float` | *required* | program units | Initial homogeneous amplitude (norm) of the single SU(2) doublet, distributed equally among its four real components via MakeSU2Doublet; it also sets the field rescaling fStar = SU2Doublet_initial_norm used to define program units. |
-| `SU2Doublet_initial_momenta_norm` | `float` | *required* | program units | Initial homogeneous amplitude (norm) of the conjugate momentum (time derivative) of the SU(2) doublet, distributed equally among its four real components via MakeSU2Doublet. |
-| `qG` | `float` | *required* | dimensionless | Dimensionless ratio fixing the SU(2) gauge coupling relative to the quartic coupling; the SU(2) gauge coupling is derived as g = sqrt(qG*lambda). |
-| `qH` | `float` | *required* | dimensionless | Dimensionless ratio fixing a second (U(1)-like) coupling relative to the quartic coupling; the derived coupling is h = sqrt(qH*lambda). |
-| `lambda` | `float` | *required* | dimensionless | Quartic self-coupling of the SU(2) doublet entering the potential term (norm of the doublet)^4; it sets the velocity rescaling omegaStar = sqrt(lambda)*SU2Doublet_initial_norm and enters the derived couplings g = sqrt(qG*lambda) and h = sqrt(qH*lambda). |
-
 ### `tanh2`
 
 | Parameter | Type | Default | Units | Description |
@@ -309,24 +263,4 @@ annotated with their arity (e.g. `×NS` for the number of scalar fields).
 | `q` | `float` | *required* | dimensionless | Resonance parameter setting the strength of the quartic interaction (q/2) phi^2 chi^2 between the inflaton and the daughter field; determines the effective coupling g = sqrt(q)*omega/phii. Example value 4e4. |
 | `initial_amplitudes` | `float` ×2 | *required* | GeV | Initial homogeneous amplitudes of the two scalar fields (inflaton, daughter) in GeV; the first entry phii = fldS0[0] sets the field rescaling fStar. Example: 3.39928e18 0. |
 | `initial_momenta` | `float` ×2 | `{0,0}` | GeV^2 | Initial homogeneous velocities (conjugate momenta) of the two scalar fields in GeV^2; defaults to zero for both fields if not specified. Example: -3.0714e31 0. |
-
-### `tanhpp2`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `M` | `float` | *required* | GeV | Mass scale M appearing in the tanh-plateau inflaton potential V0 = (M/phii)^2/2 * tanh(fldS(0)*phii/M)^2, setting the width of the plateau; used together with Lambda4 to define omega = sqrt(Lambda4)/M. |
-| `Lambda4` | `float` | *required* | GeV^2 | Quartic energy scale Lambda4 (Lambda^4) setting the overall height of the inflaton potential; enters the velocity rescaling via omega = sqrt(Lambda4)/M, which becomes omegaStar. |
-| `q` | `float` | *required* | dimensionless | Resonance/coupling parameter q controlling the strength of the quadratic-quadratic interaction term 0.5*q*phi^2*chi^2 between the inflaton (field 0) and the daughter field (field 1); enters the derived effective coupling g = sqrt(q)*omega/phii. |
-| `initial_amplitudes` | `float` ×2 | *required* | GeV | Initial homogeneous amplitudes of the two scalar fields (inflaton and daughter), in GeV; the first entry phii = fldS0[0] sets the field rescaling fStar and enters the potential and coupling definitions. |
-| `initial_momenta` | `float` ×2 | `{0,0}` | GeV^2 | Initial homogeneous velocities (canonical momenta) of the two scalar fields, in GeV^2; defaults to zero for both fields if not provided. |
-
-### `U1Axion`
-
-| Parameter | Type | Default | Units | Description |
-| --- | --- | --- | --- | --- |
-| `initial_amplitudes` | `float` | *required* | GeV | Initial homogeneous amplitude of the single real (axion) scalar field, read as get<double,1> with arity equal to the number of scalar fields (NScalars=1); in the example input it is set to 3.39928e18 GeV. |
-| `initial_momenta` | `float` | *required* | GeV^2 | Initial homogeneous momentum (time derivative) of the single real (axion) scalar field, read as get<double,1> with arity equal to the number of scalar fields (NScalars=1); in the example input it is set to -3.0714e31 GeV^2. |
-| `kappa` | `float` | *required* | dimensionless | Axion-gauge coupling parameter; used to set the inverse axion decay constant InverseAxionLambda = kappa * MPl that governs the axionic coupling between the U(1) gauge field and the real scalar. |
-| `m2` | `float` | *required* | GeV^2 | Squared mass of the axion scalar field entering the quadratic potential term V = 0.5 * m2 * phi^2 (and its first and second derivatives); in the example input the mass is given via Mass = 1.5e13 GeV. |
-| `fluctuationRatio` | `float` | `1e-4` | dimensionless | Ratio controlling the amplitude of the initial quantum fluctuations added to the scalar field/momentum and U(1) gauge field/momentum (returned by getFluctuationRatio for piS, fldS, fldU1 and piU1); defaults to 1e-4 if not specified. |
 <!-- @endgen -->

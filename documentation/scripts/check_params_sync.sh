@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 #
 # check_params_sync.sh — verify the parameter database is internally consistent
-# in both directions:
+# in three directions:
 #
 #   1. parameters.yaml  ->  Appendix_Parameters.md  (the appendix is generated)
 #   2. C++ source       <-> parameters.yaml         (no parameter has drifted)
+#   3. models.yaml      <-> models/*.h              (the model registry matches
+#                                                    the shipped model headers)
 #
 # Run this locally before committing changes to parameters.yaml, the appendix,
 # or any get<>/getOverride<>/getSeed call site:
@@ -57,7 +59,7 @@ run_check() {
     fi
 }
 
-echo "==> [1/2] Appendix <- parameters.yaml"
+echo "==> [1/3] Appendix <- parameters.yaml"
 
 echo "    Running generator unit tests"
 run_check "generator unit tests failed" \
@@ -68,7 +70,7 @@ run_check "the parameter appendix is out of sync with parameters.yaml." \
     "$PYTHON" "$SCRIPT_DIR/gen_param_appendix.py" --check \
     -- "Run 'make gen-params' in documentation/ and commit the result."
 
-echo "==> [2/2] Code <-> parameters.yaml"
+echo "==> [2/3] Code <-> parameters.yaml"
 
 echo "    Running drift-checker unit tests"
 run_check "drift-checker unit tests failed" \
@@ -78,8 +80,15 @@ echo "    Checking parameters.yaml matches the get<> call sites"
 run_check "parameters.yaml does not match the get<> call sites." \
     "$PYTHON" "$SCRIPT_DIR/check_params_code.py"
 
+echo "==> [3/3] Model registry <-> code"
+
+echo "    Checking models.yaml lists exactly the models in the code"
+run_check "the model registry (models.yaml) does not match the models in the code." \
+    "$PYTHON" "$SCRIPT_DIR/check_models_registry.py" \
+    -- "Update documentation/source/data/models.yaml and run 'make gen-model-caps'."
+
 if [ "$warned" -eq 0 ]; then
-    echo "OK: parameter database is in sync (appendix and code)."
+    echo "OK: parameter database is in sync (appendix, code, and model registry)."
 else
     echo "WARNING: parameter database checks reported issues (see above); continuing anyway." >&2
 fi

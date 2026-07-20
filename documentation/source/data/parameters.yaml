@@ -5,23 +5,14 @@ metadata:
   # === BEGIN generated model capabilities — scripts/gen_model_capabilities.py (do not edit) ===
   models:
     lphi4: {NScalars: 2, NDim: 3}
-    NMC_tanh4_w_mass_P: {NScalars: 2, NDim: 3, couplings: {nonMinimal: true}}
-    O2: {NScalars: 2, NDim: 3}
-    ON_2D: {NScalars: 2, NDim: 2}
-    SU2: {NSU2Doublet: 1, NSU2Flds: 1, NDim: 3, couplings: {su2dbSU2: true}}
-    SU2Doub: {NSU2Doublet: 1, NDim: 3}
-    U1Axion: {NScalars: 1, NU1Flds: 1, NDim: 3, couplings: {axionU1: true}}
-    cscalar: {NCScalars: 1, NDim: 3}
-    domainWalls: {NScalars: 1, NDim: 3}
-    globalStrings: {NCScalars: 1, NDim: 3}
-    localStrings: {NCScalars: 1, NU1Flds: 1, NDim: 3, couplings: {csU1: true}}
     NMC_lphi4: {NScalars: 2, NDim: 3, couplings: {nonMinimal: true}}
+    NMC_tanh4_w_mass_P: {NScalars: 2, NDim: 3, couplings: {nonMinimal: true}}
+    axionU1_m2phi2: {NScalars: 1, NU1Flds: 1, NDim: 3, couplings: {axionU1: true}}
+    defects_ONGlobal: {NScalars: 1, NDim: 3}
+    defects_U1LocalStrings: {NCScalars: 1, NU1Flds: 1, NDim: 3, couplings: {csU1: true}}
     lphi4SU2U1: {NScalars: 1, NCScalars: 1, NU1Flds: 1, NSU2Doublet: 1, NSU2Flds: 1, NDim: 3, couplings: {csU1: true, su2dbU1: true, su2dbSU2: true}}
     lphi4U1: {NCScalars: 1, NU1Flds: 1, NDim: 3, couplings: {csU1: true}}
-    m2phi2_axionU1: {NScalars: 1, NU1Flds: 1, NDim: 3, couplings: {axionU1: true}}
-    scalar: {NScalars: 1, NDim: 3}
     tanh2: {NScalars: 2, NDim: 3}
-    tanhpp2: {NScalars: 2, NDim: 3}
   # === END generated model capabilities ===
 parameters:
 
@@ -183,6 +174,103 @@ parameters:
     description: "Error tolerance used by adaptive (e.g. Runge-Kutta) solvers to control the adaptive time step."
     constraints: "Only relevant for adaptive solvers; default -1 indicates unset."
 
+  - name: "doDiffusion"
+    type: "bool"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "false"
+    important: false
+    scope: "framework"
+    category: "run"
+    units: "dimensionless"
+    description: "Master switch enabling a post-evolution diffusion phase, in which the fields are further relaxed after the main simulation has finished (used e.g. to smooth defect configurations). The diffusion-phase parameters (tmaxdiff, dtdiff, diffusionevolver, tOutputFreqDiff, tOutputRareFreqDiff, snapshots_diffusion) are only read when this is true."
+    constraints: null
+  - name: "tmaxdiff"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: null
+    important: false
+    scope: "framework"
+    category: "run"
+    units: "program units"
+    description: "Duration (maximum time) of the diffusion phase in program units."
+    constraints: "Only read when doDiffusion=true, in which case it is mandatory (no default); otherwise unused (0.0)."
+  - name: "dtdiff"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: null
+    important: false
+    scope: "framework"
+    category: "run"
+    units: "program units"
+    description: "Time step used during the diffusion phase in program units."
+    constraints: "Only read when doDiffusion=true, in which case it is mandatory (no default); otherwise unused (0.0)."
+  - name: "diffusionevolver"
+    type: "enum"
+    enum_values: ["LF", "VV2", "VV4", "VV6", "VV8", "VV10", "VV6_2", "RK2", "RK3_3", "RK3_4", "RK4_5", "PV2", "PV4", "PV6", "PV8", "PV10", "PV6_2"]
+    arity: "1"
+    required: false
+    default: "RK2"
+    important: false
+    scope: "framework"
+    category: "run"
+    units: "n/a"
+    description: "Time-evolution algorithm used during the diffusion phase (same set of integrators as evolver)."
+    constraints: "Only read when doDiffusion=true; defaults to RK2. Valid values: LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_3, RK3_4, RK4_5, PV2, PV4, PV6, PV8, PV10, PV6_2."
+  - name: "doResolutionPreserving"
+    type: "bool"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "false"
+    important: false
+    scope: "framework"
+    category: "run"
+    units: "dimensionless"
+    description: "Master switch enabling the resolution-preserving technique, which rescales the lattice and fields during the run to keep the relevant physical scales resolved. Its parameters (sRP, tRP0, tRPMax) are only read when this is true."
+    constraints: "Requires fixedBackground=true; if fixedBackground=false it is forced to false (the technique is not yet tested/supported for self-consistent expansion)."
+  - name: "sRP"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: null
+    important: false
+    scope: "framework"
+    category: "run"
+    units: "dimensionless"
+    description: "Rescaling (stretch) factor applied by the resolution-preserving technique."
+    constraints: "Only read when doResolutionPreserving=true, in which case it is mandatory (no default); otherwise unused (1.0)."
+  - name: "tRP0"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "t0"
+    important: false
+    scope: "framework"
+    category: "run"
+    units: "program units"
+    description: "Time at which the resolution-preserving rescaling starts, in program units."
+    constraints: "Only read when doResolutionPreserving=true; defaults to the simulation start time t0."
+  - name: "tRPMax"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "(computed)"
+    important: false
+    scope: "framework"
+    category: "run"
+    units: "program units"
+    description: "Time at which the resolution-preserving rescaling stops, in program units."
+    constraints: "Only read when doResolutionPreserving=true; defaults to an internally computed value (gettRPMaxtening())."
+
   # === framework / IC ===
   - name: "kCutOff"
     type: "float"
@@ -232,6 +320,31 @@ parameters:
     units: "n/a"
     description: "Seed for the random generator of initial field fluctuations; if not specified, a seed is generated randomly each run."
     constraints: "Read via getSeed; if absent a random seed is produced rather than throwing."
+
+  - name: "lcorr"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: null
+    important: false
+    scope: "framework"
+    category: "IC"
+    units: "program units"
+    description: "Initial comoving correlation length of the defect network used when generating DefectsNetwork initial conditions."
+    constraints: "Only read when ICtype_S or ICtype_U1 is DefectsNetwork, in which case it is mandatory (no default); otherwise unused (0.0)."
+  - name: "deltaNoise"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: null
+    important: false
+    scope: "framework"
+    category: "IC"
+    units: "dimensionless"
+    description: "Amplitude of the white-noise field distribution used when generating DefectsWhiteNoise initial conditions."
+    constraints: "Only read when ICtype_S or ICtype_U1 is DefectsWhiteNoise, in which case it is mandatory (no default); otherwise unused (0.0)."
 
   # === framework / output ===
   - name: "tOutputFreq"
@@ -377,6 +490,55 @@ parameters:
     category: "output"
     units: "dimensionless"
     description: "Verbosity level controlling how much model/parameter information is embedded in output filenames (0 = none; higher levels append N, kIR, dt, evolver, etc.)."
+    constraints: null
+
+  - name: "tOutputFreqDiff"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "10*dtdiff"
+    important: false
+    scope: "framework"
+    category: "output"
+    units: "program units"
+    description: "Time interval between frequent output during the diffusion phase, in program units (the diffusion-phase counterpart of tOutputFreq)."
+    constraints: "Only read when doDiffusion=true; defaults to 10*dtdiff."
+  - name: "tOutputRareFreqDiff"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "100*dtdiff"
+    important: false
+    scope: "framework"
+    category: "output"
+    units: "program units"
+    description: "Time interval between rare/infrequent output during the diffusion phase, in program units (the diffusion-phase counterpart of tOutputRareFreq)."
+    constraints: "Only read when doDiffusion=true; defaults to 100*dtdiff."
+  - name: "measureDefectsEnergies"
+    type: "bool"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "false"
+    important: false
+    scope: "framework"
+    category: "output"
+    units: "dimensionless"
+    description: "If true, enables measurement and output of the energy stored in the defect network."
+    constraints: null
+  - name: "measureDefectsStructure"
+    type: "bool"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "false"
+    important: false
+    scope: "framework"
+    category: "output"
+    units: "dimensionless"
+    description: "If true, enables measurement and output of the defect-network structure/geometry (e.g. defect positions and length/area)."
     constraints: null
 
   # === framework / spectra ===
@@ -526,6 +688,19 @@ parameters:
     units: "dimensionless"
     description: "Stride (in lattice units) used when sampling the snapshot sub-volume, one value per spatial dimension. A value of s keeps every s-th lattice point along that axis (coarsening the saved data); 1 means keep every point."
     constraints: "One value per spatial dimension (NDim = 1, 2 or 3); supply NDim values, e.g. '1 1 1' to keep every point in 3D. The underlying HDF5 saver pre-allocates a fixed array of length 10 (the maximum supported NDim), but only the first NDim entries are read; any extra values up to 10 are ignored and fewer values are padded with the default. Default is 1 in every dimension."
+
+  - name: "snapshots_diffusion"
+    type: "string"
+    enum_values: null
+    arity: "15"
+    required: false
+    default: "(empty list — no snapshots saved)"
+    important: false
+    scope: "framework"
+    category: "snapshots"
+    units: "n/a"
+    description: "Space-separated list of the configuration-space quantities to dump as HDF5 field snapshots during the diffusion phase (the diffusion-phase counterpart of snapshots). Same recognised labels as snapshots; you list any subset (in any order), one label per quantity you want saved."
+    constraints: "Only read when doDiffusion=true. Variable-length subset, NOT 15 required values: the 15 is only the maximum capacity of the internal array. Omitting the parameter, or giving an empty list, saves no snapshots."
 
   # === framework / GW ===
   - name: "withGWs"
@@ -799,45 +974,7 @@ parameters:
     description: "Initial homogeneous time-derivatives (canonical momenta) of the two scalar fields, given in GeV^2; optional parameter defaulting to zero velocity for both fields."
     constraints: "Arity 2 = number of scalar fields (NScalars=2); optional, defaults to {0,0}."
 
-  # === model:cscalar / model ===
-  - name: "m2"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:cscalar"
-    category: "model"
-    units: "GeV^2"
-    description: "Mass squared of the complex scalar field, entering the quadratic potential term V = 0.5*m2*|fldCS|^2 used as the inflaton/field potential energy."
-    constraints: null
-  - name: "initial_amplitudes"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:cscalar"
-    category: "model"
-    units: "GeV"
-    description: "Initial homogeneous amplitude (norm) of the complex scalar field; the value is split equally between real and imaginary parts as norm/sqrt(2) each to set fldCS0."
-    constraints: "Read as a single scalar (NCScalars = 1)."
-  - name: "initial_momenta"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: false
-    default: "0"
-    important: false
-    scope: "model:cscalar"
-    category: "model"
-    units: "GeV^2"
-    description: "Initial homogeneous time-derivative (conjugate momentum norm) of the complex scalar field; split equally between real and imaginary parts as norm/sqrt(2) each to set piCS0, defaulting to zero."
-    constraints: "Read as a single scalar (NCScalars = 1); defaults to 0 if omitted."
-
-  # === model:domainWalls / model ===
+  # === model:defects_ONGlobal / model ===
   - name: "lambda"
     type: "float"
     enum_values: null
@@ -845,11 +982,23 @@ parameters:
     required: false
     default: "1."
     important: false
-    scope: "model:domainWalls"
+    scope: "model:defects_ONGlobal"
     category: "model"
     units: "dimensionless"
-    description: "Quartic self-coupling of the real scalar field whose double-well potential drives domain wall formation; it also sets the velocity rescaling omegaStar=sqrt(lambda)*vev and enters the derived bias coupling g=qbias/lambda."
-    constraints: "Read twice via get<FloatType>(\"lambda\", 1.): once to set the quartic coupling lambda and once to set the field vacuum expectation value vev (which is therefore taken from the same key as lambda rather than its own key)."
+    description: "Quartic self-coupling of the real O(N) scalar multiplet whose spontaneous symmetry breaking produces the global defects (domain walls for N=1, global strings for N=2, monopoles/textures for higher N); it sets the velocity rescaling omegaStar=sqrt(lambda)*vev and enters the derived bias coupling g=qbias/lambda."
+    constraints: "Positive; read under its own key \"lambda\", defaults to 1."
+  - name: "vev"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "1."
+    important: false
+    scope: "model:defects_ONGlobal"
+    category: "model"
+    units: "GeV"
+    description: "Vacuum expectation value of the O(N) scalar multiplet, i.e. the radius of the vacuum manifold on which the defect network forms; it sets the field rescaling fStar=vev and the velocity rescaling omegaStar=sqrt(lambda)*vev."
+    constraints: "Positive; read under its own key \"vev\", defaults to 1."
   - name: "qbias"
     type: "float"
     enum_values: null
@@ -857,13 +1006,13 @@ parameters:
     required: false
     default: "0."
     important: false
-    scope: "model:domainWalls"
+    scope: "model:defects_ONGlobal"
     category: "model"
     units: "dimensionless"
-    description: "Bias parameter that adds a cubic term to the potential to break the Z2 degeneracy of the two vacua, controlling the energy difference between domain wall sides; it sets the derived bias coupling g=qbias/lambda used in the cubic potential term g*phi^3. A value of 0 gives an unbiased (symmetric) model."
-    constraints: "default 0. gives a symmetric double-well with no bias."
+    description: "Bias parameter adding a term that breaks the vacuum degeneracy, used to bias domain-wall networks; it sets the derived bias coupling g=qbias/lambda. A value of 0 gives an unbiased network."
+    constraints: "Read under the key \"qbias\". Only supported for the domain-wall case NScalars=1; the model throws if qbias!=0 with NScalars>1. Defaults to 0 (unbiased)."
 
-  # === model:globalStrings / model ===
+  # === model:defects_U1LocalStrings / model ===
   - name: "lambda"
     type: "float"
     enum_values: null
@@ -871,25 +1020,23 @@ parameters:
     required: false
     default: "1."
     important: false
-    scope: "model:globalStrings"
+    scope: "model:defects_U1LocalStrings"
     category: "model"
     units: "dimensionless"
-    description: "Quartic self-coupling of the complex scalar field whose phase forms the global cosmic strings; it sets the velocity rescaling omegaStar = sqrt(lambda)*vev and, since the same key is reused for the vacuum expectation value, also fixes the field rescaling fStar."
-    constraints: "Read twice under the literal key 'lambda': once into the C++ variable lambda and once into vev (the vev is read as the literal 'lambda', not 'vev'), so a single input value sets both. Expected lambda > 0."
-
-  # === model:localStrings / model ===
-  - name: "lambda"
+    description: "Quartic self-coupling of the complex scalar field, controlling the strength of the symmetry-breaking potential whose vacuum manifold supports the formation of local cosmic strings; together with the vacuum expectation value vev it sets the velocity rescaling omegaStar = sqrt(lambda)*vev."
+    constraints: "Positive; read under its own key \"lambda\", defaults to 1."
+  - name: "vev"
     type: "float"
     enum_values: null
     arity: "1"
     required: false
     default: "1."
     important: false
-    scope: "model:localStrings"
+    scope: "model:defects_U1LocalStrings"
     category: "model"
-    units: "dimensionless"
-    description: "Quartic self-coupling of the complex scalar field, controlling the strength of the symmetry-breaking potential whose vacuum manifold supports the formation of local cosmic strings; it sets the velocity rescaling omegaStar = sqrt(lambda)*vev and, combined with the gauge coupling, the derived gauge parameter g = sqrt(q*lambda). This same literal key is also reused to initialize the vacuum expectation value vev."
-    constraints: "The literal string \"lambda\" is read twice in the constructor: once into the variable lambda and once into the variable vev (the vev is read under the key name \"lambda\", not a separate \"vev\" key). Both reads share the same default of 1."
+    units: "GeV"
+    description: "Vacuum expectation value of the complex scalar field, i.e. the radius of the vacuum manifold on which the local cosmic strings form; it sets the field rescaling fStar=vev and the velocity rescaling omegaStar=sqrt(lambda)*vev."
+    constraints: "Positive; read under its own key \"vev\", defaults to 1."
 
   # === model:NMC_lphi4 / model ===
   - name: "lambda"
@@ -904,18 +1051,6 @@ parameters:
     units: "dimensionless"
     description: "Quartic self-coupling of the inflaton (first scalar) in the lphi4 potential 0.25*lambda*phi^4; sets the characteristic frequency omegaStar=sqrt(lambda)*fStar and, together with q, the derived coupling g=sqrt(q*lambda)."
     constraints: "lambda > 0"
-  - name: "q"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:NMC_lphi4"
-    category: "model"
-    units: "dimensionless"
-    description: "Resonance parameter setting the strength of the quartic interaction 0.5*q*lambda*phi^2*chi^2 between the inflaton (scalar 0) and the daughter field (scalar 1); enters the derived coupling g=sqrt(q*lambda)."
-    constraints: "q >= 0"
   - name: "initial_amplitudes"
     type: "float"
     enum_values: null
@@ -1089,7 +1224,7 @@ parameters:
     description: "Quartic self-coupling of the complex scalar in the V = lambda*|phi|^4 potential; it sets the velocity rescaling omegaStar = sqrt(lambda)*cmplx_field_initial_norm and, together with the gauge charge, the derived gauge coupling g = sqrt(q*lambda)."
     constraints: null
 
-  # === model:m2phi2_axionU1 / model ===
+  # === model:axionU1_m2phi2 / model ===
   - name: "initial_amplitudes"
     type: "float"
     enum_values: null
@@ -1097,7 +1232,7 @@ parameters:
     required: true
     default: null
     important: false
-    scope: "model:m2phi2_axionU1"
+    scope: "model:axionU1_m2phi2"
     category: "model"
     units: "GeV"
     description: "Initial homogeneous amplitude of the single real (axion) scalar field; its first component sets the field rescaling fStar used to convert to program units."
@@ -1109,7 +1244,7 @@ parameters:
     required: true
     default: null
     important: false
-    scope: "model:m2phi2_axionU1"
+    scope: "model:axionU1_m2phi2"
     category: "model"
     units: "GeV^2"
     description: "Initial homogeneous velocity (conjugate momentum) of the single real (axion) scalar field."
@@ -1121,7 +1256,7 @@ parameters:
     required: true
     default: null
     important: false
-    scope: "model:m2phi2_axionU1"
+    scope: "model:axionU1_m2phi2"
     category: "model"
     units: "GeV"
     description: "Mass of the scalar field in the quadratic potential V = (1/2) m^2 phi^2; sets the velocity rescaling omegaStar = mass used to convert to program units."
@@ -1213,304 +1348,6 @@ parameters:
     description: "Initial homogeneous field velocities (conjugate momenta) for the two scalar fields, in GeV^2; optional, defaults to zero for both fields."
     constraints: "Vector of length NScalars = 2; defaults to {0, 0} if omitted."
 
-  # === model:O2 / model ===
-  - name: "m2"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:O2"
-    category: "model"
-    units: "GeV^2"
-    description: "Mass squared parameter of the O(2) scalar doublet, entering the quadratic potential V = 0.5*m2*(phi_0^2 + phi_1^2) for the two scalar field components."
-    constraints: null
-  - name: "initial_amplitudes"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:O2"
-    category: "model"
-    units: "GeV"
-    description: "Initial homogeneous amplitude of the scalar field; read as a single value, divided by sqrt(2) and assigned to both scalar components (fldS0[0] and fldS0[1])."
-    constraints: "Read once as a scalar get<double> even though the model has 2 scalar fields; the same value (divided by sqrt(2)) is used for both components fldS0[0] and fldS0[1]."
-  - name: "initial_momenta"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: false
-    default: "0"
-    important: false
-    scope: "model:O2"
-    category: "model"
-    units: "GeV^2"
-    description: "Initial homogeneous time-derivative (canonical momentum) of the scalar field; read as a single value, divided by sqrt(2) and assigned to both scalar components (piS0[0] and piS0[1]); defaults to 0."
-    constraints: "Read once as a scalar get<double> with default 0 even though the model has 2 scalar fields; the same value (divided by sqrt(2)) is used for both components piS0[0] and piS0[1]."
-
-  # === model:ON_2D / model ===
-  - name: "lambda"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:ON_2D"
-    category: "model"
-    units: "dimensionless"
-    description: "Quartic self-coupling of the O(N) scalar fields, appearing in the lambda/4 (phi_i^2 phi_j^2) interaction term of the potential; also enters the velocity rescaling omegaStar = sqrt(m2) + sqrt(0.5*lambda)*fStar."
-    constraints: "Typically lambda > 0 for a bounded potential."
-  - name: "m2"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:ON_2D"
-    category: "model"
-    units: "GeV^2"
-    description: "Mass-squared parameter of the scalar fields, appearing in the m2*phi_i^2 mass term of the potential and entering the velocity rescaling omegaStar = sqrt(m2) + sqrt(0.5*lambda)*fStar."
-    constraints: null
-  - name: "A"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:ON_2D"
-    category: "model"
-    units: "GeV^2"
-    description: "Amplitude of the oscillatory driving term A*sin(omega*t)*DriveProfile added to the field equation of motion (band-limited in Fourier space between lowCut and highCut); set A=0 to disable the drive."
-    constraints: "A=0 disables the driving force; the driving term is not included in the potential energy."
-  - name: "omega"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:ON_2D"
-    category: "model"
-    units: "program units"
-    description: "Angular frequency of the time-oscillating driving force A*sin(omega*t)*DriveProfile added to the equations of motion."
-    constraints: null
-  - name: "highCut"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:ON_2D"
-    category: "model"
-    units: "program units"
-    description: "Upper momentum cutoff of the driving profile; DriveProfile in Fourier space is heaviside(highCut - k)*heaviside(k - lowCut) with k = ntilde.norm()*kIR, so only modes with lowCut < k < highCut are driven."
-    constraints: "Should satisfy highCut > lowCut to define a non-empty band of driven modes."
-  - name: "lowCut"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:ON_2D"
-    category: "model"
-    units: "program units"
-    description: "Lower momentum cutoff of the driving profile; DriveProfile in Fourier space is heaviside(highCut - k)*heaviside(k - lowCut) with k = ntilde.norm()*kIR, so only modes with lowCut < k < highCut are driven."
-    constraints: "Should satisfy lowCut < highCut to define a non-empty band of driven modes."
-  - name: "initial_amplitudes"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:ON_2D"
-    category: "model"
-    units: "GeV"
-    description: "Initial homogeneous amplitude assigned to every scalar field (all N=2 fields are given the same value in a loop); also used to set the field rescaling fStar = fldS0[0]."
-    constraints: "Read once per field inside a loop over all N scalar fields; the same scalar value is assigned to each field."
-  - name: "initial_momenta"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: false
-    default: "0."
-    important: false
-    scope: "model:ON_2D"
-    category: "model"
-    units: "GeV^2"
-    description: "Initial homogeneous time-derivative (conjugate momentum) assigned to every scalar field; optional, defaults to 0 for each field if not supplied."
-    constraints: "Read once per field inside a loop over all N scalar fields with a per-call default of 0.; the same scalar value is assigned to each field."
-
-  # === model:scalar / model ===
-  - name: "m2"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:scalar"
-    category: "model"
-    units: "GeV^2"
-    description: "Mass squared of the single scalar inflaton field, entering the quadratic potential term V = (1/2) m2 phi^2 and its derivatives."
-    constraints: null
-  - name: "initial_amplitudes"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:scalar"
-    category: "model"
-    units: "program units"
-    description: "Initial homogeneous amplitude(s) of the scalar field(s); for this single-scalar model it is a length-1 vector (fldS0) giving the initial value of the inflaton."
-    constraints: "Vector of length NS = number of scalar fields (NScalars = 1 in this model)."
-  - name: "initial_momenta"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: false
-    default: "0"
-    important: false
-    scope: "model:scalar"
-    category: "model"
-    units: "program units"
-    description: "Initial homogeneous time-derivative (conjugate momentum) of the scalar field(s); for this single-scalar model it is a length-1 vector (piS0) defaulting to zero."
-    constraints: "Vector of length NS = number of scalar fields (NScalars = 1 in this model); defaults to 0 if not provided."
-
-  # === model:SU2 / model ===
-  - name: "SU2Doublet_initial_norm"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2"
-    category: "model"
-    units: "program units"
-    description: "Initial homogeneous amplitude of the SU(2) doublet norm; the norm is distributed equally between the four real components via MakeSU2Doublet (each component set to normDoublet0/2), and this value also sets the field rescaling fStar."
-    constraints: null
-  - name: "SU2Doublet_initial_momenta_norm"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2"
-    category: "model"
-    units: "program units"
-    description: "Initial homogeneous amplitude of the SU(2) doublet conjugate momentum (time-derivative) norm; distributed equally between the four components via MakeSU2Doublet (each set to normPiDoublet0/2)."
-    constraints: null
-  - name: "qG"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2"
-    category: "model"
-    units: "dimensionless"
-    description: "Dimensionless resonance/coupling parameter relating the SU(2) gauge coupling g to the quartic self-coupling lambda via g = sqrt(qG*lambda)."
-    constraints: null
-  - name: "qH"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2"
-    category: "model"
-    units: "dimensionless"
-    description: "Dimensionless resonance/coupling parameter relating the secondary coupling h to the quartic self-coupling lambda via h = sqrt(qH*lambda)."
-    constraints: null
-  - name: "lambda"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2"
-    category: "model"
-    units: "dimensionless"
-    description: "Quartic self-coupling of the SU(2) doublet appearing in the potential |Phi|^4; also sets the frequency rescaling omegaStar = sqrt(lambda)*normDoublet0 and enters the derived couplings g = sqrt(qG*lambda) and h = sqrt(qH*lambda)."
-    constraints: null
-
-  # === model:SU2Doub / model ===
-  - name: "SU2Doublet_initial_norm"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2Doub"
-    category: "model"
-    units: "program units"
-    description: "Initial homogeneous amplitude (norm) of the single SU(2) doublet, distributed equally among its four real components via MakeSU2Doublet; it also sets the field rescaling fStar = SU2Doublet_initial_norm used to define program units."
-    constraints: "Used to compute fStar and omegaStar = sqrt(lambda)*SU2Doublet_initial_norm; should be non-zero to avoid a vanishing field rescaling."
-  - name: "SU2Doublet_initial_momenta_norm"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2Doub"
-    category: "model"
-    units: "program units"
-    description: "Initial homogeneous amplitude (norm) of the conjugate momentum (time derivative) of the SU(2) doublet, distributed equally among its four real components via MakeSU2Doublet."
-    constraints: null
-  - name: "qG"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2Doub"
-    category: "model"
-    units: "dimensionless"
-    description: "Dimensionless ratio fixing the SU(2) gauge coupling relative to the quartic coupling; the SU(2) gauge coupling is derived as g = sqrt(qG*lambda)."
-    constraints: "Used to derive g = sqrt(qG*lambda); should be non-negative so the square root is real."
-  - name: "qH"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2Doub"
-    category: "model"
-    units: "dimensionless"
-    description: "Dimensionless ratio fixing a second (U(1)-like) coupling relative to the quartic coupling; the derived coupling is h = sqrt(qH*lambda)."
-    constraints: "Used to derive h = sqrt(qH*lambda); should be non-negative so the square root is real."
-  - name: "lambda"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:SU2Doub"
-    category: "model"
-    units: "dimensionless"
-    description: "Quartic self-coupling of the SU(2) doublet entering the potential term (norm of the doublet)^4; it sets the velocity rescaling omegaStar = sqrt(lambda)*SU2Doublet_initial_norm and enters the derived couplings g = sqrt(qG*lambda) and h = sqrt(qH*lambda)."
-    constraints: "Must be positive for a bounded quartic potential and a real omegaStar."
-
   # === model:tanh2 / model ===
   - name: "M"
     type: "float"
@@ -1573,126 +1410,3 @@ parameters:
     description: "Initial homogeneous velocities (conjugate momenta) of the two scalar fields in GeV^2; defaults to zero for both fields if not specified. Example: -3.0714e31 0."
     constraints: "Vector of length 2 (NScalars=2)."
 
-  # === model:tanhpp2 / model ===
-  - name: "M"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:tanhpp2"
-    category: "model"
-    units: "GeV"
-    description: "Mass scale M appearing in the tanh-plateau inflaton potential V0 = (M/phii)^2/2 * tanh(fldS(0)*phii/M)^2, setting the width of the plateau; used together with Lambda4 to define omega = sqrt(Lambda4)/M."
-    constraints: "M > 0; example value 1.2175e19 GeV (near the Planck scale)."
-  - name: "Lambda4"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:tanhpp2"
-    category: "model"
-    units: "GeV^2"
-    description: "Quartic energy scale Lambda4 (Lambda^4) setting the overall height of the inflaton potential; enters the velocity rescaling via omega = sqrt(Lambda4)/M, which becomes omegaStar."
-    constraints: "Lambda4 > 0; example value 3.55273e64 GeV^2."
-  - name: "q"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:tanhpp2"
-    category: "model"
-    units: "dimensionless"
-    description: "Resonance/coupling parameter q controlling the strength of the quadratic-quadratic interaction term 0.5*q*phi^2*chi^2 between the inflaton (field 0) and the daughter field (field 1); enters the derived effective coupling g = sqrt(q)*omega/phii."
-    constraints: "q > 0; example value 1.3e7."
-  - name: "initial_amplitudes"
-    type: "float"
-    enum_values: null
-    arity: "2"
-    required: true
-    default: null
-    important: false
-    scope: "model:tanhpp2"
-    category: "model"
-    units: "GeV"
-    description: "Initial homogeneous amplitudes of the two scalar fields (inflaton and daughter), in GeV; the first entry phii = fldS0[0] sets the field rescaling fStar and enters the potential and coupling definitions."
-    constraints: "Length must equal the number of scalar fields (2); first entry phii must be nonzero (used as denominator in potential terms and rescaling)."
-  - name: "initial_momenta"
-    type: "float"
-    enum_values: null
-    arity: "2"
-    required: false
-    default: "{0,0}"
-    important: false
-    scope: "model:tanhpp2"
-    category: "model"
-    units: "GeV^2"
-    description: "Initial homogeneous velocities (canonical momenta) of the two scalar fields, in GeV^2; defaults to zero for both fields if not provided."
-    constraints: "Length must equal the number of scalar fields (2); defaults to {0,0}."
-
-  # === model:U1Axion / model ===
-  - name: "initial_amplitudes"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:U1Axion"
-    category: "model"
-    units: "GeV"
-    description: "Initial homogeneous amplitude of the single real (axion) scalar field, read as get<double,1> with arity equal to the number of scalar fields (NScalars=1); in the example input it is set to 3.39928e18 GeV."
-    constraints: "Vector of length NScalars (=1 for this model)."
-  - name: "initial_momenta"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:U1Axion"
-    category: "model"
-    units: "GeV^2"
-    description: "Initial homogeneous momentum (time derivative) of the single real (axion) scalar field, read as get<double,1> with arity equal to the number of scalar fields (NScalars=1); in the example input it is set to -3.0714e31 GeV^2."
-    constraints: "Vector of length NScalars (=1 for this model)."
-  - name: "kappa"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:U1Axion"
-    category: "model"
-    units: "dimensionless"
-    description: "Axion-gauge coupling parameter; used to set the inverse axion decay constant InverseAxionLambda = kappa * MPl that governs the axionic coupling between the U(1) gauge field and the real scalar."
-    constraints: null
-  - name: "m2"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: true
-    default: null
-    important: false
-    scope: "model:U1Axion"
-    category: "model"
-    units: "GeV^2"
-    description: "Squared mass of the axion scalar field entering the quadratic potential term V = 0.5 * m2 * phi^2 (and its first and second derivatives); in the example input the mass is given via Mass = 1.5e13 GeV."
-    constraints: null
-  - name: "fluctuationRatio"
-    type: "float"
-    enum_values: null
-    arity: "1"
-    required: false
-    default: "1e-4"
-    important: false
-    scope: "model:U1Axion"
-    category: "model"
-    units: "dimensionless"
-    description: "Ratio controlling the amplitude of the initial quantum fluctuations added to the scalar field/momentum and U(1) gauge field/momentum (returned by getFluctuationRatio for piS, fldS, fldU1 and piU1); defaults to 1e-4 if not specified."
-    constraints: null

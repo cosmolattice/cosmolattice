@@ -19,7 +19,7 @@ VENV_PYTHON := tmp/.venv/bin/python
 PYTHON ?= $(shell [ -x "$(VENV_PYTHON)" ] && echo "$(VENV_PYTHON)" || echo python3)
 GEN    := scripts/gen_param_appendix.py
 
-.PHONY: help gen-params gen-model-caps check-params check-params-code check-model-caps test-params docs
+.PHONY: help gen-params gen-model-caps check-params check-params-code check-model-caps check-models test-params docs
 
 help:
 	@echo "CosmoLattice documentation — make targets:"
@@ -28,6 +28,7 @@ help:
 	@echo "  make check-params       Verify the database is in sync: appendix + code<->YAML (no write)"
 	@echo "  make check-params-code  Verify parameters.yaml matches the C++ get<> call sites only"
 	@echo "  make check-model-caps   Verify metadata.models matches the model headers (no write)"
+	@echo "  make check-models       Verify models.yaml lists exactly the models in the code (no write)"
 	@echo "  make test-params        Run the parameter generator + drift-checker unit tests"
 	@echo "  make docs               Build the full documentation site (runs build.sh)"
 
@@ -55,6 +56,10 @@ check-params-code:
 # Just the model-capability drift check (metadata.models vs models/*.h ModelPars).
 check-model-caps:
 	$(PYTHON) scripts/gen_model_capabilities.py --check
+
+# Just the model-registry check (models.yaml vs models/*.h vs metadata.models).
+check-models:
+	$(PYTHON) scripts/check_models_registry.py
 
 test-params:
 	$(PYTHON) scripts/test_gen_param_appendix.py

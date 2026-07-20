@@ -15,6 +15,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR))
 
 import gen_model_capabilities as g  # noqa: E402  (after sys.path tweak)
+import check_models_registry as r  # noqa: E402  (after sys.path tweak)
 
 
 def _parse_str(raw):
@@ -26,33 +27,17 @@ def _parse_str(raw):
 
 
 def test_all_models_extracted_lphi4_first():
+    # No hardcoded model list: the expected set is the curated registry
+    # (models.yaml), which check_models_registry keeps equal to models/*.h.
     caps = g.extract_capabilities()
-    assert len(caps) == 18, f"expected 18 models, got {len(caps)}"
+    assert set(caps) == set(r.registry_names()), (
+        "extracted models differ from the models.yaml registry")
     assert next(iter(caps)) == "lphi4", "lphi4 should be emitted first"
 
 
-def test_capability_matrix_spot_checks():
-    caps = g.extract_capabilities()
-    # axion model: axion-U(1) coupling active, one scalar, one U(1) field
-    assert caps["U1Axion"]["couplings"] == {"axionU1": True}
-    assert caps["U1Axion"]["NScalars"] == 1 and caps["U1Axion"]["NU1Flds"] == 1
-    assert caps["m2phi2_axionU1"]["couplings"] == {"axionU1": True}
-    # full gauge model: three couplings active
-    assert caps["lphi4SU2U1"]["couplings"] == {
-        "csU1": True, "su2dbU1": True, "su2dbSU2": True}
-    # non-minimal models
-    assert caps["NMC_lphi4"]["couplings"] == {"nonMinimal": True}
-    assert caps["NMC_tanh4_w_mass_P"]["couplings"] == {"nonMinimal": True}
-    # SU(2) gauge model
-    assert caps["SU2"]["couplings"] == {"su2dbSU2": True}
-    # plain models: no couplings
-    assert caps["lphi4"]["couplings"] == {}
-    assert caps["scalar"]["couplings"] == {}
-    # 2D model
-    assert caps["ON_2D"]["NDim"] == 2
-    # SU2Doub has a doublet but all coupling typedefs are commented out
-    assert caps["SU2Doub"]["NSU2Doublet"] == 1
-    assert caps["SU2Doub"]["couplings"] == {}
+def test_registry_matches_code():
+    # models.yaml, the headers, and the generated metadata.models all agree.
+    assert r.check() == 0, "model registry is out of sync (see stderr)"
 
 
 def test_active_typedef_detected():
@@ -120,7 +105,7 @@ def test_yaml_copies_in_sync():
 def _run():
     tests = [
         test_all_models_extracted_lphi4_first,
-        test_capability_matrix_spot_checks,
+        test_registry_matches_code,
         test_active_typedef_detected,
         test_using_syntax_detected,
         test_commented_typedef_is_inactive,

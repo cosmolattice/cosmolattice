@@ -1,0 +1,52 @@
+# CosmoLattice model registry
+#
+# Curated list of the models shipped in models/*.h. This file is the single
+# human-maintained place that names the shipped models and gives each a short
+# label and description for the docs / input-builder to display.
+#
+# What is (and is not) the source of truth:
+#   * models/*.h                    -> WHICH models exist + their field content
+#                                      (the code; ground truth).
+#   * parameters.yaml metadata.models -> per-model CAPABILITIES (NScalars, active
+#                                      couplings, ...). GENERATED from the headers
+#                                      by scripts/gen_model_capabilities.py.
+#   * this file (models.yaml)       -> the curated NAME + human label/description.
+#                                      The labels/descriptions are not derivable
+#                                      from the headers, so they live here.
+#
+# scripts/check_models_registry.py enforces that the *set* of names here matches
+# models/*.h and metadata.models exactly. So this file is an intentional tripwire:
+# adding, renaming, or removing a model header will fail the check until you add
+# (or remove) the corresponding entry below. Run `make check-models` to verify,
+# and `make gen-model-caps` after any model change to refresh metadata.models.
+#
+# Keep entries ordered lphi4-first, then alphabetically (matching metadata.models).
+
+models:
+  - name: lphi4
+    label: "lphi4 — quartic preheating"
+    description: "Default model: an inflaton with a quartic 0.25*lambda*phi^4 potential resonantly coupled to a second real scalar (daughter field). Two real scalars, no gauge fields."
+  - name: NMC_lphi4
+    label: "NMC_lphi4 — non-minimally coupled quartic"
+    description: "Quartic (lphi4) inflaton with a daughter scalar, non-minimally coupled to gravity. Two real scalars, non-minimal coupling active."
+  - name: NMC_tanh4_w_mass_P
+    label: "NMC_tanh4_w_mass_P — non-minimal tanh^4 with mass"
+    description: "Two-field tanh^4-type inflaton model with an explicit mass term, non-minimally coupled to gravity. Two real scalars, non-minimal coupling active."
+  - name: axionU1_m2phi2
+    label: "axionU1_m2phi2 — axion + U(1) gauge"
+    description: "Axion-like real scalar with a quadratic (1/2) Mass^2 phi^2 potential coupled to a U(1) gauge field (axion-gauge preheating). One real scalar, one U(1) gauge field, axion-U(1) coupling active."
+  - name: defects_ONGlobal
+    label: "defects_ONGlobal — O(N) global defects"
+    description: "O(N) global scalar multiplet whose spontaneous symmetry breaking forms global topological defects: domain walls for N=1 (optionally biased via qbias), global strings for N=2, and higher-N textures/monopoles."
+  - name: defects_U1LocalStrings
+    label: "defects_U1LocalStrings — U(1) local strings"
+    description: "Abelian-Higgs model (a complex scalar gauged under a local U(1)) whose symmetry breaking forms local cosmic strings. One complex scalar, one U(1) gauge field, complex-scalar-U(1) coupling active."
+  - name: lphi4SU2U1
+    label: "lphi4SU2U1 — scalar + U(1) + SU(2) gauge"
+    description: "Full scalar-gauge sector: a real scalar, a complex scalar, a U(1) gauge field, and an SU(2) doublet with its SU(2) gauge field, with U(1) and SU(2) couplings active (electroweak-like)."
+  - name: lphi4U1
+    label: "lphi4U1 — complex scalar + U(1) gauge"
+    description: "Complex scalar gauged under a U(1) gauge field (Abelian-Higgs). One complex scalar, one U(1) gauge field, complex-scalar-U(1) coupling active."
+  - name: tanh2
+    label: "tanh2 — two-field tanh^2 model"
+    description: "Two real-scalar model with a tanh^2-type potential (parameters M, Lambda4, q). Two real scalars, no gauge fields."
