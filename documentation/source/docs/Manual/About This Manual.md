@@ -148,9 +148,9 @@ The manual is also complemented with few appendices:
 
 <div class="cl-facts" markdown>
 [Installation](../code/Installation.md){ .cl-fact }
-[Appendix: Parameters](Appendix_Parameters.md){ .cl-fact }
-[Appendix: Generic Model variables](Appendix_Generic_Model_variables.md){ .cl-fact }
-[Appendix: CMake Flags](Appendix_CMake_Flags.md){ .cl-fact }
+[Parameters](Appendix_Parameters.md){ .cl-fact }
+[Variable Names](Appendix_Generic_Model_variables.md){ .cl-fact }
+[CMake Flags](../code/cmake.md){ .cl-fact }
 [List of Implemented Functions](List of Implemented Functions.md){ .cl-fact }
 </div>
 
@@ -158,4 +158,4 @@ The manual is also complemented with few appendices:
 
     - [Installation](../code/Installation.md) describes the installation process in detail, of both $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ itself and of different tools and libraries that it uses (some of them compulsory, others optional). 
 
-    - [Appendix: Parameters](Appendix_Parameters.md), [Appendix: Generic Model variables](Appendix_Generic_Model_variables.md), [Appendix: CMake Flags](Appendix_CMake_Flags.md), and [List of Implemented Functions](List of Implemented Functions.md), which contain, respectively, a list of the most relevant parameters, variables, functions, and CMake flags, used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
+    - [Parameters](Appendix_Parameters.md), [Variable Names](Appendix_Generic_Model_variables.md), [CMake Flags](../code/cmake.md), and [List of Implemented Functions](List of Implemented Functions.md), which contain, respectively, a list of the most relevant parameters, variables, functions, and CMake flags, used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.

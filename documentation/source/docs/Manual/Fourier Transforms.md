@@ -33,7 +33,7 @@ At run time CosmoLattice inspects the build options and the number of MPI proces
 !!! note
     Because `FFTW` is always available, a CosmoLattice executable always has a working FFT backend, whatever combination of flags you compiled with. The optional backends simply take over when they are both compiled in and applicable to the run at hand.
 
-The full list of FFT-related `CMake` flags is collected in Appendix [CMake flags](Appendix_CMake_Flags.md). We now describe each backend in turn.
+The full list of FFT-related `CMake` flags is collected in Appendix [CMake flags](../code/cmake.md). We now describe each backend in turn.
 
 ### `FFTW`: the CPU backend { #subsec_fft_fftw }
 
@@ -83,7 +83,7 @@ mpirun -n nproc lphi4 input=...
     The `-DPARAFAFT=ON` flag only takes effect together with `-DMPI=ON`. `ParaFaFT` is also a genuinely *multi-dimensional* distributed transform: it is used for runs with at least two spatial dimensions distributed over more than one process. Single-process runs fall back to `FFTW` (or `KokkosFFT` on a GPU) automatically.
 
 !!! note "Migrating from CosmoLattice 1.0"
-    Support for the old `PFFT` backend has been discontinued. The flags `-DPFFT` and `-DMYPFFT_PATH` are no longer recognized — use `-DPARAFAFT=ON` instead. See Appendix [CMake flags](Appendix_CMake_Flags.md) for the full list of deprecated options and their replacements.
+    Support for the old `PFFT` backend has been discontinued. The flags `-DPFFT` and `-DMYPFFT_PATH` are no longer recognized — use `-DPARAFAFT=ON` instead. See Appendix [CMake flags](../code/cmake.md) for the full list of deprecated options and their replacements.
 
 ### Constraints and practical notes { #subsec_fft_notes }
 
@@ -101,4 +101,4 @@ A few constraints are worth keeping in mind when planning large or unusual runs:
 ```
 in your model's `ModelPars` class.
 
-For the broader picture of how these FFT backends fit into CosmoLattice's overall parallelization strategy — distributed (`MPI`) versus shared-memory and GPU parallelism — see Section [Parallelization](Parallelization.md). For the complete reference of compilation flags, see Appendix [CMake flags](Appendix_CMake_Flags.md), and for library installation, Appendix [Installation](../code/Installation.md).
+For the broader picture of how these FFT backends fit into CosmoLattice's overall parallelization strategy — distributed (`MPI`) versus shared-memory and GPU parallelism — see Section [Parallelization](Parallelization.md). For the complete reference of compilation flags, see Appendix [CMake flags](../code/cmake.md), and for library installation, Appendix [Installation](../code/Installation.md).

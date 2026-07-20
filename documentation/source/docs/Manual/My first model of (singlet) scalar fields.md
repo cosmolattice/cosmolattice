@@ -247,13 +247,13 @@ cd cosmolattice
 mkdir build
 cd build
 ```
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ uses CMake for compilation (see Section [Appendix: CMake Flags](Appendix_CMake_Flags.md) for more details). The model $\texttt{lphi4.h}$ is compiled by typing the following commands (<span style="color:red;">**CHANGE ?**</span>),
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ uses CMake for compilation (see Section [CMake Flags](../code/cmake.md) for more details). The model $\texttt{lphi4.h}$ is compiled by typing the following commands (<span style="color:red;">**CHANGE ?**</span>),
 ```bash
 cmake -DMODEL=lphi4 ../
 make cosmolattice
 ```
 
-Some explanations are of order.  The last argument of the `cmake` command is the path to the CMake configuration file, which is located at the root of the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ folders. In our case, its relative path with respect to the $\texttt{build/}$ folder is $\texttt{../}$. The first argument `-DMODEL=lphi4` is passed to CMake, and tells it to compile the model $\texttt{lphi4.h}$. Changing this argument to any other model present inside the folder $\texttt{models/}$ will determine which model will be compiled. Note that this is not a $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$-specific CMake argument, see Appendix [Appendix: CMake Flags](Appendix_CMake_Flags.md) for an exhaustive list.
+Some explanations are of order.  The last argument of the `cmake` command is the path to the CMake configuration file, which is located at the root of the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ folders. In our case, its relative path with respect to the $\texttt{build/}$ folder is $\texttt{../}$. The first argument `-DMODEL=lphi4` is passed to CMake, and tells it to compile the model $\texttt{lphi4.h}$. Changing this argument to any other model present inside the folder $\texttt{models/}$ will determine which model will be compiled. Note that this is not a $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$-specific CMake argument, see Appendix [CMake Flags](../code/cmake.md) for an exhaustive list.
 
 !!! note "**Important Note**"
     Every time you call CMake, it is a good practice to first remove the $\texttt{CMakeCache.txt}$ file that was previously generated.

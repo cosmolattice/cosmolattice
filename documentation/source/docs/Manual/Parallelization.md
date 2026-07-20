@@ -124,7 +124,7 @@ cmake -DHIP=ON  -DMODEL=lphi4 ../   # AMD GPU
 cmake -DOPENMP=ON -DMODEL=lphi4 ../ # multi-core CPU
 make cosmolattice
 ```
-The full list of device flags is documented in Appendix [CMake flags](Appendix_CMake_Flags.md). When a GPU backend is enabled, single-node GPU Fourier transforms are handled automatically by `KokkosFFT` (the `-DKOKKOSFFT` flag is switched on for you). A single-GPU run is launched directly, like any serial executable:
+The full list of device flags is documented in Appendix [CMake flags](../code/cmake.md). When a GPU backend is enabled, single-node GPU Fourier transforms are handled automatically by `KokkosFFT` (the `-DKOKKOSFFT` flag is switched on for you). A single-GPU run is launched directly, like any serial executable:
 ```bash
 ./lphi4 input=...
 ```
