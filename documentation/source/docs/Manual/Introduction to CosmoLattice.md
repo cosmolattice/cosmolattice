@@ -45,7 +45,6 @@ A **basic level** user with no experience at all in parallelization techniques a
 **Intermediate level**
 {: .cl-minihead }
 
-=======
 An **intermediate level** user with a certain programming experience, will want to modify the type of output CosmoLattice generates, change the initial condition routine (e.g. turn it into a Monte-Carlo generator for thermal configurations), or even design their own evolution algorithms and add these to the family of integrators available in CosmoLattice. 
 
 </div>
@@ -80,14 +79,7 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is freely available to anyo
 !!! note "**Note**"
     If you would like to help developing some aspect of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, or even implement your own modules with some new functionality we have not envisaged, please contact us and let us know about your idea(s). $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ introduces a natural language describing fields and operations between them, so it is a natural platform to implement new libraries (related or not to cosmology).
 
-<<<<<<< HEAD
 ### Purpose, capabilities and structure of the code { #subsec_Purpose .cl-sec-fold }
-=======
-### The *Numerical* Early Universe { #subsec_EU }
->>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
-
-!!! note "**Note**"
-    Work focused on developing and applying numerical methods to address non-linear field theory phenomena in the early Universe is rapidly evolving, leading to the emergence of a research field of its own. We like to refer to this field as **Lattice Cosmology**, and to the methods used as **Lattice Cosmology Techniques (LCT)**. From now on, we will adopt this terminology, which will be used constantly throughout this document.
 
 Lattice Cosmology has gained significant attention in the recent times, as reflected by the number of specialized LCT packages created over recent years, see *e.g.* `LatticeEasy` [@Felder_2000hq], `ClusterEasy` [@Felder_2007nz],  `Defrost` [@Frolov_2008hy], `CUDAEasy` [@Sainio_2009hm], `HLattice` [@Huang_2011gf],  `PyCOOL` [@Sainio_2012mw], `GABE` [@Child_2013ria], `GABERel` [@Giblin_2019nuv], `GRChombo` [@Andrade_2021rbd], `PSpectRe` [@Easther_2010qz],  `Stella` [@Amin_2018xfe], `Latfield2` [@Daverio_2015ryl] or `GFiRe` [@Lozanov_2019jff]. We expect Lattice Cosmology to become an increasingly influential approach in determining observational strategies to probe the early Universe. It is in this context that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ was originally developed, created purposely to explore the phenomenology and observational implications of non-linearities in field theory early Universe scenarios. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ differs however from the above codes in a number of aspects. To begin with, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is ready to simulate not only the evolution of global scalar and Abelian $U(1)$ gauge theories, but also non-Abelian $SU(2)$ gauge theories. Since $\tt version ~2.0$ it can also simulate scalars with a non-minimal coupling to gravity, $\phi^2R$, and axion-like particle (ALP) interactions with gauge fields, $\phi F_{\mu\nu}\tilde F^{\mu\nu}$; it incorporates methods to set up special field configurations, like cosmic defect networks in *scaling* (*e.g.* cosmic strings and domain walls), or arbitrary field power spectra or spatial profiles; it incorporates non-symplectic evolution algorithms suitable *e.g.* for non-minimal scalar kinetic theories of the type $\mathcal{G}_{ab}(\lbrace\phi_c\rbrace)\partial_\mu\phi^a\partial^\mu\phi^b$; it also allows for optimized gravitational wave dynamics on the lattice sourced by scalar and gauge fields, and scalar field dynamics in $d + 1$ dimensions with $d = 1, 2$. 
 
@@ -99,11 +91,6 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is structured in such a way
 
 !!! note
     **Note:** `TempLat` is no longer stored inside the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ source tree. It is an external dependency fetched by CMake into the local build directory. A remarkable feature of `TempLat` is that its operations and parallelization can work in an arbitrary number of spatial dimensions $d$, including $d < 3$ and $d > 3$. This makes it a natural basis for future interfaces dealing with field dynamics on lower- or higher-dimensional lattices. Visit [ https://cosmolattice.net/technicalnotes/](https://cosmolattice.net/technicalnotes/) to check for additional modules incorporated in successive updated versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to run in $d \neq 3$ spatial dimensions.
-
-<<<<<<< HEAD
-=======
-### Purpose, capabilities and structure of CosmoLattice { #subsec_Purpose }
->>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
 
 
 The basic folder tree structure of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is the following:
@@ -176,14 +163,7 @@ The basic folder tree structure of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{a
 The CMake configuration first selects the model to compile from `models/`, then builds the executable from `source/cosmolattice.cpp`. The executable includes `CosmoInterface` from this repository and links against the external `TempLat::TempLat` target. `TempLat` is fetched at configure time and is responsible for the lattice-expression machinery, memory layout, parameter parsing, Fourier-transform infrastructure, and device backend setup. Depending on the selected CMake options, `TempLat` may in turn fetch or find external packages such as Kokkos, KokkosFFT, ParaFaFT, FFTW, HDF5, MPI, OpenMP, or C++ threads.
 
 
-<<<<<<< HEAD
 ### Basic Field Equations implemented (so far) <!-- in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$  --> { #subsec_BasicEOM .cl-sec-fold }
-=======
-!!! note
-    **Note:** `TempLat` is no longer stored inside the CosmoLattice source tree. It is an external dependency fetched by CMake into the local build directory. A remarkable feature of `TempLat` is that its operations and parallelization can work in an arbitrary number of spatial dimensions $d$, including $d < 3$ and $d > 3$. This makes it a natural basis for future interfaces dealing with field dynamics on lower- or higher-dimensional lattices. Visit [ https://cosmolattice.net/technicalnotes/](https://cosmolattice.net/technicalnotes/) to check for additional modules incorporated in successive updated versions of CosmoLattice to run in $d \neq 3$ spatial dimensions.
-
-### Basic Field Equations implemented (so far) in CosmoLattice { #subsec_BasicEOM }
->>>>>>> 4042e36b8d42fa77080bfab5313cde6d95fafcc6
 
 Let us consider scalar fields of the type
 

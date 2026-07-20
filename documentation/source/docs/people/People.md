@@ -136,7 +136,7 @@
   space
 -->
 
-## **New Developers**
+## **Upcoming Developers**
 
 <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; align-items: start;">
 
