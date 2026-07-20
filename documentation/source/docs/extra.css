@@ -55,6 +55,20 @@ body.nav-collapsed .md-sidebar--primary {
     font-style: italic;
     color: var(--md-default-fg-color--light);
     padding-left: 0.1rem; /* DGF: changed from 1.4*/
+    /* transparent by default so the active marker below costs no layout shift */
+    border-left: 2px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+/* Scroll-spy: Material already tracks which heading is in view and marks its
+   TOC entry .md-nav__link--active as you scroll. The muted rule above is more
+   specific than Material's own active colour, so it was silently masking the
+   highlight — restore it here (same specificity) with an accent bar so the
+   current (sub)section is obvious at a glance. */
+.md-sidebar--primary .md-nav--secondary .md-nav__link--active {
+    color: var(--md-typeset-a-color);
+    border-left-color: var(--md-typeset-a-color);
+    font-weight: 700;
 }
 
 /* Added by DGF on June 15th 2026, to justify all text paragraphs in the website 	*/
@@ -429,8 +443,7 @@ body.nav-collapsed .md-sidebar--primary {
    <div class="cl-prose-grid" markdown> holding one
    <div class="cl-prose-card" markdown> per minihead + paragraph pair.
    javascripts/prose-fold.js activates the grid by adding .cl-managed: three
-   columns of compact cards, each showing the title plus a faded preview of
-   its (untouched) full text; clicking a card expands it across the whole row.
+   columns of cards, each showing its mini-title plus its full, untouched text.
    With JS disabled — and in print — the cards simply stack as the plain
    full-width prose they contain. Cards stay neutral on purpose: on this page
    color always means a physics sector. */
@@ -440,12 +453,6 @@ body.nav-collapsed .md-sidebar--primary {
     gap: 0.8rem;
     align-items: stretch;
     margin: 1.2em 0;
-}
-
-/* While a card is open it grows down inside its own column; release the
-   others from row-stretch so they keep their compact height. */
-.md-typeset .cl-prose-grid.cl-managed:has(.cl-open) {
-    align-items: start;
 }
 
 .md-typeset .cl-prose-grid.cl-managed .cl-prose-card {
@@ -459,16 +466,6 @@ body.nav-collapsed .md-sidebar--primary {
     background: var(--cl-card-bg);
 }
 
-.md-typeset .cl-prose-grid.cl-managed .cl-prose-card:not(.cl-open) {
-    cursor: pointer;
-    transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.md-typeset .cl-prose-grid.cl-managed .cl-prose-card:not(.cl-open):hover {
-    border-color: var(--md-default-fg-color--lighter);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-}
-
 /* The mini-titles double as card headers */
 .md-typeset .cl-prose-grid.cl-managed .cl-prose-card p.cl-minihead {
     margin: 0 0 0.5em;
@@ -476,33 +473,9 @@ body.nav-collapsed .md-sidebar--primary {
     line-height: 1.35;
 }
 
-/* Collapsed: clamp the card body to a short preview fading into the card */
-.md-typeset .cl-prose-grid.cl-managed .cl-prose-card:not(.cl-open) p:not(.cl-minihead) {
-    position: relative;
-    max-height: 8.2em;
-    overflow: hidden;
-    margin: 0 0 0.7em;
-    text-align: left; /* justified text makes rivers in narrow columns */
-}
-
-.md-typeset .cl-prose-grid.cl-managed .cl-prose-card:not(.cl-open) p:not(.cl-minihead)::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 3.4em;
-    background: linear-gradient(to bottom, transparent, var(--cl-card-bg) 92%);
-    pointer-events: none;
-}
-
-/* Expanded: full text in place, still in its column (left-aligned — the
-   column is too narrow for justified text), with a subtly stronger border */
-.md-typeset .cl-prose-grid.cl-managed .cl-prose-card.cl-open {
-    border-color: var(--md-default-fg-color--lighter);
-}
-
-.md-typeset .cl-prose-grid.cl-managed .cl-prose-card.cl-open p:not(.cl-minihead) {
+/* Card body: full text, left-aligned (the column is too narrow for justified
+   text, which would make rivers) */
+.md-typeset .cl-prose-grid.cl-managed .cl-prose-card p:not(.cl-minihead) {
     margin: 0 0 0.7em;
     text-align: left;
 }
@@ -543,19 +516,8 @@ body.nav-collapsed .md-sidebar--primary {
     transform: rotate(-135deg) translate(-0.1em, -0.1em);
 }
 
-/* Cards whose full text already fits the preview height: no fade, no toggle,
-   no pointer (prose-fold.js adds .cl-short after measuring) */
-.md-typeset .cl-prose-grid.cl-managed .cl-prose-card.cl-short {
-    cursor: default;
-}
-
-.md-typeset .cl-prose-grid.cl-managed .cl-prose-card.cl-short p:not(.cl-minihead)::after {
-    display: none;
-}
-
 /* Keep the 3-column row alive under heavy zoom / narrow windows by first
-   tightening the gaps; only true phone widths stack to a single column
-   (previews stay collapsed either way) */
+   tightening the gaps; only true phone widths stack to a single column */
 @media screen and (max-width: 44.9375em) {
     .md-typeset .cl-prose-grid.cl-managed,
     .md-typeset .cl-art-grid {
@@ -813,10 +775,6 @@ body.nav-collapsed .md-sidebar--primary {
     .md-typeset .cl-prose-grid.cl-managed {
         display: block;
     }
-    .md-typeset .cl-prose-grid.cl-managed .cl-prose-card:not(.cl-open) p:not(.cl-minihead) {
-        max-height: none;
-    }
-    .md-typeset .cl-prose-grid.cl-managed .cl-prose-card:not(.cl-open) p:not(.cl-minihead)::after,
     .md-typeset .cl-prose-toggle {
         display: none;
     }
@@ -893,79 +851,6 @@ body.nav-collapsed .md-sidebar--primary {
     }
     .md-typeset p.cl-fold.cl-managed:not(.cl-open)::after,
     .md-typeset .cl-fold-toggle {
-        display: none;
-    }
-}
-
-/* === Whole-section folds ===
-   Headings tagged { .cl-sec-fold } in the Markdown become toggles for their
-   entire section (wrapped into .cl-sec-body by prose-fold.js). Collapsed
-   bodies keep their layout width (height:0, not display:none) so MathJax
-   typesets correctly. No JS = plain visible sections. */
-.md-typeset h2.cl-sec-fold,
-.md-typeset h3.cl-sec-fold {
-    cursor: pointer;
-}
-
-.md-typeset h2.cl-sec-fold:hover,
-.md-typeset h3.cl-sec-fold:hover {
-    color: var(--md-accent-fg-color);
-}
-
-.md-typeset .cl-sec-fold::after {
-    content: "";
-    display: inline-block;
-    width: 0.4em;
-    height: 0.4em;
-    margin-left: 0.6em;
-    margin-bottom: 0.1em;
-    border-right: 2.5px solid var(--md-default-fg-color--lighter);
-    border-bottom: 2.5px solid var(--md-default-fg-color--lighter);
-    transform: rotate(45deg);
-    transition: transform 0.25s ease;
-}
-
-.md-typeset .cl-sec-fold:hover::after {
-    border-color: var(--md-accent-fg-color);
-}
-
-.md-typeset .cl-sec-fold[aria-expanded="true"]::after {
-    transform: rotate(-135deg) translate(-0.1em, -0.1em);
-}
-
-/* Collapsed: the section's first lines stay visible, fading into the page
-   (same preview language as the prose cards) */
-.md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body {
-    position: relative;
-    max-height: 6.6em;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 3.2em;
-    background: linear-gradient(to bottom, transparent, var(--md-default-bg-color) 92%);
-    pointer-events: none;
-}
-
-.md-typeset .cl-prose-toggle.cl-sec-toggle {
-    display: block;
-    margin: 0.4em auto 1.4em;
-}
-
-@media print {
-    .md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body {
-        max-height: none;
-        overflow: visible;
-        cursor: auto;
-    }
-    .md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body::after,
-    .md-typeset .cl-sec-fold::after {
         display: none;
     }
 }
@@ -1562,21 +1447,6 @@ body.nav-collapsed .md-sidebar--primary {
     margin-top: 2.4em;
     padding-bottom: 0.25em;
     border-bottom: 2px solid var(--md-default-fg-color--lightest);
-}
-
-/* === "My first model" page: sections collapsed to a blurred teaser ===
-   Each section heading carries { .cl-sec-fold }; prose-fold.js wraps its body
-   and clips it to a short preview. Here we blur that preview so the collapsed
-   section reads as a frosted "click to read" teaser rather than plain clipped
-   text. Removing the blur/opacity is enough to fall back to the toolkit's
-   default faded preview. Opening a section (.cl-sec-open, added on toggle or
-   on inbound-anchor navigation) drops the blur automatically. Scoped via
-   :has(.cl-roadmap) so other pages that use section folds are untouched. */
-.md-content:has(.cl-roadmap) .md-typeset .cl-sec-fold:not(.cl-sec-open) + .cl-sec-body {
-    max-height: 5em;
-    filter: blur(3px);
-    opacity: 0.72;
-    user-select: none;
 }
 
 /* === Output-file cards (reusable component) ===

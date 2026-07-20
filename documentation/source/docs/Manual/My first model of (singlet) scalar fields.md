@@ -23,7 +23,7 @@ This section is structured as follows.
 
 <!-- </div> -->
 
-### **Program variables** { #subsec_LatticeScalars .cl-sec-fold }
+### **Program variables** { #subsec_LatticeScalars }
 
 To describe the expansion of the universe, we consider a flat *Friedmann-Lemâitre-Robertson-Walker* (FLRW) background metric, described by the line element
 [](){ #eq_FLRWmetric }
@@ -72,7 +72,7 @@ We therefore recommend to use Eq. \eqref{eq_Alpha-PowLaw} for any scenario where
     Readers familiar with $\texttt{LatticeEasy}$[@Felder_2000hq], might have notticed that the above transformations are similar to those carried out in that code to define their program variables, $\tilde\phi \equiv a^{r}A\phi, d\tilde\eta \equiv a^{s}Bdt,  d\tilde \equiv x^i B dx^i$, if we set $A = 1/f_*$, $B= \omega_*$, $r=0$, and $s=-\alpha$ in their notation. As we will see, contrary to $\texttt{LatticeEasy}$, the evolution algorithms implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ *don't require a conformal rescaling of the fields*, so we do not need to introduce a parameter analogous to $r$.
 
 
-### **A simple model** { #sec_ScTheModel .cl-sec-fold }
+### **A simple model** { #sec_ScTheModel }
 
 <div class="cl-facts" markdown>
 [example model: lphi4](#sec_TheModelFile){ .cl-fact }
@@ -229,7 +229,7 @@ and their partial contributions as ${\widetilde E}_K^{(n)}$, ${\widetilde E}_G^{
 
 We note that the numerical schemes implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ use the second-order differential Eq. \eqref{eq_NewFriedmannEQsII} to solve for the scale factor, whereas Eq. \eqref{eq_NewFriedmannEQsI} is used as a *constraint* equation to monitor the accuracy of the obtained solution.
 
-### **My first run** { #sec_MyFirstRun .cl-sec-fold }
+### **My first run** { #sec_MyFirstRun }
 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with a set of ready-to-run models, which are available in the folder $\texttt{models/}.~$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. \eqref{eq_potentialExampleI} [more precisely,  the program potential given in Eq. \eqref{eq_PotNat}]. We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
 
@@ -445,7 +445,7 @@ with $\left\langle ... \right\rangle_{R(\tilde {\bf n})}$ denoting angular avera
      Definitions of the output variables just defined may vary in successive updates of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. For instance, whereas the form to calculate the scalar power spectrum $\widetilde{\Delta}_{\tilde \phi} (\tilde k)$ was unique in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ `v1.0`, in later versions (starting from $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ `v1.1`) we enabled the option to choose between different versions of a scalar field power spectrum. Check [**Observables**](Observables.md) for up-to-date definitions, and 
      [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](../code/Versions.md) to follow the addition of new features (ranging from new definitions, options, algorithms, interactions, etc), as incorporated in successive versions of the code. 
 
-### **The model file** { #sec_TheModelFile .cl-sec-fold }
+### **The model file** { #sec_TheModelFile }
 
 To define a model, the only file we really need to modify/create is the corresponding *model file* specified through the `-DMODEL=...` argument of CMake. In the previous example, the model file used was $\texttt{lphi4.h}$. In the following, we will review carefully the contents of such file, so that you can imitate its structure to write a new model file $\texttt{myModel.h}$, for the simulation of any other scenario of (canonically normalized) interacting (singlet) scalar fields.
 
@@ -518,7 +518,7 @@ Finally, we also provide the second derivative of the potential with respect to 
 
 With this we end our presentation of the model file. Any model consisting of canonically normalized interacting singlet scalar fields can be constructed in a similar manner.
 
-### **Scalar physics inside $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** { #sec_WhatHappensAuto .cl-sec-fold }
+### **Scalar physics inside $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** { #sec_WhatHappensAuto }
 
 We discuss now what actions the code executes when running a simulation with a model we have just set up. Our aim here is to provide a short overview of the different parts of the code automatically called when running a simulation, so that the user can have a full picture of what is happening at the physical level. For a deeper understanding on the implementation details of this, we refer the reader to Section [**Inside Cosmolattice**](What CosmoLattice does in detail.md).
 
