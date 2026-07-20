@@ -427,6 +427,20 @@ body.nav-collapsed .md-sidebar--primary {
     color: var(--cl-upcoming);
 }
 
+/* These cards go nowhere, so they must not behave like something clickable:
+   kill Material's .grid.cards hover border/shadow/transition and keep the
+   default cursor. */
+.md-typeset .grid.cl-upcoming > ul > li,
+.md-typeset .grid.cl-upcoming > ul > li:hover,
+.md-typeset .grid.cl-upcoming > ul > li:focus-within {
+    cursor: default;
+    transform: none;
+    transition: none;
+    box-shadow: none;
+    border-color: var(--md-default-fg-color--lightest);
+    border-top-color: var(--cl-upcoming);
+}
+
 .md-typeset .grid.cl-upcoming > ul > li::after {
     content: "in development";
     position: absolute;
