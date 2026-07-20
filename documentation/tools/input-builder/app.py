@@ -511,7 +511,7 @@ def render_snapshots_section(model: str, store: dict, caps: dict):
                                    key=f"snap:{model}:restrict", value=bool(prev_lo))
             if restrict:
                 # Offer up to the model's lattice dimensionality, defaulting to it
-                # (e.g. ON_2D -> 2, not 3).
+                # (a 2D model -> 2, not 3), read from the model's NDim capability.
                 ndim_max = caps.get("NDim", 3)
                 ndim_prev = len(prev_lo) if prev_lo else ndim_max
                 ndim = st.radio("Lattice dimensions", list(range(1, ndim_max + 1)),

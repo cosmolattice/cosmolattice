@@ -76,7 +76,7 @@ namespace TempLat
       // defined here
 
       lambda = parser.get<FloatType>("lambda", 1.);
-      vev = parser.get<FloatType>("lambda", 1.);
+      vev = parser.get<FloatType>("vev", 1.);
 
       /////////
       // Rescaling for program variables
