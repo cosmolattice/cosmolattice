@@ -156,7 +156,7 @@ The program variables are the scalar-singlet ones of Eq. ([*2*](My first model o
 
 ### **Model and input files for NMC theories** { #subsec_NMCInput }
 
-The example model $\texttt{lphi4NonMinimal.h}$ contains two scalar singlets, $N_s=2$. We identify $\phi_0\equiv\phi$ with the --  minimally coupled -- inflaton, and $\phi_1\equiv\chi$ with a non-minimally coupled scalar. The theory is
+The example model $\texttt{NMC_lphi4.h}$ contains two scalar singlets, $N_s=2$. We identify $\phi_0\equiv\phi$ with the --  minimally coupled -- inflaton, and $\phi_1\equiv\chi$ with a non-minimally coupled scalar. The theory is
 [](){ #eq_NMCExampleAction }
 [](){ #eq_NMCExamplePotential }
 ```math
@@ -227,9 +227,9 @@ V(f_*\tilde\phi,f_*\tilde\chi)
 \end{align}
 ```
 
-The corresponding input file is $\texttt{models/parameter-files/lphi4NonMinimal.in}$:
+The corresponding input file is $\texttt{models/parameter-files/NMC_lphi4.in}$:
 
-@emgithub(models/parameter-files/lphi4NonMinimal.in)
+@emgithub(models/parameter-files/NMC_lphi4.in)
 
 The parameter syntax, <!-- command-line overrides,  --> lattice parameters, output frequencies, and scalar initial conditions are the same as in Section [*Running the program with an input parameter file*](My first model of (singlet) scalar fields.md#subsec_Input-Scalars). The NMC-specific additions are:
 
@@ -242,7 +242,7 @@ The parameter syntax, <!-- command-line overrides,  --> lattice parameters, outp
 
 Standard scalar-singlet parameters still apply. In particular, `initial_amplitudes` and `initial_momenta` contain two entries: the first one for $\phi$ and the second one for $\chi$. A typical command-line override is
 ```bash
-./lphi4NonMinimal input=../models/parameter-files/lphi4NonMinimal.in N=64 xis=50
+./NMC_lphi4 input=../models/parameter-files/NMC_lphi4.in N=64 xis=50
 ```
 
 which runs the model on a $64^3$ lattice and sets $\xi=50$.
@@ -345,9 +345,9 @@ For the example model, the sum contains only $I=1$, with $\tilde\phi_1=\tilde\ch
 
 ### **The NMC model file** { #sec_TheNMCModelFile }
 
-To define a new NMC model, start from a scalar-singlet model file and add the NMC field assignment in the `ModelPars` structure. In $\texttt{models/lphi4NonMinimal.h}$ this declares that the second scalar, field index `1`, couples non-minimally to gravity:
+To define a new NMC model, start from a scalar-singlet model file and add the NMC field assignment in the `ModelPars` structure. In $\texttt{models/NMC_lphi4.h}$ this declares that the second scalar, field index `1`, couples non-minimally to gravity:
 
-@emgithub(models/lphi4NonMinimal.h:model_pars)
+@emgithub(models/NMC_lphi4.h:model_pars)
 
 The `NonMinimalCouplings` typedef activates the NMC module. Its first template argument is the total number of scalar singlets, while the second one is the number of non-minimally coupled scalar fields. In this model, field index `1` is the NMC scalar $\chi$, while field index `0` is the minimally coupled inflaton $\phi$.
 
@@ -355,11 +355,11 @@ The `NonMinimalCouplings` typedef activates the NMC module. Its first template a
 
 The model has one non-zero program-potential term, Eq.$~$\eqref{eq_NMCExampleProgramPotential}, which is the inflationary potential:
 
-@emgithub(models/lphi4NonMinimal.h:potential_terms)
+@emgithub(models/NMC_lphi4.h:potential_terms)
 
 where its first derivative is
 
-@emgithub(models/lphi4NonMinimal.h:potential_derivs)
+@emgithub(models/NMC_lphi4.h:potential_derivs)
 
 corresponding to
 [](){ #eq_NMCProgramPotentialDerivative }
@@ -376,7 +376,7 @@ corresponding to
 
 The second derivative needed for the initial inflaton effective mass is
 
-@emgithub(models/lphi4NonMinimal.h:potential_second_derivs)
+@emgithub(models/NMC_lphi4.h:potential_second_derivs)
 
 The numbering of these functions must be consistent with the scalar-field numbering. `Tag<0>` refers to the inflaton $\phi$. The NMC scalar $\chi$ is field `1`, which in our example model has no potential term.
 
@@ -389,7 +389,7 @@ Any scalar singlet can be initialized from an external spectrum, following the p
 ext_PS1 = path/to/spectrum.dat
 ```
 
-because in $\texttt{lphi4NonMinimal.h}$ field `1` is $\chi$. The corresponding inflaton parameter is `ext_PS0`; it can remain `none` if the inflaton fluctuations use the default scalar prescription. The `PS_type` value must match the convention used to produce the external file, and the momenta in that file must be expressed in units compatible with $\omega_*$. This is useful when the NMC spectator fluctuations have first been evolved in the linear regime and are then passed to the nonlinear lattice simulation.
+because in $\texttt{NMC_lphi4.h}$ field `1` is $\chi$. The corresponding inflaton parameter is `ext_PS0`; it can remain `none` if the inflaton fluctuations use the default scalar prescription. The `PS_type` value must match the convention used to produce the external file, and the momenta in that file must be expressed in units compatible with $\omega_*$. This is useful when the NMC spectator fluctuations have first been evolved in the linear regime and are then passed to the nonlinear lattice simulation.
 
 #### Evolution equations { #eq_evolution-NMC }
 

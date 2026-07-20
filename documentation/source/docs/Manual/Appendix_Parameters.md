@@ -200,7 +200,7 @@ annotated with their arity (e.g. `×NS` for the number of scalar fields).
 | --- | --- | --- | --- | --- |
 | `lambda` | `float` | `1.` | dimensionless | Quartic self-coupling of the complex scalar field, controlling the strength of the symmetry-breaking potential whose vacuum manifold supports the formation of local cosmic strings; it sets the velocity rescaling omegaStar = sqrt(lambda)*vev and, combined with the gauge coupling, the derived gauge parameter g = sqrt(q*lambda). This same literal key is also reused to initialize the vacuum expectation value vev. |
 
-### `lphi4NonMinimal`
+### `NMC_lphi4`
 
 | Parameter | Type | Default | Units | Description |
 | --- | --- | --- | --- | --- |
