@@ -2,7 +2,7 @@ Besides its [parallel support](Parallelization.md), another useful feature provi
 
 ### Saving three-dimensional field distributions, backups and other options: `HDF5` { #subsec_hdf5spec }
 
-When running long simulations, it may come very handy to be able to stop them and restart them later on, or to have some kind of automatic backup in case some problem happens to the hardware you are using. In order to implement this type of features, we need to be able to save the field distributions to a file. For the sake of portability, the current version of CosmoLattice uses the `HDF5` library to perform this task in a binary format. This means that, if you want to use one of the features that involve saving a three-dimensional distribution of some fields to a file, you will need to have a working `HDF5` library installed (see Appendix [Installation](../code/Installation.md) on how to do this). Assuming you have such installation, activating these features in CosmoLattice is as simple as using another `CMake` flag:
+When running long simulations, it may come very handy to be able to stop them and restart them later on, or to have some kind of automatic backup in case some problem happens to the hardware you are using. In order to implement this type of features, we need to be able to save the field distributions to a file. For the sake of portability, the current version of CosmoLattice uses the `HDF5` library to perform this task in a binary format. This means that, if you want to use one of the features that involve saving a three-dimensional distribution of some fields to a file, you will need to have a working `HDF5` library installed (see [Installation](../code/Installation.md) on how to do this). Assuming you have such installation, activating these features in CosmoLattice is as simple as using another `CMake` flag:
 ```bash
 cmake -DHDF5=ON -DMODEL=lphi4 ../
 make cosmolattice
@@ -38,7 +38,7 @@ With the ''start and stop" mechanism presented in the section above, it is natur
 
 #### Saving three dimensional energy distributions
 
-CosmoLattice is also capable of saving three-dimensional distributions of arbitrary observables in a file. At present, the user can save three-dimensional distributions of the various energy components of the system by adding different flags to the `snapshots` parameter in the parameter file (previously named `energy_snapshot`, which still works as a deprecated alias). The different flags are indicated in Appendix [Appendix: Parameters](Appendix_Parameters.md). Let us show an example: suppose we are running the `lphi4SU2U1` gauge model and we want to save to file the scalars kinetic energies and the $SU(2)$ electric energy. We would then run
+CosmoLattice is also capable of saving three-dimensional distributions of arbitrary observables in a file. At present, the user can save three-dimensional distributions of the various energy components of the system by adding different flags to the `snapshots` parameter in the parameter file (previously named `energy_snapshot`, which still works as a deprecated alias). The different flags are indicated in [Appendix: Parameters](Appendix_Parameters.md). Let us show an example: suppose we are running the `lphi4SU2U1` gauge model and we want to save to file the scalars kinetic energies and the $SU(2)$ electric energy. We would then run
 ```bash
 ./lphi4SU2U1 input=input.in snapshots="E_S_K E_B_K"
 ```
