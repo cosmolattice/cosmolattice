@@ -143,18 +143,12 @@ Describe some of the technical features implemented in $\mathcal{C}\mathtt{osmo}
 !!! note "Important Note: CosmoLattice updates & versions"
     $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is an ever-evolving package, and improved features are continuously being added. We typically release publicly a new version of the code whenever either of the following aspects take place: code algorithm improvements, new lattice methods, or new physics modules. Sucessive versions of the code with new lattice methods and/or new physics modules, will always maintain previous lattice methods and physics modules, simply adding the new ingredients. However, updated versions with new algorithmic improvements, might supersede (and hence substitute) previous parts of the code. The latter typically concern the very internal tripes of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, as *e.g.* the Fourier transform or internal communication between cores in a cluster, which the majority of users will never touch. Details of the different versions of the code can be found in the [**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Version Guide**](../code/Versions.md). This manual can be approached, in any case, independently of the version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ that the reader is using or intending to use. Most sections of the manual are common to all $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ versions, and whenever new physics modules and/or features presented in the manual require specific versions of the code, this will be clearly specified. We recommend, at any rate, to download and work always with the latest version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ (currently *version 2.0*, released on July 2026).
 
-The manual is also complemented with few appendices: 
+The manual is also complemented with a few reference pages: 
 
 <div class="cl-facts" markdown>
 [Installation](../code/Installation.md){ .cl-fact }
 [Parameters](Appendix_Parameters.md){ .cl-fact }
 [Variable Names](Appendix_Generic_Model_variables.md){ .cl-fact }
 [CMake Flags](../code/cmake.md){ .cl-fact }
-[List of Implemented Functions](List of Implemented Functions.md){ .cl-fact }
+[Input File Builder](InputBuilder.md){ .cl-fact }
 </div>
-
-!!! note "More about the appendices"
-
-    - [Installation](../code/Installation.md) describes the installation process in detail, of both $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ itself and of different tools and libraries that it uses (some of them compulsory, others optional). 
-
-    - [Parameters](Appendix_Parameters.md), [Variable Names](Appendix_Generic_Model_variables.md), [CMake Flags](../code/cmake.md), and [List of Implemented Functions](List of Implemented Functions.md), which contain, respectively, a list of the most relevant parameters, variables, functions, and CMake flags, used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
