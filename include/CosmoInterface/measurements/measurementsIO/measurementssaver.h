@@ -26,7 +26,7 @@ namespace TempLat
     // @label:measurementssaver_constructor
     template <size_t NDim>
     MeasurementsSaver(FilesManager<NDim> &fm, std::string fn, bool amIRoot, bool appendMode,
-                      const std::vector<std::string> &headers = {}, bool dontCreate = false)
+                      const std::vector<std::string> &headers = {}, bool dontCreate = false, bool saveInfreq = false)
         : printHeaders(fm.getPrintHeaders()), useHDF5(fm.getUseHDF5())
     {
       if (!dontCreate) {
@@ -34,7 +34,7 @@ namespace TempLat
           ms = std::make_shared<MeasurementsSaverStd<T>>(fm, fn, amIRoot, appendMode, headers);
         else {
 #ifdef HAVE_HDF5
-          ms5 = std::make_shared<MeasurementsSaverHDF5<T>>(fm, fn, amIRoot, appendMode, headers);
+          ms5 = std::make_shared<MeasurementsSaverHDF5<T>>(fm, fn, amIRoot, appendMode, headers, saveInfreq);
 #else
           throw(UseHDF5ButNotCompiled(
               "Call to use HDF5 for the measurementsIO output, but compiled without HDF5 option."));
@@ -48,7 +48,7 @@ namespace TempLat
 
     template <size_t NDim>
     MeasurementsSaver(FilesManager<NDim> &fm, const Field<T, NDim> &fld, bool amIRoot, bool appendMode,
-                      const std::vector<std::string> &headers = {}, bool dontCreate = false)
+                      const std::vector<std::string> &headers = {}, bool dontCreate = false, bool saveInfreq = false)
         : printHeaders(fm.getPrintHeaders()), useHDF5(fm.getUseHDF5())
     {
       if (!dontCreate) {
@@ -56,7 +56,7 @@ namespace TempLat
           ms = std::make_shared<MeasurementsSaverStd<T>>(fm, fld, amIRoot, appendMode, headers);
         else {
 #ifdef HAVE_HDF5
-          ms5 = std::make_shared<MeasurementsSaverHDF5<T>>(fm, fld, amIRoot, appendMode, headers);
+          ms5 = std::make_shared<MeasurementsSaverHDF5<T>>(fm, fld, amIRoot, appendMode, headers, saveInfreq);
 #else
           throw(UseHDF5ButNotCompiled(
               "Call to use HDF5 for the measurementsIO output, but compiled without HDF5 option."));

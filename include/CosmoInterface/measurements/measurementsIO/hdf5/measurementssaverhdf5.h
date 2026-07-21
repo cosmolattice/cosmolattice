@@ -25,21 +25,22 @@ namespace TempLat
   public:
     template <size_t NDim>
     MeasurementsSaverHDF5(FilesManager<NDim> &fm, std::string fn, bool pAmIRoot, bool appendMode,
-                          const std::vector<std::string> &pHeaders)
+                          const std::vector<std::string> &pHeaders, bool saveInfreq)
         : mHeaders(pHeaders), currentAv(0), flushCount(1), flushFreq(fm.getFlushFreq()), grpName(fn),
           fName(fm.getHDF5Fn()), amIRoot(pAmIRoot)
     {
       HDF5File file;
       file.open(fName, ReadWrite);
       auto group = file.createOrOpenGroup(grpName);
+
       for (auto h : mHeaders) {
         if (appendMode && H5Lexists(group, h.c_str(), H5P_DEFAULT) > 0) {
           averages.emplace_back(group.reopenDataset(h));
           averages.back().setOffset(averages.back().getSizes()[0]);
-          averages.back().extend(fm.getNMeas());
+          averages.back().extend(saveInfreq ? fm.getNInfreqMeas() : fm.getNMeas());
         } else {
           averages.emplace_back(group.template createTimeSeries<T>(h, {0}, {4096}));
-          averages.back().extend(fm.getNMeas());
+          averages.back().extend(saveInfreq ? fm.getNInfreqMeas() : fm.getNMeas());
         }
         averages.back().close();
       }

@@ -401,3 +401,5 @@ For both outputs, the observables are determined after TT projecting the auxilia
 | `GWprojectorType = 1` | Real projector, built from $k^0_\mathrm{L}$ |
 | `GWprojectorType = 2` | Backward projector, built from $k^-_\mathrm{L}$. Default choice. |
 | `GWprojectorType = 3` | Forward projector, built from $k^+_\mathrm{L}$. |
+
+Finally, we note that the results of the total energy density of GWs, as it is computed from integrating the power spectrum, may depend on the particular type and version of power spectrum used, as well as on the width of the binning. We note, however, that for `PS_type = 1` and `PS_version = 1`, the result is independent of the binning.

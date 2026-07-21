@@ -31,7 +31,7 @@ namespace TempLat
     GWsMeasurer(Model &model, FilesManager<Model::NDim> &filesManager, const RunParameters<T> &par, bool append):
     amIRoot(model.getToolBox()->amIRoot()),
     computeGWenergy(par.powerSpectrumType != 0),
-    energyOut(filesManager, "energies_gws", amIRoot, append, getGWEnergyHeaders(model), model.fldGWs == nullptr || !computeGWenergy),
+    energyOut(filesManager, "energies_gws", amIRoot, append, getGWEnergyHeaders(model), model.fldGWs == nullptr || !computeGWenergy, true),
     spectraOut(filesManager, "energy_gws", amIRoot, append, par, model.fldGWs == nullptr),
     PRJType(par.GWprojectorType)
     { }
@@ -61,7 +61,7 @@ namespace TempLat
     {
       std::vector<std::string> ret;
       ret.emplace_back("t");
-      ret.emplace_back("rhoGW / rho");
+      ret.emplace_back("rhoGW_over_rho");
       ret.emplace_back("rhoGW");
 
       return ret;
