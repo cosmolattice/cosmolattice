@@ -1089,8 +1089,8 @@ body.nav-collapsed .md-sidebar--primary {
 
 /* === Citations (javascripts/citations.js) ===
    Runs of 3+ citation superscripts collapse into one "[49–56]" chip; the
-   page-bottom bibliography folds behind a "References (N)" bar and opens as
-   a compact two-column list. No JS = stock footnote rendering. */
+   page-bottom bibliography sits open under a static "References (N)" header
+   as a compact two-column list. No JS = stock footnote rendering. */
 .md-typeset .cl-cite-group:not(.cl-open) sup {
     display: none;
 }
@@ -1123,11 +1123,10 @@ body.nav-collapsed .md-sidebar--primary {
     margin-left: 0.25em;
 }
 
-/* The "References (N)" bar, same design family as the collapsible notes */
-.md-typeset .cl-bib-toggle {
+/* The "References (N)" header, same design family as the collapsible notes */
+.md-typeset .cl-bib-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     width: 100%;
     margin: 2em 0 0;
     padding: 0.55em 1em;
@@ -1136,56 +1135,28 @@ body.nav-collapsed .md-sidebar--primary {
     background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
     font-weight: 700;
     color: var(--md-default-fg-color--light);
-    cursor: pointer;
     text-align: left;
 }
 
-.md-typeset .cl-bib-toggle:hover {
-    border-color: var(--md-accent-fg-color);
-    color: var(--md-accent-fg-color);
-}
-
-.md-typeset .cl-bib-toggle .cl-prose-chevron {
-    display: inline-block;
-    width: 0.45em;
-    height: 0.45em;
-    border-right: 2px solid currentColor;
-    border-bottom: 2px solid currentColor;
-    transform: rotate(45deg);
-    transition: transform 0.25s ease;
-}
-
-.md-typeset .cl-bib-toggle[aria-expanded="true"] .cl-prose-chevron {
-    transform: rotate(-135deg);
-}
-
-.md-typeset .footnote.cl-bib-folded {
+/* Compact two-column list, the header already separates it */
+.md-typeset .footnote.cl-bib > hr {
     display: none;
 }
 
-.md-typeset .footnote.cl-bib-folded.cl-bib-open {
-    display: block;
-}
-
-/* Open state: compact two-column list, the bar already separates it */
-.md-typeset .footnote.cl-bib-open > hr {
-    display: none;
-}
-
-.md-typeset .footnote.cl-bib-open > ol {
+.md-typeset .footnote.cl-bib > ol {
     columns: 2;
     column-gap: 2.2rem;
     margin-top: 0.8em;
 }
 
-.md-typeset .footnote.cl-bib-open > ol > li {
+.md-typeset .footnote.cl-bib > ol > li {
     break-inside: avoid;
     margin-bottom: 0.7em;
 }
 
 /* Bibliography typography: left-aligned (justify makes rivers in narrow
    columns), muted, tight */
-.md-typeset .footnote.cl-bib-open p {
+.md-typeset .footnote.cl-bib p {
     text-align: left;
     color: var(--md-default-fg-color--light);
     margin: 0 0 0.2em;
@@ -1212,22 +1183,18 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 @media screen and (max-width: 44.9375em) {
-    .md-typeset .footnote.cl-bib-open > ol {
+    .md-typeset .footnote.cl-bib > ol {
         columns: 1;
     }
 }
 
-/* Print: everything visible, controls hidden */
+/* Print: every citation number visible, chip controls hidden */
 @media print {
     .md-typeset .cl-cite-group:not(.cl-open) sup {
         display: inline;
     }
-    .md-typeset .cl-cite-toggle,
-    .md-typeset .cl-bib-toggle {
+    .md-typeset .cl-cite-toggle {
         display: none;
-    }
-    .md-typeset .footnote.cl-bib-folded {
-        display: block;
     }
 }
 
