@@ -51,9 +51,28 @@
       .map(function (a) { return a.replace(/\s+/g, " ").trim(); })
       .filter(function (a) { return a.length > 2 && /[A-Za-z]/.test(a); })
       .map(function (a) { return ALIAS[a] || a; });
+    // Prefer structured authors when present (the generated Using CL list): each
+    // <span class="clau" data-aid> carries an INSPIRE author id, so identity —
+    // not the name string — drives de-duplication (two different people named
+    // "Jing Liu" stay distinct, matching the researcher map). Hand-authored
+    // lists have no such spans and fall back to the parsed names.
+    var ids;
+    var auSpans = li.querySelectorAll("span.clau");
+    if (auSpans.length) {
+      list = []; ids = [];
+      auSpans.forEach(function (s) {
+        var nm = s.textContent.replace(/\s+/g, " ").trim();
+        if (!nm) return;
+        list.push(ALIAS[nm] || nm);
+        ids.push(s.getAttribute("data-aid") || null);
+      });
+      authors = list.join(", ");
+    } else {
+      ids = list.map(function () { return null; });
+    }
     if (!year) { var y = full.match(/\((19|20)(\d{2})\)/); if (y) year = parseInt(y[1] + y[2], 10); }
     return { li: li, idx: li.getAttribute("value") || "", title: title, titleHtml: b.innerHTML,
-             authors: authors, authorList: list, journal: journal, arxiv: arxiv, link: link,
+             authors: authors, authorList: list, authorIds: ids, journal: journal, arxiv: arxiv, link: link,
              year: year, cell: null };
   }
 
@@ -71,6 +90,7 @@
     var noun = isCite ? "citing works" : "papers";
     var updated = mount.getAttribute("data-updated") || "";
     var label = mount.getAttribute("data-label") || (isCite ? "Citing CL" : "Using CL");
+    var mapHref = mount.getAttribute("data-map-href") || "";  // links the "researchers" stat to the map page
 
     var papers = Array.prototype.map.call(ol.querySelectorAll(":scope > li"), parse).filter(Boolean);
     if (!papers.length) return null;
@@ -80,18 +100,20 @@
     /* ---- author aggregation (merge accents/dots, keep the nicest form) ---- */
     var abank = {};
     papers.forEach(function (p) {
-      p.authorList.forEach(function (a) {
-        var k = canon(a);
-        if (!abank[k]) abank[k] = { count: 0, forms: {} };
+      p.authorList.forEach(function (a, i) {
+        var id = p.authorIds[i];
+        var k = id ? "id:" + id : canon(a);            // identity first, name only as fallback
+        if (!abank[k]) abank[k] = { count: 0, forms: {}, canon: canon(a) };
         abank[k].count++;
         abank[k].forms[a] = (abank[k].forms[a] || 0) + 1;
       });
     });
     Object.keys(abank).forEach(function (k) {
-      if (DISPLAY[k]) { abank[k].name = DISPLAY[k]; return; }
-      var f = abank[k].forms, best = null, bn = -1;
+      var e = abank[k];
+      if (DISPLAY[e.canon]) { e.name = DISPLAY[e.canon]; return; }
+      var f = e.forms, best = null, bn = -1;
       for (var n in f) { if (f[n] > bn) { bn = f[n]; best = n; } }
-      abank[k].name = best;
+      e.name = best;
     });
     var topAuthors = Object.keys(abank)
       .map(function (k) { return { key: k, name: abank[k].name, count: abank[k].count }; })
@@ -124,7 +146,9 @@
     var stats = el("div", "cl-pubs-stats");
     stats.appendChild(mkStat(papers.length, noun));
     stats.appendChild(mkSep());
-    stats.appendChild(mkStat(Object.keys(abank).length, "researchers"));
+    stats.appendChild((mapHref && !isCite)
+      ? mkStatLink(Object.keys(abank).length, "researchers", mapHref)
+      : mkStat(Object.keys(abank).length, "researchers"));
     stats.appendChild(mkSep());
     stats.appendChild(mkStat(minY + "–" + maxY, "and counting"));
     if (isFinite(maxCount) && peakYear) {
@@ -170,8 +194,10 @@
         meta += '<a href="' + esc(p.link) + '" target="_blank" rel="noopener noreferrer">' +
           (p.arxiv ? "arXiv " + esc(p.arxiv) : "INSPIRE") + " ↗</a>";
       }
-      var authorsHtml = p.authorList.map(function (a) {
-        return '<span class="me" data-a="' + esc(canon(a)) + '">' + esc(a) + "</span>";
+      var authorsHtml = p.authorList.map(function (a, i) {
+        var id = p.authorIds[i];
+        var key = id ? "id:" + id : canon(a);
+        return '<span class="me" data-a="' + esc(key) + '">' + esc(a) + "</span>";
       }).join(", ");
       p.li.innerHTML =
         '<div class="idx">' + esc(p.idx) + "</div>" +
@@ -222,7 +248,12 @@
     function anyFilter() { return state.q || state.author || state.year; }
     function matches(p) {
       if (state.year && p.year !== state.year) return false;
-      if (state.author && p.authorList.map(canon).indexOf(state.author) < 0) return false;
+      if (state.author) {
+        var akeys = p.authorList.map(function (a, i) {
+          return p.authorIds[i] ? "id:" + p.authorIds[i] : canon(a);
+        });
+        if (akeys.indexOf(state.author) < 0) return false;
+      }
       if (state.q) {
         var s = state.q.toLowerCase();
         if ((p.title + " " + p.authors).toLowerCase().indexOf(s) < 0) return false;
@@ -339,6 +370,15 @@
     return { root: root, label: label, kind: kind, count: papers.length };
 
     function mkStat(nv, l) { var s = el("span", "s"); s.innerHTML = "<b>" + esc(String(nv)) + "</b> " + esc(l); return s; }
+    function mkStatLink(nv, l, href) {
+      var a = el("a", "s cl-pubs-maplink"); a.href = href;
+      a.setAttribute("aria-label", "See where these researchers are based — open the map");
+      a.innerHTML =
+        '<svg class="pin" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+        '<path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>' +
+        "<b>" + esc(String(nv)) + '</b> <span class="lbl">' + esc(l) + "</span>";
+      return a;
+    }
     function mkSep() { var s = el("span", "sep"); s.textContent = "·"; return s; }
   }
 

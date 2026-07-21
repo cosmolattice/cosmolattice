@@ -107,6 +107,7 @@ extra_javascript:
   - javascripts/citation-box.js #"If you use CosmoLattice": tabbed, copyable citation/BibTeX card
   - javascripts/people-filter.js #People page: clickable module-badge filtering
   - javascripts/publications.js #Publications/Citations: histogram, top users, search & filter
+  - javascripts/researcher-map.js #Researcher map page: world map of where Using CL researchers are based
   - javascripts/news-bar.js #Added by DGF (July 3rd 2026) for have a news bar on top
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js #Added by DGF (July 5th 2026) to have latex
 
@@ -119,6 +120,12 @@ hooks:
   - hooks/resolve_emgithub.py
 
 use_directory_urls: false # (optional) for better links without .html extension
+
+# The researcher map is reached from the "researchers" stat on the Publications
+# page (and its own back link), not from the top nav tabs — so it is deliberately
+# kept out of nav. This suppresses the "not included in nav" build warning.
+not_in_nav: |
+  /publications/Researcher-map.md
 
 validation:
   links:

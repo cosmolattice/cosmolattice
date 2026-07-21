@@ -38,6 +38,16 @@ echo "---------------------------------------------------------------------"
 # so the site still publishes. Run check_params_sync.sh directly for a hard check.
 bash ${base_dir}/scripts/check_params_sync.sh
 
+echo "---------------------------------------------------------------------"
+echo "         Checking the publications list is in sync with the YAML..."
+echo "---------------------------------------------------------------------"
+
+# The Using CL list in source/docs/publications/Publications.md is generated from
+# source/data/publications.yaml by scripts/gen_publications.py. Reported as a
+# WARNING only: the site still publishes if it has drifted.
+"${PYTHON:-python3}" ${base_dir}/scripts/gen_publications.py --check || \
+  echo "warning: Publications.md is out of sync with publications.yaml (run 'make gen-pubs' and commit)."
+
 # now get the latex stuff
 # bash ${base_dir}/convert_arxiv_manual.sh
 
