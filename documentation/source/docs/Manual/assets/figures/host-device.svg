@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 330" font-family="'Roboto','Helvetica Neue',system-ui,-apple-system,'Segoe UI',sans-serif">
+  <style>
+    .e{stroke:#7a838f;stroke-width:1.8;fill:none}
+    .cpu-b{fill:#2e9e4f;fill-opacity:.10;stroke:#2e9e4f;stroke-width:1.8}
+    .cpu-i{fill:none;stroke:#2e9e4f;stroke-width:1.5}
+    .gpu-b{fill:#8e44c9;fill-opacity:.10;stroke:#8e44c9;stroke-width:1.8}
+    .gpu-i{fill:none;stroke:#8e44c9;stroke-width:1.5}
+    .cpu-t{fill:#2e9e4f}.gpu-t{fill:#8e44c9}.warn-t{fill:#e5533d}
+    .tb{font-size:17px;font-weight:600}.t{font-size:15px}.sm{font-size:13px;font-weight:600}
+    @media (prefers-color-scheme:dark){.e{stroke:#98a2ae}}
+  </style>
+  <defs>
+    <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7a838f"/>
+    </marker>
+  </defs>
+
+  <text x="150" y="42" text-anchor="middle" class="tb cpu-t">Host</text>
+  <rect x="40" y="60" width="220" height="240" rx="14" class="cpu-b"/>
+  <rect x="66" y="86" width="168" height="60" rx="9" class="cpu-i"/>
+  <text x="150" y="123" text-anchor="middle" class="t cpu-t">CPU</text>
+  <rect x="66" y="162" width="168" height="112" rx="9" class="cpu-i"/>
+  <text x="150" y="223" text-anchor="middle" class="t cpu-t">RAM</text>
+
+  <text x="490" y="42" text-anchor="middle" class="tb gpu-t">Device</text>
+  <rect x="380" y="60" width="220" height="240" rx="14" class="gpu-b"/>
+  <rect x="406" y="86" width="168" height="112" rx="9" class="gpu-i"/>
+  <text x="490" y="147" text-anchor="middle" class="t gpu-t">SMs</text>
+  <rect x="406" y="214" width="168" height="60" rx="9" class="gpu-i"/>
+  <text x="490" y="251" text-anchor="middle" class="t gpu-t">VRAM</text>
+
+  <line x1="260" y1="196" x2="380" y2="196" class="e" marker-end="url(#ah2)"/>
+  <line x1="380" y1="238" x2="260" y2="238" class="e" marker-end="url(#ah2)"/>
+  <text x="320" y="228" text-anchor="middle" class="sm warn-t">slow</text>
+</svg>

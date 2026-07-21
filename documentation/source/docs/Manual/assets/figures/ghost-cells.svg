@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 430" font-family="'Roboto','Helvetica Neue',system-ui,-apple-system,'Segoe UI',sans-serif">
+  <style>
+    .mut{fill:#7a838f}
+    .lat-b{fill:#7a838f;fill-opacity:.06;stroke:#7a838f;stroke-width:1.5}
+    .l1-b{fill:#2e9e4f;fill-opacity:.10;stroke:#2e9e4f;stroke-width:1.6}
+    .l2-b{fill:#8e44c9;fill-opacity:.10;stroke:#8e44c9;stroke-width:1.6}
+    .g-b{fill:#7a838f;fill-opacity:.10;stroke:#9aa2ac;stroke-width:1.4;stroke-dasharray:4 4}
+    .l1-d{fill:#2e9e4f}.l2-d{fill:#8e44c9}.g-d{fill:#aab1bb}
+    .l1-t{fill:#2e9e4f}.l2-t{fill:#8e44c9}
+    .bnd{stroke:#7a838f;stroke-width:1.4;stroke-dasharray:5 4}
+    .ex{stroke:#e5533d;stroke-width:1.6;fill:none;stroke-dasharray:3 3}
+    .arr{stroke:#7a838f;stroke-width:1.6;fill:none}
+    .t{font-size:14px}.tb{font-size:15px;font-weight:600}.sm{font-size:12px}.gi{font-style:italic}
+    @media (prefers-color-scheme:dark){.mut{fill:#98a2ae}.bnd,.arr{stroke:#98a2ae}}
+  </style>
+  <defs>
+    <marker id="gh-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7a838f"/>
+    </marker>
+    <marker id="gh-e" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#e5533d"/>
+    </marker>
+  </defs>
+
+  <!-- ===== TOP: full physical lattice ===== -->
+  <text x="385" y="34" text-anchor="middle" class="tb mut">&#923; &#8212; physical lattice</text>
+  <rect x="186" y="48" width="398" height="54" rx="10" class="lat-b"/>
+  <line x1="385" y1="44" x2="385" y2="106" class="bnd"/>
+  <text x="385" y="122" text-anchor="middle" class="sm mut">boundary</text>
+  <!-- sites phi0..phi7 : x = 210 + i*50 ; boundary between phi3(360) and phi4(410) -> 385 -->
+  <g class="l1-d">
+    <circle cx="210" cy="70" r="4.5"/><circle cx="260" cy="70" r="4.5"/><circle cx="310" cy="70" r="4.5"/><circle cx="360" cy="70" r="4.5"/>
+  </g>
+  <g class="l2-d">
+    <circle cx="410" cy="70" r="4.5"/><circle cx="460" cy="70" r="4.5"/><circle cx="510" cy="70" r="4.5"/><circle cx="560" cy="70" r="4.5"/>
+  </g>
+  <g class="sm mut" text-anchor="middle">
+    <text x="210" y="93">&#966;&#8320;</text><text x="260" y="93">&#966;&#8321;</text><text x="310" y="93">&#966;&#8322;</text><text x="360" y="93">&#966;&#8323;</text>
+    <text x="410" y="93">&#966;&#8324;</text><text x="460" y="93">&#966;&#8325;</text><text x="510" y="93">&#966;&#8326;</text><text x="560" y="93">&#966;&#8327;</text>
+  </g>
+
+  <!-- transition arrow -->
+  <path d="M150 110 C 96 170, 96 250, 150 300" class="arr" marker-end="url(#gh-a)"/>
+  <text x="70" y="205" text-anchor="middle" class="sm mut gi">add<tspan x="70" dy="15">ghost</tspan><tspan x="70" dy="15">cells</tspan></text>
+
+  <!-- ===== BOTTOM: two sub-lattices with ghost cells ===== -->
+  <!-- boundary between the two processes, x=405 -->
+  <line x1="405" y1="248" x2="405" y2="392" class="bnd"/>
+
+  <!-- Lambda_2 (purple), upper-right: ghost phi3 + owned phi4..phi7 ; cy=290 -->
+  <rect x="405" y="266" width="204" height="48" rx="9" class="l2-b"/>
+  <rect x="356" y="266" width="49" height="48" rx="9" class="g-b"/>
+  <text x="507" y="256" text-anchor="middle" class="t l2-t">&#923;&#8322;</text>
+  <circle cx="380" cy="290" r="4.5" class="g-d"/>
+  <g class="l2-d"><circle cx="430" cy="290" r="4.5"/><circle cx="480" cy="290" r="4.5"/><circle cx="530" cy="290" r="4.5"/><circle cx="580" cy="290" r="4.5"/></g>
+  <g class="sm mut" text-anchor="middle"><text x="380" y="311">&#966;&#8323;</text><text x="430" y="311">&#966;&#8324;</text><text x="480" y="311">&#966;&#8325;</text><text x="530" y="311">&#966;&#8326;</text><text x="580" y="311">&#966;&#8327;</text></g>
+
+  <!-- Lambda_1 (green), lower-left: owned phi0..phi3 + ghost phi4 ; cy=370 -->
+  <rect x="201" y="346" width="204" height="48" rx="9" class="l1-b"/>
+  <rect x="405" y="346" width="49" height="48" rx="9" class="g-b"/>
+  <text x="303" y="416" text-anchor="middle" class="t l1-t">&#923;&#8321;</text>
+  <g class="l1-d"><circle cx="230" cy="370" r="4.5"/><circle cx="280" cy="370" r="4.5"/><circle cx="330" cy="370" r="4.5"/><circle cx="380" cy="370" r="4.5"/></g>
+  <circle cx="430" cy="370" r="4.5" class="g-d"/>
+  <g class="sm mut" text-anchor="middle"><text x="230" y="337">&#966;&#8320;</text><text x="280" y="337">&#966;&#8321;</text><text x="330" y="337">&#966;&#8322;</text><text x="380" y="337">&#966;&#8323;</text><text x="430" y="391">&#966;&#8324;</text></g>
+
+  <!-- exchange arrows: phi3 owner(L1,380,370) -> ghost(L2,380,290); phi4 owner(L2,430,290) -> ghost(L1,430,370) -->
+  <path d="M380 358 L380 302" class="ex" marker-end="url(#gh-e)"/>
+  <path d="M430 302 L430 358" class="ex" marker-end="url(#gh-e)"/>
+  <text x="622" y="330" class="sm" fill="#e5533d">exchange</text>
+  <text x="622" y="346" class="sm" fill="#e5533d">boundary</text>
+</svg>

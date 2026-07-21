@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="'Roboto','Helvetica Neue',system-ui,-apple-system,'Segoe UI',sans-serif">
+  <style>
+    .ink{fill:#2b3038}
+    .core{fill:#2e9e4f}.ctrl{fill:#e0a12e}.l1{fill:#8e44c9}
+    .l2{fill:#3f8fd0}.l3{fill:#2c6fa6}.dram{fill:#ef6c00}
+    .wt{fill:#fff}.grid{stroke:#fff;stroke-width:1;opacity:.6}
+    .lb{font-size:11px;font-weight:600}.cap{font-size:15px;font-weight:600}
+    @media (prefers-color-scheme:dark){.ink{fill:#e6e9ee}}
+  </style>
+
+  <!-- ============ CPU ============ -->
+  <!-- core units: Core(green)+Control(amber) over L1(purple) -->
+  <!-- unit @ (20,20) -->
+  <g>
+    <rect x="20"  y="20"  width="92" height="58" class="core"/>
+    <rect x="112" y="20"  width="46" height="58" class="ctrl"/>
+    <rect x="20"  y="78"  width="138" height="20" class="l1"/>
+    <rect x="172" y="20"  width="92" height="58" class="core"/>
+    <rect x="264" y="20"  width="46" height="58" class="ctrl"/>
+    <rect x="172" y="78"  width="138" height="20" class="l1"/>
+    <rect x="20"  y="110" width="92" height="58" class="core"/>
+    <rect x="112" y="110" width="46" height="58" class="ctrl"/>
+    <rect x="20"  y="168" width="138" height="20" class="l1"/>
+    <rect x="172" y="110" width="92" height="58" class="core"/>
+    <rect x="264" y="110" width="46" height="58" class="ctrl"/>
+    <rect x="172" y="168" width="138" height="20" class="l1"/>
+  </g>
+  <g class="wt lb" text-anchor="middle">
+    <text x="66" y="53">Core</text><text x="135" y="53">Ctrl</text><text x="89" y="92">L1</text>
+    <text x="218" y="53">Core</text><text x="287" y="53">Ctrl</text><text x="241" y="92">L1</text>
+    <text x="66" y="143">Core</text><text x="135" y="143">Ctrl</text><text x="89" y="182">L1</text>
+    <text x="218" y="143">Core</text><text x="287" y="143">Ctrl</text><text x="241" y="182">L1</text>
+  </g>
+  <!-- L2 (two) -->
+  <rect x="20"  y="198" width="138" height="32" class="l2"/>
+  <rect x="172" y="198" width="138" height="32" class="l2"/>
+  <!-- L3 -->
+  <rect x="20" y="238" width="290" height="32" class="l3"/>
+  <!-- DRAM -->
+  <rect x="20" y="278" width="290" height="44" class="dram"/>
+  <g class="wt lb" text-anchor="middle">
+    <text x="89" y="218">L2 Cache</text><text x="241" y="218">L2 Cache</text>
+    <text x="165" y="258">L3 Cache</text><text x="165" y="304">DRAM</text>
+  </g>
+  <text x="165" y="344" text-anchor="middle" class="cap ink">CPU</text>
+
+  <!-- ============ GPU ============ -->
+  <!-- control/L1 strip -->
+  <g>
+    <rect x="380" y="20" width="9" height="105" class="ctrl"/>
+    <rect x="389" y="20" width="9" height="105" class="l1"/>
+    <rect x="380" y="125" width="9" height="105" class="l1"/>
+    <rect x="389" y="125" width="9" height="105" class="ctrl"/>
+  </g>
+  <!-- many-core grid -->
+  <rect x="400" y="20" width="300" height="210" class="core"/>
+  <g class="grid">
+    <line x1="425" y1="20" x2="425" y2="230"/><line x1="450" y1="20" x2="450" y2="230"/><line x1="475" y1="20" x2="475" y2="230"/>
+    <line x1="500" y1="20" x2="500" y2="230"/><line x1="525" y1="20" x2="525" y2="230"/><line x1="550" y1="20" x2="550" y2="230"/>
+    <line x1="575" y1="20" x2="575" y2="230"/><line x1="600" y1="20" x2="600" y2="230"/><line x1="625" y1="20" x2="625" y2="230"/>
+    <line x1="650" y1="20" x2="650" y2="230"/><line x1="675" y1="20" x2="675" y2="230"/>
+    <line x1="400" y1="50" x2="700" y2="50"/><line x1="400" y1="80" x2="700" y2="80"/><line x1="400" y1="110" x2="700" y2="110"/>
+    <line x1="400" y1="140" x2="700" y2="140"/><line x1="400" y1="170" x2="700" y2="170"/><line x1="400" y1="200" x2="700" y2="200"/>
+  </g>
+  <!-- L2 -->
+  <rect x="380" y="238" width="320" height="32" class="l2"/>
+  <!-- DRAM -->
+  <rect x="380" y="278" width="320" height="44" class="dram"/>
+  <g class="wt lb" text-anchor="middle">
+    <text x="540" y="258">L2 Cache</text><text x="540" y="304">DRAM</text>
+  </g>
+  <text x="540" y="344" text-anchor="middle" class="cap ink">GPU</text>
+</svg>

@@ -29,14 +29,14 @@ In the distributed case, most of the problems suitable for lattice simulations i
 <div style="flex: 0 1 400px;" markdown>
 [](){ #fig_hardware }
 <figure markdown="span">
-    ![Figure 1](assets/figures/figure4.png){ width=400px}
+    ![Hardware hierarchy: cluster nodes, each with CPU cores and a GPU](assets/figures/hardware-hierarchy.svg){ width=400px }
 </figure>
 </div>
 </div>
 
 As a result, to evolve the system correctly over the entire lattice, divided into $n_p$ sub-lattices, it is not enough to evolve the system separately on each sub-lattice. Rather, at every time step, the sub-lattices need to exchange information on the values of the fields at their boundaries, so that the interaction between neighboring sites across the boundaries can be correctly taken into account. Note that TempLat supports also interactions that require more than nearest neighbors, so the exchange of information may involve more than one layer of boundary sites.
 
-We clarify this in Fig. [*2*][fig_1d], where we consider the one-dimensional case and explain the case with two cores. The physical lattice $\Lambda$ consist of the field values $\phi_0$ to $\phi_7$. To perform the computation, we can subdivide it into two smaller lattices $\Lambda_1$ and $\Lambda_2$. $\Lambda_1$ owns the field values $\phi_0$ to $\phi_3$ and we assign it to the first process. 
+We clarify this in Fig. [*2*][fig_1d], where we consider the one-dimensional case and explain the case with two cores. The physical lattice $\Lambda$ consists of the field values $\phi_0$ to $\phi_7$. To perform the computation, we can subdivide it into two smaller lattices $\Lambda_1$ and $\Lambda_2$. $\Lambda_1$ owns the field values $\phi_0$ to $\phi_3$ and we assign it to the first process. 
 $\Lambda_2$ owns $\phi_4$ to $\phi_7$ and we assign it to the second process. 
 Now imagine that, in order to solve our system of equations, we need to compute a gradient, which we write as a forward derivative [recall Eq. ([*18*][eq_forwardbackwardd])]. 
 When our first process tries to evaluate it at site $3$, it needs to compute $\frac{\phi_4-\phi_3}{\delta x}$, i.e. it requires the value of $\phi_4$, which belongs, however, to the other process.
@@ -53,7 +53,7 @@ This is the distributed parallelization idea implemented in CosmoLattice, based 
 
 [](){ #fig_1d }
 <figure markdown="span">
-    ![Figure 2](assets/figures/figure1.png){ width=750px}
+    ![Ghost cells: a 1D lattice split into two sub-lattices exchanging boundary values](assets/figures/ghost-cells.svg){ width=620px }
 </figure>
 
 
@@ -63,7 +63,7 @@ As briefly discussed in the previous section, the parallelization of ''local" op
 
 [](){ #fig_parageo }
 <figure markdown="span">
-    ![Figure 3](assets/figures/figure2.png){ width=750px}
+    ![Domain decomposition of a 3D lattice in one direction (slices) and two directions (pencils)](assets/figures/domain-decomposition.svg){ width=700px }
 </figure>
 
 It is very easy to activate this parallelization procedure in CosmoLattice. Assuming you have installed `MPI` and a properly compiled version of `fftw3` (see [Installation](../code/Installation.md) for more information, installation instructions for these libraries and guidance to use them on HPC clusters), you simply need to pass an extra flag `-DMPI=ON` to `CMake` before compiling your model:
@@ -73,7 +73,7 @@ make cosmolattice
 ```
 Of course, if you want to compile any other model (including the ones with gauge fields), you simply need to replace `lphi4` by the name of your model, as explained in Sections [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md) and [My first model of gauge fields](My first model of gauge fields.md).
 
-After having successfully compiled CosmoLattice, you can run it with `nc` cores with `nc$\geq 1$. Of course you need to have access to such number of CPU's; a typical laptop will have between one and four, whereas you can use even thousands of cores on a HPC cluster. This is done as follows,
+After having successfully compiled CosmoLattice, you can run it on `nc` cores, with `nc`$\,\geq 1$. Of course you need to have access to such a number of CPUs; a typical laptop will have between one and four, whereas you can use even thousands of cores on a HPC cluster. This is done as follows,
 ```bash
 mpirun -n nc lphi4 input=...
 ```
@@ -83,7 +83,7 @@ Note that if you are using a high-performance-computation (HPC) cluster, you wil
 
 Parallelizing only in one direction limits the maximum number of cores to $N$, the linear size of the lattice. To go further, we need to be able to compute Fourier transforms that are themselves distributed across more than one direction. CosmoLattice does this through the `ParaFaFT` library, a modern, header-only implementation of distributed multidimensional FFTs based on the algorithm of Dalcin, Mortensen & Keyes [@Dalcin_2019], which replaces the parallel-FFT library used in earlier versions of CosmoLattice. `ParaFaFT` distributes the transform over a *pencil* decomposition built with advanced `MPI` collective operations, and provides `fftw3` (CPU), `cuFFT` (NVIDIA) and `hipFFT` (AMD) backends.
 
-This in principle allows us to parallelize the simulation in all directions. In practice, because of the overload due to the boundary exchanges, it is often a good compromise to parallelize in all dimensions except one, which involves less cores, but also less boundaries. We depict the resulting parallelization strategy for the case of three spatial dimensions in the right-hand side of Fig. [*3*][fig_parageo]. In this case, the number of sites/dimension $N$ of the lattice needs to be divisible by the number of cores used in each parallelized direction. In practice,
+This in principle allows us to parallelize the simulation in all directions. In practice, because of the overload due to the boundary exchanges, it is often a good compromise to parallelize in all dimensions except one, which involves fewer cores, but also fewer boundaries. We depict the resulting parallelization strategy for the case of three spatial dimensions in the right-hand side of Fig. [*3*][fig_parageo]. In this case, the number of sites/dimension $N$ of the lattice needs to be divisible by the number of cores used in each parallelized direction. In practice,
 when all directions have the same number of points, `N` needs to be an integer multiple of the number of cores.
 
 To switch to this parallelization setting, again assuming you have a working installation of `MPI` and `fftw3` (see [Installation](../code/Installation.md)), you simply need to pass the extra flag `-DPARAFAFT=ON` to `CMake` (this is also enabled automatically when you build with `-DMPI=ON`), before compiling your favorite model
@@ -95,7 +95,7 @@ Note that this flag must be used together with the `-DMPI=ON` flag.
 
 Nothing changes in this case to execute a run, as you can send a job again using the command:
 ```bash
-mpirun -n nproc lphi4 input=...
+mpirun -n nc lphi4 input=...
 ```
 (or whichever is the equivalent command needed in your HPC cluster).
 
@@ -103,18 +103,18 @@ mpirun -n nproc lphi4 input=...
 
 The distributed strategies above split the lattice across nodes. Within a single node, CosmoLattice can additionally exploit shared-memory parallelism, either on the many cores of a CPU or, much more aggressively, on a GPU. Lattice field theory is exceptionally well suited to this: at every time step each lattice site is updated essentially independently from the others, so the natural limit on the number of parallel threads is simply the number of lattice sites, which is enormous.
 
-This is precisely what GPUs are built for. Where a CPU offers $\mathcal{O}(10$–$100)$ cores running at a high clock speed (~3 GHz) with a deep memory cache, a GPU offers $\mathcal{O}(10^4)$ cores at a more moderate clock speed (~1.5 GHz) with a much smaller cache — for instance an NVIDIA H100 has around $15000$ cores, and even a laptop-class card has several thousand. A CPU is therefore *thread-constrained* (few but powerful cores) while a GPU is *memory-constrained* (many lightweight cores), as illustrated in Fig. [*4*][fig_gpuarch] (figure source: [NVIDIA](https://www.nvidia.com)). For the site-local updates that dominate a CosmoLattice run, the GPU's massive parallelism — well over $10^5$ simultaneous operations — wins handily.
+This is precisely what GPUs are built for. Where a CPU offers $\mathcal{O}(10$–$100)$ cores running at a high clock speed (~3 GHz) with a deep memory cache, a GPU offers $\mathcal{O}(10^4)$ cores at a more moderate clock speed (~1.5 GHz) with a much smaller cache — for instance an NVIDIA H100 has around $15000$ cores, and even a laptop-class card has several thousand. A CPU is therefore *thread-constrained* (few but powerful cores) while a GPU is *memory-constrained* (many lightweight cores), as illustrated in Fig. [*4*][fig_gpuarch]. For the site-local updates that dominate a CosmoLattice run, the GPU's massive parallelism — well over $10^5$ simultaneous operations — wins handily.
 
 [](){ #fig_gpuarch }
 <figure markdown="span">
-    ![Figure 4](assets/figures/figure5.png){ width=500px}
+    ![CPU vs GPU: a CPU has few large cores with deep cache, a GPU has many lightweight cores](assets/figures/cpu-gpu-architecture.svg){ width=560px }
 </figure>
 
 To run the same model code unchanged on either a CPU or a GPU, CosmoLattice relies on the *device* model of its underlying template library, `TempLat`. The idea, sketched in Fig. [*5*][fig_device], is to separate the *sequential* work that runs on the **host** (constructing the symbolic field expressions, program flow, and dispatching work) from the *parallel*, grid-based work that runs on the **device** (the time evolution, the measurements, and the memory reordering). All device work is expressed through a small, hardware-agnostic interface (`device::iteration::reduce`, `device::memory::copyHostToDevice`, and so on). This interface is implemented by a *backend* — currently [Kokkos](https://kokkos.org) — which in turn maps onto the actual hardware: **NVIDIA** GPUs via `CUDA`, **AMD** GPUs via `ROCm`/`HIP`, and shared-memory CPUs via `OpenMP` or C++ threads. Because the model is written against the abstract device interface, exactly the same model code runs on all of these targets.
 
 [](){ #fig_device }
 <figure markdown="span">
-    ![Figure 5](assets/figures/figure6.png){ width=400px}
+    ![Host/device model: data transfers between host RAM and device VRAM are slow](assets/figures/host-device.svg){ width=460px }
 </figure>
 
 In practice this requires no extra work from the user: by default CMake auto-detects the available backend, checking for GPUs first (`CUDA`, then `HIP`) and falling back to CPU threading (`OpenMP`, then C++ threads) and finally to serial execution. You can override the choice explicitly, for instance to force a CPU build or to select a particular GPU vendor:
@@ -136,7 +136,7 @@ Before explaining some of the other features of the code, we want to give an ide
 
 [](){ #fig_speedup }
 <figure markdown="span">
-    ![Figure 6](assets/figures/figure7.png){ width=750px}
+    ![Execution time, speed-up and efficiency of lphi4SU2U1 (N=512) on 1–8 CPUs/GPUs](assets/figures/figure7.png){ width=750px}
 </figure>
 
 Fig. [*6*][fig_speedup] compares the runtime of the `lphi4SU2U1` model on 1-8 GPUs (`CUDA` backend) against 1-8 CPU nodes (using hybrid `OpenMP` and `MPI`) for fixed $N=512$. 

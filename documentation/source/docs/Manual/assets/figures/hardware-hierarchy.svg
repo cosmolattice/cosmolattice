@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 372" font-family="'Roboto','Helvetica Neue',system-ui,-apple-system,'Segoe UI',sans-serif">
+  <style>
+    .mut{fill:#7a838f}
+    .e{stroke:#7a838f;stroke-width:1.6;fill:none}
+    .box{stroke:#7a838f;stroke-width:1.6;fill:none}
+    .node{stroke:#7a838f;stroke-width:1.4;fill:none;stroke-dasharray:5 5}
+    .cpu{fill:#2e9e4f;fill-opacity:.12;stroke:#2e9e4f;stroke-width:1.6}
+    .gpu{fill:#8e44c9;fill-opacity:.12;stroke:#8e44c9;stroke-width:1.6}
+    .cpu-t{fill:#2e9e4f}.gpu-t{fill:#8e44c9}.net-t{fill:#0288d1}
+    .t{font-size:15px}.tb{font-size:15px;font-weight:600}.sm{font-size:12.5px}.b{font-weight:600}
+    @media (prefers-color-scheme:dark){
+      .mut{fill:#98a2ae}.e,.box,.node{stroke:#98a2ae}
+    }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7a838f"/>
+    </marker>
+  </defs>
+
+  <text x="18" y="118" class="t mut">input</text>
+  <line x1="18" y1="128" x2="150" y2="128" class="e" marker-end="url(#ah)"/>
+
+  <rect x="150" y="24" width="592" height="324" rx="18" class="box"/>
+  <text x="166" y="46" class="tb mut">Compute cluster</text>
+
+  <rect x="176" y="66" width="238" height="256" rx="12" class="node"/>
+  <text x="188" y="88" class="sm mut">Node</text>
+  <rect x="444" y="66" width="238" height="256" rx="12" class="node"/>
+  <text x="456" y="88" class="sm mut">Node</text>
+  <text x="704" y="200" class="tb mut">···</text>
+
+  <line x1="414" y1="194" x2="444" y2="194" class="e" marker-start="url(#ah)" marker-end="url(#ah)"/>
+  <text x="429" y="176" text-anchor="middle" class="sm b net-t">MPI</text>
+
+  <!-- node 1 -->
+  <rect x="200" y="104" width="190" height="82" rx="10" class="cpu"/>
+  <text x="295" y="140" text-anchor="middle" class="tb cpu-t">CPU</text>
+  <text x="295" y="160" text-anchor="middle" class="sm cpu-t">O(10–100) cores</text>
+  <rect x="200" y="212" width="190" height="82" rx="10" class="gpu"/>
+  <text x="295" y="248" text-anchor="middle" class="tb gpu-t">GPU</text>
+  <text x="295" y="268" text-anchor="middle" class="sm gpu-t">O(10⁴) cores</text>
+  <line x1="295" y1="186" x2="295" y2="212" class="e" marker-start="url(#ah)" marker-end="url(#ah)"/>
+
+  <!-- node 2 -->
+  <rect x="468" y="104" width="190" height="82" rx="10" class="cpu"/>
+  <text x="563" y="140" text-anchor="middle" class="tb cpu-t">CPU</text>
+  <text x="563" y="160" text-anchor="middle" class="sm cpu-t">O(10–100) cores</text>
+  <rect x="468" y="212" width="190" height="82" rx="10" class="gpu"/>
+  <text x="563" y="248" text-anchor="middle" class="tb gpu-t">GPU</text>
+  <text x="563" y="268" text-anchor="middle" class="sm gpu-t">O(10⁴) cores</text>
+  <line x1="563" y1="186" x2="563" y2="212" class="e" marker-start="url(#ah)" marker-end="url(#ah)"/>
+</svg>

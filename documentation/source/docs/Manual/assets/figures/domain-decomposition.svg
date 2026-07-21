@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="'Roboto','Helvetica Neue',system-ui,-apple-system,'Segoe UI',sans-serif">
+  <style>
+    .mut{fill:#7a838f}.ink{fill:#2b3038}
+    .face{fill:#7a838f;fill-opacity:.05;stroke:#7a838f;stroke-width:1.5}
+    .top{fill:#7a838f;fill-opacity:.11;stroke:#7a838f;stroke-width:1.5}
+    .side{fill:#7a838f;fill-opacity:.16;stroke:#7a838f;stroke-width:1.5}
+    .cut{stroke:#0288d1;stroke-width:1.4}
+    .ax{stroke:#7a838f;stroke-width:1.4;fill:none}
+    .t{font-size:14px}.tb{font-size:14.5px;font-weight:600}.sm{font-size:12px}.xs{font-size:11px}
+    @media (prefers-color-scheme:dark){.mut{fill:#98a2ae}.ink{fill:#e6e9ee}
+      .face,.top,.side,.ax{stroke:#98a2ae}}
+  </style>
+  <defs>
+    <marker id="dd-a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#7a838f"/>
+    </marker>
+  </defs>
+
+  <!-- axes -->
+  <g class="ax">
+    <line x1="60" y1="250" x2="110" y2="250" marker-end="url(#dd-a)"/>
+    <line x1="60" y1="250" x2="60" y2="200" marker-end="url(#dd-a)"/>
+    <line x1="60" y1="250" x2="30" y2="280" marker-end="url(#dd-a)"/>
+  </g>
+  <text x="116" y="254" class="sm mut">x</text>
+  <text x="56" y="192" class="sm mut">y</text>
+  <text x="18" y="292" class="sm mut">z</text>
+
+  <!-- ============ LEFT: one direction ============ -->
+  <text x="256" y="30" text-anchor="middle" class="tb ink">Parallelization in one direction</text>
+  <!-- front 150..320 (x), 80..230 (y) ; depth dx=42 dy=-30 -->
+  <!-- top face -->
+  <polygon points="150,80 320,80 362,50 192,50" class="top"/>
+  <!-- right face -->
+  <polygon points="320,80 320,230 362,200 362,50" class="side"/>
+  <!-- front face -->
+  <rect x="150" y="80" width="170" height="150" class="face"/>
+  <!-- slice cuts (front verticals at 206.7,263.3) + top continuation -->
+  <line x1="206.7" y1="80" x2="206.7" y2="230" class="cut"/>
+  <line x1="263.3" y1="80" x2="263.3" y2="230" class="cut"/>
+  <line x1="206.7" y1="80" x2="248.7" y2="50" class="cut"/>
+  <line x1="263.3" y1="80" x2="305.3" y2="50" class="cut"/>
+  <g class="t mut" text-anchor="middle">
+    <text x="178" y="160">&#923;&#8321;</text><text x="235" y="160">&#923;&#8322;</text><text x="291" y="160">&#923;&#8323;</text>
+  </g>
+
+  <!-- ============ RIGHT: two directions ============ -->
+  <text x="551" y="30" text-anchor="middle" class="tb ink">Parallelization in two directions</text>
+  <polygon points="445,80 615,80 657,50 487,50" class="top"/>
+  <polygon points="615,80 615,230 657,200 657,50" class="side"/>
+  <rect x="445" y="80" width="170" height="150" class="face"/>
+  <!-- verticals -->
+  <line x1="501.7" y1="80" x2="501.7" y2="230" class="cut"/>
+  <line x1="558.3" y1="80" x2="558.3" y2="230" class="cut"/>
+  <line x1="501.7" y1="80" x2="543.7" y2="50" class="cut"/>
+  <line x1="558.3" y1="80" x2="600.3" y2="50" class="cut"/>
+  <!-- horizontals (front) -->
+  <line x1="445" y1="130" x2="615" y2="130" class="cut"/>
+  <line x1="445" y1="180" x2="615" y2="180" class="cut"/>
+  <g class="xs mut" text-anchor="middle">
+    <text x="473" y="109">&#923;&#8321;&#8321;</text><text x="530" y="109">&#923;&#8321;&#8322;</text><text x="587" y="109">&#923;&#8321;&#8323;</text>
+    <text x="473" y="159">&#923;&#8322;&#8321;</text><text x="530" y="159">&#923;&#8322;&#8322;</text><text x="587" y="159">&#923;&#8322;&#8323;</text>
+    <text x="473" y="209">&#923;&#8323;&#8321;</text><text x="530" y="209">&#923;&#8323;&#8322;</text><text x="587" y="209">&#923;&#8323;&#8323;</text>
+  </g>
+</svg>
