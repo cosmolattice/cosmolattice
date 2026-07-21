@@ -23,8 +23,8 @@ tMax = 10
 kCutOff = 6
 initial_amplitudes = 0.
 initial_momenta = 0.
-cmplx_field_initial_norm = 1e-15 #Small non-zero value to prevent zero division in the computation of the effective masses based on the homogeneous modes
-cmplx_momentum_initial_norm = 1e-15
+cmplx_field_initial_norm = 0
+cmplx_momentum_initial_norm = 0
 SU2Doublet_initial_norm = 5.25151e18          # homogeneous amplitudes in GeV
 SU2Doublet_initial_momenta_norm = -4.45258e30 # homogeneous amplitudes in GeV2
 # @endlabel

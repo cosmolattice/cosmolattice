@@ -141,11 +141,19 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 **Built to scale**
 {: .cl-minihead }
 
-**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is fully parallelized using *Message Passing Interface* (MPI), and uses a discrete Fourier Transform parallelized in multiple spatial dimensions** (<span style="color:red;">**CHANGE ?**</span>). This makes it ideal for probing physical problems with well-separated mass/length scales, running very high resolution simulations, or simply shortening the running time of long simulations. **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is actually a general package that defines field variables and their operations, by introducing its own symbolic language**. Once you become familiar with the basic ‘syntaxis’ defined in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, editing the code or implementing your own model--resembling as much as possible how you would write it in the continuum--, becomes a relatively straightforward task.
+**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is fully parallelized using both shared memory parallelization (*OpenMP*, *POSIX Threads* or GPU acceleration) and distributed parallelization (*Message Passing Interface* (MPI)) for use in high-performance clusters, and uses a discrete Fourier Transform parallelized in multiple spatial dimensions**. This makes it ideal for probing physical problems with well-separated mass/length scales, running very high resolution simulations, or simply shortening the running time of long simulations. To provide these capabilities, **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ relies on `TempLat`, a general package for lattice simulations that defines field variables and their operations, by introducing its own symbolic language, and managing all aspects of dispatching workload to the available computational resources. Once you become familiar with the basic ‘vocabulary’ of the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and `TempLat` language, editing the code or implementing your own model (resembling how you would write it in the continuum), should become a simple task.**
 
 </div>
 
-<span style="color:red;">**PARAGRAPH on GPU Capabilities [...]**</span>
+<div class="cl-claim" markdown>
+
+**GPU Acceleration**
+{: .cl-minihead }
+
+
+With **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** 2.0, through the `TempLat` library, a particularly powerful new feature is the native support for **GPU acceleration**. This is achieved by using the `Kokkos` library, which allows for a single code base to be compiled and run on different architectures, including NVIDIA GPUs (via CUDA), AMD GPUs (via HIP), and multi-core CPUs (via OpenMP or Pthreads). This means that users can take advantage of the computational power of modern GPUs without having to write GPU-specific code, making it easier to run large-scale simulations efficiently. `TempLat` also handles the MPI distribution of the workload across many GPUs, allowing for simulations that require more memory than a single GPU can provide. Using GPUs for lattice simulations is as simple as switching a single flag in the `CMake` configuration, and the code will automatically handle the rest, including memory management and parallelization, see also [**Installation - Full**](../code/Installation.md) for more details.
+
+</div>
 
 <!-- 
 !!! note "Cutting to the chase ..."

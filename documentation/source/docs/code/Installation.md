@@ -77,6 +77,8 @@ Typically, these tools can be easily installed on your system using the default 
 | g++     | 10.1            | Minimal version tested: 11.4   |
 | clang++ | 13              | Minimal version tested: 20.1.8 |
 | nvcc    | 12.0            | Minimal version tested: 12.4   |
+| hipcc   | 6.2.0           |                                |
+
 
 </div>
 

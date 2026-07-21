@@ -28,7 +28,7 @@ namespace TempLat
     // Our potential naturaly splits into two terms: the inflaton potential
     // and the interaction with the daughter field.
 
-    using NumberType = double;
+    using FloatType = double;
 
     // All the numbers of fields are 0 by default, so we need only
     // to specify that we want two scalar fields.
@@ -55,7 +55,7 @@ namespace TempLat
   // Declaration of our model. It inherits from the generic model defined above.
   {
     //...
-    // @endlabel  
+    // @endlabel
     // @label:private_members
   private:
     FloatType g, lambda, q;
@@ -96,7 +96,7 @@ namespace TempLat
 
       g = sqrt(q * lambda);
       // For convenience, we also define g as a function of lambda and q.
-    // @endlabel
+      // @endlabel
 
       // @label:initial_conditions
       /////////
