@@ -130,6 +130,7 @@ body.nav-collapsed .md-sidebar--primary {
     --cl-nmc:     #c2185b; /* non-minimal gravity: pink */
     --cl-defects: #6d4c41; /* cosmic defects: brown */
     --cl-gw:      #0288d1; /* gravitational waves: light blue */
+    --cl-dims:    #43a047; /* scalars in (1+n)-dimensions: green */
     --cl-upcoming: #78909c; /* upcoming features: muted blue-grey */
 }
 
@@ -141,6 +142,7 @@ body.nav-collapsed .md-sidebar--primary {
     --cl-nmc:     #f06292;
     --cl-defects: #a1887f;
     --cl-gw:      #4fc3f7;
+    --cl-dims:    #81c784;
     --cl-upcoming: #90a4ae;
 }
 
@@ -1525,4 +1527,286 @@ body.nav-collapsed .md-sidebar--primary {
     text-transform: uppercase;
     color: var(--md-default-fg-color--light);
     white-space: normal;
+}
+
+/* === People page: filterable contributor badges ===
+   Each person carries a cloud of module chips in the canonical sector colors
+   (see the palette at the top of this file). Clicking a chip — in the filter
+   bar or under a person — filters the roster to everyone who touched that
+   module (union / OR). people-filter.js wires the interaction; without JS the
+   full roster and all badges still render, just non-clickable.
+   Chip kinds: physics sectors are filled + hued; Core / Templat are neutral
+   dashed (infrastructure, not a physics sector — the site rule "color means a
+   physics sector" is preserved); upcoming modules are grey dashed. */
+
+.md-typeset .cl-ppl-lede {
+    color: var(--md-default-fg-color--light);
+    text-align: left;
+}
+
+/* --- filter bar --- */
+.md-typeset .cl-people-filter {
+    margin: 1.8em 0 1.4em;
+    padding: 1em 1.1em;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+}
+.md-typeset .cl-ppl-filter-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1em;
+    margin-bottom: 0.75em;
+}
+.md-typeset .cl-ppl-filter-label {
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.62em;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--md-default-fg-color--light);
+}
+.md-typeset .cl-ppl-count {
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.72em;
+    color: var(--md-default-fg-color--light);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+.md-typeset .cl-ppl-count b {
+    color: var(--md-default-fg-color);
+    font-weight: 700;
+}
+.md-typeset .cl-ppl-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4em 0.45em;
+    align-items: center;
+}
+.md-typeset .cl-ppl-divider {
+    width: 1px;
+    align-self: stretch;
+    margin: 0.1em 0.3em;
+    background: var(--md-default-fg-color--lightest);
+}
+.md-typeset .cl-ppl-grouplabel {
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.58em;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--md-default-fg-color--light);
+}
+.md-typeset .cl-ppl-clear {
+    -webkit-appearance: none;
+    appearance: none;
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.68em;
+    letter-spacing: 0.03em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--md-default-fg-color--light);
+    padding: 0.34em 0.5em;
+    border-radius: 8px;
+    transition: color 0.15s, background 0.15s;
+}
+.md-typeset .cl-ppl-clear:hover {
+    color: var(--md-default-fg-color);
+    background: color-mix(in srgb, var(--md-default-fg-color) 7%, transparent);
+}
+.md-typeset .cl-ppl-clear:disabled {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- chip (shared by the filter bar and each person's badge cloud) --- */
+.md-typeset .cl-people .cl-ppl-chip {
+    -webkit-appearance: none;
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    margin: 0;
+    padding: 0.34em 0.62em;
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.7em;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 2em;
+    border: 1px solid color-mix(in srgb, var(--cl-accent, var(--md-default-fg-color--light)) 32%, transparent);
+    color: var(--cl-accent, var(--md-default-fg-color--light));
+    background: color-mix(in srgb, var(--cl-accent, var(--md-default-fg-color)) 10%, transparent);
+    transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+.md-typeset .cl-people .cl-ppl-chip::before {
+    content: "";
+    width: 0.5em;
+    height: 0.5em;
+    border-radius: 50%;
+    background: var(--cl-accent, var(--md-default-fg-color--light));
+    flex: 0 0 auto;
+}
+.md-typeset .cl-people .cl-ppl-chip:hover {
+    transform: translateY(-1px);
+    background: color-mix(in srgb, var(--cl-accent, var(--md-default-fg-color)) 18%, transparent);
+}
+.md-typeset .cl-people .cl-ppl-chip:focus-visible {
+    outline: 2px solid var(--cl-accent, var(--md-accent-fg-color));
+    outline-offset: 2px;
+}
+.md-typeset .cl-people .cl-ppl-chip.is-active {
+    background: var(--cl-accent, var(--md-default-fg-color));
+    color: #fff;
+    border-color: var(--cl-accent, var(--md-default-fg-color));
+}
+[data-md-color-scheme="slate"] .md-typeset .cl-people .cl-ppl-chip.is-active {
+    color: #14171f; /* slate accents are lighter — dark text keeps contrast */
+}
+
+/* accent per module (folds gauge into Core, so no scalar/u1/su2 chips) */
+.md-typeset .cl-people .m-alp      { --cl-accent: var(--cl-alp); }
+.md-typeset .cl-people .m-nmc      { --cl-accent: var(--cl-nmc); }
+.md-typeset .cl-people .m-defects  { --cl-accent: var(--cl-defects); }
+.md-typeset .cl-people .m-gw       { --cl-accent: var(--cl-gw); }
+.md-typeset .cl-people .m-dims     { --cl-accent: var(--cl-dims); }
+.md-typeset .cl-people .m-fluid,
+.md-typeset .cl-people .m-su2axion { --cl-accent: var(--cl-upcoming); }
+
+/* structural chips (Core, Templat): neutral, dashed, hollow dot */
+.md-typeset .cl-people .cl-ppl-chip--struct {
+    color: var(--md-default-fg-color);
+    background: transparent;
+    border-style: dashed;
+    border-color: var(--md-default-fg-color--lighter);
+}
+.md-typeset .cl-people .cl-ppl-chip--struct::before {
+    background: transparent;
+    border: 1px solid var(--md-default-fg-color--lighter);
+    width: 0.46em;
+    height: 0.46em;
+}
+.md-typeset .cl-people .cl-ppl-chip--struct:hover {
+    background: color-mix(in srgb, var(--md-default-fg-color) 6%, transparent);
+}
+.md-typeset .cl-people .cl-ppl-chip--struct.is-active {
+    background: var(--md-default-fg-color);
+    color: var(--md-default-bg-color);
+    border-style: solid;
+    border-color: var(--md-default-fg-color);
+}
+.md-typeset .cl-people .cl-ppl-chip--struct.is-active::before {
+    background: var(--md-default-bg-color);
+    border-color: var(--md-default-bg-color);
+}
+[data-md-color-scheme="slate"] .md-typeset .cl-people .cl-ppl-chip--struct.is-active {
+    color: var(--md-default-bg-color);
+}
+
+/* upcoming chips (Fluid Dynamics, SU(2) Axion): grey, dashed, hollow dot */
+.md-typeset .cl-people .cl-ppl-chip--upcoming {
+    border-style: dashed;
+    opacity: 0.92;
+}
+.md-typeset .cl-people .cl-ppl-chip--upcoming::before {
+    background: transparent;
+    border: 1px solid var(--cl-accent);
+}
+
+/* the matching badge(s) under a person get a ring when a filter is active */
+.md-typeset .cl-people .cl-ppl-badges .cl-ppl-chip.is-match {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--cl-accent, var(--md-default-fg-color)) 55%, transparent);
+}
+.md-typeset .cl-people .cl-ppl-badges .cl-ppl-chip--struct.is-match {
+    box-shadow: 0 0 0 2px var(--md-default-fg-color--lighter);
+}
+
+/* --- sections, grid, person cards --- */
+.md-typeset .cl-ppl-section {
+    margin-top: 2.2em;
+}
+.md-typeset .cl-ppl-section[hidden] {
+    display: none;
+}
+.md-typeset .cl-ppl-heading {
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.74em;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--md-default-fg-color--light);
+    display: flex;
+    align-items: center;
+    gap: 0.8em;
+    margin: 0 0 1.2em;
+}
+.md-typeset .cl-ppl-heading::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--md-default-fg-color--lightest);
+}
+.md-typeset .cl-ppl-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem 1.5rem;
+    align-items: start;
+}
+@media (max-width: 720px) {
+    .md-typeset .cl-ppl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 460px) {
+    .md-typeset .cl-ppl-grid { grid-template-columns: 1fr; }
+}
+.md-typeset .cl-ppl-card {
+    text-align: center;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+}
+.md-typeset .cl-ppl-card[hidden] {
+    display: none;
+}
+.md-typeset .cl-ppl-card.is-leaving {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+}
+.md-typeset .cl-ppl-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
+}
+.md-typeset .cl-ppl-name {
+    font-weight: 700;
+    margin: 0.7em 0 0.1em;
+}
+.md-typeset .cl-ppl-affil {
+    font-style: italic;
+    color: var(--md-default-fg-color--light);
+    font-size: 0.88em;
+}
+.md-typeset .cl-ppl-role {
+    font-size: 0.72em;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--md-default-fg-color--light);
+    margin-top: 0.2em;
+}
+.md-typeset .cl-ppl-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.32em;
+    justify-content: center;
+    margin-top: 0.65em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .md-typeset .cl-people .cl-ppl-card,
+    .md-typeset .cl-people .cl-ppl-chip { transition: none; }
 }

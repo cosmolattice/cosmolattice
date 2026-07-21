@@ -1,228 +1,201 @@
-# $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ People
+# The $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ team
 
-<!--
-  space
--->
+<div class="cl-people">
 
-<!--
-  space
--->
+<p class="cl-ppl-lede">Everyone who develops CosmoLattice, with the modules they have worked on. If your question is about a specific topic, the badges show who to ask — tap a module to filter the list.</p>
 
-
-## **Developers**
-
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; align-items: start;">
-
-  <div style="text-align: center;">
-    <img src="../assets/img/people/jorge.png"
-         alt="Jorge Baeza-Ballesteros"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Jorge Baeza-Ballesteros</strong><br>
-		<em>DESY, Zeuthen, Germany</em><br>
-		Contributor to CL v1.1, v1.2<br>
-    	Contributor to CL v2.0<br>
-    </div>
+<div class="cl-people-filter" role="group" aria-label="Filter people by module">
+  <div class="cl-ppl-filter-head">
+    <span class="cl-ppl-filter-label">Filter by module</span>
+    <span class="cl-ppl-count" aria-live="polite">Showing <b data-count-shown>14</b> of <b data-count-total>14</b></span>
   </div>
-
-  <div style="text-align: center;">
-    <img src="../assets/img/people/dani3.png"
-         alt="Daniel G. Figueroa"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <a href="https://webific.ific.uv.es/web/content/figueroa-daniel-g"
-         target="_blank"
-         rel="noopener noreferrer">
-        <strong>Daniel G. Figueroa</strong>
-      </a><br>
-		<em>IFIC (CSIC-UV), Valencia, Spain</em><br>
-        <strong>Creator of CosmoLattice (CL)</strong><br>
-		Contributor to CL v1.1, v1.2<br>
-    	Contributor to CL v2.0<br>
-    	<!-- Contributor to CL v3.0 (work in progress) -->
-    </div>
+  <div class="cl-ppl-legend">
+    <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
+    <button type="button" class="cl-ppl-chip m-nmc" data-mod="nmc" aria-pressed="false">NMC</button>
+    <button type="button" class="cl-ppl-chip m-defects" data-mod="defects" aria-pressed="false">Defects</button>
+    <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
+    <button type="button" class="cl-ppl-chip m-dims" data-mod="dims" aria-pressed="false">1D &amp; 2D</button>
+    <span class="cl-ppl-divider"></span>
+    <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+    <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+    <span class="cl-ppl-divider"></span>
+    <span class="cl-ppl-grouplabel">Upcoming</span>
+    <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-fluid" data-mod="fluid" aria-pressed="false">Fluid Dynamics</button>
+    <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-su2axion" data-mod="su2axion" aria-pressed="false">SU(2) Axion</button>
+    <button type="button" class="cl-ppl-clear" disabled>Clear</button>
   </div>
-
-  <div style="text-align: center;">
-    <img src="../assets/img/people/adrien.png"
-         alt="Adrien Florio"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <a href="https://afloriosite.wordpress.com/"
-         target="_blank"
-         rel="noopener noreferrer">
-        <strong>Adrien Florio</strong>
-      </a><br>
-		<em>Bielefeld University, Germany</em><br>
-        <strong>Creator of CosmoLattice (CL);</strong><br>
-		Contributor to CL v1.1, v1.2<br>
-    	Contributor to CL v2.0<br>
-    </div>
-  </div>
-
-  <div style="text-align: center;">
-    <img src="../assets/img/people/nico.png"
-         alt="Nicolas Loayza"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Nicolas Loayza</strong><br>
-		<em>CEICO, FZU, Prague, Czechia</em><br>
-		Contributor to CL v1.1, v1.2<br>
-    	Contributor to CL v2.0<br>
-    </div>
-  </div>
-  
-    <div style="text-align: center;">
-    <img src="../assets/img/people/Franz.png"
-         alt="Franz R. Sattler"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Franz R. Sattler</strong><br>
-		<em>Bielefeld University, Germany</em><br>
-        Contributor to CL v2.0
-    </div>
-  </div>
-
-  <div style="text-align: center;">
-    <img src="../assets/img/people/paco.png"
-         alt="Francisco Torrenti"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <a href="http://ftorrenti.github.io"
-         target="_blank"
-         rel="noopener noreferrer">
-        <strong>Francisco Torrenti</strong>
-      </a><br>
-		<em>Univ. Carlos III de Madrid, Spain</em><br>
-        <strong>Creator of CosmoLattice (CL)</strong><br>
-		Contributor to CL v1.1, v1.2<br>
-    	Contributor to CL v2.0<br>
-    </div>
-  </div>
-
-  <div style="text-align: center;">
-    <img src="../assets/img/people/ander.jpg"
-         alt="Ander Urio"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Ander Urio</strong><br>
-		<em>UPV/EHU, Bilbao, Spain</em><br>
-    	Contributor to CL v2.0<br>
-    </div>
-  </div>
-  
-   <div style="text-align: center;">
-    <img src="../assets/img/people/wessel.png"
-         alt="Wessel Valkenburg"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Wessel Valkenburg</strong><br>
-		<!-- <em>Private sector since 2019</em><br> -->
-		<em>Enjoying la vida loca out of academia</em><br>
-    	 <strong>Creator of CosmoLattice (CL)</strong><br>
-    </div>
-  </div>
-
-
 </div>
 
-<!--
-  space
--->
+<section class="cl-ppl-section">
+<h2 class="cl-ppl-heading">Developers</h2>
+<div class="cl-ppl-grid">
 
-----------
-
-<!--
-  space
--->
-
-## **Upcoming Developers**
-
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; align-items: start;">
-
-  <div style="text-align: center;">
-    <img src="../assets/img/people/ken.jpeg"
-         alt="Kenneth Marschall"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Kenneth Marschall</strong><br>
-	  <em>IFIC, Valencia, Spain</em><br>
-      Contributor to CL v3.0 (work in progress)
+  <article class="cl-ppl-card" data-mods="core defects gw">
+    <img class="cl-ppl-avatar" src="../assets/img/people/jorge.png" alt="Jorge Baeza-Ballesteros">
+    <div class="cl-ppl-name">Jorge Baeza-Ballesteros</div>
+    <div class="cl-ppl-affil">DESY, Zeuthen, Germany</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+      <button type="button" class="cl-ppl-chip m-defects" data-mod="defects" aria-pressed="false">Defects</button>
+      <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
     </div>
-  </div>
+  </article>
 
-  <div style="text-align: center;">
-    <img src="../assets/img/people/antonino.png"
-         alt="Antonino S. Midiri"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <a href="http://ftorrenti.github.io"
-         target="_blank"
-         rel="noopener noreferrer">
-        <strong>Antonino S. Midiri</strong>
-      </a><br>
-	  <em>University of Geneva, Switzerland</em><br>
-      Contributor to CL v3.0 (work in progress)
+  <article class="cl-ppl-card" data-mods="core alp nmc defects gw fluid">
+    <img class="cl-ppl-avatar" src="../assets/img/people/dani3.png" alt="Daniel G. Figueroa">
+    <div class="cl-ppl-name"><a href="https://webific.ific.uv.es/web/content/figueroa-daniel-g" target="_blank" rel="noopener noreferrer">Daniel G. Figueroa</a></div>
+    <div class="cl-ppl-affil">IFIC (CSIC-UV), Valencia, Spain</div>
+    <div class="cl-ppl-role">Creator of CosmoLattice</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+      <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
+      <button type="button" class="cl-ppl-chip m-nmc" data-mod="nmc" aria-pressed="false">NMC</button>
+      <button type="button" class="cl-ppl-chip m-defects" data-mod="defects" aria-pressed="false">Defects</button>
+      <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-fluid" data-mod="fluid" aria-pressed="false">Fluid Dynamics</button>
     </div>
-  </div>
+  </article>
 
-  <div style="text-align: center;">
-    <img src="../assets/img/people/ander.jpg"
-         alt="Alberto Roper Pol"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Alberto Roper Pol</strong><br>
-	  <em>University of Geneva, Switzerland</em><br>
-      Contributor to CL v3.0 (work in progress)
+  <article class="cl-ppl-card" data-mods="core templat alp nmc gw su2axion">
+    <img class="cl-ppl-avatar" src="../assets/img/people/adrien-florio.jpg" alt="Adrien Florio">
+    <div class="cl-ppl-name"><a href="https://aflorio.science" target="_blank" rel="noopener noreferrer">Adrien Florio</a></div>
+    <div class="cl-ppl-affil">Bielefeld University, Germany</div>
+    <div class="cl-ppl-role">Creator of CosmoLattice</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+      <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
+      <button type="button" class="cl-ppl-chip m-nmc" data-mod="nmc" aria-pressed="false">NMC</button>
+      <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-su2axion" data-mod="su2axion" aria-pressed="false">SU(2) Axion</button>
     </div>
-  </div>
+  </article>
+
+  <article class="cl-ppl-card" data-mods="core alp nmc gw">
+    <img class="cl-ppl-avatar" src="../assets/img/people/nico.png" alt="Nicolas Loayza">
+    <div class="cl-ppl-name">Nicolas Loayza</div>
+    <div class="cl-ppl-affil">CEICO, FZU, Prague, Czechia</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+      <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
+      <button type="button" class="cl-ppl-chip m-nmc" data-mod="nmc" aria-pressed="false">NMC</button>
+      <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
+    </div>
+  </article>
+
+  <article class="cl-ppl-card" data-mods="core templat alp su2axion">
+    <img class="cl-ppl-avatar" src="../assets/img/people/Franz.png" alt="Franz R. Sattler">
+    <div class="cl-ppl-name">Franz R. Sattler</div>
+    <div class="cl-ppl-affil">Bielefeld University, Germany</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+      <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-su2axion" data-mod="su2axion" aria-pressed="false">SU(2) Axion</button>
+    </div>
+  </article>
+
+  <article class="cl-ppl-card" data-mods="core gw dims">
+    <img class="cl-ppl-avatar" src="../assets/img/people/paco.png" alt="Francisco Torrenti">
+    <div class="cl-ppl-name"><a href="http://ftorrenti.github.io" target="_blank" rel="noopener noreferrer">Francisco Torrenti</a></div>
+    <div class="cl-ppl-affil">Univ. Carlos III de Madrid, Spain</div>
+    <div class="cl-ppl-role">Creator of CosmoLattice</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+      <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
+      <button type="button" class="cl-ppl-chip m-dims" data-mod="dims" aria-pressed="false">1D &amp; 2D</button>
+    </div>
+  </article>
+
+  <article class="cl-ppl-card" data-mods="core alp">
+    <img class="cl-ppl-avatar" src="../assets/img/people/ander.jpg" alt="Ander Urio">
+    <div class="cl-ppl-name">Ander Urio</div>
+    <div class="cl-ppl-affil">UPV/EHU, Bilbao, Spain</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+      <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
+    </div>
+  </article>
+
+  <article class="cl-ppl-card" data-mods="templat">
+    <img class="cl-ppl-avatar" src="../assets/img/people/wessel.png" alt="Wessel Valkenburg">
+    <div class="cl-ppl-name">Wessel Valkenburg</div>
+    <div class="cl-ppl-affil">Enjoying la vida loca out of academia</div>
+    <div class="cl-ppl-role">Creator of CosmoLattice</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+    </div>
+  </article>
 
 </div>
-<!--
-  space
--->
+</section>
 
-----------
+<section class="cl-ppl-section">
+<h2 class="cl-ppl-heading">Upcoming Developers</h2>
+<div class="cl-ppl-grid">
 
-<!--
-  space
--->
-
-## **Other Contributors**
-
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem 1.5rem; align-items: start;">
-
-  <div style="text-align: center;">
-    <img src="../assets/img/people/joanes.png"
-         alt="Joanes Lizarraga"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Joanes Lizarraga</strong><br>
-	  <em>UPV/EHU, Bilbao, Spain</em><br>
-      Contributor to Axion-Gauge interactions
+  <article class="cl-ppl-card" data-mods="fluid">
+    <img class="cl-ppl-avatar" src="../assets/img/people/ken.jpeg" alt="Kenneth Marschall">
+    <div class="cl-ppl-name">Kenneth Marschall</div>
+    <div class="cl-ppl-affil">IFIC, Valencia, Spain</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-fluid" data-mod="fluid" aria-pressed="false">Fluid Dynamics</button>
     </div>
-  </div>
+  </article>
 
-  <div style="text-align: center;">
-    <img src="../assets/img/people/toby.png"
-         alt="Toby Opferkuch"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Toby Opferkuch</strong><br>
-	  <em>SISSA, Trieste, Italy</em><br>
-      Contributor to NMC interactions
+  <article class="cl-ppl-card" data-mods="fluid">
+    <img class="cl-ppl-avatar" src="../assets/img/people/antonino.png" alt="Antonino S. Midiri">
+    <div class="cl-ppl-name">Antonino S. Midiri</div>
+    <div class="cl-ppl-affil">University of Geneva, Switzerland</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-fluid" data-mod="fluid" aria-pressed="false">Fluid Dynamics</button>
     </div>
-  </div>
+  </article>
 
-  <div style="text-align: center;">
-    <img src="../assets/img/people/ben.png"
-         alt="Ben A. Stefanek"
-         style="width: 150px; height: 150px; object-fit: cover; border-radius: 50%;">
-    <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
-      <strong>Ben A. Stefanek</strong><br>
-	  <em>King's College London, UK</em><br>
-      Contributor to NMC interactions
+  <article class="cl-ppl-card" data-mods="fluid">
+    <img class="cl-ppl-avatar" src="../assets/img/people/ander.jpg" alt="Alberto Roper Pol">
+    <div class="cl-ppl-name">Alberto Roper Pol</div>
+    <div class="cl-ppl-affil">University of Geneva, Switzerland</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-fluid" data-mod="fluid" aria-pressed="false">Fluid Dynamics</button>
     </div>
-  </div>
+  </article>
+
+</div>
+</section>
+
+<section class="cl-ppl-section">
+<h2 class="cl-ppl-heading">Other Contributors</h2>
+<div class="cl-ppl-grid">
+
+  <article class="cl-ppl-card" data-mods="alp">
+    <img class="cl-ppl-avatar" src="../assets/img/people/joanes.png" alt="Joanes Lizarraga">
+    <div class="cl-ppl-name">Joanes Lizarraga</div>
+    <div class="cl-ppl-affil">UPV/EHU, Bilbao, Spain</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
+    </div>
+  </article>
+
+  <article class="cl-ppl-card" data-mods="nmc">
+    <img class="cl-ppl-avatar" src="../assets/img/people/toby.png" alt="Toby Opferkuch">
+    <div class="cl-ppl-name">Toby Opferkuch</div>
+    <div class="cl-ppl-affil">SISSA, Trieste, Italy</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip m-nmc" data-mod="nmc" aria-pressed="false">NMC</button>
+    </div>
+  </article>
+
+  <article class="cl-ppl-card" data-mods="nmc">
+    <img class="cl-ppl-avatar" src="../assets/img/people/ben.png" alt="Ben A. Stefanek">
+    <div class="cl-ppl-name">Ben A. Stefanek</div>
+    <div class="cl-ppl-affil">King's College London, UK</div>
+    <div class="cl-ppl-badges">
+      <button type="button" class="cl-ppl-chip m-nmc" data-mod="nmc" aria-pressed="false">NMC</button>
+    </div>
+  </article>
+
+</div>
+</section>
 
 </div>
