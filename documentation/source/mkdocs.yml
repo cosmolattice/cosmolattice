@@ -104,7 +104,9 @@ extra_javascript:
   - javascripts/sidebar-toggle.js
   - javascripts/prose-fold.js
   - javascripts/citations.js
+  - javascripts/citation-box.js #"If you use CosmoLattice": tabbed, copyable citation/BibTeX card
   - javascripts/people-filter.js #People page: clickable module-badge filtering
+  - javascripts/publications.js #Publications/Citations: histogram, top users, search & filter
   - javascripts/news-bar.js #Added by DGF (July 3rd 2026) for have a news bar on top
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js #Added by DGF (July 5th 2026) to have latex
 
@@ -224,9 +226,7 @@ nav:
       #- "Under the Hood: Expression Templates  (A & F)": "Manual/Under the Hood: Expression Templates .md"
   - People:
       - "<span style='font-weight:bold;'>Developers/Contributors </span>": "people/People.md"
-  - Publications:
-      - "<span style='font-weight:bold;'>References using CosmoLattice </span>": "publications/Publications.md"
-      - "<span style='font-weight:bold;'>References citing CosmoLattice </span>": "publications/Citations.md"
+  - Publications: "publications/Publications.md"
   - Events:
       - "Overview": "events/EventsGuide.md"
       - "<span style='font-weight:bold;'> Schools </span>": # "events/Schools.md"

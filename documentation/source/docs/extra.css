@@ -1810,3 +1810,388 @@ body.nav-collapsed .md-sidebar--primary {
     .md-typeset .cl-people .cl-ppl-card,
     .md-typeset .cl-people .cl-ppl-chip { transition: none; }
 }
+
+
+/* ===================================================================
+   Publications / Citations interactive view  (javascripts/publications.js)
+   Scoped under .cl-pubs; neutrals derive from Material's own tokens so
+   light/dark just work. The blue histogram ramp is defined for both schemes.
+   =================================================================== */
+.cl-pubs {
+    --cl-pub-ink:        var(--md-default-fg-color);
+    --cl-pub-muted:      var(--md-default-fg-color--light);
+    --cl-pub-faint:      var(--md-default-fg-color--lighter);
+    --cl-pub-line:       var(--md-default-fg-color--lightest);
+    --cl-pub-surface:    var(--md-default-bg-color);
+    --cl-pub-surface2:   var(--md-code-bg-color);
+    --cl-pub-accent:     var(--md-accent-fg-color, #2f7fc4);
+    --cl-pub-accent-ink: var(--md-typeset-a-color, #1d5a94);
+    --cl-pub-accent-soft: rgba(47, 127, 196, .12);
+    --cl-pub-dim:        var(--md-default-fg-color--lightest);
+    /* blue sequential ramp: older -> lighter, recent -> deeper */
+    --cl-pub-y0:#cfe1f2; --cl-pub-y1:#a9cbe9; --cl-pub-y2:#83b3de; --cl-pub-y3:#5e9bd1;
+    --cl-pub-y4:#4083bd; --cl-pub-y5:#2f6aa3; --cl-pub-y6:#234f7d;
+    --cl-pub-serif:"Iowan Old Style",Georgia,"Palatino Linotype",Palatino,"Times New Roman",serif;
+    --cl-pub-mono:"Roboto Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    display: block;
+    margin: 1.2rem 0 0;
+}
+[data-md-color-scheme="slate"] .cl-pubs {
+    --cl-pub-accent-soft: rgba(90, 168, 224, .17);
+    --cl-pub-y0:#26384e; --cl-pub-y1:#2f4f70; --cl-pub-y2:#3a6791; --cl-pub-y3:#4682b3;
+    --cl-pub-y4:#579bd2; --cl-pub-y5:#72b1e4; --cl-pub-y6:#93c6ef;
+}
+
+/* ---- stat strip ---- */
+.cl-pubs .cl-pubs-stats {
+    display: flex; flex-wrap: wrap; gap: 8px 24px;
+    font-family: var(--cl-pub-mono); font-size: .74rem; color: var(--cl-pub-muted);
+    border-top: 1px solid var(--cl-pub-line); border-bottom: 1px solid var(--cl-pub-line);
+    padding: 12px 2px; margin: 0 0 1.6rem;
+}
+.cl-pubs .cl-pubs-stats .s { display: flex; align-items: baseline; gap: 7px; }
+.cl-pubs .cl-pubs-stats b {
+    color: var(--cl-pub-ink); font-weight: 700; font-size: .92rem;
+    font-variant-numeric: tabular-nums;
+}
+.cl-pubs .cl-pubs-stats .sep { color: var(--cl-pub-faint); }
+
+/* ---- two-column layout ---- */
+.cl-pubs .cl-pubs-layout { display: grid; grid-template-columns: 1fr; gap: 2rem; }
+.cl-pubs .cl-pubs-main { min-width: 0; }
+.cl-pubs .cl-pubs-side { display: flex; flex-direction: column; gap: 1.4rem; }
+@media screen and (min-width: 60em) {
+    .cl-pubs .cl-pubs-layout {
+        grid-template-columns: minmax(0, 1fr) 350px; gap: 2.6rem; align-items: start;
+    }
+    .cl-pubs .cl-pubs-side { position: sticky; top: 4rem; }
+}
+
+/* ---- sidebar cards ---- */
+.cl-pubs .cl-card {
+    border: 1px solid var(--cl-pub-line); border-radius: 12px;
+    background: var(--cl-pub-surface); padding: 15px 15px 13px;
+    box-shadow: 0 1px 2px rgba(20,40,70,.05), 0 6px 20px rgba(20,40,70,.06);
+}
+[data-md-color-scheme="slate"] .cl-pubs .cl-card {
+    box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 26px rgba(0,0,0,.4);
+}
+.cl-pubs .cl-card-title {
+    font-family: var(--cl-pub-serif); font-size: 1rem; font-weight: 600;
+    color: var(--cl-pub-ink); margin: 0 0 2px; line-height: 1.2; border: 0; padding: 0;
+}
+.cl-pubs .cl-card-note {
+    font-family: var(--cl-pub-mono); font-size: .62rem; color: var(--cl-pub-faint);
+    margin: 0 0 11px; line-height: 1.4;
+}
+.cl-pubs .cl-pubs-updated {
+    font-family: var(--cl-pub-mono); font-size: .64rem; color: var(--cl-pub-faint);
+    margin: 0; padding: 0 4px;
+}
+.cl-pubs .cl-pubs-updated strong { color: var(--cl-pub-muted); font-weight: 600; }
+
+/* ---- mini histogram ---- */
+.cl-pubs .cl-pubs-hist {
+    display: flex; align-items: flex-end; gap: clamp(3px, 1.2vw, 6px);
+    padding: 4px 0 0; border-bottom: 2px solid var(--cl-pub-line); margin: 0 0 4px;
+}
+.cl-pubs .cl-pubs-col { display: flex; flex-direction: column; align-items: center; flex: 1 1 0; min-width: 0; }
+.cl-pubs .cl-pubs-stack { display: flex; flex-direction: column-reverse; gap: 1px; width: 76%; align-items: center; }
+.cl-pubs .cl-pubs-cell {
+    width: 100%; height: var(--cl-pub-brick, 8px); border-radius: 1.5px;
+    background: var(--cl-pub-cell, var(--cl-pub-accent)); cursor: pointer;
+    transition: transform .12s ease, background .2s ease;
+}
+.cl-pubs .cl-pubs-cell:hover { transform: scaleX(1.2) scaleY(1.5); position: relative; z-index: 3; }
+.cl-pubs .cl-pubs-cell.is-dim { background: var(--cl-pub-dim); cursor: default; }
+.cl-pubs .cl-pubs-cell.is-dim:hover { transform: none; }
+.cl-pubs .cl-pubs-xlabels { display: flex; gap: clamp(3px, 1.2vw, 6px); }
+.cl-pubs .cl-pubs-xtick {
+    flex: 1 1 0; min-width: 0; text-align: center; font-family: var(--cl-pub-mono);
+    background: none; border: 0; padding: 5px 0 0; cursor: pointer; color: var(--cl-pub-muted); line-height: 1.1;
+}
+.cl-pubs .cl-pubs-xtick .yr { font-size: .68rem; font-weight: 700; color: var(--cl-pub-ink); }
+.cl-pubs .cl-pubs-xtick .ct { display: block; font-size: .58rem; color: var(--cl-pub-faint); font-variant-numeric: tabular-nums; }
+.cl-pubs .cl-pubs-xtick:hover .yr,
+.cl-pubs .cl-pubs-xtick[aria-pressed="true"] .yr { color: var(--cl-pub-accent-ink); }
+.cl-pubs .cl-pubs-xtick[aria-pressed="true"]::after {
+    content: ""; display: block; height: 2px; background: var(--cl-pub-accent);
+    margin: 4px auto 0; width: 70%; border-radius: 2px;
+}
+
+/* ---- contributors / users ---- */
+.cl-pubs .cl-pubs-contrib { display: flex; flex-direction: column; gap: 2px; }
+.cl-pubs .cl-pubs-crow {
+    display: grid; grid-template-columns: 1fr auto; gap: 7px 10px; align-items: center;
+    background: none; border: 0; text-align: left; cursor: pointer; padding: 5px 6px;
+    border-radius: 7px; font-family: var(--md-text-font-family, sans-serif);
+    color: var(--cl-pub-ink); width: 100%; transition: background .15s;
+}
+.cl-pubs .cl-pubs-crow:hover { background: var(--cl-pub-surface2); }
+.cl-pubs .cl-pubs-crow .nm { font-size: .78rem; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cl-pubs .cl-pubs-crow .val { font-family: var(--cl-pub-mono); font-size: .68rem; color: var(--cl-pub-muted); font-variant-numeric: tabular-nums; }
+.cl-pubs .cl-pubs-crow .bar { grid-column: 1 / -1; height: 3px; border-radius: 2px; background: var(--cl-pub-surface2); overflow: hidden; }
+.cl-pubs .cl-pubs-crow .bar i { display: block; height: 100%; background: var(--cl-pub-accent); border-radius: 2px; }
+.cl-pubs .cl-pubs-crow[aria-pressed="true"] { background: var(--cl-pub-accent-soft); }
+.cl-pubs .cl-pubs-crow[aria-pressed="true"] .nm { color: var(--cl-pub-accent-ink); font-weight: 600; }
+
+/* ---- search / controls ---- */
+.cl-pubs .cl-pubs-controls { display: flex; flex-wrap: wrap; gap: 11px; align-items: center; margin: 0 0 4px; }
+.cl-pubs .cl-pubs-search { flex: 1 1 220px; position: relative; min-width: 180px; }
+.cl-pubs .cl-pubs-search input {
+    width: 100%; font-family: inherit; font-size: .84rem; color: var(--cl-pub-ink);
+    background: var(--cl-pub-surface); border: 1px solid var(--cl-pub-line); border-radius: 9px;
+    padding: 10px 14px 10px 36px;
+}
+.cl-pubs .cl-pubs-search input::placeholder { color: var(--cl-pub-faint); }
+.cl-pubs .cl-pubs-search input:focus { outline: 2px solid var(--cl-pub-accent); outline-offset: 1px; border-color: transparent; }
+.cl-pubs .cl-pubs-search svg {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 15px; height: 15px; stroke: var(--cl-pub-faint); pointer-events: none;
+}
+.cl-pubs .cl-pubs-count { font-family: var(--cl-pub-mono); font-size: .7rem; color: var(--cl-pub-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.cl-pubs .cl-pubs-clear {
+    font-family: var(--cl-pub-mono); font-size: .68rem; color: var(--cl-pub-accent-ink);
+    background: none; border: 1px solid var(--cl-pub-line); border-radius: 20px;
+    padding: 5px 12px; cursor: pointer; display: none;
+}
+.cl-pubs .cl-pubs-clear.is-shown { display: inline-block; }
+.cl-pubs .cl-pubs-clear:hover { background: var(--cl-pub-accent-soft); }
+
+.cl-pubs .cl-pubs-crow:focus-visible,
+.cl-pubs .cl-pubs-xtick:focus-visible,
+.cl-pubs .cl-pubs-clear:focus-visible,
+.cl-pubs .cl-pubs-cell:focus-visible { outline: 2px solid var(--cl-pub-accent); outline-offset: 2px; }
+
+/* ---- list (enhanced <ol>) ---- */
+.cl-pubs .cl-pub-list { list-style: none; margin: .8rem 0 0; padding: 0; border-top: 1px solid var(--cl-pub-line); }
+.cl-pubs .cl-pub {
+    display: grid; grid-template-columns: 44px 1fr auto; gap: 14px;
+    padding: 14px 4px; margin: 0; border-bottom: 1px solid var(--cl-pub-line);
+    align-items: start; scroll-margin-top: 4rem;
+}
+.cl-pubs .cl-pub.is-hidden { display: none; }
+.cl-pubs .cl-pub .idx {
+    font-family: var(--cl-pub-mono); font-size: .72rem; font-weight: 700;
+    color: var(--cl-pub-accent-ink); background: var(--cl-pub-accent-soft); border-radius: 6px;
+    text-align: center; padding: 4px 0; font-variant-numeric: tabular-nums; align-self: start;
+}
+.cl-pubs .cl-pub .body { min-width: 0; }
+.cl-pubs .cl-pub .title {
+    font-family: var(--cl-pub-serif); font-size: 1rem; font-weight: 600; line-height: 1.28;
+    color: var(--cl-pub-ink); margin: 0 0 4px;
+}
+.cl-pubs .cl-pub .authors { font-size: .8rem; color: var(--cl-pub-muted); margin: 0; }
+.cl-pubs .cl-pub .authors .me { cursor: pointer; }
+.cl-pubs .cl-pub .authors .me:hover { color: var(--cl-pub-accent-ink); text-decoration: underline; }
+.cl-pubs .cl-pub .meta {
+    font-family: var(--cl-pub-mono); font-size: .7rem; color: var(--cl-pub-muted);
+    text-align: right; white-space: nowrap; display: flex; flex-direction: column; gap: 4px; align-items: flex-end;
+}
+.cl-pubs .cl-pub .meta .yr { color: var(--cl-pub-ink); font-weight: 700; }
+.cl-pubs .cl-pub .meta .jr { color: var(--cl-pub-faint); max-width: 20ch; white-space: normal; text-align: right; font-size: .64rem; }
+.cl-pubs .cl-pub .meta a { color: var(--cl-pub-accent-ink); display: inline-flex; align-items: center; gap: 3px; }
+.cl-pubs .cl-pub.is-target { background: var(--cl-pub-accent-soft); border-radius: 8px; box-shadow: 0 0 0 1px var(--cl-pub-accent) inset; }
+.cl-pubs .cl-pubs-empty { display: none; padding: 32px 4px; color: var(--cl-pub-muted); font-family: var(--cl-pub-mono); font-size: .78rem; }
+.cl-pubs .cl-pubs-empty.is-shown { display: block; }
+
+@media screen and (max-width: 34em) {
+    .cl-pubs .cl-pub { grid-template-columns: 34px 1fr; gap: 10px; }
+    .cl-pubs .cl-pub .meta { grid-column: 2; text-align: left; align-items: flex-start; }
+    .cl-pubs .cl-pub .meta .jr { text-align: left; }
+}
+
+/* ---- floating tooltip (appended to <body>) ---- */
+.cl-pubs-tt {
+    position: fixed; z-index: 210; max-width: 300px; display: none;
+    background: var(--md-default-bg-color); color: var(--md-default-fg-color);
+    border: 1px solid var(--md-default-fg-color--lightest); border-radius: 9px;
+    padding: 9px 12px; box-shadow: 0 6px 24px rgba(0,0,0,.18);
+    font-size: .8rem; line-height: 1.35; pointer-events: none;
+}
+.cl-pubs-tt.is-open { display: block; }
+.cl-pubs-tt .tt-t { font-weight: 600; margin-bottom: 3px; }
+.cl-pubs-tt .tt-a { color: var(--md-default-fg-color--light); font-size: .74rem; }
+.cl-pubs-tt .tt-y { font-family: "Roboto Mono", monospace; font-size: .66rem; color: var(--md-accent-fg-color); margin-top: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+    .cl-pubs .cl-pubs-cell, .cl-pubs .cl-pubs-crow, .cl-pubs .cl-pub { transition: none; }
+}
+
+/* ---- tabs (Using CL / Citing CL) — shown only when the page has >1 list ---- */
+.cl-pubs[hidden] { display: none; }
+.cl-pubs-tabbar {
+    display: flex; gap: 2px; flex-wrap: wrap;
+    border-bottom: 2px solid var(--md-default-fg-color--lightest);
+    margin: 1.4rem 0 0;
+}
+.cl-pubs-tabbar + .cl-pubs, .cl-pubs-tabbar ~ .cl-pubs { margin-top: 1.1rem; }
+.cl-pubs-tab {
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: .94rem; font-weight: 600; line-height: 1.2;
+    color: var(--md-default-fg-color--light);
+    background: none; border: 0; border-bottom: 2px solid transparent;
+    margin-bottom: -2px; padding: 9px 15px; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: color .15s, border-color .15s;
+}
+.cl-pubs-tab .tc {
+    font-family: "Roboto Mono", ui-monospace, monospace; font-size: .68rem; font-weight: 600;
+    color: var(--md-default-fg-color--lighter); font-variant-numeric: tabular-nums;
+    background: var(--md-code-bg-color); border-radius: 20px; padding: 1px 8px;
+}
+.cl-pubs-tab:hover { color: var(--md-default-fg-color); }
+.cl-pubs-tab.is-active { color: var(--md-typeset-a-color); border-bottom-color: var(--md-accent-fg-color); }
+.cl-pubs-tab.is-active .tc { color: var(--md-typeset-a-color); background: var(--md-accent-fg-color--transparent, var(--md-code-bg-color)); }
+.cl-pubs-tab:focus-visible { outline: 2px solid var(--md-accent-fg-color); outline-offset: 2px; border-radius: 6px; }
+
+/* === Citation card (CLcitation.md "If you use CosmoLattice") ===
+   A tabbed card — Citation / LaTeX / BibTeX — with per-pane copy buttons.
+   Wired by javascripts/citation-box.js; degrades to plain visible panes
+   with JS off (see the JS-off fallback at the end of this block). */
+.md-typeset .cl-cite {
+    margin: 1.6em 0;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--md-default-fg-color) 2.5%, transparent);
+    overflow: hidden;
+}
+
+.md-typeset .cl-cite__tabs {
+    display: flex;
+    gap: 2px;
+    padding: 0 0.6em;
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+}
+
+.md-typeset .cl-cite__tab {
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--md-default-fg-color--light);
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 0.7em 1em;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.md-typeset .cl-cite__tab:hover { color: var(--md-default-fg-color); }
+
+.md-typeset .cl-cite__tab.is-active {
+    color: var(--md-typeset-a-color);
+    border-bottom-color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-cite__tab:focus-visible {
+    outline: 2px solid var(--md-accent-fg-color);
+    outline-offset: -2px;
+    border-radius: 4px;
+}
+
+.md-typeset .cl-cite__pane {
+    position: relative;
+    padding: 1.1em 1.2em;
+}
+
+/* Reading pane: the acknowledgement as a quote-styled sentence */
+.md-typeset .cl-cite__quote {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--md-default-fg-color);
+    border-left: 3px solid var(--md-accent-fg-color);
+    padding-left: 0.9em;
+}
+
+.md-typeset .cl-cite__logo,
+.md-typeset .cl-cite__refs {
+    font-weight: 600;
+    color: var(--md-typeset-a-color);
+    white-space: nowrap;
+}
+
+.md-typeset .cl-cite__hint {
+    margin: 0.9em 0 0;
+    font-size: 0.8rem;
+    color: var(--md-default-fg-color--light);
+}
+
+/* Code panes: monospace, scrollable, room for the copy button */
+.md-typeset .cl-cite__code {
+    margin: 0;
+    padding: 0.9em 1em;
+    padding-right: 6.5em;
+    border-radius: 6px;
+    background: var(--md-code-bg-color);
+    overflow-x: auto;
+}
+
+.md-typeset .cl-cite__code code {
+    display: block;
+    font-family: var(--md-code-font-family, "Roboto Mono", ui-monospace, monospace);
+    font-size: 0.76rem;
+    line-height: 1.5;
+    color: var(--md-code-fg-color);
+    white-space: pre;
+    background: none;
+    padding: 0;
+    box-shadow: none;
+}
+
+.md-typeset .cl-cite__copy {
+    position: absolute;
+    top: 1.55em;
+    right: 1.75em;
+    z-index: 1;
+    font-family: var(--md-text-font-family, sans-serif);
+    font-size: 0.76rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--md-accent-fg-color);
+    background: var(--md-default-bg-color);
+    border: 1px solid color-mix(in srgb, var(--md-accent-fg-color) 40%, transparent);
+    border-radius: 6px;
+    padding: 0.5em 0.8em;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.md-typeset .cl-cite__copy:hover {
+    background: color-mix(in srgb, var(--md-accent-fg-color) 12%, transparent);
+}
+
+.md-typeset .cl-cite__copy:focus-visible {
+    outline: 2px solid var(--md-accent-fg-color);
+    outline-offset: 2px;
+}
+
+.md-typeset .cl-cite__copy.is-copied {
+    color: #fff;
+    background: var(--cl-dims, #43a047);
+    border-color: var(--cl-dims, #43a047);
+}
+
+/* JS enhances: hide inactive panes. Without JS every pane stays visible
+   (the [hidden] attribute still applies, so reveal them here for no-JS). */
+.md-typeset .cl-cite__pane { display: none; }
+.md-typeset .cl-cite__pane.is-active { display: block; }
+.no-js .md-typeset .cl-cite__pane { display: block; }
+.no-js .md-typeset .cl-cite__tabs,
+.no-js .md-typeset .cl-cite__copy { display: none; }
+
+@media screen and (max-width: 44.9375em) {
+    .md-typeset .cl-cite__tab { padding: 0.7em 0.7em; font-size: 0.78rem; }
+    .md-typeset .cl-cite__copy { top: auto; bottom: 1.55em; }
+}
+
+/* Print: show every pane, drop the interactive chrome */
+@media print {
+    .md-typeset .cl-cite__pane { display: block; }
+    .md-typeset .cl-cite__tabs,
+    .md-typeset .cl-cite__copy { display: none; }
+}
