@@ -138,11 +138,11 @@ nav:
       - "Quick installation and execution": "code/Quick installation and execution.md"
       - "<span style='font-weight:bold;'>Installation - Full details</span>": "code/Installation.md"
       #- "<span style='font-weight:bold;'>Code Features </span>": "code/Features.md"
-      - "<span style='font-weight:bold;'>Input File Builder </span>": "code/InputBuilder.md"
       - "<span style='font-weight:bold;'>Code Version Guide </span>": "code/Versions.md"
       #         - "Versions 2.X": "code/Versions2X.md"
       #         - "Versions 1.X": "code/Versions1X.md"
       #- "<span style='font-weight:bold;'>Useful Links </span>": "code/Basics.md"
+      - "<span style='font-weight:bold;'>Input File Builder </span>": "code/InputBuilder.md"
       - ? "<span style='font-weight:bold;'>Application Programming Interface (API) </span>" # - API:
         : #- "Links": "CosmoLattice/links.md"
           - "Classes":
@@ -218,14 +218,14 @@ nav:
       - "<span style='font-weight:bold;'>Parameters </span>": "Manual/Appendix_Parameters.md"
       - "<span style='font-weight:bold;'>Variable Names </span>": "Manual/Appendix_Generic_Model_variables.md"
       - "<span style='font-weight:bold;'>CMake Flags </span>": "code/cmake.md"
-      - "<span style='font-weight:bold;'>List of Implemented Functions </span>": "Manual/List of Implemented Functions.md"
+      # - "<span style='font-weight:bold;'>List of Implemented Functions </span>": "Manual/List of Implemented Functions.md"
       #- "Acknowledgments": "Manual/Acknowledgments.md"
       #- "Under the Hood: Expression Templates  (A & F)": "Manual/Under the Hood: Expression Templates .md"
   - People:
       - "<span style='font-weight:bold;'>Developers/Contributors </span>": "people/People.md"
   - Publications:
-      - "<span style='font-weight:bold;'>References citing CosmoLattice </span>": "publications/Citations.md"
       - "<span style='font-weight:bold;'>References using CosmoLattice </span>": "publications/Publications.md"
+      - "<span style='font-weight:bold;'>References citing CosmoLattice </span>": "publications/Citations.md"
   - Events:
       - "Overview": "events/EventsGuide.md"
       - "<span style='font-weight:bold;'> Schools </span>": # "events/Schools.md"

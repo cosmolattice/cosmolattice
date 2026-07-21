@@ -199,7 +199,7 @@
     <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
       <strong>Joanes Lizarraga</strong><br>
 	  <em>UPV/EHU, Bilbao, Spain</em><br>
-      Contributor to Axion-Gauge module
+      Contributor to Axion-Gauge interactions
     </div>
   </div>
 
@@ -210,7 +210,7 @@
     <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
       <strong>Toby Opferkuch</strong><br>
 	  <em>SISSA, Trieste, Italy</em><br>
-      Contributor to NMC module
+      Contributor to NMC interactions
     </div>
   </div>
 
@@ -221,7 +221,7 @@
     <div style="text-align: center !important; margin-top: 0.7rem; line-height: 1.35;">
       <strong>Ben A. Stefanek</strong><br>
 	  <em>King's College London, UK</em><br>
-      Contributor to NMC module
+      Contributor to NMC interactions
     </div>
   </div>
 

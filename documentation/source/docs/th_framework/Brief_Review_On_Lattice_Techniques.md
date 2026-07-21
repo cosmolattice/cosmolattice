@@ -231,7 +231,7 @@ The definition of ${\tt Type-I}$ spectrum naturally incorporates the exact multi
 !!! note "Spectrum-${\tt Type}$ in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$"
 	 While $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ uses by default ${\tt Type-I}$ spectra for its output, it allows the user to switch to ${\tt Type-II}$ if desired. For further details on these aspects, see 
 	 [*$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Technical Notes*](TechnicalNotes.md), and read
-	 [*Observables*](../Manual/Observables.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md) (<span style="color:red;">**CHECK !**</span>). 
+	 [*Observables*](../Manual/Observables.md) in the [$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Manual](../Manual/About This Manual.md). 
 
 The notion of power spectrum is particularly useful to initialize fundamental fields on a lattice. In the case of a scalar field, it is common to consider *e.g.* quantum vacuum fluctuations, characterized by a vacuum expectation value (continuum variance) as
 [](){ #eq_auto_009 }

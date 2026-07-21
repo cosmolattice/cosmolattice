@@ -1,4 +1,4 @@
-Below we present the variable used throughout the `CosmoInterface` which are declared in the `AbstractModel` class and thus shared by all models. See `src/include/TempLat/abstractmodel.h`.
+Below we present the variable used throughout the `CosmoInterface` which are declared in the `AbstractModel` class and thus shared by all models. See `include/TempLat/abstractmodel.h`.
 
 | **Variable**        | **Definition**                                                                                   |
 | ------------------- | ------------------------------------------------------------------------------------------------ |

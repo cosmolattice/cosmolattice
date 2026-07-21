@@ -12,7 +12,7 @@ mandatory parameter.
 ## Run parameters
 
 These parameters control the lattice, the time evolution and the background
-expansion. They are declared in `src/include/CosmoInterface/runparameters.h`.
+expansion. They are declared in `include/CosmoInterface/runparameters.h`.
 
 <!-- @gen:params:framework:run -->
 | Parameter | Type | Default | Units | Description |
@@ -46,7 +46,7 @@ expansion. They are declared in `src/include/CosmoInterface/runparameters.h`.
 ## Initial conditions
 
 These parameters control the initial field fluctuations and the random seed.
-They are declared in `src/include/CosmoInterface/runparameters.h`.
+They are declared in `include/CosmoInterface/runparameters.h`.
 
 <!-- @gen:params:framework:IC -->
 | Parameter | Type | Default | Units | Description |
@@ -154,7 +154,7 @@ a previously saved simulation.
 
 These framework-level coupling parameters set the gauge couplings and charges of
 the gauge sectors, as well as a few related per-field couplings. They are
-declared in the constructor of `src/include/CosmoInterface/abstractmodel.h` and
+declared in the constructor of `include/CosmoInterface/abstractmodel.h` and
 in the corresponding gauge-field interface headers.
 
 <!-- @gen:params:framework:couplings -->
