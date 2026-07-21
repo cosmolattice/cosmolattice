@@ -132,6 +132,9 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ provides symplectic integra
 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and fully exploits the *object oriented  programming* nature of this language, with a modular structure that separates well all the ingredients involved. This allows $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to have a clear separation between the physics and the technical implementation details. **The code is designed so that the user can simulate a given scenario with different parameters, without requiring to re-compile each time that parameter values are changed**. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows for an easy implementation of new models with either scalar or gauge interactions.
 
+[CMake](code/Installation.md#download-and-build){ .cl-fact }
+{: .cl-fact-row }
+
 </div>
 
 <div class="cl-claim" markdown>
@@ -155,7 +158,6 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 With **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** 2.0, through the `TempLat` library, a particularly powerful new feature is the native support for **GPU acceleration**. This is achieved by using the `Kokkos` library, which allows for a single code base to be compiled and run on different architectures, including NVIDIA GPUs (via CUDA), AMD GPUs (via HIP), and multi-core CPUs (via OpenMP or Pthreads). This means that users can take advantage of the computational power of modern GPUs without having to write GPU-specific code, making it easier to run large-scale simulations efficiently. `TempLat` also handles the MPI distribution of the workload across many GPUs, allowing for simulations that require more memory than a single GPU can provide. Using GPUs for lattice simulations is as simple as switching a single flag in the `CMake` configuration, and the code will automatically handle the rest, including memory management and parallelization, see also [**Installation - Full**](../code/Installation.md) for more details.
 
 [Kokkos](Manual/Parallelization.md#subsubsec_devices){ .cl-fact }
-[CMake](code/Installation.md#download-and-build){ .cl-fact }
 {: .cl-fact-row }
 
 </div>
