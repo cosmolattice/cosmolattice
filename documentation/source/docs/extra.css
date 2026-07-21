@@ -185,8 +185,8 @@ body.nav-collapsed .md-sidebar--primary {
     text-align: center;
     pointer-events: none;
 }
-.cl-eq-scalar::before    { content: "scalar"; }
-.cl-eq-u1-kin::before    { content: "U(1) singlet"; }
+.cl-eq-scalar::before    { content: "scalar singlet"; }
+.cl-eq-u1-kin::before    { content: "complex scalar"; }
 .cl-eq-u1-gauge::before  { content: "U(1)"; }
 .cl-eq-su2-kin::before   { content: "SU(2) doublet"; }
 .cl-eq-su2-gauge::before { content: "SU(2)"; }
