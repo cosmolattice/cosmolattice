@@ -351,7 +351,7 @@ body.nav-collapsed .md-sidebar--primary {
     text-align: left;
 }
 
-.md-typeset .cl-facts .cl-fact {
+.md-typeset .cl-fact {
     display: inline-block;
     margin: 0.2em 0.25em 0.2em 0;
     padding: 0.3em 0.85em;
@@ -364,9 +364,15 @@ body.nav-collapsed .md-sidebar--primary {
     white-space: nowrap;
 }
 
-.md-typeset .cl-facts .cl-fact:hover {
+.md-typeset .cl-fact:hover {
     border-color: var(--md-accent-fg-color);
     color: var(--md-accent-fg-color);
+}
+
+/* When a fact chip trails a claim paragraph, keep it on its own baseline
+   with a little breathing room above. */
+.md-typeset .cl-claim p.cl-fact-row {
+    margin-top: 0.7em;
 }
 
 /* === Paragraph mini-titles ===

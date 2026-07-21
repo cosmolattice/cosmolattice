@@ -109,14 +109,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\t
 
 </div>
 
-<div class="cl-facts" markdown>
-[Symplectic integrators up to $\mathcal{O}(\delta t^{10})$](Manual/What CosmoLattice does in detail.md#subsec_Evolvers){ .cl-fact }
-[Low-order Runge-Kutta up to $\mathcal{O}(\delta t^{4})$](Manual/What CosmoLattice does in detail.md#velocityverlet-positionverlet-and-rk2nstorage){ .cl-fact }
-[Gauss constraint to machine precision](Manual/My first model of gauge fields.md#eq_GaussU1-eom){ .cl-fact }
-[MPI + parallel FFTs](Manual/Parallelization.md#subsubsec_para2D){ .cl-fact }
-[CMake](code/Installation.md#download-and-build){ .cl-fact }
-[Kokkos](Manual/Parallelization.md#subsubsec_devices){ .cl-fact }
-</div>
+These are some featured capabilities of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$:
 
 <div class="cl-claim" markdown>
 
@@ -124,6 +117,11 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\t
 {: .cl-minihead }
 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ provides symplectic integrators with accuracy ranging from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{10})$, and non-symplectic integrators with accuracies from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{4})$. Appropriate observables are also provided for each algorithm, like the energy density components of each field, their relevant spectra, or dynamical constraints. Our algorithms conserve energy up to the accuracy set by the order of the evolution algorithm, reaching even machine precision in the case of the highest order integrators. Notably, our algorithms for scalar-gauge theories, either Abelian or non-Abelian, always respect the Gauss constraint to machine precision, independently of the integrator, even in the case of self-consistent expansion.
+
+[Symplectic integrators up to $\mathcal{O}(\delta t^{10})$](Manual/What CosmoLattice does in detail.md#subsec_Evolvers){ .cl-fact }
+[Low-order Runge-Kutta up to $\mathcal{O}(\delta t^{4})$](Manual/What CosmoLattice does in detail.md#velocityverlet-positionverlet-and-rk2nstorage){ .cl-fact }
+[Gauss constraint to machine precision](Manual/My first model of gauge fields.md#eq_GaussU1-eom){ .cl-fact }
+{: .cl-fact-row }
 
 </div>
 
@@ -143,6 +141,9 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 
 **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is fully parallelized using both shared memory parallelization (*OpenMP*, *POSIX Threads* or GPU acceleration) and distributed parallelization (*Message Passing Interface* (MPI)) for use in high-performance clusters, and uses a discrete Fourier Transform parallelized in multiple spatial dimensions**. This makes it ideal for probing physical problems with well-separated mass/length scales, running very high resolution simulations, or simply shortening the running time of long simulations. To provide these capabilities, **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ relies on `TempLat`, a general package for lattice simulations that defines field variables and their operations, by introducing its own symbolic language, and managing all aspects of dispatching workload to the available computational resources. Once you become familiar with the basic ‘vocabulary’ of the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and `TempLat` language, editing the code or implementing your own model (resembling how you would write it in the continuum), should become a simple task.**
 
+[MPI + parallel FFTs](Manual/Parallelization.md#subsubsec_para2D){ .cl-fact }
+{: .cl-fact-row }
+
 </div>
 
 <div class="cl-claim" markdown>
@@ -152,6 +153,10 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 
 
 With **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** 2.0, through the `TempLat` library, a particularly powerful new feature is the native support for **GPU acceleration**. This is achieved by using the `Kokkos` library, which allows for a single code base to be compiled and run on different architectures, including NVIDIA GPUs (via CUDA), AMD GPUs (via HIP), and multi-core CPUs (via OpenMP or Pthreads). This means that users can take advantage of the computational power of modern GPUs without having to write GPU-specific code, making it easier to run large-scale simulations efficiently. `TempLat` also handles the MPI distribution of the workload across many GPUs, allowing for simulations that require more memory than a single GPU can provide. Using GPUs for lattice simulations is as simple as switching a single flag in the `CMake` configuration, and the code will automatically handle the rest, including memory management and parallelization, see also [**Installation - Full**](../code/Installation.md) for more details.
+
+[Kokkos](Manual/Parallelization.md#subsubsec_devices){ .cl-fact }
+[CMake](code/Installation.md#download-and-build){ .cl-fact }
+{: .cl-fact-row }
 
 </div>
 
