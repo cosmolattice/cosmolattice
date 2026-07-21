@@ -95,7 +95,7 @@ A few constraints are worth keeping in mind when planning large or unusual runs:
 ```c++
   struct ModelPars : public TempLat::DefaultModelPars {
     // ...
-    using NumberType = float; // or double
+    using FloatType = float; // or double
     // ...
   };
 ```

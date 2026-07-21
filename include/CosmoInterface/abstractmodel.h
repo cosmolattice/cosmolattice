@@ -48,7 +48,7 @@ namespace TempLat
     // Number of dimensions (1,2,3). It can be changed in the model file.
     static constexpr size_t NDim = 3;
 
-    using NumberType = double;
+    using FloatType = double;
 
     // Coupling managers, they deal with the possible couplings between the gauge fields and complex scalars/SU2
     // doublets
@@ -75,7 +75,7 @@ namespace TempLat
 #define MakeModelFloatType(_ModelName, _ModelParsType, _FloatType)                                                     \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, _FloatType)>
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
-  AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, typename _ModelParsType::NumberType)>
+  AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, typename _ModelParsType::FloatType)>
 
   /** @brief A class which contains everything a model should have; models derive from here.
    * Mother of all the models. The arguments are passed as template parameters.
