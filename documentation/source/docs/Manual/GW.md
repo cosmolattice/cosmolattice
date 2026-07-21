@@ -18,7 +18,7 @@ The production and evolution of gravitatonal waves can be easily simulated with 
 **Gravitational waves on the lattice**
  Directly simulating the physical degrees of freedom, sourced by the transverse-traceless part of the anisotropic stress tensor, would require the computation of TT projections on every time step, which involves back-and-forth transformations to Fourier space. This would be etremely expensive in terms of computational cost, scaling as $\mathcal{O}(N^3\logN)$ with the number of points per dimension of the lattice. An alternative algorithm that overcomes this limitation by using unphysical degrees of freedom that are sourced by an effective stress anisotropic tensor was first proposed in [@GarciaBellido_2008]. The original algorithm, that employs siz unphysical degrees of freedom, was used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ v1.1 to v1.3.
 
-Since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ v2.0, the simulation of GWs follows an alternative algorithm first presented in $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme]. This makes use of five auxiliary degrees of freedom, which form a symmetric and traceless tensor, $v_{ij} with $v_{33}=-v_{11}-v_{22}$ that is evolved following a discretized version of
+Since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$, the simulation of GWs follows an alternative algorithm first presented in $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme]. This makes use of five auxiliary degrees of freedom, which form a symmetric and traceless tensor, $v_{ij} with $v_{33}=-v_{11}-v_{22}$ that is evolved following a discretized version of
 [](){ #eq_GWvEOM2 }
 ```math
 \begin{align}
@@ -248,13 +248,13 @@ Alternatively, one can set `doLFforGWs = false` so that the GW sector uses the s
 | Scalars | `PVn` | `PVn` | ✓ |
 | Scalars | `RKn` | `LF` | ✓ |
 | Scalars | `RKn` | `RKn` | Not implemented |
-| Scalars + $U(1)$ gauge fields | `LF` | `LF` | ✗ |
-| Scalars + $U(1)$ gauge fields | `VVn` | `LF` | ✓ |
-| Scalars + $U(1)$ gauge fields | `VVn` | `VVn` | ✓ |
-| Scalars + $U(1)$ gauge fields | `PVn` | `LF` | ✓ |
-| Scalars + $U(1)$ gauge fields | `PVn` | `PVn` | ✗ |
-| Scalars + $U(1)$ gauge fields | `RKn` | `LF` | ✓ |
-| Scalars + $U(1)$ gauge fields | `RKn` | `RKn` | Not implemented |
+| Scalars + U(1) gauge fields | `LF` | `LF` | ✗ |
+| Scalars + U(1) gauge fields | `VVn` | `LF` | ✓ |
+| Scalars + U(1) gauge fields | `VVn` | `VVn` | ✓ |
+| Scalars + U(1) gauge fields | `PVn` | `LF` | ✓ |
+| Scalars + U(1) gauge fields | `PVn` | `PVn` | ✗ |
+| Scalars + U(1) gauge fields | `RKn` | `LF` | ✓ |
+| Scalars + U(1) gauge fields | `RKn` | `RKn` | Not implemented |
 
 Rows with GW evolver `LF` correspond to `doLFforGWs = true`, and rows where the GW evolver matches the matter evolver correspond to `doLFforGWs = false`. The unsupported $\mathrm{U}(1)$ rows reflect the staggered-time mismatch of the gauge electric field and gauge links when the matter sector itself is evolved with `LF` and `PVn`. Evolvers `RKn` are not implemented for GWs evolution as ov version 2.0. Note this is not the case for the velocity Verlet algorithm, as the kernel of GWs only needs to be evaluated before any matter is evolved or after the end of the matter evolution.
 

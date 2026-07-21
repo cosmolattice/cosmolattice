@@ -42,8 +42,8 @@ You can download the monographs from:
 This monograph provides the theoretical foundation for $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}~{\tt version~1.0}$, released in Feb. 2021. It contains a comprehensive discussion of lattice techniques for simulating scalar and gauge field dynamics in an expanding universe. After reviewing the continuum formulation of scalar and gauge field interactions in both Minkowski and FLRW backgrounds, we introduce the fundamental tools for the discretization of field theories, including **lattice gauge-invariant** techniques. We then discuss and classify numerical algorithms, ranging from methods with $\mathcal{O}(\delta t^2)$ accuracy, such as *staggered leapfrog* and *Verlet integration*, to *Runge--Kutta* methods with accuracy up to $\mathcal{O}(\delta t^4)$, as well as the higher-order *Yoshida* and *Gauss--Legendre* integrators, achieving accuracies up to $\mathcal{O}(\delta t^{10})$. We adapt these methods for classical lattice simulations of the nonlinear dynamics of scalar and gauge fields on an expanding $3+1$-dimensional grid, including the case of **self-consistent** expansion sourced by the volume-averaged energy and pressure densities of the fields. We present lattice formulations for three canonical classes of theories:
 
 1. *Interacting scalar fields*,
-2. *Abelian* $U(1)$ *scalar-gauge theories*,
-3. *Non-Abelian* $SU(2)$ *scalar-gauge theories*.
+2. *Abelian* U(1) *scalar-gauge theories*,
+3. *Non-Abelian* SU(2) *scalar-gauge theories*.
 
 For each case, we build symplectic integrators with accuracies ranging from $\mathcal{O}(\delta t^2)$ to $\mathcal{O}(\delta t^{10})$. We also derive lattice expressions for the relevant observables, including the energy density components, field power spectra, and the Hubble constraint. Remarkably, all of our algorithms for gauge theories preserve the Gauss constraint to machine precision, even when self-consistent expansion is taken into account. As a numerical illustration, we analyze the post-inflationary dynamics of an oscillating field charged under $SU(2)\times U(1)$.
 

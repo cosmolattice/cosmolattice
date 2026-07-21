@@ -30,7 +30,17 @@ Following this, we create a `MemoryToolBox` object (or, more precisely, a shared
 
 @emgithub(source/cosmolattice.cpp:main_model)
 
-Here we create our model as defined in the model header file we specified, for instance in `models/lphi4.h` of Section [*Definition and declaration of the model*][subsubsec_DefAndDeclModel]. We also allocate an `ExtraFields` object: a small collection of temporary field buffers that some evolvers need internally (for instance, the generic Runge-Kutta evolver described below uses it to store its stage increments), and that we allocate once here so it can be shared between the initializer and the evolver. Finally, we print the model's name, so we can make sure that the model running is actually the one we wanted. We are then ready to initialize the fields in the model, as described in Sections [*Initialization of fluctuations*][sec_InitScalar] and [*Initial conditions*][subsubsec_initialConditionsNonAb]:
+Here we create our model as defined in the model header file we specified, for instance in `models/lphi4.h` of Section [*Definition and declaration of the model*][subsubsec_DefAndDeclModel]. We also allocate an `ExtraFields` object: a small collection of temporary field buffers that some evolvers need internally (for instance, the generic Runge-Kutta evolver described below uses it to store its stage increments), and that we allocate once here so it can be shared between the initializer and the evolver. Finally, we print the model's name, so we can make sure that the model running is actually the one we wanted. Then we have:
+
+@emgithub(source/cosmolattice.cpp:main_infofile)
+
+Here we print the parameters the program is running with, and we ask `manager` to create an *information file*, which records these parameters (so their values can be checked after the simulation has concluded), together with the time at which the simulation started and the type of parallelization used. Next we create:
+
+@emgithub(source/cosmolattice.cpp:main_measurer)
+
+This is a class `Measurer<ModelType, FloatType>` called `measurer`, which is in charge of performing and outputting all the standard measurements. This class is described in Section [*Measurers*][subsec_Measurers].
+
+We are then ready to initialize the fields in the model, as described in Sections [*Initialization of fluctuations*][sec_InitScalar] and [*Initial conditions*][subsubsec_initialConditionsNonAb]:
 
 @emgithub(source/cosmolattice.cpp:main_initializer)
 
@@ -38,15 +48,13 @@ If we are starting a new simulation, the initialization is taken care of by an o
 
 @emgithub(source/cosmolattice.cpp:main_restart)
 
-Here the model (fields, momenta, scale factor, etc.) is reloaded from a file created by a previous run, and the manager takes care of finding the appropriate time at which the simulation left off. In either case, we communicate the initial time `t0` to the model, since some models need it internally (e.g. for a time-dependent coupling). From the point of view of the physics, we have two more classes to instantiate:
+Here the model (fields, momenta, scale factor, etc.) is reloaded from a file created by a previous run, and the manager takes care of finding the appropriate time at which the simulation left off. In either case, we communicate the initial time `t0` to the model, since some models need it internally (e.g. for a time-dependent coupling). From the point of view of the physics, we have one more class to instantiate:
 
-@emgithub(source/cosmolattice.cpp:main_evolver_measurer)
+@emgithub(source/cosmolattice.cpp:main_evolver)
 
-We first create an object called `evolver` of type `Evolver<ModelType>`. This class, further explained in Section [*Evolvers*][subsec_Evolvers], is in charge of dispatching to the appropriate evolution algorithm, chosen at run time through the input parameter file. We also create a `Measurer<ModelType, FloatType>` called `measurer`, in charge of performing and outputting all the standard measurements. This class is described in Section [*Measurers*][subsec_Measurers]. Before starting the actual simulation, the file continues with:
+This creates an object called `evolver` of type `Evolver<ModelType>`. This class, further explained in Section [*Evolvers*][subsec_Evolvers], is in charge of dispatching to the appropriate evolution algorithm, chosen at run time through the input parameter file.
 
-@emgithub(source/cosmolattice.cpp:main_infofile)
-
-Here we print the parameters the program is running with, and we ask `manager` to create an *information file*, which records these parameters (so their values can be checked after the simulation has concluded), together with the time at which the simulation started and the type of parallelization used. We are now ready to proceed to the time evolution of the system:
+We are now ready to proceed to the time evolution of the system:
 
 @emgithub(source/cosmolattice.cpp:main_timeloop)
 
@@ -167,6 +175,7 @@ All the other functions in `definitions` follow a similar spirit. Rather than re
 - `include/CosmoInterface/definitions/phaseBunchDavies.h`: computes the Bunch-Davies vacuum phase used to imprint physically motivated initial fluctuations onto a field or gauge momentum in Fourier space.
 - `include/CosmoInterface/definitions/chiralpowerspectrum.h`: defines the `ChiralProjector` class, which projects a U(1) gauge field (or its momentum) onto positive/negative helicity modes in Fourier space, so that helicity-resolved ("chiral") power spectra can be measured for axion-sourced gauge fields.
 - `include/CosmoInterface/definitions/gwsprojector.h` and `include/CosmoInterface/definitions/PITensor.h`: source and project the gravitational-wave sector, discussed next.
+- `include/CosmoInterface/definitions/defectsmodule/`: contains a series fo header files related to the cosmic-defects module. See [**Cosmic Defects**](Defects.md) for further information.
 
 Gravitational waves are sourced by the transverse, traceless part of the anisotropic stress tensor of the matter and gauge sectors. `PITensor` assembles it, species by species:
 

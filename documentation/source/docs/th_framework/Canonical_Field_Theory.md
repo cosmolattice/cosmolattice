@@ -37,7 +37,7 @@ where ${f}' \equiv \text{d} f/ \text{d} \eta$ and $m_p \simeq 2.435\cdot10^{18}$
 <!-- 
 In Section [Lattice-Cosmology Reviews](MonographicReviews.md) we present the lattice formulation of different theories involving scalar and/or gauge fields, based on the techniques introduced in [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md). In order to introduce notation, 
  -->
-We discuss now the equations of motion resulting in a scalar-gauge theory with three kinds of canonically-normalized scalar fields: a real scalar singlet $\phi$, a $U(1)$-charged complex scalar field $\varphi$, and a $[SU(N) \times U(1)]$-charged doublet scalar field $\Phi$. In the last two cases, there are also present, respectively, Abelian and non-Abelian gauge fields, $A_{\mu}$ and $C_{\mu} \equiv C_{\mu}^a T_a$, with $T_a$ the $N^2-1$ group generators, satisfying the $SU(N)$ Lie algebra properties $[T_a, T_b] = i f_{abc} T_c$ , ${\rm Tr}(T_a) = 0$ , ${\rm Tr}(T_a T_b) = \frac{1}{2} \delta_{ab}$, and $T^{\dagger}_a = T_a$, with $f_{abc}$ the totally anti-symmetric *structure constants* of the group, and $[\cdot,\cdot]$ the usual matrix commutator. In the particular case of $SU(2)$, $T_a \equiv \sigma_a / 2$, $a=1,2,3$, with $\sigma_a$ the *Pauli matrices*, and $f_{abc} = \epsilon_{abc}$ the total anti-symmetric tensor. The scalar fields can be explicitly written in terms of real components as follows,
+We discuss now the equations of motion resulting in a scalar-gauge theory with three kinds of canonically-normalized scalar fields: a real scalar singlet $\phi$, a U(1)-charged complex scalar field $\varphi$, and a $[SU(N) \times U(1)]$-charged doublet scalar field $\Phi$. In the last two cases, there are also present, respectively, Abelian and non-Abelian gauge fields, $A_{\mu}$ and $C_{\mu} \equiv C_{\mu}^a T_a$, with $T_a$ the $N^2-1$ group generators, satisfying the $SU(N)$ Lie algebra properties $[T_a, T_b] = i f_{abc} T_c$ , ${\rm Tr}(T_a) = 0$ , ${\rm Tr}(T_a T_b) = \frac{1}{2} \delta_{ab}$, and $T^{\dagger}_a = T_a$, with $f_{abc}$ the totally anti-symmetric *structure constants* of the group, and $[\cdot,\cdot]$ the usual matrix commutator. In the particular case of SU(2), $T_a \equiv \sigma_a / 2$, $a=1,2,3$, with $\sigma_a$ the *Pauli matrices*, and $f_{abc} = \epsilon_{abc}$ the total anti-symmetric tensor. The scalar fields can be explicitly written in terms of real components as follows,
 [](){ #eq_ChargedScalars }
 ```math
 \begin{eqnarray} \label{eq_ChargedScalars}
@@ -119,7 +119,7 @@ where we have introduced the derivative operator $(\mathcal{D}_{\nu}O)_a = (\mat
     J_a^\mu & \equiv & 2g_C Q_C\mathcal{I}m [ \Phi^{\dagger} T_a( D^{\mu} \Phi )]\,.
 \end{eqnarray}
 ```
-Note that Eqs.~\eqref{eq_GaussU1-eom} and \eqref{eq_GaussSU2-eom} are the Gauss constraint of the Abelian and non-Abelian sectors, respectively, which must be preserved at all times during the evolution.
+Note that Eqs. \eqref{eq_GaussU1-eom} and \eqref{eq_GaussSU2-eom} are the Gauss constraint of the Abelian and non-Abelian sectors, respectively, which must be preserved at all times during the evolution.
 
 The energy-momentum tensor of a system characterized by a lagrangian $\mathcal{L}$, is given by 
 [](){ #eq_auto_002 }
@@ -129,7 +129,7 @@ T_{\mu \nu} \equiv -\frac{2}{\sqrt{g}}\frac{\delta(\sqrt{g} \mathcal{L})}{\delta
 \label{eq_auto_002}
 \end{equation}
 ```
-This definition leads, using Eqs.~(\ref{eq_stresstensor}) and~(\ref{eq_lagrangian}), to *local* expressions for the field's energy and pressure densities, 
+This definition leads, using Eqs. (\ref{eq_stresstensor}) and (\ref{eq_lagrangian}), to *local* expressions for the field's energy and pressure densities,
 [](){ #eq_rhoLocal }
 [](){ #eq_pLocal }
 ```math
@@ -191,5 +191,5 @@ If the fields dominate the energy budget of the Universe, the expansion rate can
 & \hspace{8.1cm}\left. +  (\alpha-1)(E_K^A + E_K^B + E_G^A + E_G^B) \right]  ,\nonumber
 \end{align}
 ```
-with $\langle \dots \rangle$ denoting an average over a sufficiently large volume to encompass all relevant wavelengths of the fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we use Eq.~(\ref{eq_FriedmannD2a}) to solve for the scale factor, while monitoring that the constraint equation (\ref{eq_FriedmannHub}) is verified throughout the evolution to some desired accuracy, see Section [*Evolution Algorithms*][subsec_Algorithms]. 
+with $\langle \dots \rangle$ denoting an average over a sufficiently large volume to encompass all relevant wavelengths of the fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we use Eq. (\ref{eq_FriedmannD2a}) to solve for the scale factor, while monitoring that the constraint equation (\ref{eq_FriedmannHub}) is verified throughout the evolution to some desired accuracy, see Section [*Evolution Algorithms*][subsec_Algorithms].
 

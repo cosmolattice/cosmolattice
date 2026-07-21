@@ -231,7 +231,7 @@ We note that the numerical schemes implemented in $\mathcal{C}\mathtt{osmo}\math
 
 ### **My first run** { #sec_MyFirstRun }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with a set of ready-to-run models, which are available in the folder $\texttt{models/}.~$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. \eqref{eq_potentialExampleI} [more precisely,  the program potential given in Eq. \eqref{eq_PotNat}]. We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with a set of ready-to-run models, which are available in the folder $\texttt{models/}.$ In particular, the file $\texttt{lphi4.h}$ contains the implementation of the model presented in the previous section, characterized by the potential given in Eq. \eqref{eq_potentialExampleI} [more precisely,  the program potential given in Eq. \eqref{eq_PotNat}]. We now show how to run the code and pass different parameters to the simulation. We also show how to modify/create model files in order to implement other scalar theories.
 
 <!-- #### Compilation -->
 

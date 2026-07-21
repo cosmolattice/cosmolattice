@@ -100,19 +100,26 @@ int main(int argc, char *argv[])
   // that you are running indeed the model you intended.
   // @endlabel
 
+  // @label:main_infofile
   if (iAmRoot) say << "This simulation will run with the following parameters: \n" << parser;
   // Printing in the console all the parameters chosen (both run parameter and specific
   // model parameters)
 
   manager.createInfoFile(parser, runParams, model, toolBox->getDecomposition(), iAmRoot);
   // Creation of an info file, which lists all parameters and options chosen
+  // @endlabel
 
-  typename ModelType::FloatType t = 0;
-  // Our time variable. Initialized below.
-
+  // @label:main_measurer
   Measurer<ModelType, FloatType> measurer(model, runParams, parser);
   // Creates an object of the class responsible for performing and outputting all the required
   // measurements (averages, energies, spectra...).
+  // @endlabel
+
+  // Our time variable. Initialized below.
+  typename ModelType::FloatType t = 0;
+
+  // We communicate t0 to the model, in case it needs it internally.
+  model.t0 = runParams.t0;
 
   // @label:main_initializer
   if (not manager.doWeRestart()) // If this is a new simulation:
@@ -140,16 +147,14 @@ int main(int argc, char *argv[])
     manager.loadSim(model, t);
     // The model is reloaded from an appropriate file created by a previous simulation.
   }
-
-  // We communicate t0 to the model, in case it needs it internally.
-  model.t0 = runParams.t0;
   // @endlabel
 
-  // @label:main_evolver_measurer
+  // @label:main_evolver
   Evolver<ModelType> evolver(model, runParams, extraFlds);
   // Here an algorithm -- evolver -- to solve the field EoM is chosen. The type of evolver
   // is specified by the user in the input parameter file, and here is passed through
   // runParams. Model is passed as well to have access to normalisations.
+  // @endlabel
 
   /************************Time evolution*************************/
 

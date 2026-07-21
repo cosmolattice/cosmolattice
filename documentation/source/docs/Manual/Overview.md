@@ -2,11 +2,11 @@ CosmoLattice is a program designed to simulate the evolution of interacting
 fields in an expanding universe. It can simulate (so far) the dynamics of 
 
 1. *global theories*, 
-2. *Abelian $U(1)$ gauge theories*, and 
-3. *non-Abelian $SU(2)$ gauge theories*, 
+2. *Abelian U(1) gauge theories*, and
+3. *non-Abelian SU(2) gauge theories*,
 
 i.e. it can handle scenarios
-including singlet scalar fields, scalar fields charged under a $U(1)$ and/or $SU(2)$ gauge symmetry, and the corresponding Abelian and/or non-Abelian gauge vector fields.
+including singlet scalar fields, scalar fields charged under a U(1) and/or SU(2) gauge symmetry, and the corresponding Abelian and/or non-Abelian gauge vector fields.
 
 CosmoLattice can simulate the dynamics of such fields either in a flat space-time background, or in a homogeneous and isotropic (spatially flat) expanding background. In the latter case, the fields can evolve either over a fixed background (e.g. with a power-law scale factor), or *self-consistently* with the fields determining themselves the expansion rate of the universe. 
 

@@ -2,7 +2,7 @@
 
 <div style="height:20px;"></div>
 
-<!-- <span style="font-size:36px;"><strong>CosmoLattice v2.0 officially out !</strong></span><br> -->
+<!-- <span style="font-size:36px;"><strong>$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$ officially out !</strong></span><br> -->
 <span style="font-size: 42px;">**Release of version 2.0 !**</span>
 <span style="color:gray;">(Posted on July 4th 2026)</span>
 
