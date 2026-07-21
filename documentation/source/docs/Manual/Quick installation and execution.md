@@ -24,13 +24,13 @@ Also optionally, the simulations can be parallelized in more than one spatial di
     cd cosmolattice                  # Enter into main code folder
     mkdir build                      # Create a new directory
     cd build                         # and go inside it.
-    cmake -DMODEL=lphi4 ../          # Selects model phi^4 for serial runs
+    cmake -DMODEL=lphi4 ../          # Selects model phi^4
     # OR
-    cmake -DMODEL=lphi4 -DMPI=ON ../ # Selects model phi^4 and activates parallelization
+    cmake -DMODEL=lphi4 -DMPI=ON ../ # Selects model phi^4 and activates distributed parallelization
     make cosmolattice                # Compiling
-    ./lphi4 input=../models/parameter-files/lphi4.in # Executes serial run (input parameter file 'lphi4.in')
+    ./lphi4 input=../models/parameter-files/lphi4.in # Executes a run (input parameter file 'lphi4.in')
     # OR
-    mpirun -n 8 lphi4 input=../models/parameter-files/lphi4.in # Parallelized run on 8 cores (input file 'lphi4.in')
+    mpirun -n 8 lphi4 input=../models/parameter-files/lphi4.in # Parallelized run on 8 MPI ranks (input file 'lphi4.in')
     ```
 
 === "High-Performance cluster"
@@ -41,7 +41,6 @@ Also optionally, the simulations can be parallelized in more than one spatial di
     cd cosmolattice   # Enter into main code folder
     mkdir build       # Create a new directory
     cd build          # and go inside it.
-    module list       # Displays down the names of the libraries you need.
     module load CMAKE # Here we will call C++, FFTW3, CMAKE and MPI.
     module load C++   # The order is important, C++ before MPI before FFTW3
     module load MPI   # Needed to run parallelized simulations
@@ -49,10 +48,11 @@ Also optionally, the simulations can be parallelized in more than one spatial di
 
     cmake -DMODEL=lphi4 ../          # Selects model phi^4 for serial runs
     # OR
-    cmake -DMODEL=lphi4 -DMPI=ON ../ # Selects model phi^4 and activates parallelization
+    cmake -DMODEL=lphi4 -DMPI=ON ../ # Selects model phi^4 and activates distributed parallelization
     make cosmolattice                # Compiling
     # Now you can run lphi4. How you do it depends on the cluster.
     ```
+    You will need to replace the CMAKE/C++/MPI/FFTW3 module names with the ones used in your cluster. These can be usually found by typing `module spider <library name>` in the command line. You can also check the cluster's documentation for more information.
 
 </div>
 
