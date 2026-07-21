@@ -111,6 +111,15 @@ Explains how to set up the initial condition of the different fields that $\math
 
 </div>
 
+<div class="cl-toc-row cl-v-all" markdown>
+
+**[Output Observables](Observables.md)** <span class="cl-toc-brief">the quantities measured during a run: energies, spectra, and more</span>
+{: .cl-toc-line }
+
+Describes the different observables that $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can measure and output during a simulation, such as field averages, energy densities, and power spectra, as well as how to configure which ones are computed and how often. This section applies to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
+
+</div>
+
 <div class="cl-toc-row cl-v-20" markdown>
 
 **[Simulations in (2+1) and (1+1) dimensions](Scalars_n_dims.md)** <span class="cl-toc-brief">scalar field dynamics on lower-dimensional lattices</span>
@@ -131,10 +140,10 @@ Elaborates on the physics captured by $\mathcal{C}\mathtt{osmo}\mathcal{L}\matht
 
 <div class="cl-toc-row cl-v-all" markdown>
 
-**[Parallelization](Parallelization.md) & [HDF5: Output and Backups](HDF5: Output and Backups.md)** <span class="cl-toc-brief">running on many cores; output files and backups</span>
+**[Parallelization](Parallelization.md), [Fourier Transforms](Fourier Transforms.md), [HDF5: Output and Backups](HDF5: Output and Backups.md) & [Expression Templates](Expression Templates.md)** <span class="cl-toc-brief">running on many cores, fast Fourier transforms, output/backups, and the expression-template engine</span>
 {: .cl-toc-line }
 
-Describe some of the technical features implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including its parallel support and back-up options. These sections apply to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
+Describe some of the technical features implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including its parallel support, Fourier transform routines, back-up options, and the expression-template engine underlying the code. These sections apply to all versions of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
 </div>
 
