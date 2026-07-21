@@ -25,12 +25,12 @@ We also explain how to integrate $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{att
     git clone https://github.com/cosmolattice/cosmolattice.git
     ```
 
-2.  This will create a folder called `cosmolattice` in the current directory. To build the code, you will need to use the `CMake` build system. To do so, navigate to the new `cosmolattice` folder and run the following commands: (<span style="color:orange;">**Jorge comment: Isn't this missing a -DMODEL and make cosmolattice?**</span>)
+2.  This will create a folder called `cosmolattice` in the current directory. To build the code, you will need to use the `CMake` build system. To do so, navigate to the new `cosmolattice` folder and run the following commands:
     ```bash
     cd cosmolattice
     mkdir build
     cd build
-    cmake ..
+    cmake .. -DMODEL=lphi4
     make -j8
     ```
     The last command will compile the code using 8 threads. You can change this number to match the number of cores you want to use for the compilation. If everything goes well, you should now have a working installation of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and you can proceed to run your first simulation as explained in Section [*My first run*][sec_MyFirstRun].
@@ -113,6 +113,7 @@ cmake -DMODEL=lphi4 -DNOTHREADING=ON ../
     ```
     Specifying the architecture is optional for CUDA, as Kokkos can usually detect it correctly. However, when compiling offline (e.g. on a HPC cluster) it may be necessary to specify it manually. 
     You can do so by passing the appropriate flag to Kokkos as described in the section [Offline compilation (Kokkos)](#offline-compilation) below.
+    Note also that the CUDA backend requires a working installation of the NVIDIA CUDA Toolkit, and a matching compiler that is supported by the toolkit. For more details, see the [CUDA installation guide on the NVIDIA website](https://docs.nvidia.com/cuda/archive/12.8.0/cuda-installation-guide-linux/#host-compiler-support-policy). We link here to CUDA 12.8, but you'll find this information for all versions of CUDA on the NVIDIA website.
 
 -   __HIP__ · AMD GPUs
 
