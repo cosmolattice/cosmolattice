@@ -11,7 +11,7 @@ S = - \int d^4 x \sqrt{-g}&&\left\{\class{cl-eq-scalar}{\sum_b\frac{1}{2}\partia
 && ~~~~~~~~\left. + \class{cl-eq-u1-gauge}{\frac{1}{4} F_{\mu \nu} F^{\mu \nu}} + \class{cl-eq-su2-gauge}{\frac{1}{2}{\rm Tr}\{G_{\mu \nu}G^{\mu \nu}\}} +\class{cl-eq-nmc-coup}{\frac{1}{2}\xi R \chi^{2}} - \class{cl-eq-alp-coup}{\frac{1}{4}\frac{\theta}{\Lambda} F_{\mu \nu}\,\tilde{F}^{\mu \nu}} + V_{\rm int}(\lbrace \phi_c \rbrace,|\varphi|, |\Phi|, \chi, \theta)\right\}\,.
 \end{eqnarray}
 ```
-These sectors can be activated either in isolation or simultaneously with the others — *click on any highlighted term to jump to its manual chapter*. More is on its way: non-minimal kinetic terms, axion–$SU(2)$ interactions, and fluids coupled to scalar or gauge fields (see [*Upcoming Features*][subsec_CLupcoming]).
+These sectors can be activated either in isolation or simultaneously with the others — *click on any highlighted term to jump to its manual chapter*. More is on its way: non-minimal kinetic terms, axion–SU(2) interactions, and fluids coupled to scalar or gauge fields (see [*Upcoming Features*][subsec_CLupcoming]).
 
 The fields can evolve in flat space-time, or in an expanding background given by the spatially-flat Friedmann-Lemaître-Robertson-Walker (FLRW) metric, with line element (here $\eta$ is the $\alpha$-time)
 [](){ #eq_lineFLRW }
@@ -47,7 +47,7 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is **publicly available**, 
 ## **$\mathcal{CL}$ Features & Capabilities** { #subsec_CLfeatAndCapa }
 <!-- of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$**  -->
 
-The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2.0$, released on July 2026) can simulate the dynamics of the following sectors. *Click on a box to jump to the corresponding section of the user manual:*
+The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\tt v2.0$, released on July 2026) can simulate the dynamics of the following sectors. *Click on a box to jump to the corresponding section of the user manual:*
 
 <div class="grid cards cl-sectors" markdown>
 
@@ -63,7 +63,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2
 
     ---
 
-    $U(1)$-charged scalar fields coupled to Abelian gauge fields.
+    U(1)-charged scalar fields coupled to Abelian gauge fields.
 
     [User Manual →](Manual/My first model of gauge fields.md)
 
@@ -71,7 +71,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2
 
     ---
 
-    $SU(2)$ scalar doublets coupled to non-Abelian gauge fields, alone or combined with a $U(1)$ sector.
+    SU(2) scalar doublets coupled to non-Abelian gauge fields, alone or combined with a U(1) sector.
 
     [User Manual →](Manual/My first model of gauge fields.md)
 
@@ -79,7 +79,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2
 
     ---
 
-    Axion-like particles (ALPs) coupled to Abelian $U(1)$ gauge sectors through a $\frac{\theta}{\Lambda} F\tilde{F}$ term.
+    Axion-like particles (ALPs) coupled to Abelian U(1) gauge sectors through a $\frac{\theta}{\Lambda} F\tilde{F}$ term.
 
     [User Manual →](Manual/ALP.md)
 
@@ -103,7 +103,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($v2
 
     ---
 
-    GW backgrounds sourced by scalar field theories and by Abelian $U(1)$ scalar-gauge theories.
+    GW backgrounds sourced by scalar field theories and by Abelian U(1) scalar-gauge theories.
 
     [User Manual →](Manual/GW.md)
 
@@ -141,11 +141,19 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 **Built to scale**
 {: .cl-minihead }
 
-**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is fully parallelized using *Message Passing Interface* (MPI), and uses a discrete Fourier Transform parallelized in multiple spatial dimensions** (<span style="color:red;">**CHANGE ?**</span>). This makes it ideal for probing physical problems with well-separated mass/length scales, running very high resolution simulations, or simply shortening the running time of long simulations. **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is actually a general package that defines field variables and their operations, by introducing its own symbolic language**. Once you become familiar with the basic ‘syntaxis’ defined in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, editing the code or implementing your own model--resembling as much as possible how you would write it in the continuum--, becomes a relatively straightforward task.
+**$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is fully parallelized using both shared memory parallelization (*OpenMP*, *POSIX Threads* or GPU acceleration) and distributed parallelization (*Message Passing Interface* (MPI)) for use in high-performance clusters, and uses a discrete Fourier Transform parallelized in multiple spatial dimensions**. This makes it ideal for probing physical problems with well-separated mass/length scales, running very high resolution simulations, or simply shortening the running time of long simulations. To provide these capabilities, **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ relies on `TempLat`, a general package for lattice simulations that defines field variables and their operations, by introducing its own symbolic language, and managing all aspects of dispatching workload to the available computational resources. Once you become familiar with the basic ‘vocabulary’ of the $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and `TempLat` language, editing the code or implementing your own model (resembling how you would write it in the continuum), should become a simple task.**
 
 </div>
 
-<span style="color:red;">**PARAGRAPH on GPU Capabilities [...]**</span>
+<div class="cl-claim" markdown>
+
+**GPU Acceleration**
+{: .cl-minihead }
+
+
+With **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** 2.0, through the `TempLat` library, a particularly powerful new feature is the native support for **GPU acceleration**. This is achieved by using the `Kokkos` library, which allows for a single code base to be compiled and run on different architectures, including NVIDIA GPUs (via CUDA), AMD GPUs (via HIP), and multi-core CPUs (via OpenMP or Pthreads). This means that users can take advantage of the computational power of modern GPUs without having to write GPU-specific code, making it easier to run large-scale simulations efficiently. `TempLat` also handles the MPI distribution of the workload across many GPUs, allowing for simulations that require more memory than a single GPU can provide. Using GPUs for lattice simulations is as simple as switching a single flag in the `CMake` configuration, and the code will automatically handle the rest, including memory management and parallelization, see also [**Installation - Full**](../code/Installation.md) for more details.
+
+</div>
 
 <!-- 
 !!! note "Cutting to the chase ..."
@@ -170,7 +178,7 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 **Physics up front, machinery under the hood**
 {: .cl-minihead }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ separates the **physics** (i.e.~fields living on a lattice and operations between them) from the **technical details**, such as the handling of the parallelization or the Fourier transforms. A beginner user with little experience in programming, and with no experience at all in parallelization techniques.
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ separates the **physics** (i.e. fields living on a lattice and operations between them) from the **technical details**, such as the handling of the parallelization or the Fourier transforms. A beginner user with little experience in programming, and with no experience at all in parallelization techniques.
 will be able to run a fully parallelized simulation of their favourite model (using hundreds of processors in a cluster if they wish), while being completely oblivious to the technical details. They will just need to write a basic **model file** in the language of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, containing the details of the model that they want to simulate. At the same time, an experienced user that wants to look inside the core routines of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ and modify, for example, the MPI-implementation, they can always do so, and perhaps even contribute to improving them.
 
 </div>
@@ -180,7 +188,7 @@ will be able to run a fully parallelized simulation of their favourite model (us
 **Symbolic algebras, parallel FFTs, and more**
 {: .cl-minihead }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [$U(1)$] and $SU(2)$ algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions (<span style="color:red;">**CHANGE ?**</span>), making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**.
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [U(1)] and SU(2) algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions (<span style="color:red;">**CHANGE ?**</span>), making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**.
 
 </div>
 
@@ -207,8 +215,8 @@ As $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is continuously evolving
 -   __Fluid–Scalar Interactions__
 -   __Higgs Bubble Nucleation__
 -   __Non-Minimal Kinetic Terms__
--   __GWs from $SU(2)$ Theories__
--   __Axion–$SU(2)$ Interactions__
+-   __GWs from SU(2) Theories__
+-   __Axion–SU(2) Interactions__
 
 </div>
 

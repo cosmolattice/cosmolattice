@@ -48,7 +48,7 @@ namespace TempLat
     // Number of dimensions (1,2,3). It can be changed in the model file.
     static constexpr size_t NDim = 3;
 
-    using NumberType = double;
+    using FloatType = double;
 
     // Coupling managers, they deal with the possible couplings between the gauge fields and complex scalars/SU2
     // doublets
@@ -75,7 +75,7 @@ namespace TempLat
 #define MakeModelFloatType(_ModelName, _ModelParsType, _FloatType)                                                     \
   AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, _FloatType)>
 #define MakeModel(_ModelName, _ModelParsType)                                                                          \
-  AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, typename _ModelParsType::NumberType)>
+  AbstractModel<MakeAbstractModelTemplateArgs(_ModelName, _ModelParsType, typename _ModelParsType::FloatType)>
 
   /** @brief A class which contains everything a model should have; models derive from here.
    * Mother of all the models. The arguments are passed as template parameters.
@@ -83,7 +83,8 @@ namespace TempLat
    **/
   template <class R, size_t NPOTTERMS, size_t NS, size_t NC, size_t NU1FLDS, size_t NSU2DOUBLET, size_t NSU2FLDS,
             typename CSU1COUPLINGS, typename SU2DOUBLETU1COUPLINGS, typename SU2DOUBLETSU2COUPLINGS,
-            typename SCALARU1AXIONCOUPLINGS, typename NONMINCOUPLINGS, typename T = double, int NDIM = 3, bool DEFECTSMODEL = false>
+            typename SCALARU1AXIONCOUPLINGS, typename NONMINCOUPLINGS, typename T = double, int NDIM = 3,
+            bool DEFECTSMODEL = false>
   class AbstractModel
       : public ScalarBase<NDIM, T, NS>,
         public ComplexScalarBase<NDIM, T, NC, CSU1COUPLINGS>,
@@ -175,8 +176,8 @@ namespace TempLat
                         "please report any problems."));
       //@endlabel
       //@label:numb_SU2_gauge_flds
-	  // Uncomment this exception in case you want to run a model with more than one SU(2) gauge field (this
-      // feature has yet not been tested)     
+      // Uncomment this exception in case you want to run a model with more than one SU(2) gauge field (this
+      // feature has yet not been tested)
       if constexpr (NSU2FLDS > 1)
         throw(NotTested("The physics interface has not been fully tested with NSU2 > 1. Abort. If you want to go on "
                         "anyway, uncomment the exception thrown in src/include/CosmoInterface/abstractmodel.h and "
@@ -265,14 +266,40 @@ namespace TempLat
     void addInitValueOnePoint()
     {
       device::IdxArray<NDIM> pos0{{}};
+
+      // Tiny program-unit condensate used ONLY to evaluate the initial potential/masses when a
+      // complex scalar or SU(2) doublet is initialised with an exactly-zero homogeneous condensate.
+      // Potential::deriv{,2}ComponentFromNorm divides by |phi| = norm(fld), which is 0/0 (-> NaN)
+      // when |phi| = 0. Writing a consistent tiny |phi| here makes nd/|phi| tend to the correct
+      // coupling-induced effective mass (potDeriv2Norm...), reproducing the former hand-tuned
+      // 1e-15 parameter-file value. The magnitude is irrelevant for a smooth potential; it is only
+      // kept safely above single-precision underflow of |phi|^2. removeInitValue() resets the point
+      // to 0 afterwards, so the simulation field and the evolution kernel are unaffected.
+      static constexpr T initNormFloor = T(1e-14);
+
       ForLoop(j, 0, NS - 1, device::memory::setAtOnePoint(this->fldS(j), pos0, this->fldS0[j] / this->fStar););
       ForLoop(
           j, 0, NC - 1,
-          ForLoop(i, 0, 1, device::memory::setAtOnePoint(this->fldCS(j)(i), pos0, this->fldCS0(j)(i) / this->fStar);));
-      ForLoop(j, 0, NSU2DOUBLET - 1,
-              ForLoop(i, 0, 3,
-                      device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0,
-                                                    this->fldSU2Doublet0(j)(i) / this->fStar);));
+          // If the homogeneous complex condensate is exactly zero, evaluate at a tiny equal-split
+          // |phi| = initNormFloor (component value initNormFloor/sqrt(2)) instead of 0/0.
+          if (this->fldCS0(j)(0_c) == 0 && this->fldCS0(j)(1_c) == 0) {
+            ForLoop(i, 0, 1,
+                    device::memory::setAtOnePoint(this->fldCS(j)(i), pos0, initNormFloor * T(0.70710678118654752)););
+          } else {
+            ForLoop(i, 0, 1, device::memory::setAtOnePoint(this->fldCS(j)(i), pos0, this->fldCS0(j)(i) / this->fStar););
+          });
+      ForLoop(
+          j, 0, NSU2DOUBLET - 1,
+          // Same zero-condensate guard for the four real components of the SU(2) doublet
+          // (equal split |phi| = initNormFloor, i.e. initNormFloor/2 per component).
+          if (this->fldSU2Doublet0(j)(0_c) == 0 && this->fldSU2Doublet0(j)(1_c) == 0 &&
+              this->fldSU2Doublet0(j)(2_c) == 0 && this->fldSU2Doublet0(j)(3_c) == 0) {
+            ForLoop(i, 0, 3, device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0, initNormFloor * T(0.5)););
+          } else {
+            ForLoop(i, 0, 3,
+                    device::memory::setAtOnePoint(this->fldSU2Doublet(j)(i), pos0,
+                                                  this->fldSU2Doublet0(j)(i) / this->fStar););
+          });
     }
 
     // This removes the homogeneous components of the fields at a single point.

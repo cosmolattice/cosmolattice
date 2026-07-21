@@ -2,7 +2,7 @@
 
 ### What is CosmoLattice ? { #subsec_WhatIsCL }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a modern package for **lattice simulations of the dynamics of interactive fields in an expanding Universe**. CosmoLattice is being continuously developed to provide an up-to-date relevant numerical tool for the scientific community working on the **physics of the early Universe**. The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ (*v2.0*, released on July 2026), can handle the dynamics of interactive scalar fields (singlets), scalar fields charged under a $U(1)$ and/or $SU(2)$ gauge symmetries interacting with the corresponding Abelian and/or non-Abelian gauge fields, axion-like-particles (ALP) interacting with gauge sectors, scalar fields non-minimally coupled to gravity, and soon enough (see below) a fluid sector coupled to scalar and/or gauge fields. In other words, CosmoLattice is ready to simulate the dynamics of field theories described by an action of the type:
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a modern package for **lattice simulations of the dynamics of interactive fields in an expanding Universe**. CosmoLattice is being continuously developed to provide an up-to-date relevant numerical tool for the scientific community working on the **physics of the early Universe**. The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\tt v2.0$, released on July 2026), can handle the dynamics of interactive scalar fields (singlets), scalar fields charged under a U(1) and/or SU(2) gauge symmetries interacting with the corresponding Abelian and/or non-Abelian gauge fields, axion-like-particles (ALP) interacting with gauge sectors, scalar fields non-minimally coupled to gravity, and soon enough (see below) a fluid sector coupled to scalar and/or gauge fields. In other words, CosmoLattice is ready to simulate the dynamics of field theories described by an action of the type:
 ```math
 \begin{eqnarray}
 S = - \int d^4 x \sqrt{-g}&&\left\{\sum_b\frac{1}{2}\partial_{\mu} \phi_b \partial^{\mu} \phi_b + \frac{1}{2} \partial_{\mu}\chi\partial^{\mu}\chi + \frac{1}{2}\partial_\mu \theta\partial^\mu \theta + (D_{\mu}^A \varphi)^{*}(D_A^{\mu} \varphi) +  (D_{\mu}\Phi )^{\dagger} (D^{\mu} \Phi) \right.\\
@@ -32,14 +32,14 @@ h_{ij}''-a^{-2(1-\alpha)}\nabla^2h_{ij}+(3-\alpha)\frac{a'}{a}h_{ij}=\frac{2}{m_
 The current version of CosmoLattice (version 2.0, released on July 2026), can simulate
 
 1. *Singlet scalar field dynamics*, 
-2. *Abelian $U(1)$ scalar-gauge interactions*, 
-3. *Non-Abelian $SU(2)$ scalar-gauge interactions*, 
-4. *Axion like particle - Abelian $U(1)$ gauge field interactions*, 
+2. *Abelian U(1) scalar-gauge interactions*,
+3. *Non-Abelian SU(2) scalar-gauge interactions*,
+4. *Axion like particle - Abelian U(1) gauge field interactions*,
 5. *Non-minimally coupled-to-gravity scalar field dynamics*, 
 6. *Global cosmic defects (e.g. domain walls, strings, monopoles, or textures)*,
 7. *Local topological defects (e.g. local strings)*,
 8. *Gravitational waves from scalar field theories*, 
-9. *Gravitational waves from Abelian $U(1)$ scalar-gauge theories*, 
+9. *Gravitational waves from Abelian U(1) scalar-gauge theories*,
 10. [...] 
 
 CosmoLattice provides symplectic integrators with accuracy ranging from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{10})$, and non-symplectic integrators with accuracies from $\mathcal{O}(\delta t^2)$ up to $\mathcal{O}(\delta t^{4})$ [see *e.g.* Sections 3.3, 3.4 and 3.5 of $\mathtt{The~Art-I}$[@Figueroa_2020rrl], for a discussion on integrators and their properties]. Appropriate observables are also provided for each algorithm, like the energy density components of each field, their relevant spectra, or dynamical constraints. Our algorithms conserve energy up to the accuracy set by the order of the evolution algorithm, reaching even machine precision in the case of the highest order integrators. Notably, our algorithms for scalar-gauge theories, either Abelian or non-Abelian, always respect the Gauss constraint to machine precision, independently of the integrator, even in the case of self-consistent expansion. 
@@ -54,7 +54,7 @@ CosmoLattice is written in C++, and fully exploits the *object oriented  program
 
 One of the major advantages of \CL is that it separates the **physics*** (i.e.~fields living on a lattice and operations between them) from the **technical details***, such as the handling of the parallelization or the Fourier transforms. For example, let us imagine a beginner user with little experience in programming, and with no experience at all in parallelization techniques. With CL, they will be able to run a fully parallelized simulation of their favourite model (say using hundreds of processors in a cluster), while being completely oblivious to the technical details. They will just need to write a basic *model file* in the language of CL, containing the details of the model that they want to simulate. If, on the contrary, the user is rather an experienced one and wants to look inside the core routines of \CL and modify, for example, the MPI-implementation, they can always do so, and perhaps even contribute to improving them. 
 
-Furthermore, \CL includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage of using \CL as a platform to implement a given scenario over writing your own code from scratch. In particular, \CL comes with symbolic scalar, complex [$U(1)$] and $SU(2)$ algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, \CL is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions **NAME**, making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**. \CL is publicly available, and it comes with a detailed manual explaining its whole structure and the basic instructions to start running your own simulations, see [**CosmoLattice Manual**](./Manual/About This Manual.md)
+Furthermore, \CL includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage of using \CL as a platform to implement a given scenario over writing your own code from scratch. In particular, \CL comes with symbolic scalar, complex [U(1)] and SU(2) algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, \CL is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions **NAME**, making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**. \CL is publicly available, and it comes with a detailed manual explaining its whole structure and the basic instructions to start running your own simulations, see [**CosmoLattice Manual**](./Manual/About This Manual.md)
 
 ### CosmoLattice Versions { #subsec_CLversions }
 
@@ -65,11 +65,11 @@ Furthermore, \CL includes already a *library* of basic routines and field-theore
 CosmoLattice is continuously evolving, with new physics modules and/or technical capabilities being constantly developed and made publicly available. At the time of writing (June 2026), we are enhancing the capabilities of CosmoLattice to simulate 
 
 10. *Fluids (fully relativistic and non-relativistic)*, 
-11. *Fluid - Abelian $U(1)$ gauge field interactions*, 
+11. *Fluid - Abelian U(1) gauge field interactions*,
 12. *Fluid - scalar field interactions*, 
 13. *Non-minimal kinetic scalar theories*,
-14. *Gravitational waves from Non-Abelian $SU(2)$ scalar-gauge theories*,
-15. *Axion like particle - Non-Abelian $SU(2)$ gauge field interactions*,
+14. *Gravitational waves from Non-Abelian SU(2) scalar-gauge theories*,
+15. *Axion like particle - Non-Abelian SU(2) gauge field interactions*,
 16. [...]
 
 As all these new physics capabilities are being developed simultaneously, in parallel by different sub-teams working on the improvement of CL, it is difficult to predict which aspects will become publicly available first. It is therefore important to keep an eye on the [**CosmoLattice Versions**](./CLversions.md) tab to check for new features (ranging from new variable definitions, options, evolver algorithms, field content, interactions, etc) incorporated in successive updated versions of CosmoLattice.

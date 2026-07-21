@@ -63,7 +63,7 @@ When all these techniques are put together to solve problems characterized by a 
 
 In Section [Lattice-Cosmology Reviews](MonographicReviews.md), we present the LCT basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, $i.e.$ the rationale behind initializers, output observables and evolution equations in the code. As the theoretical framework of these aspects is quite broad, we preset the material split in a series of monographic reviews that we have written over the years: *The art of simulating the early Universe, Part I* (Ref. [@Figueroa_2020rrl]), *Part II* (Ref. [@BaezaBallesteros_2025tme]), and *Part III* (Ref. [@Figueroa_2026XYZ]). These reviews, downloadable in PDF format, are colloquially referred to as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs, respectively. They provide comprehensive discussions on the Lattice-Cosmology methods used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate non-linear field theory dynamics in an expanding universe of
 
-&nbsp;&nbsp; I) Singlet scalar, and Abelian-$U(1)$ & NonAbelian-$SU(2)$ scalar-gauge field theories $\longrightarrow$ discussed in $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) <br>
+&nbsp;&nbsp; I) Singlet scalar, and Abelian-U(1) & NonAbelian-SU(2) scalar-gauge field theories $\longrightarrow$ discussed in $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) <br>
 
 &nbsp;&nbsp; II) Gravitational waves (GWs) and non-canonical aspects of interactive field theories $\longrightarrow$ discussed in $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]) 
 <br>

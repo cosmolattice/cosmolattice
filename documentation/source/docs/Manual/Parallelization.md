@@ -66,7 +66,7 @@ As briefly discussed in the previous section, the parallelization of ''local" op
     ![Figure 3](assets/figures/figure2.png){ width=750px}
 </figure>
 
-It is very easy to activate this parallelization procedure in CosmoLattice. Assuming you have installed `MPI` and a properly compiled version of `fftw3` (see Appendix [Installation](../code/Installation.md) for more information, installation instructions for these libraries and guidance to use them on HPC clusters), you simply need to pass an extra flag `-DMPI=ON` to `CMake` before compiling your model:
+It is very easy to activate this parallelization procedure in CosmoLattice. Assuming you have installed `MPI` and a properly compiled version of `fftw3` (see [Installation](../code/Installation.md) for more information, installation instructions for these libraries and guidance to use them on HPC clusters), you simply need to pass an extra flag `-DMPI=ON` to `CMake` before compiling your model:
 ```bash
 cmake -DMPI=ON -DMODEL=lphi4 ../
 make cosmolattice
@@ -86,7 +86,7 @@ Parallelizing only in one direction limits the maximum number of cores to $N$, t
 This in principle allows us to parallelize the simulation in all directions. In practice, because of the overload due to the boundary exchanges, it is often a good compromise to parallelize in all dimensions except one, which involves less cores, but also less boundaries. We depict the resulting parallelization strategy for the case of three spatial dimensions in the right-hand side of Fig. [*3*][fig_parageo]. In this case, the number of sites/dimension $N$ of the lattice needs to be divisible by the number of cores used in each parallelized direction. In practice,
 when all directions have the same number of points, `N` needs to be an integer multiple of the number of cores.
 
-To switch to this parallelization setting, again assuming you have a working installation of `MPI` and `fftw3` (see Appendix [Installation](../code/Installation.md)), you simply need to pass the extra flag `-DPARAFAFT=ON` to `CMake` (this is also enabled automatically when you build with `-DMPI=ON`), before compiling your favorite model
+To switch to this parallelization setting, again assuming you have a working installation of `MPI` and `fftw3` (see [Installation](../code/Installation.md)), you simply need to pass the extra flag `-DPARAFAFT=ON` to `CMake` (this is also enabled automatically when you build with `-DMPI=ON`), before compiling your favorite model
 ```bash
 cmake -DMPI=ON -DPARAFAFT=ON -DMODEL=lphi4 ../
 make cosmolattice
@@ -124,7 +124,7 @@ cmake -DHIP=ON  -DMODEL=lphi4 ../   # AMD GPU
 cmake -DOPENMP=ON -DMODEL=lphi4 ../ # multi-core CPU
 make cosmolattice
 ```
-The full list of device flags is documented in Appendix [CMake flags](../code/cmake.md). When a GPU backend is enabled, single-node GPU Fourier transforms are handled automatically by `KokkosFFT` (the `-DKOKKOSFFT` flag is switched on for you). A single-GPU run is launched directly, like any serial executable:
+The full list of device flags is documented in the [CMake flags](../code/cmake.md). When a GPU backend is enabled, single-node GPU Fourier transforms are handled automatically by `KokkosFFT` (the `-DKOKKOSFFT` flag is switched on for you). A single-GPU run is launched directly, like any serial executable:
 ```bash
 ./lphi4 input=...
 ```
