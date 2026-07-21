@@ -36,6 +36,56 @@
     return "rgb(" + r(0) + "," + r(1) + "," + r(2) + ")";
   }
 
+  /* ---- continents (for the tab-like map switcher) ----
+     Each city is bucketed into a continent to drive the "World / Europe / …"
+     tabs. ISO country → continent covers the current data; contFallback keeps
+     it robust to new countries. Only the map (viewBox + which markers show)
+     changes per tab — the "Leading hubs" list stays global by design. */
+  var CONTS = [
+    { key: "eu", name: "Europe" }, { key: "as", name: "Asia" },
+    { key: "na", name: "N. America" }, { key: "sa", name: "S. America" },
+    { key: "oc", name: "Oceania" }, { key: "af", name: "Africa" }
+  ];
+  var C2C = {
+    FR: "eu", ES: "eu", CH: "eu", DE: "eu", PL: "eu", BE: "eu", FI: "eu", GB: "eu",
+    PT: "eu", IT: "eu", CZ: "eu", RU: "eu", TR: "eu", NL: "eu", SE: "eu", AT: "eu",
+    DK: "eu", NO: "eu", IE: "eu", GR: "eu", HU: "eu", RO: "eu",
+    CN: "as", JP: "as", IN: "as", KR: "as", IL: "as", KZ: "as", AE: "as", SG: "as",
+    TW: "as", HK: "as", TH: "as", SA: "as", IR: "as",
+    US: "na", MX: "na", CA: "na",
+    BR: "sa", AR: "sa", CL: "sa", CO: "sa", PE: "sa", UY: "sa",
+    AU: "oc", NZ: "oc",
+    ZA: "af", EG: "af", NG: "af", MA: "af", KE: "af"
+  };
+  function contFallback(lat, lon) {
+    if (lon < -30) return lat > 13 ? "na" : "sa";
+    if (lon > 100) return lat < -10 ? "oc" : "as";
+    if (lat < 12) return "af";
+    if (lon > 45) return "as";
+    return "eu";
+  }
+  function continentOf(c) { return C2C[c.country] || contFallback(c.lat, c.lon); }
+
+  /* Frame a set of cities: bounding box of their projected points, padded, then
+     forced to the world view's aspect ratio and clamped to the map so the frame
+     keeps a constant height as you switch tabs. Returns [x, y, w, h]. */
+  function computeVB(list, tighten) {
+    var AR = 1005 / 412, xs = [], ys = [];
+    list.forEach(function (c) { var p = proj(c.lat, c.lon); xs.push(p[0]); ys.push(p[1]); });
+    var minx = Math.min.apply(null, xs), maxx = Math.max.apply(null, xs);
+    var miny = Math.min.apply(null, ys), maxy = Math.max.apply(null, ys);
+    var padx = Math.max((maxx - minx) * 0.18, 55), pady = Math.max((maxy - miny) * 0.18, 40);
+    minx -= padx; maxx += padx; miny -= pady; maxy += pady;
+    var cx = (minx + maxx) / 2, cy = (miny + maxy) / 2, w = maxx - minx, h = maxy - miny;
+    if (w / h < AR) w = h * AR; else h = w / AR;
+    var t = tighten || 0.85; w *= t; h *= t;   // tighten the continental frame (smaller = closer zoom)
+    if (w > VB_W) { w = VB_W; h = w / AR; }
+    if (h > VB_H) { h = VB_H; w = h * AR; }
+    var x0 = Math.max(0, Math.min(VB_W - w, cx - w / 2));
+    var y0 = Math.max(0, Math.min(VB_H - h, cy - h / 2));
+    return [x0, y0, w, h];
+  }
+
   function init() {
     var mount = document.querySelector(".cl-map-mount");
     if (!mount || mount.dataset.ready) return;
@@ -115,15 +165,21 @@
 
     /* ---- layout ---- */
     var grid = el("div", "cl-map-grid");
+    var mapcol = el("div", "cl-map-mapcol");
+    var tabbar = el("div", "cl-map-tabs"); tabbar.setAttribute("role", "tablist");
+    tabbar.setAttribute("aria-label", "Zoom the map to a continent");
+    mapcol.appendChild(tabbar);
     var frame = el("div", "cl-map-frame");
     var svg = svgEl("svg");
-    // Crop to the populated band (≈ lon −137…+166, lat 72°N…−51°S) so the
-    // continents fill the frame and empty polar/Pacific ocean is trimmed.
-    svg.setAttribute("viewBox", "145 58 1005 412");
+    var WORLD_VB = [145, 58, 1005, 412], WORLD_W = WORLD_VB[2];
+    // World view crops to the populated band (≈ lon −137…+166, lat 72°N…−51°S)
+    // so the continents fill the frame and empty polar/Pacific ocean is trimmed.
+    svg.setAttribute("viewBox", WORLD_VB.join(" "));
     svg.setAttribute("role", "img");
     svg.setAttribute("aria-label", "World map of researcher locations, point size and glow by count");
     frame.appendChild(svg);
-    grid.appendChild(frame);
+    mapcol.appendChild(frame);
+    grid.appendChild(mapcol);
 
     var hubs = el("aside", "cl-map-hubs");
     grid.appendChild(hubs);
@@ -145,9 +201,13 @@
     var ptLo = cs.getPropertyValue("--clm-pt-lo").trim() || "#3f74a6";
     var ptHi = cs.getPropertyValue("--clm-pt-hi").trim() || "#8fd6ff";
 
-    var labelSet = {};
+    // World view labels the global top 10; a continent view can label every one
+    // of its cities — declutter() then hides any whose text would overlap once
+    // the frame is zoomed in.
+    var worldLabel = {}, byCont = {};
     cities.slice().sort(function (a, b) { return b.count - a.count; }).slice(0, 10)
-      .forEach(function (c) { labelSet[c.city] = 1; });
+      .forEach(function (c) { worldLabel[c.city] = 1; });
+    cities.forEach(function (c) { var k = continentOf(c); (byCont[k] = byCont[k] || []).push(c); });
 
     /* ---- tooltip ---- */
     var tt = el("div", "cl-map-tt"); frame.appendChild(tt);
@@ -166,11 +226,16 @@
 
     var nodes = [];
     function focus(city, on) {
+      // Only cities visible in the current tab react; hovering a hub whose city
+      // sits in another continent leaves the shown markers untouched.
+      var vis = nodes.some(function (n) { return n.city === city && n.core.style.display !== "none"; });
+      var act = on && vis;
       nodes.forEach(function (n) {
+        if (n.core.style.display === "none") return;
         var active = n.city === city;
-        n.core.classList.toggle("dim", on && !active);
-        n.glow.style.opacity = on && !active ? "0.04" : "";
-        n.core.style.transform = (active && on) ? "scale(1.55)" : "";
+        n.core.classList.toggle("dim", act && !active);
+        n.glow.style.opacity = act && !active ? "0.04" : "";
+        n.core.style.transform = (active && act) ? "scale(1.55)" : "";
       });
       Array.prototype.forEach.call(hubs.querySelectorAll(".cl-map-hub"), function (h) {
         h.classList.toggle("hot", on && h.dataset.city === city);
@@ -187,8 +252,9 @@
       glow.setAttribute("opacity", (0.10 + 0.42 * t).toFixed(3));
       glowG.appendChild(glow);
 
+      var hr = null;
       if (c.count === maxc) {
-        var hr = svgEl("circle", "hotring");
+        hr = svgEl("circle", "hotring");
         hr.setAttribute("cx", cx); hr.setAttribute("cy", cy); hr.setAttribute("r", rc + 4.5);
         coreG.appendChild(hr);
       }
@@ -199,20 +265,21 @@
       core.style.transitionDelay = (i * 14) + "ms";
       coreG.appendChild(core);
 
-      if (labelSet[c.city]) {
-        var tx = svgEl("text", "ptlabel");
-        var left = cx > VB_W - 140;
-        tx.setAttribute("x", left ? cx - rc - 4 : cx + rc + 4);
-        tx.setAttribute("y", cy + 3);
-        if (left) tx.setAttribute("text-anchor", "end");
-        tx.textContent = c.city;
-        coreG.appendChild(tx);
-      }
+      var left = cx > VB_W - 140;
+      var tx = svgEl("text", "ptlabel");
+      if (left) tx.setAttribute("text-anchor", "end");
+      tx.textContent = c.city;
+      tx.style.display = "none";      // shown per-view by applyView/declutter
+      coreG.appendChild(tx);
 
       core.addEventListener("mouseenter", function (e) { showTip(c, core, e); focus(c.city, true); });
       core.addEventListener("mousemove", function (e) { showTip(c, core, e); });
       core.addEventListener("mouseleave", function () { hideTip(); focus(c.city, false); });
-      nodes.push({ city: c.city, core: core, glow: glow });
+      nodes.push({
+        city: c.city, count: c.count, core: core, glow: glow, hotring: hr, label: tx,
+        cont: continentOf(c), cx: cx, cy: cy, baseR: rc, baseRg: rg, labelLeft: left,
+        labelWorld: !!worldLabel[c.city], labelHidden: false
+      });
     });
 
     /* ---- legend ---- */
@@ -242,6 +309,101 @@
     });
     var foot = el("p", "foot"); foot.innerHTML = "Point size ∝ √(researchers); glow ∝ intensity.";
     hubs.appendChild(foot);
+
+    /* ---- continent tabs (map switcher) ----
+       World + one tab per populated continent. Clicking a tab zooms the map and
+       shows only that continent's markers; the hubs list stays global. */
+    var views = { world: WORLD_VB };
+    var tabDefs = [{ key: "world", name: "World", n: located }];
+    CONTS.forEach(function (ct) {
+      var list = byCont[ct.key];
+      if (!list || !list.length) return;
+      views[ct.key] = computeVB(list, ct.key === "eu" ? 0.765 : 0.85);   // Europe zoomed a touch closer
+      tabDefs.push({ key: ct.key, name: ct.name, n: list.reduce(function (s, c) { return s + c.count; }, 0) });
+    });
+
+    // Counter-scale marker/label geometry by the zoom factor so they keep a
+    // constant on-screen size instead of ballooning as the viewBox shrinks.
+    var LABEL_PX = 12;   // on-screen label size (native units at k = 1)
+    function applyScale(w) {
+      var k = w / WORLD_W;
+      nodes.forEach(function (n) {
+        n.core.setAttribute("r", (n.baseR * k).toFixed(2));
+        n.glow.setAttribute("r", (n.baseRg * k).toFixed(2));
+        if (n.hotring) n.hotring.setAttribute("r", ((n.baseR + 4.5) * k).toFixed(2));
+        var off = (n.baseR + 4) * k;
+        n.label.setAttribute("x", (n.labelLeft ? n.cx - off : n.cx + off).toFixed(2));
+        n.label.setAttribute("y", (n.cy + LABEL_PX * 0.34 * k).toFixed(2));
+        n.label.style.fontSize = (LABEL_PX * k).toFixed(2) + "px";
+      });
+    }
+
+    // Greedy label collision removal in native coords for the target frame:
+    // walk the labelled, visible cities by count and drop any whose text box
+    // would overlap one already kept.
+    function declutter(key, w) {
+      var k = w / WORLD_W, fontN = LABEL_PX * k, charW = fontN * 0.62, pad = fontN * 0.3, placed = [];
+      nodes.filter(function (n) {
+        var vis = key === "world" || n.cont === key;
+        return vis && (key === "world" ? n.labelWorld : true);
+      }).sort(function (a, b) { return b.count - a.count; }).forEach(function (n) {
+        var boxW = n.label.textContent.length * charW, off = (n.baseR + 4) * k;
+        var x0 = n.labelLeft ? n.cx - off - boxW : n.cx + off, x1 = x0 + boxW;
+        var y1 = n.cy + 3 * k, y0 = y1 - fontN;
+        var r = { x0: x0 - pad, y0: y0 - pad, x1: x1 + pad, y1: y1 + pad };
+        var hit = placed.some(function (p) { return !(r.x1 < p.x0 || r.x0 > p.x1 || r.y1 < p.y0 || r.y0 > p.y1); });
+        n.labelHidden = hit;
+        if (!hit) placed.push(r);
+      });
+    }
+
+    function applyView(key) {
+      nodes.forEach(function (n) {
+        var vis = key === "world" || n.cont === key;
+        var disp = vis ? "" : "none";
+        n.glow.style.display = disp; n.core.style.display = disp;
+        if (n.hotring) n.hotring.style.display = disp;
+        var cand = vis && (key === "world" ? n.labelWorld : true);
+        n.label.style.display = (cand && !n.labelHidden) ? "" : "none";
+      });
+    }
+
+    var vbRAF = null;
+    function setVB(target) {
+      if (vbRAF) { cancelAnimationFrame(vbRAF); vbRAF = null; }
+      if (reduce) { svg.setAttribute("viewBox", target.join(" ")); applyScale(target[2]); return; }
+      var cur = svg.getAttribute("viewBox").split(" ").map(Number), start = null;
+      function step(ts) {
+        if (start == null) start = ts;
+        var p = Math.min(1, (ts - start) / 460);
+        var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; // easeInOutQuad
+        var v = cur.map(function (c, i) { return c + (target[i] - c) * e; });
+        svg.setAttribute("viewBox", v.map(function (x) { return x.toFixed(2); }).join(" "));
+        applyScale(v[2]);
+        if (p < 1) vbRAF = requestAnimationFrame(step); else vbRAF = null;
+      }
+      vbRAF = requestAnimationFrame(step);
+    }
+
+    function selectTab(key, animate) {
+      Array.prototype.forEach.call(tabbar.children, function (b) {
+        b.setAttribute("aria-selected", b.dataset.key === key ? "true" : "false");
+      });
+      var vb = views[key];
+      declutter(key, vb[2]);   // decide the visible label set for the target frame
+      applyView(key);
+      if (animate) { setVB(vb); }
+      else { svg.setAttribute("viewBox", vb.join(" ")); applyScale(vb[2]); }
+    }
+
+    tabDefs.forEach(function (d) {
+      var b = el("button", "cl-map-tab"); b.type = "button"; b.dataset.key = d.key;
+      b.setAttribute("role", "tab");
+      b.innerHTML = esc(d.name) + '<span class="n">' + d.n + "</span>";
+      b.addEventListener("click", function () { selectTab(d.key, true); });
+      tabbar.appendChild(b);
+    });
+    selectTab("world", false);
 
     /* ---- reveal ---- */
     if (reduce) { coreG.classList.add("on"); }
