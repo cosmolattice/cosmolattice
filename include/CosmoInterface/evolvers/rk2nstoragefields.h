@@ -4,7 +4,7 @@
    Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
    Released under the MIT license, see LICENSE.md. */
 
-// File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
+// File info: Main contributor(s): Jorge Baeza-Ballesteros, Adrien Florio,  Year: 2026
 
 #include "TempLat/lattice/field/collections/vectorfieldcollection.h"
 #include "CosmoInterface/runparameters.h"
