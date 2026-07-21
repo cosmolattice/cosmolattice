@@ -19,7 +19,8 @@ VENV_PYTHON := tmp/.venv/bin/python
 PYTHON ?= $(shell [ -x "$(VENV_PYTHON)" ] && echo "$(VENV_PYTHON)" || echo python3)
 GEN    := scripts/gen_param_appendix.py
 
-.PHONY: help gen-params gen-model-caps check-params check-params-code check-model-caps check-models test-params docs
+.PHONY: help gen-params gen-model-caps check-params check-params-code check-model-caps check-models test-params docs \
+        gen-pubs check-pubs test-pubs gen-map add-citation
 
 help:
 	@echo "CosmoLattice documentation — make targets:"
@@ -30,6 +31,11 @@ help:
 	@echo "  make check-model-caps   Verify metadata.models matches the model headers (no write)"
 	@echo "  make check-models       Verify models.yaml lists exactly the models in the code (no write)"
 	@echo "  make test-params        Run the parameter generator + drift-checker unit tests"
+	@echo "  make gen-pubs           Regenerate the Using CL list in Publications.md from publications.yaml"
+	@echo "  make gen-map            Regenerate researcher-locations.json from the publications YAML"
+	@echo "  make add-citation A=ID  Add arXiv paper ID to publications.yaml (fetches INSPIRE, regenerates)"
+	@echo "  make check-pubs         Verify Publications.md is in sync with publications.yaml (no write)"
+	@echo "  make test-pubs          Run the publications generator unit tests"
 	@echo "  make docs               Build the full documentation site (runs build.sh)"
 
 # Regenerate the appendix tables in place. Idempotent: only the marker regions
@@ -65,6 +71,27 @@ test-params:
 	$(PYTHON) scripts/test_gen_param_appendix.py
 	$(PYTHON) scripts/test_check_params_code.py
 	$(PYTHON) scripts/test_gen_model_capabilities.py
+
+# Render the Using CL list in Publications.md from source/data/publications.yaml.
+# Idempotent: only the marker region changes.
+gen-pubs:
+	$(PYTHON) scripts/gen_publications.py
+
+# Regenerate the researcher-map data (source/data/researcher-locations.json).
+gen-map:
+	$(PYTHON) scripts/build_map_data.py
+
+# Add a paper by arXiv id: fetches INSPIRE, grows the YAML, regenerates page + map.
+#   make add-citation A=2507.04161
+add-citation:
+	$(PYTHON) scripts/add_new_citation.py $(A)
+
+# No-write check that Publications.md matches publications.yaml.
+check-pubs:
+	$(PYTHON) scripts/gen_publications.py --check
+
+test-pubs:
+	$(PYTHON) scripts/test_gen_publications.py
 
 # Full documentation build (Doxygen + MkDocs). Output goes to website/site/.
 docs:

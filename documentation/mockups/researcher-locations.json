@@ -1,0 +1,929 @@
+{
+ "method": "INSPIRE-HEP; first affiliation per author (option B); deduped researcher placed at most-recent paper",
+ "generated_from": "Using CL list",
+ "papers": 96,
+ "located": 147,
+ "total_researchers": 167,
+ "cities_count": 59,
+ "countries_count": 24,
+ "unresolved_count": 20,
+ "approx_placed_count": 5,
+ "cities": [
+  {
+   "city": "Beijing",
+   "country": "CN",
+   "lat": 39.983569,
+   "lon": 116.326611,
+   "count": 10,
+   "institutions": [
+    "CAS, ITP, Beijing",
+    "CAS, GUCAS, Beijing"
+   ],
+   "researchers": [
+    "Di, Yuefeng",
+    "Guo, Zong-Kuan",
+    "Li, Yang",
+    "Li, Yuan-Jie",
+    "Liu, Jing",
+    "Liu, Jing",
+    "Shu, Jing",
+    "Wang, Shao-Jiang",
+    "Zeng, Xiang-Xi",
+    "Zhao, Zizhuo"
+   ]
+  },
+  {
+   "city": "Tokyo",
+   "country": "JP",
+   "lat": 35.7095743,
+   "lon": 139.5906761,
+   "count": 9,
+   "institutions": [
+    "Tokyo Woman's Christian U.",
+    "Tokyo Metropolitan U., Dept. Phys."
+   ],
+   "researchers": [
+    "Aburatani, Daiki",
+    "Kaneta, Kunio",
+    "Masubuchi, Haruto",
+    "Miyazaki, Max",
+    "Nakano, Wakutaka",
+    "Narita, Yuma",
+    "Song, Deheng",
+    "Yaginuma, Nemin",
+    "Yin, Wen"
+   ]
+  },
+  {
+   "city": "Chongqing",
+   "country": "CN",
+   "lat": 29.5605199,
+   "lon": 106.4696141,
+   "count": 8,
+   "institutions": [
+    "CQU, Chongqing",
+    "CQUPT, Chongqing"
+   ],
+   "researchers": [
+    "Bian, Ligong",
+    "Cheng, Wei",
+    "Jia, Yongtao",
+    "Xu, Zixuan",
+    "Zeng, Kehao",
+    "Zhang, Ruo-Peng",
+    "Zhang, Ruopeng",
+    "Zheng, Sibo"
+   ]
+  },
+  {
+   "city": "Valencia",
+   "country": "ES",
+   "lat": 39.4702393,
+   "lon": -0.3768049,
+   "count": 6,
+   "institutions": [
+    "IFIC, Valencia"
+   ],
+   "researchers": [
+    "Cosme, Catarina",
+    "Figueroa, Daniel G.",
+    "Loayza, Nicolas",
+    "Marschall, Kenneth",
+    "Simakachorn, Peera",
+    "Stefanek, Ben A."
+   ]
+  },
+  {
+   "city": "Bilbao",
+   "country": "ES",
+   "lat": 43.2942173,
+   "lon": -3.0325855,
+   "count": 5,
+   "institutions": [
+    "U. Basque Country"
+   ],
+   "researchers": [
+    "Lizarraga, Joanes",
+    "Lopez-Eiguren, Asier",
+    "López-Mediavilla, Carmelo",
+    "Urio, Ander",
+    "Urrestilla, Jon"
+   ]
+  },
+  {
+   "city": "Rio de Janeiro",
+   "country": "BR",
+   "lat": -22.8948911,
+   "lon": -43.2256358,
+   "count": 5,
+   "institutions": [
+    "Nat. Obs., Rio de Janeiro"
+   ],
+   "researchers": [
+    "Alcaniz, J.S.",
+    "Rodrigues, G.",
+    "Rodrigues, J.G.",
+    "Santos, F.B.M. dos",
+    "Siqueira, C."
+   ]
+  },
+  {
+   "city": "Barcelona",
+   "country": "ES",
+   "lat": 41.4113755,
+   "lon": 2.2187213,
+   "count": 4,
+   "institutions": [
+    "U. Barcelona, Fac. Phys.",
+    "U. Barcelona, ICC",
+    "BIST, Barcelona",
+    "U. Barcelona, IFAE"
+   ],
+   "researchers": [
+    "Notari, Alessio",
+    "Pujolàs, Oriol",
+    "Rompineve, Fabrizio",
+    "Torrenti, Francisco"
+   ]
+  },
+  {
+   "city": "Buenos Aires",
+   "country": "AR",
+   "lat": -34.599829,
+   "lon": -58.37301,
+   "count": 4,
+   "institutions": [
+    "U. Buenos Aires",
+    "CONICET, Buenos Aires"
+   ],
+   "researchers": [
+    "Calzetta, Esteban",
+    "Cantarutti, Lucas",
+    "Elía, Juan Pablo",
+    "Mirón-Granese, Nahuel"
+   ]
+  },
+  {
+   "city": "Lausanne",
+   "country": "CH",
+   "lat": 46.5195985,
+   "lon": 6.5684919,
+   "count": 4,
+   "institutions": [],
+   "researchers": [
+    "Dux, Frédéric",
+    "Klarić, Juraj",
+    "Timiryasov, Inar",
+    "Valkenburg, Wessel"
+   ]
+  },
+  {
+   "city": "Madrid",
+   "country": "ES",
+   "lat": 40.450451,
+   "lon": -3.7359,
+   "count": 4,
+   "institutions": [
+    "U. Autonoma, Madrid, Dept. Theor. Phys."
+   ],
+   "researchers": [
+    "Ballesteros, Guillermo",
+    "Fasiello, Matteo",
+    "Papageorgiou, Alexandros",
+    "Rubio, Javier"
+   ]
+  },
+  {
+   "city": "Mainz",
+   "country": "DE",
+   "lat": 49.99549148574378,
+   "lon": 8.243865966796875,
+   "count": 4,
+   "institutions": [],
+   "researchers": [
+    "Laverda, Giorgio",
+    "Ramberg, Nicklas",
+    "Ratzinger, Wolfram",
+    "Schwaller, Pedro"
+   ]
+  },
+  {
+   "city": "Moscow",
+   "country": "RU",
+   "lat": 55.5743807,
+   "lon": 42.0201812,
+   "count": 4,
+   "institutions": [
+    "Moscow State U.",
+    "MIPT, Moscow",
+    "NRNU MEPhI, Moscow"
+   ],
+   "researchers": [
+    "Dankovsky, I.",
+    "Gorbunov, D.",
+    "Krasnov, Maxim",
+    "Ramazanov, S."
+   ]
+  },
+  {
+   "city": "Nagoya",
+   "country": "JP",
+   "lat": 35.1542164,
+   "lon": 136.9675489,
+   "count": 4,
+   "institutions": [
+    "Nagoya U., KMI",
+    "Nagoya U., Div. Part. Astrophys. Sci."
+   ],
+   "researchers": [
+    "Ichiki, Kiyotomo",
+    "Tada, Yuichiro",
+    "Terada, Takahiro",
+    "Yoshioka, Shun"
+   ]
+  },
+  {
+   "city": "Warsaw",
+   "country": "PL",
+   "lat": 52.23537,
+   "lon": 21.009485,
+   "count": 4,
+   "institutions": [
+    "U. Warsaw, Fac. Phys."
+   ],
+   "researchers": [
+    "Ghoshal, Anish",
+    "Marciniak, Michał",
+    "Olechowski, Marek",
+    "Pokorski, Stefan"
+   ]
+  },
+  {
+   "city": "Bloomington",
+   "country": "US",
+   "lat": 39.1661123,
+   "lon": -86.5265247,
+   "count": 3,
+   "institutions": [
+    "Indiana U., Bloomington"
+   ],
+   "researchers": [
+    "Co, Raymond T.",
+    "Lee, Taegyu",
+    "Leonard, Owen P."
+   ]
+  },
+  {
+   "city": "Brussels",
+   "country": "BE",
+   "lat": 50.821201,
+   "lon": 4.393737,
+   "count": 3,
+   "institutions": [
+    "IIHE, Brussels"
+   ],
+   "researchers": [
+    "Mariotti, Alberto",
+    "Rase, Aäron",
+    "Vanvlasselaer, Miguel"
+   ]
+  },
+  {
+   "city": "Hamburg",
+   "country": "DE",
+   "lat": 53.57328,
+   "lon": 9.88064,
+   "count": 3,
+   "institutions": [
+    "DESY"
+   ],
+   "researchers": [
+    "Blasi, Simone",
+    "Pierre, Mathias",
+    "Servant, Géraldine"
+   ]
+  },
+  {
+   "city": "Jyvaskyla",
+   "country": "FI",
+   "lat": 62.240393,
+   "lon": 25.742635,
+   "count": 3,
+   "institutions": [
+    "Jyvaskyla U., Jyvaskyla"
+   ],
+   "researchers": [
+    "Kainulainen, Kimmo",
+    "Nurmi, Sami",
+    "Väisänen, Olli"
+   ]
+  },
+  {
+   "city": "Melbourne",
+   "country": "AU",
+   "lat": -37.7962849,
+   "lon": 144.9598069,
+   "count": 3,
+   "institutions": [
+    "U. Melbourne"
+   ],
+   "researchers": [
+    "Ghosh, Avirup",
+    "Sopov, Alexei H.",
+    "Volkas, Raymond R."
+   ]
+  },
+  {
+   "city": "Mexico City",
+   "country": "MX",
+   "lat": 19.33382222019375,
+   "lon": -99.18826103210449,
+   "count": 3,
+   "institutions": [],
+   "researchers": [
+    "Garcia, Marcos A.G.",
+    "Garcia-Vega, Angel",
+    "Pereyra-Flores, Aline"
+   ]
+  },
+  {
+   "city": "Minneapolis",
+   "country": "US",
+   "lat": 44.97532,
+   "lon": -93.233985,
+   "count": 3,
+   "institutions": [],
+   "researchers": [
+    "Ke, Wenqi",
+    "Olive, Keith A.",
+    "Shkerin, Andrey"
+   ]
+  },
+  {
+   "city": "Oxford",
+   "country": "GB",
+   "lat": 51.7605,
+   "lon": -1.2535,
+   "count": 3,
+   "institutions": [],
+   "researchers": [
+    "Conlon, Joseph P.",
+    "Gladwyn, Benjamin",
+    "Mosny, Martin"
+   ]
+  },
+  {
+   "city": "Bhopal",
+   "country": "IN",
+   "lat": 23.2849737,
+   "lon": 77.2761888,
+   "count": 2,
+   "institutions": [
+    "IISER, Bhopal"
+   ],
+   "researchers": [
+    "Panda, Sukanta",
+    "Upadhye, Shreyas"
+   ]
+  },
+  {
+   "city": "Bielefeld",
+   "country": "DE",
+   "lat": 51.4833,
+   "lon": 11.9333,
+   "count": 2,
+   "institutions": [],
+   "researchers": [
+    "Florio, Adrien",
+    "Sattler, Franz R."
+   ]
+  },
+  {
+   "city": "Bonn",
+   "country": "DE",
+   "lat": 50.72747,
+   "lon": 7.08831,
+   "count": 2,
+   "institutions": [],
+   "researchers": [
+    "Drees, Manuel",
+    "Wang, Chenhuan"
+   ]
+  },
+  {
+   "city": "Helsinki",
+   "country": "FI",
+   "lat": 60.2054999,
+   "lon": 24.9620201,
+   "count": 2,
+   "institutions": [
+    "U. Helsinki, Dept. Phys."
+   ],
+   "researchers": [
+    "Lebedev, Oleg",
+    "Yoon, Jong-Hyun"
+   ]
+  },
+  {
+   "city": "Kolkata",
+   "country": "IN",
+   "lat": 22.9401703,
+   "lon": 88.5318661,
+   "count": 2,
+   "institutions": [
+    "IISER, Kolkata, Mohanpur"
+   ],
+   "researchers": [
+    "Dutta, Koushik",
+    "Khan, Ahamadullah"
+   ]
+  },
+  {
+   "city": "Lisbon",
+   "country": "PT",
+   "lat": 38.737239,
+   "lon": -9.1385758,
+   "count": 2,
+   "institutions": [
+    "IST, Lisbon, CENTRA"
+   ],
+   "researchers": [
+    "Mendes, Tomás",
+    "Piani, Matteo"
+   ]
+  },
+  {
+   "city": "Nottingham",
+   "country": "GB",
+   "lat": 52.9421,
+   "lon": -1.187736,
+   "count": 2,
+   "institutions": [],
+   "researchers": [
+    "Copeland, Edmund J.",
+    "Mishra, Swagat S."
+   ]
+  },
+  {
+   "city": "Prague",
+   "country": "CZ",
+   "lat": 50.1239503,
+   "lon": 14.4689537,
+   "count": 2,
+   "institutions": [
+    "ASCR, Inst. Phys., Prague"
+   ],
+   "researchers": [
+    "Barker, Will",
+    "Vikman, A."
+   ]
+  },
+  {
+   "city": "Providence",
+   "country": "US",
+   "lat": 41.826042,
+   "lon": -71.399235,
+   "count": 2,
+   "institutions": [
+    "Brown U."
+   ],
+   "researchers": [
+    "Fan, JiJi",
+    "Mansfield, Gareth"
+   ]
+  },
+  {
+   "city": "Thiruvananthapuram",
+   "country": "IN",
+   "lat": 8.5441622,
+   "lon": 76.905242,
+   "count": 2,
+   "institutions": [
+    "IISER, Trivandrum, Sch. Phys."
+   ],
+   "researchers": [
+    "Basak, Soumen",
+    "Shafi, Mohammed"
+   ]
+  },
+  {
+   "city": "Tsukuba",
+   "country": "JP",
+   "lat": 36.3418112,
+   "lon": 140.4467935,
+   "count": 2,
+   "institutions": [
+    "KEK, Tsukuba"
+   ],
+   "researchers": [
+    "Saha, Pankaj",
+    "Urakawa, Yuko"
+   ]
+  },
+  {
+   "city": "Abu Dhabi",
+   "country": "AE",
+   "lat": 24.2991738,
+   "lon": 54.6972774,
+   "count": 1,
+   "institutions": [
+    "New York U., Abu Dhabi"
+   ],
+   "researchers": [
+    "Bernal, Nicolás"
+   ]
+  },
+  {
+   "city": "Amherst",
+   "country": "US",
+   "lat": 42.38960022277268,
+   "lon": -72.52655389363605,
+   "count": 1,
+   "institutions": [],
+   "researchers": [
+    "Iguaz Juan, Joaquim"
+   ]
+  },
+  {
+   "city": "Annecy",
+   "country": "FR",
+   "lat": 45.92099,
+   "lon": 6.1605162,
+   "count": 1,
+   "institutions": [
+    "LAPTH, Annecy"
+   ],
+   "researchers": [
+    "Serpico, Pasquale D."
+   ]
+  },
+  {
+   "city": "Austin",
+   "country": "US",
+   "lat": 30.2835151,
+   "lon": -97.7348805,
+   "count": 1,
+   "institutions": [
+    "U. Texas, Austin"
+   ],
+   "researchers": [
+    "Sfakianakis, Evangelos I."
+   ]
+  },
+  {
+   "city": "Basel",
+   "country": "CH",
+   "lat": 47.564681,
+   "lon": 7.578573,
+   "count": 1,
+   "institutions": [],
+   "researchers": [
+    "Antusch, Stefan"
+   ]
+  },
+  {
+   "city": "Berlin",
+   "country": "DE",
+   "lat": 52.34598,
+   "lon": 13.633,
+   "count": 1,
+   "institutions": [],
+   "researchers": [
+    "Baeza-Ballesteros, Jorge"
+   ]
+  },
+  {
+   "city": "Bern",
+   "country": "CH",
+   "lat": 46.95126,
+   "lon": 7.438489,
+   "count": 1,
+   "institutions": [],
+   "researchers": [
+    "Laine, M."
+   ]
+  },
+  {
+   "city": "Chicago",
+   "country": "US",
+   "lat": 41.7805099,
+   "lon": -87.603826,
+   "count": 1,
+   "institutions": [
+    "U. Chicago"
+   ],
+   "researchers": [
+    "Verner, Sarunas"
+   ]
+  },
+  {
+   "city": "Coimbra",
+   "country": "PT",
+   "lat": 40.207851,
+   "lon": -8.42517,
+   "count": 1,
+   "institutions": [
+    "U. Coimbra, Dept. Phys."
+   ],
+   "researchers": [
+    "Ferreira, Ricardo Z."
+   ]
+  },
+  {
+   "city": "Istanbul",
+   "country": "TR",
+   "lat": 41.1101402,
+   "lon": 30.6700016,
+   "count": 1,
+   "institutions": [
+    "Istanbul Tech. U., Dept. Phys."
+   ],
+   "researchers": [
+    "Eröncel, Cem"
+   ]
+  },
+  {
+   "city": "Kyoto",
+   "country": "JP",
+   "lat": 35.012,
+   "lon": 135.7675,
+   "count": 1,
+   "institutions": [
+    "Kyoto U., Yukawa Inst."
+   ],
+   "researchers": [
+    "Matsui, Hiroki"
+   ]
+  },
+  {
+   "city": "London",
+   "country": "GB",
+   "lat": 51.499709,
+   "lon": -0.17614,
+   "count": 1,
+   "institutions": [
+    "Imperial Coll., London"
+   ],
+   "researchers": [
+    "Pieroni, Mauro"
+   ]
+  },
+  {
+   "city": "Munich",
+   "country": "DE",
+   "lat": 48.1440989,
+   "lon": 11.5695525,
+   "count": 1,
+   "institutions": [],
+   "researchers": [
+    "Zell, Sebastian"
+   ]
+  },
+  {
+   "city": "Ningbo",
+   "country": "CN",
+   "lat": 29.909188,
+   "lon": 121.64166,
+   "count": 1,
+   "institutions": [
+    "NBU, Ningbo"
+   ],
+   "researchers": [
+    "Cai, Rong-Gen"
+   ]
+  },
+  {
+   "city": "Osaka",
+   "country": "JP",
+   "lat": 34.6937378,
+   "lon": 135.5021651,
+   "count": 1,
+   "institutions": [
+    "Osaka U., Sch. Sci."
+   ],
+   "researchers": [
+    "Sato, Ryosuke"
+   ]
+  },
+  {
+   "city": "Pasadena",
+   "country": "US",
+   "lat": 34.2013,
+   "lon": -118.17,
+   "count": 1,
+   "institutions": [],
+   "researchers": [
+    "Berghaus, Kim V."
+   ]
+  },
+  {
+   "city": "Pohang",
+   "country": "KR",
+   "lat": 36.0121216,
+   "lon": 129.3215433,
+   "count": 1,
+   "institutions": [
+    "APCTP, Headquarters, Pohang"
+   ],
+   "researchers": [
+    "Yuwen, Zi-Yan"
+   ]
+  },
+  {
+   "city": "Princeton",
+   "country": "US",
+   "lat": 40.366633,
+   "lon": -74.640832,
+   "count": 1,
+   "institutions": [
+    "IAS, Princeton"
+   ],
+   "researchers": [
+    "Lu, Qianshu"
+   ]
+  },
+  {
+   "city": "Riverside",
+   "country": "US",
+   "lat": 33.953333,
+   "lon": -117.395278,
+   "count": 1,
+   "institutions": [],
+   "researchers": [
+    "Cui, Yanou"
+   ]
+  },
+  {
+   "city": "Saint Peter",
+   "country": "US",
+   "lat": 44.335107,
+   "lon": -93.981061,
+   "count": 1,
+   "institutions": [
+    "Gustavus Adolphus Coll."
+   ],
+   "researchers": [
+    "Mahbub, Rafid"
+   ]
+  },
+  {
+   "city": "Sendai",
+   "country": "JP",
+   "lat": 38.25331326896606,
+   "lon": 140.87335109710693,
+   "count": 1,
+   "institutions": [
+    "Tohoku U., Sendai, Dept. Phys."
+   ],
+   "researchers": [
+    "Takahashi, Fuminobu"
+   ]
+  },
+  {
+   "city": "Shanghai",
+   "country": "CN",
+   "lat": 31.2974669,
+   "lon": 121.524883,
+   "count": 1,
+   "institutions": [],
+   "researchers": [
+    "Aldabergenov, Yermek"
+   ]
+  },
+  {
+   "city": "St. Petersburg",
+   "country": "RU",
+   "lat": 59.939039,
+   "lon": 30.315785,
+   "count": 1,
+   "institutions": [
+    "St. Petersburg State U., Phys. Fac."
+   ],
+   "researchers": [
+    "Solomko, Timofey"
+   ]
+  },
+  {
+   "city": "Tel Aviv",
+   "country": "IL",
+   "lat": 32.1141667,
+   "lon": 34.7969444,
+   "count": 1,
+   "institutions": [
+    "Tel-Aviv U., Dept. Part. Phys."
+   ],
+   "researchers": [
+    "Gouttenoire, Yann"
+   ]
+  },
+  {
+   "city": "Trieste",
+   "country": "IT",
+   "lat": 45.7027101,
+   "lon": 13.7202786,
+   "count": 1,
+   "institutions": [
+    "SISSA, Trieste"
+   ],
+   "researchers": [
+    "Opferkuch, Toby"
+   ]
+  },
+  {
+   "city": "Turin",
+   "country": "IT",
+   "lat": 45.0516025,
+   "lon": 7.6809273,
+   "count": 1,
+   "institutions": [
+    "INFN, Turin"
+   ],
+   "researchers": [
+    "Taoso, Marco"
+   ]
+  }
+ ],
+ "unresolved": [
+  {
+   "name": "Mambrini, Yann",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Gross, Mathieu",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Cléry, Simon",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "del-Corral, Daniel",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Babichev, E.",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Bettoni, Dario",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Barman, Basabendu",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Das, Diganta",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Revankar, Shreyas",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Alam, Khursid",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Berkimbayev, Daulet",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Addazi, Andrea",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Khlopov, Maxim",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Ning, Zhuan",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Gu, Bao-Min",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Zhang, Yu-Peng",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Shu, Fu-Wen",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Liu, Yu-Xiao",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Zhou, Hua",
+   "reason": "no city/coords"
+  },
+  {
+   "name": "Yu, Qing",
+   "reason": "no city/coords"
+  }
+ ],
+ "papers_no_inspire_hit": []
+}

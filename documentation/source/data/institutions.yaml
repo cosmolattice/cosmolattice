@@ -1,0 +1,111 @@
+# INSPIRE institution id -> location. Auto-grown; edit coords/city by hand where needed.
+# lat/lon null => INSPIRE has no coordinates; the map falls back to the city centre.
+
+902666: {name: null, city: Berlin, country: DE, lat: 52.34598, lon: 13.633}
+902668: {name: null, city: Bern, country: CH, lat: 46.95126, lon: 7.438489}
+902670: {name: Bielefeld U., city: Bielefeld, country: DE, lat: 52.0378, lon: 8.4934, note: coords hand-fixed; INSPIRE had lon 11.93}
+902696: {name: 'IIHE, Brussels', city: Brussels, country: BE, lat: 50.821201, lon: 4.393737}
+902711: {name: null, city: Pasadena, country: US, lat: 34.2013, lon: -118.17}
+902770: {name: DESY, city: Hamburg, country: DE, lat: 53.57328, lon: 9.88064}
+902804: {name: null, city: Gainesville, country: US, lat: 29.644148, lon: -82.35092}
+902843: {name: 'U. Helsinki, Dept. Phys.', city: Helsinki, country: FI, lat: 60.2054999, lon: 24.9620201}
+902868: {name: 'Imperial Coll., London', city: London, country: GB, lat: 51.499709, lon: -0.17614}
+902889: {name: 'INFN, Turin', city: Turin, country: IT, lat: 45.0516025, lon: 7.6809273}
+902902: {name: 'Jyvaskyla U., Jyvaskyla', city: Jyvaskyla, country: FI, lat: 62.240393, lon: 25.742635}
+902916: {name: 'KEK, Tsukuba', city: Tsukuba, country: JP, lat: 36.3418112, lon: 140.4467935}
+902927: {name: null, city: London, country: GB, lat: 51.510678, lon: -0.116918}
+902943: {name: 'Kyoto U., Yukawa Inst.', city: Kyoto, country: JP, lat: 35.012, lon: 135.7675}
+902961: {name: 'St. Petersburg State U., Phys. Fac.', city: St. Petersburg, country: RU, lat: 59.939039, lon: 30.315785}
+902976: {name: 'U. Autonoma, Madrid, Dept. Theor. Phys.', city: Madrid, country: ES, lat: 40.537123, lon: -3.786507}
+902978: {name: null, city: Madrid, country: ES, lat: 40.450451, lon: -3.7359}
+902982: {name: null, city: Mainz, country: DE, lat: 49.99549148574378, lon: 8.243865966796875}
+902992: {name: null, city: Amherst, country: US, lat: 42.38960022277268, lon: -72.52655389363605}
+903003: {name: null, city: Mexico City, country: MX, lat: 19.33382222019375, lon: -99.18826103210449}
+903010: {name: null, city: Minneapolis, country: US, lat: 44.97532, lon: -93.233985}
+903030: {name: null, city: Moscow, country: RU, lat: 55.755786, lon: 37.617633}
+903032: {name: 'NRNU MEPhI, Moscow', city: Moscow, country: RU, lat: 55.6391856, lon: 37.6881803}
+903034: {name: null, city: Moscow, country: RU, lat: 55.7, lon: 37.5166667}
+903041: {name: 'Nagoya U., Div. Part. Astrophys. Sci.', city: Nagoya, country: JP, lat: 35.1664864, lon: 136.9464336}
+903105: {name: 'Osaka U., Sch. Sci.', city: Osaka, country: JP, lat: 34.6937378, lon: 135.5021651}
+903112: {name: null, city: Oxford, country: GB, lat: 51.759675, lon: -1.259506}
+903135: {name: 'ASCR, Inst. Phys., Prague', city: Prague, country: CZ, lat: 50.1239503, lon: 14.4689537}
+903138: {name: 'IAS, Princeton', city: Princeton, country: US, lat: 40.366633, lon: -74.640832}
+903237: {name: null, city: Stony Brook, country: US, lat: 40.90443, lon: -73.11732}
+903259: {name: 'Tel-Aviv U., Dept. Part. Phys.', city: Tel Aviv, country: IL, lat: 32.1141667, lon: 34.7969444}
+903268: {name: 'Tohoku U., Sendai, Dept. Phys.', city: Sendai, country: JP, lat: 38.25331326896606, lon: 140.87335109710693}
+903272: {name: 'Tokyo Metropolitan U., Dept. Phys.', city: Tokyo, country: JP, lat: 35.6894875, lon: 139.6917064}
+903304: {name: null, city: Riverside, country: US, lat: 33.953333, lon: -117.395278}
+903319: {name: 'U. Valencia, Dept. Phys. Theor.', city: Valencia, country: ES, lat: 39.50937, lon: -0.410549}
+903335: {name: 'U. Warsaw, Fac. Phys.', city: Warsaw, country: PL, lat: 52.23537, lon: 21.009485}
+903370: {name: null, city: Zurich, country: CH, lat: 47.397599, lon: 8.546739}
+903372: {name: null, city: Basel, country: CH, lat: 47.564681, lon: 7.578573}
+903418: {name: 'CONICET, Buenos Aires', city: Buenos Aires, country: AR, lat: -34.6243095, lon: -58.4506455}
+903523: {name: null, city: Lausanne, country: CH, lat: 46.5195985, lon: 6.5684919}
+903591: {name: null, city: Nottingham, country: GB, lat: 52.9421, lon: -1.187736}
+903628: {name: null, city: Shanghai, country: CN, lat: 31.2974669, lon: 121.524883}
+903776: {name: 'U. Coimbra, Dept. Phys.', city: Coimbra, country: PT, lat: 40.207851, lon: -8.42517}
+903895: {name: 'CAS, ITP, Beijing', city: Beijing, country: CN, lat: 39.983569, lon: 116.326611}
+903931: {name: U. Basque Country, city: Bilbao, country: ES, lat: 43.2942173, lon: -3.0325855}
+904416: {name: 'SISSA, Trieste', city: Trieste, country: IT, lat: 45.7027101, lon: 13.7202786}
+904463: {name: 'Istanbul Tech. U., Dept. Phys.', city: Istanbul, country: TR, lat: 41.1101402, lon: 30.6700016}
+904611: {name: 'CAS, GUCAS, Beijing', city: Beijing, country: CN, lat: 39.9133476, lon: 116.2525989}
+904810: {name: 'Nat. Obs., Rio de Janeiro', city: Rio de Janeiro, country: BR, lat: -22.8948911, lon: -43.2256358}
+904963: {name: 'CQU, Chongqing', city: Chongqing, country: CN, lat: 29.5605199, lon: 106.4696141}
+905190: {name: 'U. Barcelona, Fac. Phys.', city: Barcelona, country: ES, lat: 41.4113755, lon: 2.2187213}
+905301: {name: Leon U., city: Leon, country: ES, lat: 42.5987, lon: -5.5671, note: coords hand-added (U. Leon)}
+905765: {name: Gustavus Adolphus Coll., city: Saint Peter, country: US, lat: 44.335107, lon: -93.981061}
+906878: {name: 'MIPT, Moscow', city: Moscow, country: RU, lat: 55.9388912, lon: 37.5085037}
+907170: {name: 'NCU, Nanchang', city: Nanchang, country: CN, lat: 28.6829, lon: 115.8579, note: coords hand-added (Nanchang U.)}
+907270: {name: 'Beira Interior U., Covilha', city: Covilha, country: PT, lat: 40.2811, lon: -7.5069, note: coords hand-added (U. Beira Interior)}
+907779: {name: 'NBU, Ningbo', city: Ningbo, country: CN, lat: 29.909188, lon: 121.64166}
+907904: {name: 'U. Barcelona, IFAE', city: Barcelona, country: ES, lat: 41.5089059, lon: 2.0878204}
+907907: {name: 'IFIC, Valencia', city: Valencia, country: ES, lat: 39.4702393, lon: -0.3768049}
+908012: {name: null, city: Minneapolis, country: US, lat: 44.9741561, lon: -93.2342}
+908074: {name: 'LAPTH, Annecy', city: Annecy, country: FR, lat: 45.92099, lon: 6.1605162}
+908692: {name: null, city: Oxford, country: GB, lat: 51.7605, lon: -1.2535}
+908795: {name: null, city: Moscow, country: RU, lat: 55.709235, lon: 37.5425456}
+908999: {name: 'IST, Lisbon, CENTRA', city: Lisbon, country: PT, lat: 38.737239, lon: -9.1385758}
+909110: {name: 'APCTP, Headquarters, Pohang', city: Pohang, country: KR, lat: 36.0121216, lon: 129.3215433}
+909187: {name: null, city: London, country: GB, lat: 51.522895, lon: -0.040833}
+909257: {name: Brown U., city: Providence, country: US, lat: 41.826042, lon: -71.399235}
+909870: {name: 'CQUPT, Chongqing', city: Chongqing, country: CN, lat: 29.535171, lon: 106.605308}
+910558: {name: 'Hyderabad, IIIT', city: Hyderabad, country: IN, lat: 17.385, lon: 78.4867, note: coords hand-added (IIIT Hyderabad)}
+910640: {name: 'UCM, Madrid', city: Madrid, country: ES, lat: 40.4473608, lon: -3.7384311}
+910704: {name: null, city: Munich, country: DE, lat: 48.1440989, lon: 11.5695525}
+910712: {name: null, city: Beijing, country: CN, lat: null, lon: null}
+910767: {name: null, city: Madrid, country: ES, lat: 40.5, lon: -3.8}
+911212: {name: 'U. Barcelona, ICC', city: Barcelona, country: ES, lat: 41.3790881, lon: 2.1278398}
+911318: {name: 'SWUST, Mianyang', city: Mianyang, country: CN, lat: 31.4678, lon: 104.6794, note: coords hand-added (SWUST)}
+911594: {name: null, city: Lausanne, country: CH, lat: 46.5195985, lon: 6.5684919}
+911671: {name: null, city: Beijing, country: CN, lat: 39.991885, lon: 116.306565}
+911849: {name: 'IISER, Bhopal', city: Bhopal, country: IN, lat: 23.2849737, lon: 77.2761888}
+912045: {name: 'Nagoya U., KMI', city: Nagoya, country: JP, lat: 35.1542164, lon: 136.9675489}
+912221: {name: 'Unlisted, FR', city: Paris, country: FR, lat: 48.8566, lon: 2.3522, note: 'Khlopov: French affil = APC Paris; INSPIRE record unlisted'}
+912501: {name: Al Farabi Kazakh Natl. U., city: Almaty, country: KZ, lat: 43.238, lon: 76.945, note: coords hand-added (Al-Farabi KazNU)}
+914910: {name: Moscow State U., city: Moscow, country: RU, lat: 55.5743807, lon: 42.0201812}
+920171: {name: U. Melbourne, city: Melbourne, country: AU, lat: -37.7962849, lon: 144.9598069}
+946080: {name: U. Chicago, city: Chicago, country: US, lat: 41.7805099, lon: -87.603826}
+1091238: {name: 'U. Texas, Austin', city: Austin, country: US, lat: 30.2835151, lon: -97.7348805}
+1128166: {name: 'IISER, Kolkata, Mohanpur', city: Kolkata, country: IN, lat: 22.9401703, lon: 88.5318661}
+1188215: {name: U. Buenos Aires, city: Buenos Aires, country: AR, lat: -34.599829, lon: -58.37301}
+1188451: {name: 'New York U., Abu Dhabi', city: Abu Dhabi, country: AE, lat: 24.2991738, lon: 54.6972774}
+1189711: {name: 'LBNL, Berkeley', city: Berkeley, country: US, lat: 37.870151, lon: -122.2594606}
+1208785: {name: 'IISER, Trivandrum, Sch. Phys.', city: Thiruvananthapuram, country: IN, lat: 8.5441622, lon: 76.905242}
+1210798: {name: null, city: Beijing, country: CN, lat: 39.9912247, lon: 116.316071}
+1228041: {name: Stony Brook U., city: Stony Brook, country: US, lat: 40.9132244, lon: -73.1261091}
+1237813: {name: null, city: Cambridge, country: US, lat: 42.3647559, lon: -71.1032591}
+1241235: {name: Tokyo Woman's Christian U., city: Tokyo, country: JP, lat: 35.7095743, lon: 139.5906761}
+1243942: {name: 'Indiana U., Bloomington', city: Bloomington, country: US, lat: 39.1661123, lon: -86.5265247}
+1297569: {name: 'IBS, Daejeon', city: Daejeon, country: KR, lat: null, lon: null}
+1372169: {name: null, city: Lausanne, country: CH, lat: 46.519059, lon: 6.5770999}
+1471435: {name: null, city: Bonn, country: DE, lat: 50.72747, lon: 7.08831}
+1602995: {name: 'BIST, Barcelona', city: Barcelona, country: ES, lat: null, lon: null}
+1636674: {name: null, city: Beijing, country: CN, lat: null, lon: null}
+1663081: {name: 'LZU, Lanzhou', city: Lanzhou, country: CN, lat: 36.0611, lon: 103.8343, note: coords hand-added (Lanzhou U.)}
+1716548: {name: 'SCU, Chengdu', city: Chengdu, country: CN, lat: 30.5728, lon: 104.0668, note: coords hand-added (Sichuan U.)}
+1738740: {name: Ashoka U., city: Sonipat, country: IN, lat: 28.945, lon: 77.1015, note: 'coords hand-added (Ashoka U., near Delhi)'}
+1758644: {name: null, city: Moscow, country: RU, lat: null, lon: null}
+1776405: {name: 'IJCLab, Orsay', city: Paris, country: FR, lat: 48.8566, lon: 2.3522, note: IJCLab is in Orsay; binned to Paris}
+1783783: {name: null, city: Hangzhou, country: CN, lat: 30.2741, lon: 120.1551, note: coords hand-added}
+1849718: {name: 'SRM U., Amaravati', city: Amaravati, country: IN, lat: 16.573, lon: 80.3575, note: coords hand-added (SRM U. AP)}
+1850876: {name: 'IBS, Daejeon, CTPU', city: Daejon, country: KR, lat: null, lon: null}

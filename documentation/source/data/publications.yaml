@@ -1,0 +1,1769 @@
+# CosmoLattice publications — source of truth (Using CL list).
+# Grow with: python3 add_new_citation.py <arxiv-id>
+# Fields flagged in needs_review want a human eye; empty the list once curated.
+
+- arxiv: '2607.05517'
+  inspire: 3178051
+  title: Constant Scaling Fails for Global Monopole Networks
+  authors:
+  - name: Wakutaka Nakano
+    id: 1768581
+    inst: 903272
+  - name: Wen Yin
+    id: 1421892
+    inst: 903272
+  journal: null
+  doi: null
+  date: '2026-07-06'
+  needs_review: []
+- arxiv: '2606.31937'
+  inspire: 3175124
+  title: PBHs and GWs from Scaling Monopoles
+  authors:
+  - name: Daiki Aburatani
+    id: 3175127
+    inst: 903272
+  - name: Wakutaka Nakano
+    id: 1768581
+    inst: 903272
+  - name: Wen Yin
+    id: 1421892
+    inst: 903272
+  journal: null
+  doi: null
+  date: '2026-06-30'
+  needs_review: []
+- arxiv: '2606.14853'
+  inspire: 3168734
+  title: 'The limits of lattice inflation: a cautionary tale'
+  authors:
+  - name: Will Barker
+    id: 1839147
+    inst: 903135
+  - name: Benjamin Gladwyn
+    id: 2813131
+    inst: 903112
+  - name: Sebastian Zell
+    id: 1824632
+    inst: 910704
+  journal: null
+  doi: null
+  date: '2026-06-12'
+  needs_review: []
+- arxiv: '2605.04670'
+  inspire: 3152437
+  title: Gravitational Waves from Higgs Preheating after Inflaton \(Z_2\)-Symmetry Breaking
+  authors:
+  - name: Hua Zhou
+    id: 2126991
+    inst: 911318
+  - name: Qing Yu
+    id: 1866880
+    inst: 911318
+  - name: Wei Cheng
+    id: 1673616
+    inst: 909870
+  - name: Ruo-Peng Zhang
+    id: 3152438
+    inst: 904963
+  journal: null
+  doi: null
+  date: '2026-05-06'
+  needs_review:
+  - title
+- arxiv: '2605.00945'
+  inspire: 3151180
+  title: Oscillon Formation in Palatini Modified Gravity Theories
+  authors:
+  - name: Shreyas Upadhye
+    id: 3151184
+    inst: 911849
+  - name: Sukanta Panda
+    id: 1034797
+    inst: 911849
+  journal: null
+  doi: null
+  date: '2026-05-01'
+  needs_review: []
+- arxiv: '2604.17430'
+  inspire: 3147061
+  title: Testing \(\alpha \)-attractor P-model of Inflation by Cosmic Microwave Background Radiation
+  authors:
+  - name: Michał Marciniak
+    id: 2544357
+    inst: 903335
+  - name: Marek Olechowski
+    id: 994958
+    inst: 903335
+  - name: Stefan Pokorski
+    id: 993090
+    inst: 903335
+  journal: Acta Phys.Polon.B 57 (2026) 6
+  doi: 10.5506/APhysPolB.57.6-A16
+  date: '2026-04-19'
+  needs_review: []
+- arxiv: '2604.05078'
+  inspire: 3140653
+  title: Gravitational Waves from Matter Perturbations of Spectator Scalar Fields
+  authors:
+  - name: Marcos A.G. Garcia
+    id: 1327985
+    inst: 903003
+  - name: Angel Garcia-Vega
+    id: 3143991
+    inst: 903003
+  - name: Sarunas Verner
+    id: 1813573
+    inst: 946080
+  journal: null
+  doi: null
+  date: '2026-04-06'
+  needs_review: []
+- arxiv: '2602.15825'
+  inspire: 3121072
+  title: Hubble-scale tachyonic shocks from low-scale inflation — A new gravitational-wave window on inflation
+  authors:
+  - name: Haruto Masubuchi
+    id: 3121073
+    inst: 903272
+  - name: Yuma Narita
+    id: 2908449
+    inst: 903272
+  - name: Wen Yin
+    id: 1421892
+    inst: 903272
+  journal: JCAP 06 (2026) 090
+  doi: 10.1088/1475-7516/2026/06/090
+  date: '2026-02-17'
+  needs_review: []
+- arxiv: '2602.14389'
+  inspire: 3120722
+  title: Quintessence with tachyonic resonance and late-time cosmic-microwave-background and gravitational-wave
+    signals
+  authors:
+  - name: Shun Yoshioka
+    id: 3120727
+    inst: 903041
+  - name: Kiyotomo Ichiki
+    id: 1005144
+    inst: 903041
+  - name: Yuichiro Tada
+    id: 1316436
+    inst: 903041
+  - name: Takahiro Terada
+    id: 1198420
+    inst: 912045
+  journal: null
+  doi: null
+  date: '2026-02-16'
+  needs_review: []
+- arxiv: '2602.07972'
+  inspire: 3117723
+  title: 'Self-resonance preheating in deformed attractor models: oscillon formation and evolution'
+  authors:
+  - name: Bao-Min Gu
+    id: 1492180
+    inst: 907170
+  - name: Yu-Peng Zhang
+    id: 1492179
+    inst: 1663081
+  - name: Fu-Wen Shu
+    id: 1034515
+    inst: 907170
+  - name: Yu-Xiao Liu
+    id: 1028944
+    inst: 1663081
+  journal: null
+  doi: null
+  date: '2026-02-08'
+  needs_review: []
+- arxiv: '2602.06027'
+  inspire: 3117056
+  title: ACT DR6+Planck data impact on inflation with nonzero vacuum expectation value and the postinflationary
+    behavior
+  authors:
+  - name: F.B.M. dos Santos
+    id: 1954983
+    inst: 904810
+  - name: J.G. Rodrigues
+    id: 1868984
+    inst: 904810
+  - name: G. Rodrigues
+    id: 2630065
+    inst: 904810
+  - name: C. Siqueira
+    id: 1470863
+    inst: 904810
+  - name: J.S. Alcaniz
+    id: 1012262
+    inst: 904810
+  journal: Phys.Rev.D 113 (2026) 123545
+  doi: 10.1103/tddw-26tl
+  date: '2026-02-05'
+  needs_review:
+  - title
+- arxiv: '2601.19150'
+  inspire: 3112039
+  title: 'Q-balls from thermal balls during a first-order phase transition: a numerical study'
+  authors:
+  - name: Yuan-Jie Li
+    id: 2962152
+    inst: null
+  - name: Jing Liu
+    id: 1896010
+    inst: null
+  - name: Zong-Kuan Guo
+    id: 1027868
+    inst: null
+  journal: null
+  doi: null
+  date: '2026-01-27'
+  needs_review:
+  - author 1 affiliation
+  - author 2 affiliation
+  - author 3 affiliation
+- arxiv: '2601.09784'
+  inspire: 3105645
+  title: Classical equipartition dynamics between axions and non-Abelian gauge fields
+  authors:
+  - name: Kim V. Berghaus
+    id: 1838032
+    inst: 902711
+  - name: Adrien Florio
+    id: 1844184
+    inst: 902670
+  - name: M. Laine
+    id: 1001247
+    inst: 902668
+  - name: Franz R. Sattler
+    id: 2629259
+    inst: 902670
+  journal: JCAP 06 (2026) 020
+  doi: 10.1088/1475-7516/2026/06/020
+  date: '2026-01-14'
+  needs_review: []
+- arxiv: '2601.07670'
+  inspire: 3103226
+  title: Tachyonic gravitational dark matter production after inflation
+  authors:
+  - name: Giorgio Laverda
+    id: 2738017
+    inst: 902982
+  - name: Tomás Mendes
+    id: 3105626
+    inst: 908999
+  - name: Javier Rubio
+    id: 1065982
+    inst: 902978
+  journal: JCAP 05 (2026) 053
+  doi: 10.1088/1475-7516/2026/05/053
+  date: '2026-01-12'
+  needs_review: []
+- arxiv: '2512.21151'
+  inspire: 3095581
+  title: Acoustic gravitational waves from primordial curvature perturbations
+  authors:
+  - name: Zhuan Ning
+    id: 2623730
+    inst: 1783783
+  - name: Zi-Yan Yuwen
+    id: 2078475
+    inst: 909110
+  - name: Xiang-Xi Zeng
+    id: 2794335
+    inst: 903895
+  - name: Rong-Gen Cai
+    id: 1014768
+    inst: 907779
+  - name: Shao-Jiang Wang
+    id: 1344970
+    inst: 903895
+  journal: null
+  doi: null
+  date: '2025-12-24'
+  needs_review: []
+- arxiv: '2512.15627'
+  inspire: 3093619
+  title: The art of simulating the early Universe. Part II. Non-canonical cases & gravitational waves
+  authors:
+  - name: Jorge Baeza-Ballesteros
+    id: 1869008
+    inst: 902666
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Adrien Florio
+    id: 1844184
+    inst: 902670
+  - name: Joanes Lizarraga
+    id: 1287678
+    inst: 903931
+  - name: Nicolás Loayza
+    id: 1903971
+    inst: 907907
+  - name: Kenneth Marschall
+    id: 1797176
+    inst: 907907
+  - name: Toby Opferkuch
+    id: 1351394
+    inst: 904416
+  - name: Ben A. Stefanek
+    id: 1657376
+    inst: 907907
+  - name: Francisco Torrentí
+    id: 1274773
+    inst: 905190
+  - name: Ander Urio
+    id: 1854931
+    inst: 903931
+  journal: JCAP 06 (2026) 087
+  doi: 10.1088/1475-7516/2026/06/087
+  date: '2025-12-17'
+  needs_review:
+  - title
+- arxiv: '2512.05715'
+  inspire: 3089786
+  title: Domain wall formation from Z2 spontaneous symmetry breaking/restoration in scalar-Einstein-Gauss-Bonnet
+    theory
+  authors:
+  - name: Maxim Krasnov
+    id: 2066589
+    inst: 903032
+  - name: Daulet Berkimbayev
+    id: 2132480
+    inst: 912501
+  - name: Andrea Addazi
+    id: 1386752
+    inst: 1716548
+  - name: Yermek Aldabergenov
+    id: 1487361
+    inst: 903628
+  - name: Maxim Khlopov
+    id: 1003083
+    inst: 912221
+  journal: Phys.Dark Univ. 53 (2026) 102378
+  doi: 10.1016/j.dark.2026.102378
+  date: '2025-12-05'
+  needs_review: []
+- arxiv: '2511.16649'
+  inspire: 3085120
+  title: 'Domain walls in the scaling regime: Equal Time Correlator and gravitational waves'
+  authors:
+  - name: Simone Blasi
+    id: 1753857
+    inst: 902770
+  - name: Alberto Mariotti
+    id: 1056868
+    inst: 902696
+  - name: Aäron Rase
+    id: 2170962
+    inst: 902696
+  - name: Miguel Vanvlasselaer
+    id: 1844713
+    inst: 902696
+  journal: JCAP 06 (2026) 053
+  doi: 10.1088/1475-7516/2026/06/053
+  date: '2025-11-20'
+  needs_review: []
+- arxiv: '2511.02184'
+  inspire: 3076696
+  title: Dark Matter Freeze-in from a Z' Reheaton
+  authors:
+  - name: Avirup Ghosh
+    id: 1679114
+    inst: 920171
+  - name: Alexei H. Sopov
+    id: 3027314
+    inst: 920171
+  - name: Raymond R. Volkas
+    id: 984490
+    inst: 920171
+  journal: JCAP 04 (2026) 047
+  doi: 10.1088/1475-7516/2026/04/047
+  date: '2025-11-04'
+  needs_review: []
+- arxiv: '2510.27586'
+  inspire: 3075698
+  title: Production of gravitational waves from preheating and tachyonic instabilities
+  authors:
+  - name: Khursid Alam
+    id: 2129511
+    inst: 1738740
+  - name: Koushik Dutta
+    id: 1041898
+    inst: 1128166
+  - name: Ahamadullah Khan
+    id: 1003121
+    inst: 1128166
+  journal: JCAP 07 (2026) 056
+  doi: 10.1088/1475-7516/2026/07/056
+  date: '2025-10-31'
+  needs_review: []
+- arxiv: '2510.08685'
+  inspire: 3066795
+  title: Hydrodynamic models of reheating
+  authors:
+  - name: Juan Pablo Elía
+    id: 3069951
+    inst: 1188215
+  - name: Lucas Cantarutti
+    id: 2554308
+    inst: 1188215
+  - name: Esteban Calzetta
+    id: 1014696
+    inst: 1188215
+  - name: Nahuel Mirón-Granese
+    id: 1810304
+    inst: 903418
+  journal: Phys.Rev.D 113 (2026) 023530
+  doi: 10.1103/7zm8-b5v6
+  date: '2025-10-09'
+  needs_review: []
+- arxiv: '2509.25367'
+  inspire: 2983558
+  title: 'Cosmic domain walls on a lattice: Illusive effects of initial conditions'
+  authors:
+  - name: I. Dankovsky
+    id: 2801981
+    inst: 914910
+  - name: S. Ramazanov
+    id: 1059045
+    inst: 1758644
+  - name: E. Babichev
+    id: 1025685
+    inst: 1776405
+  - name: D. Gorbunov
+    id: 1007949
+    inst: 906878
+  - name: A. Vikman
+    id: 1024335
+    inst: 903135
+  journal: Phys.Rev.D 112 (2025) 123521
+  doi: 10.1103/l9gp-7vp5
+  date: '2025-09-29'
+  needs_review: []
+- arxiv: '2509.13292'
+  inspire: 2970029
+  title: Revisiting axion dark matter with nonlinear transitions
+  authors:
+  - name: Max Miyazaki
+    id: 2318130
+    inst: 903272
+  - name: Yuma Narita
+    id: 2908449
+    inst: 903272
+  - name: Deheng Song
+    id: 1847282
+    inst: 903272
+  - name: Nemin Yaginuma
+    id: 2970032
+    inst: 903272
+  - name: Wen Yin
+    id: 1421892
+    inst: 903272
+  journal: JHEP 05 (2026) 119
+  doi: 10.1007/JHEP05(2026)119
+  date: '2025-09-16'
+  needs_review: []
+- arxiv: '2508.14665'
+  inspire: 2962463
+  title: Dynamical backreaction of a mass-acquiring scalar field on first-order phase transitions
+  authors:
+  - name: Yuan-Jie Li
+    id: 2962152
+    inst: 1636674
+  - name: Jing Liu
+    id: 1896010
+    inst: 1636674
+  - name: Zong-Kuan Guo
+    id: 1027868
+    inst: 1783783
+  journal: Phys.Rev.D 113 (2026) 023550
+  doi: 10.1103/m284-kvr7
+  date: '2025-08-20'
+  needs_review: []
+- arxiv: '2508.07442'
+  inspire: 2959038
+  title: Preheating and gravitational waves in large-field hilltop inflation
+  authors:
+  - name: Diganta Das
+    id: 1681607
+    inst: 910558
+  - name: Shreyas Revankar
+    id: 2515014
+    inst: 910558
+  journal: Eur.Phys.J.ST 235 (2026) 1915
+  doi: 10.1140/epjs/s11734-025-01863-x
+  date: '2025-08-10'
+  needs_review: []
+- arxiv: '2508.00979'
+  inspire: 2957189
+  title: 'Nonperturbative and perturbative dynamics of a light QCD axion: Dark matter and the strong CP
+    problem'
+  authors:
+  - name: Raymond T. Co
+    id: 1380376
+    inst: 1243942
+  - name: Taegyu Lee
+    id: 1861252
+    inst: 1243942
+  - name: Owen P. Leonard
+    id: 2964222
+    inst: 1243942
+  journal: Phys.Rev.D 112 (2025) 115007
+  doi: 10.1103/18j2-l2y9
+  date: '2025-08-01'
+  needs_review:
+  - title
+- arxiv: '2507.13465'
+  inspire: 2950838
+  title: Equation of state during (p)reheating with trilinear interactions
+  authors:
+  - name: Stefan Antusch
+    id: 1019529
+    inst: 903372
+  - name: Kenneth Marschall
+    id: 1797176
+    inst: 907907
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 911212
+  journal: JCAP 11 (2025) 002
+  doi: 10.1088/1475-7516/2025/11/002
+  date: '2025-07-17'
+  needs_review: []
+- arxiv: '2507.04161'
+  inspire: 2942965
+  title: Self-tracking solutions for asymptotic scalar fields
+  authors:
+  - name: Martin Mosny
+    id: 2049806
+    inst: 908692
+  - name: Joseph P. Conlon
+    id: 1024860
+    inst: 908692
+  - name: Edmund J. Copeland
+    id: 1013069
+    inst: 903591
+  journal: JHEP 12 (2025) 135
+  doi: 10.1007/JHEP12(2025)135
+  date: '2025-07-05'
+  needs_review: []
+- arxiv: '2507.03157'
+  inspire: 2942853
+  title: 'Relativistic axion with nonrelativistic momenta: a robust bound on minimal ALP dark matter'
+  authors:
+  - name: Yuma Narita
+    id: 2908449
+    inst: 903272
+  - name: Wen Yin
+    id: 1421892
+    inst: 903272
+  journal: JHEP 01 (2026) 132
+  doi: 10.1007/JHEP01(2026)132
+  date: '2025-07-03'
+  needs_review: []
+- arxiv: '2507.01822'
+  inspire: 2941371
+  title: Kinetic fragmentation of the QCD axion on the lattice
+  authors:
+  - name: Matteo Fasiello
+    id: 1079125
+    inst: 910767
+  - name: Joanes Lizarraga
+    id: 1287678
+    inst: 903931
+  - name: Alexandros Papageorgiou
+    id: 1662555
+    inst: 910767
+  - name: Ander Urio
+    id: 1854931
+    inst: 903931
+  journal: JCAP 09 (2025) 019
+  doi: 10.1088/1475-7516/2025/09/019
+  date: '2025-07-02'
+  needs_review: []
+- arxiv: '2507.00685'
+  inspire: 2940870
+  title: Testing the Nambu–Goto approximation of cosmic string by lattice field theory simulations
+  authors:
+  - name: Zizhuo Zhao
+    id: 982141
+    inst: 904611
+  - name: Ligong Bian
+    id: 1279272
+    inst: 904963
+  - name: Jing Shu
+    id: 1019902
+    inst: 1210798
+  journal: Phys.Rev.D 114 (2026) 023539
+  doi: 10.1103/52nd-mg9m
+  date: '2025-07-01'
+  needs_review: []
+- arxiv: '2505.19950'
+  inspire: 2925626
+  title: 'Comparative study of the strong backreaction regime in axion inflation: the effect of the potential'
+  authors:
+  - name: Joanes Lizarraga
+    id: 1287678
+    inst: 903931
+  - name: Carmelo López-Mediavilla
+    id: 2925628
+    inst: 903931
+  - name: Ander Urio
+    id: 1854931
+    inst: 903931
+  journal: JCAP 11 (2025) 020
+  doi: 10.1088/1475-7516/2025/11/020
+  date: '2025-05-26'
+  needs_review: []
+- arxiv: '2505.15360'
+  inspire: 2923469
+  title: Numerical simulations on First-order phase transition through thermal fluctuation
+  authors:
+  - name: Ligong Bian
+    id: 1279272
+    inst: 904963
+  - name: Yuefeng Di
+    id: 1886983
+    inst: 903895
+  - name: Yongtao Jia
+    id: 1004345
+    inst: 904963
+  - name: Yang Li
+    id: 2844629
+    inst: 903895
+  - name: Kehao Zeng
+    id: 1894896
+    inst: 904963
+  journal: null
+  doi: null
+  date: '2025-05-21'
+  needs_review: []
+- arxiv: '2504.07902'
+  inspire: 2910519
+  title: 'Biased domain walls: faster annihilation, weaker gravitational waves'
+  authors:
+  - name: E. Babichev
+    id: 1025685
+    inst: 1776405
+  - name: I. Dankovsky
+    id: 2801981
+    inst: 908795
+  - name: D. Gorbunov
+    id: 1007949
+    inst: 903030
+  - name: S. Ramazanov
+    id: 1059045
+    inst: 1758644
+  - name: A. Vikman
+    id: 1024335
+    inst: 903135
+  journal: JCAP 10 (2025) 103
+  doi: 10.1088/1475-7516/2025/10/103
+  date: '2025-04-10'
+  needs_review: []
+- arxiv: '2504.03636'
+  inspire: 2908024
+  title: The spectrum of gravitational waves from annihilating domain walls
+  authors:
+  - name: Alessio Notari
+    id: 1036465
+    inst: 911212
+  - name: Fabrizio Rompineve
+    id: 1411973
+    inst: 907904
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 911212
+  journal: JCAP 07 (2025) 049
+  doi: 10.1088/1475-7516/2025/07/049
+  date: '2025-04-04'
+  needs_review: []
+- arxiv: '2503.19980'
+  inspire: 2904433
+  title: Two or three things particle physicists (mis)understand about (pre)heating
+  authors:
+  - name: Basabendu Barman
+    id: 1599324
+    inst: 1849718
+  - name: Nicolás Bernal
+    id: 1054142
+    inst: 1188451
+  - name: Javier Rubio
+    id: 1065982
+    inst: 902978
+  journal: Nucl.Phys.B 1018 (2025) 116996
+  doi: 10.1016/j.nuclphysb.2025.116996
+  date: '2025-03-25'
+  needs_review: []
+- arxiv: '2502.20471'
+  inspire: 2895762
+  title: Scalar field fluctuations and the production of dark matter
+  authors:
+  - name: Marcos A.G. Garcia
+    id: 1327985
+    inst: 903003
+  - name: Wenqi Ke
+    id: 1939887
+    inst: 903010
+  - name: Yann Mambrini
+    id: 1019683
+    inst: 1776405
+  - name: Keith A. Olive
+    id: 994945
+    inst: 903010
+  - name: Sarunas Verner
+    id: 1813573
+    inst: 902804
+  journal: JCAP 08 (2025) 039
+  doi: 10.1088/1475-7516/2025/08/039
+  date: '2025-02-27'
+  needs_review: []
+- arxiv: '2502.13644'
+  inspire: 2891230
+  title: Dynamics of ZN domain walls with bias directions
+  authors:
+  - name: Yuan-Jie Li
+    id: 2962152
+    inst: 1636674
+  - name: Jing Liu
+    id: 1623807
+    inst: 1636674
+  - name: Zong-Kuan Guo
+    id: 1027868
+    inst: 903895
+  journal: Phys.Rev.D 112 (2025) 103510
+  doi: 10.1103/rnpp-7wh2
+  date: '2025-02-19'
+  needs_review:
+  - title
+- arxiv: '2502.04445'
+  inspire: 2877674
+  title: 'Higgs-induced gravitational waves: the interplay of non-minimal couplings, kination and top
+    quark mass'
+  authors:
+  - name: Giorgio Laverda
+    id: 2738017
+    inst: 908999
+  - name: Javier Rubio
+    id: 1065982
+    inst: 910640
+  journal: JHEP 08 (2025) 203
+  doi: 10.1007/JHEP08(2025)203
+  date: '2025-02-06'
+  needs_review: []
+- arxiv: '2501.17226'
+  inspire: 2873836
+  title: Universal Bound on the Duration of a Kination Era
+  authors:
+  - name: Cem Eröncel
+    id: 1705253
+    inst: 904463
+  - name: Yann Gouttenoire
+    id: 1808370
+    inst: 903259
+  - name: Ryosuke Sato
+    id: 1069270
+    inst: 903105
+  - name: Géraldine Servant
+    id: 1019333
+    inst: 902770
+  - name: Peera Simakachorn
+    id: 1802054
+    inst: 907907
+  journal: Phys.Rev.Lett. 135 (2025) 101002
+  doi: 10.1103/k7ty-gwjg
+  date: '2025-01-28'
+  needs_review: []
+- arxiv: '2501.14869'
+  inspire: 2872543
+  title: 'Ephemeral Oscillons in Scalar-Tensor Theories: The Higgs-like case'
+  authors:
+  - name: Matteo Piani
+    id: 1989839
+    inst: 908999
+  - name: Javier Rubio
+    id: 1065982
+    inst: 902978
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 911212
+  journal: JCAP 06 (2025) 024
+  doi: 10.1088/1475-7516/2025/06/024
+  date: '2025-01-24'
+  needs_review: []
+- arxiv: '2501.13811'
+  inspire: 2871966
+  title: Inflaton self resonance, oscillons, and gravitational waves in small field polynomial inflation
+  authors:
+  - name: Manuel Drees
+    id: 1011413
+    inst: 1471435
+  - name: Chenhuan Wang
+    id: 2851559
+    inst: 1471435
+  journal: JCAP 04 (2025) 078
+  doi: 10.1088/1475-7516/2025/04/078
+  date: '2025-01-23'
+  needs_review: []
+- arxiv: '2412.19798'
+  inspire: 2863210
+  title: Non-Scaling Topological Defects and Gravitational Waves in Higgs Portal
+  authors:
+  - name: Wen Yin
+    id: 1421892
+    inst: 903272
+  journal: null
+  doi: 10.1093/ptep/ptaf053
+  date: '2024-12-27'
+  needs_review: []
+- arxiv: '2412.17802'
+  inspire: 2862626
+  title: Feebly-interacting Peccei-Quinn model
+  authors:
+  - name: Wen Yin
+    id: 1421892
+    inst: 903272
+  journal: JHEP 10 (2025) 177
+  doi: 10.1007/JHEP10(2025)177
+  date: '2024-12-23'
+  needs_review: []
+- arxiv: '2412.17359'
+  inspire: 2862343
+  title: 'Potential surge preheating: enhanced resonance from potential features'
+  authors:
+  - name: Pankaj Saha
+    id: 1706732
+    inst: 902916
+  - name: Yuko Urakawa
+    id: 1051151
+    inst: 902916
+  journal: JCAP 04 (2025) 061
+  doi: 10.1088/1475-7516/2025/04/061
+  date: '2024-12-23'
+  needs_review: []
+- arxiv: '2412.12287'
+  inspire: 2860351
+  title: Probing baryogenesis with gravitational waves
+  authors:
+  - name: Yanou Cui
+    id: 1035631
+    inst: 903304
+  - name: Anish Ghoshal
+    id: 1422123
+    inst: 903335
+  - name: Pankaj Saha
+    id: 1706732
+    inst: 902916
+  - name: Evangelos I. Sfakianakis
+    id: 1272098
+    inst: 1091238
+  journal: Phys.Rev.D 113 (2026) L021304
+  doi: 10.1103/964c-5cp3
+  date: '2024-12-16'
+  needs_review: []
+- arxiv: '2412.04218'
+  inspire: 2905992
+  title: 'Cosmological simulation of axion-Higgs strings: Gravitational waves and dark matter'
+  authors:
+  - name: Yongtao Jia
+    id: 1004345
+    inst: 904963
+  - name: Ligong Bian
+    id: 1279272
+    inst: 904963
+  journal: Phys.Rev.D 111 (2025) 063552
+  doi: 10.1103/PhysRevD.111.063552
+  date: '2024-12-05'
+  needs_review: []
+- arxiv: '2411.16368'
+  inspire: 2851671
+  title: 'Nonlinear dynamics of axion inflation: A detailed lattice study'
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Joanes Lizarraga
+    id: 1287678
+    inst: 903931
+  - name: Nicolás Loayza
+    id: 1903971
+    inst: 907907
+  - name: Ander Urio
+    id: 1854931
+    inst: 903931
+  - name: Jon Urrestilla
+    id: 985179
+    inst: 903931
+  journal: Phys.Rev.D 111 (2025) 063545
+  doi: 10.1103/PhysRevD.111.063545
+  date: '2024-11-25'
+  needs_review: []
+- arxiv: '2410.21971'
+  inspire: 2843536
+  title: Numerical analysis of melting domain walls and their gravitational waves
+  authors:
+  - name: I. Dankovsky
+    id: 2801981
+    inst: 908795
+  - name: S. Ramazanov
+    id: 1059045
+    inst: 1758644
+  - name: E. Babichev
+    id: 1025685
+    inst: 1776405
+  - name: D. Gorbunov
+    id: 1007949
+    inst: 903030
+  - name: A. Vikman
+    id: 1024335
+    inst: 903135
+  journal: JCAP 02 (2025) 064
+  doi: 10.1088/1475-7516/2025/02/064
+  date: '2024-10-29'
+  needs_review: []
+- arxiv: '2409.15450'
+  inspire: 2832485
+  title: 'Hubble-induced phase transitions: gravitational-wave imprint of Ricci reheating from lattice
+    simulations'
+  authors:
+  - name: Dario Bettoni
+    id: 1125509
+    inst: 905301
+  - name: Giorgio Laverda
+    id: 2738017
+    inst: 908999
+  - name: Asier Lopez-Eiguren
+    id: 1275300
+    inst: 903931
+  - name: Javier Rubio
+    id: 1065982
+    inst: 902978
+  journal: JCAP 03 (2025) 027
+  doi: 10.1088/1475-7516/2025/03/027
+  date: '2024-09-23'
+  needs_review: []
+- arxiv: '2408.11889'
+  inspire: 2820666
+  title: Nonminimal superheavy dark matter
+  authors:
+  - name: Sarunas Verner
+    id: 1813573
+    inst: 902804
+  journal: JCAP 05 (2025) 060
+  doi: 10.1088/1475-7516/2025/05/060
+  date: '2024-08-21'
+  needs_review: []
+- arxiv: '2408.02364'
+  inspire: 2964844
+  title: 'Particle and gravitational wave emission by local string loops: Lattice calculation'
+  authors:
+  - name: Jorge Baeza-Ballesteros
+    id: 1869008
+    inst: 907907
+  - name: Edmund J. Copeland
+    id: 1013069
+    inst: 903591
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Joanes Lizarraga
+    id: 1287678
+    inst: 903931
+  journal: Phys.Rev.D 112 (2025) 043540
+  doi: 10.1103/ym9p-scmw
+  date: '2024-08-05'
+  needs_review: []
+- arxiv: '2406.17468'
+  inspire: 2801986
+  title: 'Tachyonic production of dark relics: classical lattice vs. quantum 2PI in Hartree truncation'
+  authors:
+  - name: Kimmo Kainulainen
+    id: 1003927
+    inst: 902902
+  - name: Sami Nurmi
+    id: 1052633
+    inst: 902902
+  - name: Olli Väisänen
+    id: 2097463
+    inst: 902902
+  journal: JHEP 10 (2024) 009
+  doi: 10.1007/JHEP10(2024)009
+  date: '2024-06-25'
+  needs_review: []
+- arxiv: '2406.17053'
+  inspire: 2801975
+  title: Revisiting evolution of domain walls and their gravitational radiation with CosmoLattice
+  authors:
+  - name: I. Dankovsky
+    id: 2801981
+    inst: 903034
+  - name: E. Babichev
+    id: 1025685
+    inst: 1776405
+  - name: D. Gorbunov
+    id: 1007949
+    inst: 903030
+  - name: S. Ramazanov
+    id: 1059045
+    inst: 1758644
+  - name: A. Vikman
+    id: 1024335
+    inst: 903135
+  journal: JCAP 09 (2024) 047
+  doi: 10.1088/1475-7516/2024/09/047
+  date: '2024-06-24'
+  needs_review: []
+- arxiv: '2406.09122'
+  inspire: 2797795
+  title: Primordial black hole formation from self-resonant preheating?
+  authors:
+  - name: Guillermo Ballesteros
+    id: 1051733
+    inst: 902976
+  - name: Joaquim Iguaz Juan
+    id: 2023334
+    inst: 902992
+  - name: Pasquale D. Serpico
+    id: 1025602
+    inst: 908074
+  - name: Marco Taoso
+    id: 1055960
+    inst: 902889
+  journal: Phys.Rev.D 111 (2025) 083521
+  doi: 10.1103/PhysRevD.111.083521
+  date: '2024-06-13'
+  needs_review: []
+- arxiv: '2406.04017'
+  inspire: 2795350
+  title: 'Self-resonance during preheating: The case of \(\alpha\)-attractor models'
+  authors:
+  - name: Daniel del-Corral
+    id: 2026030
+    inst: 907270
+  journal: Annals Phys. 470 (2024) 169824
+  doi: 10.1016/j.aop.2024.169824
+  date: '2024-06-06'
+  needs_review: []
+- arxiv: '2406.02689'
+  inspire: 2794897
+  title: Geometric reheating of the Universe
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Nicolas Loayza
+    id: 1903971
+    inst: 907907
+  journal: JCAP 03 (2025) 073
+  doi: 10.1088/1475-7516/2025/03/073
+  date: '2024-06-04'
+  needs_review: []
+- arxiv: '2406.00108'
+  inspire: 2793779
+  title: Formation and decay of oscillons after inflation in the presence of an external coupling. Part
+    I. Lattice simulations
+  authors:
+  - name: Mohammed Shafi
+    id: 2809870
+    inst: 1208785
+  - name: Edmund J. Copeland
+    id: 1013069
+    inst: 903591
+  - name: Rafid Mahbub
+    id: 1622353
+    inst: 905765
+  - name: Swagat S. Mishra
+    id: 1517353
+    inst: 903591
+  - name: Soumen Basak
+    id: 1026976
+    inst: 1208785
+  journal: JCAP 10 (2024) 082
+  doi: 10.1088/1475-7516/2024/10/082
+  date: '2024-05-31'
+  needs_review: []
+- arxiv: '2405.08901'
+  inspire: 2787054
+  title: Preheating with deep learning
+  authors:
+  - name: Jong-Hyun Yoon
+    id: 1689350
+    inst: 1776405
+  - name: Simon Cléry
+    id: 1998968
+    inst: 1776405
+  - name: Mathieu Gross
+    id: 2687690
+    inst: 1776405
+  - name: Yann Mambrini
+    id: 1019683
+    inst: 1776405
+  journal: JCAP 08 (2024) 031
+  doi: 10.1088/1475-7516/2024/08/031
+  date: '2024-05-14'
+  needs_review: []
+- arxiv: '2404.17654'
+  inspire: 2781635
+  title: Ricci Reheating on the Lattice
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Toby Opferkuch
+    id: 1351394
+    inst: 904416
+  - name: Ben A. Stefanek
+    id: 1657376
+    inst: 902927
+  journal: null
+  doi: null
+  date: '2024-04-26'
+  needs_review: []
+- arxiv: '2404.16932'
+  inspire: 2781274
+  title: Gravitational wave signatures of post-fragmentation reheating
+  authors:
+  - name: Marcos A.G. Garcia
+    id: 1327985
+    inst: 903003
+  - name: Mathias Pierre
+    id: 1288267
+    inst: 902770
+  journal: JCAP 09 (2024) 054
+  doi: 10.1088/1475-7516/2024/09/054
+  date: '2024-04-25'
+  needs_review: []
+- arxiv: '2403.09089'
+  inspire: 2768810
+  title: Gravitational wave probe of gravitational dark matter from preheating
+  authors:
+  - name: Ruopeng Zhang
+    id: 2035562
+    inst: 904963
+  - name: Sibo Zheng
+    id: 1117071
+    inst: 904963
+  journal: JCAP 11 (2024) 007
+  doi: 10.1088/1475-7516/2024/11/007
+  date: '2024-03-14'
+  needs_review: []
+- arxiv: '2403.04848'
+  inspire: 2766973
+  title: Impact of dark sector preheating on CMB observables
+  authors:
+  - name: Marcos A.G. Garcia
+    id: 1327985
+    inst: 903003
+  - name: Aline Pereyra-Flores
+    id: 2766974
+    inst: 903003
+  journal: JCAP 08 (2024) 043
+  doi: 10.1088/1475-7516/2024/08/043
+  date: '2024-03-07'
+  needs_review: []
+- arxiv: '2402.06000'
+  inspire: 2756992
+  title: 'The rise and fall of the Standard-Model Higgs: electroweak vacuum stability during kination'
+  authors:
+  - name: Giorgio Laverda
+    id: 2738017
+    inst: 908999
+  - name: Javier Rubio
+    id: 1065982
+    inst: 902978
+  journal: JHEP 05 (2024) 339
+  doi: 10.1007/JHEP05(2024)339
+  date: '2024-02-08'
+  needs_review: []
+- arxiv: '2401.14331'
+  inspire: 2751451
+  title: 'Collapsing domain wall networks: impact on pulsar timing arrays and primordial black holes'
+  authors:
+  - name: Ricardo Z. Ferreira
+    id: 1118660
+    inst: 903776
+  - name: Alessio Notari
+    id: 1036465
+    inst: 905190
+  - name: Oriol Pujolàs
+    id: 1031250
+    inst: 1602995
+  - name: Fabrizio Rompineve
+    id: 1411973
+    inst: 911212
+  journal: JCAP 06 (2024) 020
+  doi: 10.1088/1475-7516/2024/06/020
+  date: '2024-01-25'
+  needs_review: []
+- arxiv: '2312.15056'
+  inspire: 2740592
+  title: Present and future of \({\mathcal{C}}\) osmo \({\mathcal{L}}\) attice
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Adrien Florio
+    id: 1844184
+    inst: 903237
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 907907
+  journal: Rept.Prog.Phys. 87 (2024) 094901
+  doi: 10.1088/1361-6633/ad616a
+  date: '2023-12-22'
+  needs_review:
+  - title
+- arxiv: '2312.03072'
+  inspire: 2731398
+  title: 'Phenomenology of spillway preheating: Equation of state and gravitational waves'
+  authors:
+  - name: Gareth Mansfield
+    id: 2731400
+    inst: 909257
+  - name: JiJi Fan
+    id: 1045844
+    inst: 909257
+  - name: Qianshu Lu
+    id: 1700371
+    inst: 903138
+  journal: Phys.Rev.D 110 (2024) 023542
+  doi: 10.1103/PhysRevD.110.023542
+  date: '2023-12-05'
+  needs_review: []
+- arxiv: '2311.14273'
+  inspire: 2725972
+  title: Gravitational dark matter from minimal preheating
+  authors:
+  - name: Ruopeng Zhang
+    id: 2035562
+    inst: 904963
+  - name: Sibo Zheng
+    id: 1117071
+    inst: 904963
+  journal: JHEP 02 (2024) 061
+  doi: 10.1007/JHEP02(2024)061
+  date: '2023-11-23'
+  needs_review: []
+- arxiv: '2311.02011'
+  inspire: 2718861
+  title: 'Cosmic simulations of axion: probing dark matter and gravitational waves'
+  authors:
+  - name: Yang Li
+    id: 2844629
+    inst: 903895
+  - name: Ligong Bian
+    id: 1279272
+    inst: 910712
+  - name: Rong-Gen Cai
+    id: 1014768
+    inst: 910712
+  - name: Jing Shu
+    id: 1019902
+    inst: 911671
+  journal: JCAP 08 (2025) 091
+  doi: 10.1088/1475-7516/2025/08/091
+  date: '2023-11-03'
+  needs_review: []
+- arxiv: '2310.13060'
+  inspire: 2713184
+  title: Gravitational Wave Symphony from Oscillating Spectator Scalar Fields
+  authors:
+  - name: Yanou Cui
+    id: 1035631
+    inst: 903304
+  - name: Pankaj Saha
+    id: 1706732
+    inst: 902916
+  - name: Evangelos I. Sfakianakis
+    id: 1272098
+    inst: 907904
+  journal: Phys.Rev.Lett. 133 (2024) 021004
+  doi: 10.1103/PhysRevLett.133.021004
+  date: '2023-10-19'
+  needs_review: []
+- arxiv: '2308.16231'
+  inspire: 2692461
+  title: Effects of fragmentation on post-inflationary reheating
+  authors:
+  - name: Marcos A.G. Garcia
+    id: 1327985
+    inst: 903003
+  - name: Mathieu Gross
+    id: 2687690
+    inst: 1776405
+  - name: Yann Mambrini
+    id: 1019683
+    inst: 1776405
+  - name: Keith A. Olive
+    id: 994945
+    inst: 908012
+  - name: Mathias Pierre
+    id: 1288267
+    inst: 902770
+  - name: Jong-Hyun Yoon
+    id: 1689350
+    inst: 1776405
+  journal: JCAP 12 (2023) 028
+  doi: 10.1088/1475-7516/2023/12/028
+  date: '2023-08-30'
+  needs_review: []
+- arxiv: '2308.08456'
+  inspire: 2688660
+  title: 'Gravitational wave emission from a cosmic string loop: Global case'
+  authors:
+  - name: Jorge Baeza-Ballesteros
+    id: 1869008
+    inst: 907907
+  - name: Edmund J. Copeland
+    id: 1013069
+    inst: 903591
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Joanes Lizarraga
+    id: 1287678
+    inst: 903931
+  journal: Phys.Rev.D 110 (2024) 043522
+  doi: 10.1103/PhysRevD.110.043522
+  date: '2023-08-16'
+  needs_review: []
+- arxiv: '2307.03774'
+  inspire: 2675636
+  title: Ricci reheating reloaded
+  authors:
+  - name: Giorgio Laverda
+    id: 2738017
+    inst: 908999
+  - name: Javier Rubio
+    id: 1065982
+    inst: 902978
+  journal: JCAP 03 (2024) 033
+  doi: 10.1088/1475-7516/2024/03/033
+  date: '2023-07-07'
+  needs_review: []
+- arxiv: '2306.08038'
+  inspire: 2668899
+  title: Reheating after inflaton fragmentation
+  authors:
+  - name: Marcos A.G. Garcia
+    id: 1327985
+    inst: 903003
+  - name: Mathias Pierre
+    id: 1288267
+    inst: 902770
+  journal: JCAP 11 (2023) 004
+  doi: 10.1088/1475-7516/2023/11/004
+  date: '2023-06-13'
+  needs_review: []
+- arxiv: '2305.05682'
+  inspire: 2658412
+  title: On unitarity in singlet inflation with a non-minimal coupling to gravity
+  authors:
+  - name: Oleg Lebedev
+    id: 1000862
+    inst: 902843
+  - name: Yann Mambrini
+    id: 1019683
+    inst: 1776405
+  - name: Jong-Hyun Yoon
+    id: 1689350
+    inst: 1776405
+  journal: JCAP 08 (2023) 009
+  doi: 10.1088/1475-7516/2023/08/009
+  date: '2023-05-09'
+  needs_review: []
+- arxiv: '2305.02568'
+  inspire: 2656613
+  title: Gravitational freeze-in dark matter from Higgs preheating
+  authors:
+  - name: Ruopeng Zhang
+    id: 2035562
+    inst: 904963
+  - name: Zixuan Xu
+    id: 1030158
+    inst: 904963
+  - name: Sibo Zheng
+    id: 1117071
+    inst: 904963
+  journal: JCAP 07 (2023) 048
+  doi: 10.1088/1475-7516/2023/07/048
+  date: '2023-05-04'
+  needs_review: []
+- arxiv: '2305.02367'
+  inspire: 2656596
+  title: Dissipative emergence of inflation from a quasicyclic universe
+  authors:
+  - name: Hiroki Matsui
+    id: 1479266
+    inst: 902943
+  - name: Alexandros Papageorgiou
+    id: 1662555
+    inst: 1850876
+  - name: Fuminobu Takahashi
+    id: 986833
+    inst: 903268
+  - name: Takahiro Terada
+    id: 1198420
+    inst: 1850876
+  journal: Phys.Rev.D 109 (2024) 103523
+  doi: 10.1103/PhysRevD.109.103523
+  date: '2023-05-03'
+  needs_review: []
+- arxiv: '2305.02366'
+  inspire: 2656584
+  title: Dissipative genesis of the inflationary universe
+  authors:
+  - name: Hiroki Matsui
+    id: 1479266
+    inst: 902943
+  - name: Alexandros Papageorgiou
+    id: 1662555
+    inst: 1297569
+  - name: Fuminobu Takahashi
+    id: 986833
+    inst: 903268
+  - name: Takahiro Terada
+    id: 1198420
+    inst: 1297569
+  journal: Phys.Rev.D 109 (2024) L101303
+  doi: 10.1103/PhysRevD.109.L101303
+  date: '2023-05-03'
+  needs_review: []
+- arxiv: '2304.13056'
+  inspire: 2654502
+  title: 'Preheating in Einstein-Cartan Higgs Inflation: oscillon formation'
+  authors:
+  - name: Matteo Piani
+    id: 1989839
+    inst: 908999
+  - name: Javier Rubio
+    id: 1065982
+    inst: 902978
+  journal: JCAP 12 (2023) 002
+  doi: 10.1088/1475-7516/2023/12/002
+  date: '2023-04-25'
+  needs_review: []
+- arxiv: '2304.05220'
+  inspire: 2650495
+  title: Numerical simulation of domain wall and first-order phase transition in an expanding universe
+  authors:
+  - name: Yang Li
+    id: 2844629
+    inst: 904611
+  - name: Yongtao Jia
+    id: 1004345
+    inst: 904963
+  - name: Ligong Bian
+    id: 1279272
+    inst: 904963
+  journal: JCAP 02 (2025) 038
+  doi: 10.1088/1475-7516/2025/02/038
+  date: '2023-04-11'
+  needs_review: []
+- arxiv: '2303.17436'
+  inspire: 2647294
+  title: Strong Backreaction Regime in Axion Inflation
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Joanes Lizarraga
+    id: 1287678
+    inst: 903931
+  - name: Ander Urio
+    id: 1854931
+    inst: 903931
+  - name: Jon Urrestilla
+    id: 985179
+    inst: 903931
+  journal: Phys.Rev.Lett. 131 (2023) 151003
+  doi: 10.1103/PhysRevLett.131.151003
+  date: '2023-03-30'
+  needs_review: []
+- arxiv: '2303.07503'
+  inspire: 2642134
+  title: Oscillon formation from preheating in asymmetric inflationary potentials
+  authors:
+  - name: Rafid Mahbub
+    id: 1622353
+    inst: 905765
+  - name: Swagat S. Mishra
+    id: 1517353
+    inst: 903591
+  journal: Phys.Rev.D 108 (2023) 063524
+  doi: 10.1103/PhysRevD.108.063524
+  date: '2023-03-13'
+  needs_review: []
+- arxiv: '2211.11773'
+  inspire: 2513669
+  title: Dark matter production via a non-minimal coupling to gravity
+  authors:
+  - name: Oleg Lebedev
+    id: 1000862
+    inst: 902843
+  - name: Timofey Solomko
+    id: 1718069
+    inst: 902961
+  - name: Jong-Hyun Yoon
+    id: 1689350
+    inst: 1776405
+  journal: JCAP 02 (2023) 035
+  doi: 10.1088/1475-7516/2023/02/035
+  date: '2022-11-21'
+  needs_review: []
+- arxiv: '2209.14313'
+  inspire: 2158359
+  title: 'One μ to rule them all: CMB spectral distortions can probe domain walls, cosmic strings and
+    low scale phase transitions'
+  authors:
+  - name: Nicklas Ramberg
+    id: 1823091
+    inst: 902982
+  - name: Wolfram Ratzinger
+    id: 1878087
+    inst: 902982
+  - name: Pedro Schwaller
+    id: 1057378
+    inst: 902982
+  journal: JCAP 02 (2023) 039
+  doi: 10.1088/1475-7516/2023/02/039
+  date: '2022-09-28'
+  needs_review: []
+- arxiv: '2206.14721'
+  inspire: 2103611
+  title: Gravitational wave production from preheating with trilinear interactions
+  authors:
+  - name: Catarina Cosme
+    id: 1468295
+    inst: 907907
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Nicolas Loayza
+    id: 1903971
+    inst: 907907
+  journal: JCAP 05 (2023) 023
+  doi: 10.1088/1475-7516/2023/05/023
+  date: '2022-06-29'
+  needs_review: []
+- arxiv: '2206.08940'
+  inspire: 2098321
+  title: Scalar dark matter production from preheating and structure formation constraints
+  authors:
+  - name: Marcos A.G. Garcia
+    id: 1327985
+    inst: 903003
+  - name: Mathias Pierre
+    id: 1288267
+    inst: 902770
+  - name: Sarunas Verner
+    id: 1813573
+    inst: 908012
+  journal: Phys.Rev.D 107 (2023) 043530
+  doi: 10.1103/PhysRevD.107.043530
+  date: '2022-06-17'
+  needs_review: []
+- arxiv: '2206.06319'
+  inspire: 2095022
+  title: Characterizing the post-inflationary reheating history. Part II. Multiple interacting daughter
+    fields
+  authors:
+  - name: Stefan Antusch
+    id: 1019529
+    inst: 903372
+  - name: Kenneth Marschall
+    id: 1797176
+    inst: 903372
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 903372
+  journal: JCAP 02 (2023) 019
+  doi: 10.1088/1475-7516/2023/02/019
+  date: '2022-06-13'
+  needs_review: []
+- arxiv: '2203.15808'
+  inspire: 2060111
+  title: On gravitational preheating
+  authors:
+  - name: Oleg Lebedev
+    id: 1000862
+    inst: 902843
+  - name: Jong-Hyun Yoon
+    id: 1689350
+    inst: 902843
+  journal: JCAP 07 (2022) 001
+  doi: 10.1088/1475-7516/2022/07/001
+  date: '2022-03-29'
+  needs_review: []
+- arxiv: '2203.13286'
+  inspire: 2058484
+  title: Preheating in Palatini Higgs inflation on the lattice
+  authors:
+  - name: Frédéric Dux
+    id: 2058486
+    inst: 903523
+  - name: Adrien Florio
+    id: 1844184
+    inst: 1228041
+  - name: Juraj Klarić
+    id: 1303073
+    inst: 903523
+  - name: Andrey Shkerin
+    id: 1272212
+    inst: 908012
+  - name: Inar Timiryasov
+    id: 1273723
+    inst: 903523
+  journal: JCAP 09 (2022) 015
+  doi: 10.1088/1475-7516/2022/09/015
+  date: '2022-03-24'
+  needs_review: []
+- arxiv: '2202.05805'
+  inspire: 2031374
+  title: Spectroscopy of particle couplings with gravitational waves
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Adrien Florio
+    id: 1844184
+    inst: 903237
+  - name: Nicolas Loayza
+    id: 1903971
+    inst: 907907
+  - name: Mauro Pieroni
+    id: 1408985
+    inst: 902868
+  journal: Phys.Rev.D 106 (2022) 063522
+  doi: 10.1103/PhysRevD.106.063522
+  date: '2022-02-11'
+  needs_review: []
+- arxiv: '2112.11280'
+  inspire: 1995095
+  title: 'Characterizing the postinflationary reheating history: Single daughter field with quadratic-quadratic
+    interaction'
+  authors:
+  - name: Stefan Antusch
+    id: 1019529
+    inst: 903372
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Kenneth Marschall
+    id: 1797176
+    inst: 903372
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 903372
+  journal: Phys.Rev.D 105 (2022) 043532
+  doi: 10.1103/PhysRevD.105.043532
+  date: '2021-12-21'
+  needs_review: []
+- arxiv: '2112.08388'
+  inspire: 1991985
+  title: Lattice simulations of non-minimally coupled scalar fields in the Jordan frame
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Adrien Florio
+    id: 1844184
+    inst: 903237
+  - name: Toby Opferkuch
+    id: 1351394
+    inst: 1189711
+  - name: Ben A. Stefanek
+    id: 1657376
+    inst: 903370
+  journal: SciPost Phys. 15 (2023) 077
+  doi: 10.21468/SciPostPhys.15.3.077
+  date: '2021-12-15'
+  needs_review: []
+- arxiv: '2109.13280'
+  inspire: 1932636
+  title: Freeze-in from preheating
+  authors:
+  - name: Marcos A.G. Garcia
+    id: 1327985
+    inst: 910767
+  - name: Kunio Kaneta
+    id: 1078184
+    inst: 1241235
+  - name: Yann Mambrini
+    id: 1019683
+    inst: 1776405
+  - name: Keith A. Olive
+    id: 994945
+    inst: 908012
+  - name: Sarunas Verner
+    id: 1813573
+    inst: 908012
+  journal: JCAP 03 (2022) 016
+  doi: 10.1088/1475-7516/2022/03/016
+  date: '2021-09-27'
+  needs_review: []
+- arxiv: '2102.01031'
+  inspire: 1844216
+  title: 'CosmoLattice: A modern code for lattice simulations of scalar and gauge field dynamics in an
+    expanding universe'
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 903319
+  - name: Adrien Florio
+    id: 1844184
+    inst: 903237
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 903372
+  - name: Wessel Valkenburg
+    id: 1037162
+    inst: 911594
+  journal: Comput.Phys.Commun. 283 (2023) 108586
+  doi: 10.1016/j.cpc.2022.108586
+  date: '2021-02-01'
+  needs_review:
+  - title
+- arxiv: '2006.15122'
+  inspire: 1803326
+  title: 'The art of simulating the early Universe -- Part I: Integration techniques and canonical cases'
+  authors:
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 903319
+  - name: Adrien Florio
+    id: 1844184
+    inst: 1372169
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 903372
+  - name: Wessel Valkenburg
+    id: 1037162
+    inst: 1372169
+  journal: JCAP 04 (2021) 035
+  doi: 10.1088/1475-7516/2021/04/035
+  date: '2020-06-26'
+  needs_review: []
+- arxiv: '2005.07563'
+  inspire: 1796547
+  title: 'Energy distribution and equation of state of the early Universe: matching the end of inflation
+    and the onset of radiation domination'
+  authors:
+  - name: Stefan Antusch
+    id: 1019529
+    inst: 903372
+  - name: Daniel G. Figueroa
+    id: 1046060
+    inst: 907907
+  - name: Kenneth Marschall
+    id: 1797176
+    inst: 903372
+  - name: Francisco Torrenti
+    id: 1274773
+    inst: 903372
+  journal: Phys.Lett.B 811 (2020) 135888
+  doi: 10.1016/j.physletb.2020.135888
+  date: '2020-05-15'
+  needs_review: []
