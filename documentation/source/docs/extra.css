@@ -2249,21 +2249,36 @@ body.nav-collapsed .md-sidebar--primary {
 /* layout */
 .cl-map-grid { display: grid; grid-template-columns: 1fr; gap: 20px; align-items: start; }
 @media (min-width: 940px) { .cl-map-grid { grid-template-columns: minmax(0, 1fr) 280px; } }
+.cl-map-mapcol { min-width: 0; }
+
+/* continent tabs (map switcher) */
+.cl-map-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
+.cl-map-tab { font: 600 .64rem/1 var(--clm-mono); letter-spacing: .07em; text-transform: uppercase;
+    color: var(--clm-muted); background: var(--clm-panel); border: 1px solid var(--clm-line); border-radius: 20px;
+    padding: 7px 13px; cursor: pointer; transition: color .15s, background .15s, border-color .15s; }
+.cl-map-tab:hover { color: var(--clm-ink); border-color: var(--clm-accent); }
+.cl-map-tab[aria-selected="true"] { color: var(--clm-accent-ink); background: var(--clm-accent-soft);
+    border-color: var(--clm-accent); }
+.cl-map-tab .n { margin-left: 7px; font-weight: 500; color: var(--clm-faint); font-variant-numeric: tabular-nums; }
+.cl-map-tab[aria-selected="true"] .n { color: var(--clm-accent-ink); opacity: .7; }
 
 /* the map */
 .cl-map-frame { position: relative; border: 1px solid var(--clm-ocean-edge); border-radius: 16px; overflow: hidden;
     background: radial-gradient(120% 130% at 50% 0%, var(--clm-panel) 0%, var(--clm-ocean) 55%); box-shadow: var(--clm-shadow); }
 .cl-map-frame svg { display: block; width: 100%; height: auto; }
-.cl-map .land { fill: var(--clm-land); stroke: var(--clm-land-edge); stroke-width: .5; }
-.cl-map .grat { stroke: var(--clm-grat); stroke-width: .5; fill: none; }
+/* vector-effect keeps strokes a constant screen width; the marker/label sizes
+   are counter-scaled in researcher-map.js so nothing balloons when zoomed. */
+.cl-map .land { fill: var(--clm-land); stroke: var(--clm-land-edge); stroke-width: .5; vector-effect: non-scaling-stroke; }
+.cl-map .grat { stroke: var(--clm-grat); stroke-width: .5; fill: none; vector-effect: non-scaling-stroke; }
 .cl-map .glow { fill: var(--clm-glow); }
-.cl-map .core { stroke: #fff; stroke-width: .6; cursor: pointer; transform-box: fill-box; transform-origin: center;
-    transition: transform .18s; }
+.cl-map .core { stroke: #fff; stroke-width: .8; cursor: pointer; transform-box: fill-box; transform-origin: center;
+    transition: transform .18s; vector-effect: non-scaling-stroke; }
 [data-md-color-scheme="slate"] .cl-map .core { stroke: rgba(255,255,255,.55); }
 .cl-map .core.dim { opacity: .28; }
 .cl-map .ptlabel { font: 600 10px/1 var(--clm-mono); fill: var(--clm-ink); paint-order: stroke;
-    stroke: var(--clm-ocean); stroke-width: 2.8px; stroke-linejoin: round; pointer-events: none; letter-spacing: .02em; }
-.cl-map .hotring { fill: none; stroke: var(--clm-hot); stroke-width: 1.1; opacity: .9; }
+    stroke: var(--clm-ocean); stroke-width: 2.8px; stroke-linejoin: round; pointer-events: none; letter-spacing: .02em;
+    vector-effect: non-scaling-stroke; }
+.cl-map .hotring { fill: none; stroke: var(--clm-hot); stroke-width: 1.4; opacity: .9; vector-effect: non-scaling-stroke; }
 .cl-map .reveal .core { transform: scale(0); }
 .cl-map .reveal.on .core { transform: scale(1); }
 .cl-map .reveal .ptlabel { opacity: 0; transition: opacity .4s; }

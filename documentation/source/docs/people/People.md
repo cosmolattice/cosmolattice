@@ -30,12 +30,13 @@
 <h2 class="cl-ppl-heading">Developers</h2>
 <div class="cl-ppl-grid">
 
-  <article class="cl-ppl-card" data-mods="core defects gw">
+  <article class="cl-ppl-card" data-mods="core templat defects gw">
     <img class="cl-ppl-avatar" src="../assets/img/people/jorge.png" alt="Jorge Baeza-Ballesteros">
     <div class="cl-ppl-name">Jorge Baeza-Ballesteros</div>
     <div class="cl-ppl-affil">DESY, Zeuthen, Germany</div>
     <div class="cl-ppl-badges">
       <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
       <button type="button" class="cl-ppl-chip m-defects" data-mod="defects" aria-pressed="false">Defects</button>
       <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
     </div>

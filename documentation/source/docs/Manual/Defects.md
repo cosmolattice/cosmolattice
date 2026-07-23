@@ -304,10 +304,10 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is also prepared to simulat
 [](){ #eq_localStringsAction }
 ```math
 \begin{equation}\label{eq_localStringsAction}
-S=-\int\text{d}^4x\sqrt{-g}\left\{(D^A_\mu\varphi)^*D_A^\mu\varphi+\frac{1}{4}F_{\mu\nu}F^{\mu\nu}+V_2[\phi_1, \phi_2]\right\}\,,
+S=-\int\text{d}^4x\sqrt{-g}\left\{(D^A_\mu\varphi)^*D_A^\mu\varphi+\frac{1}{4}F_{\mu\nu}F^{\mu\nu}+V_2[\varphi_1, \varphi_2]\right\}\,,
 \end{equation}
 ```
-where here $\phi_1$ and $\phi_2$ refer to the real and imaginary parts of the complex field, defined via $\varphi=\frac{1}{\sqrt{2}}(\phi_1+i\phi_2)$, and the scalar potential is identical to that in Eq. \eqref{eq_globalDefectsPotential} for $N=2$, see [**Scalar-gauge interactions**](My first model of gauge fields.md) for a definition of the covariant derivative and the field strength tensor.
+where here $\varphi_1$ and $\varphi_2$ refer to the real and imaginary parts of the complex field, defined with canonical normalization via $\varphi=\frac{1}{\sqrt{2}}(\varphi_1+i\varphi_2)$, and the scalar potential is identical to that in Eq. \eqref{eq_globalDefectsPotential} for $N=2$, see [**Scalar-gauge interactions**](My first model of gauge fields.md) for a definition of the covariant derivative and the field strength tensor.
 
 This model has a local $\text{U}(1)$ symmetry which is spontaneously broken by the true vacuum, leading to the formation of local cosmic strings. Their evolution is governed by the dynamics of the underlying fields, which follow the classical equations of motion,
 [](){ #eq_localStringsEOM }

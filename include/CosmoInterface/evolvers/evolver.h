@@ -24,6 +24,18 @@ namespace TempLat
 
   MakeException(EvolverTypeNotInEvolver);
   MakeException(InvalidEvolverTypeGW);
+  MakeException(InvalidEvolverTypeAxion);
+
+  // Helper to read IsAxionU1Coupled safely (avoids problems in models without axion couplings)
+  template <typename M, typename = void>
+  struct CheckAxionU1 {
+    static constexpr bool value = false;
+  };
+
+  template <typename M>
+  struct CheckAxionU1<M, decltype((void)M::IsAxionU1Coupled, void())> {
+    static constexpr bool value = M::IsAxionU1Coupled;
+  };
 
   template <class Model> class Evolver
   {
@@ -58,6 +70,10 @@ namespace TempLat
           PositionVerletParameters<T>::isVerlet(typeGW))
         throw(InvalidEvolverTypeGW("The evolution of a model with U(1) and GWs requires to use an evolver that correctly synchronizes fields and momenta (as both electric and magnetic fields enter the kernel of GWs). If you want to use PV for the matter fields, you should use LF for the GWs. Abort."));
       //
+   
+      if (CheckAxionU1<Model>::value && !RK2NStorageParameters<T>::isRK2n(type)) {
+        throw(InvalidEvolverTypeAxion("The evolution of a model with an Axion-U(1) coupling requires a Runge-Kutta (RK) evolver. Other evolvers (LF, VV, PV) are not supported for this coupling. Abort."));
+      }
 
     }
     // @endlabel

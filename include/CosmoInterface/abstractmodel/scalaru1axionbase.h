@@ -12,11 +12,23 @@
 
 namespace TempLat
 {
+  //Helper to get NScalars from CouplingsManager
+  template <typename CM> struct GetNScalars { static constexpr size_t nScalars = 0; };
+
+  template <size_t NScalars, size_t NU1, bool Coupled>
+  struct GetNScalars<CouplingsManager<NScalars, NU1, Coupled>> {
+    static constexpr size_t nScalars = NScalars;
+  };
   template <typename T, typename SCALARU1AXIONCOUPLINGS> class ScalarU1AxionBase
   {
   public:
     using ScalarU1AxionCouplings = typename SCALARU1AXIONCOUPLINGS::template Container<T>;
     static constexpr bool IsAxionU1Coupled = SCALARU1AXIONCOUPLINGS::howManyCouples() > 0;
+
+    // Currently, the code is restricted to an ALP coupled to a single U(1) gauge field, as generalizations involving an additional axion with a different coupling parameter have not been tested. 
+    // If, as a user, you wish to remove this restriction in order to explore these untested configurations, you can comment out this line at your own risk.
+    static_assert(!(IsAxionU1Coupled && GetNScalars<SCALARU1AXIONCOUPLINGS>::nScalars > 1),
+                  "ERROR: The Axion-U(1) coupling currently only supports exactly 1 scalar field (ALP). Compilation aborted.");
 
     ScalarU1AxionCouplings alphaLambda_SU1;
     // Time to switch from linear to non-linear evolution for AxionU1 coupling

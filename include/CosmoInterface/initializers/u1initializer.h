@@ -53,7 +53,11 @@ namespace TempLat
       else if (flagU1IC == InitialConditionsType::U1::PlaneWavesZeroB)
         initializePlaneWavesZeroBU1(model, fg, rPar.kCutoff, extraFlds);
       else if (flagU1IC == InitialConditionsType::U1::BunchDavisTransverseU1)
+      {
+        if (!Model::IsAxionU1Coupled)
+                throw(RunParametersInconsistent("You have selected BunchDavisTransverseU1 for the U(1) field, but this option is only included for models with Axion-U(1) couplings."));
         initializeBunchDavisTransverseU1(model, extps, rPar.kCutoff, extraFlds);
+      }
       else if (flagU1IC == InitialConditionsType::U1::DefectsNetwork)
         initializeStringNetwork(model,fg,rPar.lcorr);
       else if (flagU1IC == InitialConditionsType::U1::DefectsWhiteNoise)
