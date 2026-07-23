@@ -16,7 +16,7 @@ Before moving to the description of the output, we first note some general keywo
 
 One of the main results from running a simulation with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is a series of files that contain the time evolution of averages of field values and energy densities. These files are generated automatically when a simulation is run depending on the matter content of the model, and are measured with a frequency specified by the `tOutputFreq` keyword (indicated in program units, defaults to $10\delta \tilde{\eta}$ if unspecified). Each line of the file corresponds to a different measurement. First we cover those files related to **field averages** and results for the **evolution of the scale factor**.
 
-For a model containing scalar singlet fields, `NScalars > 0`, the simulation will contain the following files:
+For a model containing **scalar-singlet fields**, `NScalars > 0`, the simulation will contain the following files:
 
 <div class="grid cards cl-files" markdown>
 
@@ -29,47 +29,47 @@ For a model containing scalar singlet fields, `NScalars > 0`, the simulation wil
 
 </div>
 
-If the model contains complex scalar, `NCScalars > 0`, the following measurements are generated:
+If the model contains **complex scalars**, `NCScalars > 0`, the following measurement files are generated:
 
 <div class="grid cards cl-files" markdown>
 
+-   `average_[Re/Im]_cmplx_scalar_[nfld].txt`{ .cl-fname }
+
+    Two files for each complex field species, containing information about its real ($n=1$) and imaginary  ($n=2$) parts, respectively, $\varphi_{\texttt{nfld}}=(\varphi_{\texttt{nfld},1}+i\varphi_{\texttt{nfld},2})/\sqrt{2}$, following the canonical normalization.
+
+    $\tilde{ \eta}$, $\langle \tilde{\varphi}_{\texttt{nfld},n} \rangle$, $\langle \tilde{\varphi}'_{\texttt{nfld},n} \rangle$, $\langle \tilde{\varphi}_{\texttt{nfld},n}^2 \rangle$, $\langle \tilde{\varphi}^{'2}_{\texttt{nfld},n} \rangle$, $\text{rms} (\tilde{\varphi}_{\texttt{nfld},n})$, $\text{rms} (\tilde{\varphi}'_{\texttt{nfld},n})$
+    {: .cl-schema }
+
 -   `average_norm_cmplx_scalar_[nfld].txt`{ .cl-fname }
 
-    For each complex scalar species $\texttt{nfld}$. It contains:
+    For each complex scalar species $\texttt{nfld}$, it contains results related to the norm of the field, $|\varphi|_{\texttt{nfld}}^2=(|\varphi_{\texttt{nfld},1}|^2+|\varphi_{\texttt{nfld},2}|^2)/2$:
 
     $\tilde{ \eta}$, $\langle |\tilde{\varphi}_{\texttt{nfld}} |\rangle$, $\langle | \tilde{\varphi}_{\texttt{nfld}}' |\rangle$, $\langle |\tilde{\varphi}_{\texttt{nfld}} |^2 \rangle$, $\langle |\tilde{\varphi}_{\texttt{nfld}}'|^{2} \rangle$, $\text{rms} (|\tilde{\varphi}_{\texttt{nfld}}|)$, $\text{rms} (|\tilde{\varphi}_{\texttt{nfld}}'|)$
     {: .cl-schema }
 
--   `average_[Re/Im]_cmplx_scalar_[nfld].txt`{ .cl-fname }
-
-    Two additional files for each complex field species, containing information about its real ($n=1$) and imaginary  ($n=2$) parts, respectively, $\varphi_{\texttt{nfld}}=\varphi_{\texttt{nfld},1}+i\varphi_{\texttt{nfld},2}$. We note this separation in real and imaginary parts differs by a factor of $\sqrt{2}$ from the canonical normalization, $\varphi_{\texttt{nfld}}=(\phi_{\texttt{nfld},1}+i\phi_{\texttt{nfld},2})/\sqrt{2}$.
-
-    $\tilde{ \eta}$, $\langle \tilde{\varphi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\varphi}'_{\texttt{nfld}} \rangle$, $\langle \tilde{\varphi}_{\texttt{nfld}}^2 \rangle$, $\langle \tilde{\varphi}^{'2}_{\texttt{nfld}} \rangle$, $\text{rms} (\tilde{\varphi}_{\texttt{nfld}})$, $\text{rms} (\tilde{\varphi}'_{\texttt{nfld}})$
-    {: .cl-schema }
-
 </div>
 
-For simulations with scalar doublets, `NSU2Doublet > 0`, one also gets:
+For simulations with **scalar doublets**, `NSU2Doublet > 0`, one also gets:
 
 <div class="grid cards cl-files" markdown>
 
+-   `average_SU2Doublet_[nfld]_[n].txt`{ .cl-fname }
+
+    Measurements related to each component of the scalar doublets, defined following the canonical normalization, $\Phi=\frac{1}{\sqrt{2}}(\varphi_{\texttt{nfld},1}+i\varphi_{\texttt{nfld},2}\,\, \varphi_{\texttt{nfld},3}+i\varphi_{\texttt{nfld},4})^{\intercal}$. Four files are created per field species. They contain:
+
+    $\tilde{ \eta}$, $\langle \tilde{\varphi}_{\texttt{nfld},n} \rangle$, $\langle \tilde{\varphi}'_{\texttt{nfld},n} \rangle$, $\langle \tilde{\varphi}_{\texttt{nfld},n}^2 \rangle$, $\langle \tilde{\varphi}^{'2}_{\texttt{nfld},n} \rangle$, $\text{rms} (\tilde{\varphi}_{\texttt{nfld},n})$, $\text{rms} (\tilde{\varphi}'_{\texttt{nfld},n})$
+    {: .cl-schema }
+
 -   `average_norm_SU2Doublet_[nfld].txt`{ .cl-fname }
 
-    Containing measurements related to the norm of the scalar doublet, $|\Phi_{\texttt{nfld}}|^2=|\Phi_{\texttt{nfld},1}|^2+|\Phi_{\texttt{nfld},2}|^2+|\Phi_{\texttt{nfld},3}|^2+|\Phi_{\texttt{nfld},4}|^2$. One file is created per field species, $\texttt{nfld}$. It contains:
+    It contains measurements related to the norm of the scalar doublet, defined via $|\Phi_{\texttt{nfld}}|^2=\left(|\varphi_{\texttt{nfld},1}|^2+|\varphi_{\texttt{nfld},2}|^2+|\varphi_{\texttt{nfld},3}|^2+|\varphi_{\texttt{nfld},4}|^2\right)/2$. One file is created per field species, $\texttt{nfld}$. It contains:
 
     $\tilde{ \eta}$, $\langle |\tilde{\Phi}_{\texttt{nfld}} |\rangle$, $\langle | \tilde{\Phi}_{\texttt{nfld}}' |\rangle$, $\langle |\tilde{\Phi}_{\texttt{nfld}} |^2 \rangle$, $\langle |\tilde{\Phi}_{\texttt{nfld}}'|^{2} \rangle$, $\text{rms} (|\tilde{\Phi}_{\texttt{nfld}}|)$, $\text{rms} (|\tilde{\Phi}_{\texttt{nfld}}'|)$
     {: .cl-schema }
 
--   `average_SU2Doublet_[nfld]_[n].txt`{ .cl-fname }
-
-    Measurements related to each component of the scalar doublets. Four files are created per field species. They contain:
-
-    $\tilde{ \eta}$, $\langle \tilde{\Phi}_{\texttt{nfld}} \rangle$, $\langle \tilde{\Phi}'_{\texttt{nfld}} \rangle$, $\langle \tilde{\Phi}_{\texttt{nfld}}^2 \rangle$, $\langle \tilde{\Phi}^{'2}_{\texttt{nfld}} \rangle$, $\text{rms} (\tilde{\Phi}_{\texttt{nfld}})$, $\text{rms} (\tilde{\Phi}'_{\texttt{nfld}})$
-    {: .cl-schema }
-
 </div>
 
-For simulations with $\mathrm{U}(1)$ gauge fields `NU1Flds > 0`, the following measurements are also generated. Note that simulations with `NU1Flds > 1` have not been thoroughly tested.
+For simulations with **$\mathrm{U}(1)$ gauge fields**, `NU1Flds > 0`, the following output is also generated. Note that simulations with `NU1Flds > 1` have not been thoroughly tested, and the code aborts when trying to run them.
 
 <div class="grid cards cl-files" markdown>
 
@@ -108,7 +108,7 @@ Here, the electric and magnetic fields are defined using improved definitions,
 where we have left implicit the species index, for simplicity.
 
 
-For simulations with a $\mathrm{SU}(2)$ gauge field, `NSU2Flds > 0`, the following output is created:
+For simulations with a **$\mathrm{SU}(2)$ gauge field**, `NSU2Flds > 0`, the following output is created. Note that simulations with more than one non-abelian gauge fields are not implemented as of version 2.0, although this may change in the future. If one tries to run such simulations, the code will abort.
 
 <div class="grid cards cl-files" markdown>
 
@@ -130,7 +130,7 @@ For simulations with a $\mathrm{SU}(2)$ gauge field, `NSU2Flds > 0`, the followi
 
 
 
-In addition to these files related to field averages, results for the evolution of the scale factor are also saved with the same frequency for simulations running with self-consistent or fixed expansion, `expansion = true`. This file is not created for simulations without expansion. The file contains:
+In addition to these files related to field averages, results for the evolution of the **scale factor** are also saved with the same frequency for simulations running with self-consistent or fixed expansion, `expansion = true`. This file is not created for simulations without expansion. The file contains:
 
 <div class="grid cards cl-files" markdown>
 
