@@ -1,6 +1,6 @@
 <span style="font-size: 30px; font-weight: bold;"> $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ Schools </span>
 
-Over the years, we have run a series of specialised schools, where we give pedagogical lectures about lattice-cosmology techniques and their application to simulations of interacting fields in an expanding Universe. In these schools we also provide a comprehensive guide to using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the non-linear dynamics of interactive fields in cosmological contexts. 
+Over the years, we have run a series of specialised schools, where we give pedagogical lectures about lattice-cosmology techniques and their application to simulations of interacting fields in an expanding Universe. In these schools we also provide a comprehensive guide to using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the non-linear dynamics of interacting fields in cosmological contexts. 
 
 The Indico pages of the schools are:
 
