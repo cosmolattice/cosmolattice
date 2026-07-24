@@ -17,7 +17,7 @@
     <button type="button" class="cl-ppl-chip m-dims" data-mod="dims" aria-pressed="false">1D &amp; 2D</button>
     <span class="cl-ppl-divider"></span>
     <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
-    <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+    <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">TempLat</button>
     <span class="cl-ppl-divider"></span>
     <span class="cl-ppl-grouplabel">Upcoming</span>
     <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-fluid" data-mod="fluid" aria-pressed="false">Fluid Dynamics</button>
@@ -36,7 +36,7 @@
     <div class="cl-ppl-affil">DESY, Zeuthen, Germany</div>
     <div class="cl-ppl-badges">
       <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
-      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">TempLat</button>
       <button type="button" class="cl-ppl-chip m-defects" data-mod="defects" aria-pressed="false">Defects</button>
       <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
     </div>
@@ -64,7 +64,7 @@
     <div class="cl-ppl-role">Creator of CosmoLattice</div>
     <div class="cl-ppl-badges">
       <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
-      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">TempLat</button>
       <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
       <button type="button" class="cl-ppl-chip m-nmc" data-mod="nmc" aria-pressed="false">NMC</button>
       <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
@@ -90,7 +90,7 @@
     <div class="cl-ppl-affil">Bielefeld University, Germany</div>
     <div class="cl-ppl-badges">
       <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="core" aria-pressed="false">Core</button>
-      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">TempLat</button>
       <button type="button" class="cl-ppl-chip m-alp" data-mod="alp" aria-pressed="false">U(1) Axion</button>
       <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-su2axion" data-mod="su2axion" aria-pressed="false">SU(2) Axion</button>
     </div>
@@ -124,7 +124,7 @@
     <div class="cl-ppl-affil">Enjoying la vida loca out of academia</div>
     <div class="cl-ppl-role">Creator of CosmoLattice</div>
     <div class="cl-ppl-badges">
-      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">Templat</button>
+      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">TempLat</button>
     </div>
   </article>
 
