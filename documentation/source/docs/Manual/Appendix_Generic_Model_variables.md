@@ -1,4 +1,4 @@
-Below we present the variable used throughout the `CosmoInterface` which are declared in the `AbstractModel` class and thus shared by all models. See `include/TempLat/abstractmodel.h`.
+Below we present the variables used throughout the `CosmoInterface` which are declared in the `AbstractModel` class and thus shared by all models. See `include/CosmoInterface/abstractmodel.h`.
 
 | **Variable**        | **Definition**                                                                                   |
 | ------------------- | ------------------------------------------------------------------------------------------------ |
@@ -17,12 +17,12 @@ Below we present the variable used throughout the `CosmoInterface` which are dec
 | `pi2AvI`            | $\langle \tilde \pi_{\phi}^2 \rangle$                                                            |
 | `grad2AvI`          | $\sum_i \langle (\tilde \partial_i \tilde \phi)^2 \rangle$                                       |
 | `CSpi2AvI`          | $\langle \tilde \pi_{\varphi}^2 \rangle$                                                         |
-| `CSgrad2AvI`        | $\sum_i \langle(\widetilde D_i^A \varphi)^*(\widetilde D_i^A \widetilde \varphi) \rangle$        |
+| `CSgrad2AvI`        | $\sum_i \langle(\widetilde D_i^A \widetilde \varphi)^*(\widetilde D_i^A \widetilde \varphi) \rangle$ |
 | `SU2DblPi2AvI`      | $\langle \widetilde \pi_{\Phi}^2 \rangle$                                                        |
 | `SU2DblGrad2AvI`    | $\sum_i \langle (\widetilde D_i\widetilde \Phi)^\dagger(\widetilde D_i \widetilde \Phi) \rangle$ |
-| `U1El2AvI`          | $\sum_i \langle \mathcal{E}_i^2 \rangle$                                                         |
+| `U1pi2AvI`          | $\sum_i \langle \mathcal{E}_i^2 \rangle$                                                         |
 | `U1Mag2AvI`         | $\sum_i \langle \mathcal{B}_i^2 \rangle$                                                         |
-| `SU2El2AvI`         | $\sum_{i,a} \langle (\mathcal{E}_i^a)^2 \rangle$                                                 |
+| `SU2pi2AvI`         | $\sum_{i,a} \langle (\mathcal{E}_i^a)^2 \rangle$                                                 |
 | `SU2Mag2AvI`        | $\sum_{i,a} \langle (\mathcal{B}_i^a)^2 \rangle$                                                 |
 | `potAvI`            | $\langle \widetilde V \rangle$                                                                   |
 | `fldS0`             | $\langle \tilde \phi_* \rangle$                                                                  |
