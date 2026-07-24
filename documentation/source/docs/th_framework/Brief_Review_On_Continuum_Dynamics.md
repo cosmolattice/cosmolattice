@@ -292,7 +292,7 @@ In the practice, however, it is more convenient to define an effective anisotrop
 ```math
 \begin{align}
 \label{eq_GWEffectiveAnisotropicStress}
-\Pi_{ij}^\mathrm{eff}=\sum_a \nabla_i\phi_a \nabla_j\phi_a+2\sum_b \text{Re}\left[\left(D_i^A\varphi_b)^*D_j^A\varphi_b\right]-a^{-2\alpha}E_iE_j-a^{-2}B_i B_j \,,
+\Pi_{ij}^\mathrm{eff}=\sum_a \nabla_i\phi_a \nabla_j\phi_a+2\sum_b \text{Re}\left[ \left(D_i^A\varphi_b\right)^*D_j^A\varphi_b \right]-a^{-2\alpha}E_iE_j-a^{-2}B_i B_j \,,
 \end{align}
 ```
 from which the source of GWs is obtained after TT projection. This operation is non-local in real space, but corresponds to an algebraic relation in Fourier space,
@@ -311,10 +311,10 @@ where the Fourier-space TT projector takes the form,
 \begin{align}
 \label{eq_GWTTprojector}
 \Lambda_{ij,lm}(\hat{\bf k})
-&\equiv
+\equiv
 P_{il}(\hat{\bf k})P_{jm}(\hat{\bf k})
 -{1\over2}P_{ij}(\hat{\bf k})P_{lm}(\hat{\bf k})\,,\quad\quad \text{with}\quad\quad P_{ij}(\hat{\bf k})
-&\equiv
+\equiv
 \delta_{ij}-\hat k_i\hat k_j\,,
 \end{align}
 ```
