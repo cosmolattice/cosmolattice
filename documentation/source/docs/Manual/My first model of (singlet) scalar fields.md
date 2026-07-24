@@ -6,7 +6,7 @@ After following this section, the reader will have enough information to impleme
 
 This section is structured as follows: [*Program variables*][subsec_LatticeScalars] first introduces the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer. Then our example model is presented in [*The model*][sec_ScTheModel] , which also  defines its corresponding program variables and program potential. This is followed by [*My first run*][sec_MyFirstRun], which explains how to compile and run the code. Later, [*The model file*][sec_TheModelFile] walks the user through the *model file*, where the model details are actually implemented. And finally [*The singlet-scalar physics implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*][sec_WhatHappensAuto], presents a summarized picture of what happens 'under the hood' in the code, discussing details on how the fields are initialized in a simulation, and how their dynamical evolution is solved.
 
-</div> <!-- and how different measurements are obtained.  -->
+<!-- and how different measurements are obtained.  -->
 
 
 <!-- </div> -->
