@@ -1,4 +1,4 @@
-In this appendix we list all the different parameters that can be specified when carrying out a simulation. Most of these parameters must be specified in program units, defined by the field and spacetime transformations of Eq. ([*30*][eq_FieldSpaceTimeNaturalVariables]), so that variables are dimensionless. For example, one must introduce the length side of the box as $\tilde{L} \equiv L \omega_*$, the infrared cutoff the lattice as $\tilde{k}_{\rm IR} \equiv k_{\rm IR}/\omega_*$, etc.
+In this appendix we list all the different parameters that can be specified when carrying out a simulation. Most of these parameters must be specified in program units, defined by the field and spacetime transformations of Eq. ([*30*][eq_FieldSpaceTimeNaturalVariables]), so that variables are dimensionless. For example, one must introduce the length side of the box as $\tilde{L} \equiv L \omega_*$, the infrared cutoff of the lattice as $\tilde{k}_{\rm IR} \equiv k_{\rm IR}/\omega_*$, etc.
 
 The tables below are generated automatically from the parameter database
 `source/data/parameters.yaml` by `scripts/gen_param_appendix.py`. Only the
@@ -42,7 +42,7 @@ expansion. They are declared in `include/CosmoInterface/runparameters.h`.
 <!-- @endgen -->
 
 !!! note
-    $\tilde{k}_{\rm IR}$ and $\tilde{L}$ obey $\tilde{k}_{\rm IR} = 2\pi /\tilde L$ , so only one of them must be specified for the simulation: the other one will be automatically computed by the code.
+    $\tilde{k}_{\rm IR}$ and $\tilde{L}$ obey $\tilde{k}_{\rm IR} = 2\pi /\tilde L$, so only one of them must be specified for the simulation: the other one will be automatically computed by the code.
 
 ## Initial conditions
 
