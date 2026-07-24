@@ -5,7 +5,7 @@ In this Tab we provide a brief description of the steps to download, install, co
 
 <!-- **Download:** You can download $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ from [ http://www.cosmolattice.net](http://www.cosmolattice.net),  -->
 
-An appropriate version of FFTW needs to be installed in order to handle the code's Fourier transforms, either for serial jobs run on a single processor, or for parallelized jobs run on multiple processors. For serial jobs, that is all it is needed. For parallelized jobs, in addition, the appropriate MPI compiler needs also to be installed. 
+An appropriate version of FFTW needs to be installed in order to handle the code's Fourier transforms, either for serial jobs run on a single processor, or for parallelized jobs run on multiple processors. For serial jobs, that is all that is needed. For parallelized jobs, in addition, the appropriate MPI compiler needs also to be installed. 
 Optionally, if one wants to print two- or three-dimensional snapshots of a simulation, or simply to stop/restart a run at a certain time, the HDF5 library also needs to be installed. 
 Also optionally, the simulations can be parallelized in more than one spatial dimension, to speed up jobs of long duration or to run massive simulations. This is handled by the ParaFaFT library (parallel Fast Fourier transforms), which is automatically built and enabled when the code is compiled with MPI. For further details on the installation and use of the code and the libraries, please see [Installation](../code/Installation.md).
 
