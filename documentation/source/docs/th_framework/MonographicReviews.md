@@ -1,6 +1,6 @@
 <!-- ** Theory Monographs Guide. **  -->
 
-The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are presented through a series of monographic reviews on **lattice-cosmology** techniques, written over the years under the common title *"The Art of Simulating the Early Universe"*. At the time of writing (July 2026), the series has three parts: 
+The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is presented through a series of monographic reviews on **lattice-cosmology** techniques, written over the years under the common title *"The Art of Simulating the Early Universe"*. At the time of writing (July 2026), the series has three parts: 
 
 - *Part I. Integration techniques and canonical cases.* (Ref. [@Figueroa_2020rrl])
 
@@ -8,7 +8,7 @@ The theoretical basis for the equations implemented in $\mathcal{C}\mathtt{osmo}
 
 - *Part III. Scalar-Gauge-Fluid dynamics.* (Ref. [@Figueroa_2026XYZ]) 
 
-which will often refer to as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs. These reviews provide comprehensive discussions of lattice-cosmology methods for scalar–gauge field theories in an expanding universe ($\mathtt{The~Art-I}$); gravitational waves and non-canonical aspects of field theory, including interactions, initial conditions, dimensionality ($\mathtt{The~Art-II}$); and fluid dynamics as a description of an ensemble of interacting scalar, gauge, and fermion particles ($\mathtt{The~Art-III}$). 
+which we will often refer to as $\mathtt{The~Art-I}$, $\mathtt{The~Art-II}$ and $\mathtt{The~Art-III}$ monographs. These reviews provide comprehensive discussions of lattice-cosmology methods for scalar–gauge field theories in an expanding universe ($\mathtt{The~Art-I}$); gravitational waves and non-canonical aspects of field theory, including interactions, initial conditions, and dimensionality ($\mathtt{The~Art-II}$); and fluid dynamics as a description of an ensemble of interacting scalar, gauge, and fermion particles ($\mathtt{The~Art-III}$). 
 
 You can download the monographs from:
 
@@ -47,7 +47,7 @@ This monograph provides the theoretical foundation for $\mathcal{C}\mathtt{osmo}
 
 For each case, we build symplectic integrators with accuracies ranging from $\mathcal{O}(\delta t^2)$ to $\mathcal{O}(\delta t^{10})$. We also derive lattice expressions for the relevant observables, including the energy density components, field power spectra, and the Hubble constraint. Remarkably, all of our algorithms for gauge theories preserve the Gauss constraint to machine precision, even when self-consistent expansion is taken into account. As a numerical illustration, we analyze the post-inflationary dynamics of an oscillating field charged under $SU(2)\times U(1)$.
 
-You can Download $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) from: &nbsp; <a href="https://inspirehep.net/literature/1803326" target="_blank" rel="noopener noreferrer">INSPIRE-HEP</a> ;  &nbsp; 
+You can download $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) from: &nbsp; <a href="https://inspirehep.net/literature/1803326" target="_blank" rel="noopener noreferrer">INSPIRE-HEP</a> ;  &nbsp; 
 <a href="https://arxiv.org/abs/2006.15122" target="_blank" rel="noopener noreferrer">ArXiv Abstract</a> ; &nbsp; <a href="https://arxiv.org/pdf/2006.15122" target="_blank" rel="noopener noreferrer">ArXiv PDF</a> ; &nbsp;
 <a href="./pdfs/Art_I.pdf" target="_blank" rel="noopener noreferrer" download>Local PDF </a> ; &nbsp; <a href="https://doi.org/10.1088/1475-7516/2021/04/035" target="_blank" rel="noopener noreferrer"> Publication URL</a>
 
@@ -86,7 +86,7 @@ Next, we discuss methods for setting up special field configurations, including:
 
 We further extend the notion of non-canonical theories by discussing the discretization of scalar-field dynamics in $d+1$ dimensions, with $d\neq 3$. Independently of non-canonical aspects, we also discuss implementations of GW dynamics on the lattice, including a new algorithm that improves the memory requirements of previous methods commonly used in the literature. 
 
-You can Download $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]) from: &nbsp; <a href="https://inspirehep.net/literature/3093619" target="_blank" rel="noopener noreferrer">INSPIRE-HEP</a> ; &nbsp;
+You can download $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]) from: &nbsp; <a href="https://inspirehep.net/literature/3093619" target="_blank" rel="noopener noreferrer">INSPIRE-HEP</a> ; &nbsp;
 <a href="https://arxiv.org/abs/2512.15627" target="_blank" rel="noopener noreferrer">ArXiv Abstract</a> ; &nbsp;
 <a href="https://arxiv.org/pdf/2512.15627" target="_blank" rel="noopener noreferrer">ArXiv PDF</a> ; &nbsp;
 <a href="./pdfs/Art_II.pdf" target="_blank" rel="noopener noreferrer" download>Local PDF </a>; &nbsp; <a href="https://doi.org/10.1088/1475-7516/2026/06/087" target="_blank" rel="noopener noreferrer"> Publication URL</a>
@@ -109,7 +109,7 @@ You can Download $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]) from: 
 
 <!-- ## $\mathtt{The~Art-III}$. **Scalar-gauge-fluid dynamics** { #subsec_ArtIII } -->
 
-This monograph serves as the theoretical basis for scalar–gauge–fluid interacting systems in expanding backgrounds, as implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ since ${\tt version~3.0}$ (to be released on 2027). It presents lattice methods for the simulation of fluid dynamics in the early Universe, representing a third entry in our monographic series on lattice cosmology techniques, $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) and $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]), which previously covered canonical and non-canonical field theories, and gravitational waves (GWs). In this monograph, we first review the continuous theory of fluid dynamics in flat spacetime, and then in an FLRW background. We consider both conservation and non-conservation forms of the equations, fluids in isolation or coupled to scalar and/or gauge fields, and either fully relativistic or subrelativistic regimes of fluid bulk motion. After reviewing basic lattice concepts, we introduce detailed discretization schemes for fluid dynamics in expanding backgrounds for: 
+This monograph serves as the theoretical basis for scalar–gauge–fluid interacting systems in expanding backgrounds, as implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ since ${\tt version~3.0}$ (to be released in 2027). It presents lattice methods for the simulation of fluid dynamics in the early Universe, representing a third entry in our monographic series on lattice cosmology techniques, $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]) and $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]), which previously covered canonical and non-canonical field theories, and gravitational waves (GWs). In this monograph, we first review the continuous theory of fluid dynamics in flat spacetime, and then in an FLRW background. We consider both conservation and non-conservation forms of the equations, fluids in isolation or coupled to scalar and/or gauge fields, and either fully relativistic or subrelativistic regimes of fluid bulk motion. After reviewing basic lattice concepts, we introduce detailed discretization schemes for fluid dynamics in expanding backgrounds for: 
 
 - Isolated perfect fluids 
 - Isolated imperfect (viscous) fluids 
@@ -118,7 +118,7 @@ This monograph serves as the theoretical basis for scalar–gauge–fluid intera
 
 Our evolution algorithms accommodate self-consistent expansion sourced by all scalar, gauge, and fluid sectors, preserving gauge invariance to machine precision in some cases. We also review lattice methods to set up the initial conditions for a fluid and the implementation of GW dynamics sourced by all scalar, gauge, and fluid degrees of freedom. 
 
-You can Download $\mathtt{The~Art-III}$ (Ref. [@Figueroa_2026XYZ]) from: &nbsp; <a href="https://inspirehep.net/literature/3093619" target="_blank" rel="noopener noreferrer">INSPIRE-HEP</a> ; &nbsp;
+You can download $\mathtt{The~Art-III}$ (Ref. [@Figueroa_2026XYZ]) from: &nbsp; <a href="https://inspirehep.net/literature/3093619" target="_blank" rel="noopener noreferrer">INSPIRE-HEP</a> ; &nbsp;
 <a href="https://arxiv.org/abs/2512.15627" target="_blank" rel="noopener noreferrer">ArXiv Abstract</a> ; &nbsp;
 <a href="https://arxiv.org/pdf/2512.15627" target="_blank" rel="noopener noreferrer">ArXiv PDF</a> ; &nbsp;
 <a href="./pdfs/Art_II.pdf" target="_blank" rel="noopener noreferrer" download>Local PDF </a>; &nbsp; <a href="https://doi.org/10.1088/1475-7516/2026/06/087" target="_blank" rel="noopener noreferrer"> Publication URL</a>
