@@ -6,7 +6,7 @@ The code can be downloaded from our <a href="https://github.com/cosmolattice/cos
 
 In this Tab we discuss in detail how to build $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ for different platforms both on macOS and Linux. 
 $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ requires almost nothing beyond standard development tools on a UNIX machine, see [*Requirements*][subsec_requirements].
-We also explain how to integrate $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ with external libraries and make some general comments on to make it work on High Performance Clusters (HPC).
+We also explain how to integrate $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ with external libraries and make some general comments on how to make it work on High Performance Clusters (HPC).
 
 <div class="cl-facts cl-prereqs" markdown>
 [git](#subsec_requirements){ .cl-fact }
@@ -86,7 +86,7 @@ Typically, these tools can be easily installed on your system using the default 
 
 !!! info "Kokkos is downloaded and built for you"
 
-    $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will always download and build [Kokkos](https://kokkos.org/) automatically. If a GPU architecture is used, it will also download and build [KokkosFFT](https://github.com/kokkos/kokkos-fft) to provide GPU-native fourier transformations.
+    $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will always download and build [Kokkos](https://kokkos.org/) automatically. If a GPU architecture is used, it will also download and build [KokkosFFT](https://github.com/kokkos/kokkos-fft) to provide GPU-native Fourier transformations.
 
 ## Device configuration
 
@@ -134,7 +134,7 @@ cmake -DMODEL=lphi4 -DNOTHREADING=ON ../
 To compile an application to be run on a specific architecture, you can directly pass the target architecture to Kokkos.
 For a list of supported architectures, see [the Kokkos documentation](https://kokkos.org/kokkos-core-wiki/get-started/configuration-guide.html#gpu-architectures). For example, for an RTX 4070, you would pass 
 ```bash
-cmake -DMODEL=lphi4 -DKokkos_ARCH_ADA89 ../
+cmake -DMODEL=lphi4 -DKokkos_ARCH_ADA89=ON ../
 ```
 
 ## Optional features
@@ -144,8 +144,8 @@ Optionally, you can enable the following libraries:
 | Name    <div style="width:150px"> | Minimal Version | Extra Features                                                                        | Notes                                                                                                                                                            |
 | --------------------------------- | --------------- | ------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | MPI                               | -               | Distributed parallelization                                                           | Needs an implementation of `MPI` compatible with the compiler you chose. The most common open-source ones are `OpenMPI` and `MVAPICH` (for `g++` and `clang++`). |
-| ParaFaFT                          | -               | Distributed fourier transformations.                                                  | External library for distributed CPU/GPU fourier transforms. Automatically built and enabled when `MPI=ON`.                                                      |
-| HDF5                              | 5               | Alternative output format; saving whole simulations, restarting and automatic backup. | If `MPI=ON`, needs to be compiled against MPI. Can be built automatically.                                                                                       |
+| ParaFaFT                          | -               | Distributed Fourier transformations.                                                  | External library for distributed CPU/GPU Fourier transforms. Automatically built and enabled when `MPI=ON`.                                                      |
+| HDF5                              | 1.12            | Alternative output format; saving whole simulations, restarting and automatic backup. | If `MPI=ON`, needs to be compiled against MPI. Can be built automatically.                                                                                       |
 
 <div class="grid cards" markdown>
 
@@ -166,7 +166,7 @@ Optionally, you can enable the following libraries:
     ---
 
     `HDF5` is a file format and set of tools for managing complex data. It is particularly useful for saving whole simulations, restarting them, and automatically backing them up. 
-    Enabling `HDF5` allows you to use this format for all output files instead of the default text files. For more details, see also the [HDF5: Output and Backups](../Manual/HDF5: Output and Backups.md) section in the manual.
+    Enabling `HDF5` allows you to use this format for all output files instead of the default text files. For more details, see also the [HDF5: Output and Backups](../Manual/HDF5%3A Output and Backups.md) section in the manual.
 
     To use `HDF5` with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, you can either install it using your system's package manager, or pass `-DAUTOBUILD_HDF5=ON` to the `cmake` command, which will automatically download and build it for you:
     ```bash
@@ -221,7 +221,7 @@ At this point, you should be able to compile and run $\mathcal{C}\mathtt{osmo}\m
     ```bash
     sudo apt-get install make g++ cmake openmpi git
     ```
-    The `sudo` command is necessary for the admin rights needed to install software ''globally" on your PC.
+    The `sudo` command is necessary for the admin rights needed to install software "globally" on your PC.
 
 === "Arch Linux"
 
