@@ -30,10 +30,12 @@
 903112: {name: null, city: Oxford, country: GB, lat: 51.759675, lon: -1.259506}
 903135: {name: 'ASCR, Inst. Phys., Prague', city: Prague, country: CZ, lat: 50.1239503, lon: 14.4689537}
 903138: {name: 'IAS, Princeton', city: Princeton, country: US, lat: 40.366633, lon: -74.640832}
+903168: {name: null, city: Rome, country: IT, lat: 41.9, lon: 12.5}
 903237: {name: null, city: Stony Brook, country: US, lat: 40.90443, lon: -73.11732}
 903259: {name: 'Tel-Aviv U., Dept. Part. Phys.', city: Tel Aviv, country: IL, lat: 32.1141667, lon: 34.7969444}
 903268: {name: 'Tohoku U., Sendai, Dept. Phys.', city: Sendai, country: JP, lat: 38.25331326896606, lon: 140.87335109710693}
 903272: {name: 'Tokyo Metropolitan U., Dept. Phys.', city: Tokyo, country: JP, lat: 35.6894875, lon: 139.6917064}
+903277: {name: 'U. Tokyo, Inst. Phys., Komaba', city: Tokyo, country: JP, lat: 35.6593243, lon: 139.6857579}
 903304: {name: null, city: Riverside, country: US, lat: 33.953333, lon: -117.395278}
 903319: {name: 'U. Valencia, Dept. Phys. Theor.', city: Valencia, country: ES, lat: 39.50937, lon: -0.410549}
 903335: {name: 'U. Warsaw, Fac. Phys.', city: Warsaw, country: PL, lat: 52.23537, lon: 21.009485}
@@ -54,6 +56,7 @@
 905190: {name: 'U. Barcelona, Fac. Phys.', city: Barcelona, country: ES, lat: 41.4113755, lon: 2.2187213}
 905301: {name: Leon U., city: Leon, country: ES, lat: 42.5987, lon: -5.5671, note: coords hand-added (U. Leon)}
 905765: {name: Gustavus Adolphus Coll., city: Saint Peter, country: US, lat: 44.335107, lon: -93.981061}
+906808: {name: 'Carlos III U., Madrid', city: Madrid, country: ES, lat: 40.3325, lon: -3.7654, note: coords hand-added (UC3M Leganes campus)}
 906878: {name: 'MIPT, Moscow', city: Moscow, country: RU, lat: 55.9388912, lon: 37.5085037}
 907170: {name: 'NCU, Nanchang', city: Nanchang, country: CN, lat: 28.6829, lon: 115.8579, note: coords hand-added (Nanchang U.)}
 907270: {name: 'Beira Interior U., Covilha', city: Covilha, country: PT, lat: 40.2811, lon: -7.5069, note: coords hand-added (U. Beira Interior)}
@@ -107,5 +110,6 @@
 1758644: {name: null, city: Moscow, country: RU, lat: null, lon: null}
 1776405: {name: 'IJCLab, Orsay', city: Paris, country: FR, lat: 48.8566, lon: 2.3522, note: IJCLab is in Orsay; binned to Paris}
 1783783: {name: null, city: Hangzhou, country: CN, lat: 30.2741, lon: 120.1551, note: coords hand-added}
+1847255: {name: Shiv Nadar U., city: Dādri, country: IN, lat: 28.5238, lon: 77.5747, note: 'coords hand-added (Shiv Nadar U., Greater Noida)'}
 1849718: {name: 'SRM U., Amaravati', city: Amaravati, country: IN, lat: 16.573, lon: 80.3575, note: coords hand-added (SRM U. AP)}
 1850876: {name: 'IBS, Daejeon, CTPU', city: Daejon, country: KR, lat: null, lon: null}

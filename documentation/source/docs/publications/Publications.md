@@ -17,6 +17,16 @@ Research connected to $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. The 
      `python3 scripts/add_new_citation.py <arxiv>`) and commit the regenerated block. -->
 <!-- @gen:publications:using-cl -->
 <ol>
+<li value="98">
+<b>Gravitational waves from self-resonance during reheating with a quantum-corrected inflaton potential</b>.<br>
+<span class="clau" data-aid="2952888">Tomoya Inada</span>, <span class="clau" data-aid="2418765">Noel Jonathan Jobu</span>, <span class="clau" data-aid="1259387">Kenji Nishiwaki</span>, <span class="clau" data-aid="1274257">Toshifumi Noumi</span>, <span class="clau" data-aid="1050618">Naoki Yamatsu</span><br>
+arXiv: <a href="https://arxiv.org/abs/2607.18381" target="_blank" rel="noopener noreferrer">2607.18381</a><br><br>
+</li>
+<li value="97">
+<b>Biased Domain Wall Networks and their Gravitational Waves</b>.<br>
+<span class="clau" data-aid="3181848">Davide Barbini</span>, <span class="clau" data-aid="1036465">Alessio Notari</span>, <span class="clau" data-aid="1031250">Oriol Pujolàs</span>, <span class="clau" data-aid="1411973">Fabrizio Rompineve</span>, <span class="clau" data-aid="1274773">Francisco Torrentí</span><br>
+arXiv: <a href="https://arxiv.org/abs/2607.18107" target="_blank" rel="noopener noreferrer">2607.18107</a><br><br>
+</li>
 <li value="96">
 <b>Constant Scaling Fails for Global Monopole Networks</b>.<br>
 <span class="clau" data-aid="1768581">Wakutaka Nakano</span>, <span class="clau" data-aid="1421892">Wen Yin</span><br>
