@@ -16,7 +16,7 @@ d \eta \equiv a^{-\alpha} (t) dt \ ,\label{eq_auto_001}
 ```
 with $\alpha$ a real number conveniently chosen for each problem at hand. We refer to $\eta$ as the **$\alpha$-time**, and note that for $\alpha=1$, it represents the *conformal time*, whereas for $\alpha=0$, we recover cosmic time. In general, we will keep $\alpha$ as an unspecified real number, writing all the relevant equations in terms of $\alpha$-time. Only when a physical problem is chosen, then one needs to make a concrete choice for $\alpha$.
 
-The evolution of the scale factor is dictated by the stress-energy tensor of the matter fields, which in order to be compatible with the statistical homogeneity and isotropy of the universe, it must take the form of a *perfect fluid* as
+The evolution of the scale factor is dictated by the stress-energy tensor of the matter fields, which in order to be compatible with the statistical homogeneity and isotropy of the universe, must take the form of a *perfect fluid* as
 [](){ #eq_stresstensor }
 ```math
 \begin{equation} {\bar T}_{\mu \nu} \equiv (\bar\rho + \bar p )u_{\mu} u_{\nu} + \bar p g_{\mu \nu}  \ , \hspace{0.4cm} g_{\mu \nu} u^{\mu} u^{\nu} = -1 \hspace{0.4cm} \Longrightarrow \hspace{0.4cm}   \begin{cases}
@@ -41,7 +41,7 @@ where ${f}' \equiv \text{d} f/ \text{d} \eta$ and $m_p \simeq 2.435\cdot10^{18}$
 <!-- 
 In Section [Lattice-Cosmology Reviews](MonographicReviews.md) we present the lattice formulation of different theories involving scalar and/or gauge fields, based on the techniques introduced in [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md). In order to introduce notation, 
  -->
-We introduce now the equations of motion resulting in a scalar-gauge theory with three kinds of canonically-normalized scalar fields: a real scalar singlet $\phi$, a U(1)-charged complex scalar field $\varphi$, and a $[SU(N) \times U(1)]$-charged doublet scalar field $\Phi$. In the last two cases, there are also present, respectively, Abelian and non-Abelian gauge fields, $A_{\mu}$ and $C_{\mu} \equiv C_{\mu}^a T_a$, with $T_a$ the $N^2-1$ group generators, satisfying the $SU(N)$ Lie algebra properties $[T_a, T_b] = i f_{abc} T_c$ , ${\rm Tr}(T_a) = 0$ , ${\rm Tr}(T_a T_b) = \frac{1}{2} \delta_{ab}$, and $T^{\dagger}_a = T_a$, with $f_{abc}$ the totally anti-symmetric *structure constants* of the group, and $[\cdot,\cdot]$ the usual matrix commutator. In the particular case of SU(2), $T_a \equiv \sigma_a / 2$, $a=1,2,3$, with $\sigma_a$ the *Pauli matrices*, and $f_{abc} = \epsilon_{abc}$ the total anti-symmetric tensor. The scalar fields can be explicitly written in terms of real components as follows,
+We introduce now the equations of motion resulting in a scalar-gauge theory with three kinds of canonically-normalized scalar fields: a real scalar singlet $\phi$, a U(1)-charged complex scalar field $\varphi$, and a $[SU(N) \times U(1)]$-charged doublet scalar field $\Phi$. In the last two cases, there are also present, respectively, Abelian and non-Abelian gauge fields, $A_{\mu}$ and $C_{\mu} \equiv C_{\mu}^a T_a$, with $T_a$ the $N^2-1$ group generators, satisfying the $SU(N)$ Lie algebra properties $[T_a, T_b] = i f_{abc} T_c$ , ${\rm Tr}(T_a) = 0$ , ${\rm Tr}(T_a T_b) = \frac{1}{2} \delta_{ab}$, and $T^{\dagger}_a = T_a$, with $f_{abc}$ the totally anti-symmetric *structure constants* of the group, and $[\cdot,\cdot]$ the usual matrix commutator. In the particular case of SU(2), $T_a \equiv \sigma_a / 2$, $a=1,2,3$, with $\sigma_a$ the *Pauli matrices*, and $f_{abc} = \epsilon_{abc}$ the totally anti-symmetric tensor. The scalar fields can be explicitly written in terms of real components as follows,
 [](){ #eq_ChargedScalars }
 ```math
 \begin{eqnarray} \label{eq_ChargedScalars}
@@ -89,7 +89,7 @@ E_i \equiv F_{0i} , \,\,\,\,\,\,\,\,  B_i \equiv \frac{1}{2} \epsilon_{i j k} F^
 ```
 where $\epsilon_{ijk}$ is the Levi-Civita symbol in three dimensions with normalization $\epsilon_{123}=+1$, and $G_{\mu \nu}^a \equiv {\rm Tr}(2G_{\mu \nu} T_a) = {\rm Tr}(G_{\mu \nu} \sigma_a)$.
 
-The equations of motion for the matter fields and the scale factor have been derived in more detail in {\tt The Art\,I}. Here we simply quote their resulting form, which reads
+The equations of motion for the matter fields and the scale factor have been derived in more detail in $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$. Here we simply quote their resulting form, which reads
 [](){ #eq_singlet-eom }
 [](){ #eq_higgsU1-eom }
 [](){ #eq_higgsSU2-eom }
@@ -133,7 +133,7 @@ T_{\mu \nu} \equiv -\frac{2}{\sqrt{g}}\frac{\delta(\sqrt{g} \mathcal{L})}{\delta
 \label{eq_auto_002}
 \end{equation}
 ```
-This definition leads, using Eqs. (\ref{eq_stresstensor}) and~(\ref{eq_lagrangian}), to *local* expressions for the field's energy and pressure densities,
+This definition leads, using Eqs. (\ref{eq_stresstensor}) and (\ref{eq_lagrangian}), to *local* expressions for the field's energy and pressure densities,
 [](){ #eq_rhoLocal }
 [](){ #eq_pLocal }
 ```math
@@ -143,8 +143,6 @@ This definition leads, using Eqs. (\ref{eq_stresstensor}) and~(\ref{eq_lagrangia
 \end{eqnarray}
 ```
 with the different energy density contributions given by
-Here is the same text with all \tilde, \widetilde, and \widetilde{...} removed, while leaving everything else unchanged.
-
 [](){ #eq_energy-contributions }
 ```math
 \begin{align}
@@ -238,7 +236,7 @@ The energy density and pressure contributions of the combined axion–gauge sect
 p &=& K_\phi - \frac{1}{3} G_\phi - V(\phi) + \frac{1}{3} \left( K_{U(1)} + G_{U(1)} \right) \ , \label{eq_axion_p}
 \end{eqnarray}
 
-where the individual kinetic and gradient terms for the scalar and vector fields coincide with the definitions in Eq. \eqref{eq_energy-contributions}. If the fields of this axion-U(1) gauge sector dominate the energy budget of the Universe, the expansion is given by Friedman Eqs. \eqref{eq_FriedmannHub} and \eqref{eq_FriedmannD2a}, but of course considering only the contributions of this sector. 
+where the individual kinetic and gradient terms for the scalar and vector fields coincide with the definitions in Eq. \eqref{eq_energy-contributions}. If the fields of this axion-U(1) gauge sector dominate the energy budget of the Universe, the expansion is given by Friedmann Eqs. \eqref{eq_FriedmannHub} and \eqref{eq_FriedmannD2a}, but of course considering only the contributions of this sector. 
 
 ## Scalar-Gauge-Fluid Dynamics { #subsec_eomFluids }
 
@@ -287,7 +285,7 @@ GWs are sourced by the transverse-traceless (TT) part of the anisotropic stress 
 T_{ij}-\bar p\,g_{ij},
 \end{align}
 ```
-In the practice, however, it is more convenient to define an effective anisotropic strees tensor containing only those contributions to $\Pi_{ij}$ that have a non-zero TT projection. For example, for a generic model consisting of canonically normalized scalars and Abelian gauge fields, this takes the form,
+In practice, however, it is more convenient to define an effective anisotropic stress tensor containing only those contributions to $\Pi_{ij}$ that have a non-zero TT projection. For example, for a generic model consisting of canonically normalized scalars and Abelian gauge fields, this takes the form,
 [](){ #eq_GWEffectiveAnisotropicStress }
 ```math
 \begin{align}
@@ -320,7 +318,7 @@ P_{il}(\hat{\bf k})P_{jm}(\hat{\bf k})
 ```
 and $\hat k_i\equiv {k_i\over k}$. This guarantees the projected tensor is both transverse, $k_i\Pi_{ij}^{\rm TT}=0$, and traceless, $\Pi_{ii}^{\rm TT}=0$.
 
-<!--Numerically solving Eq.$~$\eqref{eq_GWEOMcontinuum} directly requires to determine the TT projected anisotropic stress tensor every time the GWs need to be evolved, which is a very costly operation. An alternative was proposed in Ref. [@GarciaBellido_2008], based on the use of auxiliary fields sourced by $\Pi_{ij}^\text{eff}$. While the original proposad used six unphysical degrees of freedom to simulate the GWs, it is possible to reduce this number to five, as discussed in $\mathtt{The~Art{\text -}II}$ [@BaezaBallesteros_2025tme],  by using a symmetric traceless tensor of auxiliary fields, $v_{ij}$, which obeys $v_{33}=-(v_{11}+v_{22})$. If these fields are evolved following
+<!--Numerically solving Eq.$~$\eqref{eq_GWEOMcontinuum} directly requires to determine the TT projected anisotropic stress tensor every time the GWs need to be evolved, which is a very costly operation. An alternative was proposed in Ref. [GarciaBellido_2008], based on the use of auxiliary fields sourced by $\Pi_{ij}^\text{eff}$. While the original proposal used six unphysical degrees of freedom to simulate the GWs, it is possible to reduce this number to five, as discussed in $\mathtt{The~Art{\text -}II}$ [BaezaBallesteros_2025tme],  by using a symmetric traceless tensor of auxiliary fields, $v_{ij}$, which obeys $v_{33}=-(v_{11}+v_{22})$. If these fields are evolved following
 [](){ #eq_GWvEOM }
 ```math
 \begin{align}
@@ -348,7 +346,7 @@ h_{ij}({\bf k},\eta)
 ```
 This is the algorithm used in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ to simulate the evolution of GWs.-->
 
-Finally, it is worth mentioning about GW observables. The most relevant quantity related to GWs is the energy density of the GW background,
+Finally, it is worth mentioning GW observables. The most relevant quantity related to GWs is the energy density of the GW background,
 [](){ #eq_GWrhoContinuum }
 ```math
 \begin{align}
