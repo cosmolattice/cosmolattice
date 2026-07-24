@@ -10,9 +10,9 @@ All the user has to do is enable the relevant capabilities through a few `CMake`
 
 CosmoLattice can compute its Fourier transforms with any of the following libraries:
 
-- **`FFTW`** — the always-present CPU backend. It can be used for both serial runs and for distributed runs parallelized along a single direction. With GPU builds, it can be used, incurs however copy overhead between GPU and CPU RAM, and is therefore not recommended for performance-critical runs.
+- **`FFTW`** — the always-present CPU backend. It can be used for both serial runs and for distributed runs parallelized along a single direction. With GPU builds, it can be used, but incurs copy overhead between GPU and CPU RAM, and is therefore not recommended for performance-critical runs.
 - **`KokkosFFT`** — the single-node GPU backend. It is pulled in automatically whenever you build for a GPU, and forwards the transform to the vendor library (`cuFFT` on NVIDIA, `hipFFT` on AMD) through [Kokkos](https://kokkos.org).
-- **`ParaFaFT`** — the distributed backend for transforms parallelized along *several* directions. It is the modern replacement for the `PFFT` library used in CosmoLattice 1.0 and builds either on top of either `FFTW` on CPUs, or `cuFFT`/`hipFFT` on GPUs. It is only used when the code is built with `MPI` and automatically distributes over $d-1$ spatial dimensions.
+- **`ParaFaFT`** — the distributed backend for transforms parallelized along *several* directions. It is the modern replacement for the `PFFT` library used in CosmoLattice 1.0 and builds on top of either `FFTW` on CPUs, or `cuFFT`/`hipFFT` on GPUs. It is only used when the code is built with `MPI` and automatically distributes over $d-1$ spatial dimensions.
 
 The following table summarizes when each backend is used and how it is enabled:
 
