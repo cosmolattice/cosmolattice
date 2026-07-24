@@ -175,7 +175,7 @@ All the other functions in `definitions` follow a similar spirit. Rather than re
 - `include/CosmoInterface/definitions/phaseBunchDavies.h`: computes the Bunch-Davies vacuum phase used to imprint physically motivated initial fluctuations onto a field or gauge momentum in Fourier space.
 - `include/CosmoInterface/definitions/chiralpowerspectrum.h`: defines the `ChiralProjector` class, which projects a U(1) gauge field (or its momentum) onto positive/negative helicity modes in Fourier space, so that helicity-resolved ("chiral") power spectra can be measured for axion-sourced gauge fields.
 - `include/CosmoInterface/definitions/gwsprojector.h` and `include/CosmoInterface/definitions/PITensor.h`: source and project the gravitational-wave sector, discussed next.
-- `include/CosmoInterface/definitions/defectsmodule/`: contains a series fo header files related to the cosmic-defects module. See [**Cosmic Defects**](Defects.md) for further information.
+- `include/CosmoInterface/definitions/defectsmodule/`: contains a series of header files related to the cosmic-defects module. See [**Cosmic Defects**](Defects.md) for further information.
 
 Gravitational waves are sourced by the transverse, traceless part of the anisotropic stress tensor of the matter and gauge sectors. `PITensor` assembles it, species by species:
 
