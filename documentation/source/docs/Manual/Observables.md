@@ -1,6 +1,6 @@
 This section summarizes the output results that are obtained from a simulation using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, including information about the content of the output files and about the parameters that can be used to control the type and format of the output. More concretely, we first cover in [**Average observables**][sec_averages] those observables related to averages of fields or energies, we then comment on the measurements of power spectra in [**Power spectra**][sec_PS], and finally briefly cover snapshots in [**Field and energy snapshots**][sec_snapshots].
 
-We note that most of the information presented here can also be found in other section of this manual. For example [**Scalar-scalar interactions**](My first model of (singlet) scalar fields.md) and [**Scalar-gauge interactions**](My first model of gauge fields.md) contain information about the output from default simulations of theories containing scalar and gauge fields, while information about $\texttt{HDF5}$ output can also be found in [**HDF5: Output and Backups**](HDF5: Output and Backups.md). Other information about module specific observables can be found in the corresponding sections of this manual.
+We note that most of the information presented here can also be found in other sections of this manual. For example [**Scalar-scalar interactions**](My first model of (singlet) scalar fields.md) and [**Scalar-gauge interactions**](My first model of gauge fields.md) contain information about the output from default simulations of theories containing scalar and gauge fields, while information about $\texttt{HDF5}$ output can also be found in [**HDF5: Output and Backups**](HDF5%3A Output and Backups.md). Other information about module specific observables can be found in the corresponding sections of this manual.
 
 Before moving to the description of the output, we first note some general keywords that make it possible to control the output from the parameter file:
 
@@ -75,14 +75,14 @@ For simulations with **$\mathrm{U}(1)$ gauge fields**, `NU1Flds > 0`, the follow
 
 -   `average_norm_U1_[nfld].txt`{ .cl-fname }
 
-    Contains information about the $\textrm{U}(1)$ fields. Again, a different field is generated for each field species, $\texttt{nfld}$, with columns:
+    Contains information about the $\textrm{U}(1)$ fields. Again, a different file is generated for each field species, $\texttt{nfld}$, with columns:
 
     $\tilde{ \eta}$, $\langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|} \rangle$, $\langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|} \rangle$, $\langle {|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|^2} \rangle$, $\langle {|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|^2} \rangle$, $\text{rms} (|\vec{\widetilde{ \mathcal E}}^{\mathrm{U}(1)}_{\texttt{nfld}}|)$, $\text{rms} (|\vec{\widetilde{\mathcal B}}^{\mathrm{U}(1)}_{\texttt{nfld}}|)$
     {: .cl-schema }
 
 -   `average_gauss_U1_[nfld].txt`{ .cl-fname }
 
-    Contains information about the conservation of Gauss law in the $\mathrm{U}(1)$ sector, which is in general obeyed to machine precision in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Here $\text{LHS}_{\texttt{nfld}}$ and $RHS_{\texttt{nfld}}$ are the left- and right-hand sides of Eq.$~$(17) from [**Scalar-gauge interactions**](My first model of gauge fields.md).
+    Contains information about the conservation of Gauss law in the $\mathrm{U}(1)$ sector, which is in general obeyed to machine precision in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Here $\text{LHS}_{\texttt{nfld}}$ and $\text{RHS}_{\texttt{nfld}}$ are the left- and right-hand sides of Eq.$~$(17) from [**Scalar-gauge interactions**](My first model of gauge fields.md).
 
     $\tilde{\eta}$, $\frac{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle}{\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle}$, $\langle \sqrt{(\text{LHS}_{\texttt{nfld}} - \text{RHS}_{\texttt{nfld}})^2} \rangle$, $\langle \sqrt{(\text{LHS}_{\texttt{nfld}} + \text{RHS}_{\texttt{nfld}})^2} \rangle$
     {: .cl-schema }
@@ -91,7 +91,7 @@ For simulations with **$\mathrm{U}(1)$ gauge fields**, `NU1Flds > 0`, the follow
 
     Contains information about the topological charges associated to the $\textrm{U}(1)$ fields. A single file is created, and contains two columns per field species:
 
-    $\tilde{ \eta}$, $\langle {\vec{\widetilde{ \mathcal E}}_{0}^{(2)}\cdot \vec{\widetilde{ \mathcal B}_{0}}^{(4)}} \rangle$, $\langle {(\vec{\widetilde{ \mathcal E}}_{0}^{(2)}\cdot \vec{\widetilde{ \mathcal B}}_{0}^{(4)})^2} \rangle$, $\ldots$
+    $\tilde{ \eta}$, $\langle {\vec{\widetilde{ \mathcal E}}_{0}^{(2)}\cdot \vec{\widetilde{ \mathcal B}}_{0}^{(4)}} \rangle$, $\langle {(\vec{\widetilde{ \mathcal E}}_{0}^{(2)}\cdot \vec{\widetilde{ \mathcal B}}_{0}^{(4)})^2} \rangle$, $\ldots$
     {: .cl-schema }
 
 </div>
@@ -108,7 +108,7 @@ Here, the electric and magnetic fields are defined using improved definitions,
 where we have left implicit the species index, for simplicity.
 
 
-For simulations with a **$\mathrm{SU}(2)$ gauge field**, `NSU2Flds > 0`, the following output is created. Note that simulations with more than one non-abelian gauge fields are not implemented as of version 2.0, although this may change in the future. If one tries to run such simulations, the code will abort.
+For simulations with a **$\mathrm{SU}(2)$ gauge field**, `NSU2Flds > 0`, the following output is created. Note that simulations with more than one non-abelian gauge field are not implemented as of version 2.0, although this may change in the future. If one tries to run such simulations, the code will abort.
 
 <div class="grid cards cl-files" markdown>
 
@@ -159,7 +159,7 @@ Finally, **energy averages** are also measured, together with information about 
 
 -   `average_energy_conservation.txt`{ .cl-fname }
 
-    Contains information about energy conservation (which is evaluated using the first Friedman equation in case of a self-consistent expanding background). The columns are:
+    Contains information about energy conservation (which is evaluated using the first Friedmann equation in case of a self-consistent expanding background). The columns are:
 
     If no expansion:
 
@@ -206,7 +206,7 @@ Mainly, we have the following two files:
 
 <div class="grid cards cl-files" markdown>
 
--   `average_scalar_norm.txt`{ .cl-fname }
+-   `average_norm.txt`{ .cl-fname }
 
     It is generated only for simulations of global defects. It contains information about the norm of the real scalar field $|\phi|$, defined in Eq.$~$\eqref{eq_globalNorm}. In particular, the file contains four columns:
 
@@ -215,15 +215,15 @@ Mainly, we have the following two files:
 
 -   `average_defects.txt`{ .cl-fname }
 
-    Contains additional information about the defects. If `measureDefectsEnergies = true` is indicated in the parameter file, the energy components of the defects are saved. If `measureDefectsStructure = true` is indicated, estimates of the area of domain walls or the total length of cosmic strings is saved as the last column. See [**Cosmic Defects**](Defects.md) for a more detailed discussion on this output file.
+    Contains additional information about the defects. If `measureDefectsEnergies = true` is indicated in the parameter file, the energy components of the defects are saved. If `measureDefectsStructure = true` is indicated, estimates of the area of domain walls or the total length of cosmic strings are saved as the last column. See [**Cosmic Defects**](Defects.md) for a more detailed discussion on this output file.
 
 </div>
 
-In addition, if a diffusion phase of the initial conditions is performed, some additional files are generated, measuring similar quantities as discussed above during the diffusion phase. For more information on these, see [**Cosmic Defects**](Defects.md),
+In addition, if a diffusion phase of the initial conditions is performed, some additional files are generated, measuring similar quantities as discussed above during the diffusion phase. For more information on these, see [**Cosmic Defects**](Defects.md).
 
 **HDF5 measurements**
 
-As an alternative to the use of $\texttt{.txt}$ files, it is possible to save all results in a binary file based on the hdf5 format. To do so, one needs to first compile $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ using the HDF5 library, see [**HDF5: Output and Backups**](HDF5: Output and Backups.md) for more information in this regard. Once this is done, measurements can be saved to a binary field if `hdf5Averages = true` is specified in the parameter file. In this case, all measurements related to averages are saved to the $\texttt{average.h5}$ file. This contains a hdf5 group for each $\texttt{.txt}$ file that would be saved in the standard case, with name equal to the name of such $\texttt{.txt}$ file, with the $\texttt{average_}$ prefix removed. Inside each of these groups, a dataset contains the information for each of the columns of the corresponding $\texttt{.txt}$ file.
+As an alternative to the use of $\texttt{.txt}$ files, it is possible to save all results in a binary file based on the hdf5 format. To do so, one needs to first compile $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ using the HDF5 library, see [**HDF5: Output and Backups**](HDF5%3A Output and Backups.md) for more information in this regard. Once this is done, measurements can be saved to a binary file if `hdf5Averages = true` is specified in the parameter file. In this case, all measurements related to averages are saved to the $\texttt{average.h5}$ file. This contains a hdf5 group for each $\texttt{.txt}$ file that would be saved in the standard case, with name equal to the name of such $\texttt{.txt}$ file, with the $\texttt{average_}$ prefix removed. Inside each of these groups, a dataset contains the information for each of the columns of the corresponding $\texttt{.txt}$ file.
 
 It is worth noting that there is an additional dataset inside the hdf5 file, $\texttt{Parameters}$, which contains information about the parameters used to run the simulation, in a similar fashion to the $\texttt{.infos}$ file. Each of the parameters is saved as an attribute of the empty dataset.
 
@@ -231,18 +231,18 @@ It is worth noting that there is an additional dataset inside the hdf5 file, $\t
 
 The second set of observables that get measured in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are power spectra, usually of field values. These are automatically measured for any simulation, with a frequency specified with the `tOutputInfreq` keyword in the parameter file (defaults to $10^2\delta \tilde{\eta}$ if unspecified). Measurement files are saved to the $\texttt{average_spectra_times.txt}$.
 
-Before summarizing the possible output depending on the field content and the models, we briefly discuss about different options that the user has when running the simulation. For this, we will consider a generic quantity $f$ of which we want to measure the power spectrum, $\Delta_f$, and will later specify which this $f$ may correspond to.
+Before summarizing the possible output depending on the field content and the models, we briefly discuss different options that the user has when running the simulation. For this, we will consider a generic quantity $f$ of which we want to measure the power spectrum, $\Delta_f$, and will later specify which this $f$ may correspond to.
 
-The most basic options related to the power spectra are related to the choice of power spectra type and version. The power spectra type is selected with the `PSType` keywork in the parameter file, and accepts two values: `PS_type = 1` (default) for which the exact multiplicity of each bin, $\#_l$, is used to compute the power spectrum, and `PS_type = 2` for which the number of points per bin is approximated as $\#_l\approx 4\pi \tilde{k}(l)^2$. For each of these cases, the power spectrum version can be specified using the `PS_version` keyword, and accepts three values: `1` (default), `2` and `3`. They control how the momenta associated to each bin is estimated and used to compute the power spectrum. For more information, see the [Technical Note I](../tech_notes/Power%20spectra.md).
+The most basic options related to the power spectra are related to the choice of power spectra type and version. The power spectra type is selected with the `PS_type` keyword in the parameter file, and accepts two values: `PS_type = 1` (default) for which the exact multiplicity of each bin, $\#_l$, is used to compute the power spectrum, and `PS_type = 2` for which the number of points per bin is approximated as $\#_l\approx 4\pi \tilde{k}(l)^2$. For each of these cases, the power spectrum version can be specified using the `PS_version` keyword, and accepts three values: `1` (default), `2` and `3`. They control how the momenta associated to each bin is estimated and used to compute the power spectrum. For more information, see the [Technical Note I](../tech_notes/Power%20spectra.md).
 
-Next, we discuss about which quantities get saved. By default, spectra is saved in $\texttt{.txt}$ files, and the printed results can be grouped in three sets: a first set of columns corresponding to the binning, a second set of columns corresponding to the results for the power spectra of one or more quantities, and a final column that indicates the bin multiplicity, $\#_l$, of each bin $l$. Each line corresponds to a different bin, and each time the power spectrum is measured, the new results get appended at the end of the file, with a blank line separating the different measurement times. Note that this means that information about the bins and the bin multiplicity, although invariant, gets repeatedly saved for every measurement time.
+Next, we discuss which quantities get saved. By default, spectra is saved in $\texttt{.txt}$ files, and the printed results can be grouped in three sets: a first set of columns corresponding to the binning, a second set of columns corresponding to the results for the power spectra of one or more quantities, and a final column that indicates the bin multiplicity, $\#_l$, of each bin $l$. Each line corresponds to a different bin, and each time the power spectrum is measured, the new results get appended at the end of the file, with a blank line separating the different measurement times. Note that this means that information about the bins and the bin multiplicity, although invariant, gets repeatedly saved for every measurement time.
 
 What the columns of the first and second sets contain can be chosen by the user using the `spectraVerbosity` keyword in the parameter file, which can take three values. The content of the bin-related columns, for each choice of this parameter, is summarized in the following table:
 
 | **Option** <div style="width:160px"> | **Explanation** |
 | ---------------------------------------- | --------------- |
 | `spectraVerbosity = 0` | Central values. By default, this corresponds to $\tilde{k}(l) = l k_\text{IR}$, although it changes if different bin width is used, as described below.  |
-| `spectraVerbosity = 1` | $\langle\tilde{k}\rangle$, $\text{var}(\tilde{k})$, $\text{min}(\tilde{k})$, $\text{max}(\tilde{k})$ |
+| `spectraVerbosity = 1` | $\langle\tilde{k}\rangle$ |
 | `spectraVerbosity = 2` | Central value, $\langle\tilde{k}\rangle$, $\text{var}(\tilde{k})$, $\text{min}(\tilde{k})$, $\text{max}(\tilde{k})$ |
 
 Second, for each quantity $f$ for which the power spectra is measured, the corresponding set of columns in the output file contains,
@@ -253,15 +253,15 @@ Second, for each quantity $f$ for which the power spectra is measured, the corre
 | `spectraVerbosity = 1` | $\tilde{\Delta}_\tilde{f}(\tilde{k})$ |
 | `spectraVerbosity = 2` | $\tilde{\Delta}_\tilde{f}(\tilde{k})$, $\text{var}[\tilde{\Delta}_\tilde{f}(\tilde{k})]$, $\text{min}[\tilde{\Delta}_\tilde{f}(\tilde{k})]$, $\text{max}[\tilde{\Delta}_\tilde{f}(\tilde{k})]$  |
 
-In all cases, the last column of the fields corresponds to the bin multiplicity.
+In all cases, the last column of the files corresponds to the bin multiplicity.
 
-As an alternative to the use of $\texttt{.txt}$ files, it is possible to save the spectra in binary files with the hdf5 format. This is especially useful when working with large simulations or finer binning, as discussed below. The use of hdf5 files to save spectra results requires to compile the code with the HDF5 library, see [**HDF5: Output and Backups**](HDF5: Output and Backups.md), and to indicate `hdf5Spectra = true` in the parameter file.
+As an alternative to the use of $\texttt{.txt}$ files, it is possible to save the spectra in binary files with the hdf5 format. This is especially useful when working with large simulations or finer binning, as discussed below. The use of hdf5 files to save spectra results requires to compile the code with the HDF5 library, see [**HDF5: Output and Backups**](HDF5%3A Output and Backups.md), and to indicate `hdf5Spectra = true` in the parameter file.
 
-The resulting file, $\texttt{spectra.h5}$, contains a series of groups, one per each spectra measured, which have the same name as the text files outlined below (without the $\texttt{.txt}$ suffix). Each of these groups contains a dataset corresponding to each of the columns of the text files. Results for bins and multiplicity only gets saved once, while for the fields spectra each consecutive measurements is saved in a different row of the dataset (saved in C++/python format). As of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$, only `spectraVerbosity = 0` and `spectraVerbosity = 1` are supported for HDF5 spectra output.
+The resulting file, $\texttt{spectra.h5}$, contains a series of groups, one per each spectra measured, which have the same name as the text files outlined below (without the $\texttt{.txt}$ suffix). Each of these groups contains a dataset corresponding to each of the columns of the text files. Results for bins and multiplicity only get saved once, while for the fields spectra each consecutive measurement is saved in a different row of the dataset (saved in C++/python format). As of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$, only `spectraVerbosity = 0` and `spectraVerbosity = 1` are supported for HDF5 spectra output.
 
 Finally, the user is also able to control the width of the bins with which the power spectrum is measured, using the `deltaKBin` keyword, which is specified in fractions of $k_\text{IR}$. If no value is indicated, the bin width defaults to $k_\text{IR}$. We note that for very thin binning some of the bins may be empty. These bins do not get printed to the output files. If you want to determine their location, their central momentum is at $k_\mathrm{IR}+n\Delta k_\mathrm{bin} k_\mathrm{IR}$, for some integer $n$.
 
-Another important point to highlight is the initial point of the binning. As there is no value of ${k}$ smaller than ${k}_\text{IR}$, if the specified binning has width bigger that $k_\text{IR}$, the lower end of the first bin is set at $k_\text{IR}/2$. On the other hand, if the binning is smaller than $k_\text{IR}$, the first bin is chosen so that it is centered at $k_\text{IR}$.
+Another important point to highlight is the initial point of the binning. As there is no value of ${k}$ smaller than ${k}_\text{IR}$, if the specified binning has width bigger than $k_\text{IR}$, the lower end of the first bin is set at $k_\text{IR}/2$. On the other hand, if the binning is smaller than $k_\text{IR}$, the first bin is chosen so that it is centered at $k_\text{IR}$.
 
 Related to the binning, there is the alternative option to generate an unbinned power spectrum. This can be regarded as a power spectrum with a very fine and irregular binning, with a single bin for each different value of $k$ and no empty bin. For example, for the type-I and version 1 power spectrum (other versions and types are defined in analogy to the standard power spectrum), the unbinned result is defined as
 ```math
@@ -283,7 +283,7 @@ where the width choices for the first and last bins are just conventions. We not
 
 To activate the unbinned power spectrum, one needs to compile the code with the HDF5 library active, and indicate `saveUnbinnedSpectra = true` in the parameter file. This option substitutes all the standard spectrum savers for an unbinned version, which gets saved in a file named $\texttt{unbinned_spectra.h5}$. This file contains a group per spectra measured, similar to the case of standard hdf5 spectra, with the prefix $\texttt{unbinned}$. Similarly to standard spectrum, as of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$, only `spectraVerbosity = 0` and `spectraVerbosity = 1` are supported for HDF5 unbinned spectra output.
 
-For user's seeking more flexibility to contruct their own power spectra with a custom normalization or binning from the unbinned results, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ offers the possibility of simply outputing the radial averages, $\langle|f(\mathbk{k})|^2\rangle_l$, for each momentum value. Thi is achieved by setting `PS_type = 0`, option that is obnly valid if `saveUnbinnedSpectra = true`. Note that, in this case, the total energy density of gravitational waves is not computed, this is, the file $\texttt{average_energies_gws.txt}$ is not created, although the result for this quantity can be determined from the user in an a posteriori analysis.
+For users seeking more flexibility to construct their own power spectra with a custom normalization or binning from the unbinned results, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ offers the possibility of simply outputing the radial averages, $\langle|f(\mathbf{k})|^2\rangle_l$, for each momentum value. This is achieved by setting `PS_type = 0`, option that is only valid if `saveUnbinnedSpectra = true`. Note that, in this case, the total energy density of gravitational waves is not computed, that is, the file $\texttt{average_energies_gws.txt}$ is not created, although the result for this quantity can be determined by the user in an a posteriori analysis.
 
 **Power spectrum files**
 
@@ -297,7 +297,7 @@ We now summarize the spectrum files that get measured in $\mathcal{C}\mathtt{osm
 
 -   `spectra_ON_scalar_[nfld].txt`{ .cl-fname }
 
-    For models with `NScalars > 0` and if `ONflag = true` is indicated in the parameter file, it contains the occupation number of each scalar singlet field. This is defined below.
+    For models with `NScalars > 0` and if `flagON = true` is indicated in the parameter file, it contains the occupation number of each scalar singlet field. This is defined below.
 
 -   `spectra_norm_cmplx_scalar_[nfld].txt`{ .cl-fname }
 
@@ -342,7 +342,7 @@ In the case of singlet-scalar fields, as indicated, the occupation number can be
 
 ### **Snapshots** { #sec_snapshots }
 
-The last type of observables that can be measured with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are three-dimensional ($N$-dimensional for simulations in $N$ spacial dimensions) snapshots of the energy components and field amplitudes. To measure these snapshots, one needs to compile the model with the HDF5 library active, see [**HDF5: Output and Backups**](HDF5: Output and Backups.md) for an explanation. The snapshots to be measure are specified as a space-separated list to the `snapshots` keyword, and the frequency of the measurements gets indicated using `tOutputRareFreq`, which defaults to $10^3\delta \tilde{\eta}$. The possible options for the `snapshots` parameter are summarized in the following table.
+The last type of observables that can be measured with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are three-dimensional ($N$-dimensional for simulations in $N$ spatial dimensions) snapshots of the energy components and field amplitudes. To measure these snapshots, one needs to compile the model with the HDF5 library active, see [**HDF5: Output and Backups**](HDF5%3A Output and Backups.md) for an explanation. The snapshots to be measured are specified as a space-separated list to the `snapshots` keyword, and the frequency of the measurements gets indicated using `tOutputRareFreq`, which defaults to $10^3\delta \tilde{\eta}$. The possible options for the `snapshots` parameter are summarized in the following table.
 
 | **Keyword** <div style="width:80px"> | **Explanation** |
 | ---------------------------------------- | --------------- |
@@ -369,10 +369,10 @@ snapshots = S E_S_K E_V
 for which snapshots of the field, its kinetic energy density and the total potential energy will be saved.
 
 
-Each of these snapshots gets saved to a different binary file. For example, if `S` is specified, the potential energy is saved to the `snapshot_scalar_singlet.h5` file, as indicated in the table. This file contains a different hdf5 group for each scalar species, and each group contains a series of three-dimensional datasets named with the time at which the snapshot was taken. We recommend the user to take a look at the generated files to get familiar with these naming conventions.
+Each of these snapshots gets saved to a different binary file. For example, if `S` is specified, the values of the scalar singlet fields are saved to the `snapshot_scalar_singlet.h5` file, as indicated in the table. This file contains a different hdf5 group for each scalar species, and each group contains a series of three-dimensional datasets named with the time at which the snapshot was taken. We recommend the user to take a look at the generated files to get familiar with these naming conventions.
 
-!!! note Compatibility note
-    In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ versions previous to $\tt v2.0$, snapshots were indicated using the `energy_snapshots` keyword. This is still supported for compatibility reasons, but will be removed in a future version.
+!!! note "Compatibility note"
+    In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ versions previous to $\tt v2.0$, snapshots were indicated using the `energy_snapshot` keyword. This is still supported for compatibility reasons, but will be removed in a future version.
 
 In addition to saving the three-dimensional distributions, since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$ it is possible to save snapshots of subvolumes or of a sparse grid, which may be very handy for visualization of very large simulations. For example, it is possible to only output a two-dimensional slice of the simulation. These options are controlled with the following three keywords, to which a set of $\texttt{NDim}$ integers needs to be indicated:
 
