@@ -8,7 +8,7 @@ We collect here the different CMake flags the user can pass to influence the com
 
 ### Device backends
 
-By default, CosmoLattice will auto-detect available backends. GPU backends are checked first (CUDA, then HIP), then CPU backends (OpenMP, then pthreads). If nothing is found, it falls back to no threading. You can override auto-detection by explicitly setting one of the flags below.
+By default, CosmoLattice will auto-detect available backends. GPU backends are checked first (CUDA, then HIP), then CPU backends (OpenMP, then pthreads). If OpenMP is not found, it falls back to pthreads. You can override auto-detection by explicitly setting one of the flags below.
 
 | **Flag**            | **Explanation**                                                                                 |
 | ------------------- | ----------------------------------------------------------------------------------------------- |
