@@ -292,8 +292,7 @@ In the practice, however, it is more convenient to define an effective anisotrop
 ```math
 \begin{align}
 \label{eq_GWEffectiveAnisotropicStress}
-\Pi_{ij}^\mathrm{eff}=\sum_a \nabla_i\phi_a \nabla_j\phi_a+2\sum_b \text{Re}\left[\left(D_i^A\varphi_b)^*D_j^A\varphi_b\right]-a^{-2\alpha}E_iE_j-a^{-2}B_iB_j\,,
-\equiv
+\Pi_{ij}^\mathrm{eff}=\sum_a \nabla_i\phi_a \nabla_j\phi_a+2\sum_b \text{Re}\left[\left(D_i^A\varphi_b)^*D_j^A\varphi_b\right]-a^{-2\alpha}E_iE_j-a^{-2}B_i B_j \,,
 \end{align}
 ```
 from which the source of GWs is obtained after TT projection. This operation is non-local in real space, but corresponds to an algebraic relation in Fourier space,
