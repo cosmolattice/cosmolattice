@@ -36,6 +36,23 @@ By default, CosmoLattice will auto-detect available backends. GPU backends are c
 | `-DAUTOBUILD_FFTW` | `ON` or `OFF`. Automatically download and build FFTW from source if not found on the system. Default: `OFF`. |
 | `-DAUTOBUILD_HDF5` | `ON` or `OFF`. Automatically download and build HDF5 from source if not found on the system. Default: `OFF`. |
 
+### TempLat source
+
+TempLat is downloaded automatically at configure time. These flags let you point the build at a different source, for instance your own fork.
+
+| **Flag**           | **Explanation**                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------ |
+| `-DTEMPLAT_REPO`   | Git repository to fetch TempLat from. Can be any URL git understands, including a local path. Default: `https://github.com/cosmolattice/templat.git`. |
+| `-DTEMPLAT_BRANCH` | Branch, tag or commit of TempLat to check out. Default: `main`.                                              |
+
+For example, to build against your own fork:
+
+```bash
+cmake -S . -B build -DTEMPLAT_REPO=https://github.com/yourname/templat.git -DTEMPLAT_BRANCH=my-feature
+```
+
+Note that these are cached variables, so changing them in an existing build directory requires re-running CMake with the new value (or configuring from a clean build directory).
+
 ### Compiler optimization flags
 
 | **Flag**   | **Explanation**                                                                                                                                                                       |
@@ -46,23 +63,28 @@ By default, CosmoLattice will auto-detect available backends. GPU backends are c
 
 ### Testing
 
-| **Flag**          | **Explanation**                                                  |
-| ----------------- | ---------------------------------------------------------------- |
-| `-DTEMPLAT_TESTS` | `ON` or `OFF`. Build the test suite. Default: `OFF`.             |
-| `-DNPROCESSES`    | Number of MPI processes to use when running tests. Default: `4`. |
+| **Flag**               | **Explanation**                                                            |
+| ---------------------- | -------------------------------------------------------------------------- |
+| `-DCOSMOINTERFACE_TEST` | `ON` or `OFF`. Build the CosmoInterface test suite. Default: `OFF`.       |
+| `-DTEMPLAT_TEST`       | `ON` or `OFF`. Build TempLat's own test suite. Default: `OFF`.             |
+| `-DNPROCESSES`         | Number of MPI processes to use when running tests. Default: `4`.          |
 
 ### Deprecated flags
 
-The following flags from CosmoLattice 1.0 are still accepted for backward compatibility, but will emit a warning. They will be removed in a future version.
+Unless noted otherwise, the following flags from CosmoLattice 1.0 are still accepted for backward compatibility, but will emit a warning. They will be removed in a future version. See also [Migrating from v1.x](Migration.md).
 
-| **Old flag**     | **Replacement**                                                         |
-| ---------------- | ----------------------------------------------------------------------- |
-| `-DFLOATFFT`     | `-DFLOAT`                                                               |
-| `-DPFFT`         | PFFT support has been discontinued. Use `-DPARAFAFT=ON` instead.        |
-| `-DMYPFFT_PATH`  | PFFT support has been discontinued. Use `-DPARAFAFT=ON` instead.        |
-| `-DMYFFTW3_PATH` | No longer needed. Use `-DAUTOBUILD_FFTW=ON` or set `CMAKE_PREFIX_PATH`. |
-| `-DMYHDF5_PATH`  | No longer needed. Use `-DAUTOBUILD_HDF5=ON` or set `CMAKE_PREFIX_PATH`. |
-| `-DG++OPT`       | Use `CMAKE_BUILD_TYPE=Release` or `Debug` instead.                      |
-| `-DG++SSE`       | Use `-DSSE=ON` instead.                                                 |
-| `-DG++AVX`       | Use `-DAVX=mavx2` (or `mavx`, `mavx512f`) instead.                      |
-| `-DTESTING`      | Use `-DTEMPLAT_TESTS=ON` instead.                                       |
+| **Old flag**     | **Replacement**                                                                                 |
+| ---------------- | ------------------------------------------------------------------------------------------------- |
+| `-DFLOATFFT`     | **Silently ignored.** Use `-DFLOAT=ON` instead.                                                 |
+| `-DPFFT`         | **Configure error.** PFFT support has been discontinued, use `-DPARAFAFT=ON` instead.           |
+| `-DMYPFFT_PATH`  | **Configure error.** PFFT support has been discontinued, use `-DPARAFAFT=ON` instead.           |
+| `-DMYFFTW3_PATH` | Appended to `CMAKE_PREFIX_PATH`. Use `-DAUTOBUILD_FFTW=ON` or set `CMAKE_PREFIX_PATH` directly. |
+| `-DMYHDF5_PATH`  | Appended to `CMAKE_PREFIX_PATH`. Use `-DAUTOBUILD_HDF5=ON` or set `CMAKE_PREFIX_PATH` directly. |
+| `-DG++OPT`       | Use `CMAKE_BUILD_TYPE=Release` or `Debug` instead.                                              |
+| `-DG++SSE`       | Use `-DSSE=ON` instead.                                                                         |
+| `-DG++AVX`       | Use `-DAVX=mavx2` (or `mavx`, `mavx512f`) instead.                                              |
+| `-DTESTING`      | **Silently ignored.** Use `-DCOSMOINTERFACE_TEST=ON` instead.                                   |
+| `-DOpenMP`       | Use `-DOPENMP=ON` instead.                                                                      |
+| `-DThreads`      | Use `-DPTHREADS=ON` instead.                                                                    |
+| `-DSerial`       | Use `-DNOTHREADING=ON` instead.                                                                 |
+| `-DFloat`        | Use `-DFLOAT=ON` instead.                                                                       |
