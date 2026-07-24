@@ -35,7 +35,7 @@ The toolbox argument of the model constructor changed type. Replacing it by `aut
 
 `MemoryToolBox` is now templated on the number of spatial dimensions and held in a device-aware pointer, so the explicit form is `device::memory::host_ptr<MemoryToolBox<NDim>> toolBox`. Both work; `auto` is shorter and stays correct if the type evolves.
 
-**That is the only mandatory edit.** all members of the model class, ass well as the whole symbolic language interface are unchanged.
+**That is the only mandatory edit.** All members of the model class, as well as the whole symbolic language interface, are unchanged.
 
 ??? tip "Migrating larger changes to CosmoInterface"
 
@@ -58,7 +58,7 @@ Delete your `dependencies/` habits. All library handling is done by CMake.
 | editing `MYFFTW3_PATH` / `MYHDF5_PATH` / `MYPFFT_PATH` in `CMakeLists` | `-DCMAKE_PREFIX_PATH=/path/to/lib` (the two `MY*_PATH` variables still work, with a warning) |
 
 Kokkos, ParaFaFT and TempLat are downloaded and built automatically at configure time — you never install them by hand.
-Note that both FFTW and HDF5 can be also built automatically by TempLat's CMake interface, if you do not have them installed system-wide. See [CMake Flags](cmake.md#subsec_autobuild) for details.
+Note that both FFTW and HDF5 can also be built automatically by TempLat's CMake interface, if you do not have them installed system-wide. See [CMake Flags](cmake.md#auto-building-dependencies) for details.
 
 !!! note "Configure needs network access"
 
