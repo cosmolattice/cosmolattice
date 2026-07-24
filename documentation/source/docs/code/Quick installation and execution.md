@@ -1,7 +1,7 @@
 **Download:** $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can be downloaded from our <a href="https://github.com/cosmolattice/cosmolattice_private" target="_blank">
 **GitHub repository**</a>. Alternatively, you can use `git clone` in the command line, as indicated below.
 
-In this Tab we provide a brief description of the steps to download, install, compile and run a job with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. As an example, we load a model called `lphi4`, with input parameters specified in the file `lphi4.in` (details of this model and of its parameters can be found in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md), here we just use these files as a demonstration example). 
+In this Tab we provide a brief description of the steps to download, install, compile and run a job with $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. As an example, we load a model called `lphi4`, with input parameters specified in the file `lphi4.in` (details of this model and of its parameters can be found in Section [My first model of (singlet) scalar fields](../Manual/My first model of (singlet) scalar fields.md), here we just use these files as a demonstration example). 
 
 <!-- **Download:** You can download $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ from [ http://www.cosmolattice.net](http://www.cosmolattice.net),  -->
 
