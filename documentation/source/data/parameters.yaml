@@ -40,7 +40,7 @@ parameters:
     category: "run"
     units: "program units"
     description: "Infrared cutoff of the lattice in program units; the minimum (nonzero) momentum on the lattice."
-    constraints: "Mutually exclusive with lSide: exactly one of kIR or lSide must be specified; they are related by kIR = 2*pi/lSide and an inconsistent pair throws. Default -1 means unspecified."
+    constraints: "Sets the lattice size together with lSide and dx: at least one of the three must be specified, and any combination given must obey lSide = 2*pi/kIR = N*dx, otherwise an inconsistent set throws. Default -1 means unspecified."
   - name: "lSide"
     type: "float"
     enum_values: null
@@ -52,7 +52,19 @@ parameters:
     category: "run"
     units: "program units"
     description: "Comoving side length of the cubic simulation box in program units."
-    constraints: "Mutually exclusive with kIR: exactly one of kIR or lSide must be specified; they are related by lSide = 2*pi/kIR and an inconsistent pair throws. Default -1 means unspecified."
+    constraints: "Sets the lattice size together with kIR and dx: at least one of the three must be specified, and any combination given must obey lSide = 2*pi/kIR = N*dx, otherwise an inconsistent set throws. Default -1 means unspecified."
+  - name: "dx"
+    type: "float"
+    enum_values: null
+    arity: "1"
+    required: false
+    default: "-1"
+    important: true
+    scope: "framework"
+    category: "run"
+    units: "program units"
+    description: "Comoving lattice spacing in program units."
+    constraints: "Sets the lattice size together with kIR and lSide: at least one of the three must be specified, and any combination given must obey lSide = 2*pi/kIR = N*dx, otherwise an inconsistent set throws. Default -1 means unspecified."
   - name: "dt"
     type: "float"
     enum_values: null

@@ -53,6 +53,7 @@ namespace TempLat
           kIR(par.getOverride<T>("kIR", -1, Important)),     // IR cutoff
           lSide(par.getOverride<T>("lSide", -1, Important)), // Side length
           dt(par.get<T>("dt", Important)),                   // Time step
+          dx(par.getOverride<T>("dx", -1, Important)),       // Lattice spacing
           expansion(par.get<bool>("expansion", true,
                                   Important)),             // If true: self-consistent expansion. If false: no expansion
           t0(par.get<double>("t0", 0, Important)),         // Initial time
@@ -132,20 +133,39 @@ namespace TempLat
           measureDefectsEnergies(par.get<bool>("measureDefectsEnergies", false)),
           measureDefectsStructure(par.get<bool>("measureDefectsStructure", false))
     {
-      if (AlmostEqual(lSide, -1)) {
-        if (AlmostEqual(kIR, -1))
-          throw(RunParametersMissing("You need to specify either kIR or lSide, abort."));
-        else
-          lSide = 2 * Constants::pi<T> / kIR;
-        par.erase("lSide"); // To not have wrong info in the parameter of the parser.
-      } else if (AlmostEqual(kIR, -1)) {
-        kIR = 2 * Constants::pi<T> / lSide;
-        par.erase("kIR");
-      } else if (!AlmostEqual(kIR, 2 * Constants::pi<T> / lSide))
-        throw(RunParametersInconsistent(
-            "kIR = " + std::to_string(kIR) + " and lSide = " + std::to_string(lSide) +
-            " are not consistent. If you think they should be, try removing one of the two."));
+      // The size of the lattice can be specified with any of kIR, lSide or dx. At least one of them is
+      // needed, and any subset which is given must obey lSide = 2*pi/kIR = N*dx.
       // NOTE: We must have kIR=2*pi/lside for consistency.
+      {
+        const bool hasKIR = !AlmostEqual(kIR, -1);
+        const bool hasLSide = !AlmostEqual(lSide, -1);
+        const bool hasDx = !AlmostEqual(dx, -1);
+
+        if (!hasKIR && !hasLSide && !hasDx)
+          throw(RunParametersMissing("You need to specify either kIR, lSide or dx, abort."));
+
+        // Deduce the side length from whichever of the three was provided; the ones given but not used
+        // here are checked for consistency right after.
+        if (!hasLSide) lSide = hasKIR ? 2 * Constants::pi<T> / kIR : dx * N;
+
+        if (hasKIR && !AlmostEqual(kIR, 2 * Constants::pi<T> / lSide))
+          throw(RunParametersInconsistent(
+              "kIR = " + std::to_string(kIR) + " and lSide = " + std::to_string(lSide) +
+              " are not consistent. If you think they should be, try removing one of the two."));
+        if (hasDx && !AlmostEqual(dx, lSide / N))
+          throw(RunParametersInconsistent(
+              "dx = " + std::to_string(dx) + " and lSide = " + std::to_string(lSide) +
+              " (with N = " + std::to_string(N) +
+              ") are not consistent. If you think they should be, try removing one of the two."));
+
+        kIR = 2 * Constants::pi<T> / lSide;
+        dx = lSide / N;
+
+        // To not have wrong info in the parameters of the parser.
+        if (!hasKIR) par.erase("kIR");
+        if (!hasLSide) par.erase("lSide");
+        if (!hasDx) par.erase("dx");
+      }
 
       if (appendMode && overwriteMode)
         throw(RunParametersInconsistent("'appendToFiles' and 'overwriteFiles' cannot both be true. Pick one."));
@@ -157,7 +177,6 @@ namespace TempLat
       if (tOutRareFreq < dt) throw(RunParametersInconsistent("tOutputRareFreq must be >= dt, abort."));
       if (tOutVerb < dt) throw(RunParametersInconsistent("tOutputVerb must be >= dt, abort."));
 
-      dx = lSide / N;                             // Lattice spacing
       T kUV = std::sqrt(3) * Constants::pi<T> / dx; // Maximum momenta in the lattice
 
       if (kCutoff < 0.0) kCutoff = 2 * kUV; // no cutoff means it's larger than kUV.
