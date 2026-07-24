@@ -154,7 +154,7 @@ Topical lectures were given by:
   <li style="margin: 0;">Ben A. Stefanek ........... Zurich U., Switzerland</li>
   <li style="margin: 0;">Ander Urio ........... UPV/EHU, Bilbao, Spain</li>
 </ol>
-Below we compile all the presentation slides, notes, and other materials prepared for the this school.
+Below we compile all the presentation slides, notes, and other materials prepared for this school.
 
 <!-- <span style="font-size: 30px;">Main Lectures</span> -->
 <span style="font-size: 30px; font-weight: bold;">Main Lectures</span>
