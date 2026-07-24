@@ -148,6 +148,7 @@ nav:
       - "Quick installation and execution": "code/Quick installation and execution.md"
       - "<span style='font-weight:bold;'>Installation - Full details</span>": "code/Installation.md"
       #- "<span style='font-weight:bold;'>Code Features </span>": "code/Features.md"
+      - "<span style='font-weight:bold;'>Migrating from v1.x </span>": "code/Migration.md"
       - "<span style='font-weight:bold;'>Code Version Guide </span>": "code/Versions.md"
       #         - "Versions 2.X": "code/Versions2X.md"
       #         - "Versions 1.X": "code/Versions1X.md"

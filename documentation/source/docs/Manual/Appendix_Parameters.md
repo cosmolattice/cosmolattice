@@ -20,6 +20,7 @@ expansion. They are declared in `include/CosmoInterface/runparameters.h`.
 | `N` | `int` | *required* | dimensionless | Number of lattice points per spatial dimension (the lattice is N^3 in 3D). |
 | `kIR` | `float` | `-1` | program units | Infrared cutoff of the lattice in program units; the minimum (nonzero) momentum on the lattice. |
 | `lSide` | `float` | `-1` | program units | Comoving side length of the cubic simulation box in program units. |
+| `dx` | `float` | `-1` | program units | Comoving lattice spacing in program units. |
 | `dt` | `float` | *required* | program units | Time step of the evolution algorithm in program units. |
 | `expansion` | `bool` | `true` | dimensionless | If true, the scale factor evolves self-consistently via the Friedmann equations; if false, the scale factor is fixed to unity and dynamics occur in Minkowski spacetime. |
 | `t0` | `float` | `0` | program units | Initial time of the simulation in program units. |

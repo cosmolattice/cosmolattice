@@ -1,10 +1,10 @@
 <!-- <div style="text-align: justify;"> -->
 
-Since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$, it is possible to simulate and study the dynamics and evolution of networks of cosmic defects.By default, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes models of global defects arising from theory with $N$ singlet scalar fields and a $\text{O}(N)$ symmetry, and of local cosmic strings originating in a theory with a complex scalar field and a $\text{U}(1)$ gauge sector. We note that, while these are the only two models currently implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, they can serve as a basis for advancd user to build their own models of cosmic defects. The simulation of such models follow the same basis as standard models of scalar-singlet and scalar-gauge interactions, respectively, they incorporate some additional features related to the initialization of the fields, the use of resolution-preserving techniques to prevent losing resolution of the cosmic strings, and the inclusion of string-specific observables.
+Since $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ $\tt v2.0$, it is possible to simulate and study the dynamics and evolution of networks of cosmic defects. By default, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes models of global defects arising from theory with $N$ singlet scalar fields and a $\text{O}(N)$ symmetry, and of local cosmic strings originating in a theory with a complex scalar field and a $\text{U}(1)$ gauge sector. We note that, while these are the only two models currently implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, they can serve as a basis for advancd users to build their own models of cosmic defects. The simulation of such models follows the same basis as standard models of scalar-singlet and scalar-gauge interactions, respectively, they incorporate some additional features related to the initialization of the fields, the use of resolution-preserving techniques to prevent losing resolution of the cosmic strings, and the inclusion of string-specific observables.
 
-In this section, we summarize the defect models that are implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and describe the defect-especific methods in the code and how they are controlled from the parameter file. A more detailed explanation of the theory underlying these techniques can be found in chapter 5 of Ref. [@BaezaBallesteros_2025tme]. We separate this presentation in two sections: [*Simulations of global defects*][sec_simulationsGlobalDefects], focused on the case of global defects, and [*Simulations of local strings*][sec_simulationsLocalStrings], centered on the case of local $\text{U}(1)$ strings.
+In this section, we summarize the defect models that are implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and describe the defect-specific methods in the code and how they are controlled from the parameter file. A more detailed explanation of the theory underlying these techniques can be found in chapter 5 of Ref. [@BaezaBallesteros_2025tme]. We separate this presentation in two sections: [*Simulations of global defects*][sec_simulationsGlobalDefects], focused on the case of global defects, and [*Simulations of local strings*][sec_simulationsLocalStrings], centered on the case of local $\text{U}(1)$ strings.
 
-Before moving on, we note that simulations of cosmic defects are typically performed in conformal time, $\tau$, and we will be focusing on this case in this section. This means that the associated $\alpha$ parameter in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is set to one in the model file by default, `alpha = 1`. While this can be changed by the user, the correctness of the defect-specific techniques presented below has not be tested for other values of $\alpha$.
+Before moving on, we note that simulations of cosmic defects are typically performed in conformal time, $\tau$, and we will be focusing on this case in this section. This means that the associated $\alpha$ parameter in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is set to one in the model file by default, `alpha = 1`. While this can be changed by the user, the correctness of the defect-specific techniques presented below has not been tested for other values of $\alpha$.
 
 !!! warning "Caution"
     Version 2.0 of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ implements a significant casuistic of choices to simulate cosmic defects. While the most common cases have been thoroughly tested, the use of this software is at user's responsibility. We recommend properly testing the models before running large-scale simulations. If you find any bug or inconsistency, please report it via the "Issues" tab in our <a href="https://github.com/cosmolattice/cosmolattice_private" target="_blank"> GitHub repository </a>.
@@ -70,7 +70,7 @@ qbias = 0.001
 
 The potential and its derivatives with respect to the field variables, expressed in program variables, are specified at the end on the model file. For example, the potential and its first derivative take the form
 @emgithub(models/defects_ONGlobal.h:model_potential)
-It is worth highlighting that, since the potential is invariant under permutations of the scalar fields, we don't need to specify a separate derivative function for each species, but instead we make used of the `Tag<N>` feature of [`TempLat`](https://github.com/cosmolattice/templat). Also notice how the second term in the potential, corresponding to the bias potential, is only present if `NScalars = 1`. Finally, we note the presence of a `resolutionPreservingFactor` variable. This is related to the resolution-preserving techniques discussed later in [*Resolution-preserving techniques*][sec_ResolutionPreservingTechniquesGlobal].
+It is worth highlighting that, since the potential is invariant under permutations of the scalar fields, we don't need to specify a separate derivative function for each species, but instead we make use of the `Tag<N>` feature of [`TempLat`](https://github.com/cosmolattice/templat). Also notice how the second term in the potential, corresponding to the bias potential, is only present if `NScalars = 1`. Finally, we note the presence of a `resolutionPreservingFactor` variable. This is related to the resolution-preserving techniques discussed later in [*Resolution-preserving techniques*][sec_ResolutionPreservingTechniquesGlobal].
 
 In addition to specifying the model parameters, it is also compulsory to indicate the standard parameters used for canonical simulations of scalar-singlet interactions. The only difference are some additional restrictions related to the background expansion. If the `DefectsModel` flag is on, `DefectsModel = true`, only simulations with fixed expansion or flat background are allowed. In the former case and specific for defect models, if no `H0` keyword is indicated or if one sets `H0 = 0.0`, the fixed background expansion will default to
 [](){ #eq_genericScaleFactor }
@@ -81,7 +81,7 @@ a=\left(\frac{\tau}{\tau_0}\right)^p\quad\quad\quad \text{with}\quad\quad\quad p
 ```
 where recall, $\omega$ is indicated via the `omegaEoS` keyword and $\tau_0$ is the initial time of the simulation, indicated with $\tau_0$. For example, the default parameter file for the $\texttt{defects_ONGlobal}$ model contains
 @emgithub(models/parameter-files/defects_ONGlobal.in:model_expansion)
-for which the scale factor wil evolve as $a(\tau)=\tau / \tau_0$.
+for which the scale factor will evolve as $a(\tau)=\tau / \tau_0$.
 
 #### Initial conditions and diffusion { #sec_ICDiffusionGlobal }
 
@@ -100,10 +100,10 @@ so that fluctuations are drawed from a Gaussian distribution with amplitude squa
 [](){ #eq_defectsNetworkICAmplitude }
 ```math
 \begin{equation}\label{eq_defectsNetworkICAmplitude}
-\langle|\delta \tilde{\phi}(\tilde{n})|^2\rangle  \equiv \left({2\pi \ell_\text{corr} N\over \delta\tilde{x}}\right)^3 \text{exp}\left(-\đrac{\tilde{k}^2}{\ell_\txt{corr}^2}\right)  \,.
+\langle|\delta \tilde{\phi}(\tilde{n})|^2\rangle  \equiv \left({2\pi \ell_\text{corr} N\over \delta\tilde{x}}\right)^3 \text{exp}\left(-\frac{\tilde{k}^2}{\ell_\text{corr}^2}\right)  \,.
 \end{equation}
 ```
-In this case, the initial conditions depend on a single parameter, $\ell_\text{corr}$, which is especified in the parameter file (in program units) using the `lcorr` keywork. For example, the default parameter file for this model reads
+In this case, the initial conditions depend on a single parameter, $\ell_\text{corr}$, which is specified in the parameter file (in program units) using the `lcorr` keyword. For example, the default parameter file for this model reads
 @emgithub(models/parameter-files/defects_ONGlobal.in:model_IC)
 
 The **second option**, `ICtype_S = DefectsWhiteNoise`, initializes all the scalar fields with Gaussian fluctuations that follow a white noise power spectrum,
@@ -120,14 +120,14 @@ More concretely, the fluctuations are initialized as explained in Eq. (24) of [*
 \left.\langle|\delta \tilde{\phi}(\tilde{\bf n})|^2\rangle\right|_{\tilde{k}<\tilde{k}_\text{cut}}  \equiv \left({\omega_*\over f_*}\right)^2\left({N\over \delta \tilde{x}}\right)^3{A \over 2a^2}  \,.
 \end{equation}
 ```
-These initial conditions are controlled via two free parameters: the maximum momentum to be excited in the initial conditions, $k_\text{cut}$, and the amplitude of the fluctuations, $A. These are specified in program units using the `kCutOff` and `deltaNoise` keywords in the parameter file, respectively.  For example, a valid choice of initial conditions are
+These initial conditions are controlled via two free parameters: the maximum momentum to be excited in the initial conditions, $k_\text{cut}$, and the amplitude of the fluctuations, $A$. These are specified in program units using the `kCutOff` and `deltaNoise` keywords in the parameter file, respectively.  For example, a valid choice of initial conditions are
 ```text
 #IC
 ICtype_S = WhiteNoise
 kCutOff = 6
 deltaNoise = 0.01
 ```
-The cutoff momentum, $\tilde{k}_\text{cut}$, is an optional parameter, which is set to $\tilde{k}_\text{UV}$ if not especified.
+The cutoff momentum, $\tilde{k}_\text{cut}$, is an optional parameter, which is set to $\tilde{k}_\text{UV}$ if not specified.
 
 **Diffusion of the initial conditions**
 
@@ -149,7 +149,7 @@ In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, this phase is controlle
 | `diffType` | Evolver used to integrate the diffusion equation. Must be of a Runge-Kutta type: `RK2`, `RK3_3`, `RK3_4` or `RK4_5`. Default: `RK2`. |
 | `dtdiff` | Time step used for the integration of the diffusion equation. Must obey $\delta\tau_\text{diff}\lesssim \delta x^2 / 3$ (Courant's stability condition). |
 
-Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows the user to measure the evolution of different observables during the diffusion phase. These correspond to the energies of the system, that get saved to the $\texttt{average_energies_diffusion.txt}$ file, and the norm of the scalar field, $|\phi|$, as defined below in Eq. \eqref{eq_resolutionPreservingFactor}. This is saved to the $\texttt{average_norm_diffusion.txt}$ file, toghether with the average of its square, $\langle|\phi|^2\rangle$, and its variance, $\text{var}(|\phi|)$. Moreover, it is also possible to save snapshots of the fields during the diffusion phase. The frequency of these measurements and the type of snapshots to be saved is controlled via the following keywords. Recall that saving snapshots requires compiling $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ with the $\texttt{HDF5}$ library enabled.
+Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows the user to measure the evolution of different observables during the diffusion phase. These correspond to the energies of the system, that get saved to the $\texttt{average_energies_diffusion.txt}$ file, and the norm of the scalar field, $|\phi|$, as defined below in Eq. \eqref{eq_resolutionPreservingFactor}. This is saved to the $\texttt{average_norm_diffusion.txt}$ file, together with the average of its square, $\langle|\phi|^2\rangle$, and its variance, $\text{var}(|\phi|)$. Moreover, it is also possible to save snapshots of the fields during the diffusion phase. The frequency of these measurements and the type of snapshots to be saved is controlled via the following keywords. Recall that saving snapshots requires compiling $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ with the $\texttt{HDF5}$ library enabled.
 
 | **Parameters** <div style="width:140px"> | **Explanation** |
 | ---------------------------------------- | --------------- |
@@ -165,7 +165,7 @@ It is worth noting that, while the integration of the diffusion equation makes u
 
 Following the initialization of the fields, the simulation will by default run following the physical equations of motion given in Eq. \eqref{eq_globalEOM}. When working in an expanding background, however, this leads to a loss in resolution of the defects. As the width of the defects is constant in physical units, $w\sim 1/\sqrt{2\lambda} v$, but simulations are performed in comoving spacial coordinates, less and less lattice points are contained within the defects as the simulation progresses.  This can lead to large discretization errors in the simulation.
 
-To overcome this problematic, several resolution-preserving techniques have been proposed in the literature. Possibly the most extended one is the use of a modified modified equation of motion to evolve the fields during some period of the simulation time, which is followed by standard evolution following \eqref{eq_globalEOM}. The modified equation of motion takes the form
+To overcome this problematic, several resolution-preserving techniques have been proposed in the literature. Possibly the most extended one is the use of a modified equation of motion to evolve the fields during some period of the simulation time, which is followed by standard evolution following \eqref{eq_globalEOM}. The modified equation of motion takes the form
 [](){ #eq_resolutionPreservingGlobal }
 ```math
 \begin{equation}\label{eq_resolutionPreservingglobal}
@@ -181,7 +181,7 @@ w_\text{c}(\tau)= w_0\left[\frac{a(\tau_\text{RP,0})}{a(\tau)}\right]^s\,.
 ```
 with $w_0$ the initial width. For $s < 0$, the resolution of the defects grows, while for $s=0$ it remains constant. The cases $s=0$ and $s=-1$ are known as fattening and extra-fattening, respectively.
 
-Typically, the duration of these resolution-presenving phase is fixed to ensure that the resolution of the defects is the same at the beginning of this phase and at the end of the simulation. This corresponds to setting the end-time of this resolution-preserving phase as
+Typically, the duration of these resolution-preserving phase is fixed to ensure that the resolution of the defects is the same at the beginning of this phase and at the end of the simulation. This corresponds to setting the end-time of this resolution-preserving phase as
 [](){ #eq_resolutionPreservingdurationglobal }
 ```math
 \begin{equation}\label{eq_resolutionPreservingdurationglobal}
@@ -204,8 +204,8 @@ where $\Lambda_\text{RP}(\tau)$ takes the values,
 \begin{equation}\label{eq_resolutionPreservingFactor}
 \Lambda_\text{RP}(\tau) = \left\{\begin{array}{lr}
 1  & \quad\quad\quad\quad\quad \tau < \tau_\text{RP,0}\,,\\[7pt]
-\displaystyle\left[\frac{a(\tau)}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau_\text{RP,0} \leq \tau < \tau_{RP, max}\,, \\[7pt]
-\displaystyle\left[\frac{a(\tau_{RP,max})}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau \geq \tau_{RP, max}\,. \\
+\displaystyle\left[\frac{a(\tau)}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau_\text{RP,0} \leq \tau < \tau_{\text{RP, max}}\,, \\[7pt]
+\displaystyle\left[\frac{a(\tau_{RP,max})}{a(\tau_\text{RP,0})}\right]^{2(s-1)} &  \quad\quad\quad\quad\quad \tau \geq \tau_{\text{RP, max}}\,. \\
 \end{array}\right.
 \end{equation}
 ```
@@ -224,7 +224,7 @@ For example, a possible value of these inputs can be found in the default parame
 @emgithub(models/parameter-files/defects_ONGlobal.in:resolutionpreserving)
 
 
-We finally highlight a technical feature of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Typically, the time at which the resolution-preserving phase is expected to end, $\tau_\text{RP,max}$, does not corresponds to an exact time step of the evolution, this is, $\tau_0 + n\delta\tau < \tau_\text{RP,max} < \tau_0 + (n+1)\delta\tau$ for some integer $n$. To prevent errors coming from this misalignment, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ performs an additional intermediate time step exactly at $\tau_\text{RP,max}$. Note this does not affect the times at which observables are measured or any other functionality of the code.
+We finally highlight a technical feature of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. Typically, the time at which the resolution-preserving phase is expected to end, $\tau_\text{RP,max}$, does not correspond to an exact time step of the evolution, this is, $\tau_0 + n\delta\tau < \tau_\text{RP,max} < \tau_0 + (n+1)\delta\tau$ for some integer $n$. To prevent errors coming from this misalignment, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ performs an additional intermediate time step exactly at $\tau_\text{RP,max}$. Note this does not affect the times at which observables are measured or any other functionality of the code.
 
 
 #### Defect-specific observables { #sec_ObservablesGlobal }
@@ -243,17 +243,17 @@ which is saved to the $\texttt{average_norm.txt}$ file, together with the averag
 -  The power spectrum of the norm, which is saved to the $\texttt{spectra_norm.txt}$ file, with a frequency controlled by the `tOutputInfreq` keyword.
 
 -   If `measureDefectsEnergies = true` is indicated in the parameter file, the energy components of the defects, weighted by a window function that is centered around the defects, are measured. In particular, for the scalar model considered here, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows one to measure
-[](){ #eq_globalNorm }
+[](){ #eq_weightedEnergiesglobal }
 ```math
 \begin{equation}\label{eq_weightedEnergiesglobal}
 \begin{array}{rcl}
 E_{K,\text{str}} & = & \displaystyle\frac{\delta x^3}{2a^3}\sum_{\mathbf{n}}\sum_{a=1}^N W[\{\phi_b(\mathbf{n})\}]\pi_{\phi_a}(\mathbf{n})^2\,,\\[7pt]
  E_{G,\text{str}} & = &\displaystyle \frac{a \delta x^3}{2}\sum_{\mathbf{n}}\sum_i \sum_{a=1}^N W[\{\phi_b(\mathbf{n})\}] \left[\nabla^+_i\phi_a(\mathbf{n})\right]^2\,,\\[7pt]
-  E_{V,\text{str}} & = &\displaystyle a^3 \delta x^3 \sum_{\mathbf{n}} \sum_{\mathbf{n}}\sum_{a=1}^N W[\{\phi_b(\mathbf{n})\}] V[\{\phi_a(\mathbf{n})\}]\,,
+  E_{V,\text{str}} & = &\displaystyle a^3 \delta x^3 \sum_{\mathbf{n}} \sum_{a=1}^N W[\{\phi_b(\mathbf{n})\}] V[\{\phi_a(\mathbf{n})\}]\,,
 \end{array}
 \end{equation}
 ```
-These are saved to columns 2-4 of the $\texttt{average_defects.txt}$ file, following the measurement time. The window function implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is proportional to the potential and normalized such that it is equal to unitiy at the core of the defects and field values beyond the true vacua are not taken into consideration,
+These are saved to columns 2-4 of the $\texttt{average_defects.txt}$ file, following the measurement time. The window function implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is proportional to the potential and normalized such that it is equal to unity at the core of the defects and field values beyond the true vacua are not taken into consideration,
 [](){ #eq_globalWeightFunction }
 ```math
 \begin{equation}\label{eq_globalWeightFunction}
@@ -271,7 +271,7 @@ with $\Theta$ the Heaviside function. This window function can easily be changed
 ```
 where $\delta_{\mathbf{n},i}=1$ if $\phi(\mathbf{n})\phi(\mathbf{n}+\hat{\imath})<0$, and 0 otherwise. This quantity is saved in the last column of the $\texttt{average_defects.txt}$ file.
 
-- For global strings (`NScalars = 2`) and if `measureDefectsStructure = true`, an estimate of the total length of the strings is saved in the last column of the,
+- For global strings (`NScalars = 2`) and if `measureDefectsStructure = true`, an estimate of the total length of the strings is saved in the last column of the $\texttt{average_defects.txt}$ file, 
 [](){ #eq_lengthGlobal }
 ```math
 \begin{equation}\label{eq_lengthGlobal}
@@ -320,19 +320,19 @@ A_i''-\nabla^2A_i + \nabla_j \nabla_i A_j & = & \displaystyle 2a^{2}g_AQ_A^\varp
 \end{equation}
 ```
 
-In addition to $\lambda$ and the vaccuum expectation value, $v$, the model also depends on the gauge coupling, $g_A$, and the charge of the complex scalar field under the $\mathrm{U}(1)$ symmetry, $Q_A^\varphi$. All these need to be specified in the parameter file,
+In addition to $\lambda$ and the vacuum expectation value, $v$, the model also depends on the gauge coupling, $g_A$, and the charge of the complex scalar field under the $\mathrm{U}(1)$ symmetry, $Q_A^\varphi$. All these need to be specified in the parameter file,
 @emgithub(models/parameter-files/defects_U1LocalStrings.in:model_pars)
-These parameters are used to define program variables analogously as it is done in the case of global defects, see Eq. \eqref{eq_globalProgramVariables}. The particular example presented here corresponds to the so-called critical case, $2\lambda=(Q_a^\varphi g_A)^2$, for which the gauge ans scalar radii of the local strings coincide, although $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ also allows one to simulate other non-critical cases. Note that as this model only contains one complex scalar field, there is a redundancy between the values of $g_a$ and $Q_A^\varphi$. However, both need to be included in the parameter file to run $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
+These parameters are used to define program variables analogously as it is done in the case of global defects, see Eq. \eqref{eq_globalProgramVariables}. The particular example presented here corresponds to the so-called critical case, $2\lambda=(Q_A^\varphi g_A)^2$, for which the gauge and scalar radii of the local strings coincide, although $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ also allows one to simulate other non-critical cases. Note that as this model only contains one complex scalar field, there is a redundancy between the values of $g_A$ and $Q_A^\varphi$. However, both need to be included in the parameter file to run $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$.
 
-Simulations of local strings in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ follow similar lines than those of global defects presentedabove in [*Simultations of global defects*][sec_simulationsGlobalDefects]. In particular, they can only be simulated on a flat background or on a background with fixed expansion. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ also incorporates local versions of the initial conditions, resolution-preserving techniques and observables discussed above, which are controlled by the same input parameters as in the global case. We now briefly discuss the main differences, but refer the reader to the corresponding subsections fromthe global strings model for more detailed information about the usage of these techniques and the associated parameters.
+Simulations of local strings in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ follow similar lines than those of global defects presented above in [*Simulatations of global defects*][sec_simulationsGlobalDefects]. In particular, they can only be simulated on a flat background or on a background with fixed expansion. $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ also incorporates local versions of the initial conditions, resolution-preserving techniques and observables discussed above, which are controlled by the same input parameters as in the global case. We now briefly discuss the main differences, but refer the reader to the corresponding subsections from the global strings model for more detailed information about the usage of these techniques and the associated parameters.
 
 #### Initial conditions and diffusion { #sec_ICDiffusionLocal }
 
-Initial conditions for local strings in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are specified in a very similar fashion as for their global counterparts now using the `ICtype_U1` keywork in the parameter file. In particular, one can set this to either `ICtype_U1 = DefectsNetwork` or `ICtype_U1 = DefectsWhiteNoise`, which initializes the real and imaginary parts of the complex field with a zero homogeneous background and fluctuations that follow the power spectra given in Eq. \eqref{eq_defectsNetworkIC} or Eq. \eqref{eq_whiteNoise}, respectively. The same parameters as described for global defects in [*Initial conditions and diffusion*][sec_ICDiffusionGlobal] need to be specified in either case. In both cases, the gauge field and the conjugate momenta of both the scalar and gauge fields are set to zero.
+Initial conditions for local strings in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are specified in a very similar fashion as for their global counterparts now using the `ICtype_U1` keyword in the parameter file. In particular, one can set this to either `ICtype_U1 = DefectsNetwork` or `ICtype_U1 = DefectsWhiteNoise`, which initializes the real and imaginary parts of the complex field with a zero homogeneous background and fluctuations that follow the power spectra given in Eq. \eqref{eq_defectsNetworkIC} or Eq. \eqref{eq_whiteNoise}, respectively. The same parameters as described for global defects in [*Initial conditions and diffusion*][sec_ICDiffusionGlobal] need to be specified in either case. In both cases, the gauge field and the conjugate momenta of both the scalar and gauge fields are set to zero.
 
 **Diffusion of initial conditions**
 
-Following the initialization of the scalar field, a phase of diffusion can also be performed, which is especially recommended when using `ICtypeU1 = DefectsNetwork`. In this phase, the fields are evolved following the diffusion equations
+Following the initialization of the scalar field, a phase of diffusion can also be performed, which is especially recommended when using `ICtype_U1 = DefectsNetwork`. In this phase, the fields are evolved following the diffusion equations
 [](){ #eq_localStringsDiffusion }
 ```math
 \begin{equation}\label{eq_localStringsDiffusion}
@@ -346,7 +346,7 @@ As in the global case, the evoluton is performed with a Runge-Kutta algorithm, a
 
 #### Resolution-preserving techniques { #sec_ResolutionPreservingTechniquesLocal }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows one to use of resolution-preserving techniques for local strings, similar to the techniques used for global defects. In particular, the equations of motion of the fields are modified to
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows one to use resolution-preserving techniques for local strings, similar to the techniques used for global defects. In particular, the equations of motion of the fields are modified to
 [](){ #eq_localFatteningEOM }
 ```math
 \begin{equation}\label{eq_localFatteningEOM}
@@ -357,9 +357,9 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows one to use of resolu
 \end{equation}
 ```
 This is implemented in the code using the `resolutionPreservingFactor` member variable of the `AbstractModel` class, that takes time dependent values according to Eq. \eqref{eq_resolutionPreservingFactor}. An important difference to the scalar case is the fact that this factor enters the definition of the conjugate momentum of the gauge field,
-[](){ #eq_localConjugateMomemtaFattening }
+[](){ #eq_localConjugateMomentaFattening }
 ```math
-\begin{equation}\label{eq_localConjugateMomemtaFattening}
+\begin{equation}\label{eq_localConjugateMomentaFattening}
 \left.\begin{array}{rcl}
 (\tilde{\pi}_A)_i=\Lambda_\text{RP}^{-1}\tilde{A}_i'\,,
 \end{array}\right.
@@ -380,7 +380,7 @@ This factor similarly enters the definition of the anisotropic stress tensor act
 
 #### Defect-specific observables { #sec_ObservablesLocal }
 
-Finally, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ incorporates some especific observables to study the dynamics and evolution of local strings. Contrary to the global case, the norm of the complex field and its corresponding power spectrum are measured by default in the $\texttt{average_norm_cmplx_scalar_0.txt}$ and $\texttt{spectra_norm_cmplx_scalar_0.txt}$ files, respectively, and so no additional measurements are performed by default. Note however, that the normalization of the field is different that in the global case, and the vacuum corresponds to $\langle |\tilde\varphi|^2\rangle = 1/2$.
+Finally, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ incorporates some specific observables to study the dynamics and evolution of local strings. Contrary to the global case, the norm of the complex field and its corresponding power spectrum are measured by default in the $\texttt{average_norm_cmplx_scalar_0.txt}$ and $\texttt{spectra_norm_cmplx_scalar_0.txt}$ files, respectively, and so no additional measurements are performed by default. Note however, that the normalization of the field is different from the global case, and the vacuum corresponds to $\langle |\tilde\varphi|^2\rangle = 1/2$.
 
 In the case of local strings, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ allows one to measure two defect-specific observables:
 
