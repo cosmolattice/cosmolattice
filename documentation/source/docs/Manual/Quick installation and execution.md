@@ -1,6 +1,6 @@
 Here, we provide a brief description of the steps to download, compile and run a job with CosmoLattice. As an example, we load a model called `lphi4`, with input parameters specified in the file `lphi4.in` (details of this model and of its parameters can be found in Section [My first model of (singlet) scalar fields](My first model of (singlet) scalar fields.md), here we just use these files as a demonstration example). 
 
-An appropriate version of FFTW needs to be installed in order to handle the code's Fourier transforms, either for serial jobs run on a single processor, or for parallelized jobs run on multiple processors. For serial jobs, that is all it is needed. For parallelized jobs, in addition, the appropriate MPI compiler needs also to be installed. 
+An appropriate version of FFTW needs to be installed in order to handle the code's Fourier transforms, either for serial jobs run on a single processor, or for parallelized jobs run on multiple processors. For serial jobs, that is all that is needed. For parallelized jobs, in addition, the appropriate MPI compiler needs also to be installed. 
 Optionally, if one wants to print two- or three-dimensional snapshots of a simulation, or simply to stop/restart a run at a certain time, the HDF5 library also needs to be installed. 
 Also optionally, the simulations can be parallelized in more than one spatial dimension, to speed up jobs of long duration or to run massive simulations. This is handled by the ParaFaFT library (parallel Fast Fourier transforms), which is automatically built and enabled when the code is compiled with MPI. For further details on the installation and use of the code and the libraries, please see [Installation](../code/Installation.md).
 
@@ -13,7 +13,7 @@ Also optionally, the simulations can be parallelized in more than one spatial di
 [HDF5 — optional](../code/Installation.md#subsec_requirements){ .cl-fact }
 </div>
 
-**Download:** You can download CosmoLattice from [ http://www.cosmolattice.net](http://www.cosmolattice.net) , or alternatively use `git clone` as indicated below.
+**Download:** You can download CosmoLattice from [http://www.cosmolattice.net](http://www.cosmolattice.net), or alternatively use `git clone` as indicated below.
 
 <div class="cl-hero" markdown>
 
