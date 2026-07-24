@@ -1,6 +1,6 @@
-# Cosmolattice Manual
+# CosmoLattice Manual
 
-This website has been generated from the [CosmoLattice user manual](https://arxiv.org/abs/2102.01031)
+This website has been generated from the [CosmoLattice user manual](https://arxiv.org/abs/2102.01031).
 
 ## Table of contents
 
@@ -14,12 +14,12 @@ This website has been generated from the [CosmoLattice user manual](https://arxi
 - [My first model of gauge fields](My first model of gauge fields.md)
 - [What CosmoLattice does in detail](What CosmoLattice does in detail.md)
 - [Parallelization](Parallelization.md)
-- [HDF5: Output and Backups ](HDF5: Output and Backups.md)
+- [HDF5: Output and Backups ](HDF5%3A Output and Backups.md)
 - [Acknowledgments](Acknowledgments.md)
 - [Installation](../code/Installation.md)
-- [Appendix: Parameters](Appendix: Parameters.md)
-- [Appendix: Generic Model variables](Appendix: Generic Model variables.md)
-- [Appendix: CMake Flags](Appendix: CMake Flags.md)
+- [Appendix: Parameters](Appendix_Parameters.md)
+- [Appendix: Generic Model variables](Appendix_Generic_Model_variables.md)
+- [Appendix: CMake Flags](../code/cmake.md)
 - [List of Implemented Functions](List of Implemented Functions.md)
 - [Expression Templates](Expression Templates.md)
 ## About
