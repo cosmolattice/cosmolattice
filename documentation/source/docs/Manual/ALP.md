@@ -1,14 +1,12 @@
 <!-- <div style="text-align: justify;"> -->
-CosmoLattice can evolve pseudo-scalar fields, known as *axion-like-particles* (ALPs), that are coupled to U(1) gauge fields via an interaction of the form $\phi F\tilde F$. As opposed to the charged scalars described in Section [Scalar-Gauge Interactions](My first model of gauge fields.md), these pseudo-scalar fields are not charged under a gauge symmetry. Note that while ALPs can also couple to non-Abelian gauge fields in nature (via $\phi G\tilde G$), currently only the Abelian U(1) interactions are implemented in the code. This module can be considered as an extension of the standard scalar and Abelian gauge dynamics: the fields, program variables, input-file syntax, potential functions, and standard outputs follow the same conventions to a large extent. In this section, we emphasize the additional technical details that arise from introducing this type of non-canonical coupling.
+Since version 2.0, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes a module to evolve pseudo-scalar fields coupled to $\mathrm{U}(1)$ gauge fields via an interaction of the form $\phi F\tilde F$. These pseudoscalar fields are commonly known as *axion-like-particles* (ALPs). As opposed to charged complex scalars described in [Scalar-Gauge Interactions](My first model of gauge fields.md), the pseudo-scalar fields we consider here are not charged under a gauge symmetry. Note that while ALPs can also couple to non-Abelian gauge fields in nature (via $\phi G\tilde G$), currently only the Abelian $\mathrm{U}(1)$ interactions are implemented in the code. These models can be considered as an extension of the standard scalar and Abelian gauge dynamics: fields, program variables, input-file syntax, potential functions, and standard outputs follow the same conventions to a large extent, and we recommend the reader to be familiar with the [Scalar-Gauge Interactions](My first model of gauge fields.md) section of this manual first. In this section, we emphasize the additional details that arise from introducing this type of non-canonical coupling.
 
-This section is structured as follows. In Section [*Axion-gauge continuum dynamics*][subsec_ALPcontinuum] we introduce the continuum equations of motion for the axion and the U(1) gauge-field solved by the code, as well as the self-consistent exapansion of the scale factor. In Section [*Model and input files for axion-U(1) theories*][subsec_ALPInput] we describe an example model and axion-U(1) input parameters. In Section [*The axion-U(1) model file*][sec_TheALPModelFile] we show the model-file additions that activate the module. Finally, in Section [*The axion-U(1) physics inside CosmoLattice*][sec_WhatHappensAutoinALP] we summarize the axion-specific initialization and evolution logic.
-
-
+This section is structured as follows. In first introduce in [*Axion-gauge continuum dynamics*][subsec_ALPcontinuum] the continuum equations of motion for the axion and the $\mathrm{U}(1)$ gauge-field, as well as for the self-consistent expansion of the scale factor. In [*Model and input files for axion-$\mathrm{U}(1)$ theories*][subsec_ALPInput] we describe an example model and input parameters, and also explain how it can be modified to create a different model of axion-$\mathrm{U}(1)$ interactions. Finally, in [*The axion-$\mathrm{U}(1)$ physics inside $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*][sec_WhatHappensAutoinALP] we detail the axion-specific initialization and evolution algorithms.
 
 
-### **Axion-gauge continuum dynamics** { #subsec_ALPcontinuum }
+### **Axion-gauge dynamics in the continuum** { #subsec_ALPcontinuum }
 
-The action of an axion-U(1) gauge theory that can be simulated in CosmoLattice is the following:
+The action of an axion-$\mathrm{U}(1)$ gauge theory that can be simulated in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is the following:
 [](){ #eq_AxionAction }
 ```math
 \begin{align}
@@ -23,12 +21,10 @@ S =
 \right]  ,
 \end{align}
 ```
+where $m_\text{p}$ is the reduced Planck mass and $\alpha_{\Lambda}=m_p/\Lambda$ is the dimensionless axion-$\mathrm{U}(1)$ coupling strength, with with $\Lambda$ representing an energy scale. Note that $F_{\mu\nu}$ is the standard field strength tensor of the $\mathrm{U}(1)$ gauge field $A_{\mu}$ defined in Eq. ([*5*](My first model of gauge fields.md#eq:eq_FmnAbelian)) of [Scalar-Gauge Interactions](My first model of gauge fields.md), and that $\tilde{F}_{\mu\nu} = \frac{1}{2}\epsilon_{\mu\nu\rho\sigma}F^{\rho\sigma}$ is its dual counterpart, with $\epsilon_{\mu\nu\rho\sigma}$ being the completely antisymmetric Levi-Civita tensor, which in a curved spacetime takes the normalization $\epsilon_{0123} = 1/\sqrt{-g}$.
 
-where $m_p$ is the reduced Planck mass and $\alpha_{\Lambda}=m_p/\Lambda$ is the dimensionless coupling strength of axion-U(1) coupling with with $\Lambda$ representing an energy scale. Note that $F_{\mu\nu}$ is the standard field strength tensor of the U(1) gauge field $A_{\mu}$ defined in Eq. ([*5*](My first model of gauge fields.md#eq:eq_FmnAbelian)) of [Scalar-Gauge Interactions](My first model of gauge fields.md), and that $\tilde{F}_{\mu\nu} = \frac{1}{2}\epsilon_{\mu\nu\rho\sigma}F^{\rho\sigma}$ is its dual counterpart, with $\epsilon_{\mu\nu\rho\sigma}$ being the completely antisymmetric Levi-Civita tensor, which in a curved spacetime takes the form $\epsilon_{0123} = 1/\sqrt{-g}$.
 
-
-We use the same spatially-flat FLRW background metric introduced in Eq. ([*1*](My first model of (singlet) scalar fields.md#eq_FLRWmetric)) from Section [Scalar-singlet interactions](My first model of (singlet) scalar fields.md). The variation of the action yields the following continuum equations of motion for the axion and the gauge fields (in cosmic time and temporal gauge $A_0$):
-
+We use the same spatially-flat FLRW background metric introduced in Eq. ([*1*](My first model of (singlet) scalar fields.md#eq_FLRWmetric)) of [Scalar-singlet interactions](My first model of (singlet) scalar fields.md). The variation of the action yields the continuum equations of motion for the axion and the gauge fields. Using cosmic time and working in the temporal gauge, $A_0=0$, they take the form
 [](){ #eqn_eom_axion }
 ```math
 \begin{align}
@@ -38,42 +34,34 @@ We use the same spatially-flat FLRW background metric introduced in Eq. ([*1*](M
 \dot{E}_i &= -HE_i-\frac{1}{a^2}\epsilon_{ijk}\partial_jB_k-\frac{\alpha_\Lambda}{am_p}\left(\dot{\phi}B_i-\epsilon_{ijk}\partial_j\phi E_k\right) \, ,
 \end{align}
 ```
-with the standard definitions of the electric and magnetic field from Eq. ([*8*](My first model of gauge fields.md#eq:eq_FmnAbelian)) of [Scalar-Gauge Interactions](My first model of gauge fields.md) but using standard letters $E_i$ and $B_i$.
-
-Additionally, the variation with respect to the temporal component of the gauge field leads to the following constraint equation:
-
+with the standard definitions of the electric and magnetic field from Eq. ([*8*](My first model of gauge fields.md#eq:eq_FmnAbelian)) of [Scalar-Gauge Interactions](My first model of gauge fields.md) but using roman letters $E_i$ and $B_i$ to refer to them, in this same order. Additionally, the variation of the action with respect to the temporal component of the gauge field leads to the Gauss' law, which for this type of interactions takes the form
 [](){ #eqn_Gauss }
 ```math
 \begin{align}
 \label{eqn:Gauss}
-\partial_iE_i &= -\frac{\alpha_{\Lambda}}{m_pa}\partial_i\phi B_i \, . \quad\quad\quad {\rm [Gauss~Constraint]}
+\partial_iE_i &= -\frac{\alpha_{\Lambda}}{m_pa}B_i\partial_i\phi \, . \quad\quad\quad {\rm [Gauss~Constraint]}
 \end{align}
 ```
 
-If we consider that the background expansion is driven by both the axion-like particle and the gauge field, the Friedmann equations can be written as:
-
+If we consider that the background expansion is driven by both the ALP and the gauge field, the Friedmann equations can be written as,
 [](){ #eqn_Friedmann }
-```math 
+```math
 \begin{align}
-\ddot{a} &= -\frac{a}{3m_p^2}\big( 2E_{K} - E_{V} + E_{EM} \big)\,, \label{eqn:ddaAxion} \\ 
-H^2 &= \frac{1}{3m_p^2}\big(E_{K} + E_{G} + E_{V} + E_{EM}\big)\,. \quad\quad\quad \text{[Hubble Constraint]} \label{eqn:HubbleAxion}
+\ddot{a} &= -\frac{a}{3m_p^2}\big( E_{K} - E_{V} + EM \big)\,, \label{eqn:ddaAxion} \\
+H^2 &= \frac{1}{3m_p^2}\big(E_{K} + E_{G} + E_{V} + EM\big)\,, \quad\quad\quad \text{[Hubble Constraint]} \label{eqn:HubbleAxion}
 \end{align}
 ```
-
-In this context, the various homogeneous components of the energy density are defined as in [Scalar-Gauge Interactions](My first model of gauge fields.md) for a non-charged scalar and an abelian gauge field:
-
+where, the various homogeneous components of the energy density are defined as in [Scalar-Gauge Interactions](My first model of gauge fields.md) for a non-charged scalar and an Abelian gauge field,
 [](){ #eqn_energies }
-```math 
+```math
 \begin{align}
-E_{K} \equiv \frac{1}{2}\langle\dot{\phi}^2\rangle\;, \quad E_{G} \equiv \frac{1}{2a^2}\langle(\vec\nabla\phi)^2\rangle\;, \quad E_{V} \equiv \langle V(\phi) \rangle\;, \quad E_{EM} \equiv \frac{1}{2a^4}\langle a^2\vec E^2+\vec B^2\rangle\;. \label{eqn:energyDensityTerms}
+E_{K} \equiv \frac{1}{2}\langle\dot{\phi}^2\rangle\;, \quad E_G \equiv \frac{1}{2a^2}\langle(\vec\nabla\phi)^2\rangle\;, \quad E_{V} \equiv \langle V(\phi) \rangle\;, \quad EM \equiv \frac{1}{2a^4}\langle a^2\vec E^2+\vec B^2\rangle\;. \label{eqn:energyDensityTerms}
 \end{align}
 ```
+Note that $E_K$, $E_G$, and $E_V$ refer to the kinetic, gradient, and potential energy densities of the axion, respectively, while $EM}$ denotes the electromagnetic energy density associated with the Abelian gauge field $A_\mu$.
 
-Note that $E_K$, $E_G$, and $E_V$ refer to the kinetic, gradient, and potential energy densities of the axion, respectively, while $E_{EM}$ denotes the electromagnetic energy density associated with the abelian gauge field $A_\mu$.
 
-
-Regarding CosmoLattice, we treat the continuum dynamics of the aforementioned model using the program variables and $\alpha$-time exactly as in [Scalar-Gauge Interactions](My first model of gauge fields.md) and [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md). Thus, the matter dynamics and constraints read as follows:
-
+Regarding $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, we define program variables and $\alpha$-time exactly as in [Scalar-Gauge Interactions](My first model of gauge fields.md) and [Scalar-Scalar Interactions](My first model of (singlet) scalar fields.md). Thus, the matter dynamics and constraints read to be simulated read follows,
 [](){ #eqn_eom_axion_pralpha }
 ```math
 \begin{align}
@@ -85,15 +73,13 @@ Regarding CosmoLattice, we treat the continuum dynamics of the aforementioned mo
 \tilde{\partial}_i \tilde{E}_i &= -\left(\frac{f_{*}}{m_p}\right)\alpha_\Lambda a^{\alpha-1}\tilde{\partial}_i\tilde{\phi} \tilde{B}_i \, . \quad\quad\quad {\rm [Gauss~Constraint]}
 \end{align}
 ```
-
-Furthermore, the self-consistent expansion is governed by the Friedmann equations ([*24*](My first model of gauge fields.md#eq_FriedmannHubble)) and ([*25*](My first model of gauge fields.md#eq:#eq_FriedmannDDa)) of [Scalar-Gauge Interactions](My first model of gauge fields.md), which in turn contain the definitions ([*23*](My first model of gauge fields.md#eq:#eq_energy-contrib)) from the same section for the various energy components present.
-
+Furthermore, the self-consistent expansion is governed by the program-units Friedmann equations, given in Eqs.$~$([*24*](My first model of gauge fields.md#eq_FriedmannHubble)) and ([*25*](My first model of gauge fields.md#eq:#eq_FriedmannDDa)) of [Scalar-Gauge Interactions](My first model of gauge fields.md), which in turn contain the definitions given in Eq.$~$([*23*](My first model of gauge fields.md#eq:#eq_energy-contrib)) from the same section for the various energy components present.
 
 
-### **Model and input files for axion-U(1) theories** { #subsec_ALPInput }
 
-The example model $\texttt{axionU1_m2phi.h}$ contains one scalar singlet, $N_s=1$, which represents the axion-like particle, and one U(1) gauge field, $N_{U(1)}=1$. The potential consists of a single term, $N_{\rm pot}=1$, given by
+### **Example model and input files for axion-$\mathrm{U}(1)$ theories** { #subsec_ALPInput }
 
+An example model to simulate an ALP coupled to a $\mathrm{U}(1)$ gauge field is given by the $\texttt{axionU1_m2phi.h}$ model file. This contains one scalar singlet field, $N_\mathrm{s}=1$, which represents the axion-like particle, and one $\mathrm{U}(1)$ gauge field, $N_{\mathrm{U}(1)}=1$. The potential of this model is chosen to consist of a single term, $N_{\rm pot}=1$, given by
 [](){ #eq_AxionExamplePotential }
 ```math
 \begin{align}
@@ -103,10 +89,7 @@ V(\phi)
 \frac{1}{2}m^2\phi^2 ,
 \end{align}
 ```
-where $m$ is the mass of the axion-like particle.
-
-For this model, we choose the following program variables:
-
+where $m$ is the mass of the axion-like particle. In addition, the following program variables are chosen,
 [](){ #eq_AxionExampleProgramVars }
 ```math
 \begin{align}
@@ -116,9 +99,7 @@ f_*=\phi_*~,\hspace{0.4cm}
 \alpha=0 .
 \end{align}
 ```
-
-The program potential therefore contains only one term,
-
+with $\phi_*$ the initial homogeneous amplitude of the scalar field. The program potential then reads
 [](){ #eq_AxionExampleProgramPotential }
 ```math
 \begin{align}
@@ -132,30 +113,24 @@ V(f_*\tilde\phi)
 \end{align}
 ```
 
-
-The corresponding input file is $\texttt{models/parameter-files/axionU1_m2phi2.in}$:
+To simulate this model, an example parameter file is provided, $\texttt{models/parameter-files/axionU1_m2phi2.in}$, which reads
 
 @emgithub(models/parameter-files/axionU1_m2phi2.in)
 
-The parameter syntax, <!-- command-line overrides,  --> lattice parameters, output frequencies, and scalar initial conditions are the same as in Section [*Running the program with an input parameter file*](My first model of (singlet) scalar fields.md#subsec_Input-Scalars). The axion-gauge specific additions are:
+The parameter syntax for lattice parameters, output frequencies and scalar initial conditions are the same as in Section [*Running the program with an input parameter file*](My first model of (singlet) scalar fields.md#subsec_Input-Scalars). The axion-gauge-specific additions and new restrictions are:
 
 | **Parameters** <div style="width:150px"> | **Explanation** |
 | ---------------------------------------- | --------------- |
-| `alphaLambda_AxionU1` | Dimensionless coupling constant $\alpha_{\Lambda}$ between the axion-like particle and the U(1) gauge field. In this model there is one ALP, so one value is expected. |
-| `mass` | Mass $m$ of the axion-like particle in GeV. In this model there is one ALP, so one value is expected. |
+| `alphaLambda_AxionU1` | Dimensionless coupling constant $\alpha_{\Lambda}$ between the axion-like particle and the $\mathrm{U}(1)$ gauge field. It defaults to $\alpha_\Lambda=1$ if unspecified. |
 | `evolver` | Axion-gauge models  can only  be used with of the Runge-Kutta evolvers, such as `RK2`, `RK3_3`, `RK3_4`, or `RK4_5`. |
-| `tNonLinearAxionU1` | If a value between `t0` and `tmax` is specified for this variable, the evolution up to this value will take place in what is known as the *linear regime*. Further details are provided in Section [*Linear Regime*][sec_evolution-axionU1_linear_regime]. |
+| `tNonLinearAxionU1` | If a value between `t0` and `tmax` is specified for this variable, the evolution between the start of the simulation and this time will take place in the *linear regime*. Further details are provided in Section [*Linear Regime*][sec_evolution-axionU1_linear_regime]. |
 | `flagChiralPS` | Setting this parameter to `true` triggers the generation of the $\texttt{spectra_chiral_U1_0.txt}$ and $\texttt{spectra_chiral_Elec_U1_0.txt}$ files, which contain the chiral spectra $A^{\pm}$ and $E^{\pm}$, respectively. More details are provided in the [*Output*][subsubsec_output] part of this section. |
 
-Standard scalar-singlet parameters still apply. In particular, `initial_amplitudes` and `initial_momenta` contain only one entry, corresponding to the axion field $\phi$. A typical command-line override is
-```bash
-./m2phi_axionU1 input=../models/parameter-files/m2phi_axionU1.in N=64 alphaLambda_AxionU1=13 mass=1.5e13
-```
-which runs the model on a $64^3$ lattice and sets $\alpha_{\Lambda}=13$ and $m=1.5\cdot 10^{13} \text{GeV}$.
+In addition, this particular model requires the keyword `mass` that specifies the mass of the axion in GeV. In addition, initial conditions are provided via `initial_amplitudes` and `initial_momenta`, both of which contain only one entry corresponding to the axion field $\phi$.
 
 #### Fixed background expansion
 
-This model can also be run in a fixed expanding background. This is activated with
+Axion-gauge models in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ can also be run in a fixed-expanding background. This is activated by indicating
 
 ```text
 expansion = true
@@ -163,35 +138,32 @@ fixedBackground = true
 omegaEoS = ...
 H0 = ...
 ```
-
-In that case, the scale factor is not sourced by the lattice fields, but by an external homogeneous component with constant equation of state $\omega_{\rm EoS}$.
+in the parameter file. In such case, the scale factor is not sourced by the lattice fields, but by an external homogeneous component with constant equation of state $\omega_{\rm EoS}$, see Eq. ([*11*](My first model of (singlet) scalar fields.md#eq_ScaleFactorPowerLaw)) of [Scalar-singlet interactions](My first model of (singlet) scalar fields.md).
 
 #### Output files { #subsubsec_output }
 
-An axion-U(1) simulation generates the standard output files for both the scalar-singlet (the axion) and the U(1) gauge field sectors, following the default conventions described in Section [Scalar-Gauge Interactions](My first model of gauge fields.md). The specific features and additional files for this module are:
+An axion-$\mathrm{U}(1)$ simulation generates the standard output files for both the scalar-singlet (the axion) and the $\mathrm{U}(1)$ gauge field, following the default conventions described in [Scalar-Gauge Interactions](My first model of gauge fields.md), as well as two additional files related to the power spectra. The specific novelties and additional files for this module are:
 
-*   **Gauss Constraint**: The Gauss constraint evaluation is adapted to the specific axion-U(1) expression given in Eq.$~$\eqref{eqn:Gauss_pralpha}, but the file output format remains identical to the standard gauge setup.
-*   **Energy Conservation**: When evolving within the *linear regime* (see Section [*Output*][sec_evolution-axionU1_linear_regime]), the total energy density calculation used for the energy conservation check does not include the contribution from the gauge sector.
-*   **Chiral Spectra**: If `flagChiralPS = true`, the module generates additional output files containing the chiral spectra of the gauge field and conjugate momentum.
+*   **Gauss Constraint**: The Gauss constraint evaluation is adapted to the specific axion-$\mathrm{U}(1)$ expression given in Eq.$~$\eqref{eqn:Gauss_pralpha}. The file output format remains identical to the standard gauge setup.
+*   **Energy Conservation**: When evolving within the *linear regime* (see Section [*Linear regime*][sec_evolution-axionU1_linear_regime]), the total energy density calculation used for the energy conservation check does not include the contribution from the gauge sector.
+*   **Chiral Spectra**: If `flagChiralPS = true`, the module generates additional output files containing the chiral spectra of the gauge field and conjugate momentum. We now comment on how the chiral spectra are determined.
 
-The procedure for computing the power spectra follows the standard methodology of CosmoLattice. The additional step required in this module consists of projecting the gauge fields and their conjugate momenta from the Cartesian basis, $(A_i, E_i)$, into the chiral basis, $(A^{\pm}, E^{\pm})$. 
+The procedure for computing the chiral power spectra of the gauge field and its conjugate momenta follows the standard methodology of computing power spectra in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, follwed by an additional step that consisting of the projection from the Cartesian basis, $(A_i, E_i)$, into the chiral basis, $(A^{\pm}, E^{\pm})$. This transformation is performed using a chiral projector, which is implicitly constructed in $\texttt{definitions/chiralpowerspectrum.h}$. The reader is referred to chapter 4 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme] for a detailed definition and mathematical construction of this chiral projector in both the continuum and the discrete lattice formulation.
 
-This transformation is performed using a chiral projector, which is explicitly constructed in $\texttt{include/CosmoInterface/definitions/chiralpowerspectrum.h}$. The reader is referred to chapter 4 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme] for a detailed definition and mathematical construction of this chiral projector in both the continuum theory and the discrete lattice formulation.
-
-The specific outputs are:
+The outputs files related to the chiral power spectra are:
 
 <div class="grid cards cl-files" markdown>
 
 -   `spectra_chiral_U1_0.txt`{ .cl-fname }
 
-    Chiral power spectra of the U(1) gauge field, containing the columns:
+    Chiral power spectra of the $\mathrm{U}(1)$ gauge field, containing the columns:
 
     $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{A}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{A}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
     {: .cl-schema }
 
 -   `spectra_chiral_Elec_U1_0.txt`{ .cl-fname }
 
-    Chiral power spectra of the U(1) electric field, containing the columns:
+    Chiral power spectra of the $\mathrm{U}(1)$ electric field, containing the columns:
 
     $\tilde{k}$, $\widetilde{\Delta}_{\widetilde{E}^{+}} (\tilde k)$, $\widetilde{\Delta}_{\widetilde{E}^{-}} (\tilde k)$, ${\tilde n}_{\tilde k}$, $\Delta n_{\rm bin}$
     {: .cl-schema }
@@ -199,24 +171,24 @@ The specific outputs are:
 </div>
 
 
-### **The axion-U(1) model file** { #sec_TheALPModelFile }
+**The axion-$\mathrm{U}(1)$ model file** { #sec_TheALPModelFile }
 
-To define a new axion-U(1) model, start from the example model file $\texttt{models/axionU1_m2phi2.h}$. You simply define the total number of scalar fields and gauge fields in the `ModelPars` structure, and activate the interaction via the coupling manager:
+To define a new axion-$\mathrm{U}(1)$ model, one can use as a starting point the example model file $\texttt{models/axionU1_m2phi2.h}$. As of July 2026, the axion-gauge module of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ only allows for the simulation of a single scalar species coupled to a single Abelian gauge field, although this may change in the future. The field number is specified in the `ModelPars` structure within the parameter file, the interaction is also activated using the `CouplingsManager` class
 
 @emgithub(models/axionU1_m2phi2.h:model_pars)
 
-The `ScalarU1AxionCouplings` typedef activates the axion-U(1) module. Its first template argument is the total number of scalar fields (`NScalars`), its second is the total number of U(1) gauge fields (`NU1Flds`), and the final boolean flag (`true`) activates the axion-like interaction between them.
+The definition of an `ScalarU1AxionCouplings` alias activates the axion-$\mathrm{U}(1)$ interactions. Its first template argument is the total number of scalar fields (`NScalars`), its second is the total number of $\mathrm{U}(1)$ gauge fields (`NU1Flds`), and the final boolean flag, if `true`, activates the axion-like interaction between them. Once this is set, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ will automatically simulate axion-gauge interactions as given in Eq.$~$\eqref{eq_AxionAction}.
 
-!!! note "Important Note"
-    It is possible to define a model with more than one scalar field (`NScalars > 1`); and by default, all included scalars will be coupled to the U(1) gauge field. Please be aware that the module has not been formally tested with more than one coupled scalar. If you wish to add an additional scalar field that is *not* coupled to the gauge sector, you must set the coupling flag to `false` for that specific field index. Please note that this configuration is also untested.
+!!! warning "Current scope of the axion-gauge module"
+    As of version 2.0 of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, it is only possible to run axion-gauge simulations with a single scalar field. This will be extended in the future to make it possible to simulate multiple ALPs and also scalar species not coupled to the topological term. <!--While couplings to more scalar fields are It is possible to define a model with more than one scalar field (`NScalars > 1`); and by default, all included scalars will be coupled to the $\mathrm{U}(1)$ gauge field. Please be aware that the module has not been formally tested with more than one coupled scalar. If you wish to add an additional scalar field that is *not* coupled to the gauge sector, you must set the coupling flag to `false` for that specific field index. Please note that this configuration is also untested.-->
 
-#### The potential and its derivatives { #sec_PotDerivsNMC }
+**The potential and its derivatives** { #sec_PotDerivsNMC }
 
-The model has one non-zero program-potential term, Eq.$~$\eqref{eq_AxionExampleProgramPotential}, which is the inflationary potential:
+In addition to specifying the number of fields and setting on the axion-gauge coupling, you also need to specify the model potential. For the provided example, the model only contains one term, Eq.$~$\eqref{eq_AxionExampleProgramPotential}, which is the inflationary potential:
 
 @emgithub(models/axionU1_m2phi2.h:potential_terms)
 
-where its first derivative is
+Its first derivative is
 
 @emgithub(models/axionU1_m2phi2.h:potential_derivs)
 
@@ -228,29 +200,31 @@ corresponding to
 \widetilde V_{,\tilde\phi}=\tilde\phi,
 \end{align}
 ```
-
-and second derivative
+and the second derivative reads
 
 @emgithub(models/axionU1_m2phi2.h:potential_second_derivs)
 
-The numbering of these functions must be consistent with the scalar-field numbering. In this example we just have `Tag<0>` of the inflaton/axion $\phi$. 
+where `OneType()` is a default class that returns one adapted to the particular context of its evaluation.
 
-This is a particular example of a potential, any other option can be tested by changing the three entries above.
+<!--The numbering of these functions must be consistent with the scalar-field numbering. In this example we just have `Tag<0>` of the inflaton/axion $\phi$.
+
+This is a particular example of a potential, any other option can be implemented by changing the three entries above.-->
 
 
 
-### **The axion-U(1) physics inside CosmoLattice** { #sec_WhatHappensAutoinALP }
+### **Axion-$\mathrm{U}(1)$ physics inside $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** { #sec_WhatHappensAutoinALP }
 
-#### Initialization of the fields present { #sec_InitAxionU1 }
+#### Initial conditions { #sec_InitAxionU1 }
 
-By default, the simulation initializes each chirality of the U(1) gauge field and the electric field using the Bunch-Davies solution, while the longitudinal components of both fields are set to zero. Consequently, the user does not need to specify any additional initialization parameters in the input file for the abelian gauge sector, as these initial conditions are automatically applied across the momentum range $[\tilde{k}_{\rm IR}, \tilde{k}_{\rm UV}]$.
+By default, simulations of ALPs initialize each chirality of the $\mathrm{U}(1)$ gauge field and its conjugate momenta (the electric field) using the Bunch-Davies (BD) solution, while the longitudinal components of both fields are set to zero. Consequently, the user does not need to specify any initialization parameters in the input parameter file for the Abelian gauge sector, as the BD initial conditions are automatically applied across the momentum range $[\tilde{k}_{\rm IR}, \tilde{k}_{\rm UV}]$.
 
-Furthermore, to satisfy the initial Gauss constraint—which, under these initial conditions, implies that the divergence of the electric field vanishes—the scalar field and its time derivative are set to be initially homogeneous. Their initial values are determined entirely by the standard parameters provided in the input file. For a more detailed discussion on the theoretical background and the current implementation of this procedure, see [*Bunch-Davies transverse Abelian fields*](IC.md#subsubsec_BunchDaviesTransverseU1IC).
+To satisfy the initial Gauss constraint—which, under BD initial conditions for the gauge fields implies that the divergence of the electric field vanishes—the scalar field and its time derivative are set to be initially homogeneous. Their initial values are determined entirely by the standard parameters provided in the input file using the `initial_amplitudes` and `initial_momenta` keywords, for the amplitude of the field and its derivative, respectively. For a more detailed discussion on the theoretical background and the current implementation of these initial conditions, see [*Bunch-Davies transverse Abelian fields*](IC.md#subsubsec_BunchDaviesTransverseU1IC) in the [*Initial Conditions*](IC.md) section.
 
+Following the initialization in the BD vacuum, it is recommended to evolve the fields in the linear regime to prevent the appearance of discretization effects related to UV modes of the BD spectrum. More details on this regime and how to control it are provided in [*Linear Regime*][sec_evolution-axionU1_linear_regime]
 
 #### Evolution equations { #sec_evolution-axionU1 }
 
-For self-consistent expansion, CosmoLattice evolves the fields by solving a set of first-order differential equations. Defining the conjugate momenta
+For self-consistent expansion, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ evolves the fields by solving a set of first-order differential equations. Defining the conjugate momenta
 [](){ #eq_AxionU1momentum }
 ```math
 \begin{align}
@@ -262,8 +236,7 @@ For self-consistent expansion, CosmoLattice evolves the fields by solving a set 
 b=a^{1-\alpha}a',
 \end{align}
 ```
-
-the schematic equations of motion are
+the discrete equations of motion are
 [](){ #eq_coupledFirstDiffEqAxion }
 ```math
 \begin{align}
@@ -273,8 +246,7 @@ the schematic equations of motion are
 a' &= b, & b' &= \mathcal{K}^{\rm L}_{a}[a,\tilde{E}^{\phi}_{K},\tilde{E}^{\phi}_{G},\tilde{E}^{\phi}_{V},\tilde{E}^{A}_{K},\tilde{E}^{A}_{G}]\,.
 \end{align}
 ```
-
-where the lattice kernels for the fields are given by:
+where the kernels for the fields are given by
 [](){ #eq_explicitEOMKernels }
 ```math
 \begin{align}
@@ -283,7 +255,7 @@ where the lattice kernels for the fields are given by:
 \end{align}
 ```
 
-and the scale factor kernel reads:
+and the scale-factor kernel reads:
 [](){ #eq_explicitScaleFactorKernelAlpha }
 ```math
 \begin{align}
@@ -299,40 +271,38 @@ However, due to the chiral coupling between the axion-like particle and the Abel
 ```math
 \begin{align}
 \label{eq_DiscreteAveragedFields}
-\left(\tilde{\pi}_A\right)^{(2)}_i(\tilde{\eta}, \mathbf{n}) &\equiv \frac{1}{2}\left( \left(\tilde{\pi}_A\right)_i(\tilde{\eta}, \mathbf{n}) + \left(\tilde{\pi}_A\right)_{i,-i}(\tilde{\eta}, \mathbf{n}) \right) \,, \\
-\tilde{B}^{(4)}_i(\tilde{\eta}, \mathbf{n}) &\equiv \frac{1}{4}\left( \tilde{B}_i(\tilde{\eta}, \mathbf{n}) + \tilde{B}_{i,-j}(\tilde{\eta}, \mathbf{n}) + \tilde{B}_{i,-k}(\tilde{\eta}, \mathbf{n}) + \tilde{B}_{i,-j-k}(\tilde{\eta}, \mathbf{n}) \right) \,,
+\left(\tilde{\pi}_A\right)^{(2)}_i(\tilde{\eta}, \mathbf{n}) &\equiv \frac{1}{2}\left[ \left(\tilde{\pi}_A\right)_i(\tilde{\eta}, \mathbf{n}) + \left(\tilde{\pi}_A\right)_{i,-i}(\tilde{\eta}, \mathbf{n}) \right] \,, \\
+\tilde{B}^{(4)}_i(\tilde{\eta}, \mathbf{n}) &\equiv \frac{1}{4}\left[ \tilde{B}_i(\tilde{\eta}, \mathbf{n}) + \tilde{B}_{i,-j}(\tilde{\eta}, \mathbf{n}) + \tilde{B}_{i,-k}(\tilde{\eta}, \mathbf{n}) + \tilde{B}_{i,-j-k}(\tilde{\eta}, \mathbf{n}) \right] \,,
 \end{align}
 ```
 where the negative subscripts indicate spatial shifts in the corresponding backward directions (i.e., $f_{-a}(\mathbf{n}) \equiv f(\mathbf{n} - \hat{a})$), and $j, k$ are the two spatial directions transverse to the component $i$ (such that $i, j, k$ are mutually orthogonal).
 
-The use of these specifically averaged operators guarantees that we:
+The use of these specifically averaged operators guarantees that:
 
-*   Preserve the continuous topological properties and gauge invariances at the discrete level.
-*   Maintain the standard second-order spatial accuracy, $\mathcal{O}(dx^2)$.
-*   Satisfy the discrete Bianchi identities.
+*   The continuous topological properties and gauge invariances are preserved at the discrete level.
+*   The standard second-order spatial accuracy, $\mathcal{O}(dx^2)$, is maintained.
+*   Discrete Bianchi identities are satisfied.
 
-For a comprehensive technical discussion of this lattice gauge-invariant implementation, the reader is referred to chapter 4 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme] or to the original paper where this lattice formulation was first introduced Ref. [@Figueroa:2017qmv] . Moreover, the user can find the all the coupling terms of the kernels in $\texttt{include/CosmoInterface/definitions/axioncouplings.h}$ and the functions of the redefined electric and magnetic field in $\texttt{TempLat/lattice/algebra/axionalgebra/electricfield2.h}$ and $\texttt{TempLat/lattice/algebra/axionalgebra/magneticfield4.h}$.
+For a comprehensive technical discussion of this lattice gauge-invariant implementation, the reader is referred to chapter 4 of $\,\texttt{The}\,\texttt{Art}$-$\texttt{II}$ [@BaezaBallesteros_2025tme] or to the original paper where this lattice formulation was first introduced,  Ref$~$[@Figueroa:2017qmv] . Moreover, the user can find the implementation of the axion-gauge couplings used in the evolution kernels in $\texttt{definitions/axioncouplings.h}$, and the functions of the redefined electric and magnetic field in $\texttt{TempLat/lattice/algebra/axionalgebra/electricfield2.h}$ and $\texttt{TempLat/lattice/algebra/axionalgebra/magneticfield4.h}$ within  [`TempLat`](https://github.com/cosmolattice/templat).
 
 
 
-!!! note "Important Note"
-    In this module, the axion-U(1) interaction introduces an inherent dependence on the conjugate momenta $\left(\tilde{\pi}_{A}\right)_j$ directly inside the field kernel $\mathcal{K}_{A_i}^{\rm L}$. Because the evaluation of these kernels requires simultaneous knowledge of the fields and their respective conjugate momenta, standard symplectic algorithms such as `LF`, `VV`, or `PV` cannot be employed. Non-symplectic algorithms, such as the Runge-Kutta family, must be used instead.
-
-The axion-U(1) module can be evolved with the Runge-Kutta family of algorithms implemented in CosmoLattice, for example:
+As a final comment, we note that axion-$\mathrm{U}(1)$ interactions introduce an inherent dependence on the conjugate momenta $\left(\tilde{\pi}_{A}\right)_j$ directly inside the gauge-field kernel $\mathcal{K}_{A_i}^{\rm L}$. Because the evaluation of these kernels requires simultaneous knowledge of the fields and their respective conjugate momenta, standard symplectic algorithms such as `LF`, `VV`, or `PV` cannot be employed, and simulations will fail if they are indicated in the parameter file. Non-symplectic algorithms, such as the Runge-Kutta family, must be used instead, for example:
 ```text
 evolver = RK2
 ```
-
-Higher-order RK algorithms can be used if better time-integration accuracy is needed. During the run, CosmoLattice always monitors the Friedmann constraint using the total energy density, while the dynamical update of the scale factor is performed through the kernel equation defined above.
+Higher-order RK algorithms can be used if better time-integration accuracy is needed. <!--During the run, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ always monitors the Friedmann constraint using the total energy density, while the dynamical update of the scale factor is performed through the kernel equation defined above.-->
 
 
 #### Linear Regime { #sec_evolution-axionU1_linear_regime }
 
-The linear regime represents a specific simplified case of the full dynamics where the backreaction from the gauge sector onto the axion field is switched off. Operationally, this means the topological backreaction term proportional to $\sum_i \left(\tilde{\pi}_A\right)_i^{(2)}\tilde{B}_i^{(4)}$ is explicitly removed from the axion equation of motion on the lattice. 
-
-As a direct consequence of neglecting this backreaction, no spatial gradients are generated for the axion field, causing the spatial Laplacian to vanish ($\sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi} = 0$). In turn, this spatial homogeneity implies that the discrete terms containing spatial derivatives of the axion field in the gauge field kernel become strictly zero ($\sum_\pm \sum_{j,k} \epsilon_{ijk}  \left\{ \left[ (\tilde{\nabla}_j^\pm \tilde{\phi}) \left(\tilde{\pi}_{A}\right)_{k,\pm j}^{(2)} \right]_{+i} +  \left[ (\tilde{\nabla}_j^\pm \tilde{\phi}) \left(\tilde{\pi}_A\right)_{k,\pm j}^{(2)}   \right]\right\}=0$). 
-
-Accounting for these simplifications, the discrete lattice kernels actually evolved in the linear regime reduce to:
+The linear regime represents a specific simplified case of the full axion-gauge dynamics where the backreaction from the gauge sector onto the axion field is switched off. Operationally, this means the topological backreaction term proportional to $\sum_i \left(\tilde{\pi}_A\right)_i^{(2)}\tilde{B}_i^{(4)}$ is explicitly removed from the axion equation of motion. As a direct consequence of neglecting this backreaction, no spatial gradients are generated for the axion field, which is initially homogeneous. This causes the spatial Laplacian to vanish ($\sum_i \tilde{\nabla}_i^-\tilde{\nabla}_i^+ \tilde{\phi} = 0$) and, as a consequence, the discrete terms containing spatial derivatives of the axion field in the gauge field kernel become strictly zero
+```math
+\begin{align}
+\sum_\pm \sum_{j,k} \epsilon_{ijk}  \left\{ \left[ (\tilde{\nabla}_j^\pm \tilde{\phi}) \left(\tilde{\pi}_{A}\right)_{k,\pm j}^{(2)} \right]_{+i} +  \left[ (\tilde{\nabla}_j^\pm \tilde{\phi}) \left(\tilde{\pi}_A\right)_{k,\pm j}^{(2)}   \right]\right\}=0\,.
+\end{align}
+```
+Accounting for these simplifications, the discrete lattice kernels in the linear regime reduce to:
 [](){ #eq_linearEOMKernels }
 ```math
 \begin{align}
@@ -341,7 +311,7 @@ Accounting for these simplifications, the discrete lattice kernels actually evol
 \end{align}
 ```
 
-Additionally, the contribution of the gauge sector to the cosmic expansion is completely eliminated in the linear regime. The energy density of the gauge fields is omitted from both the dynamical evolution of the scale factor and the Hubble constraint. Since the axion field remains homogeneous (setting the axion gradient energy to zero, $\tilde{E}^{\phi}_{G} = 0$), the scale factor kernel simplifies to:
+Additionally, the contribution of the gauge sector to the cosmic expansion is completely neglected in the linear regime. The energy density of the gauge fields is omitted from both the dynamical evolution of the scale factor and the Hubble constraint. Since the axion field remains homogeneous (setting the axion gradient energy to zero, $\tilde{E}^{\phi}_{G} = 0$), the scale factor kernel simplifies to:
 [](){ #eq_linearScaleFactorKernel }
 ```math
 \begin{align}
@@ -350,10 +320,8 @@ Additionally, the contribution of the gauge sector to the cosmic expansion is co
 \end{align}
 ```
 
-The motivation for simulating linearly from an initial time `t0` up to `ttNonLinearAxionU1`, and only then switching to the full non-linear dynamics until `tmax`, stems from the physical behavior of the initial state. In certain scenarios, the UV tail of the initial Bunch-Davies vacuum solution can unphysically dominate the dynamics rather than remaining subdominant.
+The motivation for simulating linearly from an initial time `t0` up to `tNonLinearAxionU1`, and only then switching to the full non-linear dynamics until `tmax`, stems from the physical behavior of the initial state. In certain scenarios, the UV tail of the initial Bunch-Davies vacuum solution can unphysically dominate the early-time dynamics rather than remaining subdominant. Through this multi-stage procedure, instead, we allow the gauge modes to first undergo chiral excitation within the homogeneous scalar field background. Once this physical excitation grows to dominate over the unphysical UV tail, the full non-linear dynamics can be safely activated. Crucially, this transition must be triggered before the backreaction of the gauge sector becomes non-negligible.
 
-Through this multi-stage procedure, we allow the gauge modes to first undergo chiral excitation within the homogeneous scalar field background. Once this physical excitation grows to dominate over the unphysical UV tail, the full non-linear dynamics can be safely activated. Crucially, this transition must be triggered before the backreaction of the gauge sector becomes non-negligible.
-
-Note that any preliminary analysis—such as determining the optimal time thresholds, assessing the impact of the UV tail for the specific range of momentum modes simulated on the lattice, etc.—is not performed by CosmoLattice. It is the user's responsibility to carry out these checks beforehand to ensure the correct and physical application of this hybrid evolution scheme.
+Note that any preliminary analysis—such as determining the optimal time thresholds, assessing the impact of the UV tail for the specific range of momentum modes simulated on the lattice, etc.—is not performed automatically by $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$. It is the user's responsibility to fix the `tNonLinearAxionU1` parameter and carry out these checks beforehand to ensure the correct and physical application of this hybrid evolution scheme.
 
 

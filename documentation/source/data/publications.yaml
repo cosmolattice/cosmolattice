@@ -2,6 +2,42 @@
 # Grow with: python3 add_new_citation.py <arxiv-id>
 # Fields flagged in needs_review want a human eye; empty the list once curated.
 
+- arxiv: '2607.18381'
+  inspire: 3182202
+  title: Gravitational waves from self-resonance during reheating with a quantum-corrected inflaton potential
+  authors:
+  - {name: Tomoya Inada, id: 2952888, inst: 903277}
+  - {name: Noel Jonathan Jobu, id: 2418765, inst: 1847255}
+  - {name: Kenji Nishiwaki, id: 1259387, inst: 1847255}
+  - {name: Toshifumi Noumi, id: 1274257, inst: 903277}
+  - {name: Naoki Yamatsu, id: 1050618, inst: 902943}
+  journal: null
+  doi: null
+  date: '2026-07-20'
+  needs_review: []
+- arxiv: '2607.18107'
+  inspire: 3181841
+  title: Biased Domain Wall Networks and their Gravitational Waves
+  authors:
+  - name: Davide Barbini
+    id: 3181848
+    inst: 907904
+  - name: Alessio Notari
+    id: 1036465
+    inst: 903168
+  - name: Oriol Pujolàs
+    id: 1031250
+    inst: 907904
+  - name: Fabrizio Rompineve
+    id: 1411973
+    inst: 907904
+  - name: Francisco Torrentí
+    id: 1274773
+    inst: 906808
+  journal: null
+  doi: null
+  date: '2026-07-20'
+  needs_review: []
 - arxiv: '2607.05517'
   inspire: 3178051
   title: Constant Scaling Fails for Global Monopole Networks

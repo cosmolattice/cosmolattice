@@ -4,19 +4,7 @@ In this section we explain, step by step, how to implement a model of interactiv
 
 After following this section, the reader will have enough information to implement in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ any model involving interacting singlet-scalar fields. Readers interested in including gauge fields and their interactions with charged scalars, should go to Section [Scalar-gauge interactions](My first model of gauge fields.md). However, we only recommend to jump into scalar-gauge theories at this point, if the reader is already familiar with the lattice formulation of scalar-scalar interactions for singlets, that we provide precisely here below. 
 
-This section is structured as follows.
-
-<div class="grid cards cl-roadmap" markdown>
-
--   [*Program variables*][subsec_LatticeScalars] first introduces the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer.
-
--   [*The model*][sec_ScTheModel] presents our example model and define its corresponding program variables and program potential.
-
--   [*My first run*][sec_MyFirstRun] explains how to compile and run the code.
-
--   [*The model file*][sec_TheModelFile] walks the user through the *model file*, where the model details are actually implemented.
-
--   [*The singlet-scalar physics implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*][sec_WhatHappensAuto], presents a summarized picture of what happens 'under the hood' in the code, discussing details on how the fields are initialized in a simulation, and how their dynamical evolution is solved.
+This section is structured as follows: [*Program variables*][subsec_LatticeScalars] first introduces the concept of *program variables* for scalar fields, which are a new set of re-scaled dimensionless variables suitable for their introduction in a computer. Then our example model is presented in [*The model*][sec_ScTheModel] , which also  defines its corresponding program variables and program potential. This is followed by [*My first run*][sec_MyFirstRun], which explains how to compile and run the code. Later, [*The model file*][sec_TheModelFile] walks the user through the *model file*, where the model details are actually implemented. And finally [*The singlet-scalar physics implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$*][sec_WhatHappensAuto], presents a summarized picture of what happens 'under the hood' in the code, discussing details on how the fields are initialized in a simulation, and how their dynamical evolution is solved.
 
 </div> <!-- and how different measurements are obtained.  -->
 
@@ -74,13 +62,13 @@ We therefore recommend to use Eq. \eqref{eq_Alpha-PowLaw} for any scenario where
 
 ### **A simple model** { #sec_ScTheModel }
 
-<div class="cl-facts" markdown>
+<!--<div class="cl-facts" markdown>
 [example model: lphi4](#sec_TheModelFile){ .cl-fact }
 [2 scalar fields](#eq_ScalarActionCont){ .cl-fact }
 [2 potential terms](#eq_potentialExampleI){ .cl-fact }
 [quartic inflaton + interaction](#eq_potentialExampleI){ .cl-fact }
 [preheating scenario](#sec_MyFirstRun){ .cl-fact }
-</div>
+</div>-->
 
 We will consider a preheating scenario for illustrative purposes, consisting of an inflaton $\phi$ with quartic potential $V(\phi) \propto \phi^4$, coupled to a secondary massless scalar field $\chi$ through a quadratic interaction $\propto  \phi^2\chi^2$. We denote the total number of scalar fields in a model as $N_s$, so in our present example $N_s=2$. The action of the field theory we want so simulate in this case is
 [](){ #eq_ScalarActionCont }

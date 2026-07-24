@@ -83,23 +83,23 @@ template<class R>
         }
 
    	 // @label:potential_terms
-        auto potentialTerms(Tag<0>) // Term 0: Quartic potential of the complex scalar
+        auto potentialTerms(Tag<0>) // Term 0: Quadratic potential of the scalar singlet
     	{
       		return  0.5 * pow<2>(fldS(0_c));
     	}
 		// @endlabel
 
 		// @label:potential_derivs
-        auto potDeriv(Tag<0>) // Derivative with respect complex scalar norm
+        auto potDeriv(Tag<0>) // Derivative with respect to the scalar singlet
     	{
     		return fldS(0_c);
     	}
 		 // @endlabel
 
 		// @label:potential_second_derivs
-    	auto potDeriv2(Tag<0>) // 2nd derivative with respect complex scalar norm
+    	auto potDeriv2(Tag<0>) // 2nd derivative with respect to the scalar singlet
     	{
-      		return  fldS(0_c)/fldS(0_c) ;
+      		return  OneType() ;
     	}
 		// @endlabel
 
