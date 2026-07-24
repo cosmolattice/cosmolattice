@@ -3,8 +3,8 @@ There is clearly a vast number of physical scenarios that can be implemented in 
 The most relevant one is the possibility of directly running any model written in CosmoLattice on a wide range of different (parallel) hardware. 
 This means that CosmoLattice runs natively, without any modification whatsoever of the code, on any number of CPU cores or GPUs, either within a single PC, or on many nodes in a HPC cluster. 
 
-As we will shortly show, all it takes for the user to run their model in any of these scenarios, are a few simple flags passed to the `CMake`. 
-Before explaining this, we give in Section [*Concepts*][subsec_para] a brief explanation how parallelization is handled in CosmoLattice. We also explain the distinction between *distributed* and *shared* parallelism, and what happens technically at the computation level.
+As we will shortly show, all it takes for the user to run their model in any of these scenarios are a few simple flags passed to `CMake`. 
+Before explaining this, we give in Section [*Concepts*][subsec_para] a brief explanation of how parallelization is handled in CosmoLattice. We also explain the distinction between *distributed* and *shared* parallelism, and what happens technically at the computation level.
 
 Any user not interested in these technical details may want to skip directly to Sections [*Distributed parallelization in one direction: MPI*][subsubsec_para1D], [*Distributed parallelization in multiple directions: MPI and ParaFaFT*][subsubsec_para2D] and [*Shared-memory parallelization and GPUs*][subsubsec_devices], where we simply explain how they can activate the various parallelization options in CosmoLattice.
 
@@ -83,8 +83,8 @@ Note that if you are using a high-performance-computation (HPC) cluster, you wil
 
 Parallelizing only in one direction limits the maximum number of cores to $N$, the linear size of the lattice. To go further, we need to be able to compute Fourier transforms that are themselves distributed across more than one direction. CosmoLattice does this through the `ParaFaFT` library, a modern, header-only implementation of distributed multidimensional FFTs based on the algorithm of Dalcin, Mortensen & Keyes [@Dalcin_2019], which replaces the parallel-FFT library used in earlier versions of CosmoLattice. `ParaFaFT` distributes the transform over a *pencil* decomposition built with advanced `MPI` collective operations, and provides `fftw3` (CPU), `cuFFT` (NVIDIA) and `hipFFT` (AMD) backends.
 
-This in principle allows us to parallelize the simulation in all directions. In practice, because of the overload due to the boundary exchanges, it is often a good compromise to parallelize in all dimensions except one, which involves fewer cores, but also fewer boundaries. We depict the resulting parallelization strategy for the case of three spatial dimensions in the right-hand side of Fig. [*3*][fig_parageo]. In this case, the number of sites/dimension $N$ of the lattice needs to be divisible by the number of cores used in each parallelized direction. In practice,
-when all directions have the same number of points, `N` needs to be an integer multiple of the number of cores.
+This in principle allows us to parallelize the simulation in all directions. In practice, because of the overhead due to the boundary exchanges, it is often a good compromise to parallelize in all dimensions except one, which involves fewer cores, but also fewer boundaries. We depict the resulting parallelization strategy for the case of three spatial dimensions in the right-hand side of Fig. [*3*][fig_parageo]. In this case, the number of sites/dimension $N$ of the lattice needs to be divisible by the number of cores used in each parallelized direction. In practice,
+when all directions have the same number of points, $N$ needs to be an integer multiple of the number of cores.
 
 To switch to this parallelization setting, again assuming you have a working installation of `MPI` and `fftw3` (see [Installation](../code/Installation.md)), you simply need to pass the extra flag `-DPARAFAFT=ON` to `CMake` (this is also enabled automatically when you build with `-DMPI=ON`), before compiling your favorite model
 ```bash
@@ -117,14 +117,14 @@ To run the same model code unchanged on either a CPU or a GPU, CosmoLattice reli
     ![Host/device model: data transfers between host RAM and device VRAM are slow](assets/figures/host-device.svg){ width=460px }
 </figure>
 
-In practice this requires no extra work from the user: by default CMake auto-detects the available backend, checking for GPUs first (`CUDA`, then `HIP`) and falling back to CPU threading (`OpenMP`, then C++ threads) and finally to serial execution. You can override the choice explicitly, for instance to force a CPU build or to select a particular GPU vendor:
+In practice this requires no extra work from the user: by default CMake auto-detects the available backend, checking for GPUs first (`CUDA`, then `HIP`) and falling back to CPU threading (`OpenMP`, then C++ threads). You can override the choice explicitly, for instance to force a CPU build or to select a particular GPU vendor:
 ```bash
 cmake -DCUDA=ON -DMODEL=lphi4 ../   # NVIDIA GPU
 cmake -DHIP=ON  -DMODEL=lphi4 ../   # AMD GPU
 cmake -DOPENMP=ON -DMODEL=lphi4 ../ # multi-core CPU
 make cosmolattice
 ```
-The full list of device flags is documented in the [CMake flags](../code/cmake.md). When a GPU backend is enabled, single-node GPU Fourier transforms are handled automatically by `KokkosFFT` (the `-DKOKKOSFFT` flag is switched on for you). A single-GPU run is launched directly, like any serial executable:
+The full list of device flags is documented in [CMake flags](../code/cmake.md). When a GPU backend is enabled, single-node GPU Fourier transforms are handled automatically by `KokkosFFT` (the `-DKOKKOSFFT` flag is switched on for you). A single-GPU run is launched directly, like any serial executable:
 ```bash
 ./lphi4 input=...
 ```
