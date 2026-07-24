@@ -9,7 +9,7 @@ symbolic count such as `×NS` for the number of scalar fields); a `—` default
 means the parameter is optional with no default, while *required* marks a
 mandatory parameter.
 
-## Run parameters
+## Run parameters { #subsec_runParam }
 
 These parameters control the lattice, the time evolution and the background
 expansion. They are declared in `include/CosmoInterface/runparameters.h`.
@@ -29,7 +29,7 @@ expansion. They are declared in `include/CosmoInterface/runparameters.h`.
 | `omegaEoS` | `float` | `1/3` | dimensionless | Barotropic equation-of-state parameter w = p/rho used for the fixed background expansion (e.g. 0.333 for radiation domination). |
 | `H0` | `float` | *required* | GeV | Initial Hubble rate used for the fixed background expansion (in GeV). |
 | `a0` | `float` | `1.0` | dimensionless | Initial value of the scale factor at the start of the simulation. |
-| `evolver` | `enum` | `LF` | n/a | Type of time-evolution algorithm: LF (staggered leapfrog), velocity-Verlet (VV*), position-Verlet (PV*), or Runge-Kutta (RK*) schemes of various orders. Allowed values: `LF`, `VV2`, `VV4`, `VV6`, `VV8`, `VV10`, `VV6_2`, `RK2`, `RK3_3`, `RK3_4`, `RK4_5`, `PV2`, `PV4`, `PV6`, `PV8`, `PV10`, `PV6_2`. |
+| `evolver` | `enum` | `LF` | n/a | Type of time-evolution algorithm: LF (staggered leapfrog), velocity-Verlet (VV), position-Verlet (PV), or Runge-Kutta (RK) schemes of various orders. Allowed values: `LF`, `VV2`, `VV4`, `VV6`, `VV8`, `VV10`, `VV6_2`, `RK2`, `RK3_3`, `RK3_4`, `RK4_5`, `PV2`, `PV4`, `PV6`, `PV8`, `PV10`, `PV6_2`. |
 | `tolerance` | `float` | `-1` | dimensionless | Error tolerance used by adaptive (e.g. Runge-Kutta) solvers to control the adaptive time step. |
 | `doDiffusion` | `bool` | `false` | dimensionless | Master switch enabling a post-evolution diffusion phase, in which the fields are further relaxed after the main simulation has finished (used e.g. to smooth defect configurations). The diffusion-phase parameters (tmaxdiff, dtdiff, diffusionevolver, tOutputFreqDiff, tOutputRareFreqDiff, snapshots_diffusion) are only read when this is true. |
 | `tmaxdiff` | `float` | — | program units | Duration (maximum time) of the diffusion phase in program units. |
