@@ -22,7 +22,7 @@ S =
 \end{align}
 ```
 
-where $m_p$ is the reduced Planck mass, $\xi$ is the dimensionless coupling strength of the non-minimal coupling, and $\mathcal{L}_{\rm m}$ describes kinetic terms of the remaining minimally-coupled scalar fields $\{\varphi_{\rm m}\}$ (which could be either singlet or charged scalars). We use the same spatially-flat FLRW background metric and $\alpha$-time convention introduced in Eq. ([*1*](My first model of (singlet) scalar fields.md#eq_FLRWmetric)) from Section [Scalar-singlet interactions](My first model of (singlet) scalar fields.md). Neglecting gravitational perturbations, the equation of motion of the non-minimally coupled field, is 
+where $m_p$ is the reduced Planck mass, $\xi$ is the dimensionless coupling strength of the non-minimal coupling, and $\mathcal{L}_{\rm m}$ describes kinetic terms of the remaining minimally-coupled scalar fields $\{\varphi_{\rm m}\}$ (which could be either singlet or charged scalars). We use the same spatially-flat FLRW background metric and $\alpha$-time convention introduced in Eq. ([*1*](My first model of (singlet) scalar fields.md#eq_FLRWmetric)) from Section [Scalar-singlet interactions](My first model of (singlet) scalar fields.md). Neglecting gravitational perturbations, the equation of motion of the non-minimally coupled field is 
 [](){ #eq_NMCeom }
 ```math
 \begin{align}
@@ -123,7 +123,7 @@ Combining Eq.$~$\eqref{eq_NMCricciTrace} with Eq.$~$\eqref{eq_NMCricciMetric} gi
 \right] .
 \end{align}
 ```
-The homogeneous energy density of a single NMC scalar is also modified, thereofre new terms will arise due to this coupling which will have to be accounted in the total energy density
+The homogeneous energy density of a single NMC scalar is also modified, therefore new terms will arise due to this coupling which will have to be accounted for in the total energy density
 [](){ #eq_NMCEnergyDensityContinuum }
 ```math
 \begin{align}
@@ -287,7 +287,7 @@ where $\tilde{\mathcal H}_* \equiv H_0/\omega_*$ and $p=2/[3(1+\omega_{\rm EoS})
 
 #### Output files
 
-An NMC run generates the usual scalar-singlet output files listed in Section [*Outputs*](My first model of (singlet) scalar fields.md#outputs). The NMC module adds the following information:
+An NMC run generates the usual scalar-singlet output files listed in Section [*Outputs*](My first model of (singlet) scalar fields.md#subsec_Outputs). The NMC module adds the following information:
 
 <div class="grid cards cl-files" markdown>
 
@@ -496,7 +496,7 @@ f\in\{\phi,\chi\}.
 ```
 
 !!! note "Important Note"
-    In self-consistent NMC expansion, $\widetilde{\bar R}$ depends on volume averages involving the fields and their conjugate momenta. Consequently, the NMC kernels depend on conjugate momenta through $\widetilde{\bar R}$. Symplectic algorithms such as `LF`, `VV`, or `PV`, should therefore not be used for self-consistent NMC evolution. Non-symplectic algorithms, such as Runge-Kutta, should be used instead.
+    In self-consistent NMC expansion, $\widetilde{\bar R}$ depends on volume averages involving the fields and their conjugate momenta. Consequently, the NMC kernels depend on conjugate momenta through $\widetilde{\bar R}$. Symplectic algorithms such as `LF`, `VV`, or `PV` should therefore not be used for self-consistent NMC evolution. Non-symplectic algorithms, such as Runge-Kutta, should be used instead.
 
 The self-consistent NMC module can be evolved with the Runge-Kutta family of algorithms implemented in CosmoLattice, for example
 ```text
