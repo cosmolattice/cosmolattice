@@ -154,7 +154,7 @@
   </article>
 
   <article class="cl-ppl-card" data-mods="fluid">
-    <img class="cl-ppl-avatar" src="../assets/img/people/ander.jpg" alt="Alberto Roper Pol">
+    <img class="cl-ppl-avatar" src="../assets/img/people/alberto.jpg" alt="Alberto Roper Pol">
     <div class="cl-ppl-name">Alberto Roper Pol</div>
     <div class="cl-ppl-affil">University of Geneva, Switzerland</div>
     <div class="cl-ppl-badges">
