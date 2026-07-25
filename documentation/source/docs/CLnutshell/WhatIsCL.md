@@ -19,7 +19,7 @@ ds^2 \equiv g_{\mu\nu}dx^\mu dx^\nu = - a^{2\alpha} (\eta)d\eta^2 + a^2 (\eta) \
 In the expanding case, the matter fields can be either evolved over a **fixed background** (e.g. with a power-law scale factor), or using the option of **self-consistent expansion of the Universe**, i.e. with the fields themselves determining the expansion rate of the Universe through the Friedmann equations. Furthermore, CosmoLattice allow to make predictions on the gravitational wave (GW) backgrounds produced by early Universe scenarios, by simultaneously simulating the emission of GWs throughout the dynamics of the above matter fields:
 ```math
 \begin{eqnarray}
-h_{ij}''-a^{-2(1-\alpha)}\nabla^2h_{ij}+(3-\alpha)\frac{a'}{a}h_{ij}=\frac{2}{m_{p}^2a^{2(1-\alpha)}}\left[\Pi_{ij}^{\rm eff}\right]^{\rm TT} \,, \hspace{5cm}\\
+h_{ij}''-a^{-2(1-\alpha)}\nabla^2h_{ij}+(3-\alpha)\frac{a'}{a}h_{ij}'=\frac{2}{m_{p}^2a^{2(1-\alpha)}}\left[\Pi_{ij}^{\rm eff}\right]^{\rm TT} \,, \hspace{5cm}\\
 {\Pi}^{\text{eff}}_{ij} \equiv \partial_i {\phi}_{b} \partial_j {\phi}_{b} + \partial_i\theta \partial_j\theta + \left[(D^A_i {\varphi})^*(D^A_j {\varphi}) + (D_i {\Phi})^\dagger(D_j {\Phi}) + {\it c.c.}\right] - \left(a^{-2\alpha}E_i E_j + a^{-2} B_i B_j\right)\,,
 %- \left(a^{-2\alpha} E_i^c E_j^c + a^{-2}  B_i^c B_j^c\right)\,.
 \end{eqnarray}

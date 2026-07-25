@@ -85,7 +85,7 @@ E_i \equiv F_{0i} , \,\,\,\,\,\,\,\,  B_i \equiv \frac{1}{2} \epsilon_{i j k} F^
 ```
 where $\epsilon_{ijk}$ is the Levi-Civita symbol in three dimensions with normalization $\epsilon_{123}=+1$, and $G_{\mu \nu}^a \equiv {\rm Tr}(2G_{\mu \nu} T_a) = {\rm Tr}(G_{\mu \nu} \sigma_a)$.
 
-The equations of motion for the matter fields and the scale factor have been derived in more detail in {\tt The Art\,I}. Here we simply quote their resulting form, which reads
+The equations of motion for the matter fields and the scale factor have been derived in more detail in $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$. Here we simply quote their resulting form, which reads
 [](){ #eq_singlet-eom }
 [](){ #eq_higgsU1-eom }
 [](){ #eq_higgsSU2-eom }
