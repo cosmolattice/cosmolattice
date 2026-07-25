@@ -131,7 +131,7 @@
 </section>
 
 <section class="cl-ppl-section">
-<h2 class="cl-ppl-heading">Joining Soon</h2>
+<h2 class="cl-ppl-heading">Developers of upcoming modules</h2>
 <div class="cl-ppl-grid">
 
   <article class="cl-ppl-card" data-mods="fluid">

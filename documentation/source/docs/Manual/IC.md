@@ -8,7 +8,7 @@ Here we explain how to implement the initial conditions for the different matter
 
 The default initialization of scalar singlet fluctuations follows the prescription described in Section [*Initialization of fluctuations*](My first model of (singlet) scalar fields.md#sec_InitScalar) of the scalar-singlet example. If no external spectrum is provided for scalar field `i`, meaning that `ext_PSi` is absent or set to `none`, CosmoLattice samples the field and its conjugate momentum from the default Gaussian vacuum prescription.
 
-For a scalar singlet $f$, the default continuum spectrum is
+For a scalar singlet $f$, in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we introduce by default a continuum spectrum mimics quantum vaccum fluctuations as
 [](){ #eq_ICDefaultScalarSpectrum }
 ```math
 \begin{align}
@@ -32,7 +32,7 @@ m_f^2
 \end{align}
 ```
 
-In program variables, the initial Fourier modes are built from two independent Gaussian realizations,
+In program variables, the initial Fourier modes are built from two independent fields (represeting *left-* and *right-moving* waves)
 [](){ #eq_ICDefaultScalarModes }
 ```math
 \begin{align}
@@ -41,41 +41,42 @@ In program variables, the initial Fourier modes are built from two independent G
 &=
 {1\over\sqrt{2}}
 \left[
-\delta\tilde f_L(\tilde{\bf n})
-+\delta\tilde f_R(\tilde{\bf n})
+\delta\tilde f_1(\tilde{\bf n})
++\delta\tilde f_2(\tilde{\bf n})
 \right],
 \\
 \delta\tilde f'(\tilde{\bf n})
 &=
 {i\tilde\omega_k\over\sqrt{2}}
 \left[
-\delta\tilde f_L(\tilde{\bf n})
--\delta\tilde f_R(\tilde{\bf n})
+\delta\tilde f_1(\tilde{\bf n})
+-\delta\tilde f_2(\tilde{\bf n})
 \right]
 -\tilde{\mathcal H}\delta\tilde f(\tilde{\bf n}) .
 \end{align}
 ```
 
-The variance of the independent real Gaussian components is fixed by the normalization
+In these expressions, $\delta \tilde f_{1,2}$ are both complex fields, each with their real and imaginary parts, say $\delta \tilde f_{\rm R} + i\delta \tilde f_{\rm I}$. At each point $\tilde{\bf n}$ of the reciprocal lattice, the code draws independent random realizations of the real ($\delta \tilde f_{\rm R}$) and imaginary ($\delta \tilde f_{\rm I}$) parts of each of the fields $\delta \tilde f_{1,2}$, from a Gaussian distribution with vanishing mean and variance
 [](){ #eq_ICDefaultScalarVariance }
 ```math
 \begin{align}
 \label{eq_ICDefaultScalarVariance}
-\sigma_f(\tilde{\bf n})
+\sigma_{\delta f}(\tilde{\bf n})
 =
 H(\tilde k_{\rm cut}-\tilde k)
 \left({\omega_*\over f_*}\right)
-\left({\tilde L\over \delta\tilde x^2}\right)^{3/2}
+\left({N\over \delta \tilde{x}}\right)^{3/2}
 {1\over\sqrt{2}}
 {1\over \sqrt{2\tilde\omega_k}},
 \hspace{0.6cm}
-\tilde\omega_k=\sqrt{\tilde k^2+\tilde m_f^2}.
+\tilde\omega_k=\sqrt{\tilde k^2+\tilde m_f^2}\,,
 \end{align}
 ```
+where we have fixed the scale factor to $a = 1$. The different factors in the above formula, are written because of various of reasons: $\left({\omega_*\over f_*}\right)$ is due to the use of program variables, $\left({N\over \delta \tilde{x}}\right)^{3/2}$ is due to lattice discretization effects (see *e.g.* [Technical Note I][note_I] in [*Technical Notes*](../th_framework/TechnicalNotes.md) of the [*Theory Framework*](../th_framework/TF_readme.md) Tab), and the extra factor ${1\over\sqrt{2}}$ multiplying $\mathcal{P}_{\delta f} (\tilde{\bf n})$ is choosen to guarantee that $\langle \delta \tilde f_1^2 \rangle $ = $\langle \delta \tilde f_1^2 \rangle \equiv$ $\left({\omega_*/f_*}\right)^2\left({N/\delta \tilde{x}}\right)^3\times{1\over2}\mathcal{P}_{\delta f} (\tilde{\bf n})$, and hence $\langle |\delta \tilde f ({\bf\tilde{n}})|^2 \rangle = \left({\omega_*/ f_*}\right)^2\left({N/\delta \tilde{x}}\right)^3\times\widetilde{\mathcal{P}}_{\delta \phi} (\tilde{\bf n})$ in program units, or equivalently $\langle |\delta f ({  \bf \tilde{n}})|^2 \rangle = \mathcal{P}_{\delta f} (k(\tilde{\bf n}))$ in physical units, as desired, with $\mathcal{P}_{\delta f}$ given above in Eq.$~$\eqref{eq_ICDefaultScalarSpectrum}.
 
-Eq.$~$\eqref{eq_ICDefaultScalarVariance} is the three-dimensional expression implemented by the code. In one- and two-dimensional runs the corresponding dimensional prefactors are modified as shown in the same function.
+**Note -.** Eq.$~$\eqref{eq_ICDefaultScalarVariance} is the expression implemented in the code for simulations in 3-spatial dimensions. In 1- and 2-dimensional spatial simulations, the prefactors are modified as shown in the same function; See Section 7.1 of $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]). 
 
-The scalar initializer selects this path through
+The scalar initializer does the above oeprations through
 
 @emgithub(include/CosmoInterface/initializers/scalarsingletinitializer.h:default_scalar_dispatch)
 
