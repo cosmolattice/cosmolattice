@@ -8,6 +8,400 @@ window.CL_MAP_DATA = {
  "countries_count": 25,
  "unresolved_count": 0,
  "approx_placed_count": 4,
+ "paper_list": [
+  {
+   "arxiv": "2607.18381",
+   "title": "Gravitational waves from self-resonance during reheating with a quantum-corrected inflaton potential"
+  },
+  {
+   "arxiv": "2607.18107",
+   "title": "Biased Domain Wall Networks and their Gravitational Waves"
+  },
+  {
+   "arxiv": "2607.05517",
+   "title": "Constant Scaling Fails for Global Monopole Networks"
+  },
+  {
+   "arxiv": "2606.31937",
+   "title": "PBHs and GWs from Scaling Monopoles"
+  },
+  {
+   "arxiv": "2606.14853",
+   "title": "The limits of lattice inflation: a cautionary tale"
+  },
+  {
+   "arxiv": "2605.04670",
+   "title": "Gravitational Waves from Higgs Preheating after Inflaton \\(Z_2\\)-Symmetry Breaking"
+  },
+  {
+   "arxiv": "2605.00945",
+   "title": "Oscillon Formation in Palatini Modified Gravity Theories"
+  },
+  {
+   "arxiv": "2604.17430",
+   "title": "Testing \\(\\alpha \\)-attractor P-model of Inflation by Cosmic Microwave Background Radiation"
+  },
+  {
+   "arxiv": "2604.05078",
+   "title": "Gravitational Waves from Matter Perturbations of Spectator Scalar Fields"
+  },
+  {
+   "arxiv": "2602.15825",
+   "title": "Hubble-scale tachyonic shocks from low-scale inflation — A new gravitational-wave window on inflation"
+  },
+  {
+   "arxiv": "2602.14389",
+   "title": "Quintessence with tachyonic resonance and late-time cosmic-microwave-background and gravitational-wave signals"
+  },
+  {
+   "arxiv": "2602.07972",
+   "title": "Self-resonance preheating in deformed attractor models: oscillon formation and evolution"
+  },
+  {
+   "arxiv": "2602.06027",
+   "title": "ACT DR6+Planck data impact on inflation with nonzero vacuum expectation value and the postinflationary behavior"
+  },
+  {
+   "arxiv": "2601.19150",
+   "title": "Q-balls from thermal balls during a first-order phase transition: a numerical study"
+  },
+  {
+   "arxiv": "2601.09784",
+   "title": "Classical equipartition dynamics between axions and non-Abelian gauge fields"
+  },
+  {
+   "arxiv": "2601.07670",
+   "title": "Tachyonic gravitational dark matter production after inflation"
+  },
+  {
+   "arxiv": "2512.21151",
+   "title": "Acoustic gravitational waves from primordial curvature perturbations"
+  },
+  {
+   "arxiv": "2512.15627",
+   "title": "The art of simulating the early Universe. Part II. Non-canonical cases & gravitational waves"
+  },
+  {
+   "arxiv": "2512.05715",
+   "title": "Domain wall formation from Z2 spontaneous symmetry breaking/restoration in scalar-Einstein-Gauss-Bonnet theory"
+  },
+  {
+   "arxiv": "2511.16649",
+   "title": "Domain walls in the scaling regime: Equal Time Correlator and gravitational waves"
+  },
+  {
+   "arxiv": "2511.02184",
+   "title": "Dark Matter Freeze-in from a Z' Reheaton"
+  },
+  {
+   "arxiv": "2510.27586",
+   "title": "Production of gravitational waves from preheating and tachyonic instabilities"
+  },
+  {
+   "arxiv": "2510.08685",
+   "title": "Hydrodynamic models of reheating"
+  },
+  {
+   "arxiv": "2509.25367",
+   "title": "Cosmic domain walls on a lattice: Illusive effects of initial conditions"
+  },
+  {
+   "arxiv": "2509.13292",
+   "title": "Revisiting axion dark matter with nonlinear transitions"
+  },
+  {
+   "arxiv": "2508.14665",
+   "title": "Dynamical backreaction of a mass-acquiring scalar field on first-order phase transitions"
+  },
+  {
+   "arxiv": "2508.07442",
+   "title": "Preheating and gravitational waves in large-field hilltop inflation"
+  },
+  {
+   "arxiv": "2508.00979",
+   "title": "Nonperturbative and perturbative dynamics of a light QCD axion: Dark matter and the strong CP problem"
+  },
+  {
+   "arxiv": "2507.13465",
+   "title": "Equation of state during (p)reheating with trilinear interactions"
+  },
+  {
+   "arxiv": "2507.04161",
+   "title": "Self-tracking solutions for asymptotic scalar fields"
+  },
+  {
+   "arxiv": "2507.03157",
+   "title": "Relativistic axion with nonrelativistic momenta: a robust bound on minimal ALP dark matter"
+  },
+  {
+   "arxiv": "2507.01822",
+   "title": "Kinetic fragmentation of the QCD axion on the lattice"
+  },
+  {
+   "arxiv": "2507.00685",
+   "title": "Testing the Nambu–Goto approximation of cosmic string by lattice field theory simulations"
+  },
+  {
+   "arxiv": "2505.19950",
+   "title": "Comparative study of the strong backreaction regime in axion inflation: the effect of the potential"
+  },
+  {
+   "arxiv": "2505.15360",
+   "title": "Numerical simulations on First-order phase transition through thermal fluctuation"
+  },
+  {
+   "arxiv": "2504.07902",
+   "title": "Biased domain walls: faster annihilation, weaker gravitational waves"
+  },
+  {
+   "arxiv": "2504.03636",
+   "title": "The spectrum of gravitational waves from annihilating domain walls"
+  },
+  {
+   "arxiv": "2503.19980",
+   "title": "Two or three things particle physicists (mis)understand about (pre)heating"
+  },
+  {
+   "arxiv": "2502.20471",
+   "title": "Scalar field fluctuations and the production of dark matter"
+  },
+  {
+   "arxiv": "2502.13644",
+   "title": "Dynamics of ZN domain walls with bias directions"
+  },
+  {
+   "arxiv": "2502.04445",
+   "title": "Higgs-induced gravitational waves: the interplay of non-minimal couplings, kination and top quark mass"
+  },
+  {
+   "arxiv": "2501.17226",
+   "title": "Universal Bound on the Duration of a Kination Era"
+  },
+  {
+   "arxiv": "2501.14869",
+   "title": "Ephemeral Oscillons in Scalar-Tensor Theories: The Higgs-like case"
+  },
+  {
+   "arxiv": "2501.13811",
+   "title": "Inflaton self resonance, oscillons, and gravitational waves in small field polynomial inflation"
+  },
+  {
+   "arxiv": "2412.19798",
+   "title": "Non-Scaling Topological Defects and Gravitational Waves in Higgs Portal"
+  },
+  {
+   "arxiv": "2412.17802",
+   "title": "Feebly-interacting Peccei-Quinn model"
+  },
+  {
+   "arxiv": "2412.17359",
+   "title": "Potential surge preheating: enhanced resonance from potential features"
+  },
+  {
+   "arxiv": "2412.12287",
+   "title": "Probing baryogenesis with gravitational waves"
+  },
+  {
+   "arxiv": "2412.04218",
+   "title": "Cosmological simulation of axion-Higgs strings: Gravitational waves and dark matter"
+  },
+  {
+   "arxiv": "2411.16368",
+   "title": "Nonlinear dynamics of axion inflation: A detailed lattice study"
+  },
+  {
+   "arxiv": "2410.21971",
+   "title": "Numerical analysis of melting domain walls and their gravitational waves"
+  },
+  {
+   "arxiv": "2409.15450",
+   "title": "Hubble-induced phase transitions: gravitational-wave imprint of Ricci reheating from lattice simulations"
+  },
+  {
+   "arxiv": "2408.11889",
+   "title": "Nonminimal superheavy dark matter"
+  },
+  {
+   "arxiv": "2408.02364",
+   "title": "Particle and gravitational wave emission by local string loops: Lattice calculation"
+  },
+  {
+   "arxiv": "2406.17468",
+   "title": "Tachyonic production of dark relics: classical lattice vs. quantum 2PI in Hartree truncation"
+  },
+  {
+   "arxiv": "2406.17053",
+   "title": "Revisiting evolution of domain walls and their gravitational radiation with CosmoLattice"
+  },
+  {
+   "arxiv": "2406.09122",
+   "title": "Primordial black hole formation from self-resonant preheating?"
+  },
+  {
+   "arxiv": "2406.04017",
+   "title": "Self-resonance during preheating: The case of \\(\\alpha\\)-attractor models"
+  },
+  {
+   "arxiv": "2406.02689",
+   "title": "Geometric reheating of the Universe"
+  },
+  {
+   "arxiv": "2406.00108",
+   "title": "Formation and decay of oscillons after inflation in the presence of an external coupling. Part I. Lattice simulations"
+  },
+  {
+   "arxiv": "2405.08901",
+   "title": "Preheating with deep learning"
+  },
+  {
+   "arxiv": "2404.17654",
+   "title": "Ricci Reheating on the Lattice"
+  },
+  {
+   "arxiv": "2404.16932",
+   "title": "Gravitational wave signatures of post-fragmentation reheating"
+  },
+  {
+   "arxiv": "2403.09089",
+   "title": "Gravitational wave probe of gravitational dark matter from preheating"
+  },
+  {
+   "arxiv": "2403.04848",
+   "title": "Impact of dark sector preheating on CMB observables"
+  },
+  {
+   "arxiv": "2402.06000",
+   "title": "The rise and fall of the Standard-Model Higgs: electroweak vacuum stability during kination"
+  },
+  {
+   "arxiv": "2401.14331",
+   "title": "Collapsing domain wall networks: impact on pulsar timing arrays and primordial black holes"
+  },
+  {
+   "arxiv": "2312.15056",
+   "title": "Present and future of CosmoLattice"
+  },
+  {
+   "arxiv": "2312.03072",
+   "title": "Phenomenology of spillway preheating: Equation of state and gravitational waves"
+  },
+  {
+   "arxiv": "2311.14273",
+   "title": "Gravitational dark matter from minimal preheating"
+  },
+  {
+   "arxiv": "2311.02011",
+   "title": "Cosmic simulations of axion: probing dark matter and gravitational waves"
+  },
+  {
+   "arxiv": "2310.13060",
+   "title": "Gravitational Wave Symphony from Oscillating Spectator Scalar Fields"
+  },
+  {
+   "arxiv": "2308.16231",
+   "title": "Effects of fragmentation on post-inflationary reheating"
+  },
+  {
+   "arxiv": "2308.08456",
+   "title": "Gravitational wave emission from a cosmic string loop: Global case"
+  },
+  {
+   "arxiv": "2307.03774",
+   "title": "Ricci reheating reloaded"
+  },
+  {
+   "arxiv": "2306.08038",
+   "title": "Reheating after inflaton fragmentation"
+  },
+  {
+   "arxiv": "2305.05682",
+   "title": "On unitarity in singlet inflation with a non-minimal coupling to gravity"
+  },
+  {
+   "arxiv": "2305.02568",
+   "title": "Gravitational freeze-in dark matter from Higgs preheating"
+  },
+  {
+   "arxiv": "2305.02367",
+   "title": "Dissipative emergence of inflation from a quasicyclic universe"
+  },
+  {
+   "arxiv": "2305.02366",
+   "title": "Dissipative genesis of the inflationary universe"
+  },
+  {
+   "arxiv": "2304.13056",
+   "title": "Preheating in Einstein-Cartan Higgs Inflation: oscillon formation"
+  },
+  {
+   "arxiv": "2304.05220",
+   "title": "Numerical simulation of domain wall and first-order phase transition in an expanding universe"
+  },
+  {
+   "arxiv": "2303.17436",
+   "title": "Strong Backreaction Regime in Axion Inflation"
+  },
+  {
+   "arxiv": "2303.07503",
+   "title": "Oscillon formation from preheating in asymmetric inflationary potentials"
+  },
+  {
+   "arxiv": "2211.11773",
+   "title": "Dark matter production via a non-minimal coupling to gravity"
+  },
+  {
+   "arxiv": "2209.14313",
+   "title": "One μ to rule them all: CMB spectral distortions can probe domain walls, cosmic strings and low scale phase transitions"
+  },
+  {
+   "arxiv": "2206.14721",
+   "title": "Gravitational wave production from preheating with trilinear interactions"
+  },
+  {
+   "arxiv": "2206.08940",
+   "title": "Scalar dark matter production from preheating and structure formation constraints"
+  },
+  {
+   "arxiv": "2206.06319",
+   "title": "Characterizing the post-inflationary reheating history. Part II. Multiple interacting daughter fields"
+  },
+  {
+   "arxiv": "2203.15808",
+   "title": "On gravitational preheating"
+  },
+  {
+   "arxiv": "2203.13286",
+   "title": "Preheating in Palatini Higgs inflation on the lattice"
+  },
+  {
+   "arxiv": "2202.05805",
+   "title": "Spectroscopy of particle couplings with gravitational waves"
+  },
+  {
+   "arxiv": "2112.11280",
+   "title": "Characterizing the postinflationary reheating history: Single daughter field with quadratic-quadratic interaction"
+  },
+  {
+   "arxiv": "2112.08388",
+   "title": "Lattice simulations of non-minimally coupled scalar fields in the Jordan frame"
+  },
+  {
+   "arxiv": "2109.13280",
+   "title": "Freeze-in from preheating"
+  },
+  {
+   "arxiv": "2102.01031",
+   "title": "CosmoLattice: A modern code for lattice simulations of scalar and gauge field dynamics in an expanding universe"
+  },
+  {
+   "arxiv": "2006.15122",
+   "title": "The art of simulating the early Universe -- Part I: Integration techniques and canonical cases"
+  },
+  {
+   "arxiv": "2005.07563",
+   "title": "Energy distribution and equation of state of the early Universe: matching the end of inflation and the onset of radiation domination"
+  }
+ ],
  "cities": [
   {
    "city": "Tokyo",
@@ -15,6 +409,45 @@ window.CL_MAP_DATA = {
    "lat": 35.6593243,
    "lon": 139.6857579,
    "count": 11,
+   "papers_count": 9,
+   "papers": [
+    [
+     0,
+     2
+    ],
+    [
+     2,
+     2
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     9,
+     3
+    ],
+    [
+     24,
+     5
+    ],
+    [
+     30,
+     2
+    ],
+    [
+     44,
+     1
+    ],
+    [
+     45,
+     1
+    ],
+    [
+     94,
+     1
+    ]
+   ],
    "institutions": [
     "Tokyo Metropolitan U., Dept. Phys.",
     "Tokyo Woman's Christian U.",
@@ -40,6 +473,37 @@ window.CL_MAP_DATA = {
    "lat": 39.9912247,
    "lon": 116.316071,
    "count": 9,
+   "papers_count": 7,
+   "papers": [
+    [
+     16,
+     2
+    ],
+    [
+     25,
+     2
+    ],
+    [
+     32,
+     2
+    ],
+    [
+     34,
+     2
+    ],
+    [
+     39,
+     3
+    ],
+    [
+     70,
+     4
+    ],
+    [
+     81,
+     1
+    ]
+   ],
    "institutions": [
     "CAS, GUCAS, Beijing",
     "CAS, ITP, Beijing"
@@ -62,6 +526,41 @@ window.CL_MAP_DATA = {
    "lat": 29.535171,
    "lon": 106.605308,
    "count": 8,
+   "papers_count": 8,
+   "papers": [
+    [
+     5,
+     2
+    ],
+    [
+     32,
+     1
+    ],
+    [
+     34,
+     3
+    ],
+    [
+     48,
+     2
+    ],
+    [
+     63,
+     2
+    ],
+    [
+     69,
+     2
+    ],
+    [
+     77,
+     3
+    ],
+    [
+     81,
+     2
+    ]
+   ],
    "institutions": [
     "CQU, Chongqing",
     "CQUPT, Chongqing"
@@ -83,6 +582,53 @@ window.CL_MAP_DATA = {
    "lat": 48.8566,
    "lon": 2.3522,
    "count": 6,
+   "papers_count": 11,
+   "papers": [
+    [
+     18,
+     1
+    ],
+    [
+     23,
+     1
+    ],
+    [
+     35,
+     1
+    ],
+    [
+     38,
+     1
+    ],
+    [
+     50,
+     1
+    ],
+    [
+     55,
+     1
+    ],
+    [
+     60,
+     4
+    ],
+    [
+     72,
+     3
+    ],
+    [
+     76,
+     2
+    ],
+    [
+     84,
+     1
+    ],
+    [
+     94,
+     1
+    ]
+   ],
    "institutions": [
     "IJCLab, Orsay",
     "Unlisted, FR"
@@ -102,6 +648,77 @@ window.CL_MAP_DATA = {
    "lat": 39.4702393,
    "lon": -0.3768049,
    "count": 6,
+   "papers_count": 17,
+   "papers": [
+    [
+     17,
+     4
+    ],
+    [
+     28,
+     1
+    ],
+    [
+     41,
+     1
+    ],
+    [
+     49,
+     2
+    ],
+    [
+     53,
+     2
+    ],
+    [
+     58,
+     2
+    ],
+    [
+     61,
+     1
+    ],
+    [
+     67,
+     2
+    ],
+    [
+     73,
+     2
+    ],
+    [
+     82,
+     1
+    ],
+    [
+     86,
+     3
+    ],
+    [
+     91,
+     2
+    ],
+    [
+     92,
+     1
+    ],
+    [
+     93,
+     1
+    ],
+    [
+     95,
+     1
+    ],
+    [
+     96,
+     1
+    ],
+    [
+     97,
+     1
+    ]
+   ],
    "institutions": [
     "IFIC, Valencia"
    ],
@@ -120,6 +737,41 @@ window.CL_MAP_DATA = {
    "lat": 43.2942173,
    "lon": -3.0325855,
    "count": 5,
+   "papers_count": 8,
+   "papers": [
+    [
+     17,
+     2
+    ],
+    [
+     31,
+     2
+    ],
+    [
+     33,
+     3
+    ],
+    [
+     49,
+     3
+    ],
+    [
+     51,
+     1
+    ],
+    [
+     53,
+     1
+    ],
+    [
+     73,
+     1
+    ],
+    [
+     82,
+     3
+    ]
+   ],
    "institutions": [
     "U. Basque Country"
    ],
@@ -137,6 +789,57 @@ window.CL_MAP_DATA = {
    "lat": 40.3325,
    "lon": -3.7654,
    "count": 5,
+   "papers_count": 12,
+   "papers": [
+    [
+     1,
+     1
+    ],
+    [
+     15,
+     1
+    ],
+    [
+     31,
+     2
+    ],
+    [
+     37,
+     1
+    ],
+    [
+     40,
+     1
+    ],
+    [
+     42,
+     1
+    ],
+    [
+     51,
+     1
+    ],
+    [
+     56,
+     1
+    ],
+    [
+     65,
+     1
+    ],
+    [
+     74,
+     1
+    ],
+    [
+     80,
+     1
+    ],
+    [
+     94,
+     1
+    ]
+   ],
    "institutions": [
     "Carlos III U., Madrid",
     "U. Autonoma, Madrid, Dept. Theor. Phys."
@@ -155,6 +858,13 @@ window.CL_MAP_DATA = {
    "lat": -22.8948911,
    "lon": -43.2256358,
    "count": 5,
+   "papers_count": 1,
+   "papers": [
+    [
+     12,
+     5
+    ]
+   ],
    "institutions": [
     "Nat. Obs., Rio de Janeiro"
    ],
@@ -172,6 +882,13 @@ window.CL_MAP_DATA = {
    "lat": -34.599829,
    "lon": -58.37301,
    "count": 4,
+   "papers_count": 1,
+   "papers": [
+    [
+     22,
+     4
+    ]
+   ],
    "institutions": [
     "CONICET, Buenos Aires",
     "U. Buenos Aires"
@@ -189,6 +906,21 @@ window.CL_MAP_DATA = {
    "lat": 46.5195985,
    "lon": 6.5684919,
    "count": 4,
+   "papers_count": 3,
+   "papers": [
+    [
+     90,
+     3
+    ],
+    [
+     95,
+     1
+    ],
+    [
+     96,
+     2
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Frédéric Dux",
@@ -203,6 +935,17 @@ window.CL_MAP_DATA = {
    "lat": 49.99549148574378,
    "lon": 8.243865966796875,
    "count": 4,
+   "papers_count": 2,
+   "papers": [
+    [
+     15,
+     1
+    ],
+    [
+     85,
+     3
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Giorgio Laverda",
@@ -217,6 +960,29 @@ window.CL_MAP_DATA = {
    "lat": 55.6391856,
    "lon": 37.6881803,
    "count": 4,
+   "papers_count": 5,
+   "papers": [
+    [
+     18,
+     1
+    ],
+    [
+     23,
+     3
+    ],
+    [
+     35,
+     3
+    ],
+    [
+     50,
+     3
+    ],
+    [
+     55,
+     3
+    ]
+   ],
    "institutions": [
     "MIPT, Moscow",
     "Moscow State U.",
@@ -235,6 +1001,13 @@ window.CL_MAP_DATA = {
    "lat": 35.1664864,
    "lon": 136.9464336,
    "count": 4,
+   "papers_count": 1,
+   "papers": [
+    [
+     10,
+     4
+    ]
+   ],
    "institutions": [
     "Nagoya U., Div. Part. Astrophys. Sci.",
     "Nagoya U., KMI"
@@ -252,6 +1025,17 @@ window.CL_MAP_DATA = {
    "lat": 52.23537,
    "lon": 21.009485,
    "count": 4,
+   "papers_count": 2,
+   "papers": [
+    [
+     7,
+     3
+    ],
+    [
+     47,
+     1
+    ]
+   ],
    "institutions": [
     "U. Warsaw, Fac. Phys."
    ],
@@ -268,6 +1052,37 @@ window.CL_MAP_DATA = {
    "lat": 41.5089059,
    "lon": 2.0878204,
    "count": 3,
+   "papers_count": 7,
+   "papers": [
+    [
+     1,
+     3
+    ],
+    [
+     17,
+     1
+    ],
+    [
+     28,
+     1
+    ],
+    [
+     36,
+     3
+    ],
+    [
+     42,
+     1
+    ],
+    [
+     66,
+     3
+    ],
+    [
+     71,
+     1
+    ]
+   ],
    "institutions": [
     "U. Barcelona, IFAE"
    ],
@@ -283,6 +1098,13 @@ window.CL_MAP_DATA = {
    "lat": 39.1661123,
    "lon": -86.5265247,
    "count": 3,
+   "papers_count": 1,
+   "papers": [
+    [
+     27,
+     3
+    ]
+   ],
    "institutions": [
     "Indiana U., Bloomington"
    ],
@@ -298,6 +1120,13 @@ window.CL_MAP_DATA = {
    "lat": 50.821201,
    "lon": 4.393737,
    "count": 3,
+   "papers_count": 1,
+   "papers": [
+    [
+     19,
+     3
+    ]
+   ],
    "institutions": [
     "IIHE, Brussels"
    ],
@@ -313,6 +1142,33 @@ window.CL_MAP_DATA = {
    "lat": 53.57328,
    "lon": 9.88064,
    "count": 3,
+   "papers_count": 6,
+   "papers": [
+    [
+     19,
+     1
+    ],
+    [
+     41,
+     1
+    ],
+    [
+     62,
+     1
+    ],
+    [
+     72,
+     1
+    ],
+    [
+     75,
+     1
+    ],
+    [
+     87,
+     1
+    ]
+   ],
    "institutions": [
     "DESY"
    ],
@@ -328,6 +1184,13 @@ window.CL_MAP_DATA = {
    "lat": 62.240393,
    "lon": 25.742635,
    "count": 3,
+   "papers_count": 1,
+   "papers": [
+    [
+     54,
+     3
+    ]
+   ],
    "institutions": [
     "Jyvaskyla U., Jyvaskyla"
    ],
@@ -343,6 +1206,13 @@ window.CL_MAP_DATA = {
    "lat": -37.7962849,
    "lon": 144.9598069,
    "count": 3,
+   "papers_count": 1,
+   "papers": [
+    [
+     20,
+     3
+    ]
+   ],
    "institutions": [
     "U. Melbourne"
    ],
@@ -358,6 +1228,37 @@ window.CL_MAP_DATA = {
    "lat": 19.33382222019375,
    "lon": -99.18826103210449,
    "count": 3,
+   "papers_count": 7,
+   "papers": [
+    [
+     8,
+     2
+    ],
+    [
+     38,
+     1
+    ],
+    [
+     62,
+     1
+    ],
+    [
+     64,
+     2
+    ],
+    [
+     72,
+     1
+    ],
+    [
+     75,
+     1
+    ],
+    [
+     87,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Aline Pereyra-Flores",
@@ -371,6 +1272,29 @@ window.CL_MAP_DATA = {
    "lat": 44.97532,
    "lon": -93.233985,
    "count": 3,
+   "papers_count": 5,
+   "papers": [
+    [
+     38,
+     2
+    ],
+    [
+     72,
+     1
+    ],
+    [
+     87,
+     1
+    ],
+    [
+     90,
+     1
+    ],
+    [
+     94,
+     2
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Andrey Shkerin",
@@ -384,6 +1308,17 @@ window.CL_MAP_DATA = {
    "lat": 51.759675,
    "lon": -1.259506,
    "count": 3,
+   "papers_count": 2,
+   "papers": [
+    [
+     4,
+     1
+    ],
+    [
+     29,
+     2
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Benjamin Gladwyn",
@@ -397,6 +1332,13 @@ window.CL_MAP_DATA = {
    "lat": 23.2849737,
    "lon": 77.2761888,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     6,
+     2
+    ]
+   ],
    "institutions": [
     "IISER, Bhopal"
    ],
@@ -411,6 +1353,17 @@ window.CL_MAP_DATA = {
    "lat": 52.0378,
    "lon": 8.4934,
    "count": 2,
+   "papers_count": 2,
+   "papers": [
+    [
+     14,
+     2
+    ],
+    [
+     17,
+     1
+    ]
+   ],
    "institutions": [
     "Bielefeld U."
    ],
@@ -425,6 +1378,13 @@ window.CL_MAP_DATA = {
    "lat": 50.72747,
    "lon": 7.08831,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     43,
+     2
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Chenhuan Wang",
@@ -437,6 +1397,13 @@ window.CL_MAP_DATA = {
    "lat": 28.5238,
    "lon": 77.5747,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     0,
+     2
+    ]
+   ],
    "institutions": [
     "Shiv Nadar U."
    ],
@@ -451,6 +1418,17 @@ window.CL_MAP_DATA = {
    "lat": 30.2741,
    "lon": 120.1551,
    "count": 2,
+   "papers_count": 2,
+   "papers": [
+    [
+     16,
+     1
+    ],
+    [
+     25,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Zhuan Ning",
@@ -463,6 +1441,13 @@ window.CL_MAP_DATA = {
    "lat": 17.385,
    "lon": 78.4867,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     26,
+     2
+    ]
+   ],
    "institutions": [
     "Hyderabad, IIIT"
    ],
@@ -477,6 +1462,13 @@ window.CL_MAP_DATA = {
    "lat": 22.9401703,
    "lon": 88.5318661,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     21,
+     2
+    ]
+   ],
    "institutions": [
     "IISER, Kolkata, Mohanpur"
    ],
@@ -491,6 +1483,21 @@ window.CL_MAP_DATA = {
    "lat": 35.012,
    "lon": 135.7675,
    "count": 2,
+   "papers_count": 3,
+   "papers": [
+    [
+     0,
+     1
+    ],
+    [
+     78,
+     1
+    ],
+    [
+     79,
+     1
+    ]
+   ],
    "institutions": [
     "Kyoto U., Yukawa Inst."
    ],
@@ -505,6 +1512,13 @@ window.CL_MAP_DATA = {
    "lat": 36.0611,
    "lon": 103.8343,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     11,
+     2
+    ]
+   ],
    "institutions": [
     "LZU, Lanzhou"
    ],
@@ -519,6 +1533,37 @@ window.CL_MAP_DATA = {
    "lat": 38.737239,
    "lon": -9.1385758,
    "count": 2,
+   "papers_count": 7,
+   "papers": [
+    [
+     15,
+     1
+    ],
+    [
+     40,
+     1
+    ],
+    [
+     42,
+     1
+    ],
+    [
+     51,
+     1
+    ],
+    [
+     65,
+     1
+    ],
+    [
+     74,
+     1
+    ],
+    [
+     80,
+     1
+    ]
+   ],
    "institutions": [
     "IST, Lisbon, CENTRA"
    ],
@@ -533,6 +1578,13 @@ window.CL_MAP_DATA = {
    "lat": 31.4678,
    "lon": 104.6794,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     5,
+     2
+    ]
+   ],
    "institutions": [
     "SWUST, Mianyang"
    ],
@@ -547,6 +1599,13 @@ window.CL_MAP_DATA = {
    "lat": 28.6829,
    "lon": 115.8579,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     11,
+     2
+    ]
+   ],
    "institutions": [
     "NCU, Nanchang"
    ],
@@ -561,6 +1620,29 @@ window.CL_MAP_DATA = {
    "lat": 52.9421,
    "lon": -1.187736,
    "count": 2,
+   "papers_count": 5,
+   "papers": [
+    [
+     29,
+     1
+    ],
+    [
+     53,
+     1
+    ],
+    [
+     59,
+     2
+    ],
+    [
+     73,
+     1
+    ],
+    [
+     83,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Edmund J. Copeland",
@@ -573,6 +1655,29 @@ window.CL_MAP_DATA = {
    "lat": 50.1239503,
    "lon": 14.4689537,
    "count": 2,
+   "papers_count": 5,
+   "papers": [
+    [
+     4,
+     1
+    ],
+    [
+     23,
+     1
+    ],
+    [
+     35,
+     1
+    ],
+    [
+     50,
+     1
+    ],
+    [
+     55,
+     1
+    ]
+   ],
    "institutions": [
     "ASCR, Inst. Phys., Prague"
    ],
@@ -587,6 +1692,13 @@ window.CL_MAP_DATA = {
    "lat": 41.826042,
    "lon": -71.399235,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     68,
+     2
+    ]
+   ],
    "institutions": [
     "Brown U."
    ],
@@ -601,6 +1713,13 @@ window.CL_MAP_DATA = {
    "lat": 8.5441622,
    "lon": 76.905242,
    "count": 2,
+   "papers_count": 1,
+   "papers": [
+    [
+     59,
+     2
+    ]
+   ],
    "institutions": [
     "IISER, Trivandrum, Sch. Phys."
    ],
@@ -615,6 +1734,21 @@ window.CL_MAP_DATA = {
    "lat": 36.3418112,
    "lon": 140.4467935,
    "count": 2,
+   "papers_count": 3,
+   "papers": [
+    [
+     46,
+     2
+    ],
+    [
+     47,
+     1
+    ],
+    [
+     71,
+     1
+    ]
+   ],
    "institutions": [
     "KEK, Tsukuba"
    ],
@@ -629,6 +1763,13 @@ window.CL_MAP_DATA = {
    "lat": 24.2991738,
    "lon": 54.6972774,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     37,
+     1
+    ]
+   ],
    "institutions": [
     "New York U., Abu Dhabi"
    ],
@@ -642,6 +1783,13 @@ window.CL_MAP_DATA = {
    "lat": 43.238,
    "lon": 76.945,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     18,
+     1
+    ]
+   ],
    "institutions": [
     "Al Farabi Kazakh Natl. U."
    ],
@@ -655,6 +1803,13 @@ window.CL_MAP_DATA = {
    "lat": 16.573,
    "lon": 80.3575,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     37,
+     1
+    ]
+   ],
    "institutions": [
     "SRM U., Amaravati"
    ],
@@ -668,6 +1823,13 @@ window.CL_MAP_DATA = {
    "lat": 42.38960022277268,
    "lon": -72.52655389363605,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     56,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Joaquim Iguaz Juan"
@@ -679,6 +1841,13 @@ window.CL_MAP_DATA = {
    "lat": 45.92099,
    "lon": 6.1605162,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     56,
+     1
+    ]
+   ],
    "institutions": [
     "LAPTH, Annecy"
    ],
@@ -692,6 +1861,13 @@ window.CL_MAP_DATA = {
    "lat": 30.2835151,
    "lon": -97.7348805,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     47,
+     1
+    ]
+   ],
    "institutions": [
     "U. Texas, Austin"
    ],
@@ -705,6 +1881,33 @@ window.CL_MAP_DATA = {
    "lat": 47.564681,
    "lon": 7.578573,
    "count": 1,
+   "papers_count": 6,
+   "papers": [
+    [
+     28,
+     1
+    ],
+    [
+     88,
+     3
+    ],
+    [
+     92,
+     3
+    ],
+    [
+     95,
+     1
+    ],
+    [
+     96,
+     1
+    ],
+    [
+     97,
+     3
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Stefan Antusch"
@@ -716,6 +1919,13 @@ window.CL_MAP_DATA = {
    "lat": 52.34598,
    "lon": 13.633,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     17,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Jorge Baeza-Ballesteros"
@@ -727,6 +1937,13 @@ window.CL_MAP_DATA = {
    "lat": 46.95126,
    "lon": 7.438489,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     14,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "M. Laine"
@@ -738,6 +1955,13 @@ window.CL_MAP_DATA = {
    "lat": 30.5728,
    "lon": 104.0668,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     18,
+     1
+    ]
+   ],
    "institutions": [
     "SCU, Chengdu"
    ],
@@ -751,6 +1975,13 @@ window.CL_MAP_DATA = {
    "lat": 41.7805099,
    "lon": -87.603826,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     8,
+     1
+    ]
+   ],
    "institutions": [
     "U. Chicago"
    ],
@@ -764,6 +1995,13 @@ window.CL_MAP_DATA = {
    "lat": 40.207851,
    "lon": -8.42517,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     66,
+     1
+    ]
+   ],
    "institutions": [
     "U. Coimbra, Dept. Phys."
    ],
@@ -777,6 +2015,13 @@ window.CL_MAP_DATA = {
    "lat": 40.2811,
    "lon": -7.5069,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     57,
+     1
+    ]
+   ],
    "institutions": [
     "Beira Interior U., Covilha"
    ],
@@ -790,6 +2035,21 @@ window.CL_MAP_DATA = {
    "lat": 60.2054999,
    "lon": 24.9620201,
    "count": 1,
+   "papers_count": 3,
+   "papers": [
+    [
+     76,
+     1
+    ],
+    [
+     84,
+     1
+    ],
+    [
+     89,
+     2
+    ]
+   ],
    "institutions": [
     "U. Helsinki, Dept. Phys."
    ],
@@ -803,6 +2063,13 @@ window.CL_MAP_DATA = {
    "lat": 41.1101402,
    "lon": 30.6700016,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     41,
+     1
+    ]
+   ],
    "institutions": [
     "Istanbul Tech. U., Dept. Phys."
    ],
@@ -816,6 +2083,13 @@ window.CL_MAP_DATA = {
    "lat": 42.5987,
    "lon": -5.5671,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     51,
+     1
+    ]
+   ],
    "institutions": [
     "Leon U."
    ],
@@ -829,6 +2103,17 @@ window.CL_MAP_DATA = {
    "lat": 51.499709,
    "lon": -0.17614,
    "count": 1,
+   "papers_count": 2,
+   "papers": [
+    [
+     61,
+     1
+    ],
+    [
+     91,
+     1
+    ]
+   ],
    "institutions": [
     "Imperial Coll., London"
    ],
@@ -842,6 +2127,13 @@ window.CL_MAP_DATA = {
    "lat": 48.1440989,
    "lon": 11.5695525,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     4,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Sebastian Zell"
@@ -853,6 +2145,13 @@ window.CL_MAP_DATA = {
    "lat": 29.909188,
    "lon": 121.64166,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     16,
+     1
+    ]
+   ],
    "institutions": [
     "NBU, Ningbo"
    ],
@@ -866,6 +2165,13 @@ window.CL_MAP_DATA = {
    "lat": 34.6937378,
    "lon": 135.5021651,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     41,
+     1
+    ]
+   ],
    "institutions": [
     "Osaka U., Sch. Sci."
    ],
@@ -879,6 +2185,13 @@ window.CL_MAP_DATA = {
    "lat": 34.2013,
    "lon": -118.17,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     14,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Kim V. Berghaus"
@@ -890,6 +2203,13 @@ window.CL_MAP_DATA = {
    "lat": 36.0121216,
    "lon": 129.3215433,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     16,
+     1
+    ]
+   ],
    "institutions": [
     "APCTP, Headquarters, Pohang"
    ],
@@ -903,6 +2223,13 @@ window.CL_MAP_DATA = {
    "lat": 40.366633,
    "lon": -74.640832,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     68,
+     1
+    ]
+   ],
    "institutions": [
     "IAS, Princeton"
    ],
@@ -916,6 +2243,17 @@ window.CL_MAP_DATA = {
    "lat": 33.953333,
    "lon": -117.395278,
    "count": 1,
+   "papers_count": 2,
+   "papers": [
+    [
+     47,
+     1
+    ],
+    [
+     71,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Yanou Cui"
@@ -927,6 +2265,13 @@ window.CL_MAP_DATA = {
    "lat": 41.9,
    "lon": 12.5,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     1,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Alessio Notari"
@@ -938,6 +2283,17 @@ window.CL_MAP_DATA = {
    "lat": 44.335107,
    "lon": -93.981061,
    "count": 1,
+   "papers_count": 2,
+   "papers": [
+    [
+     59,
+     1
+    ],
+    [
+     83,
+     1
+    ]
+   ],
    "institutions": [
     "Gustavus Adolphus Coll."
    ],
@@ -951,6 +2307,17 @@ window.CL_MAP_DATA = {
    "lat": 38.25331326896606,
    "lon": 140.87335109710693,
    "count": 1,
+   "papers_count": 2,
+   "papers": [
+    [
+     78,
+     1
+    ],
+    [
+     79,
+     1
+    ]
+   ],
    "institutions": [
     "Tohoku U., Sendai, Dept. Phys."
    ],
@@ -964,6 +2331,13 @@ window.CL_MAP_DATA = {
    "lat": 31.2974669,
    "lon": 121.524883,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     18,
+     1
+    ]
+   ],
    "institutions": [],
    "researchers": [
     "Yermek Aldabergenov"
@@ -975,6 +2349,13 @@ window.CL_MAP_DATA = {
    "lat": 28.945,
    "lon": 77.1015,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     21,
+     1
+    ]
+   ],
    "institutions": [
     "Ashoka U."
    ],
@@ -988,6 +2369,13 @@ window.CL_MAP_DATA = {
    "lat": 59.939039,
    "lon": 30.315785,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     84,
+     1
+    ]
+   ],
    "institutions": [
     "St. Petersburg State U., Phys. Fac."
    ],
@@ -1001,6 +2389,13 @@ window.CL_MAP_DATA = {
    "lat": 32.1141667,
    "lon": 34.7969444,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     41,
+     1
+    ]
+   ],
    "institutions": [
     "Tel-Aviv U., Dept. Part. Phys."
    ],
@@ -1014,6 +2409,17 @@ window.CL_MAP_DATA = {
    "lat": 45.7027101,
    "lon": 13.7202786,
    "count": 1,
+   "papers_count": 2,
+   "papers": [
+    [
+     17,
+     1
+    ],
+    [
+     61,
+     1
+    ]
+   ],
    "institutions": [
     "SISSA, Trieste"
    ],
@@ -1027,6 +2433,13 @@ window.CL_MAP_DATA = {
    "lat": 45.0516025,
    "lon": 7.6809273,
    "count": 1,
+   "papers_count": 1,
+   "papers": [
+    [
+     56,
+     1
+    ]
+   ],
    "institutions": [
     "INFN, Turin"
    ],

@@ -1235,7 +1235,7 @@
   needs_review: []
 - arxiv: '2312.15056'
   inspire: 2740592
-  title: Present and future of \({\mathcal{C}}\) osmo \({\mathcal{L}}\) attice
+  title: Present and future of CosmoLattice
   authors:
   - name: Daniel G. Figueroa
     id: 1046060

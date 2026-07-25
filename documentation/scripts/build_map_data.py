@@ -8,6 +8,13 @@ affiliation only; dedupe each researcher (by INSPIRE author id, else name); plac
 them at that affiliation on their MOST RECENT paper that resolves to coordinates;
 bin by city. Institutions with no coordinates borrow their city centre from a
 geocoded sibling. Emitted as a JS global the map page loads via <script src>.
+
+Each city also carries the papers written from it, for the map's hover card. A
+paper counts for a city when at least one of its authors listed that city as
+their first affiliation ON THAT PAPER — so a paper stays with the place it was
+written from even after its authors move. Titles live once in the top-level
+`paper_list`; a city's `papers` holds [paper index, authors from this city]
+pairs, newest first, which keeps the generated file small.
 """
 import json
 import os
@@ -49,6 +56,13 @@ def main():
         g = city_geo.get("%s|%s" % (o.get("city"), o.get("country") or "")) if o.get("city") else None
         return (g[0], g[1], True) if g else None
 
+    def city_key(inst_id):
+        """City bin key for an author's first affiliation, or None if unplaceable."""
+        o = insts.get(inst_id) if inst_id else None
+        if not o or not o.get("city") or not coords_for(o):
+            return None
+        return "%s|%s" % (o["city"], o.get("country") or "")
+
     bins, unresolved, approx = {}, [], 0
     for r in researchers.values():
         cands = sorted(
@@ -65,15 +79,29 @@ def main():
         bk = "%s|%s" % (o["city"], o.get("country") or "")
         b = bins.setdefault(bk, {"city": o["city"], "country": o.get("country"),
                                  "lat": lat, "lon": lon, "count": 0,
-                                 "researchers": [], "institutions": set()})
+                                 "researchers": [], "institutions": set(), "papers": []})
         b["count"] += 1
         b["researchers"].append(r["name"])
         if o.get("name"):
             b["institutions"].add(o["name"])
 
+    # Papers per city, newest first. Walking the papers in recency order means
+    # each city's list comes out sorted without a second pass.
+    ordered = sorted(pubs, key=lambda p: recency(p["arxiv"]), reverse=True)
+    paper_list = [{"arxiv": p["arxiv"], "title": p["title"]} for p in ordered]
+    for ix, p in enumerate(ordered):
+        here = {}
+        for a in p.get("authors", []):
+            bk = city_key(a.get("inst"))
+            if bk in bins:
+                here[bk] = here.get(bk, 0) + 1
+        for bk, n in here.items():
+            bins[bk]["papers"].append([ix, n])
+
     cities = sorted(
         ({"city": b["city"], "country": b["country"], "lat": b["lat"], "lon": b["lon"],
-          "count": b["count"], "institutions": sorted(b["institutions"]),
+          "count": b["count"], "papers_count": len(b["papers"]), "papers": b["papers"],
+          "institutions": sorted(b["institutions"]),
           "researchers": sorted(b["researchers"])} for b in bins.values()),
         key=lambda c: (-c["count"], c["city"]))
 
@@ -86,6 +114,7 @@ def main():
         "countries_count": len({c["country"] for c in cities}),
         "unresolved_count": len(unresolved),
         "approx_placed_count": approx,
+        "paper_list": paper_list,
         "cities": cities,
         "unresolved": unresolved,
     }
