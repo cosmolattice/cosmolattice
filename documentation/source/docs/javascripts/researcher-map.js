@@ -30,6 +30,27 @@
   function svgEl(tag, cls) { var e = document.createElementNS(NS, tag); if (cls) e.setAttribute("class", cls); return e; }
   function esc(s) { var d = document.createElement("div"); d.textContent = s == null ? "" : s; return d.innerHTML; }
 
+  /* Paper titles come from INSPIRE with the odd bit of inline LaTeX. MathJax
+     does not run over nodes this file builds, so render the few constructs that
+     actually occur (\(α\), Z_2) as plain Unicode and drop the rest. */
+  var GREEK = {
+    alpha: "α", beta: "β", gamma: "γ", delta: "δ", epsilon: "ε", zeta: "ζ", eta: "η",
+    theta: "θ", kappa: "κ", lambda: "λ", mu: "μ", nu: "ν", xi: "ξ", pi: "π", rho: "ρ",
+    sigma: "σ", tau: "τ", phi: "φ", chi: "χ", psi: "ψ", omega: "ω",
+    Gamma: "Γ", Delta: "Δ", Theta: "Θ", Lambda: "Λ", Xi: "Ξ", Pi: "Π", Sigma: "Σ",
+    Phi: "Φ", Psi: "Ψ", Omega: "Ω", times: "×", pm: "±", to: "→", ell: "ℓ", infty: "∞"
+  };
+  var SUB = { 0: "₀", 1: "₁", 2: "₂", 3: "₃", 4: "₄", 5: "₅", 6: "₆", 7: "₇", 8: "₈", 9: "₉" };
+  var SUP = { 0: "⁰", 1: "¹", 2: "²", 3: "³", 4: "⁴", 5: "⁵", 6: "⁶", 7: "⁷", 8: "⁸", 9: "⁹" };
+  function demath(s) {
+    return String(s == null ? "" : s)
+      .replace(/\\[()[\]]|\$+/g, "")                          // math delimiters
+      .replace(/\\([A-Za-z]+)\s*/g, function (m, w) { return GREEK[w] || ""; })
+      .replace(/([_^])\{?([0-9])\}?/g, function (m, k, d) { return (k === "_" ? SUB : SUP)[d]; })
+      .replace(/[{}]/g, "")
+      .replace(/\s+/g, " ").trim();
+  }
+
   function hex(h) { return [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]; }
   function mix(c1, c2, t) {
     var a = hex(c1), b = hex(c2), r = function (i) { return Math.round(a[i] + (b[i] - a[i]) * t); };
@@ -209,22 +230,117 @@
       .forEach(function (c) { worldLabel[c.city] = 1; });
     cities.forEach(function (c) { var k = continentOf(c); (byCont[k] = byCont[k] || []).push(c); });
 
-    /* ---- tooltip ---- */
+    /* ---- city card ----
+       Hover a marker to peek at the city and the papers written from it; click
+       to pin the card, which lists every paper and turns the rows into arXiv
+       links. The card anchors to the marker rather than the cursor — at this
+       size a card that chases the pointer is unreadable, and a pinned card has
+       to hold still to be clickable.
+
+       The arXiv id column doubles as the date: papers come newest first, so the
+       ids read as a descending timeline. A trailing numeral on a row is the
+       number of authors from this city, shown only when it is more than one. */
+    var papers = data.paper_list || [];
+    var PEEK = 4;                              // papers listed on hover; the rest need a pin
     var tt = el("div", "cl-map-tt"); frame.appendChild(tt);
-    function showTip(c, node, evt) {
-      tt.innerHTML = '<div class="c"><span>' + esc(c.city) + '</span><span class="n">' + c.count + "</span></div>" +
-        '<div class="co">' + esc(c.country || "") + " · researcher" + (c.count > 1 ? "s" : "") + "</div>" +
-        '<div class="inst">' + esc((c.institutions || []).slice(0, 3).join(" · ")) + "</div>";
-      tt.classList.add("on");
-      var fr = frame.getBoundingClientRect();
-      var x = evt.clientX - fr.left + 14, y = evt.clientY - fr.top + 14;
-      if (x + 230 > fr.width) x = evt.clientX - fr.left - 244;
-      if (y + 90 > fr.height) y = evt.clientY - fr.top - 90;
-      tt.style.left = Math.max(6, x) + "px"; tt.style.top = Math.max(6, y) + "px";
+    var pinnedCity = null, pinnedNode = null;
+
+    function paperRow(entry, linked) {
+      var p = papers[entry[0]] || {}, id = p.arxiv || "";
+      var inner = '<span class="id">' + esc(id) + "</span>" +
+        '<span class="t">' + esc(demath(p.title)) + "</span>" +
+        (entry[1] > 1 ? '<span class="n" title="' + entry[1] + ' authors from here">' + entry[1] + "</span>" : "");
+      return (linked && id)
+        ? '<a class="pp" href="https://arxiv.org/abs/' + esc(id) + '" target="_blank" rel="noopener">' + inner + "</a>"
+        : '<div class="pp">' + inner + "</div>";
     }
-    function hideTip() { tt.classList.remove("on"); }
+
+    function cardHtml(c, full) {
+      var list = c.papers || [], shown = full ? list : list.slice(0, PEEK);
+      var h = '<div class="c"><span>' + esc(c.city) + '</span><span class="n">' + c.count + "</span></div>" +
+        '<div class="co">' + esc(c.country || "") + " · researcher" + (c.count > 1 ? "s" : "") + "</div>";
+      var inst = (c.institutions || []).slice(0, 3).join(" · ");
+      if (inst) h += '<div class="inst">' + esc(inst) + "</div>";
+      if (!list.length) return h;
+      h += '<div class="ph"><span>papers from here</span><span>' + list.length + "</span></div>" +
+        '<div class="pl">' + shown.map(function (e) { return paperRow(e, full); }).join("") + "</div>";
+      var rest = list.length - shown.length;
+      if (rest > 0) h += '<div class="more">+' + rest + " more · click the point to open</div>";
+      else if (!full) h += '<div class="more">Click the point to open on arXiv</div>';
+      return h;
+    }
+
+    function placeCard(node) {
+      var fr = frame.getBoundingClientRect(), r = node.getBoundingClientRect();
+      tt.style.maxHeight = (fr.height - 16) + "px";
+      var card = tt.getBoundingClientRect(), w = card.width, h = card.height;
+      var x = r.right - fr.left + 14;                       // to the right of the point…
+      if (x + w > fr.width - 8) x = r.left - fr.left - w - 14;   // …unless it would overhang
+      tt.style.left = Math.max(8, Math.min(fr.width - w - 8, x)) + "px";
+      var y = r.top - fr.top + r.height / 2 - h / 2;        // vertically centred on the point
+      tt.style.top = Math.max(8, Math.min(fr.height - h - 8, y)) + "px";
+    }
+
+    function showTip(c, node) {
+      if (pinnedCity) return;                  // a pinned card owns the frame
+      tt.innerHTML = cardHtml(c, false);
+      tt.classList.add("on");
+      placeCard(node);
+    }
+    function hideTip() { if (!pinnedCity) tt.classList.remove("on"); }
+
+    // The frame is a wide, shallow band, so a long paper list has to scroll
+    // inside the pinned card. Fade its bottom edge while there is more below,
+    // since macOS hides the scrollbar until you touch it.
+    var pinnedList = null;
+    function markOverflow() {
+      if (!pinnedList) return;
+      tt.classList.toggle("fades", pinnedList.scrollHeight - pinnedList.clientHeight - pinnedList.scrollTop > 4);
+    }
+
+    function pinCity(c, node) {
+      if (pinnedCity) unpin();
+      pinnedCity = c; pinnedNode = node;
+      tt.innerHTML = cardHtml(c, true);
+      var x = el("button", "x"); x.type = "button";
+      x.setAttribute("aria-label", "Close the " + c.city + " papers");
+      x.innerHTML = "×";
+      x.addEventListener("click", unpin);
+      tt.appendChild(x);
+      tt.classList.add("on", "pin");
+      placeCard(node);
+      pinnedList = tt.querySelector(".pl");
+      if (pinnedList) pinnedList.addEventListener("scroll", markOverflow);
+      markOverflow();
+      placeCard(node);        // re-place: the list only takes its final height once capped
+      focus(c.city, true);
+    }
+    function unpin() {
+      if (!pinnedCity) return;
+      var city = pinnedCity.city;
+      pinnedCity = null; pinnedNode = null; pinnedList = null;
+      tt.classList.remove("on", "pin", "fades");
+      focus(city, false);
+    }
+    // A resize changes the frame, and with it where the card belongs.
+    window.addEventListener("resize", function () {
+      if (!pinnedNode) return;
+      placeCard(pinnedNode);
+      markOverflow();
+    });
+    // Dismiss: anywhere outside the card, or Escape.
+    document.addEventListener("click", function (e) {
+      if (pinnedCity && !tt.contains(e.target)) unpin();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" || e.key === "Esc") unpin();
+    });
 
     var nodes = [];
+    function nodeOf(city) {
+      for (var i = 0; i < nodes.length; i++) if (nodes[i].city === city) return nodes[i];
+      return null;
+    }
     function focus(city, on) {
       // Only cities visible in the current tab react; hovering a hub whose city
       // sits in another continent leaves the shown markers untouched.
@@ -272,9 +388,15 @@
       tx.style.display = "none";      // shown per-view by applyView/declutter
       coreG.appendChild(tx);
 
-      core.addEventListener("mouseenter", function (e) { showTip(c, core, e); focus(c.city, true); });
-      core.addEventListener("mousemove", function (e) { showTip(c, core, e); });
-      core.addEventListener("mouseleave", function () { hideTip(); focus(c.city, false); });
+      core.addEventListener("mouseenter", function () { showTip(c, core); focus(c.city, true); });
+      core.addEventListener("mouseleave", function () {
+        hideTip();
+        if (pinnedCity) focus(pinnedCity.city, true); else focus(c.city, false);
+      });
+      core.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (pinnedCity === c) unpin(); else pinCity(c, core);
+      });
       nodes.push({
         city: c.city, count: c.count, core: core, glow: glow, hotring: hr, label: tx,
         cont: continentOf(c), cx: cx, cy: cy, baseR: rc, baseRg: rg, labelLeft: left,
@@ -295,7 +417,8 @@
     frame.appendChild(legend);
 
     /* ---- hub list ---- */
-    hubs.innerHTML = '<h2>Leading hubs</h2><p class="note">Hover a city or a row to link them.</p>';
+    hubs.innerHTML = '<h2>Leading hubs</h2><p class="note">Hover to link a row to its point; ' +
+      "click for the papers.</p>";
     cities.slice().sort(function (a, b) { return b.count - a.count || a.city.localeCompare(b.city); })
       .slice(0, 12).forEach(function (c, i) {
       var b = el("button", "cl-map-hub"); b.type = "button"; b.dataset.city = c.city;
@@ -304,7 +427,20 @@
         '<span class="val"><span class="bar"><i style="width:' + (c.count / maxc * 100) + '%"></i></span>' +
         '<span class="n">' + c.count + "</span></span>";
       b.addEventListener("mouseenter", function () { focus(c.city, true); });
-      b.addEventListener("mouseleave", function () { focus(c.city, false); });
+      b.addEventListener("mouseleave", function () {
+        if (pinnedCity) focus(pinnedCity.city, true); else focus(c.city, false);
+      });
+      // Rows are the keyboard route to the papers: the markers themselves are
+      // not tab stops. A row for a city hidden by the current tab switches to
+      // that continent first, so the pinned card always has its point on screen.
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var n = nodeOf(c.city);
+        if (!n) return;
+        if (pinnedCity === c) { unpin(); return; }
+        if (n.core.style.display === "none") selectTab(n.cont, true);
+        pinCity(c, n.core);
+      });
       hubs.appendChild(b);
     });
     var foot = el("p", "foot"); foot.innerHTML = "Point size ∝ √(researchers); glow ∝ intensity.";
@@ -371,7 +507,11 @@
     var vbRAF = null;
     function setVB(target) {
       if (vbRAF) { cancelAnimationFrame(vbRAF); vbRAF = null; }
-      if (reduce) { svg.setAttribute("viewBox", target.join(" ")); applyScale(target[2]); return; }
+      if (reduce) {
+        svg.setAttribute("viewBox", target.join(" ")); applyScale(target[2]);
+        if (pinnedNode) placeCard(pinnedNode);
+        return;
+      }
       var cur = svg.getAttribute("viewBox").split(" ").map(Number), start = null;
       function step(ts) {
         if (start == null) start = ts;
@@ -380,6 +520,7 @@
         var v = cur.map(function (c, i) { return c + (target[i] - c) * e; });
         svg.setAttribute("viewBox", v.map(function (x) { return x.toFixed(2); }).join(" "));
         applyScale(v[2]);
+        if (pinnedNode) placeCard(pinnedNode);   // keep a pinned card glued to its point
         if (p < 1) vbRAF = requestAnimationFrame(step); else vbRAF = null;
       }
       vbRAF = requestAnimationFrame(step);
@@ -392,6 +533,8 @@
       var vb = views[key];
       declutter(key, vb[2]);   // decide the visible label set for the target frame
       applyView(key);
+      // A card left pinned to a point the new view hides would float unanchored.
+      if (pinnedCity && !(key === "world" || (nodeOf(pinnedCity.city) || {}).cont === key)) unpin();
       if (animate) { setVB(vb); }
       else { svg.setAttribute("viewBox", vb.join(" ")); applyScale(vb[2]); }
     }

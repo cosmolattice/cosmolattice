@@ -2313,15 +2313,53 @@ body.nav-collapsed .md-sidebar--primary {
 .cl-map-legend .t { font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--clm-faint); align-self: center; }
 .cl-map-legend .lg { display: flex; flex-direction: column; align-items: center; gap: 3px; }
 .cl-map-legend .lg .d { border-radius: 50%; background: var(--clm-glow); opacity: .75; }
-.cl-map-tt { position: absolute; pointer-events: none; z-index: 8; min-width: 150px; max-width: 230px;
-    background: var(--clm-bg); border: 1px solid var(--clm-line); border-radius: 10px; padding: 9px 11px;
+/* city card — hover peeks at the city and its papers, click pins it so the
+   paper rows become arXiv links. The card is anchored to its point by
+   researcher-map.js; only the pinned state takes pointer events. */
+.cl-map-tt { position: absolute; pointer-events: none; z-index: 8; width: min(312px, 82%);
+    box-sizing: border-box;                       /* max-height is measured against the frame */
+    display: flex; flex-direction: column;
+    background: var(--clm-bg); border: 1px solid var(--clm-line); border-radius: 10px; padding: 10px 12px;
     box-shadow: var(--clm-shadow); opacity: 0; transform: translateY(4px); transition: opacity .13s, transform .13s; }
 .cl-map-tt.on { opacity: 1; transform: none; }
+.cl-map-tt.pin { pointer-events: auto; border-color: var(--clm-accent);
+    box-shadow: 0 2px 6px rgba(20,40,60,.08), 0 18px 40px -16px rgba(20,40,60,.42); }
+[data-md-color-scheme="slate"] .cl-map-tt.pin { box-shadow: 0 2px 6px rgba(0,0,0,.35), 0 20px 44px -16px rgba(0,0,0,.75); }
 .cl-map-tt .c { font: 600 .82rem/1.2 var(--md-text-font-family, system-ui); color: var(--clm-ink);
     display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.cl-map-tt.pin .c { padding-right: 18px; }        /* room for the close button */
 .cl-map-tt .c .n { font: 700 .9rem/1 var(--clm-mono); color: var(--clm-accent-ink); }
 .cl-map-tt .co { font: .6rem/1 var(--clm-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--clm-faint); margin: 2px 0 7px; }
 .cl-map-tt .inst { font-size: .72rem; color: var(--clm-muted); line-height: 1.4; }
+/* papers written from this city */
+.cl-map-tt .ph { display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+    margin-top: 9px; padding-top: 8px; border-top: 1px solid var(--clm-line);
+    font: 600 .56rem/1 var(--clm-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--clm-faint); }
+.cl-map-tt .ph span + span { letter-spacing: 0; font-weight: 700; color: var(--clm-accent-ink); font-variant-numeric: tabular-nums; }
+.cl-map-tt .pl { margin-top: 4px; }
+.cl-map-tt.pin .pl { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.cl-map-tt.pin.fades .pl { -webkit-mask-image: linear-gradient(#000 calc(100% - 26px), transparent);
+    mask-image: linear-gradient(#000 calc(100% - 26px), transparent); }
+/* newest first, so the id column reads as a descending timeline */
+.cl-map-tt .pp { display: grid; grid-template-columns: 62px minmax(0, 1fr) auto; gap: 0 8px; align-items: start;
+    padding: 5px 3px; border-radius: 5px; text-decoration: none; color: inherit;
+    transition: background .12s, color .12s; }
+.cl-map-tt .pp + .pp { border-top: 1px solid color-mix(in srgb, var(--clm-line) 55%, transparent); }
+.cl-map-tt .pp .id { font: .58rem/1.6 var(--clm-mono); color: var(--clm-faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cl-map-tt .pp .t { font-size: .7rem; line-height: 1.35; color: var(--clm-muted);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cl-map-tt .pp .n { font: 600 .56rem/1.6 var(--clm-mono); color: var(--clm-faint); font-variant-numeric: tabular-nums; }
+.cl-map-tt a.pp:hover { background: var(--clm-accent-soft); }
+.cl-map-tt a.pp:hover .t { color: var(--clm-ink); }
+.cl-map-tt a.pp:hover .id { color: var(--clm-accent-ink); }
+.cl-map-tt a.pp:focus-visible { outline: 2px solid var(--clm-accent); outline-offset: 1px; }
+.cl-map-tt .more { flex: none; font: .58rem/1.4 var(--clm-mono); color: var(--clm-faint);
+    margin-top: 7px; padding-top: 7px; border-top: 1px solid var(--clm-line); }
+.cl-map-tt .x { position: absolute; top: 6px; right: 7px; width: 20px; height: 20px; padding: 0;
+    display: none; align-items: center; justify-content: center; border: 0; border-radius: 50%;
+    background: none; color: var(--clm-faint); font: 400 1rem/1 var(--md-text-font-family, system-ui); cursor: pointer; }
+.cl-map-tt.pin .x { display: flex; }
+.cl-map-tt .x:hover { background: var(--clm-accent-soft); color: var(--clm-ink); }
 
 /* hub side panel */
 .cl-map-hubs { border: 1px solid var(--clm-line); border-radius: 14px; background: var(--clm-panel); padding: 14px 15px; box-shadow: var(--clm-shadow); }
