@@ -1,3 +1,10 @@
+/* === Logo: dark-mode variant ===
+   theme.logo is a single file, so swap the source in slate. Covers both the
+   header button and the drawer title on small screens. */
+[data-md-color-scheme="slate"] .md-logo img {
+    content: url("assets/CL_Icon_dark.svg");
+}
+
 /* === Sidebar collapse toggle === */
 .sidebar-toggle-btn {
     position: fixed;
