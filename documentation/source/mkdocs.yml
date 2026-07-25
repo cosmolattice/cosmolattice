@@ -217,7 +217,7 @@ nav:
       - "<span style='font-weight:bold;'>Gravitational Waves </span>": "Manual/GW.md"
       - "<span style='font-weight:bold;'>Initial Conditions </span>": "Manual/IC.md"
       - "<span style='font-weight:bold;'>Output Observables </span>": "Manual/Observables.md"
-      - "<span style='font-weight:bold;'>Scalars in (1+n)-dimensions </span>": "Manual/Scalars_n_dims.md"
+      - "<span style='font-weight:bold;'>Scalars in (d+1)-dimensions </span>": "Manual/Scalars_n_dims.md"
       - "<span style='font-weight:bold;'>Inside CosmoLattice: Evolvers, Initializers & Observables </span>": "Manual/What CosmoLattice does in detail.md"
       - "<span style='font-weight:bold;'>Useful features </span>":
           - "<span style='font-size:0.95em;'>&nbsp;&nbsp;Parallelization </span>": "Manual/Parallelization.md"

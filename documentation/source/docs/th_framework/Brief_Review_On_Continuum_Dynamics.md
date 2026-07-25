@@ -87,10 +87,10 @@ with $g_{A}$ and $g_C$ the Abelian and non-Abelian gauge couplings, $Q_{A}$ and 
 \begin{equation}\label{eq_ElectricMagneticDefs}
 E_i \equiv F_{0i} , \,\,\,\,\,\,\,\,  B_i \equiv \frac{1}{2} \epsilon_{i j k} F^{j k} , \,\,\,\,\,\,\,\,   E_i^a \equiv G_{0i}^a , \,\,\,\,\,\,\,\,  B_i^a \equiv \frac{1}{2} \epsilon_{i j k} G^{j k}_a \ , \end{equation}
 ```
-where $\epsilon_{ijk}$ is the Levi-Civita symbol in three dimensions with normalization $\epsilon_{123}=+1$, and $G_{\mu \nu}^a \equiv {\rm Tr}(2G_{\mu \nu} T_a) = {\rm Tr}(G_{\mu \nu} \sigma_a)$.
+where $\epsilon_{ijk}$ is the Levi-Civita symbol in three dimensions with normalization $\epsilon_{123}=+1$, and $G_{\mu \nu}^a \equiv {\rm Tr}(2G_{\mu \nu} T_a) = {\rm Tr}(G_{\mu \nu} \sigma_a)$. **We note that the electric field definitions depend on the $\alpha$-time $\eta$, as $F_{0i}$ and $G_{0i}$ are defined with respect to $\eta$, not $t$.**
 
-The equations of motion for the matter fields and the scale factor have been derived in more detail in $\,\texttt{The}\,\texttt{Art}$-$\texttt{I}$. Here we simply quote their resulting form, which reads
-[](){ #eq_singlet-eom }
+The equations of motion for the matter fields and the scale factor have been derived in more detail in $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]). Here we simply quote their resulting form, which read
+[](){ #eq_singlet-eomCONT }
 [](){ #eq_higgsU1-eom }
 [](){ #eq_higgsSU2-eom }
 [](){ #eq_U1eom }
@@ -99,7 +99,7 @@ The equations of motion for the matter fields and the scale factor have been der
 [](){ #eq_GaussSU2-eom }
 ```math
 \begin{eqnarray}
-    \phi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{\,2} \hspace{-1mm}\phi + (3 - \alpha)\mathcal{H} {\phi'} &=& - a^{2 \alpha} V_{,\phi} \ , \label{eq_singlet-eom} \\
+    \phi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{\,2} \hspace{-1mm}\phi + (3 - \alpha)\mathcal{H} {\phi'} &=& - a^{2 \alpha} V_{,\phi} \ , \label{eq_singlet-eomCONT} \\
     \varphi'' - a^{-2(1 - \alpha)} {\vec D}_{\hspace{-0.5mm}A}^{\,2}\varphi + (3 - \alpha) \mathcal{H}  {\varphi'} &=& - \frac{a^{2 \alpha}V_{,|\varphi|} }{2} \frac{\varphi}{|\varphi |} \ , \label{eq_higgsU1-eom}\\
     \Phi'' - a^{-2(1 - \alpha)} {\vec D}^{\,2}\Phi + (3 - \alpha) \mathcal{H}  {\Phi'} &=& - \frac{a^{2 \alpha} V_{,|\Phi|}}{2} \frac{\Phi}{|\Phi |} \ , \label{eq_higgsSU2-eom}
     \\
@@ -177,7 +177,7 @@ with the different energy density contributions given by
 {G}_{SU(2)} &=& \frac{1}{2 a^4}  \sum_{a,i,j < i}  (G_{ij}^a)^2    . \\
 \end{array}\right.
 \\\nonumber\\
-\text{(Kinetic-Scalar)} \hspace{5cm} \text{(Gradient-Scalar)} \hspace{6.5cm} \text{(Electric & Magnetic)} \hspace{3.0cm}\nonumber
+\text{(Kinetic-Scalar)} \hspace{5cm} \text{(Gradient-Scalar)} \hspace{6.5cm} \text{(Electric & Magnetic)} \hspace{3.0cm}\nonumber\\
 \end{align}
 ```
 If the fields dominate the energy budget of the Universe, the expansion rate can be determined through the Friedmann Eqs. \eqref{eq_Friedmann-full}, which in our case can be written as
@@ -193,60 +193,457 @@ If the fields dominate the energy budget of the Universe, the expansion rate can
 & \hspace{2cm} \left. +  (\alpha-1)(E_K^A + E_K^B + E_G^A + E_G^B) \right]  ,\nonumber
 \end{align}
 ```
-with $\langle \dots \rangle$ denoting an average over sufficiently large volumes that encompass all relevant wavelengths of the fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we use Eq. (\ref{eq_FriedmannD2a}) to solve for the scale factor, while monitoring that the constraint equation (\ref{eq_FriedmannHub}) is verified throughout the evolution to some desired accuracy, see Section [*Evolution Algorithms*][subsec_Algorithms]. 
+where we have defined the volume-averaged energy contributions as $E_{K}^{f} = \langle K_{f} \rangle$ and $E_{G}^{f} = \langle G_{f} \rangle$ for the scalar fields $f=\phi,\varphi,\Phi$, $E_{K}^{A} = \langle K_{U(1)} \rangle$, $E_{G}^{A} = \langle G_{U(1)} \rangle$, $E_{K}^{B} = \langle K_{SU(2)} \rangle$, and $E_{G}^{B} = \langle G_{SU(2)} \rangle$ for the gauge fields, and ${E}_V = \langle {V} \rangle$ for the potential energy, with $\langle \dots \rangle$ denoting an average over sufficiently large volumes that encompass all relevant wavelengths of the fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we use Eq. (\ref{eq_FriedmannD2a}) to solve for the scale factor, while monitoring that the constraint equation (\ref{eq_FriedmannHub}) is verified throughout the evolution to some desired accuracy, see Section [*Evolution Algorithms*][subsec_Algorithms]. 
 
 ## Non-Canonical Field Theories { #subsec_eomNonCanonical }
 
-To be added soon ...
+There are many possibilities to consider when dealing when field theories with non-canonical interactions. Below we consider few representative examples, such as scalar fields non-minimally coupled (NMC) to gravity through a term of the form $\propto \phi^{2}R$, with $R$ the Ricci scalar; scalar fields with non-minimal kinetic (NMK) terms of the form $f(\phi)X$, with $X \equiv \partial^{\mu}\phi\partial_{\mu}\phi$; and axion-like-particles (ALPs) interacting with gauge fields through a coupling of the form $\phi F\tilde{F}$.
 
+<div style="height: 20px;"></div>
+
+[](){ #NMC_th }
 **Scalar Non-Minimally Coupled to Gravity**
 
+<!-- The starting point here is the Jordan-frame dynamics of a scalar field $\phi$ non-minimally coupled to gravity.  -->
+We begin with an action containing a curvature interaction proportional to $\xi R\phi^2$ and a generic potential $V(\phi,\{\varphi_{\rm m}\})$ for $\phi$ and the remaining matter fields $\{\varphi_{\rm m}\}$, represented by $\mathcal{L}_{\rm m}$. In the Jordan-frame, this reads
+
+[](){ #eq_action }
+
+```math
+S =
+\int d^{4}x\,\sqrt{-g}
+\left[
+\frac{1}{2}m_p^2R
+-\frac{1}{2}\xi R\phi^{2}
+-\frac{1}{2}g^{\mu\nu}\partial_{\mu}\phi\partial_{\nu}\phi
+-V(\phi,\{\varphi_{\rm m}\})
++\mathcal{L}_{\rm m}
+\right]\,,
+\label{eq_action}
+```
+where $R$ is the Ricci scalar and $\xi$ the non-minimal coupling parameter. Neglecting gravitational perturbations and restricting the metric to a spatially flat FLRW background, the equation of motion for $\phi$ becomes
+
+[](){ #eq_eom }
+```math
+\begin{eqnarray}
+\phi''
++(3-\alpha)\frac{a'}{a}\phi'
+-a^{-2(1-\alpha)}\nabla^2\phi
++a^{2\alpha}
+\left(
+\xi\bar R\phi+\frac{\partial V}{\partial\phi}
+\right)
+=0\,,
+\label{eq_eom}\\
+{\rm where} ~~~~~~\bar R =
+\frac{6}{a^{2\alpha}}
+\left[
+\frac{a''}{a}
++(1-\alpha)\left(\frac{a'}{a}\right)^2
+\right]\,.~~~~~~~~~~~~~~
+\label{eq_cosmic_R}
+\end{eqnarray}
+```
+<!-- 
+where the background Ricci scalar is given by
+
+[](){ #eq_cosmic_R }
+```math
+\bar R =
+\frac{6}{a^{2\alpha}}
+\left[
+\frac{a''}{a}
++(1-\alpha)\left(\frac{a'}{a}\right)^2
+\right]\,.
+\label{eq_cosmic_R}
+```
+ -->
+
+Assuming homogeneity and isotropy on large scales, the energy-momentum tensor takes the perfect-fluid form $T^\mu{}_\nu=\operatorname{diag}\{-\bar\rho(\eta),\bar p(\eta),\bar p(\eta),\bar p(\eta)\}$. The background pressure and energy density are decomposed into contributions from the non-minimally coupled scalar and the remaining matter sectors, $\bar p=\bar p_\phi+\bar p_{\rm m}$ and $\bar\rho=\bar\rho_\phi+\bar\rho_{\rm m}$. The Einstein equations then reduce to the Friedmann equations in $\alpha$-time, 
+
+[](){ #eq_Hu }
+[](){ #eq_2FE }
+```math
+\begin{eqnarray}
+\mathcal{H}^{2}
+\equiv
+\left(\frac{a'}{a}\right)^2
+=
+\frac{a^{2\alpha}}{3m_p^2}
+\left(\bar\rho_\phi+\bar\rho_{\rm m}\right)
+\label{eq_Hu}\,~~;~~~~~~~~~~
+\frac{a''}{a}
+=
+-\frac{a^{2\alpha}}{6m_p^2}
+\left[
+(1-2\alpha)
+\left(\bar\rho_\phi+\bar\rho_{\rm m}\right)
++3\left(\bar p_\phi+\bar p_{\rm m}\right)
+\right]\,,
+\end{eqnarray}
+```
+
+where the energy density and pressure of the non-minimally coupled scalar field are [@Figueroa:2021iwm]
+
+[](){ #eq_nmcrho }
+```math
+\bar\rho_\phi(\eta)
+=
+\frac{1}{2a^{2\alpha}}\left\langle\phi'^2\right\rangle
++\frac{1}{2a^2}\left\langle(\nabla\phi)^2\right\rangle
++\left\langle V(\phi)\right\rangle
++\frac{3\xi}{a^{2\alpha}}\mathcal{H}^2
+ \left\langle\phi^2\right\rangle
++\frac{6\xi}{a^{2\alpha}}\mathcal{H}
+ \left\langle\phi\phi'\right\rangle
+-\frac{\xi}{a^2}\left\langle\nabla^2\phi^2\right\rangle\,.
+\label{eq_nmcrho}\\
+```
+[](){ #eq_nmcp }
+```math
+\begin{aligned}
+\bar p_\phi(\eta)
+={}&
+\frac{1-4\xi}{2a^{2\alpha}}\left\langle\phi'^2\right\rangle
+-\frac{1-12\xi}{6a^2}\left\langle(\nabla\phi)^2\right\rangle
+-\left\langle V(\phi)\right\rangle
++\frac{2\xi}{a^{2\alpha}}\mathcal{H}
+ \left\langle\phi\phi'\right\rangle
+-\frac{\xi}{3a^2}\left\langle\nabla^2\phi^2\right\rangle
+\\
+&+
+2\xi\left\langle\phi V_{,\phi}\right\rangle
++\frac{\xi}{a^{2\alpha}}
+\left[
+\mathcal{H}^2
++12\left(\xi-\frac{1}{6}\right)
+\left(
+\frac{a''}{a}
++(1-\alpha)\mathcal{H}^2
+\right)
+\right]
+\left\langle\phi^2\right\rangle\,,
+\end{aligned}
+\label{eq_nmcp}
+```
+with $V_{,\phi}\equiv\partial V/\partial\phi$, and $\langle \dots \rangle$ denoting volume-averaging over sufficiently large scales that encompass all relevant wavelengths of the fields. The scale factor may, in principle, be evolved using the Friedmann equations in $~$\eqref{eq_Hu}. We note, however, that contrary to canonical scenarios, the *r.h.s.* of the Friedmann equations depend on time derivatives of $a(\eta)$, given the expression of $\bar\rho_\phi(\eta), \bar p_\phi(\eta)$.
+
+As proposed in Ref. [@Figueroa_2021iwm], the scale factor evolution can be obtained alternatively from the trace of the energy-momentum tensor of the non-minimally coupled field, 
+
+[](){ #eq_4dtrT }
+```math
+T_\phi
+=
+(6\xi-1)
+\left(
+\partial^\mu\phi\,\partial_\mu\phi
++\xi R\phi^2
+\right)
++6\xi\phi\frac{\partial V}{\partial\phi}
+-4V\,.
+\label{eq_4dtrT}
+```
+
+Given the traced Einstein equations $R = -\frac{1}{m_p^2}g^{\mu\nu}\left(T^\phi_{\mu\nu}+T^{\rm m}_{\mu\nu}\right)$ = $-\frac{1}{m_p^2}\left(T_\phi+T_{\rm m}\right)$, it follows that the background curvature satisfies
+
+[](){ #eq_EFEtrBack }
+```math
+m_p^2\bar R =
+(1-6\xi)
+\left[
+\left\langle
+\partial^\mu\phi\,\partial_\mu\phi
+\right\rangle
++\xi\bar R\left\langle\phi^2\right\rangle
+\right]
+-6\xi\left\langle\phi V_{,\phi}\right\rangle
++4\left\langle V\right\rangle
+-\left\langle T_{\rm m}\right\rangle\,,
+\label{eq_EFEtrBack}
+```
+where $\langle\cdots\rangle$ denotes again volume-averaging of the corresponding local spatial inhomogeneities, over length scales much larger than the inverse gradient-scales of the problem. Solving the above expression for $\bar R$, then gives
+
+[](){ #eq_eomR }
+[](){ #eq_Fphi }
+```math
+\begin{eqnarray}
+\bar R
+=
+\frac{F(\phi)}{m_p^2}
+\left[
+(1-6\xi)
+\left\langle
+\partial^\mu\phi\,\partial_\mu\phi
+\right\rangle
++4\left\langle V\right\rangle
+-6\xi\left\langle\phi V_{,\phi}\right\rangle
+-\left\langle T_{\rm m}\right\rangle
+\right]\,.
+\label{eq_eomR}\\
+~~~~{\rm where}~~~
+F(\phi)
+\equiv
+\frac{1}{
+1+(6\xi-1)\xi\left\langle\phi^2\right\rangle/m_p^2
+}\,.~~~~~~~~~~~~~~~
+\label{eq_Fphi}
+\end{eqnarray}
+```
+
+
+Using Eq.$~$\eqref{eq_cosmic_R}, we then obtain the following differential equation for the scale factor,
+
+[](){ #eq_piadot }
+```math
+\frac{a''}{a}
++(1-\alpha)\left(\frac{a'}{a}\right)^2
+=
+\frac{a^{2\alpha}F(\phi)}{6m_p^2}
+\left[
+(1-6\xi)
+\left\langle
+\partial^\mu\phi\,\partial_\mu\phi
+\right\rangle
++4\left\langle V\right\rangle
+-6\xi\left\langle\phi V_{,\phi}\right\rangle
+-\left\langle T_{\rm m}\right\rangle
+\right]\,.
+\label{eq_piadot}
+```
+
+This equation can be evolved simultaneously with the equations of motion of the non-minimally coupled scalar and the remaining matter fields. In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ we actually follow this method.
+
+<div style="height: 20px;"></div>
+
+[](){ #NMK_th }
 **Non-Minimal Kinetic Scalar Theories**
 
+Another example of non-canonical interactions is given by models with an internal field-space metric (that may, in principle, depend on both the field amplitudes and their conjugate momenta), $\mathcal{G}_{ab}\equiv\mathcal{G}_{ab}[\{\phi_a\},\{\pi_{\phi_a}\}]$. These theories are characterized by an action of the form
+
+[](){ #eq_ScalarActionNonCanonicalCont }
+```math
+S_{\rm NMK}
+=
+-\int d^4x\,\sqrt{-g}
+\left[
+\frac{1}{2}g^{\mu\nu}\mathcal{G}_{ab}
+\partial_\mu\phi_a\partial_\nu\phi_b
++V(\{\phi\})
+\right]\,,
+\label{eq_ScalarActionNonCanonicalCont}
+```
+where the field-space metric is symmetric, $\mathcal{G}_{ab}=\mathcal{G}_{ba}$. The case of canonically normalized scalar fields is trivially recovered by $\mathcal{G}_{ab}=\delta_{ab}$. Likewise, if $\mathcal{G}_{ab}=\beta\delta_{ab}$, with $\beta>0$ constant, the kinetic term can be brought to canonical form through the field redefinition $\phi_a\rightarrow\sqrt{\beta}\phi_a$. *Non-canonically normalized* fields correspond therefore only to $\mathcal{G}_{ab}$ depending explicitly on the field amplitudes and/or their derivatives. In such a case, one further assumes $\det(\mathcal{G}_{ab})\neq 0$, so that an inverse metric $\mathcal{G}^{-1}_{ab}$ exists and satisfies $\mathcal{G}_{ac}\mathcal{G}^{-1}_{cb}=\delta_{ab}$. For simplicity, we restrict below to field-space metrics that depend only on the field amplitudes, $\mathcal{G}_{ab}=\mathcal{G}_{ab}(\{\phi_a\})$. Varying the above action and considering the metric given by the FLRW background, we obtain field equations of motion as
+<!-- 
+[](){ #eq_EOMflatScalarFlds }
+```math
+\frac{1}{\sqrt{-g}}
+\partial_\mu
+\left(
+\sqrt{-g}\,g^{\mu\nu}\mathcal{G}_{ab}\partial_\nu\phi_b
+\right)
+-\frac{1}{2}g^{\mu\nu}\mathcal{G}_{bc,a}
+\partial_\mu\phi_b\partial_\nu\phi_c
+-\frac{\partial V}{\partial\phi_a}
+=0\,,
+\label{eq_EOMflatScalarFlds}
+```
+ -->
+[](){ #eqn_FLRWeqnforNMK }
+[](){ #eq_gammaNMK }
+```math
+\begin{eqnarray}
+\mathcal{G}_{ab}\phi_b''
++
+(3-\alpha)\frac{a'}{a}\mathcal{G}_{ab}\phi_b'
+-a^{-2(1-\alpha)}
+\mathcal{G}_{ab}\nabla^2\phi_b
++ \gamma_{abc}
+\left(
+\phi_b'\phi_c'
+-a^{-2(1-\alpha)}
+\vec{\nabla}\phi_b\cdot\vec{\nabla}\phi_c
+\right)
++a^{2\alpha}\frac{\partial V}{\partial\phi_a}
+=0\,,
+\label{eqn_FLRWeqnforNMK}\\
+{\rm where}~~~~~~~~ \gamma_{abc} \equiv \mathcal{G}_{ab,c}
+-\frac{1}{2}\mathcal{G}_{bc,a}\,,~~~~{\rm and}~~~~ \mathcal{G}_{bc,a}\equiv\partial\mathcal{G}_{bc}/\partial\phi_a\,. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\label{eq_gammaNMK}
+\end{eqnarray}
+```
+
+Introducing the conjugate momenta $\pi_a\equiv\pi_{\phi_a}$, Eq.$~$\eqref{eqn_FLRWeqnforNMK} can be recast as the first-order system
+
+[](){ #eqn_NMKcontinuum }
+[](){ #eq_FaNMK }
+```math
+\begin{eqnarray}
+\left\lbrace
+\begin{array}{l}
+\phi_a'
+\equiv
+\mathcal{G}^{-1}_{ab}\pi_b\,,
+\\[3mm]
+\pi_a'
++(3-\alpha)\frac{a'}{a}\pi_a
+= (\mathcal{F}_a)_{bc}\pi_b\pi_c + 
+a^{-2(1-\alpha)}
+\left[
+\mathcal{G}_{ab}\nabla^2\phi_b
++\gamma_{abc}
+\vec{\nabla}\phi_b\cdot\vec{\nabla}\phi_c
+\right]
+-a^{2\alpha}\frac{\partial V}{\partial\phi_a}\,,
+\end{array}\right.
+\label{eqn_NMKcontinuum}\\
+{\rm where}~~~~~~~~ (\mathcal{F}_a)_{bc} \equiv \mathcal{G}_{ae}\mathcal{G}^{-1}_{ec,d}\mathcal{G}^{-1}_{db} + \left(\mathcal{G}_{ae,d}-\frac{1}{2}\mathcal{G}_{ed,a}\right)\mathcal{G}^{-1}_{ec}\mathcal{G}^{-1}_{db}\,.~~~~~~~~~~~~
+\label{eq_FaNMK}
+\end{eqnarray}
+```
+
+To solve these equations, one must also specify the equation of motion for the scale factor, whose evolution is governed by Eq.$~$\eqref{eq_FriedmannD2a}. For scalar fields with non-canonical kinetic terms, the kinetic and gradient energy-density contributions, compared with Eq.$~$\eqref{eq_energy-contributions}, become
+
+[](){ #eq_energy-contrib-NMK }
+```math
+K_{\rm NMK}
+=
+\frac{1}{2a^{2\alpha}}
+\mathcal{G}_{ab}\phi_a'\phi_b'\,,
+\qquad
+G_{\rm NMK}
+=
+\frac{1}{2a^2}
+\mathcal{G}_{ab}
+\vec{\nabla}\phi_a\cdot\vec{\nabla}\phi_b\,.
+\label{eq_energy-contrib-NMK}
+```
+
+The corresponding Friedmann equations are
+
+[](){ #eq_FriedmannHubble-NMK }
+[](){ #eq_FriedmannDDa-NMK }
+```math
+\begin{eqnarray}
+\left(\frac{a'}{a}\right)^2
+&=&
+\frac{a^{2\alpha}}{3m_p^2}
+\left\langle
+K_{\rm NMK}+G_{\rm NMK}+V
+\right\rangle\,,
+\label{eq_FriedmannHubble-NMK}\\
+{\rm and} ~~~~~~~~~~~~~~~~~~~~~~~~~~~ && \nonumber \\
+\frac{a''}{a}
+&=&
+\frac{a^{2\alpha}}{3m_p^2}
+\left\langle
+(\alpha-2)K_{\rm NMK}
++\alpha G_{\rm NMK}
++(\alpha+1)V
+\right\rangle\,.
+\label{eq_FriedmannDDa-NMK}
+\end{eqnarray}
+```
+where, as usual, $\langle\cdots\rangle$ denotes volume averaging over regions sufficiently large to encompass all relevant field wavelengths.
+
+<div style="height: 20px;"></div>
+
+[](){ #ALP_th }
 **Axion-Gauge interactions**
 
-Axion-like particles (ALPs) with shift-symmetry $\phi=\phi+C$ feature prominently in early-Universe cosmology, where their characteristic Chern–Simons coupling to gauge fields ($\phi F\tilde{F}$ or $\phi G\tilde{G}$ ) can trigger non-linear phenomena such as strong particle production or tachyonic instabilities. 
+Axion-like particles (ALPs) enjoy a shift-symmetry $\phi=\phi+C$ that allows them to couple derivatively to gauge fields through Chern–Simons terms, as $\phi F\tilde{F}$ (Abelian) or $\phi G\tilde{G}$ (non-Abelian). Here we consider an axion–$U(1)$ sector described by the action
 
-We consider an axion–$U(1)$ sector described by the action
+[](){ #eq_AxionAction }
 
-\begin{equation}
-S = \int d^4x \sqrt{-g} \left[ \frac{1}{2}m_p^2 R - \frac{1}{2}\partial_\mu \phi \partial^\mu \phi - V(\phi) - \frac{1}{4}F_{\mu\nu}F^{\mu\nu} + \frac{\alpha_\Lambda}{4}\frac{\phi}{m_p} F_{\mu\nu}\tilde{F}^{\mu\nu} \right] ,
+```math
+S =
+\int d^4x\,\sqrt{-g}
+\left[
+\frac{1}{2}m_p^2R
+-\frac{1}{2}\partial_\mu\phi\,\partial^\mu\phi
+-V(\phi)
+-\frac{1}{4}F_{\mu\nu}F^{\mu\nu}
++\frac{1}{4}\frac{\phi}{\Lamda}
+F_{\mu\nu}\tilde F^{\mu\nu}
+\right]\,.
 \label{eq_AxionAction}
-\end{equation}
+```
+where $\phi$ is a real pseudo-scalar field, the axion-like particle (ALP), and $V(\phi)$ its potential (which might break the shift symmetry explicitly in some scenarios). The field-strength tensor of the $U(1)$ gauge field $A_\mu$ is defined as in standard canonical theories, $F_{\mu\nu}\equiv\partial_\mu A_\nu-\partial_\nu A_\mu$. The parameter $\alpha_\Lambda\equiv m_p/\Lambda$ characterizes the dimensionless ALP-gauge coupling strength associated with the scale $\Lambda$. The dual field-strength tensor is defined as $\tilde F_{\mu\nu}\equiv\frac{1}{2}\epsilon_{\mu\nu\rho\sigma}F^{\rho\sigma}$, where $\epsilon_{\mu\nu\rho\sigma}$ is the four-dimensional Levi-Civita pseudotensor in curved spacetime, normalized as $\epsilon_{0123}=1/\sqrt{-g}$. Varying the action with respect to $\phi$ and $A_i$ in an FLRW background, and considering the temporal gauge, $A_0=0$, yields the equations of motion in $\alpha$-time as
 
-where $\phi$ is a real scalar field (the ALP), $V(\phi)$ its interaction potential, and $F_{\mu\nu} \equiv \partial_\mu A_\nu - \partial_\nu A_\mu$ the field strength tensor of the $U(1)$ gauge field $A_\mu$. The parameter $\alpha_\Lambda \equiv m_p / \Lambda$ parameterizes the dimensionless coupling strength associated with the scale $\Lambda$. The dual field strength tensor is defined as $\tilde{F}_{\mu\nu} \equiv \frac{1}{2}\epsilon_{\mu\nu\rho\sigma}F^{\rho\sigma}$, with $\epsilon_{\mu\nu\rho\sigma}$ the 4D Levi-Civita pseudo-tensor in curved spacetime, normalized as $\epsilon_{0123} = 1/\sqrt{-g}$.
+[](){ #eq_axion_eom }
 
-Varying the action with respect to $\phi$ and $A_i$ in an FLRW background in temporal gauge ($A_0 = 0$) yields the equations of motion in $\alpha$-time:
+[](){ #eq_axion_gauge_eom }
 
+```math
 \begin{eqnarray}
-\phi'' + (3 - \alpha)\mathcal{H} \phi' - a^{2(\alpha-1)} \vec{\nabla}^2 \phi + a^{2\alpha} V_{,\phi} &=& \frac{\alpha_\Lambda}{m_p}a^{\alpha-3} \vec{E}\cdot\vec{B} \ , \label{eq_axion_eom} \\
- E'_i + (1 - \alpha)\mathcal{H} E_i -a^{2(\alpha-1)}\epsilon_{ijk}\partial_jB_k &=& \frac{\alpha_\Lambda}{m_p}  a^{\alpha-1}\left(\phi'B_i+\epsilon_{ijk}\partial_j\phi E_k\right) \ , \label{eq_axion_gauge_eom}
+\phi''
++(3-\alpha)\mathcal{H}\phi'
+-a^{2(\alpha-1)}\vec{\nabla}^{\,2}\phi
++a^{2\alpha}V_{,\phi}
+&=&
+\frac{\alpha_\Lambda}{m_p}
+a^{\alpha-3}\vec E\cdot\vec B\,,
+\label{eq_axion_eom}
+\\
+E_i'
++(1-\alpha)\mathcal{H}E_i
+-a^{2(\alpha-1)}\epsilon_{ijk}\partial_jB_k
+&=&
+\frac{\alpha_\Lambda}{m_p}a^{\alpha-1}
+\left(
+\phi'B_i+\epsilon_{ijk}\partial_j\phi\,E_k
+\right)\,.
+\label{eq_axion_gauge_eom}
 \end{eqnarray}
+```
+where primes denote derivatives with respect to $\alpha$-time, $\eta$, and $E_i \equiv F_{0i} = A_i'$. The system is subject to the Gauss constraint, which, in the absence of external charged currents, reduces to
 
-where primes denote derivatives with respect to $\alpha$-time ($\eta$). The system is subject to the Gauss constraint, which in the absence of external charged currents reduces to
+[](){ #eq_axion_gauss }
 
-\begin{equation}
-\partial_i E_i = -\frac{\alpha_\Lambda}{m_p} a^{\alpha-1}\partial_i\phi B_i \ . \label{eq_axion_gauss}
-\end{equation}
+```math
+\partial_iE_i
+=
+-\frac{\alpha_\Lambda}{m_p}
+a^{\alpha-1}\partial_i\phi\,B_i\,.
+\label{eq_axion_gauss}
+```
 
-The energy density and pressure contributions of the combined axion–gauge sector take the local forms
+The local energy density and pressure of the combined axion–gauge sector are
 
+[](){ #eq_axion_rho }
+
+[](){ #eq_axion_p }
+
+```math
 \begin{eqnarray}
-\rho &=& K_\phi + G_\phi + V(\phi) + K_{U(1)} + G_{U(1)} \ , \label{eq_axion_rho} \\
-p &=& K_\phi - \frac{1}{3} G_\phi - V(\phi) + \frac{1}{3} \left( K_{U(1)} + G_{U(1)} \right) \ , \label{eq_axion_p}
+\rho
+&=&
+K_\phi+G_\phi+V(\phi)+K_{U(1)}+G_{U(1)}\,,
+\label{eq_axion_rho}
+\\
+p
+&=&
+K_\phi-\frac{1}{3}G_\phi-V(\phi)
++\frac{1}{3}
+\left[
+K_{U(1)}+G_{U(1)}
+\right]\,.
+\label{eq_axion_p}
 \end{eqnarray}
+```
 
-where the individual kinetic and gradient terms for the scalar and vector fields coincide with the definitions in Eq. \eqref{eq_energy-contributions}. If the fields of this axion-U(1) gauge sector dominate the energy budget of the Universe, the expansion is given by Friedmann Eqs. \eqref{eq_FriedmannHub} and \eqref{eq_FriedmannD2a}, but of course considering only the contributions of this sector. 
+The individual kinetic and gradient contributions of the scalar and vector fields coincide with those defined in Eq.$~$\eqref{eq_energy-contributions}. If the axion–$U(1)$ gauge sector dominates the energy budget of the Universe, the expansion is governed by the Friedmann equations, Eqs.$~$\eqref{eq_FriedmannHub} and $\eqref{eq_FriedmannD2a}, retaining only the contributions from this sector.
 
 ## Scalar-Gauge-Fluid Dynamics { #subsec_eomFluids }
 
-To be added soon ...
+Coming soon ...
 
+<!-- 
 **Fluid Dynamics**
 
 **Scalar-Fluid Dynamics**
 
 **Gauge-Fluid Dynamics**
+ -->
 
 <!-- **Scalar-Gauge-Fluid Dynamics** -->
 

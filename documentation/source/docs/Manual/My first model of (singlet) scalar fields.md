@@ -90,49 +90,45 @@ The field equations of motion in $\alpha$-time read <!-- [@Figueroa_2020rrl] -->
 [](){ #eq_scEOM_II }
 ```math
 \begin{align}\label{eq_scEOM}
-\phi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{ 2} \hspace{-1mm}\phi + (3 - \alpha)\frac{{a'}}{a} {\phi'} &= - a^{2 \alpha} V_{,\phi} \equiv - a^{2 \alpha} (\lambda \phi^3 +g^2\phi\chi^2) %\tag{34}\\
+\phi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{ 2} \hspace{-1mm}\phi + (3 - \alpha)\frac{{a'}}{a} {\phi'} + a^{2 \alpha} V_{,\phi} &= 0
+%\equiv - a^{2 \alpha} (\lambda \phi^3 +g^2\phi\chi^2) %\tag{34}\\
 , \\
 \label{eq_scEOM_II}
-\chi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{ 2} \hspace{-1mm}\chi + (3 - \alpha)\frac{{a'}}{a} {\chi'} &= - a^{2 \alpha} V_{,\chi} \equiv - a^{2 \alpha} g^2\phi^2\chi  ,
+\chi'' - a^{-2(1 - \alpha)} {\vec\nabla}^{ 2} \hspace{-1mm}\chi + (3 - \alpha)\frac{{a'}}{a} {\chi'} + a^{2 \alpha} V_{,\chi} &= 0 
+%\equiv - a^{2 \alpha} g^2\phi^2\chi  ,
 \end{align}
 ```
+where $V_{,\phi} \equiv (\lambda \phi^3 +g^2\phi\chi^2)$ and $V_{,\chi} \equiv g^2\phi^2\chi$. The evolution of the scale factor $a(\eta)$ given by the Friedmann equations, which take one of two forms depending on the scenario:
 
-with the evolution of the scale factor $a(\eta)$ given by the Friedmann equations, which take one of two forms depending on the scenario:
+**Self-consistent expansion**. If these two fields constitute the only energy sources in the Universe (or at least the dominant ones), either of the Friedmann equations
+[](){ #eq_sfEOM }
+[](){ #eq_sfEOM_II }
+```math
+\begin{align}\label{eq_sfEOM}
+\mathcal{H}^2 \equiv  \left({a'\over a}\right)^2 &=  \frac{a^{2 \alpha}}{3 m_p^2}\left\langle  {K}  + {G} +  {V} \right\rangle,\\
+\label{eq_sfEOM_II}
+{a''\over a} &= \frac{a^{2 \alpha}}{3 m_p^2}\left\langle (\alpha-2)  {K} + \alpha  {G} + (\alpha + 1)  {V}  \right\rangle  ,  %\tag{35}
+\end{align}
+```
+can be solved self-consistently, together with the fields' equations of motion. Here $\langle \dots \rangle$ indicates a volume average, and $K$ and $G$ are the total kinetic and gradient energies. All scalar fields contribute to these quantities as $K \equiv \sum_{n=0}^{N_s-1} {K}^{(n)}$ and $G \equiv \sum_{n=0}^{N_s-1} {G}^{(n)}$, with
+[](){ #eq_KG }
+```math
+\begin{equation}
+{K}^{(n)} = \frac{1}{2 a^{2\alpha} } \phi_n^{'2}  ~, \hspace{0.4cm} {G}^{(n)} = \frac{1}{2 a^2} \sum_i (\nabla_i \phi_n)^2  ~, %\tag{36}
+\label{eq_KG}
+\end{equation}
+```
+where $\phi_0 \equiv \phi$ and $\phi_1 \equiv \chi$.
 
-=== "Self-consistent expansion"
-
-    If these two fields constitute the only energy sources in the Universe (or at least the dominant ones), either of the Friedmann equations
-    [](){ #eq_sfEOM }
-    [](){ #eq_sfEOM_II }
-    ```math
-    \begin{align}\label{eq_sfEOM}
-    \mathcal{H}^2 \equiv  \left({a'\over a}\right)^2 &=  \frac{a^{2 \alpha}}{3 m_p^2}\left\langle  {K}  + {G} +  {V} \right\rangle,\\
-    \label{eq_sfEOM_II}
-    {a''\over a} &= \frac{a^{2 \alpha}}{3 m_p^2}\left\langle (\alpha-2)  {K} + \alpha  {G} + (\alpha + 1)  {V}  \right\rangle  ,  %\tag{35}
-    \end{align}
-    ```
-
-    can be solved self-consistently, together with the fields' equations of motion. Here $\langle \dots \rangle$ indicates a volume average, and $K$ and $G$ are the total kinetic and gradient energies. All scalar fields contribute to these quantities as $K \equiv \sum_{n=0}^{N_s-1} {K}^{(n)}$ and $G \equiv \sum_{n=0}^{N_s-1} {G}^{(n)}$, with
-    [](){ #eq_KG }
-    ```math
-    \begin{equation}
-    {K}^{(n)} = \frac{1}{2 a^{2\alpha} } \phi_n^{'2}  ~, \hspace{0.4cm} {G}^{(n)} = \frac{1}{2 a^2} \sum_i (\nabla_i \phi_n)^2  ~, %\tag{36}
-    \label{eq_KG}
-    \end{equation}
-    ```
-    where $\phi_0 \equiv \phi$ and $\phi_1 \equiv \chi$.
-
-=== "Fixed-background expansion"
-
-    In other scenarios, one could have the expansion of the Universe to be fixed by an external, energetically-dominant fluid with (constant) equation of state $w$. In this case, the evolution of the scale factor and the Hubble parameter in program variables is given by the following functions,
-    [](){ #eq_ScaleFactorPowerLaw }
-    ```math
-    \begin{equation}
-    %\tag{37}
-    a(\tilde \eta) = a (\tilde \eta_* ) \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde\eta_*) \right)^p  ,\hspace{0.3cm} \mathcal{H}(\eta) = {\mathcal{H}_*\over \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde \eta_*) \right)}   ,\hspace{0.5cm} p \equiv \frac{2}{3(1 + \omega) - 2 \alpha }  .
-    \label{eq_ScaleFactorPowerLaw}
-    \end{equation}
-    ```
+**Fixed-background expansion**. In other scenarios, one could have the expansion of the Universe to be fixed by an external, energetically-dominant fluid with (constant) equation of state $w$. In this case, the evolution of the scale factor and the Hubble parameter in program variables is given by the following functions,
+[](){ #eq_ScaleFactorPowerLaw }
+```math
+\begin{equation}
+%\tag{37}
+a(\tilde \eta) = a (\tilde \eta_* ) \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde\eta_*) \right)^p  ,\hspace{0.3cm} \mathcal{H}(\eta) = {\mathcal{H}_*\over \left(1 + \frac{1}{p}\mathcal{H}_* (\tilde \eta- \tilde \eta_*) \right)}   ,\hspace{0.5cm} p \equiv \frac{2}{3(1 + \omega) - 2 \alpha }  .
+\label{eq_ScaleFactorPowerLaw}
+\end{equation}
+```
 
 !!! note
     The volume average in Eqs. \eqref{eq_sfEOM}, \eqref{eq_sfEOM_II} must be considered over length scales sufficiently large compared to the excited wavelengths in the matter fields. Only then we obtain a well-defined notion of a ’homogeneous and isotropic’ expanding background, within the given volume.
@@ -465,7 +461,7 @@ We now need to assign values to these parameters. We will do it inside the const
 
 The two lines starting by `MODELNAME(ParameterParser &parser, ...` and `Model<MODELNAME>(parser, ...`, respectively, are simply the declaration of our constructor. The argument `parser` is the *parameter parser* which we will use to add and get model specific arguments. The argument  `runPar` contains generic parameters such as the lattice spacing and the box size, see [Appendix: Parameters](Appendix_Parameters.md) for more information. The `toolBox` is an object that contains information about the internal mechanics of the library, and of which any model needs to be aware. For example, it is used to instantiate the field variables and perform iterations over the lattice, see Section [**Inside Cosmolattice**](What CosmoLattice does in detail.md) for more information. Anyhow, **these two lines should not be modified, as they are only there to declare the constructor**.
 
-Customization starts on line `lambda = parser.get< ...`, where we declare a new parameter to be read either from the input file or the command line. To do so, we use the `parser` object and its `get<double>` function. The specification of `double` means that we are expecting a number with double precision (recall that we fixed `FloatType = double` above, when setting the [*ModelPars structure*][code_param]). The argument '`lambda`' is the name of the parameter, which is specified as `lambda=...` in the input. The parameter `"q"` on line `q = parser.get< ...` is defined in the same way. On line `g = sqrt(...` we  compute $g$ as a function of $\lambda$ and $q$.
+Customization starts on line `lambda = parser.get< ...`, where we declare a new parameter to be read either from the input file or the command line. To do so, we use the `parser` object and its `get<double>` function. The specification of `double` means that we are expecting a number with double precision (recall that we fixed `FloatType = double` above in the [*ModelPars structure*][code_param]). The argument '`lambda`' is the name of the parameter, which is specified as `lambda=...` in the input. The parameter `"q"` on line `q = parser.get< ...` is defined in the same way. On line `g = sqrt(...` we  compute $g$ as a function of $\lambda$ and $q$.
 
 We now need to initialize some generic variables of the skeleton model `Model`. In particular, we need to specify the non-vanishing *initial homogeneous components* of the different scalar fields, the variables \{$\alpha$, $f_*$, $\omega_*$\} that will define our program variables, as well as the initial effective masses of the fields ($i.e.$ second derivatives of the potential).
 
@@ -539,7 +535,7 @@ In this expression, $\omega_{k,\phi}$ is the comoving frequency of the mode, and
 **Realization on the lattice**
 {: .cl-minihead }
 
-In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, this is represented by imposing a sum of left- ($\delta \tilde \phi_1$) and right-moving ($\delta \tilde \phi_2$) waves of the field amplitude at each Fourier site ${\bf \tilde n}$,
+In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, this is represented by imposing a sum of left- ($\delta \phi_1$) and right-moving ($\delta \phi_2$) waves of the field amplitude at each Fourier site ${\bf \tilde n}$. In program units, 
 [](){ #eq_fpr_influct }
 [](){ #eq_fpr_influct2 }
 ```math
@@ -551,7 +547,7 @@ In $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, this is represented by 
 \delta \tilde {\phi}' ({   \bf \tilde{n}}) &= {1\over a^{1-\alpha}}\left[\frac{i \tilde{\omega}_k}{\sqrt{2}}  \left(\delta \tilde \phi_1 ({   \bf \tilde{n}}) - \delta \tilde \phi_2  ({   \bf \tilde{n}})   \right)\right]  - \tilde{\mathcal{H}}  \delta \tilde \phi ({   \bf \tilde{n}}) , %\tag{48}
 \end{align}
 ```
-where $\tilde{\omega}_k(\tilde{\bf n}) \equiv \sqrt{\tilde{k}^2(\tilde{\bf n}) + a^2\tilde{m}_{\phi}^2}$, $\tilde{m}_{\phi}^2 \equiv \frac{\partial^2 \tilde{V}}{\partial \tilde{\phi}^2 }\Big|_{\tilde{\phi} = \tilde{\bar{\phi}}_*}$, and $\tilde{\mathcal{H}} \equiv a^\alpha H / \omega_*$. In these expressions, $\delta \phi_{1,2}$ are both complex fields, each with their real and imaginary parts $f_{\rm R} + if_{\rm I}$. At each point $\tilde{\bf n}$ of the Fourier lattice, the code then draws independent random realizations of the real ($f_{\rm R}$) and imaginary ($f_{\rm I}$) parts from a Gaussian distribution with zero mean and variance 
+where $\tilde{\omega}_k(\tilde{\bf n}) \equiv \sqrt{\tilde{k}^2(\tilde{\bf n}) + a^2\tilde{m}_{\phi}^2}$, $\tilde{m}_{\phi}^2 \equiv \frac{\partial^2 \tilde{V}}{\partial \tilde{\phi}^2 }\Big|_{\tilde{\phi} = \tilde{\bar{\phi}}_*}$, and $\tilde{\mathcal{H}} \equiv a^\alpha H / \omega_*$. In these expressions, $\delta \phi_{1,2}$ are both complex fields, each with their real and imaginary parts, say $f_{\rm R} + if_{\rm I}$. At each point $\tilde{\bf n}$ of the Fourier lattice, the code then draws independent random realizations of the real ($f_{\rm R}$) and imaginary ($f_{\rm I}$) parts from a Gaussian distribution with zero mean and variance 
 <!-- $\sigma^2 \equiv {1\over2} \times \mathcal{P}_\phi(k)$, with $\mathcal{P}_\phi(k)= $ -->
 
 
@@ -562,11 +558,13 @@ where $\tilde{\omega}_k(\tilde{\bf n}) \equiv \sqrt{\tilde{k}^2(\tilde{\bf n}) +
 \label{eq_QuantumFlucts2}
 \sigma^2_\tilde{\bf n}  %\left\langle | \delta \tilde \phi (\tilde{\bf n})|^2\right\rangle 
 %\equiv {1\over 2}\times \left({\omega_*\over f_*}\right)^2\left({N\over \delta \tilde{x}}\right)^3{1\over 2a^2\sqrt{\tilde{k}^2(\tilde{\bf n}) + a^2\tilde{m}_{\phi}^2}}  , \hspace{0.6cm} \tilde{m}_{\phi}^2 \equiv \frac{\partial^2 \tilde{V}}{\partial \tilde{\phi}^2 }\Big|_{\tilde{\phi} = \tilde{\bar{\phi}}_*}\,.
-\equiv {1\over 2}\times \left({\omega_*\over f_*}\right)^2\left({N\over \delta \tilde{x}}\right)^3{1\over 2a^2\tilde{\omega}_k(\tilde{\bf n})}
+\equiv \left({\omega_*\over f_*}\right)^2\left({N\over \delta \tilde{x}}\right)^3\times{1\over 2}\times\widetilde{\mathcal{P}}_{\delta \phi} (\tilde{\bf n})\,,~~~~~~~
+
+{\rm with}~~~~\widetilde{\mathcal{P}}_{\delta \phi} (\tilde{\bf n}) \equiv {1\over a^2 2\tilde{\omega}_k(\tilde{\bf n})}\,,
 \end{align}
 ```
 <!-- Drawing both phases and modulus amplitudes as above is mathematically equivalent to drawing $\delta \tilde \phi ({  \bf \tilde{n}})$ and $\delta \tilde \phi'({  \bf \tilde{n}})$ as Gaussian random fields.  -->
-The way in which this initialization is implemented in the code is discussed in more detail in Section [**Initializers**][subsec_Initializers].
+where $\left({\omega_*\over f_*}\right)^2$ is due to the use of program variables, $\left({N\over \delta \tilde{x}}\right)^3$ due to lattice discreteziation effects, and the extra factor ${1\over2}$ multiplying $\mathcal{P}_{\delta \phi} (\tilde{\bf n})$ is choosen to guarantee that $\langle \delta \tilde\phi_1^2 \rangle = \langle \delta \tilde\phi_1^2 \rangle \equiv \left({\omega_*/f_*}\right)^2\left({N/\delta \tilde{x}}\right)^3\times{1\over2}\mathcal{P}_{\delta \phi} (\tilde{\bf n})$, and hence $\langle |\delta \tilde \phi ({\bf\tilde{n}})|^2 \rangle = \left({\omega_*/ f_*}\right)^2\left({N/\delta \tilde{x}}\right)^3\times\widetilde{\mathcal{P}}_{\delta \phi} (\tilde{\bf n})$ in program units, or equivalently $\langle |\delta\phi ({  \bf \tilde{n}})|^2 \rangle = \mathcal{P}_{\delta \phi} (k(\tilde{\bf n}))$ in physical units, as desired. More details on the initialization procedure(s) can be found in Section [**Initializers**][subsec_Initializers].
 
 <!-- #### Evolution of the system { #eq_evolution-sc } -->
 [](){ #eq_evolution-sc }
@@ -596,9 +594,9 @@ where the kinetic, gradient, and potential energies of the field in program vari
 \end{equation}
 ```
 
-Above $\mathcal{K}_{\phi}$ and $\mathcal{K}_a$ are the **kernels** of $\phi$ and $a$ respectively. Note that the definition of $\tilde\pi_\phi$ has been chosen so that the kernels are not functions on the time-derivatives of their respective variables.
+Above $\mathcal{K}_{\phi}$ and $\mathcal{K}_a$ are the **kernels** of $\phi$ and $a$ respectively. Note that the definition of $\tilde\pi_\phi$ has been chosen so that the kernels are not functions on the time-derivatives of their respective variables, see Section 4 of $\mathtt{The~Art{\text -}I}$[@Figueroa_2020rrl] for details. 
 
-The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\texttt{v2.0}$) has implemented  different numerical schemes to solve these equations: *staggered leapfrog* (LF), *velocity verlet* (VV), *position verlet* (PV) and *Runge-Kutta* (RK). One difference between these schemes is the moments at which the fields and momenta are defined during the evolution of the system. In LF, fields and momenta are specified at different times, so they must be synchronized each time an output is printed. On the contrary, in VV, PV and RK, fields and momenta are obtained at the same time, so no such synchronization is needed. A detailed account on the properties and ins and outs of how these algorithms work, can be found in Section 3 of The-Art-I [@Figueroa_2020rrl]. A derivation of the adaptation of these algorithms to the particular problem of the dynamics of (canonically normalized) interacting (singlet) scalar fields, can be found in Section 4 of of The-Art-I [@Figueroa_2020rrl]. The reader can also check the details of our evolution algorithms in [**Evolvers**][subsec_Evolvers].
+The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\texttt{v2.0}$) has implemented  different numerical schemes to solve these equations: *staggered leapfrog* (LF), *velocity verlet* (VV), *position verlet* (PV) and *Runge-Kutta* (RK). One difference between these schemes is the moments at which the fields and momenta are defined during the evolution of the system. In LF, fields and momenta are specified at different times, so they must be synchronized each time an output is printed. On the contrary, in VV, PV and RK, fields and momenta are obtained at the same time, so no such synchronization is needed. A detailed account on the properties and ins and outs of how these algorithms work, can be found in Section 3 of $\mathtt{The~Art{\text -}I}$[@Figueroa_2020rrl]. A derivation of the adaptation of these algorithms to the particular problem of the dynamics of (canonically normalized) interacting (singlet) scalar fields, can be found in Section 4 of $\mathtt{The~Art{\text -}I}$[@Figueroa_2020rrl]. The reader can also check the details of our evolution algorithms in [**Evolvers**][subsec_Evolvers].
 
-The use of standard $\mathcal{O}(\delta \tilde{\eta}^2)$ accuracy algorithms, you need to choose in the input file `evolver=LF`, `evolver=VV2`, or `evolver=PV2`, respectively. Although both have an accuracy of order $\mathcal{O}(\delta \tilde{\eta}^2)$, `LF` only needs two steps by iteration, while `VV2` and `PV2` need three. Therefore, *verlet* algorithms are slower than *leapfrog*, typically by a factor $\sim$ 30$\%$-50$\%$ for `VV2` and $\sim$ 20$\%$-40$\%$  for `PV2`, in our test runs considering self-consistent expansion of the Unvierse. The VV and PV algorithms have the advantage, however, that they can be promoted recursively into higher order integrators with accuracies $\mathcal{O}(\delta \tilde{\eta}^4)$, $\mathcal{O}(\delta \tilde{\eta}^6)$, $\mathcal{O}(\delta \tilde{\eta}^8)$, and $\mathcal{O}(\delta \tilde{\eta}^{10})$. These improved algorithms, known as *Yoshida* integrators, are also implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and to use them you simply need to specify in the parameter file, `evolver=VV4`, `VV6`, `VV8`, `VV10`, or `evolver=PV4`, `PV6`, `PV8`, `PV10`, respectively. Such improved algorithms conserve energy much better than `LP`, `VV2` or `PV2`, but they are naturally slower, as they require more steps per iteration (the more the higher the accuracy of the integrator). For a discussion on the construction of all these integrators and dedicated versions of them to the dynamics of (canonically normalized) interacting (singlet) scalar field dynamics, we refer again the reader to Sections 3 and 4 of The-Art-I [@Figueroa_2020rrl], and to [**Evolvers**][subsec_Evolvers] in this manual.
+The use of standard $\mathcal{O}(\delta \tilde{\eta}^2)$ accuracy algorithms, you need to choose in the input file `evolver=LF`, `evolver=VV2`, or `evolver=PV2`, respectively. Although both have an accuracy of order $\mathcal{O}(\delta \tilde{\eta}^2)$, `LF` only needs two steps by iteration, while `VV2` and `PV2` need three. When considering self-consistent expansion of the Unvierse, *verlet* algorithms are slower than *leapfrog*, typically by a factor $\sim$ 30$\%$-50$\%$ for `VV2` and $\sim$ 20$\%$-40$\%$  for `PV2`, in our test runs. The VV and PV algorithms have the advantage, however, that they can be promoted recursively into higher order integrators with accuracies $\mathcal{O}(\delta \tilde{\eta}^4)$, $\mathcal{O}(\delta \tilde{\eta}^6)$, $\mathcal{O}(\delta \tilde{\eta}^8)$, and $\mathcal{O}(\delta \tilde{\eta}^{10})$. These improved algorithms, known as *Yoshida* integrators, are also implemented in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$, and to use them you simply need to specify in the parameter file, `evolver=VV4`, `VV6`, `VV8`, `VV10`, or `evolver=PV4`, `PV6`, `PV8`, `PV10`, respectively. Such improved algorithms conserve energy much better than `LP`, `VV2` or `PV2`, but they are naturally slower, as they require more steps per iteration (the more the higher the accuracy of the integrator). For a discussion on the construction of all these integrators and dedicated versions of them to the dynamics of (canonically normalized) interacting (singlet) scalar field dynamics, we refer again the reader to Sections 3 and 4 of $\mathtt{The~Art{\text -}I}$[@Figueroa_2020rrl], and to [**Evolvers**][subsec_Evolvers] in this manual.
 

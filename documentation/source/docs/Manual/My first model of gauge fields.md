@@ -106,7 +106,7 @@ with $\epsilon_{ijk}$ the Levi-Civita symbol. **These expressions represent gaug
 
     @emgithub(include/CosmoInterface/abstractmodel.h:numb_U1_gauge_flds)
 
-    **In the case of SU(2) gauge fields, however, only one of such fields can be considered at once in the code**. (<span style="color:red;">**Should we eliminate therefore the line "if constexpr (NSU2FLDS > 1)" in abstractmodel.h ?**</span>)
+    **In the case of SU(2) gauge fields, however, only one of such fields can be considered at once in the code**.
     
 
 We can see that the U(1)- and SU(2)-charged scalars are re-scaled in the same way as singlet scalar fields. **The gauge fields, however, are instead re-scaled by the parameter $\omega_*$**. Correspondingly, we define program variables for the field strengths and covariant derivatives as follows:
