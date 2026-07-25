@@ -83,42 +83,15 @@ body.nav-collapsed .md-sidebar--primary {
     text-align: justify;
 }
 
-/* === emgithub CSS isolation === */
-
-/* Reset Material theme's pre>code styles inside emgithub containers */
-.emgithub pre > code {
-    background: none;
-    padding: 0;
-    font-size: inherit;
-    border-radius: 0;
-}
-
-.emgithub pre {
-    background: none;
-    margin: 0;
-    padding: 0;
-}
-
-/* Ensure emgithub containers size correctly within Material's content area */
-.emgithub {
-    width: 100%;
-    margin: 1em 0;
-    overflow-x: auto;
-}
-
-/* Prevent hljs github theme from affecting Pygments-rendered blocks */
+/* === Native (Pygments) code blocks ===
+   Material fills the background of every <code>; inside a <pre> that turns a
+   fenced block into a grey slab. Revert it so blocks sit flat on the page
+   background. (This started life as part of an "emgithub isolation" block that
+   fought the unscoped hljs github.min.css; that stylesheet is gone from
+   mkdocs.yml now, so what remains here is purely the flat-block look.) */
 .highlight pre > code,
 .md-typeset pre > code {
     background: revert;
-}
-
-/* Ensure Pygments blocks are not re-highlighted by hljs */
-.highlight pre > code.hljs {
-    display: none;
-}
-
-.highlight pre > code[class*="language-"] {
-    all: revert;
 }
 
 /* Hide emgithub's "view raw" link (points to jsDelivr) — we inject our own via JS */
