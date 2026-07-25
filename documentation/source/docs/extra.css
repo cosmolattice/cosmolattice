@@ -2643,3 +2643,79 @@ body.nav-collapsed .md-sidebar--primary {
         font-size: 0.95em;
     }
 }
+
+/* === Variable-name reference (Appendix: Variable Names) ===
+   Modifier on the .cl-defs group skeleton above: entries are name/symbol pairs
+   rather than name + prose, so the rows form two real columns — monospace name
+   | MathJax symbol — split by a hairline rule.
+
+   The rule is painted as a 1px background bar on the <ul>, not as a border on
+   the rows: a per-row border would be chopped up by the row spacing, and it
+   would also have to sit on the symbol cell, which MathJax swaps out for an
+   <mjx-container> once it typesets. Rows therefore carry their spacing as
+   padding (not margin), so the bar spans the group with no gaps at either end.
+   Column width and gutter live in variables because the bar has to land in the
+   middle of the same gutter the grid uses. */
+.md-typeset .cl-vars {
+    --cl-var-col: 8.5rem;
+    --cl-var-gap: 1.6rem;
+}
+
+.md-typeset .cl-vars .cl-defs-group > ul {
+    padding: 0.15em 0 0.4em;
+    background-image: linear-gradient(var(--md-default-fg-color--lightest),
+                                      var(--md-default-fg-color--lightest));
+    background-repeat: no-repeat;
+    background-size: 1px 100%;
+    background-position: calc(var(--cl-var-col) + var(--cl-var-gap) / 2) 0;
+}
+
+.md-typeset .cl-vars .cl-defs-group > ul > li {
+    display: grid;
+    grid-template-columns: var(--cl-var-col) 1fr;
+    align-items: baseline;
+    column-gap: var(--cl-var-gap);
+    margin: 0;
+    padding: 0.28em 0;
+}
+
+/* Variable name: deliberately left with Material's ordinary inline-code look,
+   so a name reads the same here as it does in the prose above and in the rest
+   of the manual. justify-self keeps the code background hugging the name — as
+   a grid item it would otherwise stretch to the full column width and read as
+   a filled cell rather than inline code. */
+.md-typeset code.cl-vname {
+    justify-self: start;
+    overflow-wrap: anywhere;
+}
+
+/* Long averages (covariant gradients, sums over i and a) must not push the
+   grid wider than the content column. */
+.md-typeset .cl-vars .cl-defs-group > ul > li > .arithmatex,
+.md-typeset .cl-vars .cl-defs-group > ul > li > mjx-container {
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* The GW group's gutter note carries inline code; keep Material's own code
+   background here too, just scaled down to the note's size. */
+.md-typeset .cl-defs-note code {
+    padding: 0 0.3em;
+    font-size: 0.9em;
+    background: var(--md-code-bg-color);
+}
+
+/* Narrow screens: no room for two columns, so the pair stacks and the rule
+   that would separate them is dropped. */
+@media screen and (max-width: 44em) {
+    .md-typeset .cl-vars .cl-defs-group > ul {
+        background-image: none;
+    }
+
+    .md-typeset .cl-vars .cl-defs-group > ul > li {
+        grid-template-columns: 1fr;
+        row-gap: 0.1em;
+        padding: 0.3em 0;
+    }
+}
