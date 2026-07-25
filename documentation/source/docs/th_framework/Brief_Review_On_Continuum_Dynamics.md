@@ -41,7 +41,7 @@ where ${f}' \equiv \text{d} f/ \text{d} \eta$ and $m_p \simeq 2.435\cdot10^{18}$
 <!-- 
 In Section [Lattice-Cosmology Reviews](MonographicReviews.md) we present the lattice formulation of different theories involving scalar and/or gauge fields, based on the techniques introduced in [Field Discretization Primer](Brief_Review_On_Lattice_Techniques.md). In order to introduce notation, 
  -->
-We introduce now the equations of motion resulting in a scalar-gauge theory with three kinds of canonically-normalized scalar fields: a real scalar singlet $\phi$, a U(1)-charged complex scalar field $\varphi$, and a $[SU(N) \times U(1)]$-charged doublet scalar field $\Phi$. In the last two cases, there are also present, respectively, Abelian and non-Abelian gauge fields, $A_{\mu}$ and $C_{\mu} \equiv C_{\mu}^a T_a$, with $T_a$ the $N^2-1$ group generators, satisfying the $SU(N)$ Lie algebra properties $[T_a, T_b] = i f_{abc} T_c$ , ${\rm Tr}(T_a) = 0$ , ${\rm Tr}(T_a T_b) = \frac{1}{2} \delta_{ab}$, and $T^{\dagger}_a = T_a$, with $f_{abc}$ the totally anti-symmetric *structure constants* of the group, and $[\cdot,\cdot]$ the usual matrix commutator. In the particular case of SU(2), $T_a \equiv \sigma_a / 2$, $a=1,2,3$, with $\sigma_a$ the *Pauli matrices*, and $f_{abc} = \epsilon_{abc}$ the totally anti-symmetric tensor. The scalar fields can be explicitly written in terms of real components as follows,
+We introduce now the equations of motion resulting in a scalar-gauge theory with three kinds of canonically-normalized scalar fields: a real scalar singlet $\phi$, a U(1)-charged complex scalar field $\varphi$, and a $[SU(N) \times U(1)]$-charged doublet scalar field $\Phi$. In the last two cases, there are also present, respectively, Abelian and non-Abelian gauge fields, $A_{\mu}$ and $C_{\mu} \equiv C_{\mu}^a T_a$, with $T_a$ the $N^2-1$ group generators, satisfying the $SU(N)$ Lie algebra properties $[T_a, T_b] = i f_{abc} T_c$ , ${\rm Tr}(T_a) = 0$ , ${\rm Tr}(T_a T_b) = \frac{1}{2} \delta_{ab}$, and $T^{\dagger}_a = T_a$, with $f_{abc}$ the totally anti-symmetric *structure constants* of the group, and $[\cdot,\cdot]$ the usual matrix commutator. In the particular case of SU(2), $T_a \equiv \sigma_a / 2$, $a=1,2,3$, with $\sigma_a$ the *Pauli matrices*, and $f_{abc} = \epsilon_{abc}$ the totally anti-symmetric tensor. For further details see Chapter 2 of $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]). The scalar fields can be explicitly written in terms of real components as follows,
 [](){ #eq_ChargedScalars }
 ```math
 \begin{eqnarray} \label{eq_ChargedScalars}
@@ -87,7 +87,7 @@ with $g_{A}$ and $g_C$ the Abelian and non-Abelian gauge couplings, $Q_{A}$ and 
 \begin{equation}\label{eq_ElectricMagneticDefs}
 E_i \equiv F_{0i} , \,\,\,\,\,\,\,\,  B_i \equiv \frac{1}{2} \epsilon_{i j k} F^{j k} , \,\,\,\,\,\,\,\,   E_i^a \equiv G_{0i}^a , \,\,\,\,\,\,\,\,  B_i^a \equiv \frac{1}{2} \epsilon_{i j k} G^{j k}_a \ , \end{equation}
 ```
-where $\epsilon_{ijk}$ is the Levi-Civita symbol in three dimensions with normalization $\epsilon_{123}=+1$, and $G_{\mu \nu}^a \equiv {\rm Tr}(2G_{\mu \nu} T_a) = {\rm Tr}(G_{\mu \nu} \sigma_a)$. **We note that the electric field definitions depend on the $\alpha$-time $\eta$, as $F_{0i}$ and $G_{0i}$ are defined with respect to $\eta$, not $t$.**
+where $\epsilon_{ijk}$ is the Levi-Civita symbol in three dimensions with normalization $\epsilon_{123}=+1$, and $G_{\mu \nu}^a \equiv {\rm Tr}(2G_{\mu \nu} T_a) = {\rm Tr}(G_{\mu \nu} \sigma_a)$. Here it is important to note that **the electric field definitions above depend on the $\alpha$-time $\eta$, as $F_{0i}$ and $G_{0i}$ are defined with respect to $\eta$, not $t$.**
 
 The equations of motion for the matter fields and the scale factor have been derived in more detail in $\mathtt{The~Art-I}$ (Ref. [@Figueroa_2020rrl]). Here we simply quote their resulting form, which read
 [](){ #eq_singlet-eomCONT }
@@ -197,7 +197,7 @@ where we have defined the volume-averaged energy contributions as $E_{K}^{f} = \
 
 ## Non-Canonical Field Theories { #subsec_eomNonCanonical }
 
-There are many possibilities to consider when dealing when field theories with non-canonical interactions. Below we consider few representative examples, such as scalar fields non-minimally coupled (NMC) to gravity through a term of the form $\propto \phi^{2}R$, with $R$ the Ricci scalar; scalar fields with non-minimal kinetic (NMK) terms of the form $f(\phi)X$, with $X \equiv \partial^{\mu}\phi\partial_{\mu}\phi$; and axion-like-particles (ALPs) interacting with gauge fields through a coupling of the form $\phi F\tilde{F}$.
+There are many possibilities to consider when dealing when field theories with non-canonical interactions. Below we consider few representative examples, such as scalar fields non-minimally coupled (NMC) to gravity through a term of the form $\propto \phi^{2}R$, with $R$ the Ricci scalar; scalar fields with non-minimal kinetic (NMK) terms of the form $f(\phi)X$, with $X \equiv \partial^{\mu}\phi\partial_{\mu}\phi$; and axion-like-particles (ALPs) interacting with gauge fields through a coupling of the form $\phi F\tilde{F}$. More details on these cases can be found on Chapters 3 and 4 of $\mathtt{The~Art-II}$ (Ref. [@BaezaBallesteros_2025tme]). 
 
 <div style="height: 20px;"></div>
 
@@ -550,7 +550,7 @@ where, as usual, $\langle\cdots\rangle$ denotes volume averaging over regions su
 [](){ #ALP_th }
 **Axion-Gauge interactions**
 
-Axion-like particles (ALPs) enjoy a shift-symmetry $\phi=\phi+C$ that allows them to couple derivatively to gauge fields through Chern–Simons terms, as $\phi F\tilde{F}$ (Abelian) or $\phi G\tilde{G}$ (non-Abelian). Here we consider an axion–$U(1)$ sector described by the action
+Axion-like particles (ALPs) enjoy a shift-symmetry $\phi=\phi+C$ that allows them to couple derivatively to gauge fields through *Chern–Simons* terms, as $\phi F\tilde{F}$ (Abelian) or $\phi G\tilde{G}$ (non-Abelian). Here we consider an axion–$U(1)$ sector described by the action
 
 [](){ #eq_AxionAction }
 
@@ -562,15 +562,16 @@ S =
 -\frac{1}{2}\partial_\mu\phi\,\partial^\mu\phi
 -V(\phi)
 -\frac{1}{4}F_{\mu\nu}F^{\mu\nu}
-+\frac{1}{4}\frac{\phi}{\Lamda}
++\frac{1}{4}\frac{\phi}{\Lambda}
 F_{\mu\nu}\tilde F^{\mu\nu}
 \right]\,.
 \label{eq_AxionAction}
 ```
-where $\phi$ is a real pseudo-scalar field, the axion-like particle (ALP), and $V(\phi)$ its potential (which might break the shift symmetry explicitly in some scenarios). The field-strength tensor of the $U(1)$ gauge field $A_\mu$ is defined as in standard canonical theories, $F_{\mu\nu}\equiv\partial_\mu A_\nu-\partial_\nu A_\mu$. The parameter $\alpha_\Lambda\equiv m_p/\Lambda$ characterizes the dimensionless ALP-gauge coupling strength associated with the scale $\Lambda$. The dual field-strength tensor is defined as $\tilde F_{\mu\nu}\equiv\frac{1}{2}\epsilon_{\mu\nu\rho\sigma}F^{\rho\sigma}$, where $\epsilon_{\mu\nu\rho\sigma}$ is the four-dimensional Levi-Civita pseudotensor in curved spacetime, normalized as $\epsilon_{0123}=1/\sqrt{-g}$. Varying the action with respect to $\phi$ and $A_i$ in an FLRW background, and considering the temporal gauge, $A_0=0$, yields the equations of motion in $\alpha$-time as
+where $\phi$ is a real pseudo-scalar field, the axion-like particle (ALP), $V(\phi)$ is its interaction potential (which might break the shift symmetry explicitly in some scenarios), and the field-strength tensor of the Abelian gauge field $A_\mu$ is defined as in standard canonical theories, $F_{\mu\nu}\equiv\partial_\mu A_\nu-\partial_\nu A_\mu$. 
+
+To characterize the ALP-gauge coupling strength, we define a dimensionless parameter $\alpha_\Lambda\equiv m_p/\Lambda$ associated to the scale $\Lambda$. The dual field-strength tensor is defined as $\tilde F_{\mu\nu}\equiv\frac{1}{2}\epsilon_{\mu\nu\rho\sigma}F^{\rho\sigma}$, where $\epsilon_{\mu\nu\rho\sigma}$ is the four-dimensional Levi-Civita pseudotensor in curved spacetime, normalized as $\epsilon_{0123}=1/\sqrt{-g}$. Varying the action with respect to $\phi$ and $A_i$ in a FLRW background, and considering the temporal gauge, $A_0=0$, yields the equations of motion in $\alpha$-time as
 
 [](){ #eq_axion_eom }
-
 [](){ #eq_axion_gauge_eom }
 
 ```math
@@ -631,7 +632,7 @@ K_{U(1)}+G_{U(1)}
 \end{eqnarray}
 ```
 
-The individual kinetic and gradient contributions of the scalar and vector fields coincide with those defined in Eq.$~$\eqref{eq_energy-contributions}. If the axion–$U(1)$ gauge sector dominates the energy budget of the Universe, the expansion is governed by the Friedmann equations, Eqs.$~$\eqref{eq_FriedmannHub} and $\eqref{eq_FriedmannD2a}, retaining only the contributions from this sector.
+The individual kinetic and gradient contributions of the scalar and vector fields coincide with those defined in Eq.$~$\eqref{eq_energy-contributions}. If the axion–$U(1)$ gauge sector dominates the energy budget of the Universe, the expansion is governed by the Friedmann equations, Eqs.$~$\eqref{eq_FriedmannHub} and \eqref{eq_FriedmannD2a}, retaining only the contributions from this sector.
 
 ## Scalar-Gauge-Fluid Dynamics { #subsec_eomFluids }
 
@@ -649,7 +650,7 @@ Coming soon ...
 
 ## Gravitational Waves { #subsec_eomGWs }
 
-Gravitational waves are transverse and traceless tensor perturbations, $h_{ij}$, of the background metric. Considering the FLRW solution as the background metric, the perturbed line element (in $\alpha$-time) is
+Gravitational waves (GWs) are transverse and traceless tensor perturbations, $h_{ij}$, of the background metric. Considering the FLRW solution as the background metric, the perturbed line element (in $\alpha$-time) is
 [](){ #eq_GWmetric }
 ```math
 \begin{align}
@@ -660,7 +661,7 @@ ds^2
 +a^2(\eta)\left(\delta_{ij}+h_{ij}\right)dx^idx^j\,,
 \end{align}
 ```
-which are transverse, $\partial_i h_{ij}=0$, and traceless, $h_{ii}=0$. In the linearized gravity regime, the equation of motion of GWs reads
+which are transverse, $\partial_i h_{ij}=0$, and traceless, $h_{ii}=0$. Linearizing the Einstein equations in $h_{ij}$, the equation of motion of GWs reads
 [](){ #eq_GWEOMcontinuum }
 ```math
 \begin{align}
@@ -672,7 +673,8 @@ h_{ij}''
 {2\over m_p^2a^{2(1-\alpha)}}\Pi_{ij}^{\rm TT} \,.
 \end{align}
 ```
-GWs are sourced by the transverse-traceless (TT) part of the anisotropic stress tensor, $\Pi_{ij}^{\rm TT}$. For a generic background fluid, this anisotropic stress tensor takes the form,
+GWs are sourced by the transverse-traceless (TT) part of the anisotropic stress tensor, $\Pi_{ij}^{\rm TT}$. For a generic background fluid, this anisotropic stress tensor takes the form 
+
 [](){ #eq_GWAnisotropicStress }
 ```math
 \begin{align}
@@ -682,7 +684,8 @@ GWs are sourced by the transverse-traceless (TT) part of the anisotropic stress 
 T_{ij}-\bar p\,g_{ij},
 \end{align}
 ```
-In practice, however, it is more convenient to define an effective anisotropic stress tensor containing only those contributions to $\Pi_{ij}$ that have a non-zero TT projection. For example, for a generic model consisting of canonically normalized scalars and Abelian gauge fields, this takes the form,
+In practice, however, it is more convenient to define an effective anisotropic stress tensor containing only those contributions to $\Pi_{ij}$ that have a non-zero TT projection. For example, for a generic model consisting of canonically normalized scalars and Abelian gauge fields, this takes the form (Ref. [@PhDthesisFigueroa])
+
 [](){ #eq_GWEffectiveAnisotropicStress }
 ```math
 \begin{align}
@@ -752,12 +755,12 @@ Finally, it is worth mentioning GW observables. The most relevant quantity relat
 &=
 {m_p^2\over 4a^{2\alpha}V}
 \int_V d^3{\bf x}\,
-h'_{ij}({\bf x},\eta)h'_{ij}({\bf x},\eta)
+h'_{ij}({\bf x},\eta)h'_{ij}({\bf x},\eta) \nonumber
 \\
 &\simeq
 {m_p^2\over 4a^{2\alpha}V}
 \int_V {d^3{\bf k}\over(2\pi)^3}
-h'_{ij}({\bf k},\eta)h_{ij}^{\prime *}({\bf k},\eta)
+h'_{ij}({\bf k},\eta)h_{ij}^{\prime *}({\bf k},\eta) \nonumber
 \\
 &\equiv
 \int {d\rho_{\rm GW}\over d\log k}d\log k \,,
