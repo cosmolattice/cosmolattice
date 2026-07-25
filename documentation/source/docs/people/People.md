@@ -24,13 +24,14 @@
     <button type="button" class="cl-ppl-chip cl-ppl-chip--upcoming m-su2axion" data-mod="su2axion" aria-pressed="false">SU(2) Axion</button>
     <button type="button" class="cl-ppl-clear" disabled>Clear</button>
   </div>
+  <p class="cl-ppl-filter-note"><b>Core</b> is the simulation framework every module is built on — lattice, evolvers, integrators, I/O — and <b><a href="https://cosmolattice.github.io/templat/#top" target="_blank" rel="noopener noreferrer">TempLat</a></b> is the expression-template library underneath it.</p>
 </div>
 
 <section class="cl-ppl-section">
 <h2 class="cl-ppl-heading">Developers</h2>
 <div class="cl-ppl-grid">
 
-  <article class="cl-ppl-card" data-mods="core templat defects gw">
+  <article class="cl-ppl-card" data-mods="core templat defects gw dims">
     <img class="cl-ppl-avatar" src="../assets/img/people/jorge.png" alt="Jorge Baeza-Ballesteros">
     <div class="cl-ppl-name">Jorge Baeza-Ballesteros</div>
     <div class="cl-ppl-affil">DESY, Zeuthen, Germany</div>
@@ -39,6 +40,7 @@
       <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">TempLat</button>
       <button type="button" class="cl-ppl-chip m-defects" data-mod="defects" aria-pressed="false">Defects</button>
       <button type="button" class="cl-ppl-chip m-gw" data-mod="gw" aria-pressed="false">Grav. Waves</button>
+      <button type="button" class="cl-ppl-chip m-dims" data-mod="dims" aria-pressed="false">1D &amp; 2D</button>
     </div>
   </article>
 
@@ -118,21 +120,18 @@
     </div>
   </article>
 
-  <article class="cl-ppl-card" data-mods="templat">
+  <article class="cl-ppl-card" data-mods="">
     <img class="cl-ppl-avatar" src="../assets/img/people/wessel.png" alt="Wessel Valkenburg">
     <div class="cl-ppl-name">Wessel Valkenburg</div>
     <div class="cl-ppl-affil">Enjoying la vida loca out of academia</div>
     <div class="cl-ppl-role">Creator of CosmoLattice</div>
-    <div class="cl-ppl-badges">
-      <button type="button" class="cl-ppl-chip cl-ppl-chip--struct" data-mod="templat" aria-pressed="false">TempLat</button>
-    </div>
   </article>
 
 </div>
 </section>
 
 <section class="cl-ppl-section">
-<h2 class="cl-ppl-heading">Upcoming Developers</h2>
+<h2 class="cl-ppl-heading">Joining Soon</h2>
 <div class="cl-ppl-grid">
 
   <article class="cl-ppl-card" data-mods="fluid">

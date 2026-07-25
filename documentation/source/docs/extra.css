@@ -1592,6 +1592,20 @@ body.nav-collapsed .md-sidebar--primary {
     opacity: 0;
     pointer-events: none;
 }
+/* Footnote under the chips: says what the two neutral dashed chips mean, since
+   "Core" alone reads ambiguously (framework layer, not "the core team"). */
+.md-typeset .cl-ppl-filter-note {
+    margin: 0.9em 0 0;
+    padding-top: 0.75em;
+    border-top: 1px solid var(--md-default-fg-color--lightest);
+    font-size: 0.72em;
+    line-height: 1.55;
+    color: var(--md-default-fg-color--light);
+}
+.md-typeset .cl-ppl-filter-note b {
+    font-weight: 700;
+    color: var(--md-default-fg-color);
+}
 
 /* --- chip (shared by the filter bar and each person's badge cloud) --- */
 .md-typeset .cl-people .cl-ppl-chip {
