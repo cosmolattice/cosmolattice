@@ -215,7 +215,7 @@ where
     \Upsilon_{|\tilde{\bf n}|} \equiv \frac{\#_{R(\tilde{\bf n})}}{4\pi|\tilde{\bf n}|^2}\;.
 \end{eqnarray}
 ```
-While the most precise evaluation of Eq. (\ref{eq_discretePST1}) requires to compute $\Upsilon_{|\tilde{\bf n}|}$ exactly (for each bin), *i.e.* using Eq. (\ref{eq_Upsilon}), many works (specially in the past) often  used the multiplicity approximation $\#_{R(\tilde{\bf n})} \simeq 4\pi |\tilde{\bf n}|^2$. In that case $\Upsilon_{|\tilde{\bf n}|} \simeq 1$, and thus $\Upsilon_{|\tilde{\bf n}|}$ drops from Eq. (\ref{eq_discretePST1}). While this is only an approximation, for historical reasons we still define two types of power spectra, depending on the multiplicity assumption,
+While the most precise evaluation of Eq. (\ref{eq_discretePST1}) requires to compute $\Upsilon_{|\tilde{\bf n}|}$ exactly (for each bin), *i.e.* using Eq. (\ref{eq_Upsilon}), many works (specially in the past) often  used the multiplicity approximation $\#_{R(\tilde{\bf n})} \simeq 4\pi |\tilde{\bf n}|^2$. In that case $\Upsilon_{|\tilde{\bf n}|} \simeq 1$, and hence $\Upsilon_{|\tilde{\bf n}|}$ drops from Eq. (\ref{eq_discretePST1}). While this is only an approximation, for historical reasons we still define two types of power spectra, depending on the multiplicity assumption,
 [](){ #eq_TypeIandIIPS }
 ```math
 \begin{eqnarray}\label{eq_TypeIandIIPS}
