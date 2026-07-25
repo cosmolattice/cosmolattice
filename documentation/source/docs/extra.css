@@ -2419,7 +2419,7 @@ body.nav-collapsed .md-sidebar--primary {
 /* city card — hover peeks at the city and its papers, click pins it so the
    paper rows become arXiv links. The card is anchored to its point by
    researcher-map.js; only the pinned state takes pointer events. */
-.cl-map-tt { position: absolute; pointer-events: none; z-index: 8; width: min(312px, 82%);
+.cl-map-tt { position: absolute; pointer-events: none; z-index: 8; width: min(364px, 86%);
     box-sizing: border-box;                       /* max-height is measured against the frame */
     display: flex; flex-direction: column;
     background: var(--clm-bg); border: 1px solid var(--clm-line); border-radius: 10px; padding: 10px 12px;
@@ -2444,11 +2444,14 @@ body.nav-collapsed .md-sidebar--primary {
 .cl-map-tt.pin.fades .pl { -webkit-mask-image: linear-gradient(#000 calc(100% - 26px), transparent);
     mask-image: linear-gradient(#000 calc(100% - 26px), transparent); }
 /* newest first, so the id column reads as a descending timeline */
-.cl-map-tt .pp { display: grid; grid-template-columns: 62px minmax(0, 1fr) auto; gap: 0 8px; align-items: start;
+.cl-map-tt .pp { display: grid; grid-template-columns: 86px minmax(0, 1fr) auto; gap: 0 8px; align-items: start;
     padding: 5px 3px; border-radius: 5px; text-decoration: none; color: inherit;
     transition: background .12s, color .12s; }
 .cl-map-tt .pp + .pp { border-top: 1px solid color-mix(in srgb, var(--clm-line) 55%, transparent); }
-.cl-map-tt .pp .id { font: .58rem/1.6 var(--clm-mono); color: var(--clm-faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* the id column holds a full 10-char arXiv id (~70px) with slack for wider mono
+   fallbacks; the ellipsis is a last-resort guard, not something real ids hit */
+.cl-map-tt .pp .id { font: .58rem/1.6 var(--clm-mono); color: var(--clm-faint); font-variant-numeric: tabular-nums;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cl-map-tt .pp .t { font-size: .7rem; line-height: 1.35; color: var(--clm-muted);
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .cl-map-tt .pp .n { font: 600 .56rem/1.6 var(--clm-mono); color: var(--clm-faint); font-variant-numeric: tabular-nums; }
