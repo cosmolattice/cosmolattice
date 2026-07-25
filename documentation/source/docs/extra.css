@@ -125,6 +125,136 @@ body.nav-collapsed .md-sidebar--primary {
 .emgithub-file .file-meta a[href*="cdn.jsdelivr.net"] {
     display: none;
 }
+
+/* === emgithub dark mode ===
+   emgithub bakes its theme into each embed at build time (style=github in the
+   <script> URL from hooks/resolve_emgithub.py): it fetches the *light* GitHub
+   highlight.js theme, scopes it to .hljs-style-github, and tags the chrome with
+   -light class variants. So the snippets stayed white when Material's palette
+   toggle switched to slate. Repaint them here: tokens use the github-dark
+   palette (highlight.js 11.6 github-dark.css), the surrounding chrome uses
+   Material's own variables so the embeds match the natively-highlighted code
+   blocks on the same page.
+
+   These selectors are intentionally one class more specific than emgithub's
+   scoped theme (.hljs-style-github .hljs-*) and than the unscoped github.min.css
+   pulled in from mkdocs.yml — both are injected *after* extra.css, so equal
+   specificity would lose. */
+
+/* Frame, meta bar and copy button (emgithub emitted the -light variants) */
+[data-md-color-scheme="slate"] .emgithub-file.emgithub-file-light {
+    border-color: var(--md-default-fg-color--lightest);
+    background-color: var(--md-code-bg-color);
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .file-meta.file-meta-light {
+    color: var(--md-default-fg-color--light);
+    background-color: var(--md-default-fg-color--lightest);
+    border-top-color: var(--md-default-fg-color--lightest);
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .file-meta a {
+    color: var(--md-typeset-a-color);
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .code-area .copy-btn {
+    color: var(--md-default-fg-color--light);
+    background-color: var(--md-code-bg-color);
+    border-color: var(--md-default-fg-color--lighter);
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .code-area .copy-btn:hover {
+    color: var(--md-code-bg-color);
+    background-color: var(--md-default-fg-color--light);
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .code-area .hljs-ln-numbers {
+    color: var(--md-default-fg-color--lighter);
+}
+
+/* Syntax tokens: highlight.js "GitHub Dark" palette */
+[data-md-color-scheme="slate"] .emgithub-file .code-area pre code.hljs {
+    color: #c9d1d9;
+    background: var(--md-code-bg-color);
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-doctag,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-keyword,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-meta .hljs-keyword,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-template-tag,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-template-variable,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-type,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-variable.language_ {
+    color: #ff7b72;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-title,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-title.class_,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-title.class_.inherited__,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-title.function_ {
+    color: #d2a8ff;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-attr,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-attribute,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-literal,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-meta,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-number,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-operator,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-selector-attr,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-selector-class,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-selector-id,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-variable {
+    color: #79c0ff;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-meta .hljs-string,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-regexp,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-string {
+    color: #a5d6ff;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-built_in,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-symbol {
+    color: #ffa657;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-code,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-comment,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-formula {
+    color: #8b949e;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-name,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-quote,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-selector-pseudo,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-selector-tag {
+    color: #7ee787;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-subst,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-emphasis,
+[data-md-color-scheme="slate"] .emgithub-file .hljs-strong {
+    color: #c9d1d9;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-section {
+    color: #1f6feb;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-bullet {
+    color: #f2cc60;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-addition {
+    color: #aff5b4;
+    background-color: #033a16;
+}
+
+[data-md-color-scheme="slate"] .emgithub-file .hljs-deletion {
+    color: #ffdcd7;
+    background-color: #67060c;
+}
 /* === Sector color palette ===
    One accent color per physics sector, shared by the Home-page sector cards
    and the highlighted terms of the action equation. Slate (dark) scheme gets
