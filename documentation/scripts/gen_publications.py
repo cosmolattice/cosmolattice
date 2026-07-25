@@ -10,8 +10,8 @@ injects it into ``Publications.md`` **between explicit markers only**:
     ... generated <ol> goes here ...
     <!-- @endgen -->
 
-Everything outside the markers (the intro, the mount div, the hand-maintained
-"Citing CL" list) is left byte-for-byte untouched. The injection is idempotent:
+Everything outside the markers (the intro, the mount div) is left byte-for-byte
+untouched. The injection is idempotent:
 running the script twice yields the exact same file.
 
 Usage:
