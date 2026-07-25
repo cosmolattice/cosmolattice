@@ -353,7 +353,7 @@ arXiv: <a href="https://arxiv.org/abs/2404.17654" target="_blank" rel="noopener 
 <i>JCAP 06 (2024) 020</i>. arXiv: <a href="https://arxiv.org/abs/2401.14331" target="_blank" rel="noopener noreferrer">2401.14331</a><br><br>
 </li>
 <li value="31">
-<b>Present and future of \({\mathcal{C}}\) osmo \({\mathcal{L}}\) attice</b>.<br>
+<b>Present and future of CosmoLattice</b>.<br>
 <span class="clau" data-aid="1046060">Daniel G. Figueroa</span>, <span class="clau" data-aid="1844184">Adrien Florio</span>, <span class="clau" data-aid="1274773">Francisco Torrenti</span><br>
 <i>Rept.Prog.Phys. 87 (2024) 094901</i>. arXiv: <a href="https://arxiv.org/abs/2312.15056" target="_blank" rel="noopener noreferrer">2312.15056</a><br><br>
 </li>
