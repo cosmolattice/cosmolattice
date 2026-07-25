@@ -2506,3 +2506,140 @@ body.nav-collapsed .md-sidebar--primary {
 .cl-map-hub .val .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--clm-pt-lo), var(--clm-pt-hi)); border-radius: 3px; }
 .cl-map-hub .val .n { font: 700 .72rem/1 var(--clm-mono); color: var(--clm-muted); width: 16px; text-align: right; }
 .cl-map-hubs .foot { font: .58rem/1.4 var(--clm-mono); color: var(--clm-faint); margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--clm-line); }
+
+/* === "definitions/" reference block ("Inside CosmoLattice" page) ===
+   Replaces a flat 14-bullet list of physics-formula headers with five role
+   groups, each labelled in a left gutter. Deliberately NEUTRAL: on this site
+   colour always means a physics sector, and these formulae are cross-cutting,
+   so the signature here is structural, not colour.
+     .cl-defs-label   group name in the gutter (+ optional .cl-defs-note)
+     .cl-use          "who calls this" chip: evolve / initialize / measure
+     .cl-defs-chain   group whose entries are a real include chain (↓ rail)
+   The .cl-use chips share the pill shape of the Home page's .cl-fact chips so
+   the two read as one system. */
+.md-typeset .cl-defs {
+    margin: 1.2em 0 1.4em;
+}
+
+.md-typeset .cl-defs-group {
+    display: grid;
+    grid-template-columns: 10.5rem 1fr;
+    gap: 0 1.6rem;
+    padding-top: 0.9em;
+    border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.md-typeset .cl-defs-group + .cl-defs-group {
+    margin-top: 1.1em;
+}
+
+/* Gutter label. text-align is reset because the site justifies paragraphs. */
+.md-typeset .cl-defs-label {
+    margin: 0;
+    font-size: 0.72em;
+    font-weight: 700;
+    line-height: 1.35;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .cl-defs-note {
+    display: block;
+    margin-top: 0.35em;
+    font-size: 0.92em;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--md-default-fg-color--lighter);
+}
+
+.md-typeset .cl-defs-group > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.md-typeset .cl-defs-group > ul > li {
+    margin: 0 0 1em;
+}
+
+.md-typeset .cl-defs-group > ul > li:last-child {
+    margin-bottom: 0.9em;
+}
+
+/* Title line (file name + chips) and the description below it */
+.md-typeset .cl-defs-group > ul > li > p {
+    margin: 0;
+    text-align: left;
+}
+
+/* Flex row so a long file name and its chips wrap and align predictably */
+.md-typeset .cl-defs-group > ul > li > p:first-child {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2em 0.45em;
+}
+
+.md-typeset .cl-defs-group > ul > li > p:first-child > code.cl-fname {
+    margin-bottom: 0;
+}
+
+.md-typeset .cl-defs-group > ul > li > p:first-child > .cl-use {
+    margin-left: 0;
+}
+
+.md-typeset .cl-defs-group > ul > li > p + p {
+    margin-top: 0.25em;
+    font-size: 0.85em;
+    line-height: 1.55;
+    color: var(--md-default-fg-color--light);
+}
+
+/* "Who calls this" chip */
+.md-typeset .cl-use {
+    display: inline-block;
+    margin: 0 0 0 0.4em;
+    padding: 0.15em 0.7em;
+    border: 1px solid var(--md-default-fg-color--lighter);
+    border-radius: 2em;
+    font-size: 0.62em;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    line-height: 1.5;
+    white-space: nowrap;
+    vertical-align: 0.22em;
+    color: var(--md-default-fg-color--light);
+    background: color-mix(in srgb, var(--md-default-fg-color) 3%, transparent);
+}
+
+/* Chain group: fieldfunctionals -> averages -> energies is a real include
+   chain, so its entries are linked rather than merely stacked. */
+.md-typeset .cl-defs-chain > ul > li + li::before {
+    content: "↓";
+    display: block;
+    margin: -0.55em 0 0.3em;
+    font-size: 0.85em;
+    line-height: 1;
+    color: var(--md-default-fg-color--lighter);
+}
+
+@media screen and (max-width: 44em) {
+    .md-typeset .cl-defs-group {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .md-typeset .cl-defs-label {
+        margin-bottom: 0.7em;
+    }
+
+    .md-typeset .cl-defs-note {
+        display: inline;
+        margin-left: 0.5em;
+        font-size: 0.95em;
+    }
+}

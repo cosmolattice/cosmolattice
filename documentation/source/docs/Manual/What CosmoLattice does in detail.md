@@ -160,22 +160,94 @@ This class has no internal state; it simply regroups, under one roof, the functi
 
 This is a good place to highlight one of the advantages of CosmoLattice's expression-template-based "functional" interface (see [Expression Templates](Expression Templates.md)). Calling e.g. `U1sForCSCovDerivs` does not lead to any computation on its own: it builds an abstract expression, to be evaluated later. `fold_multiply` takes a vector-like object built by `MakeArray(a, 0, Model::NU1-1, ...)`, iterating over every U(1) gauge field `a`, and multiplies all its elements together. For each `a`, `IfElse(Model::CsU1Couplings::couples(...), complexPhase(...), OneType())` selects either the actual U(1) link phase, if the matter field is declared to couple to that gauge field, or the placeholder `OneType()` otherwise — a compile-time representation of the multiplicative identity, which the compiler can discard algebraically. This means an uncoupled gauge field costs nothing at run time.
 
-All the other functions in `definitions` follow a similar spirit. Rather than reviewing every one in detail, we summarize below what each is used for:
+All the other functions in `definitions` follow a similar spirit. Rather than reviewing every one in detail, we group them below by the role they play in a run, and label each header with the stage — evolution, initialization, measurement — that actually calls it. The headers carrying more than one label are precisely the shared formulae this folder exists for.
 
-- `include/CosmoInterface/definitions/averages.h`: computes the volume-averaged quadratic field functionals (momentum-squared, gradient-squared, magnetic-field-squared, and, for non-minimally-coupled models, the extra averages the non-minimal coupling requires) that feed the scale-factor evolution and the energy measurements.
-- `include/CosmoInterface/definitions/energies.h`: converts those raw averages (or the per-lattice-point `FieldFunctionals`, below) into physical energy densities, applying the correct powers of the scale factor and coupling normalizations; used by the Hubble constraint, the non-minimal-coupling Ricci scalar, and the energy measurer.
-- `include/CosmoInterface/definitions/fieldfunctionals.h`: defines the un-normalized, per-lattice-point quadratic quantities (gradient-squared, momentum-squared, field-strength-squared, E·B) that both `Averages` and the energy/snapshot measurers are built from.
-- `include/CosmoInterface/definitions/gausslaws.h`: checks the numerical preservation of the U(1) and SU(2) Gauss constraints, comparing the lattice divergence of the electric field against the matter (and, if present, axion) charge-density source.
-- `include/CosmoInterface/definitions/hubbleconstraint.h`: checks preservation of the first Friedmann equation, comparing $\dot a^2$ against the total energy density.
-- `include/CosmoInterface/definitions/mattercurrents.h`: computes the U(1) and SU(2) matter charge densities and currents, used both as the Gauss-law source and as the source term in the gauge-field kernels.
-- `include/CosmoInterface/definitions/potential.h`: sums the potential terms defined in the user's model, and converts the model-supplied derivatives with respect to the field *norm* into derivatives with respect to the field *components*, for complex scalars and SU(2) doublets.
-- `include/CosmoInterface/definitions/axioncouplings.h`: implements an axion(-like pseudoscalar)–U(1) Chern-Simons coupling $\propto \phi F\tilde F$, providing the extra source terms it contributes to the scalar equation of motion, to the U(1) kernel, and to the U(1) Gauss law.
-- `include/CosmoInterface/definitions/nonminimalcoupling.h`: computes the effective Planck-mass rescaling and effective Ricci scalar sourced by the matter/gauge sector, for models with a non-minimal coupling to gravity.
-- `include/CosmoInterface/definitions/fixedbackgroundexpansion.h`: implements a prescribed (non-self-consistent) power-law expansion history, used by the evolvers when a run is configured with a fixed rather than self-consistent background.
-- `include/CosmoInterface/definitions/phaseBunchDavies.h`: computes the Bunch-Davies vacuum phase used to imprint physically motivated initial fluctuations onto a field or gauge momentum in Fourier space.
-- `include/CosmoInterface/definitions/chiralpowerspectrum.h`: defines the `ChiralProjector` class, which projects a U(1) gauge field (or its momentum) onto positive/negative helicity modes in Fourier space, so that helicity-resolved ("chiral") power spectra can be measured for axion-sourced gauge fields.
-- `include/CosmoInterface/definitions/gwsprojector.h` and `include/CosmoInterface/definitions/PITensor.h`: source and project the gravitational-wave sector, discussed next.
-- `include/CosmoInterface/definitions/defectsmodule/`: contains a series of header files related to the cosmic-defects module. See [**Cosmic Defects**](Defects.md) for further information.
+<div class="cl-defs" markdown>
+
+<div class="cl-defs-group cl-defs-chain" markdown>
+<p class="cl-defs-label">Energy budget<span class="cl-defs-note">each built on the one above</span></p>
+
+-   `fieldfunctionals.h`{ .cl-fname }<span class="cl-use">measure</span>
+
+    The un-normalized, per-lattice-point quadratic quantities: gradient-squared, momentum-squared, field-strength-squared, and E·B.
+
+-   `averages.h`{ .cl-fname }<span class="cl-use">evolve</span><span class="cl-use">initialize</span>
+
+    Their volume averages — momentum-squared, gradient-squared, magnetic-field-squared, plus the extra averages a non-minimal coupling requires. These are what feed the scale-factor evolution.
+
+-   `energies.h`{ .cl-fname }<span class="cl-use">evolve</span><span class="cl-use">initialize</span><span class="cl-use">measure</span>
+
+    Converts those averages into physical energy densities, applying the correct powers of the scale factor and coupling normalizations.
+
+</div>
+
+<div class="cl-defs-group" markdown>
+<p class="cl-defs-label">Consistency checks</p>
+
+-   `gausslaws.h`{ .cl-fname }<span class="cl-use">measure</span>
+
+    Checks the numerical preservation of the U(1) and SU(2) Gauss constraints, comparing the lattice divergence of the electric field against the matter (and, if present, axion) charge-density source.
+
+-   `hubbleconstraint.h`{ .cl-fname }<span class="cl-use">initialize</span><span class="cl-use">measure</span>
+
+    Checks preservation of the first Friedmann equation, comparing $\dot a^2$ against the total energy density.
+
+</div>
+
+<div class="cl-defs-group" markdown>
+<p class="cl-defs-label">Equation-of-motion terms</p>
+
+-   `potential.h`{ .cl-fname }<span class="cl-use">evolve</span><span class="cl-use">measure</span>
+
+    Sums the potential terms defined in the user's model, and converts the model-supplied derivatives with respect to the field *norm* into derivatives with respect to the field *components*, for complex scalars and SU(2) doublets.
+
+-   `mattercurrents.h`{ .cl-fname }<span class="cl-use">evolve</span><span class="cl-use">initialize</span>
+
+    Computes the U(1) and SU(2) matter charge densities and currents, used both as the Gauss-law source and as the source term in the gauge-field kernels.
+
+-   `axioncouplings.h`{ .cl-fname }<span class="cl-use">evolve</span>
+
+    Implements an axion(-like pseudoscalar)–U(1) Chern-Simons coupling $\propto \phi F\tilde F$, providing the extra source terms it contributes to the scalar equation of motion, to the U(1) kernel, and to the U(1) Gauss law.
+
+-   `nonminimalcoupling.h`{ .cl-fname }<span class="cl-use">evolve</span><span class="cl-use">initialize</span>
+
+    Computes the effective Planck-mass rescaling and effective Ricci scalar sourced by the matter/gauge sector, for models with a non-minimal coupling to gravity.
+
+-   `PITensor.h`{ .cl-fname }<span class="cl-use">evolve</span>
+
+    Assembles, species by species, the anisotropic stress tensor that sources the gravitational-wave equation of motion. Discussed just below.
+
+</div>
+
+<div class="cl-defs-group" markdown>
+<p class="cl-defs-label">Backgrounds and initial data</p>
+
+-   `fixedbackgroundexpansion.h`{ .cl-fname }<span class="cl-use">evolve</span><span class="cl-use">initialize</span>
+
+    Implements a prescribed (non-self-consistent) power-law expansion history, used when a run is configured with a fixed rather than self-consistent background.
+
+-   `phaseBunchDavies.h`{ .cl-fname }<span class="cl-use">initialize</span>
+
+    Computes the Bunch-Davies vacuum phase used to imprint physically motivated initial fluctuations onto a field or gauge momentum in Fourier space.
+
+</div>
+
+<div class="cl-defs-group" markdown>
+<p class="cl-defs-label">Fourier-space projectors</p>
+
+-   `chiralpowerspectrum.h`{ .cl-fname }<span class="cl-use">measure</span>
+
+    Defines the `ChiralProjector` class, which projects a U(1) gauge field (or its momentum) onto positive/negative helicity modes, so that helicity-resolved ("chiral") power spectra can be measured for axion-sourced gauge fields.
+
+-   `gwsprojector.h`{ .cl-fname }<span class="cl-use">measure</span>
+
+    Defines `GWProjector`, the transverse-traceless projection applied to the GW momentum when measuring the gravitational-wave spectrum.
+
+</div>
+
+</div>
+
+One further entry in the folder is not a formula but a module of its own: `definitions/defectsmodule/` collects the header files of the cosmic-defects sector, described in [**Cosmic Defects**](Defects.md).
 
 Gravitational waves are sourced by the transverse, traceless part of the anisotropic stress tensor of the matter and gauge sectors. `PITensor` assembles it, species by species:
 
