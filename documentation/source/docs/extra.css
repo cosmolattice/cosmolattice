@@ -295,21 +295,21 @@ body.nav-collapsed .md-sidebar--primary {
     text-align: center;
     pointer-events: none;
 }
-.cl-eq-scalar::before    { content: "scalar singlet"; }
-.cl-eq-u1-kin::before    { content: "complex scalar"; }
-.cl-eq-u1-gauge::before  { content: "U(1)"; }
-.cl-eq-su2-kin::before   { content: "SU(2) doublet"; }
-.cl-eq-su2-gauge::before { content: "SU(2)"; }
-.cl-eq-alp-kin::before   { content: "axion"; }
-.cl-eq-alp-coup::before  { content: "axion coupling"; }
-.cl-eq-nmc-coup::before  { content: "non-minimal coupling"; }
-.cl-eq-nmc-kin::before {
+.cl-eq-scalar::before    { content: "Singlet scalars"; }
+.cl-eq-u1-kin::before    { content: "Complex scalars"; }
+.cl-eq-u1-gauge::before  { content: "U(1) gauge flds"; }
+.cl-eq-su2-kin::before   { content: "Doublet scalars"; }
+.cl-eq-su2-gauge::before { content: "SU(2) gauge fld"; }
+.cl-eq-alp-kin::before   { content: "Axion(s)"; }
+.cl-eq-alp-coup::before  { content: "Axion-like coupling"; }
+.cl-eq-nmc-coup::before  { content: "Gravitational NMC"; }
+.cl-eq-nmc-kin::before { content: "NMC scalars";}
     /* two lines: \A is a forced line break, needs white-space: pre */
-    content: "non-minimally\A coupled scalar";
-    white-space: pre;
-    line-height: 1.15;
-    top: -2.6em;
-}
+/*     content: "non-minimally coupled\A (NMC) scalars"; 
+     white-space: pre; 
+     line-height: 1.15; 
+     top: -2.6em; 
+ }*/ 
 
 /* The equation container clips content that sticks out above the math
    (Material makes mjx-container horizontally scrollable). Give the action
@@ -370,7 +370,7 @@ body.nav-collapsed .md-sidebar--primary {
 }
 
 .md-typeset mjx-container:has(.cl-gw-mark)::before {
-    content: "gravitational waves";
+    content: "Gravitational Waves";
     position: absolute;
     top: 0.55em;
     left: 50%;

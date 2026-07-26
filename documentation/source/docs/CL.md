@@ -2,7 +2,7 @@
 
 ## **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ in a Nutshell** { #subsec_WhatIsCL }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\mathcal{CL}$) is a modern package for **lattice simulations of the non-linear dynamics of interactive fields in an expanding Universe**, providing an up-to-date numerical tool for investigating the physics of **the early Universe**. The current version ($\tt v2.0$) is ready to simulate the dynamics of field theories described by an action of the type
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\mathcal{CL}$) is a modern package for **lattice simulations of the non-linear dynamics of interactive fields in an expanding Universe**, providing an up-to-date numerical tool for investigating the physics of **the early Universe**. The current version ($\mathcal{CL}$ $\tt v2.0$, released on July 2026) is ready to simulate the dynamics of field theories described by an action of the type
 [](){ #eq_actionCL }
 ```math
 \begin{eqnarray}
@@ -55,7 +55,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\t
 
     ---
 
-    Interacting singlet scalar fields with arbitrary potentials, *e.g.* inflaton–daughter field dynamics during preheating.
+    Interacting singlet scalar fields with arbitrary potentials.
 
     [User Manual →](Manual/My first model of (singlet) scalar fields.md)
 
@@ -83,7 +83,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\t
 
     [User Manual →](Manual/ALP.md)
 
--   __Non-Minimal Couplings to Gravity__
+-   __Non-Minimal Couplings (NMC) to Gravity__
 
     ---
 
@@ -99,7 +99,7 @@ The current version of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ ($\t
 
     [User Manual →](Manual/Defects.md)
 
--   __Gravitational Waves__
+-   __Gravitational Waves (GWs)__
 
     ---
 
@@ -155,7 +155,7 @@ $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is written in C++, and full
 {: .cl-minihead }
 
 
-With **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** 2.0, through the `TempLat` library, a particularly powerful new feature is the native support for **GPU acceleration**. This is achieved by using the `Kokkos` library, which allows for a single code base to be compiled and run on different architectures, including NVIDIA GPUs (via CUDA), AMD GPUs (via HIP), and multi-core CPUs (via OpenMP or Pthreads). This means that users can take advantage of the computational power of modern GPUs without having to write GPU-specific code, making it easier to run large-scale simulations efficiently. `TempLat` also handles the MPI distribution of the workload across many GPUs, allowing for simulations that require more memory than a single GPU can provide. Using GPUs for lattice simulations is as simple as switching a single flag in the `CMake` configuration, and the code will automatically handle the rest, including memory management and parallelization, see also [**Installation - Full**](code/Installation.md) for more details.
+From **$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$** ${\tt v2.0}$and above, through the `TempLat` library, a particularly powerful new feature is the native support for **GPU acceleration**. This is achieved by using the `Kokkos` library, which allows for a single code base to be compiled and run on different architectures, including NVIDIA GPUs (via CUDA), AMD GPUs (via HIP), and multi-core CPUs (via OpenMP or Pthreads). This means that users can take advantage of the computational power of modern GPUs without having to write GPU-specific code, making it easier to run large-scale simulations efficiently. `TempLat` also handles the MPI distribution of the workload across many GPUs, allowing for simulations that require more memory than a single GPU can provide. Using GPUs for lattice simulations is as simple as switching a single flag in the `CMake` configuration, and the code will automatically handle the rest, including memory management and parallelization, see also [**Installation - Full details**](code/Installation.md) for more details.
 
 [Kokkos](Manual/Parallelization.md#subsubsec_devices){ .cl-fact }
 {: .cl-fact-row }
@@ -195,7 +195,7 @@ will be able to run a fully parallelized simulation of their favourite model (us
 **Symbolic algebras, parallel FFTs, and more**
 {: .cl-minihead }
 
-$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [U(1)] and SU(2) algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions (<span style="color:red;">**CHANGE ?**</span>), making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**.
+$\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ includes already a *library* of basic routines and field-theoretical operations. This constitutes a clear advantage when using $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ as a platform to implement a given scenario, over writing your own code from scratch. In particular, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ comes with symbolic scalar, complex [U(1)] and SU(2) algebras, which allows the use of vectorial and matrix notations without sacrificing performances. Furthermore, $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ is MPI-based and uses a discrete Fourier Transform parallelized in multiple spatial dimensions, making it very powerful for probing physical problems with **well-separated scales**, running very **high resolution simulations**, or simply **very long simulations**.
 
 </div>
 

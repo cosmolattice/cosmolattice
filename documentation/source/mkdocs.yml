@@ -211,7 +211,7 @@ nav:
       #- "Conventions and Notation": "Manual/Conventions and Notation.md"
       #- "How to cite CosmoLattice": "Manual/HowToCiteCL.md"
       #- "Overview": "Manual/Overview.md"
-      - "<span style='font-weight:bold;'>Introduction to CosmoLattice (DANI)</span>": "Manual/Introduction to CosmoLattice.md"
+      - "<span style='font-weight:bold;'>Introduction to CosmoLattice</span>": "Manual/Introduction to CosmoLattice.md"
       - "<span style='font-weight:bold;'>Scalar-Scalar Interactions</span>": "Manual/My first model of (singlet) scalar fields.md"
       - "<span style='font-weight:bold;'>Scalar-Gauge Interactions</span>": "Manual/My first model of gauge fields.md"
       #- "<span style='font-weight:bold;'>Non-Abelian Gauge Theories</span>": "Manual/My first model of gauge fields.md"#

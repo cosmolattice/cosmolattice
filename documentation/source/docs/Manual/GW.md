@@ -5,8 +5,8 @@ This section covers how $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ sim
 !!! note "Scope of the GW module"
     As of $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ 2.0, the simulation of GWs is limited to models of canonically normalized scalar (real and complex) and Abelian gauge fields. Models with non-canonical interactions, such as scalars non-minimally coupled to gravity or non-canonical kinetic scalar theories, would require adapting the GW source terms to their non-minimal nature. The production of GWs from models involving $\mathrm{SU}(2)$ doublets or gauge fields is also not implemented in the current version. Both these features are planned to be released in the future.
 
-!!! note "Linearized gravity regime"
-    GWs in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are simulated in the linearized gravity regime, this is, backreaction of the GWs into the matter fields is neglected. We usually say that GWs are thus **passive**.
+!!! note "Linearized backreaction-less gravity regime"
+    GWs in $\mathcal{C}\mathtt{osmo}\mathcal{L}\mathtt{attice}$ are simulated in the linearized gravity regime, neglecting the backreaction of the GWs onto the matter fields. We usually say that GWs are thus **passive**.
 
 
 
