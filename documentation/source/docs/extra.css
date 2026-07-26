@@ -2695,3 +2695,235 @@ body.nav-collapsed .md-sidebar--primary {
         padding: 0.3em 0;
     }
 }
+
+/* === Events overview page ===
+   The page is a short list of links to Indico. The type roles are inverted
+   with respect to the rest of the site: the monospace face carries the URLs
+   and labels, and the body face is left to the lede. That is what the content
+   is — addresses and event names — and mono URLs stay legible at small sizes
+   without competing with the event names above them.
+
+   Kept strictly neutral: on this site a color means a physics sector, so the
+   only hue here is the UI accent (light blue), and only on hover/focus. */
+
+/* The markup is raw HTML with no `markdown` attribute, so nothing here can
+   rely on a wrapper element: every rule is keyed off its own cl-ev- class. */
+.md-typeset .cl-ev-lede {
+    text-align: left; /* the site justifies paragraphs; a lede column stretches badly */
+    max-width: 44em;
+    margin: 0 0 1.8em;
+    line-height: 1.7;
+}
+
+/* "The Indico pages of the schools are:" — demoted to a small label sitting
+   directly on top of the list it introduces, rather than reading as prose. */
+.md-typeset .cl-ev-eyebrow {
+    text-align: left;
+    margin: 0 0 0.7em;
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.72em;
+    letter-spacing: 0.06em;
+    color: var(--md-default-fg-color--light);
+}
+
+/* --- The link list ---
+   One row per event, hairline-separated. Each row sets the event name in the
+   body face and its address underneath in mono: the colon that used to join
+   them becomes the line break, so the eye picks out the name first and the
+   URL stays available without shouting. */
+.md-typeset .cl-ev-list {
+    max-width: 44em; /* same measure as the lede, so the two align */
+    margin: 0 0 2em;
+    border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.md-typeset a.cl-ev-row {
+    position: relative;
+    display: block;
+    padding: 0.85em 2.2em 0.85em 0.9em;
+    border-bottom: 1px solid var(--md-default-fg-color--lightest);
+    color: inherit;
+    text-decoration: none;
+    transition: background 0.15s, padding-left 0.15s;
+}
+
+.md-typeset a.cl-ev-row:hover {
+    background: color-mix(in srgb, var(--md-accent-fg-color) 7%, transparent);
+    padding-left: 1.2em;
+}
+
+.md-typeset a.cl-ev-row:focus-visible {
+    outline: 2px solid var(--md-accent-fg-color);
+    outline-offset: -2px;
+}
+
+.md-typeset .cl-ev-name {
+    display: block;
+    font-size: 0.95em;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--md-default-fg-color);
+}
+
+.md-typeset a.cl-ev-row:hover .cl-ev-name {
+    color: var(--md-accent-fg-color);
+}
+
+.md-typeset .cl-ev-url {
+    display: block;
+    margin-top: 0.25em;
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.7em;
+    letter-spacing: 0.01em;
+    color: var(--md-default-fg-color--light);
+    overflow-wrap: anywhere;
+}
+
+/* Every destination here is external; the mark says so once per row, at the
+   row's right edge, instead of being repeated inside the URL text. */
+.md-typeset a.cl-ev-row::after {
+    content: "\2197";
+    position: absolute;
+    top: 0.9em;
+    right: 0.9em;
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.8em;
+    color: var(--md-default-fg-color--lighter);
+    transition: color 0.15s, transform 0.15s;
+}
+
+.md-typeset a.cl-ev-row:hover::after {
+    color: var(--md-accent-fg-color);
+    transform: translate(2px, -2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .md-typeset a.cl-ev-row,
+    .md-typeset a.cl-ev-row::after {
+        transition: none;
+    }
+
+    .md-typeset a.cl-ev-row:hover {
+        padding-left: 0.9em;
+    }
+
+    .md-typeset a.cl-ev-row:hover::after {
+        transform: none;
+    }
+}
+
+/* === News page ===
+   NOTE the `cl-newsfeed-` prefix: `.cl-news-*` is already taken by the header
+   ticker (javascripts/news-bar.js + stylesheets/news-bar.css), and that
+   stylesheet hides `.cl-news-item` unscoped — reusing the name blanks this
+   whole page.
+
+   Same system as the events page: monospace carries the labels, hairlines
+   carry the structure, and the only hue is the UI accent on hover. The date
+   line is promoted to a left-hand column so the feed can be scanned by when
+   rather than by reading each title — on this page the date is the index.
+
+   Replaces the previous rhythm of 42px <span> pseudo-titles separated by
+   stacked 100px spacer <div>s and horizontal rules. */
+
+.md-typeset .cl-newsfeed-item {
+    display: grid;
+    grid-template-columns: minmax(0, 13em) minmax(0, 1fr);
+    column-gap: 2.6em;
+    padding: 2.2em 0;
+    border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+/* Date in column 1, everything else in column 2. Auto-placement then keeps
+   the title on the date's own row, so the two line up at the top of the item. */
+.md-typeset .cl-newsfeed-date {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    padding-top: 0.35em;
+    text-align: left; /* the site justifies paragraphs */
+    text-wrap: balance; /* longer date lines split evenly instead of orphaning "2026)" */
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.68em;
+    line-height: 1.5;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .cl-newsfeed-item > *:not(.cl-newsfeed-date) {
+    grid-column: 2;
+}
+
+.md-typeset .cl-newsfeed-item h2 {
+    margin: 0 0 0.5em;
+    font-size: 1.45em;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--md-default-fg-color);
+}
+
+/* Left-aligned, overriding the site-wide justification: the feed column is
+   narrow and these paragraphs are dense with inline math, which justification
+   pulls into rivers. */
+.md-typeset .cl-newsfeed-item p {
+    text-align: left;
+}
+
+.md-typeset .cl-newsfeed-item p:last-child {
+    margin-bottom: 0;
+}
+
+/* "Read More" closes every entry, so it is given its own line rather than
+   trailing whatever the last sentence happened to end on — otherwise it lands
+   in a different place in each item. Set in the label face with the arrow that
+   means "stays on this site" (the events list uses ↗ for links that leave it). */
+.md-typeset .cl-newsfeed-item p > strong:last-child {
+    display: block;
+    margin-top: 0.9em;
+}
+
+.md-typeset .cl-newsfeed-item p > strong > a {
+    font-family: var(--md-code-font-family, monospace);
+    font-size: 0.78em;
+    letter-spacing: 0.03em;
+    white-space: nowrap;
+}
+
+.md-typeset .cl-newsfeed-item p > strong > a::after {
+    content: "\2192";
+    display: inline-block;
+    margin-left: 0.4em;
+    transition: transform 0.15s;
+}
+
+.md-typeset .cl-newsfeed-item p > strong > a:hover::after {
+    transform: translateX(3px);
+}
+
+/* Narrow screens: no room for a date column, so it stacks above the title. */
+@media screen and (max-width: 55em) {
+    .md-typeset .cl-newsfeed-item {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 0.5em;
+    }
+
+    .md-typeset .cl-newsfeed-date {
+        grid-row: auto;
+        padding-top: 0;
+    }
+
+    .md-typeset .cl-newsfeed-item > *:not(.cl-newsfeed-date) {
+        grid-column: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .md-typeset .cl-newsfeed-item p > strong > a::after {
+        transition: none;
+    }
+
+    .md-typeset .cl-newsfeed-item p > strong > a:hover::after {
+        transform: none;
+    }
+}
