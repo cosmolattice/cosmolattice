@@ -43,6 +43,7 @@ Usage
 """
 
 import argparse
+import os
 import re
 import sys
 from pathlib import Path
@@ -55,7 +56,25 @@ except ImportError:  # pragma: no cover - dependency hint
 # --- Paths (resolved relative to this script, so it runs from anywhere) ------
 SCRIPT_DIR = Path(__file__).resolve().parent
 DOC_ROOT = SCRIPT_DIR.parent            # documentation/
-REPO_ROOT = DOC_ROOT.parent             # cosmolattice_private/
+
+
+def _resolve_code_root():
+    """Root of the CosmoLattice code tree the checks scan.
+
+    Order: $CL_CODE_SOURCE, then the code staged by build.sh under
+    tmp/code_source/cosmolattice, then the historical layout where
+    documentation/ lives inside the code repo (../).
+    """
+    env = os.environ.get("CL_CODE_SOURCE")
+    if env:
+        return Path(env).resolve()
+    staged = DOC_ROOT / "tmp" / "code_source" / "cosmolattice"
+    if (staged / "include").is_dir():
+        return staged
+    return DOC_ROOT.parent
+
+
+REPO_ROOT = _resolve_code_root()
 YAML_PATH = DOC_ROOT / "source" / "data" / "parameters.yaml"
 INCLUDE_DIR = REPO_ROOT / "include"
 MODELS_DIR = REPO_ROOT / "models"

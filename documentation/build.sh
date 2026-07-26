@@ -7,15 +7,28 @@ mkdir -p ${tmp_dir}
 mkdir -p ${build_dir}
 mkdir -p ${tmp_dir}/code_source
 
-# Use the local cosmolattice_private working tree (tracked files, including
-# uncommitted edits) as the source scanned for @label line numbers. The
-# displayed code still comes from public CLV2.0Alpha: SOURCE_ROOTS in
-# hooks/resolve_emgithub.py builds the emgithub URLs against that branch, so the
-# embedded snippets show alpha. NOTE: line numbers are only correct where a
-# labeled file matches CLV2.0Alpha line-for-line in its labeled region.
-repo_root=${base_dir}/..
-mkdir -p ${tmp_dir}/code_source/cosmolattice
-(cd ${repo_root} && git ls-files -z | tar --null -T - -cf -) | tar -xf - -C ${tmp_dir}/code_source/cosmolattice
+# Code source for the API reference (mkdoxy), @label scanning
+# (hooks/resolve_emgithub.py) and the parameter/model drift checks.
+#
+# Default: shallow clone of the public cosmolattice repo at CL_CODE_BRANCH,
+# so the build needs no access to any private repo and only public headers
+# can ever be rendered. Developers with a local checkout can override with
+#   CL_CODE_SOURCE=/path/to/cosmolattice bash build.sh
+# which stages that checkout's tracked files (including uncommitted edits).
+# NOTE: @emgithub line numbers are only correct where a labeled file matches
+# CL_CODE_BRANCH line-for-line in its labeled region.
+CL_CODE_BRANCH=${CL_CODE_BRANCH:-CLV2.0Alpha}
+code_dir=${tmp_dir}/code_source/cosmolattice
+if [ -n "${CL_CODE_SOURCE:-}" ]; then
+    rm -rf ${code_dir}
+    mkdir -p ${code_dir}
+    (cd ${CL_CODE_SOURCE} && git ls-files -z | tar --null -T - -cf -) | tar -xf - -C ${code_dir}
+elif [ -d ${code_dir}/.git ]; then
+    (cd ${code_dir} && git fetch --depth 1 origin ${CL_CODE_BRANCH} && git checkout -q FETCH_HEAD)
+else
+    rm -rf ${code_dir}
+    git clone --depth 1 --branch ${CL_CODE_BRANCH} https://github.com/cosmolattice/cosmolattice.git ${code_dir}
+fi
 
 # Only pull templat if it's not already present
 if [ ! -d ${tmp_dir}/code_source/templat ]; then

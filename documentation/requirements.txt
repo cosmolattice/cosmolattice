@@ -1,0 +1,11 @@
+# Pinned docs-build dependencies (see setup_python.sh).
+# Versions = the known-good set the site was last built with.
+regex==2026.5.9
+mkdocs==1.6.1
+mkdocs-material==9.7.6
+markdown-katex==202406.1035
+mkdocs-autorefs==1.4.4
+mkdocs-bibtex==4.4.0
+mkdoxy==1.2.8
+mkdocs-gen-files==0.6.1
+pyyaml==6.0.3

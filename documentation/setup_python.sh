@@ -24,19 +24,12 @@ if [[ ! -d "${tmp_dir}/.venv" ]]; then
     python3 -m venv ${tmp_dir}/.venv
     source ${tmp_dir}/.venv/bin/activate
     pip install -q --upgrade pip
-    pip install -q regex
-    pip install -q mkdocs-material
-    pip install -q markdown-katex
-    pip install -q mkdocs-autorefs
-    pip install -q mkdocs-bibtex
-    pip install -q mkdoxy
-    pip install -q mkdocs-gen-files
 else
     source ${tmp_dir}/.venv/bin/activate
 fi
 
-# Ensure PyYAML is present even in pre-existing venvs (needed by the parameter
-# appendix generator / sync check). Idempotent and fast once installed.
-pip install -q pyyaml
+# Pinned dependency set; idempotent and fast once installed, and also brings
+# pre-existing venvs up to the pinned versions.
+pip install -q -r ${base_dir}/requirements.txt
 
 cd ${base_dir}
