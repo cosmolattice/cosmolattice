@@ -1,0 +1,43 @@
+#Output
+outputfile = ./
+print_headers = true
+overwriteFiles = false
+
+#Evolution
+expansion = true
+evolver = RK2
+
+#Lattice
+N = 64
+dt = 0.005
+kIR = 1
+
+#Times
+tOutputFreq = 0.05
+tOutputInfreq = 0.5
+tOutputRareFreq = 5
+tMax = 10
+
+# Sets the time at which the full non-linear dynamics of the axion system is taken into account.
+# For t < tNonlinearAxionU1, the system is evolved on the linear regime of Axion U(1)
+tNonLinearAxionU1 = 1.5
+
+#Spectra options
+PS_type = 1
+PS_version = 1
+flagChiralPS=false
+
+#GW options
+withGWs = false
+GWprojectorType = 1
+
+#IC
+kCutOff = 30
+initial_amplitudes = 3.39928e18  # homogeneous amplitudes in GeV
+initial_momenta = -3.0714e31     # homogeneous amplitudes in GeV2
+
+#Axion U1 coupling
+alphaLambda_AxionU1 = 13
+
+#Model Parameters
+Mass = 1.5e13    # mass of the axion in GeV

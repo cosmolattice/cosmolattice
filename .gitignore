@@ -1,1 +1,20 @@
-/build
+build*/
+.cache/
+.idea/
+
+.beads/
+.claude/
+CLAUDE.md
+
+*thoughts*
+
+.DS_Store
+*.DS_Store
+*/.DS_Store
+*/*/.DS_Store
+
+# Editor swap files
+*.kate-swp
+*.swp
+*.swo
+*~

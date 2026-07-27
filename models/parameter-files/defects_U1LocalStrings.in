@@ -1,0 +1,60 @@
+#Output
+outputfile = ./
+print_headers = true
+overwriteFiles = false
+
+#Evolution
+expansion = true
+fixedBackground = true
+omegaEoS = 0.333333333333333333
+evolver = LF
+
+#Lattice
+N = 64
+dt = 0.01
+lSide = 32
+
+#Times
+tOutputFreq = 1
+tOutputInfreq = 1
+tOutputRareFreq = 1
+t0 = 70
+tMax = 102
+
+#Spectra options
+PS_type = 1
+PS_version = 1
+
+#GWs
+withGWs = false
+GWprojectorType = 1
+
+#IC
+ICtype_U1 = DefectsNetwork
+lcorr = 4
+
+// @label:model_pars
+#Model Parameters. Default corresponds to the critical case of local strings.
+lambda = 0.5
+vev = 1
+gU1s = 1
+CSU1Charges = 1
+// @endlabel
+
+#Diffusion
+doDiffusion = true
+diffusionevolver = RK2
+dtdiff = 0.005
+tmaxdiff = 5
+tOutputFreqDiff = 1
+tOutputRareFreqDiff = 1
+#snapshots_diffusion = CS
+
+#ResolutionPreserving
+doResolutionPreserving = true
+sRP = 0.
+tRP0 = 70.
+
+#Measurements defects
+measureDefectsEnergies = true
+measureDefectsStructure = true

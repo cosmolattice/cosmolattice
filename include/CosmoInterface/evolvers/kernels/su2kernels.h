@@ -1,0 +1,71 @@
+#ifndef COSMOINTERFACE_EVOLVERS_KERNELS_SU2KERNELS_H
+#define COSMOINTERFACE_EVOLVERS_KERNELS_SU2KERNELS_H
+
+/* This file is part of CosmoLattice, available at www.cosmolattice.net .
+   Copyright Daniel G. Figueroa, Adrien Florio, Francisco Torrenti and Wessel Valkenburg.
+   Released under the MIT license, see LICENSE.md. */
+
+// File info: Main contributor(s): Daniel G. Figueroa, Adrien Florio, Francisco Torrenti,  Year: 2020
+
+#include "CosmoInterface/definitions/gaugederivatives.h"
+#include "CosmoInterface/definitions/mattercurrents.h"
+#include "CosmoInterface/definitions/potential.h"
+#include "TempLat/lattice/algebra/gaugealgebra/plaquetteback.h"
+#include "CosmoInterface/evolvers/kernels/kernelstypes.h"
+
+namespace TempLat
+{
+  /** @brief A class that computes the kernel for the SU2 gauge fields.
+   *
+   *
+   * Unit test: ctest -R test-su2kernels
+   **/
+  class SU2Kernels
+  {
+  public:
+    // Put public methods here. These should change very little over time.
+    SU2Kernels() = delete;
+
+    // Equations of motion:
+    template <class Model, int N> static auto get(Model &model, Tag<N> n, KernelsTypes::EoM<Model> kt)
+    {
+      // Computes different terms in the SU(2) gauge kernels:
+
+      // SU(2) gauge current
+      auto SU2Source = MatterCurrents::SU2Current(model, n);
+
+      // Gradient (forward contribution)
+      auto GradSU2 = MakeVector(
+          i, 1, Model::NDim, Total(j, 1, Model::NDim, IfElse(!IsEqual(i, j), plaq(model.fldSU2(n), i, j), ZeroType())));
+
+      // Gradient (backward contribution)
+      auto GradSU2Back =
+          MakeVector(i, 1, Model::NDim,
+                     Total(j, 1, Model::NDim, IfElse(!IsEqual(i, j), plaqBack(model.fldSU2(n), i, j), ZeroType())));
+
+      auto normSU2Source = (1 / model.dx) * pow(model.aI, 1 + model.alpha); // Rescaling for SU2Source
+      auto normGrad = pow<3>(1 / model.dx) / model.gQ_SU2DblSU2(0_c, n) *
+                      pow(model.aI, -1 + model.alpha); // Rescaling for GradSU2 and GradSU2Back
+      // --> Note: the 0_c in normGrad is correct. In our convention, the link is defined with the coupling of the 0th
+      // doublet.
+
+      // Returns kernel for the SU(2) gauge fields' EOM:
+      return -normGrad * (GradSU2 - GradSU2Back) - normSU2Source * SU2Source;
+    }
+
+    template <class Model, int N> static auto get_momentum(Model &model, Tag<N> n, KernelsTypes::EoM<Model> kt)
+    {
+      // Returns ''momentum'' for the SU(2) gauge fields' EOM (a bit different because evolving the links). Also note
+      // that our algebra variables are antihermitean, so we are really saving i E.
+      return pow(model.aI, model.alpha - 1) * model.gQ_SU2DblSU2(0_c, n) * model.dx * model.piSU2(n);
+    }
+
+    // Default function returns EoM kernels, for backward compatibility.
+    template <class Model, int N> static auto get(Model &model, Tag<N> a)
+    {
+      return SU2Kernels::get(model, a, KernelsTypes::EoM<Model>());
+    }
+  };
+} // namespace TempLat
+
+#endif
