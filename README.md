@@ -2,7 +2,7 @@
 
 ## *A modern code for lattice simulations of scalar and gauge field dynamics in an expanding universe*
 
-[![https://raw.githubusercontent.com/cosmolattice/cosmolatticeweb/refs/heads/mkdocs-site/source/docs/assets/CL_Icon.svg](https://raw.githubusercontent.com/cosmolattice/cosmolatticeweb/refs/heads/mkdocs-site/source/docs/assets/CL_Icon.svg)](https://cosmolattice.net)
+[![CosmoLattice Logo](https://cosmolattice.net/assets/CL_Icon.svg)](https://cosmolattice.net)
 
 ### Documentation
 
