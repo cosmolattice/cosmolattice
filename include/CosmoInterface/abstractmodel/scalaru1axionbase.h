@@ -40,9 +40,9 @@ namespace TempLat
   protected:
     ScalarU1AxionBase(ParameterParser &parser)
     {
-      tNonLinearAxionU1 = parser.get<double>("tNonLinearAxionU1", -1.0);
-      auto gAxionU1 = parser.get<double, ScalarU1AxionCouplings::nGauge>("gAxionU1", 1.0);
-      auto AxionU1Charges = parser.get<double, ScalarU1AxionCouplings::howManyCouples()>("alphaLambda_AxionU1", 1);
+      tNonLinearAxionU1 = parser.get<T>("tNonLinearAxionU1", -1);
+      auto gAxionU1 = parser.get<T, ScalarU1AxionCouplings::nGauge>("gAxionU1", 1.0);
+      auto AxionU1Charges = parser.get<T, ScalarU1AxionCouplings::howManyCouples()>("alphaLambda_AxionU1", 1);
       alphaLambda_SU1.setEffectiveCharges(AxionU1Charges, gAxionU1);
     }
   };

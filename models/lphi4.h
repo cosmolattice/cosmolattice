@@ -160,7 +160,7 @@ namespace TempLat
     // to define different function with the same name. The 'auto' keyword lets the compiler
     // figure out on itself what is the actual return type of the function.
     {
-      return 0.25 * pow<4>(fldS(0_c));
+      return FloatType(0.25) * pow<4>(fldS(0_c));
       // Some notations.  The scalar fields are stored in a collection called 'fldS'.
       // The scalar fields are labelled  from 0 to Ns-1. The field say number 1 is
       // accessed through the syntax 'fldS(0_c)'. The function 'pow<N>(x)'. Works with the
@@ -173,7 +173,7 @@ namespace TempLat
     }
     auto potentialTerms(Tag<1>) const // Interaction energy
     {
-      return 0.5 * q * pow<2>(fldS(0_c) * fldS(1_c));
+      return FloatType(0.5) * q * pow<2>(fldS(0_c) * fldS(1_c));
     }
 
     // Advanced note (ignore if you are satisfied with the above) :

@@ -61,8 +61,8 @@ namespace TempLat
     {
       ForLoop(i, 0, Model::NSU2Doublet - 1,
               ForLoop(k, 0, 3,
-                      MeansMeasurer::measure(standardCompOut(i)(k), sqrt(2) * model.fldSU2Doublet(i)(k),
-                                             sqrt(2) * model.piSU2Doublet(i)(k) * pow(model.aI, model.alpha - 3), t);
+                      MeansMeasurer::measure(standardCompOut(i)(k), sqrt(T(2)) * model.fldSU2Doublet(i)(k),
+                                             sqrt(T(2)) * model.piSU2Doublet(i)(k) * pow(model.aI, model.alpha - 3), t);
                       standardCompOut(i)(k).save(lastMeas);
 
               );

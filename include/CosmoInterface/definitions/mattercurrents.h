@@ -27,7 +27,7 @@ namespace TempLat
     template <class Model, int N> static auto U1ChargeDensity(Model &model, Tag<N> n)
     { // N is the Nth U1 abelian field, i is the spatial component.
 
-      auto norm = 2.0 / model.dx * pow<2>((model.fStar / model.omegaStar));
+      auto norm = 2 / model.dx * pow<2>((model.fStar / model.omegaStar));
 
       auto U1Part =
           Total(a, 0, Model::NCs - 1,                              // sum over U(1) matter field
@@ -72,7 +72,7 @@ namespace TempLat
                        ,
                        ZeroType()));
 
-      return 2.0 / model.dx * pow<2>((model.fStar / model.omegaStar)) * (U1Part + SU2Part);
+      return 2.0f / model.dx * pow<2>((model.fStar / model.omegaStar)) * (U1Part + SU2Part);
     }
 
     template <class Model, int N> // creates a 3-component vector containing the U(1) current
@@ -94,7 +94,7 @@ namespace TempLat
                   MakeSU2(b, Real(scalar_prod(Constants::i_sigma(b) * model.fldSU2Doublet(a), model.piSU2Doublet(a)))),
               ZeroType()));
 
-      return pow<2>(model.fStar / model.omegaStar) / 2.0 * SU2Part;
+      return pow<2>(model.fStar / model.omegaStar) / 2 * SU2Part;
     }
 
     ////// SU(2) GAUGE CURRENT (used in the kernels of the EOM) //////
@@ -115,7 +115,7 @@ namespace TempLat
               ,
               ZeroType()));
 
-      return pow<2>((model.fStar / model.omegaStar)) / 2.0 * SU2Part;
+      return pow<2>((model.fStar / model.omegaStar)) / 2 * SU2Part;
     }
 
     template <class Model, int N> // creates a 3-component vector containing the SU(2) current

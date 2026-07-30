@@ -186,7 +186,7 @@ namespace TempLat
       auto invmult = MomentumMultiplicity<T, NDim>(f.getToolBox());
 
       return Hcut * safeSqrt(T(4) * Constants::pi<T> * pow(ntilde.norm(), T(2)) * invmult) *
-             (T(1) / pow(model.aI, T(1.5))) * pow(lSide / pow<2>(f.getDx()), T(1.5)) * sqrt(0.5);
+             (T(1) / pow(model.aI, T(1.5))) * pow(lSide / pow<2>(f.getDx()), T(1.5)) * sqrt(T(0.5));
     }
 
     template <class Model, size_t NDim>
@@ -225,8 +225,8 @@ namespace TempLat
 
       // definition of the phase shifts to properly have gauge fields living on the links when doing fourier
       // transformations
-      auto extraphaseminus = MakeVector(i, 1, Model::NDim, complexPhase(-1.0 * Constants::pi<T> / N * ntilde(i)));
-      auto extraphase = MakeVector(i, 1, Model::NDim, complexPhase(1.0 * Constants::pi<T> / N * ntilde(i)));
+      auto extraphaseminus = MakeVector(i, 1, Model::NDim, complexPhase(-Constants::pi<T> / N * ntilde(i)));
+      auto extraphase = MakeVector(i, 1, Model::NDim, complexPhase(Constants::pi<T> / N * ntilde(i)));
 
       /* Initialization of Gauge Field */
 
@@ -250,7 +250,7 @@ namespace TempLat
       /* Initialization of Gauge Field */
       // Sets the purely transverse initial vector field with its Bunch-Davis amplitude and appropiate phase
       //
-      ForLoop(k, 1, Model::NDim, f(k).inFourierSpace() = sqrt(1. / (2. * knorm)) * phaseA * tmpF(k).inFourierSpace();
+      ForLoop(k, 1, Model::NDim, f(k).inFourierSpace() = sqrt(T(1) / (T(2) * knorm)) * phaseA * tmpF(k).inFourierSpace();
               f(k).inFourierSpace() = asFourier(extraphase(k)) * f(k).inFourierSpace();
               f(k).inFourierSpace().setZeroMode(0);
 
@@ -259,7 +259,7 @@ namespace TempLat
 
       /* Initialization of Electric Field */
       //
-      ForLoop(k, 1, Model::NDim, p(k).inFourierSpace() = sqrt(knorm / (2.0)) * phaseE * tmpP(k).inFourierSpace();
+      ForLoop(k, 1, Model::NDim, p(k).inFourierSpace() = sqrt(knorm / T(2)) * phaseE * tmpP(k).inFourierSpace();
               p(k).inFourierSpace() = asFourier(extraphase(k)) * p(k).inFourierSpace();
               p(k).inFourierSpace().setZeroMode(0);
 

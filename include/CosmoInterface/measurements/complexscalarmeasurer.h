@@ -65,11 +65,11 @@ namespace TempLat
     template <typename Model> void measureStandard(Model &model, T t)
     {
       ForLoop(i, 0, Model::NCs - 1,
-              MeansMeasurer::measure(standardReOut(i), sqrt(2) * model.fldCS(i)(0_c),
-                                     sqrt(2) * model.piCS(i)(0_c) * pow(model.aI, model.alpha - 3), t);
+              MeansMeasurer::measure(standardReOut(i), sqrt(T(2)) * model.fldCS(i)(0_c),
+                                     sqrt(T(2)) * model.piCS(i)(0_c) * pow(model.aI, model.alpha - 3), t);
               standardReOut(i).save(lastMeas);
-              MeansMeasurer::measure(standardImOut(i), sqrt(2) * model.fldCS(i)(1_c),
-                                     sqrt(2) * model.piCS(i)(1_c) * pow(model.aI, model.alpha - 3), t);
+              MeansMeasurer::measure(standardImOut(i), sqrt(T(2)) * model.fldCS(i)(1_c),
+                                     sqrt(T(2)) * model.piCS(i)(1_c) * pow(model.aI, model.alpha - 3), t);
               standardImOut(i).save(lastMeas); //
               MeansMeasurer::measure(standardNormOut(i), norm(model.fldCS(i)),
                                      norm(model.piCS(i) * pow(model.aI, model.alpha - 3)), t);

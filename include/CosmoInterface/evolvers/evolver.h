@@ -56,6 +56,21 @@ namespace TempLat
         rk2n->setDelta(extraFlds);
       }
 
+      // High-order composition schemes rely on cancellations between coefficients quoted to ~20
+      // significant digits (and RK4_5 on its Butcher-tableau ratios). In single precision those
+      // coefficients only survive to ~7 digits and the per-step roundoff dominates well before the
+      // nominal order is reached, so the scheme costs its extra stages without buying accuracy.
+      if constexpr (sizeof(T) < sizeof(double)) {
+        const size_t order = VelocityVerletParameters<T>::isVerlet(type)  ? VelocityVerletParameters<T>::getOrder(type)
+                             : PositionVerletParameters<T>::isVerlet(type) ? PositionVerletParameters<T>::getOrder(type)
+                                                                          : 2;
+        if (order > 4)
+          say << "WARNING: a " << order
+              << "th-order composition scheme was requested for a model whose FloatType is single precision. Its "
+                 "coefficients cannot be represented to the accuracy the scheme relies on, so the effective order "
+                 "will be lower than requested. Consider a 2nd/4th-order evolver, or double precision.";
+      }
+
       if (lf == nullptr && vv == nullptr && pv == nullptr && rk2n == nullptr)
         throw(EvolverTypeNotInEvolver("The evolver type you specified was not implemented in the Evolver class, "
                                       "which dispatch between different evolvers. Abort."));

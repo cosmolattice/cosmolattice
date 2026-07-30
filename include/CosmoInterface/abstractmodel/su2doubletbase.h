@@ -71,13 +71,13 @@ namespace TempLat
           // Initialize average fields
           SU2DblGrad2AvI(0), SU2DblGrad2AvSI(0), SU2DblPi2AvSI(0), SU2DblPi2AvSIM(0), SU2DblPi2AvIM(0), SU2DblPi2AvI(0)
     {
-      auto gU1s = parser.get<double, SU2DoubletU1Couplings::nGauge>("gU1s", 1.0);
-      auto SU2DoubletU1Charges = parser.get<double, SU2DoubletU1Couplings::howManyCouples()>("SU2DoubletU1_charges", 1);
+      auto gU1s = parser.get<T, SU2DoubletU1Couplings::nGauge>("gU1s", 1.0);
+      auto SU2DoubletU1Charges = parser.get<T, SU2DoubletU1Couplings::howManyCouples()>("SU2DoubletU1_charges", 1);
       gQ_SU2DblU1.setEffectiveCharges(SU2DoubletU1Charges, gU1s);
 
-      auto gSU2s = parser.get<double, SU2DoubletSU2Couplings::nGauge>("gSU2s", 1.0);
+      auto gSU2s = parser.get<T, SU2DoubletSU2Couplings::nGauge>("gSU2s", 1.0);
       auto SU2DoubletSU2Charges =
-          parser.get<double, SU2DoubletSU2Couplings::howManyCouples()>("SU2DoubletSU2_charges", 1);
+          parser.get<T, SU2DoubletSU2Couplings::howManyCouples()>("SU2DoubletSU2_charges", 1);
       gQ_SU2DblSU2.setEffectiveCharges(SU2DoubletSU2Charges, gSU2s);
     }
   };

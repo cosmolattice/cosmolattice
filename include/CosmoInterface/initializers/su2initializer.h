@@ -56,7 +56,7 @@ namespace TempLat
         // choosing the backward spatial derivative in the Gauss constraint
         // const auto &toolBox = model.fldSU2Doublet(0_c)(0_c).getToolBox();
         auto expIK =
-            MakeVector(i, 1, Model::NDim, complexPhase(-2.0 * Constants::pi<T> / N * ntilde(i))); // e^(-2*pi*k/N)
+            MakeVector(i, 1, Model::NDim, complexPhase(-2 * Constants::pi<T> / N * ntilde(i))); // e^(-2*pi*k/N)
         auto keffm = MakeVector(i, 1, Model::NDim, 1_c - expIK(i));
         auto keffm2 = Total(i, 1, Model::NDim, norm2(keffm(i)));
 
@@ -161,7 +161,7 @@ namespace TempLat
           // @label:su2_doublet_modes
           ForLoop(a, 0, 3,
                   model.fldSU2Doublet(i)(a).inFourierSpace() =
-                      amplitudes(a) * (leftPhases(a) + rightPhases(a)) / sqrt(2) / sqrt(2);
+                      amplitudes(a) * (leftPhases(a) + rightPhases(a)) / sqrt(T(2)) / sqrt(T(2));
                   // Second sqrt(2) comes from normalisation of SU2 doublet
                   model.fldSU2Doublet(i)(a).inFourierSpace().setZeroMode(0);
                   // Sets the zero mode to 0.
@@ -175,8 +175,8 @@ namespace TempLat
 
           ForLoop(a, 0, 3,
                   model.piSU2Doublet(i)(a).inFourierSpace() =
-                      -Constants::I<T> * omega0 * amplitudes(a) * (leftPhases(a) - rightPhases(a)) / sqrt(2) / sqrt(2) -
-                      aDot * model.fldSU2Doublet(i)(a).inFourierSpace() / sqrt(2);
+                      -Constants::I<T> * omega0 * amplitudes(a) * (leftPhases(a) - rightPhases(a)) / sqrt(T(2)) / sqrt(T(2)) -
+                      aDot * model.fldSU2Doublet(i)(a).inFourierSpace() / sqrt(T(2));
 
                   model.piSU2Doublet(i)(a).inFourierSpace().setZeroMode(0);
                   // Sets the zero mode to 0.

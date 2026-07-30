@@ -29,7 +29,7 @@ namespace TempLat
     template <class Model> static auto get(Model &model)
     {
       return pow(model.aI, 1 + model.alpha) * GaugeDerivatives::LaplacianGWs(model) +
-             pow(model.aI, 1 + model.alpha) * 2. * (PITensor::effectiveAnisotropicTensor(model));
+             pow(model.aI, 1 + model.alpha) * 2 * (PITensor::effectiveAnisotropicTensor(model));
     }
     // @endlabel
   };

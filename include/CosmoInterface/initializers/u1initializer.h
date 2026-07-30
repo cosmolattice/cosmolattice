@@ -92,7 +92,7 @@ namespace TempLat
         // We define keffm as the backward (complex) lattice momentum, consistent with the backward spatial derivative
         // in the Gauss constraint
         auto expIK =
-            MakeVector(i, 1, Model::NDim, complexPhase(-2.0 * Constants::pi<T> / N * ntilde(i))); // e^(-2*pi*k/N)
+            MakeVector(i, 1, Model::NDim, complexPhase(-2 * Constants::pi<T> / N * ntilde(i))); // e^(-2*pi*k/N)
         auto keffm = MakeVector(i, 1, Model::NDim, 1_c - expIK(i));
         auto keffm2 = Total(i, 1, Model::NDim, norm2(keffm(i)));
 
@@ -201,10 +201,10 @@ namespace TempLat
               // waves in momentum space:
               // @label:complex_scalar_modes
               model.fldCS(i)(0_c).inFourierSpace() =
-                  a0 * (eitheta00 + eitheta01) / sqrt(2) /
-                  sqrt(2); // component 0. Second sqrt(2) comes from normalisation of complex scalar.
+                  a0 * (eitheta00 + eitheta01) / sqrt(T(2)) /
+                  sqrt(T(2)); // component 0. Second sqrt(2) comes from normalisation of complex scalar.
               model.fldCS(i)(0_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
-              model.fldCS(i)(1_c).inFourierSpace() = a1 * (eitheta10 + eitheta11) / sqrt(2) / sqrt(2); // component 1
+              model.fldCS(i)(1_c).inFourierSpace() = a1 * (eitheta10 + eitheta11) / sqrt(T(2)) / sqrt(T(2)); // component 1
               model.fldCS(i)(1_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
 
               // 5. Fluctuations for the complex field time-derivatives:
@@ -217,11 +217,11 @@ namespace TempLat
 
               // --> ... and then set the fluctuations of the derivatives.
               model.piCS(i)(0_c).inFourierSpace() =
-                  -Constants::I<T> * omega0 * a0 * (eitheta00 - eitheta01) / sqrt(2) / sqrt(2) -
+                  -Constants::I<T> * omega0 * a0 * (eitheta00 - eitheta01) / sqrt(T(2)) / sqrt(T(2)) -
                   aDot * model.fldCS(i)(0_c).inFourierSpace();    // component 0
               model.piCS(i)(0_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
               model.piCS(i)(1_c).inFourierSpace() =
-                  -Constants::I<T> * omega0 * a1 * (eitheta10 - eitheta11) / sqrt(2) / sqrt(2) -
+                  -Constants::I<T> * omega0 * a1 * (eitheta10 - eitheta11) / sqrt(T(2)) / sqrt(T(2)) -
                   aDot * model.fldCS(i)(1_c).inFourierSpace();    // component 1
               model.piCS(i)(1_c).inFourierSpace().setZeroMode(0); // sets the zero mode to 0
                                                                   // @endlabel
@@ -266,12 +266,12 @@ namespace TempLat
               auto a1 = fFluctuationNormDefect *
                         RGF(fg.getBaseSeed() + "norm1" + model.fldCS(i)(1_c).toString(), toolBox); // component 1
 
-              model.fldCS(i)(0_c).inFourierSpace() = a0 / sqrt(2.) / sqrt(2.); // component 0
-              model.fldCS(i)(0_c).inFourierSpace().setZeroMode(0.);
-              model.fldCS(i)(1_c).inFourierSpace() = a1 / sqrt(2.) / sqrt(2.); // component 1
-              model.fldCS(i)(1_c).inFourierSpace().setZeroMode(0.);
+              model.fldCS(i)(0_c).inFourierSpace() = a0 / sqrt(T(2)) / sqrt(T(2)); // component 0
+              model.fldCS(i)(0_c).inFourierSpace().setZeroMode(T(0));
+              model.fldCS(i)(1_c).inFourierSpace() = a1 / sqrt(T(2)) / sqrt(T(2)); // component 1
+              model.fldCS(i)(1_c).inFourierSpace().setZeroMode(T(0));
 
-              model.piCS(i) = Complexify(0., 0.););
+              model.piCS(i) = Complexify(T(0), T(0)););
     }
 
     template <class Model, typename T>
@@ -307,9 +307,9 @@ namespace TempLat
                         RGF(fg.getBaseSeed() + "norm1" + model.fldCS(i)(1_c).toString(), toolBox); // component 1
 
               // 3. Finally, we set the fields to the desired values.
-              model.fldCS(i)(0_c).inFourierSpace() = a0 / sqrt(2); // component 0
+              model.fldCS(i)(0_c).inFourierSpace() = a0 / sqrt(T(2)); // component 0
               model.fldCS(i)(0_c).inFourierSpace().setZeroMode(0);
-              model.fldCS(i)(1_c).inFourierSpace() = a1 / sqrt(2); // component 1
+              model.fldCS(i)(1_c).inFourierSpace() = a1 / sqrt(T(2)); // component 1
               model.fldCS(i)(1_c).inFourierSpace().setZeroMode(0);
 
               // 4. Conjugate momenta is set to zero.

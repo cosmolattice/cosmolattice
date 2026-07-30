@@ -200,10 +200,10 @@ namespace TempLat
      */
     template <class Model, int A> static inline auto B2SU2(Model &model, Tag<A> a)
     {
-      return 4.0 / (pow<4>(model.dx) * pow<2>(model.gQ_SU2DblSU2(0_c, a))) *
+      return 4.0f / (pow<4>(model.dx) * pow<2>(model.gQ_SU2DblSU2(0_c, a))) *
              Total(i, 1, Model::NDim,
                    Total(j, 1, Model::NDim,
-                         IfElse(IsLess(j, i), 2.0 - trace(plaq(model.fldSU2(a), i, j)), // if
+                         IfElse(IsLess(j, i), 2 - trace(plaq(model.fldSU2(a), i, j)), // if
                                 ZeroType()                                              // else
                          );));
     }

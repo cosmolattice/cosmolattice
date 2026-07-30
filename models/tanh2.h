@@ -24,6 +24,8 @@ namespace TempLat
     static constexpr size_t NScalars = 2;
     // In our phi4 example, we only want 2 scalar fields.
     static constexpr size_t NPotTerms = 2;
+
+    using FloatType = double;
     // Our potential naturaly splits into two terms: the inflaton potential
     // and the interaction with the daughter field.
 
@@ -47,7 +49,7 @@ namespace TempLat
   {
     //...
   private:
-    double M, Lambda4, phii, omega, q, g;
+    FloatType M, Lambda4, phii, omega, q, g;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
 
@@ -61,7 +63,7 @@ namespace TempLat
     // fldS : The actual object which contains the scalar fields.
 
   public:
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar, auto toolBox)
+    MODELNAME(ParameterParser &parser, RunParameters<FloatType> &runPar, auto toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
                            STRINGIFY(MODELLABEL)) // MODELLABEL is defined in the cmake.
@@ -70,12 +72,12 @@ namespace TempLat
       // Independent parameters of the model and initial homogeneous components of the fields
       /////////
 
-      M = parser.get<double>("M");
-      Lambda4 = parser.get<double>("Lambda4");
-      q = parser.get<double>("q");
+      M = parser.get<FloatType>("M");
+      Lambda4 = parser.get<FloatType>("Lambda4");
+      q = parser.get<FloatType>("q");
 
-      fldS0 = parser.get<double, 2>("initial_amplitudes");
-      piS0 = parser.get<double, 2>("initial_momenta", {0, 0});
+      fldS0 = parser.get<FloatType, 2>("initial_amplitudes");
+      piS0 = parser.get<FloatType, 2>("initial_momenta", {0, 0});
 
       phii = fldS0[0];
       g = sqrt(q) * omega / phii;
@@ -117,7 +119,7 @@ namespace TempLat
     }
     auto potentialTerms(Tag<1>) // Interaction energy
     {
-      return 0.5 * q * fldS(0_c) * fldS(0_c) * fldS(1_c) * fldS(1_c);
+      return FloatType(0.5) * q * fldS(0_c) * fldS(0_c) * fldS(1_c) * fldS(1_c);
     }
 
     /////////

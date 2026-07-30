@@ -35,7 +35,7 @@ namespace TempLat
 
     template <typename Model> static auto weightComplexScalar(Model &model)
     {
-      return 4 * Potential::potential(model) * heaviside(0.5 - norm2(model.fldCS(0_c))) /
+      return 4 * Potential::potential(model) * heaviside(0.5f - norm2(model.fldCS(0_c))) /
              model.resolutionPreservingFactor;
     }
   };

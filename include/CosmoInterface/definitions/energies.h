@@ -36,12 +36,12 @@ namespace TempLat
 
     template <class Model, class T> static inline auto kineticS(Model &model, T fldf)
     { // scalar singlet: kinetic energy
-      return 0.5 * fldf * pow<-6>(model.aI);
+      return 0.5f * fldf * pow<-6>(model.aI);
     }
 
     template <class Model, class T> static inline auto gradientS(Model &model, T fldf)
     { // scalar singlet: gradient energy
-      return 0.5 * fldf * pow<-2>(model.aI);
+      return 0.5f * fldf * pow<-2>(model.aI);
     }
 
     template <class Model, class T> static inline auto kineticCS(Model &model, T fldf)
@@ -68,7 +68,7 @@ namespace TempLat
     static inline auto electricU1(Model &model, T fldf)
     { // This expects field already rescaled by the coupling constant. That ways, works like scalar, for different gauge
       // fields.
-      return 0.5 * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf *
+      return 0.5f * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf *
              IfElse(Model::DefectsModel, model.resolutionPreservingFactor,
                     OneType()); // In case we perform a simulatin with defects that uses resolution-preserving
                                 // techniques, the definition of the electric field needs to be rescaled. Note here we
@@ -78,7 +78,7 @@ namespace TempLat
 
     template <class Model, class T> static inline auto magneticU1(Model &model, T fldf)
     { // U(1) gauge field: magnetic energy
-      return 0.5 * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf /
+      return 0.5f * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf /
              IfElse(Model::DefectsModel, model.resolutionPreservingFactor,
                     OneType()); // In case we perform a simulation with defects that uses resolution-preserving
                                 // techniques, the definition of the electric field needs to be rescaled
@@ -87,13 +87,13 @@ namespace TempLat
     template <class Model, class T> // SU(2) gauge field: electric energy
     static inline auto electricSU2(Model &model, T fldf)
     {
-      return 0.5 * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf;
+      return 0.5f * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf;
     }
 
     template <class Model, class T> // SU(2) gauge field: magnetic energy
     static inline auto magneticSU2(Model &model, T fldf)
     {
-      return 0.5 * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf;
+      return 0.5f * pow<2>(model.omegaStar / model.fStar) * pow<-4>(model.aI) * fldf;
     }
 
     // The below functions are the same with fldf=model.pi2AvI,model.grad2AvI...

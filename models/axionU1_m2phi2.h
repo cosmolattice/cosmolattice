@@ -22,6 +22,8 @@ namespace TempLat
     	static constexpr size_t NU1Flds = 1;
     	static constexpr size_t NPotTerms = 1;
 
+    	using FloatType = double;
+
 		// Axion-gauge coupling: index 0 scalar (the only one) couples to the index 0 abelian gauge (the only one)
 		typedef TempLat::CouplingsManager<NScalars, NU1Flds,true> ScalarU1AxionCouplings; 
 
@@ -45,7 +47,7 @@ template<class R>
 	    // @endlabel
 
 		 // @label:private_members
-        double mass; //axion mass for the specific quadratic potential of this model file
+        FloatType mass; //axion mass for the specific quadratic potential of this model file
       // @endlabel
 		
 
@@ -53,20 +55,20 @@ template<class R>
         static constexpr size_t NDim = Model<MODELNAME>::NDim;
 
 		// @label:constructor_params
-    	MODELNAME(ParameterParser& parser, RunParameters<double>& runPar, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox): //Constructor of our model.
+    	MODELNAME(ParameterParser& parser, RunParameters<FloatType>& runPar, device::memory::host_ptr<MemoryToolBox<NDim>> toolBox): //Constructor of our model.
     	Model<MODELNAME>(parser,runPar.getLatParams(), toolBox, runPar.dt, STRINGIFY(MODELLABEL)) //MODELLABEL is defined in the cmake.
     	{
 		 // @endlabel
    
 
 			// @label:initial_conditions
-				fldS0 = parser.get<double, 1>("initial_amplitudes");
-				piS0 = parser.get<double, 1>("initial_momenta");
+				fldS0 = parser.get<FloatType, 1>("initial_amplitudes");
+				piS0 = parser.get<FloatType, 1>("initial_momenta");
 			// @endlabel
 
       
 		// @label:read_model_specific_param
-		mass = parser.get<double>("Mass");
+		mass = parser.get<FloatType>("Mass");
 		// @endlabel
 		
 		// @label:rescaling
@@ -85,7 +87,7 @@ template<class R>
    	 // @label:potential_terms
         auto potentialTerms(Tag<0>) // Term 0: Quadratic potential of the scalar singlet
     	{
-      		return  0.5 * pow<2>(fldS(0_c));
+      		return  FloatType(0.5) * pow<2>(fldS(0_c));
     	}
 		// @endlabel
 

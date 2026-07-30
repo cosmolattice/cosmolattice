@@ -51,7 +51,7 @@ namespace TempLat
       const auto omegaK = Function(k, sqrt(pow<2>(model.aI) * m2 + pow<2>(k)));
 
       return (Function(k, normalisation * omegaK(k)) * part1) +
-             (Function(k, normalisation * pow(model.aI, 2.0 * (1.0 - model.alpha)) / omegaK(k)) * part2);
+             (Function(k, normalisation * pow(model.aI, T(2) * (T(1) - model.alpha)) / omegaK(k)) * part2);
     }
 
   private:

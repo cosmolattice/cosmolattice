@@ -14,6 +14,8 @@ namespace TempLat
         static constexpr size_t NScalars = 2;
         static constexpr size_t NPotTerms = 1;
 
+        using FloatType = double;
+
         // Non-minimal coupling: the second scalar (index 1) couples non-minimally to gravity. The first scalar (index 0) only couples minimally to gravity.
         typedef CouplingsManager<NScalars, 1, false, true> NonMinimalCouplings;
     };
@@ -34,23 +36,23 @@ namespace TempLat
   private:
   // @endlabel
     // @label:private_members
-    double lambda;
+    FloatType lambda;
     // @endlabel
 
   public:
     static constexpr size_t NDim = Model<MODELNAME>::NDim;
 
     // @label:constructor_params
-    MODELNAME(ParameterParser& parser, RunParameters<double>& runPar,
+    MODELNAME(ParameterParser& parser, RunParameters<FloatType>& runPar,
               device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
         : Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt, STRINGIFY(MODELLABEL))
     {
-        lambda = parser.get<double>("lambda");
+        lambda = parser.get<FloatType>("lambda");
     // @endlabel
 
         // @label:initial_conditions
-        fldS0 = parser.get<double, 2>("initial_amplitudes");
-        piS0 = parser.get<double, 2>("initial_momenta", {0, 0});
+        fldS0 = parser.get<FloatType, 2>("initial_amplitudes");
+        piS0 = parser.get<FloatType, 2>("initial_momenta", {0, 0});
         // @endlabel
 
         // @label:rescaling
@@ -67,7 +69,7 @@ namespace TempLat
     // @label:potential_terms
     auto potentialTerms(Tag<0>)
     {
-        return 0.25 * pow<4>(fldS(0_c));
+        return FloatType(0.25) * pow<4>(fldS(0_c));
     }
 
     // @endlabel

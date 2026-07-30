@@ -68,8 +68,8 @@ namespace TempLat
           // Initialize average fields
           CSgrad2AvI(0), CSgrad2AvSI(0), CSpi2AvSI(0), CSpi2AvSIM(0), CSpi2AvIM(0), CSpi2AvI(0)
     {
-      auto gU1s = parser.get<double, CsU1Couplings::nGauge>("gU1s", 1.0);
-      auto CSU1Charges = parser.get<double, CsU1Couplings::howManyCouples()>("CSU1_charges", 1);
+      auto gU1s = parser.get<T, CsU1Couplings::nGauge>("gU1s", 1.0);
+      auto CSU1Charges = parser.get<T, CsU1Couplings::howManyCouples()>("CSU1_charges", 1);
       gQ_CsU1.setEffectiveCharges(CSU1Charges, gU1s);
     }
   };

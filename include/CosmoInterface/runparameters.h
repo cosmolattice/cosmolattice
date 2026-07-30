@@ -20,6 +20,16 @@ namespace TempLat
   MakeException(RunParametersMissing);
   MakeException(RunParametersInconsistent);
 
+  /** @brief Tolerance for comparing run parameters with each other or with a sentinel value.
+   *
+   * Deliberately independent of the model's FloatType. AlmostEqual defaults its epsilon to
+   * sqrt(numeric_limits<T>::epsilon()), which is 1.5e-8 in double but 3.4e-4 in single precision:
+   * with that default, a single-precision run would accept lSide = 2*pi/kIR = N*dx agreeing only in
+   * the fourth digit, and would treat any H0 below 3.4e-4 as exactly zero. These are host-side
+   * comparisons of input parameters, so there is no reason to relax them with the field precision.
+   **/
+  static constexpr double runParameterTolerance = 1e-8;
+
   /** @brief A class which contains the parameters useful to run a simulation but not model specific (dt for example).
    *
    *
@@ -55,7 +65,7 @@ namespace TempLat
           dx(par.getOverride<T>("dx", -1, Important)),       // Lattice spacing
           expansion(par.get<bool>("expansion", true,
                                   Important)),             // If true: self-consistent expansion. If false: no expansion
-          t0(par.get<double>("t0", 0, Important)),         // Initial time
+          t0(par.get<T>("t0", 0, Important)),         // Initial time
           tMax(par.get<T>("tMax", 10000 * dt, Important)), // Final time
           kCutoff(par.get<T>("kCutOff", -1.0,
                              Important)), // Momenta cutoff in spectra of initial fluctuations. -1 means no cutoff.
@@ -120,8 +130,8 @@ namespace TempLat
                       U1IC == InitialConditionsType::U1::DefectsWhiteNoise)
                          ? par.get<T>("deltaNoise")
                          : 0.0),
-          doDiffusion(par.get<bool>("doDiffusion", false)), tmaxdiff(doDiffusion ? par.get<double>("tmaxdiff") : 0.0),
-          dtdiff(doDiffusion ? par.get<double>("dtdiff") : 0.0),
+          doDiffusion(par.get<bool>("doDiffusion", false)), tmaxdiff(doDiffusion ? par.get<T>("tmaxdiff") : 0.0),
+          dtdiff(doDiffusion ? par.get<T>("dtdiff") : 0.0),
           diffType(doDiffusion ? par.get<EvolverType>("diffusionevolver", RK2) : RK2), // Type of evolution algorithm
           tOutFreqDiff(doDiffusion ? par.get<T>("tOutputFreqDiff", 10 * dtdiff)
                                    : tMax), // Printing time interval of output during the diffusion phase
@@ -136,9 +146,9 @@ namespace TempLat
                                      : false), // Whether a resolution-preserving techniques is performed or not. It
                                                // requires fixed background expansion (using it for self.consistent
                                                // expansion is yet not tested nor thoroughly thought)
-          sRP(doResolutionPreserving ? par.get<double>("sRP") : 1.0),
-          tRP0(doResolutionPreserving ? par.get<double>("tRP0", t0) : t0),
-          tRPMax(doResolutionPreserving ? par.get<double>("tRPMax", gettRPMaxtening()) : t0),
+          sRP(doResolutionPreserving ? par.get<T>("sRP") : 1.0),
+          tRP0(doResolutionPreserving ? par.get<T>("tRP0", t0) : t0),
+          tRPMax(doResolutionPreserving ? par.get<T>("tRPMax", gettRPMaxtening()) : t0),
           measureDefectsEnergies(par.get<bool>("measureDefectsEnergies", false)),
           measureDefectsStructure(par.get<bool>("measureDefectsStructure", false))
     {
@@ -146,9 +156,9 @@ namespace TempLat
       // needed, and any subset which is given must obey lSide = 2*pi/kIR = N*dx.
       // NOTE: We must have kIR=2*pi/lside for consistency.
       {
-        const bool hasKIR = !AlmostEqual(kIR, -1);
-        const bool hasLSide = !AlmostEqual(lSide, -1);
-        const bool hasDx = !AlmostEqual(dx, -1);
+        const bool hasKIR = !AlmostEqual(kIR, -1, runParameterTolerance);
+        const bool hasLSide = !AlmostEqual(lSide, -1, runParameterTolerance);
+        const bool hasDx = !AlmostEqual(dx, -1, runParameterTolerance);
 
         if (!hasKIR && !hasLSide && !hasDx)
           throw(RunParametersMissing("You need to specify either kIR, lSide or dx, abort."));
@@ -157,11 +167,11 @@ namespace TempLat
         // here are checked for consistency right after.
         if (!hasLSide) lSide = hasKIR ? 2 * Constants::pi<T> / kIR : dx * N;
 
-        if (hasKIR && !AlmostEqual(kIR, 2 * Constants::pi<T> / lSide))
+        if (hasKIR && !AlmostEqual(kIR, 2 * Constants::pi<T> / lSide, runParameterTolerance))
           throw(RunParametersInconsistent(
               "kIR = " + std::to_string(kIR) + " and lSide = " + std::to_string(lSide) +
               " are not consistent. If you think they should be, try removing one of the two."));
-        if (hasDx && !AlmostEqual(dx, lSide / N))
+        if (hasDx && !AlmostEqual(dx, lSide / N, runParameterTolerance))
           throw(RunParametersInconsistent(
               "dx = " + std::to_string(dx) + " and lSide = " + std::to_string(lSide) + " (with N = " +
               std::to_string(N) + ") are not consistent. If you think they should be, try removing one of the two."));
@@ -178,7 +188,7 @@ namespace TempLat
       if (appendMode && overwriteMode)
         throw(RunParametersInconsistent("'appendToFiles' and 'overwriteFiles' cannot both be true. Pick one."));
 
-      if (AlmostEqual(dt, 0.)) throw(RunParametersInconsistent("dt cannot be zero, abort."));
+      if (AlmostEqual(dt, 0., runParameterTolerance)) throw(RunParametersInconsistent("dt cannot be zero, abort."));
       if (tMax < t0) throw(RunParametersInconsistent("tMax must be >= t0, abort."));
       if (tOutFreq < dt) throw(RunParametersInconsistent("tOutputFreq must be >= dt, abort."));
       if (tOutInfreq < dt) throw(RunParametersInconsistent("tOutputInfreq must be >= dt, abort."));
@@ -234,7 +244,7 @@ namespace TempLat
       if (sRP > 0.0)
         throw(RunParametersInconsistent(
             "The parameter sRP of the resolution-preserving phase must obey sRP <= 0. Aborting."));
-      if (AlmostEqual(sRP, 0.)) return tMax;
+      if (AlmostEqual(sRP, 0., runParameterTolerance)) return tMax;
       return tRP0 * pow(tMax / tRP0, -1. / (sRP - 1.)); // This is correct for scale factors that evolve as a power law
                                                         // and which have a0 ~ (t/t0)^p !
     }

@@ -18,6 +18,12 @@ using FloatType = typename ModelType::FloatType;
 // This is useful to avoid having to write 'typename ModelType::FloatType
 // @endlabel
 
+using TimeType = double;
+// The simulation time is accumulated one dt at a time and is deliberately kept independent of the
+// model's FloatType. In single precision, t stops advancing altogether once t/dt reaches ~2^24, and
+// long before that the measurement cadence and the resolution-preserving phase boundaries drift.
+// The fields are what benefit from reduced precision; scalar time bookkeeping costs nothing.
+
 // ------ COSMOLATTICE MAIN ------ //
 
 // @label:main_sessionguard
@@ -116,7 +122,7 @@ int main(int argc, char *argv[])
   // @endlabel
 
   // Our time variable. Initialized below.
-  typename ModelType::FloatType t = 0;
+  TimeType t = 0;
 
   // We communicate t0 to the model, in case it needs it internally.
   model.t0 = runParams.t0;
@@ -159,7 +165,7 @@ int main(int argc, char *argv[])
   /************************Time evolution*************************/
 
   // @label:main_timeloop
-  for (int i = 0; t < runParams.tMax - runParams.dt / FloatType(2.0); ++i) {
+  for (int i = 0; t < runParams.tMax - runParams.dt / TimeType(2); ++i) {
     // Loop for the time evolution. At each step we advance one time step dt
 
     if (measurer.areWeMeasuring(i))
@@ -174,7 +180,7 @@ int main(int argc, char *argv[])
       // a measurement.
     }
 
-    if constexpr (ModelType::DefectsModel) {if (runParams.doResolutionPreserving && ResolutionPreserving::updateTimeStep(model, runParams, t) ) i--; }
+    if constexpr (ModelType::DefectsModel) {if (runParams.doResolutionPreserving && ResolutionPreserving::updateTimeStep(model, runParams, FloatType(t)) ) i--; }
     // If a resolution-preserving phase is performed, we need to check whether it will end in the incoming step.
     // To ensure correct evolution and conservation of Gauss law for U1 theories, we subdivide this evoution
     // step in two substeps. One until the exact time at which the phase ends ends, and the remaining of the original step.

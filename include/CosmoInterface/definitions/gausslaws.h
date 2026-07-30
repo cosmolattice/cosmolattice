@@ -57,9 +57,9 @@ namespace TempLat
     {
       auto RHS = -model.dx * MatterCurrents::SU2ChargeDensity(model, n); // right hand side (source term)
       auto LHS = Total(i, 1, Model::NDim,
-                       (1.0 / model.dx) * (model.piSU2(n)(i) -
-                                           shift(dagger(model.fldSU2(n)(i)) * model.piSU2(n)(i) * model.fldSU2(n)(i),
-                                                 -i))); // left hand side
+                       (1 / model.dx) * (model.piSU2(n)(i) -
+                                         shift(dagger(model.fldSU2(n)(i)) * model.piSU2(n)(i) * model.fldSU2(n)(i),
+                                               -i))); // left hand side
 
       auto diff = LHS - RHS;
       auto sum = LHS + RHS;

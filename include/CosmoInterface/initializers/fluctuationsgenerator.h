@@ -46,7 +46,7 @@ namespace TempLat
       auto omega = omega_k(k, mass2, f.toString());
       // mode frequency
 
-      auto Hcut = heaviside(kCutOff - k) * pow(k, (3. - Model::NDim) / 2.);
+      auto Hcut = heaviside(kCutOff - k) * pow(k, (T(3) - T(Model::NDim)) / T(2));
       // @endlabel
       // function that sets to zero all modes over a certain cutoff
 
@@ -54,15 +54,15 @@ namespace TempLat
       // (see Sec. 7.1. of arXiv:2006.15122 for a derivation)
 
       if constexpr (Model::NDim == 1)
-        return Hcut * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), .5)) * pow(2 * omega, -0.5) /
-               sqrt(4. * Constants::pi<T>);
+        return Hcut * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 0.5f)) * pow(2 * omega, -0.5f) /
+               sqrt(T(4) * Constants::pi<T>);
       else if constexpr (Model::NDim == 2)
-        return Hcut * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(2 * omega, -0.5) /
-               sqrt(2. * Constants::pi<T>);
+        return Hcut * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(2 * omega, -0.5f) /
+               sqrt(T(2) * Constants::pi<T>);
       else
         // @label:default_scalar_norm_3d
-        return Hcut * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5)) * pow(2 * omega, -0.5) /
-               sqrt(2);
+        return Hcut * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5f)) * pow(2 * omega, -0.5f) /
+               sqrt(T(2));
       // @endlabel
 
       // Here 1/sqrt{2omega_k} characterises rms of |phi_k|, but since |phi_k|^2 =
@@ -75,8 +75,8 @@ namespace TempLat
       FourierSite<Model::NDim> ntilde(f.getToolBox());
       auto k = ntilde.norm() * f.getKIR();
 
-      return pow(sqrt(2. * Constants::pi<T>) * lcorr * lSide / pow<2>(model.dx), 1.5) *
-             sqrt(0.5 * exp(-0.5 * k * k * lcorr * lcorr));
+      return pow(sqrt(T(2) * Constants::pi<T>) * lcorr * lSide / pow<2>(model.dx), 1.5f) *
+             sqrt(T(0.5) * exp(T(-0.5) * k * k * lcorr * lcorr));
     }
 
     template <class Model>
@@ -85,17 +85,17 @@ namespace TempLat
       FourierSite<Model::NDim> ntilde(f.getToolBox());
       auto k = ntilde.norm() * f.getKIR();
 
-      auto Hcut = heaviside(kCutOff - k) * pow(k, (3. - Model::NDim) / 2.);
+      auto Hcut = heaviside(kCutOff - k) * pow(k, (T(3) - T(Model::NDim)) / T(2));
 
       if constexpr (Model::NDim == 1)
-        return Hcut * delta * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), .5)) * pow(2, -0.5) /
-               sqrt(4. * Constants::pi<T>);
+        return Hcut * delta * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 0.5f)) * pow(T(2), T(-0.5)) /
+               sqrt(T(4) * Constants::pi<T>);
       else if constexpr (Model::NDim == 2)
-        return Hcut * delta * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(2, -0.5) /
-               sqrt(2. * Constants::pi<T>);
+        return Hcut * delta * (model.omegaStar / model.fStar * (lSide / pow<2>(f.getDx()))) * pow(T(2), T(-0.5)) /
+               sqrt(T(2) * Constants::pi<T>);
       else
-        return Hcut * delta * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5)) * pow(2, -0.5) /
-               sqrt(2);
+        return Hcut * delta * (model.omegaStar / model.fStar * pow(lSide / pow<2>(f.getDx()), 1.5f)) * pow(T(2), T(-0.5)) /
+               sqrt(T(2));
     }
 
     // Returns the amplitude of the (left- or right-moving) waves,
@@ -118,7 +118,7 @@ namespace TempLat
       auto fRight = getNormedFluctuations(model, f, mass2, "Random right", kCutOff);
       // right wave
 
-      f.inFourierSpace() = (fLeft + fRight) / sqrt(2);
+      f.inFourierSpace() = (fLeft + fRight) / sqrt(T(2));
       // the sum (which is also Gaussian) is imposed to the field in momentum space
       // extra 1/sqrt{2} is due to having summed Left and Right movers.
       f.inFourierSpace().setZeroMode(0);
@@ -134,7 +134,7 @@ namespace TempLat
       auto fLeft = getNormedFluctuations(model, f, mass2, "Random left", kCutOff);
       auto fRight = getNormedFluctuations(model, f, mass2, "Random right", kCutOff);
 
-      f.inFourierSpace() = (fLeft + fRight) / sqrt(2);
+      f.inFourierSpace() = (fLeft + fRight) / sqrt(T(2));
       f.inFourierSpace().setZeroMode(0); // sets the zero mode to 0
       // @endlabel
 
@@ -143,7 +143,7 @@ namespace TempLat
       auto k = ntilde.norm() * f.getKIR(); // comoving momentum (in program units), obtained by multiplying it by k_IR
       auto omega = omega_k(k, mass2, f.toString()); // mode frequency (defined below)
 
-      p.inFourierSpace() = Constants::I<T> * omega * (fLeft - fRight) / sqrt(2) -
+      p.inFourierSpace() = Constants::I<T> * omega * (fLeft - fRight) / sqrt(T(2)) -
                            aDot * f.inFourierSpace(); // derived in Sec. 7.1. of arXiv:2006.15122
       p.inFourierSpace().setZeroMode(0);              // sets the zero mode to 0
       // @endlabel
@@ -161,20 +161,20 @@ namespace TempLat
       FourierSite<Model::NDim> ntilde(model.getToolBox());
       size_t N = GetNGrid::get(model);
 
-      auto expIK = MakeVector(i, 1, Model::NDim, complexPhase(-2.0 * Constants::pi<T> / N * ntilde(i)));
+      auto expIK = MakeVector(i, 1, Model::NDim, complexPhase(-2 * Constants::pi<T> / N * ntilde(i)));
       auto keffm = MakeVector(i, 1, Model::NDim, 1_c - expIK(i));
       auto keffm2 = Total(i, 1, Model::NDim, norm2(keffm(i)));
 
-      auto e_basis = make_templatvector(0.25, 0.25, std::numbers::sqrt2 / 4.0);
+      auto e_basis = make_templatvector(T(0.25), T(0.25), std::numbers::sqrt2_v<T> / T(4));
 
       auto edotk = Total(i, 1, 3, e_basis(i - 1) * keffm(i));
 
-      auto lambda1 = MakeVector(i, 1, 3, e_basis(i - 1) - edotk * (1.0 / keffm2) * conj(keffm(i)));
-      auto invNLambda1 = safeDivide(1.0, sqrt(Total(i, 1, Model::NDim, norm2(lambda1(i)))));
+      auto lambda1 = MakeVector(i, 1, 3, e_basis(i - 1) - edotk * (T(1) / keffm2) * conj(keffm(i)));
+      auto invNLambda1 = safeDivide(T(1), sqrt(Total(i, 1, Model::NDim, norm2(lambda1(i)))));
 
       auto lambda2 =
           MakeVector(i, 1, 3, Total(j, 1, 3, Total(k, 1, 3, Symbols::epsilon(i, j, k) * e_basis(j - 1) * keffm(k))));
-      auto invNLambda2 = safeDivide(1.0, sqrt(Total(i, 1, Model::NDim, norm2(lambda2(i)))));
+      auto invNLambda2 = safeDivide(T(1), sqrt(Total(i, 1, Model::NDim, norm2(lambda2(i)))));
 
       ForLoop(i, 1, Model::NDim,
               f(i).inFourierSpace() = model.fStar / model.omegaStar *
@@ -194,7 +194,7 @@ namespace TempLat
                    " is negative. For this field, the dispersion relation for all modes is taken to be omega_k = |k|. "
                    "Please think whether this is what you want or not.";
       R meff2 = m2 > 0 ? m2 : 0;
-      return pow(k * k + meff2, 0.5);
+      return pow(k * k + meff2, 0.5f);
     }
 
   private:

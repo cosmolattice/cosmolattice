@@ -23,13 +23,13 @@ namespace TempLat
     FixedBackgroundExpansion(Model &model, RunParameters<T> &rPar)
         : pEoS(2.0 / (3.0 * (1.0 + rPar.omegaEoS) -
                       2.0 * model.alpha)), // Coefficient of the power-law expansion: depends on EoS and alpha
-          H0((AlmostEqual(rPar.H0, 0.0) && Model::DefectsModel)
+          H0((AlmostEqual(rPar.H0, 0.0, runParameterTolerance) && Model::DefectsModel)
                  ? pEoS / rPar.t0
                  : rPar.H0 / model.omegaStar), // Initial Hubble parameter (in program units)
           alpha(model.alpha), doResolutionPreserving(rPar.doResolutionPreserving), t0(rPar.t0), tRP0(rPar.tRP0),
           tRPMax(rPar.tRPMax), sRP(rPar.sRP)
     {
-      if (AlmostEqual(H0, 0.0) && rPar.fixedBackground)
+      if (AlmostEqual(H0, 0.0, runParameterTolerance) && rPar.fixedBackground)
         throw(RunParametersInconsistent(
             "For models that do not involve cosmic defects, you need to specify a non-zero H0 to run a simulation with "
             "fixed background. If you want to disable expansion, please set expansion = false in the input file."));

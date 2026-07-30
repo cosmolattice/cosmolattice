@@ -63,7 +63,7 @@ namespace TempLat
       /////////
 
       // COMPLEX SCALAR NORM: set to zero to have a non-biased model
-      ForLoop(i, 0, ModelPars::NScalars - 1, fldS0(i) = 0.; piS0(i) = 0.;);
+      ForLoop(i, 0, ModelPars::NScalars - 1, fldS0(i) = FloatType(0); piS0(i) = FloatType(0););
       /////////
       // Parameters of the model (read from parameters file)
       /////////
@@ -73,7 +73,7 @@ namespace TempLat
       lambda = parser.get<FloatType>("lambda", 1.);
       vev = parser.get<FloatType>("vev", 1.);
       q = parser.get<FloatType>("qbias", 0.);
-      if (!AlmostEqual(q, 0.0) && ModelPars::NScalars != 1)
+      if (!AlmostEqual(q, 0.0, runParameterTolerance) && ModelPars::NScalars != 1)
         throw(RunParametersInconsistent(
             "The bias potential is only implemented for domain wall simulations. Please, set qbias to zero or remove "
             "it from the parameter file to run a simulation with NScalars > 1."));

@@ -66,8 +66,8 @@ namespace TempLat
       /////////
 
       // COMPLEX SCALAR NORM: set to zero to have a non-biased model
-      fldCS0(0_c) = Complexify(0., 0.);
-      piCS0(0_c) = Complexify(0., 0.);
+      fldCS0(0_c) = Complexify(FloatType(0), FloatType(0));
+      piCS0(0_c) = Complexify(FloatType(0), FloatType(0));
 
       /////////
       // Parameters of the model (read from parameters file)

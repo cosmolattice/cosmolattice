@@ -52,7 +52,7 @@ namespace TempLat
                                                                magneticField4(magneticField(model.fldU1(n), i), i)),
                        ZeroType()));
 
-      const double NonLinearSwitch = (tMinust0 > model.tNonLinearAxionU1) ? 1.0 : 0.0;
+      const typename Model::FloatType NonLinearSwitch = (tMinust0 > model.tNonLinearAxionU1) ? 1 : 0;
 
       return AxionCouplScalar * NonLinearSwitch;
     }
@@ -71,7 +71,7 @@ namespace TempLat
     {
 
       auto AxionCoupl1 =
-          -0.5 * Total(a, 0, Model::Ns - 1,
+          -0.5f * Total(a, 0, Model::Ns - 1,
                        IfElse(Model::ScalarU1AxionCouplings::couples(a, Tag<N>()),
                               model.alphaLambda_SU1(a, n) *
                                   (model.piS(a) * magneticField4(magneticField(model.fldU1(n), i), i) +
@@ -79,7 +79,7 @@ namespace TempLat
                               ZeroType()));
 
       auto AxionCoupl2 =
-          0.25 *
+          0.25f *
           Total(
               a, 0, Model::Ns - 1,
               IfElse(
@@ -99,7 +99,7 @@ namespace TempLat
                                         backDiff(model.fldS(a), j) * shift(electricField2(model.piU1(n), k), -j))))),
                   ZeroType()));
 
-      const double NonLinearSwitch = (tMinust0 > model.tNonLinearAxionU1) ? 1.0 : 0.0;
+      const typename Model::FloatType NonLinearSwitch = (tMinust0 > model.tNonLinearAxionU1) ? 1 : 0;
 
       return (pow(model.aI, model.alpha - 3) * AxionCoupl1 +
               pow(model.aI, -1 + model.alpha) * NonLinearSwitch * AxionCoupl2);
@@ -123,7 +123,7 @@ namespace TempLat
                                      shift(magneticField4(magneticField(model.fldU1(n), i), i), i)) +
                                         (backDiff(model.fldS(a), i) *
                                          shift(magneticField4(magneticField(model.fldU1(n), i), i), -i))) *
-                              0.5,
+                              0.5f,
                           ZeroType()));
     }
 

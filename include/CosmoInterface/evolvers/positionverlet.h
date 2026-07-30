@@ -169,31 +169,31 @@ namespace TempLat
     // Evolves fldS
     template <class Model> void driftScalar(Model &model, T w)
     {
-      model.fldS += pow(model.aI, model.alpha - 3) * (model.dt / 2.0 * w * model.piS);
+      model.fldS += pow(model.aI, model.alpha - 3) * (model.dt / T(2) * w * model.piS);
     }
 
     // Evolves fldGWs
     template <class Model> void driftGWs(Model &model, T w)
     {
-      (*model.fldGWs) += pow(model.aI, model.alpha - 3) * (model.dt / 2.0 * w * (*model.piGWs));
+      (*model.fldGWs) += pow(model.aI, model.alpha - 3) * (model.dt / T(2) * w * (*model.piGWs));
     }
 
     // Evolves fldCS
     template <class Model> void driftCS(Model &model, T w)
     {
-      model.fldCS += pow(model.aI, model.alpha - 3) * model.dt / 2.0 * w * model.piCS;
+      model.fldCS += pow(model.aI, model.alpha - 3) * model.dt / T(2) * w * model.piCS;
     }
 
     // Evolves fldSU2Doublet
     template <class Model> void driftSU2Doublet(Model &model, T w)
     {
-      model.fldSU2Doublet += pow(model.aI, model.alpha - 3) * model.dt / 2.0 * w * model.piSU2Doublet;
+      model.fldSU2Doublet += pow(model.aI, model.alpha - 3) * model.dt / T(2) * w * model.piSU2Doublet;
     }
 
     // Evolves fldU1
     template <class Model> void driftU1Vector(Model &model, T w)
     {
-      model.fldU1 += pow(model.aI, model.alpha - 1) * w * model.dt / 2.0 * model.piU1;
+      model.fldU1 += pow(model.aI, model.alpha - 1) * w * model.dt / T(2) * model.piU1;
     }
 
     // Evolves fldSU2
@@ -202,7 +202,7 @@ namespace TempLat
       ForLoop(n, 0, Model::NSU2 - 1,
               auto rescaledPi = MakeVector(
                   i, 1, Model::NDim,
-                  exp(w * pow(model.aI, model.alpha - 1) * model.dx * model.dt / 2.0 * model.gQ_SU2DblSU2(0_c, n) *
+                  exp(w * pow(model.aI, model.alpha - 1) * model.dx * model.dt / T(2) * model.gQ_SU2DblSU2(0_c, n) *
                       model.piSU2(n)(i))); // The 0_c is correct. In our convention, the link is normalized wrt the
                                            // first doublet charge.
 

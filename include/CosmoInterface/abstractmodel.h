@@ -219,6 +219,8 @@ namespace TempLat
     // set the initial value of the potential and the masses of the fields from the expression of the potential.
     void setInitialPotentialAndMassesFromPotential()
     {
+      using FloatType = T;
+
       // This adds the homogeneous components of the fields at one point:
       this->addInitValueOnePoint();
       // It's just a trick to compute the initial potential and masses; it must be removed afterwards with
@@ -232,12 +234,14 @@ namespace TempLat
       ForLoop(j, 0, NS - 1,
               this->masses2S(j) = device::memory::getAtOnePoint(Potential::deriv2S(static_cast<R &>(*this), j), pos0));
       ForLoop(j, 0, NC - 1,
-              this->masses2CS(j) = Complexify(
-                  device::memory::getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(0_c), pos0),
-                  device::memory::getAtOnePoint(Potential::deriv2CS(static_cast<R &>(*this), j)(1_c), pos0)););
+              this->masses2CS(j) = Complexify(static_cast<FloatType>(device::memory::getAtOnePoint(
+                                                  Potential::deriv2CS(static_cast<R &>(*this), j)(0_c), pos0)),
+                                              static_cast<FloatType>(device::memory::getAtOnePoint(
+                                                  Potential::deriv2CS(static_cast<R &>(*this), j)(1_c), pos0))););
       ForLoop(j, 0, NSU2DOUBLET - 1,
-              this->masses2SU2Doublet(j) = MakeSU2Doublet(
-                  a, device::memory::getAtOnePoint(Potential::deriv2SU2Doublet(static_cast<R &>(*this), j)(a), pos0)););
+              this->masses2SU2Doublet(j) =
+                  MakeSU2Doublet(a, static_cast<FloatType>(device::memory::getAtOnePoint(
+                                        Potential::deriv2SU2Doublet(static_cast<R &>(*this), j)(a), pos0))););
 
       // This removes the homogeneous component at one point added previously with "addInitValueOnePoint()"
       this->removeInitValue();

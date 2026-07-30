@@ -80,15 +80,15 @@ namespace TempLat
     static inline auto electricU1Contribution(const Model &model, Tag<I> i, Tag<J> j)
     {
       return Total(a, 0, Model::NU1 - 1,
-                   -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * model.piU1(a)(i) *
-                       model.piU1(a)(j) * IfElse(Model::DefectsModel, model.resolutionPreservingFactor, OneType()));
+                   -1 / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * model.piU1(a)(i) * model.piU1(a)(j) *
+                       IfElse(Model::DefectsModel, model.resolutionPreservingFactor, OneType()));
     }
 
     template <class Model, int I, int J>
     static inline auto magneticU1Contribution(const Model &model, Tag<I> i, Tag<J> j)
     {
       return Total(a, 0, Model::NU1 - 1,
-                   -1. / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * magneticFieldU1(model.fldU1(a), i) *
+                   -1 / pow<2>(model.aI) / pow<2>(model.fStar / model.omegaStar) * magneticFieldU1(model.fldU1(a), i) *
                        magneticFieldU1(model.fldU1(a), j) /
                        IfElse(Model::DefectsModel, model.resolutionPreservingFactor, OneType()));
     }

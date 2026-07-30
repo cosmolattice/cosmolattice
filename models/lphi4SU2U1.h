@@ -29,6 +29,8 @@ namespace TempLat
     static constexpr size_t NSU2Flds = 1;
     static constexpr size_t NPotTerms = 3;
 
+    using FloatType = double;
+
     // Coupling managers:  they deal with the different couplings between
     // the gauge fields and complex scalars/SU2 doublets
     //  --> If a type of interaction is not present, comment the corresponding line
@@ -55,16 +57,16 @@ namespace TempLat
   // Declaration of our model. It inherits from the generic model defined above.
   {
   private:
-    double lambda, qG, qH;
+    FloatType lambda, qG, qH;
     // Here are the declaration of the model specific parameters. They are 'private'
     // to force you using them only within your model and not outside.
-  // @endlabel
+    // @endlabel
 
   public:
     static constexpr size_t NDim = Model<MODELNAME>::NDim;
 
     // @label:constructor_initial_conditions
-    MODELNAME(ParameterParser &parser, RunParameters<double> &runPar,
+    MODELNAME(ParameterParser &parser, RunParameters<FloatType> &runPar,
               device::memory::host_ptr<MemoryToolBox<NDim>> toolBox)
         : // Constructor of our model.
           Model<MODELNAME>(parser, runPar.getLatParams(), toolBox, runPar.dt,
@@ -76,27 +78,27 @@ namespace TempLat
       /////////
 
       // SCALAR SINGLET: initial homogeneous amplitude and derivative
-      fldS0(0_c) = parser.get<double>("initial_amplitudes");
-      piS0(0_c) = parser.get<double>("initial_momenta");
+      fldS0(0_c) = parser.get<FloatType>("initial_amplitudes");
+      piS0(0_c) = parser.get<FloatType>("initial_momenta");
 
       // COMPLEX SCALAR NORM: initial homogeneous amplitude and derivative
-      double normCmplx0 = parser.get<double>("cmplx_field_initial_norm");
-      double normPiCmplx0 = parser.get<double>("cmplx_momentum_initial_norm");
+      FloatType normCmplx0 = parser.get<FloatType>("cmplx_field_initial_norm");
+      FloatType normPiCmplx0 = parser.get<FloatType>("cmplx_momentum_initial_norm");
 
       // We distribute the norm equally between the two components
       // using the "Complexify" function
-      fldCS0(0_c) = Complexify(normCmplx0 / sqrt(2.0), normCmplx0 / sqrt(2.0));
-      piCS0(0_c) = Complexify(normPiCmplx0 / sqrt(2.0), normPiCmplx0 / sqrt(2.0));
+      fldCS0(0_c) = Complexify(normCmplx0 / sqrt(FloatType(2)), normCmplx0 / sqrt(FloatType(2)));
+      piCS0(0_c) = Complexify(normPiCmplx0 / sqrt(FloatType(2)), normPiCmplx0 / sqrt(FloatType(2)));
 
       // SU(2) COMPLEX NORM: initial homogeneous amplitude and derivative
-      double normDoublet0 = parser.get<double>("SU2Doublet_initial_norm");
-      double normPiDoublet0 = parser.get<double>("SU2Doublet_initial_momenta_norm");
+      FloatType normDoublet0 = parser.get<FloatType>("SU2Doublet_initial_norm");
+      FloatType normPiDoublet0 = parser.get<FloatType>("SU2Doublet_initial_momenta_norm");
 
       // We distribute the norm equally between the four components
       // using the "MakeSU2Doublet" function
       fldSU2Doublet0(0_c) = MakeSU2Doublet(a, normDoublet0 / 2);
       piSU2Doublet0(0_c) = MakeSU2Doublet(a, normPiDoublet0 / 2);
-    // @endlabel
+      // @endlabel
 
       // @label:model_parameters
       /////////
@@ -105,11 +107,11 @@ namespace TempLat
       // --> Comment: Gauge couplings are specified in the parameters file (e.g. gU1s, gSU2s), and do not need to be
       // defined here
 
-      qG = parser.get<double>("qG");
-      qH = parser.get<double>("qH");
-      lambda = parser.get<double>("lambda");
+      qG = parser.get<FloatType>("qG");
+      qH = parser.get<FloatType>("qH");
+      lambda = parser.get<FloatType>("lambda");
       // @endlabel
-      
+
       // @label:rescaling
       /////////
       // Rescaling for program variables

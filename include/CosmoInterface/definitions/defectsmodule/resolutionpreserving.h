@@ -36,13 +36,13 @@ namespace TempLat
 
     template <typename Model, typename T> static bool updateTimeStep(Model &model, RunParameters<T> &rPar, T t)
     {
-      if (t > (rPar.tRPMax - rPar.dt) && t < rPar.tRPMax && !AlmostEqual(rPar.tRPMax, t) &&
-          !AlmostEqual(rPar.tRPMax, t + rPar.dt)) {
+      if (t > (rPar.tRPMax - rPar.dt) && t < rPar.tRPMax && !AlmostEqual(rPar.tRPMax, t, runParameterTolerance) &&
+          !AlmostEqual(rPar.tRPMax, t + rPar.dt, runParameterTolerance)) {
         model.dt = rPar.tRPMax - t;
         return true;
-      } else if (AlmostEqual(rPar.tRPMax, t) && !AlmostEqual(model.dt, rPar.dt))
+      } else if (AlmostEqual(rPar.tRPMax, t, runParameterTolerance) && !AlmostEqual(model.dt, rPar.dt, runParameterTolerance))
         model.dt = rPar.dt - model.dt;
-      else if (!AlmostEqual(model.dt, rPar.dt))
+      else if (!AlmostEqual(model.dt, rPar.dt, runParameterTolerance))
         model.dt = rPar.dt;
       return false;
     }

@@ -35,13 +35,13 @@ namespace TempLat
     // @label:gaugederivatives_laplacians
     template <class Model, int N> static auto LaplacianS(Model &model, Tag<N> n)
     {
-      return (1.0 / pow<2>(model.dx)) *
+      return (1 / pow<2>(model.dx)) *
              Total(i, 1, Model::NDim, shift(model.fldS(n), i) + shift(model.fldS(n), -i) - 2 * model.fldS(n));
     }
 
     template <class Model> static auto LaplacianGWs(Model &model)
     {
-      return (1.0 / pow<2>(model.dx)) *
+      return (1 / pow<2>(model.dx)) *
              Total(i, 1, Model::NDim, shift(*model.fldGWs, i) + shift(*model.fldGWs, -i) - 2 * (*model.fldGWs));
     }
 
@@ -49,7 +49,7 @@ namespace TempLat
     {
       auto covPlus = Total(i, 1, Model::NDim, U1sForCSCovDerivs(model, n, i) * shift(model.fldCS(n), i));
       auto covMinus = Total(i, 1, Model::NDim, shift(conj(U1sForCSCovDerivs(model, n, i)) * model.fldCS(n), -i));
-      return (covPlus + covMinus - (2.0 * Model::NDim) * model.fldCS(n)) / pow<2>(model.dx);
+      return (covPlus + covMinus - (2 * Model::NDim) * model.fldCS(n)) / pow<2>(model.dx);
     }
 
     template <class Model, int N> static auto covLaplacianSU2Doublet(Model &model, Tag<N> n)
@@ -61,7 +61,7 @@ namespace TempLat
                             shift(dagger(SU2sForSU2DoubletCovDerivs(model, n, i)) *
                                       (conj(U1sForSU2DoubletCovDerivs(model, n, i)) * model.fldSU2Doublet(n)),
                                   -i));
-      return (covPlus + covMinus - (2.0 * Model::NDim) * model.fldSU2Doublet(n)) / pow<2>(model.dx);
+      return (covPlus + covMinus - (2 * Model::NDim) * model.fldSU2Doublet(n)) / pow<2>(model.dx);
     }
     // @endlabel
 
