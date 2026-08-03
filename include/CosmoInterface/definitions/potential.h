@@ -59,7 +59,7 @@ namespace TempLat
     // IfElse is to avoid compilation errors when no scalars are specified.
     template <class Model> static inline auto derivS(Model &model)
     {
-      return IfElse((Model::Ns > 0), MakeArray(i, 0, Model::Ns - 1, derivS(model, i));, ZeroType());
+      return IfElse((Model::Ns > 0), MakeArray(i, 0, Model::Ns - 1, derivS(model, i)), ZeroType());
     }
 
     // template <class Model> static inline auto derivSSI(Model &model)
