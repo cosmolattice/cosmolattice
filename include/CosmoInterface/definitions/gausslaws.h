@@ -55,7 +55,13 @@ namespace TempLat
     // Checks Gauss constraint for the SU(2) gauge sector:
     template <class Model, int N> static inline auto checkSU2(Model &model, Tag<N> n)
     {
-      auto RHS = -model.dx * MatterCurrents::SU2ChargeDensity(model, n); // right hand side (source term)
+      // Right hand side (source term). Note there is no factor of dx here, unlike checkU1() above:
+      // U1ChargeDensity carries a 2/dx in its normalisation which that dx cancels, whereas
+      // SU2ChargeDensity has no 1/dx. Since the LHS below is (1/dx)*sum(...), it must be compared
+      // against the bare density -- which is also what the initialiser imposes (su2initializer.h sets
+      // j0a = -dx*density, i.e. LHS = -density). With the spurious dx the reported violation was a
+      // constant |LHS|/|RHS| = 1/dx and the ratio sat near 0.6 even for an exactly satisfied constraint.
+      auto RHS = (-1.0) * MatterCurrents::SU2ChargeDensity(model, n);
       auto LHS = Total(i, 1, Model::NDim,
                        (1 / model.dx) * (model.piSU2(n)(i) -
                                          shift(dagger(model.fldSU2(n)(i)) * model.piSU2(n)(i) * model.fldSU2(n)(i),
