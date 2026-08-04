@@ -22,7 +22,7 @@
 # - KOKKOSFFT: compile TempLat with KokkosFFT support for single-node GPU FFTs. Default: ON when CUDA or HIP support is enabled, OFF otherwise
 # - TEMPLAT_REPO: the git repository of TempLat to use, e.g. your own fork.
 #     Default: https://github.com/cosmolattice/templat.git
-# - TEMPLAT_BRANCH: the branch or tag of TempLat to use. Default: v1.0.1
+# - TEMPLAT_BRANCH: the branch or tag of TempLat to use. Default: v1.0.2
 #
 # ##############################################################################
 # cmake-format: on
@@ -57,7 +57,7 @@ set(TEMPLAT_REPO
     https://github.com/cosmolattice/templat.git
     CACHE STRING "Git repository of TempLat to use (e.g. your own fork)")
 set(TEMPLAT_BRANCH
-    v1.0.1
+    v1.0.2
     CACHE STRING "Branch of TempLat to use")
 FetchContent_Declare(
   TempLat
