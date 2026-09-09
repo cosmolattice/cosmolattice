@@ -32,9 +32,11 @@ namespace TempLat
    * - RK3_3: 3rd order 3 stages low storage Runge-Kutta
    * - RK3_4: 3rd order 4 stages low storage Runge-Kutta
    * - RK4_5: 4th order 5 stages low storage Runge-Kutta
+   * - RK3_4S: 3rd order 4 stages low storage Runge-Kutta, embedded (3,2), real-axis
+   *   stability boundary 5.80 (RK3_4: 2.79)
    *
    **/
-  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_3, RK3_4, RK4_5, PV2, PV4, PV6, PV8, PV10, PV6_2 };
+  enum EvolverType { LF, VV2, VV4, VV6, VV8, VV10, VV6_2, RK2, RK3_3, RK3_4, RK4_5, PV2, PV4, PV6, PV8, PV10, PV6_2, RK3_4S };
 
   std::istream &operator>>(std::istream &in, EvolverType &eType)
   {
@@ -74,6 +76,8 @@ namespace TempLat
       eType = PV10; // ...order 10
     else if (tmp == "PV6_2" || tmp == "16")
       eType = PV6_2; // alternative scheme for PV6 (see documentation)
+    else if (tmp == "RK3_4S" || tmp == "17")
+      eType = RK3_4S; // 3rd order 4 stages low storage RK, stability-optimised embedded (3,2)
     else if (tmp.empty()) {
     } // Otherwise crash for optional parameters.
     else
@@ -117,6 +121,8 @@ namespace TempLat
       return "PV10";
     else if (eType == PV6_2)
       return "PV6_2";
+    else if (eType == RK3_4S)
+      return "RK3_4S";
     else
       return "";
   }

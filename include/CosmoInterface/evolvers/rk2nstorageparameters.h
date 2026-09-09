@@ -16,6 +16,8 @@ namespace TempLat
   // - RK3_3:  https://arxiv.org/pdf/2101.05320
   // - RK3_4:  https://ntrs.nasa.gov/api/citations/19940029698/downloads/19940029698.pdf .
   // - RK4_5:  https://arxiv.org/pdf/2101.05320 RK4CK
+  // - RK3_4S: stability-optimised embedded (3,2) variant of RK3_4; derivation in the
+  //           su2u1higgspt repository, rk3_4_stability_optimised/DERIVATION.md (2026).
 
   template <typename T> class RK2NStorageParameters
   {
@@ -36,6 +38,13 @@ namespace TempLat
       else if (eType == RK4_5)
         res = {0, -567301805773.0 / 1357537059087.0, -2404267990393.0 / 2016746695238.0,
                -3550918686646.0 / 2091501179385.0, -1275806237668.0 / 842570457699.0};
+      // RK3_4S: embedded (3,2) 2N-storage scheme with the z^4 coefficient of the
+      // stability polynomial lowered from 1/24 to 0.019, R(z) = 1 + z + z^2/2 + z^3/6 + 0.019 z^4,
+      // real-axis boundary z* = 5.799 (RK3_4: 2.785). Same construction as RK3_4: the
+      // 3-stage partial sum is a 2nd-order solution at t+h, so b_4*dS_4 = y_4 - y_3.
+      // c_2 < 0 is forced by the embedding (see the derivation in su2u1higgspt).
+      else if (eType == RK3_4S)
+        res = {0, -7.131235671357139, 0.07357016623204414, -1.8217459068802624};
 
       return res;
     }
@@ -53,6 +62,8 @@ namespace TempLat
       else if (eType == RK4_5)
         res = {1432997174477.0 / 9575080441755.0, 5161836677717.0 / 13612068292357.0, 1720146321549.0 / 2090206949498.0,
                3134564353537.0 / 4481467310338.0, 2277821191437.0 / 14882151754819.0};
+      else if (eType == RK3_4S)
+        res = {-0.4849803451942083, -0.17444842436191757, 0.7567458587753582, 0.29676478054033917};
 
       return res;
     }
@@ -69,6 +80,8 @@ namespace TempLat
         res = {0.0, 0.06688758201974097, 0.6924057816719806, 1.0};
       else if (eType == RK4_5)
         res = {0.0, 1432997174477.0 / 9575080441755.0, 0.37040095736420475, 0.6222557631344432, 0.9582821306746903};
+      else if (eType == RK3_4S)
+        res = {0.0, -0.4849803451942083, 0.5846040570656286, 1.0};
 
       return res;
     }
@@ -79,13 +92,14 @@ namespace TempLat
       if (eType == RK3_3) res = 3;
       if (eType == RK3_4) res = 3;
       if (eType == RK4_5) res = 4;
+      if (eType == RK3_4S) res = 3;
       return res;
     }
 
     static bool isRK2n(EvolverType ev)
     {
       bool res = false;
-      if (ev == RK2 or ev == RK3_3 or ev == RK3_4 or ev == RK4_5) res = true;
+      if (ev == RK2 or ev == RK3_3 or ev == RK3_4 or ev == RK4_5 or ev == RK3_4S) res = true;
       return res;
     }
 
