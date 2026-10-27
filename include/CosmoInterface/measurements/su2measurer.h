@@ -59,18 +59,22 @@ namespace TempLat
 
     template <typename Model> void measureStandard(Model &model, T t)
     {
-      ForLoop(i, 0, Model::NSU2 - 1, auto B = sqrt(FieldFunctionals::B2SU2(model, i));
-              auto E = pow(model.aI, 1 * model.alpha - 1) * sqrt(FieldFunctionals::pi2SU2(model, i));
-              MeansMeasurer::measure(standardNormOut(i), E, B, t); standardNormOut(i).save(lastMeas);
-              gauss(i).addAverage(t); // adds time to the Gauss law file
-              auto gaussArr = GaussLaws::checkSU2(model, i);
+      ForLoop(i, 0, Model::NSU2 - 1,                                                                  //
+              auto B = sqrt(FieldFunctionals::B2SU2(model, i));                                       //
+              auto E = pow(model.aI, 1 * model.alpha - 1) * sqrt(FieldFunctionals::pi2SU2(model, i)); //
+
+              MeansMeasurer::measure(standardNormOut(i), E, B, t);       //
+              standardNormOut(i).save(lastMeas); gauss(i).addAverage(t); // adds time to the Gauss law file
+
               // the function returns a 3-component vector with information
               // of the left and right hand sides of the Gauss law.
+              auto gaussArr = GaussLaws::checkSU2(model, i); //
 
               gauss(i).addAverage(gaussArr(0)); // av|LHS - RHS|_over_av|LHS + RHS|,
               gauss(i).addAverage(gaussArr(1)); // av|LHS|
               gauss(i).addAverage(gaussArr(2)); // and av|RHS|
-              gauss(i).save(lastMeas););
+              gauss(i).save(lastMeas);          //
+      );
     }
     // @endlabel
 
@@ -79,13 +83,15 @@ namespace TempLat
     template <typename Model, typename PowerSpectrumMeasurer>
     void measureSpectra(Model &model, T t, PowerSpectrumMeasurer &PSMeasurer)
     {
-      ForLoop(k, 0, Model::NSU2 - 1,
+      ForLoop(k, 0, Model::NSU2 - 1,                                                                 //
+              auto BSU2 = FieldFunctionals::B2SU2(model, k);                                         //
+              auto ESU2 = pow(model.aI, 2 * (model.alpha - 1)) * FieldFunctionals::pi2SU2(model, k); //
 
-              auto BSU2 = safeSqrt(FieldFunctionals::B2SU2(model, k));
-              auto ESU2 = pow(model.aI, model.alpha - 1) * safeSqrt(FieldFunctionals::pi2SU2(model, k));
-              auto magSpecSU2 = PSMeasurer.powerSpectrum(BSU2); auto elSpecSU2 = PSMeasurer.powerSpectrum(ESU2);
+              auto magSpecSU2 = PSMeasurer.powerSpectrum(BSU2); //
+              auto elSpecSU2 = PSMeasurer.powerSpectrum(ESU2);  //
 
-              spectra(k).save(lastMeas, t, elSpecSU2, magSpecSU2););
+              spectra(k).save(lastMeas, t, elSpecSU2, magSpecSU2); //
+      );
     }
     // @endlabel
 
