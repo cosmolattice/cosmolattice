@@ -131,7 +131,12 @@ namespace TempLat
     // @label:gws_evolver_sync
     inline void sync(Model &model, T tMinust0) const
     {
-      if (typeGW == LF && !GWsynced) {
+      // The nullptr check matters here as much as in evolve() above: GWsynced starts false on a
+      // restart, so this branch is taken on the first sync() of a restarted run -- and with GWs
+      // disabled fldGWs is null (and lf may be null too, since it is only allocated for a LF
+      // evolver or for GWs). A fresh run never reaches it, GWsynced starting true, which is why
+      // this only ever bites a restart that actually takes a step.
+      if (model.fldGWs != nullptr && typeGW == LF && !GWsynced) {
         lf->kickGWs(model, 0.5);
         GWsynced = true;
       }
