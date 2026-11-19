@@ -1,0 +1,146 @@
+name: GPU Simulator
+
+# Optional, non-required check. The hosted runners have no GPU, so this builds
+# the lphi4 model with the CUDA backend (Kokkos and KokkosFFT) and runs it for
+# a few steps on a simulated NVIDIA H100
+# (https://github.com/pantheongpu/pantheonsim). A simulator cannot reproduce
+# hardware-specific behavior or timing, so it complements real-GPU testing and
+# does not replace it.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ master ]
+    paths:
+      - "include/**"
+      - "models/**"
+      - "source/**"
+      - "cmake/**"
+      - "CMakeLists.txt"
+      - ".github/workflows/gpu-sim.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  lphi4:
+    name: lphi4 (CUDA 13.0 and simulated H100)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 240
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+
+      # library-path is disabled so that the toolkit's cuFFT is the one that
+      # KokkosFFT links against and loads.
+      - name: Set up the simulated GPU and CUDA toolkit
+        uses: pantheongpu/setup-pantheonsim@deff5781e8adfd83dec98dd5242dcbc96a564773 # v0.1.10
+        with:
+          gpu: nvidia/h100
+          cuda-toolkit: "13.0"
+          library-path: 'false'
+
+      - name: Install FFTW
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libfftw3-dev
+
+      # Kokkos needs nvcc_wrapper as its compiler; the one from the release
+      # that TempLat fetches is used.
+      - name: Get the Kokkos nvcc wrapper
+        run: |
+          curl -sL https://github.com/kokkos/kokkos/releases/download/5.1.1/kokkos-5.1.1.tar.gz | tar -xz
+          echo "NVCC_WRAPPER=${PWD}/kokkos-5.1.1/bin/nvcc_wrapper" >> "$GITHUB_ENV"
+          echo "NVCC_WRAPPER_DEFAULT_COMPILER=g++" >> "$GITHUB_ENV"
+
+      # The simulator runs PTX only and needs a shared CUDA runtime, so the
+      # architecture is Hopper 9.0 (compute_90 PTX) and cudart is shared.
+      - name: Configure for CUDA
+        run: |
+          cmake -S . -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER="${NVCC_WRAPPER}" \
+            -DCMAKE_CXX_FLAGS="-cudart shared" \
+            -DCUDA=ON \
+            -DNATIVE=OFF \
+            -DKokkos_ARCH_HOPPER90=ON \
+            -DMODEL=lphi4
+
+      - name: Build lphi4 for CUDA
+        run: cmake --build build --target cosmolattice -j3
+
+      # The same model on the CPU, as the reference for the device result.
+      - name: Build lphi4 for the CPU
+        run: |
+          cmake -S . -B build-cpu \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_CXX_COMPILER=g++ \
+            -DNOTHREADING=ON -DNATIVE=OFF -DMODEL=lphi4
+          cmake --build build-cpu --target cosmolattice -j3
+
+      - name: Run lphi4 on the CPU and on the simulated H100
+        run: |
+          set -o pipefail
+          ARGS="input=${PWD}/models/parameter-files/lphi4.in N=16 baseSeed=12345 tMax=0.2 tOutputFreq=0.05 tOutputInfreq=0.1 outputfile=./"
+          mkdir -p run-cpu run-gpu
+          (cd run-cpu && ../build-cpu/lphi4 $ARGS 2>&1 | tee ../cpu.log)
+          (cd run-gpu && vgpu run ../build/lphi4 $ARGS 2>&1 | tee ../gpu.log)
+
+      # The CUDA build cannot start without the simulated device, and the CPU
+      # build uses FFTW where the device build uses KokkosFFT with cuFFT. The
+      # run must also be free of simulator errors and must reproduce the CPU
+      # energies.
+      - name: Check that the device ran and agrees with the CPU
+        run: |
+          ldd build/lphi4 | grep -q libcudart
+          grep -q "Using KokkosFFT backend" gpu.log
+          grep -q "Using FFTW backend" cpu.log
+          grep -q "virtual GPU platform initialized: 1 x nvidia/h100" gpu.log
+          if grep -i -E "VirtualGPU error|no (CUDA-capable )?device|cuda error" gpu.log; then
+            echo "The simulator or CUDA reported an error."; exit 1
+          fi
+          mkdir -p run-nodevice
+          if (cd run-nodevice && ../build/lphi4 input=../models/parameter-files/lphi4.in N=16 tMax=0.02 outputfile=./ > ../nodevice.log 2>&1); then
+            echo "The CUDA build ran without the simulated device."; exit 1
+          fi
+          python3 - run-cpu run-gpu <<'PY'
+          import math, sys
+
+          def load(path):
+              rows = []
+              for line in open(path):
+                  if line.startswith("#") or not line.strip():
+                      continue
+                  rows.append([float(x) for x in line.split()])
+              return rows
+
+          cpu = load(sys.argv[1] + "/average_energies.txt")
+          gpu = load(sys.argv[2] + "/average_energies.txt")
+          if len(cpu) < 4 or len(gpu) != len(cpu):
+              sys.exit("expected at least 4 measurements and equal counts, got cpu=%d gpu=%d" % (len(cpu), len(gpu)))
+          for r, (a, b) in enumerate(zip(cpu, gpu)):
+              for c, (x, y) in enumerate(zip(a, b)):
+                  if not (math.isfinite(x) and math.isfinite(y)):
+                      sys.exit("non-finite value at row %d column %d" % (r, c))
+                  if abs(x - y) > 1e-15 + 1e-6 * abs(x):
+                      sys.exit("device differs from CPU at row %d column %d: %r vs %r" % (r, c, y, x))
+          etot = [row[-1] for row in gpu]
+          if not all(e > 0 for e in etot) or not etot[0] > etot[-1]:
+              sys.exit("total energy is not positive and decreasing with expansion: %r" % etot)
+          cons = load(sys.argv[2] + "/average_energy_conservation.txt")
+          worst = max(abs(row[1]) for row in cons)
+          if worst > 1e-3:
+              sys.exit("Friedmann constraint violated: %g" % worst)
+          print("device matches the CPU reference on %d measurements, E_tot %.6f -> %.6f, worst Friedmann violation %.2e"
+                % (len(gpu), etot[0], etot[-1], worst))
+          PY
